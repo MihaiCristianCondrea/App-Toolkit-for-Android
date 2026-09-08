@@ -84,8 +84,8 @@ import kotlinx.collections.immutable.persistentListOf
  * The group is the unit, not the cell: only the corners at the outside of the block are rounded at
  * [outerRadius], every corner where two cells meet is cut at [innerRadius], and the cells are
  * separated by [itemSpacing] rather than floating as separate cards. It is the layout a storage
- * breakdown or a media summary is read in — a badge, what the row is, and how big it is — and it
- * works just as well for a block of actions, where a cell has no subtitle.
+ * breakdown or a media summary is read in: a badge, what the row is, and how big it is. It works
+ * just as well for a block of actions, where a cell has no subtitle.
  *
  * What a caller chooses:
  * - [measurements] sets the height of a cell and everything that scales with it, the way a size
@@ -101,7 +101,7 @@ import kotlinx.collections.immutable.persistentListOf
  * from [GroupedGridDefaults.MinItemsForAd] items up. The ad is part of the group: it is cut with the
  * same radii, and takes the same badge, padding and headline size as the cells, so it reads as one
  * more row rather than as something dropped between them. A grid of one cell never shows one, and
- * neither does a grid whose ad fails to load — the cells round off exactly as they would have
+ * neither does a grid whose ad fails to load, where the cells round off exactly as they would have
  * without it. Placement policy stays with the host, which decides whether to pass a unit id at all.
  *
  * @param items Cells to render, in order. An empty list renders nothing.

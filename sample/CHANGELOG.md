@@ -33,6 +33,9 @@
 
 ### Improved
 
+- The sponsored row on the Quick Tools screen now matches the rows around it: its title is no longer
+  heavier than the tile titles, and a long description is capped at two lines so the row cannot grow
+  taller than the tiles it sits between.
 - App details quick actions are now one grouped block instead of loose tiles. The two sponsored rows
   that used to sit either side of them are replaced by a single one inside the block, between the
   actions.

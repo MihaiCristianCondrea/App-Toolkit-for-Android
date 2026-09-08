@@ -32,8 +32,8 @@ import kotlin.math.roundToInt
  * The five size classes a [GroupedGrid] cell can be drawn at.
  *
  * A caller picks a size the way it picks one for a button, and everything else a cell needs at that
- * size — icon badge, glyph, content padding, the gap after the badge, and title/subtitle
- * typography — follows from the entry rather than being restated at the call site.
+ * size follows from the entry rather than being restated at the call site: icon badge, glyph,
+ * content padding, the gap after the badge, and title/subtitle typography.
  *
  * [Medium] is the default because it is the size the storage and media breakdowns were drawn at
  * before this component existed: a 48dp badge inside 16dp of padding.

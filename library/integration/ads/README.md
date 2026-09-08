@@ -139,19 +139,75 @@ host decides whether it wants the ad at all, see the toggle table above.
 
 ## Rendering an ad
 
-**Use the toolkit's own ad composables.** Every app in this family depends on this library, so no
-host has to write its own loading code, and every host that has written one has eventually
-rediscovered the same handful of bugs. Reach for these in this order:
+Start with `NativeAdSlot`. It is the recommended way, and for most placements it is the only thing
+you need. It is not the only way, and it is not meant to be: an ad should look like it belongs in
+your app, and a shared component cannot know what your app looks like. There are three levels, and
+moving to a lower one is expected rather than a workaround.
 
-| Want                                   | Use                                                | Where              |
-|----------------------------------------|----------------------------------------------------|--------------------|
-| A finished native card                 | `NativeAdSlot` and the `*NativeAdCard` wrappers    | `:library:core:ui` |
-| Your own layout, the toolkit's loading | `rememberNativeAd(adUnitId)` returning `NativeAd?` | `:library:core:ui` |
-| A banner                               | `AdBanner`                                         | `:library:core:ui` |
+### Level 1: `NativeAdSlot`, recommended
 
-`rememberNativeAd` is the one to know about. It returns a `NativeAd?` and imposes nothing on the
-layout, so a host that wants a card of its own design still gets the whole request lifecycle for
-free:
+Pick a `NativeAdPresentation` and place it. The slot does the loading, the retrying, the lifecycle,
+the disclosure label, the failure reporting, and the debug placeholder.
+
+```kotlin
+NativeAdSlot(
+    adUnitId = adUnitId,
+    presentation = NativeAdPresentation.Compact,
+    position = GroupedItemPosition.MIDDLE,
+    containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+    onAdLoaded = { visible -> },
+)
+```
+
+What you can change here: which shape the ad takes, where it sits in a grouped list, its corner
+radius, its container colour, and whether it draws a container at all. That covers a card that has
+to match surfaces your app already uses.
+
+What you cannot change here: the arrangement inside the ad. If the headline is heavier than your
+screen's titles, or the row is taller than the rows beside it, Level 1 has run out. Go to Level 2.
+
+### Level 2: your own view tree, the toolkit's loading
+
+Implement `NativeAdViewFactory` and provide it through `LocalNativeAdViewFactory`. Your factory
+decides the layout for the presentations it cares about and hands the rest back to
+`DefaultNativeAdViewFactory`. Everything else, loading included, stays where it is.
+
+```kotlin
+class MyAdViewFactory : NativeAdViewFactory {
+    private val default = DefaultNativeAdViewFactory()
+
+    override fun createViewHolder(
+        context: Context,
+        presentation: NativeAdPresentation,
+    ): NativeAdViewHolder = if (presentation is NativeAdPresentation.Compact) {
+        buildMyCompactRow(context)
+    } else {
+        default.createViewHolder(context, presentation)
+    }
+}
+
+CompositionLocalProvider(LocalNativeAdViewFactory provides remember { MyAdViewFactory() }) {
+    MyScreenContent()
+}
+```
+
+The view builders are public for exactly this: `nativeAdRoot`, `iconFrameView`, `headlineView`,
+`bodyView`, `advertiserView`, `callToActionView`, `sponsoredLabelView`, and the `dp` helper. Build
+out of those and your row keeps the shared colours, disclosure chip, and binding while looking like
+your screen.
+
+The sample's Quick Tools screen is the worked example. Its rows are 44dp circular badges, its
+headline is not bold because the screen's own titles are not bold, and its body is capped at two
+lines so an ad with a long description does not grow taller than the rows around it. See
+`ToolkitTilesNativeAdViewFactory` in `sample/feature/tiles`.
+
+This is the level most host apps want. It is the one to reach for when "the built-in ad does not
+look like my app".
+
+### Level 3: your own everything
+
+`rememberNativeAd(adUnitId)` returns a `NativeAd?` and imposes nothing at all. You get the request
+lifecycle and nothing else, and you build the `NativeAdView` yourself.
 
 ```kotlin
 val nativeAd: NativeAd = rememberNativeAd(adUnitId = adUnitId) ?: return
@@ -161,7 +217,18 @@ MyOwnCard {
 }
 ```
 
-That is the entire integration. Nothing below this line is something a host should be writing.
+Use `rememberNativeAdState` instead when you want to say something about an empty slot; it returns
+the reason alongside the ad.
+
+### The one rule at every level
+
+Whatever you draw, the assets have to sit inside a `NativeAdView`, each one assigned to its slot
+(`root.headlineView = view`), with a single `registerNativeAd(nativeAd, mediaView)` call. That is
+what reports impressions and clicks. Drawing an ad's headline with a Compose `Text` outside a
+registered `NativeAdView` reports nothing and breaks AdMob's native ad policy. Levels 1 and 2 handle
+this for you. At Level 3 it is yours to get right.
+
+For banners, `AdBanner` is the equivalent of Level 1 and there is rarely a reason to go lower.
 
 ### Where an ad placement lives
 
@@ -203,7 +270,7 @@ some of them. `NativeAdRenderer` is that logic, once.
   `registerNativeAd(nativeAd, mediaView)` call that attributes impressions and clicks.
 - The tree is created once per presentation in the `AndroidView` **factory**, keyed on the
   presentation. `applyPalette` and `bind` run in **update**, so a theme change or a new ad repaints
-  the existing views instead of rebuilding them — rebuilding would discard the loaded ad.
+  the existing views instead of rebuilding them. Rebuilding would discard the loaded ad.
 - `LocalNativeAdViewFactory` lets a host swap the whole factory for its own view trees while keeping
   the toolkit's loading, lifecycle, and reporting.
 
@@ -298,12 +365,12 @@ everyone up once, so it is worth writing down.
 
 ### Why an ad cannot be pure Compose
 
-`ads-mobile-sdk` ships no Compose API at all — not one of its ~4,900 classes references
+`ads-mobile-sdk` ships no Compose API at all. Not one of its ~4,900 classes references
 `androidx.compose`. The types an ad is rendered through are views:
 
 - `NativeAdView` extends `BaseAdAssetViewContainer`, which extends `android.widget.FrameLayout`.
-- Every asset slot on it — `headlineView`, `bodyView`, `iconView`, `callToActionView`,
-  `advertiserView`, `priceView`, `starRatingView` — is typed `android.view.View`.
+- Every asset slot on it is typed `android.view.View`: `headlineView`, `bodyView`, `iconView`,
+  `callToActionView`, `advertiserView`, `priceView`, `starRatingView`.
 - `MediaView` is a view too, and `registerNativeAd(nativeAd, mediaView)` takes those views.
 
 That registration is what attributes impressions and clicks, so it is not optional decoration: an
@@ -313,7 +380,7 @@ SDK owns.
 
 ### So how do Google's own Compose samples do it?
 
-Exactly as you would guess — Compose on the outside, views underneath. In
+Compose on the outside, views underneath. In
 [gma-next-gen-sdk-android-examples](https://github.com/googleads/gma-next-gen-sdk-android-examples),
 `NativeComposeUtility.kt` nests them:
 
@@ -358,8 +425,9 @@ silhouette has to be flattened by `rememberNativeAdBadgeShape` before a view can
 data class. The views are then coloured with `setTextColor` and drawables built from those ints.
 
 The important half is *where* it is applied: in the `AndroidView` **update** block, never the
-factory. So a theme change — dynamic colour, light/dark, or an in-app switch that does not recreate
-the activity — repaints the existing ad view instead of rebuilding it. Rebuilding would throw away
+factory. So a theme change repaints the existing ad view instead of rebuilding it, whether that is
+dynamic colour, light/dark, or an in-app switch that does not recreate the activity. Rebuilding
+would throw away
 the loaded ad and restart the request.
 
 Compose owns the colour decision; the view only ever receives integers.
@@ -368,7 +436,7 @@ Compose owns the colour decision; the view only ever receives integers.
 
 A `ComposeView` created inside an `AndroidView` factory starts its **own** composition, rooted at
 the window recomposer. It does not inherit `CompositionLocal`s from the composition around it, and
-`MaterialTheme` is a `CompositionLocal` — so `MaterialTheme.colorScheme` inside it resolves to
+`MaterialTheme` is a `CompositionLocal`, so `MaterialTheme.colorScheme` inside it resolves to
 Material's *default* scheme, not your app's. The ad quietly comes out purple.
 
 Three ways out, in order of preference:
@@ -376,7 +444,7 @@ Three ways out, in order of preference:
 1. `composeView.setParentCompositionContext(rememberCompositionContext())`, which links the
    compositions so locals flow through.
 2. Re-apply the app theme inside `setContent { AppTheme { … } }`.
-3. Resolve the colours in the outer composition and pass them in — which, generalised, is exactly
+3. Resolve the colours in the outer composition and pass them in, which is exactly
    what `NativeAdPalette` is.
 
 Google's sample does none of the three because its host applies no custom theme, so copying it into
@@ -406,7 +474,7 @@ The rendering primitives belong here, not in `:library:core:ui`. Two things pin 
 
 1. **The dependency runs the wrong way.** This module has `api(project(":library:core:ui"))`, for
    the settings screen's contracts and components. Moving `NativeAdSlot` and friends here while two
-   composables in `:library:core:ui` still call them — `NoDataScreen` and `GroupedGrid`'s ad row —
+   composables in `:library:core:ui` still call them, `NoDataScreen` and `GroupedGrid`'s ad row,
    makes the graph circular.
 2. **The SDK is on everyone's classpath already.** `:library:core:common` declares
    `api(libs.google.ads.mobile.sdk)`, so every module in the library can see `NativeAd`. That is
@@ -414,8 +482,9 @@ The rendering primitives belong here, not in `:library:core:ui`. Two things pin 
    without demoting that dependency to the modules that need it only hides the problem.
 
 Untangling it means inverting both call sites so the layout takes the ad as a slot rather than an
-ad unit id — `NoDataScreen(adContent = { … })` instead of `showAd`, and the same for `GroupedGrid` —
-after which the primitives can move here and `:library:core:ui` can drop the SDK entirely. Both are
+ad unit id. That is `NoDataScreen(adContent = { … })` instead of `showAd`, and the same for
+`GroupedGrid`. After that the primitives can move here and `:library:core:ui` can drop the SDK
+entirely. Both are
 breaking changes to published APIs, so they are worth doing in one deliberate pass rather than
 alongside a feature.
 

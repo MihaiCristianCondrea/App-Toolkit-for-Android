@@ -24,7 +24,7 @@
 - Added the `GridRow` native ad presentation: an icon-led row that keeps its disclosure chip inline
   with the body instead of on a line of its own, and takes its badge, icon size, padding and
   headline size from the grid it sits in, so a sponsored row is no taller than the cells around it.
-  Its badge is filled with the same silhouette the cells are cut from — `MaterialShapes` included —
+  Its badge is filled with the same silhouette the cells are cut from, `MaterialShapes` included,
   through `rememberNativeAdBadgeShape`, which flattens any Compose `Shape` to the path an ad's
   Android view can be drawn with.
 
@@ -61,6 +61,9 @@
 
 ### Changed
 
+- `headlineView`, the shared builder a host ad factory composes its own row out of, takes a `bold`
+  flag. A headline heavier than the titles on the screen around it reads as an intruder, so a screen
+  whose own rows are not bold can now match.
 - **Breaking:** Single-screen native ad cards moved out of `:library:core:ui` to the code that draws
   them. `HelpNativeAdCard` is now in `:library:feature:help`, `SupportNativeAdCard` in
   `:library:feature:support`, and `AppsListNativeAdCard` moved to the sample app, whose screen is

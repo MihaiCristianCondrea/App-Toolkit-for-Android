@@ -711,16 +711,24 @@ fun sponsoredLabelView(context: Context): TextView = TextView(context).apply {
     )
 }
 
-fun headlineView(context: Context, maxLines: Int): TextView = TextView(context).apply {
-    setTextSize(TypedValue.COMPLEX_UNIT_SP, HEADLINE_TEXT_SIZE_SP)
-    setTypeface(typeface, Typeface.BOLD)
-    this.maxLines = maxLines
-    ellipsize = TextUtils.TruncateAt.END
-    layoutParams = LinearLayout.LayoutParams(
-        ViewGroup.LayoutParams.MATCH_PARENT,
-        ViewGroup.LayoutParams.WRAP_CONTENT,
-    )
-}
+/**
+ * The ad's headline.
+ *
+ * [bold] is a parameter because a headline that is heavier than the titles around it reads as an
+ * intruder on a screen whose own rows are not bold. A host factory building its own row can turn it
+ * off to match the screen it is placed on.
+ */
+fun headlineView(context: Context, maxLines: Int, bold: Boolean = true): TextView =
+    TextView(context).apply {
+        setTextSize(TypedValue.COMPLEX_UNIT_SP, HEADLINE_TEXT_SIZE_SP)
+        setTypeface(typeface, if (bold) Typeface.BOLD else Typeface.NORMAL)
+        this.maxLines = maxLines
+        ellipsize = TextUtils.TruncateAt.END
+        layoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+        )
+    }
 
 fun bodyView(context: Context, maxLines: Int): TextView = TextView(context).apply {
     setTextSize(TypedValue.COMPLEX_UNIT_SP, BODY_TEXT_SIZE_SP)

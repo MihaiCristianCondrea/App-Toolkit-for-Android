@@ -44,14 +44,13 @@ sealed interface NativeAdPresentation {
 
     /**
      * One row of a grouped grid: icon badge, headline, the disclosure chip inline with the body,
-     * advertiser, and a trailing CTA — all on a single row, so the ad is no taller than the cells
+     * advertiser, and a trailing CTA, all on a single row, so the ad is no taller than the cells
      * it sits between.
      *
      * It is the only presentation whose metrics are chosen by the caller. A grid draws its cells at
      * a size class, and an ad row that ignored that size would read as a different kind of block:
      * the row takes the same badge, inset, padding and headline size as the cells around it so it
-     * reads as one of them. Everything else — colors, the disclosure chip, the CTA — stays with the
-     * shared renderer.
+     * reads as one of them. Colors, the disclosure chip and the CTA stay with the shared renderer.
      *
      * Not a `data class`: [iconShape] is deliberately left out of equality. The renderer keys its
      * view tree on the presentation and applies the palette on every update, so the badge silhouette

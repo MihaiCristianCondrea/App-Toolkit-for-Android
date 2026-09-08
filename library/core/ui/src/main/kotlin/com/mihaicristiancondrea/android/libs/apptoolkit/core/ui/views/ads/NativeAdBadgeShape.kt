@@ -38,7 +38,7 @@ import androidx.compose.ui.graphics.Path as ComposePath
  * An ad's assets have to be rendered inside a real `NativeAdView`, so the badge behind the icon is
  * an Android view and cannot be given a Compose `Shape` directly. It can, however, be filled with
  * the path that shape describes, which is what this carries: any silhouette a caller can express in
- * Compose — `MaterialShapes` included — reaches the ad badge, drawn antialiased by the same
+ * Compose, `MaterialShapes` included, reaches the ad badge, drawn antialiased by the same
  * `PathShape` machinery the platform uses for its own shape drawables.
  *
  * @property path The outline, in pixels, at [sizePx].

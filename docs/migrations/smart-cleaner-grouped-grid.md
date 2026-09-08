@@ -3,7 +3,7 @@
 **Status:** TODO, not started. Do this in Smart Cleaner when it moves to App Toolkit
 `3.0.0-pre13`.
 
-Smart Cleaner grew the grouped category grid — the block of rounded cells the storage breakdown and
+Smart Cleaner grew the grouped category grid, the block of rounded cells the storage breakdown and
 the WhatsApp summary are read in. The toolkit now owns that layout as
 `core.ui.views.grid.GroupedGrid`, so the app can delete its copy instead of maintaining a second
 one.
@@ -31,7 +31,7 @@ one.
   under the first row of cells, from two cells up, and it is cut with the same radii as the cells.
   The `MIN_ITEMS_FOR_NATIVE_AD = 4` gate in `DirectoryGrid` and the `index == 2` insertion in
   `StorageBreakdownGrid` both become the toolkit's single rule; delete them and pass `adUnitId`.
-  Their tests go with them — `groupedGridRows` is tested in the toolkit.
+  Their tests go with them, because `groupedGridRows` is tested in the toolkit.
 - **An ad that never loads no longer leaves a seam.** The row collapses and the cells above round
   off as if no ad had been asked for.
 - **Badges take any shape.** `GroupedGridItem.iconShape` accepts `MaterialShapes.<name>.toShape()`,
