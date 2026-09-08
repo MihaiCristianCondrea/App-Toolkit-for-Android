@@ -40,6 +40,12 @@
     <string name="components_button_group_tonal">Nút có tông màu</string>
     <string name="components_button_group_outlined">Nút có đường viền</string>
     <string name="components_button_group_text_and_icon">Nút văn bản và biểu tượng</string>
+    <string name="components_button_group_sizes">Kích thước nút</string>
+    <string name="components_button_size_extra_small">Rất nhỏ</string>
+    <string name="components_button_size_small">Nhỏ</string>
+    <string name="components_button_size_medium">Vừa</string>
+    <string name="components_button_size_large">Lớn</string>
+    <string name="components_button_size_extra_large">Rất lớn</string>
     <string name="components_section_fabs">Nút hành động nổi</string>
     <string name="components_section_filters">Bộ lọc danh sách hàng đầu</string>
     <string name="components_section_inputs">Menu và nhập liệu</string>

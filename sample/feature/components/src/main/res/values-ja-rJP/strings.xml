@@ -40,6 +40,12 @@
     <string name="components_button_group_tonal">トーナルボタン</string>
     <string name="components_button_group_outlined">アウトラインボタン</string>
     <string name="components_button_group_text_and_icon">テキストボタンとアイコンボタン</string>
+    <string name="components_button_group_sizes">ボタンのサイズ</string>
+    <string name="components_button_size_extra_small">特小</string>
+    <string name="components_button_size_small">小</string>
+    <string name="components_button_size_medium">中</string>
+    <string name="components_button_size_large">大</string>
+    <string name="components_button_size_extra_large">特大</string>
     <string name="components_section_fabs">フローティングアクションボタン</string>
     <string name="components_section_filters">トップリストのフィルター</string>
     <string name="components_section_inputs">メニューと入力</string>

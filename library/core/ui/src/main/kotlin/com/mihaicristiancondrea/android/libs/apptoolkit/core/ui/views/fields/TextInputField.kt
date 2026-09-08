@@ -20,7 +20,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields
 import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.ExposedDropdownMenu
@@ -29,7 +28,6 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,6 +40,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dropdown.CommonDropdownMenuItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import kotlinx.collections.immutable.ImmutableList
 
@@ -92,13 +91,14 @@ fun DropdownMenuBox(
             shape = MaterialTheme.shapes.largeIncreased,
         ) {
             options.forEach { option ->
-                DropdownMenuItem(
-                    text = { Text(option) },
+                CommonDropdownMenuItem(
+                    text = option,
                     onClick = {
-                        firebaseController.logGa4Event(ga4Event)
                         onOptionSelected(option)
                         expanded = false
                     },
+                    firebaseController = firebaseController,
+                    ga4Event = ga4Event,
                 )
             }
         }

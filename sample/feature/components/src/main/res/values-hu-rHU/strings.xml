@@ -40,6 +40,12 @@
     <string name="components_button_group_tonal">Tónusos gombok</string>
     <string name="components_button_group_outlined">Körvonalas gombok</string>
     <string name="components_button_group_text_and_icon">Szöveges és ikongombok</string>
+    <string name="components_button_group_sizes">Gombméretek</string>
+    <string name="components_button_size_extra_small">Nagyon kicsi</string>
+    <string name="components_button_size_small">Kicsi</string>
+    <string name="components_button_size_medium">Közepes</string>
+    <string name="components_button_size_large">Nagy</string>
+    <string name="components_button_size_extra_large">Nagyon nagy</string>
     <string name="components_section_fabs">Lebegő műveletgombok</string>
     <string name="components_section_filters">Felső lista szűrők</string>
     <string name="components_section_inputs">Menük és bevitel</string>

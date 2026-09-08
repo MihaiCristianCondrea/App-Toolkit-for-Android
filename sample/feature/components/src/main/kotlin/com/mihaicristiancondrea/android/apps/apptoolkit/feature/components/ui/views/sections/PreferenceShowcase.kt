@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -206,7 +207,9 @@ fun PreferenceShowcase(
                     surface = Color.Transparent,
                 )
             ) {
-                Column {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
+                ) {
                     radioOptions.forEachIndexed { index, option ->
                         RadioButtonPreferenceItem(
                             modifier = Modifier.groupedCorners(

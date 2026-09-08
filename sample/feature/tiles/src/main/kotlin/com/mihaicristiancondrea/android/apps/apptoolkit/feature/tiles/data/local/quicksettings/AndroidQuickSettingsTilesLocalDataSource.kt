@@ -38,8 +38,10 @@ class AndroidQuickSettingsTilesLocalDataSource(
         addedTiles.edit { putBoolean(component.flattenToString(), added) }
     }
 
-    override fun activeTileComponents(): Set<String> = readSystemTiles()
-        ?: addedTiles.all.filterValues { it == true }.keys
+    override fun activeTileComponents(): Set<String> = mergeActiveTileComponents(
+        systemTiles = readSystemTiles(),
+        recorded = addedTiles.all,
+    )
 
     private fun readSystemTiles(): Set<String>? = try {
         Settings.Secure.getString(context.contentResolver, SYSUI_QS_TILES)?.let { specs ->
@@ -58,4 +60,34 @@ class AndroidQuickSettingsTilesLocalDataSource(
     private companion object {
         const val SYSUI_QS_TILES = "sysui_qs_tiles"
     }
+}
+
+/**
+ * Components currently in Quick Settings, as far as this app can tell.
+ *
+ * [systemTiles] is SystemUI's own list, but it is a snapshot the app cannot depend on: SystemUI
+ * does not publish it the moment `requestAddTileService` reports success, and some devices refuse
+ * to read it at all, in which case it arrives as `null`. Taking it alone is what left a tile the
+ * user had just added still reported as not added.
+ *
+ * So [recorded], the app's own record, wins over the snapshot in both directions.
+ * `TrackedTileService` writes it from `onTileAdded`, `onStartListening`, and `onTileRemoved`, and
+ * the add request writes it too, which covers the window before the system list catches up.
+ * Components the app has no record of follow the snapshot.
+ *
+ * @param recorded Raw `SharedPreferences` contents; entries whose value is not a boolean are
+ *   ignored rather than trusted.
+ */
+internal fun mergeActiveTileComponents(
+    systemTiles: Set<String>?,
+    recorded: Map<String, Any?>,
+): Set<String> {
+    val booleans: Map<String, Boolean> = recorded
+        .mapNotNull { (component, added) -> (added as? Boolean)?.let { component to it } }
+        .toMap()
+    val recordedAsAdded: Set<String> = booleans.filterValues { it }.keys
+    if (systemTiles == null) return recordedAsAdded
+
+    val recordedAsRemoved: Set<String> = booleans.filterValues { !it }.keys
+    return systemTiles - recordedAsRemoved + recordedAsAdded
 }

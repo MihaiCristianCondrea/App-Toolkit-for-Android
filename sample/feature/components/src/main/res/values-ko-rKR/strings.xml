@@ -40,6 +40,12 @@
     <string name="components_button_group_tonal">톤 버튼</string>
     <string name="components_button_group_outlined">윤곽선 버튼</string>
     <string name="components_button_group_text_and_icon">텍스트 및 아이콘 버튼</string>
+    <string name="components_button_group_sizes">버튼 크기</string>
+    <string name="components_button_size_extra_small">아주 작게</string>
+    <string name="components_button_size_small">작게</string>
+    <string name="components_button_size_medium">보통</string>
+    <string name="components_button_size_large">크게</string>
+    <string name="components_button_size_extra_large">아주 크게</string>
     <string name="components_section_fabs">플로팅 액션 버튼</string>
     <string name="components_section_filters">상단 목록 필터</string>
     <string name="components_section_inputs">메뉴 및 입력</string>

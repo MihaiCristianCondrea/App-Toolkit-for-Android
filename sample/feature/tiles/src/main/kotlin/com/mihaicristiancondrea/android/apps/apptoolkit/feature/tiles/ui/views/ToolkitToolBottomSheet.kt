@@ -66,6 +66,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.c
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.previews.GenericToolPreview
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 
@@ -217,6 +218,7 @@ private fun ToolIntegrationSection(
             GeneralButton(
                 style = GeneralButtonStyle.Outlined,
                 modifier = Modifier.fillMaxWidth(),
+                measurements = ButtonMeasurements.Medium,
                 onClick = onSetupTile,
                 label = stringResource(id = R.string.tiles_setup),
             )
@@ -311,6 +313,7 @@ private fun QuickSettingsIntegrationCard(
             GeneralButton(
                 style = GeneralButtonStyle.Tonal,
                 modifier = Modifier.fillMaxWidth(),
+                measurements = ButtonMeasurements.Medium,
                 onClick = onAddTile,
                 label = stringResource(id = R.string.tiles_add_to_qs),
                 icon = ToolkitIcon.Vector(Icons.Outlined.Add),

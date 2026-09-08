@@ -6,6 +6,8 @@
 
 ### Added
 
+- The Components showcase now demonstrates all five button sizes, and its animation gallery covers
+  the stopwatch animation it had been missing.
 - Opening an app or its Play Store page from app details now reports the same GA4 interaction the
   list surfaces already report.
 - Added a Components animation playground with labelled and icon-only buttons for each bundled
@@ -26,7 +28,17 @@
 
 ### Improved
 
-- Buttons across the app now follow the Material 3 Expressive shape and press behavior.
+- Buttons across the app now follow the Material 3 Expressive shape and press behavior. Bottom
+  sheet actions are larger: the changelog sheet's button most of all, then the app details and
+  Quick Tools sheet actions.
+- Developer Apps and Quick Tools filter chips now animate as the available filters change, and show
+  a checkmark on the chip you picked.
+- The Apps tab shows a dot grid when selected instead of the same squares as when unselected.
+- Components showcase: the animation gallery moved below the other sections, the theme options are
+  spaced so their rounded corners read as separate rows, the FAB row demonstrates one icon source
+  each rather than three copies of the same Lottie file, the grouped actions and carousel lost the
+  extra backgrounds behind them, the value dropdown matches the app's other dropdowns, and the
+  filter chips and carousel are no longer clipped short of their card edges.
 - Quick Tools badges now draw their silhouettes from the Material 3 shape set instead of bundled
   artwork, which removes seven vector drawables from the app.
 - Added click-to-copy functionality to color swatches in the Material Colors tool.
@@ -45,6 +57,11 @@
 
 ### Fixed
 
+- Fixed Quick Tools not reacting after adding a tile. The screen read Quick Settings membership from
+  a system list that does not update the moment a tile is added, so the tile kept showing as not
+  added and, with the "Not added" filter on, nothing about the screen changed. The app's own record
+  of the tiles it added now takes precedence, and refreshing no longer loses that state the next
+  time a category is expanded.
 - Prevented malformed home-screen widget action launches from crashing the Sample App.
 - Corrected Quick Tools setup status and Android-version support for adding Quick Settings tiles.
 - Fixed Sample App startup graph verification and navigation composition after modularization.

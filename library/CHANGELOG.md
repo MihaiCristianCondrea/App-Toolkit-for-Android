@@ -6,10 +6,14 @@
 
 ### Added
 
+- `CommonFilterChip` accepts an `icon` shown while the chip is unselected, and `hasAnimation` to
+  turn off the crossfade into the selected checkmark.
+- `CommonDropdownMenuItem` takes an optional `icon` and a plain `text` alongside the existing
+  string-resource overload, so value pickers can use the toolkit row without a leading glyph.
 - Added `ButtonMeasurements`, the five Material 3 Expressive button size classes (extra small,
   small, medium, large, extra large), accepted by `GeneralButton`. Container height, shape, content
-  padding, icon size, icon spacing, and label typography all follow the selected size, so callers
-  pick a size instead of restating the specification.
+  padding, icon spacing, and label typography all follow the selected size, so callers pick a size
+  instead of restating the specification. The icon glyph keeps its own default; see `iconSize`.
 - Added an `animatedIcon` constructor to bottom-bar and drawer items: one AVD or Lottie icon can
   cover both navigation states, including reverse replay, without separate icon arguments.
   Without `animatedIcon`, callers must now supply both `icon` and `selectedIcon` explicitly.
@@ -35,13 +39,19 @@
 
 ### Changed
 
+- **Breaking:** `TopListFilters` now takes `FilterChipItem` entries instead of plain strings, so a
+  chip row carries a per-chip icon and label. Callers must map their filters to `FilterChipItem`.
+  `hasAnimation` turns the chip and row animations off, `label` accepts `null` for a row without a
+  leading caption, and `contentPadding` lets a caller that already insets the row stop it from
+  insetting itself.
 - `GeneralButton` now renders through the Material 3 Expressive button and icon-button overloads, so
   every style picks up the expressive resting and pressed shapes. Buttons keep their previous height
   by defaulting to `ButtonMeasurements.Small`; icon-only content now follows the expressive
   icon-button container and icon metrics instead of a fixed 40dp box.
-- `GeneralButton`'s `iconSize` is now `Dp?` and defaults to `null`, meaning "use the size implied by
-  `measurements`". Callers passing an explicit `Dp` are unaffected. An explicit `shape` still
-  overrides the resting shape.
+- `GeneralButton`'s `iconSize` is now `Dp?`. It keeps its `SizeConstants.ButtonIconSize` default, so
+  the glyph stays the size it has always been at every measurement; pass an explicit `Dp` for a
+  one-off such as a drawer hamburger, or `null` to take the expressive icon size of the chosen
+  `measurements`. An explicit `shape` still overrides the resting shape.
 - **Breaking (3.0):** Consolidated text, tonal, outlined, and filled action buttons into one adaptive
   `GeneralButton` with five styles, including Elevated. Removed the separate APIs without deprecated
   aliases. Icon-only content uses the matching Material icon button (a compact elevated button for
@@ -70,6 +80,8 @@
 
 ### Improved
 
+- The changelog sheet's action is now an extra-large expressive button, and `DropdownMenuBox` rows
+  now match the rest of the toolkit's dropdowns instead of rendering as bare Material rows.
 - Standardized changelog, alert-dialog, and date-picker actions with consistent button styling, haptic feedback, and press animations.
 
 ### Removed

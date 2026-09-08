@@ -40,6 +40,12 @@
     <string name="components_button_group_tonal">Butoane tonale</string>
     <string name="components_button_group_outlined">Butoane conturate</string>
     <string name="components_button_group_text_and_icon">Butoane text și pictogramă</string>
+    <string name="components_button_group_sizes">Dimensiuni butoane</string>
+    <string name="components_button_size_extra_small">Foarte mic</string>
+    <string name="components_button_size_small">Mic</string>
+    <string name="components_button_size_medium">Mediu</string>
+    <string name="components_button_size_large">Mare</string>
+    <string name="components_button_size_extra_large">Foarte mare</string>
     <string name="components_section_fabs">Butoane de acțiune flotante</string>
     <string name="components_section_filters">Filtre pentru lista de sus</string>
     <string name="components_section_inputs">Meniuri și intrări</string>

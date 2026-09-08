@@ -22,6 +22,12 @@
     <string name="components_button_group_tonal">Tonal buttons</string>
     <string name="components_button_group_outlined">Outlined buttons</string>
     <string name="components_button_group_text_and_icon">Text and icon buttons</string>
+    <string name="components_button_group_sizes">Button sizes</string>
+    <string name="components_button_size_extra_small">Extra small</string>
+    <string name="components_button_size_small">Small</string>
+    <string name="components_button_size_medium">Medium</string>
+    <string name="components_button_size_large">Large</string>
+    <string name="components_button_size_extra_large">Extra large</string>
     <string name="components_button_primary">Primary button</string>
     <string name="components_button_tonal">Tonal button</string>
     <string name="components_button_outlined">Outlined button</string>

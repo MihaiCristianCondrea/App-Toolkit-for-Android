@@ -32,9 +32,14 @@ import androidx.compose.ui.unit.DpSize
  * The five Material 3 Expressive button size classes.
  *
  * Each entry stands for one expressive container height. Everything else a button needs at that
- * size — shape, content padding, icon size, icon spacing, and label typography — is derived from
- * that height through the `ButtonDefaults.*For(buttonHeight)` helpers, so the toolkit never
- * restates expressive metrics of its own.
+ * size — shape, content padding, icon spacing, and label typography — is derived from that height
+ * through the `ButtonDefaults.*For(buttonHeight)` helpers, so the toolkit never restates expressive
+ * metrics of its own.
+ *
+ * The icon glyph is the deliberate exception. `GeneralButton` draws it at a fixed size by default
+ * rather than scaling it with the container, because an icon that grows with the button reads as
+ * oversized beside a label. Passing `iconSize = null` to `GeneralButton` opts into the expressive
+ * icon size for the chosen entry instead.
  *
  * [Small] is the toolkit default because it is `ButtonDefaults.MinHeight`, which is the height
  * `GeneralButton` rendered at before this size class existed.

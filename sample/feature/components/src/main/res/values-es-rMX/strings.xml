@@ -40,6 +40,12 @@
     <string name="components_button_group_tonal">Botones tonales</string>
     <string name="components_button_group_outlined">Botones con contorno</string>
     <string name="components_button_group_text_and_icon">Botones de texto y de iconos</string>
+    <string name="components_button_group_sizes">Tamaños de botón</string>
+    <string name="components_button_size_extra_small">Muy pequeño</string>
+    <string name="components_button_size_small">Pequeño</string>
+    <string name="components_button_size_medium">Mediano</string>
+    <string name="components_button_size_large">Grande</string>
+    <string name="components_button_size_extra_large">Muy grande</string>
     <string name="components_section_fabs">Botones de acción flotante</string>
     <string name="components_section_filters">Filtros de lista superior</string>
     <string name="components_section_inputs">Menús y entradas</string>

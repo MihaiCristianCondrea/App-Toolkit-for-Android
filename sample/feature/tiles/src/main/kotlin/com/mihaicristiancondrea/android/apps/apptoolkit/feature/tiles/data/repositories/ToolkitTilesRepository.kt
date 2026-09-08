@@ -32,8 +32,16 @@ import kotlinx.coroutines.flow.Flow
  */
 interface ToolkitTilesRepository {
 
-    /** The curated catalogue, with each tile's current Quick Settings status already applied. */
+    /**
+     * The curated catalogue, with each tile's current Quick Settings status already applied.
+     *
+     * Statuses are read per emission, not once per collection, because a tile's membership changes
+     * while the screen is open. Call [refreshTileCategories] to make it emit again.
+     */
     fun tileCategories(): Flow<ImmutableList<ToolkitTileCategoryData>>
+
+    /** Makes [tileCategories] re-read Quick Settings and emit. No-op when nobody is collecting. */
+    fun refreshTileCategories()
 
     /** Category IDs the user last left expanded, or catalogue defaults on first use. */
     val expandedCategoryIds: Flow<Set<String>>

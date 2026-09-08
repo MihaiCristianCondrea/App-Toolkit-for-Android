@@ -40,10 +40,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun ButtonShowcase(
@@ -171,7 +174,7 @@ fun ButtonShowcase(
                 )
             }
         }
-        ShowcaseSurface(position = GroupedItemPosition.LAST) {
+        ShowcaseSurface(position = GroupedItemPosition.MIDDLE) {
             Text(
                 text = stringResource(id = R.string.components_button_group_text_and_icon),
                 style = MaterialTheme.typography.labelLarge,
@@ -218,5 +221,39 @@ fun ButtonShowcase(
                 )
             }
         }
+        ShowcaseSurface(position = GroupedItemPosition.LAST) {
+            Text(
+                text = stringResource(id = R.string.components_button_group_sizes),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.Bold,
+            )
+            SmallVerticalSpacer()
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+                verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+            ) {
+                ButtonSizes.forEach { (measurements, labelResId) ->
+                    GeneralButton(
+                        style = GeneralButtonStyle.Tonal,
+                        label = stringResource(id = labelResId),
+                        measurements = measurements,
+                        onClick = {},
+                        firebaseController = firebaseController,
+                        ga4Event = onLogEvent("button", "size_${measurements.name.lowercase()}"),
+                    )
+                }
+            }
+        }
     }
 }
+
+/** Every expressive size class, in ascending order, for the showcase row. */
+private val ButtonSizes: ImmutableList<Pair<ButtonMeasurements, Int>> = persistentListOf(
+    ButtonMeasurements.ExtraSmall to R.string.components_button_size_extra_small,
+    ButtonMeasurements.Small to R.string.components_button_size_small,
+    ButtonMeasurements.Medium to R.string.components_button_size_medium,
+    ButtonMeasurements.Large to R.string.components_button_size_large,
+    ButtonMeasurements.ExtraLarge to R.string.components_button_size_extra_large,
+)

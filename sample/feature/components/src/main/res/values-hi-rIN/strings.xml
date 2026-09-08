@@ -40,6 +40,12 @@
     <string name="components_button_group_tonal">टोनल बटन</string>
     <string name="components_button_group_outlined">आउटलाइन बटन</string>
     <string name="components_button_group_text_and_icon">टेक्स्ट और आइकन बटन</string>
+    <string name="components_button_group_sizes">बटन के आकार</string>
+    <string name="components_button_size_extra_small">बहुत छोटा</string>
+    <string name="components_button_size_small">छोटा</string>
+    <string name="components_button_size_medium">मध्यम</string>
+    <string name="components_button_size_large">बड़ा</string>
+    <string name="components_button_size_extra_large">बहुत बड़ा</string>
     <string name="components_section_fabs">फ्लोटिंग एक्शन बटन</string>
     <string name="components_section_filters">शीर्ष सूची फ़िल्टर</string>
     <string name="components_section_inputs">मेनू और इनपुट</string>

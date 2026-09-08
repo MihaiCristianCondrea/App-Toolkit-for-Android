@@ -40,6 +40,12 @@
     <string name="components_button_group_tonal">Mga tonal na button</string>
     <string name="components_button_group_outlined">Mga button na may outline</string>
     <string name="components_button_group_text_and_icon">Mga text at icon button</string>
+    <string name="components_button_group_sizes">Mga sukat ng button</string>
+    <string name="components_button_size_extra_small">Napakaliit</string>
+    <string name="components_button_size_small">Maliit</string>
+    <string name="components_button_size_medium">Katamtaman</string>
+    <string name="components_button_size_large">Malaki</string>
+    <string name="components_button_size_extra_large">Napakalaki</string>
     <string name="components_section_fabs">Mga floating action button</string>
     <string name="components_section_filters">Mga filter ng nangungunang listahan</string>
     <string name="components_section_inputs">Mga menu at input</string>

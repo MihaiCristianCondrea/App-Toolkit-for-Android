@@ -74,6 +74,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.AppDetailsNativeAd
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraSmallVerticalSpacer
@@ -275,12 +276,14 @@ private fun AppDetailsActions(
                     onClick = { actionLauncher.shareApp(appInfo.packageName, appInfo.name) },
                     icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Share),
                     label = stringResource(id = R.string.app_details_share),
+                    measurements = ButtonMeasurements.Medium,
                     modifier = Modifier.weight(1f),
                 )
                 GeneralButton(
                     onClick = { actionLauncher.openApp(appInfo.packageName) },
                     icon = ToolkitIcon.Vector(imageVector = Icons.AutoMirrored.Outlined.OpenInNew),
                     label = stringResource(id = R.string.app_details_open_app),
+                    measurements = ButtonMeasurements.Medium,
                     modifier = Modifier.weight(1f),
                 )
             }

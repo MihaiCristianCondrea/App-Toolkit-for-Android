@@ -33,24 +33,37 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 
+/**
+ * A dropdown menu row with the toolkit's click feedback, bounce, and GA4 logging.
+ *
+ * [icon] is optional so that value pickers, where every row would carry the same glyph, look the
+ * same as action menus without one.
+ *
+ * @param text Row label.
+ * @param onClick Invoked after feedback and analytics, on every click.
+ * @param modifier The [Modifier] applied to the row.
+ * @param icon Optional leading icon.
+ * @param firebaseController Optional Firebase controller used to log GA4 events.
+ * @param ga4Event Optional GA4 event data to log on click.
+ */
 @Composable
 fun CommonDropdownMenuItem(
-    textResId: Int,
-    icon: ImageVector,
+    text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    icon: ImageVector? = null,
     firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
     DropdownMenuItem(
-        text = { Text(text = stringResource(id = textResId)) },
-        leadingIcon = { Icon(imageVector = icon, contentDescription = null) },
+        text = { Text(text = text) },
+        leadingIcon = icon?.let { { Icon(imageVector = it, contentDescription = null) } },
         onClick = {
             view.playSoundEffect(SoundEffectConstants.CLICK)
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
@@ -60,5 +73,25 @@ fun CommonDropdownMenuItem(
         modifier = modifier
             .clip(CircleShape)
             .bounceClick()
+    )
+}
+
+/** Overload for rows whose label is a string resource. */
+@Composable
+fun CommonDropdownMenuItem(
+    textResId: Int,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    icon: ImageVector? = null,
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
+) {
+    CommonDropdownMenuItem(
+        text = stringResource(id = textResId),
+        onClick = onClick,
+        modifier = modifier,
+        icon = icon,
+        firebaseController = firebaseController,
+        ga4Event = ga4Event,
     )
 }

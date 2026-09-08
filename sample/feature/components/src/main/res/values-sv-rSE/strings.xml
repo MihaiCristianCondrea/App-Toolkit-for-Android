@@ -40,6 +40,12 @@
     <string name="components_button_group_tonal">Tonade knappar</string>
     <string name="components_button_group_outlined">Konturknappar</string>
     <string name="components_button_group_text_and_icon">Text- och ikonknappar</string>
+    <string name="components_button_group_sizes">Knappstorlekar</string>
+    <string name="components_button_size_extra_small">Mycket liten</string>
+    <string name="components_button_size_small">Liten</string>
+    <string name="components_button_size_medium">Mellan</string>
+    <string name="components_button_size_large">Stor</string>
+    <string name="components_button_size_extra_large">Mycket stor</string>
     <string name="components_section_fabs">Flytande åtgärdsknappar</string>
     <string name="components_section_filters">Filter för topplista</string>
     <string name="components_section_inputs">Menyer och inmatning</string>

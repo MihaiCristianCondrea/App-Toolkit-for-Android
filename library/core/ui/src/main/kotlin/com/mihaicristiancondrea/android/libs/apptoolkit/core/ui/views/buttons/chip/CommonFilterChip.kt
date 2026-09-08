@@ -28,9 +28,11 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,23 +43,30 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.AnimatedToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 
 /**
- * A custom [FilterChip] that provides haptic and sound feedback on click,
- * along with a bounce click effect.
+ * A [FilterChip] with the toolkit's click feedback, bounce, and GA4 logging.
  *
- * This composable automatically displays a checkmark icon with a fade and scale animation
- * when selected, if no custom [leadingIcon] is provided.
+ * Leading icon, in order of precedence:
+ * - [leadingIcon], when given, renders as-is and this composable stays out of the way.
+ * - Otherwise the chip shows a checkmark while [selected], and [icon] while it is not. Passing no
+ *   [icon] leaves the unselected chip label-only, which is the Material default.
+ *
+ * [hasAnimation] chooses whether that swap crossfades or happens at once. Turn it off for rows that
+ * rebuild often enough that the animation reads as noise, or where a caller animates the row itself.
  *
  * @param selected Whether the chip is currently selected.
- * @param onClick The callback to be invoked when the chip is clicked.
- * @param label The text to be displayed on the chip.
- * @param modifier The [Modifier] to be applied to the chip.
- * @param leadingIcon An optional composable to be displayed at the start of the chip.
- *                    If null, a checkmark icon will be shown when the chip is selected.
+ * @param onClick Invoked after feedback and analytics, on every click.
+ * @param label Text displayed on the chip.
+ * @param modifier The [Modifier] applied to the chip.
+ * @param icon Icon shown while the chip is not selected.
+ * @param hasAnimation Whether the leading icon crossfades between its states.
+ * @param leadingIcon Full override of the leading icon slot.
  * @param firebaseController Optional Firebase controller used to log GA4 events.
  * @param ga4Event Optional GA4 event data to log on click.
  */
@@ -67,6 +76,8 @@ fun CommonFilterChip(
     onClick: () -> Unit,
     label: String,
     modifier: Modifier = Modifier,
+    icon: ToolkitIcon? = null,
+    hasAnimation: Boolean = true,
     leadingIcon: (@Composable (() -> Unit))? = null,
     firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
@@ -85,23 +96,41 @@ fun CommonFilterChip(
         },
         label = { Text(text = label) },
         leadingIcon = {
-            if (leadingIcon != null) {
-                leadingIcon()
-            } else {
-                AnimatedContent(
+            when {
+                leadingIcon != null -> leadingIcon()
+
+                hasAnimation -> AnimatedContent(
                     targetState = selected,
                     transitionSpec = { SelectAllTransitions.fadeScale },
-                    label = "Checkmark Animation"
-                ) { targetChecked ->
-                    if (targetChecked) {
-                        Icon(imageVector = Icons.Filled.Check, contentDescription = null)
-                    }
+                    label = "Filter chip leading icon",
+                ) { isSelected ->
+                    FilterChipLeadingIcon(selected = isSelected, icon = icon)
                 }
+
+                else -> FilterChipLeadingIcon(selected = selected, icon = icon)
             }
         },
         modifier = modifier.bounceClick(),
         interactionSource = interactionSource,
     )
+}
+
+/** Checkmark while selected, the caller's [icon] otherwise, nothing when there is neither. */
+@Composable
+private fun FilterChipLeadingIcon(
+    selected: Boolean,
+    icon: ToolkitIcon?,
+) {
+    when {
+        selected -> Icon(imageVector = Icons.Filled.Check, contentDescription = null)
+
+        icon != null -> AnimatedToolkitIcon(
+            icon = icon,
+            clickCount = 0,
+            contentDescription = null,
+            modifier = Modifier.size(size = FilterChipDefaults.IconSize),
+        )
+    }
 }
 
 /**

@@ -40,6 +40,12 @@
     <string name="components_button_group_tonal">ٹونل بٹن</string>
     <string name="components_button_group_outlined">آؤٹ لائن بٹن</string>
     <string name="components_button_group_text_and_icon">متن اور آئیکن بٹن</string>
+    <string name="components_button_group_sizes">بٹن کے سائز</string>
+    <string name="components_button_size_extra_small">بہت چھوٹا</string>
+    <string name="components_button_size_small">چھوٹا</string>
+    <string name="components_button_size_medium">درمیانہ</string>
+    <string name="components_button_size_large">بڑا</string>
+    <string name="components_button_size_extra_large">بہت بڑا</string>
     <string name="components_section_fabs">فلوٹنگ ایکشن بٹن</string>
     <string name="components_section_filters">اوپر والی فہرست کے فلٹر</string>
     <string name="components_section_inputs">مینوز اور ان پٹ</string>

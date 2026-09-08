@@ -40,6 +40,12 @@
     <string name="components_button_group_tonal">টোনাল বোতাম</string>
     <string name="components_button_group_outlined">আউটলাইন বোতাম</string>
     <string name="components_button_group_text_and_icon">টেক্সট ও আইকন বোতাম</string>
+    <string name="components_button_group_sizes">বোতামের আকার</string>
+    <string name="components_button_size_extra_small">অতি ছোট</string>
+    <string name="components_button_size_small">ছোট</string>
+    <string name="components_button_size_medium">মাঝারি</string>
+    <string name="components_button_size_large">বড়</string>
+    <string name="components_button_size_extra_large">অতি বড়</string>
     <string name="components_section_fabs">ভাসমান অ্যাকশন বোতাম</string>
     <string name="components_section_filters">শীর্ষ তালিকা ফিল্টার</string>
     <string name="components_section_inputs">মেনু ও ইনপুট</string>

@@ -40,6 +40,12 @@
     <string name="components_button_group_tonal">Тонални бутони</string>
     <string name="components_button_group_outlined">Контурни бутони</string>
     <string name="components_button_group_text_and_icon">Текстови бутони и бутони с икони</string>
+    <string name="components_button_group_sizes">Размери на бутоните</string>
+    <string name="components_button_size_extra_small">Много малък</string>
+    <string name="components_button_size_small">Малък</string>
+    <string name="components_button_size_medium">Среден</string>
+    <string name="components_button_size_large">Голям</string>
+    <string name="components_button_size_extra_large">Много голям</string>
     <string name="components_section_fabs">Плаващи бутони за действие</string>
     <string name="components_section_filters">Филтри на горния списък</string>
     <string name="components_section_inputs">Менюта и въвеждане</string>

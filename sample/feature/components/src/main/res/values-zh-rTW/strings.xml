@@ -40,6 +40,12 @@
     <string name="components_button_group_tonal">色調按鈕</string>
     <string name="components_button_group_outlined">外框按鈕</string>
     <string name="components_button_group_text_and_icon">文字與圖示按鈕</string>
+    <string name="components_button_group_sizes">按鈕尺寸</string>
+    <string name="components_button_size_extra_small">極小</string>
+    <string name="components_button_size_small">小</string>
+    <string name="components_button_size_medium">中</string>
+    <string name="components_button_size_large">大</string>
+    <string name="components_button_size_extra_large">極大</string>
     <string name="components_section_fabs">浮動動作按鈕</string>
     <string name="components_section_filters">頂部清單篩選</string>
     <string name="components_section_inputs">選單與輸入</string>

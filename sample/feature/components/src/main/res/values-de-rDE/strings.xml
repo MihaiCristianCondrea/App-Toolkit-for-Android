@@ -40,6 +40,12 @@
     <string name="components_button_group_tonal">Tonale Schaltflächen</string>
     <string name="components_button_group_outlined">Umrandete Schaltflächen</string>
     <string name="components_button_group_text_and_icon">Text- und Symbolschaltflächen</string>
+    <string name="components_button_group_sizes">Schaltflächengrößen</string>
+    <string name="components_button_size_extra_small">Sehr klein</string>
+    <string name="components_button_size_small">Klein</string>
+    <string name="components_button_size_medium">Mittel</string>
+    <string name="components_button_size_large">Groß</string>
+    <string name="components_button_size_extra_large">Sehr groß</string>
     <string name="components_section_fabs">Schwebende Aktionsschaltflächen</string>
     <string name="components_section_filters">Filter für oberste Listen</string>
     <string name="components_section_inputs">Menüs &amp; Eingaben</string>

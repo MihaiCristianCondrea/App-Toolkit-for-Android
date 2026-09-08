@@ -40,6 +40,12 @@
     <string name="components_button_group_tonal">Tonal düğmeler</string>
     <string name="components_button_group_outlined">Çerçeveli düğmeler</string>
     <string name="components_button_group_text_and_icon">Metin ve simge düğmeleri</string>
+    <string name="components_button_group_sizes">Düğme boyutları</string>
+    <string name="components_button_size_extra_small">Çok küçük</string>
+    <string name="components_button_size_small">Küçük</string>
+    <string name="components_button_size_medium">Orta</string>
+    <string name="components_button_size_large">Büyük</string>
+    <string name="components_button_size_extra_large">Çok büyük</string>
     <string name="components_section_fabs">Yüzen eylem düğmeleri</string>
     <string name="components_section_filters">Üst liste filtreleri</string>
     <string name="components_section_inputs">Menüler ve girişler</string>

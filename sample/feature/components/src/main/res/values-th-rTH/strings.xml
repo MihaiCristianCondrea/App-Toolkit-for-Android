@@ -40,6 +40,12 @@
     <string name="components_button_group_tonal">ปุ่มโทนสี</string>
     <string name="components_button_group_outlined">ปุ่มแบบมีเส้นขอบ</string>
     <string name="components_button_group_text_and_icon">ปุ่มข้อความและไอคอน</string>
+    <string name="components_button_group_sizes">ขนาดปุ่ม</string>
+    <string name="components_button_size_extra_small">เล็กมาก</string>
+    <string name="components_button_size_small">เล็ก</string>
+    <string name="components_button_size_medium">กลาง</string>
+    <string name="components_button_size_large">ใหญ่</string>
+    <string name="components_button_size_extra_large">ใหญ่มาก</string>
     <string name="components_section_fabs">ปุ่มการทำงานแบบลอย</string>
     <string name="components_section_filters">ตัวกรองรายการยอดนิยม</string>
     <string name="components_section_inputs">เมนูและการป้อนข้อมูล</string>

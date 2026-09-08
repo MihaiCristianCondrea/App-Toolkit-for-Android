@@ -19,7 +19,6 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Apps
-import androidx.compose.material.icons.rounded.Apps
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.navigation.AppsListRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ToolkitTilesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
@@ -30,6 +29,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
 
 object MainNavigationDefaults {
@@ -48,8 +48,10 @@ object MainNavigationDefaults {
         ),
         BottomBarItem(
             route = AppsListRoute,
-            icon = Icons.Outlined.Apps,
-            selectedIcon = Icons.Rounded.Apps,
+            icon = ToolkitIcon.Vector(Icons.Outlined.Apps),
+            // Every `Apps` variant bundled with Compose is squares; the selected state uses the
+            // dot grid Material Symbols draws for this glyph.
+            selectedIcon = ToolkitIcon.Resource(CoreUiR.drawable.ic_apps_dots),
             title = com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R.string.apps_tools_title
         )
     )

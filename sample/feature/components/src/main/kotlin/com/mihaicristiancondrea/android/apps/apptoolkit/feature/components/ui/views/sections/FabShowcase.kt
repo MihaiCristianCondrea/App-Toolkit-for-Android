@@ -40,6 +40,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fa
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedFloatingActionButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.SmallFloatingActionButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
 
 @Composable
 fun FabShowcase(
@@ -63,7 +64,7 @@ fun FabShowcase(
                     onClick = {},
                     visible = true,
                     expanded = true,
-                    icon = ToolkitIcon.Lottie(R.raw.toolkit_add_icon, tintable = true),
+                    icon = ToolkitIcon.Vector(imageVector = Icons.Filled.Add),
                     text = { Text(text = stringResource(id = R.string.components_fab_extended)) },
                     firebaseController = firebaseController,
                     ga4Event = onLogEvent("fab", "extended"),
@@ -79,7 +80,7 @@ fun FabShowcase(
                 SmallFloatingActionButton(
                     isVisible = true,
                     isExtended = true,
-                    icon = ToolkitIcon.Lottie(R.raw.toolkit_add_icon, tintable = true),
+                    icon = ToolkitIcon.AnimatedVector(resId = DesignSystemR.drawable.anim_edit),
                     contentDescription = iconContentDescription,
                     onClick = {},
                     onLogClick = {

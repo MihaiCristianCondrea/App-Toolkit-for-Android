@@ -138,7 +138,6 @@ fun ComponentsScreen(
             contentPadding = innerPadding,
             verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
         ) {
-            item(key = "animations") { AnimationShowcase() }
             item {
                 ButtonShowcase(
                     firebaseController = firebaseController,
@@ -199,6 +198,8 @@ fun ComponentsScreen(
                     onFilterSelected = { selectedFilter = it },
                 )
             }
+
+            item(key = "animations") { AnimationShowcase() }
 
             item {
                 NavigationBarSpacer()
