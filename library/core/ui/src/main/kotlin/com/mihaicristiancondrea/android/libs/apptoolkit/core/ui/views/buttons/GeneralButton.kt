@@ -74,9 +74,18 @@ enum class ButtonIconPosition { Start, End }
  * Elevated icon-only buttons use a compact ElevatedButton with Material elevation and touch target.
  *
  * [measurements] picks one of the five Material 3 Expressive size classes. Container height, shape,
- * content padding, icon size, icon spacing and label typography all follow it, so a caller chooses a
- * size rather than restating the specification. [iconSize] overrides only the icon glyph, leaving
- * the container on specification; [shape] still overrides the resting shape when set.
+ * content padding, icon size, icon spacing and label typography all follow it, so a caller chooses
+ * a size rather than restating the specification. [shape] still overrides the resting shape when
+ * set.
+ *
+ * [iconSize] pins the glyph to one size instead. Left null, the default, it scales with
+ * [measurements] — the labelled-button icon size beside a label, the icon-button size when this
+ * renders icon-only. Pass [SizeConstants.ButtonIconSize] where an icon should stay the size toolkit
+ * icons are drawn at everywhere else, which is what a row of small affordances such as a favourite,
+ * share or expand button wants; pass any other [Dp] for a one-off such as a drawer hamburger.
+ *
+ * Either way the container keeps the dimensions of [measurements]; [iconSize] only ever changes the
+ * glyph.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -90,7 +99,7 @@ fun GeneralButton(
     iconPosition: ButtonIconPosition = ButtonIconPosition.Start,
     contentDescription: String? = label,
     measurements: ButtonMeasurements = ButtonMeasurements.Small,
-    iconSize: Dp? = SizeConstants.ButtonIconSize,
+    iconSize: Dp? = null,
     iconTint: Color? = null,
     containerColor: Color? = null,
     contentColor: Color? = null,

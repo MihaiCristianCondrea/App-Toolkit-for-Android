@@ -40,6 +40,15 @@
     <string name="components_button_group_tonal">Butoane tonale</string>
     <string name="components_button_group_outlined">Butoane conturate</string>
     <string name="components_button_group_text_and_icon">Butoane text și pictogramă</string>
+    <string name="components_button_group_icon_sizes">Dimensiuni butoane cu pictogramă</string>
+    <string name="components_button_group_text_sizes">Dimensiuni butoane text</string>
+    <string name="components_button_group_text_icon_sizes">Dimensiuni butoane text și pictogramă</string>
+    <string name="components_button_group_trailing_icon_sizes">Dimensiuni butoane cu pictogramă finală</string>
+    <string name="components_button_size_extra_small">Foarte mic</string>
+    <string name="components_button_size_small">Mic</string>
+    <string name="components_button_size_medium">Mediu</string>
+    <string name="components_button_size_large">Mare</string>
+    <string name="components_button_size_extra_large">Foarte mare</string>
     <string name="components_section_fabs">Butoane de acțiune flotante</string>
     <string name="components_section_filters">Filtre pentru lista de sus</string>
     <string name="components_section_inputs">Meniuri și intrări</string>
@@ -58,4 +67,13 @@
     <string name="components_animation_restart">Repornește la atingere</string>
     <string name="components_animation_reverse">Inversează la atingere</string>
     <string name="components_animation_preview_helper">Atinge un element pentru a-i previzualiza animația.</string>
+    <string name="components_section_grid">Grilă grupată</string>
+    <string name="components_grid_group_categories">Categorii cu dimensiuni</string>
+    <string name="components_grid_group_compact">Compact, un singur rând</string>
+    <string name="components_grid_group_single">O singură celulă</string>
+    <string name="components_grid_installed_apps">Aplicații instalate</string>
+    <string name="components_grid_images">Imagini</string>
+    <string name="components_grid_music">Muzică</string>
+    <string name="components_grid_documents">Documente</string>
+    <string name="components_grid_downloads">Descărcări</string>
 </resources>

@@ -48,6 +48,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.model
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.TorchState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ResultPill
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import kotlin.math.roundToInt
@@ -170,6 +171,7 @@ private fun PresetButton(
         GeneralButton(
             onClick = onClick,
             modifier = modifier.fillMaxWidth(),
+            measurements = ButtonMeasurements.Medium,
             label = label,
         )
     } else {
@@ -177,6 +179,7 @@ private fun PresetButton(
             style = GeneralButtonStyle.Tonal,
             onClick = onClick,
             modifier = modifier.fillMaxWidth(),
+            measurements = ButtonMeasurements.Medium,
             label = label,
         )
     }
@@ -273,6 +276,7 @@ private fun SimpleTorchControl(
             onClick = {
                 onPresetSelected(if (state.isEnabled) TorchPreset.Off else TorchPreset.Maximum)
             },
+            measurements = ButtonMeasurements.Medium,
             label = stringResource(
                 if (state.isEnabled) R.string.flash_dimmer_turn_off
                 else R.string.flash_dimmer_turn_on

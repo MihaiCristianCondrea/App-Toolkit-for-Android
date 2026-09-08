@@ -95,6 +95,8 @@ class ToolkitTilesNativeAdViewFactory : NativeAdViewFactory {
                     marginEnd = context.dp(SMALL_SPACING_DP)
                 }
         }
+        // The weight, the body's line cap and the call to action are set by the card's
+        // NativeAdStyle, because they are properties of views rather than of the arrangement.
         val headline = headlineView(context = context, maxLines = 2)
         val body = bodyView(context = context, maxLines = 3)
             .withTopMargin(context.dp(ICON_PADDING_DP))

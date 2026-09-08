@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -94,10 +95,17 @@ fun ShowcaseSection(
     }
 }
 
+/**
+ * One card in a showcase group.
+ *
+ * [contentPadding] insets the content from the card edges. Drop the horizontal inset for content
+ * that scrolls sideways or is meant to bleed to the card edge, so it is not clipped short of it.
+ */
 @Composable
 fun ShowcaseSurface(
     position: GroupedItemPosition,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(all = SizeConstants.LargeSize),
     onClick: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
@@ -118,7 +126,7 @@ fun ShowcaseSurface(
         tonalElevation = 1.dp,
     ) {
         Column(
-            modifier = Modifier.padding(SizeConstants.LargeSize),
+            modifier = Modifier.padding(paddingValues = contentPadding),
             content = content,
         )
     }

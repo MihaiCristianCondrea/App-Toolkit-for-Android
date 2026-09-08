@@ -40,6 +40,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.vi
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.ButtonShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.FabShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.FilterShowcase
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.GridShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.InputShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.LayoutShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.PreferenceShowcase
@@ -138,7 +139,6 @@ fun ComponentsScreen(
             contentPadding = innerPadding,
             verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
         ) {
-            item(key = "animations") { AnimationShowcase() }
             item {
                 ButtonShowcase(
                     firebaseController = firebaseController,
@@ -190,6 +190,8 @@ fun ComponentsScreen(
                 )
             }
 
+            item { GridShowcase() }
+
             item {
                 FilterShowcase(
                     firebaseController = firebaseController,
@@ -199,6 +201,8 @@ fun ComponentsScreen(
                     onFilterSelected = { selectedFilter = it },
                 )
             }
+
+            item(key = "animations") { AnimationShowcase() }
 
             item {
                 NavigationBarSpacer()

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<!--
+  The nine-dot "apps" grid. Material Symbols draws this glyph as dots, but the icon set bundled
+  with Compose still draws every `Apps` variant as squares, so the dot form ships here. Geometry
+  matches the bundled glyph: dots are inscribed in the same 4dp cells at x/y 4, 10 and 16.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="?attr/colorControlNormal">
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M4,6a2,2 0 1,0 4,0a2,2 0 1,0 -4,0ZM10,6a2,2 0 1,0 4,0a2,2 0 1,0 -4,0ZM16,6a2,2 0 1,0 4,0a2,2 0 1,0 -4,0ZM4,12a2,2 0 1,0 4,0a2,2 0 1,0 -4,0ZM10,12a2,2 0 1,0 4,0a2,2 0 1,0 -4,0ZM16,12a2,2 0 1,0 4,0a2,2 0 1,0 -4,0ZM4,18a2,2 0 1,0 4,0a2,2 0 1,0 -4,0ZM10,18a2,2 0 1,0 4,0a2,2 0 1,0 -4,0ZM16,18a2,2 0 1,0 4,0a2,2 0 1,0 -4,0Z" />
+</vector>

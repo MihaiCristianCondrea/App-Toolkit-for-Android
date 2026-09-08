@@ -36,6 +36,9 @@ import androidx.compose.ui.unit.DpSize
  * that height through the `ButtonDefaults.*For(buttonHeight)` helpers, so the toolkit never
  * restates expressive metrics of its own.
  *
+ * A caller that wants one icon to stay a fixed size regardless of the entry passes an explicit
+ * `iconSize` to `GeneralButton`; that changes the glyph alone, never the container.
+ *
  * [Small] is the toolkit default because it is `ButtonDefaults.MinHeight`, which is the height
  * `GeneralButton` rendered at before this size class existed.
  */

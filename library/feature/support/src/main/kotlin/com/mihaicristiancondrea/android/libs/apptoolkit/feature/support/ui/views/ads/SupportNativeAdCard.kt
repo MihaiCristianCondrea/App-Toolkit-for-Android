@@ -15,11 +15,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.views.ads
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdPresentation
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdSlot
 
 /**
  * Media-led native ad card used on the Support screen.
@@ -31,6 +33,9 @@ import androidx.compose.ui.graphics.Color
  * - one `DisposableEffect(adUnitId)` owns both the load and the destroy, so changing the ad unit no
  *   longer leaks the previous `NativeAd`;
  * - the "Sponsored" disclosure comes from a translated string instead of an English literal.
+ *
+ * It lives here rather than in the toolkit's shared UI because it is a Support screen placement, not
+ * a reusable primitive: only this feature draws it.
  *
  * @param adUnitId AdMob native ad unit to request.
  * @param containerColor overrides the card container for hosts whose surfaces are their own.

@@ -73,7 +73,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.AppDetailsNativeAd
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraSmallVerticalSpacer
@@ -121,24 +120,15 @@ fun AppDetailsBottomSheet(
             installedVersionInfo = installedVersionInfo,
         )
         LargeVerticalSpacer()
-        AppDetailsNativeAd(
-            modifier = Modifier.fillMaxWidth(),
-            adsConfig = adsConfig,
-        )
-        LargeVerticalSpacer()
+        // The sheet's sponsored rows used to sit loose either side of this block. The quick-action
+        // grid carries one of its own, in the middle of its cells, so it is the only one here.
         AppDetailsQuickActions(
             appInfo = appInfo,
             isFavorite = isFavorite,
             isAppInstalled = isAppInstalled,
             actionLauncher = actionLauncher,
-            onFavoriteClick = onFavoriteClick,
-        )
-
-        AppDetailsNativeAd(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = SizeConstants.LargeSize),
             adsConfig = adsConfig,
+            onFavoriteClick = onFavoriteClick,
         )
 
         when {

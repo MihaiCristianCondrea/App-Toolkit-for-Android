@@ -40,6 +40,15 @@
     <string name="components_button_group_tonal">टोनल बटन</string>
     <string name="components_button_group_outlined">आउटलाइन बटन</string>
     <string name="components_button_group_text_and_icon">टेक्स्ट और आइकन बटन</string>
+    <string name="components_button_group_icon_sizes">आइकॉन बटन के आकार</string>
+    <string name="components_button_group_text_sizes">टेक्स्ट बटन के आकार</string>
+    <string name="components_button_group_text_icon_sizes">टेक्स्ट और आइकॉन बटन के आकार</string>
+    <string name="components_button_group_trailing_icon_sizes">अंत में आइकॉन वाले बटन के आकार</string>
+    <string name="components_button_size_extra_small">बहुत छोटा</string>
+    <string name="components_button_size_small">छोटा</string>
+    <string name="components_button_size_medium">मध्यम</string>
+    <string name="components_button_size_large">बड़ा</string>
+    <string name="components_button_size_extra_large">बहुत बड़ा</string>
     <string name="components_section_fabs">फ्लोटिंग एक्शन बटन</string>
     <string name="components_section_filters">शीर्ष सूची फ़िल्टर</string>
     <string name="components_section_inputs">मेनू और इनपुट</string>
@@ -58,4 +67,13 @@
     <string name="components_animation_restart">टैप करने पर फिर शुरू करें</string>
     <string name="components_animation_reverse">टैप करने पर उल्टा चलाएँ</string>
     <string name="components_animation_preview_helper">एनीमेशन का पूर्वावलोकन करने के लिए किसी आइटम पर टैप करें।</string>
+    <string name="components_section_grid">समूहबद्ध ग्रिड</string>
+    <string name="components_grid_group_categories">आकार के साथ श्रेणियाँ</string>
+    <string name="components_grid_group_compact">संक्षिप्त, एक पंक्ति</string>
+    <string name="components_grid_group_single">एक सेल</string>
+    <string name="components_grid_installed_apps">इंस्टॉल किए गए ऐप्स</string>
+    <string name="components_grid_images">इमेज</string>
+    <string name="components_grid_music">संगीत</string>
+    <string name="components_grid_documents">दस्तावेज़</string>
+    <string name="components_grid_downloads">डाउनलोड</string>
 </resources>

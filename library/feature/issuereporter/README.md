@@ -59,6 +59,16 @@ flowchart TD
   user-facing or GitHub-report contract.
 - Credentials are supplied by the host and used only at the remote boundary; logs and error models
   must never include the token.
+- The description field is a Markdown editor, not a preview. Highlighting is a length-preserving
+  `VisualTransformation`, so offsets stay identity-mapped and the markers remain visible and
+  editable; a Markdown renderer cannot stand in for it. The formatting bar edits the Markdown
+  source, and `Report` renders the issue body as Markdown sections with the device table in a
+  collapsible block.
+- The device-info panel owns its expansion with `rememberSaveable`. It was a file-level
+  `mutableStateOf` shared by every instance in the process, which is why the panel reopened itself
+  and never took part in saved instance state.
+- Reports are always anonymous. The screen has no account section, and a report carries only the
+  optional contact email the author types.
 
 ## Platform metadata ownership
 

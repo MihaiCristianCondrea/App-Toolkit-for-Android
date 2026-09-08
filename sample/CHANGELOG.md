@@ -6,6 +6,13 @@
 
 ### Added
 
+- The Components showcase has a Grouped grid section: a storage-style breakdown whose badges are
+  cut from different Material shapes, the same cells at the smallest size without their supporting
+  line, and a single cell to show it rounding all four of its corners.
+
+- The Components showcase now demonstrates all five button sizes for each button shape in turn —
+  icon-only, text, text with a leading icon, then text with a trailing icon — and its animation
+  gallery covers the stopwatch animation it had been missing.
 - Opening an app or its Play Store page from app details now reports the same GA4 interaction the
   list surfaces already report.
 - Added a Components animation playground with labelled and icon-only buttons for each bundled
@@ -26,7 +33,26 @@
 
 ### Improved
 
-- Buttons across the app now follow the Material 3 Expressive shape and press behavior.
+- The sponsored row on the Quick Tools screen now matches the rows around it: its title is no longer
+  heavier than the tile titles, its action is a text button like the screen's own, and a long
+  description is capped at two lines so the row cannot grow taller than the tiles it sits between.
+- The sponsored row inside the app details quick actions now uses the same badge colour as the
+  actions around it instead of a grey one, and its action is a text button.
+- App details quick actions are now one grouped block instead of loose tiles. The two sponsored rows
+  that used to sit either side of them are replaced by a single one inside the block, between the
+  actions.
+- Refined the expanded tool UI for Dice Roll, Coin Flip, Counter, and SOS: updated Coin Flip to place the coin at the top with result text directly beneath it, enhanced Counter with animated digits (`AnimatedDigit`), and removed redundant bottom text below action buttons.
+- Buttons across the app now follow the Material 3 Expressive shape and press behavior. The primary
+  actions in the changelog sheet and in every Quick Tools sheet, such as Start and the Flash Dimmer
+  on/off, are a size larger so they are easier to hit.
+- Developer Apps and Quick Tools filter chips now animate as the available filters change, and show
+  a checkmark on the chip you picked.
+- The Apps tab shows a dot grid when selected instead of the same squares as when unselected.
+- Components showcase: the animation gallery moved below the other sections, the theme options are
+  spaced so their rounded corners read as separate rows, the FAB row demonstrates one icon source
+  each rather than three copies of the same Lottie file, the grouped actions and carousel lost the
+  extra backgrounds behind them, the value dropdown matches the app's other dropdowns, and the
+  filter chips and carousel are no longer clipped short of their card edges.
 - Quick Tools badges now draw their silhouettes from the Material 3 shape set instead of bundled
   artwork, which removes seven vector drawables from the app.
 - Added click-to-copy functionality to color swatches in the Material Colors tool.
@@ -45,6 +71,11 @@
 
 ### Fixed
 
+- Fixed Quick Tools not reacting after adding a tile. The screen read Quick Settings membership from
+  a system list that does not update the moment a tile is added, so the tile kept showing as not
+  added and, with the "Not added" filter on, nothing about the screen changed. The app's own record
+  of the tiles it added now takes precedence, and refreshing no longer loses that state the next
+  time a category is expanded.
 - Prevented malformed home-screen widget action launches from crashing the Sample App.
 - Corrected Quick Tools setup status and Android-version support for adding Quick Settings tiles.
 - Fixed Sample App startup graph verification and navigation composition after modularization.

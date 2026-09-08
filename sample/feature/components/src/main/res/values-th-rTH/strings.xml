@@ -40,6 +40,15 @@
     <string name="components_button_group_tonal">ปุ่มโทนสี</string>
     <string name="components_button_group_outlined">ปุ่มแบบมีเส้นขอบ</string>
     <string name="components_button_group_text_and_icon">ปุ่มข้อความและไอคอน</string>
+    <string name="components_button_group_icon_sizes">ขนาดปุ่มไอคอน</string>
+    <string name="components_button_group_text_sizes">ขนาดปุ่มข้อความ</string>
+    <string name="components_button_group_text_icon_sizes">ขนาดปุ่มข้อความและไอคอน</string>
+    <string name="components_button_group_trailing_icon_sizes">ขนาดปุ่มที่มีไอคอนท้าย</string>
+    <string name="components_button_size_extra_small">เล็กมาก</string>
+    <string name="components_button_size_small">เล็ก</string>
+    <string name="components_button_size_medium">กลาง</string>
+    <string name="components_button_size_large">ใหญ่</string>
+    <string name="components_button_size_extra_large">ใหญ่มาก</string>
     <string name="components_section_fabs">ปุ่มการทำงานแบบลอย</string>
     <string name="components_section_filters">ตัวกรองรายการยอดนิยม</string>
     <string name="components_section_inputs">เมนูและการป้อนข้อมูล</string>
@@ -58,4 +67,13 @@
     <string name="components_animation_restart">เริ่มใหม่เมื่อแตะ</string>
     <string name="components_animation_reverse">เล่นย้อนกลับเมื่อแตะ</string>
     <string name="components_animation_preview_helper">แตะที่รายการเพื่อดูตัวอย่างแอนิเมชัน</string>
+    <string name="components_section_grid">ตารางแบบจัดกลุ่ม</string>
+    <string name="components_grid_group_categories">หมวดหมู่พร้อมขนาด</string>
+    <string name="components_grid_group_compact">กะทัดรัด บรรทัดเดียว</string>
+    <string name="components_grid_group_single">หนึ่งเซลล์</string>
+    <string name="components_grid_installed_apps">แอปที่ติดตั้ง</string>
+    <string name="components_grid_images">รูปภาพ</string>
+    <string name="components_grid_music">เพลง</string>
+    <string name="components_grid_documents">เอกสาร</string>
+    <string name="components_grid_downloads">ดาวน์โหลด</string>
 </resources>

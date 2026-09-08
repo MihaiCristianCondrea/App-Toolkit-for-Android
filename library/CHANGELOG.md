@@ -6,10 +6,36 @@
 
 ### Added
 
+- Added Markdown authoring to the issue reporter's description field: a formatting bar for bold,
+  italic, inline code, code blocks, bulleted and numbered lists, quotes and links, and Markdown
+  syntax highlighted as it is typed.
+
+- Added `GroupedGrid`, the grouped category block used for storage and media breakdowns and for
+  blocks of actions. Cells are laid out in columns as one rounded group: only the corners at the
+  outside of the block are rounded, seams between cells are cut small, and a grid of one cell rounds
+  all four of its corners. `GroupedGridMeasurements` picks the cell height and everything that
+  scales with it the way `ButtonMeasurements` does for buttons, `GroupedGridDefaults` carries the
+  radii, spacing, colors and badge shape, and each cell may cut its badge from any `Shape`,
+  including the Material 3 `MaterialShapes` set. Cell titles are semibold, and the press-scale
+  animation is off unless a caller asks for it, so a group reads as one block rather than as cells
+  that move on their own. Passing an ad unit adds one full-width native ad row in the middle of the
+  block; a grid of one cell never shows one, and an ad that fails to load leaves the group cut as if
+  it had never been asked for.
+- Added the `GridRow` native ad presentation: an icon-led row that keeps its disclosure chip inline
+  with the body instead of on a line of its own, and takes its badge, icon size, padding and
+  headline size from the grid it sits in, so a sponsored row is no taller than the cells around it.
+  Its badge is filled with the same silhouette the cells are cut from, `MaterialShapes` included,
+  through `rememberNativeAdBadgeShape`, which flattens any Compose `Shape` to the path an ad's
+  Android view can be drawn with.
+
+- `CommonFilterChip` accepts an `icon` shown while the chip is unselected, and `hasAnimation` to
+  turn off the crossfade into the selected checkmark.
+- `CommonDropdownMenuItem` takes an optional `icon` and a plain `text` alongside the existing
+  string-resource overload, so value pickers can use the toolkit row without a leading glyph.
 - Added `ButtonMeasurements`, the five Material 3 Expressive button size classes (extra small,
   small, medium, large, extra large), accepted by `GeneralButton`. Container height, shape, content
-  padding, icon size, icon spacing, and label typography all follow the selected size, so callers
-  pick a size instead of restating the specification.
+  padding, icon spacing, and label typography all follow the selected size, so callers pick a size
+  instead of restating the specification, `iconSize` included.
 - Added an `animatedIcon` constructor to bottom-bar and drawer items: one AVD or Lottie icon can
   cover both navigation states, including reverse replay, without separate icon arguments.
   Without `animatedIcon`, callers must now supply both `icon` and `selectedIcon` explicitly.
@@ -35,13 +61,46 @@
 
 ### Changed
 
+- Added `NativeAdStyle`, which gives a native ad the finish of the screen it is on without a view
+  tree of its own: badge silhouette, badge colour, headline and body size and colour, body line cap,
+  and whether the call to action is a filled pill or a text button. `NativeAdSlot` takes one. A
+  style overrides only what it names, and is applied to views that already exist, so changing one
+  repaints the ad rather than rebuilding it and losing the loaded ad.
+- The Help screen's ad now matches the rows it sits between: a `Cookie12Sided` badge on
+  `primaryContainer` like Contact Us, `titleMedium` and `bodyMedium` text at the weight the question
+  rows use, and a text button instead of a filled pill.
+- **Breaking:** `NativeAdPresentation.GridRow` no longer carries `iconCornerRadiusDp`,
+  `headlineTextSizeSp`, or `iconShape`. A presentation now describes the arrangement only, and those
+  three moved to `NativeAdStyle`, which is where the rest of an ad's finish lives.
+- **Breaking:** Single-screen native ad cards moved out of `:library:core:ui` to the code that draws
+  them. `HelpNativeAdCard` is now in `:library:feature:help`, `SupportNativeAdCard` in
+  `:library:feature:support`, and `AppsListNativeAdCard` moved to the sample app, whose screen is
+  its only caller. Consumers importing them from `core.ui.views.ads` must update the import, or
+  compose their own with `NativeAdSlot`, which is what a placement is. `AppDetailsNativeAd` is
+  removed; it had no call site left.
+- The issue reporter form is one grouped block of fields. The fields state themselves through a
+  placeholder and a leading icon instead of a floating label, whose animation reserved the space
+  that kept the two-dp grouping from reading as a group, and the description field grows to twelve
+  rows before scrolling its own content.
+- Filed issues now use a Markdown body with Description, Device info and Extra info sections; the
+  device and extra tables are Markdown tables inside a collapsible block instead of raw HTML.
+
+- **Breaking:** `TopListFilters` now takes `FilterChipItem` entries instead of plain strings, so a
+  chip row carries a per-chip icon and label. Callers must map their filters to `FilterChipItem`.
+  `hasAnimation` turns the chip and row animations off, and `contentPadding` lets a caller that
+  already insets the row stop it from insetting itself.
+- **Breaking:** `TopListFilters`'s `label` is now `leadingLabel`, the caption before the chips, and
+  it defaults to `null` rather than "Sort by". A null, empty, or blank value renders neither the
+  caption nor the gap after it, so the chips start where they would in a row that never had one.
+  Rows that want the old caption must pass it explicitly.
 - `GeneralButton` now renders through the Material 3 Expressive button and icon-button overloads, so
   every style picks up the expressive resting and pressed shapes. Buttons keep their previous height
   by defaulting to `ButtonMeasurements.Small`; icon-only content now follows the expressive
   icon-button container and icon metrics instead of a fixed 40dp box.
-- `GeneralButton`'s `iconSize` is now `Dp?` and defaults to `null`, meaning "use the size implied by
-  `measurements`". Callers passing an explicit `Dp` are unaffected. An explicit `shape` still
-  overrides the resting shape.
+- `GeneralButton`'s `iconSize` is now `Dp?` and defaults to `null`, which scales the glyph with
+  `measurements`. Pass `SizeConstants.ButtonIconSize` to pin it to the size toolkit icons are drawn
+  at elsewhere, which suits small affordances such as favourite, share, and expand buttons, or any
+  other `Dp` for a one-off. An explicit `shape` still overrides the resting shape.
 - **Breaking (3.0):** Consolidated text, tonal, outlined, and filled action buttons into one adaptive
   `GeneralButton` with five styles, including Elevated. Removed the separate APIs without deprecated
   aliases. Icon-only content uses the matching Material icon button (a compact elevated button for
@@ -70,9 +129,15 @@
 
 ### Improved
 
+- The changelog sheet's action is now an extra-large expressive button, and `DropdownMenuBox` rows
+  now match the rest of the toolkit's dropdowns instead of rendering as bare Material rows.
 - Standardized changelog, alert-dialog, and date-picker actions with consistent button styling, haptic feedback, and press animations.
 
 ### Removed
+
+- Removed the issue reporter's login section. Reports are always filed anonymously, so the
+  `login_section_label`, `send_anonymously`, `use_github_account` and `optional_placeholder`
+  resources are gone.
 
 - Removed the bundled `shape_scalloped` vector drawable from the Help feature. The Contact Us badge
   now renders `MaterialShapes.Cookie12Sided`, so the toolkit no longer ships hand-authored shape
@@ -89,6 +154,12 @@
   `DISPLAY_SETTINGS`, `FAQ`, `SELECT_STARTUP_DIALOG`, and `SELECT_LANGUAGE_DIALOG` log tags.
 
 ### Fixed
+
+- Fixed the issue reporter's device-info section. Its expansion was held in a process-wide
+  property shared by every instance, so the panel reopened by itself on a later visit; it is now
+  per-instance state that survives configuration changes. The section expands vertically instead of
+  also unfolding sideways, the header no longer reacts to taps anywhere along the row, and only its
+  arrow, now a `GeneralButton`, toggles it.
 
 - Fixed Help and Settings menu buttons that still passed ImageVector values to the migrated icon API
   and prevented the sample app from compiling.

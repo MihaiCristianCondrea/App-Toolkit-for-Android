@@ -134,6 +134,7 @@ fun QuestionCard(
                     style = GeneralButtonStyle.Text,
                     onClick = { onToggleExpand() },
                     contentDescription = title,
+                    iconSize = SizeConstants.ButtonIconSize,
                     icon = ToolkitIcon.Vector(imageVector = Icons.Filled.ExpandMore),
                     modifier = Modifier.rotate(degrees = expandIconRotation),
                 )

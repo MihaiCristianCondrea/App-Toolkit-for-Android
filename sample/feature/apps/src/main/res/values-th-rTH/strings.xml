@@ -36,7 +36,6 @@
     <string name="app_details_version">Version %1$s</string>
     <string name="app_details_view_on_play_store">ดูบน Google Play</string>
     <string name="apps_filter_all">ทั้งหมด</string>
-    <string name="error_failed_to_fetch_our_apps">ไม่สามารถโหลดรายการแอปได้</string>
     <string name="error_failed_to_load_apps">ไม่สามารถโหลดแอปได้</string>
     <string name="error_failed_to_update_favorite">ไม่สามารถอัปเดตรายการโปรดได้</string>
     <string name="favorite_apps">รายการโปรด</string>

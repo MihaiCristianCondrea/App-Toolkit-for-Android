@@ -17,28 +17,24 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github
 
+/** Host-supplied key/value pairs appended to a report. */
 class ExtraInfo {
     private val extraInfo: MutableMap<String, String> = LinkedHashMap()
 
     fun isEmpty(): Boolean = extraInfo.isEmpty()
 
+    /** The Markdown table for these pairs, or an empty string when there are none. */
     fun toMarkdown(): String {
         if (extraInfo.isEmpty()) return ""
-        val output = StringBuilder()
-        output.append(
-            "Extra info:\n" +
-                    "---\n" +
-                    "<table>\n"
-        )
-        for (key in extraInfo.keys) {
-            output.append("<tr><td>")
-                .append(key)
-                .append("</td><td>")
-                .append(extraInfo[key])
-                .append("</td></tr>\n")
+        return buildString {
+            append("| Item | Value |\n")
+            append("| --- | --- |\n")
+            extraInfo.forEach { (key, value) ->
+                append("| ${key.escapeTableCell()} | ${value.escapeTableCell()} |\n")
+            }
         }
-        output.append("</table>\n")
-        return output.toString()
     }
+
+    private fun String.escapeTableCell(): String = replace(oldValue = "|", newValue = "\\|")
 }
 

@@ -40,6 +40,15 @@
     <string name="components_button_group_tonal">Tonade knappar</string>
     <string name="components_button_group_outlined">Konturknappar</string>
     <string name="components_button_group_text_and_icon">Text- och ikonknappar</string>
+    <string name="components_button_group_icon_sizes">Storlekar för ikonknappar</string>
+    <string name="components_button_group_text_sizes">Storlekar för textknappar</string>
+    <string name="components_button_group_text_icon_sizes">Storlekar för text- och ikonknappar</string>
+    <string name="components_button_group_trailing_icon_sizes">Storlekar för knappar med ikon sist</string>
+    <string name="components_button_size_extra_small">Mycket liten</string>
+    <string name="components_button_size_small">Liten</string>
+    <string name="components_button_size_medium">Mellan</string>
+    <string name="components_button_size_large">Stor</string>
+    <string name="components_button_size_extra_large">Mycket stor</string>
     <string name="components_section_fabs">Flytande åtgärdsknappar</string>
     <string name="components_section_filters">Filter för topplista</string>
     <string name="components_section_inputs">Menyer och inmatning</string>
@@ -58,4 +67,13 @@
     <string name="components_animation_restart">Starta om vid tryck</string>
     <string name="components_animation_reverse">Spela baklänges vid tryck</string>
     <string name="components_animation_preview_helper">Tryck på ett objekt för att förhandsgranska dess animering.</string>
+    <string name="components_section_grid">Grupperat rutnät</string>
+    <string name="components_grid_group_categories">Kategorier med storlekar</string>
+    <string name="components_grid_group_compact">Kompakt, en rad</string>
+    <string name="components_grid_group_single">En cell</string>
+    <string name="components_grid_installed_apps">Installerade appar</string>
+    <string name="components_grid_images">Bilder</string>
+    <string name="components_grid_music">Musik</string>
+    <string name="components_grid_documents">Dokument</string>
+    <string name="components_grid_downloads">Nedladdningar</string>
 </resources>

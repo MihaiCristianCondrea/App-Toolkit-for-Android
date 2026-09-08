@@ -9,7 +9,7 @@ entry helpers, state handling, analytics hooks, and shared components.
 
 - `ScreenViewModel`, `LoggedScreenViewModel`, event/action bases, and `UiStateScreen` handling.
 - Navigation entry builders and UI state built on stable keys owned by `:library:navigation`.
-- Reusable buttons, fields, preferences, layouts, dialogs, snackbars, ads slots, effects, and
+- Reusable buttons, fields, preferences, layouts, grids, dialogs, snackbars, ads slots, effects, and
   adaptive-window helpers.
 - Render models such as `AppVersionInfo` and `AdsConfig`.
 - The shared theme-mode preview composables used by both the onboarding and settings theme UI.
@@ -82,6 +82,13 @@ remain available; data-layer callers should use the lower-level APIs.
 
 - `GeneralButton` is the action-button entry point for all five styles and labelled/icon-only content.
   See the [3.0 button contract and migration](../designsystem/README.md#generalbutton-30).
+- `GroupedGrid` is the grouped category/action block: `GroupedGridItem` cells, `GroupedGridDefaults`
+  for radii, spacing, colors and the badge shape, and `GroupedGridMeasurements` for the size class.
+  The corner and ad-placement rules are `groupedGridRows`, which is unit tested; the composable
+  renders the plan it returns. Its ad row goes through `NativeAdSlot` like every other ad surface,
+  so a host that passes no `adUnitId` pulls in no ad behaviour at all. The size class also chooses
+  the ad's `NativeAdPresentation.GridRow` metrics, so the sponsored row matches the cells rather
+  than the other ad surfaces.
 
 
 - All new ViewModels must extend `ScreenViewModel`, or `LoggedScreenViewModel` when Firebase
@@ -106,6 +113,13 @@ remain available; data-layer callers should use the lower-level APIs.
 
 Feature-specific theme, onboarding-preview, and display-dialog code lives in this generic core
 module. The native-ad UI also exposes an advertising concern from the shared UI foundation.
+
+`views/ads` holds only primitives now: the slot, the renderer, the palette, the presentations, and
+the two generic containers a host can place anywhere. Single-screen cards moved to the features that
+draw them, and the sample's to the sample. Do not add a one-screen wrapper back here: write it next
+to its screen, or add a `NativeAdPresentation` if the shape itself is new. The primitives themselves
+belong in `:library:integration:ads`; the reason they have not moved is recorded in
+[that module's README](../../integration/ads/README.md#current-risks).
 
 ## Migration notes
 
@@ -135,5 +149,13 @@ with `NativeAdLoader.load` under `DisposableEffectImpl.onRemembered`. Preserve t
   minimum height merely to align one screen.
 - Featured/no-data presentations retain the sponsored-label container, a clipped 16:9 media frame,
   and an end-aligned CTA. Grid presentations keep their content centered.
+- `NativeAdPresentation.GridRow` is the one presentation whose metrics the caller supplies, because
+  it has to match the grid it is interleaved with. It keeps the disclosure chip inline with the body
+  so the row stays as short as a cell; do not restore a stacked label there. Its badge silhouette
+  comes from `rememberNativeAdBadgeShape`, and is deliberately excluded from the presentation's
+  equality: the renderer keys its view tree on the presentation, so comparing the badge by identity
+  would tear down and restart the ad request whenever a caller rebuilt the shape. The badge is
+  repainted in the palette pass instead. The ad icon is inset rather than clipped, which is what
+  lets the badge carry a silhouette no view outline could express.
 
 These are compatibility safeguards for host applications, not incidental styling details.

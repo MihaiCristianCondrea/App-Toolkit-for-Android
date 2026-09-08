@@ -40,6 +40,15 @@
     <string name="components_button_group_tonal">Тонални бутони</string>
     <string name="components_button_group_outlined">Контурни бутони</string>
     <string name="components_button_group_text_and_icon">Текстови бутони и бутони с икони</string>
+    <string name="components_button_group_icon_sizes">Размери на бутоните с икона</string>
+    <string name="components_button_group_text_sizes">Размери на текстовите бутони</string>
+    <string name="components_button_group_text_icon_sizes">Размери на бутоните с текст и икона</string>
+    <string name="components_button_group_trailing_icon_sizes">Размери на бутоните с икона накрая</string>
+    <string name="components_button_size_extra_small">Много малък</string>
+    <string name="components_button_size_small">Малък</string>
+    <string name="components_button_size_medium">Среден</string>
+    <string name="components_button_size_large">Голям</string>
+    <string name="components_button_size_extra_large">Много голям</string>
     <string name="components_section_fabs">Плаващи бутони за действие</string>
     <string name="components_section_filters">Филтри на горния списък</string>
     <string name="components_section_inputs">Менюта и въвеждане</string>
@@ -58,4 +67,13 @@
     <string name="components_animation_restart">Рестартиране при докосване</string>
     <string name="components_animation_reverse">Обръщане при докосване</string>
     <string name="components_animation_preview_helper">Докоснете елемент, за да прегледате неговата анимация.</string>
+    <string name="components_section_grid">Групирана мрежа</string>
+    <string name="components_grid_group_categories">Категории с размери</string>
+    <string name="components_grid_group_compact">Компактно, на един ред</string>
+    <string name="components_grid_group_single">Една клетка</string>
+    <string name="components_grid_installed_apps">Инсталирани приложения</string>
+    <string name="components_grid_images">Изображения</string>
+    <string name="components_grid_music">Музика</string>
+    <string name="components_grid_documents">Документи</string>
+    <string name="components_grid_downloads">Изтегляния</string>
 </resources>

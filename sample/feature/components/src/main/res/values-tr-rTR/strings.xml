@@ -40,6 +40,15 @@
     <string name="components_button_group_tonal">Tonal düğmeler</string>
     <string name="components_button_group_outlined">Çerçeveli düğmeler</string>
     <string name="components_button_group_text_and_icon">Metin ve simge düğmeleri</string>
+    <string name="components_button_group_icon_sizes">Simge düğmesi boyutları</string>
+    <string name="components_button_group_text_sizes">Metin düğmesi boyutları</string>
+    <string name="components_button_group_text_icon_sizes">Metin ve simge düğmesi boyutları</string>
+    <string name="components_button_group_trailing_icon_sizes">Sonda simgeli düğme boyutları</string>
+    <string name="components_button_size_extra_small">Çok küçük</string>
+    <string name="components_button_size_small">Küçük</string>
+    <string name="components_button_size_medium">Orta</string>
+    <string name="components_button_size_large">Büyük</string>
+    <string name="components_button_size_extra_large">Çok büyük</string>
     <string name="components_section_fabs">Yüzen eylem düğmeleri</string>
     <string name="components_section_filters">Üst liste filtreleri</string>
     <string name="components_section_inputs">Menüler ve girişler</string>
@@ -58,4 +67,13 @@
     <string name="components_animation_restart">Dokununca yeniden başlat</string>
     <string name="components_animation_reverse">Dokununca tersine oynat</string>
     <string name="components_animation_preview_helper">Animasyonunu önizlemek için bir öğeye dokunun.</string>
+    <string name="components_section_grid">Gruplanmış ızgara</string>
+    <string name="components_grid_group_categories">Boyutlu kategoriler</string>
+    <string name="components_grid_group_compact">Kompakt, tek satır</string>
+    <string name="components_grid_group_single">Tek hücre</string>
+    <string name="components_grid_installed_apps">Yüklü uygulamalar</string>
+    <string name="components_grid_images">Görseller</string>
+    <string name="components_grid_music">Müzik</string>
+    <string name="components_grid_documents">Belgeler</string>
+    <string name="components_grid_downloads">İndirilenler</string>
 </resources>

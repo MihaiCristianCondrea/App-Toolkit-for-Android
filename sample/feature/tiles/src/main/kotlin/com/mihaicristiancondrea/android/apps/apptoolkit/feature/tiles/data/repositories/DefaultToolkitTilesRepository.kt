@@ -27,9 +27,11 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.domain.uti
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 
 class DefaultToolkitTilesRepository(
     private val torchRepository: TorchRepository,
@@ -37,8 +39,20 @@ class DefaultToolkitTilesRepository(
     private val quickSettingsDataSource: QuickSettingsTilesLocalDataSource,
 ) : ToolkitTilesRepository {
 
+    private val refreshRequests = MutableSharedFlow<Unit>(
+        replay = 0,
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST,
+    )
+
     override fun tileCategories(): Flow<ImmutableList<ToolkitTileCategoryData>> =
-        flowOf(currentTileCategories())
+        refreshRequests
+            .onStart { emit(Unit) }
+            .map { currentTileCategories() }
+
+    override fun refreshTileCategories() {
+        refreshRequests.tryEmit(Unit)
+    }
 
     override val expandedCategoryIds: Flow<Set<String>> =
         preferencesDataSource.expandedCategoryIds.map { persistedIds ->

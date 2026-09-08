@@ -40,6 +40,15 @@
     <string name="components_button_group_tonal">الأزرار اللونية</string>
     <string name="components_button_group_outlined">الأزرار ذات الإطار</string>
     <string name="components_button_group_text_and_icon">أزرار النص والرموز</string>
+    <string name="components_button_group_icon_sizes">أحجام أزرار الأيقونات</string>
+    <string name="components_button_group_text_sizes">أحجام الأزرار النصية</string>
+    <string name="components_button_group_text_icon_sizes">أحجام أزرار النص والأيقونة</string>
+    <string name="components_button_group_trailing_icon_sizes">أحجام أزرار الأيقونة اللاحقة</string>
+    <string name="components_button_size_extra_small">صغير جدًا</string>
+    <string name="components_button_size_small">صغير</string>
+    <string name="components_button_size_medium">متوسط</string>
+    <string name="components_button_size_large">كبير</string>
+    <string name="components_button_size_extra_large">كبير جدًا</string>
     <string name="components_section_fabs">أزرار الإجراءات العائمة</string>
     <string name="components_section_filters">فلاتر القائمة العلوية</string>
     <string name="components_section_inputs">القوائم والإدخال</string>
@@ -58,4 +67,13 @@
     <string name="components_animation_restart">إعادة البدء عند النقر</string>
     <string name="components_animation_reverse">العكس عند النقر</string>
     <string name="components_animation_preview_helper">انقر على عنصر لمعاينة الرسوم المتحركة الخاص به.</string>
+    <string name="components_section_grid">شبكة مجمّعة</string>
+    <string name="components_grid_group_categories">فئات مع الأحجام</string>
+    <string name="components_grid_group_compact">مضغوط، سطر واحد</string>
+    <string name="components_grid_group_single">خلية واحدة</string>
+    <string name="components_grid_installed_apps">التطبيقات المثبَّتة</string>
+    <string name="components_grid_images">الصور</string>
+    <string name="components_grid_music">الموسيقى</string>
+    <string name="components_grid_documents">المستندات</string>
+    <string name="components_grid_downloads">التنزيلات</string>
 </resources>

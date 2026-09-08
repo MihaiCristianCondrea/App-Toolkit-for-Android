@@ -45,17 +45,14 @@ fun groupedItemPosition(index: Int, size: Int): GroupedItemPosition {
 }
 
 /**
- * Clips an item with adaptive grouped-corner radii based on [position].
- *
- * Modifier ordering matters: apply this modifier before drawing modifiers like `background`
- * so the drawn content respects the rounded clipping.
+ * Returns a [RoundedCornerShape] with adaptive grouped-corner radii based on [position].
  */
-fun Modifier.groupedCorners(
+fun getGroupedShape(
     position: GroupedItemPosition,
     outerRadius: Dp = 16.dp,
     innerRadius: Dp = 2.dp,
-): Modifier {
-    val shape = when (position) {
+): RoundedCornerShape {
+    return when (position) {
         GroupedItemPosition.FIRST -> RoundedCornerShape(
             topStart = outerRadius,
             topEnd = outerRadius,
@@ -73,7 +70,20 @@ fun Modifier.groupedCorners(
 
         GroupedItemPosition.SINGLE -> RoundedCornerShape(outerRadius)
     }
-    return this.clip(shape)
+}
+
+/**
+ * Clips an item with adaptive grouped-corner radii based on [position].
+ *
+ * Modifier ordering matters: apply this modifier before drawing modifiers like `background`
+ * so the drawn content respects the rounded clipping.
+ */
+fun Modifier.groupedCorners(
+    position: GroupedItemPosition,
+    outerRadius: Dp = 16.dp,
+    innerRadius: Dp = 2.dp,
+): Modifier {
+    return this.clip(shape = getGroupedShape(position, outerRadius, innerRadius))
 }
 
 /**

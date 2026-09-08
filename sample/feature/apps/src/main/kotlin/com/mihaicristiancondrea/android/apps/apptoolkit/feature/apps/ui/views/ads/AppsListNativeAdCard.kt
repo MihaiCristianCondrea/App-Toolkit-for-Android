@@ -15,21 +15,27 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads
+package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.ads
 
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdPresentation
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdSlot
 
 /**
  * Square native ad cell that sits among app cards in a grid.
  *
  * Change rationale: this used to inflate `R.layout.native_ad_apps_list_card` through
  * `NativeAdViewHost` and bind it with `findViewById`, while duplicating the "render nothing until
- * loaded" logic locally. Both now come from [NativeAdSlot], see [SupportNativeAdCard] for the
- * behaviour changes that come with the shared renderer.
+ * loaded" logic locally. Both now come from [NativeAdSlot]; the behaviour changes that came with
+ * the shared renderer are listed in the `:library:integration:ads` README.
+ *
+ * It lives in the sample rather than in the library because it is this screen's placement, not a
+ * reusable primitive. The sample is where a host reads how the toolkit's ad APIs are meant to be
+ * used, so a placement belongs beside the screen that makes it.
  *
  * @param containerColor overrides the card container for hosts whose surfaces are their own.
  * @param onAdLoaded reports whether an ad is currently displayed, so the grid can drop the cell.

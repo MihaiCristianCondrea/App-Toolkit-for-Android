@@ -40,6 +40,15 @@
     <string name="components_button_group_tonal">Botões tonais</string>
     <string name="components_button_group_outlined">Botões com contorno</string>
     <string name="components_button_group_text_and_icon">Botões de texto e ícone</string>
+    <string name="components_button_group_icon_sizes">Tamanhos de botão de ícone</string>
+    <string name="components_button_group_text_sizes">Tamanhos de botão de texto</string>
+    <string name="components_button_group_text_icon_sizes">Tamanhos de botão com texto e ícone</string>
+    <string name="components_button_group_trailing_icon_sizes">Tamanhos de botão com ícone final</string>
+    <string name="components_button_size_extra_small">Muito pequeno</string>
+    <string name="components_button_size_small">Pequeno</string>
+    <string name="components_button_size_medium">Médio</string>
+    <string name="components_button_size_large">Grande</string>
+    <string name="components_button_size_extra_large">Muito grande</string>
     <string name="components_section_fabs">Botões de ação flutuante</string>
     <string name="components_section_filters">Filtros da lista superior</string>
     <string name="components_section_inputs">Menus e entradas</string>
@@ -58,4 +67,13 @@
     <string name="components_animation_restart">Reiniciar ao tocar</string>
     <string name="components_animation_reverse">Inverter ao tocar</string>
     <string name="components_animation_preview_helper">Toque em um item para ver a prévia da animação.</string>
+    <string name="components_section_grid">Grade agrupada</string>
+    <string name="components_grid_group_categories">Categorias com tamanhos</string>
+    <string name="components_grid_group_compact">Compacto, uma linha</string>
+    <string name="components_grid_group_single">Uma célula</string>
+    <string name="components_grid_installed_apps">Apps instalados</string>
+    <string name="components_grid_images">Imagens</string>
+    <string name="components_grid_music">Música</string>
+    <string name="components_grid_documents">Documentos</string>
+    <string name="components_grid_downloads">Downloads</string>
 </resources>

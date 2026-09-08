@@ -20,8 +20,11 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Outline
+import android.graphics.Path
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.PathShape
 import android.text.TextUtils
 import android.util.TypedValue
 import android.view.Gravity
@@ -42,6 +45,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.isVisible
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.isSpecified
+import androidx.compose.ui.graphics.toArgb
 import com.google.android.libraries.ads.mobile.sdk.nativead.MediaView
 import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAd
 import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdView
@@ -68,6 +74,11 @@ class DefaultNativeAdViewFactory : NativeAdViewFactory {
         NativeAdPresentation.Featured -> createFeatured(context = context)
         NativeAdPresentation.Compact -> createCompact(context = context)
         NativeAdPresentation.Grid -> createGrid(context = context)
+        is NativeAdPresentation.GridRow -> createGridRow(
+            context = context,
+            presentation = presentation,
+        )
+
         NativeAdPresentation.BarRow -> createBarRow(context = context)
     }
 }
@@ -93,9 +104,10 @@ internal fun NativeAdRenderer(
     nativeAd: NativeAd,
     palette: NativeAdPalette,
     modifier: Modifier = Modifier,
+    style: NativeAdStyle = NativeAdStyle(),
 ) {
     val factory = LocalNativeAdViewFactory.current
-    val sponsoredLabel: String = stringResource(id = R.string.sponsored_ad_label)
+    val sponsoredLabel: String = stringResource(id = R.string.sponsored_ad_label_plain)
 
     // Grid cells are square and their content is centred, so the ad view has to fill the cell;
     // every other presentation wraps its own height.
@@ -111,7 +123,7 @@ internal fun NativeAdRenderer(
             factory = { context -> factory.createViewHolder(context, presentation).root },
             update = { view ->
                 val holder: NativeAdViewHolder = view.holder ?: return@AndroidView
-                holder.applyPalette(palette = palette)
+                holder.applyPalette(palette = palette, style = style)
                 holder.bind(nativeAd = nativeAd, sponsoredLabel = sponsoredLabel)
             },
         )
@@ -139,7 +151,7 @@ class NativeAdViewHolder(
         root.tag = this
     }
 
-    fun applyPalette(palette: NativeAdPalette) {
+    fun applyPalette(palette: NativeAdPalette, style: NativeAdStyle = NativeAdStyle()) {
         label.setTextColor(palette.primary)
         // The disclosure badge sits in a rounded chip on every card presentation, as it did in the
         // layouts this renderer replaced. The bar strip is too shallow for one.
@@ -151,15 +163,44 @@ class NativeAdViewHolder(
                 radiusPx = label.context.dp(value = LABEL_CORNER_RADIUS_DP),
             )
         }
-        headline.setTextColor(palette.onSurface)
-        body?.setTextColor(palette.onSurfaceVariant)
+        headline.setTextColor(style.headlineColor.orArgb(fallback = palette.onSurface))
+        style.headlineTextSizeSp?.let { size ->
+            headline.setTextSize(TypedValue.COMPLEX_UNIT_SP, size)
+        }
+        style.headlineBold?.let { bold ->
+            headline.setTypeface(headline.typeface, if (bold) Typeface.BOLD else Typeface.NORMAL)
+        }
+
+        body?.let { bodyView ->
+            bodyView.setTextColor(style.bodyColor.orArgb(fallback = palette.onSurfaceVariant))
+            style.bodyTextSizeSp?.let { size ->
+                bodyView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size)
+            }
+            style.bodyMaxLines?.let { lines -> bodyView.maxLines = lines }
+        }
         advertiser.setTextColor(palette.onSurfaceVariant)
 
         iconFrame?.let { frame ->
-            frame.background = roundedDrawable(
-                color = palette.surfaceVariant,
-                radiusPx = frame.context.dp(value = ICON_CORNER_RADIUS_DP),
-            )
+            // The badge is cut with the caller's silhouette when it gave one, otherwise a rounded
+            // square. This runs on every update, so a shape or colour the caller rebuilt repaints
+            // instead of recreating the ad view.
+            val badgeColor: Int = style.badgeColor.orArgb(fallback = palette.surfaceVariant)
+            val badgeShape: NativeAdBadgeShape? = style.badgeShape
+
+            frame.background = if (badgeShape != null) {
+                pathDrawable(
+                    color = badgeColor,
+                    path = badgeShape.path,
+                    sourceSize = badgeShape.sizePx,
+                )
+            } else {
+                roundedDrawable(
+                    color = badgeColor,
+                    radiusPx = frame.context.dp(
+                        value = style.badgeCornerRadiusDp ?: ICON_CORNER_RADIUS_DP,
+                    ),
+                )
+            }
         }
         mediaFrame?.let { frame ->
             frame.background = roundedDrawable(
@@ -168,11 +209,34 @@ class NativeAdViewHolder(
             )
         }
         callToAction?.let { cta ->
-            cta.background = roundedDrawable(
-                color = palette.secondaryContainer,
-                radiusPx = cta.context.dp(value = CTA_CORNER_RADIUS_DP),
-            )
-            cta.setTextColor(palette.onSecondaryContainer)
+            when (style.callToAction) {
+                NativeAdCallToActionStyle.Filled -> {
+                    cta.background = roundedDrawable(
+                        color = palette.secondaryContainer,
+                        radiusPx = cta.context.dp(value = CTA_CORNER_RADIUS_DP),
+                    )
+                    cta.setTextColor(palette.onSecondaryContainer)
+                    cta.setPadding(
+                        cta.context.dp(CTA_HORIZONTAL_PADDING_DP),
+                        cta.context.dp(CTA_VERTICAL_PADDING_DP),
+                        cta.context.dp(CTA_HORIZONTAL_PADDING_DP),
+                        cta.context.dp(CTA_VERTICAL_PADDING_DP),
+                    )
+                }
+
+                NativeAdCallToActionStyle.Text -> {
+                    // A text button carries no container, and sheds the pill's padding with it, so
+                    // it lines up with the text buttons the rest of the screen uses.
+                    cta.background = null
+                    cta.setTextColor(palette.primary)
+                    cta.setPadding(
+                        cta.context.dp(CTA_TEXT_HORIZONTAL_PADDING_DP),
+                        cta.context.dp(CTA_VERTICAL_PADDING_DP),
+                        cta.context.dp(CTA_TEXT_HORIZONTAL_PADDING_DP),
+                        cta.context.dp(CTA_VERTICAL_PADDING_DP),
+                    )
+                }
+            }
         }
         if (presentation is NativeAdPresentation.BarRow) {
             content.setBackgroundColor(palette.surfaceContainer)
@@ -215,6 +279,9 @@ class NativeAdViewHolder(
     }
 }
 
+/** Resolves an optional style colour against the palette value it overrides. */
+private fun Color.orArgb(fallback: Int): Int = if (isSpecified) toArgb() else fallback
+
 private val NativeAdView.holder: NativeAdViewHolder?
     get() = tag as? NativeAdViewHolder
 
@@ -236,6 +303,7 @@ const val MEDIA_ASPECT_RATIO: Float = 16f / 9f
 const val CTA_CORNER_RADIUS_DP: Int = 20
 
 const val CTA_HORIZONTAL_PADDING_DP: Int = 20
+const val CTA_TEXT_HORIZONTAL_PADDING_DP: Int = 12
 const val CTA_VERTICAL_PADDING_DP: Int = 8
 
 const val CARD_PADDING_DP: Int = 8
@@ -245,6 +313,9 @@ const val SPACING_DP: Int = 16
 const val SMALL_SPACING_DP: Int = 8
 const val LABEL_HORIZONTAL_PADDING_DP: Int = 8
 const val LABEL_VERTICAL_PADDING_DP: Int = 4
+
+const val GRID_ROW_LABEL_SPACING_DP: Int = 6
+const val GRID_ROW_BODY_TEXT_SIZE_SP: Float = 12f
 
 const val COMPACT_ICON_SIZE_DP: Int = 48
 const val BAR_ICON_SIZE_DP: Int = 32
@@ -521,6 +592,133 @@ private fun createBarRow(context: Context): NativeAdViewHolder {
     )
 }
 
+/**
+ * One row of a grouped grid.
+ *
+ * Everything is on a single row, and the disclosure chip sits inline with the body rather than on a
+ * line of its own: a row that stacked the chip above the icon came out taller than the cells it is
+ * interleaved with, which is exactly what makes an ad read as an intruder rather than as one more
+ * row of the block. The badge, padding, gap and headline size come from the grid's size class, so
+ * the row lines up with the cells above and below it.
+ */
+private fun createGridRow(
+    context: Context,
+    presentation: NativeAdPresentation.GridRow,
+): NativeAdViewHolder {
+    val root = nativeAdRoot(context = context)
+    val padding: Int = context.dp(presentation.contentPaddingDp)
+
+    val content = LinearLayout(context).apply {
+        orientation = LinearLayout.HORIZONTAL
+        gravity = Gravity.CENTER_VERTICAL
+        setPadding(padding, padding, padding, padding)
+        layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+        )
+    }
+
+    val iconFrame = gridRowIconFrameView(context = context, presentation = presentation)
+    val icon = iconFrame.getChildAt(0) as ImageView
+
+    val texts = LinearLayout(context).apply {
+        orientation = LinearLayout.VERTICAL
+        layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+            .apply {
+                marginStart = context.dp(presentation.iconSpacingDp)
+                marginEnd = context.dp(SMALL_SPACING_DP)
+            }
+    }
+
+    val headline = headlineView(context = context, maxLines = 1)
+
+    val label = sponsoredLabelView(context = context)
+
+    val body = bodyView(context = context, maxLines = 1).apply {
+        setTextSize(TypedValue.COMPLEX_UNIT_SP, GRID_ROW_BODY_TEXT_SIZE_SP)
+        layoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+        ).apply { marginStart = context.dp(GRID_ROW_LABEL_SPACING_DP) }
+    }
+
+    val labelAndBody = LinearLayout(context).apply {
+        orientation = LinearLayout.HORIZONTAL
+        gravity = Gravity.CENTER_VERTICAL
+        layoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+        ).apply { topMargin = context.dp(ICON_PADDING_DP) }
+        addView(label)
+        addView(body)
+    }
+
+    val advertiser = advertiserView(context = context)
+        .withTopMargin(context.dp(ICON_PADDING_DP))
+
+    texts.addView(headline)
+    texts.addView(labelAndBody)
+    texts.addView(advertiser)
+
+    val callToAction = callToActionView(context = context)
+
+    content.addView(iconFrame)
+    content.addView(texts)
+    content.addView(callToAction)
+    root.addView(content)
+
+    return NativeAdViewHolder(
+        presentation = presentation,
+        root = root,
+        content = content,
+        label = label,
+        media = null,
+        mediaFrame = null,
+        icon = icon,
+        iconFrame = iconFrame,
+        headline = headline,
+        body = body,
+        advertiser = advertiser,
+        callToAction = callToAction,
+    )
+}
+
+/**
+ * The badge behind a grid row's ad icon.
+ *
+ * The icon is inset and centred rather than filling the badge, which is what lets the badge carry
+ * an arbitrary silhouette: the shape is drawn as the background, antialiased, and the icon never
+ * reaches its edge, so nothing has to be clipped to a path a view outline could not express. The
+ * inset also draws the ad icon at the size of the glyphs in the cells around it.
+ */
+private fun gridRowIconFrameView(
+    context: Context,
+    presentation: NativeAdPresentation.GridRow,
+): LinearLayout = LinearLayout(context).apply {
+    val size: Int = context.dp(presentation.iconSizeDp)
+    val inset: Int = context.dp(presentation.iconInsetDp)
+    gravity = Gravity.CENTER
+    setPadding(inset, inset, inset, inset)
+    layoutParams = LinearLayout.LayoutParams(size, size)
+    addView(
+        ImageView(context).apply {
+            scaleType = ImageView.ScaleType.FIT_CENTER
+            contentDescription = null
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+            )
+        }
+    )
+}
+
+/**
+ * Fills [path] with [color], rescaled from the size it was measured at to whatever bounds the view
+ * ends up with.
+ */
+fun pathDrawable(color: Int, path: Path, sourceSize: Float): ShapeDrawable =
+    ShapeDrawable(PathShape(path, sourceSize, sourceSize)).apply { paint.color = color }
+
 fun nativeAdRoot(
     context: Context,
     height: Int = ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -553,6 +751,12 @@ fun sponsoredLabelView(context: Context): TextView = TextView(context).apply {
     )
 }
 
+/**
+ * The ad's headline, bold by default.
+ *
+ * A screen whose own titles are not bold turns it off through `NativeAdStyle.headlineBold` rather
+ * than here, so one placement can differ without every factory restating the default.
+ */
 fun headlineView(context: Context, maxLines: Int): TextView = TextView(context).apply {
     setTextSize(TypedValue.COMPLEX_UNIT_SP, HEADLINE_TEXT_SIZE_SP)
     setTypeface(typeface, Typeface.BOLD)

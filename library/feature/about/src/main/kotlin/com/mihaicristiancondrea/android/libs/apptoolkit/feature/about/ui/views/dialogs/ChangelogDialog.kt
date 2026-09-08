@@ -47,6 +47,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
@@ -109,6 +110,8 @@ fun ChangelogDialog(
             }
             GeneralButton(
                 modifier = Modifier.fillMaxWidth(),
+                // The sheet's only action, and the one every reader ends on.
+                measurements = ButtonMeasurements.Medium,
                 onClick = {
                     if (isError) {
                         viewModel.onEvent(event = ChangelogEvent.Retry)

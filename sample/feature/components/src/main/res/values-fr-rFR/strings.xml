@@ -40,6 +40,15 @@
     <string name="components_button_group_tonal">Boutons tonals</string>
     <string name="components_button_group_outlined">Boutons avec contour</string>
     <string name="components_button_group_text_and_icon">Boutons texte et icône</string>
+    <string name="components_button_group_icon_sizes">Tailles des boutons d\'icône</string>
+    <string name="components_button_group_text_sizes">Tailles des boutons de texte</string>
+    <string name="components_button_group_text_icon_sizes">Tailles des boutons texte et icône</string>
+    <string name="components_button_group_trailing_icon_sizes">Tailles des boutons à icône finale</string>
+    <string name="components_button_size_extra_small">Très petit</string>
+    <string name="components_button_size_small">Petit</string>
+    <string name="components_button_size_medium">Moyen</string>
+    <string name="components_button_size_large">Grand</string>
+    <string name="components_button_size_extra_large">Très grand</string>
     <string name="components_section_fabs">Boutons d’action flottants</string>
     <string name="components_section_filters">Filtres de liste supérieure</string>
     <string name="components_section_inputs">Menus et entrées</string>
@@ -58,4 +67,13 @@
     <string name="components_animation_restart">Recommencer au toucher</string>
     <string name="components_animation_reverse">Inverser au toucher</string>
     <string name="components_animation_preview_helper">Appuyez sur un élément pour prévisualiser son animation.</string>
+    <string name="components_section_grid">Grille groupée</string>
+    <string name="components_grid_group_categories">Catégories avec tailles</string>
+    <string name="components_grid_group_compact">Compact, une ligne</string>
+    <string name="components_grid_group_single">Une cellule</string>
+    <string name="components_grid_installed_apps">Applications installées</string>
+    <string name="components_grid_images">Images</string>
+    <string name="components_grid_music">Musique</string>
+    <string name="components_grid_documents">Documents</string>
+    <string name="components_grid_downloads">Téléchargements</string>
 </resources>

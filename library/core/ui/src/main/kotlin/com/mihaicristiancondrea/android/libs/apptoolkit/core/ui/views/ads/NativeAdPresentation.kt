@@ -41,4 +41,28 @@ sealed interface NativeAdPresentation {
 
     /** Full-width strip for a bottom app bar or action bar: icon, one-line text, trailing CTA. */
     data object BarRow : NativeAdPresentation
+
+    /**
+     * One row of a grouped grid: icon badge, headline, the disclosure chip inline with the body,
+     * advertiser, and a trailing CTA, all on a single row, so the ad is no taller than the cells
+     * it sits between.
+     *
+     * It is the only presentation whose measurements are chosen by the caller. A grid draws its
+     * cells at a size class, and an ad row that ignored that size would read as a different kind of
+     * block, so the row takes the same badge size, inset, padding and gap as the cells around it.
+     * Everything about its finish, the badge silhouette and colour and the headline size included,
+     * is a [NativeAdStyle].
+     *
+     * @property iconSizeDp Badge size, matching the cells' badge.
+     * @property iconInsetDp Inset between the badge and the ad icon, so the icon is drawn at the
+     *   size of the glyphs in the cells rather than filling the badge.
+     * @property contentPaddingDp Inset from the row's edges, matching the cells' content padding.
+     * @property iconSpacingDp Gap after the badge, matching the cells'.
+     */
+    data class GridRow(
+        val iconSizeDp: Int,
+        val iconInsetDp: Int,
+        val contentPaddingDp: Int,
+        val iconSpacingDp: Int,
+    ) : NativeAdPresentation
 }

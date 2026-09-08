@@ -40,6 +40,15 @@
     <string name="components_button_group_tonal">Pulsanti tonali</string>
     <string name="components_button_group_outlined">Pulsanti con contorno</string>
     <string name="components_button_group_text_and_icon">Pulsanti di testo e icona</string>
+    <string name="components_button_group_icon_sizes">Dimensioni dei pulsanti icona</string>
+    <string name="components_button_group_text_sizes">Dimensioni dei pulsanti di testo</string>
+    <string name="components_button_group_text_icon_sizes">Dimensioni dei pulsanti con testo e icona</string>
+    <string name="components_button_group_trailing_icon_sizes">Dimensioni dei pulsanti con icona finale</string>
+    <string name="components_button_size_extra_small">Molto piccolo</string>
+    <string name="components_button_size_small">Piccolo</string>
+    <string name="components_button_size_medium">Medio</string>
+    <string name="components_button_size_large">Grande</string>
+    <string name="components_button_size_extra_large">Molto grande</string>
     <string name="components_section_fabs">Pulsanti di azione flottanti</string>
     <string name="components_section_filters">Filtri elenco superiore</string>
     <string name="components_section_inputs">Menu e input</string>
@@ -58,4 +67,13 @@
     <string name="components_animation_restart">Ricomincia al tocco</string>
     <string name="components_animation_reverse">Inverti al tocco</string>
     <string name="components_animation_preview_helper">Tocca un elemento per visualizzare l\'anteprima della sua animazione.</string>
+    <string name="components_section_grid">Griglia raggruppata</string>
+    <string name="components_grid_group_categories">Categorie con dimensioni</string>
+    <string name="components_grid_group_compact">Compatto, una riga</string>
+    <string name="components_grid_group_single">Una cella</string>
+    <string name="components_grid_installed_apps">App installate</string>
+    <string name="components_grid_images">Immagini</string>
+    <string name="components_grid_music">Musica</string>
+    <string name="components_grid_documents">Documenti</string>
+    <string name="components_grid_downloads">Download</string>
 </resources>

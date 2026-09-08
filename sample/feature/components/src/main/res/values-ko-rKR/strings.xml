@@ -40,6 +40,15 @@
     <string name="components_button_group_tonal">톤 버튼</string>
     <string name="components_button_group_outlined">윤곽선 버튼</string>
     <string name="components_button_group_text_and_icon">텍스트 및 아이콘 버튼</string>
+    <string name="components_button_group_icon_sizes">아이콘 버튼 크기</string>
+    <string name="components_button_group_text_sizes">텍스트 버튼 크기</string>
+    <string name="components_button_group_text_icon_sizes">텍스트와 아이콘 버튼 크기</string>
+    <string name="components_button_group_trailing_icon_sizes">끝 아이콘 버튼 크기</string>
+    <string name="components_button_size_extra_small">아주 작게</string>
+    <string name="components_button_size_small">작게</string>
+    <string name="components_button_size_medium">보통</string>
+    <string name="components_button_size_large">크게</string>
+    <string name="components_button_size_extra_large">아주 크게</string>
     <string name="components_section_fabs">플로팅 액션 버튼</string>
     <string name="components_section_filters">상단 목록 필터</string>
     <string name="components_section_inputs">메뉴 및 입력</string>
@@ -58,4 +67,13 @@
     <string name="components_animation_restart">탭하여 다시 시작</string>
     <string name="components_animation_reverse">탭하여 역재생</string>
     <string name="components_animation_preview_helper">항목을 탭하여 애니메이션을 미리 봅니다.</string>
+    <string name="components_section_grid">그룹화된 그리드</string>
+    <string name="components_grid_group_categories">크기가 있는 카테고리</string>
+    <string name="components_grid_group_compact">간결한 한 줄</string>
+    <string name="components_grid_group_single">셀 하나</string>
+    <string name="components_grid_installed_apps">설치된 앱</string>
+    <string name="components_grid_images">이미지</string>
+    <string name="components_grid_music">음악</string>
+    <string name="components_grid_documents">문서</string>
+    <string name="components_grid_downloads">다운로드</string>
 </resources>

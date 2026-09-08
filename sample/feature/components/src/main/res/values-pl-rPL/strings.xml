@@ -40,6 +40,15 @@
     <string name="components_button_group_tonal">Przyciski tonalne</string>
     <string name="components_button_group_outlined">Przyciski z obramowaniem</string>
     <string name="components_button_group_text_and_icon">Przyciski tekstowe i ikonowe</string>
+    <string name="components_button_group_icon_sizes">Rozmiary przycisków ikon</string>
+    <string name="components_button_group_text_sizes">Rozmiary przycisków tekstowych</string>
+    <string name="components_button_group_text_icon_sizes">Rozmiary przycisków z tekstem i ikoną</string>
+    <string name="components_button_group_trailing_icon_sizes">Rozmiary przycisków z ikoną na końcu</string>
+    <string name="components_button_size_extra_small">Bardzo mały</string>
+    <string name="components_button_size_small">Mały</string>
+    <string name="components_button_size_medium">Średni</string>
+    <string name="components_button_size_large">Duży</string>
+    <string name="components_button_size_extra_large">Bardzo duży</string>
     <string name="components_section_fabs">Pływające przyciski akcji</string>
     <string name="components_section_filters">Filtry listy najwyższej</string>
     <string name="components_section_inputs">Menu i pola</string>
@@ -58,4 +67,13 @@
     <string name="components_animation_restart">Uruchom ponownie po dotknięciu</string>
     <string name="components_animation_reverse">Odwróć po dotknięciu</string>
     <string name="components_animation_preview_helper">Dotknij elementu, aby wyświetlić podgląd jego animacji.</string>
+    <string name="components_section_grid">Zgrupowana siatka</string>
+    <string name="components_grid_group_categories">Kategorie z rozmiarami</string>
+    <string name="components_grid_group_compact">Kompaktowo, jeden wiersz</string>
+    <string name="components_grid_group_single">Jedna komórka</string>
+    <string name="components_grid_installed_apps">Zainstalowane aplikacje</string>
+    <string name="components_grid_images">Obrazy</string>
+    <string name="components_grid_music">Muzyka</string>
+    <string name="components_grid_documents">Dokumenty</string>
+    <string name="components_grid_downloads">Pobrane</string>
 </resources>

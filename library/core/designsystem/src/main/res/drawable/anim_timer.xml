@@ -1,0 +1,95 @@
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+
+    <aapt:attr name="android:drawable">
+        <vector
+            android:name="vector"
+            android:width="24dp"
+            android:height="24dp"
+            android:viewportWidth="24"
+            android:viewportHeight="24">
+            <group android:name="clock">
+                <group android:name="base" android:translateX="12" android:translateY="12">
+                    <path
+                        android:name="path"
+                        android:pathData="M -8 8 C -8 8 -8 10 -8 10 C -8 10 8 10 8 10 C 8 10 8 8 8 8 C 8 8 6 8 6 8 C 6 8 6 5 6 5 C 6 3.98 5.76 3.03 5.28 2.15 C 4.81 1.25 4.15 0.53 3.3 0 C 4.15 -0.53 4.81 -1.24 5.28 -2.12 C 5.76 -3.02 6 -3.98 6 -5 C 6 -5 6 -8 6 -8 C 6 -8 8 -8 8 -8 C 8 -8 8 -10 8 -10 C 8 -10 -8 -10 -8 -10 C -8 -10 -8 -8 -8 -8 C -8 -8 -6 -8 -6 -8 C -6 -8 -6 -5 -6 -5 C -6 -3.98 -5.77 -3.02 -5.3 -2.12 C -4.82 -1.24 -4.15 -0.53 -3.3 0 C -4.15 0.53 -4.82 1.25 -5.3 2.15 C -5.77 3.03 -6 3.98 -6 5 C -6 5 -6 8 -6 8 C -6 8 -8 8 -8 8 M 2.83 -2.17 C 2.04 -1.39 1.1 -1 0 -1 C -1.1 -1 -2.04 -1.39 -2.82 -2.17 C -3.61 -2.96 -4 -3.9 -4 -5 C -4 -5 -4 -8 -4 -8 C -4 -8 4 -8 4 -8 C 4 -8 4 -5 4 -5 C 4 -3.9 3.61 -2.96 2.83 -2.17 M 4 8 C 4 8 -4 8 -4 8 C -4 8 -4 5 -4 5 C -4 3.9 -3.61 2.96 -2.82 2.17 C -2.04 1.39 -1.1 1 0 1 C 1.1 1 2.04 1.39 2.83 2.17 C 3.61 2.96 4 3.9 4 5 C 4 5 4 8 4 8"
+                        android:fillColor="#ffffff" />
+                </group>
+                <group android:name="sand" android:rotation="180" android:scaleY="0" android:translateX="12" android:translateY="12">
+                    <path
+                        android:name="sand_path"
+                        android:pathData="M 3.41 -8.66 C 2.46 -8.65 1.33 -8.65 0 -8.65 C -1.33 -8.65 -2.46 -8.65 -3.4 -8.66 C -4.35 -8.67 -4.82 -8.68 -4.82 -8.69 C -4.82 -8.69 -4.82 -8.72 -4.82 -8.72 C -4.82 -8.72 4.82 -8.72 4.82 -8.72 C 4.82 -8.72 4.82 -8.69 4.82 -8.69 C 4.82 -8.68 4.35 -8.67 3.41 -8.66"
+                        android:fillColor="#ffffff"
+                        android:fillAlpha="0" />
+                </group>
+            </group>
+        </vector>
+    </aapt:attr>
+
+    <target android:name="base">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:propertyName="rotation"
+                    android:valueFrom="0"
+                    android:valueTo="187.908"
+                    android:duration="217"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in" />
+                <objectAnimator
+                    android:propertyName="rotation"
+                    android:valueFrom="187.908"
+                    android:valueTo="178.47"
+                    android:duration="248"
+                    android:startOffset="217"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in" />
+                <objectAnimator
+                    android:propertyName="rotation"
+                    android:valueFrom="178.47"
+                    android:valueTo="180"
+                    android:duration="236"
+                    android:startOffset="464"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in" />
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target android:name="sand">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="scaleY"
+                android:valueFrom="0"
+                android:valueTo="1"
+                android:duration="0"
+                android:startOffset="83"
+                android:valueType="floatType" />
+        </aapt:attr>
+    </target>
+
+    <target android:name="sand_path">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:propertyName="pathData"
+                    android:valueFrom="M 3.41 -8.66 C 2.46 -8.65 1.33 -8.65 0 -8.65 C -1.33 -8.65 -2.46 -8.65 -3.4 -8.66 C -4.35 -8.67 -4.82 -8.68 -4.82 -8.69 C -4.82 -8.69 -4.82 -8.72 -4.82 -8.72 C -4.82 -8.72 4.82 -8.72 4.82 -8.72 C 4.82 -8.72 4.82 -8.69 4.82 -8.69 C 4.82 -8.68 4.35 -8.67 3.41 -8.66"
+                    android:valueTo="M 3.41 -1.7 C 2.46 -0.75 1.33 -0.28 0 -0.28 C -1.33 -0.28 -2.46 -0.75 -3.4 -1.7 C -4.35 -2.64 -4.82 -3.78 -4.82 -5.1 C -4.82 -5.1 -4.82 -8.72 -4.82 -8.72 C -4.82 -8.72 4.82 -8.72 4.82 -8.72 C 4.82 -8.72 4.82 -5.1 4.82 -5.1 C 4.82 -3.78 4.35 -2.64 3.41 -1.7"
+                    android:duration="289"
+                    android:startOffset="161"
+                    android:valueType="pathType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in" />
+                <objectAnimator
+                    android:propertyName="fillAlpha"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:duration="41"
+                    android:startOffset="161"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in" />
+            </set>
+        </aapt:attr>
+    </target>
+
+</animated-vector>

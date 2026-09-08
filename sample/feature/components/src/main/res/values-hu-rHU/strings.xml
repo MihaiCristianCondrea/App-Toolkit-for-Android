@@ -40,6 +40,15 @@
     <string name="components_button_group_tonal">Tónusos gombok</string>
     <string name="components_button_group_outlined">Körvonalas gombok</string>
     <string name="components_button_group_text_and_icon">Szöveges és ikongombok</string>
+    <string name="components_button_group_icon_sizes">Ikongombok méretei</string>
+    <string name="components_button_group_text_sizes">Szöveges gombok méretei</string>
+    <string name="components_button_group_text_icon_sizes">Szöveges és ikonos gombok méretei</string>
+    <string name="components_button_group_trailing_icon_sizes">Záró ikonos gombok méretei</string>
+    <string name="components_button_size_extra_small">Nagyon kicsi</string>
+    <string name="components_button_size_small">Kicsi</string>
+    <string name="components_button_size_medium">Közepes</string>
+    <string name="components_button_size_large">Nagy</string>
+    <string name="components_button_size_extra_large">Nagyon nagy</string>
     <string name="components_section_fabs">Lebegő műveletgombok</string>
     <string name="components_section_filters">Felső lista szűrők</string>
     <string name="components_section_inputs">Menük és bevitel</string>
@@ -58,4 +67,13 @@
     <string name="components_animation_restart">Újraindítás koppintásra</string>
     <string name="components_animation_reverse">Megfordítás koppintásra</string>
     <string name="components_animation_preview_helper">Koppintson egy elemre az animáció előnézetéhez.</string>
+    <string name="components_section_grid">Csoportosított rács</string>
+    <string name="components_grid_group_categories">Kategóriák mérettel</string>
+    <string name="components_grid_group_compact">Kompakt, egysoros</string>
+    <string name="components_grid_group_single">Egy cella</string>
+    <string name="components_grid_installed_apps">Telepített alkalmazások</string>
+    <string name="components_grid_images">Képek</string>
+    <string name="components_grid_music">Zene</string>
+    <string name="components_grid_documents">Dokumentumok</string>
+    <string name="components_grid_downloads">Letöltések</string>
 </resources>

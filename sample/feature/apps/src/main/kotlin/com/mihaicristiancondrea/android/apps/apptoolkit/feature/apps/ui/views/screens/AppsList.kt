@@ -18,29 +18,22 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Apps
 import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.StarOutline
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -59,8 +52,11 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.ut
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AppAdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.AppsListNativeAdCard
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.ads.AppsListNativeAdCard
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.FilterChipItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.TopListFilters
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
@@ -311,26 +307,21 @@ private fun AppsListFilters(
     }
 
     if (filters.size > 1) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .horizontalScroll(rememberScrollState()),
-            horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
-        ) {
-            filters.forEach { item ->
-                FilterChip(
-                    selected = selectedFilter == item.filter,
-                    onClick = { onFilterSelected(item.filter) },
-                    label = { Text(text = stringResource(id = item.labelResId)) },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = item.icon,
-                            contentDescription = null,
-                        )
-                    },
-                )
-            }
-        }
+        val chips = filters.map { item ->
+            FilterChipItem(
+                value = item.filter,
+                label = stringResource(id = item.labelResId),
+                icon = ToolkitIcon.Vector(item.icon),
+            )
+        }.toImmutableList()
+
+        TopListFilters(
+            filters = chips,
+            selectedFilter = selectedFilter,
+            onFilterSelected = onFilterSelected,
+            // The surrounding list already insets this row.
+            contentPadding = PaddingValues(),
+        )
     }
 }
 

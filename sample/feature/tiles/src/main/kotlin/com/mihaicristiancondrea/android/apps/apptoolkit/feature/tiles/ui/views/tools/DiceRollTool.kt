@@ -29,7 +29,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -51,10 +51,12 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import kotlin.math.PI
 import kotlin.math.cos
@@ -228,20 +230,9 @@ fun DiceWithButtonAndProceduralDice(
                 }
             },
             enabled = !rolling,
+            measurements = ButtonMeasurements.Medium,
             icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.PlayArrow),
             label = stringResource(id = R.string.tool_dice_roll_action),
-        )
-
-        Spacer(modifier = Modifier.height(SizeConstants.MediumSize))
-
-        Text(
-            text = if (rolling) {
-                stringResource(id = R.string.tool_dice_roll_waiting)
-            } else {
-                displayedResult.toString()
-            },
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.primary,
         )
     }
 }
@@ -752,3 +743,17 @@ private const val PipRadius = 0.064f
 private const val PipSegmentCount = 18
 
 private const val FullCircleRadians = PI * 2.0
+
+@Preview(showBackground = true)
+@Composable
+private fun DiceRollToolPreview() {
+    MaterialTheme {
+        Surface {
+            DiceRollTool(
+                result = 1,
+                rollRequest = 0,
+                onRoll = {},
+            )
+        }
+    }
+}

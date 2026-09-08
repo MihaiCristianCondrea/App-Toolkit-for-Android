@@ -40,6 +40,15 @@
     <string name="components_button_group_tonal">トーナルボタン</string>
     <string name="components_button_group_outlined">アウトラインボタン</string>
     <string name="components_button_group_text_and_icon">テキストボタンとアイコンボタン</string>
+    <string name="components_button_group_icon_sizes">アイコンボタンのサイズ</string>
+    <string name="components_button_group_text_sizes">テキストボタンのサイズ</string>
+    <string name="components_button_group_text_icon_sizes">テキストとアイコンのボタンのサイズ</string>
+    <string name="components_button_group_trailing_icon_sizes">末尾アイコン付きボタンのサイズ</string>
+    <string name="components_button_size_extra_small">特小</string>
+    <string name="components_button_size_small">小</string>
+    <string name="components_button_size_medium">中</string>
+    <string name="components_button_size_large">大</string>
+    <string name="components_button_size_extra_large">特大</string>
     <string name="components_section_fabs">フローティングアクションボタン</string>
     <string name="components_section_filters">トップリストのフィルター</string>
     <string name="components_section_inputs">メニューと入力</string>
@@ -58,4 +67,13 @@
     <string name="components_animation_restart">タップで最初から再生</string>
     <string name="components_animation_reverse">タップで逆再生</string>
     <string name="components_animation_preview_helper">タップしてアニメーションをプレビューします。</string>
+    <string name="components_section_grid">グループ化グリッド</string>
+    <string name="components_grid_group_categories">サイズ付きカテゴリ</string>
+    <string name="components_grid_group_compact">コンパクト（1 行）</string>
+    <string name="components_grid_group_single">セル 1 つ</string>
+    <string name="components_grid_installed_apps">インストール済みアプリ</string>
+    <string name="components_grid_images">画像</string>
+    <string name="components_grid_music">音楽</string>
+    <string name="components_grid_documents">ドキュメント</string>
+    <string name="components_grid_downloads">ダウンロード</string>
 </resources>

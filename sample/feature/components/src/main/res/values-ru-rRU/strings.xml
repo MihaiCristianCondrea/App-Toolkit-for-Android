@@ -40,6 +40,15 @@
     <string name="components_button_group_tonal">Тональные кнопки</string>
     <string name="components_button_group_outlined">Контурные кнопки</string>
     <string name="components_button_group_text_and_icon">Текстовые кнопки и кнопки со значками</string>
+    <string name="components_button_group_icon_sizes">Размеры кнопок со значком</string>
+    <string name="components_button_group_text_sizes">Размеры текстовых кнопок</string>
+    <string name="components_button_group_text_icon_sizes">Размеры кнопок с текстом и значком</string>
+    <string name="components_button_group_trailing_icon_sizes">Размеры кнопок со значком в конце</string>
+    <string name="components_button_size_extra_small">Очень маленький</string>
+    <string name="components_button_size_small">Маленький</string>
+    <string name="components_button_size_medium">Средний</string>
+    <string name="components_button_size_large">Большой</string>
+    <string name="components_button_size_extra_large">Очень большой</string>
     <string name="components_section_fabs">Плавающие кнопки действий</string>
     <string name="components_section_filters">Фильтры верхнего списка</string>
     <string name="components_section_inputs">Меню и ввод</string>
@@ -58,4 +67,13 @@
     <string name="components_animation_restart">Запуск заново по нажатию</string>
     <string name="components_animation_reverse">Обратное воспроизведение по нажатию</string>
     <string name="components_animation_preview_helper">Нажмите на элемент, чтобы просмотреть его анимацию.</string>
+    <string name="components_section_grid">Сгруппированная сетка</string>
+    <string name="components_grid_group_categories">Категории с размерами</string>
+    <string name="components_grid_group_compact">Компактно, одна строка</string>
+    <string name="components_grid_group_single">Одна ячейка</string>
+    <string name="components_grid_installed_apps">Установленные приложения</string>
+    <string name="components_grid_images">Изображения</string>
+    <string name="components_grid_music">Музыка</string>
+    <string name="components_grid_documents">Документы</string>
+    <string name="components_grid_downloads">Загрузки</string>
 </resources>

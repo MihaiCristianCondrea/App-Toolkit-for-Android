@@ -36,7 +36,6 @@
     <string name="app_details_version">Version %1$s</string>
     <string name="app_details_view_on_play_store">Tingnan sa Google Play</string>
     <string name="apps_filter_all">Lahat</string>
-    <string name="error_failed_to_fetch_our_apps">Nabigong i-load ang mga listahan ng app</string>
     <string name="error_failed_to_load_apps">Nabigong i-load ang mga app</string>
     <string name="error_failed_to_update_favorite">Nabigong i-update ang paborito</string>
     <string name="favorite_apps">Mga paborito</string>

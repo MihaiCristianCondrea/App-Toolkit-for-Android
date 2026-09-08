@@ -40,6 +40,15 @@
     <string name="components_button_group_tonal">ٹونل بٹن</string>
     <string name="components_button_group_outlined">آؤٹ لائن بٹن</string>
     <string name="components_button_group_text_and_icon">متن اور آئیکن بٹن</string>
+    <string name="components_button_group_icon_sizes">آئیکن بٹن کے سائز</string>
+    <string name="components_button_group_text_sizes">ٹیکسٹ بٹن کے سائز</string>
+    <string name="components_button_group_text_icon_sizes">ٹیکسٹ اور آئیکن بٹن کے سائز</string>
+    <string name="components_button_group_trailing_icon_sizes">آخر میں آئیکن والے بٹن کے سائز</string>
+    <string name="components_button_size_extra_small">بہت چھوٹا</string>
+    <string name="components_button_size_small">چھوٹا</string>
+    <string name="components_button_size_medium">درمیانہ</string>
+    <string name="components_button_size_large">بڑا</string>
+    <string name="components_button_size_extra_large">بہت بڑا</string>
     <string name="components_section_fabs">فلوٹنگ ایکشن بٹن</string>
     <string name="components_section_filters">اوپر والی فہرست کے فلٹر</string>
     <string name="components_section_inputs">مینوز اور ان پٹ</string>
@@ -58,4 +67,13 @@
     <string name="components_animation_restart">ٹیپ کرنے پر دوبارہ شروع کریں</string>
     <string name="components_animation_reverse">ٹیپ کرنے پر الٹا چلائیں</string>
     <string name="components_animation_preview_helper">اینیمیشن کا پیش نظارہ کرنے کے لیے کسی آئٹم پر ٹیپ کریں۔</string>
+    <string name="components_section_grid">گروپ شدہ گرڈ</string>
+    <string name="components_grid_group_categories">سائز کے ساتھ اقسام</string>
+    <string name="components_grid_group_compact">مختصر، ایک سطر</string>
+    <string name="components_grid_group_single">ایک سیل</string>
+    <string name="components_grid_installed_apps">انسٹال شدہ ایپس</string>
+    <string name="components_grid_images">تصاویر</string>
+    <string name="components_grid_music">موسیقی</string>
+    <string name="components_grid_documents">دستاویزات</string>
+    <string name="components_grid_downloads">ڈاؤن لوڈز</string>
 </resources>

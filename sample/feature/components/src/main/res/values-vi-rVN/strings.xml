@@ -40,6 +40,15 @@
     <string name="components_button_group_tonal">Nút có tông màu</string>
     <string name="components_button_group_outlined">Nút có đường viền</string>
     <string name="components_button_group_text_and_icon">Nút văn bản và biểu tượng</string>
+    <string name="components_button_group_icon_sizes">Kích thước nút biểu tượng</string>
+    <string name="components_button_group_text_sizes">Kích thước nút văn bản</string>
+    <string name="components_button_group_text_icon_sizes">Kích thước nút văn bản và biểu tượng</string>
+    <string name="components_button_group_trailing_icon_sizes">Kích thước nút có biểu tượng ở cuối</string>
+    <string name="components_button_size_extra_small">Rất nhỏ</string>
+    <string name="components_button_size_small">Nhỏ</string>
+    <string name="components_button_size_medium">Vừa</string>
+    <string name="components_button_size_large">Lớn</string>
+    <string name="components_button_size_extra_large">Rất lớn</string>
     <string name="components_section_fabs">Nút hành động nổi</string>
     <string name="components_section_filters">Bộ lọc danh sách hàng đầu</string>
     <string name="components_section_inputs">Menu và nhập liệu</string>
@@ -58,4 +67,13 @@
     <string name="components_animation_restart">Phát lại khi nhấn</string>
     <string name="components_animation_reverse">Phát ngược khi nhấn</string>
     <string name="components_animation_preview_helper">Nhấn vào một mục để xem trước hoạt ảnh.</string>
+    <string name="components_section_grid">Lưới nhóm</string>
+    <string name="components_grid_group_categories">Danh mục kèm dung lượng</string>
+    <string name="components_grid_group_compact">Gọn, một dòng</string>
+    <string name="components_grid_group_single">Một ô</string>
+    <string name="components_grid_installed_apps">Ứng dụng đã cài</string>
+    <string name="components_grid_images">Hình ảnh</string>
+    <string name="components_grid_music">Nhạc</string>
+    <string name="components_grid_documents">Tài liệu</string>
+    <string name="components_grid_downloads">Tải xuống</string>
 </resources>

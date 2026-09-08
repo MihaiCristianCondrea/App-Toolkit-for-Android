@@ -40,6 +40,15 @@
     <string name="components_button_group_tonal">Mga tonal na button</string>
     <string name="components_button_group_outlined">Mga button na may outline</string>
     <string name="components_button_group_text_and_icon">Mga text at icon button</string>
+    <string name="components_button_group_icon_sizes">Mga sukat ng icon button</string>
+    <string name="components_button_group_text_sizes">Mga sukat ng text button</string>
+    <string name="components_button_group_text_icon_sizes">Mga sukat ng text at icon button</string>
+    <string name="components_button_group_trailing_icon_sizes">Mga sukat ng button na may icon sa dulo</string>
+    <string name="components_button_size_extra_small">Napakaliit</string>
+    <string name="components_button_size_small">Maliit</string>
+    <string name="components_button_size_medium">Katamtaman</string>
+    <string name="components_button_size_large">Malaki</string>
+    <string name="components_button_size_extra_large">Napakalaki</string>
     <string name="components_section_fabs">Mga floating action button</string>
     <string name="components_section_filters">Mga filter ng nangungunang listahan</string>
     <string name="components_section_inputs">Mga menu at input</string>
@@ -58,4 +67,13 @@
     <string name="components_animation_restart">Magsimula muli sa pag-tap</string>
     <string name="components_animation_reverse">Baligtarin sa pag-tap</string>
     <string name="components_animation_preview_helper">I-tap ang isang item upang i-preview ang animation nito.</string>
+    <string name="components_section_grid">Nakagrupong grid</string>
+    <string name="components_grid_group_categories">Mga kategorya na may laki</string>
+    <string name="components_grid_group_compact">Compact, isang linya</string>
+    <string name="components_grid_group_single">Isang cell</string>
+    <string name="components_grid_installed_apps">Mga naka-install na app</string>
+    <string name="components_grid_images">Mga larawan</string>
+    <string name="components_grid_music">Musika</string>
+    <string name="components_grid_documents">Mga dokumento</string>
+    <string name="components_grid_downloads">Mga download</string>
 </resources>

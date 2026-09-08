@@ -40,6 +40,15 @@
     <string name="components_button_group_tonal">色調按鈕</string>
     <string name="components_button_group_outlined">外框按鈕</string>
     <string name="components_button_group_text_and_icon">文字與圖示按鈕</string>
+    <string name="components_button_group_icon_sizes">圖示按鈕尺寸</string>
+    <string name="components_button_group_text_sizes">文字按鈕尺寸</string>
+    <string name="components_button_group_text_icon_sizes">文字與圖示按鈕尺寸</string>
+    <string name="components_button_group_trailing_icon_sizes">尾端圖示按鈕尺寸</string>
+    <string name="components_button_size_extra_small">極小</string>
+    <string name="components_button_size_small">小</string>
+    <string name="components_button_size_medium">中</string>
+    <string name="components_button_size_large">大</string>
+    <string name="components_button_size_extra_large">極大</string>
     <string name="components_section_fabs">浮動動作按鈕</string>
     <string name="components_section_filters">頂部清單篩選</string>
     <string name="components_section_inputs">選單與輸入</string>
@@ -58,4 +67,13 @@
     <string name="components_animation_restart">輕觸以重新播放</string>
     <string name="components_animation_reverse">輕觸以反向播放</string>
     <string name="components_animation_preview_helper">輕觸項目以預覽其動畫。</string>
+    <string name="components_section_grid">群組格線</string>
+    <string name="components_grid_group_categories">含容量的類別</string>
+    <string name="components_grid_group_compact">精簡單行</string>
+    <string name="components_grid_group_single">單一格</string>
+    <string name="components_grid_installed_apps">已安裝應用程式</string>
+    <string name="components_grid_images">圖片</string>
+    <string name="components_grid_music">音樂</string>
+    <string name="components_grid_documents">文件</string>
+    <string name="components_grid_downloads">下載</string>
 </resources>

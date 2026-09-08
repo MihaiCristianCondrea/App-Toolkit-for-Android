@@ -19,6 +19,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.v
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -30,8 +31,6 @@ import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.outlined.ViewCarousel
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -39,6 +38,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -103,9 +103,16 @@ fun LayoutShowcase(
         GroupedActionList(
             actions = groupedActions,
             modifier = Modifier.groupedCorners(GroupedItemPosition.FIRST),
+            containerColor = Color.Transparent,
         )
-        ShowcaseSurface(position = GroupedItemPosition.MIDDLE) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+        ShowcaseSurface(
+            position = GroupedItemPosition.MIDDLE,
+            contentPadding = PaddingValues(vertical = SizeConstants.LargeSize),
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(horizontal = SizeConstants.LargeSize),
+            ) {
                 Icon(
                     imageVector = Icons.Outlined.ViewCarousel,
                     contentDescription = null,
@@ -120,46 +127,39 @@ fun LayoutShowcase(
                 )
             }
             SmallVerticalSpacer()
-            Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
-                ),
-                shape = MaterialTheme.shapes.large,
-            ) {
-                CustomCarousel(
-                    items = dropdownOptions,
-                    sidePadding = SizeConstants.SmallSize,
-                    pagerState = carouselState,
-                ) { option ->
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(SizeConstants.LargeSize),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Icon(
-                                imageVector = when (option) {
-                                    "Alpha" -> Icons.Outlined.Favorite
-                                    "Beta" -> Icons.Outlined.StarOutline
-                                    else -> Icons.Outlined.Info
-                                },
-                                contentDescription = null,
-                                modifier = Modifier.size(48.dp),
-                                tint = MaterialTheme.colorScheme.primary,
-                            )
-                            SmallVerticalSpacer()
-                            Text(
-                                text = option,
-                                style = MaterialTheme.typography.headlineSmall,
-                                fontWeight = FontWeight.Bold,
-                            )
-                            Text(
-                                text = "Sample variant $option content",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
+            CustomCarousel(
+                items = dropdownOptions,
+                sidePadding = SizeConstants.LargeSize,
+                pagerState = carouselState,
+            ) { option ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(SizeConstants.LargeSize),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(
+                            imageVector = when (option) {
+                                "Alpha" -> Icons.Outlined.Favorite
+                                "Beta" -> Icons.Outlined.StarOutline
+                                else -> Icons.Outlined.Info
+                            },
+                            contentDescription = null,
+                            modifier = Modifier.size(48.dp),
+                            tint = MaterialTheme.colorScheme.primary,
+                        )
+                        SmallVerticalSpacer()
+                        Text(
+                            text = option,
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.Bold,
+                        )
+                        Text(
+                            text = "Sample variant $option content",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
                     }
                 }
             }

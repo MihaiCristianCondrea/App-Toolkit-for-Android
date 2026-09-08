@@ -19,8 +19,8 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,14 +30,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ExpandLess
 import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -62,6 +59,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.FilterChipItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.TopListFilters
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
@@ -108,27 +107,20 @@ internal fun TilesFilters(
     }
 
     if (filters.size > 1) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .horizontalScroll(rememberScrollState()),
-            horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
-        ) {
-            filters.forEach { item ->
-                FilterChip(
-                    selected = selectedFilter == item.filter,
-                    onClick = { onFilterSelected(item.filter) },
-                    label = { Text(text = stringResource(id = item.labelResId)) },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = item.icon,
-                            contentDescription = null,
-                            modifier = Modifier.size(SizeConstants.ButtonIconSize),
-                        )
-                    },
-                )
-            }
-        }
+        val chips = filters.map { item ->
+            FilterChipItem(
+                value = item.filter,
+                label = stringResource(id = item.labelResId),
+                icon = ToolkitIcon.Vector(item.icon),
+            )
+        }.toImmutableList()
+
+        TopListFilters(
+            filters = chips,
+            selectedFilter = selectedFilter,
+            onFilterSelected = onFilterSelected,
+            contentPadding = PaddingValues(),
+        )
     }
 }
 
@@ -176,6 +168,7 @@ internal fun TileCategorySection(
                 GeneralButton(
                     style = GeneralButtonStyle.Text,
                     onClick = onToggle,
+                    iconSize = SizeConstants.ButtonIconSize,
                     icon = ToolkitIcon.Vector(if (expanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore),
                     contentDescription = stringResource(
                             id = if (expanded) R.string.tiles_collapse_category else R.string.tiles_expand_category,

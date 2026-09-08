@@ -59,6 +59,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ReactionTestToolState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 
@@ -193,6 +194,7 @@ fun ReactionTestTool(
         ) {
             GeneralButton(
                 modifier = Modifier.weight(1f),
+                measurements = ButtonMeasurements.Medium,
                 onClick = onStart,
                 enabled = state.phase != ReactionTestPhase.Waiting && state.phase != ReactionTestPhase.Signal,
                 icon = ToolkitIcon.Vector(Icons.Outlined.PlayArrow),
@@ -207,6 +209,7 @@ fun ReactionTestTool(
             if (state.history.isNotEmpty()) {
                 GeneralButton(
                     style = GeneralButtonStyle.Outlined,
+                    measurements = ButtonMeasurements.Medium,
                     onClick = onReset,
                     icon = ToolkitIcon.Vector(Icons.Outlined.Refresh),
                     label = stringResource(id = R.string.tool_counter_reset),

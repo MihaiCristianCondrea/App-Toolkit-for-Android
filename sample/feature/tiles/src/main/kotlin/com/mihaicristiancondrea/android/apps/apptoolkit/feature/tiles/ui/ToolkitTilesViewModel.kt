@@ -59,6 +59,7 @@ class ToolkitTilesViewModel(
     screenName = AppScreenTracking.Screens.TOOLKIT_TILES.name,
 ) {
     private var loadJob: Job? = null
+    private var hasLoggedCatalogueView: Boolean = false
 
     init {
         onEvent(ToolkitTilesEvent.Initialize)
@@ -103,10 +104,15 @@ class ToolkitTilesViewModel(
                     )
                 }
                 .onEach { (categories, expandedCategoryIds) ->
-                    firebaseController.logViewItemList(
-                        itemListId = "all",
-                        itemListName = "quick_tools_catalog",
-                    )
+                    // The catalogue re-emits on every refresh and on every expand/collapse, so the
+                    // list view is reported once rather than once per emission.
+                    if (!hasLoggedCatalogueView) {
+                        hasLoggedCatalogueView = true
+                        firebaseController.logViewItemList(
+                            itemListId = "all",
+                            itemListName = "quick_tools_catalog",
+                        )
+                    }
                     screenState.setSuccess(
                         data = (screenData ?: ToolkitTilesUiState()).copy(
                             categories = categories.toUiModels(),
@@ -118,12 +124,15 @@ class ToolkitTilesViewModel(
         }
     }
 
+    /**
+     * Re-reads Quick Settings membership.
+     *
+     * This goes through the catalogue flow rather than writing statuses into the state directly.
+     * Writing directly used to lose the refresh: the flow still held the statuses captured when the
+     * screen loaded, so the next expand or collapse put the stale ones back.
+     */
     private fun refreshStatuses() {
-        screenState.update { current ->
-            val data = current.data ?: return@update current
-            val refreshed = toolkitTilesRepository.currentTileCategories().toUiModels()
-            current.copy(data = data.copy(categories = refreshed))
-        }
+        toolkitTilesRepository.refreshTileCategories()
     }
 
     private fun selectFilter(filter: ToolkitTilesFilter) {
