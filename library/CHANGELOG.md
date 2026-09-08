@@ -22,8 +22,11 @@
   block; a grid of one cell never shows one, and an ad that fails to load leaves the group cut as if
   it had never been asked for.
 - Added the `GridRow` native ad presentation: an icon-led row that keeps its disclosure chip inline
-  with the body instead of on a line of its own, and takes its badge, padding and headline size from
-  the grid it sits in, so a sponsored row is no taller than the cells around it.
+  with the body instead of on a line of its own, and takes its badge, icon size, padding and
+  headline size from the grid it sits in, so a sponsored row is no taller than the cells around it.
+  Its badge is filled with the same silhouette the cells are cut from — `MaterialShapes` included —
+  through `rememberNativeAdBadgeShape`, which flattens any Compose `Shape` to the path an ad's
+  Android view can be drawn with.
 
 - `CommonFilterChip` accepts an `icon` shown while the chip is unselected, and `hasAnimation` to
   turn off the crossfade into the selected checkmark.

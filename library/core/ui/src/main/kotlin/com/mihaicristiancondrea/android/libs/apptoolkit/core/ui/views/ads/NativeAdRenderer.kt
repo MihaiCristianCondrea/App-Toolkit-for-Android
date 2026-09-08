@@ -20,8 +20,11 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Outline
+import android.graphics.Path
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.PathShape
 import android.text.TextUtils
 import android.util.TypedValue
 import android.view.Gravity
@@ -161,14 +164,28 @@ class NativeAdViewHolder(
         advertiser.setTextColor(palette.onSurfaceVariant)
 
         iconFrame?.let { frame ->
-            // A grid row picks its own badge radius so the ad badge matches the cells beside it;
-            // every other presentation uses the shared one.
-            val radiusDp: Int = (presentation as? NativeAdPresentation.GridRow)?.iconCornerRadiusDp
-                ?: ICON_CORNER_RADIUS_DP
-            frame.background = roundedDrawable(
-                color = palette.surfaceVariant,
-                radiusPx = frame.context.dp(value = radiusDp),
-            )
+            // A grid row's badge is cut like the cells beside it: the caller's silhouette when it
+            // gave one, otherwise a rounded square at its own radius. Every other presentation uses
+            // the shared radius. This runs on every update, so a badge shape rebuilt by the caller
+            // repaints instead of recreating the ad view.
+            val gridRow: NativeAdPresentation.GridRow? =
+                presentation as? NativeAdPresentation.GridRow
+            val badgeShape: NativeAdBadgeShape? = gridRow?.iconShape
+
+            frame.background = if (badgeShape != null) {
+                pathDrawable(
+                    color = palette.surfaceVariant,
+                    path = badgeShape.path,
+                    sourceSize = badgeShape.sizePx,
+                )
+            } else {
+                roundedDrawable(
+                    color = palette.surfaceVariant,
+                    radiusPx = frame.context.dp(
+                        value = gridRow?.iconCornerRadiusDp ?: ICON_CORNER_RADIUS_DP,
+                    ),
+                )
+            }
         }
         mediaFrame?.let { frame ->
             frame.background = roundedDrawable(
@@ -559,11 +576,7 @@ private fun createGridRow(
         )
     }
 
-    val iconFrame = iconFrameView(
-        context = context,
-        sizeDp = presentation.iconSizeDp,
-        radiusDp = presentation.iconCornerRadiusDp,
-    )
+    val iconFrame = gridRowIconFrameView(context = context, presentation = presentation)
     val icon = iconFrame.getChildAt(0) as ImageView
 
     val texts = LinearLayout(context).apply {
@@ -629,6 +642,42 @@ private fun createGridRow(
         callToAction = callToAction,
     )
 }
+
+/**
+ * The badge behind a grid row's ad icon.
+ *
+ * The icon is inset and centred rather than filling the badge, which is what lets the badge carry an
+ * arbitrary silhouette: the shape is drawn as the background, antialiased, and the icon never
+ * reaches its edge, so nothing has to be clipped to a path that a view outline could not express.
+ * The inset also draws the ad icon at the size of the glyphs in the cells around it.
+ */
+private fun gridRowIconFrameView(
+    context: Context,
+    presentation: NativeAdPresentation.GridRow,
+): LinearLayout = LinearLayout(context).apply {
+    val size: Int = context.dp(presentation.iconSizeDp)
+    val inset: Int = context.dp(presentation.iconInsetDp)
+    gravity = Gravity.CENTER
+    setPadding(inset, inset, inset, inset)
+    layoutParams = LinearLayout.LayoutParams(size, size)
+    addView(
+        ImageView(context).apply {
+            scaleType = ImageView.ScaleType.FIT_CENTER
+            contentDescription = null
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+            )
+        }
+    )
+}
+
+/**
+ * Fills [path] with [color], rescaled from the size it was measured at to whatever bounds the view
+ * ends up with.
+ */
+fun pathDrawable(color: Int, path: Path, sourceSize: Float): ShapeDrawable =
+    ShapeDrawable(PathShape(path, sourceSize, sourceSize)).apply { paint.color = color }
 
 fun nativeAdRoot(
     context: Context,

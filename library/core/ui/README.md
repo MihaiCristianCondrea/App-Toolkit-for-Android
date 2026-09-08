@@ -144,6 +144,11 @@ with `NativeAdLoader.load` under `DisposableEffectImpl.onRemembered`. Preserve t
   and an end-aligned CTA. Grid presentations keep their content centered.
 - `NativeAdPresentation.GridRow` is the one presentation whose metrics the caller supplies, because
   it has to match the grid it is interleaved with. It keeps the disclosure chip inline with the body
-  so the row stays as short as a cell; do not restore a stacked label there.
+  so the row stays as short as a cell; do not restore a stacked label there. Its badge silhouette
+  comes from `rememberNativeAdBadgeShape`, and is deliberately excluded from the presentation's
+  equality: the renderer keys its view tree on the presentation, so comparing the badge by identity
+  would tear down and restart the ad request whenever a caller rebuilt the shape. The badge is
+  repainted in the palette pass instead. The ad icon is inset rather than clipped, which is what
+  lets the badge carry a silhouette no view outline could express.
 
 These are compatibility safeguards for host applications, not incidental styling details.

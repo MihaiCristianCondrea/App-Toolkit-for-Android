@@ -39,6 +39,9 @@ sealed interface NativeAdPresentation {
     /** Square cell for grids and decks: icon, headline, advertiser, body. No CTA. */
     data object Grid : NativeAdPresentation
 
+    /** Full-width strip for a bottom app bar or action bar: icon, one-line text, trailing CTA. */
+    data object BarRow : NativeAdPresentation
+
     /**
      * One row of a grouped grid: icon badge, headline, the disclosure chip inline with the body,
      * advertiser, and a trailing CTA — all on a single row, so the ad is no taller than the cells
@@ -46,25 +49,55 @@ sealed interface NativeAdPresentation {
      *
      * It is the only presentation whose metrics are chosen by the caller. A grid draws its cells at
      * a size class, and an ad row that ignored that size would read as a different kind of block:
-     * the row takes the same badge, padding and headline size as the cells around it so it reads as
-     * one of them. Everything else — colors, the disclosure chip, the CTA — stays with the shared
-     * renderer.
+     * the row takes the same badge, inset, padding and headline size as the cells around it so it
+     * reads as one of them. Everything else — colors, the disclosure chip, the CTA — stays with the
+     * shared renderer.
+     *
+     * Not a `data class`: [iconShape] is deliberately left out of equality. The renderer keys its
+     * view tree on the presentation and applies the palette on every update, so the badge silhouette
+     * is repainted rather than rebuilt. Were it compared by identity, a caller that rebuilt the
+     * shape would tear down and restart the ad request underneath it.
      *
      * @property iconSizeDp Badge size, matching the cells' badge.
-     * @property iconCornerRadiusDp Badge corner radius. The cells cut their badge from an arbitrary
-     *   `Shape`, which an Android view cannot follow, so the ad badge is a rounded square.
+     * @property iconInsetDp Inset between the badge and the ad icon, so the icon is drawn at the
+     *   size of the glyphs in the cells rather than filling the badge.
+     * @property iconCornerRadiusDp Badge corner radius, used when no [iconShape] is supplied.
      * @property headlineTextSizeSp Headline size, taken from the cells' title style.
      * @property contentPaddingDp Inset from the row's edges, matching the cells' content padding.
      * @property iconSpacingDp Gap after the badge, matching the cells'.
+     * @property iconShape Silhouette the badge is filled with. `null` falls back to a rounded square
+     *   at [iconCornerRadiusDp].
      */
-    data class GridRow(
+    @Immutable
+    class GridRow(
         val iconSizeDp: Int,
+        val iconInsetDp: Int,
         val iconCornerRadiusDp: Int,
         val headlineTextSizeSp: Float,
         val contentPaddingDp: Int,
         val iconSpacingDp: Int,
-    ) : NativeAdPresentation
+        val iconShape: NativeAdBadgeShape? = null,
+    ) : NativeAdPresentation {
 
-    /** Full-width strip for a bottom app bar or action bar: icon, one-line text, trailing CTA. */
-    data object BarRow : NativeAdPresentation
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other !is GridRow) return false
+            return iconSizeDp == other.iconSizeDp &&
+                    iconInsetDp == other.iconInsetDp &&
+                    iconCornerRadiusDp == other.iconCornerRadiusDp &&
+                    headlineTextSizeSp == other.headlineTextSizeSp &&
+                    contentPaddingDp == other.contentPaddingDp &&
+                    iconSpacingDp == other.iconSpacingDp
+        }
+
+        override fun hashCode(): Int {
+            var result = iconSizeDp
+            result = 31 * result + iconInsetDp
+            result = 31 * result + iconCornerRadiusDp
+            result = 31 * result + headlineTextSizeSp.hashCode()
+            result = 31 * result + contentPaddingDp
+            result = 31 * result + iconSpacingDp
+            return result
+        }
+    }
 }

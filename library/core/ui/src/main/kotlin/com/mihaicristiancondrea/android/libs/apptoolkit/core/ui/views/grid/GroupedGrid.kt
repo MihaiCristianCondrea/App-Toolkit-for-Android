@@ -72,6 +72,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIconContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdPresentation
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberNativeAdBadgeShape
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdSlot
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonFeedback
 import kotlinx.collections.immutable.ImmutableList
@@ -139,8 +140,15 @@ fun GroupedGrid(
     val rows: ImmutableList<GroupedGridRow> = remember(items.size, columns, adRow) {
         groupedGridRows(itemCount = items.size, columns = columns, adRow = adRow)
     }
-    val adPresentation: NativeAdPresentation.GridRow =
-        measurements.nativeAdPresentation(titleTextStyle = measurements.titleTextStyle())
+    // The ad badge is filled with the same silhouette the cells cut theirs from, flattened to a
+    // path because the ad's icon lives in a real `NativeAdView` rather than in Compose.
+    val adPresentation: NativeAdPresentation.GridRow = measurements.nativeAdPresentation(
+        titleTextStyle = measurements.titleTextStyle(),
+        badgeShape = rememberNativeAdBadgeShape(
+            shape = iconShape,
+            size = measurements.iconContainerSize,
+        ),
+    )
 
     Column(
         modifier = modifier
