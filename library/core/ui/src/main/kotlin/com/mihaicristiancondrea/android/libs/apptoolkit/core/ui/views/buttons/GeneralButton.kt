@@ -74,21 +74,18 @@ enum class ButtonIconPosition { Start, End }
  * Elevated icon-only buttons use a compact ElevatedButton with Material elevation and touch target.
  *
  * [measurements] picks one of the five Material 3 Expressive size classes. Container height, shape,
- * content padding, icon spacing and label typography all follow it, so a caller chooses a size
- * rather than restating the specification. [shape] still overrides the resting shape when set.
+ * content padding, icon size, icon spacing and label typography all follow it, so a caller chooses
+ * a size rather than restating the specification. [shape] still overrides the resting shape when
+ * set.
  *
- * [iconSize] is deliberately not part of that scaling. It defaults to
- * [SizeConstants.ButtonIconSize], the size toolkit icons are drawn at throughout the app, because a
- * glyph that grows with the container reads as oversized next to a label. Three ways to use it:
- * - Leave it alone for every ordinary button.
- * - Pass an explicit [Dp] where one icon needs to be bigger or smaller than the rest, such as a
- *   drawer hamburger or a prominent icon-only action.
- * - Pass `null` to opt into the size class after all, which resolves the expressive icon size for
- *   the chosen [measurements] — the labelled-button icon size beside a label, the icon-button size
- *   when this renders icon-only.
+ * [iconSize] pins the glyph to one size instead. Left null, the default, it scales with
+ * [measurements] — the labelled-button icon size beside a label, the icon-button size when this
+ * renders icon-only. Pass [SizeConstants.ButtonIconSize] where an icon should stay the size toolkit
+ * icons are drawn at everywhere else, which is what a row of small affordances such as a favourite,
+ * share or expand button wants; pass any other [Dp] for a one-off such as a drawer hamburger.
  *
- * Whichever you choose, the container keeps the dimensions of [measurements]; [iconSize] only ever
- * changes the glyph.
+ * Either way the container keeps the dimensions of [measurements]; [iconSize] only ever changes the
+ * glyph.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -102,7 +99,7 @@ fun GeneralButton(
     iconPosition: ButtonIconPosition = ButtonIconPosition.Start,
     contentDescription: String? = label,
     measurements: ButtonMeasurements = ButtonMeasurements.Small,
-    iconSize: Dp? = SizeConstants.ButtonIconSize,
+    iconSize: Dp? = null,
     iconTint: Color? = null,
     containerColor: Color? = null,
     contentColor: Color? = null,

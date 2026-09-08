@@ -40,7 +40,10 @@
     <string name="components_button_group_tonal">Przyciski tonalne</string>
     <string name="components_button_group_outlined">Przyciski z obramowaniem</string>
     <string name="components_button_group_text_and_icon">Przyciski tekstowe i ikonowe</string>
-    <string name="components_button_group_sizes">Rozmiary przycisków</string>
+    <string name="components_button_group_icon_sizes">Rozmiary przycisków ikon</string>
+    <string name="components_button_group_text_sizes">Rozmiary przycisków tekstowych</string>
+    <string name="components_button_group_text_icon_sizes">Rozmiary przycisków z tekstem i ikoną</string>
+    <string name="components_button_group_trailing_icon_sizes">Rozmiary przycisków z ikoną na końcu</string>
     <string name="components_button_size_extra_small">Bardzo mały</string>
     <string name="components_button_size_small">Mały</string>
     <string name="components_button_size_medium">Średni</string>

@@ -40,7 +40,10 @@
     <string name="components_button_group_tonal">Тонални бутони</string>
     <string name="components_button_group_outlined">Контурни бутони</string>
     <string name="components_button_group_text_and_icon">Текстови бутони и бутони с икони</string>
-    <string name="components_button_group_sizes">Размери на бутоните</string>
+    <string name="components_button_group_icon_sizes">Размери на бутоните с икона</string>
+    <string name="components_button_group_text_sizes">Размери на текстовите бутони</string>
+    <string name="components_button_group_text_icon_sizes">Размери на бутоните с текст и икона</string>
+    <string name="components_button_group_trailing_icon_sizes">Размери на бутоните с икона накрая</string>
     <string name="components_button_size_extra_small">Много малък</string>
     <string name="components_button_size_small">Малък</string>
     <string name="components_button_size_medium">Среден</string>

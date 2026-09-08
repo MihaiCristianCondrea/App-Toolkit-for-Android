@@ -97,6 +97,7 @@ fun AppCard(
                     onClick = onFavoriteToggle,
                     contentDescription = stringResource(R.string.favorite_apps),
                     modifier = Modifier.semantics { selected = isFavorite },
+                    iconSize = SizeConstants.ButtonIconSize,
                     icon = ToolkitIcon.Vector(
                         imageVector = if (isFavorite) {
                             Icons.Filled.Star
@@ -109,6 +110,7 @@ fun AppCard(
                     style = GeneralButtonStyle.Text,
                     onClick = { onShareClick(appInfo) },
                     contentDescription = stringResource(R.string.app_details_share_title),
+                    iconSize = SizeConstants.ButtonIconSize,
                     icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Share),
                 )
             }

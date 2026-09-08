@@ -40,7 +40,10 @@
     <string name="components_button_group_tonal">トーナルボタン</string>
     <string name="components_button_group_outlined">アウトラインボタン</string>
     <string name="components_button_group_text_and_icon">テキストボタンとアイコンボタン</string>
-    <string name="components_button_group_sizes">ボタンのサイズ</string>
+    <string name="components_button_group_icon_sizes">アイコンボタンのサイズ</string>
+    <string name="components_button_group_text_sizes">テキストボタンのサイズ</string>
+    <string name="components_button_group_text_icon_sizes">テキストとアイコンのボタンのサイズ</string>
+    <string name="components_button_group_trailing_icon_sizes">末尾アイコン付きボタンのサイズ</string>
     <string name="components_button_size_extra_small">特小</string>
     <string name="components_button_size_small">小</string>
     <string name="components_button_size_medium">中</string>

@@ -40,7 +40,10 @@
     <string name="components_button_group_tonal">Pulsanti tonali</string>
     <string name="components_button_group_outlined">Pulsanti con contorno</string>
     <string name="components_button_group_text_and_icon">Pulsanti di testo e icona</string>
-    <string name="components_button_group_sizes">Dimensioni dei pulsanti</string>
+    <string name="components_button_group_icon_sizes">Dimensioni dei pulsanti icona</string>
+    <string name="components_button_group_text_sizes">Dimensioni dei pulsanti di testo</string>
+    <string name="components_button_group_text_icon_sizes">Dimensioni dei pulsanti con testo e icona</string>
+    <string name="components_button_group_trailing_icon_sizes">Dimensioni dei pulsanti con icona finale</string>
     <string name="components_button_size_extra_small">Molto piccolo</string>
     <string name="components_button_size_small">Piccolo</string>
     <string name="components_button_size_medium">Medio</string>

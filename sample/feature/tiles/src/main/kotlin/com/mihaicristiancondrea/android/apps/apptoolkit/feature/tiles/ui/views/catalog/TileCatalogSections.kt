@@ -169,6 +169,7 @@ internal fun TileCategorySection(
                 GeneralButton(
                     style = GeneralButtonStyle.Text,
                     onClick = onToggle,
+                    iconSize = SizeConstants.ButtonIconSize,
                     icon = ToolkitIcon.Vector(if (expanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore),
                     contentDescription = stringResource(
                             id = if (expanded) R.string.tiles_collapse_category else R.string.tiles_expand_category,

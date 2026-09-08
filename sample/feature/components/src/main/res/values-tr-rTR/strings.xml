@@ -40,7 +40,10 @@
     <string name="components_button_group_tonal">Tonal düğmeler</string>
     <string name="components_button_group_outlined">Çerçeveli düğmeler</string>
     <string name="components_button_group_text_and_icon">Metin ve simge düğmeleri</string>
-    <string name="components_button_group_sizes">Düğme boyutları</string>
+    <string name="components_button_group_icon_sizes">Simge düğmesi boyutları</string>
+    <string name="components_button_group_text_sizes">Metin düğmesi boyutları</string>
+    <string name="components_button_group_text_icon_sizes">Metin ve simge düğmesi boyutları</string>
+    <string name="components_button_group_trailing_icon_sizes">Sonda simgeli düğme boyutları</string>
     <string name="components_button_size_extra_small">Çok küçük</string>
     <string name="components_button_size_small">Küçük</string>
     <string name="components_button_size_medium">Orta</string>

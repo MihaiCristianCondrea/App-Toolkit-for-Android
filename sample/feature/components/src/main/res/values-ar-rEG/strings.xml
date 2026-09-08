@@ -40,7 +40,10 @@
     <string name="components_button_group_tonal">الأزرار اللونية</string>
     <string name="components_button_group_outlined">الأزرار ذات الإطار</string>
     <string name="components_button_group_text_and_icon">أزرار النص والرموز</string>
-    <string name="components_button_group_sizes">أحجام الأزرار</string>
+    <string name="components_button_group_icon_sizes">أحجام أزرار الأيقونات</string>
+    <string name="components_button_group_text_sizes">أحجام الأزرار النصية</string>
+    <string name="components_button_group_text_icon_sizes">أحجام أزرار النص والأيقونة</string>
+    <string name="components_button_group_trailing_icon_sizes">أحجام أزرار الأيقونة اللاحقة</string>
     <string name="components_button_size_extra_small">صغير جدًا</string>
     <string name="components_button_size_small">صغير</string>
     <string name="components_button_size_medium">متوسط</string>

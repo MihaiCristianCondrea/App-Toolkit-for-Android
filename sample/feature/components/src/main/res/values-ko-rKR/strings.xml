@@ -40,7 +40,10 @@
     <string name="components_button_group_tonal">톤 버튼</string>
     <string name="components_button_group_outlined">윤곽선 버튼</string>
     <string name="components_button_group_text_and_icon">텍스트 및 아이콘 버튼</string>
-    <string name="components_button_group_sizes">버튼 크기</string>
+    <string name="components_button_group_icon_sizes">아이콘 버튼 크기</string>
+    <string name="components_button_group_text_sizes">텍스트 버튼 크기</string>
+    <string name="components_button_group_text_icon_sizes">텍스트와 아이콘 버튼 크기</string>
+    <string name="components_button_group_trailing_icon_sizes">끝 아이콘 버튼 크기</string>
     <string name="components_button_size_extra_small">아주 작게</string>
     <string name="components_button_size_small">작게</string>
     <string name="components_button_size_medium">보통</string>

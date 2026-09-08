@@ -40,7 +40,10 @@
     <string name="components_button_group_tonal">Botones tonales</string>
     <string name="components_button_group_outlined">Botones con contorno</string>
     <string name="components_button_group_text_and_icon">Botones de texto y de iconos</string>
-    <string name="components_button_group_sizes">Tamaños de botón</string>
+    <string name="components_button_group_icon_sizes">Tamaños de botón de icono</string>
+    <string name="components_button_group_text_sizes">Tamaños de botón de texto</string>
+    <string name="components_button_group_text_icon_sizes">Tamaños de botón con texto e icono</string>
+    <string name="components_button_group_trailing_icon_sizes">Tamaños de botón con icono final</string>
     <string name="components_button_size_extra_small">Muy pequeño</string>
     <string name="components_button_size_small">Pequeño</string>
     <string name="components_button_size_medium">Mediano</string>

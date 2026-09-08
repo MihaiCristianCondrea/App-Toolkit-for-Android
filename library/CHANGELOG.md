@@ -13,7 +13,7 @@
 - Added `ButtonMeasurements`, the five Material 3 Expressive button size classes (extra small,
   small, medium, large, extra large), accepted by `GeneralButton`. Container height, shape, content
   padding, icon spacing, and label typography all follow the selected size, so callers pick a size
-  instead of restating the specification. The icon glyph keeps its own default; see `iconSize`.
+  instead of restating the specification, `iconSize` included.
 - Added an `animatedIcon` constructor to bottom-bar and drawer items: one AVD or Lottie icon can
   cover both navigation states, including reverse replay, without separate icon arguments.
   Without `animatedIcon`, callers must now supply both `icon` and `selectedIcon` explicitly.
@@ -51,10 +51,10 @@
   every style picks up the expressive resting and pressed shapes. Buttons keep their previous height
   by defaulting to `ButtonMeasurements.Small`; icon-only content now follows the expressive
   icon-button container and icon metrics instead of a fixed 40dp box.
-- `GeneralButton`'s `iconSize` is now `Dp?`. It keeps its `SizeConstants.ButtonIconSize` default, so
-  the glyph stays the size it has always been at every measurement; pass an explicit `Dp` for a
-  one-off such as a drawer hamburger, or `null` to take the expressive icon size of the chosen
-  `measurements`. An explicit `shape` still overrides the resting shape.
+- `GeneralButton`'s `iconSize` is now `Dp?` and defaults to `null`, which scales the glyph with
+  `measurements`. Pass `SizeConstants.ButtonIconSize` to pin it to the size toolkit icons are drawn
+  at elsewhere, which suits small affordances such as favourite, share, and expand buttons, or any
+  other `Dp` for a one-off. An explicit `shape` still overrides the resting shape.
 - **Breaking (3.0):** Consolidated text, tonal, outlined, and filled action buttons into one adaptive
   `GeneralButton` with five styles, including Elevated. Removed the separate APIs without deprecated
   aliases. Icon-only content uses the matching Material icon button (a compact elevated button for

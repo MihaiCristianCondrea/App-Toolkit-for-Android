@@ -40,7 +40,10 @@
     <string name="components_button_group_tonal">Tonade knappar</string>
     <string name="components_button_group_outlined">Konturknappar</string>
     <string name="components_button_group_text_and_icon">Text- och ikonknappar</string>
-    <string name="components_button_group_sizes">Knappstorlekar</string>
+    <string name="components_button_group_icon_sizes">Storlekar för ikonknappar</string>
+    <string name="components_button_group_text_sizes">Storlekar för textknappar</string>
+    <string name="components_button_group_text_icon_sizes">Storlekar för text- och ikonknappar</string>
+    <string name="components_button_group_trailing_icon_sizes">Storlekar för knappar med ikon sist</string>
     <string name="components_button_size_extra_small">Mycket liten</string>
     <string name="components_button_size_small">Liten</string>
     <string name="components_button_size_medium">Mellan</string>

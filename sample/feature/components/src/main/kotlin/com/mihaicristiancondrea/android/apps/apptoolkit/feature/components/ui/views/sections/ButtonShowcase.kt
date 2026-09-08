@@ -28,7 +28,9 @@ import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
@@ -40,6 +42,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonIconPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
@@ -221,35 +224,108 @@ fun ButtonShowcase(
                 )
             }
         }
-        ShowcaseSurface(position = GroupedItemPosition.LAST) {
-            Text(
-                text = stringResource(id = R.string.components_button_group_sizes),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.Bold,
+        // Each shape gets the whole size range, smallest first, so the scale is comparable across
+        // rows rather than demonstrated once on a single shape.
+        ButtonSizeGroup(
+            titleResId = R.string.components_button_group_icon_sizes,
+            titleColor = MaterialTheme.colorScheme.primary,
+            position = GroupedItemPosition.MIDDLE,
+        ) { measurements, sizeLabel ->
+            GeneralButton(
+                icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.StarOutline),
+                contentDescription = sizeLabel,
+                measurements = measurements,
+                onClick = {},
+                firebaseController = firebaseController,
+                ga4Event = onLogEvent("button", "icon_size_${measurements.sizeVariant()}"),
             )
-            SmallVerticalSpacer()
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
-                verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
-            ) {
-                ButtonSizes.forEach { (measurements, labelResId) ->
-                    GeneralButton(
-                        style = GeneralButtonStyle.Tonal,
-                        label = stringResource(id = labelResId),
-                        measurements = measurements,
-                        onClick = {},
-                        firebaseController = firebaseController,
-                        ga4Event = onLogEvent("button", "size_${measurements.name.lowercase()}"),
-                    )
-                }
+        }
+        ButtonSizeGroup(
+            titleResId = R.string.components_button_group_text_sizes,
+            titleColor = MaterialTheme.colorScheme.secondary,
+            position = GroupedItemPosition.MIDDLE,
+        ) { measurements, sizeLabel ->
+            GeneralButton(
+                style = GeneralButtonStyle.Tonal,
+                label = sizeLabel,
+                measurements = measurements,
+                onClick = {},
+                firebaseController = firebaseController,
+                ga4Event = onLogEvent("button", "text_size_${measurements.sizeVariant()}"),
+            )
+        }
+        ButtonSizeGroup(
+            titleResId = R.string.components_button_group_text_icon_sizes,
+            titleColor = MaterialTheme.colorScheme.tertiary,
+            position = GroupedItemPosition.MIDDLE,
+        ) { measurements, sizeLabel ->
+            GeneralButton(
+                style = GeneralButtonStyle.Outlined,
+                label = sizeLabel,
+                icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Favorite),
+                measurements = measurements,
+                onClick = {},
+                firebaseController = firebaseController,
+                ga4Event = onLogEvent("button", "text_icon_size_${measurements.sizeVariant()}"),
+            )
+        }
+        ButtonSizeGroup(
+            titleResId = R.string.components_button_group_trailing_icon_sizes,
+            titleColor = MaterialTheme.colorScheme.primary,
+            position = GroupedItemPosition.LAST,
+        ) { measurements, sizeLabel ->
+            GeneralButton(
+                style = GeneralButtonStyle.Elevated,
+                label = sizeLabel,
+                icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.StarOutline),
+                iconPosition = ButtonIconPosition.End,
+                measurements = measurements,
+                onClick = {},
+                firebaseController = firebaseController,
+                ga4Event = onLogEvent("button", "trailing_icon_size_${measurements.sizeVariant()}"),
+            )
+        }
+    }
+}
+
+/**
+ * One showcase card rendering [button] once per expressive size class, smallest first.
+ *
+ * @param button Receives the size class and its resolved name, which doubles as the button's label
+ *   or content description so each button says which size it is.
+ */
+@Composable
+private fun ButtonSizeGroup(
+    titleResId: Int,
+    titleColor: Color,
+    position: GroupedItemPosition,
+    button: @Composable (ButtonMeasurements, String) -> Unit,
+) {
+    ShowcaseSurface(position = position) {
+        Text(
+            text = stringResource(id = titleResId),
+            style = MaterialTheme.typography.labelLarge,
+            color = titleColor,
+            fontWeight = FontWeight.Bold,
+        )
+        SmallVerticalSpacer()
+        FlowRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+            verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+            itemVerticalAlignment = Alignment.CenterVertically,
+        ) {
+            ButtonSizes.forEach { (measurements, labelResId) ->
+                button(measurements, stringResource(id = labelResId))
             }
         }
     }
 }
 
-/** Every expressive size class, in ascending order, for the showcase row. */
+/** GA4 variant suffix for a size class. */
+private fun ButtonMeasurements.sizeVariant(): String = name.lowercase()
+
+/** Every expressive size class, in ascending order, paired with its label. */
 private val ButtonSizes: ImmutableList<Pair<ButtonMeasurements, Int>> = persistentListOf(
     ButtonMeasurements.ExtraSmall to R.string.components_button_size_extra_small,
     ButtonMeasurements.Small to R.string.components_button_size_small,

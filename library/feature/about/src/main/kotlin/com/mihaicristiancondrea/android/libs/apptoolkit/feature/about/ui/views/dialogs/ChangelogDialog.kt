@@ -111,7 +111,7 @@ fun ChangelogDialog(
             GeneralButton(
                 modifier = Modifier.fillMaxWidth(),
                 // The sheet's only action, and the one every reader ends on.
-                measurements = ButtonMeasurements.Large,
+                measurements = ButtonMeasurements.Medium,
                 onClick = {
                     if (isError) {
                         viewModel.onEvent(event = ChangelogEvent.Retry)

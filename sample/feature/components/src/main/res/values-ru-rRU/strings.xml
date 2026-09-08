@@ -40,7 +40,10 @@
     <string name="components_button_group_tonal">Тональные кнопки</string>
     <string name="components_button_group_outlined">Контурные кнопки</string>
     <string name="components_button_group_text_and_icon">Текстовые кнопки и кнопки со значками</string>
-    <string name="components_button_group_sizes">Размеры кнопок</string>
+    <string name="components_button_group_icon_sizes">Размеры кнопок со значком</string>
+    <string name="components_button_group_text_sizes">Размеры текстовых кнопок</string>
+    <string name="components_button_group_text_icon_sizes">Размеры кнопок с текстом и значком</string>
+    <string name="components_button_group_trailing_icon_sizes">Размеры кнопок со значком в конце</string>
     <string name="components_button_size_extra_small">Очень маленький</string>
     <string name="components_button_size_small">Маленький</string>
     <string name="components_button_size_medium">Средний</string>

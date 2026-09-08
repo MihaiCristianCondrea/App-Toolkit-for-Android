@@ -35,6 +35,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.MorseToolState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ResultPill
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 
 @Composable
@@ -99,6 +100,7 @@ fun MorseTool(
         GeneralButton(
             onClick = onToggle,
             modifier = Modifier.fillMaxWidth(),
+            measurements = ButtonMeasurements.Medium,
             enabled = playback.isAvailable && (playback.isActive || state.input.isNotBlank()),
             label = stringResource(
                 if (playback.isActive) R.string.morse_stop else R.string.morse_start

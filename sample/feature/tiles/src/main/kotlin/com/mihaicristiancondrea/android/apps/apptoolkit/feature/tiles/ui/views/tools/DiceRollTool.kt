@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import kotlin.math.PI
 import kotlin.math.cos
@@ -228,6 +229,7 @@ fun DiceWithButtonAndProceduralDice(
                 }
             },
             enabled = !rolling,
+            measurements = ButtonMeasurements.Medium,
             icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.PlayArrow),
             label = stringResource(id = R.string.tool_dice_roll_action),
         )

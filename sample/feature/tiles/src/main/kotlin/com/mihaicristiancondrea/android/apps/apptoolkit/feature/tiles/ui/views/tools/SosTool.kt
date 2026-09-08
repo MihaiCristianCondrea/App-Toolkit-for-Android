@@ -44,6 +44,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ResultPill
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 
 @Composable
@@ -95,6 +96,7 @@ fun SosTool(
 
         GeneralButton(
             onClick = onToggle,
+            measurements = ButtonMeasurements.Medium,
             containerColor = if (isActive) Color.Red else null,
             contentColor = if (isActive) Color.White else null,
             label = if (isActive) "STOP SOS" else "START SOS",

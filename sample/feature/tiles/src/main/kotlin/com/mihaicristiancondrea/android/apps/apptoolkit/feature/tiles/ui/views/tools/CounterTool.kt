@@ -28,6 +28,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ResultPill
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 
@@ -39,10 +40,12 @@ fun CounterTool(count: Int, onIncrement: () -> Unit, onReset: () -> Unit) {
         Row(horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize)) {
             GeneralButton(
                 onClick = onIncrement,
+                measurements = ButtonMeasurements.Medium,
                 label = stringResource(id = R.string.tool_counter_increment),
             )
             GeneralButton(
                 style = GeneralButtonStyle.Outlined,
+                measurements = ButtonMeasurements.Medium,
                 onClick = onReset,
                 icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Refresh),
                 label = stringResource(id = R.string.tool_counter_reset),

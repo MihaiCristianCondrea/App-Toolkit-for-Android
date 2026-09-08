@@ -40,7 +40,10 @@
     <string name="components_button_group_tonal">Tónusos gombok</string>
     <string name="components_button_group_outlined">Körvonalas gombok</string>
     <string name="components_button_group_text_and_icon">Szöveges és ikongombok</string>
-    <string name="components_button_group_sizes">Gombméretek</string>
+    <string name="components_button_group_icon_sizes">Ikongombok méretei</string>
+    <string name="components_button_group_text_sizes">Szöveges gombok méretei</string>
+    <string name="components_button_group_text_icon_sizes">Szöveges és ikonos gombok méretei</string>
+    <string name="components_button_group_trailing_icon_sizes">Záró ikonos gombok méretei</string>
     <string name="components_button_size_extra_small">Nagyon kicsi</string>
     <string name="components_button_size_small">Kicsi</string>
     <string name="components_button_size_medium">Közepes</string>

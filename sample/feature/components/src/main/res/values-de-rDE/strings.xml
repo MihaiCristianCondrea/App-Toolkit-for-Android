@@ -40,7 +40,10 @@
     <string name="components_button_group_tonal">Tonale Schaltflächen</string>
     <string name="components_button_group_outlined">Umrandete Schaltflächen</string>
     <string name="components_button_group_text_and_icon">Text- und Symbolschaltflächen</string>
-    <string name="components_button_group_sizes">Schaltflächengrößen</string>
+    <string name="components_button_group_icon_sizes">Größen für Symbolschaltflächen</string>
+    <string name="components_button_group_text_sizes">Größen für Textschaltflächen</string>
+    <string name="components_button_group_text_icon_sizes">Größen für Text- und Symbolschaltflächen</string>
+    <string name="components_button_group_trailing_icon_sizes">Größen für Schaltflächen mit Symbol am Ende</string>
     <string name="components_button_size_extra_small">Sehr klein</string>
     <string name="components_button_size_small">Klein</string>
     <string name="components_button_size_medium">Mittel</string>

@@ -6,8 +6,9 @@
 
 ### Added
 
-- The Components showcase now demonstrates all five button sizes, and its animation gallery covers
-  the stopwatch animation it had been missing.
+- The Components showcase now demonstrates all five button sizes for each button shape in turn —
+  icon-only, text, text with a leading icon, then text with a trailing icon — and its animation
+  gallery covers the stopwatch animation it had been missing.
 - Opening an app or its Play Store page from app details now reports the same GA4 interaction the
   list surfaces already report.
 - Added a Components animation playground with labelled and icon-only buttons for each bundled
@@ -28,9 +29,9 @@
 
 ### Improved
 
-- Buttons across the app now follow the Material 3 Expressive shape and press behavior. Bottom
-  sheet actions are larger: the changelog sheet's button most of all, then the app details and
-  Quick Tools sheet actions.
+- Buttons across the app now follow the Material 3 Expressive shape and press behavior. The primary
+  actions in the changelog sheet and in every Quick Tools sheet, such as Start and the Flash Dimmer
+  on/off, are a size larger so they are easier to hit.
 - Developer Apps and Quick Tools filter chips now animate as the available filters change, and show
   a checkmark on the chip you picked.
 - The Apps tab shows a dot grid when selected instead of the same squares as when unselected.

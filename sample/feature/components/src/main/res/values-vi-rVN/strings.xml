@@ -40,7 +40,10 @@
     <string name="components_button_group_tonal">Nút có tông màu</string>
     <string name="components_button_group_outlined">Nút có đường viền</string>
     <string name="components_button_group_text_and_icon">Nút văn bản và biểu tượng</string>
-    <string name="components_button_group_sizes">Kích thước nút</string>
+    <string name="components_button_group_icon_sizes">Kích thước nút biểu tượng</string>
+    <string name="components_button_group_text_sizes">Kích thước nút văn bản</string>
+    <string name="components_button_group_text_icon_sizes">Kích thước nút văn bản và biểu tượng</string>
+    <string name="components_button_group_trailing_icon_sizes">Kích thước nút có biểu tượng ở cuối</string>
     <string name="components_button_size_extra_small">Rất nhỏ</string>
     <string name="components_button_size_small">Nhỏ</string>
     <string name="components_button_size_medium">Vừa</string>
