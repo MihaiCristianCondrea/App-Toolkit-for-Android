@@ -67,4 +67,13 @@
     <string name="components_animation_restart">ٹیپ کرنے پر دوبارہ شروع کریں</string>
     <string name="components_animation_reverse">ٹیپ کرنے پر الٹا چلائیں</string>
     <string name="components_animation_preview_helper">اینیمیشن کا پیش نظارہ کرنے کے لیے کسی آئٹم پر ٹیپ کریں۔</string>
+    <string name="components_section_grid">گروپ شدہ گرڈ</string>
+    <string name="components_grid_group_categories">سائز کے ساتھ اقسام</string>
+    <string name="components_grid_group_compact">مختصر، ایک سطر</string>
+    <string name="components_grid_group_single">ایک سیل</string>
+    <string name="components_grid_installed_apps">انسٹال شدہ ایپس</string>
+    <string name="components_grid_images">تصاویر</string>
+    <string name="components_grid_music">موسیقی</string>
+    <string name="components_grid_documents">دستاویزات</string>
+    <string name="components_grid_downloads">ڈاؤن لوڈز</string>
 </resources>

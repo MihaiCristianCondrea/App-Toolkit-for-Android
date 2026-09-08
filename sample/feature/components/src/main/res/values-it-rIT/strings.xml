@@ -67,4 +67,13 @@
     <string name="components_animation_restart">Ricomincia al tocco</string>
     <string name="components_animation_reverse">Inverti al tocco</string>
     <string name="components_animation_preview_helper">Tocca un elemento per visualizzare l\'anteprima della sua animazione.</string>
+    <string name="components_section_grid">Griglia raggruppata</string>
+    <string name="components_grid_group_categories">Categorie con dimensioni</string>
+    <string name="components_grid_group_compact">Compatto, una riga</string>
+    <string name="components_grid_group_single">Una cella</string>
+    <string name="components_grid_installed_apps">App installate</string>
+    <string name="components_grid_images">Immagini</string>
+    <string name="components_grid_music">Musica</string>
+    <string name="components_grid_documents">Documenti</string>
+    <string name="components_grid_downloads">Download</string>
 </resources>

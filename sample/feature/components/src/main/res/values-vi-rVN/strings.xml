@@ -67,4 +67,13 @@
     <string name="components_animation_restart">Phát lại khi nhấn</string>
     <string name="components_animation_reverse">Phát ngược khi nhấn</string>
     <string name="components_animation_preview_helper">Nhấn vào một mục để xem trước hoạt ảnh.</string>
+    <string name="components_section_grid">Lưới nhóm</string>
+    <string name="components_grid_group_categories">Danh mục kèm dung lượng</string>
+    <string name="components_grid_group_compact">Gọn, một dòng</string>
+    <string name="components_grid_group_single">Một ô</string>
+    <string name="components_grid_installed_apps">Ứng dụng đã cài</string>
+    <string name="components_grid_images">Hình ảnh</string>
+    <string name="components_grid_music">Nhạc</string>
+    <string name="components_grid_documents">Tài liệu</string>
+    <string name="components_grid_downloads">Tải xuống</string>
 </resources>

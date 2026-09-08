@@ -67,4 +67,13 @@
     <string name="components_animation_restart">Починати знову після натискання</string>
     <string name="components_animation_reverse">Відтворювати навпаки після натискання</string>
     <string name="components_animation_preview_helper">Натисніть на елемент, щоб переглянути його анімацію.</string>
+    <string name="components_section_grid">Згрупована сітка</string>
+    <string name="components_grid_group_categories">Категорії з розмірами</string>
+    <string name="components_grid_group_compact">Компактно, один рядок</string>
+    <string name="components_grid_group_single">Одна комірка</string>
+    <string name="components_grid_installed_apps">Встановлені додатки</string>
+    <string name="components_grid_images">Зображення</string>
+    <string name="components_grid_music">Музика</string>
+    <string name="components_grid_documents">Документи</string>
+    <string name="components_grid_downloads">Завантаження</string>
 </resources>

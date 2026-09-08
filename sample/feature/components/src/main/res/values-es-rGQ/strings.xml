@@ -67,4 +67,13 @@
     <string name="components_animation_restart">Reiniciar al tocar</string>
     <string name="components_animation_reverse">Invertir al tocar</string>
     <string name="components_animation_preview_helper">Toca un elemento para ver la vista previa de su animación.</string>
+    <string name="components_section_grid">Cuadrícula agrupada</string>
+    <string name="components_grid_group_categories">Categorías con tamaños</string>
+    <string name="components_grid_group_compact">Compacto, una línea</string>
+    <string name="components_grid_group_single">Una celda</string>
+    <string name="components_grid_installed_apps">Apps instaladas</string>
+    <string name="components_grid_images">Imágenes</string>
+    <string name="components_grid_music">Música</string>
+    <string name="components_grid_documents">Documentos</string>
+    <string name="components_grid_downloads">Descargas</string>
 </resources>

@@ -10,6 +10,16 @@
   italic, inline code, code blocks, bulleted and numbered lists, quotes and links, and Markdown
   syntax highlighted as it is typed.
 
+- Added `GroupedGrid`, the grouped category block used for storage and media breakdowns and for
+  blocks of actions. Cells are laid out in columns as one rounded group: only the corners at the
+  outside of the block are rounded, seams between cells are cut small, and a grid of one cell rounds
+  all four of its corners. `GroupedGridMeasurements` picks the cell height and everything that
+  scales with it the way `ButtonMeasurements` does for buttons, `GroupedGridDefaults` carries the
+  radii, spacing, colors and badge shape, and each cell may cut its badge from any `Shape`,
+  including the Material 3 `MaterialShapes` set. Passing an ad unit adds one full-width native ad
+  row under the first row of cells; a grid of one cell never shows one, and an ad that fails to load
+  leaves the group cut as if it had never been asked for.
+
 - `CommonFilterChip` accepts an `icon` shown while the chip is unselected, and `hasAnimation` to
   turn off the crossfade into the selected checkmark.
 - `CommonDropdownMenuItem` takes an optional `icon` and a plain `text` alongside the existing

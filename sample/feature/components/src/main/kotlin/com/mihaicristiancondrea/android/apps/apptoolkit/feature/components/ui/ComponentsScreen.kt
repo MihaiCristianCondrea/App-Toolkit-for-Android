@@ -40,6 +40,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.vi
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.ButtonShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.FabShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.FilterShowcase
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.GridShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.InputShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.LayoutShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.PreferenceShowcase
@@ -188,6 +189,8 @@ fun ComponentsScreen(
                     carouselState = carouselState,
                 )
             }
+
+            item { GridShowcase() }
 
             item {
                 FilterShowcase(

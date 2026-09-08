@@ -67,4 +67,13 @@
     <string name="components_animation_restart">Repornește la atingere</string>
     <string name="components_animation_reverse">Inversează la atingere</string>
     <string name="components_animation_preview_helper">Atinge un element pentru a-i previzualiza animația.</string>
+    <string name="components_section_grid">Grilă grupată</string>
+    <string name="components_grid_group_categories">Categorii cu dimensiuni</string>
+    <string name="components_grid_group_compact">Compact, un singur rând</string>
+    <string name="components_grid_group_single">O singură celulă</string>
+    <string name="components_grid_installed_apps">Aplicații instalate</string>
+    <string name="components_grid_images">Imagini</string>
+    <string name="components_grid_music">Muzică</string>
+    <string name="components_grid_documents">Documente</string>
+    <string name="components_grid_downloads">Descărcări</string>
 </resources>

@@ -126,19 +126,15 @@ fun AppDetailsBottomSheet(
             adsConfig = adsConfig,
         )
         LargeVerticalSpacer()
+        // The sponsored row that used to follow this block is now the grid's own ad row, placed
+        // inside the group rather than loose underneath it.
         AppDetailsQuickActions(
             appInfo = appInfo,
             isFavorite = isFavorite,
             isAppInstalled = isAppInstalled,
             actionLauncher = actionLauncher,
-            onFavoriteClick = onFavoriteClick,
-        )
-
-        AppDetailsNativeAd(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = SizeConstants.LargeSize),
             adsConfig = adsConfig,
+            onFavoriteClick = onFavoriteClick,
         )
 
         when {

@@ -67,4 +67,13 @@
     <string name="components_animation_restart">Mulai ulang saat diketuk</string>
     <string name="components_animation_reverse">Balik saat diketuk</string>
     <string name="components_animation_preview_helper">Ketuk item untuk melihat pratinjau animasinya.</string>
+    <string name="components_section_grid">Kisi yang dikelompokkan</string>
+    <string name="components_grid_group_categories">Kategori dengan ukuran</string>
+    <string name="components_grid_group_compact">Ringkas, satu baris</string>
+    <string name="components_grid_group_single">Satu sel</string>
+    <string name="components_grid_installed_apps">Aplikasi terinstal</string>
+    <string name="components_grid_images">Gambar</string>
+    <string name="components_grid_music">Musik</string>
+    <string name="components_grid_documents">Dokumen</string>
+    <string name="components_grid_downloads">Unduhan</string>
 </resources>

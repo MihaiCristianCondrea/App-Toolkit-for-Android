@@ -67,4 +67,13 @@
     <string name="components_animation_restart">Dokununca yeniden başlat</string>
     <string name="components_animation_reverse">Dokununca tersine oynat</string>
     <string name="components_animation_preview_helper">Animasyonunu önizlemek için bir öğeye dokunun.</string>
+    <string name="components_section_grid">Gruplanmış ızgara</string>
+    <string name="components_grid_group_categories">Boyutlu kategoriler</string>
+    <string name="components_grid_group_compact">Kompakt, tek satır</string>
+    <string name="components_grid_group_single">Tek hücre</string>
+    <string name="components_grid_installed_apps">Yüklü uygulamalar</string>
+    <string name="components_grid_images">Görseller</string>
+    <string name="components_grid_music">Müzik</string>
+    <string name="components_grid_documents">Belgeler</string>
+    <string name="components_grid_downloads">İndirilenler</string>
 </resources>

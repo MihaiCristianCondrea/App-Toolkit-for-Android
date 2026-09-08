@@ -67,4 +67,13 @@
     <string name="components_animation_restart">タップで最初から再生</string>
     <string name="components_animation_reverse">タップで逆再生</string>
     <string name="components_animation_preview_helper">タップしてアニメーションをプレビューします。</string>
+    <string name="components_section_grid">グループ化グリッド</string>
+    <string name="components_grid_group_categories">サイズ付きカテゴリ</string>
+    <string name="components_grid_group_compact">コンパクト（1 行）</string>
+    <string name="components_grid_group_single">セル 1 つ</string>
+    <string name="components_grid_installed_apps">インストール済みアプリ</string>
+    <string name="components_grid_images">画像</string>
+    <string name="components_grid_music">音楽</string>
+    <string name="components_grid_documents">ドキュメント</string>
+    <string name="components_grid_downloads">ダウンロード</string>
 </resources>

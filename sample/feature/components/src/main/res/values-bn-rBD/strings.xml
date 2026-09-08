@@ -67,4 +67,13 @@
     <string name="components_animation_restart">ট্যাপ করলে আবার শুরু</string>
     <string name="components_animation_reverse">ট্যাপ করলে উল্টো চালান</string>
     <string name="components_animation_preview_helper">অ্যানিমেশন প্রাকদর্শন করতে একটি আইটেমে ট্যাপ করুন।</string>
+    <string name="components_section_grid">গ্রুপ করা গ্রিড</string>
+    <string name="components_grid_group_categories">আকারসহ বিভাগ</string>
+    <string name="components_grid_group_compact">কমপ্যাক্ট, এক লাইন</string>
+    <string name="components_grid_group_single">একটি সেল</string>
+    <string name="components_grid_installed_apps">ইনস্টল করা অ্যাপ</string>
+    <string name="components_grid_images">ছবি</string>
+    <string name="components_grid_music">মিউজিক</string>
+    <string name="components_grid_documents">ডকুমেন্ট</string>
+    <string name="components_grid_downloads">ডাউনলোড</string>
 </resources>

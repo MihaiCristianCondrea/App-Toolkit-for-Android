@@ -67,4 +67,13 @@
     <string name="components_animation_restart">Magsimula muli sa pag-tap</string>
     <string name="components_animation_reverse">Baligtarin sa pag-tap</string>
     <string name="components_animation_preview_helper">I-tap ang isang item upang i-preview ang animation nito.</string>
+    <string name="components_section_grid">Nakagrupong grid</string>
+    <string name="components_grid_group_categories">Mga kategorya na may laki</string>
+    <string name="components_grid_group_compact">Compact, isang linya</string>
+    <string name="components_grid_group_single">Isang cell</string>
+    <string name="components_grid_installed_apps">Mga naka-install na app</string>
+    <string name="components_grid_images">Mga larawan</string>
+    <string name="components_grid_music">Musika</string>
+    <string name="components_grid_documents">Mga dokumento</string>
+    <string name="components_grid_downloads">Mga download</string>
 </resources>

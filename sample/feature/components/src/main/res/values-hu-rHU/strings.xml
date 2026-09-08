@@ -67,4 +67,13 @@
     <string name="components_animation_restart">Újraindítás koppintásra</string>
     <string name="components_animation_reverse">Megfordítás koppintásra</string>
     <string name="components_animation_preview_helper">Koppintson egy elemre az animáció előnézetéhez.</string>
+    <string name="components_section_grid">Csoportosított rács</string>
+    <string name="components_grid_group_categories">Kategóriák mérettel</string>
+    <string name="components_grid_group_compact">Kompakt, egysoros</string>
+    <string name="components_grid_group_single">Egy cella</string>
+    <string name="components_grid_installed_apps">Telepített alkalmazások</string>
+    <string name="components_grid_images">Képek</string>
+    <string name="components_grid_music">Zene</string>
+    <string name="components_grid_documents">Dokumentumok</string>
+    <string name="components_grid_downloads">Letöltések</string>
 </resources>

@@ -67,4 +67,13 @@
     <string name="components_animation_restart">Uruchom ponownie po dotknięciu</string>
     <string name="components_animation_reverse">Odwróć po dotknięciu</string>
     <string name="components_animation_preview_helper">Dotknij elementu, aby wyświetlić podgląd jego animacji.</string>
+    <string name="components_section_grid">Zgrupowana siatka</string>
+    <string name="components_grid_group_categories">Kategorie z rozmiarami</string>
+    <string name="components_grid_group_compact">Kompaktowo, jeden wiersz</string>
+    <string name="components_grid_group_single">Jedna komórka</string>
+    <string name="components_grid_installed_apps">Zainstalowane aplikacje</string>
+    <string name="components_grid_images">Obrazy</string>
+    <string name="components_grid_music">Muzyka</string>
+    <string name="components_grid_documents">Dokumenty</string>
+    <string name="components_grid_downloads">Pobrane</string>
 </resources>

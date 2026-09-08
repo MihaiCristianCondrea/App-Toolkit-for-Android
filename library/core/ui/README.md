@@ -9,7 +9,7 @@ entry helpers, state handling, analytics hooks, and shared components.
 
 - `ScreenViewModel`, `LoggedScreenViewModel`, event/action bases, and `UiStateScreen` handling.
 - Navigation entry builders and UI state built on stable keys owned by `:library:navigation`.
-- Reusable buttons, fields, preferences, layouts, dialogs, snackbars, ads slots, effects, and
+- Reusable buttons, fields, preferences, layouts, grids, dialogs, snackbars, ads slots, effects, and
   adaptive-window helpers.
 - Render models such as `AppVersionInfo` and `AdsConfig`.
 - The shared theme-mode preview composables used by both the onboarding and settings theme UI.
@@ -82,6 +82,11 @@ remain available; data-layer callers should use the lower-level APIs.
 
 - `GeneralButton` is the action-button entry point for all five styles and labelled/icon-only content.
   See the [3.0 button contract and migration](../designsystem/README.md#generalbutton-30).
+- `GroupedGrid` is the grouped category/action block: `GroupedGridItem` cells, `GroupedGridDefaults`
+  for radii, spacing, colors and the badge shape, and `GroupedGridMeasurements` for the size class.
+  The corner and ad-placement rules are `groupedGridRows`, which is unit tested; the composable
+  renders the plan it returns. Its ad row goes through `NativeAdSlot` like every other ad surface,
+  so a host that passes no `adUnitId` pulls in no ad behaviour at all.
 
 
 - All new ViewModels must extend `ScreenViewModel`, or `LoggedScreenViewModel` when Firebase

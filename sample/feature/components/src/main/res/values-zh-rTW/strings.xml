@@ -67,4 +67,13 @@
     <string name="components_animation_restart">輕觸以重新播放</string>
     <string name="components_animation_reverse">輕觸以反向播放</string>
     <string name="components_animation_preview_helper">輕觸項目以預覽其動畫。</string>
+    <string name="components_section_grid">群組格線</string>
+    <string name="components_grid_group_categories">含容量的類別</string>
+    <string name="components_grid_group_compact">精簡單行</string>
+    <string name="components_grid_group_single">單一格</string>
+    <string name="components_grid_installed_apps">已安裝應用程式</string>
+    <string name="components_grid_images">圖片</string>
+    <string name="components_grid_music">音樂</string>
+    <string name="components_grid_documents">文件</string>
+    <string name="components_grid_downloads">下載</string>
 </resources>

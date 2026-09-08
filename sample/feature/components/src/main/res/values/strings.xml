@@ -66,4 +66,13 @@
     <string name="components_section_animations">Animations</string>
     <string name="components_animation_reverse">Reverse on tap</string>
     <string name="components_animation_preview_helper">Tap an item to preview its animation.</string>
+    <string name="components_section_grid">Grouped grid</string>
+    <string name="components_grid_group_categories">Categories with sizes</string>
+    <string name="components_grid_group_compact">Compact, single line</string>
+    <string name="components_grid_group_single">One cell</string>
+    <string name="components_grid_installed_apps">Installed apps</string>
+    <string name="components_grid_images">Images</string>
+    <string name="components_grid_music">Music</string>
+    <string name="components_grid_documents">Documents</string>
+    <string name="components_grid_downloads">Downloads</string>
 </resources>

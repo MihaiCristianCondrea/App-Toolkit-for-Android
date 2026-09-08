@@ -67,4 +67,13 @@
     <string name="components_animation_restart">إعادة البدء عند النقر</string>
     <string name="components_animation_reverse">العكس عند النقر</string>
     <string name="components_animation_preview_helper">انقر على عنصر لمعاينة الرسوم المتحركة الخاص به.</string>
+    <string name="components_section_grid">شبكة مجمّعة</string>
+    <string name="components_grid_group_categories">فئات مع الأحجام</string>
+    <string name="components_grid_group_compact">مضغوط، سطر واحد</string>
+    <string name="components_grid_group_single">خلية واحدة</string>
+    <string name="components_grid_installed_apps">التطبيقات المثبَّتة</string>
+    <string name="components_grid_images">الصور</string>
+    <string name="components_grid_music">الموسيقى</string>
+    <string name="components_grid_documents">المستندات</string>
+    <string name="components_grid_downloads">التنزيلات</string>
 </resources>

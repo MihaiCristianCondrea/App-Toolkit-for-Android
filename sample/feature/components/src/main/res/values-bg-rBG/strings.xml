@@ -67,4 +67,13 @@
     <string name="components_animation_restart">Рестартиране при докосване</string>
     <string name="components_animation_reverse">Обръщане при докосване</string>
     <string name="components_animation_preview_helper">Докоснете елемент, за да прегледате неговата анимация.</string>
+    <string name="components_section_grid">Групирана мрежа</string>
+    <string name="components_grid_group_categories">Категории с размери</string>
+    <string name="components_grid_group_compact">Компактно, на един ред</string>
+    <string name="components_grid_group_single">Една клетка</string>
+    <string name="components_grid_installed_apps">Инсталирани приложения</string>
+    <string name="components_grid_images">Изображения</string>
+    <string name="components_grid_music">Музика</string>
+    <string name="components_grid_documents">Документи</string>
+    <string name="components_grid_downloads">Изтегляния</string>
 </resources>

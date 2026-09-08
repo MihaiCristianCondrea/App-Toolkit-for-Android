@@ -67,4 +67,13 @@
     <string name="components_animation_restart">Bei Tippen neu starten</string>
     <string name="components_animation_reverse">Bei Tippen umkehren</string>
     <string name="components_animation_preview_helper">Tippen Sie auf ein Element, um dessen Animation vorzuschauen.</string>
+    <string name="components_section_grid">Gruppiertes Raster</string>
+    <string name="components_grid_group_categories">Kategorien mit Größen</string>
+    <string name="components_grid_group_compact">Kompakt, einzeilig</string>
+    <string name="components_grid_group_single">Eine Zelle</string>
+    <string name="components_grid_installed_apps">Installierte Apps</string>
+    <string name="components_grid_images">Bilder</string>
+    <string name="components_grid_music">Musik</string>
+    <string name="components_grid_documents">Dokumente</string>
+    <string name="components_grid_downloads">Downloads</string>
 </resources>

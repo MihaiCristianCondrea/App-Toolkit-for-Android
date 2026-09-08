@@ -67,4 +67,13 @@
     <string name="components_animation_restart">Запуск заново по нажатию</string>
     <string name="components_animation_reverse">Обратное воспроизведение по нажатию</string>
     <string name="components_animation_preview_helper">Нажмите на элемент, чтобы просмотреть его анимацию.</string>
+    <string name="components_section_grid">Сгруппированная сетка</string>
+    <string name="components_grid_group_categories">Категории с размерами</string>
+    <string name="components_grid_group_compact">Компактно, одна строка</string>
+    <string name="components_grid_group_single">Одна ячейка</string>
+    <string name="components_grid_installed_apps">Установленные приложения</string>
+    <string name="components_grid_images">Изображения</string>
+    <string name="components_grid_music">Музыка</string>
+    <string name="components_grid_documents">Документы</string>
+    <string name="components_grid_downloads">Загрузки</string>
 </resources>
