@@ -33,8 +33,9 @@
 
 ### Improved
 
-- App details quick actions are now one grouped block instead of loose tiles, and the sponsored row
-  that used to sit under them is now part of that block.
+- App details quick actions are now one grouped block instead of loose tiles. The two sponsored rows
+  that used to sit either side of them are replaced by a single one inside the block, between the
+  actions.
 - Refined the expanded tool UI for Dice Roll, Coin Flip, Counter, and SOS: updated Coin Flip to place the coin at the top with result text directly beneath it, enhanced Counter with animated digits (`AnimatedDigit`), and removed redundant bottom text below action buttons.
 - Buttons across the app now follow the Material 3 Expressive shape and press behavior. The primary
   actions in the changelog sheet and in every Quick Tools sheet, such as Start and the Flash Dimmer

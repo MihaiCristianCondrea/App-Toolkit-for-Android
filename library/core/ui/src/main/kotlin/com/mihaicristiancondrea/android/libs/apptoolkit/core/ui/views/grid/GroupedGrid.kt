@@ -63,6 +63,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -95,14 +96,16 @@ import kotlinx.collections.immutable.persistentListOf
  * - [columns] sets how many cells share a row. A last row that is short shares its width between
  *   the cells it does have, so a lone leftover item spans the row.
  *
- * Passing an [adUnitId] adds one native ad row directly under the first row of cells, spanning the
- * full width, from [GroupedGridDefaults.MinItemsForAd] items up. The ad is part of the group: it is
- * cut with the same radii, and when it is the last row it carries the group's bottom corners. A
- * grid of one cell never shows one, and neither does a grid whose ad fails to load — the cells
- * round off exactly as they would have without it. Placement policy stays with the host, which
- * decides whether to pass a unit id at all.
+ * Passing an [adUnitId] adds one native ad row spanning the full width, in the middle of the block,
+ * from [GroupedGridDefaults.MinItemsForAd] items up. The ad is part of the group: it is cut with the
+ * same radii, and takes the same badge, padding and headline size as the cells, so it reads as one
+ * more row rather than as something dropped between them. A grid of one cell never shows one, and
+ * neither does a grid whose ad fails to load — the cells round off exactly as they would have
+ * without it. Placement policy stays with the host, which decides whether to pass a unit id at all.
  *
  * @param items Cells to render, in order. An empty list renders nothing.
+ * @param bounceOnClick `true` scales a cell down while it is held. Off by default: a grid is read as
+ * one block, and a cell that shrinks on its own breaks the block apart.
  * @param adUnitId AdMob native ad unit for the ad row. `null` or blank renders no ad row.
  */
 @Composable
@@ -116,6 +119,7 @@ fun GroupedGrid(
     itemSpacing: Dp = GroupedGridDefaults.ItemSpacing,
     iconShape: Shape = GroupedGridDefaults.IconShape,
     colors: GroupedGridColors = GroupedGridDefaults.colors(),
+    bounceOnClick: Boolean = false,
     adUnitId: String? = null,
 ) {
     if (items.isEmpty()) return
@@ -135,6 +139,8 @@ fun GroupedGrid(
     val rows: ImmutableList<GroupedGridRow> = remember(items.size, columns, adRow) {
         groupedGridRows(itemCount = items.size, columns = columns, adRow = adRow)
     }
+    val adPresentation: NativeAdPresentation.GridRow =
+        measurements.nativeAdPresentation(titleTextStyle = measurements.titleTextStyle())
 
     Column(
         modifier = modifier
@@ -168,6 +174,7 @@ fun GroupedGrid(
                                 adUnitId = adUnitId.orEmpty(),
                                 shape = shape,
                                 visible = !row.collapsed,
+                                presentation = adPresentation,
                                 colors = colors,
                                 onAdLoaded = { adLoaded = it },
                             )
@@ -178,6 +185,7 @@ fun GroupedGrid(
                                 measurements = measurements,
                                 iconShape = iconShape,
                                 colors = colors,
+                                bounceOnClick = bounceOnClick,
                             )
                         }
                     }
@@ -197,6 +205,7 @@ private fun RowScope.GroupedGridCard(
     measurements: GroupedGridMeasurements,
     iconShape: Shape,
     colors: GroupedGridColors,
+    bounceOnClick: Boolean,
 ) {
     val view: View = LocalView.current
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
@@ -205,7 +214,7 @@ private fun RowScope.GroupedGridCard(
     Card(
         modifier = Modifier
             .weight(weight = 1f)
-            .bounceClick(animationEnabled = item.enabled),
+            .bounceClick(animationEnabled = bounceOnClick && item.enabled),
         onClick = {
             feedback.performClick(view = view, hapticFeedback = hapticFeedback)
             item.onClick()
@@ -258,6 +267,7 @@ private fun RowScope.GroupedGridCard(
                         .fillMaxWidth()
                         .basicMarquee(),
                     style = measurements.titleTextStyle(),
+                    fontWeight = FontWeight.SemiBold,
                     maxLines = 1,
                 )
                 item.subtitle?.let { subtitle ->
@@ -285,6 +295,7 @@ private fun RowScope.GroupedGridAdCell(
     adUnitId: String,
     shape: Shape,
     visible: Boolean,
+    presentation: NativeAdPresentation.GridRow,
     colors: GroupedGridColors,
     onAdLoaded: (Boolean) -> Unit,
 ) {
@@ -296,7 +307,7 @@ private fun RowScope.GroupedGridAdCell(
     ) {
         NativeAdSlot(
             adUnitId = adUnitId,
-            presentation = NativeAdPresentation.Compact,
+            presentation = presentation,
             modifier = Modifier.fillMaxWidth(),
             showContainer = false,
             onAdLoaded = onAdLoaded,

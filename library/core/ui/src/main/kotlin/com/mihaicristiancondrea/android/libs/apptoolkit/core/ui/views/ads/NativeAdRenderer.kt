@@ -68,6 +68,11 @@ class DefaultNativeAdViewFactory : NativeAdViewFactory {
         NativeAdPresentation.Featured -> createFeatured(context = context)
         NativeAdPresentation.Compact -> createCompact(context = context)
         NativeAdPresentation.Grid -> createGrid(context = context)
+        is NativeAdPresentation.GridRow -> createGridRow(
+            context = context,
+            presentation = presentation,
+        )
+
         NativeAdPresentation.BarRow -> createBarRow(context = context)
     }
 }
@@ -156,9 +161,13 @@ class NativeAdViewHolder(
         advertiser.setTextColor(palette.onSurfaceVariant)
 
         iconFrame?.let { frame ->
+            // A grid row picks its own badge radius so the ad badge matches the cells beside it;
+            // every other presentation uses the shared one.
+            val radiusDp: Int = (presentation as? NativeAdPresentation.GridRow)?.iconCornerRadiusDp
+                ?: ICON_CORNER_RADIUS_DP
             frame.background = roundedDrawable(
                 color = palette.surfaceVariant,
-                radiusPx = frame.context.dp(value = ICON_CORNER_RADIUS_DP),
+                radiusPx = frame.context.dp(value = radiusDp),
             )
         }
         mediaFrame?.let { frame ->
@@ -245,6 +254,9 @@ const val SPACING_DP: Int = 16
 const val SMALL_SPACING_DP: Int = 8
 const val LABEL_HORIZONTAL_PADDING_DP: Int = 8
 const val LABEL_VERTICAL_PADDING_DP: Int = 4
+
+const val GRID_ROW_LABEL_SPACING_DP: Int = 6
+const val GRID_ROW_BODY_TEXT_SIZE_SP: Float = 12f
 
 const val COMPACT_ICON_SIZE_DP: Int = 48
 const val BAR_ICON_SIZE_DP: Int = 32
@@ -507,6 +519,103 @@ private fun createBarRow(context: Context): NativeAdViewHolder {
 
     return NativeAdViewHolder(
         presentation = NativeAdPresentation.BarRow,
+        root = root,
+        content = content,
+        label = label,
+        media = null,
+        mediaFrame = null,
+        icon = icon,
+        iconFrame = iconFrame,
+        headline = headline,
+        body = body,
+        advertiser = advertiser,
+        callToAction = callToAction,
+    )
+}
+
+/**
+ * One row of a grouped grid.
+ *
+ * Everything is on a single row, and the disclosure chip sits inline with the body rather than on a
+ * line of its own: a row that stacked the chip above the icon came out taller than the cells it is
+ * interleaved with, which is exactly what makes an ad read as an intruder rather than as one more
+ * row of the block. The badge, padding, gap and headline size come from the grid's size class, so
+ * the row lines up with the cells above and below it.
+ */
+private fun createGridRow(
+    context: Context,
+    presentation: NativeAdPresentation.GridRow,
+): NativeAdViewHolder {
+    val root = nativeAdRoot(context = context)
+    val padding: Int = context.dp(presentation.contentPaddingDp)
+
+    val content = LinearLayout(context).apply {
+        orientation = LinearLayout.HORIZONTAL
+        gravity = Gravity.CENTER_VERTICAL
+        setPadding(padding, padding, padding, padding)
+        layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+        )
+    }
+
+    val iconFrame = iconFrameView(
+        context = context,
+        sizeDp = presentation.iconSizeDp,
+        radiusDp = presentation.iconCornerRadiusDp,
+    )
+    val icon = iconFrame.getChildAt(0) as ImageView
+
+    val texts = LinearLayout(context).apply {
+        orientation = LinearLayout.VERTICAL
+        layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+            .apply {
+                marginStart = context.dp(presentation.iconSpacingDp)
+                marginEnd = context.dp(SMALL_SPACING_DP)
+            }
+    }
+
+    val headline = headlineView(context = context, maxLines = 1).apply {
+        setTextSize(TypedValue.COMPLEX_UNIT_SP, presentation.headlineTextSizeSp)
+    }
+
+    val label = sponsoredLabelView(context = context)
+
+    val body = bodyView(context = context, maxLines = 1).apply {
+        setTextSize(TypedValue.COMPLEX_UNIT_SP, GRID_ROW_BODY_TEXT_SIZE_SP)
+        layoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+        ).apply { marginStart = context.dp(GRID_ROW_LABEL_SPACING_DP) }
+    }
+
+    val labelAndBody = LinearLayout(context).apply {
+        orientation = LinearLayout.HORIZONTAL
+        gravity = Gravity.CENTER_VERTICAL
+        layoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+        ).apply { topMargin = context.dp(ICON_PADDING_DP) }
+        addView(label)
+        addView(body)
+    }
+
+    val advertiser = advertiserView(context = context)
+        .withTopMargin(context.dp(ICON_PADDING_DP))
+
+    texts.addView(headline)
+    texts.addView(labelAndBody)
+    texts.addView(advertiser)
+
+    val callToAction = callToActionView(context = context)
+
+    content.addView(iconFrame)
+    content.addView(texts)
+    content.addView(callToAction)
+    root.addView(content)
+
+    return NativeAdViewHolder(
+        presentation = presentation,
         root = root,
         content = content,
         label = label,

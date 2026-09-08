@@ -79,8 +79,10 @@ internal data class GroupedGridRow(
  * tested without a device:
  * - Items fill rows of [columns] in order. A last row that is short shares its width between the
  *   cells it does have, so a lone leftover item spans the row.
- * - The ad row, when there is one, follows the first row of items and spans the full width. It is
- *   only planned from [GroupedGridDefaults.MinItemsForAd] items up.
+ * - The ad row, when there is one, sits in the middle of the block and spans the full width: it
+ *   splits the rows of cells in half, keeping the larger half above it when there is an odd number
+ *   of them. A single row of cells has no middle, so the ad goes under it. The ad is only planned
+ *   from [GroupedGridDefaults.MinItemsForAd] items up.
  * - A corner is cut at the outer radius when it is at the outside of the group: the top row's
  *   leading and trailing corners, and the last row's. Every other corner is an inner one. A grid of
  *   one item is its own top and last row, so all four of its corners are outer ones.
@@ -98,6 +100,8 @@ internal fun groupedGridRows(
         val itemRows: List<List<Int>> = (0 until itemCount).chunked(size = columns)
         val carriesAd: Boolean =
             adRow != GroupedGridAdRow.None && itemCount >= GroupedGridDefaults.MinItemsForAd
+        // Rounded up, so a single row of cells puts the ad underneath rather than on top of itself.
+        val rowsAboveAd: Int = (itemRows.size + 1) / 2
 
         itemRows.forEachIndexed { rowIndex, indices ->
             add(
@@ -107,7 +111,7 @@ internal fun groupedGridRows(
                     collapsed = false,
                 )
             )
-            if (rowIndex == 0 && carriesAd) {
+            if (rowIndex == rowsAboveAd - 1 && carriesAd) {
                 add(
                     PlannedRow(
                         key = GROUPED_GRID_AD_ROW_KEY,

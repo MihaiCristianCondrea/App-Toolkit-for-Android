@@ -39,6 +39,32 @@ sealed interface NativeAdPresentation {
     /** Square cell for grids and decks: icon, headline, advertiser, body. No CTA. */
     data object Grid : NativeAdPresentation
 
+    /**
+     * One row of a grouped grid: icon badge, headline, the disclosure chip inline with the body,
+     * advertiser, and a trailing CTA — all on a single row, so the ad is no taller than the cells
+     * it sits between.
+     *
+     * It is the only presentation whose metrics are chosen by the caller. A grid draws its cells at
+     * a size class, and an ad row that ignored that size would read as a different kind of block:
+     * the row takes the same badge, padding and headline size as the cells around it so it reads as
+     * one of them. Everything else — colors, the disclosure chip, the CTA — stays with the shared
+     * renderer.
+     *
+     * @property iconSizeDp Badge size, matching the cells' badge.
+     * @property iconCornerRadiusDp Badge corner radius. The cells cut their badge from an arbitrary
+     *   `Shape`, which an Android view cannot follow, so the ad badge is a rounded square.
+     * @property headlineTextSizeSp Headline size, taken from the cells' title style.
+     * @property contentPaddingDp Inset from the row's edges, matching the cells' content padding.
+     * @property iconSpacingDp Gap after the badge, matching the cells'.
+     */
+    data class GridRow(
+        val iconSizeDp: Int,
+        val iconCornerRadiusDp: Int,
+        val headlineTextSizeSp: Float,
+        val contentPaddingDp: Int,
+        val iconSpacingDp: Int,
+    ) : NativeAdPresentation
+
     /** Full-width strip for a bottom app bar or action bar: icon, one-line text, trailing CTA. */
     data object BarRow : NativeAdPresentation
 }

@@ -41,7 +41,7 @@ class GroupedGridLayoutTest {
     }
 
     @Test
-    fun `the ad follows the first row and spans it`() {
+    fun `a single row of cells has no middle, so the ad goes under it`() {
         val rows = groupedGridRows(itemCount = 2, columns = 2, adRow = GroupedGridAdRow.Visible)
 
         assertEquals(2, rows.size)
@@ -68,16 +68,35 @@ class GroupedGridLayoutTest {
     }
 
     @Test
-    fun `an ad in the middle of the group carries no outer corner`() {
+    fun `an ad between rows of cells carries no outer corner`() {
         val rows = groupedGridRows(itemCount = 5, columns = 2, adRow = GroupedGridAdRow.Visible)
 
-        // Two cells, the ad, two cells, then the leftover one.
-        assertEquals(listOf(2, 1, 2, 1), rows.map { it.cells.size })
+        // Two rows of cells, the ad, then the leftover one.
+        assertEquals(listOf(2, 2, 1, 1), rows.map { it.cells.size })
+        assertEquals(GROUPED_GRID_AD_ROW_KEY, rows[2].key)
         assertEquals(
             GroupedGridCorners(false, false, false, false),
-            rows[1].cells.single().corners,
+            rows[2].cells.single().corners,
         )
         assertEquals(GroupedGridCorners(false, false, true, true), rows[3].cells.single().corners)
+    }
+
+    @Test
+    fun `the ad splits the rows of cells in half`() {
+        // Four rows of cells: two above the ad, two below.
+        val even = groupedGridRows(itemCount = 8, columns = 2, adRow = GroupedGridAdRow.Visible)
+        assertEquals(2, even.indexOfFirst { it.key == GROUPED_GRID_AD_ROW_KEY })
+        assertEquals(5, even.size)
+
+        // The quick-action case: seven cells over four rows, the ad in the middle of them.
+        val quickActions =
+            groupedGridRows(itemCount = 7, columns = 2, adRow = GroupedGridAdRow.Visible)
+        assertEquals(listOf(2, 2, 1, 2, 1), quickActions.map { it.cells.size })
+        assertEquals(2, quickActions.indexOfFirst { it.key == GROUPED_GRID_AD_ROW_KEY })
+
+        // Three rows do not divide evenly, so the larger half stays above the ad.
+        val odd = groupedGridRows(itemCount = 6, columns = 2, adRow = GroupedGridAdRow.Visible)
+        assertEquals(2, odd.indexOfFirst { it.key == GROUPED_GRID_AD_ROW_KEY })
     }
 
     @Test

@@ -86,7 +86,9 @@ remain available; data-layer callers should use the lower-level APIs.
   for radii, spacing, colors and the badge shape, and `GroupedGridMeasurements` for the size class.
   The corner and ad-placement rules are `groupedGridRows`, which is unit tested; the composable
   renders the plan it returns. Its ad row goes through `NativeAdSlot` like every other ad surface,
-  so a host that passes no `adUnitId` pulls in no ad behaviour at all.
+  so a host that passes no `adUnitId` pulls in no ad behaviour at all. The size class also chooses
+  the ad's `NativeAdPresentation.GridRow` metrics, so the sponsored row matches the cells rather
+  than the other ad surfaces.
 
 
 - All new ViewModels must extend `ScreenViewModel`, or `LoggedScreenViewModel` when Firebase
@@ -140,5 +142,8 @@ with `NativeAdLoader.load` under `DisposableEffectImpl.onRemembered`. Preserve t
   minimum height merely to align one screen.
 - Featured/no-data presentations retain the sponsored-label container, a clipped 16:9 media frame,
   and an end-aligned CTA. Grid presentations keep their content centered.
+- `NativeAdPresentation.GridRow` is the one presentation whose metrics the caller supplies, because
+  it has to match the grid it is interleaved with. It keeps the disclosure chip inline with the body
+  so the row stays as short as a cell; do not restore a stacked label there.
 
 These are compatibility safeguards for host applications, not incidental styling details.

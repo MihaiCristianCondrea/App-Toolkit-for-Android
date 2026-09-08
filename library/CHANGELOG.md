@@ -16,9 +16,14 @@
   all four of its corners. `GroupedGridMeasurements` picks the cell height and everything that
   scales with it the way `ButtonMeasurements` does for buttons, `GroupedGridDefaults` carries the
   radii, spacing, colors and badge shape, and each cell may cut its badge from any `Shape`,
-  including the Material 3 `MaterialShapes` set. Passing an ad unit adds one full-width native ad
-  row under the first row of cells; a grid of one cell never shows one, and an ad that fails to load
-  leaves the group cut as if it had never been asked for.
+  including the Material 3 `MaterialShapes` set. Cell titles are semibold, and the press-scale
+  animation is off unless a caller asks for it, so a group reads as one block rather than as cells
+  that move on their own. Passing an ad unit adds one full-width native ad row in the middle of the
+  block; a grid of one cell never shows one, and an ad that fails to load leaves the group cut as if
+  it had never been asked for.
+- Added the `GridRow` native ad presentation: an icon-led row that keeps its disclosure chip inline
+  with the body instead of on a line of its own, and takes its badge, padding and headline size from
+  the grid it sits in, so a sponsored row is no taller than the cells around it.
 
 - `CommonFilterChip` accepts an `icon` shown while the chip is unselected, and `hasAnimation` to
   turn off the crossfade into the selected checkmark.

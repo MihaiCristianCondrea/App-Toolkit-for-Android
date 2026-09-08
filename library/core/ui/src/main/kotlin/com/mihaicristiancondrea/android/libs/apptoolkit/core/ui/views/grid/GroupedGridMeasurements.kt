@@ -22,7 +22,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnitType
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdPresentation
+import kotlin.math.roundToInt
 
 /**
  * The five size classes a [GroupedGrid] cell can be drawn at.
@@ -121,3 +124,32 @@ internal fun GroupedGridMeasurements.subtitleTextStyle(): TextStyle = when (this
     GroupedGridMeasurements.Large -> MaterialTheme.typography.bodyMedium
     GroupedGridMeasurements.ExtraLarge -> MaterialTheme.typography.bodyMedium
 }
+
+/**
+ * The ad row that belongs in a grid drawn at this size class.
+ *
+ * The row is measured against the cells rather than against the other ad surfaces: same badge, same
+ * padding, same gap, and the headline at [titleTextStyle]'s size, so a sponsored row lines up with
+ * the titles above and below it instead of announcing itself by being bigger. The badge falls back
+ * to a rounded square at a quarter of its own size, because a cell's silhouette can be any `Shape`
+ * and an Android view cannot follow one.
+ */
+internal fun GroupedGridMeasurements.nativeAdPresentation(
+    titleTextStyle: TextStyle,
+): NativeAdPresentation.GridRow {
+    val headlineSizeSp: Float = titleTextStyle.fontSize
+        .takeIf { it.type == TextUnitType.Sp }
+        ?.value
+        ?: DEFAULT_AD_HEADLINE_TEXT_SIZE_SP
+
+    return NativeAdPresentation.GridRow(
+        iconSizeDp = iconContainerSize.value.roundToInt(),
+        iconCornerRadiusDp = (iconContainerSize / AD_BADGE_RADIUS_DIVISOR).value.roundToInt(),
+        headlineTextSizeSp = headlineSizeSp,
+        contentPaddingDp = contentPadding.calculateTopPadding().value.roundToInt(),
+        iconSpacingDp = iconSpacing.value.roundToInt(),
+    )
+}
+
+private const val AD_BADGE_RADIUS_DIVISOR: Float = 4f
+private const val DEFAULT_AD_HEADLINE_TEXT_SIZE_SP: Float = 16f
