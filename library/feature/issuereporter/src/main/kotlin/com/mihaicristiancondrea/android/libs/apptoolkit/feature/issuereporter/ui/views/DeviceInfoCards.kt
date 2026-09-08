@@ -54,6 +54,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.getGroupedShape
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
@@ -135,6 +136,7 @@ private fun DeviceInfoHeaderCard(
             bottomStart = bottomRadius,
             bottomEnd = bottomRadius,
         ),
+        onClick = onToggle,
     ) {
         Row(
             modifier = Modifier
@@ -155,6 +157,7 @@ private fun DeviceInfoHeaderCard(
 
             GeneralButton(
                 onClick = onToggle,
+                style = GeneralButtonStyle.Text,
                 icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.ExpandMore),
                 contentDescription = stringResource(id = R.string.cd_expand_device_info),
                 modifier = Modifier.rotate(degrees = arrowRotation),

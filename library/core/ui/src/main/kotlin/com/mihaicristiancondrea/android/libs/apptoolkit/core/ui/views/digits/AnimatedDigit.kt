@@ -62,7 +62,7 @@ fun AnimatedDigit(
     AnimatedContent(
         targetState = digit,
         transitionSpec = {
-            if (targetState > initialState) {
+            if (targetState > initialState || (initialState == '9' && targetState == '0')) {
                 AnimatedDigitTransitions.increase
             } else {
                 AnimatedDigitTransitions.decrease

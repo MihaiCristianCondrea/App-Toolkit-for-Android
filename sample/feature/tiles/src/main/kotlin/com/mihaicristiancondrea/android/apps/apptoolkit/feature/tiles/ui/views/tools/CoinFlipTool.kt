@@ -36,6 +36,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -50,6 +51,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
@@ -94,7 +96,7 @@ fun CoinFlipTool(isHeads: Boolean, flipRequest: Int, onFlip: () -> Unit) {
     )
 
     Column(
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+        verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -106,6 +108,16 @@ fun CoinFlipTool(isHeads: Boolean, flipRequest: Int, onFlip: () -> Unit) {
                     this.scaleY = scale
                     this.translationY = translationY
                 }
+        )
+
+        Text(
+            text = if (flipping) {
+                stringResource(id = R.string.tool_coin_flip_waiting)
+            } else {
+                stringResource(id = if (isHeads) R.string.tile_service_heads else R.string.tile_service_tails)
+            },
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
 
         Spacer(modifier = Modifier.height(SizeConstants.SmallSize))
@@ -120,16 +132,6 @@ fun CoinFlipTool(isHeads: Boolean, flipRequest: Int, onFlip: () -> Unit) {
             measurements = ButtonMeasurements.Medium,
             icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.PlayArrow),
             label = stringResource(id = R.string.tool_coin_flip_action),
-        )
-
-        Text(
-            text = if (flipping) {
-                stringResource(id = R.string.tool_coin_flip_waiting)
-            } else {
-                stringResource(id = if (isHeads) R.string.tile_service_heads else R.string.tile_service_tails)
-            },
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.primary
         )
     }
 }
@@ -188,5 +190,19 @@ private fun CoinFace(
             modifier = Modifier.size(64.dp),
             tint = tint
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CoinFlipToolPreview() {
+    MaterialTheme {
+        Surface {
+            CoinFlipTool(
+                isHeads = true,
+                flipRequest = 0,
+                onFlip = {},
+            )
+        }
     }
 }

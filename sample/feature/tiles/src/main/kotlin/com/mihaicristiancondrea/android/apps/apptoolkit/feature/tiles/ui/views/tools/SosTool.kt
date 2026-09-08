@@ -34,14 +34,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ResultPill
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
@@ -101,13 +101,18 @@ fun SosTool(
             contentColor = if (isActive) Color.White else null,
             label = if (isActive) "STOP SOS" else "START SOS",
         )
+    }
+}
 
-        Text(
-            text = "Flashes flashlight in Morse code (SOS)",
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = SizeConstants.LargeSize)
-        )
+@Preview(showBackground = true)
+@Composable
+private fun SosToolPreview() {
+    MaterialTheme {
+        Surface {
+            SosTool(
+                isActive = false,
+                onToggle = {},
+            )
+        }
     }
 }

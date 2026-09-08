@@ -29,6 +29,7 @@
 
 ### Improved
 
+- Refined the expanded tool UI for Dice Roll, Coin Flip, Counter, and SOS: updated Coin Flip to place the coin at the top with result text directly beneath it, enhanced Counter with animated digits (`AnimatedDigit`), and removed redundant bottom text below action buttons.
 - Buttons across the app now follow the Material 3 Expressive shape and press behavior. The primary
   actions in the changelog sheet and in every Quick Tools sheet, such as Start and the Flash Dimmer
   on/off, are a size larger so they are easier to hit.
