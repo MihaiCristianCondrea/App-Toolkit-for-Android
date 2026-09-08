@@ -23,7 +23,6 @@ sealed interface IssueReporterEvent : UiEvent {
     data class UpdateTitle(val value: String) : IssueReporterEvent
     data class UpdateDescription(val value: String) : IssueReporterEvent
     data class UpdateEmail(val value: String) : IssueReporterEvent
-    data class SetAnonymous(val anonymous: Boolean) : IssueReporterEvent
     data object RequestDeviceInfo : IssueReporterEvent
     data object Send : IssueReporterEvent
     data object DismissSnackbar : IssueReporterEvent

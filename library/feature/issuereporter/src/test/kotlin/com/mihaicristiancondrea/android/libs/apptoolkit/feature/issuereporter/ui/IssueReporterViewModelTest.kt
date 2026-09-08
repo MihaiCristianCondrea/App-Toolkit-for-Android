@@ -205,14 +205,12 @@ class IssueReporterViewModelTest {
             viewModel.onEvent(IssueReporterEvent.UpdateTitle("T"))
             viewModel.onEvent(IssueReporterEvent.UpdateDescription("D"))
             viewModel.onEvent(IssueReporterEvent.UpdateEmail("E"))
-            viewModel.onEvent(IssueReporterEvent.SetAnonymous(true))
             advanceUntilIdle()
 
             val data = viewModel.uiState.value.data!!
             assertThat(data.title).isEqualTo("T")
             assertThat(data.description).isEqualTo("D")
             assertThat(data.email).isEqualTo("E")
-            assertThat(data.anonymous).isTrue()
         }
     }
 

@@ -83,7 +83,6 @@ class IssueReporterViewModel(
             is IssueReporterEvent.UpdateTitle -> updateTitle(event.value)
             is IssueReporterEvent.UpdateDescription -> updateDescription(event.value)
             is IssueReporterEvent.UpdateEmail -> updateEmail(event.value)
-            is IssueReporterEvent.SetAnonymous -> updateAnonymous(event.anonymous)
             is IssueReporterEvent.RequestDeviceInfo -> loadDeviceInfoIfNeeded()
             is IssueReporterEvent.Send -> sendReport()
             is IssueReporterEvent.DismissSnackbar -> dismissSnackbar()
@@ -100,10 +99,6 @@ class IssueReporterViewModel(
 
     private fun updateEmail(value: String) {
         updateForm { copy(email = value) }
-    }
-
-    private fun updateAnonymous(anonymous: Boolean) {
-        updateForm { copy(anonymous = anonymous) }
     }
 
     private fun dismissSnackbar() {
@@ -149,7 +144,6 @@ class IssueReporterViewModel(
                 extra = mapOf(
                     ExtraKeys.HAS_TITLE to data.title.isNotBlank().toString(),
                     ExtraKeys.HAS_DESCRIPTION to data.description.isNotBlank().toString(),
-                    ExtraKeys.ANONYMOUS to data.anonymous.toString(),
                 ),
                 block = {
                     updateStateThreadSafe {
@@ -275,7 +269,6 @@ class IssueReporterViewModel(
     private object ExtraKeys {
         const val HAS_TITLE: String = "hasTitle"
         const val HAS_DESCRIPTION: String = "hasDescription"
-        const val ANONYMOUS: String = "anonymous"
     }
 }
 
