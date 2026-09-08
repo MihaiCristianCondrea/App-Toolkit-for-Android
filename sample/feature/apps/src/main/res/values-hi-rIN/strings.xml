@@ -36,7 +36,6 @@
     <string name="app_details_version">Version %1$s</string>
     <string name="app_details_view_on_play_store">Google Play पर देखें</string>
     <string name="apps_filter_all">सब</string>
-    <string name="error_failed_to_fetch_our_apps">ऐप सूची लोड नहीं हो सकी</string>
     <string name="error_failed_to_load_apps">ऐप्स लोड नहीं हो सकीं</string>
     <string name="error_failed_to_update_favorite">पसंदीदा अपडेट नहीं हो सका</string>
     <string name="favorite_apps">पसंदीदा</string>
