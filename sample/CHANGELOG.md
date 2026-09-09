@@ -15,6 +15,10 @@
   gallery covers the stopwatch animation it had been missing.
 - Opening an app or its Play Store page from app details now reports the same GA4 interaction the
   list surfaces already report.
+- The Components animation playground has a Loop switch that keeps every preview animating without
+  tapping it. It works alongside the existing Reverse switch, so a looping animation either repeats
+  forward or travels forward and back.
+
 - Added a Components animation playground with labelled and icon-only buttons for each bundled
   animation, plus Restart and Reverse replay controls. Quick Tools now uses one reversible Grid
   animation for both navigation states.

@@ -20,6 +20,10 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ic
 /**
  * How a [ToolkitIcon.AnimatedVector] behaves when its item is clicked again while the drawable
  * already rests on the last frame of the animation.
+ *
+ * This is the shape of a single replay, not how many replays happen. It stays meaningful for an
+ * animation that declares [ToolkitIcon.Animated.loop], where it describes each cycle of the loop
+ * rather than each click.
  */
 enum class ToolkitIconReplayMode {
 

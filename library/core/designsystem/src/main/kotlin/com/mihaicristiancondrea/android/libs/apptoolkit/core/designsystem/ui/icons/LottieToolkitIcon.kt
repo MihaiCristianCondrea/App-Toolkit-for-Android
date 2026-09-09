@@ -27,7 +27,13 @@ import com.airbnb.lottie.compose.rememberLottieDynamicProperty
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
-/** Composition loading survives replays; progress is read during drawing, not by the parent UI. */
+/**
+ * Composition loading survives replays; progress is read during drawing, not by the parent UI.
+ *
+ * An icon that declares [ToolkitIcon.Animated.loop] ignores [atEnd] and [clickCount] and animates
+ * continuously instead: [ToolkitIconReplayMode.Restart] snaps back and runs forward every cycle,
+ * [ToolkitIconReplayMode.Reverse] travels forward and back.
+ */
 @Composable
 internal fun LottieToolkitIcon(
     icon: ToolkitIcon.Lottie,
@@ -41,17 +47,42 @@ internal fun LottieToolkitIcon(
     val progress = remember(icon) { Animatable(if (atEnd && clickCount == 0) 1f else 0f) }
     val playback = remember(icon) { LottieIconPlayback(atEnd && clickCount == 0) }
 
-    LaunchedEffect(composition, icon, atEnd, clickCount) {
-        val loaded = composition ?: return@LaunchedEffect
-        val target = playback.target(atEnd, clickCount, icon.replayMode)
-        if (target.restart) progress.snapTo(0f)
-        progress.animateTo(
-            targetValue = target.progress,
-            animationSpec = tween(
-                durationMillis = (loaded.duration * abs(target.progress - progress.value)).roundToInt(),
+    if (icon.loop) {
+        LaunchedEffect(composition, icon) {
+            val loaded = composition ?: return@LaunchedEffect
+            // A composition that reports no duration would finish every cycle at once and spin
+            // this loop, so it is floored to a single frame.
+            val cycle = tween<Float>(
+                durationMillis = loaded.duration.roundToInt().coerceAtLeast(minimumValue = 16),
                 easing = LinearEasing,
-            ),
-        )
+            )
+            var forward = true
+            while (true) {
+                if (icon.replayMode == ToolkitIconReplayMode.Restart) {
+                    progress.snapTo(targetValue = 0f)
+                    progress.animateTo(targetValue = 1f, animationSpec = cycle)
+                } else {
+                    progress.animateTo(
+                        targetValue = if (forward) 1f else 0f,
+                        animationSpec = cycle,
+                    )
+                    forward = !forward
+                }
+            }
+        }
+    } else {
+        LaunchedEffect(composition, icon, atEnd, clickCount) {
+            val loaded = composition ?: return@LaunchedEffect
+            val target = playback.target(atEnd, clickCount, icon.replayMode)
+            if (target.restart) progress.snapTo(0f)
+            progress.animateTo(
+                targetValue = target.progress,
+                animationSpec = tween(
+                    durationMillis = (loaded.duration * abs(target.progress - progress.value)).roundToInt(),
+                    easing = LinearEasing,
+                ),
+            )
+        }
     }
 
     val properties = if (icon.tintable && tint != Color.Unspecified) {

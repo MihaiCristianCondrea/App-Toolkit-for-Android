@@ -64,8 +64,8 @@
     <string name="components_action_menus_summary">Atinge pentru a afișa opțiunile</string>
     <string name="components_data_selection">Selectarea datelor</string>
     <string name="components_section_animations">Animații</string>
-    <string name="components_animation_restart">Repornește la atingere</string>
     <string name="components_animation_reverse">Inversează la atingere</string>
+    <string name="components_animation_loop">Redă în buclă</string>
     <string name="components_animation_preview_helper">Atinge un element pentru a-i previzualiza animația.</string>
     <string name="components_section_grid">Grilă grupată</string>
     <string name="components_grid_group_categories">Categorii cu dimensiuni</string>

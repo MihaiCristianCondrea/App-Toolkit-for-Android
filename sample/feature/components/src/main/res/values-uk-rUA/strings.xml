@@ -64,8 +64,8 @@
     <string name="components_action_menus_summary">Торкніться, щоб показати варіанти</string>
     <string name="components_data_selection">Вибір даних</string>
     <string name="components_section_animations">Анімації</string>
-    <string name="components_animation_restart">Починати знову після натискання</string>
     <string name="components_animation_reverse">Відтворювати навпаки після натискання</string>
+    <string name="components_animation_loop">Безперервне повторення</string>
     <string name="components_animation_preview_helper">Натисніть на елемент, щоб переглянути його анімацію.</string>
     <string name="components_section_grid">Згрупована сітка</string>
     <string name="components_grid_group_categories">Категорії з розмірами</string>

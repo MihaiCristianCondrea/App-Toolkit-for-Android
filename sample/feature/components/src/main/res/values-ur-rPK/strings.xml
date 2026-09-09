@@ -64,8 +64,8 @@
     <string name="components_action_menus_summary">اختیارات دکھانے کے لیے ٹیپ کریں</string>
     <string name="components_data_selection">ڈیٹا کا انتخاب</string>
     <string name="components_section_animations">اینیمیشنز</string>
-    <string name="components_animation_restart">ٹیپ کرنے پر دوبارہ شروع کریں</string>
     <string name="components_animation_reverse">ٹیپ کرنے پر الٹا چلائیں</string>
+    <string name="components_animation_loop">مسلسل دہرائیں</string>
     <string name="components_animation_preview_helper">اینیمیشن کا پیش نظارہ کرنے کے لیے کسی آئٹم پر ٹیپ کریں۔</string>
     <string name="components_section_grid">گروپ شدہ گرڈ</string>
     <string name="components_grid_group_categories">سائز کے ساتھ اقسام</string>

@@ -24,10 +24,19 @@ import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import kotlinx.coroutines.delay
 
 /**
  * Renders a single [ToolkitIcon] exactly as described: a Compose [ImageVector],
@@ -41,7 +50,8 @@ import androidx.compose.ui.res.painterResource
  * @param contentDescription Optional description of the icon for accessibility.
  * @param modifier The [Modifier] to apply to the icon.
  * @param atEnd For [ToolkitIcon.AnimatedVector] only: `true` renders the last frame of the
- *   animation, `false` the first one. Changing this value animates between the two.
+ *   animation, `false` the first one. Changing this value animates between the two. It is ignored
+ *   by an animation that declares [ToolkitIcon.Animated.loop], which drives its own playback.
  * @param tint Tint color to apply to the icon, defaults to [LocalContentColor].
  */
 @OptIn(ExperimentalAnimationGraphicsApi::class)
@@ -80,6 +90,15 @@ fun ToolkitIconContent(
         }
 
         is ToolkitIcon.AnimatedVector -> {
+            if (icon.loop) {
+                LoopingAnimatedVectorIcon(
+                    icon = icon,
+                    contentDescription = contentDescription,
+                    modifier = modifier,
+                    tint = tint,
+                )
+                return
+            }
             val image = AnimatedImageVector.animatedVectorResource(id = icon.resId)
             val painter = rememberAnimatedVectorPainter(
                 animatedImageVector = image,
@@ -94,3 +113,51 @@ fun ToolkitIconContent(
         }
     }
 }
+
+/**
+ * Plays an [ToolkitIcon.AnimatedVector] over and over for as long as it is composed, one cycle per
+ * [AnimatedImageVector.totalDuration].
+ *
+ * The two replay modes shape the cycle the same way they shape a click:
+ * [ToolkitIconReplayMode.Restart] drops the painter between cycles so every cycle runs forward from
+ * the first frame, while [ToolkitIconReplayMode.Reverse] keeps one painter and flips its target, so
+ * the drawable travels forward and back.
+ */
+@OptIn(ExperimentalAnimationGraphicsApi::class)
+@Composable
+private fun LoopingAnimatedVectorIcon(
+    icon: ToolkitIcon.AnimatedVector,
+    contentDescription: String?,
+    modifier: Modifier,
+    tint: Color,
+) {
+    val image = AnimatedImageVector.animatedVectorResource(id = icon.resId)
+    val restarts: Boolean = icon.replayMode == ToolkitIconReplayMode.Restart
+    // A drawable that declares no duration would otherwise schedule the next cycle immediately and
+    // spin this loop, so a malformed resource costs one frame per cycle instead of the frame clock.
+    val cycleMillis: Long = image.totalDuration.toLong().coerceAtLeast(minimumValue = OneFrameMillis)
+    var cycle: Int by remember(icon) { mutableIntStateOf(value = 0) }
+
+    key(if (restarts) cycle else 0) {
+        var atEnd: Boolean by remember(icon) { mutableStateOf(value = false) }
+
+        LaunchedEffect(icon, cycle) {
+            // The painter has to draw the frame it starts on before the target flips, otherwise the
+            // drawable is created already at that target and the cycle never animates.
+            withFrameNanos { }
+            atEnd = if (restarts) true else !atEnd
+            delay(timeMillis = cycleMillis)
+            cycle++
+        }
+
+        Icon(
+            painter = rememberAnimatedVectorPainter(animatedImageVector = image, atEnd = atEnd),
+            contentDescription = contentDescription,
+            modifier = modifier,
+            tint = tint,
+        )
+    }
+}
+
+/** Floor for one loop cycle, so a duration-less animation cannot outrun the frame clock. */
+private const val OneFrameMillis: Long = 16L

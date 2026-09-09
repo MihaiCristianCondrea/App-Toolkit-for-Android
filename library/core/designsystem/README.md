@@ -90,6 +90,9 @@ items, bottom bar and rail items, and `GeneralButton`. It lives in
 | `ToolkitIcon.AnimatedVector(resId)` | An `animated-vector` resource                              | Yes, on click and on selection          |
 | `ToolkitIcon.Lottie(resId)`         | Lottie JSON in `res/raw`                                   | Yes, once per click or selection change |
 
+Both animated sources also accept `loop = true` to keep playing while composed; see
+[Looping an animation](#looping-an-animation).
+
 `ToolkitIcon.of(...)` and `ToolkitIcon.animated(...)` are shorthand factories for the same
 static/AVD types.
 
@@ -155,6 +158,33 @@ ToolkitIcon.AnimatedVector(
 `atEnd` sets the frame the drawable rests on before anything happens, and is `false`, the first
 frame, by default.
 
+### Looping an animation
+
+`loop` makes an animation run on its own for as long as it is composed, instead of once per
+interaction. It is `false` by default, so every existing icon keeps its finite, click-driven
+playback, and it is accepted by both animated sources.
+
+Looping is independent from the replay mode, which keeps describing the shape of one cycle:
+
+- `Restart` + `loop` repeats the animation forward, returning to the first frame between cycles.
+- `Reverse` + `loop` travels forward and back, so the drawable ping-pongs between its two frames.
+
+```kotlin
+ToolkitIcon.AnimatedVector(R.drawable.anim_graphic_eq, loop = true)
+
+ToolkitIcon.Lottie(
+    resId = R.raw.sync_icon,
+    replayMode = ToolkitIconReplayMode.Reverse,
+    loop = true,
+)
+```
+
+A looping icon owns its playback, so clicks and selection no longer replay it and `atEnd` is
+ignored. One AVD cycle lasts the drawable's own `totalDuration`; one Lottie cycle lasts the
+composition's duration. Reserve looping for icons that genuinely express ongoing activity, such as
+a sync or recording indicator: a permanently animating icon costs a frame callback for its whole
+lifetime and competes with the content around it for attention.
+
 ### Rendering an icon outside a toolkit component
 
 Two composables are public:
@@ -186,7 +216,8 @@ Use bundled JSON from `res/raw`. Lottie compositions load asynchronously and rem
 across clicks; playback does not reparse the JSON. The progress provider is read while drawing,
 so animation frames do not recompose the parent button or navigation surface. Animations run
 once per interaction, cancel when removed from composition, and use Compose duration scaling.
-Rapid clicks restart from zero by default. Reverse is opt-in. Icons do not loop while idle.
+Rapid clicks restart from zero by default. Reverse is opt-in. Icons do not loop while idle unless
+they opt in with `loop = true`, described in [Looping an animation](#looping-an-animation).
 
 Authored colors are preserved by default. Set `tintable = true` for monochrome artwork that should
 follow the component's content color, including its disabled state. `Color.Unspecified` preserves
@@ -248,7 +279,7 @@ null retains style defaults. Disabled colors remain Material defaults. `iconTint
 color through the shared renderer; null follows the button content color. Lottie retains authored
 colors unless `tintable = true`; `Color.Unspecified` preserves artwork even for tintable Lottie.
 Vectors, resources, AVD and bundled Lottie all use the same `ToolkitIcon` slot and existing
-`Restart` / `Reverse` replay contract described above.
+`Restart` / `Reverse` replay contract described above, including its optional `loop`.
 
 Every enabled click replays the icon, performs `ButtonFeedback`, logs the optional `ga4Event`
 through `firebaseController`, then invokes `onClick`. Disabled buttons do none of these.
@@ -288,9 +319,10 @@ Reusable AVDs belong in this module's `res/drawable`, alongside the shared icon 
 than navigation. Import this module's `R` when selecting `anim_check`, `anim_clock`, `anim_grid`,
 `anim_settings`, or `anim_share`. These animations are still being evaluated in the sample's
 Components animation playground, which previews labelled, tonal icon-only, and plain icon buttons.
-Restart on tap plays forward each time; Reverse on tap alternates direction. Switching mode resets
+Restart on tap plays forward each time; Reverse on tap alternates direction. A second switch turns
+the previews into looping playback, which keeps running without taps. Switching either control resets
 the previews. Check rests on its completed frame so the icon-only controls remain visible; its first
-Reverse tap erases the check. Playback is finite and click-driven, not an idle loop.
+Reverse tap erases the check. Playback stays finite and click-driven until the loop switch is on.
 
 Each animation contains its private vector, target animators, and interpolators through inline
 `aapt:attr` resources. Keep a separate resource only when it is actually reused. `ic_settings` and

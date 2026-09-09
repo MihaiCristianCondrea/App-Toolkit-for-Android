@@ -64,8 +64,8 @@
     <string name="components_action_menus_summary">Tocca per mostrare le opzioni</string>
     <string name="components_data_selection">Selezione dei dati</string>
     <string name="components_section_animations">Animazioni</string>
-    <string name="components_animation_restart">Ricomincia al tocco</string>
     <string name="components_animation_reverse">Inverti al tocco</string>
+    <string name="components_animation_loop">Riproduci in loop</string>
     <string name="components_animation_preview_helper">Tocca un elemento per visualizzare l\'anteprima della sua animazione.</string>
     <string name="components_section_grid">Griglia raggruppata</string>
     <string name="components_grid_group_categories">Categorie con dimensioni</string>

@@ -6,6 +6,13 @@
 
 ### Added
 
+- Animated icons can now loop. `ToolkitIcon.AnimatedVector` and `ToolkitIcon.Lottie` accept
+  `loop = true` to keep playing for as long as they are composed, instead of once per click or
+  selection change. Looping is off by default, so existing icons are unchanged, and it is
+  independent of the replay mode, which still describes one cycle: `Restart` repeats the animation
+  forward, `Reverse` travels forward and back. A looping icon owns its playback, so clicks and
+  selection no longer replay it, and every component that draws a `ToolkitIcon` supports it.
+
 - Added Markdown authoring to the issue reporter's description field: a formatting bar for bold,
   italic, inline code, code blocks, bulleted and numbered lists, quotes and links, and Markdown
   syntax highlighted as it is typed.

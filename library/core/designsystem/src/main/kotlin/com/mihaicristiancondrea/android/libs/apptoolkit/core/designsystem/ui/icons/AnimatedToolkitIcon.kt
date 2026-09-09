@@ -48,6 +48,9 @@ import androidx.compose.ui.graphics.Color
  * between two distinct shapes can instead travel back by declaring
  * [ToolkitIconReplayMode.Reverse] on the [ToolkitIcon.AnimatedVector].
  *
+ * An icon that declares [ToolkitIcon.Animated.loop] opts out of all of this: it animates on its own
+ * for as long as it is composed, so clicks and selection no longer drive its playback.
+ *
  * Components without a selected state, such as buttons, pass only [icon] and [clickCount].
  *
  * @param icon Icon shown while the component is unselected.
@@ -76,6 +79,19 @@ fun AnimatedToolkitIcon(
         selected = selected,
         interacted = clickCount > 0,
     )
+
+    // A looping animation drives itself inside the shared renderer, so none of the click and
+    // selection bookkeeping below applies to it.
+    if (displayedIcon is ToolkitIcon.Animated && displayedIcon.loop) {
+        ToolkitIconContent(
+            icon = displayedIcon,
+            contentDescription = contentDescription,
+            modifier = modifier,
+            atEnd = selected || displayedIcon.atEnd,
+            tint = tint,
+        )
+        return
+    }
 
     if (displayedIcon is ToolkitIcon.Lottie) {
         LottieToolkitIcon(

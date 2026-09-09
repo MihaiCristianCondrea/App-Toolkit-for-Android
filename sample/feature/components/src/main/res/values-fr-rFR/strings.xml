@@ -64,8 +64,8 @@
     <string name="components_action_menus_summary">Appuyez pour afficher les options</string>
     <string name="components_data_selection">Sélection des données</string>
     <string name="components_section_animations">Animations</string>
-    <string name="components_animation_restart">Recommencer au toucher</string>
     <string name="components_animation_reverse">Inverser au toucher</string>
+    <string name="components_animation_loop">Lecture en boucle</string>
     <string name="components_animation_preview_helper">Appuyez sur un élément pour prévisualiser son animation.</string>
     <string name="components_section_grid">Grille groupée</string>
     <string name="components_grid_group_categories">Catégories avec tailles</string>

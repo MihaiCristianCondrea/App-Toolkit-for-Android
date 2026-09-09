@@ -21,6 +21,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.rounded.Share
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.Test
 
 class ToolkitIconResolverTest {
@@ -88,6 +90,59 @@ class ToolkitIconResolverTest {
             resolveToolkitIcon(
                 icon = settingsResource,
                 selectedIcon = settingsVector,
+                selected = true,
+            )
+        )
+    }
+
+    @Test
+    fun `animations do not loop unless a caller opts in`() {
+        assertFalse(shareAnimated.loop)
+        assertFalse(ToolkitIcon.Lottie(resId = 3).loop)
+        assertFalse((ToolkitIcon.animated(resId = 3) as ToolkitIcon.AnimatedVector).loop)
+    }
+
+    @Test
+    fun `looping is independent from the replay mode`() {
+        val restartLoop = ToolkitIcon.AnimatedVector(resId = 3, loop = true)
+        val reverseLoop = ToolkitIcon.AnimatedVector(
+            resId = 3,
+            replayMode = ToolkitIconReplayMode.Reverse,
+            loop = true,
+        )
+
+        assertTrue(restartLoop.loop)
+        assertEquals(ToolkitIconReplayMode.Restart, restartLoop.replayMode)
+        assertTrue(reverseLoop.loop)
+        assertEquals(ToolkitIconReplayMode.Reverse, reverseLoop.replayMode)
+        assertTrue(ToolkitIcon.animated(resId = 3, loop = true).loop)
+        assertTrue(
+            ToolkitIcon.Lottie(
+                resId = 3,
+                replayMode = ToolkitIconReplayMode.Reverse,
+                loop = true,
+            ).loop
+        )
+    }
+
+    @Test
+    fun `a looping icon is still resolved by selection and interaction`() {
+        val looping = ToolkitIcon.AnimatedVector(resId = 3, loop = true)
+
+        assertEquals(
+            shareVector,
+            resolveToolkitIcon(
+                icon = shareVector,
+                selectedIcon = looping,
+                selected = false,
+                interacted = false,
+            )
+        )
+        assertEquals(
+            looping,
+            resolveToolkitIcon(
+                icon = shareVector,
+                selectedIcon = looping,
                 selected = true,
             )
         )

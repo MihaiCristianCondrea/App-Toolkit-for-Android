@@ -75,10 +75,17 @@ private val animationSamples = listOf(
     "anim_visibility_strike" to DesignSystemR.drawable.anim_visibility_strike,
 )
 
-/** Finite, click-driven previews. Changing replay mode resets the preview to its initial frame. */
+/**
+ * Click-driven previews that can be switched to continuous playback. Changing either control resets
+ * the previews to their initial frame.
+ *
+ * The two switches are independent: reverse shapes a single cycle, loop decides whether cycles keep
+ * coming on their own instead of one per tap.
+ */
 @Composable
 fun AnimationShowcase() {
     var reverse by rememberSaveable { mutableStateOf(false) }
+    var loop by rememberSaveable { mutableStateOf(false) }
     val replayMode = if (reverse) ToolkitIconReplayMode.Reverse else ToolkitIconReplayMode.Restart
     val hapticFeedback = LocalHapticFeedback.current
     val view = LocalView.current
@@ -107,9 +114,26 @@ fun AnimationShowcase() {
                 reverse = !reverse
             },
         ) {
-            AnimationInteractionRow(
-                reverse = reverse,
-                onReverseChange = { reverse = it },
+            AnimationToggleRow(
+                label = stringResource(R.string.components_animation_reverse),
+                checked = reverse,
+                onCheckedChange = { reverse = it },
+            )
+        }
+        ShowcaseSurface(
+            position = GroupedItemPosition.MIDDLE,
+            onClick = {
+                view.playSoundEffect(SoundEffectConstants.CLICK)
+                hapticFeedback.performHapticFeedback(
+                    if (loop) HapticFeedbackType.ToggleOff else HapticFeedbackType.ToggleOn,
+                )
+                loop = !loop
+            },
+        ) {
+            AnimationToggleRow(
+                label = stringResource(R.string.components_animation_loop),
+                checked = loop,
+                onCheckedChange = { loop = it },
             )
         }
         animationSamples.forEachIndexed { index, (name, resource) ->
@@ -118,12 +142,13 @@ fun AnimationShowcase() {
             } else {
                 GroupedItemPosition.MIDDLE
             }
-            key(name, replayMode) {
+            key(name, replayMode, loop) {
                 AnimationPreviewCard(
                     name = name,
                     resource = resource,
                     position = position,
                     replayMode = replayMode,
+                    loop = loop,
                 )
             }
         }
@@ -131,9 +156,10 @@ fun AnimationShowcase() {
 }
 
 @Composable
-private fun AnimationInteractionRow(
-    reverse: Boolean,
-    onReverseChange: (Boolean) -> Unit,
+private fun AnimationToggleRow(
+    label: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -142,13 +168,13 @@ private fun AnimationInteractionRow(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(
-            text = stringResource(R.string.components_animation_reverse),
+            text = label,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.SemiBold,
         )
         CustomSwitch(
-            checked = reverse,
-            onCheckedChange = onReverseChange,
+            checked = checked,
+            onCheckedChange = onCheckedChange,
         )
     }
 }
@@ -159,17 +185,19 @@ private fun AnimationPreviewCard(
     @DrawableRes resource: Int,
     position: GroupedItemPosition,
     replayMode: ToolkitIconReplayMode,
+    loop: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val hapticFeedback = LocalHapticFeedback.current
     val view = LocalView.current
-    var clickCount by rememberSaveable(replayMode) { mutableIntStateOf(0) }
+    var clickCount by rememberSaveable(replayMode, loop) { mutableIntStateOf(0) }
 
-    val icon = remember(resource, replayMode) {
+    val icon = remember(resource, replayMode, loop) {
         ToolkitIcon.AnimatedVector(
             resId = resource,
             atEnd = resource == DesignSystemR.drawable.anim_check,
             replayMode = replayMode,
+            loop = loop,
         )
     }
 

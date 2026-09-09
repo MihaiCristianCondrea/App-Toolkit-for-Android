@@ -64,8 +64,8 @@
     <string name="components_action_menus_summary">विकल्प देखने के लिए टैप करें</string>
     <string name="components_data_selection">डेटा चयन</string>
     <string name="components_section_animations">ऐनिमेशन</string>
-    <string name="components_animation_restart">टैप करने पर फिर शुरू करें</string>
     <string name="components_animation_reverse">टैप करने पर उल्टा चलाएँ</string>
+    <string name="components_animation_loop">लगातार दोहराएँ</string>
     <string name="components_animation_preview_helper">एनीमेशन का पूर्वावलोकन करने के लिए किसी आइटम पर टैप करें।</string>
     <string name="components_section_grid">समूहबद्ध ग्रिड</string>
     <string name="components_grid_group_categories">आकार के साथ श्रेणियाँ</string>
