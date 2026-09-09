@@ -99,6 +99,15 @@ enum class GeneralTextFieldStyle {
      * overload because the Material input owns its text state.
      */
     Search,
+
+    /**
+     * The search field as an outlined one: the Material outlined text field, fully rounded and
+     * leading with a search icon. Take it where a filled pill would disappear into the surface
+     * behind it — a search box on a page rather than in an app bar — or where the rest of the screen
+     * is outlined. Unlike [Search] it is an ordinary text field, so every parameter applies to it and
+     * the `TextFieldValue` overload accepts it.
+     */
+    SearchOutlined,
 }
 
 /** How much a field knows about the Markdown its text is written in. */
@@ -318,7 +327,9 @@ fun GeneralTextField(
         label = label,
         placeholder = placeholder,
         supportingText = errorText ?: supportingText,
-        leadingIcon = leadingIcon,
+        leadingIcon = leadingIcon ?: SearchLeadingIcon.takeIf {
+            style == GeneralTextFieldStyle.SearchOutlined
+        },
         leadingIconContentDescription = leadingIconContentDescription,
         trailingIcon = trailingIcon,
         trailingIconContentDescription = trailingIconContentDescription,
@@ -334,7 +345,7 @@ fun GeneralTextField(
         visualTransformation = visualTransformation,
     )
 
-    if (style == GeneralTextFieldStyle.Outlined) {
+    if (style.isOutlined()) {
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
@@ -446,7 +457,9 @@ fun GeneralTextField(
         label = label,
         placeholder = placeholder,
         supportingText = errorText ?: supportingText,
-        leadingIcon = leadingIcon,
+        leadingIcon = leadingIcon ?: SearchLeadingIcon.takeIf {
+            style == GeneralTextFieldStyle.SearchOutlined
+        },
         leadingIconContentDescription = leadingIconContentDescription,
         trailingIcon = trailingIcon,
         trailingIconContentDescription = trailingIconContentDescription,
@@ -466,7 +479,7 @@ fun GeneralTextField(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
     ) {
-        if (style == GeneralTextFieldStyle.Outlined) {
+        if (style.isOutlined()) {
             OutlinedTextField(
                 value = value,
                 onValueChange = onValueChange,
@@ -529,6 +542,10 @@ fun GeneralTextField(
     }
 }
 
+/** Both outlined treatments are drawn by the same Material component. */
+private fun GeneralTextFieldStyle.isOutlined(): Boolean =
+    this == GeneralTextFieldStyle.Outlined || this == GeneralTextFieldStyle.SearchOutlined
+
 /** What a search field leads with when its caller names no icon of its own. */
 private val SearchLeadingIcon: ToolkitIcon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Search)
 
@@ -584,6 +601,14 @@ private fun rememberGeneralTextFieldSkin(
                 )
             }
 
+            // Fully rounded is what makes an outlined field read as a search box rather than as
+            // one more form field.
+            GeneralTextFieldStyle.SearchOutlined -> GeneralTextFieldSkin(
+                fieldShape = shapeOverride ?: CircleShape,
+                formattingBarShape = RectangleShape,
+                formattingBarColor = Color.Transparent,
+            )
+
             GeneralTextFieldStyle.Outlined -> GeneralTextFieldSkin(
                 fieldShape = shapeOverride ?: outlinedShape,
                 // An outlined field is closed by its own border, so the bar is left unfilled rather
@@ -618,7 +643,8 @@ private fun rememberGeneralTextFieldSkin(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun generalTextFieldColors(style: GeneralTextFieldStyle): TextFieldColors = when (style) {
-    GeneralTextFieldStyle.Outlined -> OutlinedTextFieldDefaults.colors()
+    GeneralTextFieldStyle.Outlined, GeneralTextFieldStyle.SearchOutlined ->
+        OutlinedTextFieldDefaults.colors()
     GeneralTextFieldStyle.Search -> SearchBarDefaults.inputFieldColors()
     GeneralTextFieldStyle.Filled -> TextFieldDefaults.colors()
     GeneralTextFieldStyle.Grouped -> TextFieldDefaults.colors(

@@ -98,4 +98,5 @@
     <string name="components_text_field_markdown_placeholder">Mô tả sự cố. Thanh bên dưới sẽ định dạng.</string>
     <string name="components_text_field_search">Tìm kiếm</string>
     <string name="components_text_field_search_placeholder">Tìm kiếm thành phần</string>
+    <string name="components_text_field_search_outlined">Tìm kiếm, viền ngoài</string>
 </resources>

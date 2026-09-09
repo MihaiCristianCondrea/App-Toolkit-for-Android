@@ -98,4 +98,5 @@
     <string name="components_text_field_markdown_placeholder">Írja le a problémát. Az alábbi sáv formázza.</string>
     <string name="components_text_field_search">Keresés</string>
     <string name="components_text_field_search_placeholder">Elemek keresése</string>
+    <string name="components_text_field_search_outlined">Keresés, körvonalas</string>
 </resources>

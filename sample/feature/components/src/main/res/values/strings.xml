@@ -98,4 +98,5 @@
     <string name="components_text_field_markdown_placeholder">Describe the issue. The bar below formats it.</string>
     <string name="components_text_field_search">Search</string>
     <string name="components_text_field_search_placeholder">Search components</string>
+    <string name="components_text_field_search_outlined">Search, outlined</string>
 </resources>

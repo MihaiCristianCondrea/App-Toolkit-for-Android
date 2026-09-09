@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.firebase.dialogs.pages
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs.pages
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,7 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
 
 @Composable
 fun AboutPage() {
@@ -40,19 +40,19 @@ fun AboutPage() {
         verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
     ) {
         Text(
-            text = stringResource(R.string.onboarding_crashlytics_about_title),
+            text = stringResource(R.string.privacy_choices_about_title),
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
             color = MaterialTheme.colorScheme.onSurface
         )
 
         Text(
-            text = stringResource(R.string.onboarding_crashlytics_about_body_1),
+            text = stringResource(R.string.privacy_choices_about_body_1),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Text(
-            text = stringResource(R.string.onboarding_crashlytics_about_body_2),
+            text = stringResource(R.string.privacy_choices_about_body_2),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

@@ -98,4 +98,5 @@
     <string name="components_text_field_markdown_placeholder">Опишете проблема. Лентата отдолу го форматира.</string>
     <string name="components_text_field_search">Търсене</string>
     <string name="components_text_field_search_placeholder">Търсене в компонентите</string>
+    <string name="components_text_field_search_outlined">Търсене с контур</string>
 </resources>

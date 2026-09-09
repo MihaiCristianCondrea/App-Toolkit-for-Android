@@ -98,4 +98,5 @@
     <string name="components_text_field_markdown_placeholder">Beskriv problemet. Fältet nedanför formaterar det.</string>
     <string name="components_text_field_search">Sök</string>
     <string name="components_text_field_search_placeholder">Sök komponenter</string>
+    <string name="components_text_field_search_outlined">Sök, konturerad</string>
 </resources>

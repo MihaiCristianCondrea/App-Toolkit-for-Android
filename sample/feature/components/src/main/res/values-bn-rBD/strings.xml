@@ -98,4 +98,5 @@
     <string name="components_text_field_markdown_placeholder">সমস্যাটি বর্ণনা করুন। নিচের বারটি ফরম্যাট করবে।</string>
     <string name="components_text_field_search">সার্চ</string>
     <string name="components_text_field_search_placeholder">কম্পোনেন্ট সার্চ করুন</string>
+    <string name="components_text_field_search_outlined">সার্চ, আউটলাইনড</string>
 </resources>

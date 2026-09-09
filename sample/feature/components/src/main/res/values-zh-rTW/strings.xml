@@ -98,4 +98,5 @@
     <string name="components_text_field_markdown_placeholder">描述問題，下方工具列可設定格式。</string>
     <string name="components_text_field_search">搜尋</string>
     <string name="components_text_field_search_placeholder">搜尋元件</string>
+    <string name="components_text_field_search_outlined">搜尋（外框式）</string>
 </resources>

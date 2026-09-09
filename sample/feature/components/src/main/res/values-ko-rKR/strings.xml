@@ -98,4 +98,5 @@
     <string name="components_text_field_markdown_placeholder">문제를 설명하세요. 아래 바에서 서식을 지정합니다.</string>
     <string name="components_text_field_search">검색</string>
     <string name="components_text_field_search_placeholder">구성요소 검색</string>
+    <string name="components_text_field_search_outlined">검색, 외곽선</string>
 </resources>

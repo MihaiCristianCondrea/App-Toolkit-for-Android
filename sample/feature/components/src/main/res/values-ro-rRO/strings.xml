@@ -98,4 +98,5 @@
     <string name="components_text_field_markdown_placeholder">Descrie problema. Bara de mai jos o formatează.</string>
     <string name="components_text_field_search">Căutare</string>
     <string name="components_text_field_search_placeholder">Caută componente</string>
+    <string name="components_text_field_search_outlined">Căutare conturată</string>
 </resources>

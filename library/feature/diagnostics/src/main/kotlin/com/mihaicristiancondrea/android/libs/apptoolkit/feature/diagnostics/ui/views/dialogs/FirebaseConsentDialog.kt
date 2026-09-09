@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.firebase.dialogs
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs
 
 import android.view.SoundEffectConstants
 import android.view.View
@@ -60,10 +60,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.Ge
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.states.UsageAndDiagnosticsUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.firebase.dialogs.pages.AboutPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.firebase.dialogs.pages.ConsentPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.firebase.dialogs.pages.DetailsPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs.pages.AboutPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs.pages.ConsentPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs.pages.DetailsPage
 import kotlinx.coroutines.launch
 
 @Composable
@@ -82,9 +82,9 @@ fun FirebaseConsentDialog(
     val view: View = LocalView.current
 
     val tabs = listOf(
-        R.string.onboarding_crashlytics_dialog_tab_consent,
-        R.string.onboarding_crashlytics_dialog_tab_details,
-        R.string.onboarding_crashlytics_dialog_tab_about,
+        R.string.privacy_choices_tab_consent,
+        R.string.privacy_choices_tab_details,
+        R.string.privacy_choices_tab_about,
     )
 
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { tabs.size })
@@ -127,7 +127,7 @@ fun FirebaseConsentDialog(
                     )
                     MediumHorizontalSpacer()
                     Text(
-                        text = stringResource(R.string.onboarding_crashlytics_dialog_privacy_choices_title),
+                        text = stringResource(R.string.privacy_choices_title),
                         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold),
                         color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.weight(1f),
@@ -190,7 +190,7 @@ fun FirebaseConsentDialog(
                 ) {
                     GeneralButton(
                         modifier = Modifier.fillMaxWidth(),
-                        label = stringResource(R.string.onboarding_crashlytics_dialog_allow_all),
+                        label = stringResource(R.string.privacy_choices_allow_all),
                         onClick = {
                             view.playSoundEffect(SoundEffectConstants.CLICK)
                             hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
@@ -205,7 +205,7 @@ fun FirebaseConsentDialog(
                         GeneralButton(
                             style = GeneralButtonStyle.Outlined,
                             modifier = Modifier.weight(1f),
-                            label = stringResource(R.string.onboarding_crashlytics_dialog_confirm_choices),
+                            label = stringResource(R.string.privacy_choices_confirm),
                             onClick = {
                                 view.playSoundEffect(SoundEffectConstants.CLICK)
                                 hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
@@ -216,7 +216,7 @@ fun FirebaseConsentDialog(
                         GeneralButton(
                             style = GeneralButtonStyle.Outlined,
                             modifier = Modifier.weight(1f),
-                            label = stringResource(R.string.onboarding_crashlytics_dialog_allow_essentials),
+                            label = stringResource(R.string.privacy_choices_allow_essentials),
                             onClick = {
                                 view.playSoundEffect(SoundEffectConstants.CLICK)
                                 hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)

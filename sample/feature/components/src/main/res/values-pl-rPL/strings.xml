@@ -98,4 +98,5 @@
     <string name="components_text_field_markdown_placeholder">Opisz problem. Pasek poniżej go sformatuje.</string>
     <string name="components_text_field_search">Wyszukiwanie</string>
     <string name="components_text_field_search_placeholder">Szukaj komponentów</string>
+    <string name="components_text_field_search_outlined">Wyszukiwanie konturowe</string>
 </resources>

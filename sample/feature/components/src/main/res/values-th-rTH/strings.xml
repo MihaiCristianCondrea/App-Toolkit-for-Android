@@ -98,4 +98,5 @@
     <string name="components_text_field_markdown_placeholder">อธิบายปัญหา แถบด้านล่างช่วยจัดรูปแบบ</string>
     <string name="components_text_field_search">ค้นหา</string>
     <string name="components_text_field_search_placeholder">ค้นหาคอมโพเนนต์</string>
+    <string name="components_text_field_search_outlined">ค้นหา แบบมีเส้นขอบ</string>
 </resources>

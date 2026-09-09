@@ -79,6 +79,20 @@ class UsageAndDiagnosticsViewModel(
             is UsageAndDiagnosticsEvent.SetAdPersonalizationConsent -> updateAdPersonalizationConsent(
                 granted = event.granted
             )
+
+            is UsageAndDiagnosticsEvent.AllowAllConsent -> applyConsentBundle(
+                analytics = true,
+                adStorage = true,
+                adUserData = true,
+                adPersonalization = true,
+            )
+
+            is UsageAndDiagnosticsEvent.AllowEssentialConsent -> applyConsentBundle(
+                analytics = true,
+                adStorage = true,
+                adUserData = false,
+                adPersonalization = false,
+            )
         }
     }
 
@@ -124,6 +138,26 @@ class UsageAndDiagnosticsViewModel(
                 }
                 .launchIn(viewModelScope) // returns Job :contentReference[oaicite:2]{index=2}
         }
+    }
+
+    /**
+     * Applies one of the dialog's whole-bundle answers.
+     *
+     * Reporting is turned on with any of them: a person choosing what to share has said they are
+     * sharing something, and leaving the master switch off would silently drop every choice they
+     * just made.
+     */
+    private fun applyConsentBundle(
+        analytics: Boolean,
+        adStorage: Boolean,
+        adUserData: Boolean,
+        adPersonalization: Boolean,
+    ) {
+        updateUsageAndDiagnostics(enabled = true)
+        updateAnalyticsConsent(granted = analytics)
+        updateAdStorageConsent(granted = adStorage)
+        updateAdUserDataConsent(granted = adUserData)
+        updateAdPersonalizationConsent(granted = adPersonalization)
     }
 
     private fun updateUsageAndDiagnostics(enabled: Boolean) {

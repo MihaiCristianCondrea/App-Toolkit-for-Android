@@ -98,4 +98,5 @@
     <string name="components_text_field_markdown_placeholder">Descreva o problema. A barra abaixo faz a formatação.</string>
     <string name="components_text_field_search">Pesquisa</string>
     <string name="components_text_field_search_placeholder">Pesquisar componentes</string>
+    <string name="components_text_field_search_outlined">Pesquisa com contorno</string>
 </resources>

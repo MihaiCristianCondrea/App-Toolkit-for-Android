@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.firebase.dialogs
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs
 
 import android.view.SoundEffectConstants
 import android.view.View
@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
@@ -56,7 +57,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches.CustomSwitch
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
 
 @Composable
 fun ConsentExpandableItemCard(
@@ -100,6 +101,9 @@ fun ConsentExpandableItemCard(
                 Icon(
                     imageVector = if (expanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
                     contentDescription = null,
+                    // Drawn at the size of a button's glyph: the default 24dp reads as a control of
+                    // its own beside a titleSmall label, rather than as the label's disclosure.
+                    modifier = Modifier.size(size = SizeConstants.ButtonIconSize),
                 )
 
                 Text(

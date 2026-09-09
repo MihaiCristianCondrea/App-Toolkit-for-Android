@@ -98,4 +98,5 @@
     <string name="components_text_field_markdown_placeholder">समस्या बताएँ। नीचे दी गई बार इसे फ़ॉर्मैट करती है।</string>
     <string name="components_text_field_search">खोज</string>
     <string name="components_text_field_search_placeholder">कॉम्पोनेंट खोजें</string>
+    <string name="components_text_field_search_outlined">खोज, आउटलाइन</string>
 </resources>

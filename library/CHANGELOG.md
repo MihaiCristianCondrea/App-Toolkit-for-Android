@@ -22,6 +22,9 @@
   and a GA4 event logged when the field takes focus. `Grouped` is the form treatment: no indicator
   line, corners cut to the field's `position` in the block. Both a `String` and a `TextFieldValue`
   overload are available.
+- `GeneralTextFieldStyle.SearchOutlined` is the same search box as an outlined, fully rounded text
+  field, for a search that sits on a page rather than in an app bar. Unlike `Search` it is an
+  ordinary text field, so every parameter applies to it and the `TextFieldValue` overload accepts it.
 - `GeneralTextFieldStyle.Search` draws the Material search input: the pill-shaped box that filters
   the content behind it as it is typed, leading with a search icon unless another is given. It is
   the input field used on its own rather than a `SearchBar`, whose collapsed form intercepts the
@@ -38,6 +41,19 @@
   from that feature into `:library:core:ui`, where `MarkdownVisualTransformation` and
   `rememberMarkdownVisualTransformation` now live in
   `core.ui.views.fields.markdown`.
+
+### Changed
+
+- The **Usage and diagnostics** screen is the ads screen's layout: the reporting switch over a single
+  **Advanced privacy settings** preference that opens the privacy choices dialog — the same dialog
+  the onboarding flow shows. The four granular consents no longer sit on the screen as an expandable
+  block of switch cards, which was a plainer second copy of what that dialog's Details tab explains.
+  `FirebaseConsentDialog` moved from `:library:feature:onboarding` to `:library:feature:diagnostics`,
+  whose state it reads and writes, and its strings moved with it as `privacy_choices_*`.
+  `UsageAndDiagnosticsEvent.AllowAllConsent` and `AllowEssentialConsent` carry the dialog's
+  whole-bundle answers, so what "everything" and "essentials" cover is decided once rather than at
+  each call site. `ConsentToggleCard`, `ConsentSectionHeader` and `ExpandableConsentSectionHeader`
+  are removed, with the strings only they used.
 
 ---
 

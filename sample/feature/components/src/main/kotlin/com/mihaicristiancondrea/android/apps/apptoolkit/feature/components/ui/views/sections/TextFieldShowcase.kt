@@ -63,7 +63,7 @@ private const val MARKDOWN_MIN_LINES: Int = 4
 private const val MARKDOWN_MAX_LINES: Int = 10
 
 /**
- * Every `GeneralTextField` variant, one per card: the four styles, the error state, and the
+ * Every `GeneralTextField` variant, one per card: the five styles, the error state, and the
  * Markdown editor.
  *
  * The text these fields hold is scratch state of the showcase itself, so it stays here rather than
@@ -80,6 +80,7 @@ fun TextFieldShowcase(
     var name: String by rememberSaveable { mutableStateOf(value = "") }
     var note: String by rememberSaveable { mutableStateOf(value = "") }
     var search: String by rememberSaveable { mutableStateOf(value = "") }
+    var outlinedSearch: String by rememberSaveable { mutableStateOf(value = "") }
     var markdown: String by rememberSaveable { mutableStateOf(value = "") }
 
     ShowcaseHeader(
@@ -228,6 +229,31 @@ fun TextFieldShowcase(
                 },
                 firebaseController = firebaseController,
                 ga4Event = onLogEvent("text_field", "search"),
+            )
+        }
+
+        ShowcaseSurface(position = GroupedItemPosition.MIDDLE) {
+            CardTitle(text = stringResource(id = R.string.components_text_field_search_outlined))
+            MediumVerticalSpacer()
+            GeneralTextField(
+                value = outlinedSearch,
+                onValueChange = { outlinedSearch = it },
+                style = GeneralTextFieldStyle.SearchOutlined,
+                placeholder = stringResource(
+                    id = R.string.components_text_field_search_placeholder,
+                ),
+                trailingIcon = if (outlinedSearch.isEmpty()) {
+                    null
+                } else {
+                    ToolkitIcon.Vector(imageVector = Icons.Rounded.Close)
+                },
+                trailingIconContentDescription = stringResource(
+                    id = R.string.components_text_field_clear,
+                ),
+                onTrailingIconClick = { outlinedSearch = "" },
+                singleLine = true,
+                firebaseController = firebaseController,
+                ga4Event = onLogEvent("text_field", "search_outlined"),
             )
         }
 

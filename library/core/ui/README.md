@@ -122,6 +122,7 @@ part of the state a screen owns.
 | `Outlined` | The Material `OutlinedTextField` |
 | `Grouped` | A filled field with no indicator line, cut to `position` in a grouped block |
 | `Search` | The Material search input, pill-shaped, leading with a search icon |
+| `SearchOutlined` | The outlined field, fully rounded, leading with a search icon |
 
 `Grouped` is the form treatment: a column of fields two dp apart reads as one card, so the indicator
 line is dropped (it would cut the block into strips) and `position` plus `groupedOuterRadius` cut the
@@ -137,6 +138,10 @@ describe a form field — `label`, `supportingText`, `errorText`, `minLines`, `m
 do not apply to it, and the `TextFieldValue` overload rejects it outright, because the Material input
 owns its text state and has no caret to hand over. `onSearch` reports the keyboard's search action;
 focus is dropped first either way.
+
+`SearchOutlined` is the search box drawn as an ordinary outlined field instead, fully rounded. Take
+it where a filled pill would disappear into the surface behind it, or where the rest of the screen is
+outlined; every parameter applies to it, and the `TextFieldValue` overload accepts it.
 
 `trailingContent` replaces the whole trailing slot with a row, for the field that ends in more than
 one action — a search box carrying a filter and a clear button. `errorText` marks the error state and replaces `supportingText` in one parameter, so a message and

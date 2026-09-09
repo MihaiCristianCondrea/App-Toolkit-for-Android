@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.firebase.dialogs.pages
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs.pages
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,7 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
 
 @Composable
 fun ConsentPage() {
@@ -45,7 +45,7 @@ fun ConsentPage() {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = stringResource(R.string.onboarding_crashlytics_consent_intro_1),
+            text = stringResource(R.string.privacy_choices_intro_1),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Start,
@@ -53,7 +53,7 @@ fun ConsentPage() {
         )
 
         Text(
-            text = stringResource(R.string.onboarding_crashlytics_consent_intro_2),
+            text = stringResource(R.string.privacy_choices_intro_2),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Start,
@@ -63,9 +63,9 @@ fun ConsentPage() {
         SmallVerticalSpacer()
 
         InfoMessageSection(
-            message = stringResource(R.string.onboarding_crashlytics_consent_info_message),
+            message = stringResource(R.string.privacy_choices_info_message),
             modifier = Modifier.fillMaxWidth(),
-            learnMoreText = stringResource(R.string.onboarding_crashlytics_consent_info_learn_more),
+            learnMoreText = stringResource(R.string.privacy_choices_info_learn_more),
             learnMoreUrl = "https://developers.google.com/tag-platform/security/guides/app-consent",
         )
     }
