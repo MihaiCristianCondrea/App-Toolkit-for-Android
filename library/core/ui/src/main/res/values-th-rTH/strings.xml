@@ -30,6 +30,15 @@
     <string name="learn_more">เรียนรู้เพิ่มเติม</string>
     <string name="light_mode">โหมดสว่าง</string>
     <string name="loading">กำลังโหลด…</string>
+    <string name="markdown_format_bold">ตัวหนา</string>
+    <string name="markdown_format_bullet_list">รายการสัญลักษณ์แสดงหัวข้อย่อย</string>
+    <string name="markdown_format_code">โค้ดในบรรทัด</string>
+    <string name="markdown_format_code_block">บล็อกโค้ด</string>
+    <string name="markdown_format_italic">ตัวเอียง</string>
+    <string name="markdown_format_link">ลิงก์</string>
+    <string name="markdown_format_numbered_list">รายการลำดับเลข</string>
+    <string name="markdown_format_quote">ข้อความอ้างอิง</string>
+    <string name="markdown_supported">รองรับ Markdown</string>
     <string name="onboarding_theme_dark_desc">สบายตา</string>
     <string name="onboarding_theme_light_desc">สว่างสดใสและมีชีวิตชีวา</string>
     <string name="onboarding_theme_system_desc">ตรงกับอุปกรณ์ของคุณ</string>

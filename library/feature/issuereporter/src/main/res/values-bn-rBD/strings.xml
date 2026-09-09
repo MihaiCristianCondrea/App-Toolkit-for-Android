@@ -22,15 +22,6 @@
     <string name="issue_description_placeholder">সমস্যাটি এবং কীভাবে এটি পুনরায় তৈরি করা যায় তা বর্ণনা করুন</string>
     <string name="issue_email_label">ইমেল</string>
     <string name="issue_email_optional_placeholder">ইমেল (ঐচ্ছিক)</string>
-    <string name="issue_format_bold">বোল্ড</string>
-    <string name="issue_format_bullet_list">বুলেট তালিকা</string>
-    <string name="issue_format_code">ইনলাইন কোড</string>
-    <string name="issue_format_code_block">কোড ব্লক</string>
-    <string name="issue_format_italic">ইটালিক</string>
-    <string name="issue_format_link">লিঙ্ক</string>
-    <string name="issue_format_numbered_list">সংখ্যাযুক্ত তালিকা</string>
-    <string name="issue_format_quote">উদ্ধৃতি</string>
-    <string name="issue_markdown_supported">Markdown সমর্থিত</string>
     <string name="issue_section_label">সমস্যা</string>
     <string name="issue_send">পাঠান</string>
     <string name="issue_submitted">আপনার সমস্যা জমা দেওয়া হয়েছিল.</string>

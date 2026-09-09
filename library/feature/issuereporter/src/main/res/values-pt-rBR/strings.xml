@@ -22,15 +22,6 @@
     <string name="issue_description_placeholder">Descreva o problema e como reproduzi-lo</string>
     <string name="issue_email_label">E-mail</string>
     <string name="issue_email_optional_placeholder">E-mail (opcional)</string>
-    <string name="issue_format_bold">Negrito</string>
-    <string name="issue_format_bullet_list">Lista com marcadores</string>
-    <string name="issue_format_code">Código em linha</string>
-    <string name="issue_format_code_block">Bloco de código</string>
-    <string name="issue_format_italic">Itálico</string>
-    <string name="issue_format_link">Link</string>
-    <string name="issue_format_numbered_list">Lista numerada</string>
-    <string name="issue_format_quote">Citação</string>
-    <string name="issue_markdown_supported">Markdown compatível</string>
     <string name="issue_section_label">Problema</string>
     <string name="issue_send">Enviar</string>
     <string name="issue_submitted">Seu problema foi enviado.</string>

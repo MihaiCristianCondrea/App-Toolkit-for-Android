@@ -59,11 +59,15 @@ flowchart TD
   user-facing or GitHub-report contract.
 - Credentials are supplied by the host and used only at the remote boundary; logs and error models
   must never include the token.
-- The description field is a Markdown editor, not a preview. Highlighting is a length-preserving
+- The form is `GeneralTextField` in its grouped style, and the description field is that component
+  in its Markdown editor mode; both live in
+  [`:library:core:ui`](../../core/ui/README.md#generaltextfield). The Markdown pieces moved there
+  with it, because nothing about highlighting or a formatting bar is specific to a bug report. What
+  stays here is what is: this screen reports every formatting action through `onMarkdownFormat`, and
+  `Report` renders the issue body as Markdown sections with the device table in a collapsible block.
+- The description field is an editor, not a preview. Highlighting is a length-preserving
   `VisualTransformation`, so offsets stay identity-mapped and the markers remain visible and
-  editable; a Markdown renderer cannot stand in for it. The formatting bar edits the Markdown
-  source, and `Report` renders the issue body as Markdown sections with the device table in a
-  collapsible block.
+  editable; a Markdown renderer cannot stand in for it.
 - The device-info panel owns its expansion with `rememberSaveable`. It was a file-level
   `mutableStateOf` shared by every instance in the process, which is why the panel reopened itself
   and never took part in saved instance state.

@@ -30,6 +30,15 @@
     <string name="learn_more">En savoir plus</string>
     <string name="light_mode">Mode clair</string>
     <string name="loading">Chargement…</string>
+    <string name="markdown_format_bold">Gras</string>
+    <string name="markdown_format_bullet_list">Liste à puces</string>
+    <string name="markdown_format_code">Code en ligne</string>
+    <string name="markdown_format_code_block">Bloc de code</string>
+    <string name="markdown_format_italic">Italique</string>
+    <string name="markdown_format_link">Lien</string>
+    <string name="markdown_format_numbered_list">Liste numérotée</string>
+    <string name="markdown_format_quote">Citation</string>
+    <string name="markdown_supported">Markdown pris en charge</string>
     <string name="onboarding_theme_dark_desc">Agréable pour les yeux.</string>
     <string name="onboarding_theme_light_desc">Lumineux et énergique.</string>
     <string name="onboarding_theme_system_desc">Correspond à votre appareil.</string>

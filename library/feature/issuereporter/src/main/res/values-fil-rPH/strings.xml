@@ -22,15 +22,6 @@
     <string name="issue_description_placeholder">Ilarawan ang isyu at kung paano ito maulit</string>
     <string name="issue_email_label">Email</string>
     <string name="issue_email_optional_placeholder">Email (opsyonal)</string>
-    <string name="issue_format_bold">Bold</string>
-    <string name="issue_format_bullet_list">Listahang may bullet</string>
-    <string name="issue_format_code">Inline na code</string>
-    <string name="issue_format_code_block">Code block</string>
-    <string name="issue_format_italic">Italic</string>
-    <string name="issue_format_link">Link</string>
-    <string name="issue_format_numbered_list">Listahang may numero</string>
-    <string name="issue_format_quote">Sipi</string>
-    <string name="issue_markdown_supported">Suportado ang Markdown</string>
     <string name="issue_section_label">Isyu</string>
     <string name="issue_send">Ipadala</string>
     <string name="issue_submitted">Isinumite ang iyong isyu.</string>

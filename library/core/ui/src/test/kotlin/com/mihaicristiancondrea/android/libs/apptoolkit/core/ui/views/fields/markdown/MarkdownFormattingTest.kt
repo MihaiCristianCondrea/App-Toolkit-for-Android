@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.markdown
 
 import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.Test

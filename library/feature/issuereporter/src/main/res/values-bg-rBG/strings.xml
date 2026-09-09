@@ -22,15 +22,6 @@
     <string name="issue_description_placeholder">Опишете проблема и как да бъде възпроизведен</string>
     <string name="issue_email_label">Имейл</string>
     <string name="issue_email_optional_placeholder">Имейл (по избор)</string>
-    <string name="issue_format_bold">Получер</string>
-    <string name="issue_format_bullet_list">Списък с водачи</string>
-    <string name="issue_format_code">Вграден код</string>
-    <string name="issue_format_code_block">Блок с код</string>
-    <string name="issue_format_italic">Курсив</string>
-    <string name="issue_format_link">Връзка</string>
-    <string name="issue_format_numbered_list">Номериран списък</string>
-    <string name="issue_format_quote">Цитат</string>
-    <string name="issue_markdown_supported">Поддържа се Markdown</string>
     <string name="issue_section_label">Проблем</string>
     <string name="issue_send">Изпрати</string>
     <string name="issue_submitted">Проблемът ви беше изпратен.</string>

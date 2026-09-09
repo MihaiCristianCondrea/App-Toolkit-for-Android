@@ -30,6 +30,15 @@
     <string name="learn_more">Tìm hiểu thêm</string>
     <string name="light_mode">Chế độ sáng</string>
     <string name="loading">Đang tải…</string>
+    <string name="markdown_format_bold">Đậm</string>
+    <string name="markdown_format_bullet_list">Danh sách dấu đầu dòng</string>
+    <string name="markdown_format_code">Mã nội dòng</string>
+    <string name="markdown_format_code_block">Khối mã</string>
+    <string name="markdown_format_italic">Nghiêng</string>
+    <string name="markdown_format_link">Liên kết</string>
+    <string name="markdown_format_numbered_list">Danh sách đánh số</string>
+    <string name="markdown_format_quote">Trích dẫn</string>
+    <string name="markdown_supported">Hỗ trợ Markdown</string>
     <string name="onboarding_theme_dark_desc">Dịu mắt.</string>
     <string name="onboarding_theme_light_desc">Sáng sủa và năng động.</string>
     <string name="onboarding_theme_system_desc">Phù hợp với thiết bị của bạn.</string>

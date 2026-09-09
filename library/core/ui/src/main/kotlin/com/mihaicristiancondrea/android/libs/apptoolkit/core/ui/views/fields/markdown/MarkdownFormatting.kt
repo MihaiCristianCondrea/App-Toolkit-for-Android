@@ -15,10 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.markdown
 
 /**
- * Result of a formatting action: the new description text and where the caret/selection ends up.
+ * Result of a formatting action: the new text and where the caret or the selection ends up.
  *
  * Selection is part of the contract because every action has to keep typing flowing: wrapping an
  * empty selection has to leave the caret between the markers, and wrapping a selection has to keep
@@ -31,7 +31,7 @@ internal data class MarkdownEdit(
 )
 
 /**
- * Markdown source edits behind the description field's formatting bar.
+ * Markdown source edits behind a field's formatting bar.
  *
  * These are plain string transformations rather than composable helpers so the behaviour that is
  * easy to get subtly wrong (toggling, multi-line prefixes, caret placement) is unit-testable
@@ -142,8 +142,8 @@ internal object MarkdownFormatting {
     /**
      * Fences the selection as a code block on its own lines.
      *
-     * Logs and stack traces are the reason the description field exists at all, and they are
-     * unreadable in a GitHub issue unless they are fenced.
+     * Logs and stack traces are the reason a Markdown field usually exists at all, and they are
+     * unreadable unless they are fenced.
      */
     fun insertCodeBlock(text: String, selectionStart: Int, selectionEnd: Int): MarkdownEdit {
         val start = selectionStart.coerceIn(0, text.length)

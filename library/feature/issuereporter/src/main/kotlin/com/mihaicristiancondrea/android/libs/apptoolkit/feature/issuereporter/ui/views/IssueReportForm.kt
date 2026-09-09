@@ -24,26 +24,18 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Title
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.VisualTransformation
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextField
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextFieldStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.getGroupedShape
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.contracts.IssueReporterEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueReporterUiState
@@ -52,12 +44,15 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui
 internal val ISSUE_GROUP_OUTER_RADIUS = SizeConstants.LargeMediumSize
 
 /**
- * Form inputs for the issue report, styled with grouped corners and tight spacing.
+ * Form inputs for the issue report: `GeneralTextField` in its grouped style, with tight spacing.
  *
  * The fields carry no floating label. A label animates into space the field has to reserve whether
  * or not it is showing, which is what kept a two-dp gap from reading as a group; each field states
- * itself through a placeholder and a leading icon instead, and keeps a constant height. The
- * indicator line is dropped for the same reason — it would cut the block into strips.
+ * itself through a placeholder and a leading icon instead, and keeps a constant height. The grouped
+ * style drops the indicator line for the same reason — it would cut the block into strips.
+ *
+ * The leading icon is also what names each field for screen readers: the placeholder is gone as soon
+ * as there is content.
  */
 @Composable
 internal fun IssueReportForm(
@@ -70,18 +65,20 @@ internal fun IssueReportForm(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)
     ) {
-        IssueFormInput(
+        GeneralTextField(
             value = data.title,
             onValueChange = { onEvent(IssueReporterEvent.UpdateTitle(it)) },
+            style = GeneralTextFieldStyle.Grouped,
+            position = GroupedItemPosition.FIRST,
+            groupedOuterRadius = ISSUE_GROUP_OUTER_RADIUS,
             placeholder = stringResource(id = R.string.issue_title_label),
-            leadingIcon = Icons.Outlined.Title,
+            leadingIcon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Title),
             leadingIconContentDescription = stringResource(id = R.string.issue_title_label),
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
                 imeAction = ImeAction.Next,
             ),
-            position = GroupedItemPosition.FIRST
         )
 
         IssueDescriptionField(
@@ -90,97 +87,20 @@ internal fun IssueReportForm(
             onDescriptionChange = { onEvent(IssueReporterEvent.UpdateDescription(it)) },
         )
 
-        IssueFormInput(
+        GeneralTextField(
             value = data.email,
             onValueChange = { onEvent(IssueReporterEvent.UpdateEmail(it)) },
+            style = GeneralTextFieldStyle.Grouped,
+            position = GroupedItemPosition.LAST,
+            groupedOuterRadius = ISSUE_GROUP_OUTER_RADIUS,
             placeholder = stringResource(id = R.string.issue_email_optional_placeholder),
-            leadingIcon = Icons.Outlined.Email,
+            leadingIcon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Email),
             leadingIconContentDescription = stringResource(id = R.string.issue_email_label),
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Done,
             ),
-            position = GroupedItemPosition.LAST
         )
     }
 }
-
-/**
- * One field of the grouped form.
- *
- * [leadingIconContentDescription] is what names the field for screen readers: the placeholder is
- * gone as soon as there is content, so the icon carries the label.
- */
-@Composable
-private fun IssueFormInput(
-    value: String,
-    onValueChange: (String) -> Unit,
-    placeholder: String,
-    leadingIcon: ImageVector,
-    leadingIconContentDescription: String,
-    position: GroupedItemPosition,
-    modifier: Modifier = Modifier,
-    singleLine: Boolean = false,
-    minLines: Int = 1,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-) {
-    TextField(
-        value = value,
-        onValueChange = onValueChange,
-        placeholder = { Text(text = placeholder) },
-        leadingIcon = {
-            Icon(imageVector = leadingIcon, contentDescription = leadingIconContentDescription)
-        },
-        modifier = modifier.fillMaxWidth(),
-        singleLine = singleLine,
-        minLines = minLines,
-        keyboardOptions = keyboardOptions,
-        shape = getGroupedShape(position = position, outerRadius = ISSUE_GROUP_OUTER_RADIUS),
-        colors = groupedFieldColors(),
-    )
-}
-
-/** [TextFieldValue] variant, for the description field, whose formatting actions move the caret. */
-@Composable
-internal fun IssueFormInput(
-    value: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit,
-    placeholder: String,
-    leadingIcon: ImageVector,
-    leadingIconContentDescription: String,
-    position: GroupedItemPosition,
-    modifier: Modifier = Modifier,
-    minLines: Int = 1,
-    maxLines: Int = Int.MAX_VALUE,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
-) {
-    TextField(
-        value = value,
-        onValueChange = onValueChange,
-        placeholder = { Text(text = placeholder) },
-        leadingIcon = {
-            Icon(imageVector = leadingIcon, contentDescription = leadingIconContentDescription)
-        },
-        modifier = modifier.fillMaxWidth(),
-        minLines = minLines,
-        maxLines = maxLines,
-        keyboardOptions = keyboardOptions,
-        visualTransformation = visualTransformation,
-        shape = getGroupedShape(position = position, outerRadius = ISSUE_GROUP_OUTER_RADIUS),
-        colors = groupedFieldColors(),
-    )
-}
-
-/** Container color the grouped fields are drawn on, matched by the formatting bar beside them. */
-internal val groupedFieldContainerColor: Color
-    @Composable get() = MaterialTheme.colorScheme.surfaceContainerHighest
-
-@Composable
-private fun groupedFieldColors(): TextFieldColors = TextFieldDefaults.colors(
-    focusedIndicatorColor = Color.Transparent,
-    unfocusedIndicatorColor = Color.Transparent,
-    disabledIndicatorColor = Color.Transparent,
-    errorIndicatorColor = Color.Transparent,
-)

@@ -22,15 +22,6 @@
     <string name="issue_description_placeholder">Jelaskan masalahnya dan cara mereproduksinya</string>
     <string name="issue_email_label">Email</string>
     <string name="issue_email_optional_placeholder">Email (opsional)</string>
-    <string name="issue_format_bold">Tebal</string>
-    <string name="issue_format_bullet_list">Daftar berpoin</string>
-    <string name="issue_format_code">Kode sebaris</string>
-    <string name="issue_format_code_block">Blok kode</string>
-    <string name="issue_format_italic">Miring</string>
-    <string name="issue_format_link">Tautan</string>
-    <string name="issue_format_numbered_list">Daftar bernomor</string>
-    <string name="issue_format_quote">Kutipan</string>
-    <string name="issue_markdown_supported">Markdown didukung</string>
     <string name="issue_section_label">Masalah</string>
     <string name="issue_send">Kirim</string>
     <string name="issue_submitted">Masalah Anda telah diajukan.</string>

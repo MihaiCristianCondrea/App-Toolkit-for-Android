@@ -22,15 +22,6 @@
     <string name="issue_description_placeholder">อธิบายปัญหาและวิธีทำให้เกิดซ้ำ</string>
     <string name="issue_email_label">อีเมล</string>
     <string name="issue_email_optional_placeholder">อีเมล (ไม่บังคับ)</string>
-    <string name="issue_format_bold">ตัวหนา</string>
-    <string name="issue_format_bullet_list">รายการสัญลักษณ์แสดงหัวข้อย่อย</string>
-    <string name="issue_format_code">โค้ดในบรรทัด</string>
-    <string name="issue_format_code_block">บล็อกโค้ด</string>
-    <string name="issue_format_italic">ตัวเอียง</string>
-    <string name="issue_format_link">ลิงก์</string>
-    <string name="issue_format_numbered_list">รายการลำดับเลข</string>
-    <string name="issue_format_quote">ข้อความอ้างอิง</string>
-    <string name="issue_markdown_supported">รองรับ Markdown</string>
     <string name="issue_section_label">ปัญหา</string>
     <string name="issue_send">ส่ง</string>
     <string name="issue_submitted">ปัญหาของคุณถูกส่ง.</string>

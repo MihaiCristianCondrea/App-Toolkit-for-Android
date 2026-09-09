@@ -30,6 +30,15 @@
     <string name="learn_more">Узнать больше</string>
     <string name="light_mode">Светлый режим</string>
     <string name="loading">Загрузка…</string>
+    <string name="markdown_format_bold">Полужирный</string>
+    <string name="markdown_format_bullet_list">Маркированный список</string>
+    <string name="markdown_format_code">Встроенный код</string>
+    <string name="markdown_format_code_block">Блок кода</string>
+    <string name="markdown_format_italic">Курсив</string>
+    <string name="markdown_format_link">Ссылка</string>
+    <string name="markdown_format_numbered_list">Нумерованный список</string>
+    <string name="markdown_format_quote">Цитата</string>
+    <string name="markdown_supported">Поддерживается Markdown</string>
     <string name="onboarding_theme_dark_desc">Приятный для глаз.</string>
     <string name="onboarding_theme_light_desc">Яркий и энергичный.</string>
     <string name="onboarding_theme_system_desc">Соответствует настройкам вашего устройства.</string>

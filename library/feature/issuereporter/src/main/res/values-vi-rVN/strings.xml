@@ -22,15 +22,6 @@
     <string name="issue_description_placeholder">Mô tả sự cố và cách tái hiện</string>
     <string name="issue_email_label">Email</string>
     <string name="issue_email_optional_placeholder">Email (không bắt buộc)</string>
-    <string name="issue_format_bold">Đậm</string>
-    <string name="issue_format_bullet_list">Danh sách dấu đầu dòng</string>
-    <string name="issue_format_code">Mã nội dòng</string>
-    <string name="issue_format_code_block">Khối mã</string>
-    <string name="issue_format_italic">Nghiêng</string>
-    <string name="issue_format_link">Liên kết</string>
-    <string name="issue_format_numbered_list">Danh sách đánh số</string>
-    <string name="issue_format_quote">Trích dẫn</string>
-    <string name="issue_markdown_supported">Hỗ trợ Markdown</string>
     <string name="issue_section_label">Vấn đề</string>
     <string name="issue_send">Gửi</string>
     <string name="issue_submitted">Vấn đề của bạn đã được gửi.</string>

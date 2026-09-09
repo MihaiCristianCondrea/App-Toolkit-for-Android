@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.markdown
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -32,7 +32,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 
 /**
- * Syntax highlighting for the Markdown a report is written in.
+ * Syntax highlighting for the Markdown a field is written in.
  *
  * Styling only: every rule keeps the character count of the source text, so [OffsetMapping.Identity]
  * stays correct and the caret, the selection handles and the text the ViewModel receives are the

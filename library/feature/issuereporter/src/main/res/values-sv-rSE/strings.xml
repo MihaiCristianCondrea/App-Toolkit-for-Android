@@ -22,15 +22,6 @@
     <string name="issue_description_placeholder">Beskriv problemet och hur det kan återskapas</string>
     <string name="issue_email_label">E-post</string>
     <string name="issue_email_optional_placeholder">E-post (valfritt)</string>
-    <string name="issue_format_bold">Fet</string>
-    <string name="issue_format_bullet_list">Punktlista</string>
-    <string name="issue_format_code">Infogad kod</string>
-    <string name="issue_format_code_block">Kodblock</string>
-    <string name="issue_format_italic">Kursiv</string>
-    <string name="issue_format_link">Länk</string>
-    <string name="issue_format_numbered_list">Numrerad lista</string>
-    <string name="issue_format_quote">Citat</string>
-    <string name="issue_markdown_supported">Markdown stöds</string>
     <string name="issue_section_label">Problem</string>
     <string name="issue_send">Skicka</string>
     <string name="issue_submitted">Ditt problem lämnades in.</string>

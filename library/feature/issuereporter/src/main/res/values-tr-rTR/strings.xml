@@ -22,15 +22,6 @@
     <string name="issue_description_placeholder">Sorunu ve nasıl yeniden oluşturulacağını açıklayın</string>
     <string name="issue_email_label">E-posta</string>
     <string name="issue_email_optional_placeholder">E-posta (isteğe bağlı)</string>
-    <string name="issue_format_bold">Kalın</string>
-    <string name="issue_format_bullet_list">Madde işaretli liste</string>
-    <string name="issue_format_code">Satır içi kod</string>
-    <string name="issue_format_code_block">Kod bloğu</string>
-    <string name="issue_format_italic">İtalik</string>
-    <string name="issue_format_link">Bağlantı</string>
-    <string name="issue_format_numbered_list">Numaralı liste</string>
-    <string name="issue_format_quote">Alıntı</string>
-    <string name="issue_markdown_supported">Markdown destekleniyor</string>
     <string name="issue_section_label">Sorun</string>
     <string name="issue_send">Gönder</string>
     <string name="issue_submitted">Sorununuz gönderildi.</string>

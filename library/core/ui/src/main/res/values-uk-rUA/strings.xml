@@ -30,6 +30,15 @@
     <string name="learn_more">Дізнатися більше</string>
     <string name="light_mode">Світла тема</string>
     <string name="loading">Завантаження…</string>
+    <string name="markdown_format_bold">Жирний</string>
+    <string name="markdown_format_bullet_list">Маркований список</string>
+    <string name="markdown_format_code">Вбудований код</string>
+    <string name="markdown_format_code_block">Блок коду</string>
+    <string name="markdown_format_italic">Курсив</string>
+    <string name="markdown_format_link">Посилання</string>
+    <string name="markdown_format_numbered_list">Нумерований список</string>
+    <string name="markdown_format_quote">Цитата</string>
+    <string name="markdown_supported">Підтримується Markdown</string>
     <string name="onboarding_theme_dark_desc">Приємний для очей.</string>
     <string name="onboarding_theme_light_desc">Яскравий та енергійний.</string>
     <string name="onboarding_theme_system_desc">Відповідає налаштуванням вашого пристрою.</string>

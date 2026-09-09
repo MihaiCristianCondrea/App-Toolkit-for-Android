@@ -30,6 +30,15 @@
     <string name="learn_more">Matuto pa</string>
     <string name="light_mode">Light mode</string>
     <string name="loading">Naglo-load…</string>
+    <string name="markdown_format_bold">Bold</string>
+    <string name="markdown_format_bullet_list">Listahang may bullet</string>
+    <string name="markdown_format_code">Inline na code</string>
+    <string name="markdown_format_code_block">Code block</string>
+    <string name="markdown_format_italic">Italic</string>
+    <string name="markdown_format_link">Link</string>
+    <string name="markdown_format_numbered_list">Listahang may numero</string>
+    <string name="markdown_format_quote">Sipi</string>
+    <string name="markdown_supported">Suportado ang Markdown</string>
     <string name="onboarding_theme_dark_desc">Maginhawa sa mata.</string>
     <string name="onboarding_theme_light_desc">Maliwanag at masigla.</string>
     <string name="onboarding_theme_system_desc">Tumutugma sa iyong device.</string>

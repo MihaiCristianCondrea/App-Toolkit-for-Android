@@ -30,6 +30,15 @@
     <string name="learn_more">Dowiedz się więcej</string>
     <string name="light_mode">Tryb jasny</string>
     <string name="loading">Ładowanie…</string>
+    <string name="markdown_format_bold">Pogrubienie</string>
+    <string name="markdown_format_bullet_list">Lista punktowana</string>
+    <string name="markdown_format_code">Kod w wierszu</string>
+    <string name="markdown_format_code_block">Blok kodu</string>
+    <string name="markdown_format_italic">Kursywa</string>
+    <string name="markdown_format_link">Link</string>
+    <string name="markdown_format_numbered_list">Lista numerowana</string>
+    <string name="markdown_format_quote">Cytat</string>
+    <string name="markdown_supported">Obsługiwany Markdown</string>
     <string name="onboarding_theme_dark_desc">Przyjemny dla oczu.</string>
     <string name="onboarding_theme_light_desc">Jasny i energiczny.</string>
     <string name="onboarding_theme_system_desc">Dopasowany do Twojego urządzenia.</string>

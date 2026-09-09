@@ -30,6 +30,15 @@
     <string name="learn_more">আরও জানুন</string>
     <string name="light_mode">লাইট মোড</string>
     <string name="loading">লোড হচ্ছে…</string>
+    <string name="markdown_format_bold">বোল্ড</string>
+    <string name="markdown_format_bullet_list">বুলেট তালিকা</string>
+    <string name="markdown_format_code">ইনলাইন কোড</string>
+    <string name="markdown_format_code_block">কোড ব্লক</string>
+    <string name="markdown_format_italic">ইটালিক</string>
+    <string name="markdown_format_link">লিঙ্ক</string>
+    <string name="markdown_format_numbered_list">সংখ্যাযুক্ত তালিকা</string>
+    <string name="markdown_format_quote">উদ্ধৃতি</string>
+    <string name="markdown_supported">Markdown সমর্থিত</string>
     <string name="onboarding_theme_dark_desc">চোখের জন্য আরামদায়ক।</string>
     <string name="onboarding_theme_light_desc">উজ্জ্বল এবং প্রাণবন্ত।</string>
     <string name="onboarding_theme_system_desc">আপনার ডিভাইসের সাথে মেলে।</string>

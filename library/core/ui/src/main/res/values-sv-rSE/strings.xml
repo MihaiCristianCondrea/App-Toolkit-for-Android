@@ -30,6 +30,15 @@
     <string name="learn_more">Läs mer</string>
     <string name="light_mode">Ljust läge</string>
     <string name="loading">Läser in…</string>
+    <string name="markdown_format_bold">Fet</string>
+    <string name="markdown_format_bullet_list">Punktlista</string>
+    <string name="markdown_format_code">Infogad kod</string>
+    <string name="markdown_format_code_block">Kodblock</string>
+    <string name="markdown_format_italic">Kursiv</string>
+    <string name="markdown_format_link">Länk</string>
+    <string name="markdown_format_numbered_list">Numrerad lista</string>
+    <string name="markdown_format_quote">Citat</string>
+    <string name="markdown_supported">Markdown stöds</string>
     <string name="onboarding_theme_dark_desc">Behagligt för ögonen.</string>
     <string name="onboarding_theme_light_desc">Ljust och energiskt.</string>
     <string name="onboarding_theme_system_desc">Matchar din enhet.</string>

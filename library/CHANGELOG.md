@@ -19,9 +19,21 @@
   `resolveToolkitIconLoop(icon, interacted)` exposes the same rule to custom renderers, and
   `ToolkitIconContent` takes the matching `interacted` flag.
 
-- Added Markdown authoring to the issue reporter's description field: a formatting bar for bold,
-  italic, inline code, code blocks, bulleted and numbered lists, quotes and links, and Markdown
-  syntax highlighted as it is typed.
+- Added `GeneralTextField`, the input counterpart of `GeneralButton`: one field component whose
+  defaults render exactly the Material filled field, with `Outlined` and `Grouped` styles, a
+  `ToolkitIcon` in either icon slot, a trailing icon that becomes a button when it is given an
+  action, `errorText` that marks the error state and replaces the supporting line in one parameter,
+  and a GA4 event logged when the field takes focus. `Grouped` is the form treatment: no indicator
+  line, corners cut to the field's `position` in the block. Both a `String` and a `TextFieldValue`
+  overload are available.
+- Added Markdown authoring to `GeneralTextField`, and with it to any screen rather than only the
+  issue reporter: `GeneralTextFieldMarkdown.Highlight` styles Markdown syntax as it is typed through
+  a length-preserving transformation, and `Editor` adds the formatting bar for bold, italic, inline
+  code, code blocks, bulleted and numbered lists, quotes and links, which edits the Markdown source
+  and places the caret. The bar is cut and filled to match the field above it. `onMarkdownFormat`
+  reports the action used as a `MarkdownFormatAction` carrying a stable `analyticsName`.
+  The issue reporter's form and description field are now this component; the Markdown pieces moved
+  from that feature into `:library:core:ui`.
 
 - Added `GroupedGrid`, the grouped category block used for storage and media breakdowns and for
   blocks of actions. Cells are laid out in columns as one rounded group: only the corners at the

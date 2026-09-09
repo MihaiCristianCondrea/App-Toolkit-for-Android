@@ -30,6 +30,15 @@
     <string name="learn_more">Saber más</string>
     <string name="light_mode">Modo claro</string>
     <string name="loading">Cargando…</string>
+    <string name="markdown_format_bold">Negrita</string>
+    <string name="markdown_format_bullet_list">Lista con viñetas</string>
+    <string name="markdown_format_code">Código en línea</string>
+    <string name="markdown_format_code_block">Bloque de código</string>
+    <string name="markdown_format_italic">Cursiva</string>
+    <string name="markdown_format_link">Enlace</string>
+    <string name="markdown_format_numbered_list">Lista numerada</string>
+    <string name="markdown_format_quote">Cita</string>
+    <string name="markdown_supported">Markdown compatible</string>
     <string name="onboarding_theme_dark_desc">Suave para la vista.</string>
     <string name="onboarding_theme_light_desc">Brillante y enérgico.</string>
     <string name="onboarding_theme_system_desc">Coincide con tu dispositivo.</string>

@@ -30,6 +30,15 @@
     <string name="learn_more">Pelajari lebih lanjut</string>
     <string name="light_mode">Mode terang</string>
     <string name="loading">Memuat…</string>
+    <string name="markdown_format_bold">Tebal</string>
+    <string name="markdown_format_bullet_list">Daftar berpoin</string>
+    <string name="markdown_format_code">Kode sebaris</string>
+    <string name="markdown_format_code_block">Blok kode</string>
+    <string name="markdown_format_italic">Miring</string>
+    <string name="markdown_format_link">Tautan</string>
+    <string name="markdown_format_numbered_list">Daftar bernomor</string>
+    <string name="markdown_format_quote">Kutipan</string>
+    <string name="markdown_supported">Markdown didukung</string>
     <string name="onboarding_theme_dark_desc">Nyaman di mata.</string>
     <string name="onboarding_theme_light_desc">Terang dan energik.</string>
     <string name="onboarding_theme_system_desc">Sesuai dengan perangkat Anda.</string>

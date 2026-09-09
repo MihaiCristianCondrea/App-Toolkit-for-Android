@@ -30,6 +30,15 @@
     <string name="learn_more">Daha fazla bilgi</string>
     <string name="light_mode">Aydınlık mod</string>
     <string name="loading">Yükleniyor…</string>
+    <string name="markdown_format_bold">Kalın</string>
+    <string name="markdown_format_bullet_list">Madde işaretli liste</string>
+    <string name="markdown_format_code">Satır içi kod</string>
+    <string name="markdown_format_code_block">Kod bloğu</string>
+    <string name="markdown_format_italic">İtalik</string>
+    <string name="markdown_format_link">Bağlantı</string>
+    <string name="markdown_format_numbered_list">Numaralı liste</string>
+    <string name="markdown_format_quote">Alıntı</string>
+    <string name="markdown_supported">Markdown destekleniyor</string>
     <string name="onboarding_theme_dark_desc">Gözleri yormaz.</string>
     <string name="onboarding_theme_light_desc">Parlak ve enerjik.</string>
     <string name="onboarding_theme_system_desc">Cihazınızla eşleşir.</string>

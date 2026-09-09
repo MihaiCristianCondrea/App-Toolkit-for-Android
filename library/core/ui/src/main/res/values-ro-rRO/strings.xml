@@ -30,6 +30,15 @@
     <string name="learn_more">Află mai multe</string>
     <string name="light_mode">Mod luminos</string>
     <string name="loading">Se încarcă…</string>
+    <string name="markdown_format_bold">Aldin</string>
+    <string name="markdown_format_bullet_list">Listă cu marcatori</string>
+    <string name="markdown_format_code">Cod în linie</string>
+    <string name="markdown_format_code_block">Bloc de cod</string>
+    <string name="markdown_format_italic">Cursiv</string>
+    <string name="markdown_format_link">Link</string>
+    <string name="markdown_format_numbered_list">Listă numerotată</string>
+    <string name="markdown_format_quote">Citat</string>
+    <string name="markdown_supported">Markdown acceptat</string>
     <string name="onboarding_theme_dark_desc">Ușor pentru ochi.</string>
     <string name="onboarding_theme_light_desc">Luminos și energic.</string>
     <string name="onboarding_theme_system_desc">Se potrivește cu dispozitivul tău.</string>
