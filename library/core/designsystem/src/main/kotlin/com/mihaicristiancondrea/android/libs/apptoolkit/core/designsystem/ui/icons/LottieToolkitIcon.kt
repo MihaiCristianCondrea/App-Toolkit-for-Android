@@ -30,9 +30,11 @@ import kotlin.math.roundToInt
 /**
  * Composition loading survives replays; progress is read during drawing, not by the parent UI.
  *
- * An icon that declares [ToolkitIcon.Animated.loop] ignores [atEnd] and [clickCount] and animates
- * continuously instead: [ToolkitIconReplayMode.Restart] snaps back and runs forward every cycle,
- * [ToolkitIconReplayMode.Reverse] travels forward and back.
+ * A [looping] icon ignores [atEnd] and [clickCount] and animates continuously instead:
+ * [ToolkitIconReplayMode.Restart] snaps back and runs forward every cycle,
+ * [ToolkitIconReplayMode.Reverse] travels forward and back. Whether a loop declared with
+ * [ToolkitIcon.Animated.loop] is running yet is the caller's decision, because it can depend on the
+ * interaction the caller owns; see `resolveToolkitIconLoop`.
  */
 @Composable
 internal fun LottieToolkitIcon(
@@ -41,13 +43,14 @@ internal fun LottieToolkitIcon(
     modifier: Modifier,
     atEnd: Boolean,
     tint: Color,
+    looping: Boolean,
     clickCount: Int = 0,
 ) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(icon.resId))
     val progress = remember(icon) { Animatable(if (atEnd && clickCount == 0) 1f else 0f) }
     val playback = remember(icon) { LottieIconPlayback(atEnd && clickCount == 0) }
 
-    if (icon.loop) {
+    if (looping) {
         LaunchedEffect(composition, icon) {
             val loaded = composition ?: return@LaunchedEffect
             // A composition that reports no duration would finish every cycle at once and spin
@@ -56,7 +59,9 @@ internal fun LottieToolkitIcon(
                 durationMillis = loaded.duration.roundToInt().coerceAtLeast(minimumValue = 16),
                 easing = LinearEasing,
             )
-            var forward = true
+            // A loop that starts on an interaction inherits wherever the icon was resting, so a
+            // reversing cycle travels on from that frame instead of stalling against it.
+            var forward = progress.value < 1f
             while (true) {
                 if (icon.replayMode == ToolkitIconReplayMode.Restart) {
                     progress.snapTo(targetValue = 0f)

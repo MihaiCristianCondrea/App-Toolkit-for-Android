@@ -1,21 +1,18 @@
-Specialized instructions for generating Kotlin implementations of AppFunctions, handling system-wide
-configuration, and managing build dependencies.
+Specialized instructions for generating Kotlin implementations of AppFunctions,
+handling system-wide configuration, and managing build dependencies.
 
 ## Instructions
 
 ### Step 1: Configure Gradle dependencies and KSP
 
-Add the following to `build.gradle.kts`. App Functions requires the KSP (Kotlin Symbol Processing)
-plugin.
+Add the following to `build.gradle.kts`. App Functions requires the KSP (Kotlin
+Symbol Processing) plugin.
 
 1. **Version check** : Use library version `1.0.0-alpha10` or later from maven.google.com.
-
-<br />
 
 ```kotlin
 implementation(libs.androidx.appfunctions)
 ksp(libs.androidx.appfunctions.compiler)
-   
 ```
 
 <br />
@@ -26,9 +23,8 @@ ksp(libs.androidx.appfunctions.compiler)
 
 ### Step 2: Set up app metadata XML
 
-Describe the app's capabilities to the LLM by defining `res/xml/app_metadata.xml`.
-
-<br />
+Describe the app's capabilities to the LLM by defining
+`res/xml/app_metadata.xml`.
 
 ```xml
 <AppFunctionAppMetadata xmlns:appfn="http://schemas.android.com/apk/androidx.appfunctions"
@@ -38,15 +34,12 @@ Describe the app's capabilities to the LLM by defining `res/xml/app_metadata.xml
     Constraints:
     - Title or content must be non-null when creating a task."
     appfn:displayDescription="@string/user_visible_description" />
-   
 ```
 
 <br />
 
-Register the service and reference the app metadata in `AndroidManifest.xml` within the
-`<application>` tag:
-
-<br />
+Register the service and reference the app metadata in `AndroidManifest.xml`
+within the `<application>` tag:
 
 ```xml
 <service
@@ -67,7 +60,6 @@ Register the service and reference the app metadata in `AndroidManifest.xml` wit
 <property
     android:name="android.app.appfunctions.app_metadata"
     android:resource="@xml/app_metadata" />
-   
 ```
 
 <br />
@@ -107,15 +99,13 @@ When generating Kotlin code for AppFunctions, you MUST adhere to these rules:
 
 In version 1.0.0-alpha10 and later, App Functions use the compile-time
 `@AppFunctionServiceEntryPoint` architecture. Create an abstract class extending
-`AppFunctionService` annotated with `@AppFunctionServiceEntryPoint`. KSP generates the concrete
-service class and XML schema.
+`AppFunctionService` annotated with `@AppFunctionServiceEntryPoint`. KSP
+generates the concrete service class and XML schema.
 
 #### Recommended approach with Hilt
 
-Annotate your service with `@AndroidEntryPoint` and inject your data repositories or use cases using
-standard `@Inject internal lateinit var`:
-
-<br />
+Annotate your service with `@AndroidEntryPoint` and inject your data
+repositories or use cases using standard `@Inject internal lateinit var`:
 
 ```kotlin
 @RequiresApi(36)
@@ -136,20 +126,18 @@ abstract class BaseAppFunctionServiceHeader : AppFunctionService() {
         return messageRepository.send(name, endpointValue, messageBody)
     }
 }
-   
 ```
 
 <br />
 
 #### Framework-agnostic approach with alternative dependency injection or service locators
 
-While Hilt is recommended, many Android applications implement AppFunctions with alternative
-dependency injection frameworks (like Koin, Anvil, or manual Service Locators). Because
-`AppFunctionService` inherits from Android `android.app.Service` (and therefore `Context`), you are
-able access your application's DI container directly through `applicationContext` in property
+While Hilt is recommended, many Android applications implement AppFunctions with
+alternative dependency injection frameworks (like Koin, Anvil, or manual Service
+Locators). Because `AppFunctionService` inherits from Android
+`android.app.Service` (and therefore `Context`), you are able access your
+application's DI container directly through `applicationContext` in property
 getters or during service lifecycle execution:
-
-<br />
 
 ```kotlin
 @RequiresApi(36)
@@ -174,7 +162,6 @@ abstract class BaseAppFunctionServiceLocator : AppFunctionService() {
         return messageRepository.send(name, endpointValue, messageBody)
     }
 }
-   
 ```
 
 <br />
@@ -183,9 +170,10 @@ abstract class BaseAppFunctionServiceLocator : AppFunctionService() {
 
 Don't attempt to make an `AppFunction` class or method OS-agnostic---App Functions are inherently
 part of the Android platform integration in `androidx.appfunctions`. For architectural cleanliness,
-use existing application functionality (such as existing repositories, use cases, or domain
-orchestrators) to execute the behavior within your `@AppFunction` methods rather than creating
-redundant abstraction layers around the OS service.
+use existing
+application functionality (such as existing repositories, use cases, or domain
+orchestrators) to execute the behavior within your `@AppFunction` methods rather
+than creating redundant abstraction layers around the OS service.
 
 <br />
 
@@ -193,19 +181,18 @@ redundant abstraction layers around the OS service.
 
 ### KSP compliance for serializables
 
-**Critical constraints** : For `@AppFunctionSerializable` data classes, KSP only extracts
-documentation if it's written as inline KDoc directly for each property definition. Don't use
-class-level `@param` or `@property` tags.
+**Critical constraints** : For `@AppFunctionSerializable` data classes, KSP
+only extracts documentation if it's written as inline KDoc directly for each
+property definition. Don't use class-level `@param` or `@property` tags.
 
 ### Package integrity
 
-Configuration APIs and the `@AppFunction` annotation are located in `androidx.appfunctions`.
+Configuration APIs and the `@AppFunction` annotation are located in
+`androidx.appfunctions`.
 
 ## Examples
 
 ### Example: Serializable with inline KDoc
-
-<br />
 
 ```kotlin
 /** The parameter to create the task. */
@@ -227,7 +214,6 @@ data class Task(
     /** The content of the task. */
     val content: String,
 )
-   
 ```
 
 <br />
@@ -235,8 +221,6 @@ data class Task(
 <br />
 
 ### Example: Implementation detail
-
-<br />
 
 ```kotlin
 @RequiresApi(36)
@@ -277,7 +261,6 @@ abstract class BaseTaskAppFunctionService : AppFunctionService() {
     // Maps internal TaskEntity
     private fun TaskEntity.toTask() = Task(id = id, title = title, content = description)
 }
-   
 ```
 
 <br />

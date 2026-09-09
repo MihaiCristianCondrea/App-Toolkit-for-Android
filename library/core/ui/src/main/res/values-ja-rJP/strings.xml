@@ -30,6 +30,15 @@
     <string name="learn_more">詳しく見る</string>
     <string name="light_mode">ライトモード</string>
     <string name="loading">読み込み中…</string>
+    <string name="markdown_format_bold">太字</string>
+    <string name="markdown_format_bullet_list">箇条書き</string>
+    <string name="markdown_format_code">インラインコード</string>
+    <string name="markdown_format_code_block">コードブロック</string>
+    <string name="markdown_format_italic">斜体</string>
+    <string name="markdown_format_link">リンク</string>
+    <string name="markdown_format_numbered_list">番号付きリスト</string>
+    <string name="markdown_format_quote">引用</string>
+    <string name="markdown_supported">Markdown に対応</string>
     <string name="onboarding_theme_dark_desc">目に優しい。</string>
     <string name="onboarding_theme_light_desc">明るくエネルギッシュ。</string>
     <string name="onboarding_theme_system_desc">デバイスに合わせる。</string>

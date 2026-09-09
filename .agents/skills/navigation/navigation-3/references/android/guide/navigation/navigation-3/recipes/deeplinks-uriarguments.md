@@ -13,11 +13,13 @@ It consists of two activities
 
 The `MainActivity` handles the request with these steps
 
-1. Declare a `UriDeepLinkMatcher` for each url pattern that can be deep linked into. Each matcher accepts a uri pattern and the KSerializer of the NavKey that supports this deep link.
+1. Declare a `UriDeepLinkMatcher` for each url pattern that can be deep linked into. Each matcher
+   accepts a uri pattern and the KSerializer of the NavKey that supports this deep link.
 
 2. Create a `DeepLinkRequest` with the incoming intent.
 
-3. Match all candidate `UriDeepLinkMatchers` with the request and compare the resulting `UriMatchResults` for the best match.
+3. Match all candidate `UriDeepLinkMatchers` with the request and compare the resulting
+   `UriMatchResults` for the best match.
 
 4. Read the matching key from `UriMatchResult.key` or use default key if no match.
 
@@ -31,7 +33,8 @@ This recipe focuses on handing an intent and does not include these consideratio
 
 ## Demonstrated forms of deeplink
 
-The `MainActivity` has several backStack keys to demonstrate different types of supported deep links:
+The `MainActivity` has several backStack keys to demonstrate different types of supported deep
+links:
 
 1. `HomeKey` - deeplink with an exact url (no deeplink arguments)
 2. `UsersKey` - deeplink with path arguments
@@ -80,7 +83,6 @@ internal data class SearchKey(
 ): NavRecipeKey {
     override val name: String = STRING_LITERAL_SEARCH
 }
-   
 ```
 
 ```
@@ -182,7 +184,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-   
 ```
 
 ```
@@ -363,8 +364,6 @@ private val MENU_OPTIONS_SEARCH = mapOf(
 
 private val MENU_LABELS_SEARCH = listOf(SearchKey::ageMin.name, SearchKey::ageMax.name)
 
-
-   
 ```
 
 ```
@@ -391,6 +390,4 @@ internal val URL_SEARCH = "$PATH_BASE/$PATH_SEARCH" +
         "&${SearchKey::ageMax.name}={${SearchKey::ageMax.name}}" +
         "&${SearchKey::firstName.name}={${SearchKey::firstName.name}}" +
         "&${SearchKey::location.name}={${SearchKey::location.name}}"
-
-   
 ```

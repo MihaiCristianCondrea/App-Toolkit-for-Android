@@ -2,7 +2,66 @@
 
 ---
 
-# Unreleased
+# September 10, 2026
+
+**Version:** `3.0.0-pre14`
+
+### Added
+
+- `ToolkitIconLoopTrigger` chooses when a looping animated icon starts playing. `Immediately`, the
+  default, keeps the existing behaviour and plays as soon as the icon is composed. `OnInteraction`
+  rests on the frame `atEnd` picks until the component is clicked or becomes selected, and loops
+  from then on, so a screenful of animations no longer all play at once. It is independent of the
+  replay mode, which still describes one cycle, and a reversing loop that starts on an interaction
+  travels on from the frame it was resting on rather than snapping to the other one.
+  `resolveToolkitIconLoop(icon, interacted)` exposes the same rule to custom renderers, and
+  `ToolkitIconContent` takes the matching `interacted` flag.
+
+- Added `GeneralTextField`, the input counterpart of `GeneralButton`: one field component whose
+  defaults render exactly the Material filled field, with `Outlined` and `Grouped` styles, a
+  `ToolkitIcon` in either icon slot, a trailing icon that becomes a button when it is given an
+  action, `errorText` that marks the error state and replaces the supporting line in one parameter,
+  and a GA4 event logged when the field takes focus. `Grouped` is the form treatment: no indicator
+  line, corners cut to the field's `position` in the block. Both a `String` and a `TextFieldValue`
+  overload are available.
+- `GeneralTextFieldStyle.SearchOutlined` is the same search box as an outlined, fully rounded text
+  field, for a search that sits on a page rather than in an app bar. Unlike `Search` it is an
+  ordinary text field, so every parameter applies to it and the `TextFieldValue` overload accepts it.
+- `GeneralTextFieldStyle.Search` draws the Material search input: the pill-shaped box that filters
+  the content behind it as it is typed, leading with a search icon unless another is given. It is
+  the input field used on its own rather than a `SearchBar`, whose collapsed form intercepts the
+  keyboard and whose expanded form reserves height for results a filtering field does not have.
+  `onSearch` reports the keyboard's search action, and `trailingContent` replaces the trailing slot
+  with a row, for a field ending in more than one action, such as a filter beside a clear button.
+- Added Markdown authoring to `GeneralTextField`, and with it to any screen rather than only the
+  issue reporter: `GeneralTextFieldMarkdown.Highlight` styles Markdown syntax as it is typed through
+  a length-preserving transformation, and `Editor` adds the formatting bar for bold, italic, inline
+  code, code blocks, bulleted and numbered lists, quotes and links, which edits the Markdown source
+  and places the caret. The bar is cut and filled to match the field above it. `onMarkdownFormat`
+  reports the action used as a `MarkdownFormatAction` carrying a stable `analyticsName`.
+  The issue reporter's form and description field are now this component; the Markdown pieces moved
+  from that feature into `:library:core:ui`, where `MarkdownVisualTransformation` and
+  `rememberMarkdownVisualTransformation` now live in
+  `core.ui.views.fields.markdown`.
+
+### Changed
+
+- The **Usage and diagnostics** screen is the ads screen's layout: the reporting switch over a single
+  **Advanced privacy settings** preference that opens the privacy choices dialog — the same dialog
+  the onboarding flow shows. The four granular consents no longer sit on the screen as an expandable
+  block of switch cards, which was a plainer second copy of what that dialog's Details tab explains.
+  `FirebaseConsentDialog` moved from `:library:feature:onboarding` to `:library:feature:diagnostics`,
+  whose state it reads and writes, and its strings moved with it as `privacy_choices_*`.
+  `UsageAndDiagnosticsEvent.AllowAllConsent` and `AllowEssentialConsent` carry the dialog's
+  whole-bundle answers, so what "everything" and "essentials" cover is decided once rather than at
+  each call site. `ConsentToggleCard`, `ConsentSectionHeader` and `ExpandableConsentSectionHeader`
+  are removed, with the strings only they used.
+
+---
+
+# September 9, 2026
+
+**Version:** `3.0.0-pre13`
 
 ### Added
 

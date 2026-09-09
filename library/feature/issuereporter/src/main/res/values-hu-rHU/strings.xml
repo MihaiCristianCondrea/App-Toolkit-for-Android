@@ -22,15 +22,6 @@
     <string name="issue_description_placeholder">Írd le a hibát és azt, hogyan reprodukálható</string>
     <string name="issue_email_label">E-mail</string>
     <string name="issue_email_optional_placeholder">E-mail (nem kötelező)</string>
-    <string name="issue_format_bold">Félkövér</string>
-    <string name="issue_format_bullet_list">Felsorolás</string>
-    <string name="issue_format_code">Beágyazott kód</string>
-    <string name="issue_format_code_block">Kódblokk</string>
-    <string name="issue_format_italic">Dőlt</string>
-    <string name="issue_format_link">Hivatkozás</string>
-    <string name="issue_format_numbered_list">Számozott lista</string>
-    <string name="issue_format_quote">Idézet</string>
-    <string name="issue_markdown_supported">Markdown támogatott</string>
     <string name="issue_section_label">Hiba</string>
     <string name="issue_send">Küldés</string>
     <string name="issue_submitted">A kérdését benyújtották.</string>

@@ -30,6 +30,15 @@
     <string name="learn_more">اعرف المزيد</string>
     <string name="light_mode">الوضع الفاتح</string>
     <string name="loading">جارٍ التحميل…</string>
+    <string name="markdown_format_bold">عريض</string>
+    <string name="markdown_format_bullet_list">قائمة نقطية</string>
+    <string name="markdown_format_code">كود مضمّن</string>
+    <string name="markdown_format_code_block">كتلة كود</string>
+    <string name="markdown_format_italic">مائل</string>
+    <string name="markdown_format_link">رابط</string>
+    <string name="markdown_format_numbered_list">قائمة مرقّمة</string>
+    <string name="markdown_format_quote">اقتباس</string>
+    <string name="markdown_supported">يدعم Markdown</string>
     <string name="onboarding_theme_dark_desc">مريح للعينين.</string>
     <string name="onboarding_theme_light_desc">مشرق وحيوي.</string>
     <string name="onboarding_theme_system_desc">يطابق جهازك.</string>

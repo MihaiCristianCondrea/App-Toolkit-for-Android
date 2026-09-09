@@ -22,15 +22,6 @@
     <string name="issue_description_placeholder">Опишіть проблему та спосіб її відтворення</string>
     <string name="issue_email_label">Електронна пошта</string>
     <string name="issue_email_optional_placeholder">Електронна пошта (необовʼязково)</string>
-    <string name="issue_format_bold">Жирний</string>
-    <string name="issue_format_bullet_list">Маркований список</string>
-    <string name="issue_format_code">Вбудований код</string>
-    <string name="issue_format_code_block">Блок коду</string>
-    <string name="issue_format_italic">Курсив</string>
-    <string name="issue_format_link">Посилання</string>
-    <string name="issue_format_numbered_list">Нумерований список</string>
-    <string name="issue_format_quote">Цитата</string>
-    <string name="issue_markdown_supported">Підтримується Markdown</string>
     <string name="issue_section_label">Проблема</string>
     <string name="issue_send">Надіслати</string>
     <string name="issue_submitted">Ваше питання було подано.</string>

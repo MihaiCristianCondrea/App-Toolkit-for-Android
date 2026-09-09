@@ -57,7 +57,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.On
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.firebase.cards.UsageAndDiagnosticsToggleCard
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.firebase.dialogs.FirebaseConsentDialog
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs.FirebaseConsentDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.firebase.text.PrivacyPolicySection
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -154,27 +154,11 @@ fun FirebaseOnboardingPage(isSelected: Boolean) {
                 onboardingViewModel.onEvent(OnboardingEvent.HideCrashlyticsDialog)
             },
             onAllowAll = {
-                diagnosticsViewModel.onEvent(UsageAndDiagnosticsEvent.SetAnalyticsConsent(true))
-                diagnosticsViewModel.onEvent(UsageAndDiagnosticsEvent.SetAdStorageConsent(true))
-                diagnosticsViewModel.onEvent(UsageAndDiagnosticsEvent.SetAdUserDataConsent(true))
-                diagnosticsViewModel.onEvent(
-                    UsageAndDiagnosticsEvent.SetAdPersonalizationConsent(
-                        true
-                    )
-                )
-                diagnosticsViewModel.onEvent(UsageAndDiagnosticsEvent.SetUsageAndDiagnostics(true))
+                diagnosticsViewModel.onEvent(UsageAndDiagnosticsEvent.AllowAllConsent)
                 onboardingViewModel.onEvent(OnboardingEvent.HideCrashlyticsDialog)
             },
             onAllowEssentials = {
-                diagnosticsViewModel.onEvent(UsageAndDiagnosticsEvent.SetAnalyticsConsent(true))
-                diagnosticsViewModel.onEvent(UsageAndDiagnosticsEvent.SetAdStorageConsent(true))
-                diagnosticsViewModel.onEvent(UsageAndDiagnosticsEvent.SetAdUserDataConsent(false))
-                diagnosticsViewModel.onEvent(
-                    UsageAndDiagnosticsEvent.SetAdPersonalizationConsent(
-                        false
-                    )
-                )
-                diagnosticsViewModel.onEvent(UsageAndDiagnosticsEvent.SetUsageAndDiagnostics(true))
+                diagnosticsViewModel.onEvent(UsageAndDiagnosticsEvent.AllowEssentialConsent)
                 onboardingViewModel.onEvent(OnboardingEvent.HideCrashlyticsDialog)
             },
             onConfirmSelection = {

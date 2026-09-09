@@ -2,23 +2,34 @@
 
 This recipe demonstrates how to create multiple back stacks.
 
-The app has three top level routes: `RouteA`, `RouteB` and `RouteC`. These routes have sub routes `RouteA1`, `RouteB1` and `RouteC1` respectively. `RouteA1` contains a 100-item scrollable list, while `RouteB1` and `RouteC1` contain counters used to verify state retention through configuration changes and process death.
+The app has three top level routes: `RouteA`, `RouteB` and `RouteC`. These routes have sub routes
+`RouteA1`, `RouteB1` and `RouteC1` respectively. `RouteA1` contains a 100-item scrollable list,
+while `RouteB1` and `RouteC1` contain counters used to verify state retention through configuration
+changes and process death.
 
-The app's navigation state is held in the `NavigationState` class. The state itself is created using `rememberNavigationState`.
+The app's navigation state is held in the `NavigationState` class. The state itself is created using
+`rememberNavigationState`.
 
 Navigation events are handled by the `Navigator`. It updates the navigation state.
 
-The navigation state is converted into `NavEntry`s with `NavigationState.toDecoratedEntries`. These entries are then displayed by `NavDisplay`.
+The navigation state is converted into `NavEntry`s with `NavigationState.toDecoratedEntries`. These
+entries are then displayed by `NavDisplay`.
 
 Key behaviors:
 
-- This app follows the "exit through home" pattern where the user always exits through the starting back stack. This means that `RouteA`'s entries are *always* in the list of entries.
-- Navigating to a top level route that is not the starting route *replaces* the other entries. For example, navigating A-\>B-\>C would result in entries for A+C, B's entries are removed.
-- When a top-level route is reselected, for example if the user is on `RouteA` and taps `RouteA` on the navigation bar again, the `NavigationBar` signals the reselected key to `Navigator`, which emits it to a `Flow<NavKey>`. `RouteA1` observes this flow and, when it receives `RouteA`, resets its list scroll position to index 0.
+- This app follows the "exit through home" pattern where the user always exits through the starting
+  back stack. This means that `RouteA`'s entries are *always* in the list of entries.
+- Navigating to a top level route that is not the starting route *replaces* the other entries. For
+  example, navigating A-\>B-\>C would result in entries for A+C, B's entries are removed.
+- When a top-level route is reselected, for example if the user is on `RouteA` and taps `RouteA` on
+  the navigation bar again, the `NavigationBar` signals the reselected key to `Navigator`, which
+  emits it to a `Flow<NavKey>`. `RouteA1` observes this flow and, when it receives `RouteA`, resets
+  its list scroll position to index 0.
 
 Important implementation details:
 
-- Each top level route has its own `SaveableStateHolderNavEntryDecorator`. This is the object responsible for managing the state for the entries in its back stack.
+- Each top level route has its own `SaveableStateHolderNavEntryDecorator`. This is the object
+  responsible for managing the state for the entries in its back stack.
 
 [![](https://developer.android.com/static/images/picto-icons/code.svg) Explore View the full recipe on GitHub.](https://github.com/android/nav3-recipes/tree/main/app/src/main/java/com/example/nav3recipes/multiplestacks)
 
@@ -78,8 +89,6 @@ class Navigator(val state: NavigationState){
         }
     }
 }
-
-   
 ```
 
 ```
@@ -216,8 +225,6 @@ class NavigationState(
             listOf(startRoute, topLevelRoute)
         }
 }
-
-   
 ```
 
 ```
@@ -346,8 +353,6 @@ class MultipleStacksActivity : ComponentActivity() {
         }
     }
 }
-
-   
 ```
 
 ```
@@ -471,6 +476,4 @@ fun EntryProviderScope<NavKey>.featureCSection(
         }
     }
 }
-
-   
 ```

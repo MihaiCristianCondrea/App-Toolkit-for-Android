@@ -22,15 +22,6 @@
     <string name="issue_description_placeholder">समस्या और उसे दोहराने का तरीका बताएं</string>
     <string name="issue_email_label">ईमेल</string>
     <string name="issue_email_optional_placeholder">ईमेल (वैकल्पिक)</string>
-    <string name="issue_format_bold">बोल्ड</string>
-    <string name="issue_format_bullet_list">बुलेट सूची</string>
-    <string name="issue_format_code">इनलाइन कोड</string>
-    <string name="issue_format_code_block">कोड ब्लॉक</string>
-    <string name="issue_format_italic">इटैलिक</string>
-    <string name="issue_format_link">लिंक</string>
-    <string name="issue_format_numbered_list">क्रमांकित सूची</string>
-    <string name="issue_format_quote">उद्धरण</string>
-    <string name="issue_markdown_supported">Markdown समर्थित है</string>
     <string name="issue_section_label">समस्या</string>
     <string name="issue_send">भेजें</string>
     <string name="issue_submitted">आपका मुद्दा प्रस्तुत किया गया था.</string>

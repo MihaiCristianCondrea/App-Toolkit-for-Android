@@ -11,6 +11,8 @@ entry helpers, state handling, analytics hooks, and shared components.
 - Navigation entry builders and UI state built on stable keys owned by `:library:navigation`.
 - Reusable buttons, fields, preferences, layouts, grids, dialogs, snackbars, ads slots, effects, and
   adaptive-window helpers.
+- `GeneralTextField` and the Markdown authoring behind it: the length-preserving highlighter, the
+  formatting bar, and the source edits it applies.
 - Render models such as `AppVersionInfo` and `AdsConfig`.
 - The shared theme-mode preview composables used by both the onboarding and settings theme UI.
 - The single adaptive `GeneralButton` and FAB icon slots accept `ToolkitIcon`, including bundled Lottie icons.
@@ -82,6 +84,7 @@ remain available; data-layer callers should use the lower-level APIs.
 
 - `GeneralButton` is the action-button entry point for all five styles and labelled/icon-only content.
   See the [3.0 button contract and migration](../designsystem/README.md#generalbutton-30).
+- `GeneralTextField` is the text-input entry point; see [GeneralTextField](#generaltextfield).
 - `GroupedGrid` is the grouped category/action block: `GroupedGridItem` cells, `GroupedGridDefaults`
   for radii, spacing, colors and the badge shape, and `GroupedGridMeasurements` for the size class.
   The corner and ad-placement rules are `groupedGridRows`, which is unit tested; the composable
@@ -103,6 +106,63 @@ remain available; data-layer callers should use the lower-level APIs.
 - Every button takes its icon as a single `ToolkitIcon`, so a button can carry a Compose icon, a
   drawable resource, or an animated vector that plays on each click. See
   [the design system README](../designsystem/README.md#toolkit-icon-api).
+
+## GeneralTextField
+
+One field component, `views/fields/GeneralTextField.kt`, with the same shape as `GeneralButton`: the
+defaults render exactly the Material filled field, and every variation is a parameter rather than
+another component. Two overloads, `String` and `TextFieldValue`; take the second when the caret is
+part of the state a screen owns.
+
+`GeneralTextFieldStyle` picks the treatment:
+
+| Style | Renders |
+|---|---|
+| `Filled` (default) | The Material `TextField` |
+| `Outlined` | The Material `OutlinedTextField` |
+| `Grouped` | A filled field with no indicator line, cut to `position` in a grouped block |
+| `Search` | The Material search input, pill-shaped, leading with a search icon |
+| `SearchOutlined` | The outlined field, fully rounded, leading with a search icon |
+
+`Grouped` is the form treatment: a column of fields two dp apart reads as one card, so the indicator
+line is dropped (it would cut the block into strips) and `position` plus `groupedOuterRadius` cut the
+corners. Such a field usually carries no `label` either, because a floating label reserves height
+whether or not it is showing; `placeholder` and a described `leadingIcon` name it instead.
+
+`Search` is the odd one out, and deliberately so: it is `SearchBarDefaults.InputField` rather than a
+rounded text field, for a box that filters the content behind it as it is typed — a top app bar that
+swaps its title for a search field, say. It is used on its own rather than inside a `SearchBar`
+because the collapsed bar intercepts the soft keyboard and only accepts typing once it expands into
+a surface that reserves 240dp for results this kind of field does not have. The parameters that
+describe a form field — `label`, `supportingText`, `errorText`, `minLines`, `markdown`, `position` —
+do not apply to it, and the `TextFieldValue` overload rejects it outright, because the Material input
+owns its text state and has no caret to hand over. `onSearch` reports the keyboard's search action;
+focus is dropped first either way.
+
+`SearchOutlined` is the search box drawn as an ordinary outlined field instead, fully rounded. Take
+it where a filled pill would disappear into the surface behind it, or where the rest of the screen is
+outlined; every parameter applies to it, and the `TextFieldValue` overload accepts it.
+
+`trailingContent` replaces the whole trailing slot with a row, for the field that ends in more than
+one action — a search box carrying a filter and a clear button. `errorText` marks the error state and replaces `supportingText` in one parameter, so a message and
+the state it describes cannot drift apart. `trailingIcon` with `onTrailingIconClick` becomes a
+`GeneralButton`, so a clear or reveal action keeps the toolkit's feedback. `ga4Event` is logged when
+the field gains focus — a field is not a button, and a per-keystroke event is not an interaction.
+
+`GeneralTextFieldMarkdown` turns the field into a Markdown editor:
+
+- `Highlight` styles the syntax as it is typed. The transformation is length-preserving, so offsets
+  stay identity-mapped and the markers stay visible, selectable and editable. A Markdown *renderer*
+  cannot do this job, because the field is an editor.
+- `Editor` adds the formatting bar underneath — bold, italic, inline code, code fences, bulleted and
+  numbered lists, quotes and links — which edits the Markdown source and places the caret between the
+  markers it inserts. The bar is cut and filled to match the style above it, so field and bar read as
+  one block; a grouped field hands the lower half of its `position` to the bar.
+
+Either mode replaces `visualTransformation`, since the field draws the source itself.
+`onMarkdownFormat` reports which action was used, as a `MarkdownFormatAction` whose `analyticsName`
+is a stable identity for hosts that log them. `MarkdownFormatting`, the source edits behind the bar,
+is plain string transformation and unit tested without a Compose runtime.
 
 ## Internal implementations
 

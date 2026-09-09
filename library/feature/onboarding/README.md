@@ -18,6 +18,10 @@ consent, and completion persistence.
 
 - Host-specific startup/onboarding provider implementations, owned by `:sample`.
 - Consent SDK orchestration, owned by `:library:integration:consent`.
+- The privacy choices dialog the Firebase page opens, owned by
+  [`:library:feature:diagnostics`](../diagnostics/README.md) along with the state it reads and
+  writes. This page decides when to show it and what closing it means; nothing about the dialog
+  itself is onboarding-specific, and the settings screen shows the same one.
 - Theme implementation and settings repositories, owned by core design system/DataStore and settings
   modules.
 

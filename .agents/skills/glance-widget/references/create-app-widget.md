@@ -1,12 +1,14 @@
 The following sections describe how to create a basic app widget with Glance.
 
 > [!IMPORTANT]
-> **Key Point:** Glance provides a modern approach to build app widgets using Compose, but is restricted by the limitations of `AppWidgets` and `RemoteViews`. Therefore, Glance uses different
+> **Key Point:** Glance provides a modern approach to build app widgets using Compose, but is
+> restricted by the limitations of `AppWidgets` and `RemoteViews`. Therefore, Glance uses different
 *composables* from the Jetpack Compose UI.
 
 ## Declare the `AppWidget` in the Manifest
 
-After completing the [setup steps](https://developer.android.com/develop/ui/compose/glance/setup), declare the [`AppWidget`](https://developer.android.com/guide/topics/appwidgets) and its metadata in
+After completing the [setup steps](https://developer.android.com/develop/ui/compose/glance/setup),
+declare the [`AppWidget`](https://developer.android.com/guide/topics/appwidgets) and its metadata in
 your app.
 
 1. Extend the `AppWidget` receiver from `GlanceAppWidgetReceiver`:
@@ -22,7 +24,8 @@ your app.
 
    <br />
 
-2. Register the provider of the app widget in your `AndroidManifest.xml` file and the associated metadata file:
+2. Register the provider of the app widget in your `AndroidManifest.xml` file and the associated
+   metadata file:
 
            <receiver android:name=".glance.MyReceiver"
            android:exported="true">
@@ -36,9 +39,11 @@ your app.
 
 ## Add the `AppWidgetProviderInfo` metadata
 
-Next, follow the [Create a widget](https://developer.android.com/guide/topics/appwidgets#MetaData) guide to create and define the app widget info in the `@xml/my_app_widget_info` file.
+Next, follow the [Create a widget](https://developer.android.com/guide/topics/appwidgets#MetaData)
+guide to create and define the app widget info in the `@xml/my_app_widget_info` file.
 
-The only difference for Glance is that there is no `initialLayout` XML, but you must define one. You can use the predefined loading layout provided in the library:
+The only difference for Glance is that there is no `initialLayout` XML, but you must define one. You
+can use the predefined loading layout provided in the library:
 
     <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
         android:initialLayout="@layout/glance_default_loading_layout">
@@ -46,7 +51,9 @@ The only difference for Glance is that there is no `initialLayout` XML, but you 
 
 ## Declare the AppWidgetProviderInfo XML
 
-The `AppWidgetProviderInfo` object defines the essential qualities of your widget. Define the `AppWidgetProviderInfo` in your XML metadata resource file (`res/xml/my_app_widget_info.xml`) inside a
+The `AppWidgetProviderInfo` object defines the essential qualities of your widget. Define the
+`AppWidgetProviderInfo` in your XML metadata resource file (`res/xml/my_app_widget_info.xml`) inside
+a
 `<appwidget-provider>` element:
 
     <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
@@ -68,10 +75,13 @@ The `AppWidgetProviderInfo` object defines the essential qualities of your widge
 
 ### Widget sizing attributes
 
-The default home screen positions widgets in its window based on a grid of cells that have a defined height and width. Most home screens only let widgets take on sizes that are integer multiples of
+The default home screen positions widgets in its window based on a grid of cells that have a defined
+height and width. Most home screens only let widgets take on sizes that are integer multiples of
 the grid cells---for example, two cells horizontally by three cells vertically.
 
-The widget sizing attributes let you specify a default size for your widget and provide lower and upper bounds on the size of the widget. In this context, the default size of a widget is the size that
+The widget sizing attributes let you specify a default size for your widget and provide lower and
+upper bounds on the size of the widget. In this context, the default size of a widget is the size
+that
 the widget takes on when it is first added to the home screen.
 
 The following table describes the `<appwidget-provider>` attributes pertaining to widget sizing:
@@ -85,7 +95,8 @@ The following table describes the `<appwidget-provider>` attributes pertaining t
 
 #### Example
 
-To illustrate how the attributes in the preceding table affect widget sizing, assume the following specifications:
+To illustrate how the attributes in the preceding table affect widget sizing, assume the following
+specifications:
 
 - A grid cell is 30 dp wide and 50 dp tall.
 - The following attribute specification is provided:
@@ -118,12 +129,15 @@ The default height = `Math.ceil(80 / 50)` = 2
 The widget's size is 3x2 by default. The widget can be resized down to 2x1 or up to full screen.
 
 > [!NOTE]
-> **Note:** Jetpack Glance handles layout changes inside `provideGlance` responding to dynamic cell scaling if you use `SizeMode.Responsive` or `SizeMode.Exact`. See
-> the [Build UI with Glance guide](https://developer.android.com/develop/ui/compose/glance/build-ui) to leverage these modes.
+> **Note:** Jetpack Glance handles layout changes inside `provideGlance` responding to dynamic cell
+> scaling if you use `SizeMode.Responsive` or `SizeMode.Exact`. See
+> the [Build UI with Glance guide](https://developer.android.com/develop/ui/compose/glance/build-ui)
+> to leverage these modes.
 
 ### Additional widget attributes
 
-The following table describes the `<appwidget-provider>` attributes pertaining to qualities other than widget sizing.
+The following table describes the `<appwidget-provider>` attributes pertaining to qualities other
+than widget sizing.
 
 | Attributes and description                                             |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 |------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -138,12 +152,16 @@ The following table describes the `<appwidget-provider>` attributes pertaining t
 
 ## Define `GlanceAppWidget`
 
-1. Create a new class that extends from [`GlanceAppWidget`](https://developer.android.com/reference/kotlin/androidx/glance/appwidget/GlanceAppWidget) and overrides the `provideGlance` method. This is
+1. Create a new class that extends from [
+   `GlanceAppWidget`](https://developer.android.com/reference/kotlin/androidx/glance/appwidget/GlanceAppWidget)
+   and overrides the `provideGlance` method. This is
    the method where you can load data that is needed to render your widget:
 
    > [!NOTE]
-   > **Note:** `provideGlance` runs on the main thread. To perform any long running operations in `provideGlance`, switch to another thread using `withContext`.
-   See [Use coroutines for main-safety](https://developer.android.com/kotlin/coroutines/coroutines-adv#main-safety) for more details on how to run outside of the main thread.
+   > **Note:** `provideGlance` runs on the main thread. To perform any long running operations in
+   `provideGlance`, switch to another thread using `withContext`.
+   See [Use coroutines for main-safety](https://developer.android.com/kotlin/coroutines/coroutines-adv#main-safety)
+   for more details on how to run outside of the main thread.
 
    <br />
 
@@ -186,12 +204,15 @@ You've now configured an `AppWidget` using Glance.
 
 ## Use the GlanceAppWidgetReceiver class to handle widget broadcasts
 
-The `GlanceAppWidgetReceiver` coordinates widget broadcasts and platform state updates by extending the underlying [`AppWidgetProvider`](https://developer.android.com/guide/topics/appwidgets). It
-receives platform events when your widget is updated, deleted, enabled, or disabled, translating them into Compose lifecycle requests.
+The `GlanceAppWidgetReceiver` coordinates widget broadcasts and platform state updates by extending
+the underlying [`AppWidgetProvider`](https://developer.android.com/guide/topics/appwidgets). It
+receives platform events when your widget is updated, deleted, enabled, or disabled, translating
+them into Compose lifecycle requests.
 
 ### Declare a widget in the manifest
 
-Declare your `GlanceAppWidgetReceiver` class subclass as a broadcast receiver in your `AndroidManifest.xml` file:
+Declare your `GlanceAppWidgetReceiver` class subclass as a broadcast receiver in your
+`AndroidManifest.xml` file:
 
     <receiver android:name="MyReceiver"
               android:exported="false">
@@ -202,39 +223,59 @@ Declare your `GlanceAppWidgetReceiver` class subclass as a broadcast receiver in
                    android:resource="@xml/my_app_widget_info" />
     </receiver>
 
-The `<receiver>` element requires the `android:name` attribute, which specifies the receiver class. The receiver must accept the `ACTION_APPWIDGET_UPDATE` broadcast action inside the
+The `<receiver>` element requires the `android:name` attribute, which specifies the receiver class.
+The receiver must accept the `ACTION_APPWIDGET_UPDATE` broadcast action inside the
 `<intent-filter>`.
 
-The `<meta-data>` element must identify its name as `android.appwidget.provider`, and the `android:resource` attribute must point to your AppWidgetProviderInfo XML metadata resource (
+The `<meta-data>` element must identify its name as `android.appwidget.provider`, and the
+`android:resource` attribute must point to your AppWidgetProviderInfo XML metadata resource (
 `@xml/my_app_widget_info`).
 
 ### Implement the GlanceAppWidgetReceiver class
 
-In Glance, you extend **`GlanceAppWidgetReceiver`** instead of `AppWidgetProvider` directly. Implement it by linking your receiver to your `GlanceAppWidget` instance. The primary callbacks available
+In Glance, you extend **`GlanceAppWidgetReceiver`** instead of `AppWidgetProvider` directly.
+Implement it by linking your receiver to your `GlanceAppWidget` instance. The primary callbacks
+available
 in `GlanceAppWidgetReceiver` operate as follows:
 
-- **`onUpdate()`** : Automatically overridden by Glance to execute composition updates. If you manually override `onUpdate`, you **must call `super.onUpdate`** to allow Glance to successfully launch
+- **`onUpdate()`** : Automatically overridden by Glance to execute composition updates. If you
+  manually override `onUpdate`, you **must call `super.onUpdate`** to allow Glance to successfully
+  launch
   composition threads.
-- **`onAppWidgetOptionsChanged()`**: Called when the widget is first placed or resized. Glance reads options bundle items under the hood so your layout adjusts seamlessly based on runtime dimensions.
-- **`onDeleted(Context, IntArray)`**: Invoked whenever a specific widget instance is deleted by the user.
-- **`onEnabled(Context)`**: Triggered when the first instance of your widget is successfully created. Excellent for running global migrations.
+- **`onAppWidgetOptionsChanged()`**: Called when the widget is first placed or resized. Glance reads
+  options bundle items under the hood so your layout adjusts seamlessly based on runtime dimensions.
+- **`onDeleted(Context, IntArray)`**: Invoked whenever a specific widget instance is deleted by the
+  user.
+- **`onEnabled(Context)`**: Triggered when the first instance of your widget is successfully
+  created. Excellent for running global migrations.
 - **`onDisabled(Context)`**: Called when the last active instance of the provider is removed.
-- **`onReceive(Context, Intent)`** : Intercepts every platform broadcast before specific callback methods. You must ensure that any custom receiver logic you write calls
-  `super.onReceive(context, intent)` and **must never call `goAsync`** yourself since Glance automatically routes work asynchronously.
+- **`onReceive(Context, Intent)`** : Intercepts every platform broadcast before specific callback
+  methods. You must ensure that any custom receiver logic you write calls
+  `super.onReceive(context, intent)` and **must never call `goAsync`** yourself since Glance
+  automatically routes work asynchronously.
 
 > [!WARNING]
-> **Warning:** Because receivers are subject to strict **10-second background limits** , long-running actions should never run in receiver callbacks. If you need to perform complex database queries or
-> network lookups, delegate the task to `WorkManager` and execute `GlanceAppWidget().update()` upon completion.
+> **Warning:** Because receivers are subject to strict **10-second background limits** ,
+> long-running actions should never run in receiver callbacks. If you need to perform complex database
+> queries or
+> network lookups, delegate the task to `WorkManager` and execute `GlanceAppWidget().update()` upon
+> completion.
 
 ### Receive widget broadcast intents
 
-Under the hood, `GlanceAppWidgetReceiver` filters and handles the following foundational platform widget broadcast intents:
+Under the hood, `GlanceAppWidgetReceiver` filters and handles the following foundational platform
+widget broadcast intents:
 
-- [`ACTION_APPWIDGET_UPDATE`](https://developer.android.com/reference/android/appwidget/AppWidgetManager#ACTION_APPWIDGET_UPDATE)
-- [`ACTION_APPWIDGET_DELETED`](https://developer.android.com/reference/android/appwidget/AppWidgetManager#ACTION_APPWIDGET_DELETED)
-- [`ACTION_APPWIDGET_ENABLED`](https://developer.android.com/reference/android/appwidget/AppWidgetManager#ACTION_APPWIDGET_ENABLED)
-- [`ACTION_APPWIDGET_DISABLED`](https://developer.android.com/reference/android/appwidget/AppWidgetManager#ACTION_APPWIDGET_DISABLED)
-- [`ACTION_APPWIDGET_OPTIONS_CHANGED`](https://developer.android.com/reference/android/appwidget/AppWidgetManager#ACTION_APPWIDGET_OPTIONS_CHANGED)
+- [
+  `ACTION_APPWIDGET_UPDATE`](https://developer.android.com/reference/android/appwidget/AppWidgetManager#ACTION_APPWIDGET_UPDATE)
+- [
+  `ACTION_APPWIDGET_DELETED`](https://developer.android.com/reference/android/appwidget/AppWidgetManager#ACTION_APPWIDGET_DELETED)
+- [
+  `ACTION_APPWIDGET_ENABLED`](https://developer.android.com/reference/android/appwidget/AppWidgetManager#ACTION_APPWIDGET_ENABLED)
+- [
+  `ACTION_APPWIDGET_DISABLED`](https://developer.android.com/reference/android/appwidget/AppWidgetManager#ACTION_APPWIDGET_DISABLED)
+- [
+  `ACTION_APPWIDGET_OPTIONS_CHANGED`](https://developer.android.com/reference/android/appwidget/AppWidgetManager#ACTION_APPWIDGET_OPTIONS_CHANGED)
 
 ## Create UI
 
@@ -290,31 +331,48 @@ class MyAppWidget: GlanceAppWidget() {
 
 The preceding code sample does the following:
 
-- In the top level [`Column`](https://developer.android.com/reference/kotlin/androidx/glance/layout/package-summary#column), items are placed vertically one after each other.
-- The `Column` expands its size to match the available space (via the [`GlanceModifier`](https://developer.android.com/reference/kotlin/androidx/glance/GlanceModifier) and aligns its content to the
+- In the top level [
+  `Column`](https://developer.android.com/reference/kotlin/androidx/glance/layout/package-summary#column),
+  items are placed vertically one after each other.
+- The `Column` expands its size to match the available space (via the [
+  `GlanceModifier`](https://developer.android.com/reference/kotlin/androidx/glance/GlanceModifier)
+  and aligns its content to the
   top (`verticalAlignment`) and centers it horizontally (`horizontalAlignment`).
 - The `Column`'s content is defined using the lambda. The order matters.
     - The first item in the `Column` is a `Text` component with `12.dp` of padding.
-    - The second item is a [`Row`](https://developer.android.com/reference/kotlin/androidx/glance/layout/package-summary#row), where items are placed horizontally one after each other, with two [
-      `Buttons`](https://developer.android.com/reference/kotlin/androidx/glance/package-summary#button) centered horizontally (`horizontalAlignment`). The final display depends on the available space.
+    - The second item is a [
+      `Row`](https://developer.android.com/reference/kotlin/androidx/glance/layout/package-summary#row),
+      where items are placed horizontally one after each other, with two [
+      `Buttons`](https://developer.android.com/reference/kotlin/androidx/glance/package-summary#button)
+      centered horizontally (`horizontalAlignment`). The final display depends on the available
+      space.
       The following image is an example of what it may look like:
 
-![destination_widget](https://developer.android.com/static/develop/ui/compose/images/destination_widget.png) **Figure 1.** An example UI.
+![destination_widget](https://developer.android.com/static/develop/ui/compose/images/destination_widget.png)
+**Figure 1.** An example UI.
 
-You can change the alignment values or apply different modifier values (such as padding) to change the placement and size of the components. See
-the [reference documentation](https://developer.android.com/reference/kotlin/androidx/glance/package-summary) for a full list of components, parameters, and available modifiers for each class.
+You can change the alignment values or apply different modifier values (such as padding) to change
+the placement and size of the components. See
+the [reference documentation](https://developer.android.com/reference/kotlin/androidx/glance/package-summary)
+for a full list of components, parameters, and available modifiers for each class.
 
 ## Implement rounded corners
 
-Android 12 introduces system parameters to customize the corner radii of your app widgets dynamically:
+Android 12 introduces system parameters to customize the corner radii of your app widgets
+dynamically:
 
-- [`system_app_widget_background_radius`](https://developer.android.com/reference/android/R.dimen#system_app_widget_background_radius): Specifies the corner radius of the widget background container (
+- [
+  `system_app_widget_background_radius`](https://developer.android.com/reference/android/R.dimen#system_app_widget_background_radius):
+  Specifies the corner radius of the widget background container (
   never larger than 28 dp).
-- **Inner radius:** To prevent content clipping, calculate a proportional radius for your inner content based on the system background outline: `systemRadiusValue - widgetPadding`
+- **Inner radius:** To prevent content clipping, calculate a proportional radius for your inner
+  content based on the system background outline: `systemRadiusValue - widgetPadding`
 
-In Glance, you can apply corner radius sizing properties dynamically in composition using `GlanceModifier.cornerRadius(android.R.dimen.system_app_widget_background_radius)`.
+In Glance, you can apply corner radius sizing properties dynamically in composition using
+`GlanceModifier.cornerRadius(android.R.dimen.system_app_widget_background_radius)`.
 
-For backward compatibility on devices running Android 11 (API level 30) or lower, implement custom attributes and custom theme resource fallbacks:
+For backward compatibility on devices running Android 11 (API level 30) or lower, implement custom
+attributes and custom theme resource fallbacks:
 
 - **`/values/attrs.xml`**
 

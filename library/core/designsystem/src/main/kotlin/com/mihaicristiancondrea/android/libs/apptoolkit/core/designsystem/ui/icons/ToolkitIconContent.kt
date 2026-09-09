@@ -51,7 +51,11 @@ import kotlinx.coroutines.delay
  * @param modifier The [Modifier] to apply to the icon.
  * @param atEnd For [ToolkitIcon.AnimatedVector] only: `true` renders the last frame of the
  *   animation, `false` the first one. Changing this value animates between the two. It is ignored
- *   by an animation that declares [ToolkitIcon.Animated.loop], which drives its own playback.
+ *   by an animation that is currently looping, which drives its own playback.
+ * @param interacted Whether the component drawing this icon has been clicked or selected. It only
+ *   matters for an icon that loops [ToolkitIconLoopTrigger.OnInteraction]: `false`, the default,
+ *   keeps such an icon resting, and a stateless caller with nothing to interact with can leave it
+ *   there.
  * @param tint Tint color to apply to the icon, defaults to [LocalContentColor].
  */
 @OptIn(ExperimentalAnimationGraphicsApi::class)
@@ -61,8 +65,10 @@ fun ToolkitIconContent(
     contentDescription: String?,
     modifier: Modifier = Modifier,
     atEnd: Boolean = false,
+    interacted: Boolean = false,
     tint: Color = LocalContentColor.current,
 ) {
+    val looping: Boolean = resolveToolkitIconLoop(icon = icon, interacted = interacted)
     when (icon) {
         is ToolkitIcon.Lottie -> LottieToolkitIcon(
             icon = icon,
@@ -70,6 +76,7 @@ fun ToolkitIconContent(
             modifier = modifier,
             atEnd = atEnd,
             tint = tint,
+            looping = looping,
         )
         is ToolkitIcon.Vector -> {
             Icon(
@@ -90,11 +97,12 @@ fun ToolkitIconContent(
         }
 
         is ToolkitIcon.AnimatedVector -> {
-            if (icon.loop) {
+            if (looping) {
                 LoopingAnimatedVectorIcon(
                     icon = icon,
                     contentDescription = contentDescription,
                     modifier = modifier,
+                    restingAtEnd = atEnd,
                     tint = tint,
                 )
                 return
@@ -122,6 +130,10 @@ fun ToolkitIconContent(
  * [ToolkitIconReplayMode.Restart] drops the painter between cycles so every cycle runs forward from
  * the first frame, while [ToolkitIconReplayMode.Reverse] keeps one painter and flips its target, so
  * the drawable travels forward and back.
+ *
+ * A reversing loop picks [restingAtEnd] up as its first frame, so a loop that starts on an
+ * interaction travels on from the frame the icon was resting on rather than snapping to the other
+ * one. A restarting loop always opens on the first frame, which is the cycle it repeats.
  */
 @OptIn(ExperimentalAnimationGraphicsApi::class)
 @Composable
@@ -129,6 +141,7 @@ private fun LoopingAnimatedVectorIcon(
     icon: ToolkitIcon.AnimatedVector,
     contentDescription: String?,
     modifier: Modifier,
+    restingAtEnd: Boolean,
     tint: Color,
 ) {
     val image = AnimatedImageVector.animatedVectorResource(id = icon.resId)
@@ -139,7 +152,7 @@ private fun LoopingAnimatedVectorIcon(
     var cycle: Int by remember(icon) { mutableIntStateOf(value = 0) }
 
     key(if (restarts) cycle else 0) {
-        var atEnd: Boolean by remember(icon) { mutableStateOf(value = false) }
+        var atEnd: Boolean by remember(icon) { mutableStateOf(value = !restarts && restingAtEnd) }
 
         LaunchedEffect(icon, cycle) {
             // The painter has to draw the frame it starts on before the target flips, otherwise the

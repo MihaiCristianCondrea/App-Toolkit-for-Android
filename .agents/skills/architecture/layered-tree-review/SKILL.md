@@ -27,11 +27,13 @@ references/android-tree-rules.md
 
 Use the sibling architecture skills when behavior matters:
 
-- `android-data-layer` for repositories, data sources, models, source of truth, threading, interfaces, caching, and data behavior.
+- `android-data-layer` for repositories, data sources, models, source of truth, threading,
+  interfaces, caching, and data behavior.
 - `android-domain-layer` for optional domain/use-case decisions.
 
 Do not duplicate or override those rules here.
 
 Prefer small mechanical moves, renames, and package fixes.
 
-Report only meaningful placement problems. If ownership depends on architectural behavior rather than tree structure, defer to the appropriate architecture skill.
+Report only meaningful placement problems. If ownership depends on architectural behavior rather
+than tree structure, defer to the appropriate architecture skill.

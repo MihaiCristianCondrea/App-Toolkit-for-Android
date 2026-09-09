@@ -6,6 +6,12 @@
 
 ### Added
 
+- The Components showcase has a Text fields section, one card per `GeneralTextField` variant: the
+  filled default with a leading icon and a clear button, the outlined style showing an error and its
+  message, two grouped fields cut as one block, the search box with the clear action that appears
+  only once there is something to clear, its outlined and fully rounded counterpart, and the Markdown
+  editor with its formatting bar.
+
 - The Components showcase has a Grouped grid section: a storage-style breakdown whose badges are
   cut from different Material shapes, the same cells at the smallest size without their supporting
   line, and a single cell to show it rounding all four of its corners.
@@ -18,6 +24,11 @@
 - The Components animation playground has a Loop switch that keeps every preview animating without
   tapping it. It works alongside the existing Reverse switch, so a looping animation either repeats
   forward or travels forward and back.
+
+- The Components animation playground's controls are now one compact block of the three decisions an
+  animated icon makes, in place of the two switches: a menu for the replay mode, a Loop checkbox,
+  and, while looping, a menu choosing whether the loop starts right away or on the first tap, which
+  is the default so a screenful of previews no longer plays on its own.
 
 - Added a Components animation playground with labelled and icon-only buttons for each bundled
   animation, plus Restart and Reverse replay controls. Quick Tools now uses one reversible Grid

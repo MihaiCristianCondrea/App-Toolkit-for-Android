@@ -17,36 +17,22 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Send
-import androidx.compose.material.icons.outlined.Analytics
-import androidx.compose.material.icons.outlined.Campaign
-import androidx.compose.material.icons.outlined.Storage
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.contracts.UsageAndDiagnosticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.states.UsageAndDiagnosticsUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.cards.ConsentToggleCard
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.headers.ConsentSectionHeader
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.headers.ExpandableConsentSectionHeader
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
@@ -57,25 +43,36 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateSc
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.contracts.UsageAndDiagnosticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.states.UsageAndDiagnosticsUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs.FirebaseConsentDialog
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 private const val USAGE_DIAGNOSTICS_SCREEN_NAME = "UsageAndDiagnostics"
 private const val USAGE_DIAGNOSTICS_SCREEN_CLASS = "UsageAndDiagnosticsList"
 
+private object UsageAndDiagnosticsPreferenceKeys {
+    const val USAGE_AND_DIAGNOSTICS: String = "usage_and_diagnostics"
+    const val PRIVACY_CHOICES: String = "advanced_privacy_settings"
+}
+
 /**
- * A Composable that displays a list of settings for usage and diagnostics.
+ * Usage and diagnostics settings: the reporting switch, and the privacy choices behind it.
  *
- * This screen presents a main toggle to enable or disable overall usage and diagnostics reporting.
- * It also includes an expandable section for "Advanced privacy settings" which allows the user
- * to granularly control consent for different categories like analytics and advertising (ad storage,
- * user data, and personalization).
+ * The layout is the ads screen's, deliberately. Both screens are one switch over a single
+ * preference that opens the consent surface belonging to it — there it is the AdMob consent form,
+ * here the toolkit's own privacy dialog — so the two settings screens that ask the same kind of
+ * question now look like each other.
  *
- * The state is managed by a [UsageAndDiagnosticsViewModel] and reflects the user's current consent choices.
+ * The granular consents used to sit on this screen as an expandable block of switch cards. They are
+ * the four the dialog already explains one tab away, so the block was a second, plainer copy of a
+ * surface the onboarding flow presents better; opening that dialog from here replaces it, and the
+ * choices made here and during onboarding are visibly the same choices.
  *
  * @param paddingValues The padding to apply to the content of the list, typically provided by a Scaffold.
  */
@@ -101,25 +98,24 @@ fun UsageAndDiagnosticsList(
         screenState = screenState.screenState,
     )
 
-    var advancedSettingsExpanded: Boolean by remember { mutableStateOf(false) }
+    var privacyChoicesVisible: Boolean by rememberSaveable { mutableStateOf(value = false) }
 
     LazyColumn(
         contentPadding = paddingValues,
         modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
+        verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
     ) {
         item {
             LargeVerticalSpacer()
         }
 
         item {
-            val usageState = rememberUpdatedState(newValue = uiState.usageAndDiagnostics)
             SwitchCardItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = SizeConstants.LargeSize),
                 title = stringResource(id = R.string.usage_and_diagnostics),
-                switchState = usageState,
+                switchState = rememberUpdatedState(newValue = uiState.usageAndDiagnostics),
                 onSwitchToggled = { isChecked ->
                     viewModel.onEvent(UsageAndDiagnosticsEvent.SetUsageAndDiagnostics(isChecked))
                 },
@@ -131,7 +127,9 @@ fun UsageAndDiagnosticsList(
                             SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
                                 USAGE_DIAGNOSTICS_SCREEN_NAME
                             ),
-                            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str("usage_and_diagnostics"),
+                            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
+                                UsageAndDiagnosticsPreferenceKeys.USAGE_AND_DIAGNOSTICS
+                            ),
                             SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(isChecked.toString()),
                         ),
                     )
@@ -140,131 +138,24 @@ fun UsageAndDiagnosticsList(
         }
 
         item {
-            ExpandableConsentSectionHeader(
-                title = stringResource(id = R.string.advanced_privacy_settings),
-                expanded = advancedSettingsExpanded,
-                onToggle = { advancedSettingsExpanded = !advancedSettingsExpanded },
-            )
-        }
-
-        item {
-            AnimatedVisibility(
-                visible = advancedSettingsExpanded,
-                enter = expandVertically(expandFrom = Alignment.Top),
-                exit = shrinkVertically(shrinkTowards = Alignment.Top),
-            ) {
-                Column(
-                    modifier = Modifier.padding(horizontal = SizeConstants.SmallSize),
-                    verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)
-                ) {
-                    ConsentSectionHeader(title = stringResource(id = R.string.consent_category_analytics_title))
-                    ConsentToggleCard(
-                        title = stringResource(id = R.string.consent_analytics_storage_title),
-                        description = stringResource(id = R.string.consent_analytics_storage_description),
-                        switchState = uiState.analyticsConsent,
-                        icon = Icons.Outlined.Analytics,
-                        onCheckedChange = { isChecked ->
-                            viewModel.onEvent(UsageAndDiagnosticsEvent.SetAnalyticsConsent(isChecked))
-                        },
-                        firebaseController = firebaseController,
-                        ga4EventProvider = { isChecked ->
-                            Ga4EventData(
-                                name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
-                                params = mapOf(
-                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
-                                        USAGE_DIAGNOSTICS_SCREEN_NAME
-                                    ),
-                                    SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str("analytics_consent"),
-                                    SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(isChecked.toString()),
-                                ),
-                            )
-                        },
+            Box(modifier = Modifier.padding(horizontal = SizeConstants.SmallSize)) {
+                PreferenceItem(
+                    title = stringResource(id = R.string.advanced_privacy_settings),
+                    summary = stringResource(id = R.string.summary_advanced_privacy_settings),
+                    onClick = { privacyChoicesVisible = true },
+                    firebaseController = firebaseController,
+                    ga4Event = Ga4EventData(
+                        name = SettingsAnalytics.Events.PREFERENCE_VIEW,
+                        params = mapOf(
+                            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
+                                USAGE_DIAGNOSTICS_SCREEN_NAME
+                            ),
+                            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
+                                UsageAndDiagnosticsPreferenceKeys.PRIVACY_CHOICES
+                            ),
+                        ),
                     )
-
-                    SmallVerticalSpacer()
-
-                    ConsentSectionHeader(title = stringResource(id = R.string.consent_category_advertising_title))
-                    ConsentToggleCard(
-                        title = stringResource(id = R.string.consent_ad_storage_title),
-                        description = stringResource(id = R.string.consent_ad_storage_description),
-                        switchState = uiState.adStorageConsent,
-                        icon = Icons.Outlined.Storage,
-                        onCheckedChange = { isChecked ->
-                            viewModel.onEvent(UsageAndDiagnosticsEvent.SetAdStorageConsent(isChecked))
-                        },
-                        firebaseController = firebaseController,
-                        ga4EventProvider = { isChecked ->
-                            Ga4EventData(
-                                name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
-                                params = mapOf(
-                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
-                                        USAGE_DIAGNOSTICS_SCREEN_NAME
-                                    ),
-                                    SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str("ad_storage_consent"),
-                                    SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(isChecked.toString()),
-                                ),
-                            )
-                        },
-                    )
-
-                    SmallVerticalSpacer()
-
-                    ConsentToggleCard(
-                        title = stringResource(id = R.string.consent_ad_user_data_title),
-                        description = stringResource(id = R.string.consent_ad_user_data_description),
-                        switchState = uiState.adUserDataConsent,
-                        icon = Icons.AutoMirrored.Outlined.Send,
-                        onCheckedChange = { isChecked ->
-                            viewModel.onEvent(
-                                UsageAndDiagnosticsEvent.SetAdUserDataConsent(
-                                    isChecked
-                                )
-                            )
-                        },
-                        firebaseController = firebaseController,
-                        ga4EventProvider = { isChecked ->
-                            Ga4EventData(
-                                name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
-                                params = mapOf(
-                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
-                                        USAGE_DIAGNOSTICS_SCREEN_NAME
-                                    ),
-                                    SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str("ad_user_data_consent"),
-                                    SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(isChecked.toString()),
-                                ),
-                            )
-                        },
-                    )
-
-                    SmallVerticalSpacer()
-
-                    ConsentToggleCard(
-                        title = stringResource(id = R.string.consent_ad_personalization_title),
-                        description = stringResource(id = R.string.consent_ad_personalization_description),
-                        switchState = uiState.adPersonalizationConsent,
-                        icon = Icons.Outlined.Campaign,
-                        onCheckedChange = { isChecked ->
-                            viewModel.onEvent(
-                                UsageAndDiagnosticsEvent.SetAdPersonalizationConsent(
-                                    isChecked
-                                )
-                            )
-                        },
-                        firebaseController = firebaseController,
-                        ga4EventProvider = { isChecked ->
-                            Ga4EventData(
-                                name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
-                                params = mapOf(
-                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
-                                        USAGE_DIAGNOSTICS_SCREEN_NAME
-                                    ),
-                                    SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str("ad_personalization_consent"),
-                                    SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(isChecked.toString()),
-                                ),
-                            )
-                        },
-                    )
-                }
+                )
             }
         }
 
@@ -272,11 +163,39 @@ fun UsageAndDiagnosticsList(
             InfoMessageSection(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(all = SizeConstants.MediumSize * 2),
+                    .padding(horizontal = SizeConstants.MediumSize * 2),
                 message = stringResource(id = R.string.summary_usage_and_diagnostics),
                 learnMoreText = stringResource(id = R.string.learn_more),
                 learnMoreUrl = AppLinks.PRIVACY_POLICY,
             )
         }
+    }
+
+    if (privacyChoicesVisible) {
+        FirebaseConsentDialog(
+            state = uiState,
+            onDismissRequest = { privacyChoicesVisible = false },
+            onAllowAll = {
+                viewModel.onEvent(UsageAndDiagnosticsEvent.AllowAllConsent)
+                privacyChoicesVisible = false
+            },
+            onAllowEssentials = {
+                viewModel.onEvent(UsageAndDiagnosticsEvent.AllowEssentialConsent)
+                privacyChoicesVisible = false
+            },
+            onConfirmSelection = { privacyChoicesVisible = false },
+            onAnalyticsConsentChanged = {
+                viewModel.onEvent(UsageAndDiagnosticsEvent.SetAnalyticsConsent(it))
+            },
+            onAdStorageConsentChanged = {
+                viewModel.onEvent(UsageAndDiagnosticsEvent.SetAdStorageConsent(it))
+            },
+            onAdUserDataConsentChanged = {
+                viewModel.onEvent(UsageAndDiagnosticsEvent.SetAdUserDataConsent(it))
+            },
+            onAdPersonalizationConsentChanged = {
+                viewModel.onEvent(UsageAndDiagnosticsEvent.SetAdPersonalizationConsent(it))
+            },
+        )
     }
 }

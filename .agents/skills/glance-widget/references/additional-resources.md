@@ -1,7 +1,10 @@
 See the following Glance samples and showcases to learn more:
 
-- [**Glance Figma kit**](https://www.figma.com/community/file/1237551184114564748/android-ui-kit): **A Figma kit demonstrating how to design widgets using Canonical Widget Layouts**.
-- [**Glance code samples**](https://github.com/android/platform-samples/tree/main/samples/user-interface/appwidgets): **Code samples demonstrating how to build widgets with Jetpack Glance using
+- [**Glance Figma kit**](https://www.figma.com/community/file/1237551184114564748/android-ui-kit): *
+  *A Figma kit demonstrating how to design widgets using Canonical Widget Layouts**.
+- [**Glance code samples
+  **](https://github.com/android/platform-samples/tree/main/samples/user-interface/appwidgets): *
+  *Code samples demonstrating how to build widgets with Jetpack Glance using
   Canonical Widget Layouts**.
 
 - [AndroidX demos](https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:glance/glance-appwidget/integration-tests/demos/src/main/java/androidx/glance/appwidget/demos/):

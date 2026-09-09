@@ -1,7 +1,8 @@
 The domain layer is an *optional* layer that sits between the UI layer and the
 data layer.
 ![When it is included, the optional domain layer provides dependencies to
-the UI layer and depends on the data layer.](https://developer.android.com/static/topic/libraries/architecture/images/mad-arch-domain-overview.png) **Figure 1.** The domain layer's role in app architecture.
+the UI layer and depends on the data layer.](https://developer.android.com/static/topic/libraries/architecture/images/mad-arch-domain-overview.png)
+**Figure 1.** The domain layer's role in app architecture.
 
 The domain layer is responsible for encapsulating complex business logic, or
 simple business logic that is reused by multiple ViewModels. This layer is
@@ -9,7 +10,10 @@ optional because not all apps will have these requirements. You should only use
 it when needed-for example, to handle complexity or favor reusability.
 
 > [!NOTE]
-> **Note:** The term "domain layer" is used in other software architectures, such as "clean" architecture, and has a different meaning there. Don't confuse the definition of "domain layer" defined in the Android official architecture guidance with other definitions you may have read elsewhere. There may be subtle but important differences.
+> **Note:** The term "domain layer" is used in other software architectures, such as "clean"
+> architecture, and has a different meaning there. Don't confuse the definition of "domain layer"
+> defined in the Android official architecture guidance with other definitions you may have read
+> elsewhere. There may be subtle but important differences.
 
 A domain layer provides the following benefits:
 
@@ -23,7 +27,9 @@ responsibility over a single functionality, and they should not contain mutable
 data. You should instead handle mutable data in your UI or data layers.
 
 > [!NOTE]
-> **Note:** The recommendations and best practices present in this page can be applied to a broad spectrum of apps to allow them to scale, improve quality and robustness, and make them easier to test. However, you should treat them as guidelines and adapt them to your requirements as needed.
+> **Note:** The recommendations and best practices present in this page can be applied to a broad
+> spectrum of apps to allow them to scale, improve quality and robustness, and make them easier to
+> test. However, you should treat them as guidelines and adapt them to your requirements as needed.
 
 [Video](https://www.youtube.com/watch?v=gIhjCh3U88I)
 
@@ -68,7 +74,8 @@ zones to display the proper message on the screen:
 
 ![GetLatestNewsWithAuthorsUseCase depends on repository classes from the
 data layer, but it also depends on FormatDataUseCase, another use case class
-that is also in the domain layer.](https://developer.android.com/static/topic/libraries/architecture/images/mad-arch-domain-usecase-deps.png) **Figure 2.** Example dependency graph for a use case that depends on other use cases.
+that is also in the domain layer.](https://developer.android.com/static/topic/libraries/architecture/images/mad-arch-domain-usecase-deps.png)
+**Figure 2.** Example dependency graph for a use case that depends on other use cases.
 
 ## Call use cases in Kotlin
 
@@ -152,7 +159,10 @@ requirements regarding date formatting change in the future, you only need to
 change code in one centralized place.
 
 > [!NOTE]
-> **Note:** In some cases, logic that can exist in use cases could instead be part of static methods in `Util` classes. However, the latter is discouraged because `Util` classes are often hard to find and their functionality is hard to discover. Furthermore, use cases can share common functionality such as threading and error handling in base classes that can benefit larger teams at scale.
+> **Note:** In some cases, logic that can exist in use cases could instead be part of static methods
+> in `Util` classes. However, the latter is discouraged because `Util` classes are often hard to find
+> and their functionality is hard to discover. Furthermore, use cases can share common functionality
+> such as threading and error handling in base classes that can benefit larger teams at scale.
 
 ### Combine repositories
 
@@ -162,7 +172,8 @@ that `NewsRepository` exposes only contains the name of the author, but you want
 to display more information about the author on the screen. Author information
 can be obtained from the `AuthorsRepository`.
 ![GetLatestNewsWithAuthorsUseCase depends on two different repository
-classes from the data layer: NewsRepository and AuthorsRepository.](https://developer.android.com/static/topic/libraries/architecture/images/mad-arch-domain-multiple-repos.png) **Figure 3.** Dependency graph for a use case that combines data from multiple repositories.
+classes from the data layer: NewsRepository and AuthorsRepository.](https://developer.android.com/static/topic/libraries/architecture/images/mad-arch-domain-multiple-repos.png)
+**Figure 3.** Dependency graph for a use case that combines data from multiple repositories.
 
 Because the logic involves multiple repositories and can become complex, you
 create a `GetLatestNewsWithAuthorsUseCase` class to abstract the logic out of
@@ -197,8 +208,12 @@ many items it'll process. That's why the use case moves the work to a background
 thread using the default dispatcher.
 
 > [!NOTE]
-> **Note:** The [Room library](https://developer.android.com/training/data-storage/room) lets you query [relationships](https://developer.android.com/training/data-storage/room/relationships) between different entities in a database. If the database is the [source of
-> truth](https://developer.android.com/jetpack/guide/data-layer#source-of-truth), you can create a query that does all that work for you. In that case, it's better to create a repository class like `NewsWithAuthorsRepository` instead of a use case.
+> **Note:** The [Room library](https://developer.android.com/training/data-storage/room) lets you
+> query [relationships](https://developer.android.com/training/data-storage/room/relationships)
+> between different entities in a database. If the database is the [source of
+> truth](https://developer.android.com/jetpack/guide/data-layer#source-of-truth), you can create a
+> query that does all that work for you. In that case, it's better to create a repository class like
+`NewsWithAuthorsRepository` instead of a use case.
 
 ## Other consumers
 
@@ -212,7 +227,8 @@ cases to get all the aforementioned benefits of the domain layer.
 One other consideration when implementing the domain layer is whether you should
 still allow direct access to the data layer from the UI layer, or force
 everything through the domain layer.
-![UI layer cannot access data layer directly, it must go through the Domain layer](https://developer.android.com/static/topic/libraries/architecture/images/mad-arch-domain-data-access-restriction.png) **Figure 4.** Dependency graph showing UI layer being denied access to the data layer.
+![UI layer cannot access data layer directly, it must go through the Domain layer](https://developer.android.com/static/topic/libraries/architecture/images/mad-arch-domain-data-access-restriction.png)
+**Figure 4.** Dependency graph showing UI layer being denied access to the data layer.
 
 An advantage of making this restriction is that it stops your UI from bypassing
 domain layer logic, for example, if you are performing analytics logging on each
@@ -232,7 +248,8 @@ approach.
 
 ## Testing
 
-[General testing guidance](https://developer.android.com/training/testing) applies when testing the domain
+[General testing guidance](https://developer.android.com/training/testing) applies when testing the
+domain
 layer. For other UI tests, developers typically use fake repositories, and it's
 good practice to use fake repositories when testing the domain layer as well.
 

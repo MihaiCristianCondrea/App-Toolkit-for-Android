@@ -111,5 +111,4 @@ lint/tmp/
 .artifacts
 .claude/
 .codex/
-references/
 resources/

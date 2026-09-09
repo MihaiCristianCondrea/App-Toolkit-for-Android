@@ -26,7 +26,8 @@ Translate Android XML resources while preserving the existing resource structure
 
 Inspect the target module first:
 
-- Determine supported locales from the existing `res/values-*` directories and Gradle/resource configuration.
+- Determine supported locales from the existing `res/values-*` directories and Gradle/resource
+  configuration.
 - Do not invent locales or create new locale directories unless explicitly requested.
 - Check which resource file owns each entry.
 
@@ -92,7 +93,8 @@ Preserve every existing `<item quantity="...">`.
 
 Translate only the text and keep placeholders intact.
 
-Do not assume plural categories are identical between languages. Follow the structure already required by the target locale/project.
+Do not assume plural categories are identical between languages. Follow the structure already
+required by the target locale/project.
 
 ## Output
 
@@ -104,4 +106,5 @@ values-<locale>/plurals.xml
 values-<locale>/errors.xml
 ```
 
-Do not add explanations, signatures, metadata comments, or placeholder translations unless explicitly requested.
+Do not add explanations, signatures, metadata comments, or placeholder translations unless
+explicitly requested.

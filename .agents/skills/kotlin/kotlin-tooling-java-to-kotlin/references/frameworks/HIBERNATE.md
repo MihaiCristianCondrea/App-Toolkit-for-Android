@@ -170,7 +170,7 @@ public class Department {
     private String name;
 
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<User> users = new ArrayList<>();
+    private final List<User> users = new ArrayList<>();
 
     protected Department() {}
 

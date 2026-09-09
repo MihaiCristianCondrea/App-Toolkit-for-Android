@@ -32,4 +32,18 @@ sealed interface UsageAndDiagnosticsEvent : UiEvent {
     data class SetAdStorageConsent(val granted: Boolean) : UsageAndDiagnosticsEvent
     data class SetAdUserDataConsent(val granted: Boolean) : UsageAndDiagnosticsEvent
     data class SetAdPersonalizationConsent(val granted: Boolean) : UsageAndDiagnosticsEvent
+
+    /**
+     * Grants everything: reporting, analytics, and all three advertising consents.
+     *
+     * The privacy dialog offers this as one action, so what "all" covers is decided here rather than
+     * by each screen that shows the dialog.
+     */
+    data object AllowAllConsent : UsageAndDiagnosticsEvent
+
+    /**
+     * Grants what the app needs to run and be fixed — reporting, analytics and ad storage — and
+     * refuses what is only useful for targeting: ad user data and ad personalization.
+     */
+    data object AllowEssentialConsent : UsageAndDiagnosticsEvent
 }

@@ -22,15 +22,6 @@
     <string name="issue_description_placeholder">請描述問題以及重現步驟</string>
     <string name="issue_email_label">電子郵件</string>
     <string name="issue_email_optional_placeholder">電子郵件（選填）</string>
-    <string name="issue_format_bold">粗體</string>
-    <string name="issue_format_bullet_list">項目符號清單</string>
-    <string name="issue_format_code">行內程式碼</string>
-    <string name="issue_format_code_block">程式碼區塊</string>
-    <string name="issue_format_italic">斜體</string>
-    <string name="issue_format_link">連結</string>
-    <string name="issue_format_numbered_list">編號清單</string>
-    <string name="issue_format_quote">引言</string>
-    <string name="issue_markdown_supported">支援 Markdown</string>
     <string name="issue_section_label">問題</string>
     <string name="issue_send">傳送</string>
     <string name="issue_submitted">您的問題已提交！</string>

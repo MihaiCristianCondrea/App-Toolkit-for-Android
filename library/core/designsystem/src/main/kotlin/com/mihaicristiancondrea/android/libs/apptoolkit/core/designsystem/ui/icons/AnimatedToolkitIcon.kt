@@ -48,8 +48,10 @@ import androidx.compose.ui.graphics.Color
  * between two distinct shapes can instead travel back by declaring
  * [ToolkitIconReplayMode.Reverse] on the [ToolkitIcon.AnimatedVector].
  *
- * An icon that declares [ToolkitIcon.Animated.loop] opts out of all of this: it animates on its own
- * for as long as it is composed, so clicks and selection no longer drive its playback.
+ * An icon that declares [ToolkitIcon.Animated.loop] opts out of all of this once its loop is
+ * running: it animates on its own for as long as it is composed, so clicks and selection no longer
+ * drive its playback. With [ToolkitIconLoopTrigger.OnInteraction] the loop only starts on the first
+ * click or selection, and until then the icon behaves like every other animated one.
  *
  * Components without a selected state, such as buttons, pass only [icon] and [clickCount].
  *
@@ -73,21 +75,24 @@ fun AnimatedToolkitIcon(
     selected: Boolean = false,
     tint: Color = LocalContentColor.current,
 ) {
+    val interacted: Boolean = clickCount > 0 || selected
     val displayedIcon: ToolkitIcon = resolveToolkitIcon(
         icon = icon,
         selectedIcon = selectedIcon,
         selected = selected,
         interacted = clickCount > 0,
     )
+    val looping: Boolean = resolveToolkitIconLoop(icon = displayedIcon, interacted = interacted)
 
-    // A looping animation drives itself inside the shared renderer, so none of the click and
-    // selection bookkeeping below applies to it.
-    if (displayedIcon is ToolkitIcon.Animated && displayedIcon.loop) {
+    // A running loop drives itself inside the shared renderer, so none of the click and selection
+    // bookkeeping below applies to it.
+    if (displayedIcon is ToolkitIcon.Animated && looping) {
         ToolkitIconContent(
             icon = displayedIcon,
             contentDescription = contentDescription,
             modifier = modifier,
             atEnd = selected || displayedIcon.atEnd,
+            interacted = interacted,
             tint = tint,
         )
         return
@@ -100,6 +105,7 @@ fun AnimatedToolkitIcon(
             modifier = modifier,
             atEnd = selected || displayedIcon.atEnd,
             tint = tint,
+            looping = false,
             clickCount = clickCount,
         )
         return

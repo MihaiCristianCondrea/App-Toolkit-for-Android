@@ -30,6 +30,15 @@
     <string name="learn_more">Научете повече</string>
     <string name="light_mode">Светъл режим</string>
     <string name="loading">Зареждане…</string>
+    <string name="markdown_format_bold">Получер</string>
+    <string name="markdown_format_bullet_list">Списък с водачи</string>
+    <string name="markdown_format_code">Вграден код</string>
+    <string name="markdown_format_code_block">Блок с код</string>
+    <string name="markdown_format_italic">Курсив</string>
+    <string name="markdown_format_link">Връзка</string>
+    <string name="markdown_format_numbered_list">Номериран списък</string>
+    <string name="markdown_format_quote">Цитат</string>
+    <string name="markdown_supported">Поддържа се Markdown</string>
     <string name="onboarding_theme_dark_desc">Приятен за очите.</string>
     <string name="onboarding_theme_light_desc">Светъл и енергичен.</string>
     <string name="onboarding_theme_system_desc">Съответства на твоето устройство.</string>

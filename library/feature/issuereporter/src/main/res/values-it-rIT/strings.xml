@@ -22,15 +22,6 @@
     <string name="issue_description_placeholder">Descrivi il problema e come riprodurlo</string>
     <string name="issue_email_label">Email</string>
     <string name="issue_email_optional_placeholder">Email (facoltativa)</string>
-    <string name="issue_format_bold">Grassetto</string>
-    <string name="issue_format_bullet_list">Elenco puntato</string>
-    <string name="issue_format_code">Codice in linea</string>
-    <string name="issue_format_code_block">Blocco di codice</string>
-    <string name="issue_format_italic">Corsivo</string>
-    <string name="issue_format_link">Collegamento</string>
-    <string name="issue_format_numbered_list">Elenco numerato</string>
-    <string name="issue_format_quote">Citazione</string>
-    <string name="issue_markdown_supported">Markdown supportato</string>
     <string name="issue_section_label">Problema</string>
     <string name="issue_send">Invia</string>
     <string name="issue_submitted">Il tuo problema è stato inviato.</string>

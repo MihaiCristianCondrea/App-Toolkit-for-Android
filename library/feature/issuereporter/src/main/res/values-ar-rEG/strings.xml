@@ -22,15 +22,6 @@
     <string name="issue_description_placeholder">صف المشكلة وكيفية إعادة إنتاجها</string>
     <string name="issue_email_label">البريد الإلكتروني</string>
     <string name="issue_email_optional_placeholder">البريد الإلكتروني (اختياري)</string>
-    <string name="issue_format_bold">عريض</string>
-    <string name="issue_format_bullet_list">قائمة نقطية</string>
-    <string name="issue_format_code">كود مضمّن</string>
-    <string name="issue_format_code_block">كتلة كود</string>
-    <string name="issue_format_italic">مائل</string>
-    <string name="issue_format_link">رابط</string>
-    <string name="issue_format_numbered_list">قائمة مرقّمة</string>
-    <string name="issue_format_quote">اقتباس</string>
-    <string name="issue_markdown_supported">يدعم Markdown</string>
     <string name="issue_section_label">المشكلة</string>
     <string name="issue_send">إرسال</string>
     <string name="issue_submitted">تم تقديم مشكلتك.</string>

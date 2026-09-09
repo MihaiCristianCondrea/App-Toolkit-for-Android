@@ -30,6 +30,15 @@
     <string name="learn_more">了解更多</string>
     <string name="light_mode">淺色模式</string>
     <string name="loading">載入中…</string>
+    <string name="markdown_format_bold">粗體</string>
+    <string name="markdown_format_bullet_list">項目符號清單</string>
+    <string name="markdown_format_code">行內程式碼</string>
+    <string name="markdown_format_code_block">程式碼區塊</string>
+    <string name="markdown_format_italic">斜體</string>
+    <string name="markdown_format_link">連結</string>
+    <string name="markdown_format_numbered_list">編號清單</string>
+    <string name="markdown_format_quote">引言</string>
+    <string name="markdown_supported">支援 Markdown</string>
     <string name="onboarding_theme_dark_desc">對眼睛溫和。</string>
     <string name="onboarding_theme_light_desc">明亮且充滿活力。</string>
     <string name="onboarding_theme_system_desc">與您的裝置設定相符。</string>
