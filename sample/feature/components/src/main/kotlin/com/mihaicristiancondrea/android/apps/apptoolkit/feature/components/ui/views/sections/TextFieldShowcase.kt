@@ -22,9 +22,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Notes
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Notes
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.TextFields
 import androidx.compose.material.icons.outlined.Title
@@ -183,7 +183,7 @@ fun TextFieldShowcase(
                     placeholder = stringResource(
                         id = R.string.components_text_field_note_placeholder,
                     ),
-                    leadingIcon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Notes),
+                    leadingIcon = ToolkitIcon.Vector(imageVector = Icons.AutoMirrored.Outlined.Notes),
                     leadingIconContentDescription = stringResource(
                         id = R.string.components_text_field_note_placeholder,
                     ),
