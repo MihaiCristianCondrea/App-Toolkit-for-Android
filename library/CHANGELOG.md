@@ -6,16 +6,12 @@
 
 ### Added
 
-- Animated icons can now loop. `ToolkitIcon.AnimatedVector` and `ToolkitIcon.Lottie` accept
-  `loop = true` to keep playing cycle after cycle, instead of once per click or selection change.
-  Looping is off by default, so existing icons are unchanged, and it is independent of the replay
-  mode, which still describes one cycle: `Restart` repeats the animation forward, `Reverse` travels
-  forward and back. A running loop owns its playback, so clicks and selection no longer replay it,
-  and every component that draws a `ToolkitIcon` supports it.
-  `ToolkitIconLoopTrigger` chooses when that loop starts: `Immediately`, the default, plays as soon
-  as the icon is composed, while `OnInteraction` rests on the icon's frame until it is clicked or
-  selected and loops from then on, so a screenful of animations does not all play at once. A
-  reversing loop that starts on an interaction travels on from the frame it was resting on.
+- `ToolkitIconLoopTrigger` chooses when a looping animated icon starts playing. `Immediately`, the
+  default, keeps the existing behaviour and plays as soon as the icon is composed. `OnInteraction`
+  rests on the frame `atEnd` picks until the component is clicked or becomes selected, and loops
+  from then on, so a screenful of animations no longer all play at once. It is independent of the
+  replay mode, which still describes one cycle, and a reversing loop that starts on an interaction
+  travels on from the frame it was resting on rather than snapping to the other one.
   `resolveToolkitIconLoop(icon, interacted)` exposes the same rule to custom renderers, and
   `ToolkitIconContent` takes the matching `interacted` flag.
 
@@ -33,7 +29,28 @@
   and places the caret. The bar is cut and filled to match the field above it. `onMarkdownFormat`
   reports the action used as a `MarkdownFormatAction` carrying a stable `analyticsName`.
   The issue reporter's form and description field are now this component; the Markdown pieces moved
-  from that feature into `:library:core:ui`.
+  from that feature into `:library:core:ui`, where `MarkdownVisualTransformation` and
+  `rememberMarkdownVisualTransformation` now live in
+  `core.ui.views.fields.markdown`.
+
+---
+
+# September 9, 2026
+
+**Version:** `3.0.0-pre13`
+
+### Added
+
+- Animated icons can now loop. `ToolkitIcon.AnimatedVector` and `ToolkitIcon.Lottie` accept
+  `loop = true` to keep playing for as long as they are composed, instead of once per click or
+  selection change. Looping is off by default, so existing icons are unchanged, and it is
+  independent of the replay mode, which still describes one cycle: `Restart` repeats the animation
+  forward, `Reverse` travels forward and back. A looping icon owns its playback, so clicks and
+  selection no longer replay it, and every component that draws a `ToolkitIcon` supports it.
+
+- Added Markdown authoring to the issue reporter's description field: a formatting bar for bold,
+  italic, inline code, code blocks, bulleted and numbered lists, quotes and links, and Markdown
+  syntax highlighted as it is typed.
 
 - Added `GroupedGrid`, the grouped category block used for storage and media breakdowns and for
   blocks of actions. Cells are laid out in columns as one rounded group: only the corners at the
