@@ -81,4 +81,19 @@
     <string name="components_grid_music">الموسيقى</string>
     <string name="components_grid_documents">المستندات</string>
     <string name="components_grid_downloads">التنزيلات</string>
+    <string name="components_section_text_fields">حقول النص</string>
+    <string name="components_text_field_filled">ممتلئ</string>
+    <string name="components_text_field_outlined">محدد بإطار</string>
+    <string name="components_text_field_grouped">مجمّع</string>
+    <string name="components_text_field_markdown">محرر Markdown</string>
+    <string name="components_text_field_title_label">العنوان</string>
+    <string name="components_text_field_title_placeholder">سمِّ هذا المكون</string>
+    <string name="components_text_field_support">النص الداعم يظهر أسفل الحقل.</string>
+    <string name="components_text_field_clear">مسح</string>
+    <string name="components_text_field_email_label">البريد الإلكتروني</string>
+    <string name="components_text_field_email_placeholder">you@example.com</string>
+    <string name="components_text_field_email_error">أدخل عنوان بريد إلكتروني كاملاً.</string>
+    <string name="components_text_field_name_placeholder">الاسم</string>
+    <string name="components_text_field_note_placeholder">ملاحظة</string>
+    <string name="components_text_field_markdown_placeholder">صف المشكلة. يتولى الشريط أدناه التنسيق.</string>
 </resources>

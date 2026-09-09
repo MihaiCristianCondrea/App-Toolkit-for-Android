@@ -81,4 +81,19 @@
     <string name="components_grid_music">Музыка</string>
     <string name="components_grid_documents">Документы</string>
     <string name="components_grid_downloads">Загрузки</string>
+    <string name="components_section_text_fields">Текстовые поля</string>
+    <string name="components_text_field_filled">Заполненное</string>
+    <string name="components_text_field_outlined">С контуром</string>
+    <string name="components_text_field_grouped">Сгруппированное</string>
+    <string name="components_text_field_markdown">Редактор Markdown</string>
+    <string name="components_text_field_title_label">Заголовок</string>
+    <string name="components_text_field_title_placeholder">Назовите этот компонент</string>
+    <string name="components_text_field_support">Вспомогательный текст находится под полем.</string>
+    <string name="components_text_field_clear">Очистить</string>
+    <string name="components_text_field_email_label">Эл. почта</string>
+    <string name="components_text_field_email_placeholder">you@example.com</string>
+    <string name="components_text_field_email_error">Введите полный адрес эл. почты.</string>
+    <string name="components_text_field_name_placeholder">Имя</string>
+    <string name="components_text_field_note_placeholder">Заметка</string>
+    <string name="components_text_field_markdown_placeholder">Опишите проблему. Панель ниже её оформит.</string>
 </resources>

@@ -81,4 +81,19 @@
     <string name="components_grid_music">Музика</string>
     <string name="components_grid_documents">Документи</string>
     <string name="components_grid_downloads">Изтегляния</string>
+    <string name="components_section_text_fields">Текстови полета</string>
+    <string name="components_text_field_filled">Запълнено</string>
+    <string name="components_text_field_outlined">С контур</string>
+    <string name="components_text_field_grouped">Групирано</string>
+    <string name="components_text_field_markdown">Редактор на Markdown</string>
+    <string name="components_text_field_title_label">Заглавие</string>
+    <string name="components_text_field_title_placeholder">Дайте име на този компонент</string>
+    <string name="components_text_field_support">Помощният текст стои под полето.</string>
+    <string name="components_text_field_clear">Изчистване</string>
+    <string name="components_text_field_email_label">Имейл</string>
+    <string name="components_text_field_email_placeholder">you@example.com</string>
+    <string name="components_text_field_email_error">Въведете пълен имейл адрес.</string>
+    <string name="components_text_field_name_placeholder">Име</string>
+    <string name="components_text_field_note_placeholder">Бележка</string>
+    <string name="components_text_field_markdown_placeholder">Опишете проблема. Лентата отдолу го форматира.</string>
 </resources>

@@ -81,4 +81,19 @@
     <string name="components_grid_music">Musica</string>
     <string name="components_grid_documents">Documenti</string>
     <string name="components_grid_downloads">Download</string>
+    <string name="components_section_text_fields">Campi di testo</string>
+    <string name="components_text_field_filled">Pieno</string>
+    <string name="components_text_field_outlined">Con bordo</string>
+    <string name="components_text_field_grouped">Raggruppato</string>
+    <string name="components_text_field_markdown">Editor Markdown</string>
+    <string name="components_text_field_title_label">Titolo</string>
+    <string name="components_text_field_title_placeholder">Dai un nome a questo componente</string>
+    <string name="components_text_field_support">Il testo di supporto sta sotto il campo.</string>
+    <string name="components_text_field_clear">Cancella</string>
+    <string name="components_text_field_email_label">Email</string>
+    <string name="components_text_field_email_placeholder">you@example.com</string>
+    <string name="components_text_field_email_error">Inserisci un indirizzo email completo.</string>
+    <string name="components_text_field_name_placeholder">Nome</string>
+    <string name="components_text_field_note_placeholder">Nota</string>
+    <string name="components_text_field_markdown_placeholder">Descrivi il problema. La barra qui sotto lo formatta.</string>
 </resources>

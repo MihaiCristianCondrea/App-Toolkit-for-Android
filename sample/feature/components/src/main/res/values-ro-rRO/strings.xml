@@ -81,4 +81,19 @@
     <string name="components_grid_music">Muzică</string>
     <string name="components_grid_documents">Documente</string>
     <string name="components_grid_downloads">Descărcări</string>
+    <string name="components_section_text_fields">Câmpuri de text</string>
+    <string name="components_text_field_filled">Umplut</string>
+    <string name="components_text_field_outlined">Conturat</string>
+    <string name="components_text_field_grouped">Grupat</string>
+    <string name="components_text_field_markdown">Editor Markdown</string>
+    <string name="components_text_field_title_label">Titlu</string>
+    <string name="components_text_field_title_placeholder">Denumește această componentă</string>
+    <string name="components_text_field_support">Textul ajutător stă sub câmp.</string>
+    <string name="components_text_field_clear">Șterge</string>
+    <string name="components_text_field_email_label">Email</string>
+    <string name="components_text_field_email_placeholder">you@example.com</string>
+    <string name="components_text_field_email_error">Introdu o adresă de email completă.</string>
+    <string name="components_text_field_name_placeholder">Nume</string>
+    <string name="components_text_field_note_placeholder">Notă</string>
+    <string name="components_text_field_markdown_placeholder">Descrie problema. Bara de mai jos o formatează.</string>
 </resources>

@@ -81,4 +81,19 @@
     <string name="components_grid_music">Musik</string>
     <string name="components_grid_documents">Dokumen</string>
     <string name="components_grid_downloads">Unduhan</string>
+    <string name="components_section_text_fields">Kolom teks</string>
+    <string name="components_text_field_filled">Terisi</string>
+    <string name="components_text_field_outlined">Bergaris</string>
+    <string name="components_text_field_grouped">Berkelompok</string>
+    <string name="components_text_field_markdown">Editor Markdown</string>
+    <string name="components_text_field_title_label">Judul</string>
+    <string name="components_text_field_title_placeholder">Beri nama komponen ini</string>
+    <string name="components_text_field_support">Teks pendukung berada di bawah kolom.</string>
+    <string name="components_text_field_clear">Hapus</string>
+    <string name="components_text_field_email_label">Email</string>
+    <string name="components_text_field_email_placeholder">you@example.com</string>
+    <string name="components_text_field_email_error">Masukkan alamat email lengkap.</string>
+    <string name="components_text_field_name_placeholder">Nama</string>
+    <string name="components_text_field_note_placeholder">Catatan</string>
+    <string name="components_text_field_markdown_placeholder">Jelaskan masalahnya. Bilah di bawah yang memformatnya.</string>
 </resources>

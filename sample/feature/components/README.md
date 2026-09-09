@@ -9,6 +9,8 @@ The hidden components showcase and the unlock gesture that reveals it.
 - The concrete `ComponentsShowcaseRepository`, which owns the unlock flag.
 - `ComponentsActivity`, `ComponentsScreen`, and the unlock threshold behavior.
 - Localized strings for the component showcase.
+- The `GeneralTextField` gallery: one card per variant, including the error state and the Markdown
+  editor. The text typed into it is the showcase's own scratch state and stays inside the section.
 - The animation playground for bundled DesignSystem AVDs: a replay-mode menu, a Loop checkbox, and
   the menu that chooses whether a loop starts right away or on the first tap. Changing a control
   resets preview state; previews animate only on taps until a loop is started.
@@ -41,7 +43,7 @@ flowchart TD
     Repo --> Drawer[":sample:app" drawer entry, shown when unlocked]
     Drawer --> Activity[ComponentsActivity]
     Activity --> Screen[ComponentsScreen]
-    Screen --> Sections[Button / FAB / filter / input / layout / preference showcases]
+    Screen --> Sections[Button / FAB / text field / filter / input / layout / preference showcases]
 ```
 
 ## Architectural decisions

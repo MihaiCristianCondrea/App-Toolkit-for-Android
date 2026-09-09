@@ -81,4 +81,19 @@
     <string name="components_grid_music">音楽</string>
     <string name="components_grid_documents">ドキュメント</string>
     <string name="components_grid_downloads">ダウンロード</string>
+    <string name="components_section_text_fields">テキストフィールド</string>
+    <string name="components_text_field_filled">塗りつぶし</string>
+    <string name="components_text_field_outlined">アウトライン</string>
+    <string name="components_text_field_grouped">グループ</string>
+    <string name="components_text_field_markdown">Markdown エディタ</string>
+    <string name="components_text_field_title_label">タイトル</string>
+    <string name="components_text_field_title_placeholder">このコンポーネントに名前を付ける</string>
+    <string name="components_text_field_support">補助テキストはフィールドの下に表示されます。</string>
+    <string name="components_text_field_clear">消去</string>
+    <string name="components_text_field_email_label">メール</string>
+    <string name="components_text_field_email_placeholder">you@example.com</string>
+    <string name="components_text_field_email_error">完全なメールアドレスを入力してください。</string>
+    <string name="components_text_field_name_placeholder">名前</string>
+    <string name="components_text_field_note_placeholder">メモ</string>
+    <string name="components_text_field_markdown_placeholder">問題を記入してください。下のバーで書式を設定できます。</string>
 </resources>

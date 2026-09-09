@@ -81,4 +81,19 @@
     <string name="components_grid_music">음악</string>
     <string name="components_grid_documents">문서</string>
     <string name="components_grid_downloads">다운로드</string>
+    <string name="components_section_text_fields">텍스트 필드</string>
+    <string name="components_text_field_filled">채움</string>
+    <string name="components_text_field_outlined">외곽선</string>
+    <string name="components_text_field_grouped">그룹</string>
+    <string name="components_text_field_markdown">Markdown 편집기</string>
+    <string name="components_text_field_title_label">제목</string>
+    <string name="components_text_field_title_placeholder">이 구성요소의 이름 지정</string>
+    <string name="components_text_field_support">보조 텍스트는 필드 아래에 표시됩니다.</string>
+    <string name="components_text_field_clear">지우기</string>
+    <string name="components_text_field_email_label">이메일</string>
+    <string name="components_text_field_email_placeholder">you@example.com</string>
+    <string name="components_text_field_email_error">전체 이메일 주소를 입력하세요.</string>
+    <string name="components_text_field_name_placeholder">이름</string>
+    <string name="components_text_field_note_placeholder">메모</string>
+    <string name="components_text_field_markdown_placeholder">문제를 설명하세요. 아래 바에서 서식을 지정합니다.</string>
 </resources>

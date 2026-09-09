@@ -81,4 +81,19 @@
     <string name="components_grid_music">موسیقی</string>
     <string name="components_grid_documents">دستاویزات</string>
     <string name="components_grid_downloads">ڈاؤن لوڈز</string>
+    <string name="components_section_text_fields">ٹیکسٹ فیلڈز</string>
+    <string name="components_text_field_filled">بھرا ہوا</string>
+    <string name="components_text_field_outlined">خاکہ دار</string>
+    <string name="components_text_field_grouped">گروپ شدہ</string>
+    <string name="components_text_field_markdown">Markdown ایڈیٹر</string>
+    <string name="components_text_field_title_label">عنوان</string>
+    <string name="components_text_field_title_placeholder">اس کمپوننٹ کو نام دیں</string>
+    <string name="components_text_field_support">معاون متن فیلڈ کے نیچے ہوتا ہے۔</string>
+    <string name="components_text_field_clear">صاف کریں</string>
+    <string name="components_text_field_email_label">ای میل</string>
+    <string name="components_text_field_email_placeholder">you@example.com</string>
+    <string name="components_text_field_email_error">مکمل ای میل پتہ درج کریں۔</string>
+    <string name="components_text_field_name_placeholder">نام</string>
+    <string name="components_text_field_note_placeholder">نوٹ</string>
+    <string name="components_text_field_markdown_placeholder">مسئلہ بیان کریں۔ نیچے دی گئی بار اسے فارمیٹ کرتی ہے۔</string>
 </resources>

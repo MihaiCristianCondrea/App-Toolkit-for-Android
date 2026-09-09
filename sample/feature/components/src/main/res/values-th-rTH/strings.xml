@@ -81,4 +81,19 @@
     <string name="components_grid_music">เพลง</string>
     <string name="components_grid_documents">เอกสาร</string>
     <string name="components_grid_downloads">ดาวน์โหลด</string>
+    <string name="components_section_text_fields">ช่องข้อความ</string>
+    <string name="components_text_field_filled">แบบทึบ</string>
+    <string name="components_text_field_outlined">แบบมีเส้นขอบ</string>
+    <string name="components_text_field_grouped">แบบจัดกลุ่ม</string>
+    <string name="components_text_field_markdown">ตัวแก้ไข Markdown</string>
+    <string name="components_text_field_title_label">ชื่อ</string>
+    <string name="components_text_field_title_placeholder">ตั้งชื่อคอมโพเนนต์นี้</string>
+    <string name="components_text_field_support">ข้อความช่วยเหลืออยู่ใต้ช่อง</string>
+    <string name="components_text_field_clear">ล้าง</string>
+    <string name="components_text_field_email_label">อีเมล</string>
+    <string name="components_text_field_email_placeholder">you@example.com</string>
+    <string name="components_text_field_email_error">กรอกที่อยู่อีเมลให้ครบถ้วน</string>
+    <string name="components_text_field_name_placeholder">ชื่อ</string>
+    <string name="components_text_field_note_placeholder">บันทึก</string>
+    <string name="components_text_field_markdown_placeholder">อธิบายปัญหา แถบด้านล่างช่วยจัดรูปแบบ</string>
 </resources>

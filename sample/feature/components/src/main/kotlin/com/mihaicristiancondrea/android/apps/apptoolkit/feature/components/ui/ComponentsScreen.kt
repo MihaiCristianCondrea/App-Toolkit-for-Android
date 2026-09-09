@@ -44,6 +44,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.vi
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.InputShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.LayoutShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.PreferenceShowcase
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.TextFieldShowcase
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
@@ -162,6 +163,13 @@ fun ComponentsScreen(
                     selectedDropdownOption = selectedDropdownOption,
                     dropdownOptions = dropdownOptions,
                     onDropdownOptionSelected = { selectedDropdownOption = it },
+                )
+            }
+
+            item {
+                TextFieldShowcase(
+                    firebaseController = firebaseController,
+                    onLogEvent = ::ga4Event,
                 )
             }
 

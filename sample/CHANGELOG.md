@@ -6,6 +6,10 @@
 
 ### Added
 
+- The Components showcase has a Text fields section, one card per `GeneralTextField` variant: the
+  filled default with a leading icon and a clear button, the outlined style showing an error and its
+  message, two grouped fields cut as one block, and the Markdown editor with its formatting bar.
+
 - The Components showcase has a Grouped grid section: a storage-style breakdown whose badges are
   cut from different Material shapes, the same cells at the smallest size without their supporting
   line, and a single cell to show it rounding all four of its corners.

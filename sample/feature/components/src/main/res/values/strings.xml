@@ -81,4 +81,19 @@
     <string name="components_grid_music">Music</string>
     <string name="components_grid_documents">Documents</string>
     <string name="components_grid_downloads">Downloads</string>
+    <string name="components_section_text_fields">Text fields</string>
+    <string name="components_text_field_filled">Filled</string>
+    <string name="components_text_field_outlined">Outlined</string>
+    <string name="components_text_field_grouped">Grouped</string>
+    <string name="components_text_field_markdown">Markdown editor</string>
+    <string name="components_text_field_title_label">Title</string>
+    <string name="components_text_field_title_placeholder">Name this component</string>
+    <string name="components_text_field_support">Supporting text sits under the field.</string>
+    <string name="components_text_field_clear">Clear</string>
+    <string name="components_text_field_email_label">Email</string>
+    <string name="components_text_field_email_placeholder">you@example.com</string>
+    <string name="components_text_field_email_error">Enter a full email address.</string>
+    <string name="components_text_field_name_placeholder">Name</string>
+    <string name="components_text_field_note_placeholder">Note</string>
+    <string name="components_text_field_markdown_placeholder">Describe the issue. The bar below formats it.</string>
 </resources>

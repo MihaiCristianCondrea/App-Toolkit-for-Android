@@ -81,4 +81,19 @@
     <string name="components_grid_music">Musika</string>
     <string name="components_grid_documents">Mga dokumento</string>
     <string name="components_grid_downloads">Mga download</string>
+    <string name="components_section_text_fields">Mga text field</string>
+    <string name="components_text_field_filled">Filled</string>
+    <string name="components_text_field_outlined">Outlined</string>
+    <string name="components_text_field_grouped">Grouped</string>
+    <string name="components_text_field_markdown">Markdown editor</string>
+    <string name="components_text_field_title_label">Pamagat</string>
+    <string name="components_text_field_title_placeholder">Pangalanan ang bahaging ito</string>
+    <string name="components_text_field_support">Ang supporting text ay nasa ilalim ng field.</string>
+    <string name="components_text_field_clear">I-clear</string>
+    <string name="components_text_field_email_label">Email</string>
+    <string name="components_text_field_email_placeholder">you@example.com</string>
+    <string name="components_text_field_email_error">Maglagay ng kumpletong email address.</string>
+    <string name="components_text_field_name_placeholder">Pangalan</string>
+    <string name="components_text_field_note_placeholder">Tala</string>
+    <string name="components_text_field_markdown_placeholder">Ilarawan ang isyu. Ino-format ito ng bar sa ibaba.</string>
 </resources>

@@ -81,4 +81,19 @@
     <string name="components_grid_music">Музика</string>
     <string name="components_grid_documents">Документи</string>
     <string name="components_grid_downloads">Завантаження</string>
+    <string name="components_section_text_fields">Текстові поля</string>
+    <string name="components_text_field_filled">Заповнене</string>
+    <string name="components_text_field_outlined">З контуром</string>
+    <string name="components_text_field_grouped">Згруповане</string>
+    <string name="components_text_field_markdown">Редактор Markdown</string>
+    <string name="components_text_field_title_label">Заголовок</string>
+    <string name="components_text_field_title_placeholder">Назвіть цей компонент</string>
+    <string name="components_text_field_support">Допоміжний текст розміщено під полем.</string>
+    <string name="components_text_field_clear">Очистити</string>
+    <string name="components_text_field_email_label">Ел. пошта</string>
+    <string name="components_text_field_email_placeholder">you@example.com</string>
+    <string name="components_text_field_email_error">Введіть повну адресу ел. пошти.</string>
+    <string name="components_text_field_name_placeholder">Ім\'я</string>
+    <string name="components_text_field_note_placeholder">Нотатка</string>
+    <string name="components_text_field_markdown_placeholder">Опишіть проблему. Панель нижче її відформатує.</string>
 </resources>

@@ -81,4 +81,19 @@
     <string name="components_grid_music">Musik</string>
     <string name="components_grid_documents">Dokument</string>
     <string name="components_grid_downloads">Nedladdningar</string>
+    <string name="components_section_text_fields">Textfält</string>
+    <string name="components_text_field_filled">Fyllt</string>
+    <string name="components_text_field_outlined">Konturerat</string>
+    <string name="components_text_field_grouped">Grupperat</string>
+    <string name="components_text_field_markdown">Markdown-redigerare</string>
+    <string name="components_text_field_title_label">Titel</string>
+    <string name="components_text_field_title_placeholder">Namnge den här komponenten</string>
+    <string name="components_text_field_support">Hjälptexten står under fältet.</string>
+    <string name="components_text_field_clear">Rensa</string>
+    <string name="components_text_field_email_label">E-post</string>
+    <string name="components_text_field_email_placeholder">you@example.com</string>
+    <string name="components_text_field_email_error">Ange en fullständig e-postadress.</string>
+    <string name="components_text_field_name_placeholder">Namn</string>
+    <string name="components_text_field_note_placeholder">Anteckning</string>
+    <string name="components_text_field_markdown_placeholder">Beskriv problemet. Fältet nedanför formaterar det.</string>
 </resources>

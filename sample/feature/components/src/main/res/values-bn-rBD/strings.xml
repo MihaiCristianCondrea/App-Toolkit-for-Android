@@ -81,4 +81,19 @@
     <string name="components_grid_music">মিউজিক</string>
     <string name="components_grid_documents">ডকুমেন্ট</string>
     <string name="components_grid_downloads">ডাউনলোড</string>
+    <string name="components_section_text_fields">টেক্সট ফিল্ড</string>
+    <string name="components_text_field_filled">ফিলড</string>
+    <string name="components_text_field_outlined">আউটলাইনড</string>
+    <string name="components_text_field_grouped">গ্রুপড</string>
+    <string name="components_text_field_markdown">Markdown সম্পাদক</string>
+    <string name="components_text_field_title_label">শিরোনাম</string>
+    <string name="components_text_field_title_placeholder">এই কম্পোনেন্টের নাম দিন</string>
+    <string name="components_text_field_support">সহায়ক লেখা ফিল্ডের নিচে থাকে।</string>
+    <string name="components_text_field_clear">মুছুন</string>
+    <string name="components_text_field_email_label">ইমেল</string>
+    <string name="components_text_field_email_placeholder">you@example.com</string>
+    <string name="components_text_field_email_error">সম্পূর্ণ ইমেল ঠিকানা লিখুন।</string>
+    <string name="components_text_field_name_placeholder">নাম</string>
+    <string name="components_text_field_note_placeholder">নোট</string>
+    <string name="components_text_field_markdown_placeholder">সমস্যাটি বর্ণনা করুন। নিচের বারটি ফরম্যাট করবে।</string>
 </resources>

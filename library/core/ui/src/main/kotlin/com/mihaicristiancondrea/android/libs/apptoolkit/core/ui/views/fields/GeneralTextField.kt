@@ -117,7 +117,8 @@ enum class GeneralTextFieldMarkdown {
  *
  * @param value Text the field shows.
  * @param onValueChange Receives every edit, from typing and from the formatting bar alike.
- * @param modifier The [Modifier] applied to the field, or to the field and its bar together.
+ * @param modifier The [Modifier] applied to the field, or to the field and its bar together. The
+ *   field fills the width it is given either way.
  * @param style Visual treatment; see [GeneralTextFieldStyle].
  * @param enabled Whether the field accepts input.
  * @param readOnly Whether the text can be selected and copied but not edited.

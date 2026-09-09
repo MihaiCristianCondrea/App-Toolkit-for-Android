@@ -81,4 +81,19 @@
     <string name="components_grid_music">音樂</string>
     <string name="components_grid_documents">文件</string>
     <string name="components_grid_downloads">下載</string>
+    <string name="components_section_text_fields">文字欄位</string>
+    <string name="components_text_field_filled">填滿式</string>
+    <string name="components_text_field_outlined">外框式</string>
+    <string name="components_text_field_grouped">群組式</string>
+    <string name="components_text_field_markdown">Markdown 編輯器</string>
+    <string name="components_text_field_title_label">標題</string>
+    <string name="components_text_field_title_placeholder">為這個元件命名</string>
+    <string name="components_text_field_support">輔助文字位於欄位下方。</string>
+    <string name="components_text_field_clear">清除</string>
+    <string name="components_text_field_email_label">電子郵件</string>
+    <string name="components_text_field_email_placeholder">you@example.com</string>
+    <string name="components_text_field_email_error">請輸入完整的電子郵件地址。</string>
+    <string name="components_text_field_name_placeholder">名稱</string>
+    <string name="components_text_field_note_placeholder">備註</string>
+    <string name="components_text_field_markdown_placeholder">描述問題，下方工具列可設定格式。</string>
 </resources>
