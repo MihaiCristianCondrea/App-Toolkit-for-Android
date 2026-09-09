@@ -2,9 +2,12 @@
 
 Reliable software is built by understanding failures, not by hiding them.
 
-This directory is the central place for documenting crashes, ANRs, and other stability issues discovered through Firebase Crashlytics, logs, testing, telemetry, user reports, or other diagnostic sources.
+This directory is the central place for documenting crashes, ANRs, and other stability issues
+discovered through Firebase Crashlytics, logs, testing, telemetry, user reports, or other diagnostic
+sources.
 
-The goal is simple: keep active investigations easy to find, preserve useful evidence, and retain enough context from resolved issues so the same mistakes are easier to recognize in the future.
+The goal is simple: keep active investigations easy to find, preserve useful evidence, and retain
+enough context from resolved issues so the same mistakes are easier to recognize in the future.
 
 ## Directory Structure
 
@@ -33,21 +36,27 @@ docs/
 
 The `open/` directory contains crashes and bugs that are not yet resolved.
 
-An issue may be at any stage of investigation. Some folders may contain only a raw stack trace or Firebase export. Others may already include notes, possible causes, reproduction details, and a partial investigation.
+An issue may be at any stage of investigation. Some folders may contain only a raw stack trace or
+Firebase export. Others may already include notes, possible causes, reproduction details, and a
+partial investigation.
 
-A `README.md` is useful when there is enough context to summarize what is known, but it is not required for newly collected raw evidence.
+A `README.md` is useful when there is enough context to summarize what is known, but it is not
+required for newly collected raw evidence.
 
 If there is not enough evidence to identify a reasonable root cause, keep the issue in `open/`.
 
-Do not force a fix simply because an issue exists. A speculative fix can hide the real problem, introduce new behavior, or make the crash harder to understand later.
+Do not force a fix simply because an issue exists. A speculative fix can hide the real problem,
+introduce new behavior, or make the crash harder to understand later.
 
-When more information is needed, document that clearly. A short note such as "more data is needed" is better than pretending the cause is known.
+When more information is needed, document that clearly. A short note such as "more data is needed"
+is better than pretending the cause is known.
 
 ### 2. `fixed/` - Resolved Issues and Historical Records
 
 Once an issue is understood and resolved, move it to `fixed/`.
 
-These records exist so past crashes remain useful after the immediate problem is gone. They should help explain what failed, why it failed, and what changed to prevent it from happening again.
+These records exist so past crashes remain useful after the immediate problem is gone. They should
+help explain what failed, why it failed, and what changed to prevent it from happening again.
 
 A resolved issue should normally contain a `README.md` covering:
 
@@ -71,7 +80,8 @@ Do not remove evidence simply because the issue is fixed.
 
 Use one directory for each distinct crash, ANR, or Crashlytics issue.
 
-If Firebase groups many events under the same issue, they should normally remain part of the same crash record rather than being split into separate directories.
+If Firebase groups many events under the same issue, they should normally remain part of the same
+crash record rather than being split into separate directories.
 
 ### Use descriptive names
 
@@ -92,11 +102,13 @@ issue/
 firebase-error/
 ```
 
-The directory name should make the affected problem reasonably clear without needing to open the files first.
+The directory name should make the affected problem reasonably clear without needing to open the
+files first.
 
 ### Normalize imported evidence
 
-Crash folders or files downloaded directly from Firebase or another diagnostic tool may not follow the project structure or naming conventions.
+Crash folders or files downloaded directly from Firebase or another diagnostic tool may not follow
+the project structure or naming conventions.
 
 When working on an issue, normalize the structure where practical.
 
@@ -122,19 +134,23 @@ When asked to investigate or fix a crash:
 
    Find the relevant issue under `open/` and read all available information before changing code.
 
-   This may include stack traces, Firebase logs, breadcrumbs, device information, reproduction notes, or an existing `README.md`.
+   This may include stack traces, Firebase logs, breadcrumbs, device information, reproduction
+   notes, or an existing `README.md`.
 
 2. **Inspect the affected code**
 
-   Trace the relevant execution path and inspect the surrounding implementation, not only the exact line shown in the stack trace.
+   Trace the relevant execution path and inspect the surrounding implementation, not only the exact
+   line shown in the stack trace.
 
-   The crashing line is often where the problem becomes visible, not necessarily where the problem begins.
+   The crashing line is often where the problem becomes visible, not necessarily where the problem
+   begins.
 
 3. **Determine what is actually known**
 
    Separate confirmed evidence from assumptions.
 
-   A stack trace can identify where the application failed, but it does not always explain why the state leading to the failure existed.
+   A stack trace can identify where the application failed, but it does not always explain why the
+   state leading to the failure existed.
 
 4. **Establish a plausible root cause**
 
@@ -144,7 +160,8 @@ When asked to investigate or fix a crash:
 
 5. **Implement the smallest appropriate fix**
 
-   When the cause is understood well enough, fix the underlying problem with the smallest change that addresses it correctly.
+   When the cause is understood well enough, fix the underlying problem with the smallest change
+   that addresses it correctly.
 
    Avoid unrelated refactoring or architectural changes unless they are required for the fix.
 
@@ -172,7 +189,8 @@ When asked to investigate or fix a crash:
 
 8. **Move the issue to `fixed/`**
 
-   Move the complete issue directory only after the problem is reasonably understood, fixed, and verified.
+   Move the complete issue directory only after the problem is reasonably understood, fixed, and
+   verified.
 
    Keep the original diagnostic evidence with it.
 
@@ -189,7 +207,8 @@ When asked to investigate or fix a crash:
 
 ## Changelog
 
-After a crash or bug is fixed, update the changelog that belongs to the affected deliverable when the change is meaningful enough to record.
+After a crash or bug is fixed, update the changelog that belongs to the affected deliverable when
+the change is meaningful enough to record.
 
 * App-specific fixes belong in the app changelog.
 * Library-specific fixes belong in the library changelog.
@@ -198,7 +217,8 @@ Do not automatically add the same fix to both.
 
 Keep changelog entries short and focused on the outcome.
 
-The detailed explanation of the failure, investigation, and implementation belongs in the crash record.
+The detailed explanation of the failure, investigation, and implementation belongs in the crash
+record.
 
 ## Guiding Principles
 
@@ -212,7 +232,8 @@ Inspect the surrounding code and application state before deciding on the root c
 
 ### Do not guess just to close an issue
 
-An unresolved issue with clearly documented uncertainty is better than a speculative fix presented as a confirmed solution.
+An unresolved issue with clearly documented uncertainty is better than a speculative fix presented
+as a confirmed solution.
 
 If more data is needed, keep the issue open.
 
@@ -220,11 +241,13 @@ If more data is needed, keep the issue open.
 
 Keep diagnostic evidence and investigation notes that may help explain similar problems later.
 
-Do not rewrite historical records merely because the architecture or implementation has changed since the crash occurred.
+Do not rewrite historical records merely because the architecture or implementation has changed
+since the crash occurred.
 
 ### Fix the cause, not only the symptom
 
-Defensive checks can be useful, but they should not automatically replace understanding why an invalid state occurred.
+Defensive checks can be useful, but they should not automatically replace understanding why an
+invalid state occurred.
 
 Prefer fixes that address the underlying failure when the evidence supports them.
 
