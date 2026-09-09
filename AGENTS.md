@@ -21,13 +21,19 @@ Before making substantial changes:
 - Inspect the actual implementation when documentation and code need to be reconciled.
 - Do not invent intended architecture that is not supported by the current code.
 
-Update the module `README.md` only when a change meaningfully affects its documented responsibilities, dependencies, contracts, important flows, or architectural risks.
+To ensure modules remain up-to-date when modifying code:
 
-Do not update it for cosmetic changes, routine maintenance, or internal refactors that preserve the documented behavior.
+- Update the module's `README.md` whenever a change affects its documented responsibilities, dependencies, contracts, important flows, or architectural risks.
+- Point to and use the `android-localization` skill when user-facing strings or localizations need to be added or updated.
+- Point to and use the `changelog` skill when a change requires a changelog entry for the module or application.
+
+Do not update module documentation for cosmetic changes, routine maintenance, or internal refactors that preserve documented behavior.
+
+Note: App Toolkit library works on the same patter, its features are documented in the respective modules README files.
 
 ## Localization
 
-When changing user-facing strings, inspect the target module's existing resources and Gradle configuration first.
+When changing user-facing strings, inspect the target module's existing resources and Gradle configuration first, and use the `android-localization` skill.
 
 - Never assume or hardcode the supported locale list.
 - Translate all locales required by the target module when translation is part of the task.
@@ -36,16 +42,20 @@ When changing user-facing strings, inspect the target module's existing resource
 
 ## Documentation
 
-Documentation must describe the current code.
+Documentation lives per module in the module's local `README.md` and in KDoc—not in the `docs/` folder.
 
-Update technical documentation only when your change makes it inaccurate or changes a documented contract, architecture decision, or public API.
+The `docs/` folder is reserved for general guidelines applying across all projects or special cases, such as crash records:
+- **Open / Active Crashes**: [open](docs/crashes/open)
+- **Fixed / Resolved Crashes**: [fixed](docs/crashes/fixed)
 
-Do not duplicate module documentation or skill guidance into `AGENTS.md`.
+Technical documentation must describe the current code:
 
-Do not add comments or KDoc that merely restate the implementation. When touching code, add, improve, or correct relevant KDoc when it helps explain public APIs, contracts, invariants, side effects, ownership, assumptions, or non-obvious behavior. If existing KDoc is inaccurate or outdated, update it to match the current implementation.
+- Update technical documentation only when your change makes it inaccurate or changes a documented contract, architecture decision, or public API.
+- Do not duplicate module documentation or skill guidance into `AGENTS.md`.
+- Do not add comments or KDoc that merely restate the implementation. When touching code, add, improve, or correct relevant KDoc when it helps explain public APIs, contracts, invariants, side effects, ownership, assumptions, or non-obvious behavior. If existing KDoc is inaccurate or outdated, update it to match the current implementation.
 
 ## Changelog
 
-When a change may require a changelog update, use the project's changelog skill.
+When a change may require a changelog update, use the project's `changelog` skill.
 
 Do not duplicate changelog rules or formatting guidance here. The changelog skill defines when an entry is needed, where it belongs, and how it should be written.
