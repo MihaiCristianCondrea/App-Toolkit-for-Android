@@ -64,8 +64,13 @@
     <string name="components_action_menus_summary">Nhấn để hiển thị các tùy chọn</string>
     <string name="components_data_selection">Chọn dữ liệu</string>
     <string name="components_section_animations">Ảnh động</string>
-    <string name="components_animation_reverse">Phát ngược khi nhấn</string>
-    <string name="components_animation_loop">Lặp liên tục</string>
+    <string name="components_animation_replay">Phát lại</string>
+    <string name="components_animation_replay_restart">Từ đầu</string>
+    <string name="components_animation_replay_reverse">Ngược</string>
+    <string name="components_animation_loop">Lặp</string>
+    <string name="components_animation_loop_start">Bắt đầu lặp</string>
+    <string name="components_animation_loop_start_immediately">Ngay lập tức</string>
+    <string name="components_animation_loop_start_on_tap">Khi nhấn</string>
     <string name="components_animation_preview_helper">Nhấn vào một mục để xem trước hoạt ảnh.</string>
     <string name="components_section_grid">Lưới nhóm</string>
     <string name="components_grid_group_categories">Danh mục kèm dung lượng</string>

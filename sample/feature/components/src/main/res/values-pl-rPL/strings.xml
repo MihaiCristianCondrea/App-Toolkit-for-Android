@@ -64,8 +64,13 @@
     <string name="components_action_menus_summary">Dotknij, aby wyświetlić opcje</string>
     <string name="components_data_selection">Wybór danych</string>
     <string name="components_section_animations">Animacje</string>
-    <string name="components_animation_reverse">Odwróć po dotknięciu</string>
-    <string name="components_animation_loop">Odtwarzaj w pętli</string>
+    <string name="components_animation_replay">Odtwarzanie</string>
+    <string name="components_animation_replay_restart">Od początku</string>
+    <string name="components_animation_replay_reverse">Odwróć</string>
+    <string name="components_animation_loop">Pętla</string>
+    <string name="components_animation_loop_start">Początek pętli</string>
+    <string name="components_animation_loop_start_immediately">Od razu</string>
+    <string name="components_animation_loop_start_on_tap">Po dotknięciu</string>
     <string name="components_animation_preview_helper">Dotknij elementu, aby wyświetlić podgląd jego animacji.</string>
     <string name="components_section_grid">Zgrupowana siatka</string>
     <string name="components_grid_group_categories">Kategorie z rozmiarami</string>

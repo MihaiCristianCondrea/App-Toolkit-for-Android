@@ -44,3 +44,17 @@ fun resolveToolkitIcon(
     selectedIcon is ToolkitIcon.Animated && interacted -> selectedIcon
     else -> icon
 }
+
+/**
+ * Whether [icon] has to be drawing a running loop right now.
+ *
+ * A loop declared with [ToolkitIconLoopTrigger.OnInteraction] only counts once the component has
+ * been clicked or selected, so until then the icon keeps the finite, click-driven playback of every
+ * other animated icon and rests on the frame `atEnd` picks.
+ *
+ * @param icon The icon a component is about to draw.
+ * @param interacted Whether the component has been clicked or selected while composed.
+ */
+fun resolveToolkitIconLoop(icon: ToolkitIcon, interacted: Boolean): Boolean =
+    icon is ToolkitIcon.Animated && icon.loop &&
+            (icon.loopTrigger == ToolkitIconLoopTrigger.Immediately || interacted)

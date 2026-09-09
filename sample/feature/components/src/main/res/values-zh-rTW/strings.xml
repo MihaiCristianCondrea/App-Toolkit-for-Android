@@ -64,8 +64,13 @@
     <string name="components_action_menus_summary">輕觸以顯示選項</string>
     <string name="components_data_selection">資料選擇</string>
     <string name="components_section_animations">動畫</string>
-    <string name="components_animation_reverse">輕觸以反向播放</string>
-    <string name="components_animation_loop">持續循環播放</string>
+    <string name="components_animation_replay">播放方式</string>
+    <string name="components_animation_replay_restart">從頭播放</string>
+    <string name="components_animation_replay_reverse">反向播放</string>
+    <string name="components_animation_loop">循環</string>
+    <string name="components_animation_loop_start">循環開始</string>
+    <string name="components_animation_loop_start_immediately">立即</string>
+    <string name="components_animation_loop_start_on_tap">輕觸時</string>
     <string name="components_animation_preview_helper">輕觸項目以預覽其動畫。</string>
     <string name="components_section_grid">群組格線</string>
     <string name="components_grid_group_categories">含容量的類別</string>

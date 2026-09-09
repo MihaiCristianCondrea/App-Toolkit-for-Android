@@ -64,8 +64,13 @@
     <string name="components_action_menus_summary">탭하여 옵션 표시</string>
     <string name="components_data_selection">데이터 선택</string>
     <string name="components_section_animations">애니메이션</string>
-    <string name="components_animation_reverse">탭하여 역재생</string>
-    <string name="components_animation_loop">계속 반복</string>
+    <string name="components_animation_replay">재생 방식</string>
+    <string name="components_animation_replay_restart">처음부터</string>
+    <string name="components_animation_replay_reverse">역재생</string>
+    <string name="components_animation_loop">반복</string>
+    <string name="components_animation_loop_start">반복 시작</string>
+    <string name="components_animation_loop_start_immediately">바로</string>
+    <string name="components_animation_loop_start_on_tap">탭할 때</string>
     <string name="components_animation_preview_helper">항목을 탭하여 애니메이션을 미리 봅니다.</string>
     <string name="components_section_grid">그룹화된 그리드</string>
     <string name="components_grid_group_categories">크기가 있는 카테고리</string>

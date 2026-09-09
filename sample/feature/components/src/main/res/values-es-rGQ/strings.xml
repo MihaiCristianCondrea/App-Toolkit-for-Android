@@ -64,8 +64,13 @@
     <string name="components_action_menus_summary">Toca para mostrar las opciones</string>
     <string name="components_data_selection">Selección de datos</string>
     <string name="components_section_animations">Animaciones</string>
-    <string name="components_animation_reverse">Invertir al tocar</string>
-    <string name="components_animation_loop">Repetir continuamente</string>
+    <string name="components_animation_replay">Reproducción</string>
+    <string name="components_animation_replay_restart">Reiniciar</string>
+    <string name="components_animation_replay_reverse">Invertir</string>
+    <string name="components_animation_loop">Bucle</string>
+    <string name="components_animation_loop_start">Inicio del bucle</string>
+    <string name="components_animation_loop_start_immediately">De inmediato</string>
+    <string name="components_animation_loop_start_on_tap">Al tocar</string>
     <string name="components_animation_preview_helper">Toca un elemento para ver la vista previa de su animación.</string>
     <string name="components_section_grid">Cuadrícula agrupada</string>
     <string name="components_grid_group_categories">Categorías con tamaños</string>

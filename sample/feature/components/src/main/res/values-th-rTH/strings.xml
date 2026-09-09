@@ -64,8 +64,13 @@
     <string name="components_action_menus_summary">แตะเพื่อแสดงตัวเลือก</string>
     <string name="components_data_selection">การเลือกข้อมูล</string>
     <string name="components_section_animations">ภาพเคลื่อนไหว</string>
-    <string name="components_animation_reverse">เล่นย้อนกลับเมื่อแตะ</string>
-    <string name="components_animation_loop">เล่นวนต่อเนื่อง</string>
+    <string name="components_animation_replay">การเล่นซ้ำ</string>
+    <string name="components_animation_replay_restart">เริ่มใหม่</string>
+    <string name="components_animation_replay_reverse">ย้อนกลับ</string>
+    <string name="components_animation_loop">เล่นวน</string>
+    <string name="components_animation_loop_start">เริ่มเล่นวน</string>
+    <string name="components_animation_loop_start_immediately">ทันที</string>
+    <string name="components_animation_loop_start_on_tap">เมื่อแตะ</string>
     <string name="components_animation_preview_helper">แตะที่รายการเพื่อดูตัวอย่างแอนิเมชัน</string>
     <string name="components_section_grid">ตารางแบบจัดกลุ่ม</string>
     <string name="components_grid_group_categories">หมวดหมู่พร้อมขนาด</string>

@@ -64,8 +64,13 @@
     <string name="components_action_menus_summary">Koppintson a lehetőségek megjelenítéséhez</string>
     <string name="components_data_selection">Adatkiválasztás</string>
     <string name="components_section_animations">Animációk</string>
-    <string name="components_animation_reverse">Megfordítás koppintásra</string>
-    <string name="components_animation_loop">Folyamatos ismétlés</string>
+    <string name="components_animation_replay">Lejátszás</string>
+    <string name="components_animation_replay_restart">Újraindítás</string>
+    <string name="components_animation_replay_reverse">Megfordítás</string>
+    <string name="components_animation_loop">Ismétlés</string>
+    <string name="components_animation_loop_start">Ismétlés kezdete</string>
+    <string name="components_animation_loop_start_immediately">Azonnal</string>
+    <string name="components_animation_loop_start_on_tap">Koppintásra</string>
     <string name="components_animation_preview_helper">Koppintson egy elemre az animáció előnézetéhez.</string>
     <string name="components_section_grid">Csoportosított rács</string>
     <string name="components_grid_group_categories">Kategóriák mérettel</string>

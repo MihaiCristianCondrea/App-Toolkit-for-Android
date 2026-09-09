@@ -64,8 +64,13 @@
     <string name="components_action_menus_summary">Tippen, um Optionen anzuzeigen</string>
     <string name="components_data_selection">Datenauswahl</string>
     <string name="components_section_animations">Animationen</string>
-    <string name="components_animation_reverse">Bei Tippen umkehren</string>
-    <string name="components_animation_loop">Dauerhaft wiederholen</string>
+    <string name="components_animation_replay">Wiedergabe</string>
+    <string name="components_animation_replay_restart">Neu starten</string>
+    <string name="components_animation_replay_reverse">Umkehren</string>
+    <string name="components_animation_loop">Schleife</string>
+    <string name="components_animation_loop_start">Schleifenstart</string>
+    <string name="components_animation_loop_start_immediately">Sofort</string>
+    <string name="components_animation_loop_start_on_tap">Beim Tippen</string>
     <string name="components_animation_preview_helper">Tippen Sie auf ein Element, um dessen Animation vorzuschauen.</string>
     <string name="components_section_grid">Gruppiertes Raster</string>
     <string name="components_grid_group_categories">Kategorien mit Größen</string>

@@ -64,8 +64,13 @@
     <string name="components_action_menus_summary">Seçenekleri göstermek için dokunun</string>
     <string name="components_data_selection">Veri seçimi</string>
     <string name="components_section_animations">Animasyonlar</string>
-    <string name="components_animation_reverse">Dokununca tersine oynat</string>
-    <string name="components_animation_loop">Sürekli döngü</string>
+    <string name="components_animation_replay">Yeniden oynatma</string>
+    <string name="components_animation_replay_restart">Baştan</string>
+    <string name="components_animation_replay_reverse">Tersine</string>
+    <string name="components_animation_loop">Döngü</string>
+    <string name="components_animation_loop_start">Döngü başlangıcı</string>
+    <string name="components_animation_loop_start_immediately">Hemen</string>
+    <string name="components_animation_loop_start_on_tap">Dokununca</string>
     <string name="components_animation_preview_helper">Animasyonunu önizlemek için bir öğeye dokunun.</string>
     <string name="components_section_grid">Gruplanmış ızgara</string>
     <string name="components_grid_group_categories">Boyutlu kategoriler</string>

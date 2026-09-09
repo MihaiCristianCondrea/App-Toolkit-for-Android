@@ -64,8 +64,13 @@
     <string name="components_action_menus_summary">Нажмите, чтобы показать варианты</string>
     <string name="components_data_selection">Выбор данных</string>
     <string name="components_section_animations">Анимации</string>
-    <string name="components_animation_reverse">Обратное воспроизведение по нажатию</string>
-    <string name="components_animation_loop">Непрерывное повторение</string>
+    <string name="components_animation_replay">Воспроизведение</string>
+    <string name="components_animation_replay_restart">С начала</string>
+    <string name="components_animation_replay_reverse">Обратно</string>
+    <string name="components_animation_loop">Повтор</string>
+    <string name="components_animation_loop_start">Начало повтора</string>
+    <string name="components_animation_loop_start_immediately">Сразу</string>
+    <string name="components_animation_loop_start_on_tap">По нажатию</string>
     <string name="components_animation_preview_helper">Нажмите на элемент, чтобы просмотреть его анимацию.</string>
     <string name="components_section_grid">Сгруппированная сетка</string>
     <string name="components_grid_group_categories">Категории с размерами</string>

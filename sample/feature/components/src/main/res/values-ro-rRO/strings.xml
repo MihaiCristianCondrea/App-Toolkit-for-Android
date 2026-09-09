@@ -64,8 +64,13 @@
     <string name="components_action_menus_summary">Atinge pentru a afișa opțiunile</string>
     <string name="components_data_selection">Selectarea datelor</string>
     <string name="components_section_animations">Animații</string>
-    <string name="components_animation_reverse">Inversează la atingere</string>
-    <string name="components_animation_loop">Redă în buclă</string>
+    <string name="components_animation_replay">Redare</string>
+    <string name="components_animation_replay_restart">De la început</string>
+    <string name="components_animation_replay_reverse">Inversat</string>
+    <string name="components_animation_loop">Buclă</string>
+    <string name="components_animation_loop_start">Începutul buclei</string>
+    <string name="components_animation_loop_start_immediately">Imediat</string>
+    <string name="components_animation_loop_start_on_tap">La atingere</string>
     <string name="components_animation_preview_helper">Atinge un element pentru a-i previzualiza animația.</string>
     <string name="components_section_grid">Grilă grupată</string>
     <string name="components_grid_group_categories">Categorii cu dimensiuni</string>

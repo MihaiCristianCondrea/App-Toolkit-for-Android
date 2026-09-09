@@ -126,6 +126,35 @@ class ToolkitIconResolverTest {
     }
 
     @Test
+    fun `a loop starts as soon as it is composed unless it waits for an interaction`() {
+        val immediate = ToolkitIcon.AnimatedVector(resId = 3, loop = true)
+        val onInteraction = ToolkitIcon.Lottie(
+            resId = 3,
+            loop = true,
+            loopTrigger = ToolkitIconLoopTrigger.OnInteraction,
+        )
+
+        assertEquals(ToolkitIconLoopTrigger.Immediately, immediate.loopTrigger)
+        assertTrue(resolveToolkitIconLoop(icon = immediate, interacted = false))
+        assertTrue(resolveToolkitIconLoop(icon = immediate, interacted = true))
+        assertFalse(resolveToolkitIconLoop(icon = onInteraction, interacted = false))
+        assertTrue(resolveToolkitIconLoop(icon = onInteraction, interacted = true))
+    }
+
+    @Test
+    fun `an icon that does not loop never loops, whatever its trigger says`() {
+        val notLooping = ToolkitIcon.AnimatedVector(
+            resId = 3,
+            loopTrigger = ToolkitIconLoopTrigger.OnInteraction,
+        )
+
+        assertFalse(resolveToolkitIconLoop(icon = notLooping, interacted = true))
+        assertFalse(resolveToolkitIconLoop(icon = shareAnimated, interacted = true))
+        assertFalse(resolveToolkitIconLoop(icon = shareVector, interacted = true))
+        assertFalse(resolveToolkitIconLoop(icon = settingsResource, interacted = true))
+    }
+
+    @Test
     fun `a looping icon is still resolved by selection and interaction`() {
         val looping = ToolkitIcon.AnimatedVector(resId = 3, loop = true)
 

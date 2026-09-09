@@ -64,8 +64,13 @@
     <string name="components_action_menus_summary">Ketuk untuk menampilkan opsi</string>
     <string name="components_data_selection">Pemilihan data</string>
     <string name="components_section_animations">Animasi</string>
-    <string name="components_animation_reverse">Balik saat diketuk</string>
-    <string name="components_animation_loop">Ulangi terus-menerus</string>
+    <string name="components_animation_replay">Pemutaran</string>
+    <string name="components_animation_replay_restart">Mulai ulang</string>
+    <string name="components_animation_replay_reverse">Balik</string>
+    <string name="components_animation_loop">Ulangi</string>
+    <string name="components_animation_loop_start">Mulai pengulangan</string>
+    <string name="components_animation_loop_start_immediately">Segera</string>
+    <string name="components_animation_loop_start_on_tap">Saat diketuk</string>
     <string name="components_animation_preview_helper">Ketuk item untuk melihat pratinjau animasinya.</string>
     <string name="components_section_grid">Kisi yang dikelompokkan</string>
     <string name="components_grid_group_categories">Kategori dengan ukuran</string>

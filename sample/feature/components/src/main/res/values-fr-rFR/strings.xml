@@ -64,8 +64,13 @@
     <string name="components_action_menus_summary">Appuyez pour afficher les options</string>
     <string name="components_data_selection">Sélection des données</string>
     <string name="components_section_animations">Animations</string>
-    <string name="components_animation_reverse">Inverser au toucher</string>
-    <string name="components_animation_loop">Lecture en boucle</string>
+    <string name="components_animation_replay">Lecture</string>
+    <string name="components_animation_replay_restart">Redémarrer</string>
+    <string name="components_animation_replay_reverse">Inverser</string>
+    <string name="components_animation_loop">Boucle</string>
+    <string name="components_animation_loop_start">Début de la boucle</string>
+    <string name="components_animation_loop_start_immediately">Immédiatement</string>
+    <string name="components_animation_loop_start_on_tap">Au toucher</string>
     <string name="components_animation_preview_helper">Appuyez sur un élément pour prévisualiser son animation.</string>
     <string name="components_section_grid">Grille groupée</string>
     <string name="components_grid_group_categories">Catégories avec tailles</string>

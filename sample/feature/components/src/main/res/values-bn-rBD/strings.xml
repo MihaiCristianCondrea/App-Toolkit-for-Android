@@ -64,8 +64,13 @@
     <string name="components_action_menus_summary">বিকল্প দেখাতে ট্যাপ করুন</string>
     <string name="components_data_selection">ডেটা নির্বাচন</string>
     <string name="components_section_animations">অ্যানিমেশন</string>
-    <string name="components_animation_reverse">ট্যাপ করলে উল্টো চালান</string>
-    <string name="components_animation_loop">ক্রমাগত লুপ</string>
+    <string name="components_animation_replay">পুনরায় চালানো</string>
+    <string name="components_animation_replay_restart">শুরু থেকে</string>
+    <string name="components_animation_replay_reverse">উল্টো</string>
+    <string name="components_animation_loop">লুপ</string>
+    <string name="components_animation_loop_start">লুপ শুরু</string>
+    <string name="components_animation_loop_start_immediately">সঙ্গে সঙ্গে</string>
+    <string name="components_animation_loop_start_on_tap">ট্যাপ করলে</string>
     <string name="components_animation_preview_helper">অ্যানিমেশন প্রাকদর্শন করতে একটি আইটেমে ট্যাপ করুন।</string>
     <string name="components_section_grid">গ্রুপ করা গ্রিড</string>
     <string name="components_grid_group_categories">আকারসহ বিভাগ</string>

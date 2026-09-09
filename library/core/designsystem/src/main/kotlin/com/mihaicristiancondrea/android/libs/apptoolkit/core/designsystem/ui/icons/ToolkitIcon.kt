@@ -31,8 +31,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
  * - [AnimatedVector], an Animated Vector Drawable that plays when the component is clicked.
  * - [Lottie], bundled Lottie JSON that plays once per interaction.
  *
- * Both animated sources accept [Animated.loop] to keep playing while composed instead of only on
- * interaction; it is off by default and orthogonal to their replay mode.
+ * Both animated sources accept [Animated.loop] to keep playing instead of only on interaction; it is
+ * off by default, orthogonal to their replay mode, and [Animated.loopTrigger] decides whether the
+ * loop starts on its own or on the first interaction.
  *
  * Components that own a selected state take two of these, one per state, and both slots accept any
  * of the four sources. See `:library:core:designsystem` README.md for the accepted combinations and the
@@ -47,15 +48,21 @@ sealed interface ToolkitIcon {
         val replayMode: ToolkitIconReplayMode
 
         /**
-         * Whether the animation keeps playing on its own while the icon is composed, instead of
-         * only running once per interaction. `false`, the default, keeps the finite click driven
-         * playback every existing icon relies on.
+         * Whether the animation keeps playing cycle after cycle, instead of only running once per
+         * interaction. `false`, the default, keeps the finite click driven playback every existing
+         * icon relies on.
          *
          * Looping is independent from [replayMode], which keeps describing the shape of one cycle:
          * a looping [ToolkitIconReplayMode.Restart] icon repeats forward from its first frame,
          * while a looping [ToolkitIconReplayMode.Reverse] icon travels forward and back.
          */
         val loop: Boolean
+
+        /**
+         * When a declared [loop] starts: right away, or on the first click or selection. Ignored
+         * while [loop] is `false`. See [ToolkitIconLoopTrigger].
+         */
+        val loopTrigger: ToolkitIconLoopTrigger
     }
 
     /**
@@ -83,8 +90,10 @@ sealed interface ToolkitIcon {
      *   clicked. `false`, the default, rests on the first frame.
      * @property replayMode What a repeated click does once the animation already ran. Defaults to
      *   [ToolkitIconReplayMode.Restart].
-     * @property loop Whether the drawable animates continuously while composed. Defaults to `false`,
-     *   which keeps the click driven playback. The cycle follows [replayMode].
+     * @property loop Whether the drawable animates continuously. Defaults to `false`, which keeps
+     *   the click driven playback. The cycle follows [replayMode].
+     * @property loopTrigger What starts a declared [loop]. Defaults to
+     *   [ToolkitIconLoopTrigger.Immediately], which plays as soon as the icon is composed.
      */
     @Immutable
     data class AnimatedVector(
@@ -92,10 +101,12 @@ sealed interface ToolkitIcon {
         override val atEnd: Boolean = false,
         override val replayMode: ToolkitIconReplayMode = ToolkitIconReplayMode.Restart,
         override val loop: Boolean = false,
+        override val loopTrigger: ToolkitIconLoopTrigger = ToolkitIconLoopTrigger.Immediately,
     ) : Animated
 
     /**
-     * Bundled Lottie JSON in `res/raw`. Plays once per interaction unless [loop] is set.
+     * Bundled Lottie JSON in `res/raw`. Plays once per interaction unless [loop] is set, in which
+     * case [loopTrigger] decides whether the loop starts on its own or on the first interaction.
      * Artwork retains its authored colors; the renderer's tint applies only when [tintable] is true.
      * Prefer small vector-only compositions for navigation and button icons.
      */
@@ -106,6 +117,7 @@ sealed interface ToolkitIcon {
         override val replayMode: ToolkitIconReplayMode = ToolkitIconReplayMode.Restart,
         val tintable: Boolean = false,
         override val loop: Boolean = false,
+        override val loopTrigger: ToolkitIconLoopTrigger = ToolkitIconLoopTrigger.Immediately,
     ) : Animated
 
     companion object {
@@ -116,6 +128,7 @@ sealed interface ToolkitIcon {
             atEnd: Boolean = false,
             replayMode: ToolkitIconReplayMode = ToolkitIconReplayMode.Restart,
             loop: Boolean = false,
-        ): AnimatedVector = AnimatedVector(resId, atEnd, replayMode, loop)
+            loopTrigger: ToolkitIconLoopTrigger = ToolkitIconLoopTrigger.Immediately,
+        ): AnimatedVector = AnimatedVector(resId, atEnd, replayMode, loop, loopTrigger)
     }
 }

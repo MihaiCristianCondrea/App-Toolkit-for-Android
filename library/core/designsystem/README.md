@@ -90,8 +90,8 @@ items, bottom bar and rail items, and `GeneralButton`. It lives in
 | `ToolkitIcon.AnimatedVector(resId)` | An `animated-vector` resource                              | Yes, on click and on selection          |
 | `ToolkitIcon.Lottie(resId)`         | Lottie JSON in `res/raw`                                   | Yes, once per click or selection change |
 
-Both animated sources also accept `loop = true` to keep playing while composed; see
-[Looping an animation](#looping-an-animation).
+Both animated sources also accept `loop = true`, and a `loopTrigger` that starts the loop either on
+composition or on the first interaction; see [Looping an animation](#looping-an-animation).
 
 `ToolkitIcon.of(...)` and `ToolkitIcon.animated(...)` are shorthand factories for the same
 static/AVD types.
@@ -160,9 +160,10 @@ frame, by default.
 
 ### Looping an animation
 
-`loop` makes an animation run on its own for as long as it is composed, instead of once per
+`loop` makes an animation run cycle after cycle for as long as it is composed, instead of once per
 interaction. It is `false` by default, so every existing icon keeps its finite, click-driven
-playback, and it is accepted by both animated sources.
+playback, and it is accepted by both animated sources. `loopTrigger` decides whether the loop starts
+on its own or on the first interaction.
 
 Looping is independent from the replay mode, which keeps describing the shape of one cycle:
 
@@ -179,25 +180,51 @@ ToolkitIcon.Lottie(
 )
 ```
 
-A looping icon owns its playback, so clicks and selection no longer replay it and `atEnd` is
+A running loop owns its playback, so clicks and selection no longer replay it and `atEnd` is
 ignored. One AVD cycle lasts the drawable's own `totalDuration`; one Lottie cycle lasts the
-composition's duration. Reserve looping for icons that genuinely express ongoing activity, such as
-a sync or recording indicator: a permanently animating icon costs a frame callback for its whole
-lifetime and competes with the content around it for attention.
+composition's duration.
+
+`loopTrigger` decides when the loop starts:
+
+- `Immediately`, the default, plays as soon as the icon is composed. Use it for an icon that reports
+  something the app is already doing, such as a sync or a recording indicator.
+- `OnInteraction` rests on the frame `atEnd` picks until the component is clicked or becomes
+  selected, and loops from then on. Until that first interaction the icon behaves like every other
+  animated one, so it stays quiet in a list where a screenful of them would otherwise all play at
+  once.
+
+```kotlin
+ToolkitIcon.AnimatedVector(
+    resId = R.drawable.anim_graphic_eq,
+    loop = true,
+    loopTrigger = ToolkitIconLoopTrigger.OnInteraction,
+)
+```
+
+A reversing loop that starts on an interaction travels on from the frame the icon was resting on
+rather than snapping to the other one.
+
+Reserve looping for icons that genuinely express ongoing activity: a permanently animating icon
+costs a frame callback for its whole lifetime and competes with the content around it for attention.
+`OnInteraction` is the cheaper default for a gallery or a list, where the animation illustrates what
+the person just did.
 
 ### Rendering an icon outside a toolkit component
 
 Two composables are public:
 
-- `ToolkitIconContent(icon, contentDescription, modifier, atEnd, tint)` draws exactly one icon and
-  owns no state. `atEnd` picks the frame of an animated vector, and changing it animates between the
-  two frames.
+- `ToolkitIconContent(icon, contentDescription, modifier, atEnd, interacted, tint)` draws exactly
+  one icon and owns no state. `atEnd` picks the frame of an animated vector, and changing it
+  animates between the two frames. `interacted` only matters for an icon looping `OnInteraction`,
+  which rests until it is `true`.
 - `AnimatedToolkitIcon(icon, clickCount, contentDescription, modifier, selectedIcon, selected, tint)`
   is the stateful one the toolkit components use. The owner keeps a click counter and increments it
   on every click; each increment replays the animation. Owners that never animate pass `0`.
 
 `resolveToolkitIcon(icon, selectedIcon, selected, interacted)` returns the icon a component should
 be drawing, and is useful when a host renders its own navigation surface from toolkit item models.
+`resolveToolkitIconLoop(icon, interacted)` answers whether that icon has to be looping right now,
+which is the same rule the renderers apply.
 
 ### Accessibility
 
@@ -217,7 +244,8 @@ across clicks; playback does not reparse the JSON. The progress provider is read
 so animation frames do not recompose the parent button or navigation surface. Animations run
 once per interaction, cancel when removed from composition, and use Compose duration scaling.
 Rapid clicks restart from zero by default. Reverse is opt-in. Icons do not loop while idle unless
-they opt in with `loop = true`, described in [Looping an animation](#looping-an-animation).
+they opt in with `loop = true`, described in [Looping an animation](#looping-an-animation), where
+`loopTrigger` also decides whether that loop waits for the first interaction.
 
 Authored colors are preserved by default. Set `tintable = true` for monochrome artwork that should
 follow the component's content color, including its disabled state. `Color.Unspecified` preserves
@@ -318,11 +346,12 @@ transitions. FABs remain specialized floating action components.
 Reusable AVDs belong in this module's `res/drawable`, alongside the shared icon renderer, rather
 than navigation. Import this module's `R` when selecting `anim_check`, `anim_clock`, `anim_grid`,
 `anim_settings`, or `anim_share`. These animations are still being evaluated in the sample's
-Components animation playground, which previews labelled, tonal icon-only, and plain icon buttons.
-Restart on tap plays forward each time; Reverse on tap alternates direction. A second switch turns
-the previews into looping playback, which keeps running without taps. Switching either control resets
-the previews. Check rests on its completed frame so the icon-only controls remain visible; its first
-Reverse tap erases the check. Playback stays finite and click-driven until the loop switch is on.
+Components animation playground, whose controls are the three decisions an animated icon makes: a
+replay menu (Restart plays forward each time, Reverse alternates direction), a Loop checkbox, and,
+once looping is on, a menu choosing whether the loop starts right away or on the first tap. Changing
+any of them resets the previews. Check rests on its completed frame so the icon-only controls remain
+visible; its first Reverse tap erases the check. Playback stays finite and tap-driven until a loop
+is both switched on and started.
 
 Each animation contains its private vector, target animators, and interpolators through inline
 `aapt:attr` resources. Keep a separate resource only when it is actually reused. `ic_settings` and
