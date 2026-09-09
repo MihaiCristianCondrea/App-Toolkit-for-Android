@@ -16,7 +16,6 @@ Convert the Java code 1 to 1 into Kotlin, prioritising faithfulness to the origi
 Java semantics, to replicate the Java code's functionality and logic exactly.
 
 **Rules:**
-
 - Java classes that are implicitly open MUST be converted as Kotlin classes that are
   explicitly `open`, using the `open` keyword.
 - To convert Java constructors that inject into fields, use the Kotlin primary
@@ -31,7 +30,6 @@ from the original Java. Use `val` instead of `var` where you see variables that 
 never modified.
 
 **Rules:**
-
 - If you see a logical assertion that a value is not null (e.g., `Objects.requireNonNull`),
   this shows that the author has considered that the value can never be null. Use a
   non-null type in this case, and remove the logical assertion.
@@ -43,7 +41,6 @@ never modified.
 Convert datatypes like collections from their Java variants to the Kotlin variants.
 
 **Rules:**
-
 - For Java collections like `List` that are mutable by default, always use the Kotlin
   `MutableList`, unless you see explicitly that the Java code uses an immutable wrapper
   (e.g., `Collections.unmodifiableList()`) — in this case, use the Kotlin `List` (and
@@ -54,7 +51,6 @@ Convert datatypes like collections from their Java variants to the Kotlin varian
 Introduce syntactic transformations to make the output truly idiomatic.
 
 **Rules:**
-
 - Where getters and setters are defined as methods in Java, use the Kotlin syntax to
   replace these methods with a more idiomatic version.
 - Lambdas should be used where they can simplify code complexity while replicating the
@@ -67,23 +63,19 @@ In each stage of your chain of thought, the following invariants must hold.
 **Invariant 1:** No new side-effects or behaviour.
 
 **Invariant 2:** Preserve all annotations and targets exactly.
-
 - Annotations must target the backing field in Kotlin where they targeted the field in
   Java. Use annotation site targets: `@field:`, `@get:`, `@set:`, `@param:`.
 
 **Invariant 3:** Preserve the package declaration and all imports.
-
 - Carry forwards every single import, adding no new imports. Only remove imports where
   they would shadow Kotlin names (e.g., `java.util.List` shadows Kotlin's `List`).
 
 **Invariant 4:** Preserve all Javadoc comments.
-
 - In step 1, convert any Javadoc comments to KDoc comments.
 - In all other steps, carry forwards the KDoc comments, preserving information where
   structure changes.
 
 **Invariant 5:** Ensure the output result is in Kotlin.
-
 - The emitted code must be syntactically valid Kotlin.
 
 **After each step**, go through each of these invariants, listing the ones that no
@@ -323,7 +315,6 @@ Invariants check: All OK.
 Invariants check: All OK.
 
 **Step 4** — Idiomatic Kotlin:
-
 1. Primary constructor with `id` as a `val` property. Apply both `@field:JsonProperty`
    and `@get:JsonProperty` to match both Java annotation targets.
 2. Convert `nickname` getter/setter → Kotlin property with `@field:Nullable` and

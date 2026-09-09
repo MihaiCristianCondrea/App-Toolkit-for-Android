@@ -1,7 +1,6 @@
 # Migrating a KMP Library Module to AGP 9.0
 
-This reference covers the full migration of a Kotlin Multiplatform library module from
-`com.android.library` (AGP 8.x) to `com.android.kotlin.multiplatform.library` (AGP 9.x).
+This reference covers the full migration of a Kotlin Multiplatform library module from `com.android.library` (AGP 8.x) to `com.android.kotlin.multiplatform.library` (AGP 9.x).
 
 ---
 
@@ -94,7 +93,6 @@ dependencies {
 ### With Version Catalog (`gradle/libs.versions.toml`)
 
 **Before:**
-
 ```toml
 [versions]
 agp = "8.7.3"
@@ -106,7 +104,6 @@ kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 ```
 
 **After:**
-
 ```toml
 [versions]
 agp = "9.0.1"
@@ -122,7 +119,6 @@ kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 If versions are declared directly in build files, update the plugin IDs and versions in place:
 
 **Before (root build.gradle.kts):**
-
 ```kotlin
 plugins {
     id("com.android.library") version "8.7.3" apply false
@@ -131,7 +127,6 @@ plugins {
 ```
 
 **After (root build.gradle.kts):**
-
 ```kotlin
 plugins {
     id("com.android.kotlin.multiplatform.library") version "9.0.1" apply false
@@ -140,7 +135,6 @@ plugins {
 ```
 
 **Before (module build.gradle.kts):**
-
 ```kotlin
 plugins {
     id("org.jetbrains.kotlin.multiplatform")
@@ -149,7 +143,6 @@ plugins {
 ```
 
 **After (module build.gradle.kts):**
-
 ```kotlin
 plugins {
     id("org.jetbrains.kotlin.multiplatform")
@@ -158,7 +151,6 @@ plugins {
 ```
 
 Key changes:
-
 - The plugin ID changes from `com.android.library` to `com.android.kotlin.multiplatform.library`.
 - AGP version must be 9.0.0+, Gradle 9.1.0+, KGP 2.0.0+ (2.3.0+ recommended).
 
@@ -169,7 +161,6 @@ Key changes:
 ### With Version Catalog
 
 **Before:**
-
 ```kotlin
 plugins {
     alias(libs.plugins.androidLibrary) apply false
@@ -178,7 +169,6 @@ plugins {
 ```
 
 **After:**
-
 ```kotlin
 plugins {
     alias(libs.plugins.androidKmpLibrary) apply false
@@ -189,7 +179,6 @@ plugins {
 ### Without Version Catalog
 
 **Before:**
-
 ```kotlin
 plugins {
     id("com.android.library") version "8.7.3" apply false
@@ -198,7 +187,6 @@ plugins {
 ```
 
 **After:**
-
 ```kotlin
 plugins {
     id("com.android.kotlin.multiplatform.library") version "9.0.1" apply false
@@ -206,15 +194,13 @@ plugins {
 }
 ```
 
-No other root-level changes are required unless you have convention plugins that reference the old
-plugin ID (see convention plugin section below).
+No other root-level changes are required unless you have convention plugins that reference the old plugin ID (see convention plugin section below).
 
 ---
 
 ## Source Directory Renames
 
-The new KMP-integrated plugin does NOT change the expected source directory layout. The standard KMP
-source sets still apply:
+The new KMP-integrated plugin does NOT change the expected source directory layout. The standard KMP source sets still apply:
 
 | Source Set              | Directory                 |
 |-------------------------|---------------------------|
@@ -223,9 +209,7 @@ source sets still apply:
 | `androidMain` resources | `src/androidMain/res/`    |
 | `iosMain`               | `src/iosMain/kotlin/`     |
 
-**No renames are required** if you already use the standard KMP layout. If your module previously
-used the classic Android layout (`src/main/java/`, `src/main/res/`), you must migrate to the KMP
-layout:
+**No renames are required** if you already use the standard KMP layout. If your module previously used the classic Android layout (`src/main/java/`, `src/main/res/`), you must migrate to the KMP layout:
 
 | Old (Android layout)           | New (KMP layout)                      |
 |--------------------------------|---------------------------------------|
@@ -254,8 +238,7 @@ kotlin {
 }
 ```
 
-This creates the `androidHostTest` source set. The previous name `androidUnitTest` still works as an
-alias but `androidHostTest` is preferred.
+This creates the `androidHostTest` source set. The previous name `androidUnitTest` still works as an alias but `androidHostTest` is preferred.
 
 ### Device Tests (Instrumented Tests)
 
@@ -270,8 +253,7 @@ kotlin {
 }
 ```
 
-This creates the `androidDeviceTest` source set. The previous name `androidInstrumentedTest` still
-works as an alias but `androidDeviceTest` is preferred.
+This creates the `androidDeviceTest` source set. The previous name `androidInstrumentedTest` still works as an alias but `androidDeviceTest` is preferred.
 
 ### Full Test Example
 
@@ -303,8 +285,7 @@ kotlin {
 
 ## Java Compilation (withJava)
 
-If your module contains Java source files in `androidMain`, you must explicitly enable Java
-compilation:
+If your module contains Java source files in `androidMain`, you must explicitly enable Java compilation:
 
 ```kotlin
 kotlin {
@@ -314,8 +295,7 @@ kotlin {
 }
 ```
 
-Without this call, `.java` files in `src/androidMain/java/` will be ignored. Kotlin files are
-compiled by default.
+Without this call, `.java` files in `src/androidMain/java/` will be ignored. Kotlin files are compiled by default.
 
 ---
 
@@ -341,16 +321,13 @@ kotlin {
 }
 ```
 
-**Warning:** Consumer ProGuard rules can be silently dropped during migration if you forget this
-step. The old `android {}` block is gone, so the `consumerProguardFiles` call in `defaultConfig` has
-no equivalent location unless you explicitly add it in `kotlin { android {} }`.
+**Warning:** Consumer ProGuard rules can be silently dropped during migration if you forget this step. The old `android {}` block is gone, so the `consumerProguardFiles` call in `defaultConfig` has no equivalent location unless you explicitly add it in `kotlin { android {} }`.
 
 ---
 
 ## JVM Target Configuration Hierarchy
 
-There are three levels at which you can configure the JVM target. They are listed from most
-specific (highest priority) to least specific (lowest priority):
+There are three levels at which you can configure the JVM target. They are listed from most specific (highest priority) to least specific (lowest priority):
 
 ### Level 1: Android-Specific Compiler Options (Recommended)
 
@@ -386,13 +363,11 @@ kotlin {
 }
 ```
 
-This sets both the JDK used for compilation and the JVM target. It is the broadest setting and
-affects all JVM compilations.
+This sets both the JDK used for compilation and the JVM target. It is the broadest setting and affects all JVM compilations.
 
 ### Priority Order
 
 If multiple levels are set, the most specific wins:
-
 1. `kotlin { android { compilerOptions { } } }` -- highest priority
 2. `kotlin { compilerOptions { } }` -- medium priority
 3. `kotlin { jvmToolchain() }` -- lowest priority
@@ -416,8 +391,7 @@ Replace with one of the three levels above.
 
 ## Dependencies Configuration Changes
 
-The top-level `dependencies {}` block configurations change because build variants (debug/release)
-are removed from the KMP library plugin.
+The top-level `dependencies {}` block configurations change because build variants (debug/release) are removed from the KMP library plugin.
 
 ### Before
 
@@ -455,17 +429,13 @@ kotlin {
 }
 ```
 
-**Prefer putting dependencies inside `sourceSets` blocks** rather than the top-level
-`dependencies {}` block. The top-level block is only needed for special configurations like
-`androidRuntimeClasspath` that have no source set equivalent.
+**Prefer putting dependencies inside `sourceSets` blocks** rather than the top-level `dependencies {}` block. The top-level block is only needed for special configurations like `androidRuntimeClasspath` that have no source set equivalent.
 
 ---
 
 ## Dependency Resolution Details
 
-When your KMP module depends on a legacy Android library that exposes multiple variants (e.g.,
-`debug`/`release` build types or custom flavor dimensions like `free`/`paid`), you must explicitly
-define how to resolve them using the `localDependencySelection` DSL.
+When your KMP module depends on a legacy Android library that exposes multiple variants (e.g., `debug`/`release` build types or custom flavor dimensions like `free`/`paid`), you must explicitly define how to resolve them using the `localDependencySelection` DSL.
 
 ### Before
 
@@ -507,8 +477,7 @@ kotlin {
 
 ## Android Resources
 
-Android resources (`res/`) are not processed by default with the new plugin. You must explicitly
-enable them:
+Android resources (`res/`) are not processed by default with the new plugin. You must explicitly enable them:
 
 ```kotlin
 kotlin {
@@ -518,8 +487,7 @@ kotlin {
 }
 ```
 
-Without this, files in `src/androidMain/res/` will be ignored and `R` class generation will not
-happen.
+Without this, files in `src/androidMain/res/` will be ignored and `R` class generation will not happen.
 
 ---
 
@@ -568,15 +536,13 @@ class KmpLibraryConventionPlugin : Plugin<Project> {
 }
 ```
 
-The `LibraryExtension` class from AGP is no longer used. All Android configuration goes through
-`KotlinMultiplatformExtension.android {}`.
+The `LibraryExtension` class from AGP is no longer used. All Android configuration goes through `KotlinMultiplatformExtension.android {}`.
 
 ---
 
 ## Quick Checklist
 
-- [ ] Update plugin IDs and versions (in `libs.versions.toml` if using version catalog, or directly
-  in build files)
+- [ ] Update plugin IDs and versions (in `libs.versions.toml` if using version catalog, or directly in build files)
 - [ ] Replace plugin alias in `build.gradle.kts`
 - [ ] Move `android {}` block contents into `kotlin { android {} }`
 - [ ] Replace `androidTarget {}` with `android {}`
@@ -588,10 +554,8 @@ The `LibraryExtension` class from AGP is no longer used. All Android configurati
 - [ ] Move consumer ProGuard rules to new DSL
 - [ ] Migrate top-level `dependencies` to source set dependencies
 - [ ] Update convention plugins if applicable
-- [ ] Rename test source dirs: `androidUnitTest` to `androidHostTest`, `androidInstrumentedTest` to
-  `androidDeviceTest`
+- [ ] Rename test source dirs: `androidUnitTest` to `androidHostTest`, `androidInstrumentedTest` to `androidDeviceTest`
 - [ ] Update root `build.gradle.kts` plugin declarations
 - [ ] Run `./gradlew :module:assemble` to verify
-- [ ] Run `./gradlew :module:testAndroidHostTest` if there are any android host tests or common
-  tests
+- [ ] Run `./gradlew :module:testAndroidHostTest` if there are any android host tests or common tests
 - [ ] Run `./gradlew :module:assembleAndroidDeviceTest` if there are any android device tests

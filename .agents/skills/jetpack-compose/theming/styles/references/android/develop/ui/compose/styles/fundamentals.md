@@ -6,7 +6,10 @@ There are three ways you can adopt Styles throughout your app:
 
 ## Available properties on Styles
 
-Styles support many of the same properties that modifiers support; however, not everything that is a modifier can be replicated with a Style. You still need modifiers for certain behaviors, like interactions, custom drawing, or stacking of properties.
+Styles support many of the same properties that modifiers support; however, not
+everything that is a modifier can be replicated with a Style. You still need
+modifiers for certain behaviors, like interactions, custom drawing, or stacking
+of properties.
 
 | Grouping | Properties | Inherited by children |
 |---|---|---|
@@ -33,58 +36,53 @@ Styles support many of the same properties that modifiers support; however, not 
 
 Components that expose a `Style` parameter allow you to set their styling:
 
-<br />
 
 ```kotlin
 BaseButton(
     onClick = { },
     style = { }
 ) {
-    BaseText("Click me")
-}
-   
+    BaseText("Click mnippets.kt
 ```
 
 <br />
 
-Within the style lambda, you can set various properties, such as `externalPadding` or `background`:
+Within the style lambda, you can set various properties, such as `externalPadding`
+or `background`:
 
-<br />
 
 ```kotlin
 BaseButton(
     onClick = { },
     style = { background(Color.Blue) }
 ) {
-    BaseText("Click me")
-}
-   
+    BaseText("Click mnippets.kt
 ```
 
 <br />
 
-For the full list of supported properties, see [Available properties on Styles](https://developer.android.com/develop/ui/compose/styles/fundamentals#properties-styles).
+For the full list of supported properties, see [Available properties on
+Styles](https://developer.android.com/develop/ui/compose/styles/fundamentals#properties-styles).
 
 ## Apply Styles using modifiers for components with no existing parameter
 
-For components that lack a built-in style parameter, you can still apply styles with the `styleable` modifier. This approach is also useful when developing your own custom components.
+For components that lack a built-in style parameter, you can still apply styles
+with the `styleable` modifier. This approach is also useful when developing your
+own custom components.
 
-<br />
 
 ```kotlin
 Row(
     modifier = Modifier.styleable { }
 ) {
-    BaseText("Content")
-}
-   
+    BaseText("Contennippets.kt
 ```
 
 <br />
 
-Similar to the `style` parameter, you can include properties like `background`, `contentPadding`, or `externalPadding` inside the lambda.
+Similar to the `style` parameter, you can include properties like `background`,
+`contentPadding`, or `externalPadding` inside the lambda.
 
-<br />
 
 ```kotlin
 Row(
@@ -92,9 +90,7 @@ Row(
         background(Color.Blue)
     }
 ) {
-    BaseText("Content")
-}
-   
+    BaseText("Contennippets.kt
 ```
 
 <br />
@@ -102,28 +98,35 @@ Row(
 > [!NOTE]
 > **Note:** When using `Modifier.styleable`, the child composables won't have those properties applied to them, unless they are inherited properties. Only the container with the `styleable` modifier has those properties applied.
 
-Multiple chained `Modifier.styleable` modifiers are additive with non-inherited properties on the applied composable, behaving similarly to multiple modifiers defining the same properties. For inherited properties, these are overridden, and the last `styleable` modifier in the chain sets the values.
+Multiple chained `Modifier.styleable` modifiers are additive with non-inherited
+properties on the applied composable, behaving similarly to multiple modifiers
+defining the same properties. For inherited properties, these are overridden,
+and the last `styleable` modifier in the chain sets the values.
 
-When using `Modifier.styleable`, you may also want to create and supply a `StyleState` to be used with the modifier to apply state-based styling. For more details, see [State and animations with Styles](https://developer.android.com/develop/ui/compose/styles/state-animations).
+When using `Modifier.styleable`, you may also want to create and supply a
+`StyleState` to be used with the modifier to apply state-based styling. For more
+details, see [State and animations with
+Styles](https://developer.android.com/develop/ui/compose/styles/state-animations).
 
 ## Define a standalone Style
 
 You can define a standalone Style for reusability purposes:
 
-<br />
 
 ```kotlin
 val style = Style { background(Color.Blue) }
-   
 ```
 
 <br />
 
-You can then pass that defined style into a composable's style parameter or with `Modifier.styleable`. When using `Modifier.styleable`, you also need to create a `StyleState` object. `StyleState` is covered in detail in the [State and animations with Styles](https://developer.android.com/develop/ui/compose/styles/state-animations) documentation.
+You can then pass that defined style into a composable's style parameter or with
+`Modifier.styleable`. When using `Modifier.styleable`, you also need to create a
+`StyleState` object. `StyleState` is covered in detail in the [State and
+animations with Styles](https://developer.android.com/develop/ui/compose/styles/state-animations) documentation.
 
-The following example shows how you can apply a Style either directly through a component's built-in parameters, or through a `Modifier.styleable`:
+The following example shows how you can apply a Style either directly through a
+component's built-in parameters, or through a `Modifier.styleable`:
 
-<br />
 
 ```kotlin
 val style = Style { background(Color.Blue) }
@@ -138,16 +141,14 @@ val styleState = remember { MutableStyleState(null) }
 Column(
     Modifier.styleable(styleState, style)
 ) {
-    BaseText("Column content")
-}
-   
+    BaseText("Col)
+}StylesSnippets.kt
 ```
 
 <br />
 
 You can also pass that Style into multiple components:
 
-<br />
 
 ```kotlin
 val style = Style { background(Color.Blue) }
@@ -167,20 +168,17 @@ Column(
 }
 val rowStyleState = remember { MutableStyleState(null) }
 Row(
-    Modifier.styleable(rowStyleState, style)
-) {
-    BaseText("Row")
-}
-   
+    Modifier.styleable(rowStyleState, stText("Row")
+}StylesSnippets.kt
 ```
 
 <br />
 
 ## Add multiple Style properties
 
-You can add multiple Style properties by setting different properties on each line:
+You can add multiple Style properties by setting different properties on each
+line:
 
-<br />
 
 ```kotlin
 BaseButton(
@@ -190,9 +188,7 @@ BaseButton(
         contentPaddingStart(16.dp)
     }
 ) {
-    BaseText("Button")
-}
-   
+    BaseText("Buttonippets.kt
 ```
 
 <br />
@@ -200,9 +196,12 @@ BaseButton(
 > [!IMPORTANT]
 > **Important:** Unlike modifier-based styling, properties in Styles override one another; the last property defined takes precedence.
 
-Properties in Styles are not additive, unlike modifier-based styling. Styles take the last set value in the list of properties within one style block. In the following example, with the background set twice, the `TealColor` is the applied background. For padding, `contentPaddingTop` overrides the top padding set by `contentPadding` and does not combine the values.
+Properties in Styles are not additive, unlike modifier-based styling. Styles
+take the last set value in the list of properties within one style block. In the
+following example, with the background set twice, the `TealColor` is the applied
+background. For padding, `contentPaddingTop` overrides the top
+padding set by `contentPadding` and does not combine the values.
 
-<br />
 
 ```kotlin
 BaseButton(
@@ -219,9 +218,7 @@ BaseButton(
         //
     }
 ) {
-    BaseText("Click me!")
-}
-   
+    BaseText("Click menippets.kt
 ```
 
 <br />
@@ -231,9 +228,9 @@ overrides](https://developer.android.com/static/develop/ui/compose/styles/images
 
 ## Merge multiple style objects
 
-You can create multiple Style objects and pass them into the style parameter of your composable.
+You can create multiple Style objects and pass them into the style parameter of
+your composable.
 
-<br />
 
 ```kotlin
 val style1 = Style { background(TealColor) }
@@ -245,9 +242,7 @@ BaseButton(
 
     },
 ) {
-    BaseText("Click me!")
-}
-   
+    BaseText("Click menippets.kt
 ```
 
 <br />
@@ -255,9 +250,12 @@ BaseButton(
 ![Button with background color and contentPaddingTop
 set](https://developer.android.com/static/develop/ui/compose/styles/images/button_content_padding_top.png) **Figure 2.** Button with background color and `contentPaddingTop` set.
 
-When multiple Styles specify the same property, the last set property is chosen. Because properties are not additive in Styles, the last padding passed in overrides the `contentPaddingHorizontal` set by the initial `contentPadding`. Additionally, the last background color overrides the background color set by the initial style passed in.
+When multiple Styles specify the same property, the last set
+property is chosen. Because properties are not additive in Styles, the last
+padding passed in overrides the `contentPaddingHorizontal` set by the initial
+`contentPadding`. Additionally, the last background color overrides the
+background color set by the initial style passed in.
 
-<br />
 
 ```kotlin
 val style1 = Style {
@@ -276,14 +274,13 @@ BaseButton(
 
     },
 ) {
-    BaseText("Click me!")
-}
-   
+    BaseText("Click menippets.kt
 ```
 
 <br />
 
-In this case, the styling applied has a light gray background and `32.dp` padding, except for the left and right padding, which has a value of `8.dp`.
+In this case, the styling applied has a light gray background and `32.dp` padding,
+except for the left and right padding, which has a value of `8.dp`.
 ![Button with contentPadding that's overridden by different
 Styles](https://developer.android.com/static/develop/ui/compose/styles/images/button_content_padding_overrides.png) **Figure 3.** Button with `contentPadding` that's overridden by different Styles.
 
@@ -292,7 +289,9 @@ Styles](https://developer.android.com/static/develop/ui/compose/styles/images/bu
 > [!NOTE]
 > **Note:** While the Style APIs are experimental, you need to opt-in to enable Style inheritance by setting the flag `ComposeFoundationFlags.isInheritedTextStyleEnabled = true`.
 
-Certain style properties, such as `contentColor` and text style-related properties, propagate to the child composables. A style set on a child composable overrides the inherited parent styling for that specific child.
+Certain style properties, such as `contentColor` and text style-related
+properties, propagate to the child composables. A style set on a child
+composable overrides the inherited parent styling for that specific child.
 ![Style propagation with Style, styleable, and direct
 parameters](https://developer.android.com/static/develop/ui/compose/styles/images/styles_modifiers_precedence_ordering.png) **Figure 4.** Style propagation with `Style`, `styleable`, and direct parameters.
 
@@ -308,9 +307,9 @@ parameters](https://developer.android.com/static/develop/ui/compose/styles/image
 
 ### Parent styling
 
-You can set text properties (such as `contentColor`) from the parent composable, and they propagate to all child `Text` composables.
+You can set text properties (such as `contentColor`) from the parent composable,
+and they propagate to all child `Text` composables.
 
-<br />
 
 ```kotlin
 val styleState = remember { MutableStyleState(null) }
@@ -325,9 +324,8 @@ Column(
 ) {
     BaseText("Children inherit", style = { width(60.dp) })
     BaseText("certain properties")
-    BaseText("from their parents")
-}
-   
+    BaseText(&quents")
+}StylesSnippets.kt
 ```
 
 <br />
@@ -337,9 +335,10 @@ inheritance](https://developer.android.com/static/develop/ui/compose/styles/imag
 
 ### Child override of properties
 
-You can also set styling on a specific `Text` composable. If the parent composable has styling set, the styling set on the child composable overrides the parent composable's styling.
+You can also set styling on a specific `Text` composable. If the parent composable
+has styling set, the styling set on the child composable overrides the
+parent composable's styling.
 
-<br />
 
 ```kotlin
 val styleState = remember { MutableStyleState(null) }
@@ -356,9 +355,8 @@ Column(
         contentBrush(Brush.linearGradient(listOf(Color.Red, Color.Blue)))
     })
     BaseText("override properties")
-    BaseText("set by their parents")
-}
-   
+    BaseText("ents")
+}StylesSnippets.kt
 ```
 
 <br />
@@ -368,40 +366,39 @@ properties](https://developer.android.com/static/develop/ui/compose/styles/image
 
 ## Implement custom Style properties
 
-You can create custom properties that map to existing Style definitions by using extension functions on the `StyleScope`, as shown in the following example:
+You can create custom properties that map to existing Style definitions by using
+extension functions on the `StyleScope`, as shown in the following example:
 
-<br />
 
 ```kotlin
 fun StyleScope.outlinedBackground(color: Color) {
     border(1.dp, color)
     background(color)
 }
-   
 ```
 
 <br />
 
 Apply this new property within a Style definition:
 
-<br />
 
 ```kotlin
 val customExtensionStyle = Style {
     outlinedBackground(Color.Blue)
 }
-   
 ```
 
 <br />
 
-Creating new styleable properties is unsupported. If your use case requires such support, submit a [feature request](https://issuetracker.google.com/issues/new?component=612128).
+Creating new styleable properties is unsupported. If your use case
+requires such support, submit a [feature request](https://issuetracker.google.com/issues/new?component=612128).
 
 ## Read `CompositionLocal` values
 
-It's a common pattern to store design system tokens within a `CompositionLocal`, to access the variables without needing to pass them as parameters. Styles can access `CompositionLocal`s to retrieve system-wide values within a style:
+It's a common pattern to store design system tokens within a `CompositionLocal`,
+to access the variables without needing to pass them as parameters. Styles
+can access `CompositionLocal`s to retrieve system-wide values within a style:
 
-<br />
 
 ```kotlin
 val buttonStyle = Style {
@@ -409,7 +406,6 @@ val buttonStyle = Style {
     shape(RoundedCornerShape(50))
     background(Brush.verticalGradient(LocalCustomColors.currentValue.background))
 }
-   
 ```
 
 <br />

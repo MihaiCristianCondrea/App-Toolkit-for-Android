@@ -1,6 +1,7 @@
-Follow this systematic procedure to migrate Android applications that use the AppFunctions API in
-version 1.0.0-alpha09 and lower to the compile-time `@AppFunctionServiceEntryPoint` architecture
-introduced in version `1.0.0-alpha10`.
+Follow this systematic procedure to migrate Android applications that use the
+AppFunctions API in version 1.0.0-alpha09 and lower to the compile-time
+`@AppFunctionServiceEntryPoint` architecture introduced in version
+`1.0.0-alpha10`.
 
 *** ** * ** ***
 
@@ -8,44 +9,28 @@ introduced in version `1.0.0-alpha10`.
 
 In lower versions of the AppFunctions API, for example version `1.0.0-alpha09`:
 
-- Applications require separate dependencies for core functionality, specifically
-  `androidx.appfunctions:appfunctions`, and service components, specifically
-  `androidx.appfunctions:appfunctions-service`.
+- Applications require separate dependencies for core functionality, specifically `androidx.appfunctions:appfunctions`, and service components, specifically `androidx.appfunctions:appfunctions-service`.
 - The application implements `AppFunctionConfiguration.Provider` on its `Application` class.
-- You manually register enclosing class instantiation using
-  `AppFunctionConfiguration.Builder().addEnclosingClassFactory(...)`.
+- You manually register enclosing class instantiation using `AppFunctionConfiguration.Builder().addEnclosingClassFactory(...)`.
 - You place metadata property tags directly under `<application>`.
 
 In version `1.0.0-alpha10` featuring `@AppFunctionServiceEntryPoint`:
 
-- The core and service dependencies are consolidated into a single runtime artifact,
-  `androidx.appfunctions:appfunctions`, which eliminates the need for the standalone
-  `appfunctions-service` library.
-- A dedicated wrapper class extending `AppFunctionService` is annotated with
-  `@AppFunctionServiceEntryPoint` and Hilt's `@AndroidEntryPoint` or an alternative dependency
-  injection framework.
-- The KSP compiler generates a concrete service subclass and an XML metadata schema file in
-  `assets/`.
-- The OS discovers and routes executions using a consolidated `<service>` and `app_metadata`
-  declaration in `AndroidManifest.xml`.
+- The core and service dependencies are consolidated into a single runtime artifact, `androidx.appfunctions:appfunctions`, which eliminates the need for the standalone `appfunctions-service` library.
+- A dedicated wrapper class extending `AppFunctionService` is annotated with `@AppFunctionServiceEntryPoint` and Hilt's `@AndroidEntryPoint` or an alternative dependency injection framework.
+- The KSP compiler generates a concrete service subclass and an XML metadata schema file in `assets/`.
+- The OS discovers and routes executions using a consolidated `<service>` and `app_metadata` declaration in `AndroidManifest.xml`.
 
 ### Strict migration requirements from 1.0.0-alpha09 to 1.0.0-alpha10
 
 When focusing solely on the mandatory API changes required by the new
-`@AppFunctionServiceEntryPoint` architecture, the migration consists of four strict requirements
-that you must complete:
+`@AppFunctionServiceEntryPoint` architecture, the migration consists of four
+strict requirements that you must complete:
 
-1. **Build dependency consolidation** : Remove the merged `appfunctions-service` dependency while
-   retaining core `appfunctions` and the KSP compiler.
-2. **Service wrapper creation** : Replace the legacy `AppFunctionConfiguration.Provider` on the
-   `Application` class with an abstract class extending `AppFunctionService`, annotated with
-   `@AppFunctionServiceEntryPoint`.
-3. **Annotation and context decoupling** : Move `@AppFunction` annotations to the new wrapper
-   methods and drop `AppFunctionContext` parameters because `AppFunctionService` inherits directly
-   from `Context`.
-4. **Manifest registration** : Register the KSP-generated concrete service in `AndroidManifest.xml`
-   with `BIND_APP_FUNCTION_SERVICE`, the `AppFunctionService` intent filter, and metadata property
-   tags.
+1. **Build dependency consolidation** : Remove the merged `appfunctions-service` dependency while retaining core `appfunctions` and the KSP compiler.
+2. **Service wrapper creation** : Replace the legacy `AppFunctionConfiguration.Provider` on the `Application` class with an abstract class extending `AppFunctionService`, annotated with `@AppFunctionServiceEntryPoint`.
+3. **Annotation and context decoupling** : Move `@AppFunction` annotations to the new wrapper methods and drop `AppFunctionContext` parameters because `AppFunctionService` inherits directly from `Context`.
+4. **Manifest registration** : Register the KSP-generated concrete service in `AndroidManifest.xml` with `BIND_APP_FUNCTION_SERVICE`, the `AppFunctionService` intent filter, and metadata property tags.
 
 *** ** * ** ***
 
@@ -53,9 +38,10 @@ that you must complete:
 
 ### Consolidate AppFunctions build dependencies
 
-Remove the standalone `appfunctions-service` library from your module build files like
-`build.gradle.kts` and version catalog like `libs.versions.toml`. In version `1.0.0-alpha10`, all
-core service capabilities are consolidated directly within the main `appfunctions` artifact.
+Remove the standalone `appfunctions-service` library from your module build
+files like `build.gradle.kts` and version catalog like `libs.versions.toml`. In
+version `1.0.0-alpha10`, all core service capabilities are consolidated directly
+within the main `appfunctions` artifact.
 
     // build.gradle.kts
     dependencies {
@@ -74,26 +60,22 @@ core service capabilities are consolidated directly within the main `appfunction
     androidx-appfunctions-compiler = { module = "androidx.appfunctions:appfunctions-compiler", version.ref = "appfunctions" }
 
 > [!NOTE]
-> **Note:** If another dependency in your project uses snapshot builds like `1.0.0-SNAPSHOT` or
-> custom snapshot repositories from `https://androidx.dev/snapshots/...`, preserve your custom
-> snapshot repository configuration in `settings.gradle.kts`. Otherwise, standard Google Maven
-> repositories resolve `1.0.0-alpha10` directly.
+> **Note:** If another dependency in your project uses snapshot builds like `1.0.0-SNAPSHOT` or custom snapshot repositories from `https://androidx.dev/snapshots/...`, preserve your custom snapshot repository configuration in `settings.gradle.kts`. Otherwise, standard Google Maven repositories resolve `1.0.0-alpha10` directly.
 
 *** ** * ** ***
 
 ### Create a dedicated wrapper service extending `AppFunctionService`
 
-Instead of annotating standalone business logic classes or implementing manual configuration
-providers, create an abstract service wrapper across your project, for example
-`BaseAppFunctionService`, extending `AppFunctionService` and annotated with
-`@AppFunctionServiceEntryPoint`.
+Instead of annotating standalone business logic classes or implementing manual
+configuration providers, create an abstract service wrapper across your project,
+for example `BaseAppFunctionService`, extending `AppFunctionService` and
+annotated with `@AppFunctionServiceEntryPoint`.
 
 #### Recommended approach using Hilt
 
-Annotate your service with `@AndroidEntryPoint` and inject your data repositories or use cases using
-standard `@Inject internal lateinit var`:
+Annotate your service with `@AndroidEntryPoint` and inject your data
+repositories or use cases using standard `@Inject internal lateinit var`:
 
-<br />
 
 ```kotlin
 @RequiresApi(36)
@@ -114,20 +96,19 @@ abstract class BaseAppFunctionService : AppFunctionService() {
         return messageRepository.send(name, endpointValue, messageBody)
     }
 }
-   
 ```
 
 <br />
 
 #### Framework-agnostic approach using alternative dependency injection or a service locator
 
-While Hilt is recommended, many Android applications implement AppFunctions with alternative
-dependency injection frameworks like Koin, Anvil, or manual Service Locators. Because
-`AppFunctionService` inherits from Android `android.app.Service` and therefore `Context`, you are
-able access your application's DI container directly through `applicationContext` in property
+While Hilt is recommended, many Android applications implement AppFunctions with
+alternative dependency injection frameworks like Koin, Anvil, or manual Service
+Locators. Because `AppFunctionService` inherits from Android
+`android.app.Service` and therefore `Context`, you are able access your
+application's DI container directly through `applicationContext` in property
 getters or during service lifecycle execution:
 
-<br />
 
 ```kotlin
 @RequiresApi(36)
@@ -152,24 +133,21 @@ abstract class ServiceLocatorBaseAppFunctionService : AppFunctionService() {
         return messageRepository.send(name, endpointValue, messageBody)
     }
 }
-   
 ```
 
 <br />
 
 > [!IMPORTANT]
-> **Important:** The `appFunctionXmlFileName` parameter, for example `"my_app_function_service"`,
-> mustn't include the `.xml` extension, as the KSP compiler automatically appends `.xml`. Passing
-`"my_app_function_service.xml"` results in the asset being named
-`"my_app_function_service.xml.xml"`.
+> **Important:** The `appFunctionXmlFileName` parameter, for example `"my_app_function_service"`, mustn't include the `.xml` extension, as the KSP compiler automatically appends `.xml`. Passing `"my_app_function_service.xml"` results in the asset being named `"my_app_function_service.xml.xml"`.
 
 *** ** * ** ***
 
 ### Simplify method signatures and decouple context
 
-Remove legacy `AppFunctionContext` parameters from your core methods. When a method requires an
-Android `Context`, for example when constructing a `PendingIntent`, access `this` directly from your
-`AppFunctionService` wrapper because the wrapper inherently extends `android.content.Context`.
+Remove legacy `AppFunctionContext` parameters from your core methods. When a
+method requires an Android `Context`, for example when constructing a
+`PendingIntent`, access `this` directly from your `AppFunctionService` wrapper
+because the wrapper inherently extends `android.content.Context`.
 
     -   suspend fun makeCall(appFunctionContext: AppFunctionContext, contactName: String?): PendingIntent
     +   suspend fun makeCall(contactName: String?): PendingIntent
@@ -178,8 +156,8 @@ Android `Context`, for example when constructing a `PendingIntent`, access `this
 
 ### Remove legacy configuration provider
 
-Update your `Application` class by removing `AppFunctionConfiguration.Provider` and its associated
-builder entry points:
+Update your `Application` class by removing
+`AppFunctionConfiguration.Provider` and its associated builder entry points:
 
     -   abstract class BaseChatApplication : Application(), AppFunctionConfiguration.Provider { ... }
     +   abstract class BaseChatApplication : Application()
@@ -188,20 +166,21 @@ builder entry points:
 
 ### Avoid redundant abstraction layers
 
-Don't attempt to make an `AppFunction` class or method OS-agnostic---AppFunctions are inherently
-part of the Android platform integration through the `androidx.appfunctions` package. For
-architectural cleanliness, use existing application functionality, such as existing repositories,
-use cases, or domain orchestrators, to execute the behavior within your `@AppFunction` methods
-rather than creating redundant abstraction layers around the OS service.
+Don't attempt to make an `AppFunction` class or method OS-agnostic---AppFunctions
+are inherently part of the Android platform integration through the
+`androidx.appfunctions` package. For architectural cleanliness, use existing
+application functionality, such as existing repositories, use cases, or domain
+orchestrators, to execute the behavior within your `@AppFunction` methods rather
+than creating redundant abstraction layers around the OS service.
 
 *** ** * ** ***
 
 ### Consolidate service and metadata manifest declarations
 
-Register the KSP-generated service declaration and `app_metadata` property inside your module
-manifest, for example in `src/main/AndroidManifest.xml` within the `<application>` tag:
+Register the KSP-generated service declaration and `app_metadata` property
+inside your module manifest, for example in `src/main/AndroidManifest.xml`
+within the `<application>` tag:
 
-<br />
 
 ```xml
 <service
@@ -222,7 +201,6 @@ manifest, for example in `src/main/AndroidManifest.xml` within the `<application
 <property
     android:name="android.app.appfunctions.app_metadata"
     android:resource="@xml/app_metadata" />
-   
 ```
 
 <br />
@@ -231,11 +209,18 @@ manifest, for example in `src/main/AndroidManifest.xml` within the `<application
 
 ## Verification and troubleshooting
 
-1. **Clean rebuild and deploy** : `bash ./gradlew clean installDebug`
-2. **Verify AppSearch discovery / indexing** : Run the following ADB command to confirm the OS
-   successfully discovered and indexed your functions:
-   `bash adb shell cmd app_function list-app-functions` *If your package doesn't appear, confirm
-   that `android.app.appfunctions.v2` matches the exact asset name generated in `assets/`.*
+1. **Clean rebuild and deploy** : `bash
+   ./gradlew clean installDebug`
+2. **Verify AppSearch discovery / indexing** : Run the following ADB command to
+   confirm the OS successfully discovered and indexed your functions:
+   `bash
+   adb shell cmd app_function list-app-functions`
+   *If your package doesn't appear, confirm that `android.app.appfunctions.v2`
+   matches the exact asset name generated in `assets/`.*
 
 3. **Verify execution using ADB** :
-   `bash adb shell "cmd app_function execute-app-function \ --package com.example.chatapp \ --function 'com.example.chatapp.appfunctions.BaseAppFunctionService#send' \ --parameters '{\"name\": \"Alice\", \"endpointValue\": \"1\", \"messageBody\": \"Hello Alice!\"}'"`
+   `bash
+   adb shell "cmd app_function execute-app-function \
+   --package com.example.chatapp \
+   --function 'com.example.chatapp.appfunctions.BaseAppFunctionService#send' \
+   --parameters '{\"name\": \"Alice\", \"endpointValue\": \"1\", \"messageBody\": \"Hello Alice!\"}'"`

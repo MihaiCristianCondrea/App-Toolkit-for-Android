@@ -3,7 +3,6 @@
 ## When This Applies
 
 Detected when imports match any of:
-
 - `javax.persistence.*`
 - `jakarta.persistence.*`
 - `org.hibernate.*`
@@ -21,9 +20,9 @@ Detected when imports match any of:
    secondary constructor or default values for all primary constructor parameters.
 
 4. **Annotation site targets matter:**
-    - `@Id`, `@Column`, `@GeneratedValue` on fields → use `@field:Id`, `@field:Column`, etc.
-      in Kotlin, OR place annotations on constructor parameters with `@field:` site target.
-    - `@ManyToOne`, `@OneToMany`, `@JoinColumn` → same `@field:` targeting.
+   - `@Id`, `@Column`, `@GeneratedValue` on fields → use `@field:Id`, `@field:Column`, etc.
+     in Kotlin, OR place annotations on constructor parameters with `@field:` site target.
+   - `@ManyToOne`, `@OneToMany`, `@JoinColumn` → same `@field:` targeting.
 
 5. **Lazy loading considerations:** `@ManyToOne(fetch = FetchType.LAZY)` requires the entity
    class to be open for proxy creation. `@OneToMany` with lazy collections work with Kotlin's
@@ -38,7 +37,6 @@ Detected when imports match any of:
 ### Example 1: JPA Entity with @Id, @Column, and Relationships
 
 **Java:**
-
 ```java
 @Entity
 @Table(name = "users")
@@ -76,7 +74,6 @@ public class User {
 ```
 
 **Kotlin:**
-
 ```kotlin
 @Entity
 @Table(name = "users")
@@ -105,7 +102,6 @@ open class User(
 ### Example 2: @Embeddable Value Object
 
 **Java:**
-
 ```java
 @Embeddable
 public class Address {
@@ -134,7 +130,6 @@ public class Address {
 ```
 
 **Kotlin:**
-
 ```kotlin
 @Embeddable
 data class Address(
@@ -156,7 +151,6 @@ Default values satisfy the no-arg constructor requirement.
 ### Example 3: Entity with @ManyToOne and @OneToMany
 
 **Java:**
-
 ```java
 @Entity
 @Table(name = "departments")
@@ -195,7 +189,6 @@ public class Department {
 ```
 
 **Kotlin:**
-
 ```kotlin
 @Entity
 @Table(name = "departments")
@@ -228,7 +221,6 @@ open class Department(
 ```
 
 Key points in this example:
-
 - `cascade` array syntax uses Kotlin's `[CascadeType.ALL]` instead of Java's `{CascadeType.ALL}`.
 - The collection is typed as `MutableList` to allow Hibernate to manage the relationship.
 - The class and its properties are `open` so Hibernate can create proxies.
