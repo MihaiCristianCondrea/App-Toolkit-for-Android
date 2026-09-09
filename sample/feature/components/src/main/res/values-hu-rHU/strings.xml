@@ -96,4 +96,6 @@
     <string name="components_text_field_name_placeholder">Név</string>
     <string name="components_text_field_note_placeholder">Jegyzet</string>
     <string name="components_text_field_markdown_placeholder">Írja le a problémát. Az alábbi sáv formázza.</string>
+    <string name="components_text_field_search">Keresés</string>
+    <string name="components_text_field_search_placeholder">Elemek keresése</string>
 </resources>

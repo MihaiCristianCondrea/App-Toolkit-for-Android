@@ -19,14 +19,21 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
@@ -39,6 +46,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
@@ -79,6 +87,18 @@ enum class GeneralTextFieldStyle {
      * group this one is.
      */
     Grouped,
+
+    /**
+     * The pill-shaped Material search input, for a field that filters the content behind it as it
+     * is typed — a top app bar that swaps its title for a search box, say. It leads with a search
+     * icon unless another one is given, and takes its clear or filter actions in the trailing slot.
+     *
+     * It is a different Material component rather than a rounded text field, so the parameters that
+     * describe a form field — `label`, `supportingText`, `errorText`, `minLines`, `maxLines`,
+     * `markdown`, `position` — do not apply to it, and it is rejected by the `TextFieldValue`
+     * overload because the Material input owns its text state.
+     */
+    Search,
 }
 
 /** How much a field knows about the Markdown its text is written in. */
@@ -104,6 +124,10 @@ enum class GeneralTextFieldMarkdown {
  * [errorText] both marks the field as errored and replaces [supportingText] beneath it, so the
  * message and the state cannot drift apart. Pass [isError] on its own to mark the state without a
  * message.
+ *
+ * [GeneralTextFieldStyle.Search] draws the Material search input instead, for a field that filters
+ * what is behind it as it is typed. It leads with a search icon unless [leadingIcon] names another,
+ * and the parameters describing a form field do not apply to it; see the style's own documentation.
  *
  * [markdown] is what makes this field a Markdown editor: [GeneralTextFieldMarkdown.Highlight] styles
  * the syntax as it is typed, and [GeneralTextFieldMarkdown.Editor] adds the formatting bar under the
@@ -134,6 +158,12 @@ enum class GeneralTextFieldMarkdown {
  * @param trailingIcon Icon after the text. With [onTrailingIconClick] it becomes a button.
  * @param trailingIconContentDescription Accessibility description of [trailingIcon].
  * @param onTrailingIconClick Action of the trailing icon, such as clearing the field.
+ * @param trailingContent Replaces the whole trailing slot with a row of your own, for a field that
+ *   ends in more than one action — a search box carrying both a filter and a clear button, say. It
+ *   supersedes [trailingIcon].
+ * @param onSearch Called by [GeneralTextFieldStyle.Search] when the keyboard's search action is
+ *   used. The field always drops focus first, so a filter that already applied itself as it was
+ *   typed needs nothing here.
  * @param singleLine Whether the field refuses line breaks and scrolls horizontally.
  * @param minLines Rows the field is at least as tall as.
  * @param maxLines Rows the field grows to before it scrolls its own content.
@@ -168,6 +198,8 @@ fun GeneralTextField(
     trailingIcon: ToolkitIcon? = null,
     trailingIconContentDescription: String? = null,
     onTrailingIconClick: (() -> Unit)? = null,
+    trailingContent: (@Composable RowScope.() -> Unit)? = null,
+    onSearch: ((String) -> Unit)? = null,
     singleLine: Boolean = false,
     minLines: Int = 1,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
@@ -184,6 +216,37 @@ fun GeneralTextField(
     firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
 ) {
+    if (style == GeneralTextFieldStyle.Search) {
+        val slots = GeneralTextFieldSlots(
+            label = null,
+            placeholder = placeholder,
+            supportingText = null,
+            leadingIcon = leadingIcon ?: SearchLeadingIcon,
+            leadingIconContentDescription = leadingIconContentDescription,
+            trailingIcon = trailingIcon,
+            trailingIconContentDescription = trailingIconContentDescription,
+            onTrailingIconClick = onTrailingIconClick,
+            trailingContent = trailingContent,
+        )
+        GeneralSearchField(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = modifier
+                .fillMaxWidth()
+                .logFocusGain(firebaseController = firebaseController, ga4Event = ga4Event),
+            enabled = enabled,
+            readOnly = readOnly,
+            textStyle = textStyle,
+            placeholder = slots.placeholder(),
+            leadingIcon = slots.leadingIcon(),
+            trailingIcon = slots.trailingIcon(),
+            shape = shape,
+            colors = colors,
+            onSearch = onSearch,
+        )
+        return
+    }
+
     // The formatting bar has to place the caret, so an editor keeps a TextFieldValue of its own and
     // reports only the text back. Everything else stays on the plain String field.
     if (markdown == GeneralTextFieldMarkdown.Editor) {
@@ -223,6 +286,8 @@ fun GeneralTextField(
             trailingIcon = trailingIcon,
             trailingIconContentDescription = trailingIconContentDescription,
             onTrailingIconClick = onTrailingIconClick,
+            trailingContent = trailingContent,
+            onSearch = onSearch,
             singleLine = singleLine,
             minLines = minLines,
             maxLines = maxLines,
@@ -258,6 +323,7 @@ fun GeneralTextField(
         trailingIcon = trailingIcon,
         trailingIconContentDescription = trailingIconContentDescription,
         onTrailingIconClick = onTrailingIconClick,
+        trailingContent = trailingContent,
     )
     val fieldColors: TextFieldColors = colors ?: generalTextFieldColors(style = style)
     val fieldModifier: Modifier = Modifier
@@ -325,7 +391,9 @@ fun GeneralTextField(
  * markers they insert. Take this overload when the caret is part of the state a screen restores, and
  * the [String] one otherwise.
  *
- * Every parameter behaves as it does on the [String] overload.
+ * Every parameter behaves as it does on the [String] overload, except that
+ * [GeneralTextFieldStyle.Search] is rejected: the Material search input owns its own text state, so
+ * there is no caret for this overload to hand over.
  */
 @Composable
 fun GeneralTextField(
@@ -345,6 +413,8 @@ fun GeneralTextField(
     trailingIcon: ToolkitIcon? = null,
     trailingIconContentDescription: String? = null,
     onTrailingIconClick: (() -> Unit)? = null,
+    trailingContent: (@Composable RowScope.() -> Unit)? = null,
+    onSearch: ((String) -> Unit)? = null,
     singleLine: Boolean = false,
     minLines: Int = 1,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
@@ -361,6 +431,9 @@ fun GeneralTextField(
     firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
 ) {
+    require(style != GeneralTextFieldStyle.Search) {
+        "The search style owns its own text state; take the String overload of GeneralTextField."
+    }
     val hasFormattingBar: Boolean = markdown == GeneralTextFieldMarkdown.Editor
     val skin: GeneralTextFieldSkin = rememberGeneralTextFieldSkin(
         style = style,
@@ -378,6 +451,7 @@ fun GeneralTextField(
         trailingIcon = trailingIcon,
         trailingIconContentDescription = trailingIconContentDescription,
         onTrailingIconClick = onTrailingIconClick,
+        trailingContent = trailingContent,
     )
     val fieldColors: TextFieldColors = colors ?: generalTextFieldColors(style = style)
     val fieldModifier: Modifier = Modifier
@@ -455,6 +529,9 @@ fun GeneralTextField(
     }
 }
 
+/** What a search field leads with when its caller names no icon of its own. */
+private val SearchLeadingIcon: ToolkitIcon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Search)
+
 /** Shapes and colors the chosen style gives the field and the bar under it. */
 @Immutable
 private data class GeneralTextFieldSkin(
@@ -515,6 +592,14 @@ private fun rememberGeneralTextFieldSkin(
                 formattingBarColor = Color.Transparent,
             )
 
+            // A search field never carries a formatting bar, and draws through the Material search
+            // input rather than this skin; the shape is here so the whole style set stays covered.
+            GeneralTextFieldStyle.Search -> GeneralTextFieldSkin(
+                fieldShape = shapeOverride ?: CircleShape,
+                formattingBarShape = RectangleShape,
+                formattingBarColor = Color.Transparent,
+            )
+
             GeneralTextFieldStyle.Filled -> GeneralTextFieldSkin(
                 fieldShape = shapeOverride ?: filledShape,
                 // The filled field rounds its top corners only, so the bar rounds the bottom ones
@@ -530,9 +615,11 @@ private fun rememberGeneralTextFieldSkin(
 }
 
 /** The indicator line is dropped for a grouped field: it would cut the block into strips. */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun generalTextFieldColors(style: GeneralTextFieldStyle): TextFieldColors = when (style) {
     GeneralTextFieldStyle.Outlined -> OutlinedTextFieldDefaults.colors()
+    GeneralTextFieldStyle.Search -> SearchBarDefaults.inputFieldColors()
     GeneralTextFieldStyle.Filled -> TextFieldDefaults.colors()
     GeneralTextFieldStyle.Grouped -> TextFieldDefaults.colors(
         focusedIndicatorColor = Color.Transparent,
@@ -580,6 +667,7 @@ private class GeneralTextFieldSlots(
     val trailingIcon: ToolkitIcon?,
     val trailingIconContentDescription: String?,
     val onTrailingIconClick: (() -> Unit)?,
+    val trailingContent: (@Composable RowScope.() -> Unit)?,
 ) {
 
     fun label(): @Composable (() -> Unit)? {
@@ -608,6 +696,8 @@ private class GeneralTextFieldSlots(
     }
 
     fun trailingIcon(): @Composable (() -> Unit)? {
+        val row: (@Composable RowScope.() -> Unit)? = trailingContent
+        if (row != null) return { Row(verticalAlignment = Alignment.CenterVertically, content = row) }
         val icon: ToolkitIcon = trailingIcon ?: return null
         val onClick: (() -> Unit)? = onTrailingIconClick
         if (onClick == null) {

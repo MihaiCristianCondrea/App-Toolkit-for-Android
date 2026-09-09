@@ -96,4 +96,6 @@
     <string name="components_text_field_name_placeholder">Ad</string>
     <string name="components_text_field_note_placeholder">Not</string>
     <string name="components_text_field_markdown_placeholder">Sorunu açıklayın. Alttaki çubuk biçimlendirir.</string>
+    <string name="components_text_field_search">Arama</string>
+    <string name="components_text_field_search_placeholder">Bileşenlerde ara</string>
 </resources>

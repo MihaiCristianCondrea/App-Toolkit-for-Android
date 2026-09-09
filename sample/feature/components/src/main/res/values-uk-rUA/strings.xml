@@ -96,4 +96,6 @@
     <string name="components_text_field_name_placeholder">Ім\'я</string>
     <string name="components_text_field_note_placeholder">Нотатка</string>
     <string name="components_text_field_markdown_placeholder">Опишіть проблему. Панель нижче її відформатує.</string>
+    <string name="components_text_field_search">Пошук</string>
+    <string name="components_text_field_search_placeholder">Пошук компонентів</string>
 </resources>

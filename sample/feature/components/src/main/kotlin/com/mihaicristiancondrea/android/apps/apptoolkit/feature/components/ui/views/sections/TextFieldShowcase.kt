@@ -50,6 +50,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.reposit
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextField
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextFieldMarkdown
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextFieldStyle
@@ -61,7 +63,7 @@ private const val MARKDOWN_MIN_LINES: Int = 4
 private const val MARKDOWN_MAX_LINES: Int = 10
 
 /**
- * Every `GeneralTextField` variant, one per card: the three styles, the error state, and the
+ * Every `GeneralTextField` variant, one per card: the four styles, the error state, and the
  * Markdown editor.
  *
  * The text these fields hold is scratch state of the showcase itself, so it stays here rather than
@@ -77,6 +79,7 @@ fun TextFieldShowcase(
     var email: String by rememberSaveable { mutableStateOf(value = "") }
     var name: String by rememberSaveable { mutableStateOf(value = "") }
     var note: String by rememberSaveable { mutableStateOf(value = "") }
+    var search: String by rememberSaveable { mutableStateOf(value = "") }
     var markdown: String by rememberSaveable { mutableStateOf(value = "") }
 
     ShowcaseHeader(
@@ -194,6 +197,38 @@ fun TextFieldShowcase(
                     ),
                 )
             }
+        }
+
+        ShowcaseSurface(position = GroupedItemPosition.MIDDLE) {
+            CardTitle(text = stringResource(id = R.string.components_text_field_search))
+            MediumVerticalSpacer()
+            GeneralTextField(
+                value = search,
+                onValueChange = { search = it },
+                style = GeneralTextFieldStyle.Search,
+                placeholder = stringResource(
+                    id = R.string.components_text_field_search_placeholder,
+                ),
+                // The clear action only exists while there is something to clear, which is the
+                // trailing row a search box wants rather than one permanent icon.
+                trailingContent = if (search.isEmpty()) {
+                    null
+                } else {
+                    {
+                        GeneralButton(
+                            onClick = { search = "" },
+                            style = GeneralButtonStyle.Text,
+                            icon = ToolkitIcon.Vector(imageVector = Icons.Rounded.Close),
+                            contentDescription = stringResource(
+                                id = R.string.components_text_field_clear,
+                            ),
+                            iconSize = SizeConstants.ButtonIconSize,
+                        )
+                    }
+                },
+                firebaseController = firebaseController,
+                ga4Event = onLogEvent("text_field", "search"),
+            )
         }
 
         ShowcaseSurface(position = GroupedItemPosition.LAST) {

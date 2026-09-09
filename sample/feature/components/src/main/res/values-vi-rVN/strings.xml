@@ -96,4 +96,6 @@
     <string name="components_text_field_name_placeholder">Tên</string>
     <string name="components_text_field_note_placeholder">Ghi chú</string>
     <string name="components_text_field_markdown_placeholder">Mô tả sự cố. Thanh bên dưới sẽ định dạng.</string>
+    <string name="components_text_field_search">Tìm kiếm</string>
+    <string name="components_text_field_search_placeholder">Tìm kiếm thành phần</string>
 </resources>

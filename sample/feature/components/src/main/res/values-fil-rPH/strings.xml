@@ -96,4 +96,6 @@
     <string name="components_text_field_name_placeholder">Pangalan</string>
     <string name="components_text_field_note_placeholder">Tala</string>
     <string name="components_text_field_markdown_placeholder">Ilarawan ang isyu. Ino-format ito ng bar sa ibaba.</string>
+    <string name="components_text_field_search">Paghahanap</string>
+    <string name="components_text_field_search_placeholder">Maghanap ng mga bahagi</string>
 </resources>

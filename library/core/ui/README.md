@@ -121,13 +121,25 @@ part of the state a screen owns.
 | `Filled` (default) | The Material `TextField` |
 | `Outlined` | The Material `OutlinedTextField` |
 | `Grouped` | A filled field with no indicator line, cut to `position` in a grouped block |
+| `Search` | The Material search input, pill-shaped, leading with a search icon |
 
 `Grouped` is the form treatment: a column of fields two dp apart reads as one card, so the indicator
 line is dropped (it would cut the block into strips) and `position` plus `groupedOuterRadius` cut the
 corners. Such a field usually carries no `label` either, because a floating label reserves height
 whether or not it is showing; `placeholder` and a described `leadingIcon` name it instead.
 
-`errorText` marks the error state and replaces `supportingText` in one parameter, so a message and
+`Search` is the odd one out, and deliberately so: it is `SearchBarDefaults.InputField` rather than a
+rounded text field, for a box that filters the content behind it as it is typed — a top app bar that
+swaps its title for a search field, say. It is used on its own rather than inside a `SearchBar`
+because the collapsed bar intercepts the soft keyboard and only accepts typing once it expands into
+a surface that reserves 240dp for results this kind of field does not have. The parameters that
+describe a form field — `label`, `supportingText`, `errorText`, `minLines`, `markdown`, `position` —
+do not apply to it, and the `TextFieldValue` overload rejects it outright, because the Material input
+owns its text state and has no caret to hand over. `onSearch` reports the keyboard's search action;
+focus is dropped first either way.
+
+`trailingContent` replaces the whole trailing slot with a row, for the field that ends in more than
+one action — a search box carrying a filter and a clear button. `errorText` marks the error state and replaces `supportingText` in one parameter, so a message and
 the state it describes cannot drift apart. `trailingIcon` with `onTrailingIconClick` becomes a
 `GeneralButton`, so a clear or reveal action keeps the toolkit's feedback. `ga4Event` is logged when
 the field gains focus — a field is not a button, and a per-keystroke event is not an interaction.

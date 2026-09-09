@@ -96,4 +96,6 @@
     <string name="components_text_field_name_placeholder">Namn</string>
     <string name="components_text_field_note_placeholder">Anteckning</string>
     <string name="components_text_field_markdown_placeholder">Beskriv problemet. Fältet nedanför formaterar det.</string>
+    <string name="components_text_field_search">Sök</string>
+    <string name="components_text_field_search_placeholder">Sök komponenter</string>
 </resources>

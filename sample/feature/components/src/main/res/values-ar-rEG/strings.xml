@@ -96,4 +96,6 @@
     <string name="components_text_field_name_placeholder">الاسم</string>
     <string name="components_text_field_note_placeholder">ملاحظة</string>
     <string name="components_text_field_markdown_placeholder">صف المشكلة. يتولى الشريط أدناه التنسيق.</string>
+    <string name="components_text_field_search">بحث</string>
+    <string name="components_text_field_search_placeholder">ابحث في المكونات</string>
 </resources>

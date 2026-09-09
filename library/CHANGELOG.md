@@ -22,6 +22,12 @@
   and a GA4 event logged when the field takes focus. `Grouped` is the form treatment: no indicator
   line, corners cut to the field's `position` in the block. Both a `String` and a `TextFieldValue`
   overload are available.
+- `GeneralTextFieldStyle.Search` draws the Material search input: the pill-shaped box that filters
+  the content behind it as it is typed, leading with a search icon unless another is given. It is
+  the input field used on its own rather than a `SearchBar`, whose collapsed form intercepts the
+  keyboard and whose expanded form reserves height for results a filtering field does not have.
+  `onSearch` reports the keyboard's search action, and `trailingContent` replaces the trailing slot
+  with a row, for a field ending in more than one action, such as a filter beside a clear button.
 - Added Markdown authoring to `GeneralTextField`, and with it to any screen rather than only the
   issue reporter: `GeneralTextFieldMarkdown.Highlight` styles Markdown syntax as it is typed through
   a length-preserving transformation, and `Editor` adds the formatting bar for bold, italic, inline

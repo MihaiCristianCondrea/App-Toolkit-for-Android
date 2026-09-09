@@ -96,4 +96,6 @@
     <string name="components_text_field_name_placeholder">Nome</string>
     <string name="components_text_field_note_placeholder">Nota</string>
     <string name="components_text_field_markdown_placeholder">Descrivi il problema. La barra qui sotto lo formatta.</string>
+    <string name="components_text_field_search">Ricerca</string>
+    <string name="components_text_field_search_placeholder">Cerca componenti</string>
 </resources>

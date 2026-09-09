@@ -96,4 +96,6 @@
     <string name="components_text_field_name_placeholder">Имя</string>
     <string name="components_text_field_note_placeholder">Заметка</string>
     <string name="components_text_field_markdown_placeholder">Опишите проблему. Панель ниже её оформит.</string>
+    <string name="components_text_field_search">Поиск</string>
+    <string name="components_text_field_search_placeholder">Поиск компонентов</string>
 </resources>

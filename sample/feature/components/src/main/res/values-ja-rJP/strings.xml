@@ -96,4 +96,6 @@
     <string name="components_text_field_name_placeholder">名前</string>
     <string name="components_text_field_note_placeholder">メモ</string>
     <string name="components_text_field_markdown_placeholder">問題を記入してください。下のバーで書式を設定できます。</string>
+    <string name="components_text_field_search">検索</string>
+    <string name="components_text_field_search_placeholder">コンポーネントを検索</string>
 </resources>

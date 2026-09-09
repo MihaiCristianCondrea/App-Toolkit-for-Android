@@ -96,4 +96,6 @@
     <string name="components_text_field_name_placeholder">نام</string>
     <string name="components_text_field_note_placeholder">نوٹ</string>
     <string name="components_text_field_markdown_placeholder">مسئلہ بیان کریں۔ نیچے دی گئی بار اسے فارمیٹ کرتی ہے۔</string>
+    <string name="components_text_field_search">تلاش</string>
+    <string name="components_text_field_search_placeholder">کمپوننٹس تلاش کریں</string>
 </resources>

@@ -96,4 +96,6 @@
     <string name="components_text_field_name_placeholder">Nama</string>
     <string name="components_text_field_note_placeholder">Catatan</string>
     <string name="components_text_field_markdown_placeholder">Jelaskan masalahnya. Bilah di bawah yang memformatnya.</string>
+    <string name="components_text_field_search">Pencarian</string>
+    <string name="components_text_field_search_placeholder">Cari komponen</string>
 </resources>
