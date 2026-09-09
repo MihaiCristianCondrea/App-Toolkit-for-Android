@@ -38,7 +38,6 @@
     <string name="tile_service_tails">লেজ</string>
     <string name="tile_sos_summary">জরুরী ক্রিয়া বন্ধ রাখুন</string>
     <string name="tile_sos_title">এসওএস</string>
-    <string name="tiles_add">যোগ করুন</string>
     <string name="tiles_add_pre_android_13">Android 12 এবং তার বেশি বয়সের জন্য দ্রুত সেটিংস সম্পাদনা মোড থেকে টাইলস যোগ করতে হবে।</string>
     <string name="tiles_add_result_added">দ্রুত সেটিংসে টাইল যোগ করা হয়েছে</string>
     <string name="tiles_add_result_already_added">টাইল ইতিমধ্যেই দ্রুত সেটিংসে রয়েছে৷</string>

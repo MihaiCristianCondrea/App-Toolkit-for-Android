@@ -38,7 +38,6 @@
     <string name="tile_service_tails">Farok</string>
     <string name="tile_sos_summary">Tartsa közel a vészhelyzeti intézkedéseket</string>
     <string name="tile_sos_title">SOS</string>
-    <string name="tiles_add">Hozzáadás</string>
     <string name="tiles_add_pre_android_13">Az Android 12 és régebbi verzióihoz a Gyorsbeállítások szerkesztési módból csempék hozzáadása szükséges.</string>
     <string name="tiles_add_result_added">Csempe hozzáadva a Gyorsbeállításokhoz</string>
     <string name="tiles_add_result_already_added">A csempe már a Gyorsbeállításokban van</string>

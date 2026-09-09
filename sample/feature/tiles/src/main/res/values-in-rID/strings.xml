@@ -38,7 +38,6 @@
     <string name="tile_service_tails">Ekor</string>
     <string name="tile_sos_summary">Dekatkan tindakan darurat</string>
     <string name="tile_sos_title">SOS</string>
-    <string name="tiles_add">Tambahkan</string>
     <string name="tiles_add_pre_android_13">Android 12 dan yang lebih lama memerlukan penambahan ubin dari mode edit Pengaturan Cepat.</string>
     <string name="tiles_add_result_added">Ubin ditambahkan ke Pengaturan Cepat</string>
     <string name="tiles_add_result_already_added">Ubin sudah ada di Pengaturan Cepat</string>

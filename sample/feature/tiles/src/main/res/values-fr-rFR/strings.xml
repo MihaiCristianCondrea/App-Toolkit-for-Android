@@ -38,7 +38,6 @@
     <string name="tile_service_tails">Queues</string>
     <string name="tile_sos_summary">Gardez les actions d’urgence à proximité</string>
     <string name="tile_sos_title">SOS</string>
-    <string name="tiles_add">Ajouter</string>
     <string name="tiles_add_pre_android_13">Android 12 et versions antérieures nécessitent l’ajout de vignettes à partir du mode d’édition des paramètres rapides.</string>
     <string name="tiles_add_result_added">Tuile ajoutée aux paramètres rapides</string>
     <string name="tiles_add_result_already_added">Tile est déjà dans les paramètres rapides</string>

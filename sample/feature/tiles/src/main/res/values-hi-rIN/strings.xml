@@ -38,7 +38,6 @@
     <string name="tile_service_tails">पूंछ</string>
     <string name="tile_sos_summary">आपातकालीन कार्रवाइयां बंद रखें</string>
     <string name="tile_sos_title">एसओएस</string>
-    <string name="tiles_add">जोड़ें</string>
     <string name="tiles_add_pre_android_13">Android 12 और पुराने संस्करणों में त्वरित सेटिंग्स संपादन मोड से टाइल जोड़ने की आवश्यकता होती है।</string>
     <string name="tiles_add_result_added">टाइल को त्वरित सेटिंग्स में जोड़ा गया</string>
     <string name="tiles_add_result_already_added">टाइल पहले से ही त्वरित सेटिंग्स में है</string>

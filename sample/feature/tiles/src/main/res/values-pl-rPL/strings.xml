@@ -38,7 +38,6 @@
     <string name="tile_service_tails">Ogony</string>
     <string name="tile_sos_summary">Trzymaj działania awaryjne blisko</string>
     <string name="tile_sos_title">SOS</string>
-    <string name="tiles_add">Dodaj</string>
     <string name="tiles_add_pre_android_13">Android 12 i starsze wymagają dodania kafelków w trybie edycji Szybkich ustawień.</string>
     <string name="tiles_add_result_added">Kafelek dodany do Szybkich ustawień</string>
     <string name="tiles_add_result_already_added">Kafelek jest już w Szybkich ustawieniach</string>

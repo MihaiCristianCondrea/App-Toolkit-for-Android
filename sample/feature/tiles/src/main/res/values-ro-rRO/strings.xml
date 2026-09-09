@@ -38,7 +38,6 @@
     <string name="tile_service_tails">Cozi</string>
     <string name="tile_sos_summary">Țineți acțiunile de urgență aproape</string>
     <string name="tile_sos_title">SOS</string>
-    <string name="tiles_add">Adăugați</string>
     <string name="tiles_add_pre_android_13">Android 12 și versiuni mai vechi necesită adăugarea de piese din modul de editare Setări rapide.</string>
     <string name="tiles_add_result_added">Tila adăugată la Setări rapide</string>
     <string name="tiles_add_result_already_added">Tile este deja în Setări rapide</string>

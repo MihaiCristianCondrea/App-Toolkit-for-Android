@@ -38,7 +38,6 @@
     <string name="tile_service_tails">テイルス</string>
     <string name="tile_sos_summary">緊急行動は身近にしておくこと</string>
     <string name="tile_sos_title">SOS</string>
-    <string name="tiles_add">追加</string>
     <string name="tiles_add_pre_android_13">Android 12 以降では、クイック設定編集モードからタイルを追加する必要があります。</string>
     <string name="tiles_add_result_added">クイック設定にタイルを追加しました</string>
     <string name="tiles_add_result_already_added">タイルはすでにクイック設定にあります</string>

@@ -38,7 +38,6 @@
     <string name="tile_service_tails">Svansar</string>
     <string name="tile_sos_summary">Håll nödåtgärder nära</string>
     <string name="tile_sos_title">SOS</string>
-    <string name="tiles_add">Lägg till</string>
     <string name="tiles_add_pre_android_13">Android 12 och äldre kräver att du lägger till brickor från redigeringsläget för snabbinställningar.</string>
     <string name="tiles_add_result_added">Kakel har lagts till i snabbinställningar</string>
     <string name="tiles_add_result_already_added">Tile finns redan i snabbinställningarna</string>

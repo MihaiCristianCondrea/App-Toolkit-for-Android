@@ -38,7 +38,6 @@
     <string name="tile_service_tails">尾巴</string>
     <string name="tile_sos_summary">密切關注緊急行動</string>
     <string name="tile_sos_title">求救</string>
-    <string name="tiles_add">添加</string>
     <string name="tiles_add_pre_android_13">Android 12 及更早版本需要從「快速設定」編輯模式新增圖塊。</string>
     <string name="tiles_add_result_added">磁貼已新增至快速設定</string>
     <string name="tiles_add_result_already_added">磁貼已在「快速設定」中</string>

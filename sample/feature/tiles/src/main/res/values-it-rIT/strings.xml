@@ -38,7 +38,6 @@
     <string name="tile_service_tails">Code</string>
     <string name="tile_sos_summary">Mantieni le azioni di emergenza vicine</string>
     <string name="tile_sos_title">SOS</string>
-    <string name="tiles_add">Aggiungi</string>
     <string name="tiles_add_pre_android_13">Android 12 e versioni precedenti richiedono l\'aggiunta di riquadri dalla modalità di modifica Impostazioni rapide.</string>
     <string name="tiles_add_result_added">Riquadro aggiunto alle Impostazioni rapide</string>
     <string name="tiles_add_result_already_added">Il riquadro è già nelle Impostazioni rapide</string>

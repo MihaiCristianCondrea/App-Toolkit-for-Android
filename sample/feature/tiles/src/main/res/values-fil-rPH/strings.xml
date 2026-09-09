@@ -38,7 +38,6 @@
     <string name="tile_service_tails">Mga buntot</string>
     <string name="tile_sos_summary">Panatilihing malapit ang mga aksyong pang-emergency</string>
     <string name="tile_sos_title">SOS</string>
-    <string name="tiles_add">Idagdag</string>
     <string name="tiles_add_pre_android_13">Ang Android 12 at mas luma ay nangangailangan ng pagdaragdag ng mga tile mula sa Quick Settings edit mode.</string>
     <string name="tiles_add_result_added">Idinagdag ang tile sa Mga Mabilisang Setting</string>
     <string name="tiles_add_result_already_added">Ang tile ay nasa Mga Mabilisang Setting</string>
