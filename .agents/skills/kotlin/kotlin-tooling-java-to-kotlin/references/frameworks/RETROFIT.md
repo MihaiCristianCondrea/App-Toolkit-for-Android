@@ -20,6 +20,7 @@ async pattern is eliminated entirely.
 ### 3. Annotation preservation
 
 All Retrofit annotations transfer directly with no changes:
+
 - HTTP method annotations: `@GET`, `@POST`, `@PUT`, `@DELETE`, `@PATCH`, `@HTTP`
 - Header annotations: `@Headers`, `@Header`, `@HeaderMap`
 - Parameter annotations: `@Path`, `@Query`, `@QueryMap`, `@Body`, `@Field`,
@@ -139,6 +140,7 @@ interface UserApi {
 ```
 
 **Key points:**
+
 - `Call<T>` is removed — each method becomes a `suspend fun` returning `T` directly.
   Retrofit 2.6.0+ supports this natively without an additional adapter.
 - `Call<Void>` becomes `Response<Unit>`. `Unit` is Kotlin's equivalent of `Void`.

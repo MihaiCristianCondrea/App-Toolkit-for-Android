@@ -7,10 +7,10 @@ Detected when imports match `com.fasterxml.jackson.*`.
 ## Key Rules
 
 1. **Annotation site targets**:
-   - `@JsonProperty` on a Java field → `@field:JsonProperty` in Kotlin.
-   - `@JsonProperty` on a Java getter → `@get:JsonProperty` in Kotlin.
-   - When converting to Kotlin properties, apply BOTH `@field:` and `@get:` targets to
-     match Java's dual annotation on field + getter.
+    - `@JsonProperty` on a Java field → `@field:JsonProperty` in Kotlin.
+    - `@JsonProperty` on a Java getter → `@get:JsonProperty` in Kotlin.
+    - When converting to Kotlin properties, apply BOTH `@field:` and `@get:` targets to
+      match Java's dual annotation on field + getter.
 
 2. **@JsonCreator**: Java's `@JsonCreator` static factory or constructor → Kotlin primary
    constructor. The `@JsonCreator` annotation is often unnecessary on Kotlin's primary
@@ -135,6 +135,7 @@ open class OrderSummaryDto(
 ```
 
 **Key points:**
+
 - `@JsonInclude` stays at class level — no site target needed.
 - `@JsonProperty` gets both `@field:` and `@get:` to match the Java field + getter
   annotations.
@@ -238,6 +239,7 @@ data class ConfigEntry @JsonCreator constructor(
 ```
 
 **Key points:**
+
 - The Java `@JsonCreator` static factory is converted to a Kotlin primary constructor
   with `@JsonCreator`. The companion object factory is preserved for backward
   compatibility but the primary constructor handles deserialization.

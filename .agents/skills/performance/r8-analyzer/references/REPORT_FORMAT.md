@@ -16,8 +16,11 @@ mention in this section
 
 ## 3. Optimization summary
 
-- **Optimization score**: \[X\]% code is available for R8 optimizations (e.g., inlining, merging). \[100-X\]% of codebase can't be optimized by R8.
-- **Shrinking score**: \[X\]% of code will be optimized by R8 by removing unused classes, fields and methods. \[100-X\]% of codebase contains redundant classes, fields and methods that can't be removed by R8.
+- **Optimization score**: \[X\]% code is available for R8 optimizations (e.g., inlining, merging).
+  \[100-X\]% of codebase can't be optimized by R8.
+- **Shrinking score**: \[X\]% of code will be optimized by R8 by removing unused classes, fields and
+  methods. \[100-X\]% of codebase contains redundant classes, fields and methods that can't be
+  removed by R8.
 - **Obfuscation score**: \[X\]% of the codebase is available for R8 to obfuscate.
 
 Increasing these scores increases the codebase available to R8 for
@@ -27,7 +30,8 @@ optimizations.
 
 ### \[Rule text\]
 
-- **Keeps**: \[X\] items or \[X\] % of the codebase from optimization. Classes: \[X\], Fields: \[X\], Methods: \[X\] are prevented from optimization due to this keep rule
+- **Keeps**: \[X\] items or \[X\] % of the codebase from optimization. Classes: \[X\], Fields:
+  \[X\], Methods: \[X\] are prevented from optimization due to this keep rule
 - **Kept items**: \[Class1\], \[Class2\]
 - **Action** : **Remove** (Library bundles rules) OR **Refine** (Too broad, use \[Surgical Rule\]).
 

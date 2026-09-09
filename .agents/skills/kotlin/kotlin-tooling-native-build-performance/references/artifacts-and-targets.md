@@ -6,13 +6,13 @@ same code several times. Map each feedback loop to one specific task.
 
 ## Task table
 
-| Feedback loop | Correct task |
-|---|---|
-| Xcode builds and runs the app (direct integration) | `:shared:embedAndSignAppleFrameworkForXcode` |
-| Gradle-only check of the Apple Silicon simulator framework | `:shared:linkDebugFrameworkIosSimulatorArm64` |
-| CocoaPods integration | `:shared:linkPodDebugFrameworkIosSimulatorArm64` |
-| Distribution or App Store validation | `assemble<Name>ReleaseXCFramework` — in CI, not in the local loop |
-| Debug XCFramework genuinely required | `assemble<Name>DebugXCFramework` |
+| Feedback loop                                              | Correct task                                                      |
+|------------------------------------------------------------|-------------------------------------------------------------------|
+| Xcode builds and runs the app (direct integration)         | `:shared:embedAndSignAppleFrameworkForXcode`                      |
+| Gradle-only check of the Apple Silicon simulator framework | `:shared:linkDebugFrameworkIosSimulatorArm64`                     |
+| CocoaPods integration                                      | `:shared:linkPodDebugFrameworkIosSimulatorArm64`                  |
+| Distribution or App Store validation                       | `assemble<Name>ReleaseXCFramework` — in CI, not in the local loop |
+| Debug XCFramework genuinely required                       | `assemble<Name>DebugXCFramework`                                  |
 
 Per-target link tasks follow the pattern
 `link<BuildType>Framework<Target>`; find the exact names with

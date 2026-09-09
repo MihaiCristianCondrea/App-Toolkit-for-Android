@@ -1,8 +1,11 @@
 Boost app engagement by reaching your users where they are. Integrate Engage SDK
 to deliver personalized recommendations and continuation content directly to
 users across multiple on-device surfaces, like
-**[Collections](https://android-developers.googleblog.com/2024/07/introducing-collections-powered-by-engage-sdk.html)** , **[Entertainment
-Space](https://blog.google/products/android/entertainment-space/)** , and the Play Store. The integration adds
+*
+*[Collections](https://android-developers.googleblog.com/2024/07/introducing-collections-powered-by-engage-sdk.html)
+** , **[Entertainment
+Space](https://blog.google/products/android/entertainment-space/)** , and the Play Store. The
+integration adds
 less than 50 KB (compressed) to the average APK and takes most apps about a
 week of developer time. Learn more at our **[business
 site](http://play.google.com/console/about/programs/EngageSDK)**.
@@ -35,31 +38,31 @@ Interaction related metadata are optional.
 
 - Post
 
-  - Image in portrait mode and Timestamp, or
-  - Image in portrait mode + text content and Timestamp
+    - Image in portrait mode and Timestamp, or
+    - Image in portrait mode + text content and Timestamp
 - Profile
 
-  - Avatar, Name or Handle, Additional image
+    - Avatar, Name or Handle, Additional image
 - Interactions
 
-  - Count and label only, or
-  - Count and visual (icon)
+    - Count and label only, or
+    - Count and visual (icon)
 
 **SocialPostEntity** contains profile, post and interaction related metadata.
 
 - Profile
 
-  - Avatar, Name or Handle, additional text, additional image
+    - Avatar, Name or Handle, additional text, additional image
 - Post
 
-  - Text and Timestamp, or
-  - Rich media (image or rich URL) and Timestamp, or
-  - Text and rich media (image or rich URL) and Timestamp, or
-  - Video preview (thumbnail and duration) and Timestamp
+    - Text and Timestamp, or
+    - Rich media (image or rich URL) and Timestamp, or
+    - Text and rich media (image or rich URL) and Timestamp, or
+    - Video preview (thumbnail and duration) and Timestamp
 - Interactions
 
-  - Count \& label only, or
-  - Count \& visual (icon)
+    - Count \& label only, or
+    - Count \& visual (icon)
 
 ### Pre-work
 
@@ -80,9 +83,9 @@ service](https://developer.android.com/guide/components/bound-services).
 The data a client can publish is subject to the following limits for different
 cluster types:
 
-| Cluster type | Cluster limits | Minimum entity limits in a cluster | Maximum entity limits in a cluster |
-|---|---|---|---|
-| Recommendation Cluster(s) | At most 7 | At least 1 (`PortraitMediaEntity`, or `SocialPostEntity`) | At most 50 (`PortraitMediaEntity`, or `SocialPostEntity`) |
+| Cluster type              | Cluster limits | Minimum entity limits in a cluster                        | Maximum entity limits in a cluster                        |
+|---------------------------|----------------|-----------------------------------------------------------|-----------------------------------------------------------|
+| Recommendation Cluster(s) | At most 7      | At least 1 (`PortraitMediaEntity`, or `SocialPostEntity`) | At most 50 (`PortraitMediaEntity`, or `SocialPostEntity`) |
 
 ### Step 1: Provide entity data
 
@@ -96,64 +99,64 @@ The charts below outline available attributes and requirements for each type.
 
 #### `PortraitMediaEntity`
 
-| Attribute | Requirement | Description | Format |
-|---|---|---|---|
-| Action URI | **Required** for all surfaces other than Google TV | Deep Link to the entity in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) | URI |
-| PlatformSpecificPlayback | **Required** for Google TV surface | Deep Link to the entity in the provider app for platforms like Google TV and Mobile. | List of PlatformSpecificPlayback objects |
-| Recommendation Reason | Optional | The justification for recommending the content to the user. | RecommendationReason object |
-| Comments Summary | Optional | Summary of comments for the post. | String |
-| **Post related metadata (Required)** ||||
-| Image(s) | Required | Image(s) should be in **portrait aspect ratio.** The UI may show only 1 image when multiple images are provided. However, the UI may provide visual indication that there are more images in the app. *If the post is a video, the provider should provide a thumbnail of the video to be shown as an image.* | See [Image Specifications](https://developer.android.com/guide/playcore/engage/social#image-specs) for guidance. |
-| Text content | Optional | The main text of a post, update, etc. | String (recommended max 140 chars) |
-| Timestamp | Optional | Time when the post was published. | Epoch timestamp in milliseconds |
-| Is video content | Optional | Is the post a video? | boolean |
-| Video duration | Optional | The duration of the video in milliseconds. | Long |
-| **Profile related metadata (Optional)** ||||
-| Name | Required | Profile name or id or handle, eg "John Doe", "@TeamPixel" | String(recommended max 25 chars) |
-| Avatar | Required | Profile picture or avatar image of the user. **Square 1:1 image** | See [Image Specifications](https://developer.android.com/guide/playcore/engage/social#image-specs) for guidance. |
-| Additional Image | Optional | Profile badge. for example - verified badge **Square 1:1 image** | See [Image Specifications](https://developer.android.com/guide/playcore/engage/social#image-specs) for guidance. |
-| **Interactions related metadata (Optional)** ||||
-| Count | Optional | Indicate the number of interactions, for example - "3.7 M.". **Note:** If both Count and Count Value are provided, Count will be used. **Note:** Partners should use either **Count** or **CountWithOptionalLabel**. | String |
-| CountWithOptionalLabel | Optional | Indicate the number of interactions with an optional label, for example - "3.7 M Likes.". **Note:** If both CountWithOptionalLabel and Count Value are provided, one of them will be used. **Note:** Partners should use either **Count** or **CountWithOptionalLabel**. | String |
-| Count Value | Optional | The number of interactions as a value. **Note:** Provide Count Value instead of Count if your app doesn't handle logic on how a large number should be optimized for different display sizes. If both Count and Count Value are provided, Count is used. | Long |
-| Label | Optional | Indicate what the interaction label is for. For example - "Likes". | String |
-| Visual | Optional | Indicate what the interaction is for. For example - Image showing Likes icon, emoji. Can provide more than 1 image, though not all may not be shown on all form factors. **Note:** Must be Square 1:1 image | See [Image Specifications](https://developer.android.com/guide/playcore/engage/social#image-specs) for guidance. |
-| **DisplayTimeWindow (Optional) - Set a time window for a content to be shown on the surface** ||||
-| Start Timestamp | Optional | The epoch timestamp after which the content should be shown on the surface. If not set, content is eligible to be shown on the surface. | Epoch timestamp in milliseconds |
-| End Timestamp | Optional | The epoch timestamp after which the content is no longer shown on the surface. If not set, content is eligible to be shown on the surface. | Epoch timestamp in milliseconds |
+| Attribute                                                                                     | Requirement                                        | Description                                                                                                                                                                                                                                                                                                   | Format                                                                                                           |
+|-----------------------------------------------------------------------------------------------|----------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------|
+| Action URI                                                                                    | **Required** for all surfaces other than Google TV | Deep Link to the entity in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution)                                                                                                                 | URI                                                                                                              |
+| PlatformSpecificPlayback                                                                      | **Required** for Google TV surface                 | Deep Link to the entity in the provider app for platforms like Google TV and Mobile.                                                                                                                                                                                                                          | List of PlatformSpecificPlayback objects                                                                         |
+| Recommendation Reason                                                                         | Optional                                           | The justification for recommending the content to the user.                                                                                                                                                                                                                                                   | RecommendationReason object                                                                                      |
+| Comments Summary                                                                              | Optional                                           | Summary of comments for the post.                                                                                                                                                                                                                                                                             | String                                                                                                           |
+| **Post related metadata (Required)**                                                          |                                                    |                                                                                                                                                                                                                                                                                                               |                                                                                                                  |
+| Image(s)                                                                                      | Required                                           | Image(s) should be in **portrait aspect ratio.** The UI may show only 1 image when multiple images are provided. However, the UI may provide visual indication that there are more images in the app. *If the post is a video, the provider should provide a thumbnail of the video to be shown as an image.* | See [Image Specifications](https://developer.android.com/guide/playcore/engage/social#image-specs) for guidance. |
+| Text content                                                                                  | Optional                                           | The main text of a post, update, etc.                                                                                                                                                                                                                                                                         | String (recommended max 140 chars)                                                                               |
+| Timestamp                                                                                     | Optional                                           | Time when the post was published.                                                                                                                                                                                                                                                                             | Epoch timestamp in milliseconds                                                                                  |
+| Is video content                                                                              | Optional                                           | Is the post a video?                                                                                                                                                                                                                                                                                          | boolean                                                                                                          |
+| Video duration                                                                                | Optional                                           | The duration of the video in milliseconds.                                                                                                                                                                                                                                                                    | Long                                                                                                             |
+| **Profile related metadata (Optional)**                                                       |                                                    |                                                                                                                                                                                                                                                                                                               |                                                                                                                  |
+| Name                                                                                          | Required                                           | Profile name or id or handle, eg "John Doe", "@TeamPixel"                                                                                                                                                                                                                                                     | String(recommended max 25 chars)                                                                                 |
+| Avatar                                                                                        | Required                                           | Profile picture or avatar image of the user. **Square 1:1 image**                                                                                                                                                                                                                                             | See [Image Specifications](https://developer.android.com/guide/playcore/engage/social#image-specs) for guidance. |
+| Additional Image                                                                              | Optional                                           | Profile badge. for example - verified badge **Square 1:1 image**                                                                                                                                                                                                                                              | See [Image Specifications](https://developer.android.com/guide/playcore/engage/social#image-specs) for guidance. |
+| **Interactions related metadata (Optional)**                                                  |                                                    |                                                                                                                                                                                                                                                                                                               |                                                                                                                  |
+| Count                                                                                         | Optional                                           | Indicate the number of interactions, for example - "3.7 M.". **Note:** If both Count and Count Value are provided, Count will be used. **Note:** Partners should use either **Count** or **CountWithOptionalLabel**.                                                                                          | String                                                                                                           |
+| CountWithOptionalLabel                                                                        | Optional                                           | Indicate the number of interactions with an optional label, for example - "3.7 M Likes.". **Note:** If both CountWithOptionalLabel and Count Value are provided, one of them will be used. **Note:** Partners should use either **Count** or **CountWithOptionalLabel**.                                      | String                                                                                                           |
+| Count Value                                                                                   | Optional                                           | The number of interactions as a value. **Note:** Provide Count Value instead of Count if your app doesn't handle logic on how a large number should be optimized for different display sizes. If both Count and Count Value are provided, Count is used.                                                      | Long                                                                                                             |
+| Label                                                                                         | Optional                                           | Indicate what the interaction label is for. For example - "Likes".                                                                                                                                                                                                                                            | String                                                                                                           |
+| Visual                                                                                        | Optional                                           | Indicate what the interaction is for. For example - Image showing Likes icon, emoji. Can provide more than 1 image, though not all may not be shown on all form factors. **Note:** Must be Square 1:1 image                                                                                                   | See [Image Specifications](https://developer.android.com/guide/playcore/engage/social#image-specs) for guidance. |
+| **DisplayTimeWindow (Optional) - Set a time window for a content to be shown on the surface** |                                                    |                                                                                                                                                                                                                                                                                                               |                                                                                                                  |
+| Start Timestamp                                                                               | Optional                                           | The epoch timestamp after which the content should be shown on the surface. If not set, content is eligible to be shown on the surface.                                                                                                                                                                       | Epoch timestamp in milliseconds                                                                                  |
+| End Timestamp                                                                                 | Optional                                           | The epoch timestamp after which the content is no longer shown on the surface. If not set, content is eligible to be shown on the surface.                                                                                                                                                                    | Epoch timestamp in milliseconds                                                                                  |
 
 #### `SocialPostEntity`
 
-| Attribute | Requirement | Description | Format |
-|---|---|---|---|
-| Action URI | **Required** | Deep Link to the entity in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) | URI |
-| PlatformSpecificPlayback URIs | **Required** for Google TV surface | Deep Link to the entity in the provider app for platforms like Google TV and Mobile. | List of PlatformSpecificPlayback objects |
-| Recommendation Reason | Optional | The justification for recommending the content to the user. | RecommendationReason object |
-| Comments Summary | Optional | Summary of comments for the post. | String |
-| **Post related metadata (Required)** At least one of TextContent, Image or WebContent is required ||||
-| Image(s) | Optional | Image(s) should be in **portrait aspect ratio.** The UI may show only 1 image when multiple images are provided. However, the UI may provide visual indication that there are more images in the app. *If the post is a video, the provider should provide a thumbnail of the video to be shown as an image.* | See [Image Specifications](https://developer.android.com/guide/playcore/engage/social#image-specs) for guidance. |
-| Text content | Optional | The main text of a post, update, etc. | String (recommended max 140 chars) |
-| **Video Content (Optional)** ||||
-| Duration | Required | The duration of the video in milliseconds. | Long |
-| Image | Required | Preview image of the video content. | See [Image Specifications](https://developer.android.com/guide/playcore/engage/social#image-specs) for guidance. |
-| **Link Preview (Optional)** ||||
-| Link Preview - Title | Required | Text to indicate the title of the web page content | String |
-| Link Preview - Hostname | Required | Text to indicate the web page owner, eg "INSIDER" | String |
-| Link Preview - Image | Optional | Hero image for the web content | See [Image Specifications](https://developer.android.com/guide/playcore/engage/social#image-specs) for guidance. |
-| Timestamp | Optional | Time when the post was published. | Epoch timestamp in milliseconds |
-| **Profile related metadata (Optional)** ||||
-| Name | Required | Profile name or id or handle, eg "John Doe", "@TeamPixel." | String(recommended max 25 chars) |
-| Additional Text | Optional | Could be used as profile id or handle or additional metadata For example "@John-Doe", "5M followers", "You might like", "Trending", "5 new posts" | String(recommended max 40 chars) |
-| Avatar | Required | Profile picture or avatar image of the user. **Square 1:1 image** | See [Image Specifications](https://developer.android.com/guide/playcore/engage/social#image-specs) for guidance. |
-| Additional Image | Optional | Profile badge, for example - verified badge **Square 1:1 image** | See [Image Specifications](https://developer.android.com/guide/playcore/engage/social#image-specs) for guidance. |
-| **Interactions related metadata (Optional)** ||||
-| Count | Required | Indicate the number of interactions, for example - "3.7 M." **Note:** Partners should use either **Count** or **CountWithOptionalLabel**. | String |
-| CountWithOptionalLabel | Required | Indicate the number of interactions with an optional label, for example - "3.7 M Likes." **Note:** Partners should use either **Count** or **CountWithOptionalLabel**. | String |
-| Label | Optional If not provided, **Visual** must be provided. | Indicate what the interaction is for. For example - "Likes." | String (recommended max 20 chars for count + label combined) |
-| Visual | Optional If not provided, **Label** must be provided. | Indicate what the interaction is for. For example - Image showing Likes icon, emoji. Can provide more than 1 image, though not all may not be shown on all form factors. **Square 1:1 image** | See [Image Specifications](https://developer.android.com/guide/playcore/engage/social#image-specs) for guidance. |
-| **DisplayTimeWindow (Optional) - Set a time window for a content to be shown on the surface** ||||
-| Start Timestamp | Optional | The epoch timestamp after which the content should be shown on the surface. If not set, content is eligible to be shown on the surface. | Epoch timestamp in milliseconds |
-| End Timestamp | Optional | The epoch timestamp after which the content is no longer shown on the surface. If not set, content is eligible to be shown on the surface. | Epoch timestamp in milliseconds |
+| Attribute                                                                                         | Requirement                                            | Description                                                                                                                                                                                                                                                                                                   | Format                                                                                                           |
+|---------------------------------------------------------------------------------------------------|--------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------|
+| Action URI                                                                                        | **Required**                                           | Deep Link to the entity in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution)                                                                                                                 | URI                                                                                                              |
+| PlatformSpecificPlayback URIs                                                                     | **Required** for Google TV surface                     | Deep Link to the entity in the provider app for platforms like Google TV and Mobile.                                                                                                                                                                                                                          | List of PlatformSpecificPlayback objects                                                                         |
+| Recommendation Reason                                                                             | Optional                                               | The justification for recommending the content to the user.                                                                                                                                                                                                                                                   | RecommendationReason object                                                                                      |
+| Comments Summary                                                                                  | Optional                                               | Summary of comments for the post.                                                                                                                                                                                                                                                                             | String                                                                                                           |
+| **Post related metadata (Required)** At least one of TextContent, Image or WebContent is required |                                                        |                                                                                                                                                                                                                                                                                                               |                                                                                                                  |
+| Image(s)                                                                                          | Optional                                               | Image(s) should be in **portrait aspect ratio.** The UI may show only 1 image when multiple images are provided. However, the UI may provide visual indication that there are more images in the app. *If the post is a video, the provider should provide a thumbnail of the video to be shown as an image.* | See [Image Specifications](https://developer.android.com/guide/playcore/engage/social#image-specs) for guidance. |
+| Text content                                                                                      | Optional                                               | The main text of a post, update, etc.                                                                                                                                                                                                                                                                         | String (recommended max 140 chars)                                                                               |
+| **Video Content (Optional)**                                                                      |                                                        |                                                                                                                                                                                                                                                                                                               |                                                                                                                  |
+| Duration                                                                                          | Required                                               | The duration of the video in milliseconds.                                                                                                                                                                                                                                                                    | Long                                                                                                             |
+| Image                                                                                             | Required                                               | Preview image of the video content.                                                                                                                                                                                                                                                                           | See [Image Specifications](https://developer.android.com/guide/playcore/engage/social#image-specs) for guidance. |
+| **Link Preview (Optional)**                                                                       |                                                        |                                                                                                                                                                                                                                                                                                               |                                                                                                                  |
+| Link Preview - Title                                                                              | Required                                               | Text to indicate the title of the web page content                                                                                                                                                                                                                                                            | String                                                                                                           |
+| Link Preview - Hostname                                                                           | Required                                               | Text to indicate the web page owner, eg "INSIDER"                                                                                                                                                                                                                                                             | String                                                                                                           |
+| Link Preview - Image                                                                              | Optional                                               | Hero image for the web content                                                                                                                                                                                                                                                                                | See [Image Specifications](https://developer.android.com/guide/playcore/engage/social#image-specs) for guidance. |
+| Timestamp                                                                                         | Optional                                               | Time when the post was published.                                                                                                                                                                                                                                                                             | Epoch timestamp in milliseconds                                                                                  |
+| **Profile related metadata (Optional)**                                                           |                                                        |                                                                                                                                                                                                                                                                                                               |                                                                                                                  |
+| Name                                                                                              | Required                                               | Profile name or id or handle, eg "John Doe", "@TeamPixel."                                                                                                                                                                                                                                                    | String(recommended max 25 chars)                                                                                 |
+| Additional Text                                                                                   | Optional                                               | Could be used as profile id or handle or additional metadata For example "@John-Doe", "5M followers", "You might like", "Trending", "5 new posts"                                                                                                                                                             | String(recommended max 40 chars)                                                                                 |
+| Avatar                                                                                            | Required                                               | Profile picture or avatar image of the user. **Square 1:1 image**                                                                                                                                                                                                                                             | See [Image Specifications](https://developer.android.com/guide/playcore/engage/social#image-specs) for guidance. |
+| Additional Image                                                                                  | Optional                                               | Profile badge, for example - verified badge **Square 1:1 image**                                                                                                                                                                                                                                              | See [Image Specifications](https://developer.android.com/guide/playcore/engage/social#image-specs) for guidance. |
+| **Interactions related metadata (Optional)**                                                      |                                                        |                                                                                                                                                                                                                                                                                                               |                                                                                                                  |
+| Count                                                                                             | Required                                               | Indicate the number of interactions, for example - "3.7 M." **Note:** Partners should use either **Count** or **CountWithOptionalLabel**.                                                                                                                                                                     | String                                                                                                           |
+| CountWithOptionalLabel                                                                            | Required                                               | Indicate the number of interactions with an optional label, for example - "3.7 M Likes." **Note:** Partners should use either **Count** or **CountWithOptionalLabel**.                                                                                                                                        | String                                                                                                           |
+| Label                                                                                             | Optional If not provided, **Visual** must be provided. | Indicate what the interaction is for. For example - "Likes."                                                                                                                                                                                                                                                  | String (recommended max 20 chars for count + label combined)                                                     |
+| Visual                                                                                            | Optional If not provided, **Label** must be provided.  | Indicate what the interaction is for. For example - Image showing Likes icon, emoji. Can provide more than 1 image, though not all may not be shown on all form factors. **Square 1:1 image**                                                                                                                 | See [Image Specifications](https://developer.android.com/guide/playcore/engage/social#image-specs) for guidance. |
+| **DisplayTimeWindow (Optional) - Set a time window for a content to be shown on the surface**     |                                                        |                                                                                                                                                                                                                                                                                                               |                                                                                                                  |
+| Start Timestamp                                                                                   | Optional                                               | The epoch timestamp after which the content should be shown on the surface. If not set, content is eligible to be shown on the surface.                                                                                                                                                                       | Epoch timestamp in milliseconds                                                                                  |
+| End Timestamp                                                                                     | Optional                                               | The epoch timestamp after which the content is no longer shown on the surface. If not set, content is eligible to be shown on the surface.                                                                                                                                                                    | Epoch timestamp in milliseconds                                                                                  |
 
 #### Image specifications
 
@@ -171,12 +174,14 @@ PNG, JPG, static GIF, WebP
 *Additional recommendations*
 
 - **Image safe area:** Put your important content in the center 80% of the image.
-- Use a transparent background so that the image can be properly displayed in Dark and Light theme settings.
+- Use a transparent background so that the image can be properly displayed in Dark and Light theme
+  settings.
 
 ### Step 2: Provide Cluster data
 
 It is recommended to have the content publish job executed in the background
-(for example, using [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager))
+(for example,
+using [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager))
 and scheduled on a regular basis or on an event basis (for example, every time
 the user opens the app or when the user just followed a new account)
 
@@ -199,18 +204,19 @@ whether the content can be presented on the device.
 
 ##### For Engage SDK v1.6.0 and higher (Recommended)
 
-
 ## Android skills
 
 [View on GitHub](https://github.com/android/skills/tree/main/play/engage-sdk-integration)
 
 ### Engage SDK integration
 
-To install the skill from the [Android CLI](https://developer.android.com/tools/agents/android-cli), run:
+To install the skill from the [Android CLI](https://developer.android.com/tools/agents/android-cli),
+run:
 
     android skills add engage-sdk-integration
 
-If your team uses AI coding tools (such as Gemini in Android Studio), you can automate this migration by prompting your AI assistant:
+If your team uses AI coding tools (such as Gemini in Android Studio), you can automate this
+migration by prompting your AI assistant:
 
     Use the engage-sdk-integration skill to use Engage SDK 1.6.0 and refactor isServiceAvailable to pass ServiceAvailabilityRequest for publishing all cluster types.
 
@@ -222,14 +228,14 @@ publish. The `isServiceAvailable` API accepts a request object,
 availability needs to be checked. You can find the `ClusterType` enum values
 required for `ServiceAvailabilityRequest` from the following table.
 
-| Cluster Type | Cluster Type Constant | Integer Value |
-|---|---|---|
-| Unknown | `TYPE_UNKNOWN` | 0 |
-| Recommendation Cluster | `TYPE_RECOMMENDATION` | 1 |
-| Featured Cluster | `TYPE_FEATURED` | 2 |
-| Continuation Cluster | `TYPE_CONTINUATION` | 3 |
-| User Management Cluster | `TYPE_ENGAGEMENT` | 8 |
-| Subscription Cluster | `TYPE_SUBSCRIPTION` | 12 |
+| Cluster Type            | Cluster Type Constant | Integer Value |
+|-------------------------|-----------------------|---------------|
+| Unknown                 | `TYPE_UNKNOWN`        | 0             |
+| Recommendation Cluster  | `TYPE_RECOMMENDATION` | 1             |
+| Featured Cluster        | `TYPE_FEATURED`       | 2             |
+| Continuation Cluster    | `TYPE_CONTINUATION`   | 3             |
+| User Management Cluster | `TYPE_ENGAGEMENT`     | 8             |
+| Subscription Cluster    | `TYPE_SUBSCRIPTION`   | 12            |
 
 ### Kotlin
 
@@ -325,7 +331,10 @@ please contact engage-developers@google.com.
     });
 
 > [!NOTE]
-> **Note:** We highly recommend keeping a periodic job running to check if the service becomes available at a later point in time. The availability of the service may change with Android version upgrades, app upgrades, installs, and uninstalls. By ensuring periodic job checks at a certain time interval, data can be published once the service becomes available.
+> **Note:** We highly recommend keeping a periodic job running to check if the service becomes
+> available at a later point in time. The availability of the service may change with Android version
+> upgrades, app upgrades, installs, and uninstalls. By ensuring periodic job checks at a certain time
+> interval, data can be published once the service becomes available.
 
 #### `publishRecommendationClusters`
 
@@ -333,18 +342,21 @@ This API is used to publish a list `RecommendationCluster` objects.
 
 A `RecommendationCluster` object can have the following attributes:
 
-| Attribute | Requirement | Description |
-|---|---|---|
-| List of SocialPostEntity, or PortraitMediaEntity | **Required** | A list of entities that make up the recommendations for this Recommendation Cluster. Entities in a single cluster must be of the same type. |
-| Title | **Required** | The title for the Recommendation Cluster (for example, *Latest from your friends*). **Recommended text size: under 25 chars** (Text that is too long may show ellipses) |
-| Subtitle | Optional | The subtitle for the Recommendation Cluster. |
-| Action Uri | Optional | The deep link to the page in the partner app where users can see the complete list of recommendations. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
+| Attribute                                        | Requirement  | Description                                                                                                                                                                                                                                             |
+|--------------------------------------------------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| List of SocialPostEntity, or PortraitMediaEntity | **Required** | A list of entities that make up the recommendations for this Recommendation Cluster. Entities in a single cluster must be of the same type.                                                                                                             |
+| Title                                            | **Required** | The title for the Recommendation Cluster (for example, *Latest from your friends*). **Recommended text size: under 25 chars** (Text that is too long may show ellipses)                                                                                 |
+| Subtitle                                         | Optional     | The subtitle for the Recommendation Cluster.                                                                                                                                                                                                            |
+| Action Uri                                       | Optional     | The deep link to the page in the partner app where users can see the complete list of recommendations. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
 
 > [!IMPORTANT]
-> **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
+> **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call
+> delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
 
 > [!IMPORTANT]
-> **Important:** For social apps, it's critical to update recommendations after each app usage. Social app users are more interested in the most recent recommendations and ideally would like to see a post at most once.
+> **Important:** For social apps, it's critical to update recommendations after each app usage.
+> Social app users are more interested in the most recent recommendations and ideally would like to
+> see a post at most once.
 
 ### Kotlin
 
@@ -387,16 +399,17 @@ personalized content)
 
 The following metadata is part of the Sign In Card -
 
-| Attribute | Requirement | Description |
-|---|---|---|
-| Action Uri | Required | Deeplink to Action (i.e. navigates to app sign in page) |
-| Image | Optional - If not provided, Title must be provided | Image Shown on the Card 16x9 aspect ratio images with a resolution of 1264x712 |
-| Title | Optional - If not provided, Image must be provided | Title on the Card |
-| Action Text | Optional | Text Shown on the CTA (i.e. Sign in) |
-| Subtitle | Optional | Optional Subtitle on the Card |
+| Attribute   | Requirement                                        | Description                                                                    |
+|-------------|----------------------------------------------------|--------------------------------------------------------------------------------|
+| Action Uri  | Required                                           | Deeplink to Action (i.e. navigates to app sign in page)                        |
+| Image       | Optional - If not provided, Title must be provided | Image Shown on the Card 16x9 aspect ratio images with a resolution of 1264x712 |
+| Title       | Optional - If not provided, Image must be provided | Title on the Card                                                              |
+| Action Text | Optional                                           | Text Shown on the CTA (i.e. Sign in)                                           |
+| Subtitle    | Optional                                           | Optional Subtitle on the Card                                                  |
 
 > [!IMPORTANT]
-> **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
+> **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call
+> delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
 
 ### Kotlin
 
@@ -452,10 +465,15 @@ we **strongly recommend** updating the publish status using the
 **updatePublishStatus** API.
 This is important because :
 
-- Providing the status in all scenarios, even when the content is published (STATUS == PUBLISHED), is critical to populate dashboards that use this explicit status to convey the health and other metrics of your integration.
-- If no content is published but the integration status isn't broken (STATUS == NOT_PUBLISHED), Google can avoid triggering alerts in the app health dashboards. It confirms that content is not published due to an **expected** situation from the provider's standpoint.
+- Providing the status in all scenarios, even when the content is published (STATUS == PUBLISHED),
+  is critical to populate dashboards that use this explicit status to convey the health and other
+  metrics of your integration.
+- If no content is published but the integration status isn't broken (STATUS == NOT_PUBLISHED),
+  Google can avoid triggering alerts in the app health dashboards. It confirms that content is not
+  published due to an **expected** situation from the provider's standpoint.
 - It helps developers provide insights into when the data is published versus not.
-- Google may use the status codes to nudge the user to do certain actions in the app so they can see the app content or overcome it.
+- Google may use the status codes to nudge the user to do certain actions in the app so they can see
+  the app content or overcome it.
 
 The list of eligible publish status codes are :
 
@@ -515,7 +533,10 @@ with the status code **NOT_PUBLISHED_REQUIRES_SIGN_IN**
 This API is used to delete the content of Recommendation Clusters.
 
 > [!IMPORTANT]
-> **Important:** Delete APIs should only be called when there is no content to publish. **Don't** call delete and publish APIs subsequently to replace the content as the publish APIs do that inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com) before using delete APIs.
+> **Important:** Delete APIs should only be called when there is no content to publish. **Don't**
+> call delete and publish APIs subsequently to replace the content as the publish APIs do that
+> inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com)
+> before using delete APIs.
 
 ### Kotlin
 
@@ -534,7 +555,10 @@ and the existing state is maintained.
 This API is used to delete the content of UserAccountManagement Cluster.
 
 > [!IMPORTANT]
-> **Important:** Delete APIs should only be called when there is no content to publish. **Don't** call delete and publish APIs subsequently to replace the content as the publish APIs do that inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com) before using delete APIs.
+> **Important:** Delete APIs should only be called when there is no content to publish. **Don't**
+> call delete and publish APIs subsequently to replace the content as the publish APIs do that
+> inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com)
+> before using delete APIs.
 
 ### Kotlin
 
@@ -553,7 +577,10 @@ rejected and the existing state is maintained.
 This API is used to delete the content of a given cluster type.
 
 > [!IMPORTANT]
-> **Important:** Delete APIs should only be called when there is no content to publish. **Don't** call delete and publish APIs subsequently to replace the content as the publish APIs do that inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com) before using delete APIs.
+> **Important:** Delete APIs should only be called when there is no content to publish. **Don't**
+> call delete and publish APIs subsequently to replace the content as the publish APIs do that
+> inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com)
+> before using delete APIs.
 
 ### Kotlin
 
@@ -604,21 +631,22 @@ that a follow-up action can be taken to recover and resubmit an successful task.
 The error is returned as an `AppEngageException` with the cause included as an
 error code.
 
-| Error code | Error name | Note |
-|---|---|---|
-| `1` | `SERVICE_NOT_FOUND` | The service is not available on the given device. |
-| `2` | `SERVICE_NOT_AVAILABLE` | The service is available on the given device, but it is not available at the time of the call (for example, it is explicitly disabled). |
-| `3` | `SERVICE_CALL_EXECUTION_FAILURE` | The task execution failed due to threading issues. In this case, it can be retried. |
-| `4` | `SERVICE_CALL_PERMISSION_DENIED` | The caller is not allowed to make the service call. |
-| `5` | `SERVICE_CALL_INVALID_ARGUMENT` | The request contains invalid data (for example, more than the allowed number of clusters). |
-| `6` | `SERVICE_CALL_INTERNAL` | There is an error on the service side. |
-| `7` | `SERVICE_CALL_RESOURCE_EXHAUSTED` | The service call is made too frequently. |
+| Error code | Error name                        | Note                                                                                                                                    |
+|------------|-----------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| `1`        | `SERVICE_NOT_FOUND`               | The service is not available on the given device.                                                                                       |
+| `2`        | `SERVICE_NOT_AVAILABLE`           | The service is available on the given device, but it is not available at the time of the call (for example, it is explicitly disabled). |
+| `3`        | `SERVICE_CALL_EXECUTION_FAILURE`  | The task execution failed due to threading issues. In this case, it can be retried.                                                     |
+| `4`        | `SERVICE_CALL_PERMISSION_DENIED`  | The caller is not allowed to make the service call.                                                                                     |
+| `5`        | `SERVICE_CALL_INVALID_ARGUMENT`   | The request contains invalid data (for example, more than the allowed number of clusters).                                              |
+| `6`        | `SERVICE_CALL_INTERNAL`           | There is an error on the service side.                                                                                                  |
+| `7`        | `SERVICE_CALL_RESOURCE_EXHAUSTED` | The service call is made too frequently.                                                                                                |
 
 ### Step 3: Handle broadcast intents
 
 In addition to making publish content API calls through a job, it is also
 required to set up a
-[`BroadcastReceiver`](https://developer.android.com/reference/android/content/BroadcastReceiver) to receive
+[`BroadcastReceiver`](https://developer.android.com/reference/android/content/BroadcastReceiver) to
+receive
 the request for a content publish.
 
 The goal of broadcast intents is mainly for app reactivation and forcing data
@@ -687,10 +715,12 @@ The `BroadcastReceiver` must be set up in the following two ways:
        </receiver>
     </application>
 
-The following [intents](https://developer.android.com/reference/android/content/Intent) will be sent by the
+The following [intents](https://developer.android.com/reference/android/content/Intent) will be sent
+by the
 service:
 
-- `com.google.android.engage.action.PUBLISH_RECOMMENDATION` It is recommended to start a `publishRecommendationClusters` call when receiving this intent.
+- `com.google.android.engage.action.PUBLISH_RECOMMENDATION` It is recommended to start a
+  `publishRecommendationClusters` call when receiving this intent.
 
 ## Integration workflow
 
@@ -699,7 +729,8 @@ For a step-by-step guide on verifying your integration after it is complete, see
 
 ## FAQs
 
-See [Engage SDK Frequently Asked Questions](https://developer.android.com/guide/playcore/engage/faq) for
+See [Engage SDK Frequently Asked Questions](https://developer.android.com/guide/playcore/engage/faq)
+for
 FAQs.
 
 ## Contact
@@ -713,7 +744,11 @@ possible.
 
 After completing this integration, your next steps are as follows:
 
-- Send an email to [`engage-developers@google.com`](mailto:engage-developers@google.com) and attach your integrated APK that is ready for testing by Google.
-- Google performs a verification and reviews internally to make sure the integration works as expected. If changes are needed, Google contacts you with any necessary details.
-- When testing is complete and no changes are needed, Google contacts you to notify you that you can start publishing the updated and integrated APK to the Play Store.
-- After Google has confirmed that your updated APK has been published to the Play Store, your **Recommendation**, clusters will be published and visible to users.
+- Send an email to [`engage-developers@google.com`](mailto:engage-developers@google.com) and attach
+  your integrated APK that is ready for testing by Google.
+- Google performs a verification and reviews internally to make sure the integration works as
+  expected. If changes are needed, Google contacts you with any necessary details.
+- When testing is complete and no changes are needed, Google contacts you to notify you that you can
+  start publishing the updated and integrated APK to the Play Store.
+- After Google has confirmed that your updated APK has been published to the Play Store, your *
+  *Recommendation**, clusters will be published and visible to users.

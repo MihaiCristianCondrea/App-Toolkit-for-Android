@@ -44,29 +44,31 @@ are in use. Load ONLY the matching framework reference files to keep context foc
 
 ### Framework Detection Table
 
-| Import prefix | Framework guide |
-|---|---|
-| `org.springframework.*` | [SPRING.md](references/frameworks/SPRING.md) |
-| `lombok.*` | [LOMBOK.md](references/frameworks/LOMBOK.md) |
-| `javax.persistence.*`, `jakarta.persistence.*`, `org.hibernate.*` | [HIBERNATE.md](references/frameworks/HIBERNATE.md) |
-| `com.fasterxml.jackson.*` | [JACKSON.md](references/frameworks/JACKSON.md) |
-| `io.micronaut.*` | [MICRONAUT.md](references/frameworks/MICRONAUT.md) |
-| `io.quarkus.*`, `javax.enterprise.*`, `jakarta.enterprise.*` | [QUARKUS.md](references/frameworks/QUARKUS.md) |
-| `dagger.*`, `dagger.hilt.*` | [DAGGER-HILT.md](references/frameworks/DAGGER-HILT.md) |
-| `io.reactivex.*`, `rx.*` | [RXJAVA.md](references/frameworks/RXJAVA.md) |
-| `org.junit.*`, `org.testng.*` | [JUNIT.md](references/frameworks/JUNIT.md) |
-| `com.google.inject.*` | [GUICE.md](references/frameworks/GUICE.md) |
-| `retrofit2.*`, `okhttp3.*` | [RETROFIT.md](references/frameworks/RETROFIT.md) |
-| `org.mockito.*` | [MOCKITO.md](references/frameworks/MOCKITO.md) |
+| Import prefix                                                     | Framework guide                                        |
+|-------------------------------------------------------------------|--------------------------------------------------------|
+| `org.springframework.*`                                           | [SPRING.md](references/frameworks/SPRING.md)           |
+| `lombok.*`                                                        | [LOMBOK.md](references/frameworks/LOMBOK.md)           |
+| `javax.persistence.*`, `jakarta.persistence.*`, `org.hibernate.*` | [HIBERNATE.md](references/frameworks/HIBERNATE.md)     |
+| `com.fasterxml.jackson.*`                                         | [JACKSON.md](references/frameworks/JACKSON.md)         |
+| `io.micronaut.*`                                                  | [MICRONAUT.md](references/frameworks/MICRONAUT.md)     |
+| `io.quarkus.*`, `javax.enterprise.*`, `jakarta.enterprise.*`      | [QUARKUS.md](references/frameworks/QUARKUS.md)         |
+| `dagger.*`, `dagger.hilt.*`                                       | [DAGGER-HILT.md](references/frameworks/DAGGER-HILT.md) |
+| `io.reactivex.*`, `rx.*`                                          | [RXJAVA.md](references/frameworks/RXJAVA.md)           |
+| `org.junit.*`, `org.testng.*`                                     | [JUNIT.md](references/frameworks/JUNIT.md)             |
+| `com.google.inject.*`                                             | [GUICE.md](references/frameworks/GUICE.md)             |
+| `retrofit2.*`, `okhttp3.*`                                        | [RETROFIT.md](references/frameworks/RETROFIT.md)       |
+| `org.mockito.*`                                                   | [MOCKITO.md](references/frameworks/MOCKITO.md)         |
 
 If `javax.inject.*` is detected, check for Dagger/Hilt vs Guice by looking for other
 imports from those frameworks. If ambiguous, load both guides.
 
 ## Step 1: Convert
 
-Apply the conversion methodology from [CONVERSION-METHODOLOGY.md](references/CONVERSION-METHODOLOGY.md).
+Apply the conversion methodology
+from [CONVERSION-METHODOLOGY.md](references/CONVERSION-METHODOLOGY.md).
 
 This is a 4-step chain-of-thought process:
+
 1. **Faithful 1:1 translation** — exact semantics preserved
 2. **Nullability & mutability audit** — val/var, nullable types
 3. **Collection type conversion** — Java mutable → Kotlin types
@@ -108,6 +110,7 @@ If the project does not use Git, simply write the `.kt` file and delete the `.ja
 ## Step 4: Verify
 
 After conversion, verify using [checklist.md](assets/checklist.md):
+
 - Attempt to compile the converted file
 - Run existing tests
 - Check annotation site targets
@@ -130,6 +133,7 @@ For large batches, consider converting in packages (bottom-up from leaf packages
 ## Common Pitfalls
 
 See [KNOWN-ISSUES.md](references/KNOWN-ISSUES.md) for:
+
 - Kotlin keyword conflicts (`when`, `in`, `is`, `object`)
 - SAM conversion ambiguity
 - Platform types from Java interop

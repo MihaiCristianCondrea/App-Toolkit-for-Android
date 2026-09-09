@@ -17,24 +17,33 @@ metadata:
 
 # GA4 App Analytics
 
-Use this skill when reviewing, planning, or implementing Google Analytics 4 instrumentation in an Android application.
+Use this skill when reviewing, planning, or implementing Google Analytics 4 instrumentation in an
+Android application.
 
-The goal is not to maximize event count. The goal is to measure meaningful product behavior with a clean, stable analytics vocabulary that helps with product decisions, marketing, experimentation, retention, and monetization analysis.
+The goal is not to maximize event count. The goal is to measure meaningful product behavior with a
+clean, stable analytics vocabulary that helps with product decisions, marketing, experimentation,
+retention, and monetization analysis.
 
-This skill is designed for host applications that use App Toolkit, but the event design principles are general.
+This skill is designed for host applications that use App Toolkit, but the event design principles
+are general.
 
 ## Core principles
 
 1. Inspect the project before proposing analytics changes.
 2. Understand what the application actually does before choosing events.
 3. Prefer automatically collected events when they already cover the behavior.
-4. Prefer a Google recommended event when its documented meaning genuinely matches the product behavior.
-5. Use custom events freely when the product has important behavior that Google recommendations do not describe.
+4. Prefer a Google recommended event when its documented meaning genuinely matches the product
+   behavior.
+5. Use custom events freely when the product has important behavior that Google recommendations do
+   not describe.
 6. Do not force a recommended event onto unrelated behavior just because the event name exists.
-7. Do not duplicate events already collected automatically by Firebase, GA4, AdMob, or an existing project integration.
+7. Do not duplicate events already collected automatically by Firebase, GA4, AdMob, or an existing
+   project integration.
 8. Keep event names stable and parameters bounded.
-9. Never send sensitive, identifying, user-entered, or high-cardinality values without a clear and safe reason.
-10. Separate analysis from implementation. Propose first. Implement only after approval unless the user explicitly requests direct implementation.
+9. Never send sensitive, identifying, user-entered, or high-cardinality values without a clear and
+   safe reason.
+10. Separate analysis from implementation. Propose first. Implement only after approval unless the
+    user explicitly requests direct implementation.
 
 ## Required workflow
 
@@ -47,8 +56,12 @@ Review enough of the project to understand:
 - Application purpose and major user journeys.
 - Navigation destinations and meaningful screens.
 - Existing analytics modules, contracts, constants, tests, and helper functions.
-- App Toolkit usage, especially `FirebaseController`, `LoggedScreenViewModel`, `TrackScreenView`, `TrackScreenState`, `AnalyticsEvent`, `AnalyticsValue`, `Ga4EventData`, and reusable UI components with GA4 support.
-- Existing Firebase Analytics, Crashlytics, Performance, consent, AdMob, mediation, purchases, authentication, onboarding, search, content browsing, sharing, subscriptions, and Remote Config usage.
+- App Toolkit usage, especially `FirebaseController`, `LoggedScreenViewModel`, `TrackScreenView`,
+  `TrackScreenState`, `AnalyticsEvent`, `AnalyticsValue`, `Ga4EventData`, and reusable UI components
+  with GA4 support.
+- Existing Firebase Analytics, Crashlytics, Performance, consent, AdMob, mediation, purchases,
+  authentication, onboarding, search, content browsing, sharing, subscriptions, and Remote Config
+  usage.
 - Current automatic, recommended, and custom events.
 - Existing event parameters and user properties.
 - Existing screen tracking.
@@ -68,7 +81,8 @@ For each important journey, identify:
 - Successful completion.
 - Failure or cancellation when analytically useful.
 - Relevant content or feature category.
-- Whether the behavior can influence activation, retention, monetization, marketing, or experimentation.
+- Whether the behavior can influence activation, retention, monetization, marketing, or
+  experimentation.
 
 Classify existing and proposed events as:
 
@@ -83,9 +97,11 @@ Read `references/event-strategy.md` and `references/recommended-events.md` durin
 
 Inspect the navigation structure and top-level Compose destinations.
 
-Verify that meaningful destinations are tracked once when they become visible, not on every recomposition.
+Verify that meaningful destinations are tracked once when they become visible, not on every
+recomposition.
 
-Use stable screen names and classes. Do not encode IDs, URLs, search text, IP addresses, file paths, timestamps, or user data into screen names.
+Use stable screen names and classes. Do not encode IDs, URLs, search text, IP addresses, file paths,
+timestamps, or user data into screen names.
 
 Read `references/screen-tracking.md`.
 
@@ -104,9 +120,11 @@ Possible purposes include:
 - Google Ads key events and campaign optimization.
 - Firebase experiments and Remote Config measurement.
 
-Do not claim that an arbitrary custom event directly improves AdMob ad personalization unless current Google documentation explicitly supports that behavior.
+Do not claim that an arbitrary custom event directly improves AdMob ad personalization unless
+current Google documentation explicitly supports that behavior.
 
-Custom events can still be highly valuable because they can explain which features, content, or journeys correlate with retention, ad revenue, purchases, or high-value users.
+Custom events can still be highly valuable because they can explain which features, content, or
+journeys correlate with retention, ad revenue, purchases, or high-value users.
 
 Read `references/monetization-and-marketing.md`.
 
@@ -125,7 +143,8 @@ Before recommending an event or parameter, check whether it can contain:
 - Exception messages or stack traces.
 - Random IDs, timestamps, or values likely to create high cardinality.
 
-Prefer bounded categories such as `success`, `timeout`, `cancelled`, `wifi`, `cellular`, `beginner`, or `advanced`.
+Prefer bounded categories such as `success`, `timeout`, `cancelled`, `wifi`, `cellular`, `beginner`,
+or `advanced`.
 
 Read `references/privacy-and-data-quality.md`.
 
@@ -135,11 +154,11 @@ Present a small number of strategies based on the actual project. Usually three 
 
 A useful default structure is:
 
-| Option | Scope |
-| --- | --- |
+| Option    | Scope                                                                                          |
+|-----------|------------------------------------------------------------------------------------------------|
 | Essential | Critical screens, important recommended events, core product outcomes, obvious analytics fixes |
-| Balanced | Essential plus important custom product events, funnels, categories, and monetization signals |
-| Detailed | Balanced plus deeper feature instrumentation useful for advanced analysis and experiments |
+| Balanced  | Essential plus important custom product events, funnels, categories, and monetization signals  |
+| Detailed  | Balanced plus deeper feature instrumentation useful for advanced analysis and experiments      |
 
 Do not mechanically use these exact names when another grouping better matches the project.
 
@@ -158,9 +177,11 @@ Choose one preferred strategy and explain why it best fits the project.
 
 Then ask for approval with a direct question in this form:
 
-> I think the Balanced strategy is the best fit for this project because it captures the important product journey without adding noisy analytics. Can I implement it?
+> I think the Balanced strategy is the best fit for this project because it captures the important
+> product journey without adding noisy analytics. Can I implement it?
 
-Do not modify the project before this approval unless the user already explicitly requested implementation without a review gate.
+Do not modify the project before this approval unless the user already explicitly requested
+implementation without a review gate.
 
 ### Phase 7: Implement after approval
 
@@ -173,9 +194,11 @@ After approval:
 5. Prefer a stable event contract rather than scattering raw event strings across features.
 6. Emit events at the point where the behavior is known accurately.
 7. Avoid duplicate logging between UI components and ViewModels.
-8. Update or add tests for event names, required parameters, forbidden parameters, screen identifiers, and important emission paths.
+8. Update or add tests for event names, required parameters, forbidden parameters, screen
+   identifiers, and important emission paths.
 9. Run the relevant tests and build checks.
-10. Summarize the implemented strategy and call out any analytics decisions that remain intentionally unimplemented.
+10. Summarize the implemented strategy and call out any analytics decisions that remain
+    intentionally unimplemented.
 
 Read `references/implementation-and-testing.md` before editing.
 
@@ -183,11 +206,14 @@ Read `references/implementation-and-testing.md` before editing.
 
 Recommended GA4 events are not a complete description of an application.
 
-A cleaner app may care more about which cleaner is opened and completed than about search behavior. A tutorials app may care more about Kotlin lesson usage than Python lesson usage. A network utility may care about scan completion, speed tests, or Wake-on-LAN usage.
+A cleaner app may care more about which cleaner is opened and completed than about search behavior.
+A tutorials app may care more about Kotlin lesson usage than Python lesson usage. A network utility
+may care about scan completion, speed tests, or Wake-on-LAN usage.
 
 Use custom events for important product behavior that recommended events do not describe.
 
-Prefer a shared event with bounded parameters when several features represent the same underlying action.
+Prefer a shared event with bounded parameters when several features represent the same underlying
+action.
 
 Example:
 
@@ -229,7 +255,8 @@ Examples include:
 
 Use the documented parameters correctly.
 
-For example, do not use `search` for a network probe or LAN discovery. A real GA4 search should represent an actual user search and use the documented search parameters.
+For example, do not use `search` for a network probe or LAN discovery. A real GA4 search should
+represent an actual user search and use the documented search parameters.
 
 ## Event design rules
 
@@ -276,39 +303,50 @@ When the host uses App Toolkit:
 - `TrackScreenState` can record bounded screen state transitions.
 - Reusable Toolkit UI components may already support `Ga4EventData` and direct interaction logging.
 
-Always inspect existing component analytics support before adding another manual event around the same click.
+Always inspect existing component analytics support before adding another manual event around the
+same click.
 
 ## Event purpose classification
 
 When presenting recommendations, classify each event by its main value:
 
-| Purpose | Meaning |
-| --- | --- |
-| Product insight | Helps understand feature or content usage |
-| Funnel | Helps understand progression and abandonment |
-| Retention | Helps identify behavior associated with returning users |
-| Monetization analysis | Helps correlate behavior with ad or purchase revenue |
-| Marketing | Useful for audiences, key events, or campaign optimization |
-| Ad personalization | Only claim this when documented by current Google guidance |
-| Experimentation | Useful as a goal or segment for A/B tests or Remote Config experiments |
-| Diagnostics | Helps understand application operation rather than user value |
+| Purpose               | Meaning                                                                |
+|-----------------------|------------------------------------------------------------------------|
+| Product insight       | Helps understand feature or content usage                              |
+| Funnel                | Helps understand progression and abandonment                           |
+| Retention             | Helps identify behavior associated with returning users                |
+| Monetization analysis | Helps correlate behavior with ad or purchase revenue                   |
+| Marketing             | Useful for audiences, key events, or campaign optimization             |
+| Ad personalization    | Only claim this when documented by current Google guidance             |
+| Experimentation       | Useful as a goal or segment for A/B tests or Remote Config experiments |
+| Diagnostics           | Helps understand application operation rather than user value          |
 
 ## Sources and freshness
 
 GA4, Firebase, AdMob, Google Ads, and privacy guidance changes over time.
 
-When a recommendation depends on current platform behavior, especially monetization, attribution, automatic events, limits, or privacy rules, verify the current official Google documentation before making a strong claim.
+When a recommendation depends on current platform behavior, especially monetization, attribution,
+automatic events, limits, or privacy rules, verify the current official Google documentation before
+making a strong claim.
 
 Use `references/official-sources.md` as the starting point.
 
 ## Reference files
 
-- `references/app-toolkit-analytics.md`: How App Toolkit sends events, tracks screens, handles consent, and separates Toolkit-owned from host-owned analytics.
-- `references/project-review.md`: Mandatory project inspection checklist and strategy discovery process.
-- `references/event-strategy.md`: Event taxonomy, custom event design, parameter design, and event quality rules.
+- `references/app-toolkit-analytics.md`: How App Toolkit sends events, tracks screens, handles
+  consent, and separates Toolkit-owned from host-owned analytics.
+- `references/project-review.md`: Mandatory project inspection checklist and strategy discovery
+  process.
+- `references/event-strategy.md`: Event taxonomy, custom event design, parameter design, and event
+  quality rules.
 - `references/recommended-events.md`: How to decide when a Google recommended event genuinely fits.
-- `references/screen-tracking.md`: Screen tracking rules for Compose and navigation-based Android apps.
-- `references/monetization-and-marketing.md`: AdMob, GA4, Google Ads, key events, audiences, experiments, and monetization analysis.
-- `references/privacy-and-data-quality.md`: Privacy, cardinality, naming, sensitive data, and data quality safeguards.
-- `references/implementation-and-testing.md`: App Toolkit implementation patterns, approval gate, tests, and validation.
-- `references/official-sources.md`: Official documentation links to re-check when current behavior matters.
+- `references/screen-tracking.md`: Screen tracking rules for Compose and navigation-based Android
+  apps.
+- `references/monetization-and-marketing.md`: AdMob, GA4, Google Ads, key events, audiences,
+  experiments, and monetization analysis.
+- `references/privacy-and-data-quality.md`: Privacy, cardinality, naming, sensitive data, and data
+  quality safeguards.
+- `references/implementation-and-testing.md`: App Toolkit implementation patterns, approval gate,
+  tests, and validation.
+- `references/official-sources.md`: Official documentation links to re-check when current behavior
+  matters.

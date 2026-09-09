@@ -8,9 +8,11 @@ form of your Kotlin object.
 Generating structured output is particularly useful for tasks like the
 following:
 
-- **Entity extraction**: Extracting structured fields (for example, event name, date, location) from unstructured text.
+- **Entity extraction**: Extracting structured fields (for example, event name, date, location) from
+  unstructured text.
 - **Classification**: Categorizing input text into predefined categories.
-- **Data serialization**: Converting unstructured user input into a format suitable for database storage or API calls.
+- **Data serialization**: Converting unstructured user input into a format suitable for database
+  storage or API calls.
 
 ## Prerequisites
 
@@ -30,16 +32,19 @@ The Structured Output API also has the following requirements:
 The Structured Output API has the following limitations:
 
 - Works in Kotlin only.
-- ProGuard might interfere with the parsing of your annotated class. Add your annotated class to your [keep rules](https://developer.android.com/topic/performance/app-optimization/keep-rules-overview) to exclude them from ProGuard if you get errors parsing, for example:
+- ProGuard might interfere with the parsing of your annotated class. Add your annotated class to
+  your [keep rules](https://developer.android.com/topic/performance/app-optimization/keep-rules-overview)
+  to exclude them from ProGuard if you get errors parsing, for example:
 
-    # Keep classes used by structured output for deserialization for release builds.
-    -keep class com.google.mlkit.genai.demo.kotlin.Plant { *; }
+  # Keep classes used by structured output for deserialization for release builds.
+  -keep class com.google.mlkit.genai.demo.kotlin.Plant { *; }
 
 ## Configure project
 
 To get started with the Structured Output API, follow these steps:
 
-1. [Add the ML Kit Prompt API as a dependency](https://developer.android.com/agents/skills/device-ai/prompt-api/references/get-started#configure-project) in your
+1. [Add the ML Kit Prompt API as a dependency](https://developer.android.com/agents/skills/device-ai/prompt-api/references/get-started#configure-project)
+   in your
    app-level `build.gradle.kts` (or `build.gradle`) file, if you haven't
    already.
 
@@ -67,7 +72,8 @@ data classes. There are two main annotations for defining the output
 structure:
 
 - Use the `@Generable` annotation to define the class as a target for structured output.
-- Use the `@Guide` annotations on the class properties to provide descriptions and constraints that guide the model's output.
+- Use the `@Guide` annotations on the class properties to provide descriptions and constraints that
+  guide the model's output.
 
 The following example defines a structure for extracting plant information:
 
@@ -110,18 +116,20 @@ The following example defines a structure for extracting plant information:
 The following types are supported within a `@Generable` annotated class,
 along with their respective `@Guide` constraints:
 
-| Type | Description | Supported `@Guide` constraints |
-|---|---|---|
-| `String` | For text. | `description`, `enumValues` |
-| `Double` / `Float` | For floating-point numbers. | `description`, `minimum`, `maximum` |
-| `Int` / `Long` | For whole numbers. | `description`, `minimum`, `maximum` |
-| `Boolean` | For true/false values. | `description` |
-| `List<T>` | For lists of supported types or nested `@Generable` classes. | `description`, `minItems`, `maxItems` |
-| `List<String>` | For lists of `String` values. | `description`, `enumValues`, `minItems`, `maxItems` > [!NOTE] > **Note:** Setting the `enumValues` parameter defines the values allowed for the individual list items. |
-| `@Generable` class | For nested structured objects. | `description` |
+| Type               | Description                                                  | Supported `@Guide` constraints                                                                                                                                         |
+|--------------------|--------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `String`           | For text.                                                    | `description`, `enumValues`                                                                                                                                            |
+| `Double` / `Float` | For floating-point numbers.                                  | `description`, `minimum`, `maximum`                                                                                                                                    |
+| `Int` / `Long`     | For whole numbers.                                           | `description`, `minimum`, `maximum`                                                                                                                                    |
+| `Boolean`          | For true/false values.                                       | `description`                                                                                                                                                          |
+| `List<T>`          | For lists of supported types or nested `@Generable` classes. | `description`, `minItems`, `maxItems`                                                                                                                                  |
+| `List<String>`     | For lists of `String` values.                                | `description`, `enumValues`, `minItems`, `maxItems` > [!NOTE] > **Note:** Setting the `enumValues` parameter defines the values allowed for the individual list items. |
+| `@Generable` class | For nested structured objects.                               | `description`                                                                                                                                                          |
 
 > [!NOTE]
-> **Note:** Circular dependencies between nested `@Generable` classes are not supported (for example, a class referencing itself, or Class A referencing Class B which in turn references Class A).
+> **Note:** Circular dependencies between nested `@Generable` classes are not supported (for
+> example, a class referencing itself, or Class A referencing Class B which in turn references Class
+> A).
 
 ## Generate structured content
 
@@ -186,11 +194,16 @@ candidates if the parsed response is null.
 
 The `finishReason` property can take one of the following values:
 
-- `TypedFinishReason.STOP`: The model finished generating successfully and the output matches the schema.
-- `TypedFinishReason.MAX_TOKENS`: The model stopped because it reached the token limit. The output might be incomplete.
-- `TypedFinishReason.PARSE_CLASS_ERROR`: The model completed generation, but the resulting JSON couldn't be parsed into the target Kotlin class.
-- `TypedFinishReason.STRUCTURE_NOT_ANNOTATED`: The target class or its nested classes are missing the required `@Generable` annotation.
-- `TypedFinishReason.STRUCTURE_VALUES_INVALID`: The generated values violated the constraints defined in the `@Guide` annotations (for example value out of range, list size out of bounds).
+- `TypedFinishReason.STOP`: The model finished generating successfully and the output matches the
+  schema.
+- `TypedFinishReason.MAX_TOKENS`: The model stopped because it reached the token limit. The output
+  might be incomplete.
+- `TypedFinishReason.PARSE_CLASS_ERROR`: The model completed generation, but the resulting JSON
+  couldn't be parsed into the target Kotlin class.
+- `TypedFinishReason.STRUCTURE_NOT_ANNOTATED`: The target class or its nested classes are missing
+  the required `@Generable` annotation.
+- `TypedFinishReason.STRUCTURE_VALUES_INVALID`: The generated values violated the constraints
+  defined in the `@Guide` annotations (for example value out of range, list size out of bounds).
 - `TypedFinishReason.OTHER`: Generation stopped due to other reasons.
 
 ### Exceptions
@@ -198,16 +211,25 @@ The `finishReason` property can take one of the following values:
 The Structured Output API might throw `GenAiException` with the following
 error codes:
 
-- `GenAiException.STRUCTURED_OUTPUT_INVALID_CLASS` (-104): The structure of the annotated class is invalid or contains unsupported types. This is typically a development-time configuration error. Review your `@Generable` data class definition to check that all property types are supported and that there aren't any circular dependencies.
-- `GenAiException.STRUCTURED_OUTPUT_INVALID_VALUE` (-105): The values generated by the model are invalid or fail constraints verification. This is a runtime error. If you encounter this error frequently, consider the following solutions:
-  - Refining your prompt instructions to guide the model more strictly.
-  - Relaxing the constraints (like minimum, maximum, or list size limits) in your `@Guide` annotations if they are too restrictive for the model's capabilities.
-  - Implementing a fallback strategy in your app, such as retrying the request or displaying a default state.
+- `GenAiException.STRUCTURED_OUTPUT_INVALID_CLASS` (-104): The structure of the annotated class is
+  invalid or contains unsupported types. This is typically a development-time configuration error.
+  Review your `@Generable` data class definition to check that all property types are supported and
+  that there aren't any circular dependencies.
+- `GenAiException.STRUCTURED_OUTPUT_INVALID_VALUE` (-105): The values generated by the model are
+  invalid or fail constraints verification. This is a runtime error. If you encounter this error
+  frequently, consider the following solutions:
+    - Refining your prompt instructions to guide the model more strictly.
+    - Relaxing the constraints (like minimum, maximum, or list size limits) in your `@Guide`
+      annotations if they are too restrictive for the model's capabilities.
+    - Implementing a fallback strategy in your app, such as retrying the request or displaying a
+      default state.
 
 ## Count tokens
 
 To check if your structured prompt is within the input token limit, calculate
-the token count using the [`countTokens()`](https://developer.android.com/android/reference/com/google/mlkit/genai/prompt/GenerativeModel#countTokens(com.google.mlkit.genai.prompt.GenerateContentRequest)) method.
+the token count using the [
+`countTokens()`](https://developer.android.com/android/reference/com/google/mlkit/genai/prompt/GenerativeModel#countTokens(com.google.mlkit.genai.prompt.GenerateContentRequest))
+method.
 
 Because structured output requests need to instruct the model on the schema
 structure, counting tokens on just the raw prompt text (using a

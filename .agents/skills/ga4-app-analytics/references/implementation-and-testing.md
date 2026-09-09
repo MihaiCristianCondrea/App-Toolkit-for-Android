@@ -2,11 +2,13 @@
 
 ## Approval gate
 
-Do not implement during the strategy review unless the user explicitly requested direct implementation.
+Do not implement during the strategy review unless the user explicitly requested direct
+implementation.
 
 After presenting options, recommend one and ask:
 
-> I think this strategy is the best fit for the project because it captures the important product behavior without adding unnecessary analytics. Can I implement it?
+> I think this strategy is the best fit for the project because it captures the important product
+> behavior without adding unnecessary analytics. Can I implement it?
 
 Implementation begins only after approval.
 
@@ -19,7 +21,8 @@ When the host app uses App Toolkit:
 3. Reuse `Ga4EventData` for Toolkit UI components that support it.
 4. Reuse `TrackScreenView` for explicit Compose screen views.
 5. Reuse `TrackScreenState` only when screen states have analytical value.
-6. Reuse `LoggedScreenViewModel` operation telemetry instead of duplicating operation start and error events manually.
+6. Reuse `LoggedScreenViewModel` operation telemetry instead of duplicating operation start and
+   error events manually.
 7. Keep product-specific event contracts in the host application.
 8. Keep Toolkit-owned analytics vocabulary in the Toolkit.
 
@@ -111,7 +114,8 @@ Important ViewModels or product analytics helpers should test that:
 
 ## Screen tests
 
-Where practical, verify that screen identifiers are stable and that screen tracking is not tied to dynamic content values.
+Where practical, verify that screen identifiers are stable and that screen tracking is not tied to
+dynamic content values.
 
 ## Build validation
 
@@ -121,8 +125,10 @@ After implementation:
 2. Run affected feature tests.
 3. Build the affected modules or application.
 4. Review the final event inventory.
-5. Confirm there are no new direct Firebase Analytics calls when App Toolkit already provides the required path.
-6. Confirm no user data, raw targets, file paths, URLs, or exception text were added to GA4 parameters.
+5. Confirm there are no new direct Firebase Analytics calls when App Toolkit already provides the
+   required path.
+6. Confirm no user data, raw targets, file paths, URLs, or exception text were added to GA4
+   parameters.
 
 ## Final implementation summary
 
@@ -135,4 +141,5 @@ Report:
 - Key parameters.
 - Tests added or updated.
 - Build result.
-- Any follow-up work that requires GA4 console, Firebase console, AdMob, or Google Ads configuration outside the codebase.
+- Any follow-up work that requires GA4 console, Firebase console, AdMob, or Google Ads configuration
+  outside the codebase.

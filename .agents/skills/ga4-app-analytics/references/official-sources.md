@@ -1,8 +1,10 @@
 # Official Sources
 
-Use official documentation as the primary source for current GA4, Firebase, AdMob, Google Ads, and privacy behavior.
+Use official documentation as the primary source for current GA4, Firebase, AdMob, Google Ads, and
+privacy behavior.
 
-Re-check current documentation when a recommendation depends on exact platform behavior, limits, monetization, automatic events, consent, or advertising integration.
+Re-check current documentation when a recommendation depends on exact platform behavior, limits,
+monetization, automatic events, consent, or advertising integration.
 
 ## Google Analytics 4
 
@@ -78,6 +80,8 @@ https://support.google.com/google-ads/answer/13812987
 
 ## Source rule
 
-When official documentation and third-party guidance disagree, prefer the current official Google documentation for platform behavior.
+When official documentation and third-party guidance disagree, prefer the current official Google
+documentation for platform behavior.
 
-Third-party analytics guides can still be useful for analysis methods, reporting structure, and examples, but they should not override current Google product documentation.
+Third-party analytics guides can still be useful for analysis methods, reporting structure, and
+examples, but they should not override current Google product documentation.

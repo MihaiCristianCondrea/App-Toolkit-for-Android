@@ -116,18 +116,25 @@ When uncertain, read the relevant official reference rather than guessing.
 
 # Official source index
 
-- `create-app-widget.md` → https://developer.android.com/develop/ui/compose/glance/create-app-widget.md.txt
+-
+`create-app-widget.md` → https://developer.android.com/develop/ui/compose/glance/create-app-widget.md.txt
 - `enhance.md` → https://developer.android.com/develop/ui/compose/glance/enhance.md.txt
 - `configuration.md` → https://developer.android.com/develop/ui/compose/glance/configuration.md.txt
-- `generated-previews.md` → https://developer.android.com/develop/ui/compose/glance/generated-previews.md.txt
+-
+`generated-previews.md` → https://developer.android.com/develop/ui/compose/glance/generated-previews.md.txt
 - `pin-in-app.md` → https://developer.android.com/develop/ui/compose/glance/pin-in-app.md.txt
-- `error-handling.md` → https://developer.android.com/develop/ui/compose/glance/error-handling.md.txt
+-
+`error-handling.md` → https://developer.android.com/develop/ui/compose/glance/error-handling.md.txt
 - `testing.md` → https://developer.android.com/develop/ui/compose/glance/testing.md.txt
-- `user-interaction.md` → https://developer.android.com/develop/ui/compose/glance/user-interaction.md.txt
+-
+`user-interaction.md` → https://developer.android.com/develop/ui/compose/glance/user-interaction.md.txt
 - `metrics.md` → https://developer.android.com/develop/ui/compose/glance/metrics.md.txt
-- `glance-app-widget.md` → https://developer.android.com/develop/ui/compose/glance/glance-app-widget.md.txt
+-
+`glance-app-widget.md` → https://developer.android.com/develop/ui/compose/glance/glance-app-widget.md.txt
 - `build-ui.md` → https://developer.android.com/develop/ui/compose/glance/build-ui.md.txt
 - `theme.md` → https://developer.android.com/develop/ui/compose/glance/theme.md.txt
-- `interoperability.md` → https://developer.android.com/develop/ui/compose/glance/interoperability.md.txt
-- `additional-resources.md` → https://developer.android.com/develop/ui/compose/glance/additional-resources.md.txt
+-
+`interoperability.md` → https://developer.android.com/develop/ui/compose/glance/interoperability.md.txt
+-
+`additional-resources.md` → https://developer.android.com/develop/ui/compose/glance/additional-resources.md.txt
 

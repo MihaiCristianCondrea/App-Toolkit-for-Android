@@ -1,12 +1,18 @@
-Glance provides an API to manage the color theme. For other style attributes, such as [`TextStyle`](https://developer.android.com/reference/kotlin/androidx/compose/ui/text/TextStyle), declare
+Glance provides an API to manage the color theme. For other style attributes, such as [
+`TextStyle`](https://developer.android.com/reference/kotlin/androidx/compose/ui/text/TextStyle),
+declare
 top-level variables.
 
 ## Add colors
 
-Glance provides an implementation of Material colors out of the box. To use the built-in theme, wrap your top level composable with `GlanceTheme`, as shown in the following example.
+Glance provides an implementation of Material colors out of the box. To use the built-in theme, wrap
+your top level composable with `GlanceTheme`, as shown in the following example.
 
-On devices that support dynamic colors, this theme is derived from the user-specific platform colors. On other devices, this falls back to the Material baseline theme. Use `GlanceTheme.colors` to
-style with colors from the wrapped theme. You can use these values from the theme anywhere a color is needed.
+On devices that support dynamic colors, this theme is derived from the user-specific platform
+colors. On other devices, this falls back to the Material baseline theme. Use `GlanceTheme.colors`
+to
+style with colors from the wrapped theme. You can use these values from the theme anywhere a color
+is needed.
 
 <br />
 
@@ -34,10 +40,12 @@ private fun MyContent() {
 
 <br />
 
-To customize the theme, you can pass the `colors` to the `GlanceTheme`. Glance provides the `androidx.glance:glance-material` interoperability library for Material 2, and
+To customize the theme, you can pass the `colors` to the `GlanceTheme`. Glance provides the
+`androidx.glance:glance-material` interoperability library for Material 2, and
 `androidx.glance:glance-material3` for Material 3 colors support.
 
-For example, provide your app's existing material colors to the `ColorProviders` API to create a Glance color scheme, as shown in the following snippet:
+For example, provide your app's existing material colors to the `ColorProviders` API to create a
+Glance color scheme, as shown in the following snippet:
 
 <br />
 
@@ -60,7 +68,8 @@ object MyAppWidgetGlanceColorScheme {
 
 <br />
 
-Provide the colors from the scheme to the `GlanceTheme` that wraps all your composables, as shown in the following example:
+Provide the colors from the scheme to the `GlanceTheme` that wraps all your composables, as shown in
+the following example:
 
 <br />
 
@@ -88,7 +97,8 @@ private fun MyContent() {
 
 <br />
 
-If you prefer to use dynamic colors from the wallpaper when supported, and your app's color scheme otherwise, you can conditionally pass your app's color scheme in the `GlanceTheme`. This is shown in
+If you prefer to use dynamic colors from the wallpaper when supported, and your app's color scheme
+otherwise, you can conditionally pass your app's color scheme in the `GlanceTheme`. This is shown in
 the following snippet:
 
 <br />
@@ -144,4 +154,5 @@ GlanceModifier.background(
 <br />
 
 > [!NOTE]
-> **Note:** You can use the Android resource folder structure to define different shapes or other resources for any type of configuration (e.g., `values-night`).
+> **Note:** You can use the Android resource folder structure to define different shapes or other
+> resources for any type of configuration (e.g., `values-night`).

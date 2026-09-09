@@ -54,6 +54,8 @@ These work but require temporarily setting `android.newDsl=false` (or other flag
 
 1. **Inventory all plugins** used in the project
 2. **Check each against the tables above**
-3. **If any plugin is broken without workaround**, inform the user — they may need to wait for a plugin update or remove it
-4. **If plugins need opt-out flags**, add them to `gradle.properties` and note them as temporary workarounds
+3. **If any plugin is broken without workaround**, inform the user — they may need to wait for a
+   plugin update or remove it
+4. **If plugins need opt-out flags**, add them to `gradle.properties` and note them as temporary
+   workarounds
 5. **Update plugin versions** to their AGP 9.0-compatible versions before or during migration

@@ -37,28 +37,29 @@ Window, UTID, UPID, System Vitals) provided in your initial prompt.
    `R`, `S` and `D` states. Investigate all substantial buckets. Also look for
    composite bottlenecks (for example, "40% CPU-starved + 35% IO-blocked").
 3. **Run checks to rule out red herrings:** For example:
-   - A thread in `S` state could be normal behavior -> investigate only if
-     the sleep actually overlaps with a pending obligation (for example, a
-     pending binder reply).
-   - A thread in `Running/Runnable`: When a thread spends high duration in
-     `Running/Runnable`, inspect CPU frequency, throttling counters, and core
-     migrations before attributing latency to code inefficiency, because
-     hardware throttling inflates wall time without increasing instruction
-     overhead:
-     - Verify first that an identified code path is actually doing
-       disproportionate work.
-     - Query the trace to find what the thread was doing during this window.
-       Query the `slice` table for the longest duration slices during this
-       window.
-     - Beyond blocking slices, query and identify repetitive micro-operations
-       or gaps that collectively exhaust the budget to prevent tunnel vision.
-     - Perform a system-wide check to identify if there was CPU throttling or
-       core migrations around the symptom window (see Principle 7).
+    - A thread in `S` state could be normal behavior -> investigate only if
+      the sleep actually overlaps with a pending obligation (for example, a
+      pending binder reply).
+    - A thread in `Running/Runnable`: When a thread spends high duration in
+      `Running/Runnable`, inspect CPU frequency, throttling counters, and core
+      migrations before attributing latency to code inefficiency, because
+      hardware throttling inflates wall time without increasing instruction
+      overhead:
+        - Verify first that an identified code path is actually doing
+          disproportionate work.
+        - Query the trace to find what the thread was doing during this window.
+          Query the `slice` table for the longest duration slices during this
+          window.
+        - Beyond blocking slices, query and identify repetitive micro-operations
+          or gaps that collectively exhaust the budget to prevent tunnel vision.
+        - Perform a system-wide check to identify if there was CPU throttling or
+          core migrations around the symptom window (see Principle 7).
 4. **Drill down:** For every significant bucket revealed from the time
    distribution analysis during the symptom window, identify what the thread
    was doing at the transition point. Investigate every significant bucket (for
    example, >= 20% of the time window) to avoid missing real bottlenecks or
    composite issues.
+
 > **Action:** Tag missing data as `[GAP]`. Do not guess.
 
 ### Step 3: Domain and Hints Discovery
@@ -83,32 +84,32 @@ in order:
 ### Step 4: Exhaustive Investigation (Do Not Give Up Early)
 
 - **Follow the dependency chain:**
-  - If the victim thread was waiting or blocked by another thread, follow the
-    chain to the leaf. Find out what it is waiting _for_. Cross process
-    boundaries if necessary. Do not conclude without following the entire
-    blocker chain (See Principle 4 in `guiding_principles.md`).
-  - **Dynamic hint injection:** If your dependency chain leads to a new
-    subsystem or process you haven't researched yet, do a single search in
-    `$SKILL_ROOT/analysis/workflows/perfetto-trace-analysis/references/hints/`
-    for relevant hints before proceeding. Do not fall into infinite loops.
-  - Every state bucket investigation should end in one of three states:
-    **Terminal root cause**, **Blocked by another thread**, or
-    **Partial suspect**.
+    - If the victim thread was waiting or blocked by another thread, follow the
+      chain to the leaf. Find out what it is waiting _for_. Cross process
+      boundaries if necessary. Do not conclude without following the entire
+      blocker chain (See Principle 4 in `guiding_principles.md`).
+    - **Dynamic hint injection:** If your dependency chain leads to a new
+      subsystem or process you haven't researched yet, do a single search in
+      `$SKILL_ROOT/analysis/workflows/perfetto-trace-analysis/references/hints/`
+      for relevant hints before proceeding. Do not fall into infinite loops.
+    - Every state bucket investigation should end in one of three states:
+      **Terminal root cause**, **Blocked by another thread**, or
+      **Partial suspect**.
 
-    > A finding is a "terminal root cause" if:
-    >
-    > - You can trace it down to a physical bottleneck (thermal throttle, GPU,
-    >   storage). **Require Specificity:** Do not conclude with generic labels.
-    >   Specify the _what_ clearly.
-    > - A specific function or code path is identified as doing disproportionate
-    >   work relative to its purpose (for example, synchronous disk IO on main
-    >   thread, unnecessary object allocation triggering GC).
-    > - A scheduling policy or resource limit is identified as artificially
-    >   constraining the thread (for example, background CPU cap, foreground
-    >   service restriction).
-    > - The bottleneck is identified in a different process/service that the
-    >   investigated process cannot control (for example, `system_server` lock
-    >   contention, `SurfaceFlinger` throttling).
+      > A finding is a "terminal root cause" if:
+      >
+      > - You can trace it down to a physical bottleneck (thermal throttle, GPU,
+          >   storage). **Require Specificity:** Do not conclude with generic labels.
+          >   Specify the _what_ clearly.
+      > - A specific function or code path is identified as doing disproportionate
+          >   work relative to its purpose (for example, synchronous disk IO on main
+          >   thread, unnecessary object allocation triggering GC).
+      > - A scheduling policy or resource limit is identified as artificially
+          >   constraining the thread (for example, background CPU cap, foreground
+          >   service restriction).
+      > - The bottleneck is identified in a different process/service that the
+          >   investigated process cannot control (for example, `system_server` lock
+          >   contention, `SurfaceFlinger` throttling).
 
 - **Systemic sweep before concluding:** Discovering an application-layer
   bottleneck (software root cause) does not terminate the investigation of a

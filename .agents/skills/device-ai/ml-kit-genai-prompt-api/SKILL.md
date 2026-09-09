@@ -22,8 +22,10 @@ Kit GenAI Prompt API in Android apps.
 ## Prerequisites
 
 - Android API level must be 26 or higher. If `minSdk` is below 26, update it to 26.
-- Add the ML Kit GenAI Prompt API dependency (`com.google.mlkit:genai-prompt`) to the app-level `build.gradle` file, with version at least `1.0.0-beta4`.
-- If `com.google.mlkit:genai-schema-compiler` dependency is used and KSP plugin version is below 2.3.6, update it to 2.3.6.
+- Add the ML Kit GenAI Prompt API dependency (`com.google.mlkit:genai-prompt`) to the app-level
+  `build.gradle` file, with version at least `1.0.0-beta4`.
+- If `com.google.mlkit:genai-schema-compiler` dependency is used and KSP plugin version is below
+  2.3.6, update it to 2.3.6.
 
 ## Detailed steps
 
@@ -34,14 +36,17 @@ To optimize prompts for use with the ML Kit Prompt API, follow the
 
 ### 2. Prefix caching optimization
 
-If the prompt is more than 200 words, implement the [prefix caching API](https://developer.android.com/agents/skills/device-ai/prompt-api/references/prefix-caching).
+If the prompt is more than 200 words, implement
+the [prefix caching API](https://developer.android.com/agents/skills/device-ai/prompt-api/references/prefix-caching).
 
 ### 3. Lifecycle and best practices
 
-- The model must be fully downloaded and available before calling the first inference. Follow the guide on [implementing a generative model](https://developer.android.com/agents/skills/device-ai/prompt-api/references/get-started) to check that the `FeatureStatus` of a model is `AVAILABLE` before making an inference.
+- The model must be fully downloaded and available before calling the first inference. Follow the
+  guide
+  on [implementing a generative model](https://developer.android.com/agents/skills/device-ai/prompt-api/references/get-started)
+  to check that the `FeatureStatus` of a model is `AVAILABLE` before making an inference.
 - Release ML Kit instances by calling `close()` when an `Activity`,
   `Fragment`, or `ViewModel` is destroyed. Example:
-
 
   ```kotlin
   // Instantiating model in activity, fragment, or ViewModel
@@ -58,7 +63,10 @@ If the prompt is more than 200 words, implement the [prefix caching API](https:/
 When implementing or refactoring a prompt to use structured output, follow
 these rules:
 
-1. **Check for API availability:** Verify Structured Output feature is available on the device with `isStructuredOutputFeatureAvailable()` before using it. Refer to the [Structured Output API guide](https://developer.android.com/agents/skills/device-ai/prompt-api/references/structured-output) for full instructions.
+1. **Check for API availability:** Verify Structured Output feature is available on the device with
+   `isStructuredOutputFeatureAvailable()` before using it. Refer to
+   the [Structured Output API guide](https://developer.android.com/agents/skills/device-ai/prompt-api/references/structured-output)
+   for full instructions.
 2. **Return type:** Return the `@Generable` typed object from the function
    signature instead of a `String` or JSON string.
 
@@ -78,7 +86,6 @@ these rules:
 
    This is the example code before refactoring:
 
-
    ```kotlin
    suspend fun parseEmail(email: String): String {
        val parseEmailPrompt = "Parse this email and return the sender, title, and short summary of the email less than 10 words: "
@@ -91,8 +98,7 @@ these rules:
 
    <br />
 
-   This is the example code after using Structured Output API:
-
+This is the example code after using Structured Output API:
 
    ```kotlin
    @Generable

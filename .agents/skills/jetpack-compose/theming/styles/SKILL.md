@@ -19,7 +19,8 @@ metadata:
 
 ## Limitations
 
-- Warn the user that this skill is EXPERIMENTAL and requires updating to alpha version of Compose and opting in to the Experimental APIs.
+- Warn the user that this skill is EXPERIMENTAL and requires updating to alpha version of Compose
+  and opting in to the Experimental APIs.
 - This skill only supports custom UI components and custom themes.
 - This skill does not support Material Design component Styles.
 
@@ -49,28 +50,36 @@ block to your module's `build.gradle.kts`:
 
 Refer to the official documentation to complete specific development tasks:
 
-- Basic Style Usage: To set backgrounds, sizes, and alignments on a component, follow the [Compose Styles Fundamentals
+- Basic Style Usage: To set backgrounds, sizes, and alignments on a component, follow
+  the [Compose Styles Fundamentals
   Guide](references/android/develop/ui/compose/styles/fundamentals.md).
-- State and Transitions: To configure property changes for state shifts (like pressed or hovered), follow the [Animations and State-Based Styling
+- State and Transitions: To configure property changes for state shifts (like pressed or hovered),
+  follow the [Animations and State-Based Styling
   Guide](references/android/develop/ui/compose/styles/state-animations.md).
-- Architecture Trade offs: To decide when to use a Style versus a standard Modifier, follow the [Styles versus Modifiers
+- Architecture Trade offs: To decide when to use a Style versus a standard Modifier, follow
+  the [Styles versus Modifiers
   Comparison](references/android/develop/ui/compose/styles/styles-vs-modifiers.md).
-- Theme Level Integration: To connect style definitions with custom themes, follow [Theming with Styles](references/android/develop/ui/compose/styles/theming.md) and [Custom Themes in Compose](references/android/develop/ui/compose/designsystems/custom.md).
+- Theme Level Integration: To connect style definitions with custom themes,
+  follow [Theming with Styles](references/android/develop/ui/compose/styles/theming.md)
+  and [Custom Themes in Compose](references/android/develop/ui/compose/designsystems/custom.md).
 
 ## Step-by-Step Migration Workflow
 
 ### Step 1: Analyze theme structure
 
 1. Locate your central theme file (such as `Theme.kt`).
-2. Identify design tokens. Note references for colors, typography, and shapes (for example, `LocalColorScheme`, `LocalTypography`, or `LocalShapes`).
-3. If the project lacks Jetpack Compose dependencies, stop. Instruct the user to migrate to Jetpack Compose first.
-4. If the project imports `androidx.compose.material.MaterialTheme`, recommend migrating to Material 3 before proceeding.
+2. Identify design tokens. Note references for colors, typography, and shapes (for example,
+   `LocalColorScheme`, `LocalTypography`, or `LocalShapes`).
+3. If the project lacks Jetpack Compose dependencies, stop. Instruct the user to migrate to Jetpack
+   Compose first.
+4. If the project imports `androidx.compose.material.MaterialTheme`, recommend migrating to Material
+   3 before proceeding.
 
 ### Step 2: Establish `ComponentStyles`
 
 1. Create a new file named `ComponentStyles.kt` in your theme directory.
-2. Define a top-level data class to hold your component styles, for example, the Jetsnack one is called `JetsnackStyles`:
-
+2. Define a top-level data class to hold your component styles, for example, the Jetsnack one is
+   called `JetsnackStyles`:
 
    ```kotlin
    object ExampleComponentStyles {
@@ -88,12 +97,9 @@ Refer to the official documentation to complete specific development tasks:
 3. Expose this class through your custom theme with a static reference, don't
    use `CompositionLocals` here as it's not required.
 
-
    ```kotlin
    @Immutable
-   class JetsnackTheme(
-       // other Design system properties
-   ) {
+   class JetsnackTheme {
        companion object {
            val colors: CustomThemingWithStyles.JetsnackColors
                @Composable @ReadOnlyComposable
@@ -110,7 +116,6 @@ Refer to the official documentation to complete specific development tasks:
 
 4. Provide extensions on `StyleScope` to reference theme tokens directly if
    they are exposed using `CompositionLocals`. For example:
-
 
    ```kotlin
    val StyleScope.colors: JetsnackColors
@@ -131,23 +136,35 @@ For each custom component (for example, `CustomButton`), complete the following
 sequence:
 
 1. **Establish a visual baseline (If an emulator is available):**
-   - **If you CANNOT run an Android emulator:** Skip this step entirely and proceed to Step 2.
-   - **If you CAN run an Android emulator:** Perform the following to capture a baseline screenshot:
-     - **Option A:** Locate and run an existing screenshot test for the component.
-     - **Option B (If no test exists):** Create a test using the project's existing testing framework, then run it.
-     - **Option C (If no framework exists):** Create a minimal screenshot test using UI Automator or Espresso, then run it.
-2. **Remove individual styling parameters** : Remove styling parameters such as `backgroundColor`, `shape`, `textStyle`, and `contentPadding` from the signature - anything that `StyleScope` supports.
-3. **Add the style parameter** : Add `style: Style = Style` to the function signature. Always ensure the default value is exactly `Style` (e.g., `style:
+    - **If you CANNOT run an Android emulator:** Skip this step entirely and proceed to Step 2.
+    - **If you CAN run an Android emulator:** Perform the following to capture a baseline
+      screenshot:
+        - **Option A:** Locate and run an existing screenshot test for the component.
+        - **Option B (If no test exists):** Create a test using the project's existing testing
+          framework, then run it.
+        - **Option C (If no framework exists):** Create a minimal screenshot test using UI Automator
+          or Espresso, then run it.
+2. **Remove individual styling parameters** : Remove styling parameters such as `backgroundColor`,
+   `shape`, `textStyle`, and `contentPadding` from the signature - anything that `StyleScope`
+   supports.
+3. **Add the style parameter** : Add `style: Style = Style` to the function signature. Always ensure
+   the default value is exactly `Style` (e.g., `style:
    Style = Style`) and not a specific style default like `ChipStyleDefault` or any other value.
-4. **Declare state tracking** : If the component is interactable, create a `MutableStyleState` using the interaction source. Update state fields (such as `isEnabled`) inside the Composable to track the state correctly.
-5. **Apply styleable modifier** : Replace specific layout modifiers on the root element with `Modifier.styleable()`.
-6. **Move defaults to ComponentStyles** : Move hardcoded values from the component definition to a dedicated `Style` instance in `ComponentStyles.kt`.
-7. **Validate component:** Compare the baseline screenshot image taken at the start with the rendered Compose Preview of the new composable. Ignore string content; focus on layout and styling. Iterate on the Compose code until visual parity is achieved. Once verified, write a Compose UI test for the new composable.
+4. **Declare state tracking** : If the component is interactable, create a `MutableStyleState` using
+   the interaction source. Update state fields (such as `isEnabled`) inside the Composable to track
+   the state correctly.
+5. **Apply styleable modifier** : Replace specific layout modifiers on the root element with
+   `Modifier.styleable()`.
+6. **Move defaults to ComponentStyles** : Move hardcoded values from the component definition to a
+   dedicated `Style` instance in `ComponentStyles.kt`.
+7. **Validate component:** Compare the baseline screenshot image taken at the start with the
+   rendered Compose Preview of the new composable. Ignore string content; focus on layout and
+   styling. Iterate on the Compose code until visual parity is achieved. Once verified, write a
+   Compose UI test for the new composable.
 
 #### Migration example
 
 Before Migration:
-
 
 ```kotlin
 @Composable
@@ -177,7 +194,6 @@ fun CustomButton(
 <br />
 
 After Migration:
-
 
 ```kotlin
 // Exposed via ComponentStyles.kt
@@ -223,4 +239,5 @@ fun CustomButton(
 
 1. Build the project. Verify that there are no compilation errors.
 2. Run your module's screenshot tests.
-3. Compare visual outputs of the whole app between the previous and updated components. Verify that no visual layout regressions occur.
+3. Compare visual outputs of the whole app between the previous and updated components. Verify that
+   no visual layout regressions occur.

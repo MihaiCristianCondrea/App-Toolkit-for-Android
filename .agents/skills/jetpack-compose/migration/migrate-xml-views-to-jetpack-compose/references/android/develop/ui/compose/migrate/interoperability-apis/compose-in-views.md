@@ -1,12 +1,13 @@
 > [!NOTE]
-> **Note:** Interoperability is supported for hybrid apps that use Compose and Views. For apps that are only in Compose, use the recommended Compose-only architecture with a single Activity and latest navigation libraries, like Navigation 3.
+> **Note:** Interoperability is supported for hybrid apps that use Compose and Views. For apps that
+> are only in Compose, use the recommended Compose-only architecture with a single Activity and latest
+> navigation libraries, like Navigation 3.
 
 You can add Compose-based UI into an existing app that uses a View-based design.
 
 To create a new, entirely Compose-based screen, have your
 activity call the `setContent()` method, and pass whatever composable functions
 you like.
-
 
 ```kotlin
 class ExampleActivity : ComponentActivity() {
@@ -41,39 +42,49 @@ This code looks just like what you'd find in a Compose-only app.
 
 ## `ViewCompositionStrategy` for `ComposeView`
 
-[`ViewCompositionStrategy`](https://developer.android.com/reference/kotlin/androidx/compose/ui/platform/ViewCompositionStrategy)
+[
+`ViewCompositionStrategy`](https://developer.android.com/reference/kotlin/androidx/compose/ui/platform/ViewCompositionStrategy)
 defines when the Composition should be disposed. The default,
-[`ViewCompositionStrategy.Default`](https://developer.android.com/reference/kotlin/androidx/compose/ui/platform/ViewCompositionStrategy#Default()),
+[
+`ViewCompositionStrategy.Default`](https://developer.android.com/reference/kotlin/androidx/compose/ui/platform/ViewCompositionStrategy#Default()),
 disposes the Composition when the underlying
-[`ComposeView`](https://developer.android.com/reference/kotlin/androidx/compose/ui/platform/ComposeView)
+[
+`ComposeView`](https://developer.android.com/reference/kotlin/androidx/compose/ui/platform/ComposeView)
 detaches from the window, unless it is part of a pooling container such as a
 `RecyclerView`. In a single-Activity Compose-only app, this default behavior is
 what you would want, however, if you are incrementally adding Compose in your
 codebase, this behavior may cause state loss in some scenarios.
 
-To change the `ViewCompositionStrategy`, call the [`setViewCompositionStrategy()`](https://developer.android.com/reference/kotlin/androidx/compose/ui/platform/AbstractComposeView#setViewCompositionStrategy(androidx.compose.ui.platform.ViewCompositionStrategy))
+To change the `ViewCompositionStrategy`, call the [
+`setViewCompositionStrategy()`](https://developer.android.com/reference/kotlin/androidx/compose/ui/platform/AbstractComposeView#setViewCompositionStrategy(androidx.compose.ui.platform.ViewCompositionStrategy))
 method and provide a different strategy.
 
 The table below summarizes the different scenarios you can use
 `ViewCompositionStrategy` in:
 
-| `ViewCompositionStrategy` | Description and Interop Scenario |
-|---|---|
-| [`DisposeOnDetachedFromWindow`](https://developer.android.com/reference/kotlin/androidx/compose/ui/platform/ViewCompositionStrategy.DisposeOnDetachedFromWindow) | The Composition will be disposed when the underlying `ComposeView` is detached from the window. Has since been superseded by `DisposeOnDetachedFromWindowOrReleasedFromPool`. Interop scenario: \* `ComposeView` whether it's the sole element in the View hierarchy, or in the context of a mixed View/Compose screen (not in Fragment). |
+| `ViewCompositionStrategy`                                                                                                                                                                                          | Description and Interop Scenario                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`DisposeOnDetachedFromWindow`](https://developer.android.com/reference/kotlin/androidx/compose/ui/platform/ViewCompositionStrategy.DisposeOnDetachedFromWindow)                                                   | The Composition will be disposed when the underlying `ComposeView` is detached from the window. Has since been superseded by `DisposeOnDetachedFromWindowOrReleasedFromPool`. Interop scenario: \* `ComposeView` whether it's the sole element in the View hierarchy, or in the context of a mixed View/Compose screen (not in Fragment).                                                                                                                                                                                                            |
 | [`DisposeOnDetachedFromWindowOrReleasedFromPool`](https://developer.android.com/reference/kotlin/androidx/compose/ui/platform/ViewCompositionStrategy.DisposeOnDetachedFromWindowOrReleasedFromPool) (**Default**) | Similar to `DisposeOnDetachedFromWindow`, when the Composition is not in a pooling container, such as a `RecyclerView`. If it is in a pooling container, it will dispose when either the pooling container itself detaches from the window, or when the item is being discarded (i.e. when the pool is full). Interop scenario: \* `ComposeView` whether it's the sole element in the View hierarchy, or in the context of a mixed View/Compose screen (not in Fragment). \* `ComposeView` as an item in a pooling container such as `RecyclerView`. |
-| [`DisposeOnLifecycleDestroyed`](https://developer.android.com/reference/kotlin/androidx/compose/ui/platform/ViewCompositionStrategy.DisposeOnLifecycleDestroyed) | The Composition will be disposed when the provided [`Lifecycle`](https://developer.android.com/reference/androidx/lifecycle/Lifecycle) is destroyed. Interop scenario \* `ComposeView` in a Fragment's View. |
-| [`DisposeOnViewTreeLifecycleDestroyed`](https://developer.android.com/reference/kotlin/androidx/compose/ui/platform/ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed) | The Composition will be disposed when the `Lifecycle` owned by the `LifecycleOwner` returned by `ViewTreeLifecycleOwner.get` of the next window the View is attached to is destroyed. Interop scenario: \* `ComposeView` in a Fragment's View. \* `ComposeView` in a View wherein the Lifecycle is not known yet. |
+| [`DisposeOnLifecycleDestroyed`](https://developer.android.com/reference/kotlin/androidx/compose/ui/platform/ViewCompositionStrategy.DisposeOnLifecycleDestroyed)                                                   | The Composition will be disposed when the provided [`Lifecycle`](https://developer.android.com/reference/androidx/lifecycle/Lifecycle) is destroyed. Interop scenario \* `ComposeView` in a Fragment's View.                                                                                                                                                                                                                                                                                                                                         |
+| [`DisposeOnViewTreeLifecycleDestroyed`](https://developer.android.com/reference/kotlin/androidx/compose/ui/platform/ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)                                   | The Composition will be disposed when the `Lifecycle` owned by the `LifecycleOwner` returned by `ViewTreeLifecycleOwner.get` of the next window the View is attached to is destroyed. Interop scenario: \* `ComposeView` in a Fragment's View. \* `ComposeView` in a View wherein the Lifecycle is not known yet.                                                                                                                                                                                                                                    |
 
 ## `ComposeView` in Fragments (Transitionary Step)
 
 > [!NOTE]
-> **Note:** For hybrid apps with Views and Compose, that use Fragments, use `ComposeView` to wrap composables content and add to a Fragment during migration. For Compose-only apps, do not use Fragments and instead use the recommended Compose-only architecture with a single Activity and latest navigation libraries, like Navigation 3.
+> **Note:** For hybrid apps with Views and Compose, that use Fragments, use `ComposeView` to wrap
+> composables content and add to a Fragment during migration. For Compose-only apps, do not use
+> Fragments and instead use the recommended Compose-only architecture with a single Activity and
+> latest navigation libraries, like Navigation 3.
 
 If you want to incorporate Compose UI content in a fragment or an existing View
-layout, use [`ComposeView`](https://developer.android.com/reference/kotlin/androidx/compose/ui/platform/ComposeView)
+layout, use [
+`ComposeView`](https://developer.android.com/reference/kotlin/androidx/compose/ui/platform/ComposeView)
 and call its
-[`setContent()`](https://developer.android.com/reference/kotlin/androidx/compose/ui/platform/ComposeView#setContent(kotlin.Function0))
-method. `ComposeView` is an Android [`View`](https://developer.android.com/reference/android/view/View).
+[
+`setContent()`](https://developer.android.com/reference/kotlin/androidx/compose/ui/platform/ComposeView#setContent(kotlin.Function0))
+method. `ComposeView` is an Android [
+`View`](https://developer.android.com/reference/android/view/View).
 
 You can put the `ComposeView` in your XML layout just like any other `View`:
 
@@ -96,10 +107,10 @@ You can put the `ComposeView` in your XML layout just like any other `View`:
 ```
 
 In the Kotlin source code, inflate the layout from the [layout
-resource](https://developer.android.com/guide/topics/resources/layout-resource) defined in XML. Then get the
+resource](https://developer.android.com/guide/topics/resources/layout-resource) defined in XML. Then
+get the
 `ComposeView` using the XML ID, set a Composition strategy that works best for
 the host `View`, and call `setContent()` to use Compose.
-
 
 ```kotlin
 class ExampleFragmentXml : Fragment() {
@@ -131,7 +142,6 @@ class ExampleFragmentXml : Fragment() {
 
 Alternatively, you can also use view binding to obtain references to the
 `ComposeView` by referencing the generated binding class for your XML layout file:
-
 
 ```kotlin
 class ExampleFragment : Fragment() {
@@ -181,7 +191,6 @@ Compose text element.
 You can also include a `ComposeView` directly in a fragment if your full screen
 is built with Compose, which lets you avoid using an XML layout file entirely.
 
-
 ```kotlin
 class ExampleFragmentNoXml : Fragment() {
 
@@ -211,7 +220,6 @@ class ExampleFragmentNoXml : Fragment() {
 
 If there are multiple `ComposeView` elements in the same layout, each one must
 have a unique ID for `savedInstanceState` to work.
-
 
 ```kotlin
 class ExampleFragmentMultipleComposeView : Fragment() {
@@ -264,7 +272,6 @@ within a mixed Views and Compose layout.
 Say you want to display the following composable in the Layout Editor. Note
 that composables annotated with `@Preview` are good candidates to preview in the
 Layout Editor.
-
 
 ```kotlin
 @Preview

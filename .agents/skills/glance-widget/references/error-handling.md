@@ -1,8 +1,10 @@
-API features for improving error handling on Glance are included beginning in Android 15. This page provides best practices regarding these APIs.
+API features for improving error handling on Glance are included beginning in Android 15. This page
+provides best practices regarding these APIs.
 
 ## Use a try-catch block around non-composable components
 
-Compose doesn't allow try-catch blocks around composables, but lets you wrap your app's other logic in these blocks. This lets you use Compose for your error view, as shown in the following example:
+Compose doesn't allow try-catch blocks around composables, but lets you wrap your app's other logic
+in these blocks. This lets you use Compose for your error view, as shown in the following example:
 
     provideContent {
            var isError = false;
@@ -26,20 +28,25 @@ Compose doesn't allow try-catch blocks around composables, but lets you wrap you
 
 If there is an uncaught exception or a Compose error, Glance displays a default error layout:
 ![An error message showing the type of error and a suggestion for where
-to look for it](https://developer.android.com/static/develop/ui/compose/images/default_error_layout.png) **Figure 1.**Glance 1.0 default error
-layout ![A box with the text 'Can't show content'](https://developer.android.com/static/develop/ui/compose/images/new_error_layout.png) **Figure 2.**Glance 1.1.0 default error layout
+to look for it](https://developer.android.com/static/develop/ui/compose/images/default_error_layout.png) **
+Figure 1.**Glance 1.0 default error
+layout ![A box with the text 'Can't show content'](https://developer.android.com/static/develop/ui/compose/images/new_error_layout.png) **
+Figure 2.**Glance 1.1.0 default error layout
 
-Glance lets developers provide an XML layout as a fallback if composition fails. This means that there was an error in the Compose code. This error UI also appears if you have an uncaught error in
+Glance lets developers provide an XML layout as a fallback if composition fails. This means that
+there was an error in the Compose code. This error UI also appears if you have an uncaught error in
 your app's code.
 
     class UpgradeWidget : GlanceAppWidget(errorUiLayout = R.layout.error_layout)
 
 This layout is a static layout that your user can't interact with, but is good in emergency cases.
-![Contains a heading and a text field to display an error message](https://developer.android.com/static/develop/ui/compose/images/custom_error_layout.png) **Figure 3.**Example custom error layout
+![Contains a heading and a text field to display an error message](https://developer.android.com/static/develop/ui/compose/images/custom_error_layout.png) **
+Figure 3.**Example custom error layout
 
 ## Add actions to the default error UI
 
-As of Glance 1.1.0, Glance lets you override the default error handling code. This way, you can add action callbacks in the event of an uncaught exception or error in composition.
+As of Glance 1.1.0, Glance lets you override the default error handling code. This way, you can add
+action callbacks in the event of an uncaught exception or error in composition.
 
 To use this feature, override the `onCompositionError()` function:
 
@@ -50,9 +57,11 @@ To use this feature, override the `onCompositionError()` function:
         throwable: Throwable
     )
 
-In this function, Glance falls back to the `RemoteViews` API for error handling. This lets you specify layouts and action handlers using XML.
+In this function, Glance falls back to the `RemoteViews` API for error handling. This lets you
+specify layouts and action handlers using XML.
 
-The following examples show you, step-by-step, how to create an error UI that includes a button to send feedback:
+The following examples show you, step-by-step, how to create an error UI that includes a button to
+send feedback:
 
 1. Write the `error_layout.xml` file:
 

@@ -5,7 +5,9 @@ This page describes how to do the following:
 - Provide an image input with related text input and receive a response
 
 For more details about the Prompt API, see the
-reference documentation for Kotlin ([com.google.mlkit.genai.prompt](https://developer.android.com/android/reference/kotlin/com/google/mlkit/genai/prompt/package-summary)) and
+reference documentation for
+Kotlin ([com.google.mlkit.genai.prompt](https://developer.android.com/android/reference/kotlin/com/google/mlkit/genai/prompt/package-summary))
+and
 Java ([com.google.mlkit.genai.prompt.java](https://developer.android.com/android/reference/com/google/mlkit/genai/prompt/java/package-summary),
 [com.google.mlkit.genai.prompt](https://developer.android.com/android/reference/com/google/mlkit/genai/prompt/package-summary)).
 
@@ -200,8 +202,8 @@ image. You can bundle multiple images and text together in the same request.
   the full result or stream the response as it's generated for both text-only
   and multimodal prompts.
 
-  - This uses non-streaming inference, which retrieves the entire result from
-    the AI model before returning the result:
+    - This uses non-streaming inference, which retrieves the entire result from
+      the AI model before returning the result:
 
   ### Kotlin
 
@@ -217,8 +219,8 @@ image. You can bundle multiple images and text together in the same request.
                       .build())
               .get();
 
-  - The following snippets are examples of using streaming inference, which
-    retrieves the result in chunks as it's being generated:
+    - The following snippets are examples of using streaming inference, which
+      retrieves the result in chunks as it's being generated:
 
   ### Kotlin
 
@@ -258,15 +260,21 @@ parameters:
 - `temperature` : Controls the degree of randomness in token selection.
 - `seed` : Enables generating stable and deterministic results.
 - `topK` : Controls randomness and diversity in results.
-- `candidateCount` : Requests the number of unique responses returned. Note that the exact number of responses may not be the same as `candidateCount` because duplicate responses are automatically removed.
+- `candidateCount` : Requests the number of unique responses returned. Note that the exact number of
+  responses may not be the same as `candidateCount` because duplicate responses are automatically
+  removed.
 - `maxOutputTokens` : Defines the maximum number of tokens that can be generated in the response.
 
 For more guidance on setting optional configurations, see
-[`GenerateContentRequest`](https://developer.android.com/android/reference/kotlin/com/google/mlkit/genai/prompt/GenerateContentRequest).
+[
+`GenerateContentRequest`](https://developer.android.com/android/reference/kotlin/com/google/mlkit/genai/prompt/GenerateContentRequest).
 
 ## Supported features and limitations
 
-- Input must be under 4000 tokens (or approximately 3000 English words). For more information, see the [`countTokens`](https://developer.android.com/android/reference/com/google/mlkit/genai/prompt/GenerativeModel#countTokens(com.google.mlkit.genai.prompt.GenerateContentRequest)) reference.
+- Input must be under 4000 tokens (or approximately 3000 English words). For more information, see
+  the [
+  `countTokens`](https://developer.android.com/android/reference/com/google/mlkit/genai/prompt/GenerativeModel#countTokens(com.google.mlkit.genai.prompt.GenerateContentRequest))
+  reference.
 - Use cases that require long output (more than 4K tokens) should be avoided.
 - AICore enforces an inference quota per app. For more information, see [Quota
   per application](https://developer.android.com/ml-kit/genai#quota-per).

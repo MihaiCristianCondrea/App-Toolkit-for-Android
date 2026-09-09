@@ -60,10 +60,10 @@ Note the output produced by the subagent to identify the filtered list of
 
 > **Note:**
 > - If no candidates are found, ask the user for symptom clarification and
->   specific timestamps.
+    > specific timestamps.
 > - If the triage reveals multiple candidates, select the top 2 or 3 most
->   severe, representative candidates and ask the user before proceeding
->   which ones to investigate. The user may choose one or more.
+    > severe, representative candidates and ask the user before proceeding
+    > which ones to investigate. The user may choose one or more.
 
 **Expected outcome:** Confirmation on which candidate(s) to investigate
 before proceeding.
@@ -74,6 +74,7 @@ For **every** candidate (one or more) identified in the previous step, spin
 off a task/subagent to investigate these tracks _in parallel_.
 
 Construct a prompt for each candidate containing:
+
 ```markdown
 Trace path: [path]
 Baseline Trace Path: [path, if provided]

@@ -50,13 +50,15 @@ integrity.
 
 If the user has explicitly specified a target XML layout, proceed to Step 2.
 Otherwise, analyze the codebase to identify the best candidate for migration by
-following the logic in [references/identify-optimal-xml-candidate.md](references/identify-optimal-xml-candidate.md).
+following the logic
+in [references/identify-optimal-xml-candidate.md](references/identify-optimal-xml-candidate.md).
 
 ### Step 2: Analyze the project and layout
 
 Analyze the identified XML View's structure, hierarchy, and implementation
 details.
-Use [references/analysis-of-the-project-and-layout.md](references/analysis-of-the-project-and-layout.md) to
+Use [references/analysis-of-the-project-and-layout.md](references/analysis-of-the-project-and-layout.md)
+to
 guide your technical audit of the layout and surrounding project context.
 
 ### Step 3: Create a plan
@@ -108,8 +110,10 @@ facilitate visual verification.
 
 Replace the usages of the migrated XML layout to use the new Compose component.
 
-- To add Compose in Views, use [Compose in Views](references/android/develop/ui/compose/migrate/interoperability-apis/compose-in-views.md).
-- To add Views in Compose, use [Views in Compose](references/android/develop/ui/compose/migrate/interoperability-apis/views-in-compose.md).
+- To add Compose in Views,
+  use [Compose in Views](references/android/develop/ui/compose/migrate/interoperability-apis/compose-in-views.md).
+- To add Views in Compose,
+  use [Views in Compose](references/android/develop/ui/compose/migrate/interoperability-apis/views-in-compose.md).
 
 ### Step 9: Validate the migration
 

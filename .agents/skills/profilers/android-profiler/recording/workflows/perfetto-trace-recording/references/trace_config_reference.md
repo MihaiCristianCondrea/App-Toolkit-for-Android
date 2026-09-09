@@ -39,15 +39,15 @@ Merging two configs = keep one `buffers` section and concatenate their
 Location:
 `$SKILL_ROOT/recording/workflows/perfetto-trace-recording/references/example-configs/`
 
-| File | Use case |
-| :--- | :--- |
-| `sched_cpu.pftxt` | CPU scheduling + frequency/idle (base layer). |
-| `app_jank.pftxt` | Slow UI / dropped frames: atrace + frame timeline. |
-| `memory_counters.pftxt` | System + per-process memory, LMK activity. |
-| `java_heap_dump.pftxt` | Java heap retention graph for one app. |
-| `native_heap.pftxt` | Sampled native malloc/free callstacks (heapprofd). |
-| `cpu_profile.pftxt` | Periodic CPU callstack samples (traced_perf). |
-| `long_background.pftxt` | Long/field traces: ring buffer + periodic writes. |
+| File                    | Use case                                           |
+|:------------------------|:---------------------------------------------------|
+| `sched_cpu.pftxt`       | CPU scheduling + frequency/idle (base layer).      |
+| `app_jank.pftxt`        | Slow UI / dropped frames: atrace + frame timeline. |
+| `memory_counters.pftxt` | System + per-process memory, LMK activity.         |
+| `java_heap_dump.pftxt`  | Java heap retention graph for one app.             |
+| `native_heap.pftxt`     | Sampled native malloc/free callstacks (heapprofd). |
+| `cpu_profile.pftxt`     | Periodic CPU callstack samples (traced_perf).      |
+| `long_background.pftxt` | Long/field traces: ring buffer + periodic writes.  |
 
 For a standalone heap dump, native heap profile, or CPU profile, prefer the
 dedicated helper scripts in:
@@ -56,19 +56,19 @@ Use exemplars when one trace must combine several sources.
 
 ## Data sources at a glance
 
-| `name` | What it records | Key options |
-| :--- | :--- | :--- |
-| `linux.ftrace` | Kernel events and atrace | `ftrace_events`, `atrace_categories`, `atrace_apps` |
-| `linux.process_stats` | Process/thread names & stats | `scan_all_processes_on_start`, `proc_stats_poll_ms` |
-| `linux.sys_stats` | Periodic `/proc` counters | `meminfo_period_ms`, `vmstat_period_ms`, `stat_period_ms` |
-| `android.log` | Logcat | `android_log_config { log_ids: ... }` |
-| `android.surfaceflinger.frametimeline` | Frame timelines (jank) | None needed |
-| `android.java_hprof` | Java heap dump | `java_hprof_config { process_cmdline: ... }` |
-| `android.heapprofd` | Native heap profiling | `heapprofd_config { sampling_interval_bytes, ... }` |
-| `linux.perf` | CPU callstack sampling | `perf_event_config { timebase, callstack_sampling }` |
-| `android.packages_list` | Package mapping | None needed |
-| `android.power` | Battery counters | `android_power_config { battery_poll_ms, ... }` |
-| `track_event` | Custom app trace events | `track_event_config { enabled_categories }` |
+| `name`                                 | What it records              | Key options                                               |
+|:---------------------------------------|:-----------------------------|:----------------------------------------------------------|
+| `linux.ftrace`                         | Kernel events and atrace     | `ftrace_events`, `atrace_categories`, `atrace_apps`       |
+| `linux.process_stats`                  | Process/thread names & stats | `scan_all_processes_on_start`, `proc_stats_poll_ms`       |
+| `linux.sys_stats`                      | Periodic `/proc` counters    | `meminfo_period_ms`, `vmstat_period_ms`, `stat_period_ms` |
+| `android.log`                          | Logcat                       | `android_log_config { log_ids: ... }`                     |
+| `android.surfaceflinger.frametimeline` | Frame timelines (jank)       | None needed                                               |
+| `android.java_hprof`                   | Java heap dump               | `java_hprof_config { process_cmdline: ... }`              |
+| `android.heapprofd`                    | Native heap profiling        | `heapprofd_config { sampling_interval_bytes, ... }`       |
+| `linux.perf`                           | CPU callstack sampling       | `perf_event_config { timebase, callstack_sampling }`      |
+| `android.packages_list`                | Package mapping              | None needed                                               |
+| `android.power`                        | Battery counters             | `android_power_config { battery_poll_ms, ... }`           |
+| `track_event`                          | Custom app trace events      | `track_event_config { enabled_categories }`               |
 
 The full, authoritative field list for every data source is the generated
 [TraceConfig reference](https://perfetto.dev/docs/reference/trace-config-proto);

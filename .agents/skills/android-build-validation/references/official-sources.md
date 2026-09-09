@@ -1,6 +1,7 @@
 # Official Android Sources
 
-Use official Android documentation when package names, SDK installation commands, compatibility requirements, or CLI behavior may have changed.
+Use official Android documentation when package names, SDK installation commands, compatibility
+requirements, or CLI behavior may have changed.
 
 ## Android CLI
 

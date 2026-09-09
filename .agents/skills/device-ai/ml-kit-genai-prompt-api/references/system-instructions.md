@@ -12,12 +12,14 @@ Common use cases include:
 ## Prerequisites
 
 System instructions work on devices running Gemini Nano V3 and higher. For a
-list of supported devices, see [Prompt API device support](https://developer.android.com/ml-kit/genai#prompt-device).
+list of supported devices,
+see [Prompt API device support](https://developer.android.com/ml-kit/genai#prompt-device).
 
 ## Limitations
 
 We don't recommend using system instructions with
-[prefix caching](https://developer.android.com/agents/skills/device-ai/prompt-api/references/prefix-caching). In general, use system instructions for
+[prefix caching](https://developer.android.com/agents/skills/device-ai/prompt-api/references/prefix-caching).
+In general, use system instructions for
 short instructions that define how the model should behave; use prefix
 caching if you need to repeat a large part of your prompt across queries and
 need to optimize performance.
@@ -63,9 +65,16 @@ into the `generateContentRequest` request builder:
 
 Here are some best practices when using system instructions:
 
-- **Be clear and direct:** The model follows clear, direct instructions better than ambiguous ones. Here are some examples:
-  - Vague (avoid): "Don't write too much. Try to be helpful and friendly, and format the output nicely."
-  - Clear (preferred): "You are a friendly customer support assistant. Limit your responses to a maximum of 3 sentences. Format any lists using bullet points."
-- **Be concise:** While system instructions are powerful, very long instructions can consume the model's limited context window.
-- **Factor in token counts:** Make sure that your token counting logic includes the system instructions to avoid underestimating request size. We recommend keeping your system instructions to under 150 words (100-200 tokens).
-- **Test and iterate:** Model behavior can vary based on phrasing. Test with various user inputs to ensure the model maintains its persona consistently.
+- **Be clear and direct:** The model follows clear, direct instructions better than ambiguous ones.
+  Here are some examples:
+    - Vague (avoid): "Don't write too much. Try to be helpful and friendly, and format the output
+      nicely."
+    - Clear (preferred): "You are a friendly customer support assistant. Limit your responses to a
+      maximum of 3 sentences. Format any lists using bullet points."
+- **Be concise:** While system instructions are powerful, very long instructions can consume the
+  model's limited context window.
+- **Factor in token counts:** Make sure that your token counting logic includes the system
+  instructions to avoid underestimating request size. We recommend keeping your system instructions
+  to under 150 words (100-200 tokens).
+- **Test and iterate:** Model behavior can vary based on phrasing. Test with various user inputs to
+  ensure the model maintains its persona consistently.

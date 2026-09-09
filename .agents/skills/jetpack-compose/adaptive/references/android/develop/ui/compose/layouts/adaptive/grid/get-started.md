@@ -1,8 +1,12 @@
-This page describes how to implement basic [`Grid`](https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/Grid.composable#Grid(kotlin.Function1,androidx.compose.ui.Modifier,kotlin.Function1)) layouts.
+This page describes how to implement basic [
+`Grid`](https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/Grid.composable#Grid(kotlin.Function1,androidx.compose.ui.Modifier,kotlin.Function1))
+layouts.
 
 ## Set up project
 
-1. Add the [`androidx.compose.foundation.layout`](https://developer.android.com/jetpack/androidx/versions) library to your project's
+1. Add the [
+   `androidx.compose.foundation.layout`](https://developer.android.com/jetpack/androidx/versions)
+   library to your project's
    `lib.versions.toml`.
 
        [versions]
@@ -21,7 +25,6 @@ This page describes how to implement basic [`Grid`](https://developer.android.co
 
 The following example creates a basic 2x3 grid,
 with the columns and rows having a fixed size of `100.dp`.
-
 
 ```kotlin
 Grid(
@@ -45,7 +48,9 @@ Grid(
 
 <br />
 
-![A basic grid consists of rows and columns with fixed size.](https://developer.android.com/static/develop/ui/compose/images/layouts/adaptive/grid/six-cards-in-grid.png) **Figure 1**. A basic grid consists of rows and columns with fixed size.
+![A basic grid consists of rows and columns with fixed size.](https://developer.android.com/static/develop/ui/compose/images/layouts/adaptive/grid/six-cards-in-grid.png)
+**Figure 1**. A basic grid consists of rows and columns with fixed size.
 
 To learn how to implement more advanced grids,
-see [Set container properties](https://developer.android.com/develop/ui/compose/layouts/adaptive/grid/container-properties) and [Set item properties](https://developer.android.com/develop/ui/compose/layouts/adaptive/grid/item-properties).
+see [Set container properties](https://developer.android.com/develop/ui/compose/layouts/adaptive/grid/container-properties)
+and [Set item properties](https://developer.android.com/develop/ui/compose/layouts/adaptive/grid/item-properties).

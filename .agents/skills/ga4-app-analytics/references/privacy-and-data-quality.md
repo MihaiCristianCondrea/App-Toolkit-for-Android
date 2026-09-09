@@ -2,7 +2,8 @@
 
 ## Privacy rule
 
-Analytics should describe behavior without exposing the person, their private content, or effectively unique values.
+Analytics should describe behavior without exposing the person, their private content, or
+effectively unique values.
 
 Do not send sensitive or identifying information to GA4.
 
@@ -62,7 +63,8 @@ Common causes:
 - Dynamic screen names.
 - Raw exception strings.
 
-If a parameter is useful only because every value is unique, it usually belongs in another system rather than GA4.
+If a parameter is useful only because every value is unique, it usually belongs in another system
+rather than GA4.
 
 ## Numerical values
 
@@ -70,7 +72,8 @@ Use numeric parameters or custom metrics for measurements when the value itself 
 
 Do not convert numbers into strings merely to create dimensions.
 
-Before adding raw measurements, ask whether the metric creates real product insight and whether aggregation is more appropriate.
+Before adding raw measurements, ask whether the metric creates real product insight and whether
+aggregation is more appropriate.
 
 ## Error reporting
 
@@ -88,7 +91,8 @@ Use Crashlytics for stack traces, exception messages, and debugging details.
 
 ## Search terms
 
-A search event may be semantically correct but still unsafe if the search term can contain private information.
+A search event may be semantically correct but still unsafe if the search term can contain private
+information.
 
 Review the product context before collecting raw search text.
 
@@ -98,7 +102,8 @@ A bounded category may sometimes be safer than the original text.
 
 Use user properties sparingly.
 
-A user property should represent a stable, non-sensitive segmentation attribute that has clear analytical value.
+A user property should represent a stable, non-sensitive segmentation attribute that has clear
+analytical value.
 
 Do not use user properties for:
 

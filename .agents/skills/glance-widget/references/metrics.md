@@ -1,10 +1,16 @@
-Android 16 includes additional metrics APIs that are more granular. These metrics track tap actions such as a button click, scroll, impressions, and the widget's size and position.
+Android 16 includes additional metrics APIs that are more granular. These metrics track tap actions
+such as a button click, scroll, impressions, and the widget's size and position.
 
 > [!NOTE]
-> **Note:** Testing widget engagement metrics requires a compileSdk of 36.1 or higher and a device running Android 16 or higher. Test with a physical device for the best results. For more information,
-> see [Get Android 16 QPR2 Beta on a Google Pixel device](https://developer.android.com/about/versions/16/qpr2/get).
+> **Note:** Testing widget engagement metrics requires a compileSdk of 36.1 or higher and a device
+> running Android 16 or higher. Test with a physical device for the best results. For more
+> information,
+>
+see [Get Android 16 QPR2 Beta on a Google Pixel device](https://developer.android.com/about/versions/16/qpr2/get).
 
-The main API is [`AppWidgetEvent`](https://developer.android.com/reference/android/appwidget/AppWidgetEvent#getClickedIds%28%29). Use `WorkManager` to create a periodic worker that captures widget
+The main API is [
+`AppWidgetEvent`](https://developer.android.com/reference/android/appwidget/AppWidgetEvent#getClickedIds%28%29).
+Use `WorkManager` to create a periodic worker that captures widget
 engagement, whether daily, weekly, or whenever your app is opened.
 
 See the following snippet for an example of tracking clicks, scrolls and impression length.
@@ -77,13 +83,16 @@ fun getWidgetEngagementMetrics(context: Context) {
 
 <br />
 
-To preserve system health, events are reported once an hour by default although device manufacturers may change the reporting window. For example, on Pixel devices if a user scrolls the same list in
+To preserve system health, events are reported once an hour by default although device manufacturers
+may change the reporting window. For example, on Pixel devices if a user scrolls the same list in
 your widget 10 times in an hour, only 1 scroll event will be counted for that hour.
 
-For testing, you can set the following attribute to a specified time and restart your test device. In the following example, the report window is set to 0 ms and events are reported immediately.
+For testing, you can set the following attribute to a specified time and restart your test device.
+In the following example, the report window is set to 0 ms and events are reported immediately.
 
     adb shell device_config override systemui widget_events_report_interval_ms 0
 
 In order to set a custom tag for reporting clicks and scrolls, you can
-use [RemoteViews.setAppWidgetEventTag](https://developer.android.com/reference/android/widget/RemoteViews#setAppWidgetEventTag(int,%20int)) on a view within your `RemoteViews` layout. This integer tag
+use [RemoteViews.setAppWidgetEventTag](https://developer.android.com/reference/android/widget/RemoteViews#setAppWidgetEventTag(int,%20int))
+on a view within your `RemoteViews` layout. This integer tag
 is used when you query for `AppWidgetEvents` that include clicks or scrolls on this view.

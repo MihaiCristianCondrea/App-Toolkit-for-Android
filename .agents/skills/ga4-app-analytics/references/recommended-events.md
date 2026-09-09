@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Google recommended events provide common semantics and can unlock built-in reporting and integrations.
+Google recommended events provide common semantics and can unlock built-in reporting and
+integrations.
 
 Use them when the product behavior actually matches the documented event meaning.
 
@@ -25,7 +26,8 @@ purchase
 
 Other recommended events may apply depending on the product.
 
-Always verify the current official Google documentation before relying on an exact parameter requirement or monetization behavior.
+Always verify the current official Google documentation before relying on an exact parameter
+requirement or monetization behavior.
 
 ## tutorial_begin and tutorial_complete
 
@@ -41,7 +43,8 @@ first-run onboarding completed
 tutorial_complete
 ```
 
-Do not use these events for unrelated help pages or normal feature walkthroughs unless they genuinely represent the onboarding/tutorial flow you want to measure.
+Do not use these events for unrelated help pages or normal feature walkthroughs unless they
+genuinely represent the onboarding/tutorial flow you want to measure.
 
 ## select_content
 
@@ -80,7 +83,8 @@ Do not use `search` as a generic substitute for:
 
 Use the documented search parameters correctly.
 
-If the actual search term may contain sensitive or private information, reconsider whether the raw term should be collected.
+If the actual search term may contain sensitive or private information, reconsider whether the raw
+term should be collected.
 
 ## share
 
@@ -102,7 +106,8 @@ Never send credentials, email addresses, tokens, or personal details as paramete
 
 Use Google's documented purchase semantics for real transactions.
 
-Before adding or modifying purchase events, inspect existing Billing, Firebase, Play, or ecommerce integrations so revenue is not duplicated or reported inconsistently.
+Before adding or modifying purchase events, inspect existing Billing, Firebase, Play, or ecommerce
+integrations so revenue is not duplicated or reported inconsistently.
 
 ## Decision rule
 

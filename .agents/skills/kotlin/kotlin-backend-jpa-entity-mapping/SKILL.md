@@ -27,8 +27,10 @@ for Kotlin + Spring Data JPA projects.
 ## Entity Design Rules
 
 - **Never use `data class` for JPA entities.** Use a regular `class`. Keep `data class` for DTOs.
-- Keep transport DTOs and persistence entities separate unless the project clearly uses a shared model.
-- Model required columns as non-null only when object construction and persistence lifecycle make it safe.
+- Keep transport DTOs and persistence entities separate unless the project clearly uses a shared
+  model.
+- Model required columns as non-null only when object construction and persistence lifecycle make it
+  safe.
 - Use `lateinit` only when the project already accepts that tradeoff and the lifecycle is safe.
 - Verify `kotlin("plugin.jpa")` or equivalent no-arg support when JPA entities exist.
 - Verify classes and members are compatible with proxying where needed.
@@ -87,10 +89,12 @@ class Order(
 ```
 
 **Key rules:**
+
 - `equals` compares by ID only — stable under dirty tracking and proxy unwrapping
 - `hashCode` returns class-based constant — avoids `Set`/`Map` corruption after persist
 - `toString` excludes lazy-loaded relations — prevents `LazyInitializationException`
-- Constructor params are mutable entity fields; DB-generated `id` is nullable with a protected setter
+- Constructor params are mutable entity fields; DB-generated `id` is nullable with a protected
+  setter
 
 ## Uniqueness Constraints
 
@@ -154,8 +158,10 @@ class ReservationService(private val repo: ReservationRepository) {
 ```
 
 **Key rules:**
+
 - Database constraint is mandatory — application checks alone have race conditions
-- Application check provides clean error messages — without it, users get raw `DataIntegrityViolationException`
+- Application check provides clean error messages — without it, users get raw
+  `DataIntegrityViolationException`
 - Both layers together: application catches the common case, database catches the race
 - Spring Data derives `findByXAndY` queries automatically
 
@@ -168,14 +174,20 @@ class ReservationService(private val repo: ReservationRepository) {
 
 ## Common ORM Traps
 
-- **Bidirectional associations:** maintain both sides in domain methods. Half-updated graphs cause subtle bugs.
-- **`orphanRemoval` vs cascade remove:** not interchangeable. Explain lifecycle semantics before choosing.
-- **Lazy load triggers:** `toString`, debug logging, JSON serialization, and IDE inspection can all trigger lazy loads.
-- **Bulk updates/deletes:** bypass persistence context and lifecycle callbacks. Subsequent reads may be stale.
-- **Multiple bag fetches:** can cause Cartesian explosion. Verify the ORM can execute collection-heavy fetch plans safely.
+- **Bidirectional associations:** maintain both sides in domain methods. Half-updated graphs cause
+  subtle bugs.
+- **`orphanRemoval` vs cascade remove:** not interchangeable. Explain lifecycle semantics before
+  choosing.
+- **Lazy load triggers:** `toString`, debug logging, JSON serialization, and IDE inspection can all
+  trigger lazy loads.
+- **Bulk updates/deletes:** bypass persistence context and lifecycle callbacks. Subsequent reads may
+  be stale.
+- **Multiple bag fetches:** can cause Cartesian explosion. Verify the ORM can execute
+  collection-heavy fetch plans safely.
 - **`Set` + mutable equality:** collection membership can break after entity state changes.
 - **`@Version`:** the clearest optimistic concurrency mechanism when concurrent updates matter.
-- **`open-in-view` disabled:** DTO mapping touching lazy fields must happen inside a transaction boundary.
+- **`open-in-view` disabled:** DTO mapping touching lazy fields must happen inside a transaction
+  boundary.
 
 ## Guardrails
 

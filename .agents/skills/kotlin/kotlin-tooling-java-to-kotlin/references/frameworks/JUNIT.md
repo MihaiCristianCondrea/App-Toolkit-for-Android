@@ -8,19 +8,19 @@ Detected when imports match `org.junit.*` or `org.testng.*`.
 
 ### 1. JUnit 4 to Kotlin (with JUnit 5)
 
-| JUnit 4 | Kotlin (JUnit 5 / kotlin.test) |
-|---|---|
-| `@Test` | `@Test` (from `kotlin.test` or `org.junit.jupiter.api`) |
-| `@Before` | `@BeforeEach` (JUnit 5) or `@BeforeTest` (kotlin.test) |
-| `@After` | `@AfterEach` (JUnit 5) or `@AfterTest` (kotlin.test) |
-| `@BeforeClass` | `@BeforeAll` in companion object with `@JvmStatic` |
-| `@AfterClass` | `@AfterAll` in companion object with `@JvmStatic` |
-| `@RunWith` | `@ExtendWith` (JUnit 5) |
-| `@Ignore` | `@Disabled` (JUnit 5) |
-| `@Rule` / `@ClassRule` | `@ExtendWith` or `@RegisterExtension` |
-| `Assert.assertEquals(expected, actual)` | `assertEquals(expected, actual)` (kotlin.test) |
-| `Assert.assertTrue(condition)` | `assertTrue(condition)` (kotlin.test) |
-| `@Test(expected = X.class)` | `assertFailsWith<X> { }` (kotlin.test) or `assertThrows<X> { }` (JUnit 5) |
+| JUnit 4                                 | Kotlin (JUnit 5 / kotlin.test)                                            |
+|-----------------------------------------|---------------------------------------------------------------------------|
+| `@Test`                                 | `@Test` (from `kotlin.test` or `org.junit.jupiter.api`)                   |
+| `@Before`                               | `@BeforeEach` (JUnit 5) or `@BeforeTest` (kotlin.test)                    |
+| `@After`                                | `@AfterEach` (JUnit 5) or `@AfterTest` (kotlin.test)                      |
+| `@BeforeClass`                          | `@BeforeAll` in companion object with `@JvmStatic`                        |
+| `@AfterClass`                           | `@AfterAll` in companion object with `@JvmStatic`                         |
+| `@RunWith`                              | `@ExtendWith` (JUnit 5)                                                   |
+| `@Ignore`                               | `@Disabled` (JUnit 5)                                                     |
+| `@Rule` / `@ClassRule`                  | `@ExtendWith` or `@RegisterExtension`                                     |
+| `Assert.assertEquals(expected, actual)` | `assertEquals(expected, actual)` (kotlin.test)                            |
+| `Assert.assertTrue(condition)`          | `assertTrue(condition)` (kotlin.test)                                     |
+| `@Test(expected = X.class)`             | `assertFailsWith<X> { }` (kotlin.test) or `assertThrows<X> { }` (JUnit 5) |
 
 ### 2. JUnit 5 stays mostly the same
 
@@ -35,14 +35,14 @@ Focus on Kotlin idioms in the test body:
 
 ### 3. TestNG to Kotlin
 
-| TestNG | Kotlin (JUnit 5) |
-|---|---|
-| `@Test` | `@Test` |
-| `@BeforeMethod` | `@BeforeEach` |
-| `@AfterMethod` | `@AfterEach` |
-| `@BeforeClass` | `@BeforeAll` with `@JvmStatic` in companion object |
-| `@AfterClass` | `@AfterAll` with `@JvmStatic` in companion object |
-| `@DataProvider` | `@ParameterizedTest` + `@MethodSource` |
+| TestNG          | Kotlin (JUnit 5)                                   |
+|-----------------|----------------------------------------------------|
+| `@Test`         | `@Test`                                            |
+| `@BeforeMethod` | `@BeforeEach`                                      |
+| `@AfterMethod`  | `@AfterEach`                                       |
+| `@BeforeClass`  | `@BeforeAll` with `@JvmStatic` in companion object |
+| `@AfterClass`   | `@AfterAll` with `@JvmStatic` in companion object  |
+| `@DataProvider` | `@ParameterizedTest` + `@MethodSource`             |
 
 ### 4. Assertion style
 
@@ -53,6 +53,7 @@ at runtime.
 ### 5. Backtick method names
 
 Kotlin allows backtick-quoted method names for readable test names:
+
 ```kotlin
 @Test
 fun `should return empty list when no users exist`() { ... }
@@ -184,6 +185,7 @@ class UserServiceTest {
 ```
 
 **Key points:**
+
 - JUnit 4 `@Before` / `@After` → JUnit 5 `@BeforeEach` / `@AfterEach`.
 - `@BeforeClass` static method → `@BeforeAll` + `@JvmStatic` inside `companion object`.
 - `@Test(expected = ...)` → `assertFailsWith<ExceptionType> { }` with reified generics.

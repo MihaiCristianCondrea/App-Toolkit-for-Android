@@ -10,7 +10,9 @@ the benefits of the data layer, check out the [Architecture Overview
 page](https://developer.android.com/jetpack/guide).
 
 > [!NOTE]
-> **Note:** The recommendations and best practices present in this page can be applied to a broad spectrum of apps to allow them to scale, improve quality and robustness, and make them easier to test. However, you should treat them as guidelines and adapt them to your requirements as needed.
+> **Note:** The recommendations and best practices present in this page can be applied to a broad
+> spectrum of apps to allow them to scale, improve quality and robustness, and make them easier to
+> test. However, you should treat them as guidelines and adapt them to your requirements as needed.
 
 [Video](https://www.youtube.com/watch?v=r5AseKQh2ZE)
 
@@ -22,7 +24,8 @@ data you handle in your app. For example, you might create a `MoviesRepository`
 class for data related to movies, or a `PaymentsRepository` class for data
 related to payments.
 ![In a typical architecture, the data layer's repositories provide data
-to the rest of the app and depend on the data sources.](https://developer.android.com/static/topic/libraries/architecture/images/mad-arch-data-overview.png) **Figure 1.** The data layer's role in app architecture.
+to the rest of the app and depend on the data sources.](https://developer.android.com/static/topic/libraries/architecture/images/mad-arch-data-overview.png)
+**Figure 1.** The data layer's role in app architecture.
 
 Repository classes are responsible for the following tasks:
 
@@ -39,8 +42,10 @@ operations.
 
 Other layers in the hierarchy should never access data sources directly; the
 entry points to the data layer are always the repository classes. State holder
-classes (see the [UI layer guide](https://developer.android.com/jetpack/guide/ui-layer#state-holders)) or use
-case classes (see the [domain layer guide](https://developer.android.com/jetpack/guide/domain-layer)) should
+classes (see
+the [UI layer guide](https://developer.android.com/jetpack/guide/ui-layer#state-holders)) or use
+case classes (see
+the [domain layer guide](https://developer.android.com/jetpack/guide/domain-layer)) should
 never have a data source as a direct dependency. Using repository classes as
 entry points allows the different layers of the architecture to scale
 independently.
@@ -48,9 +53,12 @@ independently.
 **The data exposed by this layer should be immutable** so that it cannot be
 tampered with by other classes, which would risk putting its values in an
 inconsistent state. Immutable data can also be safely handled by multiple
-threads. See the [threading section](https://developer.android.com/topic/architecture/data-layer#threading) for more details.
+threads. See
+the [threading section](https://developer.android.com/topic/architecture/data-layer#threading) for
+more details.
 
-Following [dependency injection](https://developer.android.com/training/dependency-injection) best practices,
+Following [dependency injection](https://developer.android.com/training/dependency-injection) best
+practices,
 the repository takes data sources as dependencies in its constructor:
 
     class ExampleRepository(
@@ -59,7 +67,10 @@ the repository takes data sources as dependencies in its constructor:
     ) { /* ... */ }
 
 > [!NOTE]
-> **Note:** Often, when a repository only contains a single data source and doesn't depend on other repositories, developers merge the responsibilities of repositories and data sources into the repository class. If you do this, don't forget to split functionalities if the repository needs to handle data from another source in a later version of your app.
+> **Note:** Often, when a repository only contains a single data source and doesn't depend on other
+> repositories, developers merge the responsibilities of repositories and data sources into the
+> repository class. If you do this, don't forget to split functionalities if the repository needs to
+> handle data from another source in a later version of your app.
 
 ## Expose APIs
 
@@ -67,18 +78,23 @@ Classes in the data layer generally expose functions to perform one-shot Create,
 Read, Update and Delete (CRUD) calls or to be notified of data changes over
 time. The data layer should expose the following for each of these cases:
 
-- **One-shot operations:** The data layer should expose suspend functions in Kotlin; and for the Java programming language, the data layer should expose functions that provide a callback to notify the result of the operation, or RxJava `Single`, `Maybe`, or `Completable` types.
-- **To be notified of data changes over time:** The data layer should expose [flows](https://developer.android.com/kotlin/flow) in Kotlin; and for the Java programming language, the data layer should expose a callback that emits the new data, or the RxJava `Observable` or `Flowable` type.
+- **One-shot operations:** The data layer should expose suspend functions in Kotlin; and for the
+  Java programming language, the data layer should expose functions that provide a callback to
+  notify the result of the operation, or RxJava `Single`, `Maybe`, or `Completable` types.
+- **To be notified of data changes over time:** The data layer should
+  expose [flows](https://developer.android.com/kotlin/flow) in Kotlin; and for the Java programming
+  language, the data layer should expose a callback that emits the new data, or the RxJava
+  `Observable` or `Flowable` type.
 
-    class ExampleRepository(
-        private val exampleRemoteDataSource: ExampleRemoteDataSource, // network
-        private val exampleLocalDataSource: ExampleLocalDataSource // database
-    ) {
+  class ExampleRepository(
+  private val exampleRemoteDataSource: ExampleRemoteDataSource, // network
+  private val exampleLocalDataSource: ExampleLocalDataSource // database
+  ) {
 
         val data: Flow<Example> = ...
 
         suspend fun modifyData(example: Example) { ... }
-    }
+  }
 
 ## Naming conventions in this guide
 
@@ -105,11 +121,17 @@ Don't name the data source based on an implementation detail---for example,
 shouldn't know how the data is saved. If you follow this rule, you can change
 the implementation of the data source (for example, migrating from
 [SharedPreferences](https://developer.android.com/training/data-storage/shared-preferences) to
-[DataStore](https://developer.android.com/topic/libraries/architecture/datastore)) without affecting the
+[DataStore](https://developer.android.com/topic/libraries/architecture/datastore)) without affecting
+the
 layer that calls that source.
 
 > [!NOTE]
-> **Note:** When migrating over to a new implementation of a data source, you might create an interface for the data source and have two implementations of the data source: one for the old backing technology, and one for the new one. In that case, it's fine to use the name of the technology for the data source class names (even though it's an implementation detail) because the repository only sees the interface, not the data source classes themselves. When you finish the migration, you can rename the new class to not contain the implementation detail in its name.
+> **Note:** When migrating over to a new implementation of a data source, you might create an
+> interface for the data source and have two implementations of the data source: one for the old
+> backing technology, and one for the new one. In that case, it's fine to use the name of the
+> technology for the data source class names (even though it's an implementation detail) because the
+> repository only sees the interface, not the data source classes themselves. When you finish the
+> migration, you can rename the new class to not contain the implementation detail in its name.
 
 ## Multiple levels of repositories
 
@@ -123,10 +145,13 @@ For example, a repository that handles user authentication data,
 and `RegistrationRepository` to fulfill its requirements.
 ![In the example, UserRepository depends on two other repository classes:
 LoginRepository, which depends on other login data sources; and
-RegistrationRepository, which depends on other registration data sources.](https://developer.android.com/static/topic/libraries/architecture/images/mad-arch-data-multiple-repos.png) **Figure 2.** Dependency graph of a repository that depends on other repositories.
+RegistrationRepository, which depends on other registration data sources.](https://developer.android.com/static/topic/libraries/architecture/images/mad-arch-data-multiple-repos.png)
+**Figure 2.** Dependency graph of a repository that depends on other repositories.
 
 > [!NOTE]
-> **Note:** Traditionally, some developers have called repository classes that depend on other repository classes *managers* ---for example, `UserManager` instead of `UserRepository`. You can use this naming convention if you prefer.
+> **Note:** Traditionally, some developers have called repository classes that depend on other
+> repository classes *managers* ---for example, `UserManager` instead of `UserRepository`. You can use
+> this naming convention if you prefer.
 
 ## Source of truth
 
@@ -164,7 +189,8 @@ take advantage of these APIs when they are available.
 
 To learn more about threading, see the [guide to background
 processing](https://developer.android.com/guide/background). For Kotlin users,
-[coroutines](https://developer.android.com/kotlin/coroutines) are the recommended option. See [Running
+[coroutines](https://developer.android.com/kotlin/coroutines) are the recommended option.
+See [Running
 Android tasks in background threads](https://developer.android.com/guide/background/threading) for
 recommended options for the Java programming language.
 
@@ -186,12 +212,14 @@ the registration or login flow---then you should scope the instance to the class
 that owns the lifecycle of that flow. For example, you could scope a
 `RegistrationRepository` that contains in-memory data to the
 `RegistrationActivity` or the [navigation
-graph](https://developer.android.com/guide/navigation/navigation-getting-started#create-nav-graph) of the
+graph](https://developer.android.com/guide/navigation/navigation-getting-started#create-nav-graph)
+of the
 registration flow.
 
 The lifecycle of each instance is a critical factor in deciding how to provide
 dependencies within your app. It's recommended that you follow [dependency
-injection](https://developer.android.com/training/dependency-injection) best practices where the dependencies
+injection](https://developer.android.com/training/dependency-injection) best practices where the
+dependencies
 are managed and can be scoped to dependency containers. To learn more about
 scoping in Android, see the [Scoping in Android and
 Hilt](https://medium.com/androiddevelopers/scoping-in-android-and-hilt-c2e5222317c0)
@@ -241,8 +269,10 @@ layers:
 Separating model classes is beneficial in the following ways:
 
 - It saves app memory by reducing the data to only what's needed.
-- It adapts external data types to data types used by your app---for example, your app might use a different data type to represent dates.
-- It provides better separation of concerns---for example, members of a large team could work individually on the network and UI layers of a feature if the model class is defined beforehand.
+- It adapts external data types to data types used by your app---for example, your app might use a
+  different data type to represent dates.
+- It provides better separation of concerns---for example, members of a large team could work
+  individually on the network and UI layers of a feature if the model class is defined beforehand.
 
 You can extend this practice and define separate model classes in other parts of
 your app architecture as well---for example, in data source classes and
@@ -264,7 +294,8 @@ displaying some data obtained from the database.
 
 UI-oriented operations are typically triggered by the UI layer and follow the
 caller's lifecycle---for example, the lifecycle of the ViewModel. See the [Make a
-network request](https://developer.android.com/topic/architecture/data-layer#network-request) section for an example of a UI-oriented
+network request](https://developer.android.com/topic/architecture/data-layer#network-request)
+section for an example of a UI-oriented
 operation.
 
 ### App-oriented operations
@@ -272,12 +303,15 @@ operation.
 App-oriented operations are relevant as long as the app is open. If the app is
 closed or the process is killed, these operations are canceled. An example is
 caching the result of a network request so that it can be used later if needed.
-See the [Implement in-memory data caching](https://developer.android.com/topic/architecture/data-layer#in-memory-cache) section to learn
+See
+the [Implement in-memory data caching](https://developer.android.com/topic/architecture/data-layer#in-memory-cache)
+section to learn
 more.
 
 These operations typically follow the lifecycle of the `Application` class or
 the data layer. For an example, see the [Make an operation live longer than the
-screen](https://developer.android.com/topic/architecture/data-layer#make_an_operation_live_longer_than_the_screen) section.
+screen](https://developer.android.com/topic/architecture/data-layer#make_an_operation_live_longer_than_the_screen)
+section.
 
 ### Business-oriented operations
 
@@ -286,7 +320,8 @@ death. An example is finishing the upload of a photo that the user wants to post
 to their profile.
 
 The recommendation for business-oriented operations is to use WorkManager. See
-the [Schedule tasks using WorkManager](https://developer.android.com/topic/architecture/data-layer#workmanager) section to learn more.
+the [Schedule tasks using WorkManager](https://developer.android.com/topic/architecture/data-layer#workmanager)
+section to learn more.
 
 ## Expose errors
 
@@ -296,7 +331,8 @@ Kotlin's [built-in error-handling
 mechanism](https://kotlinlang.org/docs/exception-handling.html). For
 errors that could be triggered by suspend functions, use `try/catch` blocks when
 appropriate; and in flows, use the
-[`catch`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/catch.html)
+[
+`catch`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/catch.html)
 operator. With this approach, the UI layer is expected to handle exceptions when
 calling the data layer.
 
@@ -304,7 +340,12 @@ The data layer can understand and handle different types of errors and expose
 them using custom exceptions---for example, a `UserNotAuthenticatedException`.
 
 > [!NOTE]
-> **Note:** Another way to model the result of interactions with the data layer is by using a `Result` class. This pattern models errors and other signals that can happen as part of processing the result. In this pattern, the data layer returns a `Result<T>` type instead of `T`, making the UI aware of *known* errors that could occur in certain scenarios. This is necessary for reactive programming APIs that don't have proper exception handling, such as [LiveData](https://developer.android.com/topic/architecture/data-layer/topic/libraries/architecture/livedata).
+> **Note:** Another way to model the result of interactions with the data layer is by using a
+`Result` class. This pattern models errors and other signals that can happen as part of processing
+> the result. In this pattern, the data layer returns a `Result<T>` type instead of `T`, making the UI
+> aware of *known* errors that could occur in certain scenarios. This is necessary for reactive
+> programming APIs that don't have proper exception handling, such
+> as [LiveData](https://developer.android.com/topic/architecture/data-layer/topic/libraries/architecture/livedata).
 
 To learn more about errors in coroutines, see the [Exceptions in
 coroutines](https://medium.com/androiddevelopers/exceptions-in-coroutines-ce8da1ec060c)
@@ -362,12 +403,14 @@ method:
 The `NewsApi` interface hides the implementation of the network API client; it
 doesn't make a difference whether the interface is backed by
 [Retrofit](https://square.github.io/retrofit/) or
-[`HttpURLConnection`](https://developer.android.com/reference/java/net/HttpURLConnection). Relying on
+[`HttpURLConnection`](https://developer.android.com/reference/java/net/HttpURLConnection). Relying
+on
 interfaces makes API implementations swappable in your app.
 
 > [!IMPORTANT]
 > **Key Point:** **Relying on interfaces makes API implementations swappable in your
-> app.** In addition to providing scalability and allowing you to replace dependencies more easily, it also favors testability because you can inject fake data source implementations in tests.
+> app.** In addition to providing scalability and allowing you to replace dependencies more easily,
+> it also favors testability because you can inject fake data source implementations in tests.
 
 #### Create the repository
 
@@ -411,7 +454,8 @@ the repository or in data source classes.
 
 For simplicity, `NewsRepository` uses a mutable variable to cache the latest
 news. To protect reads and writes from different threads, a
-[`Mutex`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.sync/-mutex/)
+[
+`Mutex`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.sync/-mutex/)
 is used. To learn more about shared mutable state and concurrency, see the
 [Kotlin
 documentation](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html#shared-mutable-state-and-concurrency).
@@ -507,11 +551,17 @@ user is not connected to the network.
 If the data you're working with needs to survive process death, then you need to
 store it on disk in one of the following ways:
 
-- For *large datasets* that need to be queried, need referential integrity, or need partial updates, save the data in a *Room database*. In the News app example, the news articles or authors could be saved in the database.
-- For *small datasets* that only need to be retrieved and set (not queries or updated partially), use *DataStore*. In the News app example, the user's preferred date format or other display preferences could be saved in DataStore.
+- For *large datasets* that need to be queried, need referential integrity, or need partial updates,
+  save the data in a *Room database*. In the News app example, the news articles or authors could be
+  saved in the database.
+- For *small datasets* that only need to be retrieved and set (not queries or updated partially),
+  use *DataStore*. In the News app example, the user's preferred date format or other display
+  preferences could be saved in DataStore.
 - For *chunks of data* like a JSON object, use a *file*.
 
-As mentioned in the [Source of truth](https://developer.android.com/topic/architecture/data-layer#source-of-truth) section, each data
+As mentioned in
+the [Source of truth](https://developer.android.com/topic/architecture/data-layer#source-of-truth)
+section, each data
 source works with only one source and corresponds to a specific data type (for
 example, `News`, `Authors`, `NewsAndAuthors`, or `UserPreferences`). Classes
 that use the data source shouldn't know how the data is saved---for example, in a
@@ -521,7 +571,8 @@ database or in a file.
 
 Because each data source should have the responsibility of working with only one
 source for a specific type of data, a Room data source would receive either a
-[data access object (DAO)](https://developer.android.com/training/data-storage/room/accessing-data) or the
+[data access object (DAO)](https://developer.android.com/training/data-storage/room/accessing-data)
+or the
 database itself as a parameter. For example, `NewsLocalDataSource` might take an
 instance of `NewsDao` as a parameter, and `AuthorsLocalDataSource` might take an
 instance of `AuthorsDao`.
@@ -535,7 +586,8 @@ guides](https://developer.android.com/training/data-storage/room).
 
 #### DataStore as a data source
 
-[DataStore](https://developer.android.com/topic/libraries/architecture/datastore) is perfect for storing
+[DataStore](https://developer.android.com/topic/libraries/architecture/datastore) is perfect for
+storing
 key-value pairs like user settings. Examples might include time format,
 notification preferences, and whether to show or hide news items after the user
 has read them. DataStore can also store typed objects with [protocol
@@ -575,11 +627,13 @@ this a *business-oriented* operation. This requirement makes it so that even
 if the device doesn't have connectivity when the user opens the app, the user
 can still see recent news.
 
-[WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager) makes it easy to
+[WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager) makes it easy
+to
 schedule asynchronous and reliable work and can take care of constraint
 management. It's the recommended library for persistent work. To perform the
 task defined above, a
-[`Worker`](https://developer.android.com/topic/libraries/architecture/workmanager/advanced/coroutineworker)
+[
+`Worker`](https://developer.android.com/topic/libraries/architecture/workmanager/advanced/coroutineworker)
 class is created: `RefreshLatestNewsWorker`. This class takes `NewsRepository`
 as a dependency in order to fetch the latest news and cache it to disk.
 
@@ -642,7 +696,8 @@ example, `NewsTasksDataSource` or `PaymentsTasksDataSource`. All tasks related
 to a particular type of data should be encapsulated in the same class.
 
 If the task needs to be triggered at app startup, it's recommended to trigger
-the WorkManager request using the [App Startup](https://developer.android.com/topic/libraries/app-startup)
+the WorkManager request using
+the [App Startup](https://developer.android.com/topic/libraries/app-startup)
 library that calls the repository from an
 [`Initializer`](https://developer.android.com/reference/kotlin/androidx/startup/Initializer).
 
@@ -651,14 +706,16 @@ guides](https://developer.android.com/topic/libraries/architecture/workmanager).
 
 ## Testing
 
-[Dependency injection](https://developer.android.com/training/dependency-injection) best practices help when
+[Dependency injection](https://developer.android.com/training/dependency-injection) best practices
+help when
 testing your app. It's also helpful to rely on interfaces for classes that
 communicate with external resources. When you test a unit, you can inject fake
 versions of its dependencies to make the test deterministic and reliable.
 
 ### Unit tests
 
-[General testing guidance](https://developer.android.com/training/testing) applies when testing the data
+[General testing guidance](https://developer.android.com/training/testing) applies when testing the
+data
 layer. For unit tests, use real objects when needed and fake any dependencies
 that reach out to external sources such as reading from a file or reading from
 the network.

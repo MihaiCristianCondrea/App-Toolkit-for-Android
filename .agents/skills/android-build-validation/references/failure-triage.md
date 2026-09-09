@@ -64,7 +64,8 @@ Examples:
 - required hardware is unavailable
 - package download servers cannot be reached
 
-A missing Android SDK should normally be fixed locally before it is accepted as an environment limitation.
+A missing Android SDK should normally be fixed locally before it is accepted as an environment
+limitation.
 
 ### Flaky or nondeterministic failure
 

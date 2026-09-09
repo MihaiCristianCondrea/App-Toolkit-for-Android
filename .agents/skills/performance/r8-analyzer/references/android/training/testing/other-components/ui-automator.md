@@ -2,7 +2,12 @@ The UI Automator testing framework provides a set of APIs to build UI tests that
 interact with user apps and system apps.
 
 > [!NOTE]
-> **Note:** This documentation covers the modern approach to writing UI Automator tests, introduced with [UI Automator 2.4](https://developer.android.com/jetpack/androidx/releases/test-uiautomator#2.4.0). This approach makes your tests more concise, readable, and robust. The API is under development, and we strongly recommend using it for any new development with UI Automator. The [legacy API guidance](https://developer.android.com/training/testing/other-components/ui-automator-legacy) is also available.
+> **Note:** This documentation covers the modern approach to writing UI Automator tests, introduced
+> with [UI Automator 2.4](https://developer.android.com/jetpack/androidx/releases/test-uiautomator#2.4.0).
+> This approach makes your tests more concise, readable, and robust. The API is under development, and
+> we strongly recommend using it for any new development with UI Automator.
+> The [legacy API guidance](https://developer.android.com/training/testing/other-components/ui-automator-legacy)
+> is also available.
 
 ## Introduction to modern UI Automator testing
 
@@ -18,7 +23,8 @@ helps when writing macrobenchmark tests.
 Key features of the modern approach include:
 
 - A dedicated `uiAutomator` test scope for cleaner and more expressive test code.
-- Methods like `onElement`, `onElements`, and `onElementOrNull` for finding UI elements with clear predicates.
+- Methods like `onElement`, `onElements`, and `onElementOrNull` for finding UI elements with clear
+  predicates.
 - Built-in waiting mechanism for conditional elements `onElement*(timeoutMs:
   Long = 10000)`
 - Explicit app state management such as `waitForStable` and `waitForAppToBeVisible`.
@@ -28,7 +34,8 @@ Key features of the modern approach include:
 ## Set up your project
 
 To begin using the modern UI Automator APIs, update your project's
-`build.gradle.kts` file to include the [latest dependency](https://developer.android.com/jetpack/androidx/releases/test-uiautomator#2.4.0):
+`build.gradle.kts` file to include
+the [latest dependency](https://developer.android.com/jetpack/androidx/releases/test-uiautomator#2.4.0):
 
 ### Kotlin
 
@@ -206,23 +213,34 @@ before interacting with it.
     onElement { viewIdResourceName == "my_loading_indicator" }.waitForStable()
 
 > [!NOTE]
-> **Note:** In most cases, `waitForStable()` isn't strictly necessary when using `onElement { ... }` because `onElement` already includes a timeout. Use `waitForStable()` primarily in combination with `onElements { ... }` to verify that all UI elements are visible, when you know that the UI is in an unstable state, or for specific screenshot testing scenarios where you need the UI to completely settle before capturing. `waitForStable()` works by waiting until no changes are detected in the accessibility tree for a set period. Note that this UI stability check doesn't guarantee that the app is fully idle, as background tasks might still be running.
+> **Note:** In most cases, `waitForStable()` isn't strictly necessary when using `onElement { ... }`
+> because `onElement` already includes a timeout. Use `waitForStable()` primarily in combination with
+`onElements { ... }` to verify that all UI elements are visible, when you know that the UI is in an
+> unstable state, or for specific screenshot testing scenarios where you need the UI to completely
+> settle before capturing. `waitForStable()` works by waiting until no changes are detected in the
+> accessibility tree for a set period. Note that this UI stability check doesn't guarantee that the
+> app is fully idle, as background tasks might still be running.
 
 ## Use UI Automator for Macrobenchmarks and Baseline Profiles
 
-Use UI Automator for performance testing with [Jetpack Macrobenchmark](https://developer.android.com/topic/performance/benchmarking/macrobenchmark-overview)
-and for generating [Baseline Profiles](https://developer.android.com/topic/performance/baselineprofiles/overview), as it provides a reliable way to
+Use UI Automator for performance testing
+with [Jetpack Macrobenchmark](https://developer.android.com/topic/performance/benchmarking/macrobenchmark-overview)
+and for
+generating [Baseline Profiles](https://developer.android.com/topic/performance/baselineprofiles/overview),
+as it provides a reliable way to
 interact with your app and measure performance from an end-user perspective.
 
 Macrobenchmark uses UI Automator APIs to drive the UI and measure interactions.
 For example, in startup benchmarks, you can use `onElement` to detect when UI
 content is fully loaded, enabling you to measure [Time to Full Display
-(TTFD)](https://developer.android.com/topic/performance/vitals/launch-time#time-full). In jank benchmarks, UI Automator APIs are used to scroll lists or
+(TTFD)](https://developer.android.com/topic/performance/vitals/launch-time#time-full). In jank
+benchmarks, UI Automator APIs are used to scroll lists or
 run animations to measure frame timings. Functions like `startActivity()` or
 `startIntent()` are useful for getting the app into the correct state before
 measurement begins.
 
-When [generating Baseline Profiles](https://developer.android.com/topic/performance/baselineprofiles/create-baselineprofile), you automate your app's critical user
+When [generating Baseline Profiles](https://developer.android.com/topic/performance/baselineprofiles/create-baselineprofile),
+you automate your app's critical user
 journeys (CUJs) to record which classes and methods require pre-compilation. UI
 Automator is an ideal tool for writing these automation scripts. The modern
 DSL's predicate-based element finding and built-in wait mechanisms (`onElement`)
@@ -302,11 +320,11 @@ debugging.
 If you have existing UI Automator tests written with older API surfaces, use the
 following table as a reference to migrate to the modern approach:
 
-| Action type | Old UI Automator method | New UI Automator method |
-|---|---|---|
-| Entry point | `UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())` | Wrap test logic in the `uiAutomator { ... }` scope. |
-| Find UI elements | `device.findObject(By.res("com.example.app:id/my_button"))` | `onElement { viewIdResourceName == "my\_button" }` |
-| Find UI elements | `device.findObject(By.text("Click Me"))` | `onElement { textAsString() == "Click Me" }` |
-| Wait for idle UI | `device.waitForIdle()` | Prefer `onElement`'s built-in timeout mechanism; otherwise, `activeWindow().waitForStable()` |
-| Find child elements | Manually nested `findObject` calls | `onElement().onElement()` chaining |
-| Handle permission dialogs | `UiAutomator.registerWatcher()` | `watchFor(PermissionDialog)` |
+| Action type               | Old UI Automator method                                              | New UI Automator method                                                                      |
+|---------------------------|----------------------------------------------------------------------|----------------------------------------------------------------------------------------------|
+| Entry point               | `UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())` | Wrap test logic in the `uiAutomator { ... }` scope.                                          |
+| Find UI elements          | `device.findObject(By.res("com.example.app:id/my_button"))`          | `onElement { viewIdResourceName == "my\_button" }`                                           |
+| Find UI elements          | `device.findObject(By.text("Click Me"))`                             | `onElement { textAsString() == "Click Me" }`                                                 |
+| Wait for idle UI          | `device.waitForIdle()`                                               | Prefer `onElement`'s built-in timeout mechanism; otherwise, `activeWindow().waitForStable()` |
+| Find child elements       | Manually nested `findObject` calls                                   | `onElement().onElement()` chaining                                                           |
+| Handle permission dialogs | `UiAutomator.registerWatcher()`                                      | `watchFor(PermissionDialog)`                                                                 |

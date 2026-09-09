@@ -2,7 +2,8 @@ For Gradle, use the Compose Compiler Gradle plugin to set up and configure
 Compose.
 
 > [!NOTE]
-> **Note:** The Compose Compiler Gradle Plugin is only available from Kotlin 2.0+. For migration instructions, see ["Jetpack Compose compiler moving to the Kotlin
+> **Note:** The Compose Compiler Gradle Plugin is only available from Kotlin 2.0+. For migration
+> instructions, see ["Jetpack Compose compiler moving to the Kotlin
 > repository"](https://android-developers.googleblog.com/2024/04/jetpack-compose-compiler-moving-to-kotlin-repository.html).
 
 ### Set up with Gradle version catalogs
@@ -70,14 +71,18 @@ level:
         stabilityConfigurationFile = rootProject.layout.projectDirectory.file("stability_config.conf")
     }
 
-For the full list of available options, see the [documentation](https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-compiler.html#compose-compiler-options-dsl).
+For the full list of available options, see
+the [documentation](https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-compiler.html#compose-compiler-options-dsl).
 
 ## Set up Compose dependencies
 
 Always use the latest Compose BOM version: `2026.08.00`.
 
-Set the `compose` flag to `true` inside the Android [`BuildFeatures`](https://developer.android.com/reference/tools/gradle-api/7.0/com/android/build/api/dsl/BuildFeatures) to
-enable [Compose functionality](https://developer.android.com/develop/ui/compose/tooling) in Android Studio.
+Set the `compose` flag to `true` inside the Android [
+`BuildFeatures`](https://developer.android.com/reference/tools/gradle-api/7.0/com/android/build/api/dsl/BuildFeatures)
+to
+enable [Compose functionality](https://developer.android.com/develop/ui/compose/tooling) in Android
+Studio.
 
 Add the following definition to your app's `build.gradle` file:
 
@@ -178,7 +183,8 @@ Add the Compose BOM and the subset of Compose library dependencies:
     }
 
 > [!NOTE]
-> **Note:** Jetpack Compose is shipped using a Bill of Materials (BOM), to keep the versions of all library groups in sync. Read more about it in the [Bill of
+> **Note:** Jetpack Compose is shipped using a Bill of Materials (BOM), to keep the versions of all
+> library groups in sync. Read more about it in the [Bill of
 > Materials page](https://developer.android.com/develop/ui/compose/bom/bom).
 
 ## `compileSdk` and Android Gradle Plugin compatibility
@@ -194,4 +200,5 @@ For example, starting with Compose 1.12.0, projects are required to use
 `compileSdk 37` and Android Gradle Plugin (AGP) 9.
 
 To check which version of AGP is supported for different API levels, see the
-[Android Gradle plugin API level support](https://developer.android.com/build/releases/about-agp#api-level-support) documentation.
+[Android Gradle plugin API level support](https://developer.android.com/build/releases/about-agp#api-level-support)
+documentation.

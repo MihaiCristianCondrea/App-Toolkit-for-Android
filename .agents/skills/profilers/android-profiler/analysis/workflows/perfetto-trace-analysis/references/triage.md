@@ -33,14 +33,14 @@ Follow these steps in order:
    > latency spike occurs.
    >
    > - Find the victim's first non-Running state transition within the symptom
-   >   window.
+       > window.
    > - Follow the waker chain for that transition. Check waker timestamps -
-   >   if the blocking event began significantly before the symptom window,
-   >   expand the investigation window upstream to include that origin.
+       > if the blocking event began significantly before the symptom window,
+       > expand the investigation window upstream to include that origin.
    > - If it cascades down to an origin in another process (for example, a
-   >   binder server that stalled `500ms` before the jank), **note** the
-   >   expanded window and include the upstream stall as a co-candidate to
-   >   investigate further.
+       > binder server that stalled `500ms` before the jank), **note** the
+       > expanded window and include the upstream stall as a co-candidate to
+       > investigate further.
 
 4. **Output** the triage summary using the format defined below.
 
@@ -53,7 +53,7 @@ Key available metrics for `--run-metrics`:
 Quick lookup table based on symptom:
 
 | Symptom/Issue    | What to check                         | Useful Perfetto tables                          |
-| :--------------- | :------------------------------------ | :---------------------------------------------- |
+|:-----------------|:--------------------------------------|:------------------------------------------------|
 | App startup      | Main thread                           | `android.startup.startups` (`android_startups`) |
 | App jank         | Main, render threads                  | `actual_frame_timeline_slice`                   |
 | System jank      | SurfaceFlinger                        | `actual_frame_timeline_slice`                   |

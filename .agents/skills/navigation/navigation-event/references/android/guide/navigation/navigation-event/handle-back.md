@@ -2,7 +2,6 @@ You can extend the abstract class `NavigationEventHandler` to handle navigation
 events across platforms. This class provides methods corresponding to the
 lifecycle of a navigation gesture.
 
-
 ```kotlin
 val myHandler = object: NavigationEventHandler<NavigationEventInfo>(
     initialInfo = NavigationEventInfo.None,
@@ -31,7 +30,6 @@ val myHandler = object: NavigationEventHandler<NavigationEventInfo>(
 
 The `addHandler` function connects the handler to the dispatcher:
 
-
 ```kotlin
 navigationEventDispatcher.addHandler(myHandler)
 ```
@@ -40,7 +38,6 @@ navigationEventDispatcher.addHandler(myHandler)
 
 Call `myHandler.remove()` to remove the handler from the dispatcher:
 
-
 ```kotlin
 myHandler.remove()
 ```
@@ -48,7 +45,10 @@ myHandler.remove()
 <br />
 
 Handlers are invoked based on priority, and then by recency. All
-[`PRIORITY_OVERLAY`](https://developer.android.com/reference/kotlin/androidx/navigationevent/NavigationEventDispatcher#PRIORITY_OVERLAY()) handlers are called before any [`PRIORITY_DEFAULT`](https://developer.android.com/reference/kotlin/androidx/navigationevent/NavigationEventDispatcher#PRIORITY_DEFAULT())
+[
+`PRIORITY_OVERLAY`](https://developer.android.com/reference/kotlin/androidx/navigationevent/NavigationEventDispatcher#PRIORITY_OVERLAY())
+handlers are called before any [
+`PRIORITY_DEFAULT`](https://developer.android.com/reference/kotlin/androidx/navigationevent/NavigationEventDispatcher#PRIORITY_DEFAULT())
 handlers. Within each priority group, handlers are invoked in a Last-In,
 First-Out (LIFO) order --- the most recently added handler is called first.
 
@@ -61,7 +61,6 @@ The `NavigationBackHandler` composable creates a `NavigationEventHandler` for
 its content and links it to the `LocalNavigationEventDispatcherOwner`. It uses
 Compose's `DisposableEffect` to automatically call the dispatcher's `dispose()`
 method when the composable leaves the screen, safely managing resources.
-
 
 ```kotlin
 @Composable
@@ -79,7 +78,6 @@ public fun NavigationBackHandler(
 
 This function lets you control event handling precisely within localized UI
 subtrees.
-
 
 ```kotlin
 @Composable
@@ -116,14 +114,20 @@ fun HandlingBackWithTransitionState(
 <br />
 
 This example shows how to observe predictive back gesture updates using
-[`NavigationEventTransitionState`](https://developer.android.com/reference/kotlin/androidx/navigationevent/NavigationEventTransitionState). The `progress` value can be used to
+[
+`NavigationEventTransitionState`](https://developer.android.com/reference/kotlin/androidx/navigationevent/NavigationEventTransitionState).
+The `progress` value can be used to
 update UI elements in response to the back gesture, while handling completion
 and cancellation through `NavigationBackHandler`.
 
 ### Access the back gesture or swipe edge in Compose
 
 > [!NOTE]
-> **Note:** For Android, if you're already using a navigation library with built-in Predictive Back support, like [Navigation 3](https://developer.android.com/guide/navigation/navigation-3/animate-destinations), use that instead of implementing the guidance here. The following section shows how to create a Predictive Back animation using only `NavigationEvent` and Compose.
+> **Note:** For Android, if you're already using a navigation library with built-in Predictive Back
+> support,
+> like [Navigation 3](https://developer.android.com/guide/navigation/navigation-3/animate-destinations),
+> use that instead of implementing the guidance here. The following section shows how to create a
+> Predictive Back animation using only `NavigationEvent` and Compose.
 
 **Figure 1** . A predictive back animation built with `NavigationEvent` and Compose.
 
@@ -132,11 +136,11 @@ the `NavigationEventTransitionState` is `InProgress`, and (b) observe the
 progress and swipe edge state with `rememberNavigationEventState`:
 
 - `progress`: A Float from `0.0` to `1.0` indicating how far the user has swiped.
-- `swipeEdge`: An integer constant (`EDGE_LEFT` or `EDGE_RIGHT`) indicating where the gesture started.
+- `swipeEdge`: An integer constant (`EDGE_LEFT` or `EDGE_RIGHT`) indicating where the gesture
+  started.
 
 The following snippet is a simplified example of how to implement a scale and
 shift animation:
-
 
 ```kotlin
 object Routes {

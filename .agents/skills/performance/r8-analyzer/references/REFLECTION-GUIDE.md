@@ -51,9 +51,11 @@ filtered by annotation.
 annotation class ReflectiveExecutor
 // Logic: find methods annotated with @ReflectiveExecutor and invoke them`
 
-- **Suggested Keep Rule:** \`\`\`proguard # Keep the annotation itself -keep @interface com.example.library.ReflectiveExecutor
+- **Suggested Keep Rule:** \`\`\`proguard # Keep the annotation itself -keep @interface
+  com.example.library.ReflectiveExecutor
 
 # Keep members of any class annotated with this specific annotation
+
 -keepclassmembers class \* {
 @com.example.library.ReflectiveExecutor \*;
 }
@@ -65,7 +67,8 @@ annotation class ReflectiveExecutor
 classpath.
 
 - **Look for:** `try-catch` blocks around `Class.forName()` used to toggle features.
-- **Example Code:** \`\`\`kotlin private const val VIDEO_TRACKER_CLASS = "com.example.analytics.video.VideoEventTracker"
+- **Example Code:** \`\`\`kotlin private const val VIDEO_TRACKER_CLASS = "
+  com.example.analytics.video.VideoEventTracker"
 
 try {
 Class.forName(VIDEO_TRACKER_CLASS).getDeclaredConstructor().newInstance()
@@ -83,7 +86,8 @@ Class.forName(VIDEO_TRACKER_CLASS).getDeclaredConstructor().newInstance()
 **Scenario:** Using reflection to access internal fields or methods not exposed
 with public APIs.
 
-- **Look for:** `getDeclaredField("...")` or `getDeclaredMethod("...")` followed by `isAccessible = true`.
+- **Look for:** `getDeclaredField("...")` or `getDeclaredMethod("...")` followed by
+  `isAccessible = true`.
 - **Example Code:**
   `kotlin
   val secretField = instance::class.java.getDeclaredField("secretMessage")

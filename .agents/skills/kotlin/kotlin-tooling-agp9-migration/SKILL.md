@@ -22,20 +22,27 @@ migration.
 ## Step 0: Analyze the Project
 
 Before making any changes, understand the project structure:
+
 1. Read `settings.gradle.kts` (or `.gradle`) to find all modules
 2. For each module, read its `build.gradle.kts` to identify which plugins are applied
 3. Check if the project uses a Gradle version catalog (`gradle/libs.versions.toml`). If it exists,
-   read it for current AGP/Gradle/Kotlin versions. If not, find versions directly in `build.gradle.kts`
-   files (typically in the root `buildscript {}` or `plugins {}` block). **Adapt all examples in this
+   read it for current AGP/Gradle/Kotlin versions. If not, find versions directly in
+   `build.gradle.kts`
+   files (typically in the root `buildscript {}` or `plugins {}` block). **Adapt all examples in
+   this
    guide accordingly** — version catalog examples use `alias(libs.plugins.xxx)` while direct usage
    uses `id("plugin.id") version "x.y.z"`
 4. Read `gradle/wrapper/gradle-wrapper.properties` for the Gradle version
 5. Check `gradle.properties` for any existing workarounds (`android.enableLegacyVariantApi`)
-6. Check for `org.jetbrains.kotlin.android` plugin usage — AGP 9.0 has built-in Kotlin and this plugin must be removed
-7. Check for `org.jetbrains.kotlin.kapt` plugin usage — incompatible with built-in Kotlin, must migrate to KSP or `com.android.legacy-kapt`
-8. Check for third-party plugins that may be incompatible with AGP 9.0 (see "Plugin Compatibility" section below)
+6. Check for `org.jetbrains.kotlin.android` plugin usage — AGP 9.0 has built-in Kotlin and this
+   plugin must be removed
+7. Check for `org.jetbrains.kotlin.kapt` plugin usage — incompatible with built-in Kotlin, must
+   migrate to KSP or `com.android.legacy-kapt`
+8. Check for third-party plugins that may be incompatible with AGP 9.0 (see "Plugin Compatibility"
+   section below)
 
-If Bash is available, run `scripts/analyze-project.sh` from this skill's directory to get a structured summary.
+If Bash is available, run `scripts/analyze-project.sh` from this skill's directory to get a
+structured summary.
 
 ### Classify Each Module
 
@@ -54,7 +61,8 @@ For each module, determine its type:
 - **Path C is recommended** when the project has a monolithic `composeApp` (or similar) module
   containing entry points for multiple platforms (Android, Desktop, Web). This aligns with the
   new JetBrains default project structure where each platform gets its own app module.
-- **Ask the user** whether they want Path B only (minimum required) or Path C (recommended full restructure)
+- **Ask the user** whether they want Path B only (minimum required) or Path C (recommended full
+  restructure)
 
 ## Path A: Library Module Migration
 
@@ -76,11 +84,12 @@ Summary:
        }
    }
    ```
-4. **Rename source directories** (only if the module uses classic Android layout instead of KMP layout):
-   - `src/main` → `src/androidMain`
-   - `src/test` → `src/androidHostTest`
-   - `src/androidTest` → `src/androidDeviceTest`
-   - If the module already uses `src/androidMain/`, no directory renames are needed
+4. **Rename source directories** (only if the module uses classic Android layout instead of KMP
+   layout):
+    - `src/main` → `src/androidMain`
+    - `src/test` → `src/androidHostTest`
+    - `src/androidTest` → `src/androidDeviceTest`
+    - If the module already uses `src/androidMain/`, no directory renames are needed
 5. **Move dependencies** from top-level `dependencies {}` into `sourceSets`:
    ```kotlin
    kotlin {
@@ -134,7 +143,10 @@ Summary:
     }
     ```
 11. **Resolve Sub-dependency Variants (Product Flavors / Build Types)**:
-    Because the new KMP Android library plugin enforces a single-variant architecture, it does not natively understand how to resolve dependencies that publish multiple variants (like `debug`/`release` build types, or product flavors like `free`/`paid`). Configure fallback behaviors using `localDependencySelection`:
+    Because the new KMP Android library plugin enforces a single-variant architecture, it does not
+    natively understand how to resolve dependencies that publish multiple variants (like `debug`/
+    `release` build types, or product flavors like `free`/`paid`). Configure fallback behaviors
+    using `localDependencySelection`:
     ```kotlin
     kotlin {
         android {
@@ -153,7 +165,8 @@ Summary:
 
 ## Path B: Android App + Shared Module Split
 
-Use this when a module applies `kotlin.multiplatform` + `com.android.application`. This is **mandatory** for AGP 9.0 compatibility.
+Use this when a module applies `kotlin.multiplatform` + `com.android.application`. This is *
+*mandatory** for AGP 9.0 compatibility.
 
 See [references/MIGRATION-APP-SPLIT.md](references/MIGRATION-APP-SPLIT.md) for full guide.
 
@@ -187,10 +200,11 @@ Summary:
    }
    ```
 2. **Move Android entry point code** from `src/androidMain/` to `androidApp/src/main/`:
-   - `MainActivity.kt` (and any other Activities/Fragments)
-   - `AndroidManifest.xml` (app-level manifest with `<application>` and launcher `<activity>`) — verify `android:name` on `<activity>` uses the fully qualified class name in its new location
-   - Android Application class if present
-   - App-level resources (launcher icons, theme, etc.)
+    - `MainActivity.kt` (and any other Activities/Fragments)
+    - `AndroidManifest.xml` (app-level manifest with `<application>` and launcher `<activity>`) —
+      verify `android:name` on `<activity>` uses the fully qualified class name in its new location
+    - Android Application class if present
+    - App-level resources (launcher icons, theme, etc.)
 3. **Add to `settings.gradle.kts`**: `include(":androidApp")`
 4. **Add to root `build.gradle.kts`**: plugin declarations with `apply false`
 5. **Convert original module** from application to library using Path A steps
@@ -203,7 +217,8 @@ Summary:
 Use this when the project has a monolithic module (typically `composeApp`) containing entry
 points for multiple platforms. This is optional but aligns with the new JetBrains default.
 
-See [references/MIGRATION-FULL-RESTRUCTURE.md](references/MIGRATION-FULL-RESTRUCTURE.md) for full guide.
+See [references/MIGRATION-FULL-RESTRUCTURE.md](references/MIGRATION-FULL-RESTRUCTURE.md) for full
+guide.
 
 ### Target Structure
 
@@ -221,34 +236,36 @@ project/
 
 1. **Apply Path B first** — extract `androidApp` (mandatory for AGP 9.0)
 2. **Extract `desktopApp`** (if desktop target exists):
-   - Create module with `org.jetbrains.compose` and `application {}` plugin
-   - Move `main()` function from `desktopMain` to `desktopApp/src/main/kotlin/`
-   - Move `compose.desktop { application { ... } }` config to `desktopApp/build.gradle.kts`
-   - Add dependency on `shared` module
+    - Create module with `org.jetbrains.compose` and `application {}` plugin
+    - Move `main()` function from `desktopMain` to `desktopApp/src/main/kotlin/`
+    - Move `compose.desktop { application { ... } }` config to `desktopApp/build.gradle.kts`
+    - Add dependency on `shared` module
 3. **Extract `webApp`** (if wasmJs/js target exists):
-   - Create module with appropriate Kotlin/JS or Kotlin/Wasm configuration
-   - Move web entry point from `wasmJsMain`/`jsMain` to `webApp/src/wasmJsMain/kotlin/`
-   - Move browser/distribution config to `webApp/build.gradle.kts`
-   - Add dependency on `shared` module
+    - Create module with appropriate Kotlin/JS or Kotlin/Wasm configuration
+    - Move web entry point from `wasmJsMain`/`jsMain` to `webApp/src/wasmJsMain/kotlin/`
+    - Move browser/distribution config to `webApp/build.gradle.kts`
+    - Add dependency on `shared` module
 4. **iOS** — typically already in a separate `iosApp` directory. Verify:
-   - Framework export config (`binaries.framework`) stays in `shared` module
-   - Xcode project references the correct framework path
+    - Framework export config (`binaries.framework`) stays in `shared` module
+    - Xcode project references the correct framework path
 5. **Rename module** from `composeApp` to `shared`:
-   - Rename directory
-   - Update `settings.gradle.kts` include
-   - Update all dependency references across modules
+    - Rename directory
+    - Update `settings.gradle.kts` include
+    - Update all dependency references across modules
 6. **Clean up shared module**: remove all platform entry point code and app-specific config
    that was moved to the platform app modules
 
 ### Variant: Native UI
 
 If some platforms use native UI (e.g., SwiftUI for iOS), split `shared` into:
+
 - `sharedLogic` — business logic consumed by ALL platforms
 - `sharedUI` — Compose Multiplatform UI consumed only by platforms using shared UI
 
 ### Variant: Server
 
 If the project includes a server target:
+
 - Add `server` module at the root
 - Move all client modules under an `app/` directory
 - Add `core` module for code shared between server and client (models, validation)
@@ -273,7 +290,8 @@ These are required regardless of migration path:
    android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
    ```
 
-   Without version catalog — update `com.android.*` plugin versions and add in root `build.gradle.kts`:
+   Without version catalog — update `com.android.*` plugin versions and add in root
+   `build.gradle.kts`:
    ```kotlin
    plugins {
        id("com.android.application") version "9.0.1" apply false
@@ -285,11 +303,13 @@ These are required regardless of migration path:
    ```
    Install via SDK Manager or configure in android { buildToolsVersion = "36.0.0" }
    ```
-5. **Review gradle.properties** — remove error-causing properties and review changed defaults (see "Gradle Properties Default Changes" section)
+5. **Review gradle.properties** — remove error-causing properties and review changed defaults (see "
+   Gradle Properties Default Changes" section)
 
 ## Built-in Kotlin Migration
 
-AGP 9.0 enables built-in Kotlin support by default for all `com.android.application` and `com.android.library`
+AGP 9.0 enables built-in Kotlin support by default for all `com.android.application` and
+`com.android.library`
 modules. The `org.jetbrains.kotlin.android` plugin is no longer needed and will conflict if applied.
 
 **Important:** Built-in Kotlin does NOT replace KMP support. KMP library modules still need
@@ -313,6 +333,7 @@ plugins {
 ```
 
 Remove from version catalog (`gradle/libs.versions.toml`):
+
 ```toml
 [plugins]
 # REMOVE: kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -325,11 +346,13 @@ The `org.jetbrains.kotlin.kapt` plugin is **incompatible** with built-in Kotlin.
 **Preferred: Migrate to KSP** — see the KSP migration guide for each annotation processor.
 
 **Fallback: Use `com.android.legacy-kapt`** (same version as AGP):
+
 ```toml
 # gradle/libs.versions.toml
 [plugins]
 legacy-kapt = { id = "com.android.legacy-kapt", version.ref = "agp" }
 ```
+
 ```kotlin
 // Module build.gradle.kts — replace kotlin-kapt with legacy-kapt
 plugins {
@@ -342,6 +365,7 @@ plugins {
 
 For pure Android modules (non-KMP), migrate `android.kotlinOptions {}` to the top-level
 `kotlin.compilerOptions {}`:
+
 ```kotlin
 // Old
 android {
@@ -362,11 +386,14 @@ kotlin {
 }
 ```
 
-**Note:** With built-in Kotlin, `jvmTarget` defaults to `android.compileOptions.targetCompatibility`, so it may be optional if you already set `compileOptions`.
+**Note:** With built-in Kotlin, `jvmTarget` defaults to
+`android.compileOptions.targetCompatibility`, so it may be optional if you already set
+`compileOptions`.
 
 ### Step 4: Migrate kotlin.sourceSets to android.sourceSets
 
 With built-in Kotlin, only `android.sourceSets {}` with the `kotlin` set is supported:
+
 ```kotlin
 // NOT SUPPORTED with built-in Kotlin:
 kotlin.sourceSets.named("main") {
@@ -380,6 +407,7 @@ android.sourceSets.named("main") {
 ```
 
 For generated sources, use the Variant API:
+
 ```kotlin
 androidComponents.onVariants { variant ->
     variant.sources.kotlin!!.addStaticSourceDirectory("additionalSourceDirectory/kotlin")
@@ -398,11 +426,13 @@ For large projects, migrate module-by-module:
    }
    ```
 3. Follow Steps 1-4 for that module
-4. Once all modules are migrated, remove `android.builtInKotlin=false` and all `com.android.built-in-kotlin` plugins
+4. Once all modules are migrated, remove `android.builtInKotlin=false` and all
+   `com.android.built-in-kotlin` plugins
 
 ### Optional: Disable Kotlin for Non-Kotlin Modules
 
 For modules that contain **no Kotlin sources**, disable built-in Kotlin to save build time:
+
 ```kotlin
 android {
     enableKotlin = false
@@ -412,23 +442,29 @@ android {
 ### Opt-Out (Temporary)
 
 If blocked by plugin incompatibilities, opt out temporarily:
+
 ```properties
 # gradle.properties
 android.builtInKotlin=false
 android.newDsl=false  # also required if using new DSL opt-out
 ```
 
-**Warning:** Ask the user if they want to opt out, and if so, remind them this is a temporary measure.
+**Warning:** Ask the user if they want to opt out, and if so, remind them this is a temporary
+measure.
 
 ## Plugin Compatibility
 
-See [references/PLUGIN-COMPATIBILITY.md](references/PLUGIN-COMPATIBILITY.md) for the full compatibility table with known compatible versions, opt-out flag workarounds, and broken plugins.
+See [references/PLUGIN-COMPATIBILITY.md](references/PLUGIN-COMPATIBILITY.md) for the full
+compatibility table with known compatible versions, opt-out flag workarounds, and broken plugins.
 
-**Before migrating**, inventory all plugins in the project and check each against that table. If any plugin is broken without workaround, inform the user. If plugins need opt-out flags, add them to`gradle.properties` and note them as temporary workarounds.
+**Before migrating**, inventory all plugins in the project and check each against that table. If any
+plugin is broken without workaround, inform the user. If plugins need opt-out flags, add them to
+`gradle.properties` and note them as temporary workarounds.
 
 ## Gradle Properties Default Changes
 
-AGP 9.0 changes the defaults for many Gradle properties. Check `gradle.properties` for any explicitly set values that may now conflict. 
+AGP 9.0 changes the defaults for many Gradle properties. Check `gradle.properties` for any
+explicitly set values that may now conflict.
 Key changes:
 
 | Property                                             | Old Default | New Default | Action                                            |
@@ -447,15 +483,18 @@ Key changes:
 | `android.onlyEnableUnitTestForTheTestedBuildType`    | `false`     | `true`      | Only if testing non-default build types           |
 
 Check for and remove properties that now cause errors:
+
 - `android.r8.integratedResourceShrinking` — removed, always on
 - `android.enableNewResourceShrinker.preciseShrinking` — removed, always on
 
 ## Pure Android Tips
 
-For non-KMP Android modules upgrading to AGP 9.0, follow the "Built-in Kotlin Migration" steps above,
+For non-KMP Android modules upgrading to AGP 9.0, follow the "Built-in Kotlin Migration" steps
+above,
 then review the "Gradle Properties Default Changes" table. Additional changes:
 
-- **Review new DSL interfaces** — `BaseExtension` is removed; use `CommonExtension` or specific extension types
+- **Review new DSL interfaces** — `BaseExtension` is removed; use `CommonExtension` or specific
+  extension types
 - **Java default changed** from Java 8 to Java 11 — ensure `compileOptions` reflects this
 
 ## Verification
@@ -475,20 +514,31 @@ After migration, verify with the [checklist](assets/checklist.md). Key checks:
 See [references/KNOWN-ISSUES.md](references/KNOWN-ISSUES.md) for details. Key gotchas:
 
 ### KMP Library Plugin Issues
-- **BuildConfig unavailable** in library modules — use DI/`AppConfiguration` interface, or use [BuildKonfig](https://github.com/yshrsmz/BuildKonfig) or [gradle-buildconfig-plugin](https://github.com/gmazzo/gradle-buildconfig-plugin) for compile-time constants
-- **No build variants** — single variant architecture; compile-time constants can use BuildKonfig/gradle-buildconfig-plugin flavors, but variant-specific dependencies/resources/signing must move to app module
+
+- **BuildConfig unavailable** in library modules — use DI/`AppConfiguration` interface, or
+  use [BuildKonfig](https://github.com/yshrsmz/BuildKonfig)
+  or [gradle-buildconfig-plugin](https://github.com/gmazzo/gradle-buildconfig-plugin) for
+  compile-time constants
+- **No build variants** — single variant architecture; compile-time constants can use
+  BuildKonfig/gradle-buildconfig-plugin flavors, but variant-specific dependencies/resources/signing
+  must move to app module
 - **NDK/JNI unsupported** in new plugin — extract to separate `com.android.library` module
 - **Compose resources crash** without `androidResources { enable = true }`
-- **Consumer ProGuard rules silently dropped** if not migrated to `consumerProguardFiles.add(file(...))` in new DSL
+- **Consumer ProGuard rules silently dropped** if not migrated to
+  `consumerProguardFiles.add(file(...))` in new DSL
 - **KSP** requires version 2.3.1+ for AGP 9.0 compatibility
 
 ### AGP 9.0 General Issues
-- **BaseExtension removed** — convention plugins using old DSL types need rewriting to use `CommonExtension`
-- **Variant APIs removed** — `applicationVariants`, `libraryVariants`, `variantFilter` replaced by `androidComponents`
+
+- **BaseExtension removed** — convention plugins using old DSL types need rewriting to use
+  `CommonExtension`
+- **Variant APIs removed** — `applicationVariants`, `libraryVariants`, `variantFilter` replaced by
+  `androidComponents`
 - **Convention plugins** need refactoring — old `android {}` extension helpers are obsolete
 
 ## Reference Files
 
 - [DSL Reference](references/DSL-REFERENCE.md) — side-by-side old→new DSL mapping
 - [Version Matrix](references/VERSION-MATRIX.md) — AGP/Gradle/KGP/Compose/IDE compatibility
-- [Plugin Compatibility](references/PLUGIN-COMPATIBILITY.md) — third-party plugin status and workarounds
+- [Plugin Compatibility](references/PLUGIN-COMPATIBILITY.md) — third-party plugin status and
+  workarounds

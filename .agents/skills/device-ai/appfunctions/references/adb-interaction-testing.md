@@ -8,21 +8,28 @@ emulator using ADB for AppFunction testing and debugging.
 Use this scenario when you want to see which app functions are registered on
 the device.
 
-1. **List all functions** : To view all registered app functions in JSON format, run `adb shell cmd app_function list-app-functions`.
-2. **Filter by package** : To view functions for a specific package, pipe the output to `grep` or a JSON tool: `adb shell cmd app_function
+1. **List all functions** : To view all registered app functions in JSON format, run
+   `adb shell cmd app_function list-app-functions`.
+2. **Filter by package** : To view functions for a specific package, pipe the output to `grep` or a
+   JSON tool: `adb shell cmd app_function
    list-app-functions | grep <package_name>`.
 
 ### Scenario 2: Invoke app functions
 
 If you want to test the execution of an app function, use this scenario.
 
-1. **Analyze description** : Before invoking, you must read the `description` field for the function in the `list-app-functions` output. This often contains critical usage constraints, required workflows, or disambiguation rules.
-2. **Follow constraints**: Follow all instructions in the description, such as asking the user to disambiguate or calling another tool first.
-3. **Format parameters** : Format the `--parameters` argument as a valid JSON string that represents the function's input arguments.
+1. **Analyze description** : Before invoking, you must read the `description` field for the function
+   in the `list-app-functions` output. This often contains critical usage constraints, required
+   workflows, or disambiguation rules.
+2. **Follow constraints**: Follow all instructions in the description, such as asking the user to
+   disambiguate or calling another tool first.
+3. **Format parameters** : Format the `--parameters` argument as a valid JSON string that represents
+   the function's input arguments.
 4. **Execute function** : Use `adb shell cmd app_function execute-app-function
    --package <PACKAGE_NAME> --function <SERVICE_CLASS_NAME#FUNCTION_NAME>
    --parameters '<PARAMETERS_JSON>'`.
-5. **Handle response** : The command returns the result as a JSON string. To get brief YAML output, use `--brief-yaml`.
+5. **Handle response** : The command returns the result as a JSON string. To get brief YAML output,
+   use `--brief-yaml`.
 
 ### Scenario 3: Manage function state
 

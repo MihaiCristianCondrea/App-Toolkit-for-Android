@@ -1,5 +1,6 @@
 This guide contains instructions for developers to integrate their recommended
-video content, using the [Engage SDK](https://developer.android.com/guide/playcore/engage), to populate recommendations
+video content, using the [Engage SDK](https://developer.android.com/guide/playcore/engage), to
+populate recommendations
 experiences across Google surfaces, such as TV, mobile, and tablet.
 
 Recommendation leverages the **Recommendation cluster** to show movies and TV
@@ -12,12 +13,14 @@ can be a maximum **of 7** recommendation clusters per request.
 > [!IMPORTANT]
 > **Important:** [Express interest in developing with Engage](http://g.co/tv/vda).
 
-Complete the [Pre-work](https://developer.android.com/guide/playcore/engage/tv/getting-started#pre-work) instructions in the Getting Started guide.
+Complete
+the [Pre-work](https://developer.android.com/guide/playcore/engage/tv/getting-started#pre-work)
+instructions in the Getting Started guide.
 
 1. Execute publishing on a foreground service.
 2. Publish recommendations data at most once daily, triggered by either of
-   - User's first login of the day. (*or*)
-   - When the user starts interacting with the application.
+    - User's first login of the day. (*or*)
+    - When the user starts interacting with the application.
 
 ## Integration
 
@@ -25,7 +28,8 @@ Complete the [Pre-work](https://developer.android.com/guide/playcore/engage/tv/g
 `publishRecommendationClusters` method to publish a recommendations object.
 
 Make sure to initialize the client and check for service availability as
-described in the [Getting Started guide](https://developer.android.com/guide/playcore/engage/tv/getting-started#common-integration).
+described in
+the [Getting Started guide](https://developer.android.com/guide/playcore/engage/tv/getting-started#common-integration).
 
     client.publishRecommendationClusters(recommendationRequest)
 
@@ -35,7 +39,9 @@ Clusters are logical grouping of the entities. The following code examples
 explains how to build the clusters based on your preference and how to create a
 publishing request and upsert all clusters.
 
-The [`RecommendationClusterType`](https://developer.android.com/reference/com/google/android/engage/common/datamodel/RecommendationClusterType) determines how the
+The [
+`RecommendationClusterType`](https://developer.android.com/reference/com/google/android/engage/common/datamodel/RecommendationClusterType)
+determines how the
 cluster will be displayed.
 
     // cluster for popular movies
@@ -77,10 +83,14 @@ When the service receives the request, the following actions occur within one
 transaction:
 
 - Existing `RecommendationsCluster` data from the developer partner is removed.
-- Data from the request is parsed and stored in the updated `RecommendationsCluster`. In case of an error, the entire request is rejected and the existing state is maintained.
+- Data from the request is parsed and stored in the updated `RecommendationsCluster`. In case of an
+  error, the entire request is rejected and the existing state is maintained.
 
 > [!NOTE]
-> **Note:** Publish APIs are upsert operations, replacing existing content; update entities by republishing the entire cluster. Only publish recommendations for adult accounts. Avoid using delete APIs followed by publish, as the latter inherently replaces content.
+> **Note:** Publish APIs are upsert operations, replacing existing content; update entities by
+> republishing the entire cluster. Only publish recommendations for adult accounts. Avoid using
+> delete
+> APIs followed by publish, as the latter inherently replaces content.
 
 ### Cross-device sync
 
@@ -103,7 +113,9 @@ To manually delete a user's data from the Google TV server before the standard
 receiving the request, the service deletes all existing Engage
 data for the account profile, or for the entire account.
 
-The [`DeleteReason`](https://developer.android.com/reference/com/google/android/engage/service/DeleteReason) enum defines the reason for data deletion.
+The [
+`DeleteReason`](https://developer.android.com/reference/com/google/android/engage/service/DeleteReason)
+enum defines the reason for data deletion.
 The following code removes recommendations on logout.
 
     // If the user logs out from your media app, you must make the following call
@@ -132,11 +144,16 @@ The following code removes recommendations on logout.
 The SDK has defined different entities to represent each item type. Following
 entities are supported for the Recommendation cluster:
 
-1. [`MediaActionFeedEntity`](https://developer.android.com/reference/com/google/android/engage/video/datamodel/MediaActionFeedEntity)
-2. [`MovieEntity`](https://developer.android.com/reference/com/google/android/engage/video/datamodel/MovieEntity)
-3. [`TvShowEntity`](https://developer.android.com/reference/com/google/android/engage/video/datamodel/TvShowEntity)
-4. [`LiveTvChannelEntity`](https://developer.android.com/reference/com/google/android/engage/video/datamodel/LiveTvChannelEntity)
-5. [`LiveTvProgramEntity`](https://developer.android.com/reference/com/google/android/engage/video/datamodel/LiveTvProgramEntity)
+1. [
+   `MediaActionFeedEntity`](https://developer.android.com/reference/com/google/android/engage/video/datamodel/MediaActionFeedEntity)
+2. [
+   `MovieEntity`](https://developer.android.com/reference/com/google/android/engage/video/datamodel/MovieEntity)
+3. [
+   `TvShowEntity`](https://developer.android.com/reference/com/google/android/engage/video/datamodel/TvShowEntity)
+4. [
+   `LiveTvChannelEntity`](https://developer.android.com/reference/com/google/android/engage/video/datamodel/LiveTvChannelEntity)
+5. [
+   `LiveTvProgramEntity`](https://developer.android.com/reference/com/google/android/engage/video/datamodel/LiveTvProgramEntity)
 
 ### Provide descriptions
 
@@ -202,7 +219,8 @@ Poster images require a URI and pixel dimensions (height and width). Target
 different form factors by providing multiple poster images, but verify all
 images maintain a 16:9 aspect ratio and a minimum height of 200 pixels for
 correct display of the "Recommendations" entity, especially within Google's
-[Entertainment Space](https://support.google.com/entertainmentspace/answer/10346911). Images with a height less than 200
+[Entertainment Space](https://support.google.com/entertainmentspace/answer/10346911). Images with a
+height less than 200
 pixels may not be shown.
 
     Image image1 = new Image.Builder()
@@ -292,7 +310,9 @@ availability windows.
 
 If you have integrated your Media catalogue or Media action feed with Google TV,
 you need not create separate entities for Movie or TV Show and instead you can
-create a [`MediaActionFeedEntity`](https://developer.android.com/reference/com/google/android/engage/video/datamodel/MediaActionFeedEntity) which includes the
+create a [
+`MediaActionFeedEntity`](https://developer.android.com/reference/com/google/android/engage/video/datamodel/MediaActionFeedEntity)
+which includes the
 required field DataFeedElementId. This Id must be unique and must match with the
 ID in Media Action Feed as it helps to identify ingested feed content and
 perform media content lookups.
@@ -468,4 +488,6 @@ recommendation reason.
       .build()
 
 > [!NOTE]
-> **Note:** If the additional fields are provided directly within the entity, these values will be prioritized. The locale, if provided in the Account Profile, will be used to fetch the remaining entity metadata from Google's database in the language consistent with the request.
+> **Note:** If the additional fields are provided directly within the entity, these values will be
+> prioritized. The locale, if provided in the Account Profile, will be used to fetch the remaining
+> entity metadata from Google's database in the language consistent with the request.

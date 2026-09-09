@@ -2,11 +2,13 @@
 
 Use this reference after inspecting the repository.
 
-The exact tasks depend on the project. Do not assume every Android repository uses the same test layout.
+The exact tasks depend on the project. Do not assume every Android repository uses the same test
+layout.
 
 ## Required validation
 
-Implementation work should finish with the broadest repository-supported unit-test suite that applies to the change.
+Implementation work should finish with the broadest repository-supported unit-test suite that
+applies to the change.
 
 For many Gradle Android projects:
 
@@ -155,7 +157,8 @@ For cleanup or deletion flows, consider:
 - stale input
 - missing input
 
-JVM tests can validate decision logic, but system confirmation flows may still require runtime validation.
+JVM tests can validate decision logic, but system confirmation flows may still require runtime
+validation.
 
 ## Permission testing
 
@@ -271,7 +274,8 @@ Inspect whether the project uses:
 
 Run the variant that exercises the changed behavior.
 
-For release-critical work, also consider whether release compilation or packaging should be verified.
+For release-critical work, also consider whether release compilation or packaging should be
+verified.
 
 ## Suggested validation sequence
 

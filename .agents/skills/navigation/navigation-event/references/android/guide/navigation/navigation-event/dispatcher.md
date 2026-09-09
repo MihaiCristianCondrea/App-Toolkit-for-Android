@@ -1,6 +1,8 @@
 To implement a robust navigation system, your app needs a centralized way to
 handle back gestures and other navigation signals. This page describes how to
-use [`NavigationEventDispatcher`](https://developer.android.com/reference/kotlin/androidx/navigationevent/NavigationEventDispatcher) to coordinate and distribute these
+use [
+`NavigationEventDispatcher`](https://developer.android.com/reference/kotlin/androidx/navigationevent/NavigationEventDispatcher)
+to coordinate and distribute these
 navigation events across your application.
 
 ## Declare a `NavigationEventDispatcher`
@@ -12,10 +14,11 @@ registered listeners within your app. Components can subscribe to these events
 to react to navigation changes or other system-driven navigation actions.
 
 You should provide `NavigationEventDispatcher` instances through a
-[`NavigationEventDispatcherOwner`](https://developer.android.com/reference/androidx/navigationevent/NavigationEventDispatcherOwner). This ensures that different parts of your
+[
+`NavigationEventDispatcherOwner`](https://developer.android.com/reference/androidx/navigationevent/NavigationEventDispatcherOwner).
+This ensures that different parts of your
 app can access the same dispatcher and observe navigation events in a consistent
 and coordinated way.
-
 
 ```kotlin
 class MyComponent: NavigationEventDispatcherOwner {
@@ -28,7 +31,6 @@ class MyComponent: NavigationEventDispatcherOwner {
 
 If you are inside of a `ComponentActivity`, instead of implementing your own
 dispatcher, you can retrieve the one provided for you.
-
 
 ```kotlin
 class MyCustomActivity : ComponentActivity() {
@@ -52,7 +54,6 @@ raw system input and translates it into a standard `NavigationEvent` to be sent
 to the `NavigationEventDispatcher`.
 
 The following example is a custom implementation of a `NavigationEventInput`:
-
 
 ```kotlin
 public class MyInput : NavigationEventInput() {
@@ -82,7 +83,6 @@ public class MyInput : NavigationEventInput() {
 
 Next, provide that input to your dispatcher:
 
-
 ```kotlin
 navigationEventDispatcher.addInput(MyInput())
 ```
@@ -90,7 +90,9 @@ navigationEventDispatcher.addInput(MyInput())
 <br />
 
 > [!NOTE]
-> **Note:** To provide a simple input, use the [`DirectNavigationEventInput`](https://developer.android.com/reference/androidx/navigationevent/DirectNavigationEventInput) class.
+> **Note:** To provide a simple input, use the [
+`DirectNavigationEventInput`](https://developer.android.com/reference/androidx/navigationevent/DirectNavigationEventInput)
+> class.
 
 ## Clean up resources with `dispose()`
 
@@ -98,7 +100,6 @@ To prevent memory leaks in a dynamic UI, every created
 `NavigationEventDispatcher` instance must be explicitly removed from the
 hierarchy using the `dispose()` method when the component it is tied to is
 destroyed:
-
 
 ```kotlin
 navigationEventDispatcher.dispose()

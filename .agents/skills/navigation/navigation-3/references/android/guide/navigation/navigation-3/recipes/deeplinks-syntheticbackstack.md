@@ -8,24 +8,32 @@ managing a synthetic backStack and Task stacks.
 This recipe simulates a real-world scenario where "App A" deep links
 into "App B".
 
-"App A" is simulated by the module [syntheticbackstack](https://developer.android.com/app/src/main/java/com/example/nav3recipes/deeplink/handlerequests/syntheticbackstack), which
+"App A" is simulated by the
+module [syntheticbackstack](https://developer.android.com/app/src/main/java/com/example/nav3recipes/deeplink/handlerequests/syntheticbackstack),
+which
 contains the `SyntheticBackStackDeepLinkActivity` that allows you to create a deeplink intent and
 trigger that in either the existing Task, or in a new Task.
 
-"App B" is simulated by the module [syntheticbackstackapp](https://developer.android.com/syntheticbackstackapp/src/main/java/com/example/nav3recipes/deeplink/syntheticbackstack), which contains
-the `SyntheticBackStackAppActivity` that you deeplink into. That module shows you how to build a synthetic backStack
+"App B" is simulated by the
+module [syntheticbackstackapp](https://developer.android.com/syntheticbackstackapp/src/main/java/com/example/nav3recipes/deeplink/syntheticbackstack),
+which contains
+the `SyntheticBackStackAppActivity` that you deeplink into. That module shows you how to build a
+synthetic backStack
 and how to manage the Task stack properly in order to support both Back and Up buttons.
 
 # How to Use
 
-Ensure both the main `app` and `syntheticbackstackapp` are installed on the emulator or connected device. Ensure that the installed `syntheticbackstackapp` supports
+Ensure both the main `app` and `syntheticbackstackapp` are installed on the emulator or connected
+device. Ensure that the installed `syntheticbackstackapp` supports
 the `"www.nav3deeplink.com"` link.
 
-On the recipe's landing page, choose the filters and click the button to deep link. It should bring you to the Activity of `syntheticbackstackapp`.
+On the recipe's landing page, choose the filters and click the button to deep link. It should bring
+you to the Activity of `syntheticbackstackapp`.
 
 # How it Works
 
-The recipe follows the deep link guideline summarized [here](https://developer.android.com/docs/deeplink-guide#summary).
+The recipe follows the deep link guideline
+summarized [here](https://developer.android.com/docs/deeplink-guide#summary).
 
 To see behavior of `Existing Task`:
 

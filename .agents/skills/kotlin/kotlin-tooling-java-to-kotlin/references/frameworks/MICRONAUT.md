@@ -114,6 +114,7 @@ class OrderController(
 ```
 
 Key changes:
+
 - `@Inject` is removed — Micronaut auto-discovers the single constructor.
 - The `jakarta.inject.Inject` import is removed because it is no longer referenced.
 - Constructor parameters become `private val` in the primary constructor.

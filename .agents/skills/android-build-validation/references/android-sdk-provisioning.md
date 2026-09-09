@@ -1,6 +1,7 @@
 # Android SDK Provisioning
 
-Use this reference when an Android project cannot configure or test because the local Android SDK is missing or incomplete.
+Use this reference when an Android project cannot configure or test because the local Android SDK is
+missing or incomplete.
 
 The goal is to prepare the current machine without changing the project to fit the environment.
 
@@ -115,7 +116,8 @@ When `winget` is available:
 winget install --id Google.AndroidCLI
 ```
 
-If this is not available, use the current Android CLI installation instructions from the official Android documentation.
+If this is not available, use the current Android CLI installation instructions from the official
+Android documentation.
 
 ## Choose a writable SDK directory
 
@@ -152,7 +154,8 @@ build-tools/34.0.0
 platform-tools
 ```
 
-For new or preview Android versions, list the available package first and install the exact package that matches the project's configuration.
+For new or preview Android versions, list the available package first and install the exact package
+that matches the project's configuration.
 
 ## Install required packages
 
@@ -177,9 +180,11 @@ Do not install unrelated API levels.
 
 ## `sdkmanager` compatibility path
 
-Many existing Android environments still use the older Android SDK Command-Line Tools and `sdkmanager`.
+Many existing Android environments still use the older Android SDK Command-Line Tools and
+`sdkmanager`.
 
-Google currently marks `sdkmanager` as deprecated in favor of Android CLI, but it remains useful for existing CI environments.
+Google currently marks `sdkmanager` as deprecated in favor of Android CLI, but it remains useful for
+existing CI environments.
 
 If it is already installed:
 

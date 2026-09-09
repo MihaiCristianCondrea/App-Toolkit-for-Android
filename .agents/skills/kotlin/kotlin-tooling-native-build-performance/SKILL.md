@@ -32,15 +32,15 @@ Establish four facts before editing anything: **where** (local or CI),
 (first build, clean, warm, or no-op), and **phase** (which tasks dominate the
 log). Then match the dominant symptom:
 
-| Symptom in the build log | Likely cause | Read |
-|---|---|---|
-| `linkRelease*` or `*ReleaseXCFramework` tasks in a local development loop | Building distribution artifacts for development | [artifacts-and-targets](references/artifacts-and-targets.md) |
-| Kotlin/Native compiler distribution downloaded on every CI run | `~/.konan` not preserved between runs | [caching-and-gradle](references/caching-and-gradle.md) |
-| Long pause before the first task starts | Configuration phase, no configuration cache | [caching-and-gradle](references/caching-and-gradle.md) |
-| All iOS targets build when only one simulator is needed | Broad task (`build`, `assemble`, `assemble*XCFramework`) or unused targets | [artifacts-and-targets](references/artifacts-and-targets.md) |
-| `ksp*` tasks ahead of `compileKotlinIos*` | Generated-code work on the native path | [exports-and-generated-code](references/exports-and-generated-code.md) |
-| Small source edit recompiles and relinks everything | Compiler caches disabled, or missing incrementality | [caching-and-gradle](references/caching-and-gradle.md), [experimental](references/experimental.md) |
-| Machine overloaded while several `link*` tasks run at once | Parallel native linking | [caching-and-gradle](references/caching-and-gradle.md), worker-limit caveat |
+| Symptom in the build log                                                  | Likely cause                                                               | Read                                                                                               |
+|---------------------------------------------------------------------------|----------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------|
+| `linkRelease*` or `*ReleaseXCFramework` tasks in a local development loop | Building distribution artifacts for development                            | [artifacts-and-targets](references/artifacts-and-targets.md)                                       |
+| Kotlin/Native compiler distribution downloaded on every CI run            | `~/.konan` not preserved between runs                                      | [caching-and-gradle](references/caching-and-gradle.md)                                             |
+| Long pause before the first task starts                                   | Configuration phase, no configuration cache                                | [caching-and-gradle](references/caching-and-gradle.md)                                             |
+| All iOS targets build when only one simulator is needed                   | Broad task (`build`, `assemble`, `assemble*XCFramework`) or unused targets | [artifacts-and-targets](references/artifacts-and-targets.md)                                       |
+| `ksp*` tasks ahead of `compileKotlinIos*`                                 | Generated-code work on the native path                                     | [exports-and-generated-code](references/exports-and-generated-code.md)                             |
+| Small source edit recompiles and relinks everything                       | Compiler caches disabled, or missing incrementality                        | [caching-and-gradle](references/caching-and-gradle.md), [experimental](references/experimental.md) |
+| Machine overloaded while several `link*` tasks run at once                | Parallel native linking                                                    | [caching-and-gradle](references/caching-and-gradle.md), worker-limit caveat                        |
 
 ## Step 1: Audit and Measure
 
@@ -120,14 +120,14 @@ Reasoning chain:
 ## Verify
 
 - [ ] Re-run the exact baseline command; compare warm build against warm
-      build, not warm against cold.
+  build, not warm against cold.
 - [ ] Second run with the configuration cache reports it is being reused.
 - [ ] The local development log no longer contains `linkRelease*`,
-      `*ReleaseXCFramework`, or removed generator tasks.
+  `*ReleaseXCFramework`, or removed generator tasks.
 - [ ] CI still produces every required release artifact, unchanged.
 - [ ] Tests pass and the app still runs from Xcode.
 - [ ] `scripts/audit-native-build.sh` reports no findings you have not
-      consciously accepted and documented.
+  consciously accepted and documented.
 
 ## Report Your Changes
 
@@ -143,12 +143,12 @@ Close with a short performance note:
 
 ## Official Documentation
 
-| Topic | Link |
-|---|---|
-| Improving Kotlin/Native compilation time | https://kotlinlang.org/docs/native-improving-compilation-time.html |
-| Kotlin Gradle plugin compilation and caches | https://kotlinlang.org/docs/gradle-compilation-and-caches.html |
-| iOS integration methods | https://kotlinlang.org/docs/multiplatform-ios-integration-overview.html |
-| Direct integration with Xcode | https://kotlinlang.org/docs/multiplatform/multiplatform-direct-integration.html |
+| Topic                                           | Link                                                                               |
+|-------------------------------------------------|------------------------------------------------------------------------------------|
+| Improving Kotlin/Native compilation time        | https://kotlinlang.org/docs/native-improving-compilation-time.html                 |
+| Kotlin Gradle plugin compilation and caches     | https://kotlinlang.org/docs/gradle-compilation-and-caches.html                     |
+| iOS integration methods                         | https://kotlinlang.org/docs/multiplatform-ios-integration-overview.html            |
+| Direct integration with Xcode                   | https://kotlinlang.org/docs/multiplatform/multiplatform-direct-integration.html    |
 | Building final native binaries and XCFrameworks | https://kotlinlang.org/docs/multiplatform/multiplatform-build-native-binaries.html |
-| Kotlin/Native binary options | https://kotlinlang.org/docs/native-binary-options.html |
-| KSP with Kotlin Multiplatform | https://kotlinlang.org/docs/ksp-multiplatform.html |
+| Kotlin/Native binary options                    | https://kotlinlang.org/docs/native-binary-options.html                             |
+| KSP with Kotlin Multiplatform                   | https://kotlinlang.org/docs/ksp-multiplatform.html                                 |

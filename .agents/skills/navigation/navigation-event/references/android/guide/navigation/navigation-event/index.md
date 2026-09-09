@@ -1,7 +1,8 @@
 Navigation Event is a library that provides a Kotlin Multiplatform (KMP)
 solution for integrating system-level navigation events into your application.
 It is designed to be the foundational layer for handling navigation directions
-across various [supported platforms](https://developer.android.com/kotlin/multiplatform#kotlin-multiplatform-and-jetpack-libraries).
+across
+various [supported platforms](https://developer.android.com/kotlin/multiplatform#kotlin-multiplatform-and-jetpack-libraries).
 
 ## Key concepts
 
@@ -11,9 +12,13 @@ such as those found in Jetpack Compose.
 
 ### `NavigationEventDispatcher`
 
-The [`NavigationEventDispatcher`](https://developer.android.com/reference/kotlin/androidx/navigationevent/NavigationEventDispatcher) is the central class responsible for
+The [
+`NavigationEventDispatcher`](https://developer.android.com/reference/kotlin/androidx/navigationevent/NavigationEventDispatcher)
+is the central class responsible for
 managing all registered navigation event consumers
-([`NavigationEventHandler`](https://developer.android.com/reference/kotlin/androidx/navigationevent/NavigationEventHandler))) and orchestrating the flow of events.
+([
+`NavigationEventHandler`](https://developer.android.com/reference/kotlin/androidx/navigationevent/NavigationEventHandler)))
+and orchestrating the flow of events.
 
 In a hierarchical setup, all dispatchers within the same chain share a single
 `NavigationEventProcessor`, which manages the global state and ensures a single,
@@ -33,17 +38,23 @@ dispatcher and are invoked based on priority and registration order.
 
 ### `NavigationEvent`
 
-[`NavigationEvent`](https://developer.android.com/reference/androidx/navigationevent/NavigationEvent) is a data class that carries the details of the
+[
+`NavigationEvent`](https://developer.android.com/reference/androidx/navigationevent/NavigationEvent)
+is a data class that carries the details of the
 navigation gesture.
 
 ### `NavigationEventInfo`
 
-[`NavigationEventInfo`](https://developer.android.com/reference/androidx/navigationevent/NavigationEventInfo) is an abstract class that provides contextual
+[
+`NavigationEventInfo`](https://developer.android.com/reference/androidx/navigationevent/NavigationEventInfo)
+is an abstract class that provides contextual
 information about a navigation state.
 
 ### `NavigationEventInput`
 
-[`NavigationEventInput`](https://developer.android.com/reference/androidx/navigationevent/NavigationEventInput) is an abstract class for components that generate
+[
+`NavigationEventInput`](https://developer.android.com/reference/androidx/navigationevent/NavigationEventInput)
+is an abstract class for components that generate
 and dispatch navigation events. It acts as the "input" side of the navigation
 system, translating platform-specific events (like system back gestures or
 button clicks) into standardized events that can be sent to a
@@ -80,4 +91,7 @@ Input handling is achieved through various mechanisms on each platform:
 | **Gesture from bottom** | ✅ Home | 🚫 | ✅ Home |
 
 > [!NOTE]
-> **Note:** The **Web** platform has unique navigation handling, where the browser controls the back stack state. This requires synchronization between the browser window and the application's navigation stack. The question mark represents behavior that is inconsistent because web browsers don't have a single, unified "back" button or gesture.
+> **Note:** The **Web** platform has unique navigation handling, where the browser controls the back
+> stack state. This requires synchronization between the browser window and the application's
+> navigation stack. The question mark represents behavior that is inconsistent because web browsers
+> don't have a single, unified "back" button or gesture.

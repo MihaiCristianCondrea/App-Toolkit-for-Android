@@ -1,25 +1,34 @@
 # DataStore
+
 Part of [Android Jetpack](https://developer.android.com/jetpack).
 
-
-Try with Kotlin Multiplatform Kotlin Multiplatform allows sharing the data layer with other platforms. Learn how to set up and work with DataStore in KMP [Set up DataStore for KMP →](https://developer.android.com/kotlin/multiplatform/datastore) ![](https://developer.android.com/static/images/android-kmp-logo.png)
+Try with Kotlin Multiplatform Kotlin Multiplatform allows sharing the data layer with other
+platforms. Learn how to set up and work with DataStore in
+KMP [Set up DataStore for KMP →](https://developer.android.com/kotlin/multiplatform/datastore) ![](https://developer.android.com/static/images/android-kmp-logo.png)
 
 <br />
 
 Jetpack DataStore is a data storage solution that lets you store key-value
-pairs or typed objects with [protocol buffers](https://developers.google.com/protocol-buffers). DataStore uses Kotlin
+pairs or typed objects with [protocol buffers](https://developers.google.com/protocol-buffers).
+DataStore uses Kotlin
 coroutines and Flow to store data asynchronously, consistently, and
 transactionally.
 
-If you're using [`SharedPreferences`](https://developer.android.com/reference/kotlin/android/content/SharedPreferences) to store data, consider migrating to
+If you're using [
+`SharedPreferences`](https://developer.android.com/reference/kotlin/android/content/SharedPreferences)
+to store data, consider migrating to
 DataStore instead.
 
 > [!NOTE]
-> **Note:** If you need to support large or complex datasets, partial updates, or referential integrity, consider using [Room](https://developer.android.com/training/data-storage/room) instead of DataStore. DataStore is ideal for small datasets and does not support partial updates or referential integrity.
+> **Note:** If you need to support large or complex datasets, partial updates, or referential
+> integrity, consider using [Room](https://developer.android.com/training/data-storage/room) instead
+> of DataStore. DataStore is ideal for small datasets and does not support partial updates or
+> referential integrity.
 
 ## DataStore API
 
-The [`DataStore`](https://developer.android.com/reference/kotlin/androidx/datastore/core/DataStore) interface provides the following API:
+The [`DataStore`](https://developer.android.com/reference/kotlin/androidx/datastore/core/DataStore)
+interface provides the following API:
 
 1. A flow that can be used to read data from the DataStore
 
@@ -33,7 +42,9 @@ The [`DataStore`](https://developer.android.com/reference/kotlin/androidx/datast
 
 If you want to store and access data using keys, use the Preferences
 DataStore implementation which does not require a predefined schema, and it does
-not provide type safety. It has a [`SharedPreferences`](https://developer.android.com/reference/kotlin/android/content/SharedPreferences)-like API but doesn't
+not provide type safety. It has a [
+`SharedPreferences`](https://developer.android.com/reference/kotlin/android/content/SharedPreferences)
+-like API but doesn't
 have the drawbacks associated with shared preferences.
 
 DataStore lets you persist custom classes. To do this, you must define a
@@ -272,7 +283,8 @@ In order to use DataStore correctly always keep in mind the following rules:
 
 3. **Do not mix usages of `SingleProcessDataStore` and `MultiProcessDataStore`**
    for the same file. If you intend to access the `DataStore` from more than one
-   process, you must use [`MultiProcessDataStore`](https://developer.android.com/topic/libraries/architecture/datastore#multiprocess).
+   process, you must use [
+   `MultiProcessDataStore`](https://developer.android.com/topic/libraries/architecture/datastore#multiprocess).
 
 ## Data Definition
 
@@ -319,13 +331,15 @@ value for the serializer to be used if there is no file created yet.
 
 ### Proto DataStore
 
-The Proto DataStore implementation uses DataStore and [protocol buffers](https://developers.google.com/protocol-buffers) to
+The Proto DataStore implementation uses DataStore
+and [protocol buffers](https://developers.google.com/protocol-buffers) to
 persist typed objects to disk.
 
 Proto DataStore requires a predefined schema in a proto file in the
 `app/src/main/proto/` directory. This schema defines the type for the objects
 that you persist in your Proto DataStore. To learn more about defining a proto
-schema, see the [protobuf language guide](https://developers.google.com/protocol-buffers/docs/proto3).
+schema, see
+the [protobuf language guide](https://developers.google.com/protocol-buffers/docs/proto3).
 
 Add a file called `settings.proto` inside the `src/main/proto` folder:
 
@@ -360,7 +374,8 @@ serializer to be used if there is no file created yet.
     }
 
 > [!NOTE]
-> **Note:** The class for your stored objects is generated at compile time from the message defined in the proto file. Make sure you rebuild your project.
+> **Note:** The class for your stored objects is generated at compile time from the message defined
+> in the proto file. Make sure you rebuild your project.
 
 ## Create a DataStore
 
@@ -368,9 +383,14 @@ You need to specify a name for the file that is used to persist the data.
 
 ### Preferences DataStore
 
-The Preferences DataStore implementation uses the [`DataStore`](https://developer.android.com/reference/kotlin/androidx/datastore/core/DataStore) and
-[`Preferences`](https://developer.android.com/reference/kotlin/androidx/datastore/preferences/core/Preferences) classes to persist key-value pairs to disk. Use the
-property delegate created by [`preferencesDataStore`](https://developer.android.com/reference/kotlin/androidx/datastore/preferences/package-summary#preferencesDataStore(kotlin.String,androidx.datastore.core.handlers.ReplaceFileCorruptionHandler,kotlin.Function1,kotlinx.coroutines.CoroutineScope)) to create an instance
+The Preferences DataStore implementation uses the [
+`DataStore`](https://developer.android.com/reference/kotlin/androidx/datastore/core/DataStore) and
+[
+`Preferences`](https://developer.android.com/reference/kotlin/androidx/datastore/preferences/core/Preferences)
+classes to persist key-value pairs to disk. Use the
+property delegate created by [
+`preferencesDataStore`](https://developer.android.com/reference/kotlin/androidx/datastore/preferences/package-summary#preferencesDataStore(kotlin.String,androidx.datastore.core.handlers.ReplaceFileCorruptionHandler,kotlin.Function1,kotlinx.coroutines.CoroutineScope))
+to create an instance
 of `DataStore<Preferences>`. Call it once at the top level of your Kotlin
 file. Access DataStore through this property throughout the rest of your
 application. This makes it easier to keep your DataStore as a singleton.
@@ -416,8 +436,12 @@ You need to specify a name for the file that is used to persist the data.
 Because Preferences DataStore doesn't use a predefined schema, you must use
 the corresponding key type function to define a key for each value that you
 need to store in the `DataStore<Preferences>` instance. For example, to define
-a key for an int value, use [`intPreferencesKey`](https://developer.android.com/reference/kotlin/androidx/datastore/preferences/core/package-summary#intPreferencesKey(kotlin.String)). Then, use the
-[`DataStore.data`](https://developer.android.com/reference/kotlin/androidx/datastore/core/DataStore#data()) property to expose the appropriate stored value using a
+a key for an int value, use [
+`intPreferencesKey`](https://developer.android.com/reference/kotlin/androidx/datastore/preferences/core/package-summary#intPreferencesKey(kotlin.String)).
+Then, use the
+[
+`DataStore.data`](https://developer.android.com/reference/kotlin/androidx/datastore/core/DataStore#data())
+property to expose the appropriate stored value using a
 Flow.
 
     fun counterFlow(): Flow<Int> = context.dataStore.data.map { preferences ->
@@ -442,7 +466,9 @@ stored object.
         settings.exampleCounter
     }
 
-Use [`collectAsStateWithLifecycle`](https://developer.android.com/reference/kotlin/androidx/lifecycle/compose/package-summary#extension-functions) to consume the `Flow` produced by
+Use [
+`collectAsStateWithLifecycle`](https://developer.android.com/reference/kotlin/androidx/lifecycle/compose/package-summary#extension-functions)
+to consume the `Flow` produced by
 a ViewModel in a composable.
 This safely converts the DataStore Flow into Compose State that triggers
 recomposition.
@@ -458,7 +484,9 @@ see [State and Jetpack Compose](https://developer.android.com/develop/ui/compose
 
 ## Write to DataStore
 
-DataStore provides an [updateData](https://developer.android.com/reference/kotlin/androidx/datastore/core/DataStore#updatedata) function that transactionally updates a
+DataStore provides
+an [updateData](https://developer.android.com/reference/kotlin/androidx/datastore/core/DataStore#updatedata)
+function that transactionally updates a
 stored object. `updateData` gives you the current state of the data as an
 instance of your data type and updates the data transactionally in an atomic
 read-write-modify operation. All of the code in the `updateData` block is
@@ -475,7 +503,9 @@ treated as a single transaction.
     }
 
 > [!NOTE]
-> **Note:** You can also use the [`edit`](https://developer.android.com/reference/kotlin/androidx/datastore/preferences/core/package-summary#edit) suspend function. This function provides a `MutablePreferences` object that you can modify.
+> **Note:** You can also use the [
+`edit`](https://developer.android.com/reference/kotlin/androidx/datastore/preferences/core/package-summary#edit)
+> suspend function. This function provides a `MutablePreferences` object that you can modify.
 
 ### JSON DataStore
 
@@ -619,7 +649,9 @@ Add the following to your `AndroidManifiest.xml`:
         android:process=":my_process_id" />
 
 > [!IMPORTANT]
-> **Important:** To run the service in a different process, use the `android:process` attribute. Note that the process ID is prefixed with a colon (`:`). This makes the service run in a new process, private to the application.
+> **Important:** To run the service in a different process, use the `android:process` attribute.
+> Note that the process ID is prefixed with a colon (`:`). This makes the service run in a new
+> process, private to the application.
 
 The service periodically calls `updateLastUpdateTime`, which writes to the
 datastore using `updateData`.
@@ -684,7 +716,8 @@ And the app code:
         }
     }
 
-You can use [Hilt](https://developer.android.com/training/dependency-injection/hilt-android) dependency injection so that your DataStore
+You can use [Hilt](https://developer.android.com/training/dependency-injection/hilt-android)
+dependency injection so that your DataStore
 instance is unique per process:
 
     @Provides
@@ -693,7 +726,9 @@ instance is unique per process:
        MultiProcessDataStoreFactory.create(...)
 
 > [!WARNING]
-> **Warning:** This is a simplified example and you shouldn't access DataStore from the composable in your production code. You should always use ViewModel to generate the state that Compose will render.
+> **Warning:** This is a simplified example and you shouldn't access DataStore from the composable
+> in your production code. You should always use ViewModel to generate the state that Compose will
+> render.
 
 ## Handle file corruption
 

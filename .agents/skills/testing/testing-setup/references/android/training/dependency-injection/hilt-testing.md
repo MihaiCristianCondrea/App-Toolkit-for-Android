@@ -29,7 +29,8 @@ class AnalyticsAdapterTest {
 The same applies to ViewModel classes obtained by calling `hiltViewModel()` in
 your composables. In unit tests, construct the ViewModel directly with fakes.
 For information on how state flows from a ViewModel into composables, see
-[State and Jetpack Compose](https://developer.android.com/develop/ui/compose/state) and [Where to hoist state](https://developer.android.com/develop/ui/compose/state-hoisting).
+[State and Jetpack Compose](https://developer.android.com/develop/ui/compose/state)
+and [Where to hoist state](https://developer.android.com/develop/ui/compose/state-hoisting).
 
 ## End-to-end tests
 
@@ -60,7 +61,10 @@ dependencies {
 ```
 
 > [!NOTE]
-> **Note:** If you use [Jetpack integrations](https://developer.android.com/training/dependency-injection/hilt-jetpack) (like `hilt-navigation-compose` to obtain a ViewModel through `hiltViewModel()`), you must also add their annotation processors to your test dependencies.
+> **Note:** If you
+> use [Jetpack integrations](https://developer.android.com/training/dependency-injection/hilt-jetpack) (
+> like `hilt-navigation-compose` to obtain a ViewModel through `hiltViewModel()`), you must also add
+> their annotation processors to your test dependencies.
 
 ### UI test setup
 
@@ -112,12 +116,16 @@ application to run in tests.
 ##### Set the test application in instrumented tests
 
 To use the Hilt test application in [instrumented
-tests](https://developer.android.com/training/testing/ui-testing), you need to configure a new test runner.
+tests](https://developer.android.com/training/testing/ui-testing), you need to configure a new test
+runner.
 This makes Hilt work for all of the instrumented tests in your project. Perform
 the following steps:
 
-1. Create a custom class that extends [`AndroidJUnitRunner`](https://developer.android.com/reference/kotlin/androidx/test/runner/AndroidJUnitRunner) in the `androidTest` folder.
-2. Override the `newApplication` function and pass in the name of the generated Hilt test application.
+1. Create a custom class that extends [
+   `AndroidJUnitRunner`](https://developer.android.com/reference/kotlin/androidx/test/runner/AndroidJUnitRunner)
+   in the `androidTest` folder.
+2. Override the `newApplication` function and pass in the name of the generated Hilt test
+   application.
 
 ```kotlin
 // A custom runner to set up the instrumented application class for tests.
@@ -131,7 +139,8 @@ class CustomTestRunner : AndroidJUnitRunner() {
 
 Next, configure this test runner in your Gradle file as described in the
 [instrumented unit test
-guide](https://developer.android.com/training/testing/unit-testing/instrumented-unit-tests#setup). Make sure
+guide](https://developer.android.com/training/testing/unit-testing/instrumented-unit-tests#setup).
+Make sure
 you use the full classpath:
 
 ```kotlin
@@ -301,13 +310,17 @@ for Robolectric tests, or in the `androidTest` module for instrumented tests.
 The recommendation is to use `@TestInstallIn` whenever possible.
 
 > [!WARNING]
-> **Warning:** You cannot uninstall modules that are not annotated with `@InstallIn`. Attempting to do so causes a compilation error.
+> **Warning:** You cannot uninstall modules that are not annotated with `@InstallIn`. Attempting to
+> do so causes a compilation error.
 
 > [!WARNING]
-> **Warning:** `@UninstallModules` can only uninstall `@InstallIn` modules, not `@TestInstallIn` modules. Attempting to do so causes a compilation error.
+> **Warning:** `@UninstallModules` can only uninstall `@InstallIn` modules, not `@TestInstallIn`
+> modules. Attempting to do so causes a compilation error.
 
 > [!NOTE]
-> **Note:** As Hilt creates new components for tests that use `@UninstallModules`, it can significantly impact unit test build times. Use it when necessary and prefer using `@TestInstallIn` when the bindings need to be replaced in all test classes.
+> **Note:** As Hilt creates new components for tests that use `@UninstallModules`, it can
+> significantly impact unit test build times. Use it when necessary and prefer using `@TestInstallIn`
+> when the bindings need to be replaced in all test classes.
 
 #### Binding new values
 
@@ -378,12 +391,14 @@ In the example, Hilt generates an `Application` named
 `HiltTestApplication_Application` that extends the `BaseApplication` class. In
 general, the name of the generated application is the name of the annotated
 class appended with `_Application`. You must set the generated Hilt test
-application to run in your [instrumented tests](https://developer.android.com/training/testing/ui-testing) or
+application to run in
+your [instrumented tests](https://developer.android.com/training/testing/ui-testing) or
 [Robolectric tests](http://robolectric.org/) as described in [Test
 application](https://developer.android.com/training/dependency-injection/hilt-testing#test-application).
 
 > [!NOTE]
-> **Note:** Because `HiltTestApplication_Application` is code that Hilt generates at runtime, the IDE might highlight it in red until you run your tests.
+> **Note:** Because `HiltTestApplication_Application` is code that Hilt generates at runtime, the
+> IDE might highlight it in red until you run your tests.
 
 ### Multiple TestRule objects in your instrumented test
 

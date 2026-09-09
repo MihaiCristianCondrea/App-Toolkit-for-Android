@@ -1,13 +1,32 @@
 ---
 name: android-build-validation
-description: Use when validating Android project changes, running Gradle tests, working in Linux or CI-style environments, fixing a missing Android SDK, preparing Android build tooling, checking repository verification tasks, separating regressions from existing failures, or deciding when a device or emulator is required. Inspect the repository first, prepare the environment when needed, run targeted tests while iterating, then run the broadest applicable repository validation before reporting the result.
+description: >
+  Use when validating Android project changes, running Gradle tests, working in
+  Linux or CI-style environments, fixing a missing Android SDK, preparing
+  Android build tooling, checking repository verification tasks, separating
+  regressions from existing failures, or deciding when a device or emulator is
+  required. Inspect the repository first, prepare the environment when needed,
+  run targeted tests while iterating, then run the broadest applicable
+  repository validation before reporting the result.
+metadata:
+  author: Google LLC
+  last-updated: '2026-08-13'
+  keywords:
+    - build validation
+    - gradle
+    - testing
+    - android sdk
+    - ci
+    - verification
 ---
 
 # Android Build Validation
 
 Validate Android changes in the environment you actually have.
 
-A missing Android SDK is usually an environment setup problem, not a reason to skip testing. If the current machine has network access and writable storage, prepare the Android SDK locally and continue.
+A missing Android SDK is usually an environment setup problem, not a reason to skip testing. If the
+current machine has network access and writable storage, prepare the Android SDK locally and
+continue.
 
 This skill is designed for Android repositories that may be opened in:
 
@@ -23,7 +42,8 @@ The goal is to make validation reliable without changing the project just to fit
 
 1. **Inspect the repository before running or installing anything.**
 
-   Do not assume the project uses a specific SDK version, JDK, module name, build-tools version, verification task, or test layout.
+   Do not assume the project uses a specific SDK version, JDK, module name, build-tools version,
+   verification task, or test layout.
 
 2. **Do not treat a failed test as passing because the environment was incomplete.**
 
@@ -31,13 +51,15 @@ The goal is to make validation reliable without changing the project just to fit
 
 3. **Use the project's own configuration as the source of truth.**
 
-   Resolve `compileSdk`, JDK requirements, Gradle tasks, and test strategy from the same files the build uses.
+   Resolve `compileSdk`, JDK requirements, Gradle tasks, and test strategy from the same files the
+   build uses.
 
 4. **Run narrow tests while iterating, then broaden validation before finishing.**
 
 5. **Keep local JVM validation separate from Android runtime validation.**
 
-   JVM tests cannot prove runtime permission dialogs, framework services, MediaStore consent, native ads, WorkManager process recovery, or other Android runtime behavior.
+   JVM tests cannot prove runtime permission dialogs, framework services, MediaStore consent, native
+   ads, WorkManager process recovery, or other Android runtime behavior.
 
 6. **Separate regressions from pre-existing failures.**
 
@@ -85,7 +107,8 @@ Determine:
 - instrumented-test requirements
 - documented baseline failures
 
-Read [`references/testing-guidance.md`](references/testing-guidance.md) when deciding what must be tested.
+Read [`references/testing-guidance.md`](references/testing-guidance.md) when deciding what must be
+tested.
 
 ### 2. Check the environment
 
@@ -99,7 +122,8 @@ command -v sdkmanager || true
 printf 'ANDROID_HOME=%s\n' "${ANDROID_HOME:-}"
 ```
 
-Also check whether the repository already points to an Android SDK through `local.properties` or another environment configuration.
+Also check whether the repository already points to an Android SDK through `local.properties` or
+another environment configuration.
 
 If the required Android SDK or packages are missing, read:
 
@@ -178,7 +202,8 @@ Do not call something an environment issue without evidence.
 
 ### 7. Run Android runtime validation when needed
 
-Use a device, emulator, managed device, or instrumented test when JVM tests cannot prove the behavior.
+Use a device, emulator, managed device, or instrumented test when JVM tests cannot prove the
+behavior.
 
 Examples include:
 
@@ -260,9 +285,9 @@ Do not:
 
 ## Load on demand
 
-| Need | Reference |
-| --- | --- |
-| Test scope, targeted tests, full-suite expectations, device validation | `references/testing-guidance.md` |
-| Android SDK provisioning in Linux, containers, macOS, and Windows | `references/android-sdk-provisioning.md` |
-| Red-suite analysis, baseline failures, flaky tests, and evidence | `references/failure-triage.md` |
-| Current authoritative Android tooling documentation | `references/official-sources.md` |
+| Need                                                                   | Reference                                |
+|------------------------------------------------------------------------|------------------------------------------|
+| Test scope, targeted tests, full-suite expectations, device validation | `references/testing-guidance.md`         |
+| Android SDK provisioning in Linux, containers, macOS, and Windows      | `references/android-sdk-provisioning.md` |
+| Red-suite analysis, baseline failures, flaky tests, and evidence       | `references/failure-triage.md`           |
+| Current authoritative Android tooling documentation                    | `references/official-sources.md`         |

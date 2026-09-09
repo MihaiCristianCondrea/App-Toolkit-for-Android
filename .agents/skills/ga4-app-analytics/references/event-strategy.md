@@ -20,7 +20,8 @@ Recommended events can provide better built-in reporting, integrations, and comm
 
 Use when an important product behavior has no suitable recommended event.
 
-Custom events are not second-class events. They often provide the most useful understanding of the application because each product has its own features, content, and success states.
+Custom events are not second-class events. They often provide the most useful understanding of the
+application because each product has its own features, content, and success states.
 
 ### Operational or diagnostics
 
@@ -200,4 +201,5 @@ Prefer a centralized host-owned contract containing:
 - Forbidden parameter names.
 - Contract validation tests.
 
-This makes the analytics schema reviewable and prevents inline event strings from drifting across features.
+This makes the analytics schema reviewable and prevents inline event strings from drifting across
+features.

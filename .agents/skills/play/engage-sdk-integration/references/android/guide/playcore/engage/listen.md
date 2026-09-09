@@ -1,8 +1,11 @@
 Boost app engagement by reaching your users where they are. Integrate Engage SDK
 to deliver personalized recommendations and continuation content directly to
 users across multiple on-device surfaces, like
-**[Collections](https://android-developers.googleblog.com/2024/07/introducing-collections-powered-by-engage-sdk.html)** , **[Entertainment
-Space](https://blog.google/products/android/entertainment-space/)** , and the Play Store. The integration adds
+*
+*[Collections](https://android-developers.googleblog.com/2024/07/introducing-collections-powered-by-engage-sdk.html)
+** , **[Entertainment
+Space](https://blog.google/products/android/entertainment-space/)** , and the Play Store. The
+integration adds
 less than 50 KB (compressed) to the average APK and takes most apps about a
 week of developer time. Learn more at our **[business
 site](http://play.google.com/console/about/programs/EngageSDK)**.
@@ -21,29 +24,37 @@ This integration includes the following three cluster types: **Recommendation** 
   from an individual developer partner.
 
   Your recommendations take the following structure:
-  - **Recommendation Cluster:** A UI view that contains a group of
-    recommendations from the same developer partner.
+    - **Recommendation Cluster:** A UI view that contains a group of
+      recommendations from the same developer partner.
 
-    ![](https://developer.android.com/static/images/guide/playcore/engage/listen-term-1.png) **Figure 1.** Entertainment Space UI showing a Recommendation Cluster from a single partner.
-  - **Entity:** An object representing a single item in a cluster. An entity
-    can be a playlist, an audiobook, a podcast, and more. See the [Provide
-    entity data](https://developer.android.com/guide/playcore/engage/listen#provide-entity-data) section for a list of supported entity
-    types.
+      ![](https://developer.android.com/static/images/guide/playcore/engage/listen-term-1.png) *
+      *Figure 1.** Entertainment Space UI showing a Recommendation Cluster from a single partner.
+    - **Entity:** An object representing a single item in a cluster. An entity
+      can be a playlist, an audiobook, a podcast, and more. See the [Provide
+      entity data](https://developer.android.com/guide/playcore/engage/listen#provide-entity-data)
+      section for a list of supported entity
+      types.
 
-    ![](https://developer.android.com/static/images/guide/playcore/engage/listen-term-2.png) **Figure 2.** Entertainment Space UI showing a single Entity within a single partner's Recommendation Cluster.
+      ![](https://developer.android.com/static/images/guide/playcore/engage/listen-term-2.png) *
+      *Figure 2.** Entertainment Space UI showing a single Entity within a single partner's
+      Recommendation Cluster.
 - The **Continuation** cluster shows audio content recently engaged by users
   from multiple developer partners in a single UI grouping. Each developer
   partner will be allowed to broadcast a maximum of 10 entities in the
   Continuation cluster.
 
-  ![](https://developer.android.com/static/images/guide/playcore/engage/listen-term-3.png) **Figure 3.** Entertainment Space UI showing a Continuation cluster with unfinished recommendations from multiple partners (only one recommendation is currently visible).
+  ![](https://developer.android.com/static/images/guide/playcore/engage/listen-term-3.png) **Figure
+  3.** Entertainment Space UI showing a Continuation cluster with unfinished recommendations from
+  multiple partners (only one recommendation is currently visible).
 - The **Featured** cluster showcases a selection of items from multiple
   developer partners in a single UI grouping. There will be a single Featured
   cluster, which will be surfaced near the top of the UI with a priority
   placement above all Recommendation clusters. Each developer partner will be
   allowed to broadcast up to 10 entities in the Featured cluster.
 
-  ![](https://developer.android.com/static/images/guide/playcore/engage/listen-term-4.png) **Figure 4.** Entertainment Space UI showing a Featured cluster with recommendations from multiple partners (only one recommendation is currently visible).
+  ![](https://developer.android.com/static/images/guide/playcore/engage/listen-term-4.png) **Figure
+  4.** Entertainment Space UI showing a Featured cluster with recommendations from multiple
+  partners (only one recommendation is currently visible).
 
 ### Pre-work
 
@@ -64,11 +75,11 @@ service](https://developer.android.com/guide/components/bound-services).
 The data a client can publish is subject to the following limits for different
 cluster types:
 
-| Cluster type | Cluster limits | Maximum entity limits in a cluster |
-|---|---|---|
-| Recommendation Cluster(s) | At most 7 | At most 50 |
-| Continuation Cluster | At most 1 | At most 20 |
-| Featured Cluster | At most 1 | At most 20 |
+| Cluster type              | Cluster limits | Maximum entity limits in a cluster |
+|---------------------------|----------------|------------------------------------|
+| Recommendation Cluster(s) | At most 7      | At most 50                         |
+| Continuation Cluster      | At most 1      | At most 20                         |
+| Featured Cluster          | At most 1      | At most 20                         |
 
 ### Step 1: Provide entity data
 
@@ -92,196 +103,196 @@ The charts below outline available attributes and requirements for each type.
 The `MusicAlbumEntity` object represents a music album (for example, *Midnights*
 by Taylor Swift).
 
-| Attribute | Requirement | Notes |
-|---|---|---|
-| Name | **Required** | The title of the music album. |
-| Poster images | **Required** | At least one image must be provided. See [Image Specifications](https://developer.android.com/guide/playcore/engage/listen#image-specs) for guidance. |
-| Info page uri | **Required** | The deep link to the provider app for details about the music album. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
-| Artists | **Required** | List of artists in the music album. |
-| Playback uri | Optional | A deep link that starts playing the album in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
-| Description | Optional | Must be within 200 characters if provided. |
-| Songs count | Optional | The number of songs in the music album. |
-| Genres | Optional | List of genres in the music album. |
-| Album Format | Optional | ALBUM (includes LP and double LP) EP SINGLE Mixtape |
-| Music labels | Optional | List of music labels associated with the album. |
-| Downloaded on Device | Optional | Boolean indicating if the music album is downloaded on device. |
-| Explicit | Optional | A boolean indicating if the content is explicit or not Items that contain explicit material or have a parental advisory warning should be set to TRUE. Explicit items appears with an "E" tag. |
-| Release date | Optional | The release date of the album in epoch milliseconds. |
-| Duration | Optional | The duration of the album in milliseconds. |
-| Last engagement time | Optional | Recommended for items in the Continuation Cluster. May be used for ranking. In epoch milliseconds |
-| Progress percentage complete | Optional | Recommended for items in the Continuation Cluster. Integer between 0 and 100 |
+| Attribute                    | Requirement  | Notes                                                                                                                                                                                                                 |
+|------------------------------|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Name                         | **Required** | The title of the music album.                                                                                                                                                                                         |
+| Poster images                | **Required** | At least one image must be provided. See [Image Specifications](https://developer.android.com/guide/playcore/engage/listen#image-specs) for guidance.                                                                 |
+| Info page uri                | **Required** | The deep link to the provider app for details about the music album. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
+| Artists                      | **Required** | List of artists in the music album.                                                                                                                                                                                   |
+| Playback uri                 | Optional     | A deep link that starts playing the album in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution)       |
+| Description                  | Optional     | Must be within 200 characters if provided.                                                                                                                                                                            |
+| Songs count                  | Optional     | The number of songs in the music album.                                                                                                                                                                               |
+| Genres                       | Optional     | List of genres in the music album.                                                                                                                                                                                    |
+| Album Format                 | Optional     | ALBUM (includes LP and double LP) EP SINGLE Mixtape                                                                                                                                                                   |
+| Music labels                 | Optional     | List of music labels associated with the album.                                                                                                                                                                       |
+| Downloaded on Device         | Optional     | Boolean indicating if the music album is downloaded on device.                                                                                                                                                        |
+| Explicit                     | Optional     | A boolean indicating if the content is explicit or not Items that contain explicit material or have a parental advisory warning should be set to TRUE. Explicit items appears with an "E" tag.                        |
+| Release date                 | Optional     | The release date of the album in epoch milliseconds.                                                                                                                                                                  |
+| Duration                     | Optional     | The duration of the album in milliseconds.                                                                                                                                                                            |
+| Last engagement time         | Optional     | Recommended for items in the Continuation Cluster. May be used for ranking. In epoch milliseconds                                                                                                                     |
+| Progress percentage complete | Optional     | Recommended for items in the Continuation Cluster. Integer between 0 and 100                                                                                                                                          |
 
 #### `MusicArtistEntity`
 
 The `MusicArtistEntity` object represents a music arist (for example, Adele).
 
-| Attribute | Requirement | Notes |
-|---|---|---|
-| Name | **Required** | Name of the music artist. |
-| Poster images | **Required** | At least one image must be provided. See [Image Specifications](https://developer.android.com/guide/playcore/engage/listen#image-specs) for guidance. |
-| Info page uri | **Required** | The deep link to the provider app for details about the music artist. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
-| Playback uri | Optional | The deep link which starts playing the artist's songs in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
-| Description | Optional | Must be within 200 characters if provided. |
-| Last engagement time | Optional | Recommended for items in the Continuation Cluster. May be used for ranking. In epoch milliseconds |
+| Attribute            | Requirement  | Notes                                                                                                                                                                                                                       |
+|----------------------|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Name                 | **Required** | Name of the music artist.                                                                                                                                                                                                   |
+| Poster images        | **Required** | At least one image must be provided. See [Image Specifications](https://developer.android.com/guide/playcore/engage/listen#image-specs) for guidance.                                                                       |
+| Info page uri        | **Required** | The deep link to the provider app for details about the music artist. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution)      |
+| Playback uri         | Optional     | The deep link which starts playing the artist's songs in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
+| Description          | Optional     | Must be within 200 characters if provided.                                                                                                                                                                                  |
+| Last engagement time | Optional     | Recommended for items in the Continuation Cluster. May be used for ranking. In epoch milliseconds                                                                                                                           |
 
 #### `MusicTrackEntity`
 
 The `MusicTrackEntity` object represents a music track (for example, *Yellow* by
 Coldplay).
 
-| Attribute | Requirement | Notes |
-|---|---|---|
-| Name | **Required** | Title of the music track. |
-| Poster images | **Required** | At least one image must be provided. See [Image Specifications](https://developer.android.com/guide/playcore/engage/listen#image-specs) for guidance. |
-| Playback uri | **Required** | A deep link that starts playing the music track in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
-| Artists | **Required** | List of artists for the music track. |
-| Info page uri | Optional | A deep link to the provider app for details about the music track. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
-| Description | Optional | Must be within 200 characters if provided. |
-| Duration | Optional | The duration of the track in milliseconds. |
-| Album | Optional | The name of the album to which the song belongs. |
-| Downloaded on Device | Optional | Boolean indicating if the music track is downloaded on device. |
-| Explicit | Optional | A boolean indicating if the content is explicit or not Items that contain explicit material or have a parental advisory warning should be set to TRUE. Explicit items appears with an "E" tag. |
-| Last engagement time | Optional | Recommended for items in the Continuation Cluster. May be used for ranking. In epoch milliseconds |
-| Progress percentage complete | Optional | Recommended for items in the Continuation Cluster. Integer between 0 and 100 |
+| Attribute                    | Requirement  | Notes                                                                                                                                                                                                                 |
+|------------------------------|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Name                         | **Required** | Title of the music track.                                                                                                                                                                                             |
+| Poster images                | **Required** | At least one image must be provided. See [Image Specifications](https://developer.android.com/guide/playcore/engage/listen#image-specs) for guidance.                                                                 |
+| Playback uri                 | **Required** | A deep link that starts playing the music track in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
+| Artists                      | **Required** | List of artists for the music track.                                                                                                                                                                                  |
+| Info page uri                | Optional     | A deep link to the provider app for details about the music track. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution)   |
+| Description                  | Optional     | Must be within 200 characters if provided.                                                                                                                                                                            |
+| Duration                     | Optional     | The duration of the track in milliseconds.                                                                                                                                                                            |
+| Album                        | Optional     | The name of the album to which the song belongs.                                                                                                                                                                      |
+| Downloaded on Device         | Optional     | Boolean indicating if the music track is downloaded on device.                                                                                                                                                        |
+| Explicit                     | Optional     | A boolean indicating if the content is explicit or not Items that contain explicit material or have a parental advisory warning should be set to TRUE. Explicit items appears with an "E" tag.                        |
+| Last engagement time         | Optional     | Recommended for items in the Continuation Cluster. May be used for ranking. In epoch milliseconds                                                                                                                     |
+| Progress percentage complete | Optional     | Recommended for items in the Continuation Cluster. Integer between 0 and 100                                                                                                                                          |
 
 #### `MusicVideoEntity`
 
 The `MusicVideoEntity` object represents a music video (for example,
 *The Weeknd - Take My Breath (Official Music Video)*).
 
-| Attribute | Requirement | Notes |
-|---|---|---|
-| Name | **Required** | Title of the music video. |
-| Poster images | **Required** | At least one image must be provided. See [Image Specifications](https://developer.android.com/guide/playcore/engage/listen#image-specs) for guidance. |
-| Playback uri | **Required** | A deep link that starts playing the music video in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
-| Info page uri | Optional | A deep link to the provider app for details about the music video. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
-| Duration | Optional | The duration of the video in milliseconds. |
-| View count | Optional | The number of views on the video in free text format. |
-| Artists | Optional | List of artists of the music video. |
-| Content rating | Optional | List of content ratings of the track. |
-| Description | Optional | Must be within 200 characters if provided. |
-| Downloaded on Device | Optional | Boolean indicating if the music video is downloaded on device. |
-| Explicit | Optional | A boolean indicating if the content is explicit or not Items that contain explicit material or have a parental advisory warning should be set to TRUE. Explicit items appears with an "E" tag. |
-| Last engagement time | Optional | Recommended for items in the Continuation Cluster. May be used for ranking. In epoch milliseconds |
-| Progress percentage complete | Optional | Recommended for items in the Continuation Cluster. Integer between 0 and 100 |
+| Attribute                    | Requirement  | Notes                                                                                                                                                                                                                 |
+|------------------------------|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Name                         | **Required** | Title of the music video.                                                                                                                                                                                             |
+| Poster images                | **Required** | At least one image must be provided. See [Image Specifications](https://developer.android.com/guide/playcore/engage/listen#image-specs) for guidance.                                                                 |
+| Playback uri                 | **Required** | A deep link that starts playing the music video in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
+| Info page uri                | Optional     | A deep link to the provider app for details about the music video. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution)   |
+| Duration                     | Optional     | The duration of the video in milliseconds.                                                                                                                                                                            |
+| View count                   | Optional     | The number of views on the video in free text format.                                                                                                                                                                 |
+| Artists                      | Optional     | List of artists of the music video.                                                                                                                                                                                   |
+| Content rating               | Optional     | List of content ratings of the track.                                                                                                                                                                                 |
+| Description                  | Optional     | Must be within 200 characters if provided.                                                                                                                                                                            |
+| Downloaded on Device         | Optional     | Boolean indicating if the music video is downloaded on device.                                                                                                                                                        |
+| Explicit                     | Optional     | A boolean indicating if the content is explicit or not Items that contain explicit material or have a parental advisory warning should be set to TRUE. Explicit items appears with an "E" tag.                        |
+| Last engagement time         | Optional     | Recommended for items in the Continuation Cluster. May be used for ranking. In epoch milliseconds                                                                                                                     |
+| Progress percentage complete | Optional     | Recommended for items in the Continuation Cluster. Integer between 0 and 100                                                                                                                                          |
 
 #### `PlaylistEntity`
 
 The `PlaylistEntity` object represents a music playlist (for example, the US Top
 10 Playlist).
 
-| Attribute | Requirement | Notes |
-|---|---|---|
-| Name | **Required** | Title of the playlist. |
-| Poster images | **Required** | At least one image must be provided. See [Image Specifications](https://developer.android.com/guide/playcore/engage/listen#image-specs) for guidance. |
-| Playback uri | **Required** | A deep link that starts playing the music playlist in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
-| Info page uri | Optional | A deep link to the provider app for details about the music playlist. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
-| Duration | Optional | The duration of the playlist in milliseconds. |
-| Songs count | Optional | The number of songs in the music playlist. |
-| Description | Optional | Must be within 200 characters if provided. |
-| Downloaded on Device | Optional | Boolean indicating if the playlist is downloaded on device. |
-| Explicit | Optional | A boolean indicating if the content is explicit or not Items that contain explicit material or have a parental advisory warning should be set to TRUE. Explicit items appears with an "E" tag. |
-| Last engagement time | Optional | Recommended for items in the Continuation Cluster. May be used for ranking. In epoch milliseconds |
-| Progress percentage complete | Optional | Recommended for items in the Continuation Cluster. Integer between 0 and 100 |
+| Attribute                    | Requirement  | Notes                                                                                                                                                                                                                    |
+|------------------------------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Name                         | **Required** | Title of the playlist.                                                                                                                                                                                                   |
+| Poster images                | **Required** | At least one image must be provided. See [Image Specifications](https://developer.android.com/guide/playcore/engage/listen#image-specs) for guidance.                                                                    |
+| Playback uri                 | **Required** | A deep link that starts playing the music playlist in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
+| Info page uri                | Optional     | A deep link to the provider app for details about the music playlist. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution)   |
+| Duration                     | Optional     | The duration of the playlist in milliseconds.                                                                                                                                                                            |
+| Songs count                  | Optional     | The number of songs in the music playlist.                                                                                                                                                                               |
+| Description                  | Optional     | Must be within 200 characters if provided.                                                                                                                                                                               |
+| Downloaded on Device         | Optional     | Boolean indicating if the playlist is downloaded on device.                                                                                                                                                              |
+| Explicit                     | Optional     | A boolean indicating if the content is explicit or not Items that contain explicit material or have a parental advisory warning should be set to TRUE. Explicit items appears with an "E" tag.                           |
+| Last engagement time         | Optional     | Recommended for items in the Continuation Cluster. May be used for ranking. In epoch milliseconds                                                                                                                        |
+| Progress percentage complete | Optional     | Recommended for items in the Continuation Cluster. Integer between 0 and 100                                                                                                                                             |
 
 #### `PodcastSeriesEntity`
 
 The `PodcastSeriesEntity` object represents a podcast series (for example, *This
 American Life*).
 
-| Attribute | Requirement | Notes |
-|---|---|---|
-| Name | **Required** | Title of the podcast series. |
-| Poster images | **Required** | At least one image must be provided. See [Image Specifications](https://developer.android.com/guide/playcore/engage/listen#image-specs) for guidance. |
-| Info page uri | **Required** | A deep link to the provider app for details about the podcast series. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
-| Playback uri | Optional | A deep link that starts playing the podcast series in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
-| Episode count | Optional | The number of episodes in the podcast series. |
-| Production name | Optional | The name of the production of the podcast series. |
-| Hosts | Optional | List of hosts of the podcast series. |
-| Genres | Optional | List of genres of the podcast series. |
-| Downloaded on device | Optional | Boolean indicating if the podcast is downloaded on the device. |
-| Description | Optional | Must be within 200 characters if provided. |
-| Explicit | Optional | A boolean indicating if the content is explicit or not Items that contain explicit material or have a parental advisory warning should be set to TRUE. Explicit items appears with an "E" tag. |
-| Last engagement time | Optional | Recommended for items in the Continuation Cluster. May be used for ranking. In epoch milliseconds |
+| Attribute            | Requirement  | Notes                                                                                                                                                                                                                    |
+|----------------------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Name                 | **Required** | Title of the podcast series.                                                                                                                                                                                             |
+| Poster images        | **Required** | At least one image must be provided. See [Image Specifications](https://developer.android.com/guide/playcore/engage/listen#image-specs) for guidance.                                                                    |
+| Info page uri        | **Required** | A deep link to the provider app for details about the podcast series. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution)   |
+| Playback uri         | Optional     | A deep link that starts playing the podcast series in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
+| Episode count        | Optional     | The number of episodes in the podcast series.                                                                                                                                                                            |
+| Production name      | Optional     | The name of the production of the podcast series.                                                                                                                                                                        |
+| Hosts                | Optional     | List of hosts of the podcast series.                                                                                                                                                                                     |
+| Genres               | Optional     | List of genres of the podcast series.                                                                                                                                                                                    |
+| Downloaded on device | Optional     | Boolean indicating if the podcast is downloaded on the device.                                                                                                                                                           |
+| Description          | Optional     | Must be within 200 characters if provided.                                                                                                                                                                               |
+| Explicit             | Optional     | A boolean indicating if the content is explicit or not Items that contain explicit material or have a parental advisory warning should be set to TRUE. Explicit items appears with an "E" tag.                           |
+| Last engagement time | Optional     | Recommended for items in the Continuation Cluster. May be used for ranking. In epoch milliseconds                                                                                                                        |
 
 #### `PodcastEpisodeEntity`
 
 The `PodcastEpisodeEntity` object represents a podcast series (for example,
 *Spark Bird, Episode 754: This American Life*).
 
-| Attribute | Requirement | Notes |
-|---|---|---|
-| Name | **Required** | Title of the podcast episode. |
-| Poster images | **Required** | At least one image must be provided. See [Image Specifications](https://developer.android.com/guide/playcore/engage/listen#image-specs) for guidance. |
-| Playback uri | **Required** | A deep link that starts playing the podcast episode in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
-| Podcast series title | **Required** | The name of the podcast series to which the episode belongs. |
-| Duration | **Required** | The duration of the podcast episode in milliseconds. |
-| Publish Date | **Required** | Publish date of the podcast (in epoch milliseconds) |
-| Info page uri | Optional | A deep link to the provider app for details about the podcast episode. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
-| Production name | Optional | The name of the production of the podcast series. |
-| Episode index | Optional | The index of the episode in the series (first index is 1). |
-| Hosts | Optional | List of hosts of the podcast episode. |
-| Genres | Optional | List of genres of the podcast episode. |
-| Downloaded on device | Optional | Boolean indicating if the podcast episode is downloaded on the device. |
-| Description | Optional | Must be within 200 characters if provided. |
-| Video Podcast | Optional | Boolean indicating if the podcast episode has video content |
-| Explicit | Optional | A boolean indicating if the content is explicit or not Items that contain explicit material or have a parental advisory warning should be set to TRUE. Explicit items appears with an "E" tag. |
-| Listen Next Type | Optional | Recommended for Items in the Continuation Cluster TYPE_CONTINUE - Resume on a unfinished audio item. TYPE_NEXT - Continue on a new one of a series. TYPE_NEW - Newly released. |
-| Last engagement time | Optional | Recommended for items in the Continuation Cluster. May be used for ranking. In epoch milliseconds |
-| Progress percentage complete | Optional | Recommended for items in the Continuation Cluster. Integer between 0 and 100 |
+| Attribute                    | Requirement  | Notes                                                                                                                                                                                                                     |
+|------------------------------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Name                         | **Required** | Title of the podcast episode.                                                                                                                                                                                             |
+| Poster images                | **Required** | At least one image must be provided. See [Image Specifications](https://developer.android.com/guide/playcore/engage/listen#image-specs) for guidance.                                                                     |
+| Playback uri                 | **Required** | A deep link that starts playing the podcast episode in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
+| Podcast series title         | **Required** | The name of the podcast series to which the episode belongs.                                                                                                                                                              |
+| Duration                     | **Required** | The duration of the podcast episode in milliseconds.                                                                                                                                                                      |
+| Publish Date                 | **Required** | Publish date of the podcast (in epoch milliseconds)                                                                                                                                                                       |
+| Info page uri                | Optional     | A deep link to the provider app for details about the podcast episode. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution)   |
+| Production name              | Optional     | The name of the production of the podcast series.                                                                                                                                                                         |
+| Episode index                | Optional     | The index of the episode in the series (first index is 1).                                                                                                                                                                |
+| Hosts                        | Optional     | List of hosts of the podcast episode.                                                                                                                                                                                     |
+| Genres                       | Optional     | List of genres of the podcast episode.                                                                                                                                                                                    |
+| Downloaded on device         | Optional     | Boolean indicating if the podcast episode is downloaded on the device.                                                                                                                                                    |
+| Description                  | Optional     | Must be within 200 characters if provided.                                                                                                                                                                                |
+| Video Podcast                | Optional     | Boolean indicating if the podcast episode has video content                                                                                                                                                               |
+| Explicit                     | Optional     | A boolean indicating if the content is explicit or not Items that contain explicit material or have a parental advisory warning should be set to TRUE. Explicit items appears with an "E" tag.                            |
+| Listen Next Type             | Optional     | Recommended for Items in the Continuation Cluster TYPE_CONTINUE - Resume on a unfinished audio item. TYPE_NEXT - Continue on a new one of a series. TYPE_NEW - Newly released.                                            |
+| Last engagement time         | Optional     | Recommended for items in the Continuation Cluster. May be used for ranking. In epoch milliseconds                                                                                                                         |
+| Progress percentage complete | Optional     | Recommended for items in the Continuation Cluster. Integer between 0 and 100                                                                                                                                              |
 
 #### `LiveRadioStationEntity`
 
 The `LiveRadioStationEntity` object represents a live radio station (for
 example, 98.1 The Breeze).
 
-| Attribute | Requirement | Notes |
-|---|---|---|
-| Name | **Required** | Title of the live radio station. |
-| Poster images | **Required** | At least one image must be provided. See [Image Specifications](https://developer.android.com/guide/playcore/engage/listen#image-specs) for guidance. |
-| Playback uri | **Required** | A deep link that starts playing the radio station in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
-| Info page uri | Optional | A deep link to the provider app for details about the radio station. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
-| Frequency | Optional | The frequency at which the radio station is broadcasted (for example, "98.1 FM"). |
-| Show title | Optional | The current show that is playing on the radio station. |
-| Hosts | Optional | List of hosts of the radio station. |
-| Description | Optional | Must be within 200 characters if provided. |
-| Last engagement time | Optional | Recommended for items in the Continuation Cluster. May be used for ranking. In epoch milliseconds |
+| Attribute            | Requirement  | Notes                                                                                                                                                                                                                   |
+|----------------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Name                 | **Required** | Title of the live radio station.                                                                                                                                                                                        |
+| Poster images        | **Required** | At least one image must be provided. See [Image Specifications](https://developer.android.com/guide/playcore/engage/listen#image-specs) for guidance.                                                                   |
+| Playback uri         | **Required** | A deep link that starts playing the radio station in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
+| Info page uri        | Optional     | A deep link to the provider app for details about the radio station. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution)   |
+| Frequency            | Optional     | The frequency at which the radio station is broadcasted (for example, "98.1 FM").                                                                                                                                       |
+| Show title           | Optional     | The current show that is playing on the radio station.                                                                                                                                                                  |
+| Hosts                | Optional     | List of hosts of the radio station.                                                                                                                                                                                     |
+| Description          | Optional     | Must be within 200 characters if provided.                                                                                                                                                                              |
+| Last engagement time | Optional     | Recommended for items in the Continuation Cluster. May be used for ranking. In epoch milliseconds                                                                                                                       |
 
 #### `AudiobookEntity`
 
 The `AudiobookEntity` object represents an audiobook (for example, the audiobook
 of *Becoming* by Michelle Obama).
 
-| Attribute | Requirement | Notes |
-|---|---|---|
-| Name | **Required** |   |
-| Poster images | **Required** | At least one image must be provided. See [Image Specifications](https://developer.android.com/guide/playcore/engage/listen#image-specs) for guidance. |
-| Author | **Required** | At least one author name must be provided. |
-| Action link uri | **Required** | The deep link to the provider app for the audiobook. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) |
-| Narrator | Optional | At least one narrator's name must be provided. |
-| Publish date | Optional | In epoch milliseconds if provided. |
-| Description | Optional | Must be within 200 characters if provided. |
-| Price | Optional | Free text |
-| Duration | Optional | Must be a positive value if provided. |
-| Genre | Optional | List of genres associated with the book. |
-| Series name | Optional | Name of the series that the audiobook belongs to (for example, *Harry Potter*. |
-| Series unit index | Optional | The index of the audiobook in the series, where 1 is the first audiobook in the series. For example, if *Harry Potter and the Prisoner of Azkaban* is the 3rd book in the series, this should be set to 3. |
-| Continue book type | Optional | TYPE_CONTINUE - Resume on a unfinished book. TYPE_NEXT - Continue on a new one of a series. TYPE_NEW - Newly released. |
-| Last Engagement Time | Conditionally required | Must be provided when the item is in the Continuation cluster. In epoch milliseconds. |
-| Progress Percentage Complete | Conditionally required | Must be provided when the item is in the Continuation cluster. \*Newly\* acquired audiobooks can be a part of the continue reading cluster. Value must be greater than 0 and less than 100. |
-| **DisplayTimeWindow - Set a time window for a content to be shown on the surface** |||
-| Start Timestamp | Optional | The epoch timestamp after which the content should be shown on the surface. If not set, content is eligible to be shown on the surface. In epoch milliseconds. |
-| End Timestamp | Optional | The epoch timestamp after which the content is no longer shown on the surface. If not set, content is eligible to be shown on the surface. In epoch milliseconds. |
+| Attribute                                                                          | Requirement            | Notes                                                                                                                                                                                                      |
+|------------------------------------------------------------------------------------|------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Name                                                                               | **Required**           |                                                                                                                                                                                                            |
+| Poster images                                                                      | **Required**           | At least one image must be provided. See [Image Specifications](https://developer.android.com/guide/playcore/engage/listen#image-specs) for guidance.                                                      |
+| Author                                                                             | **Required**           | At least one author name must be provided.                                                                                                                                                                 |
+| Action link uri                                                                    | **Required**           | The deep link to the provider app for the audiobook. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution)      |
+| Narrator                                                                           | Optional               | At least one narrator's name must be provided.                                                                                                                                                             |
+| Publish date                                                                       | Optional               | In epoch milliseconds if provided.                                                                                                                                                                         |
+| Description                                                                        | Optional               | Must be within 200 characters if provided.                                                                                                                                                                 |
+| Price                                                                              | Optional               | Free text                                                                                                                                                                                                  |
+| Duration                                                                           | Optional               | Must be a positive value if provided.                                                                                                                                                                      |
+| Genre                                                                              | Optional               | List of genres associated with the book.                                                                                                                                                                   |
+| Series name                                                                        | Optional               | Name of the series that the audiobook belongs to (for example, *Harry Potter*.                                                                                                                             |
+| Series unit index                                                                  | Optional               | The index of the audiobook in the series, where 1 is the first audiobook in the series. For example, if *Harry Potter and the Prisoner of Azkaban* is the 3rd book in the series, this should be set to 3. |
+| Continue book type                                                                 | Optional               | TYPE_CONTINUE - Resume on a unfinished book. TYPE_NEXT - Continue on a new one of a series. TYPE_NEW - Newly released.                                                                                     |
+| Last Engagement Time                                                               | Conditionally required | Must be provided when the item is in the Continuation cluster. In epoch milliseconds.                                                                                                                      |
+| Progress Percentage Complete                                                       | Conditionally required | Must be provided when the item is in the Continuation cluster. \*Newly\* acquired audiobooks can be a part of the continue reading cluster. Value must be greater than 0 and less than 100.                |
+| **DisplayTimeWindow - Set a time window for a content to be shown on the surface** |                        |                                                                                                                                                                                                            |
+| Start Timestamp                                                                    | Optional               | The epoch timestamp after which the content should be shown on the surface. If not set, content is eligible to be shown on the surface. In epoch milliseconds.                                             |
+| End Timestamp                                                                      | Optional               | The epoch timestamp after which the content is no longer shown on the surface. If not set, content is eligible to be shown on the surface. In epoch milliseconds.                                          |
 
 #### Image specifications
 
 Required specifications for image assets are listed below:
 
-| Aspect ratio | Requirement | Minimum pixels | Recommended pixels |
-|---|---|---|---|
-| Square (1x1) | **Required** | 300x300 | 1200x1200 |
-| Landscape (1.91x1) | Optional | 600x314 | 1200x628 |
-| Portrait (4x5) | Optional | 480x600 | 960x1200 |
+| Aspect ratio       | Requirement  | Minimum pixels | Recommended pixels |
+|--------------------|--------------|----------------|--------------------|
+| Square (1x1)       | **Required** | 300x300        | 1200x1200          |
+| Landscape (1.91x1) | Optional     | 600x314        | 1200x628           |
+| Portrait (4x5)     | Optional     | 480x600        | 960x1200           |
 
 *File formats*
 
@@ -339,7 +350,8 @@ PNG, JPG, static GIF, WebP
 ### Step 2: Provide Cluster data
 
 It's recommended to have the content publish job executed in the background
-(for example, using [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager))
+(for example,
+using [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager))
 and scheduled on a regular basis or on an event basis (for example, every time
 the user opens the app or when the user just added something to their cart).
 
@@ -365,18 +377,19 @@ whether the content can be presented on the device.
 
 ##### For Engage SDK v1.6.0 and higher (Recommended)
 
-
 ## Android skills
 
 [View on GitHub](https://github.com/android/skills/tree/main/play/engage-sdk-integration)
 
 ### Engage SDK integration
 
-To install the skill from the [Android CLI](https://developer.android.com/tools/agents/android-cli), run:
+To install the skill from the [Android CLI](https://developer.android.com/tools/agents/android-cli),
+run:
 
     android skills add engage-sdk-integration
 
-If your team uses AI coding tools (such as Gemini in Android Studio), you can automate this migration by prompting your AI assistant:
+If your team uses AI coding tools (such as Gemini in Android Studio), you can automate this
+migration by prompting your AI assistant:
 
     Use the engage-sdk-integration skill to use Engage SDK 1.6.0 and refactor isServiceAvailable to pass ServiceAvailabilityRequest for publishing all cluster types.
 
@@ -388,14 +401,14 @@ publish. The `isServiceAvailable` API accepts a request object,
 availability needs to be checked. You can find the `ClusterType` enum values
 required for `ServiceAvailabilityRequest` from the following table.
 
-| Cluster Type | Cluster Type Constant | Integer Value |
-|---|---|---|
-| Unknown | `TYPE_UNKNOWN` | 0 |
-| Recommendation Cluster | `TYPE_RECOMMENDATION` | 1 |
-| Featured Cluster | `TYPE_FEATURED` | 2 |
-| Continuation Cluster | `TYPE_CONTINUATION` | 3 |
-| User Management Cluster | `TYPE_ENGAGEMENT` | 8 |
-| Subscription Cluster | `TYPE_SUBSCRIPTION` | 12 |
+| Cluster Type            | Cluster Type Constant | Integer Value |
+|-------------------------|-----------------------|---------------|
+| Unknown                 | `TYPE_UNKNOWN`        | 0             |
+| Recommendation Cluster  | `TYPE_RECOMMENDATION` | 1             |
+| Featured Cluster        | `TYPE_FEATURED`       | 2             |
+| Continuation Cluster    | `TYPE_CONTINUATION`   | 3             |
+| User Management Cluster | `TYPE_ENGAGEMENT`     | 8             |
+| Subscription Cluster    | `TYPE_SUBSCRIPTION`   | 12            |
 
 ### Kotlin
 
@@ -501,14 +514,18 @@ suitable for your needs, please contact engage-developers@google.com.
     });
 
 > [!NOTE]
-> **Note:** We highly recommend keeping a periodic job running to check if the service becomes available at a later point in time. The availability of the service may change with Android version upgrades, app upgrades, installs, and uninstalls. By ensuring periodic job checks at a certain time interval, data can be published once the service becomes available.
+> **Note:** We highly recommend keeping a periodic job running to check if the service becomes
+> available at a later point in time. The availability of the service may change with Android version
+> upgrades, app upgrades, installs, and uninstalls. By ensuring periodic job checks at a certain time
+> interval, data can be published once the service becomes available.
 
 #### `publishRecommendationClusters`
 
 This API is used to publish a list of `RecommendationCluster` objects.
 
 > [!IMPORTANT]
-> **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
+> **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call
+> delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
 
 ### Kotlin
 
@@ -548,7 +565,8 @@ maintained.
 This API is used to publish a list of `FeaturedCluster` objects.
 
 > [!IMPORTANT]
-> **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
+> **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call
+> delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
 
 ### Kotlin
 
@@ -584,7 +602,8 @@ maintained.
 This API is used to publish a `ContinuationCluster` object.
 
 > [!IMPORTANT]
-> **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
+> **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call
+> delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
 
 ### Kotlin
 
@@ -625,16 +644,17 @@ personalized content)
 
 The following metadata is part of the Sign In Card -
 
-| Attribute | Requirement | Description |
-|---|---|---|
-| Action Uri | Required | Deeplink to Action (i.e. navigates to app sign in page) |
-| Image | Optional - If not provided, Title must be provided | Image Shown on the Card 16x9 aspect ratio images with a resolution of 1264x712 |
-| Title | Optional - If not provided, Image must be provided | Title on the Card |
-| Action Text | Optional | Text Shown on the CTA (i.e. Sign in) |
-| Subtitle | Optional | Optional Subtitle on the Card |
+| Attribute   | Requirement                                        | Description                                                                    |
+|-------------|----------------------------------------------------|--------------------------------------------------------------------------------|
+| Action Uri  | Required                                           | Deeplink to Action (i.e. navigates to app sign in page)                        |
+| Image       | Optional - If not provided, Title must be provided | Image Shown on the Card 16x9 aspect ratio images with a resolution of 1264x712 |
+| Title       | Optional - If not provided, Image must be provided | Title on the Card                                                              |
+| Action Text | Optional                                           | Text Shown on the CTA (i.e. Sign in)                                           |
+| Subtitle    | Optional                                           | Optional Subtitle on the Card                                                  |
 
 > [!IMPORTANT]
-> **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
+> **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call
+> delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
 
 ### Kotlin
 
@@ -690,10 +710,15 @@ we **strongly recommend** updating the publish status using the
 **updatePublishStatus** API.
 This is important because :
 
-- Providing the status in all scenarios, even when the content is published (STATUS == PUBLISHED), is critical to populate dashboards that use this explicit status to convey the health and other metrics of your integration.
-- If no content is published but the integration status isn't broken (STATUS == NOT_PUBLISHED), Google can avoid triggering alerts in the app health dashboards. It confirms that content is not published due to an **expected** situation from the provider's standpoint.
+- Providing the status in all scenarios, even when the content is published (STATUS == PUBLISHED),
+  is critical to populate dashboards that use this explicit status to convey the health and other
+  metrics of your integration.
+- If no content is published but the integration status isn't broken (STATUS == NOT_PUBLISHED),
+  Google can avoid triggering alerts in the app health dashboards. It confirms that content is not
+  published due to an **expected** situation from the provider's standpoint.
 - It helps developers provide insights into when the data is published versus not.
-- Google may use the status codes to nudge the user to do certain actions in the app so they can see the app content or overcome it.
+- Google may use the status codes to nudge the user to do certain actions in the app so they can see
+  the app content or overcome it.
 
 The list of eligible publish status codes are :
 
@@ -753,7 +778,10 @@ with the status code **NOT_PUBLISHED_REQUIRES_SIGN_IN**
 This API is used to delete the content of Recommendation Clusters.
 
 > [!IMPORTANT]
-> **Important:** Delete APIs should only be called when there is no content to publish. **Don't** call delete and publish APIs subsequently to replace the content as the publish APIs do that inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com) before using delete APIs.
+> **Important:** Delete APIs should only be called when there is no content to publish. **Don't**
+> call delete and publish APIs subsequently to replace the content as the publish APIs do that
+> inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com)
+> before using delete APIs.
 
 ### Kotlin
 
@@ -775,7 +803,10 @@ and the existing state is maintained.
 This API is used to delete the content of Featured Cluster.
 
 > [!IMPORTANT]
-> **Important:** Delete APIs should only be called when there is no content to publish. **Don't** call delete and publish APIs subsequently to replace the content as the publish APIs do that inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com) before using delete APIs.
+> **Important:** Delete APIs should only be called when there is no content to publish. **Don't**
+> call delete and publish APIs subsequently to replace the content as the publish APIs do that
+> inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com)
+> before using delete APIs.
 
 ### Kotlin
 
@@ -797,7 +828,10 @@ and the existing state is maintained.
 This API is used to delete the content of Continuation Cluster.
 
 > [!IMPORTANT]
-> **Important:** Delete APIs should only be called when there is no content to publish. **Don't** call delete and publish APIs subsequently to replace the content as the publish APIs do that inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com) before using delete APIs.
+> **Important:** Delete APIs should only be called when there is no content to publish. **Don't**
+> call delete and publish APIs subsequently to replace the content as the publish APIs do that
+> inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com)
+> before using delete APIs.
 
 ### Kotlin
 
@@ -819,7 +853,10 @@ and the existing state is maintained.
 This API is used to delete the content of UserAccountManagement Cluster.
 
 > [!IMPORTANT]
-> **Important:** Delete APIs should only be called when there is no content to publish. **Don't** call delete and publish APIs subsequently to replace the content as the publish APIs do that inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com) before using delete APIs.
+> **Important:** Delete APIs should only be called when there is no content to publish. **Don't**
+> call delete and publish APIs subsequently to replace the content as the publish APIs do that
+> inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com)
+> before using delete APIs.
 
 ### Kotlin
 
@@ -841,7 +878,10 @@ rejected and the existing state is maintained.
 This API is used to delete the content of a given cluster type.
 
 > [!IMPORTANT]
-> **Important:** Delete APIs should only be called when there is no content to publish. **Don't** call delete and publish APIs subsequently to replace the content as the publish APIs do that inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com) before using delete APIs.
+> **Important:** Delete APIs should only be called when there is no content to publish. **Don't**
+> call delete and publish APIs subsequently to replace the content as the publish APIs do that
+> inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com)
+> before using delete APIs.
 
 ### Kotlin
 
@@ -894,21 +934,22 @@ that a follow-up action can be taken to recover and resubmit an successful task.
 The error is returned as an `AppEngageException` with the cause included as an
 error code.
 
-| Error code | Error name | Note |
-|---|---|---|
-| `1` | `SERVICE_NOT_FOUND` | The service is not available on the given device. |
-| `2` | `SERVICE_NOT_AVAILABLE` | The service is available on the given device, but it is not available at the time of the call (for example, it is explicitly disabled). |
-| `3` | `SERVICE_CALL_EXECUTION_FAILURE` | The task execution failed due to threading issues. In this case, it can be retried. |
-| `4` | `SERVICE_CALL_PERMISSION_DENIED` | The caller is not allowed to make the service call. |
-| `5` | `SERVICE_CALL_INVALID_ARGUMENT` | The request contains invalid data (for example, more than the allowed number of clusters). |
-| `6` | `SERVICE_CALL_INTERNAL` | There is an error on the service side. |
-| `7` | `SERVICE_CALL_RESOURCE_EXHAUSTED` | The service call is made too frequently. |
+| Error code | Error name                        | Note                                                                                                                                    |
+|------------|-----------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| `1`        | `SERVICE_NOT_FOUND`               | The service is not available on the given device.                                                                                       |
+| `2`        | `SERVICE_NOT_AVAILABLE`           | The service is available on the given device, but it is not available at the time of the call (for example, it is explicitly disabled). |
+| `3`        | `SERVICE_CALL_EXECUTION_FAILURE`  | The task execution failed due to threading issues. In this case, it can be retried.                                                     |
+| `4`        | `SERVICE_CALL_PERMISSION_DENIED`  | The caller is not allowed to make the service call.                                                                                     |
+| `5`        | `SERVICE_CALL_INVALID_ARGUMENT`   | The request contains invalid data (for example, more than the allowed number of clusters).                                              |
+| `6`        | `SERVICE_CALL_INTERNAL`           | There is an error on the service side.                                                                                                  |
+| `7`        | `SERVICE_CALL_RESOURCE_EXHAUSTED` | The service call is made too frequently.                                                                                                |
 
 ### Step 3: Handle broadcast intents
 
 In addition to making publish content API calls through a job, it is also
 required to set up a
-[`BroadcastReceiver`](https://developer.android.com/reference/android/content/BroadcastReceiver) to receive
+[`BroadcastReceiver`](https://developer.android.com/reference/android/content/BroadcastReceiver) to
+receive
 the request for a content publish.
 
 The goal of broadcast intents is mainly for app reactivation and forcing data
@@ -1016,12 +1057,16 @@ The `BroadcastReceiver` must be set up in the following two ways:
        </receiver>
     </application>
 
-The following [intents](https://developer.android.com/reference/android/content/Intent) will be sent by the
+The following [intents](https://developer.android.com/reference/android/content/Intent) will be sent
+by the
 service:
 
-- `com.google.android.engage.action.PUBLISH_RECOMMENDATION` It is recommended to start a `publishRecommendationClusters` call when receiving this intent.
-- `com.google.android.engage.action.PUBLISH_FEATURED` It is recommended to start a `publishFeaturedCluster` call when receiving this intent.
-- `com.google.android.engage.action.PUBLISH_CONTINUATION` It is recommended to start a `publishContinuationCluster` call when receiving this intent.
+- `com.google.android.engage.action.PUBLISH_RECOMMENDATION` It is recommended to start a
+  `publishRecommendationClusters` call when receiving this intent.
+- `com.google.android.engage.action.PUBLISH_FEATURED` It is recommended to start a
+  `publishFeaturedCluster` call when receiving this intent.
+- `com.google.android.engage.action.PUBLISH_CONTINUATION` It is recommended to start a
+  `publishContinuationCluster` call when receiving this intent.
 
 ## Integration workflow
 
@@ -1030,7 +1075,8 @@ For a step-by-step guide on verifying your integration after it is complete, see
 
 ## FAQs
 
-See [Engage SDK Frequently Asked Questions](https://developer.android.com/guide/playcore/engage/faq) for
+See [Engage SDK Frequently Asked Questions](https://developer.android.com/guide/playcore/engage/faq)
+for
 FAQs.
 
 ## Contact
@@ -1044,7 +1090,12 @@ possible.
 
 After completing this integration, your next steps are as follows:
 
-- Send an email to [`engage-developers@google.com`](mailto:engage-developers@google.com) and attach your integrated APK that is ready for testing by Google.
-- Google will perform a verification and review internally to make sure the integration works as expected. If changes are needed, Google will contact you with any necessary details.
-- When testing is complete and no changes are needed, Google will contact you to notify you that you can start publishing the updated and integrated APK to the Play Store.
-- After Google has confirmed that your updated APK has been published to the Play Store, your **Recommendation** , **Featured** , and **Continuation** clusters will be published and visible to users.
+- Send an email to [`engage-developers@google.com`](mailto:engage-developers@google.com) and attach
+  your integrated APK that is ready for testing by Google.
+- Google will perform a verification and review internally to make sure the integration works as
+  expected. If changes are needed, Google will contact you with any necessary details.
+- When testing is complete and no changes are needed, Google will contact you to notify you that you
+  can start publishing the updated and integrated APK to the Play Store.
+- After Google has confirmed that your updated APK has been published to the Play Store, your *
+  *Recommendation** , **Featured** , and **Continuation** clusters will be published and visible to
+  users.

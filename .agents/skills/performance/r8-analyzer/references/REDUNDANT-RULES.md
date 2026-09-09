@@ -95,15 +95,21 @@ code within the library.
     -keep class com.google.gson.stream.** { *; }
 
 - **Keeps Unused Code:** Prevents R8 from removing models that are never actually used in the code.
-- **Prevents Method Stripping:** Keeps all getters, setters, `toString()`, `equals()`, and `hashCode()` methods, even if they are never called.
-- **Blocks Obfuscation:** Prevents the class names from being obfuscated, which is unnecessary for Gson if you use `@SerializedName`.
+- **Prevents Method Stripping:** Keeps all getters, setters, `toString()`, `equals()`, and
+  `hashCode()` methods, even if they are never called.
+- **Blocks Obfuscation:** Prevents the class names from being obfuscated, which is unnecessary for
+  Gson if you use `@SerializedName`.
 
 **The Fix:**
 
-1. Use `@SerializedName` on every field in your data classes uses so that the field is retained after R8 optimization
+1. Use `@SerializedName` on every field in your data classes uses so that the field is retained
+   after R8 optimization
 2. Modern Gson (**v2.11.0+** ) bundles its own rules ([View Gson's embedded
    ProGuard
-   rules](https://github.com/google/gson/blob/main/gson/src/main/resources/META-INF/proguard/gson.pro)). The bundled keep rules retains the `@SerializedName` annotated fields. If you are on an older version, move towards Gson version 2.11 because it has the necessary keep rules and delete the keep rules that target the classes used for gson serialization and deserialization
+   rules](https://github.com/google/gson/blob/main/gson/src/main/resources/META-INF/proguard/gson.pro)).
+   The bundled keep rules retains the `@SerializedName` annotated fields. If you are on an older
+   version, move towards Gson version 2.11 because it has the necessary keep rules and delete the
+   keep rules that target the classes used for gson serialization and deserialization
 
 *** ** * ** ***
 
@@ -194,7 +200,8 @@ android.os.Parcelable { public static final android.os.Parcelable$Creator *; }`.
 1. Add the `kotlin-parcelize` plugin.
 2. **Use `@Parcelize`:** Replace manual `writeToParcel` logic with the `@Parcelize` annotation.
 3. **Delete All Parcelable Rules:** The plugin automatically generates the required rules.
-4. The default proguard file `proguard-android-optimize.txt` contains the keep rules for keeping all the parcelable classes
+4. The default proguard file `proguard-android-optimize.txt` contains the keep rules for keeping all
+   the parcelable classes
 5. **Ideal Rule:** **None.** Delete all manual Parcelable keeps.
 
 *** ** * ** ***

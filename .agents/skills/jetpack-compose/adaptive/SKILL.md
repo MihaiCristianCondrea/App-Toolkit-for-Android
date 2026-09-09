@@ -25,7 +25,8 @@ metadata:
 
 The app must:
 
-- Use Compose for all screens. If it's still using Fragments or Views, suggest using the XML to Compose skill to migrate those screens.
+- Use Compose for all screens. If it's still using Fragments or Views, suggest using the XML to
+  Compose skill to migrate those screens.
 - Use Jetpack Navigation 3. If it doesn't, suggest the Navigation 3 skill to migrate the app.
 
 ## Workflow to make an app adaptive
@@ -43,9 +44,9 @@ task.
 
 Ensure that screenshot tests exist to verify the current UI on different form
 factors. If they don't exist, add the [Compose Preview Screenshot Testing
-tool](references/android/develop/ui/compose/tooling/debug.md). Use the following annotation to create previews for all the major form
+tool](references/android/develop/ui/compose/tooling/debug.md). Use the following annotation to
+create previews for all the major form
 factors. For example:
-
 
 ```kotlin
 @Preview(name = "Phone", device = Devices.PHONE, showBackground = true)
@@ -78,8 +79,11 @@ screen (navigation rail).
 If you need to provide more screen space for the content, hide the
 navigation area. Examples of this include:
 
-- Hiding the navigation bar when the user scrolls down and showing it again when the user scrolls up. The assumption is that when the user is scrolling down, they are consuming content but when scrolling up they are trying to navigate away from that content.
-- Hiding the navigation area when its content is distracting. For example, in camera previews or when displaying a full-screen photo.
+- Hiding the navigation bar when the user scrolls down and showing it again when the user scrolls
+  up. The assumption is that when the user is scrolling down, they are consuming content but when
+  scrolling up they are trying to navigate away from that content.
+- Hiding the navigation area when its content is distracting. For example, in camera previews or
+  when displaying a full-screen photo.
 
 When the detail screen is displayed full-screen on mobile, full-screen mode must
 be deactivated on larger screens.
@@ -88,8 +92,11 @@ Steps to migrate:
 
 - Locate the existing navigation bar.
 - Convert each item to a `NavigationSuiteItem`.
-- Identify whether the navigation bar's visibility changes. For example, if it is wrapped with an `AnimatedContent` or `AnimatedVisibility` composable. If so, follow the guidance in the "Control navigation area visibility".
-- Replace the container that held the navigation bar (often a `Scaffold`) with `NavigationSuiteScaffold` from the Material 3 adaptive layouts library.
+- Identify whether the navigation bar's visibility changes. For example, if it is wrapped with an
+  `AnimatedContent` or `AnimatedVisibility` composable. If so, follow the guidance in the "Control
+  navigation area visibility".
+- Replace the container that held the navigation bar (often a `Scaffold`) with
+  `NavigationSuiteScaffold` from the Material 3 adaptive layouts library.
 - Supply the navigation items using the `navigationItems` parameter of `NavigationSuiteScaffold`.
 
 ### Step 2.1. Control navigation area visibility
@@ -101,12 +108,15 @@ parameter.
 
 Steps to migrate:
 
-- Identify the scenarios under which the navigation bar is hidden. This is usually done with a boolean variable for the visibility. Use `isNavBarVisible` or `shouldShowNavBar` as the variable name.
-- Create an instance of `NavigationSuiteScaffoldState` using `rememberNavigationSuiteScaffoldState()` and pass it to `NavigationSuiteScaffold`.
-- When the navigation area visibility changes, use a `LaunchedEffect` to call `show` or `hide` on the `NavigationSuiteScaffoldState`.
+- Identify the scenarios under which the navigation bar is hidden. This is usually done with a
+  boolean variable for the visibility. Use `isNavBarVisible` or `shouldShowNavBar` as the variable
+  name.
+- Create an instance of `NavigationSuiteScaffoldState` using
+  `rememberNavigationSuiteScaffoldState()` and pass it to `NavigationSuiteScaffold`.
+- When the navigation area visibility changes, use a `LaunchedEffect` to call `show` or `hide` on
+  the `NavigationSuiteScaffoldState`.
 
 For example:
-
 
 ```kotlin
 // Pass this variable to any composable that needs to control the navigation area visibility
@@ -158,19 +168,23 @@ presentation).
 #### Add a Material list-detail SceneStrategy
 
 - Add the `androidx.compose.material3.adaptive:adaptive-navigation3` library
-- Create an `androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy` using `rememberListDetailSceneStrategy`
+- Create an `androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy` using
+  `rememberListDetailSceneStrategy`
 - Pass the `ListDetailSceneStrategy` to `NavDisplay` using its `sceneStrategies` parameter
 
 #### Use metadata to identify the list and detail screens
 
 - Add metadata using `entry(metadata = ...)` or `NavEntry(metadata = ...)` to the list entry using `ListDetailSceneStrategy.listPane(detailPlaceholder = {
   <placeholder composable> })`.
-- Use the `detailPlaceholder` parameter to add a placeholder on the detail screen when no list items are selected.
+- Use the `detailPlaceholder` parameter to add a placeholder on the detail screen when no list items
+  are selected.
 - Add metadata to the detail entry using `ListDetailSceneStrategy.detailPane()`.
 
 #### Important considerations
 
-- When a detail screen displays its content full-screen on mobile (content fills the entire screen, bars or rails are hidden), full-screen mode must be deactivated if it's part of a list-detail layout.
+- When a detail screen displays its content full-screen on mobile (content fills the entire screen,
+  bars or rails are hidden), full-screen mode must be deactivated if it's part of a list-detail
+  layout.
 - Detail screens must not show a back arrow when on a list-detail layout.
 
 For a reference implementation, check the [Nav3 **Material** List Detail
@@ -185,12 +199,14 @@ screen complements the main screen and is shown in a supporting pane.
 #### Add a Material supporting pane `SceneStrategy`
 
 - If you haven't already, add the `androidx.compose.material3.adaptive:adaptive-navigation3` library
-- Create an `androidx.compose.material3.adaptive.navigation3.SupportingPaneSceneStrategy` using `rememberSupportingPaneSceneStrategy`
+- Create an `androidx.compose.material3.adaptive.navigation3.SupportingPaneSceneStrategy` using
+  `rememberSupportingPaneSceneStrategy`
 - Pass the `SupportingPaneSceneStrategy` to `NavDisplay` using its `sceneStrategies` parameter
 
 #### Use metadata to identify the main and supporting screens
 
-- Add metadata using `entry(metadata = ...)` or `NavEntry(metadata = ...)` to the main entry using `SupportingPaneSceneStrategy.mainPane()`
+- Add metadata using `entry(metadata = ...)` or `NavEntry(metadata = ...)` to the main entry using
+  `SupportingPaneSceneStrategy.mainPane()`
 - Add metadata to the supporting entry using `SupportingPaneSceneStrategy.supportingPane()`
 
 ### Step 3.3. Run screenshot tests
@@ -207,10 +223,12 @@ Look for the following vertical list composables: `LazyColumn`,
 
 Steps to migrate:
 
-- Choose a suitable minimum width in dp for the column. The item must be clearly visible to the user at this width.
+- Choose a suitable minimum width in dp for the column. The item must be clearly visible to the user
+  at this width.
 - For `LazyColumn`: change to a `LazyVerticalGrid` and follow the instruction later
 - For `LazyVerticalGrid`: change the `columns` parameter to use `GridCells.Adaptive(<width>.dp)`
-- For `LazyVerticalStaggeredGrid`: change the `columns` parameter to use `StaggeredGridCells.Adaptive(<width>.dp)`
+- For `LazyVerticalStaggeredGrid`: change the `columns` parameter to use
+  `StaggeredGridCells.Adaptive(<width>.dp)`
 
 ### Step 4.2. Migrate non-lazy lists to Grid
 
@@ -231,7 +249,6 @@ available width is:
 
 - less than 800dp, a 2x4 grid is used
 - 800dp or more, a 4x2 grid is used
-
 
 ```kotlin
 Grid(
@@ -262,7 +279,8 @@ annotation to any function that uses it.
 In an app with multiple top-level destinations, each screen must manage its own
 app bar state independently. There are two main scroll behaviors:
 
-- `exitUntilCollapsedScrollBehavior`: Hides on scroll down, stays hidden while you scroll up until you reach the very top (0 offset).
+- `exitUntilCollapsedScrollBehavior`: Hides on scroll down, stays hidden while you scroll up until
+  you reach the very top (0 offset).
 - `enterAlwaysScrollBehavior`: Hides on scroll down, shows immediately on scroll up.
 
 ## Final step: Build and test
@@ -286,7 +304,9 @@ Check the FlexBox documentation:
 
 ## MediaQuery
 
-Check the [MediaQuery documentation](references/android/develop/ui/compose/layouts/adaptive/mediaquery/index.md) when you need to query the device's
+Check
+the [MediaQuery documentation](references/android/develop/ui/compose/layouts/adaptive/mediaquery/index.md)
+when you need to query the device's
 screen size, pointer precision, keyboard type, whether it has cameras or
 microphones, and other device capabilities.
 

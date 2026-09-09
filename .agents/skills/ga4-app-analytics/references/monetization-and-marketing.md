@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Analytics can influence monetization in several different ways. Keep these mechanisms separate so recommendations stay accurate.
+Analytics can influence monetization in several different ways. Keep these mechanisms separate so
+recommendations stay accurate.
 
 ## 1. Product monetization analysis
 
@@ -29,11 +30,13 @@ This is one of the strongest reasons to add product-specific custom events.
 
 ## 2. AdMob personalization
 
-Google documents specific App Analytics Connection behavior for automatically collected and recommended Analytics events.
+Google documents specific App Analytics Connection behavior for automatically collected and
+recommended Analytics events.
 
 Do not automatically claim that arbitrary custom events directly improve AdMob ad personalization.
 
-When this distinction matters, verify the current AdMob documentation before making a strong statement.
+When this distinction matters, verify the current AdMob documentation before making a strong
+statement.
 
 Use wording such as:
 
@@ -44,7 +47,8 @@ Current Google documentation should be checked before claiming that it directly 
 
 ## 3. Audiences and remarketing
 
-Custom events and custom dimensions can be valuable for audience building when allowed by current platform rules and user consent.
+Custom events and custom dimensions can be valuable for audience building when allowed by current
+platform rules and user consent.
 
 Examples of product segments:
 
@@ -58,7 +62,8 @@ Do not use sensitive or identifying attributes to build audiences.
 
 ## 4. Key events and Google Ads
 
-A small number of important product events can be marked as key events in GA4 and used for marketing measurement or Google Ads optimization.
+A small number of important product events can be marked as key events in GA4 and used for marketing
+measurement or Google Ads optimization.
 
 Potential examples depend on the product:
 
@@ -77,7 +82,8 @@ Key events should represent outcomes important to the product or business.
 
 ## 5. Experiments
 
-GA4 events can be useful as goals or analysis signals for Firebase experiments and Remote Config changes.
+GA4 events can be useful as goals or analysis signals for Firebase experiments and Remote Config
+changes.
 
 Examples:
 
@@ -86,7 +92,8 @@ Examples:
 - Compare feature presentation using completion events.
 - Compare lesson recommendations using `lesson_opened` and `lesson_completed`.
 
-Do not change monetization behavior solely because an event exists. Use experiments when the tradeoff between revenue and product experience is uncertain.
+Do not change monetization behavior solely because an event exists. Use experiments when the
+tradeoff between revenue and product experience is uncertain.
 
 ## 6. Automatic ad events
 
@@ -147,6 +154,7 @@ language = kotlin
 level = intermediate
 ```
 
-This can reveal which content categories attract engagement and which categories correlate with completion, retention, ad revenue, or purchases.
+This can reveal which content categories attract engagement and which categories correlate with
+completion, retention, ad revenue, or purchases.
 
 That information can be more valuable to the product than an unrelated recommended event.

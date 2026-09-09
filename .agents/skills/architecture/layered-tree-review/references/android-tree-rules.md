@@ -2,7 +2,8 @@
 
 Use this skill only for file, package, and module placement.
 
-Architecture behavior belongs to the dedicated `android-data-layer` and `android-domain-layer` skills. Do not duplicate those rules here.
+Architecture behavior belongs to the dedicated `android-data-layer` and `android-domain-layer`
+skills. Do not duplicate those rules here.
 
 Prefer small structural changes. Do not redesign behavior only to satisfy a directory tree.
 
@@ -31,7 +32,8 @@ A feature that consumes shared repositories can omit its own `data/`.
 
 ## Prefer modules over nested UI features
 
-When functionality is meaningful enough to stand on its own, prefer creating or extracting a dedicated feature module instead of placing it under another feature's `ui/features/`.
+When functionality is meaningful enough to stand on its own, prefer creating or extracting a
+dedicated feature module instead of placing it under another feature's `ui/features/`.
 
 Prefer a standalone feature module when the functionality:
 
@@ -52,7 +54,8 @@ feature/
     └── ...
 ```
 
-Do not keep reusable functionality nested inside `cart/ui/features/filters/` merely because Cart currently uses it first.
+Do not keep reusable functionality nested inside `cart/ui/features/filters/` merely because Cart
+currently uses it first.
 
 ## UI
 
@@ -77,7 +80,8 @@ Create only the folders the screen actually needs.
 
 `views/` contains reusable stateless UI owned by that screen or feature.
 
-Do not place ViewModels, state coordinators, repositories, or lifecycle-owning components in `views/`.
+Do not place ViewModels, state coordinators, repositories, or lifecycle-owning components in
+`views/`.
 
 ### Nested UI features are a last resort
 
@@ -87,7 +91,8 @@ Use:
 ui/features/<feature-name>/
 ```
 
-only for UI functionality that is tightly coupled to one parent screen but still owns an independent presentation lifecycle.
+only for UI functionality that is tightly coupled to one parent screen but still owns an independent
+presentation lifecycle.
 
 Typical examples include:
 
@@ -127,7 +132,8 @@ If it is reusable or independently meaningful, create a feature module instead.
 
 If it is stateless UI, place it in `views/`.
 
-If it is ordinary stateful UI controlled by the main screen ViewModel, keep it in the main `ui/` structure.
+If it is ordinary stateful UI controlled by the main screen ViewModel, keep it in the main `ui/`
+structure.
 
 Do not create `ui/features/` merely because a composable is large or visually complex.
 
@@ -146,7 +152,8 @@ ui/
 
 Main screens and their ViewModels live directly in `ui/`.
 
-Do not place DTOs, entities, repositories, data sources, database code, filesystem code, DataStore code, or remote API implementations in `ui/`.
+Do not place DTOs, entities, repositories, data sources, database code, filesystem code, DataStore
+code, or remote API implementations in `ui/`.
 
 ## Data
 

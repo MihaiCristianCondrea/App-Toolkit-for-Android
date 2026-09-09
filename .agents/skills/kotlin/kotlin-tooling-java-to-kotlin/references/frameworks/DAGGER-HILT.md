@@ -152,6 +152,7 @@ object AnalyticsModule {
 ```
 
 Key changes:
+
 - `@Inject` moves before the `constructor` keyword in the primary constructor.
 - Constructor parameters become `private val` in the primary constructor.
 - The module class becomes an `object` since it contains only static-like provides methods.

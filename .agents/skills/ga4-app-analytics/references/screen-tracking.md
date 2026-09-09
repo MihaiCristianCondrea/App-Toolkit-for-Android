@@ -4,7 +4,8 @@
 
 Screen tracking should describe meaningful user-visible destinations.
 
-Modern Android apps often use a single Activity with Compose navigation, so explicit screen tracking is frequently necessary.
+Modern Android apps often use a single Activity with Compose navigation, so explicit screen tracking
+is frequently necessary.
 
 ## App Toolkit
 
@@ -58,7 +59,8 @@ Dynamic screen names create high cardinality and can expose private information.
 
 ## Bottom sheets and dialogs
 
-Track a bottom sheet as a screen only when it behaves like a meaningful destination with enough interaction or content to justify separate analysis.
+Track a bottom sheet as a screen only when it behaves like a meaningful destination with enough
+interaction or content to justify separate analysis.
 
 Examples that may deserve screen tracking:
 

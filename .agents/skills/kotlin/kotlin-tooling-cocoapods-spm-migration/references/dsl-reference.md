@@ -4,7 +4,8 @@ Complete reference for the `swiftPMDependencies {}` DSL in Kotlin Multiplatform.
 
 ## Basic Structure
 
-`swiftPackage()` and `localSwiftPackage()` are annotated with `@ExperimentalKotlinGradlePluginApi` (warning level). Add the opt-in at the top of `build.gradle.kts`:
+`swiftPackage()` and `localSwiftPackage()` are annotated with `@ExperimentalKotlinGradlePluginApi` (
+warning level). Add the opt-in at the top of `build.gradle.kts`:
 
 ```kotlin
 @file:OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -36,11 +37,13 @@ kotlin {
 
 ## Package Declaration
 
-The DSL has two API forms. **Use the simple string API** for most packages. Use the typed API only when you need `exact()`, `branch()`, `revision()`, or platform constraints.
+The DSL has two API forms. **Use the simple string API** for most packages. Use the typed API only
+when you need `exact()`, `branch()`, `revision()`, or platform constraints.
 
 ### Simple API (Preferred)
 
-Plain strings for URL, version, and products. The `version` parameter maps to a **minimum version** (`from()`) internally. The `importedClangModules` defaults to the `products` list automatically.
+Plain strings for URL, version, and products. The `version` parameter maps to a **minimum version
+** (`from()`) internally. The `importedClangModules` defaults to the `products` list automatically.
 
 ```kotlin
 swiftPackage(
@@ -52,7 +55,8 @@ swiftPackage(
 
 ### Typed API (Advanced)
 
-Use when you need exact version pinning, branch tracking, platform constraints, or explicit Clang module control:
+Use when you need exact version pinning, branch tracking, platform constraints, or explicit Clang
+module control:
 
 ```kotlin
 swiftPackage(
@@ -95,6 +99,7 @@ swift package init --type library --name LocalPackage
 ```
 
 Then use it in Kotlin:
+
 ```kotlin
 // src/appleMain/kotlin/useLocalPackage.kt
 import swiftPMImport.<group>.<module>.HelloFromLocalPackage
@@ -109,16 +114,18 @@ fun useLocalPackage() {
 
 ## Version Specification
 
-| Syntax | Description | Use Case |
-|--------|-------------|----------|
-| `version = "1.0.0"` (simple API) | Minimum version — equivalent to `from("1.0.0")` | Most packages |
-| `version = exact("1.0")` | Exact version pin | Strict dependencies, migration |
-| `version = from("1.0")` | Minimum version (explicit) | Same as simple string |
-| `version = branch("name")` | Git branch | Development, testing |
-| `version = revision("hash")` | Git commit hash | Pinning specific commits |
-| `version = range("1.0", "2.0")` | Version range | Constraining upper bound |
+| Syntax                           | Description                                     | Use Case                       |
+|----------------------------------|-------------------------------------------------|--------------------------------|
+| `version = "1.0.0"` (simple API) | Minimum version — equivalent to `from("1.0.0")` | Most packages                  |
+| `version = exact("1.0")`         | Exact version pin                               | Strict dependencies, migration |
+| `version = from("1.0")`          | Minimum version (explicit)                      | Same as simple string          |
+| `version = branch("name")`       | Git branch                                      | Development, testing           |
+| `version = revision("hash")`     | Git commit hash                                 | Pinning specific commits       |
+| `version = range("1.0", "2.0")`  | Version range                                   | Constraining upper bound       |
 
-**Important for migration:** The simple string `version = "X.Y.Z"` resolves to a minimum version (`from()`), which may pull a newer version than what was in CocoaPods. For exact version preservation during migration, use the typed API: `version = exact("X.Y.Z")`.
+**Important for migration:** The simple string `version = "X.Y.Z"` resolves to a minimum version (
+`from()`), which may pull a newer version than what was in CocoaPods. For exact version preservation
+during migration, use the typed API: `version = exact("X.Y.Z")`.
 
 ---
 
@@ -130,7 +137,8 @@ fun useLocalPackage() {
 products = listOf("FirebaseAnalytics", "FirebaseAuth")
 ```
 
-With the simple API, `importedClangModules` defaults to the same list as `products`. This works when product names match Clang module names.
+With the simple API, `importedClangModules` defaults to the same list as `products`. This works when
+product names match Clang module names.
 
 ### Typed API — Platform Constraints
 
@@ -158,15 +166,21 @@ products = listOf(
 
 ### Automatic Discovery (Default)
 
-By default, `discoverClangModulesImplicitly = true`. SwiftPM import automatically discovers and imports all accessible Clang modules.
+By default, `discoverClangModulesImplicitly = true`. SwiftPM import automatically discovers and
+imports all accessible Clang modules.
 
-**IMPORTANT:** When `discoverClangModulesImplicitly = true`, the `importedClangModules` parameter is ignored. Only set `importedClangModules` when `discoverClangModulesImplicitly = false`.
+**IMPORTANT:** When `discoverClangModulesImplicitly = true`, the `importedClangModules` parameter is
+ignored. Only set `importedClangModules` when `discoverClangModulesImplicitly = false`.
 
-**IMPORTANT for Firebase:** Set `discoverClangModulesImplicitly = false` when using Firebase. Firebase's transitive C++ dependencies (gRPC, abseil, leveldb, BoringSSL) contain Clang modules that fail cinterop generation. Disable implicit discovery and explicitly list only the Firebase modules you need in `importedClangModules`.
+**IMPORTANT for Firebase:** Set `discoverClangModulesImplicitly = false` when using Firebase.
+Firebase's transitive C++ dependencies (gRPC, abseil, leveldb, BoringSSL) contain Clang modules that
+fail cinterop generation. Disable implicit discovery and explicitly list only the Firebase modules
+you need in `importedClangModules`.
 
 ### Explicit Module Import
 
-When automatic discovery is disabled and the Clang module name differs from the product name, use the typed API:
+When automatic discovery is disabled and the Clang module name differs from the product name, use
+the typed API:
 
 ```kotlin
 swiftPMDependencies {
@@ -190,12 +204,12 @@ swiftPMDependencies {
 
 ### When to Use importedClangModules
 
-| Scenario | Use importedClangModules? |
-|----------|---------------------|
+| Scenario                                     | Use importedClangModules?         |
+|----------------------------------------------|-----------------------------------|
 | Simple API, product name = Clang module name | No (auto-defaulted from products) |
-| Product name != Clang module name | Yes (typed API) |
-| Multiple modules per product | Yes (typed API) |
-| Using discoverClangModulesImplicitly = false | Yes (typed API) |
+| Product name != Clang module name            | Yes (typed API)                   |
+| Multiple modules per product                 | Yes (typed API)                   |
+| Using discoverClangModulesImplicitly = false | Yes (typed API)                   |
 
 ---
 
@@ -270,7 +284,9 @@ kotlin {
 
 ## Transitive Dependencies
 
-SwiftPM dependencies are handled automatically. When you run Kotlin/Native tests or link a framework, the Kotlin Gradle Plugin will provision necessary machine code from transitive SwiftPM dependencies. This behavior is automatic.
+SwiftPM dependencies are handled automatically. When you run Kotlin/Native tests or link a
+framework, the Kotlin Gradle Plugin will provision necessary machine code from transitive SwiftPM
+dependencies. This behavior is automatic.
 
 You can optionally declare transitive dependencies explicitly to pin specific versions:
 

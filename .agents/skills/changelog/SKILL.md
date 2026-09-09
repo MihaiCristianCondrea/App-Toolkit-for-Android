@@ -23,8 +23,11 @@ Inspect the existing changelog and relevant implementation before editing it.
 
 Determine the project structure to structure the changelog correctly:
 
-- **Library with Sample App**: The project consists of a library module and a sample/demo app module. Update the relevant section (`## Library Changes`, `## Sample App Changes`, or both) depending on where the change took place.
-- **Normal App (No Library)**: The project is a standalone application without a library module. Update the changelog directly as an app changelog.
+- **Library with Sample App**: The project consists of a library module and a sample/demo app
+  module. Update the relevant section (`## Library Changes`, `## Sample App Changes`, or both)
+  depending on where the change took place.
+- **Normal App (No Library)**: The project is a standalone application without a library module.
+  Update the changelog directly as an app changelog.
 
 ## What Belongs
 
@@ -32,9 +35,11 @@ Add entries for changes that meaningfully affect:
 
 - Library consumers (for library changes);
 - Sample App or App users (for application changes);
-- Public behavior, APIs, integration, compatibility, reliability, performance, accessibility, or important bug fixes.
+- Public behavior, APIs, integration, compatibility, reliability, performance, accessibility, or
+  important bug fixes.
 
-Skip routine refactors, formatting, tests, documentation, file moves, dependency bumps, and internal cleanup when externally observable behavior is unchanged.
+Skip routine refactors, formatting, tests, documentation, file moves, dependency bumps, and internal
+cleanup when externally observable behavior is unchanged.
 
 Describe the outcome rather than the implementation for non-developer users.
 
@@ -48,13 +53,16 @@ Separate changes into:
 - `## Sample App Changes`
 
 Update the section relevant to your change:
+
 - If a change affects only the library, update `## Library Changes`.
 - If a change affects only the sample app, update `## Sample App Changes`.
-- If a change affects both, describe each distinct impact in its appropriate section without duplicating the same entry.
+- If a change affects both, describe each distinct impact in its appropriate section without
+  duplicating the same entry.
 
 ### Normal App (No Library)
 
-Maintain a single app changelog directly under `# Unreleased` (or the relevant release section) using category headers, without splitting into Library or Sample App sections.
+Maintain a single app changelog directly under `# Unreleased` (or the relevant release section)
+using category headers, without splitting into Library or Sample App sections.
 
 ### Categories
 
@@ -71,7 +79,8 @@ Only include categories that contain entries.
 
 New work belongs under `# Unreleased`.
 
-Do not create a release section from source-control versions, version bumps, tags, or library prereleases alone.
+Do not create a release section from source-control versions, version bumps, tags, or library
+prereleases alone.
 
 When creating an actual release section:
 
@@ -97,11 +106,14 @@ For App releases, include both `versionName` and `versionCode` when known.
 
 For Library releases, include the published library version.
 
-App release history follows actual Google Play production releases. When production release information is available, treat it as the source of truth for version names, version codes, dates, and release boundaries.
+App release history follows actual Google Play production releases. When production release
+information is available, treat it as the source of truth for version names, version codes, dates,
+and release boundaries.
 
 Library release history follows actual published library releases.
 
-Changes from development versions that never reached production belong to the next production release that actually shipped them.
+Changes from development versions that never reached production belong to the next production
+release that actually shipped them.
 
 ## Writing
 

@@ -4,7 +4,8 @@
 
 This reference explains the analytics path used by App Toolkit host applications.
 
-The host application should normally build on this system rather than creating a second Firebase Analytics path.
+The host application should normally build on this system rather than creating a second Firebase
+Analytics path.
 
 ## Main flow
 
@@ -20,7 +21,8 @@ FirebaseControllerImpl
 Firebase Analytics
 ```
 
-`FirebaseController` lives in App Toolkit core common code. Host features depend on this contract instead of importing the Firebase Analytics SDK directly.
+`FirebaseController` lives in App Toolkit core common code. Host features depend on this contract
+instead of importing the Firebase Analytics SDK directly.
 
 The Firebase integration provides the concrete implementation through dependency injection.
 
@@ -62,7 +64,8 @@ Feature code should normally call the controller instead of directly accessing F
 
 ## FirebaseControllerImpl behavior
 
-The Firebase implementation validates and converts Toolkit events before sending them to Firebase Analytics.
+The Firebase implementation validates and converts Toolkit events before sending them to Firebase
+Analytics.
 
 Current protections include:
 
@@ -73,13 +76,15 @@ Current protections include:
 - String value trimming.
 - User property name and value limits.
 
-Do not rely only on transport validation for analytics quality. A technically valid event can still be semantically wrong, noisy, unsafe, or useless.
+Do not rely only on transport validation for analytics quality. A technically valid event can still
+be semantically wrong, noisy, unsafe, or useless.
 
 ## LoggedScreenViewModel
 
 `LoggedScreenViewModel` provides standard operational telemetry.
 
-It records ViewModel lifecycle and UI event breadcrumbs for Crashlytics and can emit operation events such as:
+It records ViewModel lifecycle and UI event breadcrumbs for Crashlytics and can emit operation
+events such as:
 
 ```text
 vm_op_start
@@ -88,13 +93,15 @@ vm_op_error
 
 These events describe application operations. They are not a replacement for product analytics.
 
-For example, a lesson completion or cleanup completion should still have a meaningful product event when that behavior matters to the host app.
+For example, a lesson completion or cleanup completion should still have a meaningful product event
+when that behavior matters to the host app.
 
 ## Screen tracking
 
 `TrackScreenView` is the normal App Toolkit helper for explicit Compose screen tracking.
 
-It sends a screen view through `FirebaseController.logScreenView()` when the stable screen name changes.
+It sends a screen view through `FirebaseController.logScreenView()` when the stable screen name
+changes.
 
 Use it at meaningful top-level destinations.
 
@@ -107,7 +114,8 @@ no_data
 error
 ```
 
-Use screen state tracking when it answers a real product or reliability question. Do not add it mechanically to every small component.
+Use screen state tracking when it answers a real product or reliability question. Do not add it
+mechanically to every small component.
 
 ## Reusable UI analytics
 
@@ -122,7 +130,9 @@ ga4Event
 
 and log the event at the exact interaction point.
 
-Before adding a manual event around a Toolkit button, preference, chip, field, or FAB, inspect whether the component already supports GA4 logging. Duplicate click events can otherwise be emitted from both the component and the caller.
+Before adding a manual event around a Toolkit button, preference, chip, field, or FAB, inspect
+whether the component already supports GA4 logging. Duplicate click events can otherwise be emitted
+from both the component and the caller.
 
 ## Host ownership
 

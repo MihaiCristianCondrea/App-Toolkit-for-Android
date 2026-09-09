@@ -1,8 +1,11 @@
 Boost app engagement by reaching your users where they are. Integrate Engage SDK
 to deliver personalized recommendations and continuation content directly to
 users across multiple on-device surfaces, like
-**[Collections](https://android-developers.googleblog.com/2024/07/introducing-collections-powered-by-engage-sdk.html)** , **[Entertainment
-Space](https://blog.google/products/android/entertainment-space/)** , and the Play Store. The integration adds
+*
+*[Collections](https://android-developers.googleblog.com/2024/07/introducing-collections-powered-by-engage-sdk.html)
+** , **[Entertainment
+Space](https://blog.google/products/android/entertainment-space/)** , and the Play Store. The
+integration adds
 less than 50 KB (compressed) to the average APK and takes most apps about a
 week of developer time. Learn more at our **[business
 site](http://play.google.com/console/about/programs/EngageSDK)**.
@@ -23,63 +26,70 @@ This integration includes the following three cluster types: **Recommendation** 
   health). Use these to surface articles or people related to health and
   fitness.
 
-  - A Recommendation cluster can be made of `ArticleEntity`, `PersonEntity`, or `EventEntity` but not a mix of different entity types.
+    - A Recommendation cluster can be made of `ArticleEntity`, `PersonEntity`, or `EventEntity` but
+      not a mix of different entity types.
 
   Your recommendations take the following structure:
-  - **Recommendation Cluster:** A UI view that contains a group of
-    recommendations from the same developer partner.
+    - **Recommendation Cluster:** A UI view that contains a group of
+      recommendations from the same developer partner.
 
-  - **Entity:** An object representing a single item in a cluster. This
-    integration offers some entities that would be surfaced using the
-    Recommendation Cluster:
+    - **Entity:** An object representing a single item in a cluster. This
+      integration offers some entities that would be surfaced using the
+      Recommendation Cluster:
 
-    - **ArticleEntity**: ArticleEntity represents a recommendation for
-      text-based content related to health \& fitness. It can be used for
-      articles, blogposts, marketing content, news snippets, etc.
+        - **ArticleEntity**: ArticleEntity represents a recommendation for
+          text-based content related to health \& fitness. It can be used for
+          articles, blogposts, marketing content, news snippets, etc.
 
-      ![](https://developer.android.com/static/images/guide/playcore/engage/article-entity-health-and-fitness.png) **Figure 1:** UI showing a single ArticleEntity within Recommendations cluster.
-    - **PersonEntity**: PersonEntity represents a person. The
-      recommendations could be to highlight a coach or any person related
-      to health and fitness, etc.
+          ![](https://developer.android.com/static/images/guide/playcore/engage/article-entity-health-and-fitness.png)
+          **Figure 1:** UI showing a single ArticleEntity within Recommendations cluster.
+        - **PersonEntity**: PersonEntity represents a person. The
+          recommendations could be to highlight a coach or any person related
+          to health and fitness, etc.
 
-      ![](https://developer.android.com/static/images/guide/playcore/engage/person-entity-health-and-fitness.png) **Figure 2:** UI showing a single PersonEntity within Recommendations cluster.
-    - **EventEntity**: EventEntity represents an event happening in the
-      future. Event start time is a critical piece of information that
-      needs to be conveyed to the users This entity could be used for
-      surfacing events like blood donation camp, training sessions, gym or
-      yoga classes etc. related to health and fitness.
+          ![](https://developer.android.com/static/images/guide/playcore/engage/person-entity-health-and-fitness.png)
+          **Figure 2:** UI showing a single PersonEntity within Recommendations cluster.
+        - **EventEntity**: EventEntity represents an event happening in the
+          future. Event start time is a critical piece of information that
+          needs to be conveyed to the users This entity could be used for
+          surfacing events like blood donation camp, training sessions, gym or
+          yoga classes etc. related to health and fitness.
 
-      ![](https://developer.android.com/static/images/guide/playcore/engage/event-entity-health-and-fitness.png) **Figure 3:** UI showing a single EventEntity within Recommendations cluster.
+          ![](https://developer.android.com/static/images/guide/playcore/engage/event-entity-health-and-fitness.png)
+          **Figure 3:** UI showing a single EventEntity within Recommendations cluster.
 - The **Continuation** cluster shows content recently engaged by users from
   multiple developer partners in a single UI grouping. Each developer partner
   will be allowed to broadcast a maximum of 10 entities in the Continuation
   cluster.
 
   Your continuation content can take the following structure:
-  - **ArticleEntity**: ArticleEntity represents a recommendation for
-    text-based content that is related to health \& fitness. This entity can
-    be used to represent unfinished news articles or other content that the
-    user would like to continue consuming from where they left it. Ex: News
-    snippet, blogpost snippet about health or fitness related topics.
+    - **ArticleEntity**: ArticleEntity represents a recommendation for
+      text-based content that is related to health \& fitness. This entity can
+      be used to represent unfinished news articles or other content that the
+      user would like to continue consuming from where they left it. Ex: News
+      snippet, blogpost snippet about health or fitness related topics.
 
-    ![](https://developer.android.com/static/images/guide/playcore/engage/article-entity-continuation-health-and-fitness.png) **Figure 6.** UI showing a single ArticleEntity within a Continuation cluster.
-  - **EventReservationEntity**: EventReservationEntity represents
-    reservation for an event and helps users track upcoming or ongoing
-    fitness and health events reservations. Ex: Training sessions
+      ![](https://developer.android.com/static/images/guide/playcore/engage/article-entity-continuation-health-and-fitness.png)
+      **Figure 6.** UI showing a single ArticleEntity within a Continuation cluster.
+    - **EventReservationEntity**: EventReservationEntity represents
+      reservation for an event and helps users track upcoming or ongoing
+      fitness and health events reservations. Ex: Training sessions
 
-    ![](https://developer.android.com/static/images/guide/playcore/engage/event-reservation-entity-health-and-fitness.png) **Figure 8.** UI showing a single EventReservationEntity within a Continuation cluster.
+      ![](https://developer.android.com/static/images/guide/playcore/engage/event-reservation-entity-health-and-fitness.png)
+      **Figure 8.** UI showing a single EventReservationEntity within a Continuation cluster.
 - The **Featured** cluster showcases a selection of entities from multiple
   developer partners in one UI grouping. There will be a single Featured
   cluster, which is surfaced near the top of the UI with a priority placement
   above all Recommendation clusters. Each developer partner will be allowed to
   broadcast up to 10 entities in the Featured cluster.
 
-  - **GenericFeaturedEntity**: GenericFeaturedEntity differs from
-    Recommendation item in that Featured item should be used for a single
-    top content from developers and should represent the single most
-    important content that will be interesting and relevant to users.
+    - **GenericFeaturedEntity**: GenericFeaturedEntity differs from
+      Recommendation item in that Featured item should be used for a single
+      top content from developers and should represent the single most
+      important content that will be interesting and relevant to users.
 
-    ![](https://developer.android.com/static/images/guide/playcore/engage/featured-item-health-and-fitness.png) **Figure 12:** UI showing a single hero GenericFeaturedEntity card within a Featured cluster
+      ![](https://developer.android.com/static/images/guide/playcore/engage/featured-item-health-and-fitness.png)
+      **Figure 12:** UI showing a single hero GenericFeaturedEntity card within a Featured cluster
 
 ### Pre-work
 
@@ -100,11 +110,11 @@ The design is based on an implementation of a
 The data a client can publish is subject to the following limits for different
 cluster types:
 
-| Cluster type | Cluster limits | Minimum entity limits in a cluster | Maximum entity limits in a cluster |
-|---|---|---|---|
-| Recommendation Cluster(s) | At most 7 | At least 1 | At most 50 (`ArticleEntity`, `PersonEntity`, or `EventEntity`) |
-| Continuation Cluster | At most 1 | At least 1 | At most 20 (`ArticleEntity`, or `EventReservationEntity`) |
-| Featured Cluster | At most 1 | At least 1 | At most 20 (`GenericFeaturedEntity`) |
+| Cluster type              | Cluster limits | Minimum entity limits in a cluster | Maximum entity limits in a cluster                             |
+|---------------------------|----------------|------------------------------------|----------------------------------------------------------------|
+| Recommendation Cluster(s) | At most 7      | At least 1                         | At most 50 (`ArticleEntity`, `PersonEntity`, or `EventEntity`) |
+| Continuation Cluster      | At most 1      | At least 1                         | At most 20 (`ArticleEntity`, or `EventReservationEntity`)      |
+| Featured Cluster          | At most 1      | At least 1                         | At most 20 (`GenericFeaturedEntity`)                           |
 
 ### Step 1: Provide entity data
 
@@ -121,139 +131,139 @@ The charts below outline available attributes and requirements for each type.
 
 #### `GenericFeaturedEntity`
 
-| Attribute | Requirement | Description | Format |
-|---|---|---|---|
-| Action Uri | **Required** | Deep Link to the entity in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) | Uri |
-| Poster images | **Required** | We will show only 1 image when multiple images are provided. Recommended aspect ratio is 16:9 **Note:** If a badge is provided, please ensure safe space of 24 dps at both the top and bottom of the image | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance. |
-| Title | Optional | Title of the entity. | Free text **Recommended text size: 50 chars** |
-| Description | Optional | A single paragraph of text to describe the entity. **Note:** Either description or subtitle list will be displayed to the user, not both. | Free text **Recommended text size: 180 chars** |
-| Subtitle list | Optional | Up to 3 subtitles, with each subtitle a single line of text. **Note:** Either description or subtitle list will be displayed to the user, not both. | Free text **Recommended text size for each subtitle: max 50 chars** |
-| Badges | Optional | Each badge is either free text (max 15 chars) or small image. Special UX treatment on top of image/video, for example as badge overlay on the image - "Live update" - Article read duration |   |
-| Badge - Text | Optional | Title for the badge **Note:** Either text or image is required for the badge | Free text **Recommended text size: max 15 chars** |
-| Badge - Image | Optional | Small image Special UX treatment, for example as badge overlay on the image/video thumbnail. **Note:** Either text or image is required for the badge | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance. |
-| Content Categories | Optional | Describe the category of the content in the entity. | List of Enums See the [Content Category section](https://developer.android.com/guide/playcore/engage/healthandfitness#content-category) for guidance. |
+| Attribute          | Requirement  | Description                                                                                                                                                                                                | Format                                                                                                                                                |
+|--------------------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Action Uri         | **Required** | Deep Link to the entity in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution)              | Uri                                                                                                                                                   |
+| Poster images      | **Required** | We will show only 1 image when multiple images are provided. Recommended aspect ratio is 16:9 **Note:** If a badge is provided, please ensure safe space of 24 dps at both the top and bottom of the image | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance.                            |
+| Title              | Optional     | Title of the entity.                                                                                                                                                                                       | Free text **Recommended text size: 50 chars**                                                                                                         |
+| Description        | Optional     | A single paragraph of text to describe the entity. **Note:** Either description or subtitle list will be displayed to the user, not both.                                                                  | Free text **Recommended text size: 180 chars**                                                                                                        |
+| Subtitle list      | Optional     | Up to 3 subtitles, with each subtitle a single line of text. **Note:** Either description or subtitle list will be displayed to the user, not both.                                                        | Free text **Recommended text size for each subtitle: max 50 chars**                                                                                   |
+| Badges             | Optional     | Each badge is either free text (max 15 chars) or small image. Special UX treatment on top of image/video, for example as badge overlay on the image - "Live update" - Article read duration                |                                                                                                                                                       |
+| Badge - Text       | Optional     | Title for the badge **Note:** Either text or image is required for the badge                                                                                                                               | Free text **Recommended text size: max 15 chars**                                                                                                     |
+| Badge - Image      | Optional     | Small image Special UX treatment, for example as badge overlay on the image/video thumbnail. **Note:** Either text or image is required for the badge                                                      | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance.                            |
+| Content Categories | Optional     | Describe the category of the content in the entity.                                                                                                                                                        | List of Enums See the [Content Category section](https://developer.android.com/guide/playcore/engage/healthandfitness#content-category) for guidance. |
 
 #### `ArticleEntity`
 
-| Attribute | Requirement | Description | Format |
-|---|---|---|---|
-| Action Uri | **Required** | Deep Link to the entity in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) | Uri |
-| Title | **Required** | Title of the entity. | Free text **Recommended text size: Max 50 chars** |
-| Poster images | Optional | We will show only 1 image when multiple images are provided. Recommended aspect ratio is 16:9 **Note:** Image is highly recommended. If a badge is provided, please ensure safe space of 24 dps at both the top and bottom of the image | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance. |
-| Source - Title | Optional | The name of the author, organization, or reporter | Free text **Recommended text size: Under 25 chars** |
-| Source - Image | Optional | An image of the source like the author, the organization, reporter | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance. |
-| Description | Optional | A single paragraph of text to describe the entity. **Note:** Either description or subtitle list will be displayed to the user, not both. | Free text **Recommended text size: 180 chars** |
-| Subtitle list | Optional | Up to 3 subtitles, with each subtitle a single line of text. **Note:** Either description or subtitle list will be displayed to the user, not both. | Free text **Recommended text size for each subtitle: max 50 chars** |
-| Badges | Optional | Each badge is either free text (max 15 chars) or small image. Special UX treatment on top of image/video, for example as badge overlay on the image - "Live update" - Article read duration |   |
-| Badge - Text | Optional | Title for the badge **Note:** Either text or image is required for the badge | Free text **Recommended text size: max 15 chars** |
-| Badge - Image | Optional | Small image Special UX treatment, for example as badge overlay on the image/video thumbnail. **Note:** Either text or image is required for the badge | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance. |
-| Content Publish Time | Optional | This is the epoch timestamp in milliseconds on when the content was published / updated in the app. | Epoch timestamp in milliseconds |
-| Last Engagement Time | Conditionally Required | The epoch timestamp in milliseconds when the user interacted with this entity last time. **Note:** This field is required if this entity is part of the continuation cluster. | Epoch timestamp in milliseconds |
-| Progress Percentage | Conditionally Required | The percentage of the full content consumed by the user to date. **Note:** This field is required if this entity is part of the continuation cluster. | An int value between 0\~100 inclusive. |
-| Content Categories | Optional | Describe the category of the content in the entity. | List of Enums See the [Content Category section](https://developer.android.com/guide/playcore/engage/healthandfitness#content-category) for guidance. |
+| Attribute            | Requirement            | Description                                                                                                                                                                                                                             | Format                                                                                                                                                |
+|----------------------|------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Action Uri           | **Required**           | Deep Link to the entity in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution)                                           | Uri                                                                                                                                                   |
+| Title                | **Required**           | Title of the entity.                                                                                                                                                                                                                    | Free text **Recommended text size: Max 50 chars**                                                                                                     |
+| Poster images        | Optional               | We will show only 1 image when multiple images are provided. Recommended aspect ratio is 16:9 **Note:** Image is highly recommended. If a badge is provided, please ensure safe space of 24 dps at both the top and bottom of the image | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance.                            |
+| Source - Title       | Optional               | The name of the author, organization, or reporter                                                                                                                                                                                       | Free text **Recommended text size: Under 25 chars**                                                                                                   |
+| Source - Image       | Optional               | An image of the source like the author, the organization, reporter                                                                                                                                                                      | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance.                            |
+| Description          | Optional               | A single paragraph of text to describe the entity. **Note:** Either description or subtitle list will be displayed to the user, not both.                                                                                               | Free text **Recommended text size: 180 chars**                                                                                                        |
+| Subtitle list        | Optional               | Up to 3 subtitles, with each subtitle a single line of text. **Note:** Either description or subtitle list will be displayed to the user, not both.                                                                                     | Free text **Recommended text size for each subtitle: max 50 chars**                                                                                   |
+| Badges               | Optional               | Each badge is either free text (max 15 chars) or small image. Special UX treatment on top of image/video, for example as badge overlay on the image - "Live update" - Article read duration                                             |                                                                                                                                                       |
+| Badge - Text         | Optional               | Title for the badge **Note:** Either text or image is required for the badge                                                                                                                                                            | Free text **Recommended text size: max 15 chars**                                                                                                     |
+| Badge - Image        | Optional               | Small image Special UX treatment, for example as badge overlay on the image/video thumbnail. **Note:** Either text or image is required for the badge                                                                                   | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance.                            |
+| Content Publish Time | Optional               | This is the epoch timestamp in milliseconds on when the content was published / updated in the app.                                                                                                                                     | Epoch timestamp in milliseconds                                                                                                                       |
+| Last Engagement Time | Conditionally Required | The epoch timestamp in milliseconds when the user interacted with this entity last time. **Note:** This field is required if this entity is part of the continuation cluster.                                                           | Epoch timestamp in milliseconds                                                                                                                       |
+| Progress Percentage  | Conditionally Required | The percentage of the full content consumed by the user to date. **Note:** This field is required if this entity is part of the continuation cluster.                                                                                   | An int value between 0\~100 inclusive.                                                                                                                |
+| Content Categories   | Optional               | Describe the category of the content in the entity.                                                                                                                                                                                     | List of Enums See the [Content Category section](https://developer.android.com/guide/playcore/engage/healthandfitness#content-category) for guidance. |
 
 #### `PersonEntity`
 
-| Attribute | Requirement | Description | Format |
-|---|---|---|---|
-| Action Uri | **Required** | Deep Link to the entity in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) | Uri |
-| Profile - Name | **Required** | Profile name or id or handle, eg "John Doe", "@TeamPixel", etc. | String **Recommended text size: Max 50 chars** |
-| Profile - Avatar | **Required** | Profile picture or avatar image of the user. **Note:**Must be Square 1:1 image. | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance. |
-| Profile - Additional Text | Optional | Free text like the profile handle. | Free text **Recommended text size: Max 15 chars** |
-| Profile - Additional Image | Optional | Small image like a verified badge. | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance. |
-| Header image | Optional | We will show only 1 image when multiple images are provided. Recommended aspect ratio is 16:9 **Note:** Image is highly recommended. If a badge is provided, please ensure safe space of 24 dps at both the top and bottom of the image | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance. |
-| Popularity - Count | Optional | Indicate the number of followers or popularity value, for example - "3.7 M". **Note:** If both Count and Count Value are provided, Count will be used | String **Recommended text size: max 20 chars for count + label combined** |
-| Popularity - Count Value | Optional | The number of followers or popularity value. **Note:** Provide Count Value if your app doesn't want to handle logic on how a large number should be optimized for different display sizes. If both Count and Count Value are provided, Count will be used. | Long |
-| Popularity - Label | Optional | Indicate what the popularity label is. For example - "Likes". | String **Recommended text size: Max 20 chars for count + label combined** |
-| Popularity - Visual | Optional | Indicate what the interaction is for. For example - Image showing Likes icon, Emojis. Can provide more than 1 image, though not all may not be shown on all form factors. **Note:** Must be Square 1:1 image | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance. |
-| Rating - Max value | Required | The maximum value of the rating scale. **Must be provided if current value of rating is also provided.** | Number \>= 0.0 |
-| Rating - Current value | Required | The current value of the rating scale. **Must be provided if maximum value of rating is also provided.** | Number \>= 0.0 |
-| Rating - Count | Optional | The count of the ratings for the entity. **Note:** Provide this field if your app controls how the count is displayed to the users. Use a concise string. For example, if the count is 1,000,000, consider using an abbreviation like 1M so that the count isn't truncated on smaller display sizes. | String |
-| Rating - Count Value | Optional | The count of the ratings for the entity. **Note:** Provide this field if you don't handle the display abbreviation logic yourself. If both Count and Count Value are present, Count is displayed to users. | Long |
-| Location - Country | Optional | The country where the person is located or serving. | Free text **Recommended text size: max \~20 chars** |
-| Location - City | Optional | The city where the person is located or serving. | Free text **Recommended text size: max \~20 chars** |
-| Location - Display Address | Optional | The address where the person is located or serving will be displayed to the user. | Free text **Recommended text size: max \~20 chars** |
-| Location - Street Address | Optional | The street address (if applicable) where the person is located or serving. | Free text **Recommended text size: max \~20 chars** |
-| Location - State | Optional | The state (if applicable) where the person is located or serving. | Free text **Recommended text size: max \~20 chars** |
-| Location - Zip code | Optional | The zip code (if applicable) where the person is located or serving. | Free text **Recommended text size: max \~20 chars** |
-| Location - Neighborhood | Optional | The neighborhood (if applicable) where the person is located or serving. | Free text **Recommended text size: max \~20 chars** |
-| Badges | Optional | Each badge is either free text (max 15 chars) or small image. |   |
-| Badge - Text | Optional | Title for the badge **Note:** Either text or image is required for the badge | Free text **Recommended text size: max 15 chars** |
-| Badge - Image | Optional | Small image Special UX treatment, for example as badge overlay on the image/video thumbnail. **Note:** Either text or image is required for the badge | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance. |
-| Description | Optional | A single paragraph of text to describe the entity. **Note:** Either description or subtitle list will be displayed to the user, not both. | Free text **Recommended text size: 180 chars** |
-| Subtitle list | Optional | Up to 3 subtitles, with each subtitle a single line of text. **Note:** Either description or subtitle list will be displayed to the user, not both. | Free text **Recommended text size for each subtitle: max 50 chars** |
-| Content Categories | Optional | Describe the category of the content in the entity. | List of Eligible Enums - TYPE_HEALTH_AND_FITENESS (Example - Yoga/fitness trainer) - TYPE_HOME_AND_AUTO (Example - Plumber) - TYPE_SPORTS (Example - Player) - TYPE_DATING See the [Content Category section](https://developer.android.com/guide/playcore/engage/healthandfitness#content-category) for guidance. |
+| Attribute                  | Requirement  | Description                                                                                                                                                                                                                                                                                          | Format                                                                                                                                                                                                                                                                                                             |
+|----------------------------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Action Uri                 | **Required** | Deep Link to the entity in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution)                                                                                                        | Uri                                                                                                                                                                                                                                                                                                                |
+| Profile - Name             | **Required** | Profile name or id or handle, eg "John Doe", "@TeamPixel", etc.                                                                                                                                                                                                                                      | String **Recommended text size: Max 50 chars**                                                                                                                                                                                                                                                                     |
+| Profile - Avatar           | **Required** | Profile picture or avatar image of the user. **Note:**Must be Square 1:1 image.                                                                                                                                                                                                                      | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance.                                                                                                                                                                                         |
+| Profile - Additional Text  | Optional     | Free text like the profile handle.                                                                                                                                                                                                                                                                   | Free text **Recommended text size: Max 15 chars**                                                                                                                                                                                                                                                                  |
+| Profile - Additional Image | Optional     | Small image like a verified badge.                                                                                                                                                                                                                                                                   | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance.                                                                                                                                                                                         |
+| Header image               | Optional     | We will show only 1 image when multiple images are provided. Recommended aspect ratio is 16:9 **Note:** Image is highly recommended. If a badge is provided, please ensure safe space of 24 dps at both the top and bottom of the image                                                              | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance.                                                                                                                                                                                         |
+| Popularity - Count         | Optional     | Indicate the number of followers or popularity value, for example - "3.7 M". **Note:** If both Count and Count Value are provided, Count will be used                                                                                                                                                | String **Recommended text size: max 20 chars for count + label combined**                                                                                                                                                                                                                                          |
+| Popularity - Count Value   | Optional     | The number of followers or popularity value. **Note:** Provide Count Value if your app doesn't want to handle logic on how a large number should be optimized for different display sizes. If both Count and Count Value are provided, Count will be used.                                           | Long                                                                                                                                                                                                                                                                                                               |
+| Popularity - Label         | Optional     | Indicate what the popularity label is. For example - "Likes".                                                                                                                                                                                                                                        | String **Recommended text size: Max 20 chars for count + label combined**                                                                                                                                                                                                                                          |
+| Popularity - Visual        | Optional     | Indicate what the interaction is for. For example - Image showing Likes icon, Emojis. Can provide more than 1 image, though not all may not be shown on all form factors. **Note:** Must be Square 1:1 image                                                                                         | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance.                                                                                                                                                                                         |
+| Rating - Max value         | Required     | The maximum value of the rating scale. **Must be provided if current value of rating is also provided.**                                                                                                                                                                                             | Number \>= 0.0                                                                                                                                                                                                                                                                                                     |
+| Rating - Current value     | Required     | The current value of the rating scale. **Must be provided if maximum value of rating is also provided.**                                                                                                                                                                                             | Number \>= 0.0                                                                                                                                                                                                                                                                                                     |
+| Rating - Count             | Optional     | The count of the ratings for the entity. **Note:** Provide this field if your app controls how the count is displayed to the users. Use a concise string. For example, if the count is 1,000,000, consider using an abbreviation like 1M so that the count isn't truncated on smaller display sizes. | String                                                                                                                                                                                                                                                                                                             |
+| Rating - Count Value       | Optional     | The count of the ratings for the entity. **Note:** Provide this field if you don't handle the display abbreviation logic yourself. If both Count and Count Value are present, Count is displayed to users.                                                                                           | Long                                                                                                                                                                                                                                                                                                               |
+| Location - Country         | Optional     | The country where the person is located or serving.                                                                                                                                                                                                                                                  | Free text **Recommended text size: max \~20 chars**                                                                                                                                                                                                                                                                |
+| Location - City            | Optional     | The city where the person is located or serving.                                                                                                                                                                                                                                                     | Free text **Recommended text size: max \~20 chars**                                                                                                                                                                                                                                                                |
+| Location - Display Address | Optional     | The address where the person is located or serving will be displayed to the user.                                                                                                                                                                                                                    | Free text **Recommended text size: max \~20 chars**                                                                                                                                                                                                                                                                |
+| Location - Street Address  | Optional     | The street address (if applicable) where the person is located or serving.                                                                                                                                                                                                                           | Free text **Recommended text size: max \~20 chars**                                                                                                                                                                                                                                                                |
+| Location - State           | Optional     | The state (if applicable) where the person is located or serving.                                                                                                                                                                                                                                    | Free text **Recommended text size: max \~20 chars**                                                                                                                                                                                                                                                                |
+| Location - Zip code        | Optional     | The zip code (if applicable) where the person is located or serving.                                                                                                                                                                                                                                 | Free text **Recommended text size: max \~20 chars**                                                                                                                                                                                                                                                                |
+| Location - Neighborhood    | Optional     | The neighborhood (if applicable) where the person is located or serving.                                                                                                                                                                                                                             | Free text **Recommended text size: max \~20 chars**                                                                                                                                                                                                                                                                |
+| Badges                     | Optional     | Each badge is either free text (max 15 chars) or small image.                                                                                                                                                                                                                                        |                                                                                                                                                                                                                                                                                                                    |
+| Badge - Text               | Optional     | Title for the badge **Note:** Either text or image is required for the badge                                                                                                                                                                                                                         | Free text **Recommended text size: max 15 chars**                                                                                                                                                                                                                                                                  |
+| Badge - Image              | Optional     | Small image Special UX treatment, for example as badge overlay on the image/video thumbnail. **Note:** Either text or image is required for the badge                                                                                                                                                | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance.                                                                                                                                                                                         |
+| Description                | Optional     | A single paragraph of text to describe the entity. **Note:** Either description or subtitle list will be displayed to the user, not both.                                                                                                                                                            | Free text **Recommended text size: 180 chars**                                                                                                                                                                                                                                                                     |
+| Subtitle list              | Optional     | Up to 3 subtitles, with each subtitle a single line of text. **Note:** Either description or subtitle list will be displayed to the user, not both.                                                                                                                                                  | Free text **Recommended text size for each subtitle: max 50 chars**                                                                                                                                                                                                                                                |
+| Content Categories         | Optional     | Describe the category of the content in the entity.                                                                                                                                                                                                                                                  | List of Eligible Enums - TYPE_HEALTH_AND_FITENESS (Example - Yoga/fitness trainer) - TYPE_HOME_AND_AUTO (Example - Plumber) - TYPE_SPORTS (Example - Player) - TYPE_DATING See the [Content Category section](https://developer.android.com/guide/playcore/engage/healthandfitness#content-category) for guidance. |
 
 #### `EventEntity`
 
-| Attribute | Requirement | Description | Format |
-|---|---|---|---|
-| Action Uri | **Required** | Deep Link to the entity in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) | Uri |
-| Title | **Required** | Title of the entity. | String **Recommended text size: Max 50 chars** |
-| Start time | **Required** | The epoch timestamp when the event is expected to start. **Note:**This will be represented in milliseconds. | Epoch timestamp in milliseconds |
-| Event mode | **Required** | A field to indicate whether the event will be virtual, in-person or both. | Enum: VIRTUAL, IN_PERSON, or HYBRID |
-| Poster images | **Required** | We will show only 1 image when multiple images are provided. Recommended aspect ratio is 16:9 **Note:** Image is highly recommended. If a badge is provided, please ensure safe space of 24 dps at both the top and bottom of the image | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance. |
-| Location - Country | Conditionally Required | The country in which the event is happening. **Note:** This is required for events which are IN_PERSON or HYBRID | Free text **Recommended text size: max \~20 chars** |
-| Location - City | Conditionally Required | The city in which the event is happening. **Note:** This is required for events which are IN_PERSON or HYBRID | Free text **Recommended text size: max \~20 chars** |
-| Location - Display Address | Conditionally Required | The address or venue name where the event will take place that should be displayed to the user. **Note:** This is required for events which are IN_PERSON or HYBRID | Free text **Recommended text size: max \~20 chars** |
-| Location - Street Address | Optional | The street address (if applicable) of the location at which event is being hosted. | Free text **Recommended text size: max \~20 chars** |
-| Location - State | Optional | The state or province (if applicable) in which the event is being hosted. | Free text **Recommended text size: max \~20 chars** |
-| Location - Zip code | Optional | The zip code (if applicable) of the location in which the event is being hosted. | Free text **Recommended text size: max \~20 chars** |
-| Location - Neighborhood | Optional | The neighborhood (if applicable) in which the event is being hosted. | Free text **Recommended text size: max \~20 chars** |
-| End time | Optional | The epoch timestamp when the event is expected to end. **Note:**This will be represented in milliseconds. | Epoch timestamp in milliseconds |
-| Description | Optional | A single paragraph of text to describe the entity. **Note:** Either description or subtitle list will be displayed to the user, not both. | Free text **Recommended text size: 180 chars** |
-| Subtitle list | Optional | Up to 3 subtitles, with each subtitle a single line of text. **Note:** Either description or subtitle list will be displayed to the user, not both. | Free text **Recommended text size for each subtitle: max 50 chars** |
-| Badges | Optional | Each badge is either free text (max 15 chars) or small image. |   |
-| Badge - Text | Optional | Title for the badge **Note:** Either text or image is required for the badge | Free text **Recommended text size: max 15 chars** |
-| Badge - Image | Optional | Small image Special UX treatment, for example as badge overlay on the image/video thumbnail. **Note:** Either text or image is required for the badge | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance. |
-| Price - CurrentPrice | Conditionally required | The current price of the ticket/pass for the event. **Must be provided if strikethrough price is provided.** | Free text |
-| Price - StrikethroughPrice | Optional | The original price of the ticket/pass for the event. | Free text |
-| Price Callout | Optional | Price callout to feature a promo, event, member discount, if available. | Free text **Recommended text size: under 45 chars (Text that is too long may show ellipses)** |
-| Content Categories | Optional | Describe the category of the content in the entity. | List of Eligible Enums - TYPE_MOVIES_AND_TV_SHOWS (Example - Cinema) - TYPE_DIGITAL_GAMES (Example - eSports) - TYPE_MUSIC (Example - Concert) - TYPE_TRAVEL_AND_LOCAL (Example - Tour, festival) - TYPE_HEALTH_AND_FITENESS (Example - Yoga class) - TYPE_EDUCATION (Example - Class) - TYPE_SPORTS (Example - Football game) - TYPE_DATING (Example - meetup) See the [Content Category section](https://developer.android.com/guide/playcore/engage/healthandfitness#content-category) for guidance. |
+| Attribute                  | Requirement            | Description                                                                                                                                                                                                                             | Format                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+|----------------------------|------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Action Uri                 | **Required**           | Deep Link to the entity in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution)                                           | Uri                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Title                      | **Required**           | Title of the entity.                                                                                                                                                                                                                    | String **Recommended text size: Max 50 chars**                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| Start time                 | **Required**           | The epoch timestamp when the event is expected to start. **Note:**This will be represented in milliseconds.                                                                                                                             | Epoch timestamp in milliseconds                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| Event mode                 | **Required**           | A field to indicate whether the event will be virtual, in-person or both.                                                                                                                                                               | Enum: VIRTUAL, IN_PERSON, or HYBRID                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Poster images              | **Required**           | We will show only 1 image when multiple images are provided. Recommended aspect ratio is 16:9 **Note:** Image is highly recommended. If a badge is provided, please ensure safe space of 24 dps at both the top and bottom of the image | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance.                                                                                                                                                                                                                                                                                                                                                                              |
+| Location - Country         | Conditionally Required | The country in which the event is happening. **Note:** This is required for events which are IN_PERSON or HYBRID                                                                                                                        | Free text **Recommended text size: max \~20 chars**                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Location - City            | Conditionally Required | The city in which the event is happening. **Note:** This is required for events which are IN_PERSON or HYBRID                                                                                                                           | Free text **Recommended text size: max \~20 chars**                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Location - Display Address | Conditionally Required | The address or venue name where the event will take place that should be displayed to the user. **Note:** This is required for events which are IN_PERSON or HYBRID                                                                     | Free text **Recommended text size: max \~20 chars**                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Location - Street Address  | Optional               | The street address (if applicable) of the location at which event is being hosted.                                                                                                                                                      | Free text **Recommended text size: max \~20 chars**                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Location - State           | Optional               | The state or province (if applicable) in which the event is being hosted.                                                                                                                                                               | Free text **Recommended text size: max \~20 chars**                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Location - Zip code        | Optional               | The zip code (if applicable) of the location in which the event is being hosted.                                                                                                                                                        | Free text **Recommended text size: max \~20 chars**                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Location - Neighborhood    | Optional               | The neighborhood (if applicable) in which the event is being hosted.                                                                                                                                                                    | Free text **Recommended text size: max \~20 chars**                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| End time                   | Optional               | The epoch timestamp when the event is expected to end. **Note:**This will be represented in milliseconds.                                                                                                                               | Epoch timestamp in milliseconds                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| Description                | Optional               | A single paragraph of text to describe the entity. **Note:** Either description or subtitle list will be displayed to the user, not both.                                                                                               | Free text **Recommended text size: 180 chars**                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| Subtitle list              | Optional               | Up to 3 subtitles, with each subtitle a single line of text. **Note:** Either description or subtitle list will be displayed to the user, not both.                                                                                     | Free text **Recommended text size for each subtitle: max 50 chars**                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Badges                     | Optional               | Each badge is either free text (max 15 chars) or small image.                                                                                                                                                                           |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| Badge - Text               | Optional               | Title for the badge **Note:** Either text or image is required for the badge                                                                                                                                                            | Free text **Recommended text size: max 15 chars**                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| Badge - Image              | Optional               | Small image Special UX treatment, for example as badge overlay on the image/video thumbnail. **Note:** Either text or image is required for the badge                                                                                   | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance.                                                                                                                                                                                                                                                                                                                                                                              |
+| Price - CurrentPrice       | Conditionally required | The current price of the ticket/pass for the event. **Must be provided if strikethrough price is provided.**                                                                                                                            | Free text                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| Price - StrikethroughPrice | Optional               | The original price of the ticket/pass for the event.                                                                                                                                                                                    | Free text                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| Price Callout              | Optional               | Price callout to feature a promo, event, member discount, if available.                                                                                                                                                                 | Free text **Recommended text size: under 45 chars (Text that is too long may show ellipses)**                                                                                                                                                                                                                                                                                                                                                                                                           |
+| Content Categories         | Optional               | Describe the category of the content in the entity.                                                                                                                                                                                     | List of Eligible Enums - TYPE_MOVIES_AND_TV_SHOWS (Example - Cinema) - TYPE_DIGITAL_GAMES (Example - eSports) - TYPE_MUSIC (Example - Concert) - TYPE_TRAVEL_AND_LOCAL (Example - Tour, festival) - TYPE_HEALTH_AND_FITENESS (Example - Yoga class) - TYPE_EDUCATION (Example - Class) - TYPE_SPORTS (Example - Football game) - TYPE_DATING (Example - meetup) See the [Content Category section](https://developer.android.com/guide/playcore/engage/healthandfitness#content-category) for guidance. |
 
 #### `EventReservationEntity`
 
-| Attribute | Requirement | Description | Format |
-|---|---|---|---|
-| Action Uri | **Required** | Deep Link to the entity in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution) | Uri |
-| Title | **Required** | Title of the entity. | String **Recommended text size: Max 50 chars** |
-| Start time | **Required** | The epoch timestamp when the event is expected to start. **Note:**This will be represented in milliseconds. | Epoch timestamp in milliseconds |
-| Event mode | **Required** | A field to indicate whether the event will be virtual, in-person or both. | Enum: VIRTUAL, IN_PERSON, or HYBRID |
-| Location - Country | Conditionally Required | The country in which the event is happening. **Note:** This is required for events which are IN_PERSON or HYBRID | Free text **Recommended text size: max \~20 chars** |
-| Location - City | Conditionally Required | The city in which the event is happening. **Note:** This is required for events which are IN_PERSON or HYBRID | Free text **Recommended text size: max \~20 chars** |
-| Location - Display Address | Conditionally Required | The address or venue name where the event will take place that should be displayed to the user. **Note:** This is required for events which are IN_PERSON or HYBRID | Free text **Recommended text size: max \~20 chars** |
-| Location - Street Address | Optional | The street address (if applicable) of the location at which event is being hosted. | Free text **Recommended text size: max \~20 chars** |
-| Location - State | Optional | The state or province (if applicable) in which the event is being hosted. | Free text **Recommended text size: max \~20 chars** |
-| Location - Zip code | Optional | The zip code (if applicable) of the location in which the event is being hosted. | Free text **Recommended text size: max \~20 chars** |
-| Location - Neighborhood | Optional | The neighborhood (if applicable) in which the event is being hosted. | Free text **Recommended text size: max \~20 chars** |
-| Poster images | Optional | We will show only 1 image when multiple images are provided. Recommended aspect ratio is 16:9 **Note:** Image is highly recommended. If a badge is provided, please ensure safe space of 24 dps at both the top and bottom of the image | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance. |
-| End time | Optional | The epoch timestamp when the event is expected to end. **Note:**This will be represented in milliseconds. | Epoch timestamp in milliseconds |
-| Service Provider - Name | Optional | The name of the service provider. **Note:**Either text or image is required for the service provider. | Free text. For example, name of the event organizer/tour |
-| Service Provider - Image | Optional | The logo/image of the service provider. **Note:**Either text or image is required for the service provider. | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance. |
-| Description | Optional | A single paragraph of text to describe the entity. **Note:** Either description or subtitle list will be displayed to the user, not both. | Free text **Recommended text size: 180 chars** |
-| Subtitle list | Optional | Up to 3 subtitles, with each subtitle a single line of text. **Note:** Either description or subtitle list will be displayed to the user, not both. | Free text **Recommended text size for each subtitle: max 50 chars** |
-| Badges | Optional | Each badge is either free text (max 15 chars) or small image. |   |
-| Badge - Text | Optional | Title for the badge **Note:** Either text or image is required for the badge | Free text **Recommended text size: max 15 chars** |
-| Badge - Image | Optional | Small image Special UX treatment, for example as badge overlay on the image/video thumbnail. **Note:** Either text or image is required for the badge | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance. |
-| Reservation ID | Optional | The reservation ID for the event reservation. | Free text |
-| Price - CurrentPrice | Conditionally required | The current price of the ticket/pass for the event. **Must be provided if strikethrough price is provided.** | Free text |
-| Price - StrikethroughPrice | Optional | The original price of the ticket/pass for the event. | Free text |
-| Price Callout | Optional | Price callout to feature a promo, event, member discount, if available. | Free text **Recommended text size: under 45 chars (Text that is too long may show ellipses)** |
-| Rating - Max value | Optional | The maximum value of the rating scale. **Must be provided if current value of rating is also provided.** | Number \>= 0.0 |
-| Rating - Current value | Optional | The current value of the rating scale. **Must be provided if maximum value of rating is also provided.** | Number \>= 0.0 |
-| Rating - Count | Optional | The count of the ratings for the event. **Note:** Provide this field if your app wants to control how this is displayed to the users. Please provide the concise string that can be displayed to the user. For example, if the count is 1,000,000, consider using abbreviations like 1M, so that it won't be truncated on smaller display sizes. | String |
-| Rating - Count Value | Optional | The count of the ratings for the event. **Note:** Provide this field if you don't want to handle the display abbreviation logic yourself. If both Count and Count Value are present, we will use the Count to display to users | Long |
-| Content Categories | Optional | Describe the category of the content in the entity. | List of Eligible Enums - TYPE_MOVIES_AND_TV_SHOWS (Example - Cinema) - TYPE_DIGITAL_GAMES (Example - eSports) - TYPE_MUSIC (Example - Concert) - TYPE_TRAVEL_AND_LOCAL (Example - Tour, festival) - TYPE_HEALTH_AND_FITENESS (Example - Yoga class) - TYPE_EDUCATION (Example - Class) - TYPE_SPORTS (Example - Football game) - TYPE_DATING (Example - meetup) See the [Content Category section](https://developer.android.com/guide/playcore/engage/healthandfitness#content-category) for guidance. |
+| Attribute                  | Requirement            | Description                                                                                                                                                                                                                                                                                                                                      | Format                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+|----------------------------|------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Action Uri                 | **Required**           | Deep Link to the entity in the provider app. Note: You can use deep links for attribution. [Refer to this FAQ](https://developer.android.com/guide/playcore/engage/faq#deeplinks-attribution)                                                                                                                                                    | Uri                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Title                      | **Required**           | Title of the entity.                                                                                                                                                                                                                                                                                                                             | String **Recommended text size: Max 50 chars**                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| Start time                 | **Required**           | The epoch timestamp when the event is expected to start. **Note:**This will be represented in milliseconds.                                                                                                                                                                                                                                      | Epoch timestamp in milliseconds                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| Event mode                 | **Required**           | A field to indicate whether the event will be virtual, in-person or both.                                                                                                                                                                                                                                                                        | Enum: VIRTUAL, IN_PERSON, or HYBRID                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Location - Country         | Conditionally Required | The country in which the event is happening. **Note:** This is required for events which are IN_PERSON or HYBRID                                                                                                                                                                                                                                 | Free text **Recommended text size: max \~20 chars**                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Location - City            | Conditionally Required | The city in which the event is happening. **Note:** This is required for events which are IN_PERSON or HYBRID                                                                                                                                                                                                                                    | Free text **Recommended text size: max \~20 chars**                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Location - Display Address | Conditionally Required | The address or venue name where the event will take place that should be displayed to the user. **Note:** This is required for events which are IN_PERSON or HYBRID                                                                                                                                                                              | Free text **Recommended text size: max \~20 chars**                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Location - Street Address  | Optional               | The street address (if applicable) of the location at which event is being hosted.                                                                                                                                                                                                                                                               | Free text **Recommended text size: max \~20 chars**                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Location - State           | Optional               | The state or province (if applicable) in which the event is being hosted.                                                                                                                                                                                                                                                                        | Free text **Recommended text size: max \~20 chars**                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Location - Zip code        | Optional               | The zip code (if applicable) of the location in which the event is being hosted.                                                                                                                                                                                                                                                                 | Free text **Recommended text size: max \~20 chars**                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Location - Neighborhood    | Optional               | The neighborhood (if applicable) in which the event is being hosted.                                                                                                                                                                                                                                                                             | Free text **Recommended text size: max \~20 chars**                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Poster images              | Optional               | We will show only 1 image when multiple images are provided. Recommended aspect ratio is 16:9 **Note:** Image is highly recommended. If a badge is provided, please ensure safe space of 24 dps at both the top and bottom of the image                                                                                                          | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance.                                                                                                                                                                                                                                                                                                                                                                              |
+| End time                   | Optional               | The epoch timestamp when the event is expected to end. **Note:**This will be represented in milliseconds.                                                                                                                                                                                                                                        | Epoch timestamp in milliseconds                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| Service Provider - Name    | Optional               | The name of the service provider. **Note:**Either text or image is required for the service provider.                                                                                                                                                                                                                                            | Free text. For example, name of the event organizer/tour                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| Service Provider - Image   | Optional               | The logo/image of the service provider. **Note:**Either text or image is required for the service provider.                                                                                                                                                                                                                                      | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance.                                                                                                                                                                                                                                                                                                                                                                              |
+| Description                | Optional               | A single paragraph of text to describe the entity. **Note:** Either description or subtitle list will be displayed to the user, not both.                                                                                                                                                                                                        | Free text **Recommended text size: 180 chars**                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| Subtitle list              | Optional               | Up to 3 subtitles, with each subtitle a single line of text. **Note:** Either description or subtitle list will be displayed to the user, not both.                                                                                                                                                                                              | Free text **Recommended text size for each subtitle: max 50 chars**                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Badges                     | Optional               | Each badge is either free text (max 15 chars) or small image.                                                                                                                                                                                                                                                                                    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| Badge - Text               | Optional               | Title for the badge **Note:** Either text or image is required for the badge                                                                                                                                                                                                                                                                     | Free text **Recommended text size: max 15 chars**                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| Badge - Image              | Optional               | Small image Special UX treatment, for example as badge overlay on the image/video thumbnail. **Note:** Either text or image is required for the badge                                                                                                                                                                                            | See [Image Specifications](https://developer.android.com/guide/playcore/engage/healthandfitness#image-specs) for guidance.                                                                                                                                                                                                                                                                                                                                                                              |
+| Reservation ID             | Optional               | The reservation ID for the event reservation.                                                                                                                                                                                                                                                                                                    | Free text                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| Price - CurrentPrice       | Conditionally required | The current price of the ticket/pass for the event. **Must be provided if strikethrough price is provided.**                                                                                                                                                                                                                                     | Free text                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| Price - StrikethroughPrice | Optional               | The original price of the ticket/pass for the event.                                                                                                                                                                                                                                                                                             | Free text                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| Price Callout              | Optional               | Price callout to feature a promo, event, member discount, if available.                                                                                                                                                                                                                                                                          | Free text **Recommended text size: under 45 chars (Text that is too long may show ellipses)**                                                                                                                                                                                                                                                                                                                                                                                                           |
+| Rating - Max value         | Optional               | The maximum value of the rating scale. **Must be provided if current value of rating is also provided.**                                                                                                                                                                                                                                         | Number \>= 0.0                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| Rating - Current value     | Optional               | The current value of the rating scale. **Must be provided if maximum value of rating is also provided.**                                                                                                                                                                                                                                         | Number \>= 0.0                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| Rating - Count             | Optional               | The count of the ratings for the event. **Note:** Provide this field if your app wants to control how this is displayed to the users. Please provide the concise string that can be displayed to the user. For example, if the count is 1,000,000, consider using abbreviations like 1M, so that it won't be truncated on smaller display sizes. | String                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| Rating - Count Value       | Optional               | The count of the ratings for the event. **Note:** Provide this field if you don't want to handle the display abbreviation logic yourself. If both Count and Count Value are present, we will use the Count to display to users                                                                                                                   | Long                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| Content Categories         | Optional               | Describe the category of the content in the entity.                                                                                                                                                                                                                                                                                              | List of Eligible Enums - TYPE_MOVIES_AND_TV_SHOWS (Example - Cinema) - TYPE_DIGITAL_GAMES (Example - eSports) - TYPE_MUSIC (Example - Concert) - TYPE_TRAVEL_AND_LOCAL (Example - Tour, festival) - TYPE_HEALTH_AND_FITENESS (Example - Yoga class) - TYPE_EDUCATION (Example - Class) - TYPE_SPORTS (Example - Football game) - TYPE_DATING (Example - meetup) See the [Content Category section](https://developer.android.com/guide/playcore/engage/healthandfitness#content-category) for guidance. |
 
 #### Image specifications
 
 Required specifications for image assets are listed in this table:
 
-| Aspect ratio | Minimum pixels | Recommended pixels |
-|---|---|---|
-| Square (1x1) **Preferred** | 300x300 | 1200x1200 |
-| Landscape (1.91x1) | 600x314 | 1200x628 |
-| Portrait (4x5) | 480x600 | 960x1200 |
+| Aspect ratio               | Minimum pixels | Recommended pixels |
+|----------------------------|----------------|--------------------|
+| Square (1x1) **Preferred** | 300x300        | 1200x1200          |
+| Landscape (1.91x1)         | 600x314        | 1200x628           |
+| Portrait (4x5)             | 480x600        | 960x1200           |
 
 The images are required to be hosted on public CDNs so that Google can access
 them.
@@ -269,7 +279,8 @@ PNG, JPG, static GIF, WebP
 *Additional recommendations*
 
 - **Image safe area:** Put your important content in the center 80% of the image.
-- Use a transparent background so that the image can be properly displayed in Dark and Light theme settings.
+- Use a transparent background so that the image can be properly displayed in Dark and Light theme
+  settings.
 
 #### Content Category
 
@@ -299,15 +310,28 @@ them.
 
 *Guidelines to use the content categories*
 
-1. Some entities like **ArticleEntity** and **GenericFeaturedEntity** are eligible to use any of the content categories. For other entities like **EventEntity** , **EventReservationEntity** , **PersonEntity**, only a subset of these categories are eligible. Check the list of categories eligible for an entity type before populating the list.
+1. Some entities like **ArticleEntity** and **GenericFeaturedEntity** are eligible to use any of the
+   content categories. For other entities like **EventEntity** , **EventReservationEntity** , *
+   *PersonEntity**, only a subset of these categories are eligible. Check the list of categories
+   eligible for an entity type before populating the list.
 2. Use the specific entity type for some content categories over a combination
    of the Generic entities and the ContentCategory:
 
-   - TYPE_MOVIES_AND_TV_SHOWS - Check out the entities from [Watch integration guide](https://developer.android.com/guide/playcore/engage/watch) before using the generic entities.
-   - TYPE_BOOKS - Check out the [EbookEntity](https://developer.android.com/guide/playcore/engage/read#ebookentity) before using the generic entities.
-   - TYPE_AUDIOBOOKS - Check out [AudiobookEntity](https://developer.android.com/guide/playcore/engage/read#audiobookentity) before using the generic entities.
-   - TYPE_SHOPPING - Check out [ShoppingEntity](https://developer.android.com/guide/playcore/engage/shopping#shoppingEntity) before using the generic entities.
-   - TYPE_FOOD_AND_DRINK - Check out entities from [Food Integration guide](https://developer.android.com/guide/playcore/engage/food) before using the generic entities.
+    - TYPE_MOVIES_AND_TV_SHOWS - Check out the entities
+      from [Watch integration guide](https://developer.android.com/guide/playcore/engage/watch)
+      before using the generic entities.
+    - TYPE_BOOKS - Check out
+      the [EbookEntity](https://developer.android.com/guide/playcore/engage/read#ebookentity) before
+      using the generic entities.
+    - TYPE_AUDIOBOOKS - Check
+      out [AudiobookEntity](https://developer.android.com/guide/playcore/engage/read#audiobookentity)
+      before using the generic entities.
+    - TYPE_SHOPPING - Check
+      out [ShoppingEntity](https://developer.android.com/guide/playcore/engage/shopping#shoppingEntity)
+      before using the generic entities.
+    - TYPE_FOOD_AND_DRINK - Check out entities
+      from [Food Integration guide](https://developer.android.com/guide/playcore/engage/food) before
+      using the generic entities.
 3. The ContentCategory field is optional and should be left blank if the
    content doesn't belong to any of the categories mentioned earlier.
 
@@ -318,7 +342,8 @@ them.
 ### Step 2: Provide Cluster data
 
 It is recommended to have the content publish job executed in the background
-(for example, using [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager))
+(for example,
+using [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager))
 and scheduled on a regular basis or on an event basis (for example, every time
 the user opens the app or when the user just added something to their cart).
 
@@ -345,18 +370,19 @@ whether the content can be presented on the device.
 
 ##### For Engage SDK v1.6.0 and higher (Recommended)
 
-
 ## Android skills
 
 [View on GitHub](https://github.com/android/skills/tree/main/play/engage-sdk-integration)
 
 ### Engage SDK integration
 
-To install the skill from the [Android CLI](https://developer.android.com/tools/agents/android-cli), run:
+To install the skill from the [Android CLI](https://developer.android.com/tools/agents/android-cli),
+run:
 
     android skills add engage-sdk-integration
 
-If your team uses AI coding tools (such as Gemini in Android Studio), you can automate this migration by prompting your AI assistant:
+If your team uses AI coding tools (such as Gemini in Android Studio), you can automate this
+migration by prompting your AI assistant:
 
     Use the engage-sdk-integration skill to use Engage SDK 1.6.0 and refactor isServiceAvailable to pass ServiceAvailabilityRequest for publishing all cluster types.
 
@@ -368,14 +394,14 @@ publish. The `isServiceAvailable` API accepts a request object,
 availability needs to be checked. You can find the `ClusterType` enum values
 required for `ServiceAvailabilityRequest` from the following table.
 
-| Cluster Type | Cluster Type Constant | Integer Value |
-|---|---|---|
-| Unknown | `TYPE_UNKNOWN` | 0 |
-| Recommendation Cluster | `TYPE_RECOMMENDATION` | 1 |
-| Featured Cluster | `TYPE_FEATURED` | 2 |
-| Continuation Cluster | `TYPE_CONTINUATION` | 3 |
-| User Management Cluster | `TYPE_ENGAGEMENT` | 8 |
-| Subscription Cluster | `TYPE_SUBSCRIPTION` | 12 |
+| Cluster Type            | Cluster Type Constant | Integer Value |
+|-------------------------|-----------------------|---------------|
+| Unknown                 | `TYPE_UNKNOWN`        | 0             |
+| Recommendation Cluster  | `TYPE_RECOMMENDATION` | 1             |
+| Featured Cluster        | `TYPE_FEATURED`       | 2             |
+| Continuation Cluster    | `TYPE_CONTINUATION`   | 3             |
+| User Management Cluster | `TYPE_ENGAGEMENT`     | 8             |
+| Subscription Cluster    | `TYPE_SUBSCRIPTION`   | 12            |
 
 ### Kotlin
 
@@ -482,14 +508,18 @@ engage-developers@google.com.
     });
 
 > [!NOTE]
-> **Note:** We highly recommend keeping a periodic job running to check if the service becomes available at a later point in time. The availability of the service may change with Android version upgrades, app upgrades, installs, and uninstalls. By ensuring periodic job checks at a certain time interval, data can be published once the service becomes available.
+> **Note:** We highly recommend keeping a periodic job running to check if the service becomes
+> available at a later point in time. The availability of the service may change with Android version
+> upgrades, app upgrades, installs, and uninstalls. By ensuring periodic job checks at a certain time
+> interval, data can be published once the service becomes available.
 
 #### `publishRecommendationClusters`
 
 This API is used to publish a list of `RecommendationCluster` objects.
 
 > [!IMPORTANT]
-> **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
+> **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call
+> delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
 
 ### Kotlin
 
@@ -531,7 +561,8 @@ maintained.
 This API is used to publish a list of `FeaturedCluster` objects.
 
 > [!IMPORTANT]
-> **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
+> **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call
+> delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
 
 ### Kotlin
 
@@ -569,7 +600,8 @@ maintained.
 This API is used to publish a `ContinuationCluster` object.
 
 > [!IMPORTANT]
-> **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
+> **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call
+> delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
 
 ### Kotlin
 
@@ -610,16 +642,17 @@ personalized content)
 
 The following metadata is part of the Sign In Card -
 
-| Attribute | Requirement | Description |
-|---|---|---|
-| Action Uri | Required | Deeplink to Action (i.e. navigates to app sign in page) |
-| Image | Optional - If not provided, Title must be provided | Image Shown on the Card 16x9 aspect ratio images with a resolution of 1264x712 |
-| Title | Optional - If not provided, Image must be provided | Title on the Card |
-| Action Text | Optional | Text Shown on the CTA (i.e. Sign in) |
-| Subtitle | Optional | Optional Subtitle on the Card |
+| Attribute   | Requirement                                        | Description                                                                    |
+|-------------|----------------------------------------------------|--------------------------------------------------------------------------------|
+| Action Uri  | Required                                           | Deeplink to Action (i.e. navigates to app sign in page)                        |
+| Image       | Optional - If not provided, Title must be provided | Image Shown on the Card 16x9 aspect ratio images with a resolution of 1264x712 |
+| Title       | Optional - If not provided, Image must be provided | Title on the Card                                                              |
+| Action Text | Optional                                           | Text Shown on the CTA (i.e. Sign in)                                           |
+| Subtitle    | Optional                                           | Optional Subtitle on the Card                                                  |
 
 > [!IMPORTANT]
-> **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
+> **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call
+> delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
 
 ### Kotlin
 
@@ -674,10 +707,15 @@ If for any internal business reason, none of the clusters is published, we
 **strongly recommend** updating the publish status using the
 **updatePublishStatus** API. This is important because :
 
-- Providing the status in all scenarios, even when the content is published (STATUS == PUBLISHED), is critical to populate dashboards that use this explicit status to convey the health and other metrics of your integration.
-- If no content is published but the integration status isn't broken (STATUS == NOT_PUBLISHED), Google can avoid triggering alerts in the app health dashboards. It confirms that content is not published due to an **expected** situation from the provider's standpoint.
+- Providing the status in all scenarios, even when the content is published (STATUS == PUBLISHED),
+  is critical to populate dashboards that use this explicit status to convey the health and other
+  metrics of your integration.
+- If no content is published but the integration status isn't broken (STATUS == NOT_PUBLISHED),
+  Google can avoid triggering alerts in the app health dashboards. It confirms that content is not
+  published due to an **expected** situation from the provider's standpoint.
 - It helps developers provide insights into when the data is published versus not.
-- Google may use the status codes to nudge the user to do certain actions in the app so they can see the app content or overcome it.
+- Google may use the status codes to nudge the user to do certain actions in the app so they can see
+  the app content or overcome it.
 
 The list of eligible publish status codes are :
 
@@ -737,7 +775,10 @@ to publish the Sign In Card then we recommend calling the
 This API is used to delete the content of Recommendation Clusters.
 
 > [!IMPORTANT]
-> **Important:** Delete APIs should only be called when there is no content to publish. **Don't** call delete and publish APIs subsequently to replace the content as the publish APIs do that inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com) before using delete APIs.
+> **Important:** Delete APIs should only be called when there is no content to publish. **Don't**
+> call delete and publish APIs subsequently to replace the content as the publish APIs do that
+> inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com)
+> before using delete APIs.
 
 ### Kotlin
 
@@ -759,7 +800,10 @@ the existing state is maintained.
 This API is used to delete the content of Featured Cluster.
 
 > [!IMPORTANT]
-> **Important:** Delete APIs should only be called when there is no content to publish. **Don't** call delete and publish APIs subsequently to replace the content as the publish APIs do that inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com) before using delete APIs.
+> **Important:** Delete APIs should only be called when there is no content to publish. **Don't**
+> call delete and publish APIs subsequently to replace the content as the publish APIs do that
+> inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com)
+> before using delete APIs.
 
 ### Kotlin
 
@@ -781,7 +825,10 @@ existing state is maintained.
 This API is used to delete the content of Continuation Cluster.
 
 > [!IMPORTANT]
-> **Important:** Delete APIs should only be called when there is no content to publish. **Don't** call delete and publish APIs subsequently to replace the content as the publish APIs do that inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com) before using delete APIs.
+> **Important:** Delete APIs should only be called when there is no content to publish. **Don't**
+> call delete and publish APIs subsequently to replace the content as the publish APIs do that
+> inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com)
+> before using delete APIs.
 
 ### Kotlin
 
@@ -803,7 +850,10 @@ the existing state is maintained.
 This API is used to delete the content of UserAccountManagement Cluster.
 
 > [!IMPORTANT]
-> **Important:** Delete APIs should only be called when there is no content to publish. **Don't** call delete and publish APIs subsequently to replace the content as the publish APIs do that inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com) before using delete APIs.
+> **Important:** Delete APIs should only be called when there is no content to publish. **Don't**
+> call delete and publish APIs subsequently to replace the content as the publish APIs do that
+> inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com)
+> before using delete APIs.
 
 ### Kotlin
 
@@ -825,7 +875,10 @@ rejected and the existing state is maintained.
 This API is used to delete the content of a given cluster type.
 
 > [!IMPORTANT]
-> **Important:** Delete APIs should only be called when there is no content to publish. **Don't** call delete and publish APIs subsequently to replace the content as the publish APIs do that inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com) before using delete APIs.
+> **Important:** Delete APIs should only be called when there is no content to publish. **Don't**
+> call delete and publish APIs subsequently to replace the content as the publish APIs do that
+> inherently. Reach out to [`engage-developers@google.com`](mailto:engage-developers@google.com)
+> before using delete APIs.
 
 ### Kotlin
 
@@ -900,21 +953,22 @@ that a follow-up action can be taken to recover and resubmit an successful task.
 The error is returned as an `AppEngageException` with the cause included as an
 error code.
 
-| Error code | Error name | Note |
-|---|---|---|
-| `1` | `SERVICE_NOT_FOUND` | The service is not available on the given device. |
-| `2` | `SERVICE_NOT_AVAILABLE` | The service is available on the given device, but it is not available at the time of the call (for example, it is explicitly disabled). |
-| `3` | `SERVICE_CALL_EXECUTION_FAILURE` | The task execution failed due to threading issues. In this case, it can be retried. |
-| `4` | `SERVICE_CALL_PERMISSION_DENIED` | The caller is not allowed to make the service call. |
-| `5` | `SERVICE_CALL_INVALID_ARGUMENT` | The request contains invalid data (for example, more than the allowed number of clusters). |
-| `6` | `SERVICE_CALL_INTERNAL` | There is an error on the service side. |
-| `7` | `SERVICE_CALL_RESOURCE_EXHAUSTED` | The service call is made too frequently. |
+| Error code | Error name                        | Note                                                                                                                                    |
+|------------|-----------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| `1`        | `SERVICE_NOT_FOUND`               | The service is not available on the given device.                                                                                       |
+| `2`        | `SERVICE_NOT_AVAILABLE`           | The service is available on the given device, but it is not available at the time of the call (for example, it is explicitly disabled). |
+| `3`        | `SERVICE_CALL_EXECUTION_FAILURE`  | The task execution failed due to threading issues. In this case, it can be retried.                                                     |
+| `4`        | `SERVICE_CALL_PERMISSION_DENIED`  | The caller is not allowed to make the service call.                                                                                     |
+| `5`        | `SERVICE_CALL_INVALID_ARGUMENT`   | The request contains invalid data (for example, more than the allowed number of clusters).                                              |
+| `6`        | `SERVICE_CALL_INTERNAL`           | There is an error on the service side.                                                                                                  |
+| `7`        | `SERVICE_CALL_RESOURCE_EXHAUSTED` | The service call is made too frequently.                                                                                                |
 
 ### Step 3: Handle broadcast intents
 
 In addition to making publish content API calls through a job, it is also
 required to set up a
-[`BroadcastReceiver`](https://developer.android.com/reference/android/content/BroadcastReceiver) to receive
+[`BroadcastReceiver`](https://developer.android.com/reference/android/content/BroadcastReceiver) to
+receive
 the request for a content publish.
 
 The goal of broadcast intents is mainly for app reactivation and forcing data
@@ -1022,12 +1076,16 @@ The `BroadcastReceiver` must be set up in the following two ways:
        </receiver>
     </application>
 
-The following [intents](https://developer.android.com/reference/android/content/Intent) is sent by the
+The following [intents](https://developer.android.com/reference/android/content/Intent) is sent by
+the
 service:
 
-- `com.google.android.engage.action.PUBLISH_RECOMMENDATION` It is recommended to start a `publishRecommendationClusters` call when receiving this intent.
-- `com.google.android.engage.action.PUBLISH_FEATURED` It is recommended to start a `publishFeaturedCluster` call when receiving this intent.
-- `com.google.android.engage.action.PUBLISH_CONTINUATION` It is recommended to start a `publishContinuationCluster` call when receiving this intent.
+- `com.google.android.engage.action.PUBLISH_RECOMMENDATION` It is recommended to start a
+  `publishRecommendationClusters` call when receiving this intent.
+- `com.google.android.engage.action.PUBLISH_FEATURED` It is recommended to start a
+  `publishFeaturedCluster` call when receiving this intent.
+- `com.google.android.engage.action.PUBLISH_CONTINUATION` It is recommended to start a
+  `publishContinuationCluster` call when receiving this intent.
 
 ## Integration workflow
 
@@ -1036,7 +1094,8 @@ For a step-by-step guide on verifying your integration after it is complete, see
 
 ## FAQs
 
-See [Engage SDK Frequently Asked Questions](https://developer.android.com/guide/playcore/engage/faq) for
+See [Engage SDK Frequently Asked Questions](https://developer.android.com/guide/playcore/engage/faq)
+for
 FAQs.
 
 ## Contact
@@ -1049,7 +1108,12 @@ any questions during the integration process.
 
 After completing this integration, your next steps are as follows:
 
-- Send an email to [`engage-developers@google.com`](mailto:engage-developers@google.com) and attach your integrated APK that is ready for testing by Google.
-- Google performs a verification and reviews internally to make sure the integration works as expected. If changes are needed, Google contacts you with any necessary details.
-- When testing is complete and no changes are needed, Google contacts you to notify you that you can start publishing the updated and integrated APK to the Play Store.
-- After Google has confirmed that your updated APK has been published to the Play Store, your **Recommendation** , **Featured** , and **Continuation** clusters may be published and visible to users.
+- Send an email to [`engage-developers@google.com`](mailto:engage-developers@google.com) and attach
+  your integrated APK that is ready for testing by Google.
+- Google performs a verification and reviews internally to make sure the integration works as
+  expected. If changes are needed, Google contacts you with any necessary details.
+- When testing is complete and no changes are needed, Google contacts you to notify you that you can
+  start publishing the updated and integrated APK to the Play Store.
+- After Google has confirmed that your updated APK has been published to the Play Store, your *
+  *Recommendation** , **Featured** , and **Continuation** clusters may be published and visible to
+  users.

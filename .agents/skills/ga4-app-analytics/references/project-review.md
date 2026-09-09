@@ -46,7 +46,8 @@ failure or cancellation
 
 Not every step needs an event.
 
-Track the smallest set that can answer useful questions about adoption, progression, abandonment, retention, and value.
+Track the smallest set that can answer useful questions about adoption, progression, abandonment,
+retention, and value.
 
 ### 3. Inspect existing analytics
 
@@ -81,7 +82,8 @@ Build an inventory containing:
 
 ### 4. Inspect screens and navigation
 
-Find meaningful destinations in Navigation, Navigation 3, activities, sheets, dialogs, and adaptive layouts.
+Find meaningful destinations in Navigation, Navigation 3, activities, sheets, dialogs, and adaptive
+layouts.
 
 Decide which surfaces deserve a screen view.
 
@@ -121,13 +123,15 @@ If ads are present, determine:
 - Whether manual paid event or impression revenue logging exists.
 - Whether automatic ad events may already cover proposed analytics.
 
-If purchases are present, inspect how purchase events and revenue are reported before adding new events.
+If purchases are present, inspect how purchase events and revenue are reported before adding new
+events.
 
 ### 7. Inspect consent and privacy
 
 Understand how analytics collection is enabled or disabled and where consent is applied.
 
-Do not introduce a second consent policy in feature code when the project already controls collection centrally.
+Do not introduce a second consent policy in feature code when the project already controls
+collection centrally.
 
 ## Questions the strategy should answer
 
@@ -147,4 +151,5 @@ A good project review should make it possible to answer questions such as:
 
 The review phase produces a strategy, not code changes.
 
-After the review, present options and ask for implementation approval unless the user explicitly requested immediate implementation.
+After the review, present options and ask for implementation approval unless the user explicitly
+requested immediate implementation.

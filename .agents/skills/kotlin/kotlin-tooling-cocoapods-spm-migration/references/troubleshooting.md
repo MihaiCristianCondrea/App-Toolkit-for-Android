@@ -15,11 +15,13 @@ swiftPMImport.<group>.<module>.<ClassName>
 ```
 
 **Steps to fix:**
+
 1. Check `group` property in build.gradle.kts
 2. Replace `-` with `.` in both group and module names
 3. Run `./gradlew build` to see available classes in error messages
 
 **Example:**
+
 ```kotlin
 // If group = "org.jetbrains.kotlin.firebase-sample" and module = "kotlin-library"
 // Import becomes:
@@ -35,6 +37,7 @@ import swiftPMImport.org.jetbrains.kotlin.firebase.sample.kotlin.library.FIRAnal
 **Symptom:** IDE fails to sync project after adding swiftPMDependencies
 
 **Solution:**
+
 1. Invalidate caches: File > Invalidate Caches > Invalidate and Restart
 2. Run `./gradlew --refresh-dependencies`
 3. Check all repository declarations include JetBrains Maven
@@ -55,11 +58,13 @@ import swiftPMImport.org.jetbrains.kotlin.firebase.sample.kotlin.library.FIRAnal
    ```
 
 2. **Verify SPM package is linked in Xcode:**
-   - Open project in Xcode
-   - Check Package Dependencies section
-   - Ensure `KotlinMultiplatformLinkedPackage` is present
+    - Open project in Xcode
+    - Check Package Dependencies section
+    - Ensure `KotlinMultiplatformLinkedPackage` is present
 
-3. **Check framework configuration** — `isStatic = true` is recommended. While `isStatic = false` can work, dynamic frameworks have known edge cases with SwiftPM import (linker errors, dyld crashes, duplicate class warnings). It is required with `dev.gitlive:firebase-*` — see below.
+3. **Check framework configuration** — `isStatic = true` is recommended. While `isStatic = false`
+   can work, dynamic frameworks have known edge cases with SwiftPM import (linker errors, dyld
+   crashes, duplicate class warnings). It is required with `dev.gitlive:firebase-*` — see below.
 
 ---
 
@@ -68,13 +73,15 @@ import swiftPMImport.org.jetbrains.kotlin.firebase.sample.kotlin.library.FIRAnal
 **Symptom:** Xcode can't find the Kotlin module
 
 **Solution:**
+
 1. Clean Xcode build folder: Shift+Cmd+K
 2. Re-run integration:
    ```bash
    ./gradlew :moduleName:integrateLinkagePackage
    ```
 3. Restart Xcode completely
-4. Re-open the correct Xcode project file (`.xcodeproj` if all CocoaPods were removed, `.xcworkspace` if non-KMP CocoaPods remain)
+4. Re-open the correct Xcode project file (`.xcodeproj` if all CocoaPods were removed,
+   `.xcworkspace` if non-KMP CocoaPods remain)
 
 ---
 
@@ -103,7 +110,8 @@ Execution failed for task ':moduleName:checkSandboxAndWriteProtection'.
 
 Or build scripts can't access files or run Gradle.
 
-**Cause:** Xcode 16+ enables User Script Sandboxing by default. The Gradle build phase needs to write to the project directory, which sandboxing prevents.
+**Cause:** Xcode 16+ enables User Script Sandboxing by default. The Gradle build phase needs to
+write to the project directory, which sandboxing prevents.
 
 **Solution:**
 
@@ -111,9 +119,11 @@ Or build scripts can't access files or run Gradle.
    ```bash
    sed -i '' 's/ENABLE_USER_SCRIPT_SANDBOXING = YES/ENABLE_USER_SCRIPT_SANDBOXING = NO/g' /path/to/iosApp/*.xcodeproj/project.pbxproj
    ```
-   If the setting is not present in the `.pbxproj` (Xcode defaults to YES without an explicit entry), open the project in Xcode instead.
+   If the setting is not present in the `.pbxproj` (Xcode defaults to YES without an explicit
+   entry), open the project in Xcode instead.
 
-2. Or disable in Xcode: select app target → Build Settings → Build Options → set "User Script Sandboxing" to NO
+2. Or disable in Xcode: select app target → Build Settings → Build Options → set "User Script
+   Sandboxing" to NO
 
 3. **Important:** After changing the setting, stop the Gradle daemon:
    ```bash
@@ -126,7 +136,9 @@ Or build scripts can't access files or run Gradle.
 
 ### `integrateEmbedAndSign` Skipped or Does Nothing
 
-**Symptom:** Running `integrateEmbedAndSign` completes without errors but the Xcode project is not modified. The `embedAndSignAppleFrameworkForXcode` build phase is not added or remains commented out.
+**Symptom:** Running `integrateEmbedAndSign` completes without errors but the Xcode project is not
+modified. The `embedAndSignAppleFrameworkForXcode` build phase is not added or remains commented
+out.
 
 **Cause:** The project has code that disables `EmbedAndSign` tasks. Common patterns:
 
@@ -147,9 +159,11 @@ This was a CocoaPods-era workaround that inadvertently disables `integrateEmbedA
 
 ### `embedAndSignAppleFrameworkForXcode` Commented Out in Build Phase
 
-**Symptom:** Xcode build succeeds but produces no Kotlin framework. The app crashes at runtime with missing module errors.
+**Symptom:** Xcode build succeeds but produces no Kotlin framework. The app crashes at runtime with
+missing module errors.
 
-**Cause:** The Gradle invocation in the Xcode build phase script was commented out (prefixed with `#`) — possibly a pre-existing state from before migration.
+**Cause:** The Gradle invocation in the Xcode build phase script was commented out (prefixed with
+`#`) — possibly a pre-existing state from before migration.
 
 **Solution:** Open `project.pbxproj` and uncomment the Gradle invocation:
 
@@ -164,9 +178,16 @@ This was a CocoaPods-era workaround that inadvertently disables `integrateEmbedA
 
 ### `cocoapods.*` Class Not Found After Converting to `swiftPMImport.*`
 
-**Symptom:** After replacing `import cocoapods.FirebaseMessaging.FIRMessaging` with `import swiftPMImport.<group>.<module>.FIRMessaging`, the build fails with `Unresolved reference 'FIRMessaging'`. Other swiftPMImport classes (e.g., `GIDSignIn`) resolve fine.
+**Symptom:** After replacing `import cocoapods.FirebaseMessaging.FIRMessaging` with
+`import swiftPMImport.<group>.<module>.FIRMessaging`, the build fails with
+`Unresolved reference 'FIRMessaging'`. Other swiftPMImport classes (e.g., `GIDSignIn`) resolve fine.
 
-**Cause:** A third-party KMP library (e.g., [KMPNotifier](https://github.com/mirzemehdi/KMPNotifier) — `io.github.mirzemehdi:kmpnotifier`) bundles its own pre-built cinterop klib with the `cocoapods.FirebaseMessaging` namespace. The swiftPMDependencies cinterop generator detects these existing bindings and **deliberately skips** generating new bindings for that Clang module to avoid duplicate symbols. The `swiftPMImport.*` bindings for that module simply don't exist.
+**Cause:** A third-party KMP library (
+e.g., [KMPNotifier](https://github.com/mirzemehdi/KMPNotifier) — `io.github.mirzemehdi:kmpnotifier`)
+bundles its own pre-built cinterop klib with the `cocoapods.FirebaseMessaging` namespace. The
+swiftPMDependencies cinterop generator detects these existing bindings and **deliberately skips**
+generating new bindings for that Clang module to avoid duplicate symbols. The `swiftPMImport.*`
+bindings for that module simply don't exist.
 
 **Solution:** Revert the affected imports back to `cocoapods.*`:
 
@@ -176,11 +197,16 @@ import cocoapods.FirebaseMessaging.FIRMessaging
 import cocoapods.FirebaseMessaging.FIRMessagingAPNSTokenType
 ```
 
-The `cocoapods` prefix here is just a package namespace embedded in the library's published artifact — no CocoaPods infrastructure is needed at runtime.
+The `cocoapods` prefix here is just a package namespace embedded in the library's published
+artifact — no CocoaPods infrastructure is needed at runtime.
 
-**How to identify bundled klibs in advance:** Check if the project depends on KMP libraries that wrap iOS SDKs. Known libraries: [KMPNotifier](https://github.com/mirzemehdi/KMPNotifier) (bundles `cocoapods.FirebaseMessaging`). Also check for `linkOnly = true` pod declarations — this indicates the pod was only needed for linking while a KMP library provided the actual bindings.
+**How to identify bundled klibs in advance:** Check if the project depends on KMP libraries that
+wrap iOS SDKs. Known libraries: [KMPNotifier](https://github.com/mirzemehdi/KMPNotifier) (bundles
+`cocoapods.FirebaseMessaging`). Also check for `linkOnly = true` pod declarations — this indicates
+the pod was only needed for linking while a KMP library provided the actual bindings.
 
-**Inspecting klib contents:** Use `klib dump-metadata-signatures` to verify which classes a klib provides ([docs](https://kotlinlang.org/docs/native-libraries.html#using-kotlin-native-compiler)):
+**Inspecting klib contents:** Use `klib dump-metadata-signatures` to verify which classes a klib
+provides ([docs](https://kotlinlang.org/docs/native-libraries.html#using-kotlin-native-compiler)):
 
 ```bash
 # Find the klib
@@ -192,6 +218,7 @@ klib dump-metadata-signatures /path/to/cinterop.klib | grep "FIRMessaging"
 ```
 
 You can also compare before/after migration by dumping the swiftPMImport klib:
+
 ```bash
 # After build, find the swiftPMImport klib
 find . -name "*.klib" -path "*swiftPMImport*" | head -1
@@ -208,16 +235,25 @@ klib dump-metadata-signatures /path/to/swiftPMImport.klib | grep "FIRMessaging"
 ### `framework 'FirebaseCore' not found` (K/N Linker)
 
 **Symptom:** Kotlin/Native linker fails with:
+
 ```
 ld: framework 'FirebaseCore' not found
 ```
-or similar errors for `FirebaseAuth`, `FirebaseFirestore`, etc. The Gradle compilation succeeds but the link step fails.
 
-**Cause:** [firebase-kotlin-sdk](https://github.com/GitLiveApp/firebase-kotlin-sdk) (`dev.gitlive:firebase-*`) was published with CocoaPods-era cinterop klibs. These klibs have `-framework FirebaseCore`, `-framework FirebaseAuth`, etc. baked into their linker metadata. With CocoaPods, those frameworks were in `Pods/` on the search path. With SPM, they land in per-product subdirectories (`$BUILT_PRODUCTS_DIR/FirebaseCore/FirebaseCore.framework`) that the K/N linker doesn't search.
+or similar errors for `FirebaseAuth`, `FirebaseFirestore`, etc. The Gradle compilation succeeds but
+the link step fails.
+
+**Cause:** [firebase-kotlin-sdk](https://github.com/GitLiveApp/firebase-kotlin-sdk) (
+`dev.gitlive:firebase-*`) was published with CocoaPods-era cinterop klibs. These klibs have
+`-framework FirebaseCore`, `-framework FirebaseAuth`, etc. baked into their linker metadata. With
+CocoaPods, those frameworks were in `Pods/` on the search path. With SPM, they land in per-product
+subdirectories (`$BUILT_PRODUCTS_DIR/FirebaseCore/FirebaseCore.framework`) that the K/N linker
+doesn't search.
 
 **Solution (two-part):**
 
 **Part A — Gradle linkerOpts:**
+
 ```kotlin
 iosTarget.binaries.framework {
     val builtProductsDir = System.getenv("BUILT_PRODUCTS_DIR")
@@ -235,11 +271,14 @@ iosTarget.binaries.framework {
 }
 ```
 
-The `if (builtProductsDir != null)` guard ensures `./gradlew :moduleName:compileKotlinIosSimulatorArm64` works without Xcode (compilation doesn't link).
+The `if (builtProductsDir != null)` guard ensures
+`./gradlew :moduleName:compileKotlinIosSimulatorArm64` works without Xcode (compilation doesn't
+link).
 
 **Part B — Xcode FRAMEWORK_SEARCH_PATHS:**
 
 Add matching entries in `project.pbxproj` for both Debug and Release `buildSettings`:
+
 ```
 FRAMEWORK_SEARCH_PATHS = (
     "$(inherited)",
@@ -254,13 +293,18 @@ FRAMEWORK_SEARCH_PATHS = (
 
 ### `dyld: Library not loaded: @rpath/FirebaseCore.framework/FirebaseCore` (Runtime Crash)
 
-**Symptom:** The Gradle build and Xcode compilation both succeed, but the app crashes at launch with:
+**Symptom:** The Gradle build and Xcode compilation both succeed, but the app crashes at launch
+with:
+
 ```
 dyld: Library not loaded: @rpath/FirebaseCore.framework/FirebaseCore
   Referenced from: .../ComposeApp.framework/ComposeApp
 ```
 
-**Cause:** The KMP framework is **dynamic** (`isStatic = false` or default). The K/N linker creates `LC_LOAD_DYLIB` entries (`@rpath/FirebaseCore.framework/FirebaseCore`). Firebase SPM products are **static** libraries — their `.framework` bundles exist in `$BUILT_PRODUCTS_DIR` during build but are NOT embedded in the app bundle. At runtime, `dyld` searches `@rpath` and finds nothing.
+**Cause:** The KMP framework is **dynamic** (`isStatic = false` or default). The K/N linker creates
+`LC_LOAD_DYLIB` entries (`@rpath/FirebaseCore.framework/FirebaseCore`). Firebase SPM products are *
+*static** libraries — their `.framework` bundles exist in `$BUILT_PRODUCTS_DIR` during build but are
+NOT embedded in the app bundle. At runtime, `dyld` searches `@rpath` and finds nothing.
 
 **Solution:** Switch to a static framework:
 
@@ -271,12 +315,17 @@ iosTarget.binaries.framework {
 }
 ```
 
-With a static framework, all symbols are embedded in the `.a` archive. No `LC_LOAD_DYLIB` entries are created. Unresolved `-framework` flags from dev.gitlive klibs are deferred to the final Xcode app link, where `KotlinMultiplatformLinkedPackage` provides them.
+With a static framework, all symbols are embedded in the `.a` archive. No `LC_LOAD_DYLIB` entries
+are created. Unresolved `-framework` flags from dev.gitlive klibs are deferred to the final Xcode
+app link, where `KotlinMultiplatformLinkedPackage` provides them.
 
 **After switching to static, also:**
+
 1. Re-run `integrateLinkagePackage` — regenerates `Package.swift` with `type: .none` (static)
-2. Remove any "Embed Frameworks" copy phase for the KMP framework — static frameworks must NOT be embedded
-3. Add linker flags previously resolved by the K/N linker (e.g., `-framework Accelerate`, `-weak_framework CoreML`) to `OTHER_LDFLAGS` in the Xcode project
+2. Remove any "Embed Frameworks" copy phase for the KMP framework — static frameworks must NOT be
+   embedded
+3. Add linker flags previously resolved by the K/N linker (e.g., `-framework Accelerate`,
+   `-weak_framework CoreML`) to `OTHER_LDFLAGS` in the Xcode project
 
 ---
 
@@ -284,11 +333,14 @@ With a static framework, all symbols are embedded in the `.a` archive. No `LC_LO
 
 ### cinterop Failures on C++ Modules (gRPC, abseil, leveldb, BoringSSL)
 
-**Symptom:** Build fails with cinterop errors on modules like `grpc`, `absl`, `leveldb`, `openssl_grpc`, or other C++ transitive dependencies of Firebase.
+**Symptom:** Build fails with cinterop errors on modules like `grpc`, `absl`, `leveldb`,
+`openssl_grpc`, or other C++ transitive dependencies of Firebase.
 
-**Cause:** `discoverClangModulesImplicitly = true` (the default) makes Kotlin attempt cinterop on every Clang module in the dependency graph, including C++ modules that are not compatible.
+**Cause:** `discoverClangModulesImplicitly = true` (the default) makes Kotlin attempt cinterop on
+every Clang module in the dependency graph, including C++ modules that are not compatible.
 
-**Solution:** Set `discoverClangModulesImplicitly = false` and explicitly list only the Firebase Clang modules you need:
+**Solution:** Set `discoverClangModulesImplicitly = false` and explicitly list only the Firebase
+Clang modules you need:
 
 ```kotlin
 swiftPMDependencies {
@@ -309,18 +361,20 @@ See [common-pods-mapping.md](common-pods-mapping.md) for the full importedClangM
 
 ### Firebase Classes Not Found (Wrong Clang Module Name)
 
-**Symptom:** `Unresolved reference` for Firebase classes like `FIRDatabase`, `FIRRemoteConfig`, `FIRFirestore`, `FIRInAppMessaging` even though the product is listed.
+**Symptom:** `Unresolved reference` for Firebase classes like `FIRDatabase`, `FIRRemoteConfig`,
+`FIRFirestore`, `FIRInAppMessaging` even though the product is listed.
 
-**Cause:** Several Firebase products expose ObjC headers through Clang modules whose names differ from the SPM product name. Using the product name in `importedClangModules` won't find the headers.
+**Cause:** Several Firebase products expose ObjC headers through Clang modules whose names differ
+from the SPM product name. Using the product name in `importedClangModules` won't find the headers.
 
 **Solution:** Use the correct internal Clang module names:
 
-| SPM Product | Correct importedClangModules entry |
-|---|---|
-| FirebaseDatabase | `FirebaseDatabaseInternal` |
-| FirebaseFirestore | `FirebaseFirestoreInternal` |
-| FirebaseInAppMessaging-Beta | `FirebaseInAppMessagingInternal` |
-| FirebaseRemoteConfig | `FirebaseRemoteConfigInternal` |
+| SPM Product                 | Correct importedClangModules entry |
+|-----------------------------|------------------------------------|
+| FirebaseDatabase            | `FirebaseDatabaseInternal`         |
+| FirebaseFirestore           | `FirebaseFirestoreInternal`        |
+| FirebaseInAppMessaging-Beta | `FirebaseInAppMessagingInternal`   |
+| FirebaseRemoteConfig        | `FirebaseRemoteConfigInternal`     |
 
 ---
 
@@ -328,7 +382,8 @@ See [common-pods-mapping.md](common-pods-mapping.md) for the full importedClangM
 
 **Symptom:** Can't import FIRFirestore classes
 
-**Cause:** Firestore's Clang module name differs from product name. The internal Clang module exposed to Objective-C is `FirebaseFirestoreInternal`, not `FirebaseFirestore`.
+**Cause:** Firestore's Clang module name differs from product name. The internal Clang module
+exposed to Objective-C is `FirebaseFirestoreInternal`, not `FirebaseFirestore`.
 
 **Solution:** Add explicit importedClangModules:
 
@@ -345,9 +400,12 @@ swiftPackage(
 
 ### Firebase Crashlytics: dSYM Upload Script Broken After Migration
 
-**Symptom:** Crash reports don't appear in Firebase Console after migrating to SPM. Or the build phase fails with "No such file" errors referencing `${PODS_ROOT}/FirebaseCrashlytics/upload-symbols`.
+**Symptom:** Crash reports don't appear in Firebase Console after migrating to SPM. Or the build
+phase fails with "No such file" errors referencing
+`${PODS_ROOT}/FirebaseCrashlytics/upload-symbols`.
 
-**Cause:** The CocoaPods-era dSYM upload script references `${PODS_ROOT}` which no longer exists. The SPM equivalent is at a different path.
+**Cause:** The CocoaPods-era dSYM upload script references `${PODS_ROOT}` which no longer exists.
+The SPM equivalent is at a different path.
 
 **Solution:** Update the existing "Run Script" build phase (or add one at the END if none exists):
 
@@ -356,6 +414,7 @@ swiftPackage(
 ```
 
 With input files:
+
 ```
 ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}
 ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}
@@ -364,7 +423,8 @@ $(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plis
 $(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)
 ```
 
-Also set **Debug Information Format** to `DWARF with dSYM File` for all build configurations in Build Settings.
+Also set **Debug Information Format** to `DWARF with dSYM File` for all build configurations in
+Build Settings.
 
 ---
 
@@ -375,6 +435,7 @@ Also set **Debug Information Format** to `DWARF with dSYM File` for all build co
 **Cause:** Beta products have a `-Beta` suffix in SPM.
 
 **Solution:** Use the correct SPM product name:
+
 - `FirebaseInAppMessaging` → `FirebaseInAppMessaging-Beta`
 - `FirebaseAppDistribution` → `FirebaseAppDistribution-Beta`
 
@@ -383,14 +444,22 @@ Also set **Debug Information Format** to `DWARF with dSYM File` for all build co
 ### dyld Crash When Mixing Firebase Across CocoaPods and SPM
 
 **Symptom:** App crashes at launch with a dyld error like:
+
 ```
 Symbol not found: _OBJC_CLASS_$_FIRFirestore
 ```
-or similar `_OBJC_CLASS_$_FIR*` symbol-not-found errors. The Gradle build and Xcode compilation both succeed, but the app crashes at runtime.
 
-**Cause:** Some Firebase pods were migrated to SPM while others remained in CocoaPods. All Firebase products share transitive dependencies (gRPC, abseil, leveldb, BoringSSL, nanopb). Having both package managers link these transitive dependencies causes duplicate/conflicting symbols that the dynamic linker cannot resolve.
+or similar `_OBJC_CLASS_$_FIR*` symbol-not-found errors. The Gradle build and Xcode compilation both
+succeed, but the app crashes at runtime.
 
-**Solution:** Migrate **all** Firebase pods to SPM at once. This includes Swift-only pods (FirebaseAI, FirebaseFunctions, FirebaseMLModelDownloader) that Kotlin cannot use directly — add them as `products` entries without `importedClangModules`:
+**Cause:** Some Firebase pods were migrated to SPM while others remained in CocoaPods. All Firebase
+products share transitive dependencies (gRPC, abseil, leveldb, BoringSSL, nanopb). Having both
+package managers link these transitive dependencies causes duplicate/conflicting symbols that the
+dynamic linker cannot resolve.
+
+**Solution:** Migrate **all** Firebase pods to SPM at once. This includes Swift-only pods (
+FirebaseAI, FirebaseFunctions, FirebaseMLModelDownloader) that Kotlin cannot use directly — add them
+as `products` entries without `importedClangModules`:
 
 ```kotlin
 products = listOf(
@@ -413,6 +482,7 @@ After adding new products, re-run `integrateLinkagePackage` to regenerate the li
 **Symptom:** App crashes on Firebase initialization
 
 **Solution:**
+
 1. Ensure `GoogleService-Info.plist` is in iOS app target
 2. Call `FIRApp.configure()` before using any Firebase service
 3. Check Firebase console for configuration issues
@@ -445,15 +515,18 @@ Check [releases page](https://github.com/googlemaps/ios-maps-sdk/releases) for v
 
 ### KSP after updating Kotlin version
 
-KSP should generally work with the target Kotlin version without any changes. Do NOT update KSP as part of the migration — it is out of scope.
+KSP should generally work with the target Kotlin version without any changes. Do NOT update KSP as
+part of the migration — it is out of scope.
 
-If KSP does fail (unlikely), the issue is unrelated to the CocoaPods-to-SwiftPM migration itself. Present the error to the user and let them decide how to handle it separately.
+If KSP does fail (unlikely), the issue is unrelated to the CocoaPods-to-SwiftPM migration itself.
+Present the error to the user and let them decide how to handle it separately.
 
 ---
 
 ## Manual Integration Command Discovery
 
-If the xcodebuild approach in Phase 5.1 fails, discover paths manually and run integration tasks directly:
+If the xcodebuild approach in Phase 5.1 fails, discover paths manually and run integration tasks
+directly:
 
 ```bash
 # Find iOS project directory (contains Podfile)
@@ -474,7 +547,8 @@ GRADLE_PROJECT_PATH=":$KMP_MODULE" \
 
 ## Manual CocoaPods Deintegration from pbxproj
 
-If `pod deintegrate` is not available, manually remove these CocoaPods references from `project.pbxproj`:
+If `pod deintegrate` is not available, manually remove these CocoaPods references from
+`project.pbxproj`:
 
 - `Pods_<target>.framework` build file and file reference
 - `Pods-<target>.debug.xcconfig` / `Pods-<target>.release.xcconfig` file references
@@ -487,7 +561,8 @@ If `pod deintegrate` is not available, manually remove these CocoaPods reference
 
 ## Manual Xcode Integration Steps
 
-If the automatic `integrateEmbedAndSign` / `integrateLinkagePackage` tasks fail, set up the Xcode project manually:
+If the automatic `integrateEmbedAndSign` / `integrateLinkagePackage` tasks fail, set up the Xcode
+project manually:
 
 1. Open `.xcodeproj` (or `.xcworkspace` if non-KMP CocoaPods remain)
 2. Add "Compile Kotlin" run script phase BEFORE "Compile Sources":
@@ -495,7 +570,8 @@ If the automatic `integrateEmbedAndSign` / `integrateLinkagePackage` tasks fail,
    cd "$SRCROOT/.."
    ./gradlew :moduleName:embedAndSignAppleFrameworkForXcode
    ```
-3. Set `ENABLE_USER_SCRIPT_SANDBOXING = NO` (Build Settings → Build Options → User Script Sandboxing)
+3. Set `ENABLE_USER_SCRIPT_SANDBOXING = NO` (Build Settings → Build Options → User Script
+   Sandboxing)
 4. Run `./gradlew --stop` to restart the Gradle daemon after changing sandboxing
 5. Add local package: `../moduleName/KotlinMultiplatformLinkedPackage`
 
@@ -505,19 +581,25 @@ If the automatic `integrateEmbedAndSign` / `integrateLinkagePackage` tasks fail,
 
 **Do NOT revert the migration as a first response.** Instead:
 
-1. **Read the full error log** — identify the actual failure type (Gradle resolution, import not found, linker error, Xcode build phase)
-2. **Re-check each migration phase** — walk through Phases 2-6 and verify each step was applied. Common mistakes:
-   - Missing JetBrains Maven repo in `settings.gradle.kts`
-   - Wrong `group` or module name in import namespace (dashes not converted to dots)
-   - `cocoapods {}` block or plugin not fully removed (Phase 6)
-   - Wrong Xcode project file opened (`.xcodeproj` when non-KMP CocoaPods remain and `.xcworkspace` is needed, or vice versa)
-   - `isStatic = true` missing from framework config (required with dev.gitlive or similar CocoaPods-era wrapper klibs)
-   - `integrateLinkagePackage` not run
-   - EmbedAndSign disabler code not removed (prevents `integrateEmbedAndSign`)
-   - `embedAndSignAppleFrameworkForXcode` commented out in Xcode build phase
-   - `cocoapods.*` imports replaced that should have been preserved (bundled klib from third-party library)
+1. **Read the full error log** — identify the actual failure type (Gradle resolution, import not
+   found, linker error, Xcode build phase)
+2. **Re-check each migration phase** — walk through Phases 2-6 and verify each step was applied.
+   Common mistakes:
+    - Missing JetBrains Maven repo in `settings.gradle.kts`
+    - Wrong `group` or module name in import namespace (dashes not converted to dots)
+    - `cocoapods {}` block or plugin not fully removed (Phase 6)
+    - Wrong Xcode project file opened (`.xcodeproj` when non-KMP CocoaPods remain and `.xcworkspace`
+      is needed, or vice versa)
+    - `isStatic = true` missing from framework config (required with dev.gitlive or similar
+      CocoaPods-era wrapper klibs)
+    - `integrateLinkagePackage` not run
+    - EmbedAndSign disabler code not removed (prevents `integrateEmbedAndSign`)
+    - `embedAndSignAppleFrameworkForXcode` commented out in Xcode build phase
+    - `cocoapods.*` imports replaced that should have been preserved (bundled klib from third-party
+      library)
 3. **Consult the sections above** for specific error patterns
-4. **If unsure, present options to the user** — describe what the logs show, list possible causes, and let the user decide
+4. **If unsure, present options to the user** — describe what the logs show, list possible causes,
+   and let the user decide
 
 ---
 
@@ -553,6 +635,7 @@ kotlin {
 ### Step 3: Restore Kotlin Imports
 
 Change all imports back:
+
 ```kotlin
 // FROM:
 import swiftPMImport.group.module.ClassName
@@ -580,8 +663,8 @@ Open `*.xcworkspace` (not .xcodeproj) from the iOS project directory in Xcode.
 If issues persist:
 
 1. **Check sample projects:**
-   - [kmp-with-cocoapods-compose-sample (spm_import branch)](https://github.com/Kotlin/kmp-with-cocoapods-compose-sample/tree/spm_import)
-   - [kmp-with-cocoapods-firebase-sample (spm_import branch)](https://github.com/Kotlin/kmp-with-cocoapods-firebase-sample/tree/spm_import)
+    - [kmp-with-cocoapods-compose-sample (spm_import branch)](https://github.com/Kotlin/kmp-with-cocoapods-compose-sample/tree/spm_import)
+    - [kmp-with-cocoapods-firebase-sample (spm_import branch)](https://github.com/Kotlin/kmp-with-cocoapods-firebase-sample/tree/spm_import)
 
 2. **Run verbose build:**
    ```bash
@@ -589,9 +672,10 @@ If issues persist:
    ```
 
 3. **Check generated files:**
-   - Look in `moduleName/KotlinMultiplatformLinkedPackage/` for Package.swift
+    - Look in `moduleName/KotlinMultiplatformLinkedPackage/` for Package.swift
 
-4. **Inspect klib contents** using the `klib` tool ([docs](https://kotlinlang.org/docs/native-libraries.html#using-kotlin-native-compiler)):
+4. **Inspect klib contents** using the `klib`
+   tool ([docs](https://kotlinlang.org/docs/native-libraries.html#using-kotlin-native-compiler)):
    ```bash
    # Dump all API signatures from a klib
    klib dump-metadata-signatures /path/to/library.klib
@@ -603,4 +687,5 @@ If issues persist:
    find . -name "*.klib" -path "*swiftPMImport*"     # new swiftPMImport klibs
    find ~/.gradle/caches -name "*.klib" -path "*libraryName*"  # third-party klibs
    ```
-   This is particularly useful for verifying which classes are available in the swiftPMImport klib vs. bundled in third-party dependency klibs.
+   This is particularly useful for verifying which classes are available in the swiftPMImport klib
+   vs. bundled in third-party dependency klibs.

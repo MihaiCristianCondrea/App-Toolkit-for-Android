@@ -9,17 +9,26 @@ AppFunctions API in version 1.0.0-alpha09 and lower to the compile-time
 
 In lower versions of the AppFunctions API, for example version `1.0.0-alpha09`:
 
-- Applications require separate dependencies for core functionality, specifically `androidx.appfunctions:appfunctions`, and service components, specifically `androidx.appfunctions:appfunctions-service`.
+- Applications require separate dependencies for core functionality, specifically
+  `androidx.appfunctions:appfunctions`, and service components, specifically
+  `androidx.appfunctions:appfunctions-service`.
 - The application implements `AppFunctionConfiguration.Provider` on its `Application` class.
-- You manually register enclosing class instantiation using `AppFunctionConfiguration.Builder().addEnclosingClassFactory(...)`.
+- You manually register enclosing class instantiation using
+  `AppFunctionConfiguration.Builder().addEnclosingClassFactory(...)`.
 - You place metadata property tags directly under `<application>`.
 
 In version `1.0.0-alpha10` featuring `@AppFunctionServiceEntryPoint`:
 
-- The core and service dependencies are consolidated into a single runtime artifact, `androidx.appfunctions:appfunctions`, which eliminates the need for the standalone `appfunctions-service` library.
-- A dedicated wrapper class extending `AppFunctionService` is annotated with `@AppFunctionServiceEntryPoint` and Hilt's `@AndroidEntryPoint` or an alternative dependency injection framework.
-- The KSP compiler generates a concrete service subclass and an XML metadata schema file in `assets/`.
-- The OS discovers and routes executions using a consolidated `<service>` and `app_metadata` declaration in `AndroidManifest.xml`.
+- The core and service dependencies are consolidated into a single runtime artifact,
+  `androidx.appfunctions:appfunctions`, which eliminates the need for the standalone
+  `appfunctions-service` library.
+- A dedicated wrapper class extending `AppFunctionService` is annotated with
+  `@AppFunctionServiceEntryPoint` and Hilt's `@AndroidEntryPoint` or an alternative dependency
+  injection framework.
+- The KSP compiler generates a concrete service subclass and an XML metadata schema file in
+  `assets/`.
+- The OS discovers and routes executions using a consolidated `<service>` and `app_metadata`
+  declaration in `AndroidManifest.xml`.
 
 ### Strict migration requirements from 1.0.0-alpha09 to 1.0.0-alpha10
 
@@ -27,10 +36,17 @@ When focusing solely on the mandatory API changes required by the new
 `@AppFunctionServiceEntryPoint` architecture, the migration consists of four
 strict requirements that you must complete:
 
-1. **Build dependency consolidation** : Remove the merged `appfunctions-service` dependency while retaining core `appfunctions` and the KSP compiler.
-2. **Service wrapper creation** : Replace the legacy `AppFunctionConfiguration.Provider` on the `Application` class with an abstract class extending `AppFunctionService`, annotated with `@AppFunctionServiceEntryPoint`.
-3. **Annotation and context decoupling** : Move `@AppFunction` annotations to the new wrapper methods and drop `AppFunctionContext` parameters because `AppFunctionService` inherits directly from `Context`.
-4. **Manifest registration** : Register the KSP-generated concrete service in `AndroidManifest.xml` with `BIND_APP_FUNCTION_SERVICE`, the `AppFunctionService` intent filter, and metadata property tags.
+1. **Build dependency consolidation** : Remove the merged `appfunctions-service` dependency while
+   retaining core `appfunctions` and the KSP compiler.
+2. **Service wrapper creation** : Replace the legacy `AppFunctionConfiguration.Provider` on the
+   `Application` class with an abstract class extending `AppFunctionService`, annotated with
+   `@AppFunctionServiceEntryPoint`.
+3. **Annotation and context decoupling** : Move `@AppFunction` annotations to the new wrapper
+   methods and drop `AppFunctionContext` parameters because `AppFunctionService` inherits directly
+   from `Context`.
+4. **Manifest registration** : Register the KSP-generated concrete service in `AndroidManifest.xml`
+   with `BIND_APP_FUNCTION_SERVICE`, the `AppFunctionService` intent filter, and metadata property
+   tags.
 
 *** ** * ** ***
 
@@ -60,7 +76,10 @@ within the main `appfunctions` artifact.
     androidx-appfunctions-compiler = { module = "androidx.appfunctions:appfunctions-compiler", version.ref = "appfunctions" }
 
 > [!NOTE]
-> **Note:** If another dependency in your project uses snapshot builds like `1.0.0-SNAPSHOT` or custom snapshot repositories from `https://androidx.dev/snapshots/...`, preserve your custom snapshot repository configuration in `settings.gradle.kts`. Otherwise, standard Google Maven repositories resolve `1.0.0-alpha10` directly.
+> **Note:** If another dependency in your project uses snapshot builds like `1.0.0-SNAPSHOT` or
+> custom snapshot repositories from `https://androidx.dev/snapshots/...`, preserve your custom
+> snapshot repository configuration in `settings.gradle.kts`. Otherwise, standard Google Maven
+> repositories resolve `1.0.0-alpha10` directly.
 
 *** ** * ** ***
 
@@ -75,7 +94,6 @@ annotated with `@AppFunctionServiceEntryPoint`.
 
 Annotate your service with `@AndroidEntryPoint` and inject your data
 repositories or use cases using standard `@Inject internal lateinit var`:
-
 
 ```kotlin
 @RequiresApi(36)
@@ -109,7 +127,6 @@ Locators. Because `AppFunctionService` inherits from Android
 application's DI container directly through `applicationContext` in property
 getters or during service lifecycle execution:
 
-
 ```kotlin
 @RequiresApi(36)
 @AppFunctionServiceEntryPoint(
@@ -138,7 +155,10 @@ abstract class ServiceLocatorBaseAppFunctionService : AppFunctionService() {
 <br />
 
 > [!IMPORTANT]
-> **Important:** The `appFunctionXmlFileName` parameter, for example `"my_app_function_service"`, mustn't include the `.xml` extension, as the KSP compiler automatically appends `.xml`. Passing `"my_app_function_service.xml"` results in the asset being named `"my_app_function_service.xml.xml"`.
+> **Important:** The `appFunctionXmlFileName` parameter, for example `"my_app_function_service"`,
+> mustn't include the `.xml` extension, as the KSP compiler automatically appends `.xml`. Passing
+`"my_app_function_service.xml"` results in the asset being named
+`"my_app_function_service.xml.xml"`.
 
 *** ** * ** ***
 
@@ -180,7 +200,6 @@ than creating redundant abstraction layers around the OS service.
 Register the KSP-generated service declaration and `app_metadata` property
 inside your module manifest, for example in `src/main/AndroidManifest.xml`
 within the `<application>` tag:
-
 
 ```xml
 <service

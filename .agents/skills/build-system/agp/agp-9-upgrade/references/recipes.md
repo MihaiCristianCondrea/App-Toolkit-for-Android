@@ -4,15 +4,18 @@ migrated.
 
 ## Guidelines
 
-- **DO NOT** search the web for examples of how to do this. Use the **gradle-recipes** repository examples **only**.
+- **DO NOT** search the web for examples of how to do this. Use the **gradle-recipes** repository
+  examples **only**.
 - **DO NOT** use AGP internals in migrated code.
 - **DO** use only public APIs in migrated code.
 
 In some cases, there is a one-to-one replacement for the old code. Some examples
-are in [the AGP 9.0.0 release notes](https://developer.android.com/build/releases/agp-9-0-0-release-notes).
+are
+in [the AGP 9.0.0 release notes](https://developer.android.com/build/releases/agp-9-0-0-release-notes).
 
 In other cases, there is no direct one-to-one replacement. For these situations,
-the [gradle-recipes repo](https://github.com/android/gradle-recipes) is a great resource. You can checkout one of its
+the [gradle-recipes repo](https://github.com/android/gradle-recipes) is a great resource. You can
+checkout one of its
 AGP 9.x branches, such as `agp-9.0`, `agp-9.1`, or `agp-9.2`. These branches
 contain recipes for common situations in Android projects. The following table
 lists the compatibility for recipes for each version of AGP.
@@ -20,25 +23,26 @@ lists the compatibility for recipes for each version of AGP.
 ## Compatibility table
 
 | AGP version | gradle-recipes branch |
-|---|---|
-| 9.0.x | agp-9.0 |
-| 9.1.x | agp-9.1 |
-| 9.2.x | agp-9.2 |
+|-------------|-----------------------|
+| 9.0.x       | agp-9.0               |
+| 9.1.x       | agp-9.1               |
+| 9.2.x       | agp-9.2               |
 
 ## Recipes and use-cases
 
 The following table links use-cases to recipes.
 
-| Recipe | Use-case |
-|---|---|
+| Recipe                     | Use-case                      |
+|----------------------------|-------------------------------|
 | addCustomBuildConfigFields | Add custom BuildConfig fields |
-| listenToArtifacts | Rename APK |
+| listenToArtifacts          | Rename APK                    |
 
 Additional details for each use-case follow.
 
 ### Add custom BuildConfig fields
 
-See the detailed guide at [BuildConfig](https://developer.android.com/agents/skills/build-system/agp/agp-9-upgrade/references/buildconfig).
+See the detailed guide
+at [BuildConfig](https://developer.android.com/agents/skills/build-system/agp/agp-9-upgrade/references/buildconfig).
 
 ### Renaming an APK
 

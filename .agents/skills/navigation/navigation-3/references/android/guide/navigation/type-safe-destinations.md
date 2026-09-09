@@ -11,11 +11,13 @@ requirements:
 2. **Kotlin serialization plugin**:
 3. Add the plugin to `libs.versions.toml`:
 
-    [libraries]
-    kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+   [libraries]
+   kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json",
+   version.ref = "kotlinxSerializationJson" }
 
-    [plugins]
-    kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+   [plugins]
+   kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "
+   kotlin" }
 
 - Add the dependencies to your top-level `build.gradle.kts` and module-level `build.gradle.kts`.
 
@@ -101,18 +103,18 @@ If you use a `ViewModel`, you can now extract the route object directly from the
 If you need to pass complex data classes (not just primitives), you must define
 a custom `NavType`.
 
-1. **Create the Custom Type** : \`\`\`kotlin val SearchFilterType = object : NavType(isNullableAllowed = false) { override fun get(bundle: Bundle, key: String): SearchFilter? = Json.decodeFromString(bundle.getString(key) ?: return null)
+1. **Create the Custom Type** : \`\`\`kotlin val SearchFilterType = object : NavType(
+   isNullableAllowed = false) { override fun get(bundle: Bundle, key: String): SearchFilter? =
+   Json.decodeFromString(bundle.getString(key) ?: return null)
 
-    override fun parseValue(value: String): SearchFilter =
-        Json.decodeFromString(Uri.decode(value))
+   override fun parseValue(value: String): SearchFilter =
+   Json.decodeFromString(Uri.decode(value))
 
-    override fun put(bundle: Bundle, key: String, value: SearchFilter) {
-        bundle.putString(key, Json.encodeToString(value))
-    }
+   override fun put(bundle: Bundle, key: String, value: SearchFilter) {
+   bundle.putString(key, Json.encodeToString(value))
+   }
 
 }
-
-
 
     2. **Register it in the Graph**:
     ```kotlin
@@ -122,8 +124,11 @@ a custom `NavType`.
 
 ## Best practices and tips
 
-- **Sealed Hierarchies**: For large apps, group your routes using a sealed interface or class to keep the navigation structure organized
-- **Object Instances** : For routes without parameters, always use `object` instead of `class` to avoid unnecessary allocations
+- **Sealed Hierarchies**: For large apps, group your routes using a sealed interface or class to
+  keep the navigation structure organized
+- **Object Instances** : For routes without parameters, always use `object` instead of `class` to
+  avoid unnecessary allocations
 - **Nullable Types** : The new API supports nullable types (for example, `data
   class Search(val query: String?)`) and provides default values automatically
-- **Testing** : Use `navController.currentBackStackEntry?.hasRoute<T>()` to check the current destination in a type-safe manner during UI tests
+- **Testing** : Use `navController.currentBackStackEntry?.hasRoute<T>()` to check the current
+  destination in a type-safe manner during UI tests
