@@ -21,7 +21,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ic
  * Picks which of the two icons of a component has to be rendered.
  *
  * The rules cover the three combinations the toolkit supports:
- * - **Static only** (vector and/or drawable resource): [selectedIcon] while [selected], [icon] otherwise.
+ * - **Static only** (vector, drawable resource, and/or bitmap): [selectedIcon] while [selected],
+ *   [icon] otherwise.
  * - **Static normal icon + animated selected icon**: the static [icon] is shown until the component
  *   is either selected or clicked at least once ([interacted]); from then on the AVD is rendered so
  *   it can play. This is the "`Icons.Rounded.Share` at rest, animation on click" case. The first
