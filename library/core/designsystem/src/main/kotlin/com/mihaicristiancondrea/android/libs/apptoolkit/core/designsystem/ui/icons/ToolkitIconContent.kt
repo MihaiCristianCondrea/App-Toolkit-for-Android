@@ -21,6 +21,7 @@ import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
 import androidx.compose.animation.graphics.res.animatedVectorResource
 import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
+import androidx.compose.foundation.Image
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
@@ -34,13 +35,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import kotlinx.coroutines.delay
 
 /**
- * Renders a single [ToolkitIcon] exactly as described: a Compose [ImageVector],
- * a static drawable/vector resource, or one frame state of an Animated Vector Drawable.
+ * Renders a single [ToolkitIcon] exactly as described: a Compose [ImageVector], a static
+ * drawable/vector resource, a runtime bitmap, or one frame state of an animated source.
  *
  * This composable is intentionally stateless. Deciding *which* icon a navigation item shows,
  * and whether an AVD currently rests on its first or last frame, is the job of
@@ -56,7 +58,7 @@ import kotlinx.coroutines.delay
  *   matters for an icon that loops [ToolkitIconLoopTrigger.OnInteraction]: `false`, the default,
  *   keeps such an icon resting, and a stateless caller with nothing to interact with can leave it
  *   there.
- * @param tint Tint color to apply to the icon, defaults to [LocalContentColor].
+ * @param tint Tint color to apply to tintable icon sources, defaults to [LocalContentColor].
  */
 @OptIn(ExperimentalAnimationGraphicsApi::class)
 @Composable
@@ -78,6 +80,7 @@ fun ToolkitIconContent(
             tint = tint,
             looping = looping,
         )
+
         is ToolkitIcon.Vector -> {
             Icon(
                 imageVector = icon.imageVector,
@@ -93,6 +96,19 @@ fun ToolkitIconContent(
                 contentDescription = contentDescription,
                 modifier = modifier,
                 tint = tint,
+            )
+        }
+
+        is ToolkitIcon.Bitmap -> {
+            Image(
+                bitmap = icon.imageBitmap,
+                contentDescription = contentDescription,
+                modifier = modifier,
+                colorFilter = if (icon.tintable && tint != Color.Unspecified) {
+                    ColorFilter.tint(color = tint)
+                } else {
+                    null
+                },
             )
         }
 
