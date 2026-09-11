@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -76,6 +77,26 @@ class GeneralButtonTest {
         compose.onNodeWithContentDescription("Next page").assertHasClickAction()
         compose.onAllNodesWithText("Next", useUnmergedTree = true).assertCountEquals(0)
     }
+
+    @Test fun bitmapIconRendersAndKeepsButtonInteraction() {
+        val bitmap = Bitmap.createBitmap(2, 2, Bitmap.Config.ARGB_8888).apply {
+            eraseColor(android.graphics.Color.MAGENTA)
+        }.asImageBitmap()
+        var clicks = 0
+        compose.setContent {
+            MaterialTheme {
+                GeneralButton(
+                    onClick = { clicks++ },
+                    icon = ToolkitIcon.Bitmap(imageBitmap = bitmap),
+                    contentDescription = "Bitmap action",
+                )
+            }
+        }
+
+        compose.onNodeWithContentDescription("Bitmap action").assertHasClickAction().performClick()
+        compose.runOnIdle { assertEquals(1, clicks) }
+    }
+
     @Test fun styleMatrixRendersLabelledAndIconOnlyForms() {
         var clicks = 0
         compose.setContent {
