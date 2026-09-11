@@ -31,17 +31,17 @@ import androidx.compose.ui.graphics.Color
 
 /**
  * Renders the icon of a clickable component, mixing the unselected and selected icons with the
- * click driven playback of Animated Vector Drawables.
+ * click driven playback of animated sources.
  *
  * Behavior, per icon combination:
- * - Two static icons (vector or drawable resource): the icon is swapped on selection, nothing
- *   animates.
+ * - Two static icons (vector, drawable resource, or bitmap): the icon is swapped on selection,
+ *   nothing animates.
  * - Static unselected icon + animated selected icon: the static icon is shown at rest; the first
- *   click swaps in the AVD and plays it forward, and every further click plays it again, so a
- *   repeatedly clicked action such as *Share* animates every single time.
- * - A single AVD used for both states: the drawable rests on its first frame while unselected and on
- *   its last frame while selected, and still replays on every click.
- * - Animated unselected icon + static selected icon: the AVD plays while the component is
+ *   click swaps in the animated source and plays it forward, and every further click plays it again,
+ *   so a repeatedly clicked action such as *Share* animates every single time.
+ * - A single animated icon used for both states: the artwork rests on its first frame while
+ *   unselected and on its last frame while selected, and still replays on every click.
+ * - Animated unselected icon + static selected icon: the animation plays while the component is
  *   unselected, and the static icon takes over once it is selected.
  *
  * A repeated click restarts the animation from its first frame by default. Drawables that morph
