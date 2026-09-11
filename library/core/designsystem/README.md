@@ -81,12 +81,13 @@ items, bottom bar and rail items, and `GeneralButton`. It lives in
 `:library:core:designsystem`, package
 `com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons`.
 
-### The four sources
+### The five sources
 
 | Source                              | Declares                                                   | Animates                                |
 |-------------------------------------|------------------------------------------------------------|-----------------------------------------|
 | `ToolkitIcon.Vector(imageVector)`   | A Compose `ImageVector`, for example `Icons.Rounded.Share` | No                                      |
 | `ToolkitIcon.Resource(resId)`       | A drawable or vector XML resource, drawn through a painter | No                                      |
+| `ToolkitIcon.Bitmap(imageBitmap)`   | A runtime Compose `ImageBitmap`                            | No                                      |
 | `ToolkitIcon.AnimatedVector(resId)` | An `animated-vector` resource                              | Yes, on click and on selection          |
 | `ToolkitIcon.Lottie(resId)`         | Lottie JSON in `res/raw`                                   | Yes, once per click or selection change |
 
@@ -94,16 +95,40 @@ Both animated sources also accept `loop = true`, and a `loopTrigger` that starts
 composition or on the first interaction; see [Looping an animation](#looping-an-animation).
 
 `ToolkitIcon.of(...)` and `ToolkitIcon.animated(...)` are shorthand factories for the same
-static/AVD types.
+static/AVD types. `ToolkitIcon.of(imageBitmap)` creates the bitmap source and preserves its colors by
+default.
 
 `AnimatedVector` requires a real `animated-vector` drawable, the kind
 `androidx.compose.animation.graphics` can read: one `vector` plus the `target` animators that move
 it from the first frame to the last one. A plain `vector` resource passed as `AnimatedVector` fails to
 inflate at runtime. Declare it as `Resource` instead.
 
-Remote Lottie URLs and asset paths are not accepted by this icon API. Anything else, such as a Coil
-`Painter` or a bitmap, is not accepted. Draw those with a plain
-`Image` next to the component instead of through the icon slot.
+Remote Lottie URLs and asset paths are not accepted by this icon API. Arbitrary `Painter` instances,
+such as a Coil painter, are also not stored in `ToolkitIcon`. Runtime raster artwork belongs in
+`ToolkitIcon.Bitmap` as an `ImageBitmap`.
+
+### Runtime bitmap icons
+
+Use `ToolkitIcon.Bitmap` when the artwork exists only at runtime rather than as a compile-time
+resource. This covers downloaded or generated imagery and application icons resolved from another
+package after the host converts them to `ImageBitmap`.
+
+```kotlin
+GeneralButton(
+    onClick = ::openApp,
+    label = stringResource(id = R.string.open),
+    icon = ToolkitIcon.Bitmap(imageBitmap = appIconBitmap),
+)
+```
+
+Bitmap artwork preserves its original colors by default, which is the expected behavior for app
+icons and other branded imagery. Set `tintable = true` only for monochrome bitmap artwork that should
+follow the component's content color.
+
+`ToolkitIcon` deliberately does not store Android `Drawable` objects. `Drawable` is mutable and does
+not fit the immutable icon model shared by the toolkit. Resolve or rasterize a runtime drawable once
+at the application boundary, remember the resulting `ImageBitmap`, then pass that bitmap through the
+same icon slot as every other source.
 
 ### Components with a selected state
 
@@ -304,10 +329,11 @@ target; it does not fall back to a filled style. Caller size constraints take pr
 
 `containerColor` and `contentColor` are optional enabled-state overrides shared by both forms;
 null retains style defaults. Disabled colors remain Material defaults. `iconTint` overrides icon
-color through the shared renderer; null follows the button content color. Lottie retains authored
-colors unless `tintable = true`; `Color.Unspecified` preserves artwork even for tintable Lottie.
-Vectors, resources, AVD and bundled Lottie all use the same `ToolkitIcon` slot and existing
-`Restart` / `Reverse` replay contract described above, including its optional `loop`.
+color through the shared renderer; null follows the button content color. Bitmap and Lottie artwork
+retain authored colors unless `tintable = true`; `Color.Unspecified` preserves artwork even when
+it is tintable. Vectors, resources, bitmaps, AVD and bundled Lottie all use the same `ToolkitIcon`
+slot and existing `Restart` / `Reverse` replay contract described above, including its optional
+`loop` for animated sources.
 
 Every enabled click replays the icon, performs `ButtonFeedback`, logs the optional `ga4Event`
 through `firebaseController`, then invokes `onClick`. Disabled buttons do none of these.
@@ -327,6 +353,11 @@ GeneralButton(
     label = stringResource(R.string.continue_label),
     icon = ToolkitIcon.Vector(Icons.AutoMirrored.Rounded.ArrowForward),
     iconPosition = ButtonIconPosition.End,
+)
+GeneralButton(
+    onClick = ::openApp,
+    label = stringResource(R.string.open),
+    icon = ToolkitIcon.Bitmap(imageBitmap = appIconBitmap),
 )
 ```
 
