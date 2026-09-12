@@ -65,8 +65,8 @@ private object UsageAndDiagnosticsPreferenceKeys {
  * Usage and diagnostics settings: the reporting switch, and the privacy choices behind it.
  *
  * The layout is the ads screen's, deliberately. Both screens are one switch over a single
- * preference that opens the consent surface belonging to it — there it is the AdMob consent form,
- * here the toolkit's own privacy dialog — so the two settings screens that ask the same kind of
+ * preference that opens the consent surface belonging to it (such as the AdMob consent form,
+ * or the toolkit's own privacy dialog) so the two settings screens that ask the same kind of
  * question now look like each other.
  *
  * The granular consents used to sit on this screen as an expandable block of switch cards. They are

@@ -2,7 +2,7 @@
 
 ---
 
-# September 11, 2026
+# September 12, 2026
 
 **Version:** `3.0.0-pre15`
 
@@ -38,7 +38,6 @@
   travels on from the frame it was resting on rather than snapping to the other one.
   `resolveToolkitIconLoop(icon, interacted)` exposes the same rule to custom renderers, and
   `ToolkitIconContent` takes the matching `interacted` flag.
-
 - Added `GeneralTextField`, the input counterpart of `GeneralButton`: one field component whose
   defaults render exactly the Material filled field, with `Outlined` and `Grouped` styles, a
   `ToolkitIcon` in either icon slot, a trailing icon that becomes a button when it is given an
@@ -48,7 +47,8 @@
   overload are available.
 - `GeneralTextFieldStyle.SearchOutlined` is the same search box as an outlined, fully rounded text
   field, for a search that sits on a page rather than in an app bar. Unlike `Search` it is an
-  ordinary text field, so every parameter applies to it and the `TextFieldValue` overload accepts it.
+  ordinary text field, so every parameter applies to it and the `TextFieldValue` overload accepts
+  it.
 - `GeneralTextFieldStyle.Search` draws the Material search input: the pill-shaped box that filters
   the content behind it as it is typed, leading with a search icon unless another is given. It is
   the input field used on its own rather than a `SearchBar`, whose collapsed form intercepts the
@@ -68,11 +68,13 @@
 
 ### Changed
 
-- The **Usage and diagnostics** screen is the ads screen's layout: the reporting switch over a single
-  **Advanced privacy settings** preference that opens the privacy choices dialog — the same dialog
+- The **Usage and diagnostics** screen is the ads screen's layout: the reporting switch over a
+  single
+  **Advanced privacy settings** preference that opens the privacy choices dialog, the same dialog
   the onboarding flow shows. The four granular consents no longer sit on the screen as an expandable
   block of switch cards, which was a plainer second copy of what that dialog's Details tab explains.
-  `FirebaseConsentDialog` moved from `:library:feature:onboarding` to `:library:feature:diagnostics`,
+  `FirebaseConsentDialog` moved from `:library:feature:onboarding` to
+  `:library:feature:diagnostics`,
   whose state it reads and writes, and its strings moved with it as `privacy_choices_*`.
   `UsageAndDiagnosticsEvent.AllowAllConsent` and `AllowEssentialConsent` carry the dialog's
   whole-bundle answers, so what "everything" and "essentials" cover is decided once rather than at
@@ -93,11 +95,9 @@
   independent of the replay mode, which still describes one cycle: `Restart` repeats the animation
   forward, `Reverse` travels forward and back. A looping icon owns its playback, so clicks and
   selection no longer replay it, and every component that draws a `ToolkitIcon` supports it.
-
 - Added Markdown authoring to the issue reporter's description field: a formatting bar for bold,
   italic, inline code, code blocks, bulleted and numbered lists, quotes and links, and Markdown
   syntax highlighted as it is typed.
-
 - Added `GroupedGrid`, the grouped category block used for storage and media breakdowns and for
   blocks of actions. Cells are laid out in columns as one rounded group: only the corners at the
   outside of the block are rounded, seams between cells are cut small, and a grid of one cell rounds
@@ -115,7 +115,6 @@
   Its badge is filled with the same silhouette the cells are cut from, `MaterialShapes` included,
   through `rememberNativeAdBadgeShape`, which flattens any Compose `Shape` to the path an ad's
   Android view can be drawn with.
-
 - `CommonFilterChip` accepts an `icon` shown while the chip is unselected, and `hasAnimation` to
   turn off the crossfade into the selected checkmark.
 - `CommonDropdownMenuItem` takes an optional `icon` and a plain `text` alongside the existing
@@ -130,21 +129,21 @@
 - Added reusable Check, Clock, and Grid AVDs to DesignSystem and moved Settings/Share there.
   Consumers must import these drawable resources from `core.designsystem.R`. Private animation
   resources are now inline; the unused Success animation and imported dummy color were removed.
-
 - Added bundled Lottie icons with forward restart by default, optional reverse replay, and optional
   content-color tinting. All FAB wrappers now accept the shared `ToolkitIcon` API while retaining
   their existing ImageVector/custom-content overloads.
-
 - Added `ToolkitIcon`, the icon slot shared by navigation items and buttons. It accepts a Compose
   `ImageVector`, a drawable or vector resource, or an animated vector drawable that plays when the
   component is clicked. `ToolkitIconReplayMode` chooses whether a repeated click restarts the
   animation, the default, or plays it backwards. The accepted combinations are documented in
   `:library:core:designsystem` README.md.
 - Added animated Settings and Share drawer icons, used by the standard drawer entries.
-- Added `NavigationDrawerSheet`, a reusable navigation drawer component that renders `ModalDrawerSheet` with navigation drawer items, selection state, click handling, and dividers.
+- Added `NavigationDrawerSheet`, a reusable navigation drawer component that renders
+  `ModalDrawerSheet` with navigation drawer items, selection state, click handling, and dividers.
 - Added core common's AppVersionMetadata and getVersionMetadata for package version lookup without
   a UI dependency, and core DataStore's startupValueFlow for caller-defined startup mapping.
-- Exposed toolkit destination builders from app.main.ui.navigation in the main toolkit module. The historical
+- Exposed toolkit destination builders from app.main.ui.navigation in the main toolkit module. The
+  historical
   About-package entry point, UI helpers, and AppVersionInfo remain compatible.
 
 ### Changed
@@ -172,7 +171,6 @@
   rows before scrolling its own content.
 - Filed issues now use a Markdown body with Description, Device info and Extra info sections; the
   device and extra tables are Markdown tables inside a collapsible block instead of raw HTML.
-
 - **Breaking:** `TopListFilters` now takes `FilterChipItem` entries instead of plain strings, so a
   chip row carries a per-chip icon and label. Callers must map their filters to `FilterChipItem`.
   `hasAnimation` turns the chip and row animations off, and `contentPadding` lets a caller that
@@ -189,7 +187,8 @@
   `measurements`. Pass `SizeConstants.ButtonIconSize` to pin it to the size toolkit icons are drawn
   at elsewhere, which suits small affordances such as favourite, share, and expand buttons, or any
   other `Dp` for a one-off. An explicit `shape` still overrides the resting shape.
-- **Breaking (3.0):** Consolidated text, tonal, outlined, and filled action buttons into one adaptive
+- **Breaking (3.0):** Consolidated text, tonal, outlined, and filled action buttons into one
+  adaptive
   `GeneralButton` with five styles, including Elevated. Removed the separate APIs without deprecated
   aliases. Icon-only content uses the matching Material icon button (a compact elevated button for
   Elevated); all forms share feedback, analytics, replay, icon position, and color overrides.
@@ -202,9 +201,11 @@
   from `core.designsystem.ui.icons`. `AnimatedIconButtonDirection` takes the same type.
 - The standard Settings and Share drawer entries declare their animated icon once, so it covers both
   the unselected and the selected state.
-- Standardized library APIs under module-owned `feature.*`, `core.*`, and `integration.*` package roots; consumers must update imports to the new packages.
+- Standardized library APIs under module-owned `feature.*`, `core.*`, and `integration.*` package
+  roots; consumers must update imports to the new packages.
 - Moved library dependency-injection bindings into the owning feature/integration modules and
-  exposed the datastore module from `core.datastore.di`; the main toolkit module now only composes those
+  exposed the datastore module from `core.datastore.di`; the main toolkit module now only composes
+  those
   modules.
 - Moved `ThemePreferencesState`, `BaseCoreManager`, and `FirebaseControllerImpl` into their
   layer-specific packages; consumers must update imports to `core.common.domain.models.theme`,
@@ -219,14 +220,14 @@
 
 - The changelog sheet's action is now an extra-large expressive button, and `DropdownMenuBox` rows
   now match the rest of the toolkit's dropdowns instead of rendering as bare Material rows.
-- Standardized changelog, alert-dialog, and date-picker actions with consistent button styling, haptic feedback, and press animations.
+- Standardized changelog, alert-dialog, and date-picker actions with consistent button styling,
+  haptic feedback, and press animations.
 
 ### Removed
 
 - Removed the issue reporter's login section. Reports are always filed anonymously, so the
   `login_section_label`, `send_anonymously`, `use_github_account` and `optional_placeholder`
   resources are gone.
-
 - Removed the bundled `shape_scalloped` vector drawable from the Help feature. The Contact Us badge
   now renders `MaterialShapes.Cookie12Sided`, so the toolkit no longer ships hand-authored shape
   artwork that Material 3 already provides.
@@ -236,8 +237,10 @@
 - Removed `Activity.isInAppReviewAvailable`, an exact duplicate of the wired-up
   `ReviewRepository.isReviewAvailable(activity)`. Call the repository instead.
 - Removed unused constants that no call site referenced: `ApiHost.DOCS_URL` and
-  `ApiHost.OPEN_API_URL` (both still documented in the `ApiHost` KDoc), `GithubConstants.GITHUB_PAGES`,
-  `AppLinks.DEVELOPER_PAGE` and `AppLinks.CONTACT_PAGE`, `SettingsAnalytics.Params.NAVIGATION_ROUTE`,
+  `ApiHost.OPEN_API_URL` (both still documented in the `ApiHost` KDoc),
+  `GithubConstants.GITHUB_PAGES`,
+  `AppLinks.DEVELOPER_PAGE` and `AppLinks.CONTACT_PAGE`,
+  `SettingsAnalytics.Params.NAVIGATION_ROUTE`,
   `DataStoreNamesConstants.DATA_STORE_DYNAMIC_VARIANT_INDEX` and `DATA_STORE_REVIEW_DONE`, and the
   `DISPLAY_SETTINGS`, `FAQ`, `SELECT_STARTUP_DIALOG`, and `SELECT_LANGUAGE_DIALOG` log tags.
 
@@ -248,14 +251,12 @@
   per-instance state that survives configuration changes. The section expands vertically instead of
   also unfolding sideways, the header no longer reacts to taps anywhere along the row, and only its
   arrow, now a `GeneralButton`, toggles it.
-
 - Fixed Help and Settings menu buttons that still passed ImageVector values to the migrated icon API
   and prevented the sample app from compiling.
-
 - Prevented duplicate or late Billing service responses from crashing purchase recovery, product
   queries, and donation consumption with an `Already resumed` error.
-
-- Fixed icon-state handling in `NavigationDrawerItemContent` and `LeftNavigationRail` to display `selectedIcon` when selected and `icon` when unselected.
+- Fixed icon-state handling in `NavigationDrawerItemContent` and `LeftNavigationRail` to display
+  `selectedIcon` when selected and `icon` when unselected.
 - Fixed animated navigation icons never playing. They were swapped in already on their last frame,
   and a second click did nothing. They now play on every click, in the drawer, the bottom bar, and
   the navigation rail.
@@ -268,13 +269,17 @@
 
 ### Changed
 
-- Display ads now defaults to on in debug builds as well as release, so a fresh debug install renders ads instead of none. A stored choice still wins in every build. Reduce ads continues to default to off everywhere.
+- Display ads now defaults to on in debug builds as well as release, so a fresh debug install
+  renders ads instead of none. A stored choice still wins in every build. Reduce ads continues to
+  default to off everywhere.
 - `dataStoreModule()` no longer takes `isDebugBuild`, which it only used to pick that default.
 
 ### Added
 
-- Added `AdLoadReporter`, which logs every ad load failure, adds a Crashlytics breadcrumb, and records a non-fatal for the failures that are not simply no fill.
-- Added `AdSlotDebugPlaceholder`, shown by `NativeAdSlot` on debug builds where an empty ad slot would otherwise render nothing.
+- Added `AdLoadReporter`, which logs every ad load failure, adds a Crashlytics breadcrumb, and
+  records a non-fatal for the failures that are not simply no fill.
+- Added `AdSlotDebugPlaceholder`, shown by `NativeAdSlot` on debug builds where an empty ad slot
+  would otherwise render nothing.
 - Added `rememberNativeAdState`, which returns why a slot is empty alongside the ad.
 
 ---
@@ -289,12 +294,15 @@
 
 ### Documentation
 
-- Documented how a host should render ads: use `NativeAdSlot`, `rememberNativeAd` or `AdBanner` rather than the Mobile Ads loaders directly, and what the toolkit handles on the host's behalf.
+- Documented how a host should render ads: use `NativeAdSlot`, `rememberNativeAd` or `AdBanner`
+  rather than the Mobile Ads loaders directly, and what the toolkit handles on the host's behalf.
 
 ### Fixed
 
-- Fixed the ads migration removing an explicit opt-in as well as an opt-out, which on debug builds turned ads off again at every launch.
-- Fixed the **Help & feedback** overflow action appearing on every standalone settings sub-page instead of on the settings root.
+- Fixed the ads migration removing an explicit opt-in as well as an opt-out, which on debug builds
+  turned ads off again at every launch.
+- Fixed the **Help & feedback** overflow action appearing on every standalone settings sub-page
+  instead of on the settings root.
 
 ---
 
@@ -304,12 +312,15 @@
 
 ### Added
 
-- Added a **Reduce Ads** preference for suppressing App Open ads while keeping other supported ad formats enabled.
+- Added a **Reduce Ads** preference for suppressing App Open ads while keeping other supported ad
+  formats enabled.
 
 ### Changed
 
-- Integrated the Reduce Ads preference into the shared ads settings flow and persistent DataStore configuration.
-- Updated the release Ads Settings screen to expose Reduce Ads while retaining the full Display Ads control for debug builds.
+- Integrated the Reduce Ads preference into the shared ads settings flow and persistent DataStore
+  configuration.
+- Updated the release Ads Settings screen to expose Reduce Ads while retaining the full Display Ads
+  control for debug builds.
 - Updated shared DataStore access to use the App Toolkit dependency graph.
 
 ### Fixed
@@ -336,7 +347,8 @@
 ### Changed
 
 - Moved additional shared application resources and configuration under App Toolkit ownership.
-- Moved reusable themes, splash resources, locale configuration, backup rules, and extraction rules into the library.
+- Moved reusable themes, splash resources, locale configuration, backup rules, and extraction rules
+  into the library.
 - Reduced the amount of host application configuration required when integrating App Toolkit.
 
 ### Improved
@@ -444,15 +456,18 @@ The first preview of the redesigned App Toolkit 3.0 architecture.
 
 ### Added
 
-- Added a unified `appToolkitModules(...)` entry point for loading the standard App Toolkit dependency graph.
+- Added a unified `appToolkitModules(...)` entry point for loading the standard App Toolkit
+  dependency graph.
 - Added automated dependency-graph verification for library integrations.
-- Added manifest contract tests to prevent reusable modules from overriding host application configuration.
+- Added manifest contract tests to prevent reusable modules from overriding host application
+  configuration.
 - Added dedicated reusable core, feature, integration, navigation, testing, and DataStore modules.
 
 ### Changed
 
 - Split the previous App Toolkit structure into focused reusable modules.
-- Split shared preferences into responsibility-specific data sources for themes, display, onboarding, consent, ads, review state, changelog state, favorites, and general application state.
+- Split shared preferences into responsibility-specific data sources for themes, display,
+  onboarding, consent, ads, review state, changelog state, favorites, and general application state.
 - Reorganized reusable navigation contracts into dedicated modules.
 - Reworked repository and data-layer boundaries to reduce unnecessary abstraction.
 - Removed duplicate DataStore ownership.
@@ -873,7 +888,8 @@ No public library behavior changed.
 
 ### Improved
 
-- Added haptic feedback, sound feedback, and bounce interaction to expandable sections in the reusable Issue Reporter.
+- Added haptic feedback, sound feedback, and bounce interaction to expandable sections in the
+  reusable Issue Reporter.
 
 ---
 
@@ -981,7 +997,8 @@ No public library behavior changed.
 
 ### Changed
 
-- Marked `OnboardingActivity` with `noHistory` so completed onboarding does not remain in the host application's back stack.
+- Marked `OnboardingActivity` with `noHistory` so completed onboarding does not remain in the host
+  application's back stack.
 
 ---
 
@@ -1236,7 +1253,8 @@ No public library behavior changed.
 
 ### Changed
 
-- Replaced the previous status snackbar implementation with the new reusable snackbar infrastructure.
+- Replaced the previous status snackbar implementation with the new reusable snackbar
+  infrastructure.
 - Refined reusable About and Help state handling.
 
 ### Fixed
@@ -1456,7 +1474,8 @@ The first stable 1.x App Toolkit library release.
 ### Added
 
 - Added a reusable Privacy Settings screen.
-- Added privacy policy, terms, code of conduct, permissions, ads, diagnostics, legal-notice, and license preferences.
+- Added privacy policy, terms, code of conduct, permissions, ads, diagnostics, legal-notice, and
+  license preferences.
 - Added `PrivacySettingsProvider` for host customization.
 
 ---

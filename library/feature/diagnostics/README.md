@@ -23,7 +23,7 @@ places and the two settings screens asking the same kind of question look alike.
 That dialog lives here rather than in onboarding, because it reads and writes this feature's state;
 onboarding depends on this module, not the other way round. Its `privacy_choices_*` strings moved
 with it. The four granular consents were also drawn on the settings screen as an expandable block of
-switch cards — a second, plainer copy of what the dialog's Details tab already explains — and that
+switch cards (a second, plainer copy of what the dialog's Details tab already explains) and that
 block, `ConsentToggleCard`, `ConsentSectionHeader` and `ExpandableConsentSectionHeader` are gone.
 
 `AllowAllConsent` and `AllowEssentialConsent` are events rather than five calls at each call site:

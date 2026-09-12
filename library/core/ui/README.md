@@ -130,11 +130,11 @@ corners. Such a field usually carries no `label` either, because a floating labe
 whether or not it is showing; `placeholder` and a described `leadingIcon` name it instead.
 
 `Search` is the odd one out, and deliberately so: it is `SearchBarDefaults.InputField` rather than a
-rounded text field, for a box that filters the content behind it as it is typed — a top app bar that
+rounded text field, for a box that filters the content behind it as it is typed, such as a top app bar that
 swaps its title for a search field, say. It is used on its own rather than inside a `SearchBar`
 because the collapsed bar intercepts the soft keyboard and only accepts typing once it expands into
 a surface that reserves 240dp for results this kind of field does not have. The parameters that
-describe a form field — `label`, `supportingText`, `errorText`, `minLines`, `markdown`, `position` —
+describe a form field (label, supportingText, errorText, minLines, markdown, position)
 do not apply to it, and the `TextFieldValue` overload rejects it outright, because the Material input
 owns its text state and has no caret to hand over. `onSearch` reports the keyboard's search action;
 focus is dropped first either way.
@@ -144,18 +144,18 @@ it where a filled pill would disappear into the surface behind it, or where the 
 outlined; every parameter applies to it, and the `TextFieldValue` overload accepts it.
 
 `trailingContent` replaces the whole trailing slot with a row, for the field that ends in more than
-one action — a search box carrying a filter and a clear button. `errorText` marks the error state and replaces `supportingText` in one parameter, so a message and
+one action, such as a search box carrying a filter and a clear button. `errorText` marks the error state and replaces `supportingText` in one parameter, so a message and
 the state it describes cannot drift apart. `trailingIcon` with `onTrailingIconClick` becomes a
 `GeneralButton`, so a clear or reveal action keeps the toolkit's feedback. `ga4Event` is logged when
-the field gains focus — a field is not a button, and a per-keystroke event is not an interaction.
+the field gains focus, since a field is not a button, and a per-keystroke event is not an interaction.
 
 `GeneralTextFieldMarkdown` turns the field into a Markdown editor:
 
 - `Highlight` styles the syntax as it is typed. The transformation is length-preserving, so offsets
   stay identity-mapped and the markers stay visible, selectable and editable. A Markdown *renderer*
   cannot do this job, because the field is an editor.
-- `Editor` adds the formatting bar underneath — bold, italic, inline code, code fences, bulleted and
-  numbered lists, quotes and links — which edits the Markdown source and places the caret between the
+- `Editor` adds the formatting bar underneath (bold, italic, inline code, code fences, bulleted and
+  numbered lists, quotes and links) which edits the Markdown source and places the caret between the
   markers it inserts. The bar is cut and filled to match the style above it, so field and bar read as
   one block; a grouped field hands the lower half of its `position` to the bar.
 

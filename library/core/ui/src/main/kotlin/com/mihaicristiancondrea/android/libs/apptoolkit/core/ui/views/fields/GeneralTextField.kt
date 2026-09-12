@@ -90,12 +90,12 @@ enum class GeneralTextFieldStyle {
 
     /**
      * The pill-shaped Material search input, for a field that filters the content behind it as it
-     * is typed — a top app bar that swaps its title for a search box, say. It leads with a search
+     * is typed, such as a top app bar that swaps its title for a search box, say. It leads with a search
      * icon unless another one is given, and takes its clear or filter actions in the trailing slot.
      *
      * It is a different Material component rather than a rounded text field, so the parameters that
-     * describe a form field — `label`, `supportingText`, `errorText`, `minLines`, `maxLines`,
-     * `markdown`, `position` — do not apply to it, and it is rejected by the `TextFieldValue`
+     * describe a form field (label, supportingText, errorText, minLines, maxLines,
+     * markdown, position) do not apply to it, and it is rejected by the `TextFieldValue`
      * overload because the Material input owns its text state.
      */
     Search,
@@ -103,7 +103,7 @@ enum class GeneralTextFieldStyle {
     /**
      * The search field as an outlined one: the Material outlined text field, fully rounded and
      * leading with a search icon. Take it where a filled pill would disappear into the surface
-     * behind it — a search box on a page rather than in an app bar — or where the rest of the screen
+     * behind it (a search box on a page rather than in an app bar) or where the rest of the screen
      * is outlined. Unlike [Search] it is an ordinary text field, so every parameter applies to it and
      * the `TextFieldValue` overload accepts it.
      */
@@ -168,7 +168,7 @@ enum class GeneralTextFieldMarkdown {
  * @param trailingIconContentDescription Accessibility description of [trailingIcon].
  * @param onTrailingIconClick Action of the trailing icon, such as clearing the field.
  * @param trailingContent Replaces the whole trailing slot with a row of your own, for a field that
- *   ends in more than one action — a search box carrying both a filter and a clear button, say. It
+ *   ends in more than one action, such as a search box carrying both a filter and a clear button. It
  *   supersedes [trailingIcon].
  * @param onSearch Called by [GeneralTextFieldStyle.Search] when the keyboard's search action is
  *   used. The field always drops focus first, so a filter that already applied itself as it was

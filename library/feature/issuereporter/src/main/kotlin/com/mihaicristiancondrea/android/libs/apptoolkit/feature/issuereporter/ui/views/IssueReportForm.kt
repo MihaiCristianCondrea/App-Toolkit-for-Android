@@ -49,7 +49,7 @@ internal val ISSUE_GROUP_OUTER_RADIUS = SizeConstants.LargeMediumSize
  * The fields carry no floating label. A label animates into space the field has to reserve whether
  * or not it is showing, which is what kept a two-dp gap from reading as a group; each field states
  * itself through a placeholder and a leading icon instead, and keeps a constant height. The grouped
- * style drops the indicator line for the same reason — it would cut the block into strips.
+ * style drops the indicator line for the same reason, because it would cut the block into strips.
  *
  * The leading icon is also what names each field for screen readers: the placeholder is gone as soon
  * as there is content.

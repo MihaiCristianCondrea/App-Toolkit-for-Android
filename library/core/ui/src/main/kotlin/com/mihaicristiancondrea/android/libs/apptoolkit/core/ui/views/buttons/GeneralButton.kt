@@ -79,7 +79,7 @@ enum class ButtonIconPosition { Start, End }
  * set.
  *
  * [iconSize] pins the glyph to one size instead. Left null, the default, it scales with
- * [measurements] — the labelled-button icon size beside a label, the icon-button size when this
+ * [measurements] (the labelled-button icon size beside a label, the icon-button size when this
  * renders icon-only. Pass [SizeConstants.ButtonIconSize] where an icon should stay the size toolkit
  * icons are drawn at everywhere else, which is what a row of small affordances such as a favourite,
  * share or expand button wants; pass any other [Dp] for a one-off such as a drawer hamburger.

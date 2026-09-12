@@ -25,7 +25,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.do
  * issue body.
  *
  * The body is Markdown because that is what GitHub renders. The author's description is inserted
- * verbatim — it is written in a Markdown editor, so their formatting is intentional — and everything
+ * verbatim (since it is written in a Markdown editor, so their formatting is intentional) and everything
  * this class adds around it is structured so a maintainer can read the report without expanding
  * anything, and expand the device table only when it matters.
  */

@@ -2,103 +2,32 @@
 
 # Unreleased
 
-**Version:** `Unknown` (`unknown`)
+**Version:** `26.09.16` (`1370016`)
 
 ### Added
 
-- The Components showcase has a Text fields section, one card per `GeneralTextField` variant: the
-  filled default with a leading icon and a clear button, the outlined style showing an error and its
-  message, two grouped fields cut as one block, the search box with the clear action that appears
-  only once there is something to clear, its outlined and fully rounded counterpart, and the Markdown
-  editor with its formatting bar.
-
-- The Components showcase has a Grouped grid section: a storage-style breakdown whose badges are
-  cut from different Material shapes, the same cells at the smallest size without their supporting
-  line, and a single cell to show it rounding all four of its corners.
-
-- The Components showcase now demonstrates all five button sizes for each button shape in turn —
-  icon-only, text, text with a leading icon, then text with a trailing icon — and its animation
-  gallery covers the stopwatch animation it had been missing.
-- Opening an app or its Play Store page from app details now reports the same GA4 interaction the
-  list surfaces already report.
-- The Components animation playground has a Loop switch that keeps every preview animating without
-  tapping it. It works alongside the existing Reverse switch, so a looping animation either repeats
-  forward or travels forward and back.
-
-- The Components animation playground's controls are now one compact block of the three decisions an
-  animated icon makes, in place of the two switches: a menu for the replay mode, a Loop checkbox,
-  and, while looping, a menu choosing whether the loop starts right away or on the first tap, which
-  is the default so a screenful of previews no longer plays on its own.
-
-- Added a Components animation playground with labelled and icon-only buttons for each bundled
-  animation, plus Restart and Reverse replay controls. Quick Tools now uses one reversible Grid
-  animation for both navigation states.
-
-- Added Reaction Test quick tool under Sensors & Measurement with randomized delays, false-start detection, session statistics, rating badges, and haptic feedback.
-- Added standard GA4 `view_item`, `view_item_list`, `share`, and `select_content` telemetry across Developer Apps and Quick Tools screens to support AdMob App Analytics Connection.
+- Added the Reaction Test quick tool.
+- Added Text Fields section in the Components showcase covering standard inputs, outlined errors, grouped fields, search boxes, and a Markdown editor with a formatting bar.
+- Added Grouped Grid showcase in the Components.
+- Added different buttons styles with Expressive sizes.
+- Added Animation Playground with loop controls, playback speeds, and restart/reverse options.
 
 ### Removed
 
-- Removed the Sound Mode tool and its associated system repository, local ringer-mode data sources,
-  audio settings permission, and localized resources.
-- Removed the Caffeine tool and its Quick Settings service. Keeping the screen awake needed a
-  foreground service and a wake lock, and Android caps that service at about three minutes anyway.
-  The app no longer declares `WAKE_LOCK` or `FOREGROUND_SERVICE`.
-- Removed the Music Search tool. The feature moves to a different app.
+- Removed the Sound Mode, Caffeine, and Lux Meter.
 
 ### Improved
 
-- The sponsored row on the Quick Tools screen now matches the rows around it: its title is no longer
-  heavier than the tile titles, its action is a text button like the screen's own, and a long
-  description is capped at two lines so the row cannot grow taller than the tiles it sits between.
-- The sponsored row inside the app details quick actions now uses the same badge colour as the
-  actions around it instead of a grey one, and its action is a text button.
-- App details quick actions are now one grouped block instead of loose tiles. The two sponsored rows
-  that used to sit either side of them are replaced by a single one inside the block, between the
-  actions.
-- Refined the expanded tool UI for Dice Roll, Coin Flip, Counter, and SOS: updated Coin Flip to place the coin at the top with result text directly beneath it, enhanced Counter with animated digits (`AnimatedDigit`), and removed redundant bottom text below action buttons.
-- Buttons across the app now follow the Material 3 Expressive shape and press behavior. The primary
-  actions in the changelog sheet and in every Quick Tools sheet, such as Start and the Flash Dimmer
-  on/off, are a size larger so they are easier to hit.
-- Developer Apps and Quick Tools filter chips now animate as the available filters change, and show
-  a checkmark on the chip you picked.
-- The Apps tab shows a dot grid when selected instead of the same squares as when unselected.
-- Components showcase: the animation gallery moved below the other sections, the theme options are
-  spaced so their rounded corners read as separate rows, the FAB row demonstrates one icon source
-  each rather than three copies of the same Lottie file, the grouped actions and carousel lost the
-  extra backgrounds behind them, the value dropdown matches the app's other dropdowns, and the
-  filter chips and carousel are no longer clipped short of their card edges.
-- Quick Tools badges now draw their silhouettes from the Material 3 shape set instead of bundled
-  artwork, which removes seven vector drawables from the app.
-- Added click-to-copy functionality to color swatches in the Material Colors tool.
-- Unified action-button behavior across dialogs, Quick Tools, and the component showcase, including
-  consistent click feedback and an accessible snackbar dismiss action.
-- Quick Tools that offer a Quick Settings tile you have not added now read "Not added" with a
-  neutral add icon, instead of "Needs setup" with a warning icon. Nothing about those tools needs
-  setting up: they run in the app, and adding their tile stays optional. The matching filter chip
-  reads "Not added" too.
-- Tools without a Quick Settings tile now say so plainly instead of claiming they need more setup.
-- Removed the Lux Meter tool and ambient light feature in favor to let Low Brightness have this feature.
-- Removed unused code from the app to have a smaller app.
-- Improved Components showcase labels and translations.
-- Standardized Quick Tools actions with consistent button styling, haptic feedback, and press
-  animations.
+- Streamlined app details quick actions into a clean, grouped layout.
+- Refined the expanded tool UI for Dice Roll, Coin Flip, Counter, and SOS with cleaner placement and animated counters.
+- Upgraded buttons across the app to Material 3 Expressive styling with larger primary action targets for easier tapping.
+- Polished the Components showcase layout, color swatches with one-tap copy, and smoother filter chip animations.
+- Clarified Quick Settings tile status messages as "Not added" for a more intuitive setup experience.
 
 ### Fixed
 
-- Fixed Quick Tools not reacting after adding a tile. The screen read Quick Settings membership from
-  a system list that does not update the moment a tile is added, so the tile kept showing as not
-  added and, with the "Not added" filter on, nothing about the screen changed. The app's own record
-  of the tiles it added now takes precedence, and refreshing no longer loses that state the next
-  time a category is expanded.
-- Prevented malformed home-screen widget action launches from crashing the Sample App.
-- Corrected Quick Tools setup status and Android-version support for adding Quick Settings tiles.
-- Fixed Sample App startup graph verification and navigation composition after modularization.
-- Fixed missing ad-placement and analytics-contract verification.
-- Fixed missing `VIBRATE` permission declaration for Toolkit Tiles.
-- Fixed AdMob application ID metadata location.
-- Fixed duplicate dependency injection bindings and centralized route identifiers.
-- Fixed startup screen aggregation and shell test compilation.
+- Fixed an issue where Quick Settings tile status updates were delayed after adding tiles.
+- Fixed crashes caused by malformed widget action launches and added missing vibration permissions.
 
 ---
 

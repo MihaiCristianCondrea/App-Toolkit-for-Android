@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.DpSize
  * The five Material 3 Expressive button size classes.
  *
  * Each entry stands for one expressive container height. Everything else a button needs at that
- * size — shape, content padding, icon size, icon spacing, and label typography — is derived from
+ * size (shape, content padding, icon size, icon spacing, and label typography) is derived from
  * that height through the `ButtonDefaults.*For(buttonHeight)` helpers, so the toolkit never
  * restates expressive metrics of its own.
  *

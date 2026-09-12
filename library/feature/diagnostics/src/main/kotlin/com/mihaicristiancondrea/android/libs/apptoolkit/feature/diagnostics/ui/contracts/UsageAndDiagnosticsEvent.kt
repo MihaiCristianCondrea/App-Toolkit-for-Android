@@ -42,7 +42,7 @@ sealed interface UsageAndDiagnosticsEvent : UiEvent {
     data object AllowAllConsent : UsageAndDiagnosticsEvent
 
     /**
-     * Grants what the app needs to run and be fixed — reporting, analytics and ad storage — and
+     * Grants what the app needs to run and be fixed (reporting, analytics, and ad storage) and
      * refuses what is only useful for targeting: ad user data and ad personalization.
      */
     data object AllowEssentialConsent : UsageAndDiagnosticsEvent
