@@ -2,6 +2,28 @@
 
 ---
 
+# September 11, 2026
+
+**Version:** `3.0.0-pre15`
+
+### Added
+
+- Added `ToolkitIcon.Bitmap`, a runtime `ImageBitmap` source for toolkit icon slots. Bitmap artwork
+  preserves its original colors by default and can opt into the host component's content color with
+  `tintable = true`. `ToolkitIcon.of(imageBitmap)` provides the matching shorthand factory.
+
+### Improved
+
+- `ToolkitIconContent` now renders runtime bitmap artwork through the same shared path used by
+  `GeneralButton`, navigation items, fields, and FABs, so consumers no longer need a parallel button
+  implementation when an icon is resolved at runtime rather than bundled as a drawable resource.
+- Added runtime bitmap coverage to the Components button showcase and the `GeneralButton`
+  instrumented test. The icon documentation now describes the fifth source, its tint behavior, and
+  the boundary for converting mutable Android `Drawable` instances into remembered `ImageBitmap`
+  values before passing them to the immutable toolkit model.
+
+---
+
 # September 10, 2026
 
 **Version:** `3.0.0-pre14`

@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,9 +29,11 @@ import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
@@ -57,6 +60,19 @@ fun ButtonShowcase(
     onLogEvent: (String, String?) -> Ga4EventData,
 ) {
     val iconContentDescription = stringResource(id = R.string.components_icon_content_description)
+    val runtimeBitmapIcon = remember {
+        Bitmap.createBitmap(
+            intArrayOf(
+                android.graphics.Color.rgb(66, 133, 244),
+                android.graphics.Color.rgb(52, 168, 83),
+                android.graphics.Color.rgb(251, 188, 4),
+                android.graphics.Color.rgb(234, 67, 53),
+            ),
+            2,
+            2,
+            Bitmap.Config.ARGB_8888,
+        ).asImageBitmap()
+    }
 
     ShowcaseHeader(
         title = stringResource(id = R.string.components_section_buttons),
@@ -89,6 +105,13 @@ fun ButtonShowcase(
                     onClick = {},
                     firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "primary_icon"),
+                )
+                GeneralButton(
+                    label = stringResource(id = R.string.components_button_primary),
+                    icon = ToolkitIcon.Bitmap(imageBitmap = runtimeBitmapIcon),
+                    onClick = {},
+                    firebaseController = firebaseController,
+                    ga4Event = onLogEvent("button", "primary_bitmap_icon"),
                 )
                 GeneralButton(
                     icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.StarOutline),

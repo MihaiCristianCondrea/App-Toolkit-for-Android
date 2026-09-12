@@ -20,14 +20,16 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ic
 import androidx.annotation.DrawableRes
 import androidx.annotation.RawRes
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 
 /**
  * One icon slot of a toolkit component, such as a navigation item or a button.
  *
- * Four sources are accepted:
+ * Five sources are accepted:
  * - [Vector], a Compose [ImageVector] like `Icons.Rounded.Share`.
  * - [Resource], a static drawable or vector XML resource, drawn through a painter.
+ * - [Bitmap], a runtime Compose [ImageBitmap], with authored colors preserved by default.
  * - [AnimatedVector], an Animated Vector Drawable that plays when the component is clicked.
  * - [Lottie], bundled Lottie JSON that plays once per interaction.
  *
@@ -36,8 +38,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
  * loop starts on its own or on the first interaction.
  *
  * Components that own a selected state take two of these, one per state, and both slots accept any
- * of the four sources. See `:library:core:designsystem` README.md for the accepted combinations and the
- * behavior of each one.
+ * of the five sources. See `:library:core:designsystem` README.md for the accepted combinations and
+ * the behavior of each one.
  */
 @Immutable
 sealed interface ToolkitIcon {
@@ -76,6 +78,23 @@ sealed interface ToolkitIcon {
      */
     @Immutable
     data class Resource(@param:DrawableRes val resId: Int) : ToolkitIcon
+
+    /**
+     * Icon backed by a runtime Compose [ImageBitmap]. Nothing about it animates.
+     *
+     * This source is intended for artwork that is not known as a compile-time drawable resource,
+     * such as an application icon resolved at runtime. Artwork keeps its original colors by
+     * default. Set [tintable] only for monochrome imagery that should follow the host component's
+     * content color.
+     *
+     * Callers own creation and lifetime of the bitmap. Convert mutable Android objects such as a
+     * `Drawable` at the application boundary instead of storing them in this immutable icon model.
+     */
+    @Immutable
+    data class Bitmap(
+        val imageBitmap: ImageBitmap,
+        val tintable: Boolean = false,
+    ) : ToolkitIcon
 
     /**
      * Icon backed by an Animated Vector Drawable.
@@ -123,6 +142,9 @@ sealed interface ToolkitIcon {
     companion object {
         fun of(imageVector: ImageVector): ToolkitIcon = Vector(imageVector)
         fun of(@DrawableRes resId: Int): ToolkitIcon = Resource(resId)
+        fun of(imageBitmap: ImageBitmap, tintable: Boolean = false): ToolkitIcon =
+            Bitmap(imageBitmap = imageBitmap, tintable = tintable)
+
         fun animated(
             @DrawableRes resId: Int,
             atEnd: Boolean = false,

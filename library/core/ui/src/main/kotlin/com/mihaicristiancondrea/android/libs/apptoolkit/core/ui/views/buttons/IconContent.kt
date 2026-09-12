@@ -31,7 +31,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
  * Icon renderer shared by every button in this package.
  *
  * It sizes the icon and hands it to [AnimatedToolkitIcon], so a [ToolkitIcon.AnimatedVector] plays
- * whenever [clickCount] grows while a [ToolkitIcon.Vector] or [ToolkitIcon.Resource] simply draws.
+ * whenever [clickCount] grows while static sources such as [ToolkitIcon.Vector],
+ * [ToolkitIcon.Resource], and [ToolkitIcon.Bitmap] simply draw.
  *
  * @param icon The icon to draw.
  * @param clickCount Clicks the owning button received while composed.
