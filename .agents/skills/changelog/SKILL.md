@@ -117,8 +117,8 @@ release that actually shipped them.
 
 ## Writing
 
-Keep entries concise, specific, factual, and understandable without reading the source code.
-
-Combine several implementation commits when they represent one meaningful outcome.
-
-Do not invent version codes, release dates, behavior, or release history.
+- Keep entries brief, simple, pinpoint, and on-point. Avoid long, essay-like descriptions.
+- **Never use em dashes (`—`)** or overly verbose AI phrasing. Use commas, parentheses, or short direct sentences.
+- Use clean, flat bullet points under standard categories (`Added`, `Changed`, `Improved`, `Removed`, `Fixed`) without nested sub-lists.
+- Combine several implementation commits when they represent one meaningful outcome.
+- Do not invent version codes, release dates, behavior, or release history.
