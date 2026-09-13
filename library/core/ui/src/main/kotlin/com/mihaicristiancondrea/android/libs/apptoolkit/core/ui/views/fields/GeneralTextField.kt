@@ -426,7 +426,7 @@ fun GeneralTextField(
     trailingIconContentDescription: String? = null,
     onTrailingIconClick: (() -> Unit)? = null,
     trailingContent: (@Composable RowScope.() -> Unit)? = null,
-    onSearch: ((String) -> Unit)? = null,
+    onSearch: ((String) -> Unit)? = null, // FIXME: Parameter "onSearch" is never used
     singleLine: Boolean = false,
     minLines: Int = 1,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
@@ -733,7 +733,7 @@ private class GeneralTextFieldSlots(
         if (row != null) return { Row(verticalAlignment = Alignment.CenterVertically, content = row) }
         val icon: ToolkitIcon = trailingIcon ?: return null
         val onClick: (() -> Unit)? = onTrailingIconClick
-        if (onClick == null) {
+        if (onClick == null) { // FIXME: If-Null return/break/... foldable to '?:'
             return {
                 ToolkitIconContent(
                     icon = icon,
