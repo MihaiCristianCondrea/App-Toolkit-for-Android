@@ -297,7 +297,6 @@ fun GeneralTextField(
             trailingIconContentDescription = trailingIconContentDescription,
             onTrailingIconClick = onTrailingIconClick,
             trailingContent = trailingContent,
-            onSearch = onSearch,
             singleLine = singleLine,
             minLines = minLines,
             maxLines = maxLines,
@@ -426,7 +425,6 @@ fun GeneralTextField(
     trailingIconContentDescription: String? = null,
     onTrailingIconClick: (() -> Unit)? = null,
     trailingContent: (@Composable RowScope.() -> Unit)? = null,
-    onSearch: ((String) -> Unit)? = null, // FIXME: Parameter "onSearch" is never used
     singleLine: Boolean = false,
     minLines: Int = 1,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
@@ -732,14 +730,11 @@ private class GeneralTextFieldSlots(
         val row: (@Composable RowScope.() -> Unit)? = trailingContent
         if (row != null) return { Row(verticalAlignment = Alignment.CenterVertically, content = row) }
         val icon: ToolkitIcon = trailingIcon ?: return null
-        val onClick: (() -> Unit)? = onTrailingIconClick
-        if (onClick == null) { // FIXME: If-Null return/break/... foldable to '?:'
-            return {
-                ToolkitIconContent(
-                    icon = icon,
-                    contentDescription = trailingIconContentDescription,
-                )
-            }
+        val onClick: () -> Unit = onTrailingIconClick ?: return {
+            ToolkitIconContent(
+                icon = icon,
+                contentDescription = trailingIconContentDescription,
+            )
         }
         return {
             GeneralButton(
