@@ -1,8 +1,8 @@
 App Toolkit is a clean, lightweight, and versatile multi-tool app designed to simplify your daily life with essential utilities, device insights, and wellness tools.
 
-It includes quick-access tools like decision makers, tally counters, a precise compass and level, emergency flash and dimmer, Morse code messaging, music search, and caffeine mode. All in one fast, battery-friendly package.
+It includes quick-access tools like decision makers, tally counters, a precise compass and level, emergency flash and dimmer, Morse code messaging, reaction tests, and Quick Settings tiles. All in one fast, battery-friendly package.
 
-Whether you need a quick tool on the go, a relaxing breathing exercise, or a way to keep your screen awake, App Toolkit provides a seamless, beautifully designed experience built with modern Material You theming.
+Whether you need a quick tool on the go, a relaxing breathing exercise, or a quick reaction test to sharpen your reflexes, App Toolkit provides a seamless, beautifully designed experience built with modern Material You theming.
 
 Our app is designed to be simple and easy to use, while also being fast and lightweight. Plus, it's free and open-source software!
 
@@ -12,11 +12,11 @@ Features
 • Smart Decision Tools: Instantly flip a coin or roll dice for quick choices and games.
 • Tally Counter: Effortlessly track tasks, habits, or repetitions with a simple interface.
 • Precision Compass & Level: High-accuracy tools for navigation and perfect alignment.
+• Reaction Test: Test and train your visual reflexes with random delay signals and score tracking.
 • SOS Emergency Flash: One-touch SOS signaling and a powerful flashlight for any situation.
 • Flash Dimmer: Adjust supported flashlight strength in-app or cycle levels from Quick Settings.
 • Morse Flashlight: Flash a custom letters-and-numbers message in Morse code.
-• Music Search: Lightning-fast shortcut to identify any song playing nearby.
-• Caffeine Mode: Keep your screen awake and prevent timeouts while reading or working.
+• Toolkit Tiles: Discover, manage, and sync supported Quick Settings tiles for instant access.
 
 📱 Device & Design Insights
 • Material Colors Explorer: Preview and explore your device's unique Material You color palette.

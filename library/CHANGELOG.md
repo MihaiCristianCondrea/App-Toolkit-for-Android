@@ -2,6 +2,19 @@
 
 ---
 
+# Unreleased
+
+**Version:** `3.0.0-pre16`
+
+### Improved
+
+- Updated `GeneralTextField` search handling so `GeneralTextFieldStyle.Search` placeholders use the
+  same `textStyle` as entered text, keeping typography consistent before and after typing begins.
+  The `TextFieldValue` overload also no longer exposes the unused `onSearch` callback, which only
+  applies to the `String` overload used by the Material search input.
+
+---
+
 # September 12, 2026
 
 **Version:** `3.0.0-pre15`
