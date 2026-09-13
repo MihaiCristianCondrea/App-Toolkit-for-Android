@@ -179,7 +179,8 @@ enum class GeneralTextFieldMarkdown {
  * @param keyboardOptions Keyboard type, capitalization and IME action.
  * @param keyboardActions What the IME action does.
  * @param visualTransformation Applied to plain fields only; [markdown] replaces it.
- * @param textStyle Typography of the text itself.
+ * @param textStyle Typography of the text itself. Search placeholders use the same style so the
+ *   typography stays consistent before and after typing begins.
  * @param markdown Markdown support; see [GeneralTextFieldMarkdown].
  * @param onMarkdownFormat Reports which formatting action was used, for hosts that log them.
  * @param position Where this field sits in a [GeneralTextFieldStyle.Grouped] block.
@@ -246,7 +247,7 @@ fun GeneralTextField(
             enabled = enabled,
             readOnly = readOnly,
             textStyle = textStyle,
-            placeholder = slots.placeholder(),
+            placeholder = slots.placeholder(textStyle = textStyle),
             leadingIcon = slots.leadingIcon(),
             trailingIcon = slots.trailingIcon(),
             shape = shape,
@@ -701,9 +702,15 @@ private class GeneralTextFieldSlots(
         return { Text(text = text) }
     }
 
-    fun placeholder(): @Composable (() -> Unit)? {
+    fun placeholder(textStyle: TextStyle? = null): @Composable (() -> Unit)? {
         val text: String = placeholder ?: return null
-        return { Text(text = text) }
+        return {
+            if (textStyle == null) {
+                Text(text = text)
+            } else {
+                Text(text = text, style = textStyle)
+            }
+        }
     }
 
     fun supportingText(): @Composable (() -> Unit)? {
