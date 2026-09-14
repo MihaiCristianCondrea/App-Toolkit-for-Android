@@ -103,7 +103,7 @@ android {
         // `namespace` above: `namespace` names the generated R/BuildConfig classes and can be
         // renamed freely, while changing `applicationId` publishes a different app and strands
         // every existing install. See build-logic/README.md#application-id.
-        applicationId = "com.d4rk.android.apps.apptoolkit"
+        applicationId = releasedApplicationId
         resValue("string", "app_package_name", releasedApplicationId)
         minSdk = appVersion.minSdk
         targetSdk = appVersion.targetSdk
@@ -175,6 +175,19 @@ android {
         }
     }
 
+    /**
+     * Configures build types for the sample application.
+     *
+     * ### Release Configuration:
+     * - **Signing**: Dynamically assigns release signing if `signing.properties` exists.
+     * - **App Optimization (AGP 9.0+)**: Uses `optimization { enable = true }` to enable unified R8
+     *   code and resource shrinking with built-in default platform keep rules.
+     *   *Crucial:* DO NOT remove or replace this with legacy `isMinifyEnabled` or `proguardFiles(...)`.
+     *   Refer to the `r8-analyzer` skill for auditing and optimizing R8 keep rules.
+     * - **Crashlytics**: Enables mapping file upload when a matching Google Services config is detected.
+     *
+     * @see <a href="https://developer.android.com/topic/performance/app-optimization/enable-app-optimization">Enable App Optimization</a>
+     */
     buildTypes {
         release {
             val signingFile = rootProject.file("signing.properties")
@@ -186,10 +199,6 @@ android {
             optimization {
                 enable = true
             }
-            proguardFiles(
-                getDefaultProguardFile(name = "proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
             if (hasMatchingGoogleServicesConfig) {
                 configure<CrashlyticsExtension> {
                     mappingFileUploadEnabled = true

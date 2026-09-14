@@ -42,17 +42,6 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildTypes {
-        release {
-            proguardFiles(
-                getDefaultProguardFile(name = "proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-
-
-
     buildFeatures {
         compose = true
     }
