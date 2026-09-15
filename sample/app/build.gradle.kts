@@ -207,7 +207,6 @@ android {
         }
     }
 
-
     buildFeatures {
         buildConfig = true
         compose = true
@@ -232,7 +231,6 @@ android {
             excludes.add("META-INF/io.netty.versions.properties")
         }
     }
-
 }
 
 dependencies {
