@@ -270,8 +270,6 @@ dependencies {
 
     implementation(libs.cronet.fallback)
 
-    // Unit Tests
-
     // Instrumentation Tests
     androidTestImplementation(dependencyNotation = libs.bundles.instrumentationTest)
     debugImplementation(dependencyNotation = libs.androidx.compose.ui.test.manifest)
