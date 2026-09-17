@@ -8,12 +8,18 @@
 
 ### Added
 
-- Added more pre-build animations
+- Added 30 reusable animated vector drawables to `:library:core:designsystem`. The expanded
+  animation set includes paired on/off states for blinds, cameras, fans, garage doors, lights,
+  locks, outlets, security systems, switches, thermostats, TVs, and vacuums, together with
+  play/pause, sound bars, a square container, and volume expand/collapse animations.
 
 ### Changed
 
-- Changed the proguard for the new AGP 9+
-- Bumped some dependenices
+- Updated the AGP 9+ release configuration by removing the legacy `proguardFiles(...)` setup from
+  `:library:apptoolkit` and the sample application. The sample now relies on AGP 9's unified R8
+  application optimization through `optimization { enable = true }`.
+- Updated Ktor from `3.5.2` to `3.6.0`.
+- Updated Robolectric from `4.16.1` to `4.17`.
 
 ---
 
