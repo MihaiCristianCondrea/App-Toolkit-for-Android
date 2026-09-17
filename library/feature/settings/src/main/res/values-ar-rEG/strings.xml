@@ -15,7 +15,17 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="advanced">متقدم</string>
+    <string name="display">العرض</string>
     <string name="get_help">احصل على مساعدة</string>
+    <string name="notifications">الإشعارات</string>
+    <string name="security_and_privacy">الأمان والخصوصية</string>
     <string name="settings">الإعدادات</string>
+    <string name="settings_category_general">عام</string>
     <string name="settings_placeholder_description">لم يتم تحديد أي إعدادات. اختر خيارًا لعرض تفاصيله هنا.</string>
+    <string name="summary_preference_settings_about">اعرف المزيد عن التطبيق</string>
+    <string name="summary_preference_settings_advanced">استكشف المزيد من الإعدادات المتقدمة</string>
+    <string name="summary_preference_settings_display">خصص شكل ومظهر تطبيقك</string>
+    <string name="summary_preference_settings_notifications">إدارة إشعارات التطبيق</string>
+    <string name="summary_preference_settings_privacy_and_security">إدارة إعدادات الخصوصية الخاصة بك</string>
 </resources>

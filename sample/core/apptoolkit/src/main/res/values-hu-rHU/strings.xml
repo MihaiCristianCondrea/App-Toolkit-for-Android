@@ -15,11 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="about">Névjegy</string>
-    <string name="advanced">Haladó</string>
-    <string name="dark_theme">Sötét téma</string>
-    <string name="display">Kijelző</string>
-    <string name="notifications">Értesítések</string>
     <string name="question_1">Mi az App Toolkit?</string>
     <string name="question_2">Hogyan érem el az App Toolkitben megjelenített különböző appokat?</string>
     <string name="question_3">Az App Toolkitben bemutatott appok ingyenesek?</string>
@@ -29,8 +24,6 @@
     <string name="question_7">Miért van szüksége az App Toolkitnek internet-hozzáféréshez hasonló engedélyekre?</string>
     <string name="question_8">Hogyan küldhetek visszajelzést az App Toolkitről vagy az appokról?</string>
     <string name="question_9">Biztonságban vannak az adataim, ha az App Toolkitet használom más appok megtalálásához?</string>
-    <string name="security_and_privacy">Biztonság és adatvédelem</string>
-    <string name="settings">Beállítások</string>
     <string name="summary_preference_faq_1">Az App Toolkit egy alkalmazás, amely az AppToolkit könyvtárral készült appokat mutatja be és szemlélteti. Útmutató az ökoszisztéma felfedezéséhez és az AppToolkit könyvtár működésének megtekintéséhez.</string>
     <string name="summary_preference_faq_2">Az App Toolkit különféle alkalmazásokat listáz. Egy appra koppintva általában több információt és egy linket kap a Google Play Store-ban való telepítéshez vagy megnyitáshoz, így közvetlenül kipróbálhatja.</string>
     <string name="summary_preference_faq_3">Sok, az App Toolkitben bemutatott app alap funkciókat ingyen kínál. Néhány fejlettebb funkciót prémium verzióval vagy alkalmazáson belüli vásárlással tesz elérhetővé. Az egyes appok részletei a Google Play Store megfelelő oldalán találhatók.</string>
@@ -40,10 +33,4 @@
     <string name="summary_preference_faq_7">A legfrissebb applista megjelenítéséhez az App Toolkit internet-hozzáférést használ a Google Play Store információinak lekéréséhez és pontos megjelenítéséhez. Általában nincs szükség más, invazív engedélyekre.</string>
     <string name="summary_preference_faq_8">Értékeljük az App Toolkittel és a listázott appokkal kapcsolatos visszajelzését. Általában talál „Feedback” vagy „Kapcsolat” opciót az App Toolkit beállításaiban vagy a Google Play Store fejlesztői oldalán. Az AppToolkit könyvtárról szóló visszajelzések is szívesen fogadottak a megfelelő csatornákon.</string>
     <string name="summary_preference_faq_9">Az App Toolkit főként nyilvánosan elérhető információkat kér le a listázott appokról. Amikor úgy dönt, hogy telepít vagy használ egyet, annak saját adatvédelmi irányelvei érvényesek; érdemes átnézni. Az App Toolkit adatkezelése a saját adatvédelmi irányelveiben van leírva.</string>
-    <string name="summary_preference_settings_about">Tudjon meg többet az alkalmazásról</string>
-    <string name="summary_preference_settings_advanced">Fedezd fel a további haladó beállításokat</string>
-    <string name="summary_preference_settings_display">Személyre szabhatod az alkalmazás megjelenését</string>
-    <string name="summary_preference_settings_notifications">Alkalmazás értesítéseinek kezelése</string>
-    <string name="summary_preference_settings_privacy_and_security">Kezeld az adatvédelmi beállításaidat</string>
-    <string name="usage_and_diagnostics">Használat és diagnosztika</string>
 </resources>

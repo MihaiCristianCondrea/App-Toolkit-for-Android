@@ -15,7 +15,17 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="advanced">Avançado</string>
+    <string name="display">Tela</string>
     <string name="get_help">Obter ajuda</string>
+    <string name="notifications">Notificações</string>
+    <string name="security_and_privacy">Segurança e privacidade</string>
     <string name="settings">Configurações</string>
+    <string name="settings_category_general">Geral</string>
     <string name="settings_placeholder_description">Nenhuma configuração selecionada. Escolha uma opção para ver seus detalhes aqui.</string>
+    <string name="summary_preference_settings_about">Saiba mais sobre o aplicativo</string>
+    <string name="summary_preference_settings_advanced">Explore mais configurações avançadas</string>
+    <string name="summary_preference_settings_display">Personalize a aparência e o comportamento do aplicativo</string>
+    <string name="summary_preference_settings_notifications">Gerencie as notificações do aplicativo</string>
+    <string name="summary_preference_settings_privacy_and_security">Gerencie suas configurações de privacidade</string>
 </resources>

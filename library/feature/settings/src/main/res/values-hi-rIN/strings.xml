@@ -15,7 +15,17 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="advanced">उन्नत</string>
+    <string name="display">डिस्प्ले</string>
     <string name="get_help">मदद प्राप्त करें</string>
+    <string name="notifications">सूचनाएं</string>
+    <string name="security_and_privacy">सुरक्षा और गोपनीयता</string>
     <string name="settings">सेटिंग्स</string>
+    <string name="settings_category_general">सामान्य</string>
     <string name="settings_placeholder_description">कोई सेटिंग्स चयनित नहीं। विवरण देखने के लिए एक विकल्प चुनें।</string>
+    <string name="summary_preference_settings_about">ऐप के बारे में अधिक जानें</string>
+    <string name="summary_preference_settings_advanced">और अधिक उन्नत सेटिंग्स का अन्वेषण करें</string>
+    <string name="summary_preference_settings_display">अपने ऐप के लुक और अनुभव को वैयक्तिकृत करें</string>
+    <string name="summary_preference_settings_notifications">ऐप सूचनाओं का प्रबंधन करें</string>
+    <string name="summary_preference_settings_privacy_and_security">अपनी गोपनीयता सेटिंग्स का प्रबंधन करें</string>
 </resources>

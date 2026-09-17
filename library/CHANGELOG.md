@@ -12,6 +12,11 @@
   animation set includes paired on/off states for blinds, cameras, fans, garage doors, lights,
   locks, outlets, security systems, switches, thermostats, TVs, and vacuums, together with
   play/pause, sound bars, a square container, and volume expand/collapse animations.
+- Added the shared root settings labels to `:library:feature:settings`, translated in all 25
+  supported locales: `notifications`, `display`, `security_and_privacy`, `advanced`,
+  `settings_category_general`, and the matching `summary_preference_settings_*` summaries. Hosts no
+  longer need to declare and translate their own copies to name the destinations `SettingsContent`
+  already defines.
 
 ### Changed
 

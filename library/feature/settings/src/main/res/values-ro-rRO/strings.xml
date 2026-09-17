@@ -15,7 +15,17 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="advanced">Avansat</string>
+    <string name="display">Afișaj</string>
     <string name="get_help">Obține ajutor</string>
+    <string name="notifications">Notificări</string>
+    <string name="security_and_privacy">Securitate și confidențialitate</string>
     <string name="settings">Setări</string>
+    <string name="settings_category_general">General</string>
     <string name="settings_placeholder_description">Nicio setare selectată. Alege o opțiune pentru a vedea detalii aici.</string>
+    <string name="summary_preference_settings_about">Află mai multe despre aplicație</string>
+    <string name="summary_preference_settings_advanced">Explorează mai multe setări avansate</string>
+    <string name="summary_preference_settings_display">Personalizează aspectul și funcționalitatea aplicației</string>
+    <string name="summary_preference_settings_notifications">Gestionează notificările aplicației</string>
+    <string name="summary_preference_settings_privacy_and_security">Gestionează setările de confidențialitate</string>
 </resources>

@@ -15,7 +15,17 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="advanced">Avancé</string>
+    <string name="display">Affichage</string>
     <string name="get_help">Obtenir de l\'aide</string>
+    <string name="notifications">Notifications</string>
+    <string name="security_and_privacy">Sécurité et confidentialité</string>
     <string name="settings">Paramètres</string>
+    <string name="settings_category_general">Général</string>
     <string name="settings_placeholder_description">Aucun paramètre sélectionné. Choisissez une option pour afficher les détails ici.</string>
+    <string name="summary_preference_settings_about">En savoir plus sur l\'application</string>
+    <string name="summary_preference_settings_advanced">Explorez des paramètres avancés</string>
+    <string name="summary_preference_settings_display">Personnalisez l\'apparence de votre application</string>
+    <string name="summary_preference_settings_notifications">Gérez les notifications de l\'application</string>
+    <string name="summary_preference_settings_privacy_and_security">Gérez vos paramètres de confidentialité</string>
 </resources>

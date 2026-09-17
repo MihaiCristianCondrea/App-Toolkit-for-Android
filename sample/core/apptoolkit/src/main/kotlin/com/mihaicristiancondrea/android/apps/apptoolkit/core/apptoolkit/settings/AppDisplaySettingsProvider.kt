@@ -19,11 +19,11 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.setting
 
 import android.content.Context
 import androidx.compose.runtime.Composable
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.views.dialogs.SelectStartupScreenAlertDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.general.GeneralSettingsActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.constants.SettingsContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.providers.DisplaySettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.R as DisplayR
 
 /**
  * Supplies the sample's theme route and startup-destination dialog to toolkit display settings.
@@ -36,7 +36,7 @@ class AppDisplaySettingsProvider(
     override fun openThemeSettings() {
         GeneralSettingsActivity.start(
             context = context,
-            title = context.getString(R.string.dark_theme),
+            title = context.getString(DisplayR.string.dark_theme),
             contentKey = SettingsContent.THEME,
         )
     }

@@ -15,7 +15,17 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="advanced">進階</string>
+    <string name="display">顯示</string>
     <string name="get_help">獲取幫助</string>
+    <string name="notifications">通知</string>
+    <string name="security_and_privacy">安全與隱私</string>
     <string name="settings">設定</string>
+    <string name="settings_category_general">一般</string>
     <string name="settings_placeholder_description">未選擇設定。選擇一個選項以在此查看詳細資訊。</string>
+    <string name="summary_preference_settings_about">了解更多關於應用程式</string>
+    <string name="summary_preference_settings_advanced">探索更多進階設定</string>
+    <string name="summary_preference_settings_display">個性化您的應用程式外觀和感受</string>
+    <string name="summary_preference_settings_notifications">管理應用程式通知</string>
+    <string name="summary_preference_settings_privacy_and_security">管理您的隱私設定</string>
 </resources>

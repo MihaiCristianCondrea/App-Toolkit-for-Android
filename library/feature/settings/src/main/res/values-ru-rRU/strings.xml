@@ -15,7 +15,17 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="advanced">Дополнительно</string>
+    <string name="display">Дисплей</string>
     <string name="get_help">Получить помощь</string>
+    <string name="notifications">Уведомления</string>
+    <string name="security_and_privacy">Безопасность и конфиденциальность</string>
     <string name="settings">Настройки</string>
+    <string name="settings_category_general">Общие</string>
     <string name="settings_placeholder_description">Настройки не выбраны. Выберите опцию, чтобы увидеть её детали.</string>
+    <string name="summary_preference_settings_about">Узнайте больше о приложении</string>
+    <string name="summary_preference_settings_advanced">Изучите дополнительные настройки</string>
+    <string name="summary_preference_settings_display">Настройте внешний вид и поведение приложения</string>
+    <string name="summary_preference_settings_notifications">Управляйте уведомлениями приложения</string>
+    <string name="summary_preference_settings_privacy_and_security">Управляйте настройками конфиденциальности</string>
 </resources>

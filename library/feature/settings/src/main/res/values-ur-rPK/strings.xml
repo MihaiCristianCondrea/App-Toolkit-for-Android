@@ -15,7 +15,17 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="advanced">جدید</string>
+    <string name="display">ڈسپلے</string>
     <string name="get_help">مدد حاصل کریں</string>
+    <string name="notifications">اطلاعات</string>
+    <string name="security_and_privacy">سیکیورٹی اور رازداری</string>
     <string name="settings">ترتیبات</string>
+    <string name="settings_category_general">عام</string>
     <string name="settings_placeholder_description">کوئی ترتیبات منتخب نہیں ہیں۔ اس کی تفصیلات یہاں دیکھنے کے لیے ایک آپشن منتخب کریں۔</string>
+    <string name="summary_preference_settings_about">ایپ کے بارے میں مزید جانیں</string>
+    <string name="summary_preference_settings_advanced">مزید جدید ترتیبات دریافت کریں</string>
+    <string name="summary_preference_settings_display">اپنی ایپ کی شکل و صورت کو ذاتی بنائیں</string>
+    <string name="summary_preference_settings_notifications">ایپ اطلاعات کا نظم کریں</string>
+    <string name="summary_preference_settings_privacy_and_security">اپنی رازداری کی ترتیبات کا نظم کریں</string>
 </resources>
