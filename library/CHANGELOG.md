@@ -2,6 +2,21 @@
 
 ---
 
+# Unreleased
+
+**Version:** `3.0.0-pre17`
+
+### Added
+
+- Added more pre-build animations
+
+### Changed
+
+- Changed the proguard for the new AGP 9+
+- Bumped some dependenices
+
+---
+
 # September 13, 2026
 
 **Version:** `3.0.0-pre16`
