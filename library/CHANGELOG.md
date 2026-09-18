@@ -39,6 +39,8 @@
   value on the same click.
 - `FaqMappers` moved to `data/remote/mappers`; it maps a remote DTO, which is where the project's
   tree rules put that.
+- `FaqItem`, `FaqId` and `AboutInfo` moved from `domain/models` to `data/models`. Neither module has
+  a use case any more, so neither has a domain layer for a model to live in.
 - `DefaultNavigationRepository` moved from `:library:feature:about` to `:library:navigation`,
   together with the drawer labels it uses. Hosts update the import to
   `com.mihaicristiancondrea.android.libs.apptoolkit.navigation.data.repositories.DefaultNavigationRepository`.
@@ -103,6 +105,9 @@
 - Tapping the application name or the build version on the About screen played the click ripple and
   did nothing. Both carried no copy action, so most of the screen looked broken after the first
   successful copy.
+- Simplified the About copy path: each copy is its own job rather than restarting a shared one, and
+  the clipboard write no longer hops dispatchers to reach the main thread it was already on.
+  Cancelling a previous copy could only discard one the user had asked for.
 
 ---
 

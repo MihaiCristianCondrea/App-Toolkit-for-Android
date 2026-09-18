@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.models.AboutInfo
 
 /** Supplies the application and device metadata rendered by the About screen. */
 interface AboutRepository {

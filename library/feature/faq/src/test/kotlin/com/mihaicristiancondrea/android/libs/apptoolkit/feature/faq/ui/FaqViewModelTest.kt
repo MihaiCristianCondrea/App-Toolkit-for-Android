@@ -18,8 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.repositories.FaqRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.domain.models.FaqId
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.domain.models.FaqItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqId
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.contracts.FaqEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.usecases.ForceInAppReviewUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider

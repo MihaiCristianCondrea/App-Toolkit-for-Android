@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.models
 
 /**
  * Application and device metadata backing the About screen.

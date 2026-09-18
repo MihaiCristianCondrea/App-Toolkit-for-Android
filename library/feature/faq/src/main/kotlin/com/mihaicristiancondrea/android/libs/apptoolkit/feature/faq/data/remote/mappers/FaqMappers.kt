@@ -18,8 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.mappers
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.models.FaqQuestionDto
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.domain.models.FaqId
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.domain.models.FaqItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqId
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
 
 /**
  * Maps an [Iterable] of [FaqQuestionDto] to a [List] of [FaqItem] domain models.

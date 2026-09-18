@@ -46,15 +46,14 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * ViewModel for the About screen, including tap-to-copy of the entries it renders.
  *
- * Writing to the clipboard is a system UI interaction, so it runs on the main dispatcher rather
- * than on IO. Android 13 raised its own clipboard preview for every copy, so a successful copy is
- * confirmed in-app only below that, where nothing else tells the user anything happened. A failed
- * copy raises no system UI at all, so it is always reported.
+ * Writing to the clipboard is a system UI interaction, so it happens on the main thread, which is
+ * where `viewModelScope` already runs. Android 13 raised its own clipboard preview for every copy,
+ * so a successful copy is confirmed in-app only below that, where nothing else tells the user
+ * anything happened. A failed copy raises no system UI at all, so it is always reported.
  *
  * @param sdkIntProvider Supplies the running platform level, so the confirmation rule is testable
  * without a device.
@@ -71,7 +70,6 @@ open class AboutViewModel(
     screenName = "About",
 ) {
     private var observeJob: Job? = null
-    private var copyJob: Job? = null
 
     init {
         onEvent(AboutEvent.Load)
@@ -117,38 +115,41 @@ open class AboutViewModel(
         }
     }
 
+    /**
+     * Copies [text] under [label], then confirms it where the platform will not.
+     *
+     * Each copy is its own job on purpose. An earlier version restarted a shared `copyJob`, which
+     * bought nothing, a clipboard write is instant and idempotent, and gave cancellation a way to
+     * drop a copy the user had already asked for. There is no `withContext` either: the write has
+     * to happen on the main thread and `viewModelScope` is already there, so hopping dispatchers
+     * only moved the write off the click's own frame.
+     */
     private fun copyToClipboard(
         label: String,
         text: String,
         successMessage: UiTextHelper?,
     ) {
-        val extra: Map<String, String> = mapOf(ExtraKeys.LABEL to label)
-
-        copyJob = copyJob.restart {
-            launchReport(
-                action = Actions.COPY_TO_CLIPBOARD,
-                extra = extra,
-                block = {
-                    val copied: Boolean = withContext(dispatchers.main) {
-                        context.copyTextToClipboard(label = label, text = text)
-                    }
-                    check(copied) { "Clipboard rejected the copy for \"$label\"" }
-                    if (!showsSystemClipboardPreview()) {
-                        showSnackbar(
-                            message = successMessage
-                                ?: UiTextHelper.StringResource(R.string.snack_copied_to_clipboard),
-                            isError = false,
-                        )
-                    }
-                },
-                onError = {
+        launchReport(
+            action = Actions.COPY_TO_CLIPBOARD,
+            extra = mapOf(ExtraKeys.LABEL to label),
+            block = {
+                val copied: Boolean = context.copyTextToClipboard(label = label, text = text)
+                check(copied) { "Clipboard rejected the copy for \"$label\"" }
+                if (!showsSystemClipboardPreview()) {
                     showSnackbar(
-                        message = UiTextHelper.StringResource(R.string.snack_copy_failed),
-                        isError = true,
+                        message = successMessage
+                            ?: UiTextHelper.StringResource(R.string.snack_copied_to_clipboard),
+                        isError = false,
                     )
-                },
-            )
-        }
+                }
+            },
+            onError = {
+                showSnackbar(
+                    message = UiTextHelper.StringResource(R.string.snack_copy_failed),
+                    isError = true,
+                )
+            },
+        )
     }
 
     /**

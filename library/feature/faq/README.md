@@ -12,7 +12,8 @@ review, and store actions around it. This module replaced `:library:feature:help
   catalog, and fall back to the resources bundled in the host.
 - `FaqRemoteDataSource`, `FaqLocalDataSource`, the catalog DTOs, and the DTO mappers under
   `data/remote/mappers`.
-- `FaqItem`, `FaqId`, `QuestionCard`, `ContactUsCard`, `FaqNativeAdCard`, and the overflow menu.
+- `FaqItem` and `FaqId` in `data/models`, `QuestionCard`, `ContactUsCard`, `FaqNativeAdCard`, and
+  the overflow menu.
 - The nine question and nine answer placeholder resources a host fills in.
 
 ## Does not own

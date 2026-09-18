@@ -30,7 +30,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatc
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories.AboutRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.models.AboutInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.mappers.toUiState
 import io.mockk.every
@@ -209,6 +209,42 @@ class AboutViewModelTest {
             dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
             verify { ClipData.newPlainText("Device info", "shown-device-info") }
+        }
+
+    @Test
+    fun `copying one row then another writes both to the clipboard`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = createViewModel()
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            viewModel.onEvent(AboutEvent.CopyToClipboard(label = "App name", text = "App Toolkit"))
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            viewModel.onEvent(
+                AboutEvent.CopyToClipboard(label = "App Toolkit version", text = "3.0.0-test")
+            )
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            verify { ClipData.newPlainText("App name", "App Toolkit") }
+            verify { ClipData.newPlainText("App Toolkit version", "3.0.0-test") }
+        }
+
+    @Test
+    fun `copying one row then another still writes both when the platform previews clipboard`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = createViewModel(sdkInt = Build.VERSION_CODES.TIRAMISU)
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            viewModel.onEvent(AboutEvent.CopyToClipboard(label = "App name", text = "App Toolkit"))
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            viewModel.onEvent(
+                AboutEvent.CopyToClipboard(label = "Play services", text = "24.01.12")
+            )
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            verify { ClipData.newPlainText("App name", "App Toolkit") }
+            verify { ClipData.newPlainText("Play services", "24.01.12") }
         }
 
     @Test
