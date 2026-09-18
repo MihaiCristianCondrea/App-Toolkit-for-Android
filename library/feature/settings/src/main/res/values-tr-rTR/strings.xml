@@ -15,7 +15,17 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="advanced">Gelişmiş</string>
+    <string name="display">Ekran</string>
     <string name="get_help">Yardım al</string>
+    <string name="notifications">Bildirimler</string>
+    <string name="security_and_privacy">Güvenlik ve gizlilik</string>
     <string name="settings">Ayarlar</string>
+    <string name="settings_category_general">Genel</string>
     <string name="settings_placeholder_description">Seçilen bir ayar yok. Ayrıntıları görüntülemek için bir seçenek seçin.</string>
+    <string name="summary_preference_settings_about">Uygulama hakkında daha fazla bilgi edinin</string>
+    <string name="summary_preference_settings_advanced">Daha gelişmiş ayarları keşfedin</string>
+    <string name="summary_preference_settings_display">Uygulamanızın görünümünü ve hissini kişiselleştirin</string>
+    <string name="summary_preference_settings_notifications">Uygulama bildirimlerini yönetin</string>
+    <string name="summary_preference_settings_privacy_and_security">Gizlilik ayarlarınızı yönetin</string>
 </resources>

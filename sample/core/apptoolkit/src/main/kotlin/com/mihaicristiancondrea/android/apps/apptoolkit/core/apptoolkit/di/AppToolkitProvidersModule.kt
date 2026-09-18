@@ -18,7 +18,6 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.di
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.settings.AppAboutSettingsProvider
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.settings.AppAdvancedSettingsProvider
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.settings.AppDisplaySettingsProvider
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.settings.AppPrivacySettingsProvider
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.settings.AppSettingsProvider
@@ -31,8 +30,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitMod
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.AboutSettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.PrivacySettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.SettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.providers.AdvancedSettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.providers.DisplaySettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReporterConfig
 import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -53,6 +52,9 @@ fun appToolkitHostModules(hostBuildConfig: AppToolkitHostBuildConfig): List<Modu
         appToolkitModules(
             hostBuildConfig = hostBuildConfig,
             startupProviderFactory = ::AppStartupProvider,
+            // The sample turns the gesture on because it is what the sample is for: showing a host
+            // what the toolkit offers. It stays off by default for everyone else.
+            issueReporterConfig = IssueReporterConfig(shakeToReportEnabled = true),
         )
     )
     add(appToolkitProvidersModule(hostBuildConfig = hostBuildConfig))
@@ -70,7 +72,6 @@ internal fun appToolkitProvidersModule(hostBuildConfig: AppToolkitHostBuildConfi
         single<AboutSettingsProvider> {
             AppAboutSettingsProvider(context = get(), hostBuildConfig = hostBuildConfig)
         }
-        single<AdvancedSettingsProvider> { AppAdvancedSettingsProvider(context = get()) }
         single<DisplaySettingsProvider> { AppDisplaySettingsProvider(context = get()) }
         single<PrivacySettingsProvider> { AppPrivacySettingsProvider(context = get()) }
         single<ColorPalette>(named(AppToolkitDiConstants.DEFAULT_THEME_PALETTE)) { bluePalette }

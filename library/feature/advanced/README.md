@@ -2,21 +2,25 @@
 
 ## Responsibility and consumers
 
-Owns the advanced settings list, cache-clearing state and actions, AdvancedSettingsProvider,
+Owns the advanced settings list, cache-clearing state and actions,
 CacheRepository/DefaultCacheRepository, and advancedSettingsModule. Settings composes this content;
-the main toolkit module assembles its DI module. Hosts supply the advanced settings provider.
+the main toolkit module assembles its DI module. The feature asks nothing of its host: the removed
+AdvancedSettingsProvider existed only to supply a bug-report URL, which the list stopped using once
+the issue reporter began submitting reports itself.
 
 ## Dependencies and flow
 
-Depends on core common, network, and UI, plus Issue Reporter for the report action.
-AdvancedSettingsList sends events to AdvancedSettingsViewModel, which calls CacheRepository.
+Depends on core common, network, and UI, plus Issue Reporter for the report action. The bug-report
+row composes IssueReporterBottomSheet over this screen, held by rememberSaveable state, rather than
+starting an activity. AdvancedSettingsList sends events to AdvancedSettingsViewModel, which calls
+CacheRepository.
 DefaultCacheRepository performs cache operations on the injected dispatcher and reports results
 through the existing screen state. The feature owns its localized resources.
 
 ## Contracts and boundaries
 
-Public entry points are AdvancedSettingsList, AdvancedSettingsViewModel, AdvancedSettingsProvider,
-CacheRepository, and advancedSettingsModule. Cache operations belong to data/repositories;
+Public entry points are AdvancedSettingsList, AdvancedSettingsViewModel, CacheRepository, and
+advancedSettingsModule. Cache operations belong to data/repositories;
 presentation and provider callbacks belong to ui. There is no domain layer because these actions
 do not require a separate business-operation abstraction. Settings owns the category route.
 

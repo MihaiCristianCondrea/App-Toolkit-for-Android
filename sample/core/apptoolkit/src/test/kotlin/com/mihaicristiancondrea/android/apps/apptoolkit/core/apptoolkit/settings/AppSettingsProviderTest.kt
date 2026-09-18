@@ -18,7 +18,6 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.settings
 
 import android.content.Context
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openAppNotificationSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.general.GeneralSettingsActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.constants.SettingsContent
@@ -35,21 +34,23 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R as SettingsR
 
 class AppSettingsProviderTest {
 
     private val defaultStrings = mapOf(
-        R.string.settings to "Settings",
-        R.string.notifications to "Notifications",
-        R.string.summary_preference_settings_notifications to "Manage app notifications",
-        R.string.display to "Display",
-        R.string.summary_preference_settings_display to "Personalize your app's look and feel",
-        R.string.security_and_privacy to "Security & privacy",
-        R.string.summary_preference_settings_privacy_and_security to "Manage your privacy settings",
-        R.string.advanced to "Advanced",
-        R.string.summary_preference_settings_advanced to "Explore more advanced settings",
-        R.string.about to "About",
-        R.string.summary_preference_settings_about to "Learn more about the app"
+        SettingsR.string.settings to "Settings",
+        SettingsR.string.notifications to "Notifications",
+        SettingsR.string.summary_preference_settings_notifications to "Manage app notifications",
+        SettingsR.string.display to "Display",
+        SettingsR.string.summary_preference_settings_display to "Personalize your app's look and feel",
+        SettingsR.string.security_and_privacy to "Security & privacy",
+        SettingsR.string.summary_preference_settings_privacy_and_security to "Manage your privacy settings",
+        SettingsR.string.advanced to "Advanced",
+        SettingsR.string.summary_preference_settings_advanced to "Explore more advanced settings",
+        CoreUiR.string.about to "About",
+        SettingsR.string.summary_preference_settings_about to "Learn more about the app"
     )
 
     @AfterEach
@@ -68,7 +69,7 @@ class AppSettingsProviderTest {
 
         val config = provider.provideSettingsConfig()
 
-        assertEquals(defaultStrings[R.string.settings], config.title)
+        assertEquals(defaultStrings[SettingsR.string.settings], config.title)
         assertEquals(2, config.categories.size)
 
         val generalPreferences = config.categories[0].preferences
@@ -76,40 +77,40 @@ class AppSettingsProviderTest {
 
         val notifications = generalPreferences[0]
         assertEquals(SettingsConstants.KEY_SETTINGS_NOTIFICATION, notifications.key)
-        assertEquals(defaultStrings[R.string.notifications], notifications.title)
+        assertEquals(defaultStrings[SettingsR.string.notifications], notifications.title)
         assertEquals(
-            defaultStrings[R.string.summary_preference_settings_notifications],
+            defaultStrings[SettingsR.string.summary_preference_settings_notifications],
             notifications.summary
         )
 
         val display = generalPreferences[1]
         assertEquals(SettingsContent.DISPLAY, display.key)
-        assertEquals(defaultStrings[R.string.display], display.title)
-        assertEquals(defaultStrings[R.string.summary_preference_settings_display], display.summary)
+        assertEquals(defaultStrings[SettingsR.string.display], display.title)
+        assertEquals(defaultStrings[SettingsR.string.summary_preference_settings_display], display.summary)
 
         val advancedCategory = config.categories[1].preferences
         assertEquals(3, advancedCategory.size)
 
         val security = advancedCategory[0]
         assertEquals(SettingsContent.SECURITY_AND_PRIVACY, security.key)
-        assertEquals(defaultStrings[R.string.security_and_privacy], security.title)
+        assertEquals(defaultStrings[SettingsR.string.security_and_privacy], security.title)
         assertEquals(
-            defaultStrings[R.string.summary_preference_settings_privacy_and_security],
+            defaultStrings[SettingsR.string.summary_preference_settings_privacy_and_security],
             security.summary
         )
 
         val advanced = advancedCategory[1]
         assertEquals(SettingsContent.ADVANCED, advanced.key)
-        assertEquals(defaultStrings[R.string.advanced], advanced.title)
+        assertEquals(defaultStrings[SettingsR.string.advanced], advanced.title)
         assertEquals(
-            defaultStrings[R.string.summary_preference_settings_advanced],
+            defaultStrings[SettingsR.string.summary_preference_settings_advanced],
             advanced.summary
         )
 
         val about = advancedCategory[2]
         assertEquals(SettingsContent.ABOUT, about.key)
-        assertEquals(defaultStrings[R.string.about], about.title)
-        assertEquals(defaultStrings[R.string.summary_preference_settings_about], about.summary)
+        assertEquals(defaultStrings[CoreUiR.string.about], about.title)
+        assertEquals(defaultStrings[SettingsR.string.summary_preference_settings_about], about.summary)
 
         notifications.action.invoke()
         verify(exactly = 1) { context.openAppNotificationSettings() }
@@ -138,7 +139,7 @@ class AppSettingsProviderTest {
         }
 
         assertNull(config.categories[0].title)
-        assertEquals(defaultStrings[R.string.settings], config.title)
+        assertEquals(defaultStrings[SettingsR.string.settings], config.title)
     }
 
     @Test

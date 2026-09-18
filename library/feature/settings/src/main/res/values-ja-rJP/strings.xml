@@ -15,7 +15,17 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="advanced">詳細設定</string>
+    <string name="display">ディスプレイ</string>
     <string name="get_help">ヘルプを取得</string>
+    <string name="notifications">通知</string>
+    <string name="security_and_privacy">セキュリティとプライバシー</string>
     <string name="settings">設定</string>
+    <string name="settings_category_general">一般</string>
     <string name="settings_placeholder_description">設定が選択されていません。詳細を表示するにはオプションを選択してください。</string>
+    <string name="summary_preference_settings_about">アプリについて詳しく知る</string>
+    <string name="summary_preference_settings_advanced">さらに高度な設定を探索する</string>
+    <string name="summary_preference_settings_display">アプリの外観と操作感をカスタマイズする</string>
+    <string name="summary_preference_settings_notifications">アプリの通知を管理する</string>
+    <string name="summary_preference_settings_privacy_and_security">プライバシー設定を管理する</string>
 </resources>

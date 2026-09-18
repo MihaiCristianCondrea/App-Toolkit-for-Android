@@ -15,7 +15,17 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="advanced">고급</string>
+    <string name="display">디스플레이</string>
     <string name="get_help">도움 받기</string>
+    <string name="notifications">알림</string>
+    <string name="security_and_privacy">보안 &amp; 개인 정보 보호</string>
     <string name="settings">설정</string>
+    <string name="settings_category_general">일반</string>
     <string name="settings_placeholder_description">선택된 설정이 없습니다. 여기서 세부 정보를 보려면 옵션을 선택하세요.</string>
+    <string name="summary_preference_settings_about">앱에 대해 자세히 알아보기</string>
+    <string name="summary_preference_settings_advanced">더 많은 고급 설정 살펴보기</string>
+    <string name="summary_preference_settings_display">앱의 모양과 느낌을 맞춤 설정하세요.</string>
+    <string name="summary_preference_settings_notifications">앱 알림 관리</string>
+    <string name="summary_preference_settings_privacy_and_security">개인 정보 설정을 관리합니다.</string>
 </resources>

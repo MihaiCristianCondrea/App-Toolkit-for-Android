@@ -19,6 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.di.modules
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers.StartupProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReporterConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.di.billingModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.di.firebaseModule
 import org.koin.core.module.Module
@@ -62,10 +63,13 @@ import org.koin.core.module.Module
  *
  * @param hostBuildConfig Host build values the toolkit cannot read from its own BuildConfig.
  * @param startupProviderFactory Produces the host's startup screen provider.
+ * @param issueReporterConfig Opts the host into shake-to-report, which is off by default. A host
+ * that enables it also calls `IssueReporterShakeManager.install()` from its `Application`.
  */
 fun appToolkitModules(
     hostBuildConfig: AppToolkitHostBuildConfig,
     startupProviderFactory: () -> StartupProvider,
+    issueReporterConfig: IssueReporterConfig = IssueReporterConfig(),
 ): List<Module> = buildList {
     addAll(appToolkitFoundationModules(hostBuildConfig = hostBuildConfig))
     add(firebaseModule)
@@ -75,6 +79,7 @@ fun appToolkitModules(
         appToolkitFeatureModules(
             hostBuildConfig = hostBuildConfig,
             startupProviderFactory = startupProviderFactory,
+            issueReporterConfig = issueReporterConfig,
         )
     )
 }

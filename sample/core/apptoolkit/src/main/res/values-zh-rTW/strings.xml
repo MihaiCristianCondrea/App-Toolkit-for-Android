@@ -15,11 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="about">關於</string>
-    <string name="advanced">進階</string>
-    <string name="dark_theme">深色主題</string>
-    <string name="display">顯示</string>
-    <string name="notifications">通知</string>
     <string name="question_1">什麼是 App Toolkit？</string>
     <string name="question_2">如何存取 App Toolkit 中顯示的不同應用程式？</string>
     <string name="question_3">App Toolkit 中展示的應用程式是免費的嗎？</string>
@@ -29,8 +24,6 @@
     <string name="question_7">為什麼 App Toolkit 需要像網際網路存取這樣的權限？</string>
     <string name="question_8">如何提供 App Toolkit 或應用程式的意見回饋？</string>
     <string name="question_9">使用 App Toolkit 尋找其他應用程式時，我的資料安全嗎？</string>
-    <string name="security_and_privacy">安全與隱私</string>
-    <string name="settings">設定</string>
     <string name="summary_preference_faq_1">App Toolkit 是用來展示與示範使用 AppToolkit 程式庫打造的應用程式的應用程式。它是你探索此生態系並查看 AppToolkit 程式庫實際運作的指南。</string>
     <string name="summary_preference_faq_2">App Toolkit 會列出各種應用程式。點選某個應用程式通常會看到更多資訊與連結，可從 Google Play Store 安裝或開啟，以便親自體驗。</string>
     <string name="summary_preference_faq_3">許多在 App Toolkit 中展示的應用程式提供基本功能免費使用。部分應用程式可能透過進階版或應用程式內購提供進階功能。每個應用程式的詳細資訊可在其 Google Play Store 頁面找到。</string>
@@ -40,10 +33,4 @@
     <string name="summary_preference_faq_7">為了顯示最新的應用程式清單，App Toolkit 會使用網際網路存取從 Google Play Store 取得資訊並正確顯示。通常不需要其他具侵入性的權限。</string>
     <string name="summary_preference_faq_8">我們感謝你對 App Toolkit 與清單中的應用程式提供意見。你通常可以在 App Toolkit 設定或 Google Play Store 的開發者頁面中找到 "Feedback" 或 "Contact" 選項。對 AppToolkit 程式庫的回饋也歡迎透過適當管道提供。</string>
     <string name="summary_preference_faq_9">App Toolkit 主要取得清單中應用程式的公開資訊。當你選擇安裝或使用其中一個應用程式時，將適用該應用程式的隱私權政策；請務必查看。App Toolkit 的資料處理方式已在其隱私權政策中說明。</string>
-    <string name="summary_preference_settings_about">了解更多關於應用程式</string>
-    <string name="summary_preference_settings_advanced">探索更多進階設定</string>
-    <string name="summary_preference_settings_display">個性化您的應用程式外觀和感受</string>
-    <string name="summary_preference_settings_notifications">管理應用程式通知</string>
-    <string name="summary_preference_settings_privacy_and_security">管理您的隱私設定</string>
-    <string name="usage_and_diagnostics">使用與診斷</string>
 </resources>

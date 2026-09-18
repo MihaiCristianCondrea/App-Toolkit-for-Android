@@ -15,7 +15,17 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="advanced">Додаткові налаштування</string>
+    <string name="display">Екран</string>
     <string name="get_help">Отримати допомогу</string>
+    <string name="notifications">Сповіщення</string>
+    <string name="security_and_privacy">Безпека та конфіденційність</string>
     <string name="settings">Налаштування</string>
+    <string name="settings_category_general">Загальні</string>
     <string name="settings_placeholder_description">Налаштування не вибрано. Виберіть опцію, щоб переглянути її деталі.</string>
+    <string name="summary_preference_settings_about">Дізнайтеся більше про додаток</string>
+    <string name="summary_preference_settings_advanced">Досліджуйте більше розширених налаштувань</string>
+    <string name="summary_preference_settings_display">Персоналізуйте вигляд та функціонал вашого додатка</string>
+    <string name="summary_preference_settings_notifications">Керуйте сповіщеннями додатка</string>
+    <string name="summary_preference_settings_privacy_and_security">Керуйте своїми налаштуваннями конфіденційності</string>
 </resources>

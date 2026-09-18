@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.di
 
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import androidx.compose.material3.ColorScheme
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.di.appToolkitHostModules
@@ -25,7 +26,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.Ap
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ColorPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.AboutSettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.SettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.providers.AdvancedSettingsProvider
 import io.ktor.client.engine.HttpClientEngine
 import org.junit.jupiter.api.Test
 import org.koin.core.module.Module
@@ -37,12 +37,11 @@ import org.koin.test.verify.verify
  */
 class HostKoinGraphTest {
 
-    private val platformTypes = listOf(Context::class, Activity::class)
+    private val platformTypes = listOf(Context::class, Activity::class, Application::class)
     private val builtByFactoryFunction = listOf(HttpClientEngine::class, ColorScheme::class)
     private val hostExtensionPoints = listOf(
         SettingsProvider::class,
         AboutSettingsProvider::class,
-        AdvancedSettingsProvider::class,
         ColorPalette::class,
     )
 

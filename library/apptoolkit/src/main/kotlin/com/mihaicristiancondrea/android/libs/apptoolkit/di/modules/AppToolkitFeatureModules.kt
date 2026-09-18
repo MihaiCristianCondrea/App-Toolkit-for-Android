@@ -33,6 +33,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersio
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.di.aboutModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.di.helpModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.di.issueReporterModule
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReporterConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.di.onboardingModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers.StartupProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.di.permissionsModule
@@ -49,13 +50,14 @@ import org.koin.dsl.module
 fun appToolkitFeatureModules(
     hostBuildConfig: AppToolkitHostBuildConfig,
     startupProviderFactory: () -> StartupProvider,
+    issueReporterConfig: IssueReporterConfig = IssueReporterConfig(),
 ): List<Module> = listOf(
     appToolkitCoreModule(hostBuildConfig = hostBuildConfig),
     onboardingModule(startupProviderFactory = startupProviderFactory),
     supportModule,
     helpModule(hostBuildConfig = hostBuildConfig),
     aboutModule,
-    issueReporterModule(hostBuildConfig = hostBuildConfig),
+    issueReporterModule(hostBuildConfig = hostBuildConfig, config = issueReporterConfig),
     permissionsModule,
     reviewModule,
 )

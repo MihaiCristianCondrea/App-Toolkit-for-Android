@@ -4,6 +4,59 @@
 
 # Unreleased
 
+**Version:** `3.0.0-pre17`
+
+### Added
+
+- Added 30 reusable animated vector drawables to `:library:core:designsystem`. The expanded
+  animation set includes paired on/off states for blinds, cameras, fans, garage doors, lights,
+  locks, outlets, security systems, switches, thermostats, TVs, and vacuums, together with
+  play/pause, sound bars, a square container, and volume expand/collapse animations.
+- Added the shared root settings labels to `:library:feature:settings`, translated in all 25
+  supported locales: `notifications`, `display`, `security_and_privacy`, `advanced`,
+  `settings_category_general`, and the matching `summary_preference_settings_*` summaries. Hosts no
+  longer need to declare and translate their own copies to name the destinations `SettingsContent`
+  already defines.
+- Added shake to report to `:library:feature:issuereporter`. Shaking the device opens the issue
+  reporter from any screen. It is off by default and a host turns it on with
+  `IssueReporterConfig(shakeToReportEnabled = true)` passed to `appToolkitModules`, plus
+  `IssueReporterShakeManager.install()` in its `Application`. The accelerometer is read only while
+  an activity is in the foreground, and a shake has to clear a magnitude threshold, a minimum
+  duration and a cooldown before it counts.
+- Added `IssueReporterBottomSheet`, the issue reporter as a composable a host can show from its own
+  screen, plus `IssueReporterLauncher.show(activity)` for callers outside a composition and
+  `IssueReporterContent` for hosts embedding the report form in a container of their own.
+
+### Changed
+
+- The issue reporter now opens as a bottom sheet over the current screen instead of launching its
+  own activity. Advanced settings no longer leaves the settings screen to report a bug, and the
+  full-screen top app bar and floating send button are replaced by a sheet with a send button fixed
+  at the bottom.
+- The reporter reports its results as toasts instead of snackbars, so a report that succeeded says
+  so even if the sheet was dismissed on the way.
+- A submitted report now replaces the form with a confirmation instead of stacking a success card on
+  top of it. The sheet shrinks to a check, `Report submitted`, an `Open issue` link and a `Done`
+  button, takes the keyboard down and gives a confirm haptic. The form is cleared when the sheet is
+  dismissed rather than when the network answers, and a failed send returns to the form with the
+  report intact.
+- Corrected the `open_button_label` translations in all 25 supported locales. They rendered "open
+  issue" as an adjective, an issue that happens to be open, rather than the action the button
+  performs.
+- Removed `IssueReporterActivity`, its manifest entry, and the `Theme.AppToolkit.IssueReporter`
+  style. Hosts that started the activity directly call `IssueReporterLauncher.show(activity)`.
+- Removed `AdvancedSettingsProvider` and its `bugReportUrl`. Advanced settings stopped using the URL
+  when the reporter began submitting reports itself, so hosts no longer bind this provider.
+- Updated the AGP 9+ release configuration by removing the legacy `proguardFiles(...)` setup from
+  `:library:apptoolkit` and the sample application. The sample now relies on AGP 9's unified R8
+  application optimization through `optimization { enable = true }`.
+- Updated Ktor from `3.5.2` to `3.6.0`.
+- Updated Robolectric from `4.16.1` to `4.17`.
+
+---
+
+# September 13, 2026
+
 **Version:** `3.0.0-pre16`
 
 ### Improved

@@ -15,7 +15,17 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="advanced">Advanced</string>
+    <string name="display">Display</string>
     <string name="get_help">Get help</string>
+    <string name="notifications">Notifications</string>
+    <string name="security_and_privacy">Security &amp; privacy</string>
     <string name="settings">Settings</string>
+    <string name="settings_category_general">General</string>
     <string name="settings_placeholder_description">No settings selected. Choose an option to view its details here.</string>
+    <string name="summary_preference_settings_about">Learn more about the app</string>
+    <string name="summary_preference_settings_advanced">Explore more advanced settings</string>
+    <string name="summary_preference_settings_display">Personalize your app\'s look and feel</string>
+    <string name="summary_preference_settings_notifications">Manage app notifications</string>
+    <string name="summary_preference_settings_privacy_and_security">Manage your privacy settings</string>
 </resources>

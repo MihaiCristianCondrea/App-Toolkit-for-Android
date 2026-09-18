@@ -20,15 +20,13 @@
     <string name="device_info">Информация об устройстве</string>
     <string name="issue_description_label">Описание</string>
     <string name="issue_description_placeholder">Опишите проблему и способ ее воспроизведения</string>
+    <string name="issue_done">Готово</string>
     <string name="issue_email_label">Электронная почта</string>
     <string name="issue_email_optional_placeholder">Эл. почта (необязательно)</string>
     <string name="issue_section_label">Проблема</string>
     <string name="issue_send">Отправить</string>
-    <string name="issue_submitted">Ваша проблема была отправлена.</string>
-    <string name="issue_submitted_successfully">Выпуск успешно</string>
+    <string name="issue_submitted_message">Спасибо, что помогаете улучшать приложение.</string>
+    <string name="issue_submitted_title">Отчёт отправлен</string>
     <string name="issue_title_label">Заголовок</string>
-    <string name="open_button_label">Открытая проблема</string>
-    <string name="open_issue_in_browser">Открыт в браузере</string>
     <string name="snack_report_failed">Не удалось отправить отчет</string>
-    <string name="snack_report_success">Отчет успешно отправлен</string>
 </resources>

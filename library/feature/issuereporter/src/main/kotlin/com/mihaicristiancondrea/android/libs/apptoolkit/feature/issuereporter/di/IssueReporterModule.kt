@@ -26,10 +26,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.da
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.remote.IssueReporterRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.DefaultIssueReporterRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReporterRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReporterConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.providers.DeviceInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.usecases.SendIssueReportUseCase
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.shake.IssueReporterShakeManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterViewModel
+import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
@@ -38,7 +41,17 @@ import org.koin.dsl.module
 
 private val githubTokenQualifier = qualifier<GithubToken>()
 
-fun issueReporterModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
+/**
+ * Bindings for the issue reporter.
+ *
+ * [config] is the host's answer to the one thing the feature cannot decide for itself: whether
+ * shaking the device opens a report. It defaults to off, so a host that passes nothing registers no
+ * sensor listener and behaves exactly as before the gesture existed.
+ */
+fun issueReporterModule(
+    hostBuildConfig: AppToolkitHostBuildConfig,
+    config: IssueReporterConfig = IssueReporterConfig(),
+): Module = module {
     single<IssueReporterRemoteDataSource> { IssueReporterRemoteDataSource(client = get()) }
     single<DeviceInfoProvider> { DeviceInfoLocalDataSource(get(), get()) }
     single<IssueReporterRepository> { DefaultIssueReporterRepository(get(), get(), get(), get()) }
@@ -50,6 +63,10 @@ fun issueReporterModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = mo
         )
     }
     single<String>(githubTokenQualifier) { hostBuildConfig.githubToken.toToken() }
+    single<IssueReporterConfig> { config }
+    single<IssueReporterShakeManager> {
+        IssueReporterShakeManager(application = androidApplication(), config = get())
+    }
 
     viewModel {
         IssueReporterViewModel(

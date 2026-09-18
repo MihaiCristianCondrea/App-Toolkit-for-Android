@@ -15,7 +15,17 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="advanced">Avancerat</string>
+    <string name="display">Skärm</string>
     <string name="get_help">Få hjälp</string>
+    <string name="notifications">Notifikationer</string>
+    <string name="security_and_privacy">Säkerhet och integritet</string>
     <string name="settings">Inställningar</string>
+    <string name="settings_category_general">Allmänt</string>
     <string name="settings_placeholder_description">Inga inställningar valda. Välj ett alternativ för att se detaljer här.</string>
+    <string name="summary_preference_settings_about">Läs mer om appen</string>
+    <string name="summary_preference_settings_advanced">Utforska mer avancerade inställningar</string>
+    <string name="summary_preference_settings_display">Anpassa appens utseende och känsla</string>
+    <string name="summary_preference_settings_notifications">Hantera appnotifikationer</string>
+    <string name="summary_preference_settings_privacy_and_security">Hantera dina sekretessinställningar</string>
 </resources>

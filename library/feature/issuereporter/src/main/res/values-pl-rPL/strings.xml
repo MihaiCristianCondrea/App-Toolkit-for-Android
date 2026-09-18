@@ -20,15 +20,13 @@
     <string name="device_info">Informacje o urządzeniu</string>
     <string name="issue_description_label">Opis</string>
     <string name="issue_description_placeholder">Opisz problem i sposób jego odtworzenia</string>
+    <string name="issue_done">Gotowe</string>
     <string name="issue_email_label">Email</string>
     <string name="issue_email_optional_placeholder">E-mail (opcjonalnie)</string>
     <string name="issue_section_label">Zgłoszenie</string>
     <string name="issue_send">Wyślij</string>
-    <string name="issue_submitted">Twój problem został przesłany.</string>
-    <string name="issue_submitted_successfully">Problem złożony pomyślnie</string>
+    <string name="issue_submitted_message">Dziękujemy za pomoc w ulepszaniu aplikacji.</string>
+    <string name="issue_submitted_title">Zgłoszenie wysłane</string>
     <string name="issue_title_label">Tytuł</string>
-    <string name="open_button_label">Problem otwarty</string>
-    <string name="open_issue_in_browser">Otwarte w przeglądarce</string>
     <string name="snack_report_failed">Nie udało się wysłać zgłoszenia</string>
-    <string name="snack_report_success">Zgłoszenie wysłane pomyślnie</string>
 </resources>

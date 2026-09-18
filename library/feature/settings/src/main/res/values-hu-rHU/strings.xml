@@ -15,7 +15,17 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="advanced">Haladó</string>
+    <string name="display">Kijelző</string>
     <string name="get_help">Segítség kérése</string>
+    <string name="notifications">Értesítések</string>
+    <string name="security_and_privacy">Biztonság és adatvédelem</string>
     <string name="settings">Beállítások</string>
+    <string name="settings_category_general">Általános</string>
     <string name="settings_placeholder_description">Nincs kiválasztott beállítás. Válassz egy lehetőséget a részletek megtekintéséhez.</string>
+    <string name="summary_preference_settings_about">Tudjon meg többet az alkalmazásról</string>
+    <string name="summary_preference_settings_advanced">Fedezd fel a további haladó beállításokat</string>
+    <string name="summary_preference_settings_display">Személyre szabhatod az alkalmazás megjelenését</string>
+    <string name="summary_preference_settings_notifications">Alkalmazás értesítéseinek kezelése</string>
+    <string name="summary_preference_settings_privacy_and_security">Kezeld az adatvédelmi beállításaidat</string>
 </resources>

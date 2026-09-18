@@ -36,6 +36,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.sty
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ColorPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ThemePaletteProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.managers.AdsCoreManager
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.shake.IssueReporterShakeManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repositories.BillingRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -57,6 +58,7 @@ import java.time.ZoneId
  * - Manage global ad initialization and display (App Open ads).
  * - Handle dynamic color palette switching, including seasonal themes (Halloween, Christmas).
  * - Monitor activity lifecycles to track the current UI context.
+ * - Install shake-to-report, which opens the toolkit's issue reporter from any screen.
  * - Process billing and purchases on application resume.
  *
  * @property currentActivity The currently active [Activity] instance, used for showing ads.
@@ -74,6 +76,7 @@ class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
         applyDefaultColorPalette()
         super<BaseCoreManager>.onCreate()
         registerActivityLifecycleCallbacks(this)
+        getKoin().get<IssueReporterShakeManager>().install()
         ProcessLifecycleOwner.get().lifecycle.addObserver(observer = this)
     }
 

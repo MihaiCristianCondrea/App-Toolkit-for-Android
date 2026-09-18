@@ -18,13 +18,18 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states
 
 /**
- * UI state holder for the Issue Reporter screen.
+ * UI state holder for the issue reporter.
+ *
+ * The form fields survive submission on purpose. They are what the author wrote, and the
+ * confirmation is still part of the same interaction; clearing them the moment the network answered
+ * would destroy that input while the author is still looking at the sheet. [IssueSubmissionState]
+ * decides what is shown, and the reset happens when the sheet is dismissed.
  */
 data class IssueReporterUiState(
     val title: String = "",
     val description: String = "",
     val email: String = "",
-    val issueUrl: String? = null,
+    val submissionState: IssueSubmissionState = IssueSubmissionState.Editing,
     val deviceInfoText: String? = null,
 )
 

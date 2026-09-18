@@ -19,13 +19,13 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.setting
 
 import android.content.Context
 import android.content.Intent
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.startActivitySafely
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.PrivacySettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.PermissionsActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.general.GeneralSettingsActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.constants.SettingsContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.AdsSettingsActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R as AboutR
 
 /** Maps toolkit privacy actions to the sample's permissions, ads, and diagnostics activities. */
 class AppPrivacySettingsProvider(
@@ -43,7 +43,7 @@ class AppPrivacySettingsProvider(
     override fun openUsageAndDiagnosticsScreen() {
         GeneralSettingsActivity.start(
             context = context,
-            title = context.getString(R.string.usage_and_diagnostics),
+            title = context.getString(AboutR.string.usage_and_diagnostics),
             contentKey = SettingsContent.USAGE_AND_DIAGNOSTICS,
         )
     }

@@ -15,11 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="about">Tentang</string>
-    <string name="advanced">Lanjutan</string>
-    <string name="dark_theme">Tema gelap</string>
-    <string name="display">Tampilan</string>
-    <string name="notifications">Notifikasi</string>
     <string name="question_1">Apa itu App Toolkit?</string>
     <string name="question_2">Bagaimana cara mengakses berbagai aplikasi yang ditampilkan di App Toolkit?</string>
     <string name="question_3">Apakah aplikasi yang ditampilkan di App Toolkit gratis?</string>
@@ -29,8 +24,6 @@
     <string name="question_7">Mengapa App Toolkit memerlukan izin seperti akses Internet?</string>
     <string name="question_8">Bagaimana saya bisa memberikan masukan tentang App Toolkit atau aplikasi?</string>
     <string name="question_9">Apakah data saya aman saat menggunakan App Toolkit untuk menemukan aplikasi lain?</string>
-    <string name="security_and_privacy">Keamanan &amp; privasi</string>
-    <string name="settings">Pengaturan</string>
     <string name="summary_preference_faq_1">App Toolkit adalah aplikasi yang dirancang untuk menampilkan dan mendemonstrasikan aplikasi yang dibuat dengan pustaka AppToolkit. Ini adalah panduan Anda untuk menjelajahi ekosistem ini dan melihat pustaka AppToolkit beraksi.</string>
     <string name="summary_preference_faq_2">App Toolkit menampilkan berbagai aplikasi. Saat mengetuk salah satu aplikasi, biasanya Anda akan melihat informasi lebih lanjut dan tautan untuk memasang atau membukanya dari Google Play Store agar bisa mencobanya langsung.</string>
     <string name="summary_preference_faq_3">Banyak aplikasi yang ditampilkan di App Toolkit menawarkan kumpulan fitur dasar secara gratis. Beberapa mungkin memiliki fitur lanjutan melalui versi premium atau pembelian dalam aplikasi. Detail tiap aplikasi tersedia di halaman Google Play Store-nya.</string>
@@ -40,10 +33,4 @@
     <string name="summary_preference_faq_7">Untuk menampilkan daftar aplikasi terbaru, App Toolkit menggunakan akses Internet untuk mengambil informasi dari Google Play Store dan menampilkannya dengan tepat. Biasanya tidak memerlukan izin invasif lainnya.</string>
     <string name="summary_preference_faq_8">Masukan Anda tentang App Toolkit dan aplikasi yang terdaftar sangat dihargai. Anda biasanya dapat menemukan opsi "Feedback" atau "Kontak" di pengaturan App Toolkit atau di halaman pengembang di Google Play Store. Masukan tentang pustaka AppToolkit juga diterima melalui saluran yang sesuai.</string>
     <string name="summary_preference_faq_9">App Toolkit terutama mengambil informasi publik tentang aplikasi yang terdaftar. Saat Anda memilih untuk memasang atau menggunakan salah satu aplikasi tersebut, kebijakan privasinya berlaku; pastikan untuk meninjaunya. Penanganan data App Toolkit dijelaskan dalam kebijakan privasinya.</string>
-    <string name="summary_preference_settings_about">Pelajari lebih lanjut tentang aplikasi</string>
-    <string name="summary_preference_settings_advanced">Jelajahi lebih banyak pengaturan lanjutan</string>
-    <string name="summary_preference_settings_display">Personalisasi tampilan dan nuansa aplikasi Anda</string>
-    <string name="summary_preference_settings_notifications">Kelola notifikasi aplikasi</string>
-    <string name="summary_preference_settings_privacy_and_security">Kelola pengaturan privasi Anda</string>
-    <string name="usage_and_diagnostics">Penggunaan dan diagnostik</string>
 </resources>

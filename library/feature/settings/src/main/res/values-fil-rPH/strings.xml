@@ -15,7 +15,17 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="advanced">Advanced</string>
+    <string name="display">Display</string>
     <string name="get_help">Humingi ng tulong</string>
+    <string name="notifications">Mga Notipikasyon</string>
+    <string name="security_and_privacy">Seguridad &amp; Pribasya</string>
     <string name="settings">Mga Setting</string>
+    <string name="settings_category_general">Pangkalahatan</string>
     <string name="settings_placeholder_description">Walang napiling setting. Pumili ng opsyon para tingnan ang mga detalye nito dito.</string>
+    <string name="summary_preference_settings_about">Matuto pa tungkol sa app</string>
+    <string name="summary_preference_settings_advanced">Galugarin ang mas maraming advanced na setting</string>
+    <string name="summary_preference_settings_display">I-personalize ang itsura at pakiramdam ng iyong app</string>
+    <string name="summary_preference_settings_notifications">Pamahalaan ang mga notipikasyon ng app</string>
+    <string name="summary_preference_settings_privacy_and_security">Pamahalaan ang iyong mga setting ng privacy</string>
 </resources>

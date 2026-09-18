@@ -20,15 +20,13 @@
     <string name="device_info">معلومات الجهاز</string>
     <string name="issue_description_label">الوصف</string>
     <string name="issue_description_placeholder">صف المشكلة وكيفية إعادة إنتاجها</string>
+    <string name="issue_done">تم</string>
     <string name="issue_email_label">البريد الإلكتروني</string>
     <string name="issue_email_optional_placeholder">البريد الإلكتروني (اختياري)</string>
     <string name="issue_section_label">المشكلة</string>
     <string name="issue_send">إرسال</string>
-    <string name="issue_submitted">تم تقديم مشكلتك.</string>
-    <string name="issue_submitted_successfully">تم تقديم القضية بنجاح</string>
+    <string name="issue_submitted_message">شكرًا لمساعدتك في تحسين التطبيق.</string>
+    <string name="issue_submitted_title">تم إرسال البلاغ</string>
     <string name="issue_title_label">العنوان</string>
-    <string name="open_button_label">قضية مفتوحة</string>
-    <string name="open_issue_in_browser">مفتوح في المتصفح</string>
     <string name="snack_report_failed">فشل في إرسال التقرير</string>
-    <string name="snack_report_success">تم إرسال التقرير بنجاح</string>
 </resources>

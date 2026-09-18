@@ -11,10 +11,13 @@ theme, advanced, and usage/diagnostics feature modules.
 - General settings repository/presentation flow, including the standalone screen's Help & feedback
   top-app-bar shortcut.
 - `SettingsProvider`, and default content providers that integrate the dedicated settings modules.
+- Localized labels for the root destinations the toolkit itself defines in `SettingsContent`, so
+  every host names Notifications, Display, Security & privacy, Advanced and About identically.
 
 ## Does not own
 
-- Host-specific settings categories/content, owned by `:sample` provider implementations.
+- Host-specific settings categories/content, owned by `:sample` provider implementations. Hosts
+  still choose which destinations to list and in what order; only the shared labels live here.
 - Host identity strings, supplied as overridable defaults by `:library:core:common`.
 - Consent SDK operations, delegated to `:library:integration:consent`.
 - About/help/issue-reporter feature implementations, owned by their modules.

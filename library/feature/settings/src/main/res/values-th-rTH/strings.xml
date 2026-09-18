@@ -15,7 +15,17 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="advanced">ขั้นสูง</string>
+    <string name="display">หน้าจอ</string>
     <string name="get_help">ขอความช่วยเหลือ</string>
+    <string name="notifications">การแจ้งเตือน</string>
+    <string name="security_and_privacy">ความปลอดภัยและความเป็นส่วนตัว</string>
     <string name="settings">การตั้งค่า</string>
+    <string name="settings_category_general">ทั่วไป</string>
     <string name="settings_placeholder_description">ยังไม่มีการเลือกตั้งค่า เลือกตัวเลือกเพื่อดูรายละเอียดที่นี่</string>
+    <string name="summary_preference_settings_about">เรียนรู้เพิ่มเติมเกี่ยวกับแอป</string>
+    <string name="summary_preference_settings_advanced">สำรวจการตั้งค่าขั้นสูงเพิ่มเติม</string>
+    <string name="summary_preference_settings_display">ปรับแต่งรูปลักษณ์ของแอปตามที่คุณต้องการ</string>
+    <string name="summary_preference_settings_notifications">จัดการการแจ้งเตือนแอป</string>
+    <string name="summary_preference_settings_privacy_and_security">จัดการการตั้งค่าความเป็นส่วนตัวของคุณ</string>
 </resources>

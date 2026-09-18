@@ -6,7 +6,10 @@ Collects device/report data and submits structured issues to a configured GitHub
 
 ## Owns
 
-- Issue-report screen, activity, ViewModel, state, events, and actions.
+- Issue-report sheet content, the `ModalBottomSheet` that presents it, the launcher for callers
+  outside a composition, ViewModel, state, events, and actions.
+- Shake-to-report: the detector, the application-scoped manager that drives it, and the host
+  configuration that enables it.
 - Report, device-info, GitHub-target, and result domain models.
 - Report use case, repository/provider contracts, remote source, local device source, DTO, and
   mapper.
@@ -32,7 +35,13 @@ Collects device/report data and submits structured issues to a configured GitHub
 
 ```mermaid
 flowchart TD
-    Screen[IssueReporterScreen] -->|initialize| VM[IssueReporterViewModel]
+    Settings[Advanced settings row] --> Sheet[IssueReporterBottomSheet]
+    Shake[ShakeDetector via IssueReporterShakeManager] --> Launcher[IssueReporterLauncher]
+    Launcher -->|ComposeView on the content view| Sheet
+    Sheet --> Screen[IssueReporterContent]
+    Screen -->|Editing / Sending| Form[IssueReportForm and device info]
+    Screen -->|Submitted| Done[IssueSubmittedContent]
+    Screen -->|initialize| VM[IssueReporterViewModel]
     VM -->|captureDeviceInfo| Repo[IssueReporterRepository]
     Repo --> Device[DeviceInfoLocalDataSource]
     Device --> Model[Immutable DeviceInfo]
@@ -51,6 +60,54 @@ flowchart TD
 
 ## Architectural decisions
 
+- The reporter is content, not a screen. It used to be an activity whose only job was to host the
+  form and call `finish()`, reached through `openActivity`. It is now `IssueReporterContent`, shown
+  in a modal bottom sheet over whatever the author was looking at, so reporting a problem no longer
+  costs a task transition and no longer hides the screen the report is about.
+- There is one sheet, reached two ways. `IssueReporterBottomSheet` is a Compose `ModalBottomSheet`,
+  and a host already composing shows it directly, the way the advanced settings row does. The shake
+  gesture cannot: it is detected by an application-scoped sensor listener with an `Activity` and no
+  composition, so `IssueReporterLauncher` mounts a `ComposeView` on the activity's content view and
+  puts the same composable in it. The mounting differs; the sheet does not.
+- `IssueReporterPresence` is what keeps those two paths from stacking. A host composing the sheet is
+  invisible to the launcher, which would otherwise mount a second one when the device is shaken on a
+  screen already showing the reporter.
+- Dismissing the sheet resets the ViewModel. The sheet holds no state of its own and the ViewModel
+  is scoped to the screen that opened it, so without `IssueReporterEvent.Reset` an abandoned draft,
+  or the confirmation card of a report already filed, would be waiting the next time it opened. A
+  send in flight is left to finish rather than cancelled.
+- Shake detection is application-scoped, not per screen. Only the foreground activity can present
+  anything, so one listener that follows the resumed activity replaces a sensor listener retrofitted
+  into every activity of every host app. The accelerometer is registered on resume and unregistered
+  on pause, because a sensor left registered keeps drawing power with nothing to show for it.
+- The gesture is opt-in through `IssueReporterConfig`. This is a library shipping into several apps,
+  and a listener nobody asked for is a cost nobody agreed to; a host that does not enable it
+  registers nothing.
+- The send action is a persistent bottom button, not the floating one the full screen used. A
+  floating action button inside another floating surface reads as an unrelated second layer, and the
+  sheet is one focused operation with one action that commits it.
+- Submission is a state, not an inference. `IssueSubmissionState` names Editing, Sending and
+  Submitted, and the sheet shows exactly one of them. The reporter used to read "submitted" off a
+  non-null issue URL, which left it showing an editable form, a live send button and a confirmation
+  of a report already filed at the same time, telling the author the task was both finished and not.
+  Submitting now replaces the editor outright, so the sheet shrinks to a confirmation and the
+  shrinking is itself the signal that there is nothing left to do.
+- A failure goes back to Editing with the report intact, because the next thing the author does is
+  fix it and send again. `ScreenState.Error` carries its message separately and leaves `data` alone,
+  so swapping the form for an error layout would throw away a report still being held.
+- The form fields survive submission and are cleared on dismissal. They are what the author wrote,
+  and the confirmation is part of the same interaction; clearing them the moment the network
+  answered would destroy that input while the author is still looking at the sheet. Done is a
+  dismissal like any other and takes the same path.
+- Done is the primary action on the confirmation and opening the issue is the quiet one, because
+  finishing is the normal next step. There is deliberately no "report another": it adds a decision
+  to what should be the simplest state in the feature, and reopening the reporter covers it.
+- Messages are toasts, not snackbars. A snackbar belongs to the surface hosting it, and this one is
+  a sheet: it would land inside the sheet, over the send button that produced it, and go away with
+  the sheet if the author dismissed it on the way. A toast is the system's own window, so a report
+  that succeeded says so even when the sheet was dismissed while it was still sending.
+- Success takes the keyboard down, clears focus and fires a confirm haptic. The keyboard belongs to
+  a form that is being replaced, and the sheet shrinking is easy to miss on a glance away.
 - Device capture is a local data-source responsibility. The domain model is a plain immutable value
   and does not read Android globals or a `Context` during construction.
 - The repository is the only data-layer entry point used by the ViewModel; the source-level
@@ -82,6 +139,13 @@ and unavailable versions still produce a null name and version code -1.
 
 ## Public contracts
 
+- `IssueReporterBottomSheet(onDismissRequest)` is the entry point for a host inside a composition,
+  and `IssueReporterLauncher.show(activity)` for one that is not. `IssueReporterContent` is public
+  for a host embedding the form in a container of its own, which then owns its presentation and its
+  own duplicate protection.
+- `IssueReporterConfig` and `IssueReporterShakeManager.install()` are the shake-gesture contract. A
+  host enables the gesture by passing the config into `appToolkitModules` and calling `install()`
+  from its `Application`.
 - `IssueReporterRepository`, `SendIssueReportUseCase`, domain models, and presentation entry
   points/contracts.
 - `DeviceInfoProvider` is the local data source's own contract, not a caller-facing one. Device
@@ -90,14 +154,29 @@ and unavailable versions still produce a null name and version code -1.
 
 ## Internal implementations
 
-- GitHub request DTO/mapping, device inspection, repository implementation, and screen composition.
+- GitHub request DTO/mapping, device inspection, repository implementation, sheet composition,
+  `IssueSubmittedContent`, and the `ComposeView` the launcher mounts.
+- `ShakeDetector`, whose thresholds are constructor parameters so they can be tuned against real
+  devices without changing the gesture logic.
 
 ## Current risks
 
 The feature handles a host-provided GitHub token; logging and error changes must avoid exposing that
 credential.
 
+Shake thresholds are a judgement, not a measurement. `ShakeDetector` guards against accidental
+triggers three ways at once, a magnitude threshold, a minimum duration with a minimum number of
+readings, and a cooldown, because any one of them alone fires when a phone is put down firmly. The
+defaults are a starting point and want tuning on physical devices.
+
 ## Migration notes
+
+`IssueReporterActivity`, its manifest entry, and `Theme.AppToolkit.IssueReporter` are gone, together
+with the `LargeTopAppBarWithScaffold`, the back handling, and the FAB that only existed because the
+reporter was a screen. A host inside a composition now shows `IssueReporterBottomSheet`; one that
+started the activity from outside a composition calls `IssueReporterLauncher.show`.
+`AdvancedSettingsProvider.bugReportUrl` went with them: it pointed at the repository's issues page
+from before the reporter submitted directly, and nothing read it any more.
 
 `DeviceInfo` was a mutable class that read `android.os.Build` in its field initialisers, built
 itself

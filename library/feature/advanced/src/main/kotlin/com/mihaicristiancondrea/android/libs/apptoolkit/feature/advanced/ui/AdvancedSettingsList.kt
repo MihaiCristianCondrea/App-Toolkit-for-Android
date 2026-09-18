@@ -25,19 +25,21 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.contracts.AdvancedSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.states.AdvancedSettingsUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterBottomSheet
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
@@ -69,7 +71,7 @@ private object AdvancedPreferenceKeys {
  * into "Error Reporting" and "Cache Management".
  *
  * It includes options to:
- * - Navigate to an issue reporter screen.
+ * - Open the issue reporter sheet over this screen.
  * - Clear the application's cache, showing a toast message upon completion.
  *
  * @param paddingValues The padding values to be applied to the root layout of the list,
@@ -98,6 +100,13 @@ fun AdvancedSettingsList(
 
     val context = LocalContext.current
     val appContext = remember(context) { context.applicationContext }
+
+    // rememberSaveable, so rotating with the reporter open does not close it.
+    var showIssueReporter: Boolean by rememberSaveable { mutableStateOf(value = false) }
+
+    if (showIssueReporter) {
+        IssueReporterBottomSheet(onDismissRequest = { showIssueReporter = false })
+    }
 
     val messageRes: Int? = screenState.data?.cacheClearMessage
     val toastText: String? = messageRes?.let { stringResource(id = it) }
@@ -129,9 +138,7 @@ fun AdvancedSettingsList(
                     SettingsPreferenceItem(
                         title = stringResource(id = R.string.bug_report),
                         summary = stringResource(id = R.string.summary_preference_settings_bug_report),
-                        onClick = {
-                            context.openActivity(IssueReporterActivity::class.java)
-                        },
+                        onClick = { showIssueReporter = true },
                         firebaseController = firebaseController,
                         ga4Event = advancedPreferenceTapEvent(preferenceKey = AdvancedPreferenceKeys.BUG_REPORT),
                         modifier = Modifier.groupedPreferenceItem(
