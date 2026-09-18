@@ -34,8 +34,13 @@ import kotlinx.coroutines.flow.flow
  * Implementation of [FaqRepository] that manages the retrieval of FAQ items
  * from both remote and local data sources.
  *
- * This repositories prioritizes remote data from a specified catalog and product,
- * falling back to local data if the remote fetch fails or returns no results.
+ * Prioritizes remote data from a specified catalog and product, falling back to the bundled local
+ * questions when the remote fetch fails or yields nothing usable.
+ *
+ * Both sources are normalized before they are considered: entries are trimmed, blanks are dropped
+ * and repeated ids collapse to their first occurrence. Normalizing here rather than downstream is
+ * what makes the fallback correct, a remote catalog of nothing but blank rows now counts as empty
+ * and falls through to the local questions instead of rendering blank rows.
  *
  * @property localDataSource The local data source for accessing cached or bundled FAQ questions.
  * @property remoteDataSource The remote data source for fetching FAQ catalogs and questions via network.
@@ -62,13 +67,13 @@ class DefaultFaqRepository(
             fetchRemoteFaqItems()
         }
 
-        val remoteItems = remoteResult.getOrNull().orEmpty()
+        val remoteItems = remoteResult.getOrNull().orEmpty().normalize()
         if (remoteItems.isNotEmpty()) {
             emit(DataState.Success(remoteItems))
             return@flow
         }
 
-        val localItems = localDataSource.loadLocalQuestions()
+        val localItems = localDataSource.loadLocalQuestions().normalize()
         if (localItems.isNotEmpty()) {
             emit(DataState.Success(localItems))
             return@flow
@@ -95,4 +100,19 @@ class DefaultFaqRepository(
 
         return questions.toFaqItems()
     }
+
+    /**
+     * Trims each entry, drops the ones left without a question or an answer, and keeps the first
+     * of any repeated id.
+     */
+    private fun List<FaqItem>.normalize(): List<FaqItem> = asSequence()
+        .map { faqItem ->
+            faqItem.copy(
+                question = faqItem.question.trim(),
+                answer = faqItem.answer.trim(),
+            )
+        }
+        .filter { it.question.isNotBlank() && it.answer.isNotBlank() }
+        .distinctBy { it.id.value }
+        .toList()
 }

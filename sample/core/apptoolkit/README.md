@@ -3,13 +3,13 @@
 ## Purpose
 
 Adapts the reusable AppToolkit module to the sample product. It is the host-integration boundary for
-toolkit startup and settings providers, localized provider resources, and Koin override ordering.
+toolkit startup, the host-wide toolkit answers, and Koin override ordering.
 
 ## Owns
 
-- `appToolkitHostModules`, which combines the toolkit graph with the sample's provider bindings.
-- `AppStartupProvider` and the sample implementations of settings, about, display, advanced, and
-  privacy provider contracts.
+- `appToolkitHostModules`, which orders the toolkit graph ahead of the host's own modules.
+- `AppStartupProvider`, and the host-wide answers that belong to no single feature, currently the
+  default theme palette.
 
 ## Does not own
 
@@ -17,6 +17,9 @@ toolkit startup and settings providers, localized provider resources, and Koin o
 - The sample's FAQ questions and answers, owned by
   [`:sample:feature:faq`](../../feature/faq/README.md). They lived here only because this module
   already had a `res/` directory; a body of content belongs to its own module.
+- The settings, about, display, and privacy provider implementations, owned by
+  [`:sample:feature:settings`](../../feature/settings/README.md) together with their Koin bindings.
+  A `:sample:core:` module may not depend on a feature, so the bindings travel with the classes.
 - The About composable that contains the components-showcase unlock gesture, owned by
   [`:sample:feature:settings`](../../feature/settings/README.md).
 - Application startup and final Koin bootstrapping, owned by [`:sample:app`](../../app/README.md).

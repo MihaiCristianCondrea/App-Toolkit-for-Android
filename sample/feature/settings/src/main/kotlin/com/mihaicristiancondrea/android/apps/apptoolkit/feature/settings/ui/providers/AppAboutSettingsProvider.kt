@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.settings
+package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.providers
 
 import android.content.Context
 import android.os.Build

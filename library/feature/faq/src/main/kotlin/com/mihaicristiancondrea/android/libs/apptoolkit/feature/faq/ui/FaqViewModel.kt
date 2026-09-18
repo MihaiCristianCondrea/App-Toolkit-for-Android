@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui
 
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.domain.models.FaqItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.domain.usecases.GetFaqUseCase
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.repositories.FaqRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.contracts.FaqAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.contracts.FaqEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.states.FaqUiState
@@ -53,7 +53,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class FaqViewModel(
-    private val getFaqUseCase: GetFaqUseCase,
+    private val faqRepository: FaqRepository,
     private val forceInAppReviewUseCase: ForceInAppReviewUseCase,
     private val dispatchers: DispatcherProvider,
     firebaseController: FirebaseController,
@@ -81,12 +81,12 @@ class FaqViewModel(
     private fun loadFaq() {
         startOperation(action = "loadFaq")
         observeJob = observeJob.restart {
-            getFaqUseCase.invoke()
+            faqRepository.fetchFaq()
                 .flowOn(context = dispatchers.io)
                 .onStart {
                     firebaseController.logBreadcrumb(
                         message = "FAQ fetch started",
-                        attributes = mapOf("source" to "GetFaqUseCase")
+                        attributes = mapOf("source" to "FaqRepository")
                     )
                     updateStateThreadSafe {
                         screenState.setLoading()

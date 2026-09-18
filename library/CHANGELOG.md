@@ -14,7 +14,7 @@
   screen. Tapping either copies its value, matching the device info row.
 - Added `snack_copied_to_clipboard` and `snack_copy_failed` in all 25 supported locales.
 - Added `:library:feature:faq`, which replaces `:library:feature:help` and owns the FAQ surface end
-  to end: the screen and activity, the catalog repository and data sources, `GetFaqUseCase`,
+  to end: the screen and activity, the catalog repository and data sources,
   `FaqItem`, `QuestionCard`, `ContactUsCard`, the native ad slot, the overflow menu, and the nine
   placeholder question and answer slots. A host adds or rewords a question by changing its own FAQ
   module alone.
@@ -67,6 +67,9 @@
   `appToolkitFeatureModules` need no change.
 - `HelpConstants` is now `FaqConstants`, in `core.common.utils.constants.faq`. It only ever held
   FAQ values, in both the library and the sample.
+- Removed `GetFaqUseCase`. Trimming, dropping blanks and de-duplicating the catalog is repository
+  work, and the single caller gained nothing from the extra layer, so `FaqViewModel` reads
+  `FaqRepository` directly.
 - The settings sub-screens are named for what they are: `DisplaySettingsList`, `ThemeSettingsList`,
   `AdvancedSettingsList` and `UsageAndDiagnosticsList` are now `DisplaySettingsScreen`,
   `ThemeSettingsScreen`, `AdvancedSettingsScreen` and `UsageAndDiagnosticsScreen`.
@@ -88,6 +91,8 @@
 - A failed copy said `Unable to load device info`, the message for a failed load. It now says the
   copy did not go through. Success confirmations are unchanged: they still appear only below
   Android 13, where the platform shows no clipboard preview of its own.
+- A remote FAQ catalog of nothing but blank rows rendered as blank rows. The catalog is normalized
+  before the fallback decision now, so it counts as empty and the bundled questions are shown.
 
 ---
 

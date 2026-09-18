@@ -25,7 +25,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.local.F
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.FaqRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.repositories.DefaultFaqRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.repositories.FaqRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.domain.usecases.GetFaqUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.FaqViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.usecases.ForceInAppReviewUseCase
 import org.koin.core.module.Module
@@ -33,8 +32,8 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 /**
- * Binds the FAQ feature: the catalog sources, the use case that cleans them for display, and the
- * screen that lists them alongside the contact and review actions.
+ * Binds the FAQ feature: the catalog sources, the repository that normalizes and falls back
+ * between them, and the screen that lists them alongside the contact and review actions.
  */
 fun faqModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
     single<FaqLocalDataSource> { FaqLocalDataSource(context = get()) }
@@ -50,11 +49,9 @@ fun faqModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
             firebaseController = get(),
         )
     }
-    single<GetFaqUseCase> { GetFaqUseCase(repository = get()) }
-
     viewModel {
         FaqViewModel(
-            getFaqUseCase = get(),
+            faqRepository = get(),
             forceInAppReviewUseCase = get<ForceInAppReviewUseCase>(),
             dispatchers = get<DispatcherProvider>(),
             firebaseController = get(),

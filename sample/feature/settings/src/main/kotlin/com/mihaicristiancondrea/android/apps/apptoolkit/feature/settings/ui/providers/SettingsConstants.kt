@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.settings
+package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.providers
 
 object SettingsConstants {
     const val KEY_SETTINGS_NOTIFICATION: String = "notifications"

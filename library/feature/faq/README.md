@@ -8,10 +8,9 @@ review, and store actions around it. This module replaced `:library:feature:help
 ## Owns
 
 - `FaqScreen`, `FaqActivity`, `FaqViewModel`, and their state, event, and action contracts.
-- `FaqRepository` and `DefaultFaqRepository`, which prefer the remote catalog and fall back to the
-  resources bundled in the host.
+- `FaqRepository` and `DefaultFaqRepository`, which normalize both sources, prefer the remote
+  catalog, and fall back to the resources bundled in the host.
 - `FaqRemoteDataSource`, `FaqLocalDataSource`, and the catalog DTOs and mappers.
-- `GetFaqUseCase`, which trims, drops blanks, and de-duplicates before display.
 - `FaqItem`, `FaqId`, `QuestionCard`, `ContactUsCard`, `FaqNativeAdCard`, and the overflow menu.
 - The nine question and nine answer placeholder resources a host fills in.
 
@@ -82,8 +81,7 @@ The screen already skips the slot when the id is blank or the user has ads switc
 flowchart TD
     Screen[FaqScreen] --> VM[FaqViewModel]
     Activity[FaqActivity] --> Screen
-    VM --> UseCase[GetFaqUseCase]
-    UseCase --> Repo[FaqRepository]
+    VM --> Repo[FaqRepository]
     Repo --> Remote[FaqRemoteDataSource]
     Remote --> Catalog[FAQ catalog endpoint]
     Repo --> Local[FaqLocalDataSource]
@@ -104,13 +102,17 @@ flowchart TD
   `MissingTranslation` is an error in this project.
 - A host adds or rewords a question by changing its own FAQ module alone. Nothing in the library
   moves, which is the reason the content is not declared here.
-- Cleaning the catalog (trimming, dropping blanks, de-duplicating by id) lives in the use case, so
-  the remote and the local source are both consumed without either repeating it.
+- There is no FAQ use case. Cleaning the catalog is transforming a data-source model into an
+  application model, which is repository work, and the one thing a use case would have added is a
+  layer the single caller does not need. `FaqViewModel` reads `FaqRepository` directly.
+- Normalizing inside the repository, before the emptiness check rather than after it, is what makes
+  the fallback correct: a remote catalog of nothing but blank rows now counts as empty and falls
+  through to the local questions instead of rendering blank rows.
 
 ## Public contracts
 
 - `FaqScreen`, `FaqActivity`, `FaqViewModel`, `FaqUiState`, `FaqEvent`, `FaqAction`,
-  `FaqRepository`, `GetFaqUseCase`, `FaqItem`, `FaqId`, `QuestionCard`, and `faqModule`.
+  `FaqRepository`, `FaqItem`, `FaqId`, `QuestionCard`, and `faqModule`.
 
 ## Internal implementations
 

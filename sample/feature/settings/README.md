@@ -10,6 +10,9 @@ About content, and the hidden version-tap gesture that surface hosts.
 - The sample binding for `GeneralSettingsRepository` and `GeneralSettingsViewModel`.
 - `GeneralSettingsContentProvider`, bound with this app's `AboutSettingsContent`.
 - `ShowcaseUnlockRepository`: the version-tap threshold and the write that persists the unlock.
+- The sample's answers to the toolkit's settings extension points: `AppSettingsProvider`,
+  `AppAboutSettingsProvider`, `AppDisplaySettingsProvider`, `AppPrivacySettingsProvider` and
+  `SettingsConstants`, bound by `settingsModule(hostBuildConfig)`.
 
 ## Does not own
 

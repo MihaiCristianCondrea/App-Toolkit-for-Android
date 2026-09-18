@@ -20,7 +20,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.repositories.FaqRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.domain.models.FaqId
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.domain.models.FaqItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.domain.usecases.GetFaqUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.contracts.FaqEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.usecases.ForceInAppReviewUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
@@ -60,24 +59,26 @@ class FaqViewModelTest {
     }
 
     @Test
-    fun `loadFaq sets success state when repository returns data`() =
+    fun `loadFaq surfaces the questions the repository emits`() =
         runTest(dispatcherExtension.testDispatcher) {
             val repository = object : FaqRepository {
                 override fun fetchFaq(): Flow<DataState<List<FaqItem>, Errors>> =
                     flowOf(
                         DataState.Success(
                             data = listOf(
+                                // Already normalized: trimming, blank-dropping and de-duplication
+                                // are the repository's job, covered by DefaultFaqRepositoryTest.
                                 FaqItem(
                                     id = FaqId("remote-1"),
-                                    question = " Q ",
-                                    answer = " A "
+                                    question = "Q",
+                                    answer = "A"
                                 )
                             )
                         )
                     )
             }
             val viewModel = FaqViewModel(
-                getFaqUseCase = GetFaqUseCase(repository),
+                faqRepository = repository,
                 forceInAppReviewUseCase = reviewUseCase,
                 dispatchers = testDispatcherProvider(),
                 firebaseController = firebaseController,
@@ -103,7 +104,7 @@ class FaqViewModelTest {
                 }
             }
             val viewModel = FaqViewModel(
-                getFaqUseCase = GetFaqUseCase(repository),
+                faqRepository = repository,
                 forceInAppReviewUseCase = reviewUseCase,
                 dispatchers = testDispatcherProvider(),
                 firebaseController = firebaseController,

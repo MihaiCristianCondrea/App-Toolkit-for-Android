@@ -42,7 +42,7 @@ fun sampleAppModules(hostBuildConfig: AppToolkitHostBuildConfig): List<Module> =
     add(navigationModule)
     add(shellModule)
     add(appModule)
-    add(settingsModule)
+    add(settingsModule(hostBuildConfig = hostBuildConfig))
     add(tilesModule)
     add(appsModule)
     add(componentsModule)
