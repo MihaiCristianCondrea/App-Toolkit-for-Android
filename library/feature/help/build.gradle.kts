@@ -50,4 +50,5 @@ dependencies {
     api(project(":library:navigation"))
     api(project(":library:integration:review"))
     api(project(":library:feature:about"))
+    api(project(":library:feature:faq"))
 }

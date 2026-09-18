@@ -7,7 +7,7 @@ and the strings that name them.
 
 ## Owns
 
-- `PrivacySettingsList`, the data-driven privacy and legal preference list.
+- `PrivacyScreen`, the data-driven privacy and legal preference list.
 - `PrivacyViewModel`, `PrivacyUiState`, `PrivacyItem`, and the click routing between them.
 - `PrivacySettingsProvider`, the host contract supplying URLs and the destinations to open.
 - Privacy, legal, ads, permissions, and usage-and-diagnostics strings.
@@ -34,7 +34,7 @@ and the strings that name them.
 
 ```mermaid
 flowchart TD
-    List[PrivacySettingsList] --> VM[PrivacyViewModel]
+    Screen[PrivacyScreen] --> VM[PrivacyViewModel]
     VM --> Provider[PrivacySettingsProvider]
     VM --> Mapper[PrivacyMappers to PrivacyItem list]
     List --> Click[PrivacyEvent.ItemClicked]
@@ -57,7 +57,7 @@ flowchart TD
 
 ## Public contracts
 
-- `PrivacySettingsProvider`, `PrivacySettingsList`, `PrivacyViewModel`, `PrivacyUiState`,
+- `PrivacySettingsProvider`, `PrivacyScreen`, `PrivacyViewModel`, `PrivacyUiState`,
   `PrivacyItem`, `PrivacyItemAction`, `PrivacyEvent`, `PrivacyAction`, and `privacyModule`.
 
 ## Internal implementations

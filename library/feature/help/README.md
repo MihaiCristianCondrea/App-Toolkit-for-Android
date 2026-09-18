@@ -2,18 +2,21 @@
 
 ## Purpose
 
-Displays localized FAQ/help content, loading a product-specific catalog locally or remotely and
-exposing contact/review actions.
+Presents the help surface: the FAQ list supplied by [`:library:feature:faq`](../faq/README.md),
+plus the contact, review, and store actions around it.
 
 ## Owns
 
 - Help screen/activity/ViewModel and their state/event/action contracts.
-- FAQ domain model, repository contract, and `GetFaqUseCase`.
-- Local and remote FAQ sources, DTOs, mapper, and repository implementation.
+- The Contact Us card, the Help native ad slot, and the overflow menu actions.
 
 ## Does not own
 
+- The FAQ catalog itself: `FaqRepository`, `GetFaqUseCase`, both data sources, the DTOs and mapper,
+  `FaqItem`, `QuestionCard`, and the nine placeholder slots, all owned by
+  [`:library:feature:faq`](../faq/README.md).
 - About/navigation route definitions, owned by `:library:feature:about`.
+- Open-source licenses, owned by [`:library:feature:licenses`](../licenses/README.md).
 - In-app review implementation, owned by `:library:integration:review`.
 - HTTP client construction, owned by `:library:core:network`.
 - Host identity strings, supplied as overridable defaults by `:library:core:common`.
@@ -38,11 +41,11 @@ The bundled catalog is nine question/answer pairs read from host resources:
 | …                    | …                               |
 | `question_9`         | `summary_preference_faq_9`      |
 
-This module declares all eighteen as empty, untranslatable placeholders in
-`res/values/untranslatable_strings.xml`, purely so it compiles on its own. The host is expected to
-override every one of them, in each locale it supports, the way `:sample:core:apptoolkit` does. A
-host that does not gets a Help screen showing nine blank rows the moment the remote catalog is
-unavailable, with nothing in the build output to say why.
+[`:library:feature:faq`](../faq/README.md) declares all eighteen as empty, untranslatable
+placeholders in its `res/values/untranslatable_strings.xml`, purely so it compiles on its own. The
+host is expected to override every one of them, in each locale it supports, the way
+`:sample:feature:faq` does. A host that does not gets a Help screen showing nine blank rows the
+moment the remote catalog is unavailable, with nothing in the build output to say why.
 
 Provide fewer than nine only if the host is fine with the remainder rendering blank; the count is
 fixed here, not derived from what the host declares.
@@ -62,6 +65,7 @@ The screen already skips the slot when the id is blank or the user has ads switc
 - `:library:core:common`, `:library:core:datastore`, `:library:core:network`, and `:library:core:ui`
   for shared configuration, state, persistence access, networking, and UI.
 - [`:library:navigation`](../../navigation/README.md) for feature navigation.
+- [`:library:feature:faq`](../faq/README.md) for the FAQ catalog it lists.
 - [`:library:integration:review`](../../integration/review/README.md) for review prompts.
 - [`:library:navigation`](../../navigation/README.md) for shared AppToolkit routes; the remaining
   About dependency supplies feature-specific settings/navigation integration.

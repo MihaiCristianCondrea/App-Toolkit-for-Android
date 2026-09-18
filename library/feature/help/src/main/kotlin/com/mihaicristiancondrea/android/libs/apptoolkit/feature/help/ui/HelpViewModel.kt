@@ -18,8 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.ui
 
 import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.domain.models.FaqItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.domain.usecases.GetFaqUseCase
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.domain.models.FaqItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.domain.usecases.GetFaqUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.ui.contracts.HelpAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.ui.contracts.HelpEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.ui.states.HelpUiState

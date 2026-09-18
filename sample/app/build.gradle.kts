@@ -242,6 +242,7 @@ dependencies {
     implementation(project(":sample:integration:ads"))
     implementation(project(":sample:feature:apps"))
     implementation(project(":sample:feature:components"))
+    implementation(project(":sample:feature:faq"))
     implementation(project(":sample:core:shell"))
     implementation(project(":sample:feature:onboarding"))
     implementation(project(":sample:feature:settings"))

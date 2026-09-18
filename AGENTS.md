@@ -40,6 +40,24 @@ When changing user-facing strings, inspect the target module's existing resource
 - Do not create new locale directories unless explicitly required.
 - Preserve resource keys, placeholders, escaping, markup, and formatting tokens exactly.
 
+### Strings belong to the module that owns the feature
+
+Put a string in the module that owns the surface rendering it, not in whichever module already
+happened to have a `res/` directory.
+
+- A feature's strings live in that feature module, across every supported locale.
+- A body of content that stands on its own, such as an FAQ, gets its own module rather than riding
+  along in a general-purpose one. `:library:feature:faq` declares empty placeholder slots and
+  `:sample:feature:faq` answers them with the sample's translated copy. Adding or rewording a
+  question is then a change to one module, and it touches no code.
+- A resource-only module is a legitimate module. It needs no Kotlin sources.
+- A string used by two unrelated features belongs in the shared module both already depend on, such
+  as `:library:core:ui` for button labels. Duplicating a name across sibling feature modules is
+  allowed by resource merging, but prefer one owner.
+- A library module that renders host-supplied copy declares the names as `translatable="false"`
+  placeholders and documents which host module fills them, so lint does not demand translations of
+  empty strings.
+
 ## Documentation
 
 Documentation lives per module in the module's local `README.md` and in KDoc—not in the `docs/` folder.

@@ -17,10 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.data.repositories.FaqRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.domain.models.FaqId
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.domain.models.FaqItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.domain.usecases.GetFaqUseCase
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.repositories.FaqRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.domain.models.FaqId
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.domain.models.FaqItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.domain.usecases.GetFaqUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.ui.contracts.HelpEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.usecases.ForceInAppReviewUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider

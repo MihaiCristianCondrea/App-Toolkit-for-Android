@@ -32,6 +32,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.di.aboutModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.di.changelogModule
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.di.faqModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.di.helpModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.di.issueReporterModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReporterConfig
@@ -58,7 +59,8 @@ fun appToolkitFeatureModules(
     appToolkitCoreModule(hostBuildConfig = hostBuildConfig),
     onboardingModule(startupProviderFactory = startupProviderFactory),
     supportModule,
-    helpModule(hostBuildConfig = hostBuildConfig),
+    faqModule(hostBuildConfig = hostBuildConfig),
+    helpModule,
     aboutModule,
     changelogModule,
     licensesModule,

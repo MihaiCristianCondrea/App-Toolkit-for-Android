@@ -48,9 +48,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.domain.models.FaqItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.domain.models.FaqItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.ui.views.cards.ContactUsCard
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.ui.views.cards.QuestionCard
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.cards.QuestionCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue

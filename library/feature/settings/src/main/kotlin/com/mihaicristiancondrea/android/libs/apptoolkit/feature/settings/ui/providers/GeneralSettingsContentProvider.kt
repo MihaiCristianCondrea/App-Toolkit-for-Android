@@ -25,7 +25,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.AboutSc
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.AdvancedSettingsList
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.UsageAndDiagnosticsList
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.DisplaySettingsList
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.PrivacySettingsList
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.PrivacyScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.constants.SettingsContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.ThemeSettingsList
 
@@ -58,7 +58,7 @@ class GeneralSettingsContentProvider(
 
             SettingsContent.ADVANCED -> AdvancedSettingsList(paddingValues = paddingValues)
             SettingsContent.DISPLAY -> DisplaySettingsList(paddingValues = paddingValues)
-            SettingsContent.SECURITY_AND_PRIVACY -> PrivacySettingsList(paddingValues = paddingValues)
+            SettingsContent.SECURITY_AND_PRIVACY -> PrivacyScreen(paddingValues = paddingValues)
             SettingsContent.THEME -> ThemeSettingsList(paddingValues = paddingValues)
             SettingsContent.USAGE_AND_DIAGNOSTICS -> UsageAndDiagnosticsList(paddingValues = paddingValues)
             else -> customScreens[contentKey]?.invoke(paddingValues)

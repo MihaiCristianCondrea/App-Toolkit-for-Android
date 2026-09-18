@@ -13,6 +13,12 @@
 - Added tap to copy to the App Toolkit version and Google Play services version rows on the About
   screen. Tapping either copies its value, matching the device info row.
 - Added `snack_copied_to_clipboard` and `snack_copy_failed` in all 25 supported locales.
+- Added `:library:feature:faq`, holding the FAQ catalog that `:library:feature:help` used to carry:
+  `FaqRepository`, `GetFaqUseCase`, the local and remote data sources, the DTOs and mapper,
+  `FaqItem`, `QuestionCard`, and the nine placeholder question and answer slots. A host adds or
+  rewords a question by changing its own FAQ module alone.
+- Added `:sample:feature:faq`, a resource-only module carrying the sample's nine questions and
+  answers in all 25 supported locales. They previously sat in `:sample:core:apptoolkit`.
 - Added unit test coverage for `NavigationBackStackActions` covering top-level navigation,
   single-top deduplication, and back-stack pops.
 - Added unit test coverage for `DefaultFirebaseController` covering consent settings, event
@@ -35,7 +41,7 @@
 - `MainTopAppBar` shows its Support overflow action only when the host passes `onSupportClick`. It
   no longer opens `SupportActivity` by itself, which removes the dependency on
   `:library:feature:support`.
-- `LicensesScreen`, `LicensesActivity`, `PrivacySettingsList`, `PrivacySettingsProvider`,
+- `LicensesScreen`, `LicensesActivity`, `PrivacyScreen` (was `PrivacySettingsList`), `PrivacySettingsProvider`,
   `ChangelogDialog`, and the changelog repository, use case, and ViewModel moved to their new
   modules. Hosts update the imports to the matching `feature.licenses`, `feature.privacy`, and
   `feature.changelog` packages.
@@ -46,6 +52,13 @@
   pre computed card positions, replacing the hardcoded preference rows.
 - `LicensesScreen` reports its loading and success state through a new `LicensesViewModel` instead
   of building a screen state inline.
+- `PrivacySettingsList` is now `PrivacyScreen`, matching the `AboutScreen` and `LicensesScreen`
+  naming already used across the toolkit.
+- `HelpLocalDataSource` and `HelpRemoteDataSource` are now `FaqLocalDataSource` and
+  `FaqRemoteDataSource` in `:library:feature:faq`, since they only ever served the FAQ.
+- `helpModule` no longer takes `AppToolkitHostBuildConfig` and is a value rather than a function.
+  The FAQ bindings it used to declare moved to `faqModule(hostBuildConfig)`. Hosts calling
+  `appToolkitFeatureModules` need no change.
 - The About preference click handler is a single lambda with the action `when` inside it, replacing
   a `when` whose branches each returned a lambda.
 - Renamed `FirebaseControllerImpl` to `DefaultFirebaseController` in `:library:integration:firebase`,

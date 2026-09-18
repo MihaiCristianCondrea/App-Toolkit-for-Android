@@ -10,11 +10,13 @@ toolkit startup and settings providers, localized provider resources, and Koin o
 - `appToolkitHostModules`, which combines the toolkit graph with the sample's provider bindings.
 - `AppStartupProvider` and the sample implementations of settings, about, display, advanced, and
   privacy provider contracts.
-- The localized strings used by those host provider implementations.
 
 ## Does not own
 
 - Toolkit provider contracts or default implementations, owned by `:library:feature:*` modules.
+- The sample's FAQ questions and answers, owned by
+  [`:sample:feature:faq`](../../feature/faq/README.md). They lived here only because this module
+  already had a `res/` directory; a body of content belongs to its own module.
 - The About composable that contains the components-showcase unlock gesture, owned by
   [`:sample:feature:settings`](../../feature/settings/README.md).
 - Application startup and final Koin bootstrapping, owned by [`:sample:app`](../../app/README.md).
