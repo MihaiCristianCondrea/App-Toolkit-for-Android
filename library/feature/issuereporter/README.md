@@ -6,8 +6,8 @@ Collects device/report data and submits structured issues to a configured GitHub
 
 ## Owns
 
-- Issue-report sheet content, its bottom-sheet container, launcher, ViewModel, state, events, and
-  actions.
+- Issue-report sheet content, the `ModalBottomSheet` that presents it, the launcher for callers
+  outside a composition, ViewModel, state, events, and actions.
 - Shake-to-report: the detector, the application-scoped manager that drives it, and the host
   configuration that enables it.
 - Report, device-info, GitHub-target, and result domain models.
@@ -35,9 +35,9 @@ Collects device/report data and submits structured issues to a configured GitHub
 
 ```mermaid
 flowchart TD
-    Settings[Advanced settings row] --> Launcher[IssueReporterLauncher]
-    Shake[ShakeDetector via IssueReporterShakeManager] --> Launcher
-    Launcher --> Sheet[IssueReporterBottomSheetFragment]
+    Settings[Advanced settings row] --> Sheet[IssueReporterBottomSheet]
+    Shake[ShakeDetector via IssueReporterShakeManager] --> Launcher[IssueReporterLauncher]
+    Launcher -->|ComposeView on the content view| Sheet
     Sheet --> Screen[IssueReporterContent]
     Screen -->|initialize| VM[IssueReporterViewModel]
     VM -->|captureDeviceInfo| Repo[IssueReporterRepository]
@@ -62,11 +62,18 @@ flowchart TD
   form and call `finish()`, reached through `openActivity`. It is now `IssueReporterContent`, shown
   in a modal bottom sheet over whatever the author was looking at, so reporting a problem no longer
   costs a task transition and no longer hides the screen the report is about.
-- There is one presentation and one way in. `IssueReporterLauncher.show(activity)` is what both the
-  advanced settings row and the shake gesture call. A Compose `ModalBottomSheet` would serve
-  settings well and serve the gesture not at all, because the gesture is detected outside any
-  composition; a `BottomSheetDialogFragment` holding a `ComposeView` can be shown from either, so
-  the feature keeps one implementation instead of one per entry point.
+- There is one sheet, reached two ways. `IssueReporterBottomSheet` is a Compose `ModalBottomSheet`,
+  and a host already composing shows it directly, the way the advanced settings row does. The shake
+  gesture cannot: it is detected by an application-scoped sensor listener with an `Activity` and no
+  composition, so `IssueReporterLauncher` mounts a `ComposeView` on the activity's content view and
+  puts the same composable in it. The mounting differs; the sheet does not.
+- `IssueReporterPresence` is what keeps those two paths from stacking. A host composing the sheet is
+  invisible to the launcher, which would otherwise mount a second one when the device is shaken on a
+  screen already showing the reporter.
+- Dismissing the sheet resets the ViewModel. The sheet holds no state of its own and the ViewModel
+  is scoped to the screen that opened it, so without `IssueReporterEvent.Reset` an abandoned draft,
+  or the confirmation card of a report already filed, would be waiting the next time it opened. A
+  send in flight is left to finish rather than cancelled.
 - Shake detection is application-scoped, not per screen. Only the foreground activity can present
   anything, so one listener that follows the resumed activity replaces a sensor listener retrofitted
   into every activity of every host app. The accelerometer is registered on resume and unregistered
@@ -77,9 +84,13 @@ flowchart TD
 - The send action is a persistent bottom button, not the floating one the full screen used. A
   floating action button inside another floating surface reads as an unrelated second layer, and the
   sheet is one focused operation with one action that commits it.
-- Every screen state renders through the same form. `ScreenState.Error` already carries its message
-  as a snackbar and leaves `data` intact, so swapping the form for an error layout would throw away
-  a report the author is still holding; loading only marks the send button busy.
+- Every screen state renders through the same form. `ScreenState.Error` carries its message
+  separately and leaves `data` intact, so swapping the form for an error layout would throw away a
+  report the author is still holding; loading only marks the send button busy.
+- Results are toasts, not snackbars. A snackbar belongs to the surface hosting it, and this one is a
+  sheet: it would land inside the sheet, over the send button that produced it, and go away with the
+  sheet if the author dismissed it on the way. A toast is the system's own window, so a report that
+  succeeded says so either way.
 - Device capture is a local data-source responsibility. The domain model is a plain immutable value
   and does not read Android globals or a `Context` during construction.
 - The repository is the only data-layer entry point used by the ViewModel; the source-level
@@ -111,9 +122,10 @@ and unavailable versions still produce a null name and version code -1.
 
 ## Public contracts
 
-- `IssueReporterLauncher.show(activity)` is the entry point. `IssueReporterContent` is public for a
-  host embedding the form in its own container; `IssueReporterBottomSheetFragment` is not, because
-  how the reporter is presented is this module's decision.
+- `IssueReporterBottomSheet(onDismissRequest)` is the entry point for a host inside a composition,
+  and `IssueReporterLauncher.show(activity)` for one that is not. `IssueReporterContent` is public
+  for a host embedding the form in a container of its own, which then owns its presentation and its
+  own duplicate protection.
 - `IssueReporterConfig` and `IssueReporterShakeManager.install()` are the shake-gesture contract. A
   host enables the gesture by passing the config into `appToolkitModules` and calling `install()`
   from its `Application`.
@@ -126,7 +138,7 @@ and unavailable versions still produce a null name and version code -1.
 ## Internal implementations
 
 - GitHub request DTO/mapping, device inspection, repository implementation, sheet composition, and
-  the bottom-sheet fragment.
+  the `ComposeView` the launcher mounts.
 - `ShakeDetector`, whose thresholds are constructor parameters so they can be tuned against real
   devices without changing the gesture logic.
 
@@ -144,7 +156,8 @@ defaults are a starting point and want tuning on physical devices.
 
 `IssueReporterActivity`, its manifest entry, and `Theme.AppToolkit.IssueReporter` are gone, together
 with the `LargeTopAppBarWithScaffold`, the back handling, and the FAB that only existed because the
-reporter was a screen. Callers that started the activity now call `IssueReporterLauncher.show`.
+reporter was a screen. A host inside a composition now shows `IssueReporterBottomSheet`; one that
+started the activity from outside a composition calls `IssueReporterLauncher.show`.
 `AdvancedSettingsProvider.bugReportUrl` went with them: it pointed at the repository's issues page
 from before the reporter submitted directly, and nothing read it any more.
 

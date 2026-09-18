@@ -11,7 +11,7 @@ the issue reporter began submitting reports itself.
 ## Dependencies and flow
 
 Depends on core common, network, and UI, plus Issue Reporter for the report action. The bug-report
-row opens the reporter's bottom sheet over this screen through IssueReporterLauncher, rather than
+row composes IssueReporterBottomSheet over this screen, held by rememberSaveable state, rather than
 starting an activity. AdvancedSettingsList sends events to AdvancedSettingsViewModel, which calls
 CacheRepository.
 DefaultCacheRepository performs cache operations on the injected dispatcher and reports results

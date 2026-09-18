@@ -18,24 +18,32 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.presentation
 
 import android.app.Activity
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
+import androidx.activity.ComponentActivity
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 
 /**
  * Covers the cases the launcher has to survive rather than crash on.
  *
  * The shake detector calls it from a sensor callback, so the activity it is handed can be halfway
- * through going away by the time the gesture lands. None of these is an error worth taking an app
- * down for, and each one has to be answered the same way: do not show a sheet.
+ * through going away by the time the gesture lands, and the screen underneath may already be
+ * showing a sheet of its own. None of these is worth taking an app down for, and each has to be
+ * answered the same way: do not mount a sheet.
  */
 class IssueReporterLauncherTest {
 
+    @AfterEach
+    fun clearPresence() {
+        while (IssueReporterPresence.isShowing) {
+            IssueReporterPresence.onHidden()
+        }
+    }
+
     @Test
-    fun `an activity that cannot host fragments is refused`() {
+    fun `an activity that cannot own a composition is refused`() {
         val activity: Activity = mockk()
 
         assertThat(IssueReporterLauncher.show(activity = activity)).isFalse()
@@ -43,7 +51,7 @@ class IssueReporterLauncherTest {
 
     @Test
     fun `a finishing activity is refused`() {
-        val activity: FragmentActivity = mockk {
+        val activity: ComponentActivity = mockk {
             every { isFinishing } returns true
         }
 
@@ -51,30 +59,22 @@ class IssueReporterLauncherTest {
     }
 
     @Test
-    fun `an activity whose state is already saved is refused`() {
-        val fragmentManager: FragmentManager = mockk {
-            every { isStateSaved } returns true
-        }
-        val activity: FragmentActivity = mockk {
+    fun `a destroyed activity is refused`() {
+        val activity: ComponentActivity = mockk {
             every { isFinishing } returns false
-            every { isDestroyed } returns false
-            every { supportFragmentManager } returns fragmentManager
+            every { isDestroyed } returns true
         }
 
         assertThat(IssueReporterLauncher.show(activity = activity)).isFalse()
     }
 
     @Test
-    fun `a sheet that is already showing is not shown again`() {
-        val fragmentManager: FragmentManager = mockk {
-            every { isStateSaved } returns false
-            every { isDestroyed } returns false
-            every { findFragmentByTag(IssueReporterLauncher.FRAGMENT_TAG) } returns mockk()
-        }
-        val activity: FragmentActivity = mockk {
+    fun `a sheet a host is already showing is not stacked on`() {
+        // The screen underneath composed its own sheet, which the launcher cannot see as a view.
+        IssueReporterPresence.onShown()
+        val activity: ComponentActivity = mockk {
             every { isFinishing } returns false
             every { isDestroyed } returns false
-            every { supportFragmentManager } returns fragmentManager
         }
 
         assertThat(IssueReporterLauncher.show(activity = activity)).isFalse()

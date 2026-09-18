@@ -17,8 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -29,13 +30,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -43,15 +44,16 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.reposit
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiSnackbar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.contracts.IssueReporterEvent
@@ -80,17 +82,22 @@ private const val ISSUE_REPORTER_SCREEN_CLASS = "IssueReporterContent"
  * A floating action button inside another floating surface reads as a second, unrelated layer, and
  * the sheet is a single focused operation with exactly one action to commit it.
  *
- * Every screen state is rendered through the same form. `ScreenState.Error` already carries its
- * message as a snackbar and leaves `data` intact, so replacing the form with an error layout would
- * throw away a report the author is still holding; `ScreenState.IsLoading` only marks the send
- * button busy.
+ * Every screen state is rendered through the same form. `ScreenState.Error` carries its message
+ * separately and leaves `data` intact, so replacing the form with an error layout would throw away
+ * a report the author is still holding; `ScreenState.IsLoading` only marks the send button busy.
+ *
+ * Results are reported as toasts. A snackbar belongs to the surface that hosts it, and this one is
+ * a sheet: it would land inside the sheet, over the send button that produced it, and vanish with
+ * the sheet if the author dismissed it on the way. A toast is the system's own window, so a report
+ * that succeeded says so whether or not the sheet is still up.
  */
 @Composable
-fun IssueReporterContent(modifier: Modifier = Modifier) {
+fun IssueReporterContent(
+    modifier: Modifier = Modifier,
+    viewModel: IssueReporterViewModel = koinViewModel(),
+) {
     val firebaseController: FirebaseController = koinInject()
-    val viewModel: IssueReporterViewModel = koinViewModel()
 
-    val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
     val uiStateScreen: UiStateScreen<IssueReporterUiState> by viewModel.uiState.collectAsStateWithLifecycle()
     val data: IssueReporterUiState = uiStateScreen.data ?: IssueReporterUiState()
     val isSending: Boolean = uiStateScreen.screenState is ScreenState.IsLoading
@@ -110,7 +117,7 @@ fun IssueReporterContent(modifier: Modifier = Modifier) {
     // navigationBarsPadding() comes first on purpose: it consumes the navigation bar inset, so the
     // imePadding() after it adds only what the keyboard needs on top, instead of both insets
     // stacking into a gap above the send button whenever the keyboard is open.
-    Box(
+    Column(
         modifier = modifier
             .fillMaxWidth()
             .navigationBarsPadding()
@@ -120,58 +127,77 @@ fun IssueReporterContent(modifier: Modifier = Modifier) {
                 end = SizeConstants.LargeSize,
                 bottom = SizeConstants.LargeSize,
             ),
+        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.MediumSize),
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(space = SizeConstants.MediumSize),
-        ) {
-            Text(
-                text = stringResource(id = R.string.bug_report),
-                style = MaterialTheme.typography.headlineSmall,
-            )
+        Text(
+            text = stringResource(id = R.string.bug_report),
+            style = MaterialTheme.typography.headlineSmall,
+        )
 
-            IssueReporterSections(
-                data = data,
-                firebaseController = firebaseController,
-                onEvent = viewModel::onEvent,
-                // The sheet wraps its content while it fits and stops growing once it fills the screen,
-                // at which point the report scrolls under a send button that stays put.
-                modifier = Modifier.weight(weight = 1f, fill = false),
-            )
+        IssueReporterSections(
+            data = data,
+            firebaseController = firebaseController,
+            onEvent = viewModel::onEvent,
+            // The sheet wraps its content while it fits and stops growing once it fills the screen,
+            // at which point the report scrolls under a send button that stays put.
+            modifier = Modifier.weight(weight = 1f, fill = false),
+        )
 
-            GeneralButton(
-                onClick = {
-                    firebaseController.logEvent(
-                        issueReporterActionEvent(
-                            actionName = IssueReporterActionNames.SEND_ISSUE,
-                            params = mapOf(
-                                "title_length" to AnalyticsValue.LongVal(data.title.length.toLong()),
-                                "description_length" to AnalyticsValue.LongVal(data.description.length.toLong()),
-                                "has_email" to AnalyticsValue.Bool(data.email.isNotBlank()),
-                            ),
-                        )
+        GeneralButton(
+            onClick = {
+                firebaseController.logEvent(
+                    issueReporterActionEvent(
+                        actionName = IssueReporterActionNames.SEND_ISSUE,
+                        params = mapOf(
+                            "title_length" to AnalyticsValue.LongVal(data.title.length.toLong()),
+                            "description_length" to AnalyticsValue.LongVal(data.description.length.toLong()),
+                            "has_email" to AnalyticsValue.Bool(data.email.isNotBlank()),
+                        ),
                     )
-                    viewModel.onEvent(IssueReporterEvent.Send)
-                },
-                style = GeneralButtonStyle.Filled,
-                enabled = !isSending,
-                label = stringResource(id = R.string.issue_send),
-                icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.BugReport),
-                measurements = ButtonMeasurements.Medium,
-                modifier = Modifier.fillMaxWidth(),
-            )
-        }
+                )
+                viewModel.onEvent(IssueReporterEvent.Send)
+            },
+            style = GeneralButtonStyle.Filled,
+            enabled = !isSending,
+            label = stringResource(id = R.string.issue_send),
+            icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.BugReport),
+            measurements = ButtonMeasurements.Medium,
+            modifier = Modifier.fillMaxWidth(),
+        )
 
-        // Over the send button rather than under it: a snackbar that took part in the column would
-        // push the action the author just pressed, on exactly the results they pressed it for.
-        Box(modifier = Modifier.align(alignment = Alignment.BottomCenter)) {
-            DefaultSnackbarHandler(
-                screenState = uiStateScreen,
-                snackbarHostState = snackbarHostState,
-                getDismissEvent = { IssueReporterEvent.DismissSnackbar },
-                onEvent = viewModel::onEvent,
-            )
-        }
+        ScreenMessageToast(
+            snackbar = uiStateScreen.snackbar,
+            onShown = { viewModel.onEvent(IssueReporterEvent.DismissSnackbar) },
+        )
+    }
+}
+
+/**
+ * Shows each screen message once, as a toast.
+ *
+ * [UiSnackbar.timeStamp] is the identity of a message, not its content: the reporter can fail the
+ * same way twice in a row, and keying on the text would swallow the second one. Acknowledging it
+ * through [onShown] is what lets the next identical message through.
+ */
+@Composable
+private fun ScreenMessageToast(
+    snackbar: UiSnackbar?,
+    onShown: () -> Unit,
+) {
+    val context: Context = LocalContext.current
+    val appContext: Context = remember(context) { context.applicationContext }
+
+    LaunchedEffect(snackbar?.timeStamp) {
+        val message: UiTextHelper = snackbar?.message ?: return@LaunchedEffect
+        val text: String = message.asString(context = context)
+        if (text.isBlank()) return@LaunchedEffect
+
+        Toast.makeText(
+            appContext,
+            text,
+            if (snackbar.isError) Toast.LENGTH_LONG else Toast.LENGTH_SHORT,
+        ).show()
+        onShown()
     }
 }
 

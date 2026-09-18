@@ -25,6 +25,15 @@ sealed interface IssueReporterEvent : UiEvent {
     data class UpdateEmail(val value: String) : IssueReporterEvent
     data object RequestDeviceInfo : IssueReporterEvent
     data object Send : IssueReporterEvent
+
+    /**
+     * Returns the reporter to an empty report.
+     *
+     * The presentation outlives no state of its own, so closing the sheet has to say so: the
+     * ViewModel is scoped to the screen that opened it, and without this an abandoned draft, or the
+     * confirmation of a report already filed, would be waiting the next time the sheet opened.
+     */
+    data object Reset : IssueReporterEvent
     data object DismissSnackbar : IssueReporterEvent
 }
 

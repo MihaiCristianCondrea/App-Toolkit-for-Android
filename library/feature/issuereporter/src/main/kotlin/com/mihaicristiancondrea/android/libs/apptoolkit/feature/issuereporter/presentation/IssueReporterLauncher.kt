@@ -18,40 +18,80 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.presentation
 
 import android.app.Activity
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterBottomSheetFragment
+import android.view.View
+import android.view.ViewGroup
+import androidx.activity.ComponentActivity
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.lifecycle.setViewTreeLifecycleOwner
+import androidx.lifecycle.setViewTreeViewModelStoreOwner
+import androidx.savedstate.setViewTreeSavedStateRegistryOwner
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppTheme
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterBottomSheet
 
 /**
- * The single way to open the issue reporter.
+ * Opens the report sheet for a caller that has an `Activity` but no composition.
  *
- * Every entry point calls this: the advanced settings row, the shake gesture, and anything a host
- * adds later. Keeping one launcher is what keeps one presentation, so a change to how the reporter
- * is shown is made once instead of once per caller.
+ * The shake gesture is detected by an application-scoped sensor listener, which cannot compose
+ * anything. This mounts a `ComposeView` on the activity's content view and puts the same
+ * [IssueReporterBottomSheet] in it, so the gesture and a host that composes the sheet itself show
+ * the identical sheet rather than the feature carrying two presentations.
+ *
+ * A host that is already composing should call [IssueReporterBottomSheet] directly. This exists for
+ * callers that cannot.
  */
 object IssueReporterLauncher {
 
-    /** Fragment tag the sheet is shown under, and the handle used to detect it is already open. */
-    const val FRAGMENT_TAG: String =
-        "com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.BottomSheet"
+    /** Marks the view this launcher added, so it can be found again and removed. */
+    private const val OVERLAY_TAG: String =
+        "com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.Overlay"
 
     /**
-     * Shows the reporter over [activity], unless it is already showing there.
+     * Shows the reporter over [activity].
      *
-     * Returns false without doing anything when the reporter cannot be shown: [activity] is not a
-     * [FragmentActivity], it is going away, its state is already saved, or the sheet is open. The
-     * shake detector calls this from a sensor callback, so the activity can be in any of those
-     * states by the time a gesture lands, and none of them is an error worth crashing an app over.
+     * Returns false without doing anything when it cannot be shown: [activity] is not a
+     * [ComponentActivity], it is going away, or a sheet is already up, including one a host
+     * composed itself. The shake detector calls this from a sensor callback, so the activity can be
+     * in any of those states by the time a gesture lands, and none of them is worth taking an app
+     * down for.
+     *
+     * Must be called on the main thread, which is where sensor callbacks are delivered.
      */
     fun show(activity: Activity): Boolean {
-        val fragmentActivity = activity as? FragmentActivity ?: return false
-        if (fragmentActivity.isFinishing || fragmentActivity.isDestroyed) return false
+        if (activity !is ComponentActivity) return false
+        if (activity.isFinishing || activity.isDestroyed) return false
+        if (IssueReporterPresence.isShowing) return false
 
-        val fragmentManager: FragmentManager = fragmentActivity.supportFragmentManager
-        if (fragmentManager.isStateSaved || fragmentManager.isDestroyed) return false
-        if (fragmentManager.findFragmentByTag(FRAGMENT_TAG) != null) return false
+        val content: ViewGroup = activity.findViewById(android.R.id.content) ?: return false
+        if (content.findViewWithTag<View?>(OVERLAY_TAG) != null) return false
 
-        IssueReporterBottomSheetFragment().show(fragmentManager, FRAGMENT_TAG)
+        val host = ComposeView(activity).apply {
+            tag = OVERLAY_TAG
+            // The activity's decor view normally carries these already, but only once it has set
+            // content. Naming them here means the sheet's ViewModel resolves the same way no matter
+            // what the host activity has done with its own window.
+            setViewTreeLifecycleOwner(activity)
+            setViewTreeViewModelStoreOwner(activity)
+            setViewTreeSavedStateRegistryOwner(activity)
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnDetachedFromWindow)
+        }
+
+        host.setContent {
+            AppTheme {
+                // The sheet lives in its own window, so this view contributes no layout and is left
+                // to wrap to nothing. A view that filled the activity would sit over the screen
+                // behind the sheet with nothing to draw and touches to swallow.
+                IssueReporterBottomSheet(onDismissRequest = { content.removeView(host) })
+            }
+        }
+
+        content.addView(
+            host,
+            ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+            ),
+        )
         return true
     }
 }

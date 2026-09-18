@@ -85,6 +85,7 @@ class IssueReporterViewModel(
             is IssueReporterEvent.UpdateEmail -> updateEmail(event.value)
             is IssueReporterEvent.RequestDeviceInfo -> loadDeviceInfoIfNeeded()
             is IssueReporterEvent.Send -> sendReport()
+            is IssueReporterEvent.Reset -> resetReport()
             is IssueReporterEvent.DismissSnackbar -> dismissSnackbar()
         }
     }
@@ -99,6 +100,24 @@ class IssueReporterViewModel(
 
     private fun updateEmail(value: String) {
         updateForm { copy(email = value) }
+    }
+
+    /**
+     * Clears the report and any message waiting to be shown.
+     *
+     * A send already in flight is left alone rather than cancelled. The author asked for that
+     * report to be filed, and closing the sheet is not taking it back; the state it produces is
+     * cleared by the next reset instead.
+     */
+    private fun resetReport() {
+        if (sendJob?.isActive == true) return
+
+        viewModelScope.launch {
+            updateStateThreadSafe {
+                screenState.setSuccess(data = IssueReporterUiState())
+                screenState.dismissSnackbar()
+            }
+        }
     }
 
     private fun dismissSnackbar() {
