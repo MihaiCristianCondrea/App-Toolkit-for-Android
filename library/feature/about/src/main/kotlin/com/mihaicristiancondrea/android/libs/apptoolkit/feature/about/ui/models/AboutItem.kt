@@ -38,9 +38,6 @@ object AboutItemKey {
  * Click interactions supported by About screen preference items.
  */
 sealed interface AboutItemAction {
-    /** Triggers the tap-counter easter egg that launches konfetti on 5 taps. */
-    data object VersionEasterEgg : AboutItemAction
-
     /** Opens the open-source software licenses screen. */
     data object OpenLicenses : AboutItemAction
 
@@ -48,7 +45,9 @@ sealed interface AboutItemAction {
      * Copies [text] to the system clipboard under [label].
      *
      * The text travels with the action so the clipboard receives exactly what the item displays,
-     * instead of a second lookup that could resolve under a different configuration.
+     * instead of a second lookup that could resolve under a different configuration. Both are
+     * [UiTextHelper] rather than `String` so a row whose value is a string resource, such as the
+     * application name, is as copyable as one holding a formatted value.
      *
      * @property label Clipboard entry label, also used as the copied item's name.
      * @property text The exact text written to the clipboard.
@@ -57,7 +56,7 @@ sealed interface AboutItemAction {
      */
     data class CopyToClipboard(
         val label: UiTextHelper,
-        val text: String,
+        val text: UiTextHelper,
         val successMessage: UiTextHelper? = null,
     ) : AboutItemAction
 }
@@ -75,12 +74,19 @@ sealed interface AboutItem {
         val title: UiTextHelper,
     ) : AboutItem
 
-    /** An individual preference entry within a category card. */
+    /**
+     * An individual preference entry within a category card.
+     *
+     * @property countsVersionTap Taps on this row advance the hidden version-tap counter that
+     * launches konfetti on the fifth one. It is a gesture layered on top of the row, not something
+     * the row does instead of its [action], so it is a flag rather than an [AboutItemAction].
+     */
     data class Preference(
         override val key: String,
         val title: UiTextHelper,
         val summary: UiTextHelper,
         val position: GroupedItemPosition = GroupedItemPosition.MIDDLE,
         val action: AboutItemAction? = null,
+        val countsVersionTap: Boolean = false,
     ) : AboutItem
 }

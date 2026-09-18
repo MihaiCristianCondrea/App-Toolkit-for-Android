@@ -69,7 +69,15 @@ flowchart TD
   an injected `sdkIntProvider`, which keeps both paths testable without a device.
 - `AboutItemAction.CopyToClipboard` carries the label, the exact text, and an optional confirmation
   message, so any row becomes copyable without a new event, and the clipboard receives what the row
-  displays rather than a second lookup resolved under a different configuration.
+  displays rather than a second lookup resolved under a different configuration. Both texts are
+  `UiTextHelper`, so a row whose value is a string resource copies as readily as one holding a
+  formatted value.
+- Every row that displays a value copies it on tap. Open source licenses is the only preference
+  that does something else, because it navigates. Rows that rendered as clickable but carried no
+  action were the reason tapping most of this screen appeared to do nothing.
+- The hidden version-tap gesture is `Preference.countsVersionTap`, not an `AboutItemAction`. It is
+  layered on top of whatever the row does, so the build version row counts taps and copies its
+  value on the same click instead of having to choose.
 - Use cases are retained where they perform a named operation or combine concerns; repository calls
   that only forwarded data were not given synthetic wrappers.
 

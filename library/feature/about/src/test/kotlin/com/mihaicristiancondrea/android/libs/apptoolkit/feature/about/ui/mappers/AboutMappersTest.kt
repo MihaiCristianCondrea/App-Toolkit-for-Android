@@ -57,7 +57,6 @@ class AboutMappersTest {
 
         val buildVersion = items.preference(AboutItemKey.APP_BUILD_VERSION)
         assertThat((buildVersion.summary as UiTextHelper.DynamicString).content).isEqualTo("1.0 (1)")
-        assertThat(buildVersion.action).isEqualTo(AboutItemAction.VersionEasterEgg)
 
         val licenses = items.preference(AboutItemKey.OSS_LICENSES)
         assertThat(licenses.position).isEqualTo(GroupedItemPosition.LAST)
@@ -74,7 +73,7 @@ class AboutMappersTest {
         assertThat(deviceInfoItem.action).isEqualTo(
             AboutItemAction.CopyToClipboard(
                 label = UiTextHelper.StringResource(R.string.device_info),
-                text = "device-info",
+                text = UiTextHelper.DynamicString("device-info"),
                 successMessage = UiTextHelper.StringResource(R.string.snack_device_info_copied),
             )
         )
@@ -87,13 +86,13 @@ class AboutMappersTest {
         assertThat(items.preference(AboutItemKey.APP_TOOLKIT_VERSION).action).isEqualTo(
             AboutItemAction.CopyToClipboard(
                 label = UiTextHelper.StringResource(R.string.app_toolkit_version),
-                text = "3.0.0-test",
+                text = UiTextHelper.DynamicString("3.0.0-test"),
             )
         )
         assertThat(items.preference(AboutItemKey.GOOGLE_PLAY_SERVICES_VERSION).action).isEqualTo(
             AboutItemAction.CopyToClipboard(
                 label = UiTextHelper.StringResource(R.string.google_play_services_version),
-                text = "24.01.12",
+                text = UiTextHelper.DynamicString("24.01.12"),
             )
         )
     }
@@ -121,6 +120,52 @@ class AboutMappersTest {
         assertThat(items.none { it.key == AboutItemKey.HEADER_DEVICE_INFO }).isTrue()
         assertThat(items.none { it.key == AboutItemKey.DEVICE_INFO }).isTrue()
         assertThat(items.last().key).isEqualTo(AboutItemKey.OSS_LICENSES)
+    }
+
+    @Test
+    fun `every row that shows a value copies it, and only licenses navigates`() {
+        val items = aboutInfo.toUiState().items
+        val preferences = items.filterIsInstance<AboutItem.Preference>()
+
+        val notCopyable = preferences
+            .filterNot { it.action is AboutItemAction.CopyToClipboard }
+            .map { it.key }
+
+        // A row that looked clickable but did nothing is what made most of this screen seem broken.
+        assertThat(notCopyable).containsExactly(AboutItemKey.OSS_LICENSES)
+        assertThat(preferences.first { it.key == AboutItemKey.OSS_LICENSES }.action)
+            .isEqualTo(AboutItemAction.OpenLicenses)
+    }
+
+    @Test
+    fun `the app name row copies the name itself`() {
+        val appName = aboutInfo.toUiState().items.preference(AboutItemKey.APP_NAME)
+
+        val action = appName.action as AboutItemAction.CopyToClipboard
+        assertThat(action.text).isEqualTo(appName.title)
+    }
+
+    @Test
+    fun `the build version row both copies and feeds the version tap counter`() {
+        val buildVersion = aboutInfo.toUiState().items.preference(AboutItemKey.APP_BUILD_VERSION)
+
+        assertThat(buildVersion.countsVersionTap).isTrue()
+        assertThat(buildVersion.action).isEqualTo(
+            AboutItemAction.CopyToClipboard(
+                label = UiTextHelper.StringResource(R.string.app_build_version),
+                text = UiTextHelper.DynamicString("1.0 (1)"),
+            )
+        )
+    }
+
+    @Test
+    fun `no other row feeds the version tap counter`() {
+        val counting = aboutInfo.toUiState().items
+            .filterIsInstance<AboutItem.Preference>()
+            .filter { it.countsVersionTap }
+            .map { it.key }
+
+        assertThat(counting).containsExactly(AboutItemKey.APP_BUILD_VERSION)
     }
 
     private fun List<AboutItem>.preference(key: String): AboutItem.Preference =

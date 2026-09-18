@@ -10,7 +10,8 @@ review, and store actions around it. This module replaced `:library:feature:help
 - `FaqScreen`, `FaqActivity`, `FaqViewModel`, and their state, event, and action contracts.
 - `FaqRepository` and `DefaultFaqRepository`, which normalize both sources, prefer the remote
   catalog, and fall back to the resources bundled in the host.
-- `FaqRemoteDataSource`, `FaqLocalDataSource`, and the catalog DTOs and mappers.
+- `FaqRemoteDataSource`, `FaqLocalDataSource`, the catalog DTOs, and the DTO mappers under
+  `data/remote/mappers`.
 - `FaqItem`, `FaqId`, `QuestionCard`, `ContactUsCard`, `FaqNativeAdCard`, and the overflow menu.
 - The nine question and nine answer placeholder resources a host fills in.
 

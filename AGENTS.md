@@ -31,6 +31,19 @@ Do not update module documentation for cosmetic changes, routine maintenance, or
 
 Note: App Toolkit library works on the same patter, its features are documented in the respective modules README files.
 
+## Module layers
+
+Follow the `architecture` skills for placement. Two rules this project has settled that the skills
+leave open:
+
+- A `domain/` package holding only models, with no use cases, is fine. The layer names the concept,
+  not the operation: a model that crosses the repository, the state holder and the UI is the
+  application's vocabulary and belongs there. Do not move such models into `data/models/` and do
+  not invent a use case to justify the package.
+- Do not add a use case that only forwards a repository call or tidies its result. Trimming,
+  filtering and de-duplicating a response is transforming a data-source model into an application
+  model, which is repository work. A state holder may depend on a repository directly.
+
 ## Localization
 
 When changing user-facing strings, inspect the target module's existing resources and Gradle configuration first, and use the `android-localization` skill.

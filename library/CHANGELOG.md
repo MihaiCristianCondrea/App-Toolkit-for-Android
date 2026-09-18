@@ -10,8 +10,9 @@
   The open source licenses screen, the privacy and legal preference list, and the changelog sheet
   now ship as their own modules, so a host can depend on the one it needs instead of pulling the
   whole About feature.
-- Added tap to copy to the App Toolkit version and Google Play services version rows on the About
-  screen. Tapping either copies its value, matching the device info row.
+- Every About row that displays a value now copies it on tap: the application name, the build
+  version, the App Toolkit version, the Google Play services version and the device info. Open
+  source licenses is the only preference that does something else, because it navigates.
 - Added `snack_copied_to_clipboard` and `snack_copy_failed` in all 25 supported locales.
 - Added `:library:feature:faq`, which replaces `:library:feature:help` and owns the FAQ surface end
   to end: the screen and activity, the catalog repository and data sources,
@@ -31,7 +32,13 @@
   clipboard write now runs on the main thread. `AboutRepository.copyDeviceInfo` and
   `CopyDeviceInfoUseCase` are removed.
 - `AboutItemAction.CopyToClipboard` replaces the device specific copy action and carries the label,
-  the exact text, and an optional confirmation message, so any About row can be made copyable.
+  the exact text, and an optional confirmation message, so any About row can be made copyable. Both
+  texts are `UiTextHelper`, so a row backed by a string resource copies too.
+- `AboutItemAction.VersionEasterEgg` is gone. The hidden version-tap gesture is
+  `AboutItem.Preference.countsVersionTap`, which lets the build version row count taps and copy its
+  value on the same click.
+- `FaqMappers` moved to `data/remote/mappers`; it maps a remote DTO, which is where the project's
+  tree rules put that.
 - `DefaultNavigationRepository` moved from `:library:feature:about` to `:library:navigation`,
   together with the drawer labels it uses. Hosts update the import to
   `com.mihaicristiancondrea.android.libs.apptoolkit.navigation.data.repositories.DefaultNavigationRepository`.
@@ -93,6 +100,9 @@
   Android 13, where the platform shows no clipboard preview of its own.
 - A remote FAQ catalog of nothing but blank rows rendered as blank rows. The catalog is normalized
   before the fallback decision now, so it counts as empty and the bundled questions are shown.
+- Tapping the application name or the build version on the About screen played the click ripple and
+  did nothing. Both carried no copy action, so most of the screen looked broken after the first
+  successful copy.
 
 ---
 

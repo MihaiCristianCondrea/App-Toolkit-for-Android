@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.mappers
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.mappers
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.models.FaqQuestionDto
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.domain.models.FaqId

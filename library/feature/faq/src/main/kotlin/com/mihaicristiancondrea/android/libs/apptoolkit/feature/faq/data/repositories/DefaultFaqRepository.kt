@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.repositories
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.local.FaqLocalDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.mappers.toFaqItems
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.mappers.toFaqItems
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.FaqRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.models.FaqQuestionDto
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.domain.models.FaqItem

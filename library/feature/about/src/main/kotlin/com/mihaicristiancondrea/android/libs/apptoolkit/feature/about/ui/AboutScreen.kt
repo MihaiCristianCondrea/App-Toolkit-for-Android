@@ -172,28 +172,27 @@ fun AboutScreen(
                                     title = item.title.asString(),
                                     summary = item.summary.asString(),
                                     onClick = {
+                                        if (item.countsVersionTap) {
+                                            appVersionTotalTapCount += 1
+                                            onVersionTap(appVersionTotalTapCount)
+                                            appVersionTapCount += 1
+                                            if (appVersionTapCount >= 5) {
+                                                appVersionTapCount = 0
+                                                showKonfettiAnimationForThisInstance = true
+                                                firebaseController.logUnlockAchievement(
+                                                    "konfetti_easter_egg",
+                                                )
+                                            }
+                                        }
                                         when (val action = item.action) {
                                             is AboutItemAction.CopyToClipboard -> {
                                                 viewModel.onEvent(
                                                     event = AboutEvent.CopyToClipboard(
                                                         label = action.label.asString(context),
-                                                        text = action.text,
+                                                        text = action.text.asString(context),
                                                         successMessage = action.successMessage,
                                                     )
                                                 )
-                                            }
-
-                                            AboutItemAction.VersionEasterEgg -> {
-                                                appVersionTotalTapCount += 1
-                                                onVersionTap(appVersionTotalTapCount)
-                                                appVersionTapCount += 1
-                                                if (appVersionTapCount >= 5) {
-                                                    appVersionTapCount = 0
-                                                    showKonfettiAnimationForThisInstance = true
-                                                    firebaseController.logUnlockAchievement(
-                                                        "konfetti_easter_egg",
-                                                    )
-                                                }
                                             }
 
                                             AboutItemAction.OpenLicenses -> {

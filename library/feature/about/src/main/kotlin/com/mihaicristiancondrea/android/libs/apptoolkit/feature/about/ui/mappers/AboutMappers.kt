@@ -32,24 +32,39 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.
  *
  * Entries that have nothing to show are dropped, so grouped card positions are assigned after
  * filtering and always describe the list the user actually sees.
+ *
+ * Every row that displays a value copies it on tap. The licenses row is the sole exception, it
+ * navigates instead, and a row that only looked clickable was the reason tapping most of this
+ * screen appeared to do nothing.
  */
 internal fun AboutInfo.toUiState(): AboutUiState = AboutUiState(items = toAboutItems())
 
 private fun AboutInfo.toAboutItems(): List<AboutItem> {
     val appInfoPreferences = buildList {
+        val appNameTitle = UiTextHelper.StringResource(CommonR.string.app_full_name)
         add(
             AboutItem.Preference(
                 key = AboutItemKey.APP_NAME,
-                title = UiTextHelper.StringResource(CommonR.string.app_full_name),
+                title = appNameTitle,
                 summary = UiTextHelper.StringResource(CommonR.string.copyright),
+                action = AboutItemAction.CopyToClipboard(
+                    label = appNameTitle,
+                    text = appNameTitle,
+                ),
             )
         )
+        val buildVersionTitle = UiTextHelper.StringResource(R.string.app_build_version)
+        val buildVersion = UiTextHelper.DynamicString("$appVersion ($appVersionCode)")
         add(
             AboutItem.Preference(
                 key = AboutItemKey.APP_BUILD_VERSION,
-                title = UiTextHelper.StringResource(R.string.app_build_version),
-                summary = UiTextHelper.DynamicString("$appVersion ($appVersionCode)"),
-                action = AboutItemAction.VersionEasterEgg,
+                title = buildVersionTitle,
+                summary = buildVersion,
+                action = AboutItemAction.CopyToClipboard(
+                    label = buildVersionTitle,
+                    text = buildVersion,
+                ),
+                countsVersionTap = true,
             )
         )
         if (appToolkitVersion.isNotBlank()) {
@@ -61,7 +76,7 @@ private fun AboutInfo.toAboutItems(): List<AboutItem> {
                     summary = UiTextHelper.DynamicString(appToolkitVersion),
                     action = AboutItemAction.CopyToClipboard(
                         label = title,
-                        text = appToolkitVersion,
+                        text = UiTextHelper.DynamicString(appToolkitVersion),
                     ),
                 )
             )
@@ -75,11 +90,12 @@ private fun AboutInfo.toAboutItems(): List<AboutItem> {
                     summary = UiTextHelper.DynamicString(googlePlayServicesVersion),
                     action = AboutItemAction.CopyToClipboard(
                         label = title,
-                        text = googlePlayServicesVersion,
+                        text = UiTextHelper.DynamicString(googlePlayServicesVersion),
                     ),
                 )
             )
         }
+        // The licenses row navigates; it is the one entry with no value to put on the clipboard.
         add(
             AboutItem.Preference(
                 key = AboutItemKey.OSS_LICENSES,
@@ -100,7 +116,7 @@ private fun AboutInfo.toAboutItems(): List<AboutItem> {
                     summary = UiTextHelper.DynamicString(deviceInfo),
                     action = AboutItemAction.CopyToClipboard(
                         label = title,
-                        text = deviceInfo,
+                        text = UiTextHelper.DynamicString(deviceInfo),
                         successMessage = UiTextHelper.StringResource(
                             R.string.snack_device_info_copied,
                         ),
