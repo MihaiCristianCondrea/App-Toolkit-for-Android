@@ -2,7 +2,7 @@
 
 ---
 
-# Unreleased
+# September 18, 2026
 
 **Version:** `3.0.0-pre17`
 
