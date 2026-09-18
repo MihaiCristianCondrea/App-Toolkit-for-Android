@@ -150,8 +150,6 @@ fun IssueReporterContent(
         ) { submitted: Boolean ->
             if (submitted && submissionState is IssueSubmissionState.Submitted) {
                 IssueSubmittedContent(
-                    issueUrl = submissionState.issueUrl,
-                    firebaseController = firebaseController,
                     onDone = onDone,
                 )
             } else {
@@ -316,8 +314,6 @@ private fun IssueSubmittedContentPreview() {
     MaterialTheme {
         Column(modifier = Modifier.padding(all = SizeConstants.LargeSize)) {
             IssueSubmittedContent(
-                issueUrl = "https://github.com/example/example/issues/1",
-                firebaseController = PreviewFirebaseController,
                 onDone = {},
             )
         }

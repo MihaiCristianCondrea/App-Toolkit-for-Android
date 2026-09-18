@@ -28,6 +28,5 @@
     <string name="issue_submitted_message">Thanks for helping improve the app.</string>
     <string name="issue_submitted_title">Report submitted</string>
     <string name="issue_title_label">Title</string>
-    <string name="open_button_label">Open issue</string>
     <string name="snack_report_failed">Failed to send report</string>
 </resources>

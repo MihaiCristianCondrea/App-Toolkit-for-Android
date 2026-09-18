@@ -28,6 +28,5 @@
     <string name="issue_submitted_message">感謝你協助我們改進這個應用程式。</string>
     <string name="issue_submitted_title">已送出回報</string>
     <string name="issue_title_label">標題</string>
-    <string name="open_button_label">開啟問題</string>
     <string name="snack_report_failed">無法傳送報告</string>
 </resources>

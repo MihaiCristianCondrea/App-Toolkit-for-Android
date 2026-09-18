@@ -28,6 +28,5 @@
     <string name="issue_submitted_message">Grazie per averci aiutato a migliorare l\'app.</string>
     <string name="issue_submitted_title">Segnalazione inviata</string>
     <string name="issue_title_label">Titolo</string>
-    <string name="open_button_label">Apri la segnalazione</string>
     <string name="snack_report_failed">Invio della segnalazione non riuscito</string>
 </resources>

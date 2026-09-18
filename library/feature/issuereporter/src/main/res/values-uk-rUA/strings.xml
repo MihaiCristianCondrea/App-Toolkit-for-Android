@@ -28,6 +28,5 @@
     <string name="issue_submitted_message">Дякуємо, що допомагаєте покращувати застосунок.</string>
     <string name="issue_submitted_title">Звіт надіслано</string>
     <string name="issue_title_label">Заголовок</string>
-    <string name="open_button_label">Відкрити задачу</string>
     <string name="snack_report_failed">Не вдалося надіслати звіт</string>
 </resources>

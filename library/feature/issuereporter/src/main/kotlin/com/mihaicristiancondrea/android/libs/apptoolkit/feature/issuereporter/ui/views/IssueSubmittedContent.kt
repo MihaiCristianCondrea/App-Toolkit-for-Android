@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Icon
@@ -35,20 +34,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.IssueReporterActionNames
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.issueReporterActionEvent
 
 /**
  * The whole sheet once the report has been filed.
@@ -61,19 +54,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui
  * Nothing here is a card. The card was carrying the confirmation's weight because it was competing
  * with a form around it; alone on the sheet, whitespace does that better, and the check in its
  * filled circle becomes the anchor instead of an outline drawn at launcher-icon size.
- *
- * [onDone] is the primary action because finishing is the normal next step. Opening the issue is
- * the exception, so it is the quieter one.
  */
 @Composable
 internal fun IssueSubmittedContent(
-    issueUrl: String,
-    firebaseController: FirebaseController,
     onDone: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val uriHandler = LocalUriHandler.current
-
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -112,24 +98,6 @@ internal fun IssueSubmittedContent(
         )
 
         LargeVerticalSpacer()
-
-        GeneralButton(
-            onClick = {
-                firebaseController.logEvent(
-                    issueReporterActionEvent(
-                        actionName = IssueReporterActionNames.OPEN_CREATED_ISSUE,
-                        params = mapOf(
-                            "has_issue_url" to AnalyticsValue.Bool(issueUrl.isNotBlank()),
-                        ),
-                    )
-                )
-                uriHandler.openUri(issueUrl)
-            },
-            style = GeneralButtonStyle.Text,
-            label = stringResource(id = R.string.open_button_label),
-            icon = ToolkitIcon.Vector(imageVector = Icons.AutoMirrored.Outlined.OpenInNew),
-            measurements = ButtonMeasurements.Medium,
-        )
 
         GeneralButton(
             onClick = onDone,

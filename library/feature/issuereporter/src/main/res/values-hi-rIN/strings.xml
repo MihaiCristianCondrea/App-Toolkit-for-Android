@@ -28,6 +28,5 @@
     <string name="issue_submitted_message">ऐप को बेहतर बनाने में मदद करने के लिए धन्यवाद।</string>
     <string name="issue_submitted_title">रिपोर्ट भेज दी गई</string>
     <string name="issue_title_label">शीर्षक</string>
-    <string name="open_button_label">मुद्दा खोलें</string>
     <string name="snack_report_failed">रिपोर्ट भेजने में विफल</string>
 </resources>

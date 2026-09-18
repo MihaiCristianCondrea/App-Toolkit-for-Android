@@ -28,6 +28,5 @@
     <string name="issue_submitted_message">ขอบคุณที่ช่วยปรับปรุงแอปให้ดีขึ้น</string>
     <string name="issue_submitted_title">ส่งรายงานแล้ว</string>
     <string name="issue_title_label">ชื่อเรื่อง</string>
-    <string name="open_button_label">เปิดปัญหา</string>
     <string name="snack_report_failed">ส่งรายงานไม่สำเร็จ</string>
 </resources>

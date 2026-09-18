@@ -28,6 +28,5 @@
     <string name="issue_submitted_message">Îți mulțumim că ne ajuți să îmbunătățim aplicația.</string>
     <string name="issue_submitted_title">Raport trimis</string>
     <string name="issue_title_label">Titlu</string>
-    <string name="open_button_label">Deschide problema</string>
     <string name="snack_report_failed">Trimiterea raportului a eșuat</string>
 </resources>

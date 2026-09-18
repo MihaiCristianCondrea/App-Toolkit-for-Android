@@ -28,6 +28,5 @@
     <string name="issue_submitted_message">Tack för att du hjälper oss att förbättra appen.</string>
     <string name="issue_submitted_title">Rapporten har skickats</string>
     <string name="issue_title_label">Titel</string>
-    <string name="open_button_label">Öppna ärendet</string>
     <string name="snack_report_failed">Det gick inte att skicka rapporten</string>
 </resources>

@@ -28,6 +28,5 @@
     <string name="issue_submitted_message">شكرًا لمساعدتك في تحسين التطبيق.</string>
     <string name="issue_submitted_title">تم إرسال البلاغ</string>
     <string name="issue_title_label">العنوان</string>
-    <string name="open_button_label">فتح المشكلة</string>
     <string name="snack_report_failed">فشل في إرسال التقرير</string>
 </resources>

@@ -28,6 +28,5 @@
     <string name="issue_submitted_message">Благодарим ви, че помагате да подобрим приложението.</string>
     <string name="issue_submitted_title">Докладът е изпратен</string>
     <string name="issue_title_label">Заглавие</string>
-    <string name="open_button_label">Отваряне на проблема</string>
     <string name="snack_report_failed">Неуспешно изпращане на доклада</string>
 </resources>

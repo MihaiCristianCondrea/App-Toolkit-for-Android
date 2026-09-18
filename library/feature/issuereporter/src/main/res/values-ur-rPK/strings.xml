@@ -28,6 +28,5 @@
     <string name="issue_submitted_message">ایپ کو بہتر بنانے میں مدد کرنے کا شکریہ۔</string>
     <string name="issue_submitted_title">رپورٹ بھیج دی گئی</string>
     <string name="issue_title_label">عنوان</string>
-    <string name="open_button_label">مسئلہ کھولیں</string>
     <string name="snack_report_failed">رپورٹ بھیجنے میں ناکام</string>
 </resources>

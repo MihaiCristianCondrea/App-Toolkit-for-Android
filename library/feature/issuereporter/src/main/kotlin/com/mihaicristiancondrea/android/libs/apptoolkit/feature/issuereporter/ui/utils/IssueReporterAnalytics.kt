@@ -32,7 +32,6 @@ internal const val ISSUE_REPORTER_SCREEN_NAME: String = "IssueReporter"
 internal object IssueReporterActionNames {
     const val OPEN_ISSUES_LIST: String = "open_issues_list"
     const val SEND_ISSUE: String = "send_issue"
-    const val OPEN_CREATED_ISSUE: String = "open_created_issue"
     const val TOGGLE_DEVICE_INFO: String = "toggle_device_info"
     const val FORMAT_DESCRIPTION: String = "format_description"
 }

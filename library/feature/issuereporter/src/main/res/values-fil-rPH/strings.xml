@@ -28,6 +28,5 @@
     <string name="issue_submitted_message">Salamat sa pagtulong na mapabuti ang app.</string>
     <string name="issue_submitted_title">Naipadala ang ulat</string>
     <string name="issue_title_label">Pamagat</string>
-    <string name="open_button_label">Buksan ang isyu</string>
     <string name="snack_report_failed">Nabigo ang pagpapadala ng ulat</string>
 </resources>

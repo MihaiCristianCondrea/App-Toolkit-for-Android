@@ -28,6 +28,5 @@
     <string name="issue_submitted_message">앱을 개선하는 데 도움을 주셔서 감사합니다.</string>
     <string name="issue_submitted_title">보고서가 제출되었습니다</string>
     <string name="issue_title_label">제목</string>
-    <string name="open_button_label">이슈 열기</string>
     <string name="snack_report_failed">보고서 전송 실패</string>
 </resources>

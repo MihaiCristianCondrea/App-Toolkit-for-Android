@@ -28,6 +28,5 @@
     <string name="issue_submitted_message">Спасибо, что помогаете улучшать приложение.</string>
     <string name="issue_submitted_title">Отчёт отправлен</string>
     <string name="issue_title_label">Заголовок</string>
-    <string name="open_button_label">Открыть задачу</string>
     <string name="snack_report_failed">Не удалось отправить отчет</string>
 </resources>

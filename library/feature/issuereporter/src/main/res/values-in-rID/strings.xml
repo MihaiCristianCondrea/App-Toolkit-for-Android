@@ -28,6 +28,5 @@
     <string name="issue_submitted_message">Terima kasih telah membantu meningkatkan aplikasi ini.</string>
     <string name="issue_submitted_title">Laporan terkirim</string>
     <string name="issue_title_label">Judul</string>
-    <string name="open_button_label">Buka masalah</string>
     <string name="snack_report_failed">Gagal mengirim laporan</string>
 </resources>
