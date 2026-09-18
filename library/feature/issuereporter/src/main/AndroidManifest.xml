@@ -17,11 +17,13 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <application>
-        <!-- Internal issue reporter screen; not intended as an externally callable API. -->
-        <activity
-            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterActivity"
-            android:exported="false"
-            android:theme="@style/Theme.AppToolkit.IssueReporter" />
-    </application>
+    <!--
+      Shake-to-report reads the accelerometer, which needs no permission. It is declared optional so
+      the reporter, and therefore any app embedding it, is not filtered off devices without one:
+      the gesture is one of several ways to open the reporter, never the only one.
+    -->
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="false" />
+
 </manifest>

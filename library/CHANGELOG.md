@@ -17,9 +17,25 @@
   `settings_category_general`, and the matching `summary_preference_settings_*` summaries. Hosts no
   longer need to declare and translate their own copies to name the destinations `SettingsContent`
   already defines.
+- Added shake to report to `:library:feature:issuereporter`. Shaking the device opens the issue
+  reporter from any screen. It is off by default and a host turns it on with
+  `IssueReporterConfig(shakeToReportEnabled = true)` passed to `appToolkitModules`, plus
+  `IssueReporterShakeManager.install()` in its `Application`. The accelerometer is read only while
+  an activity is in the foreground, and a shake has to clear a magnitude threshold, a minimum
+  duration and a cooldown before it counts.
+- Added `IssueReporterLauncher.show(activity)`, the single entry point for opening the issue
+  reporter, and `IssueReporterContent` for hosts embedding the report form in their own container.
 
 ### Changed
 
+- The issue reporter now opens as a bottom sheet over the current screen instead of launching its
+  own activity. Advanced settings no longer leaves the settings screen to report a bug, and the
+  full-screen top app bar and floating send button are replaced by a sheet with a send button fixed
+  at the bottom.
+- Removed `IssueReporterActivity`, its manifest entry, and the `Theme.AppToolkit.IssueReporter`
+  style. Hosts that started the activity directly call `IssueReporterLauncher.show(activity)`.
+- Removed `AdvancedSettingsProvider` and its `bugReportUrl`. Advanced settings stopped using the URL
+  when the reporter began submitting reports itself, so hosts no longer bind this provider.
 - Updated the AGP 9+ release configuration by removing the legacy `proguardFiles(...)` setup from
   `:library:apptoolkit` and the sample application. The sample now relies on AGP 9's unified R8
   application optimization through `optimization { enable = true }`.

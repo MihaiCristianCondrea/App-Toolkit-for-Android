@@ -22,15 +22,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 
 /**
- * Analytics plumbing shared by the report screen and the views split out of it.
+ * Analytics plumbing shared by the report sheet and the views split out of it.
  *
- * These were private to `IssueReporterScreen.kt`, which is why every card had to stay in that one
+ * These were private to the report's own file, which is why every card had to stay in that one
  * file: a composable in `ui/views` could not name the event helper it needed.
  */
 internal const val ISSUE_REPORTER_SCREEN_NAME: String = "IssueReporter"
 
 internal object IssueReporterActionNames {
-    const val BACK_CLICK: String = "back_click"
     const val OPEN_ISSUES_LIST: String = "open_issues_list"
     const val SEND_ISSUE: String = "send_issue"
     const val OPEN_CREATED_ISSUE: String = "open_created_issue"

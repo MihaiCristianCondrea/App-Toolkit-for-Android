@@ -24,7 +24,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.sty
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.AboutSettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.PrivacySettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.SettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.providers.AdvancedSettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.providers.DisplaySettingsProvider
 import io.mockk.every
 import io.mockk.mockk
@@ -86,7 +85,6 @@ class AppToolkitProvidersModuleTest {
         with(koin()) {
             get<SettingsProvider>()
             get<AboutSettingsProvider>()
-            get<AdvancedSettingsProvider>()
             get<DisplaySettingsProvider>()
             get<PrivacySettingsProvider>()
             get<ColorPalette>(named(AppToolkitDiConstants.DEFAULT_THEME_PALETTE))
