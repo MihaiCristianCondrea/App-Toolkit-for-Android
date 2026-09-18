@@ -102,27 +102,10 @@ open class AboutViewModel(
     }
 
     private fun copyDeviceInfo(label: String) {
-        val deviceInfo = screenData?.deviceInfo.orEmpty()
         startOperation(action = Actions.COPY_DEVICE_INFO, extra = mapOf(ExtraKeys.LABEL to label))
 
-        if (deviceInfo.isBlank()) {
-            viewModelScope.launch {
-                updateStateThreadSafe {
-                    screenState.showSnackbar(
-                        UiSnackbar(
-                            message = UiTextHelper.StringResource(R.string.snack_device_info_failed),
-                            isError = true,
-                            timeStamp = System.nanoTime(),
-                            type = ScreenMessageType.SNACKBAR,
-                        )
-                    )
-                }
-            }
-            return
-        }
-
         copyJob = copyJob.restart {
-            copyDeviceInfo.invoke(label = label, deviceInfo = deviceInfo)
+            copyDeviceInfo.invoke(label = label)
                 .flowOn(dispatchers.io)
                 .onEach { result ->
                     result

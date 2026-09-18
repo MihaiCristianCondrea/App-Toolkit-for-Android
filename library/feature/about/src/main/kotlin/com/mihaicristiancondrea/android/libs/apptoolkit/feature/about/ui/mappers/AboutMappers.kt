@@ -19,20 +19,13 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.mapper
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.AboutUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
 
 /**
  * Extension function to map [AboutInfo] domain model to [AboutUiState] UI state.
  *
- * @return A new instance of [AboutUiState] containing the mapped application and device information.
+ * @return A new instance of [AboutUiState] containing the mapped items.
  */
 internal fun AboutInfo.toUiState(): AboutUiState =
     AboutUiState(
-        appVersionInfo = AppVersionInfo(
-            versionName = appVersion,
-            versionCode = appVersionCode.toLong()
-        ),
-        appToolkitVersion = appToolkitVersion,
-        googlePlayServicesVersion = googlePlayServicesVersion,
-        deviceInfo = deviceInfo,
+        items = items,
     )

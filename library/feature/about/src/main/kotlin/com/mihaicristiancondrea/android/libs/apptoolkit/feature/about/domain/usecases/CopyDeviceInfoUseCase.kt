@@ -40,15 +40,17 @@ class CopyDeviceInfoUseCase(
 
     operator fun invoke(
         label: String,
-        deviceInfo: String,
+        deviceInfo: String = "",
     ): Flow<DataState<CopyDeviceInfoResult, Errors>> =
         flow {
             firebaseController.logBreadcrumb(
                 message = "Copy device info started",
-                attributes = mapOf(
-                    "label" to label,
-                    "deviceInfoLength" to deviceInfo.length.toString(),
-                ),
+                attributes = buildMap {
+                    put("label", label)
+                    if (deviceInfo.isNotEmpty()) {
+                        put("deviceInfoLength", deviceInfo.length.toString())
+                    }
+                },
             )
             val result = runCatching {
                 repository.copyDeviceInfo(

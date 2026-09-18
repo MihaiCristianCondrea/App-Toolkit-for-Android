@@ -18,19 +18,18 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states
 
 import androidx.compose.runtime.Immutable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutItem
 
 /**
  * UI representation for the about screen.
  *
- * Values are loaded by [AboutViewModel] using the provided data sources and are
- * exposed as immutable properties to the UI layer.
+ * Values are loaded by [com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.AboutViewModel]
+ * using the provided data sources and are exposed as immutable properties to the UI layer.
+ *
+ * @property items The ordered list of category headers and preference items ready to render.
  */
 @Immutable
 data class AboutUiState(
-    val appVersionInfo: AppVersionInfo = AppVersionInfo(versionName = "", versionCode = 0L),
-    val appToolkitVersion: String = "",
-    val googlePlayServicesVersion: String? = null,
-    val deviceInfo: String = "",
+    val items: List<AboutItem> = emptyList(),
 )
 

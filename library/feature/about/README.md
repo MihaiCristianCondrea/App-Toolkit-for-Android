@@ -63,6 +63,9 @@ flowchart TD
 
 - About and changelog are separate state holders because one is stable application metadata and the
   other coordinates remote/cache/update work with an independent lifecycle.
+- About screen presentation is data-driven: `DefaultAboutRepository` builds an ordered list of
+  display-ready `AboutItem` models (headers and grouped preferences) with pre-computed titles,
+  summaries, actions, and card positions so `AboutScreen` remains purely declarative.
 - Use cases are retained where they perform a named operation or combine concerns; repository calls
   that only forwarded data were not given synthetic wrappers.
 - Changelog persistence provides fallback content, while the remote response remains authoritative
@@ -72,13 +75,13 @@ flowchart TD
 
 ## Public contracts
 
-- About/privacy provider interfaces, `DefaultNavigationRepository`,
+- About/privacy provider interfaces, `DefaultNavigationRepository`, `AboutItem`,
   about/changelog repositories/models, `CopyDeviceInfoUseCase`, `GetChangelogUseCase`, and
   screen/navigation composables.
 
 ## Internal implementations
 
-- Device/build-info mapping, Google Play services package inspection, clipboard behavior,
+- Device/build-info mapping, About item assembly with grouped card position calculation, Google Play services package inspection, clipboard behavior,
   changelog HTTP/fallback logic, screen composition, and update-host creation.
 
 ## Current risks

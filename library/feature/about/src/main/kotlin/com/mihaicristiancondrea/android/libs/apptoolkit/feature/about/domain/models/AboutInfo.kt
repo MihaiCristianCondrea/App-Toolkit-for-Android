@@ -21,9 +21,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.mo
  * Display-ready application and device information for the About screen.
  *
  * @property items The ordered list of category headers and preference items ready to render.
- * @property deviceInfo The raw device hardware and software specification string used for clipboard copy.
  */
 data class AboutInfo(
     val items: List<AboutItem>,
-    val deviceInfo: String,
 )

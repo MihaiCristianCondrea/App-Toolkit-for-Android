@@ -70,23 +70,27 @@ class DefaultAboutRepository(
             gmsVersion = gmsVersionProvider.getVersion(),
             deviceInfo = rawDeviceInfo,
         )
-        return AboutInfo(
-            items = items,
-            deviceInfo = rawDeviceInfo,
-        )
+        return AboutInfo(items = items)
     }
 
     override fun copyDeviceInfo(label: String, deviceInfo: String): CopyDeviceInfoResult {
+        val textToCopy = deviceInfo.ifBlank { deviceProvider.deviceInfo }
         firebaseController.logBreadcrumb(
             message = "Copy device info requested",
             attributes = mapOf("label" to label),
         )
+        if (textToCopy.isBlank()) {
+            return CopyDeviceInfoResult(
+                copied = false,
+                shouldShowFeedback = true,
+            )
+        }
         val allowFeedback = sdkIntProvider() <= Build.VERSION_CODES.S_V2
         var shouldShowFeedback = false
         val copied = runCatching {
             context.copyTextToClipboard(
                 label = label,
-                text = deviceInfo,
+                text = textToCopy,
                 onCopyFallback = {
                     if (allowFeedback) {
                         shouldShowFeedback = true

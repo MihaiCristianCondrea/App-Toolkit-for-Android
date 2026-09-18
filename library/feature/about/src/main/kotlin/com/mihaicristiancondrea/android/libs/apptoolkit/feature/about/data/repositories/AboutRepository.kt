@@ -26,5 +26,5 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.mod
  */
 interface AboutRepository {
     suspend fun getAboutInfo(): AboutInfo
-    fun copyDeviceInfo(label: String, deviceInfo: String): CopyDeviceInfoResult
+    fun copyDeviceInfo(label: String, deviceInfo: String = ""): CopyDeviceInfoResult
 }

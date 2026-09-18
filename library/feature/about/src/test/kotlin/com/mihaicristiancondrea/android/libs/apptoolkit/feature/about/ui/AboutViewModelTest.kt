@@ -18,19 +18,22 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 
 import com.google.common.truth.Truth.assertThat
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories.AboutRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutItemAction
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutItemKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.CopyDeviceInfoResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.usecases.CopyDeviceInfoUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.AboutSettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -48,24 +51,36 @@ class AboutViewModelTest {
         override val deviceInfo: String = "device-info"
     }
 
-    private val buildInfoProvider = object : BuildInfoProvider {
-        override val appVersion: String = "1.0"
-        override val appVersionCode: Int = 1
-        override val packageName: String = "pkg"
-        override val isDebugBuild: Boolean = false
-    }
+    private val testItems: List<AboutItem> = listOf(
+        AboutItem.Header(
+            key = AboutItemKey.HEADER_APP_INFO,
+            title = UiTextHelper.DynamicString("App info"),
+        ),
+        AboutItem.Preference(
+            key = AboutItemKey.APP_NAME,
+            title = UiTextHelper.DynamicString("App name"),
+            summary = UiTextHelper.DynamicString("Copyright"),
+            position = GroupedItemPosition.FIRST,
+        ),
+        AboutItem.Preference(
+            key = AboutItemKey.APP_BUILD_VERSION,
+            title = UiTextHelper.DynamicString("App version"),
+            summary = UiTextHelper.DynamicString("1.0 (1)"),
+            position = GroupedItemPosition.MIDDLE,
+            action = AboutItemAction.VersionEasterEgg,
+        ),
+    )
+
+    private val defaultAboutInfo = AboutInfo(
+        items = testItems,
+    )
+
     private val firebaseController = FakeFirebaseController()
 
     private fun createViewModel(
         testDispatcher: TestDispatcher = dispatcherExtension.testDispatcher,
         repository: AboutRepository = object : AboutRepository {
-            override suspend fun getAboutInfo(): AboutInfo = AboutInfo(
-                appVersion = buildInfoProvider.appVersion,
-                appVersionCode = buildInfoProvider.appVersionCode,
-                appToolkitVersion = "3.0.0",
-                googlePlayServicesVersion = "24.01.12",
-                deviceInfo = deviceProvider.deviceInfo,
-            )
+            override suspend fun getAboutInfo(): AboutInfo = defaultAboutInfo
 
             override fun copyDeviceInfo(label: String, deviceInfo: String): CopyDeviceInfoResult =
                 CopyDeviceInfoResult(copied = true, shouldShowFeedback = true)
@@ -99,12 +114,7 @@ class AboutViewModelTest {
         dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
         val state = viewModel.uiState.value
-        assertThat(state.data?.deviceInfo).isEqualTo(deviceProvider.deviceInfo)
-        assertThat(state.data?.appVersionInfo?.versionName).isEqualTo(buildInfoProvider.appVersion)
-        assertThat(state.data?.appVersionInfo?.versionCode)
-            .isEqualTo(buildInfoProvider.appVersionCode.toLong())
-        assertThat(state.data?.appToolkitVersion).isEqualTo("3.0.0")
-        assertThat(state.data?.googlePlayServicesVersion).isEqualTo("24.01.12")
+        assertThat(state.data?.items).isEqualTo(testItems)
     }
 
     @Test
@@ -116,8 +126,6 @@ class AboutViewModelTest {
         dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
         val state = viewModel.uiState.value
-        assertThat(state.data?.deviceInfo).isEqualTo(deviceProvider.deviceInfo)
-
         val snackbar = state.snackbar!!
         val msg = snackbar.message as UiTextHelper.StringResource
         assertThat(msg.resourceId).isEqualTo(R.string.snack_device_info_copied)
@@ -127,13 +135,7 @@ class AboutViewModelTest {
     fun `copy device info failure surfaces fallback snackbar`() =
         runTest(dispatcherExtension.testDispatcher) {
             val repository = object : AboutRepository {
-                override suspend fun getAboutInfo(): AboutInfo = AboutInfo(
-                    appVersion = buildInfoProvider.appVersion,
-                    appVersionCode = buildInfoProvider.appVersionCode,
-                    appToolkitVersion = "3.0.0",
-                    googlePlayServicesVersion = "24.01.12",
-                    deviceInfo = deviceProvider.deviceInfo,
-                )
+                override suspend fun getAboutInfo(): AboutInfo = defaultAboutInfo
 
                 override fun copyDeviceInfo(
                     label: String,
@@ -194,13 +196,7 @@ class AboutViewModelTest {
     fun `no fallback means no success snackbar`() =
         runTest(dispatcherExtension.testDispatcher) {
             val repository = object : AboutRepository {
-                override suspend fun getAboutInfo(): AboutInfo = AboutInfo(
-                    appVersion = buildInfoProvider.appVersion,
-                    appVersionCode = buildInfoProvider.appVersionCode,
-                    appToolkitVersion = "3.0.0",
-                    googlePlayServicesVersion = "24.01.12",
-                    deviceInfo = deviceProvider.deviceInfo,
-                )
+                override suspend fun getAboutInfo(): AboutInfo = defaultAboutInfo
 
                 override fun copyDeviceInfo(
                     label: String,
@@ -273,7 +269,7 @@ class AboutViewModelTest {
 
         val state = recreated.uiState.value
         assertThat(state.snackbar).isNull()
-        assertThat(state.data?.deviceInfo).isEqualTo(deviceProvider.deviceInfo)
+        assertThat(state.data?.items).isEqualTo(testItems)
     }
 }
 
