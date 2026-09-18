@@ -17,6 +17,10 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <queries>
+        <package android:name="com.google.android.gms" />
+    </queries>
+
     <application>
         <!-- Internal licenses screen displayed from settings/help flows only. -->
         <activity

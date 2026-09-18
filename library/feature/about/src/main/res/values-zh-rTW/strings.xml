@@ -21,6 +21,7 @@
     <string name="app_build">應用程式構建：%6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
     <string name="app_build_version">應用程式構建版本</string>
     <string name="app_info">應用程式資訊</string>
+    <string name="app_toolkit_version">App Toolkit 版本</string>
     <string name="changelog_title">應用程式變更紀錄</string>
     <string name="code_of_conduct">行為準則</string>
     <string name="content_description_more_options">更多选项</string>
@@ -29,6 +30,7 @@
     <string name="device_model">設備型號：</string>
     <string name="done_button_content_description">完成</string>
     <string name="go_back">返回</string>
+    <string name="google_play_services_version">Google Play 服務版本</string>
     <string name="help_and_feedback">幫助與反饋</string>
     <string name="legal">法律</string>
     <string name="legal_notices">法律通知</string>

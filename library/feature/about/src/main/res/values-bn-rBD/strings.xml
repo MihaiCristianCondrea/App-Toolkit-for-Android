@@ -21,6 +21,7 @@
     <string name="app_build">অ্যাপ বিল্ড: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
     <string name="app_build_version">অ্যাপ্লিকেশন বিল্ড সংস্করণ</string>
     <string name="app_info">অ্যাপের তথ্য</string>
+    <string name="app_toolkit_version">App Toolkit সংস্করণ</string>
     <string name="changelog_title">অ্যাপ চেঞ্জলগ</string>
     <string name="code_of_conduct">আচরণবিধি</string>
     <string name="content_description_more_options">আরও বিকল্প</string>
@@ -29,6 +30,7 @@
     <string name="device_model">ডিভাইস মডেল</string>
     <string name="done_button_content_description">সম্পন্ন</string>
     <string name="go_back">ফিরে যান</string>
+    <string name="google_play_services_version">Google Play পরিষেবা সংস্করণ</string>
     <string name="help_and_feedback">সাহায্য ও প্রতিক্রিয়া</string>
     <string name="legal">আইনি</string>
     <string name="legal_notices">আইনি নোটিশ</string>

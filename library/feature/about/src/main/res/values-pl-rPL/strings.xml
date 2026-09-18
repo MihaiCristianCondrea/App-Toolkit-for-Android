@@ -21,6 +21,7 @@
     <string name="app_build">Kompilacja aplikacji: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
     <string name="app_build_version">Wersja kompilacji aplikacji</string>
     <string name="app_info">Informacje o aplikacji</string>
+    <string name="app_toolkit_version">Wersja App Toolkit</string>
     <string name="changelog_title">Dziennik zmian aplikacji</string>
     <string name="code_of_conduct">Kodeks postępowania</string>
     <string name="content_description_more_options">Więcej opcji</string>
@@ -29,6 +30,7 @@
     <string name="device_model">Model urządzenia</string>
     <string name="done_button_content_description">Gotowe</string>
     <string name="go_back">Wróć</string>
+    <string name="google_play_services_version">Wersja Usług Google Play</string>
     <string name="help_and_feedback">Pomoc i opinie</string>
     <string name="legal">Informacje prawne</string>
     <string name="legal_notices">Noty prawne</string>

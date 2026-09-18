@@ -21,6 +21,7 @@
     <string name="app_build">Build ng app: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
     <string name="app_build_version">Bersyon ng build ng application</string>
     <string name="app_info">Impormasyon ng app</string>
+    <string name="app_toolkit_version">Bersyon ng App Toolkit</string>
     <string name="changelog_title">Changelog ng app</string>
     <string name="code_of_conduct">Kodigo ng pag-uugali</string>
     <string name="content_description_more_options">Higit pang mga pagpipilian</string>
@@ -29,6 +30,7 @@
     <string name="device_model">Modelo ng device</string>
     <string name="done_button_content_description">Tapos na</string>
     <string name="go_back">Bumalik</string>
+    <string name="google_play_services_version">Bersyon ng mga serbisyo ng Google Play</string>
     <string name="help_and_feedback">Tulong &amp; Feedback</string>
     <string name="legal">Legal</string>
     <string name="legal_notices">Mga legal na paunawa</string>

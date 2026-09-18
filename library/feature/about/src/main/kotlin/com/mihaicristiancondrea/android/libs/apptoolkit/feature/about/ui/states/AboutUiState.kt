@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -29,6 +29,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersio
 @Immutable
 data class AboutUiState(
     val appVersionInfo: AppVersionInfo = AppVersionInfo(versionName = "", versionCode = 0L),
+    val appToolkitVersion: String = "",
+    val googlePlayServicesVersion: String? = null,
     val deviceInfo: String = "",
 )
 

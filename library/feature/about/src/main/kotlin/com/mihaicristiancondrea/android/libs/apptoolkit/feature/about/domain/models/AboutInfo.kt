@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,15 +18,12 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models
 
 /**
- * Data class representing basic application and device information.
+ * Display-ready application and device information for the About screen.
  *
- * @property appVersion The human-readable version name of the application.
- * @property appVersionCode The internal version code of the application.
- * @property deviceInfo A string containing relevant hardware and software specifications of the device.
+ * @property items The ordered list of category headers and preference items ready to render.
+ * @property deviceInfo The raw device hardware and software specification string used for clipboard copy.
  */
 data class AboutInfo(
-    val appVersion: String,
-    val appVersionCode: Int,
+    val items: List<AboutItem>,
     val deviceInfo: String,
 )
-

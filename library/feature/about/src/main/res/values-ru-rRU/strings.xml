@@ -21,6 +21,7 @@
     <string name="app_build">Сборка приложения: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
     <string name="app_build_version">Версия сборки приложения</string>
     <string name="app_info">Информация о приложении</string>
+    <string name="app_toolkit_version">Версия App Toolkit</string>
     <string name="changelog_title">Журнал изменений приложения</string>
     <string name="code_of_conduct">Кодекс поведения</string>
     <string name="content_description_more_options">Больше вариантов</string>
@@ -29,6 +30,7 @@
     <string name="device_model">Модель устройства</string>
     <string name="done_button_content_description">Готово</string>
     <string name="go_back">Назад</string>
+    <string name="google_play_services_version">Версия сервисов Google Play</string>
     <string name="help_and_feedback">Помощь и отзывы</string>
     <string name="legal">Юридическая информация</string>
     <string name="legal_notices">Юридические уведомления</string>

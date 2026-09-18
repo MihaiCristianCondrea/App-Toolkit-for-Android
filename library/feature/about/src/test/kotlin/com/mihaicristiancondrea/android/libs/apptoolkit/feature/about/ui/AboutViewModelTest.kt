@@ -62,6 +62,8 @@ class AboutViewModelTest {
             override suspend fun getAboutInfo(): AboutInfo = AboutInfo(
                 appVersion = buildInfoProvider.appVersion,
                 appVersionCode = buildInfoProvider.appVersionCode,
+                appToolkitVersion = "3.0.0",
+                googlePlayServicesVersion = "24.01.12",
                 deviceInfo = deviceProvider.deviceInfo,
             )
 
@@ -101,6 +103,8 @@ class AboutViewModelTest {
         assertThat(state.data?.appVersionInfo?.versionName).isEqualTo(buildInfoProvider.appVersion)
         assertThat(state.data?.appVersionInfo?.versionCode)
             .isEqualTo(buildInfoProvider.appVersionCode.toLong())
+        assertThat(state.data?.appToolkitVersion).isEqualTo("3.0.0")
+        assertThat(state.data?.googlePlayServicesVersion).isEqualTo("24.01.12")
     }
 
     @Test
@@ -126,6 +130,8 @@ class AboutViewModelTest {
                 override suspend fun getAboutInfo(): AboutInfo = AboutInfo(
                     appVersion = buildInfoProvider.appVersion,
                     appVersionCode = buildInfoProvider.appVersionCode,
+                    appToolkitVersion = "3.0.0",
+                    googlePlayServicesVersion = "24.01.12",
                     deviceInfo = deviceProvider.deviceInfo,
                 )
 
@@ -191,6 +197,8 @@ class AboutViewModelTest {
                 override suspend fun getAboutInfo(): AboutInfo = AboutInfo(
                     appVersion = buildInfoProvider.appVersion,
                     appVersionCode = buildInfoProvider.appVersionCode,
+                    appToolkitVersion = "3.0.0",
+                    googlePlayServicesVersion = "24.01.12",
                     deviceInfo = deviceProvider.deviceInfo,
                 )
 

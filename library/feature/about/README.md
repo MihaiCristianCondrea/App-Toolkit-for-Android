@@ -7,7 +7,8 @@ several settings/help flows.
 
 ## Owns
 
-- About information/copy-device-info domain and presentation flows.
+- About information/copy-device-info domain and presentation flows (including host application,
+  App Toolkit, and Google Play services versions).
 - Changelog retrieval/presentation and in-app-update triggering.
 - Licenses and library-extras screens.
 - Privacy/about provider contracts, the feature-specific top app bar, and related navigation
@@ -77,8 +78,8 @@ flowchart TD
 
 ## Internal implementations
 
-- Device/build-info mapping, clipboard behavior, changelog HTTP/fallback logic, screen composition,
-  and update-host creation.
+- Device/build-info mapping, Google Play services package inspection, clipboard behavior,
+  changelog HTTP/fallback logic, screen composition, and update-host creation.
 
 ## Current risks
 

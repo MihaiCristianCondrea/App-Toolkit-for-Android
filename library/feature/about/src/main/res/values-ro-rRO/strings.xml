@@ -21,6 +21,7 @@
     <string name="app_build">Compilare aplicație: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
     <string name="app_build_version">Versiunea de compilare a aplicației</string>
     <string name="app_info">Informații despre aplicație</string>
+    <string name="app_toolkit_version">Versiune App Toolkit</string>
     <string name="changelog_title">Jurnal de modificări al aplicației</string>
     <string name="code_of_conduct">Cod de conduită</string>
     <string name="content_description_more_options">Mai multe opțiuni</string>
@@ -29,6 +30,7 @@
     <string name="device_model">Model dispozitiv</string>
     <string name="done_button_content_description">Gata</string>
     <string name="go_back">Înapoi</string>
+    <string name="google_play_services_version">Versiune servicii Google Play</string>
     <string name="help_and_feedback">Ajutor și feedback</string>
     <string name="legal">Informații legale</string>
     <string name="legal_notices">Avertismente legale</string>

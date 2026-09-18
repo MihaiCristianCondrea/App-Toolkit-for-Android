@@ -21,6 +21,7 @@
     <string name="app_build">เวอร์ชันแอป: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
     <string name="app_build_version">เวอร์ชันแอป</string>
     <string name="app_info">ข้อมูลแอป</string>
+    <string name="app_toolkit_version">เวอร์ชัน App Toolkit</string>
     <string name="changelog_title">บันทึกการเปลี่ยนแปลง</string>
     <string name="code_of_conduct">หลักปฏิบัติ</string>
     <string name="content_description_more_options">ตัวเลือกเพิ่มเติม</string>
@@ -29,6 +30,7 @@
     <string name="device_model">รุ่นอุปกรณ์</string>
     <string name="done_button_content_description">เสร็จสิ้น</string>
     <string name="go_back">กลับ</string>
+    <string name="google_play_services_version">เวอร์ชันบริการ Google Play</string>
     <string name="help_and_feedback">ความช่วยเหลือและข้อเสนอแนะ</string>
     <string name="legal">ข้อมูลทางกฎหมาย</string>
     <string name="legal_notices">ประกาศทางกฎหมาย</string>

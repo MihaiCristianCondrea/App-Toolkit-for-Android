@@ -26,6 +26,10 @@
 - Added `IssueReporterBottomSheet`, the issue reporter as a composable a host can show from its own
   screen, plus `IssueReporterLauncher.show(activity)` for callers outside a composition and
   `IssueReporterContent` for hosts embedding the report form in a container of their own.
+- Added App Toolkit and Google Play services version display to the About screen in
+  `:library:feature:about`. The About screen now presents the library's publishing version and
+  inspects the installed Google Play services package runtime version when available on the device,
+  translated across all 25 supported locales.
 
 ### Changed
 
@@ -36,13 +40,11 @@
 - The reporter reports its results as toasts instead of snackbars, so a report that succeeded says
   so even if the sheet was dismissed on the way.
 - A submitted report now replaces the form with a confirmation instead of stacking a success card on
-  top of it. The sheet shrinks to a check, `Report submitted`, an `Open issue` link and a `Done`
-  button, takes the keyboard down and gives a confirm haptic. The form is cleared when the sheet is
-  dismissed rather than when the network answers, and a failed send returns to the form with the
-  report intact.
-- Corrected the `open_button_label` translations in all 25 supported locales. They rendered "open
-  issue" as an adjective, an issue that happens to be open, rather than the action the button
-  performs.
+  top of it. The sheet shrinks to a check, `Report submitted`, and a `Done` button, takes the
+  keyboard down and gives a confirm haptic. The form is cleared when the sheet is dismissed rather
+  than when the network answers, and a failed send returns to the form with the report intact.
+- Removed the "Open issue" button and its analytics action from the issue reporter confirmation
+  sheet, cleaning up `open_button_label` strings across all 25 supported locales.
 - Removed `IssueReporterActivity`, its manifest entry, and the `Theme.AppToolkit.IssueReporter`
   style. Hosts that started the activity directly call `IssueReporterLauncher.show(activity)`.
 - Removed `AdvancedSettingsProvider` and its `bugReportUrl`. Advanced settings stopped using the URL

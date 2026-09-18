@@ -21,6 +21,7 @@
     <string name="app_build">إصدار التطبيق: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
     <string name="app_build_version">إصدار بناء التطبيق</string>
     <string name="app_info">معلومات التطبيق</string>
+    <string name="app_toolkit_version">إصدار App Toolkit</string>
     <string name="changelog_title">سجل تغييرات التطبيق</string>
     <string name="code_of_conduct">مدونة قواعد السلوك</string>
     <string name="content_description_more_options">المزيد من الخيارات</string>
@@ -29,6 +30,7 @@
     <string name="device_model">طراز الجهاز</string>
     <string name="done_button_content_description">تم</string>
     <string name="go_back">العودة</string>
+    <string name="google_play_services_version">إصدار خدمات Google Play</string>
     <string name="help_and_feedback">المساعدة والملاحظات</string>
     <string name="legal">قانوني</string>
     <string name="legal_notices">إشعارات قانونية</string>

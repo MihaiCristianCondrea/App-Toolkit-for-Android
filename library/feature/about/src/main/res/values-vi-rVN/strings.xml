@@ -21,6 +21,7 @@
     <string name="app_build">Bản dựng ứng dụng: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
     <string name="app_build_version">Phiên bản xây dựng ứng dụng</string>
     <string name="app_info">Thông tin ứng dụng</string>
+    <string name="app_toolkit_version">Phiên bản App Toolkit</string>
     <string name="changelog_title">Nhật ký thay đổi ứng dụng</string>
     <string name="code_of_conduct">Quy tắc ứng xử</string>
     <string name="content_description_more_options">Nhiều lựa chọn hơn</string>
@@ -29,6 +30,7 @@
     <string name="device_model">Kiểu máy</string>
     <string name="done_button_content_description">Xong</string>
     <string name="go_back">Quay lại</string>
+    <string name="google_play_services_version">Phiên bản Dịch vụ Google Play</string>
     <string name="help_and_feedback">Trợ giúp &amp; phản hồi</string>
     <string name="legal">Pháp lý</string>
     <string name="legal_notices">Thông báo pháp lý</string>

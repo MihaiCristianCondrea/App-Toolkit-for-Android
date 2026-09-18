@@ -23,6 +23,7 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import com.google.common.truth.Truth.assertThat
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.providers.GooglePlayServicesVersionProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.CopyDeviceInfoResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.AboutSettingsProvider
@@ -61,12 +62,18 @@ class TestDefaultAboutRepository {
     private fun repository(
         context: Context = mockk(),
         sdkIntProvider: () -> Int = { Build.VERSION.SDK_INT },
+        gmsVersionProvider: GooglePlayServicesVersionProvider = mockk {
+            every { getVersion() } returns "24.01.12"
+        },
+        toolkitVersionProvider: () -> String = { "3.0.0-test" },
     ): DefaultAboutRepository =
         DefaultAboutRepository(
             deviceProvider = deviceProvider,
             buildInfoProvider = buildInfoProvider,
             context = context,
             sdkIntProvider = sdkIntProvider,
+            gmsVersionProvider = gmsVersionProvider,
+            toolkitVersionProvider = toolkitVersionProvider,
             firebaseController = mockk<FirebaseController>(relaxed = true),
         )
 
@@ -78,7 +85,22 @@ class TestDefaultAboutRepository {
 
         assertThat(result.appVersion).isEqualTo(buildInfoProvider.appVersion)
         assertThat(result.appVersionCode).isEqualTo(buildInfoProvider.appVersionCode)
+        assertThat(result.appToolkitVersion).isEqualTo("3.0.0-test")
+        assertThat(result.googlePlayServicesVersion).isEqualTo("24.01.12")
         assertThat(result.deviceInfo).isEqualTo(deviceProvider.deviceInfo)
+    }
+
+    @Test
+    fun `getAboutInfo handles absent google play services`() = runTest(dispatcherExtension.testDispatcher) {
+        val gmsProvider = mockk<GooglePlayServicesVersionProvider> {
+            every { getVersion() } returns null
+        }
+        val repo = repository(gmsVersionProvider = gmsProvider)
+
+        val result: AboutInfo = repo.getAboutInfo()
+
+        assertThat(result.googlePlayServicesVersion).isNull()
+        assertThat(result.appToolkitVersion).isEqualTo("3.0.0-test")
     }
 
     @Test

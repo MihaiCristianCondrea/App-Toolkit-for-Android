@@ -21,6 +21,7 @@
     <string name="app_build">Збірка додатка: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
     <string name="app_build_version">Версія додатка</string>
     <string name="app_info">Інформація про додаток</string>
+    <string name="app_toolkit_version">Версія App Toolkit</string>
     <string name="changelog_title">Журнал змін</string>
     <string name="code_of_conduct">Кодекс поведінки</string>
     <string name="content_description_more_options">Більше варіантів</string>
@@ -29,6 +30,7 @@
     <string name="device_model">Модель пристрою</string>
     <string name="done_button_content_description">Готово</string>
     <string name="go_back">Повернутися</string>
+    <string name="google_play_services_version">Версія сервісів Google Play</string>
     <string name="help_and_feedback">Допомога та зворотній зв\'язок</string>
     <string name="legal">Юридична інформація</string>
     <string name="legal_notices">Юридичні повідомлення</string>

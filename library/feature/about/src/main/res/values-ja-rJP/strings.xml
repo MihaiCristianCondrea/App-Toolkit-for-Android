@@ -21,6 +21,7 @@
     <string name="app_build">アプリビルド: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
     <string name="app_build_version">アプリビルドバージョン</string>
     <string name="app_info">アプリ情報</string>
+    <string name="app_toolkit_version">App Toolkitバージョン</string>
     <string name="changelog_title">アプリの変更履歴</string>
     <string name="code_of_conduct">行動規範</string>
     <string name="content_description_more_options">その他のオプション</string>
@@ -29,6 +30,7 @@
     <string name="device_model">デバイスモデル</string>
     <string name="done_button_content_description">完了</string>
     <string name="go_back">戻る</string>
+    <string name="google_play_services_version">Google Play開発者サービスのバージョン</string>
     <string name="help_and_feedback">ヘルプとフィードバック</string>
     <string name="legal">法的情報</string>
     <string name="legal_notices">法的通知</string>

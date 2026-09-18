@@ -207,6 +207,30 @@ fun AboutScreen(
 
                     item {
                         SettingsPreferenceItem(
+                            title = stringResource(id = R.string.app_toolkit_version),
+                            summary = data.appToolkitVersion,
+                            modifier = Modifier.groupedPreferenceItem(
+                                position = GroupedItemPosition.MIDDLE,
+                                outerRadius = SizeConstants.LargeMediumSize,
+                            )
+                        )
+                    }
+
+                    if (!data.googlePlayServicesVersion.isNullOrBlank()) {
+                        item {
+                            SettingsPreferenceItem(
+                                title = stringResource(id = R.string.google_play_services_version),
+                                summary = data.googlePlayServicesVersion,
+                                modifier = Modifier.groupedPreferenceItem(
+                                    position = GroupedItemPosition.MIDDLE,
+                                    outerRadius = SizeConstants.LargeMediumSize,
+                                )
+                            )
+                        }
+                    }
+
+                    item {
+                        SettingsPreferenceItem(
                             title = stringResource(id = R.string.oss_license_title),
                             summary = stringResource(id = R.string.summary_preference_settings_oss),
                             onClick = {

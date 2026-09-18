@@ -36,9 +36,11 @@ android {
 
     defaultConfig {
         minSdk = versioning.minSdk
+        buildConfigField("String", "APP_TOOLKIT_VERSION", "\"${project.version}\"")
     }
 
     buildFeatures {
+        buildConfig = true
         compose = true
     }
 }

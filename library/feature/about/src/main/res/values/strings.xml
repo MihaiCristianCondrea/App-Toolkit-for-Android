@@ -21,6 +21,7 @@
     <string name="app_build">App build: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
     <string name="app_build_version">Application build version</string>
     <string name="app_info">App info</string>
+    <string name="app_toolkit_version">App Toolkit version</string>
     <string name="changelog_title">App changelog</string>
     <string name="code_of_conduct">Code of conduct</string>
     <string name="content_description_more_options">More options</string>
@@ -29,6 +30,7 @@
     <string name="device_model">Device model</string>
     <string name="done_button_content_description">Done</string>
     <string name="go_back">Go back</string>
+    <string name="google_play_services_version">Google Play services version</string>
     <string name="help_and_feedback">Help &amp; feedback</string>
     <string name="legal">Legal</string>
     <string name="legal_notices">Legal notices</string>

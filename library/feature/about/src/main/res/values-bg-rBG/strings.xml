@@ -21,6 +21,7 @@
     <string name="app_build">Компилация на приложението: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
     <string name="app_build_version">Версия на компилацията</string>
     <string name="app_info">Информация за приложението</string>
+    <string name="app_toolkit_version">Версия на App Toolkit</string>
     <string name="changelog_title">Дневник на промените</string>
     <string name="code_of_conduct">Кодекс на поведение</string>
     <string name="content_description_more_options">Още опции</string>
@@ -29,6 +30,7 @@
     <string name="device_model">Модел на устройството</string>
     <string name="done_button_content_description">Готово</string>
     <string name="go_back">Назад</string>
+    <string name="google_play_services_version">Версия на услугите за Google Play</string>
     <string name="help_and_feedback">Помощ и обратна връзка</string>
     <string name="legal">Правни</string>
     <string name="legal_notices">Правни известия</string>

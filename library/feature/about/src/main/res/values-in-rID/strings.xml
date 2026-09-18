@@ -21,6 +21,7 @@
     <string name="app_build">Build aplikasi: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
     <string name="app_build_version">Versi build aplikasi</string>
     <string name="app_info">Info aplikasi</string>
+    <string name="app_toolkit_version">Versi App Toolkit</string>
     <string name="changelog_title">Catatan perubahan aplikasi</string>
     <string name="code_of_conduct">Kode etik</string>
     <string name="content_description_more_options">Lebih banyak opsi</string>
@@ -29,6 +30,7 @@
     <string name="device_model">Model perangkat</string>
     <string name="done_button_content_description">Selesai</string>
     <string name="go_back">Kembali</string>
+    <string name="google_play_services_version">Versi layanan Google Play</string>
     <string name="help_and_feedback">Bantuan &amp; umpan balik</string>
     <string name="legal">Hukum</string>
     <string name="legal_notices">Pemberitahuan hukum</string>

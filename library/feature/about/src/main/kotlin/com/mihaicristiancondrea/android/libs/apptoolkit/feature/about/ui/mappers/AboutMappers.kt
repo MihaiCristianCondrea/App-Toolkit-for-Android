@@ -32,5 +32,7 @@ internal fun AboutInfo.toUiState(): AboutUiState =
             versionName = appVersion,
             versionCode = appVersionCode.toLong()
         ),
+        appToolkitVersion = appToolkitVersion,
+        googlePlayServicesVersion = googlePlayServicesVersion,
         deviceInfo = deviceInfo,
     )
