@@ -17,20 +17,24 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.di
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.help.HelpConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.faq.FaqConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.string.faqCatalogUrl
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.local.FaqLocalDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.FaqRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.repositories.DefaultFaqRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.repositories.FaqRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.domain.usecases.GetFaqUseCase
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.FaqViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.usecases.ForceInAppReviewUseCase
 import org.koin.core.module.Module
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 /**
- * Binds the FAQ catalog: its local resource fallback, the remote catalog, and the use case that
- * cleans the result for display.
+ * Binds the FAQ feature: the catalog sources, the use case that cleans them for display, and the
+ * screen that lists them alongside the contact and review actions.
  */
 fun faqModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
     single<FaqLocalDataSource> { FaqLocalDataSource(context = get()) }
@@ -39,7 +43,7 @@ fun faqModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
         DefaultFaqRepository(
             localDataSource = get(),
             remoteDataSource = get(),
-            catalogUrl = HelpConstants.FAQ_BASE_URL.faqCatalogUrl(
+            catalogUrl = FaqConstants.FAQ_BASE_URL.faqCatalogUrl(
                 isDebugBuild = hostBuildConfig.isDebugBuild,
             ),
             productId = hostBuildConfig.faqProductId,
@@ -47,4 +51,13 @@ fun faqModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
         )
     }
     single<GetFaqUseCase> { GetFaqUseCase(repository = get()) }
+
+    viewModel {
+        FaqViewModel(
+            getFaqUseCase = get(),
+            forceInAppReviewUseCase = get<ForceInAppReviewUseCase>(),
+            dispatchers = get<DispatcherProvider>(),
+            firebaseController = get(),
+        )
+    }
 }

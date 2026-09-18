@@ -15,13 +15,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.contracts
 
-const val STARTUP_LOG_TAG: String = "StartupActivity"
-const val CLIPBOARD_HELPER_LOG_TAG: String = "ClipboardHelper"
-const val CONSENT_LOG_TAG: String = "Consent"
-const val GENERAL_SETTINGS_LOG_TAG: String = "GeneralSettingsActivity"
-const val FCM_LOG_TAG: String = "FirebaseNotifications"
-const val THEME_SETTINGS_LOG_TAG: String = "ThemeSettingsScreen"
-const val ABOUT_SETTINGS_LOG_TAG: String = "AboutSettings"
-const val INFO_MESSAGE_LOG_TAG: String = "InfoMessageSection"
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewOutcome
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
+
+sealed interface FaqAction : ActionEvent {
+    data class OpenUrl(val url: String) : FaqAction
+    data object OpenPlayStoreReview : FaqAction
+    data class ReviewOutcomeReported(val outcome: ReviewOutcome) : FaqAction
+}

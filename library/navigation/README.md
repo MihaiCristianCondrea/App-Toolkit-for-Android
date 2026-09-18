@@ -35,7 +35,7 @@ transition helpers shared by host and feature UI.
 - `:sample` for host navigation.
 - `:library:apptoolkit` and `:library:core:ui` for shared destination registration and navigation
   UI.
-- `:library:feature:about`, `:library:feature:help`, `:library:feature:issuereporter`,
+- `:library:feature:about`, `:library:feature:faq`, `:library:feature:issuereporter`,
   `:library:feature:onboarding`, `:library:feature:permissions`, `:library:feature:settings`, and
   `:library:feature:support` for feature routes and navigation surfaces.
 

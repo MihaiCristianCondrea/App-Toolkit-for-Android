@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,13 +15,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.states
 
-const val STARTUP_LOG_TAG: String = "StartupActivity"
-const val CLIPBOARD_HELPER_LOG_TAG: String = "ClipboardHelper"
-const val CONSENT_LOG_TAG: String = "Consent"
-const val GENERAL_SETTINGS_LOG_TAG: String = "GeneralSettingsActivity"
-const val FCM_LOG_TAG: String = "FirebaseNotifications"
-const val THEME_SETTINGS_LOG_TAG: String = "ThemeSettingsScreen"
-const val ABOUT_SETTINGS_LOG_TAG: String = "AboutSettings"
-const val INFO_MESSAGE_LOG_TAG: String = "InfoMessageSection"
+import androidx.compose.runtime.Immutable
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.domain.models.FaqItem
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+
+@Immutable
+data class FaqUiState(
+    val questions: ImmutableList<FaqItem> = persistentListOf()
+)
+

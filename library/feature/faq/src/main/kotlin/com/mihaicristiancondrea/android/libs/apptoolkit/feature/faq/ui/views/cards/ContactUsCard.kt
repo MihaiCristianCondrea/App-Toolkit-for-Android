@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,67 +19,58 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.ca
 
 import android.view.SoundEffectConstants
 import android.view.View
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExpandMore
-import androidx.compose.material.icons.outlined.QuestionAnswer
+import androidx.compose.material.icons.outlined.Support
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.text.HtmlText
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
 
 /**
- * Displays one expandable FAQ entry.
+ * Displays the FAQ screen Contact Us action.
  *
- * @param groupedPosition Optional position in the FAQ content group. When supplied, the card
- * uses grouped corners and a compact layout; when omitted, the standalone shape is kept.
+ * @param onClick Invoked when the card is selected.
+ * @param groupedPosition Optional position in a grouped FAQ content section.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun QuestionCard(
-    title: String,
-    summary: String,
-    isExpanded: Boolean,
-    onToggleExpand: () -> Unit,
-    modifier: Modifier = Modifier,
+fun ContactUsCard(
+    onClick: () -> Unit,
     groupedPosition: GroupedItemPosition? = null,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
-    val expandIconRotation by animateFloatAsState(
-        targetValue = if (isExpanded) 180f else 0f,
-        label = "ExpandIconRotation"
-    )
-    val cardModifier = modifier
+    val cardModifier = Modifier
         .fillMaxWidth()
         .let { currentModifier ->
             groupedPosition?.let {
@@ -89,64 +80,56 @@ fun QuestionCard(
                 )
             } ?: currentModifier
         }
-        .animateContentSize()
-
     Card(
         modifier = cardModifier,
-        shape = groupedPosition?.let { RectangleShape }
-            ?: RoundedCornerShape(size = SizeConstants.MediumSize),
         onClick = {
             view.playSoundEffect(SoundEffectConstants.CLICK)
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-            onToggleExpand()
-        }
+            onClick()
+        },
+        shape = groupedPosition?.let { RectangleShape }
+            ?: RoundedCornerShape(
+                topStart = SizeConstants.ExtraSmallSize,
+                topEnd = SizeConstants.ExtraSmallSize,
+                bottomStart = SizeConstants.LargeIncreasedSize,
+                bottomEnd = SizeConstants.LargeIncreasedSize,
+            ),
     ) {
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(all = SizeConstants.MediumSize)
+                .padding(all = SizeConstants.LargeSize),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.size(size = SizeConstants.LauncherIconSize)
             ) {
-                Icon(
-                    imageVector = Icons.Outlined.QuestionAnswer,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
+                Box(
                     modifier = Modifier
-                        .size(size = SizeConstants.LauncherIconSize)
-                        .background(
-                            color = MaterialTheme.colorScheme.primaryContainer,
-                            shape = CircleShape
-                        )
-                        .padding(all = SizeConstants.SmallSize)
+                        .fillMaxSize()
+                        .clip(shape = MaterialShapes.Cookie12Sided.toShape())
+                        .background(color = MaterialTheme.colorScheme.primaryContainer)
                 )
-
-                LargeHorizontalSpacer()
-
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.weight(weight = 1f)
-                )
-
-                GeneralButton(
-                    style = GeneralButtonStyle.Text,
-                    onClick = { onToggleExpand() },
-                    contentDescription = title,
-                    iconSize = SizeConstants.ButtonIconSize,
-                    icon = ToolkitIcon.Vector(imageVector = Icons.Filled.ExpandMore),
-                    modifier = Modifier.rotate(degrees = expandIconRotation),
+                Icon(
+                    imageVector = Icons.Outlined.Support,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
-            if (isExpanded) {
-                SmallVerticalSpacer()
-                HtmlText(
-                    text = summary,
-                    style = MaterialTheme.typography.bodyMedium,
+            LargeHorizontalSpacer()
+            Column(
+                modifier = Modifier
+                    .weight(weight = 1f)
+                    .fillMaxHeight()
+            ) {
+                Text(
+                    text = stringResource(id = R.string.contact_us),
+                    fontWeight = FontWeight.SemiBold
                 )
+                Text(text = stringResource(id = R.string.contact_us_description))
             }
         }
     }
 }
-

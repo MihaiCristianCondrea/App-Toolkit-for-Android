@@ -32,7 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.ui.HelpActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.FaqActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
@@ -75,7 +75,7 @@ fun SettingsMenuActions() {
             icon = Icons.AutoMirrored.Outlined.HelpOutline,
             onClick = {
                 showMenu.value = false
-                context.openActivity(HelpActivity::class.java)
+                context.openActivity(FaqActivity::class.java)
             },
         )
     }

@@ -54,7 +54,7 @@ dependencies {
     api(project(":library:navigation"))
     api(project(":library:integration:consent"))
     api(project(":library:feature:about"))
-    api(project(":library:feature:help"))
+    api(project(":library:feature:faq"))
     api(project(":library:feature:issuereporter"))
     api(project(":library:feature:privacy"))
 }

@@ -40,7 +40,7 @@ entry helpers, state handling, analytics hooks, and shared components.
 ## Used by
 
 - `:sample` and `:library:apptoolkit`.
-- `:library:feature:about`, `:library:feature:help`, `:library:feature:issuereporter`,
+- `:library:feature:about`, `:library:feature:faq`, `:library:feature:issuereporter`,
   `:library:feature:onboarding`, `:library:feature:permissions`, `:library:feature:settings`, and
   `:library:feature:support`.
 - `:library:integration:ads` for its settings screen and ad presentation.

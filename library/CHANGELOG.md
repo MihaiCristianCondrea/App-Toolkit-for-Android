@@ -13,10 +13,11 @@
 - Added tap to copy to the App Toolkit version and Google Play services version rows on the About
   screen. Tapping either copies its value, matching the device info row.
 - Added `snack_copied_to_clipboard` and `snack_copy_failed` in all 25 supported locales.
-- Added `:library:feature:faq`, holding the FAQ catalog that `:library:feature:help` used to carry:
-  `FaqRepository`, `GetFaqUseCase`, the local and remote data sources, the DTOs and mapper,
-  `FaqItem`, `QuestionCard`, and the nine placeholder question and answer slots. A host adds or
-  rewords a question by changing its own FAQ module alone.
+- Added `:library:feature:faq`, which replaces `:library:feature:help` and owns the FAQ surface end
+  to end: the screen and activity, the catalog repository and data sources, `GetFaqUseCase`,
+  `FaqItem`, `QuestionCard`, `ContactUsCard`, the native ad slot, the overflow menu, and the nine
+  placeholder question and answer slots. A host adds or rewords a question by changing its own FAQ
+  module alone.
 - Added `:sample:feature:faq`, a resource-only module carrying the sample's nine questions and
   answers in all 25 supported locales. They previously sat in `:sample:core:apptoolkit`.
 - Added unit test coverage for `NavigationBackStackActions` covering top-level navigation,
@@ -54,11 +55,24 @@
   of building a screen state inline.
 - `PrivacySettingsList` is now `PrivacyScreen`, matching the `AboutScreen` and `LicensesScreen`
   naming already used across the toolkit.
+- Removed `:library:feature:help`. Everything it held moved to `:library:feature:faq` and was
+  renamed to match: `HelpScreen`, `HelpActivity`, `HelpViewModel`, `HelpUiState`, `HelpEvent`,
+  `HelpAction`, `HelpScreenContent`, `HelpScreenMenuActions` and `HelpNativeAdCard` are now
+  `FaqScreen`, `FaqActivity`, `FaqViewModel`, `FaqUiState`, `FaqEvent`, `FaqAction`,
+  `FaqScreenContent`, `FaqScreenMenuActions` and `FaqNativeAdCard`. Hosts update the import to the
+  matching `feature.faq` package.
 - `HelpLocalDataSource` and `HelpRemoteDataSource` are now `FaqLocalDataSource` and
-  `FaqRemoteDataSource` in `:library:feature:faq`, since they only ever served the FAQ.
-- `helpModule` no longer takes `AppToolkitHostBuildConfig` and is a value rather than a function.
-  The FAQ bindings it used to declare moved to `faqModule(hostBuildConfig)`. Hosts calling
+  `FaqRemoteDataSource`, since they only ever served the FAQ.
+- `helpModule` is gone. `faqModule(hostBuildConfig)` binds the whole feature. Hosts calling
   `appToolkitFeatureModules` need no change.
+- `HelpConstants` is now `FaqConstants`, in `core.common.utils.constants.faq`. It only ever held
+  FAQ values, in both the library and the sample.
+- The settings sub-screens are named for what they are: `DisplaySettingsList`, `ThemeSettingsList`,
+  `AdvancedSettingsList` and `UsageAndDiagnosticsList` are now `DisplaySettingsScreen`,
+  `ThemeSettingsScreen`, `AdvancedSettingsScreen` and `UsageAndDiagnosticsScreen`.
+- The `Help & feedback` drawer entry, the `HelpRoute` key, the `HELP_NATIVE_AD` ads qualifier and
+  the screen's GA4 name are unchanged. They name the destination the user sees, not the module that
+  implements it.
 - The About preference click handler is a single lambda with the action `when` inside it, replacing
   a `when` whose branches each returned a lambda.
 - Renamed `FirebaseControllerImpl` to `DefaultFirebaseController` in `:library:integration:firebase`,

@@ -256,7 +256,7 @@ dependencies {
     implementation(project(":library:core:designsystem"))
     implementation(project(":library:navigation"))
     implementation(project(":library:feature:about"))
-    implementation(project(":library:feature:help"))
+    implementation(project(":library:feature:faq"))
     implementation(project(":library:feature:issuereporter"))
     implementation(project(":library:feature:onboarding"))
     implementation(project(":library:feature:permissions"))

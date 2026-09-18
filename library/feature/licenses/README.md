@@ -18,7 +18,7 @@ the AboutLibraries metadata that backs them.
 - The About list entry that opens this screen, owned by
   [`:library:feature:about`](../about/README.md).
 - The Help overflow entry that opens this screen, owned by
-  [`:library:feature:help`](../help/README.md).
+  [`:library:feature:faq`](../faq/README.md).
 - The `LicensesRoute` key and its Navigation 3 entry, owned by
   [`:library:navigation`](../../navigation/README.md) and `:library:apptoolkit`.
 
@@ -29,7 +29,7 @@ the AboutLibraries metadata that backs them.
 
 ## Used by
 
-- `:library:apptoolkit`, `:library:feature:about`, and `:library:feature:help`.
+- `:library:apptoolkit`, `:library:feature:about`, and `:library:feature:faq`.
 
 ## Flow chart
 

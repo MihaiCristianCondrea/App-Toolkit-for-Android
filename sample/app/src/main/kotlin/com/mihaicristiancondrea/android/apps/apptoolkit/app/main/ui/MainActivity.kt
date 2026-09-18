@@ -45,7 +45,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extens
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppTheme
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.activity.observeActions
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.factory.GmsHostFactory
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.ui.HelpActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.FaqActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.startup.StartupActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.SettingsActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.SupportActivity
@@ -68,7 +68,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R as 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R as AboutR
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.R as PrivacyR
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.R as HelpR
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R as HelpR
 
 class MainActivity : AppCompatActivity() {
 
@@ -187,7 +187,7 @@ class MainActivity : AppCompatActivity() {
                             }
 
                             is HelpRoute -> {
-                                openActivity(activityClass = HelpActivity::class.java)
+                                openActivity(activityClass = FaqActivity::class.java)
                                 true
                             }
 

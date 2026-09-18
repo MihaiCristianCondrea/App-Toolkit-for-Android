@@ -37,7 +37,7 @@ plus the tap-to-copy interaction for every entry it renders.
 
 ## Used by
 
-- `:sample`, `:library:apptoolkit`, `:library:feature:help`, and `:library:feature:settings`.
+- `:sample`, `:library:apptoolkit`, `:library:feature:faq`, and `:library:feature:settings`.
 
 ## Flow chart
 

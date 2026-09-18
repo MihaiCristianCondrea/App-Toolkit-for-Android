@@ -1,0 +1,90 @@
+/*
+ * Copyright (©) 2026 Mihai-Cristian Condrea
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.ads
+
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialShapes
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.toShape
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdPresentation
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdCallToActionStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdSlot
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberNativeAdBadgeShape
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
+
+/**
+ * Icon-led native ad row used inside the grouped FAQ content list.
+ *
+ * Change rationale: this used to inflate `R.layout.native_ad_help_card` through `NativeAdViewHost`
+ * and bind it with `findViewById`. It is now a thin wrapper over [NativeAdSlot], which builds the
+ * same `NativeAdView` in Kotlin. The behaviour changes that came with the shared renderer are
+ * listed in the `:library:integration:ads` README.
+ *
+ * It lives here rather than in the toolkit's shared UI because it is a FAQ screen placement, not a
+ * reusable primitive: only this feature's content list draws it.
+ *
+ * Integration and compliance notes:
+ * - Render this composable only after consent/ads settings allow ad serving.
+ * - Placement policy stays with the screen; this is a view-layer primitive.
+ *
+ * @param groupedPosition position inside a grouped FAQ section, or `null` when standalone.
+ * @param containerColor overrides the card container for hosts whose surfaces are their own.
+ * @param onAdLoaded reports whether an ad is currently displayed.
+ */
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun FaqNativeAdCard(
+    modifier: Modifier = Modifier,
+    adUnitId: String,
+    groupedPosition: GroupedItemPosition? = null,
+    containerColor: Color = Color.Unspecified,
+    onAdLoaded: (Boolean) -> Unit = {},
+) {
+    // The rows this ad is interleaved with all carry a 48dp badge filled with primaryContainer, a
+    // titleMedium title and a bodyMedium summary, and QuestionCard's action is a text button. The ad
+    // takes the same finish so it reads as one more row of the list rather than as a card dropped
+    // into it. The badge repeats ContactUsCard's silhouette, which is the row directly below it.
+    val style = NativeAdStyle(
+        badgeShape = rememberNativeAdBadgeShape(
+            shape = MaterialShapes.Cookie12Sided.toShape(),
+            size = SizeConstants.LauncherIconSize,
+        ),
+        badgeColor = MaterialTheme.colorScheme.primaryContainer,
+        headlineTextSizeSp = MaterialTheme.typography.titleMedium.fontSize.value,
+        headlineBold = false,
+        bodyTextSizeSp = MaterialTheme.typography.bodyMedium.fontSize.value,
+        callToAction = NativeAdCallToActionStyle.Text,
+    )
+
+    NativeAdSlot(
+        adUnitId = adUnitId,
+        presentation = NativeAdPresentation.Compact,
+        modifier = modifier,
+        position = groupedPosition ?: GroupedItemPosition.SINGLE,
+        // Matches QuestionCard, the item this row is interleaved with.
+        cornerRadius = SizeConstants.MediumSize,
+        containerColor = containerColor,
+        style = style,
+        onAdLoaded = onAdLoaded,
+    )
+}

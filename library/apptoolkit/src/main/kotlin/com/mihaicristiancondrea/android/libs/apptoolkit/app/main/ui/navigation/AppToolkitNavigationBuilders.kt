@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.AdsSettingsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.ui.HelpScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.FaqScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.LicensesScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.views.extras.LibraryExtrasScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
@@ -83,7 +83,7 @@ private fun generalSettingsEntryBuilder(): NavigationEntryBuilder<StableNavKey> 
 private fun helpEntryBuilder(): NavigationEntryBuilder<StableNavKey> = {
     entry<HelpRoute>(clazzContentKey = { route -> route }) {
         val config: AppVersionInfo = koinInject()
-        HelpScreen(config = config, isEmbedded = true)
+        FaqScreen(config = config, isEmbedded = true)
     }
 }
 

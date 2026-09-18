@@ -99,7 +99,6 @@ dependencies {
     api(project(":library:feature:about"))
     api(project(":library:feature:changelog"))
     api(project(":library:feature:faq"))
-    api(project(":library:feature:help"))
     api(project(":library:feature:issuereporter"))
     api(project(":library:feature:licenses"))
     api(project(":library:feature:onboarding"))

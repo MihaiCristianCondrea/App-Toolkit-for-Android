@@ -13,7 +13,7 @@ every supported locale.
 
 - The FAQ mechanism (repository, data sources, use case, `QuestionCard`), owned by
   [`:library:feature:faq`](../../../library/feature/faq/README.md).
-- The Help screen that renders the questions, owned by `:library:feature:help`.
+- The FAQ screen that renders the questions, owned by `:library:feature:faq`.
 
 ## Depends on
 
