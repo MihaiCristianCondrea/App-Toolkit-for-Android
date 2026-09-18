@@ -46,6 +46,7 @@
     <string name="settings_placeholder_description">Aucun paramètre sélectionné. Choisissez une option pour afficher les détails ici.</string>
     <string name="share">Partager</string>
     <string name="snack_device_info_copied">Les informations sur l\'appareil ont été copiées dans le presse-papiers</string>
+    <string name="snack_device_info_copy_failed">Impossible de copier les informations sur l\'appareil dans le presse-papiers</string>
     <string name="snack_device_info_failed">Impossible de charger les informations sur l\'appareil</string>
     <string name="summary_preference_settings_ads">Contrôlez comment nous utilisons vos informations pour vous montrer des publicités pertinentes</string>
     <string name="summary_preference_settings_code_of_conduct">Comprenez les règles et lignes directrices concernant le comportement au sein de notre service</string>

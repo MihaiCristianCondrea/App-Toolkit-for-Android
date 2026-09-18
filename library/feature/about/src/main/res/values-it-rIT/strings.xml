@@ -46,6 +46,7 @@
     <string name="settings_placeholder_description">Nessuna impostazione selezionata. Scegli un\'opzione per visualizzare i dettagli qui.</string>
     <string name="share">Condividi</string>
     <string name="snack_device_info_copied">Informazioni sul dispositivo copiate negli appunti</string>
+    <string name="snack_device_info_copy_failed">Impossibile copiare le informazioni del dispositivo negli appunti</string>
     <string name="snack_device_info_failed">Impossibile caricare le informazioni del dispositivo</string>
     <string name="summary_preference_settings_ads">Controlla come utilizziamo le tue informazioni per mostrarti annunci pertinenti</string>
     <string name="summary_preference_settings_code_of_conduct">Comprendi le regole di comportamento previste dal nostro servizio</string>

@@ -46,6 +46,7 @@
     <string name="settings_placeholder_description">Настройки не выбраны. Выберите опцию, чтобы увидеть её детали.</string>
     <string name="share">Поделиться</string>
     <string name="snack_device_info_copied">Информация об устройстве скопирована в буфер обмена</string>
+    <string name="snack_device_info_copy_failed">Не удалось скопировать информацию об устройстве в буфер обмена</string>
     <string name="snack_device_info_failed">Не удалось загрузить информацию об устройстве</string>
     <string name="summary_preference_settings_ads">Контролируйте, как мы используем вашу информацию для показа релевантной рекламы</string>
     <string name="summary_preference_settings_code_of_conduct">Ознакомьтесь с правилами и руководящими принципами поведения</string>

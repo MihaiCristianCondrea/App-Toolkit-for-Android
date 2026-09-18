@@ -55,6 +55,13 @@
 - Updated Ktor from `3.5.2` to `3.6.0`.
 - Updated Robolectric from `4.16.1` to `4.17`.
 
+### Fixed
+
+- A failed device info copy on the About screen said `Unable to load device info`, the message for a
+  failed load. It now says the copy did not go through, in all 25 supported locales. The copy also
+  uses the device report the screen is showing instead of resolving it a second time, so the
+  clipboard always matches what is on screen.
+
 ---
 
 # September 13, 2026

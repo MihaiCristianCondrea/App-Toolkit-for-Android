@@ -46,6 +46,7 @@
     <string name="settings_placeholder_description">Nicio setare selectată. Alege o opțiune pentru a vedea detalii aici.</string>
     <string name="share">Distribuie</string>
     <string name="snack_device_info_copied">Informațiile dispozitivului au fost copiate în clipboard</string>
+    <string name="snack_device_info_copy_failed">Informațiile dispozitivului nu au putut fi copiate în clipboard</string>
     <string name="snack_device_info_failed">Nu s-a putut încărca informațiile despre dispozitiv</string>
     <string name="summary_preference_settings_ads">Controlează modul în care folosim informațiile tale pentru a afișa reclame relevante</string>
     <string name="summary_preference_settings_code_of_conduct">Înțelege regulile și liniile directoare pentru comportament în cadrul serviciului nostru</string>

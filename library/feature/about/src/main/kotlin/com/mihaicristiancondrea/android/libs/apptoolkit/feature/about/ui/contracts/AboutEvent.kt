@@ -24,6 +24,16 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.Ui
  */
 sealed interface AboutEvent : UiEvent {
     data object Load : AboutEvent
-    data class CopyDeviceInfo(val label: String) : AboutEvent
+    /**
+     * Copies [deviceInfo] to the clipboard under [label].
+     *
+     * @param label The clipboard entry label.
+     * @param deviceInfo The device report shown on screen. Blank falls back to the host provider.
+     */
+    data class CopyDeviceInfo(
+        val label: String,
+        val deviceInfo: String = "",
+    ) : AboutEvent
+
     data object DismissSnackbar : AboutEvent
 }

@@ -46,6 +46,7 @@
     <string name="settings_placeholder_description">Няма избрани настройки. Изберете опция, за да видите подробностите тук.</string>
     <string name="share">Споделяне</string>
     <string name="snack_device_info_copied">Информацията за устройството е копирана в клипборда</string>
+    <string name="snack_device_info_copy_failed">Информацията за устройството не беше копирана в клипборда</string>
     <string name="snack_device_info_failed">Неуспешно зареждане на информация за устройството</string>
     <string name="summary_preference_settings_ads">Контролирайте как се използва вашата информация за показване на подходящи реклами</string>
     <string name="summary_preference_settings_code_of_conduct">Разберете правилата и насоките за поведение в услугата ни</string>

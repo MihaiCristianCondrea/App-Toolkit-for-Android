@@ -46,6 +46,7 @@
     <string name="settings_placeholder_description">ยังไม่มีการเลือกตั้งค่า เลือกตัวเลือกเพื่อดูรายละเอียดที่นี่</string>
     <string name="share">แชร์</string>
     <string name="snack_device_info_copied">คัดลอกข้อมูลอุปกรณ์ไปยังคลิปบอร์ดแล้ว</string>
+    <string name="snack_device_info_copy_failed">ไม่สามารถคัดลอกข้อมูลอุปกรณ์ไปยังคลิปบอร์ดได้</string>
     <string name="snack_device_info_failed">ไม่สามารถโหลดข้อมูลอุปกรณ์ได้</string>
     <string name="summary_preference_settings_ads">ควบคุมวิธีการใช้ข้อมูลของคุณสำหรับแสดงโฆษณา</string>
     <string name="summary_preference_settings_code_of_conduct">เข้าใจกฎและแนวทางการปฏิบัติภายในบริการของเรา</string>

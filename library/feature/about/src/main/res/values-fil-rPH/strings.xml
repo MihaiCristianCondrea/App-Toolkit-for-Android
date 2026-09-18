@@ -46,6 +46,7 @@
     <string name="settings_placeholder_description">Walang napiling setting. Pumili ng opsyon para tingnan ang mga detalye nito dito.</string>
     <string name="share">Ibahagi</string>
     <string name="snack_device_info_copied">Nakopya sa clipboard ang impormasyon ng device</string>
+    <string name="snack_device_info_copy_failed">Hindi makopya sa clipboard ang impormasyon ng device</string>
     <string name="snack_device_info_failed">Hindi ma-load ang impormasyon ng device</string>
     <string name="summary_preference_settings_ads">Kontrolin kung paano namin ginagamit ang iyong impormasyon para ipakita sa iyo ang mga nauugnay na ad</string>
     <string name="summary_preference_settings_code_of_conduct">Unawain ang mga patakaran at alituntunin para sa pag-uugali sa loob ng aming serbisyo</string>

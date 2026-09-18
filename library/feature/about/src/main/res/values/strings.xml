@@ -46,6 +46,7 @@
     <string name="settings_placeholder_description">No settings selected. Choose an option to view its details here.</string>
     <string name="share">Share</string>
     <string name="snack_device_info_copied">Device info copied to clipboard</string>
+    <string name="snack_device_info_copy_failed">Couldn\'t copy device info to clipboard</string>
     <string name="snack_device_info_failed">Unable to load device info</string>
     <string name="summary_preference_settings_ads">Control how your information is used to show relevant ads</string>
     <string name="summary_preference_settings_code_of_conduct">Understand the rules and guidelines for behavior within the service</string>

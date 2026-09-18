@@ -46,6 +46,7 @@
     <string name="settings_placeholder_description">未選擇設定。選擇一個選項以在此查看詳細資訊。</string>
     <string name="share">分享</string>
     <string name="snack_device_info_copied">設備資訊已複製到剪貼板</string>
+    <string name="snack_device_info_copy_failed">無法將裝置資訊複製到剪貼簿</string>
     <string name="snack_device_info_failed">無法載入裝置資訊</string>
     <string name="summary_preference_settings_ads">管理我們如何使用您的資訊來顯示相關廣告</string>
     <string name="summary_preference_settings_code_of_conduct">了解服務中的行為規範和指南</string>

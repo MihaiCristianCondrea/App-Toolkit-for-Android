@@ -55,10 +55,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.licenses.LicensesActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.AboutUiState
 import kotlinx.coroutines.delay
 import nl.dionsegijn.konfetti.compose.KonfettiView
@@ -168,7 +168,8 @@ fun AboutScreen(
                             }
 
                             is AboutItem.Preference -> {
-                                val onClick: () -> Unit = when (item.action) {
+                                val action: AboutItemAction? = item.action
+                                val onClick: () -> Unit = when (action) {
                                     AboutItemAction.VersionEasterEgg -> {
                                         {
                                             appVersionTotalTapCount += 1
@@ -194,10 +195,13 @@ fun AboutScreen(
                                         }
                                     }
 
-                                    AboutItemAction.CopyDeviceInfo -> {
+                                    is AboutItemAction.CopyDeviceInfo -> {
                                         {
                                             viewModel.onEvent(
-                                                event = AboutEvent.CopyDeviceInfo(label = item.title.asString(context))
+                                                event = AboutEvent.CopyDeviceInfo(
+                                                    label = item.title.asString(context),
+                                                    deviceInfo = action.deviceInfo,
+                                                )
                                             )
                                         }
                                     }
@@ -210,7 +214,7 @@ fun AboutScreen(
                                     summary = item.summary.asString(),
                                     onClick = onClick,
                                     firebaseController = firebaseController,
-                                    ga4Event = if (item.action != null) aboutPreferenceTapEvent(preferenceKey = item.key) else null,
+                                    ga4Event = if (action != null) aboutPreferenceTapEvent(preferenceKey = item.key) else null,
                                     modifier = Modifier.groupedPreferenceItem(
                                         position = item.position,
                                         outerRadius = SizeConstants.LargeMediumSize,

@@ -46,6 +46,7 @@
     <string name="settings_placeholder_description">Nincs kiválasztott beállítás. Válassz egy lehetőséget a részletek megtekintéséhez.</string>
     <string name="share">Megosztás</string>
     <string name="snack_device_info_copied">Eszközinformáció másolva a vágólapra</string>
+    <string name="snack_device_info_copy_failed">Nem sikerült az eszközinformációt a vágólapra másolni</string>
     <string name="snack_device_info_failed">Nem sikerült betölteni az eszköz adatait</string>
     <string name="summary_preference_settings_ads">Szabályozd, hogyan használjuk az információidat a releváns hirdetések megjelenítéséhez</string>
     <string name="summary_preference_settings_code_of_conduct">Ismerd meg a szolgáltatásban elvárt viselkedési szabályokat</string>

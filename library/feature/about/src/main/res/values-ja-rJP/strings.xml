@@ -46,6 +46,7 @@
     <string name="settings_placeholder_description">設定が選択されていません。詳細を表示するにはオプションを選択してください。</string>
     <string name="share">共有</string>
     <string name="snack_device_info_copied">デバイス情報がクリップボードにコピーされました</string>
+    <string name="snack_device_info_copy_failed">デバイス情報をクリップボードにコピーできませんでした</string>
     <string name="snack_device_info_failed">デバイス情報を読み込めませんでした</string>
     <string name="summary_preference_settings_ads">関連性のある広告を表示するために情報をどのように使用するかを制御する</string>
     <string name="summary_preference_settings_code_of_conduct">サービス内での行動ルールとガイドラインを理解する</string>

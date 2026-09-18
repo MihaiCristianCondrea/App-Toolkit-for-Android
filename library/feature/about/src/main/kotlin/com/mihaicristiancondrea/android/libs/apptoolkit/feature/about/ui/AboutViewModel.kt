@@ -52,7 +52,7 @@ import kotlinx.coroutines.launch
  */
 open class AboutViewModel(
     private val aboutRepository: AboutRepository,
-    private val copyDeviceInfo: CopyDeviceInfoUseCase,
+    private val copyDeviceInfoUseCase: CopyDeviceInfoUseCase,
     private val dispatchers: DispatcherProvider,
     firebaseController: FirebaseController,
 ) : LoggedScreenViewModel<AboutUiState, AboutEvent, AboutAction>(
@@ -70,7 +70,11 @@ open class AboutViewModel(
     override fun handleEvent(event: AboutEvent) {
         when (event) {
             is AboutEvent.Load -> loadAboutInfo()
-            is AboutEvent.CopyDeviceInfo -> copyDeviceInfo(label = event.label)
+            is AboutEvent.CopyDeviceInfo -> copyDeviceInfo(
+                label = event.label,
+                deviceInfo = event.deviceInfo,
+            )
+
             is AboutEvent.DismissSnackbar -> dismissSnackbar()
         }
     }
@@ -101,63 +105,49 @@ open class AboutViewModel(
         }
     }
 
-    private fun copyDeviceInfo(label: String) {
+    private fun copyDeviceInfo(label: String, deviceInfo: String) {
         startOperation(action = Actions.COPY_DEVICE_INFO, extra = mapOf(ExtraKeys.LABEL to label))
 
         copyJob = copyJob.restart {
-            copyDeviceInfo.invoke(label = label)
+            copyDeviceInfoUseCase(label = label, deviceInfo = deviceInfo)
                 .flowOn(dispatchers.io)
                 .onEach { result ->
                     result
                         .onSuccess { copyResult ->
-                            updateStateThreadSafe {
-                                val messageRes = if (copyResult.copied) {
-                                    R.string.snack_device_info_copied
-                                } else {
-                                    R.string.snack_device_info_failed
-                                }
-
-                                if (!copyResult.copied || copyResult.shouldShowFeedback) {
-                                    screenState.showSnackbar(
-                                        UiSnackbar(
-                                            message = UiTextHelper.StringResource(messageRes),
-                                            isError = !copyResult.copied,
-                                            timeStamp = System.nanoTime(),
-                                            type = ScreenMessageType.SNACKBAR,
-                                        )
-                                    )
-                                }
-                            }
-                        }
-                        .onFailure {
+                            if (!copyResult.shouldShowFeedback) return@onSuccess
                             updateStateThreadSafe {
                                 screenState.showSnackbar(
                                     UiSnackbar(
-                                        message = UiTextHelper.StringResource(R.string.snack_device_info_failed),
-                                        isError = true,
+                                        message = UiTextHelper.StringResource(R.string.snack_device_info_copied),
+                                        isError = false,
                                         timeStamp = System.nanoTime(),
                                         type = ScreenMessageType.SNACKBAR,
                                     )
                                 )
                             }
                         }
+                        .onFailure { showCopyFailure() }
                 }
                 .catchReport(
                     action = Actions.COPY_DEVICE_INFO,
                     extra = mapOf(ExtraKeys.LABEL to label)
                 ) {
-                    updateStateThreadSafe {
-                        screenState.showSnackbar(
-                            UiSnackbar(
-                                message = UiTextHelper.StringResource(R.string.snack_device_info_failed),
-                                isError = true,
-                                timeStamp = System.nanoTime(),
-                                type = ScreenMessageType.SNACKBAR,
-                            )
-                        )
-                    }
+                    showCopyFailure()
                 }
                 .launchIn(viewModelScope)
+        }
+    }
+
+    private suspend fun showCopyFailure() {
+        updateStateThreadSafe {
+            screenState.showSnackbar(
+                UiSnackbar(
+                    message = UiTextHelper.StringResource(R.string.snack_device_info_copy_failed),
+                    isError = true,
+                    timeStamp = System.nanoTime(),
+                    type = ScreenMessageType.SNACKBAR,
+                )
+            )
         }
     }
 

@@ -46,6 +46,7 @@
     <string name="settings_placeholder_description">کوئی ترتیبات منتخب نہیں ہیں۔ اس کی تفصیلات یہاں دیکھنے کے لیے ایک آپشن منتخب کریں۔</string>
     <string name="share">شیئر کریں</string>
     <string name="snack_device_info_copied">ڈیوائس کی معلومات کلپ بورڈ پر کاپی ہو گئیں</string>
+    <string name="snack_device_info_copy_failed">ڈیوائس کی معلومات کلپ بورڈ پر کاپی نہیں ہو سکیں</string>
     <string name="snack_device_info_failed">ڈیوائس کی معلومات لوڈ نہیں ہو سکی</string>
     <string name="summary_preference_settings_ads">کنٹرول کریں کہ ہم آپ کو متعلقہ اشتہارات دکھانے کے لیے آپ کی معلومات کیسے استعمال کرتے ہیں</string>
     <string name="summary_preference_settings_code_of_conduct">ہماری سروس کے اندر رویے کے لیے قواعد و ضوابط کو سمجھیں</string>

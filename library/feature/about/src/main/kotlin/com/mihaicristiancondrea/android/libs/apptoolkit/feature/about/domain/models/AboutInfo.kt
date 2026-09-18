@@ -18,10 +18,19 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models
 
 /**
- * Display-ready application and device information for the About screen.
+ * Application and device metadata backing the About screen.
  *
- * @property items The ordered list of category headers and preference items ready to render.
+ * @property appVersion The host application version name.
+ * @property appVersionCode The host application version code.
+ * @property appToolkitVersion The App Toolkit publishing version, blank when unavailable.
+ * @property googlePlayServicesVersion The installed Google Play services version, `null` when the
+ * package is not present on the device.
+ * @property deviceInfo The formatted device report supplied by the host.
  */
 data class AboutInfo(
-    val items: List<AboutItem>,
+    val appVersion: String,
+    val appVersionCode: Int,
+    val appToolkitVersion: String,
+    val googlePlayServicesVersion: String?,
+    val deviceInfo: String,
 )

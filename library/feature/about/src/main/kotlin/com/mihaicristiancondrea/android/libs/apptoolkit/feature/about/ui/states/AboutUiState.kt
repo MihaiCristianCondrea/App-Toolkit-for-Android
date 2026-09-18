@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states
 
 import androidx.compose.runtime.Immutable
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItem
 
 /**
  * UI representation for the about screen.

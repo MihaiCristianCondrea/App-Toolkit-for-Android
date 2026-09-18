@@ -24,15 +24,10 @@ import android.os.Build
 import android.util.Log
 import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.providers.GooglePlayServicesVersionProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutItemAction
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutItemKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.CopyDeviceInfoResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.AboutSettingsProvider
 import io.mockk.every
@@ -83,65 +78,57 @@ class TestDefaultAboutRepository {
         )
 
     @Test
-    fun `getAboutInfo returns expected info`() = runTest(dispatcherExtension.testDispatcher) {
+    fun `getAboutInfo returns host and toolkit metadata`() = runTest(dispatcherExtension.testDispatcher) {
         val repo = repository()
 
         val result: AboutInfo = repo.getAboutInfo()
 
-        assertThat(result.items).hasSize(8)
-
-        val headerAppInfo = result.items[0] as AboutItem.Header
-        assertThat(headerAppInfo.key).isEqualTo(AboutItemKey.HEADER_APP_INFO)
-
-        val appName = result.items[1] as AboutItem.Preference
-        assertThat(appName.key).isEqualTo(AboutItemKey.APP_NAME)
-        assertThat(appName.position).isEqualTo(GroupedItemPosition.FIRST)
-
-        val appBuildVersion = result.items[2] as AboutItem.Preference
-        assertThat(appBuildVersion.key).isEqualTo(AboutItemKey.APP_BUILD_VERSION)
-        assertThat((appBuildVersion.summary as UiTextHelper.DynamicString).content).isEqualTo("1.0 (1)")
-        assertThat(appBuildVersion.position).isEqualTo(GroupedItemPosition.MIDDLE)
-        assertThat(appBuildVersion.action).isEqualTo(AboutItemAction.VersionEasterEgg)
-
-        val toolkitVersion = result.items[3] as AboutItem.Preference
-        assertThat(toolkitVersion.key).isEqualTo(AboutItemKey.APP_TOOLKIT_VERSION)
-        assertThat((toolkitVersion.summary as UiTextHelper.DynamicString).content).isEqualTo("3.0.0-test")
-        assertThat(toolkitVersion.position).isEqualTo(GroupedItemPosition.MIDDLE)
-
-        val gmsVersion = result.items[4] as AboutItem.Preference
-        assertThat(gmsVersion.key).isEqualTo(AboutItemKey.GOOGLE_PLAY_SERVICES_VERSION)
-        assertThat((gmsVersion.summary as UiTextHelper.DynamicString).content).isEqualTo("24.01.12")
-        assertThat(gmsVersion.position).isEqualTo(GroupedItemPosition.MIDDLE)
-
-        val ossLicenses = result.items[5] as AboutItem.Preference
-        assertThat(ossLicenses.key).isEqualTo(AboutItemKey.OSS_LICENSES)
-        assertThat(ossLicenses.position).isEqualTo(GroupedItemPosition.LAST)
-        assertThat(ossLicenses.action).isEqualTo(AboutItemAction.OpenLicenses)
-
-        val headerDeviceInfo = result.items[6] as AboutItem.Header
-        assertThat(headerDeviceInfo.key).isEqualTo(AboutItemKey.HEADER_DEVICE_INFO)
-
-        val deviceInfoPref = result.items[7] as AboutItem.Preference
-        assertThat(deviceInfoPref.key).isEqualTo(AboutItemKey.DEVICE_INFO)
-        assertThat((deviceInfoPref.summary as UiTextHelper.DynamicString).content).isEqualTo(deviceProvider.deviceInfo)
-        assertThat(deviceInfoPref.position).isEqualTo(GroupedItemPosition.SINGLE)
-        assertThat(deviceInfoPref.action).isEqualTo(AboutItemAction.CopyDeviceInfo)
+        assertThat(result).isEqualTo(
+            AboutInfo(
+                appVersion = "1.0",
+                appVersionCode = 1,
+                appToolkitVersion = "3.0.0-test",
+                googlePlayServicesVersion = "24.01.12",
+                deviceInfo = deviceProvider.deviceInfo,
+            )
+        )
     }
 
     @Test
-    fun `getAboutInfo handles absent google play services`() = runTest(dispatcherExtension.testDispatcher) {
-        val gmsProvider = mockk<GooglePlayServicesVersionProvider> {
-            every { getVersion() } returns null
+    fun `getAboutInfo reports absent google play services as null`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val gmsProvider = mockk<GooglePlayServicesVersionProvider> {
+                every { getVersion() } returns null
+            }
+            val repo = repository(gmsVersionProvider = gmsProvider)
+
+            val result: AboutInfo = repo.getAboutInfo()
+
+            assertThat(result.googlePlayServicesVersion).isNull()
         }
-        val repo = repository(gmsVersionProvider = gmsProvider)
 
-        val result: AboutInfo = repo.getAboutInfo()
+    @Test
+    fun `copyDeviceInfo with blank device info reports failure without copying`() {
+        val blankDeviceProvider = object : AboutSettingsProvider {
+            override val deviceInfo: String = "   "
+        }
+        val context = mockk<Context>()
+        val repo = DefaultAboutRepository(
+            deviceProvider = blankDeviceProvider,
+            buildInfoProvider = buildInfoProvider,
+            context = context,
+            firebaseController = mockk(relaxed = true),
+            sdkIntProvider = { Build.VERSION_CODES.S_V2 },
+            gmsVersionProvider = mockk { every { getVersion() } returns null },
+            toolkitVersionProvider = { "3.0.0-test" },
+        )
 
-        assertThat(result.items.none { it.key == AboutItemKey.GOOGLE_PLAY_SERVICES_VERSION }).isTrue()
-        assertThat(result.items).hasSize(7)
+        val copyResult = repo.copyDeviceInfo(label = "label")
 
-        val ossLicenses = result.items.first { it.key == AboutItemKey.OSS_LICENSES } as AboutItem.Preference
-        assertThat(ossLicenses.position).isEqualTo(GroupedItemPosition.LAST)
+        assertThat(copyResult).isEqualTo(
+            CopyDeviceInfoResult(copied = false, shouldShowFeedback = false)
+        )
+        verify(exactly = 0) { context.getSystemService(ClipboardManager::class.java) }
     }
 
     @Test

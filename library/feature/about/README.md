@@ -47,6 +47,7 @@ flowchart TD
     AboutScreen[About screen] --> AboutVM[AboutViewModel]
     AboutVM --> AboutRepo[AboutRepository]
     AboutRepo --> Build[Build and app-info providers]
+    AboutVM --> Mapper[AboutMappers to AboutItem list]
     AboutVM --> CopyUC[CopyDeviceInfoUseCase]
     CopyUC --> Clipboard[Device report to clipboard]
     ChangelogUI[Changelog dialog] --> ChangelogVM[ChangelogViewModel]
@@ -63,9 +64,13 @@ flowchart TD
 
 - About and changelog are separate state holders because one is stable application metadata and the
   other coordinates remote/cache/update work with an independent lifecycle.
-- About screen presentation is data-driven: `DefaultAboutRepository` builds an ordered list of
-  display-ready `AboutItem` models (headers and grouped preferences) with pre-computed titles,
-  summaries, actions, and card positions so `AboutScreen` remains purely declarative.
+- About screen presentation is data-driven: `AboutRepository` returns the raw `AboutInfo`
+  metadata and `ui/mappers` turns it into an ordered list of `AboutItem` models (headers and
+  grouped preferences) with titles, summaries, actions, and card positions, so `AboutScreen`
+  remains purely declarative and the data layer stays free of rendering concerns.
+- The device report travels with `AboutItemAction.CopyDeviceInfo`, so the clipboard receives the
+  text the item displays rather than a second lookup resolved later under a different
+  configuration.
 - Use cases are retained where they perform a named operation or combine concerns; repository calls
   that only forwarded data were not given synthetic wrappers.
 - Changelog persistence provides fallback content, while the remote response remains authoritative
@@ -75,14 +80,15 @@ flowchart TD
 
 ## Public contracts
 
-- About/privacy provider interfaces, `DefaultNavigationRepository`, `AboutItem`,
+- About/privacy provider interfaces, `DefaultNavigationRepository`, `AboutItem` (UI model),
   about/changelog repositories/models, `CopyDeviceInfoUseCase`, `GetChangelogUseCase`, and
   screen/navigation composables.
 
 ## Internal implementations
 
-- Device/build-info mapping, About item assembly with grouped card position calculation, Google Play services package inspection, clipboard behavior,
-  changelog HTTP/fallback logic, screen composition, and update-host creation.
+- Device/build-info mapping, About item assembly with grouped card position calculation
+  (`ui/mappers`), Google Play services package inspection, clipboard behavior, changelog
+  HTTP/fallback logic, screen composition, and update-host creation.
 
 ## Current risks
 

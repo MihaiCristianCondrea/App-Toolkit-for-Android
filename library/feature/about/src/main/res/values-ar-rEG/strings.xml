@@ -46,6 +46,7 @@
     <string name="settings_placeholder_description">لم يتم تحديد أي إعدادات. اختر خيارًا لعرض تفاصيله هنا.</string>
     <string name="share">مشاركة</string>
     <string name="snack_device_info_copied">تم نسخ معلومات الجهاز إلى الحافظة</string>
+    <string name="snack_device_info_copy_failed">تعذر نسخ معلومات الجهاز إلى الحافظة</string>
     <string name="snack_device_info_failed">تعذر تحميل معلومات الجهاز</string>
     <string name="summary_preference_settings_ads">تحكم في كيفية استخدامنا لمعلوماتك لعرض إعلانات ذات صلة بك</string>
     <string name="summary_preference_settings_code_of_conduct">فهم القواعد والإرشادات للسلوك داخل خدمتنا</string>

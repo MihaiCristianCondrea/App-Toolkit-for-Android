@@ -46,6 +46,7 @@
     <string name="settings_placeholder_description">Chưa chọn cài đặt nào. Chọn một tùy chọn để xem chi tiết tại đây.</string>
     <string name="share">Chia sẻ</string>
     <string name="snack_device_info_copied">Đã sao chép thông tin thiết bị vào khay nhớ tạm</string>
+    <string name="snack_device_info_copy_failed">Không thể sao chép thông tin thiết bị vào khay nhớ tạm</string>
     <string name="snack_device_info_failed">Không thể tải thông tin thiết bị</string>
     <string name="summary_preference_settings_ads">Kiểm soát cách chúng tôi sử dụng thông tin của bạn để hiển thị quảng cáo phù hợp</string>
     <string name="summary_preference_settings_code_of_conduct">Hiểu các quy tắc và hướng dẫn về hành vi trong dịch vụ của chúng tôi</string>

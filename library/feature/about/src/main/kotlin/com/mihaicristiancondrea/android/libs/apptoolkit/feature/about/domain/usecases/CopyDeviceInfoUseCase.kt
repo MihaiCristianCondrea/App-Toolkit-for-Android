@@ -38,6 +38,12 @@ class CopyDeviceInfoUseCase(
     private val firebaseController: FirebaseController,
 ) {
 
+    /**
+     * Copies [deviceInfo] to the clipboard under [label].
+     *
+     * A blank [deviceInfo] lets the repository fall back to the host-provided device report.
+     * Emits [DataState.Success] only when the clipboard actually accepted the text.
+     */
     operator fun invoke(
         label: String,
         deviceInfo: String = "",

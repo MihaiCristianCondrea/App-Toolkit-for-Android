@@ -46,6 +46,7 @@
     <string name="settings_placeholder_description">Keine Einstellungen ausgewählt. Wählen Sie eine Option, um Details anzuzeigen.</string>
     <string name="share">Teilen</string>
     <string name="snack_device_info_copied">Geräteinformationen wurden in die Zwischenablage kopiert</string>
+    <string name="snack_device_info_copy_failed">Geräteinformationen konnten nicht in die Zwischenablage kopiert werden</string>
     <string name="snack_device_info_failed">Geräteinformationen konnten nicht geladen werden</string>
     <string name="summary_preference_settings_ads">Verwalten Sie Ihre Werbeeinwilligungen</string>
     <string name="summary_preference_settings_code_of_conduct">Erfahren Sie die Regeln und Richtlinien für die Nutzung unserer Dienste</string>

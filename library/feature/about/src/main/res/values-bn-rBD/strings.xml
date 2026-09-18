@@ -46,6 +46,7 @@
     <string name="settings_placeholder_description">কোনো সেটিংস নির্বাচন করা হয়নি। এর বিবরণ এখানে দেখতে একটি বিকল্প পছন্দ করুন।</string>
     <string name="share">শেয়ার করুন</string>
     <string name="snack_device_info_copied">ডিভাইসের তথ্য ক্লিপবোর্ডে কপি করা হয়েছে</string>
+    <string name="snack_device_info_copy_failed">ডিভাইসের তথ্য ক্লিপবোর্ডে কপি করা যায়নি</string>
     <string name="snack_device_info_failed">ডিভাইসের তথ্য লোড করা যায়নি</string>
     <string name="summary_preference_settings_ads">আপনাকে প্রাসঙ্গিক বিজ্ঞাপন দেখাতে আমরা কীভাবে আপনার তথ্য ব্যবহার করি তা নিয়ন্ত্রণ করুন</string>
     <string name="summary_preference_settings_code_of_conduct">আমাদের পরিষেবার মধ্যে আচরণের নিয়ম এবং নির্দেশিকা বুঝুন</string>

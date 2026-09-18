@@ -81,7 +81,7 @@ val aboutModule: Module = module {
     viewModel {
         AboutViewModel(
             aboutRepository = get(),
-            copyDeviceInfo = get(),
+            copyDeviceInfoUseCase = get(),
             dispatchers = get(),
             firebaseController = get(),
         )

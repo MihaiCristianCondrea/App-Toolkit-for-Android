@@ -23,17 +23,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories.AboutRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutItemAction
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutItemKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.CopyDeviceInfoResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.usecases.CopyDeviceInfoUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.AboutSettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.mappers.toUiState
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -47,33 +43,15 @@ class AboutViewModelTest {
         val dispatcherExtension = UnconfinedDispatcherExtension()
     }
 
-    private val deviceProvider = object : AboutSettingsProvider {
-        override val deviceInfo: String = "device-info"
-    }
-
-    private val testItems: List<AboutItem> = listOf(
-        AboutItem.Header(
-            key = AboutItemKey.HEADER_APP_INFO,
-            title = UiTextHelper.DynamicString("App info"),
-        ),
-        AboutItem.Preference(
-            key = AboutItemKey.APP_NAME,
-            title = UiTextHelper.DynamicString("App name"),
-            summary = UiTextHelper.DynamicString("Copyright"),
-            position = GroupedItemPosition.FIRST,
-        ),
-        AboutItem.Preference(
-            key = AboutItemKey.APP_BUILD_VERSION,
-            title = UiTextHelper.DynamicString("App version"),
-            summary = UiTextHelper.DynamicString("1.0 (1)"),
-            position = GroupedItemPosition.MIDDLE,
-            action = AboutItemAction.VersionEasterEgg,
-        ),
-    )
-
     private val defaultAboutInfo = AboutInfo(
-        items = testItems,
+        appVersion = "1.0",
+        appVersionCode = 1,
+        appToolkitVersion = "3.0.0-test",
+        googlePlayServicesVersion = "24.01.12",
+        deviceInfo = "device-info",
     )
+
+    private val expectedItemKeys: List<String> = defaultAboutInfo.toUiState().items.map { it.key }
 
     private val firebaseController = FakeFirebaseController()
 
@@ -90,7 +68,7 @@ class AboutViewModelTest {
 
         return AboutViewModel(
             aboutRepository = repository,
-            copyDeviceInfo = CopyDeviceInfoUseCase(repository, firebaseController),
+            copyDeviceInfoUseCase = CopyDeviceInfoUseCase(repository, firebaseController),
             dispatchers = testDispatchers,
             firebaseController = firebaseController,
         )
@@ -114,7 +92,7 @@ class AboutViewModelTest {
         dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
         val state = viewModel.uiState.value
-        assertThat(state.data?.items).isEqualTo(testItems)
+        assertThat(state.data?.items?.map { it.key }).isEqualTo(expectedItemKeys)
     }
 
     @Test
@@ -132,7 +110,7 @@ class AboutViewModelTest {
     }
 
     @Test
-    fun `copy device info failure surfaces fallback snackbar`() =
+    fun `copy device info failure surfaces the copy failure message`() =
         runTest(dispatcherExtension.testDispatcher) {
             val repository = object : AboutRepository {
                 override suspend fun getAboutInfo(): AboutInfo = defaultAboutInfo
@@ -157,7 +135,38 @@ class AboutViewModelTest {
 
             val snackbar = viewModel.uiState.value.snackbar!!
             val msg = snackbar.message as UiTextHelper.StringResource
-            assertThat(msg.resourceId).isEqualTo(R.string.snack_device_info_failed)
+            assertThat(msg.resourceId).isEqualTo(R.string.snack_device_info_copy_failed)
+            assertThat(snackbar.isError).isTrue()
+        }
+
+    @Test
+    fun `copy device info forwards the displayed report to the repository`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            var copiedText: String? = null
+            val repository = object : AboutRepository {
+                override suspend fun getAboutInfo(): AboutInfo = defaultAboutInfo
+
+                override fun copyDeviceInfo(
+                    label: String,
+                    deviceInfo: String,
+                ): CopyDeviceInfoResult {
+                    copiedText = deviceInfo
+                    return CopyDeviceInfoResult(copied = true, shouldShowFeedback = true)
+                }
+            }
+
+            val viewModel = createViewModel(
+                testDispatcher = dispatcherExtension.testDispatcher,
+                repository = repository
+            )
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            viewModel.onEvent(
+                AboutEvent.CopyDeviceInfo(label = "label", deviceInfo = "shown-device-info")
+            )
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            assertThat(copiedText).isEqualTo("shown-device-info")
         }
 
     @Test
@@ -269,7 +278,7 @@ class AboutViewModelTest {
 
         val state = recreated.uiState.value
         assertThat(state.snackbar).isNull()
-        assertThat(state.data?.items).isEqualTo(testItems)
+        assertThat(state.data?.items?.map { it.key }).isEqualTo(expectedItemKeys)
     }
 }
 

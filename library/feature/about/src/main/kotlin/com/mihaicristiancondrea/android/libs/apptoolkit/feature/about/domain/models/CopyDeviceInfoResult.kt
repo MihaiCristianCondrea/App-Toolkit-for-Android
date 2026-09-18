@@ -22,7 +22,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.mo
  *
  * @param copied whether the clipboard operation succeeded.
  * @param shouldShowFeedback true when legacy platforms require in-app confirmation because no system
- * clipboard preview is available.
+ * clipboard preview is available. Only meaningful when [copied] is true; a failed copy is always
+ * reported to the user.
  */
 data class CopyDeviceInfoResult(
     val copied: Boolean,

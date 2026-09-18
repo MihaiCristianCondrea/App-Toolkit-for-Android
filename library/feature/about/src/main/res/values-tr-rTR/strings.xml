@@ -46,6 +46,7 @@
     <string name="settings_placeholder_description">Seçilen bir ayar yok. Ayrıntıları görüntülemek için bir seçenek seçin.</string>
     <string name="share">Paylaş</string>
     <string name="snack_device_info_copied">Cihaz bilgileri panoya kopyalandı</string>
+    <string name="snack_device_info_copy_failed">Cihaz bilgileri panoya kopyalanamadı</string>
     <string name="snack_device_info_failed">Cihaz bilgileri yüklenemedi</string>
     <string name="summary_preference_settings_ads">Verilerinizi nasıl kullandığımızı kontrol edin</string>
     <string name="summary_preference_settings_code_of_conduct">Hizmetimizdeki davranış kurallarını ve yönergelerini anlayın</string>

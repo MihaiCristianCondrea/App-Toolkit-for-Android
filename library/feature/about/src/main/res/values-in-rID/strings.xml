@@ -46,6 +46,7 @@
     <string name="settings_placeholder_description">Tidak ada pengaturan yang dipilih. Pilih opsi untuk melihat detailnya di sini.</string>
     <string name="share">Bagikan</string>
     <string name="snack_device_info_copied">Informasi perangkat disalin ke papan klip</string>
+    <string name="snack_device_info_copy_failed">Tidak dapat menyalin info perangkat ke papan klip</string>
     <string name="snack_device_info_failed">Tidak dapat memuat info perangkat</string>
     <string name="summary_preference_settings_ads">Kendalikan bagaimana kami menggunakan informasi Anda untuk menampilkan iklan yang relevan</string>
     <string name="summary_preference_settings_code_of_conduct">Pahami aturan dan pedoman perilaku dalam layanan kami</string>

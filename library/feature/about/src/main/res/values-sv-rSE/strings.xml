@@ -46,6 +46,7 @@
     <string name="settings_placeholder_description">Inga inställningar valda. Välj ett alternativ för att se detaljer här.</string>
     <string name="share">Dela</string>
     <string name="snack_device_info_copied">Enhetsinformation kopierad till urklipp</string>
+    <string name="snack_device_info_copy_failed">Det gick inte att kopiera enhetsinformationen till urklipp</string>
     <string name="snack_device_info_failed">Det gick inte att läsa in enhetsinformation</string>
     <string name="summary_preference_settings_ads">Kontrollera hur vi använder din information för att visa relevanta annonser</string>
     <string name="summary_preference_settings_code_of_conduct">Förstå reglerna och riktlinjerna för beteende inom vår tjänst</string>

@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
@@ -44,8 +44,13 @@ sealed interface AboutItemAction {
     /** Opens the open-source software licenses screen. */
     data object OpenLicenses : AboutItemAction
 
-    /** Copies the device information to the system clipboard. */
-    data object CopyDeviceInfo : AboutItemAction
+    /**
+     * Copies [deviceInfo] to the system clipboard.
+     *
+     * The text travels with the action so the clipboard receives exactly the report the item
+     * displays, instead of a second lookup that could resolve under a different configuration.
+     */
+    data class CopyDeviceInfo(val deviceInfo: String) : AboutItemAction
 }
 
 /**

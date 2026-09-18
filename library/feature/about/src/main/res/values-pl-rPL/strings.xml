@@ -46,6 +46,7 @@
     <string name="settings_placeholder_description">Nie wybrano żadnych ustawień. Wybierz opcję, aby wyświetlić jej szczegóły tutaj.</string>
     <string name="share">Udostępnij</string>
     <string name="snack_device_info_copied">Informacje o urządzeniu zostały skopiowane do schowka</string>
+    <string name="snack_device_info_copy_failed">Nie można skopiować informacji o urządzeniu do schowka</string>
     <string name="snack_device_info_failed">Nie można załadować informacji o urządzeniu</string>
     <string name="summary_preference_settings_ads">Kontroluj, jak używamy Twoich informacji do wyświetlania odpowiednich reklam</string>
     <string name="summary_preference_settings_code_of_conduct">Zrozum zasady i wytyczne dotyczące zachowania w naszej usłudze</string>
