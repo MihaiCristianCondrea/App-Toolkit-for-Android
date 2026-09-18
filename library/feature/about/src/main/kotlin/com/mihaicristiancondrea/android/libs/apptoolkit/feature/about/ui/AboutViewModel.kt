@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 
 import android.content.Context
+import android.os.Build
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
@@ -51,15 +52,19 @@ import kotlinx.coroutines.withContext
  * ViewModel for the About screen, including tap-to-copy of the entries it renders.
  *
  * Writing to the clipboard is a system UI interaction, so it runs on the main dispatcher rather
- * than on IO, and it reports the outcome in-app on every platform version. Android 13 and newer
- * normally raise a system clipboard preview, but OEMs disable or restyle it, so relying on it left
- * users with no confirmation at all.
+ * than on IO. Android 13 raised its own clipboard preview for every copy, so a successful copy is
+ * confirmed in-app only below that, where nothing else tells the user anything happened. A failed
+ * copy raises no system UI at all, so it is always reported.
+ *
+ * @param sdkIntProvider Supplies the running platform level, so the confirmation rule is testable
+ * without a device.
  */
 open class AboutViewModel(
     private val aboutRepository: AboutRepository,
     private val context: Context,
     private val dispatchers: DispatcherProvider,
     firebaseController: FirebaseController,
+    private val sdkIntProvider: () -> Int = { Build.VERSION.SDK_INT },
 ) : LoggedScreenViewModel<AboutUiState, AboutEvent, AboutAction>(
     initialState = UiStateScreen(data = AboutUiState()),
     firebaseController = firebaseController,
@@ -128,11 +133,13 @@ open class AboutViewModel(
                         context.copyTextToClipboard(label = label, text = text)
                     }
                     check(copied) { "Clipboard rejected the copy for \"$label\"" }
-                    showSnackbar(
-                        message = successMessage
-                            ?: UiTextHelper.StringResource(R.string.snack_copied_to_clipboard),
-                        isError = false,
-                    )
+                    if (!showsSystemClipboardPreview()) {
+                        showSnackbar(
+                            message = successMessage
+                                ?: UiTextHelper.StringResource(R.string.snack_copied_to_clipboard),
+                            isError = false,
+                        )
+                    }
                 },
                 onError = {
                     showSnackbar(
@@ -143,6 +150,13 @@ open class AboutViewModel(
             )
         }
     }
+
+    /**
+     * True when the platform raises its own clipboard preview, making an in-app confirmation a
+     * duplicate report of the same copy.
+     */
+    private fun showsSystemClipboardPreview(): Boolean =
+        sdkIntProvider() > Build.VERSION_CODES.S_V2
 
     private suspend fun showSnackbar(message: UiTextHelper, isError: Boolean) {
         updateStateThreadSafe {

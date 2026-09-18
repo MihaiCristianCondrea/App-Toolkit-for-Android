@@ -46,6 +46,8 @@
   pre computed card positions, replacing the hardcoded preference rows.
 - `LicensesScreen` reports its loading and success state through a new `LicensesViewModel` instead
   of building a screen state inline.
+- The About preference click handler is a single lambda with the action `when` inside it, replacing
+  a `when` whose branches each returned a lambda.
 - Renamed `FirebaseControllerImpl` to `DefaultFirebaseController` in `:library:integration:firebase`,
   conforming to repository naming conventions while retaining a backward-compatible typealias.
 - Relocated `DefaultInAppUpdateRepositoryTest` from `:library:feature:about` to
@@ -54,12 +56,11 @@
 
 ### Fixed
 
-- Copying device info from the About screen did nothing visible on Android 13 and newer. The copy
-  ran on a background dispatcher, and the confirmation was suppressed on the assumption that the
-  system clipboard preview would appear, which many devices disable or restyle. The copy now runs
-  on the main thread and always confirms in app.
-- Fixed the About screen preference clicks, which built a nested lambda that was discarded instead
-  of being invoked, so tapping a row did nothing.
+- Copying from the About screen ran the clipboard write on a background dispatcher. It now runs on
+  the main thread, where a system UI interaction belongs.
+- A failed copy said `Unable to load device info`, the message for a failed load. It now says the
+  copy did not go through. Success confirmations are unchanged: they still appear only below
+  Android 13, where the platform shows no clipboard preview of its own.
 
 ---
 

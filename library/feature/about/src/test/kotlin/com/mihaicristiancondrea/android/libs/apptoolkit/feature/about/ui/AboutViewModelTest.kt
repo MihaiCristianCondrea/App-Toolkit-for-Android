@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
@@ -92,6 +93,7 @@ class AboutViewModelTest {
             override suspend fun getAboutInfo(): AboutInfo = defaultAboutInfo
         },
         clipboardContext: Context = context,
+        sdkInt: Int = Build.VERSION_CODES.S_V2,
     ): AboutViewModel {
         val testDispatchers: DispatcherProvider = TestDispatchers(testDispatcher)
 
@@ -100,6 +102,7 @@ class AboutViewModelTest {
             context = clipboardContext,
             dispatchers = testDispatchers,
             firebaseController = firebaseController,
+            sdkIntProvider = { sdkInt },
         )
     }
 
@@ -146,6 +149,35 @@ class AboutViewModelTest {
 
             val message = viewModel.uiState.value.snackbar!!.message as UiTextHelper.StringResource
             assertThat(message.resourceId).isEqualTo(R.string.snack_device_info_copied)
+        }
+
+    @Test
+    fun `copy stays silent when the platform shows its own clipboard preview`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = createViewModel(sdkInt = Build.VERSION_CODES.TIRAMISU)
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            viewModel.onEvent(AboutEvent.CopyToClipboard(label = "label", text = "text"))
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            assertThat(viewModel.uiState.value.snackbar).isNull()
+        }
+
+    @Test
+    fun `copy failure is reported even when the platform shows a clipboard preview`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            every { context.getSystemService(ClipboardManager::class.java) } returns null
+
+            val viewModel = createViewModel(sdkInt = Build.VERSION_CODES.TIRAMISU)
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            viewModel.onEvent(AboutEvent.CopyToClipboard(label = "label", text = "text"))
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            val snackbar = viewModel.uiState.value.snackbar!!
+            val message = snackbar.message as UiTextHelper.StringResource
+            assertThat(message.resourceId).isEqualTo(R.string.snack_copy_failed)
+            assertThat(snackbar.isError).isTrue()
         }
 
     @Test

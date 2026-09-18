@@ -61,9 +61,12 @@ flowchart TD
   preferences) with titles, summaries, actions, and card positions, so `AboutScreen` remains purely
   declarative and the data layer stays free of rendering concerns.
 - Copying is a presentation interaction, not a repository query, so `AboutViewModel` performs the
-  clipboard write itself. It runs on the main dispatcher because writing the clipboard is a system
-  UI interaction, and it always confirms in-app: Android 13 and newer normally raise a system
-  clipboard preview, but OEMs disable or restyle it, which left users with no feedback at all.
+  clipboard write itself, on the main dispatcher because writing the clipboard is a system UI
+  interaction.
+- A successful copy is confirmed in-app only below Android 13. From Android 13 the platform raises
+  its own clipboard preview, so an in-app snackbar would report the same copy twice. A failed copy
+  raises no system UI on any version, so it is always reported. The platform level is read through
+  an injected `sdkIntProvider`, which keeps both paths testable without a device.
 - `AboutItemAction.CopyToClipboard` carries the label, the exact text, and an optional confirmation
   message, so any row becomes copyable without a new event, and the clipboard receives what the row
   displays rather than a second lookup resolved under a different configuration.
