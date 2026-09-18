@@ -31,10 +31,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extens
 /**
  * Firebase-backed implementation that delegates toggles to the SDK.
  */
-class FirebaseControllerImpl : FirebaseController {
+class DefaultFirebaseController(
+    private val analyticsProvider: () -> FirebaseAnalytics = { Firebase.analytics },
+    private val crashlyticsProvider: () -> FirebaseCrashlytics = { FirebaseCrashlytics.getInstance() },
+    private val performanceProvider: () -> FirebasePerformance = { FirebasePerformance.getInstance() },
+) : FirebaseController {
 
     private val analytics: FirebaseAnalytics
-        get() = Firebase.analytics
+        get() = analyticsProvider()
 
     /**
      * Updates the Firebase Analytics consent settings based on the provided permissions.
@@ -54,7 +58,7 @@ class FirebaseControllerImpl : FirebaseController {
         adUserDataGranted: Boolean,
         adPersonalizationGranted: Boolean,
     ) {
-        val firebaseAnalytics: FirebaseAnalytics = Firebase.analytics
+        val firebaseAnalytics: FirebaseAnalytics = analytics
         val consentSettings: MutableMap<FirebaseAnalytics.ConsentType, FirebaseAnalytics.ConsentStatus> =
             mutableMapOf()
 
@@ -76,7 +80,7 @@ class FirebaseControllerImpl : FirebaseController {
      * @param enabled Whether analytics collection should be enabled or disabled.
      */
     override fun setAnalyticsEnabled(enabled: Boolean) {
-        Firebase.analytics.setAnalyticsCollectionEnabled(enabled)
+        analytics.setAnalyticsCollectionEnabled(enabled)
     }
 
     /**
@@ -87,7 +91,7 @@ class FirebaseControllerImpl : FirebaseController {
      * @param enabled True to enable Crashlytics collection, false to disable it.
      */
     override fun setCrashlyticsEnabled(enabled: Boolean) {
-        FirebaseCrashlytics.getInstance().isCrashlyticsCollectionEnabled = enabled
+        crashlyticsProvider().isCrashlyticsCollectionEnabled = enabled
     }
 
     /**
@@ -96,7 +100,7 @@ class FirebaseControllerImpl : FirebaseController {
      * @param enabled True to enable performance collection, false to disable it.
      */
     override fun setPerformanceEnabled(enabled: Boolean) {
-        FirebasePerformance.getInstance().isPerformanceCollectionEnabled = enabled
+        performanceProvider().isPerformanceCollectionEnabled = enabled
     }
 
     /**
@@ -110,7 +114,7 @@ class FirebaseControllerImpl : FirebaseController {
      * @param attributes A map of key-value pairs providing additional context to the log.
      */
     override fun logBreadcrumb(message: String, attributes: Map<String, String>) {
-        val crashlytics = FirebaseCrashlytics.getInstance()
+        val crashlytics = crashlyticsProvider()
         val suffix = if (attributes.isEmpty()) {
             ""
         } else {
@@ -138,7 +142,7 @@ class FirebaseControllerImpl : FirebaseController {
         throwable: Throwable,
         extraKeys: Map<String, String>,
     ) {
-        val crashlytics = FirebaseCrashlytics.getInstance()
+        val crashlytics = crashlyticsProvider()
         crashlytics.setCustomKey("view_model", viewModelName)
         crashlytics.setCustomKey("action", action)
         crashlytics.setCustomKey("exception_type", throwable::class.java.name)
@@ -157,7 +161,7 @@ class FirebaseControllerImpl : FirebaseController {
      * @param attributes Additional key-value pairs to be attached as custom metadata in Crashlytics.
      */
     override fun recordNonFatal(throwable: Throwable, attributes: Map<String, String>) {
-        val crashlytics = FirebaseCrashlytics.getInstance()
+        val crashlytics = crashlyticsProvider()
         crashlytics.setCustomKey("exception_type", throwable::class.java.name)
         crashlytics.setCustomKey("exception_message", throwable.message ?: "unknown")
         attributes.forEach { (key, value) ->
@@ -260,3 +264,11 @@ class FirebaseControllerImpl : FirebaseController {
     }
 }
 
+/**
+ * Backward compatibility alias for [DefaultFirebaseController].
+ */
+@Deprecated(
+    message = "Use DefaultFirebaseController instead.",
+    replaceWith = ReplaceWith("DefaultFirebaseController")
+)
+typealias FirebaseControllerImpl = DefaultFirebaseController

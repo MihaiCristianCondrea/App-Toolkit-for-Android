@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories
+package com.mihaicristiancondrea.android.libs.apptoolkit.integration.update.data.repositories
 
 import android.app.Activity
 import androidx.activity.result.ActivityResultLauncher
@@ -29,7 +29,6 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.update.data.repositories.DefaultInAppUpdateRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.update.domain.models.InAppUpdateHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.update.domain.models.InAppUpdateResult
 import io.mockk.every
@@ -157,6 +156,3 @@ class DefaultInAppUpdateRepositoryTest {
         return task
     }
 }
-
-
-

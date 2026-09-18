@@ -2,6 +2,20 @@
 
 ---
 
+# Unreleased
+
+### Added
+
+- Added unit test coverage for `NavigationBackStackActions` covering top-level navigation, single-top deduplication, and back-stack pops.
+- Added unit test coverage for `DefaultFirebaseController` covering consent settings, event tracking, screen views, user properties, and error reporting.
+
+### Changed
+
+- Renamed `FirebaseControllerImpl` to `DefaultFirebaseController` in `:library:integration:firebase`, conforming to repository naming conventions while retaining a backward-compatible typealias.
+- Relocated `DefaultInAppUpdateRepositoryTest` from `:library:feature:about` to `:library:integration:update` and applied the unit test convention plugin to `:library:integration:update` and `:library:integration:firebase`.
+
+---
+
 # September 18, 2026
 
 **Version:** `3.0.0-pre17`
