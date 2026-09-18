@@ -21,7 +21,6 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.parcelize)
-    alias(libs.plugins.about.libraries)
     id("com.mihaicristiancondrea.android.apptoolkit.versioning")
     id("com.mihaicristiancondrea.android.apptoolkit.unit-test")
     id("com.mihaicristiancondrea.android.apptoolkit.jvm-target")
@@ -48,16 +47,12 @@ android {
 dependencies {
     testImplementation(project(":library:core:testing"))
     api(project(":library:core:common"))
-    api(project(":library:core:datastore"))
-    api(project(":library:core:network"))
     api(project(":library:core:ui"))
     api(project(":library:navigation"))
     api(project(":library:integration:consent"))
     api(project(":library:integration:review"))
     api(project(":library:integration:update"))
-    api(project(":library:feature:support"))
+    api(project(":library:feature:licenses"))
 
-    api(libs.aboutlibraries.compose.m3)
     api(libs.konfetti.compose)
-    api(libs.compose.markdown)
 }

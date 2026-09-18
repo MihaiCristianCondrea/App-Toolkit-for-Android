@@ -53,20 +53,30 @@ private fun AboutInfo.toAboutItems(): List<AboutItem> {
             )
         )
         if (appToolkitVersion.isNotBlank()) {
+            val title = UiTextHelper.StringResource(R.string.app_toolkit_version)
             add(
                 AboutItem.Preference(
                     key = AboutItemKey.APP_TOOLKIT_VERSION,
-                    title = UiTextHelper.StringResource(R.string.app_toolkit_version),
+                    title = title,
                     summary = UiTextHelper.DynamicString(appToolkitVersion),
+                    action = AboutItemAction.CopyToClipboard(
+                        label = title,
+                        text = appToolkitVersion,
+                    ),
                 )
             )
         }
         if (!googlePlayServicesVersion.isNullOrBlank()) {
+            val title = UiTextHelper.StringResource(R.string.google_play_services_version)
             add(
                 AboutItem.Preference(
                     key = AboutItemKey.GOOGLE_PLAY_SERVICES_VERSION,
-                    title = UiTextHelper.StringResource(R.string.google_play_services_version),
+                    title = title,
                     summary = UiTextHelper.DynamicString(googlePlayServicesVersion),
+                    action = AboutItemAction.CopyToClipboard(
+                        label = title,
+                        text = googlePlayServicesVersion,
+                    ),
                 )
             )
         }
@@ -82,12 +92,19 @@ private fun AboutInfo.toAboutItems(): List<AboutItem> {
 
     val deviceInfoPreferences = buildList {
         if (deviceInfo.isNotBlank()) {
+            val title = UiTextHelper.StringResource(R.string.device_info)
             add(
                 AboutItem.Preference(
                     key = AboutItemKey.DEVICE_INFO,
-                    title = UiTextHelper.StringResource(R.string.device_info),
+                    title = title,
                     summary = UiTextHelper.DynamicString(deviceInfo),
-                    action = AboutItemAction.CopyDeviceInfo(deviceInfo = deviceInfo),
+                    action = AboutItemAction.CopyToClipboard(
+                        label = title,
+                        text = deviceInfo,
+                        successMessage = UiTextHelper.StringResource(
+                            R.string.snack_device_info_copied,
+                        ),
+                    ),
                 )
             )
         }

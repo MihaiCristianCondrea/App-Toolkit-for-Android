@@ -16,5 +16,4 @@
   -->
 <resources>
     <string name="arch" translatable="false">Arch</string>
-    <string name="summary_preference_settings_license" translatable="false">General Public License-3.0</string>
 </resources>

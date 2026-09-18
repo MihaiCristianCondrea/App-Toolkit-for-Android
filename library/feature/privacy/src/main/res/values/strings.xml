@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">Ads</string>
+    <string name="code_of_conduct">Code of conduct</string>
+    <string name="legal">Legal</string>
+    <string name="legal_notices">Legal notices</string>
+    <string name="license">License</string>
+    <string name="permissions">Permissions</string>
+    <string name="privacy">Privacy</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="summary_preference_settings_ads">Control how your information is used to show relevant ads</string>
+    <string name="summary_preference_settings_code_of_conduct">Understand the rules and guidelines for behavior within the service</string>
+    <string name="summary_preference_settings_legal_notices">View legal information about the service</string>
+    <string name="summary_preference_settings_permissions">Manage the permissions granted to the service</string>
+    <string name="summary_preference_settings_privacy_policy">View the policy that governs how your data is handled</string>
+    <string name="summary_preference_settings_terms_of_service">Review the terms you agree to when using this service</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">Share data to help improve in-app experience</string>
+    <string name="terms_of_service">Terms of service</string>
+    <string name="usage_and_diagnostics">Usage and diagnostics</string>
+</resources>

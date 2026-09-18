@@ -67,6 +67,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R as ComponentsR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R as AboutR
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.R as PrivacyR
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.R as HelpR
 
 class MainActivity : AppCompatActivity() {
@@ -151,8 +152,8 @@ class MainActivity : AppCompatActivity() {
                             is SettingsRoute -> stringResource(AboutR.string.settings)
                             is GeneralSettingsRoute -> route.title
                             is HelpRoute -> stringResource(HelpR.string.help)
-                            is AdsSettingsRoute -> stringResource(AboutR.string.ads)
-                            is PermissionsRoute -> stringResource(AboutR.string.permissions)
+                            is AdsSettingsRoute -> stringResource(PrivacyR.string.ads)
+                            is PermissionsRoute -> stringResource(PrivacyR.string.permissions)
                             is LicensesRoute -> stringResource(AboutR.string.oss_license_title)
                             is SupportRoute -> stringResource(AboutR.string.support_us)
                             is LibraryExtrasRoute -> stringResource(CommonR.string.app_name)

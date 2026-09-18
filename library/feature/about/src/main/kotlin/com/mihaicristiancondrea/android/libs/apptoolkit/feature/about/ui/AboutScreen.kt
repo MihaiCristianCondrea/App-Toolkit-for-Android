@@ -56,10 +56,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.licenses.LicensesActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.AboutUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.LicensesActivity
 import kotlinx.coroutines.delay
 import nl.dionsegijn.konfetti.compose.KonfettiView
 import nl.dionsegijn.konfetti.core.Angle
@@ -168,53 +168,53 @@ fun AboutScreen(
                             }
 
                             is AboutItem.Preference -> {
-                                val action: AboutItemAction? = item.action
-                                val onClick: () -> Unit = when (action) {
-                                    AboutItemAction.VersionEasterEgg -> {
-                                        {
-                                            appVersionTotalTapCount += 1
-                                            onVersionTap(appVersionTotalTapCount)
-                                            appVersionTapCount += 1
-                                            if (appVersionTapCount >= 5) {
-                                                appVersionTapCount = 0
-                                                showKonfettiAnimationForThisInstance = true
-                                                firebaseController.logUnlockAchievement("konfetti_easter_egg")
-                                            }
-                                        }
-                                    }
-
-                                    AboutItemAction.OpenLicenses -> {
-                                        {
-                                            val opened = context.openActivity(LicensesActivity::class.java)
-                                            if (!opened) {
-                                                Log.w(
-                                                    ABOUT_SETTINGS_LOG_TAG,
-                                                    "Failed to open licenses screen from About settings"
-                                                )
-                                            }
-                                        }
-                                    }
-
-                                    is AboutItemAction.CopyDeviceInfo -> {
-                                        {
-                                            viewModel.onEvent(
-                                                event = AboutEvent.CopyDeviceInfo(
-                                                    label = item.title.asString(context),
-                                                    deviceInfo = action.deviceInfo,
-                                                )
-                                            )
-                                        }
-                                    }
-
-                                    null -> { {} }
-                                }
-
                                 SettingsPreferenceItem(
                                     title = item.title.asString(),
                                     summary = item.summary.asString(),
-                                    onClick = onClick,
+                                    onClick = {
+                                        when (val action = item.action) {
+                                            is AboutItemAction.CopyToClipboard -> {
+                                                viewModel.onEvent(
+                                                    event = AboutEvent.CopyToClipboard(
+                                                        label = action.label.asString(context),
+                                                        text = action.text,
+                                                        successMessage = action.successMessage,
+                                                    )
+                                                )
+                                            }
+
+                                            AboutItemAction.VersionEasterEgg -> {
+                                                appVersionTotalTapCount += 1
+                                                onVersionTap(appVersionTotalTapCount)
+                                                appVersionTapCount += 1
+                                                if (appVersionTapCount >= 5) {
+                                                    appVersionTapCount = 0
+                                                    showKonfettiAnimationForThisInstance = true
+                                                    firebaseController.logUnlockAchievement(
+                                                        "konfetti_easter_egg",
+                                                    )
+                                                }
+                                            }
+
+                                            AboutItemAction.OpenLicenses -> {
+                                                val opened = context.openActivity(
+                                                    LicensesActivity::class.java,
+                                                )
+                                                if (!opened) {
+                                                    Log.w(
+                                                        ABOUT_SETTINGS_LOG_TAG,
+                                                        "Failed to open licenses screen from About settings",
+                                                    )
+                                                }
+                                            }
+
+                                            null -> Unit
+                                        }
+                                    },
                                     firebaseController = firebaseController,
-                                    ga4Event = if (action != null) aboutPreferenceTapEvent(preferenceKey = item.key) else null,
+                                    ga4Event = item.action?.let {
+                                        aboutPreferenceTapEvent(preferenceKey = item.key)
+                                    },
                                     modifier = Modifier.groupedPreferenceItem(
                                         position = item.position,
                                         outerRadius = SizeConstants.LargeMediumSize,

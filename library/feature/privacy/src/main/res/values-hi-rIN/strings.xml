@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">विज्ञापन</string>
+    <string name="code_of_conduct">आचार संहिता</string>
+    <string name="legal">कानूनी</string>
+    <string name="legal_notices">कानूनी नोटिस</string>
+    <string name="license">लाइसेंस</string>
+    <string name="permissions">अनुमतियाँ</string>
+    <string name="privacy">गोपनीयता</string>
+    <string name="privacy_policy">गोपनीयता नीति</string>
+    <string name="summary_preference_settings_ads">प्रासंगिक विज्ञापन दिखाने के लिए आपकी जानकारी के उपयोग को नियंत्रित करें</string>
+    <string name="summary_preference_settings_code_of_conduct">हमारी सेवा के भीतर व्यवहार के नियमों और दिशानिर्देशों को समझें</string>
+    <string name="summary_preference_settings_legal_notices">हमारी सेवा के बारे में कानूनी जानकारी देखें</string>
+    <string name="summary_preference_settings_permissions">हमारी सेवा को दी गई अनुमतियों का प्रबंधन करें</string>
+    <string name="summary_preference_settings_privacy_policy">हम आपके डेटा को कैसे संभालते हैं इसकी नीति देखें</string>
+    <string name="summary_preference_settings_terms_of_service">सेवा की शर्तों की समीक्षा करें</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">ऐप अनुभव को बेहतर बनाने में मदद के लिए डेटा साझा करें</string>
+    <string name="terms_of_service">सेवा की शर्तें</string>
+    <string name="usage_and_diagnostics">उपयोग और निदान</string>
+</resources>

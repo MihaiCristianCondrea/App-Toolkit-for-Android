@@ -17,6 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.util.Log
 import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
@@ -26,12 +30,18 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedD
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories.AboutRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.CopyDeviceInfoResult
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.usecases.CopyDeviceInfoUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.mappers.toUiState
+import io.mockk.every
+import io.mockk.justRun
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
+import io.mockk.verify
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 
@@ -55,40 +65,47 @@ class AboutViewModelTest {
 
     private val firebaseController = FakeFirebaseController()
 
+    private lateinit var context: Context
+    private lateinit var clipboardManager: ClipboardManager
+
+    @BeforeEach
+    fun setUp() {
+        mockkStatic(Log::class)
+        every { Log.w(any(), any<String>(), any()) } returns 0
+        mockkStatic(ClipData::class)
+        every { ClipData.newPlainText(any(), any()) } returns mockk(relaxed = true)
+        clipboardManager = mockk()
+        justRun { clipboardManager.setPrimaryClip(any()) }
+        context = mockk()
+        every { context.getSystemService(ClipboardManager::class.java) } returns clipboardManager
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(ClipData::class)
+        unmockkStatic(Log::class)
+    }
+
     private fun createViewModel(
         testDispatcher: TestDispatcher = dispatcherExtension.testDispatcher,
         repository: AboutRepository = object : AboutRepository {
             override suspend fun getAboutInfo(): AboutInfo = defaultAboutInfo
-
-            override fun copyDeviceInfo(label: String, deviceInfo: String): CopyDeviceInfoResult =
-                CopyDeviceInfoResult(copied = true, shouldShowFeedback = true)
-        }
+        },
+        clipboardContext: Context = context,
     ): AboutViewModel {
         val testDispatchers: DispatcherProvider = TestDispatchers(testDispatcher)
 
         return AboutViewModel(
             aboutRepository = repository,
-            copyDeviceInfoUseCase = CopyDeviceInfoUseCase(repository, firebaseController),
+            context = clipboardContext,
             dispatchers = testDispatchers,
             firebaseController = firebaseController,
         )
     }
 
-    private fun createFailingViewModel(
-        testDispatcher: TestDispatcher = dispatcherExtension.testDispatcher,
-    ): AboutViewModel {
-        val repository = object : AboutRepository {
-            override suspend fun getAboutInfo(): AboutInfo = throw Exception("fail")
-
-            override fun copyDeviceInfo(label: String, deviceInfo: String): CopyDeviceInfoResult =
-                CopyDeviceInfoResult(copied = false, shouldShowFeedback = true)
-        }
-        return createViewModel(testDispatcher = testDispatcher, repository = repository)
-    }
-
     @Test
     fun `initial load populates ui state`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = createViewModel(testDispatcher = dispatcherExtension.testDispatcher)
+        val viewModel = createViewModel()
         dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
         val state = viewModel.uiState.value
@@ -96,85 +113,78 @@ class AboutViewModelTest {
     }
 
     @Test
-    fun `copy device info shows snackbar`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = createViewModel(testDispatcher = dispatcherExtension.testDispatcher)
-        dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
-
-        viewModel.onEvent(AboutEvent.CopyDeviceInfo(label = "label"))
-        dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
-
-        val state = viewModel.uiState.value
-        val snackbar = state.snackbar!!
-        val msg = snackbar.message as UiTextHelper.StringResource
-        assertThat(msg.resourceId).isEqualTo(R.string.snack_device_info_copied)
-    }
-
-    @Test
-    fun `copy device info failure surfaces the copy failure message`() =
+    fun `copy confirms with the generic message when the action has none`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val repository = object : AboutRepository {
-                override suspend fun getAboutInfo(): AboutInfo = defaultAboutInfo
-
-                override fun copyDeviceInfo(
-                    label: String,
-                    deviceInfo: String,
-                ): CopyDeviceInfoResult = CopyDeviceInfoResult(
-                    copied = false,
-                    shouldShowFeedback = true
-                )
-            }
-
-            val viewModel = createViewModel(
-                testDispatcher = dispatcherExtension.testDispatcher,
-                repository = repository
-            )
+            val viewModel = createViewModel()
             dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
-            viewModel.onEvent(AboutEvent.CopyDeviceInfo(label = "label"))
+            viewModel.onEvent(AboutEvent.CopyToClipboard(label = "label", text = "text"))
             dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
             val snackbar = viewModel.uiState.value.snackbar!!
-            val msg = snackbar.message as UiTextHelper.StringResource
-            assertThat(msg.resourceId).isEqualTo(R.string.snack_device_info_copy_failed)
+            val message = snackbar.message as UiTextHelper.StringResource
+            assertThat(message.resourceId).isEqualTo(R.string.snack_copied_to_clipboard)
+            assertThat(snackbar.isError).isFalse()
+        }
+
+    @Test
+    fun `copy confirms with the action's own message when it has one`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = createViewModel()
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            viewModel.onEvent(
+                AboutEvent.CopyToClipboard(
+                    label = "label",
+                    text = "device-info",
+                    successMessage = UiTextHelper.StringResource(
+                        R.string.snack_device_info_copied,
+                    ),
+                )
+            )
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            val message = viewModel.uiState.value.snackbar!!.message as UiTextHelper.StringResource
+            assertThat(message.resourceId).isEqualTo(R.string.snack_device_info_copied)
+        }
+
+    @Test
+    fun `copy failure surfaces the failure message`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            every { context.getSystemService(ClipboardManager::class.java) } returns null
+
+            val viewModel = createViewModel()
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            viewModel.onEvent(AboutEvent.CopyToClipboard(label = "label", text = "text"))
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            val snackbar = viewModel.uiState.value.snackbar!!
+            val message = snackbar.message as UiTextHelper.StringResource
+            assertThat(message.resourceId).isEqualTo(R.string.snack_copy_failed)
             assertThat(snackbar.isError).isTrue()
         }
 
     @Test
-    fun `copy device info forwards the displayed report to the repository`() =
+    fun `copy writes the requested label and text to the clipboard`() =
         runTest(dispatcherExtension.testDispatcher) {
-            var copiedText: String? = null
-            val repository = object : AboutRepository {
-                override suspend fun getAboutInfo(): AboutInfo = defaultAboutInfo
-
-                override fun copyDeviceInfo(
-                    label: String,
-                    deviceInfo: String,
-                ): CopyDeviceInfoResult {
-                    copiedText = deviceInfo
-                    return CopyDeviceInfoResult(copied = true, shouldShowFeedback = true)
-                }
-            }
-
-            val viewModel = createViewModel(
-                testDispatcher = dispatcherExtension.testDispatcher,
-                repository = repository
-            )
+            val viewModel = createViewModel()
             dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
             viewModel.onEvent(
-                AboutEvent.CopyDeviceInfo(label = "label", deviceInfo = "shown-device-info")
+                AboutEvent.CopyToClipboard(label = "Device info", text = "shown-device-info")
             )
             dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
-            assertThat(copiedText).isEqualTo("shown-device-info")
+            verify { ClipData.newPlainText("Device info", "shown-device-info") }
         }
 
     @Test
     fun `dismiss snackbar resets state`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = createViewModel(testDispatcher = dispatcherExtension.testDispatcher)
+        val viewModel = createViewModel()
         dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
-        viewModel.onEvent(AboutEvent.CopyDeviceInfo(label = "label"))
+        viewModel.onEvent(AboutEvent.CopyToClipboard(label = "label", text = "text"))
         dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
         assertThat(viewModel.uiState.value.snackbar).isNotNull()
 
@@ -184,101 +194,33 @@ class AboutViewModelTest {
     }
 
     @Test
-    fun `snackbar can be shown again after dismissal`() =
+    fun `repeated copy events replace the snackbar`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val viewModel = createViewModel(testDispatcher = dispatcherExtension.testDispatcher)
+            val viewModel = createViewModel()
             dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
-            viewModel.onEvent(AboutEvent.CopyDeviceInfo(label = "label"))
+            viewModel.onEvent(AboutEvent.CopyToClipboard(label = "label", text = "text"))
             dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+            val first = viewModel.uiState.value.snackbar!!.timeStamp
 
-            viewModel.onEvent(AboutEvent.DismissSnackbar)
+            viewModel.onEvent(AboutEvent.CopyToClipboard(label = "label", text = "text"))
             dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
-            assertThat(viewModel.uiState.value.snackbar).isNull()
+            val second = viewModel.uiState.value.snackbar!!.timeStamp
 
-            viewModel.onEvent(AboutEvent.CopyDeviceInfo(label = "label"))
-            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
-            assertThat(viewModel.uiState.value.snackbar).isNotNull()
+            assertThat(second).isNotEqualTo(first)
         }
 
     @Test
-    fun `no fallback means no success snackbar`() =
+    fun `repository error shows the load failure snackbar`() =
         runTest(dispatcherExtension.testDispatcher) {
             val repository = object : AboutRepository {
-                override suspend fun getAboutInfo(): AboutInfo = defaultAboutInfo
-
-                override fun copyDeviceInfo(
-                    label: String,
-                    deviceInfo: String
-                ): CopyDeviceInfoResult =
-                    CopyDeviceInfoResult(copied = true, shouldShowFeedback = false)
+                override suspend fun getAboutInfo(): AboutInfo = throw IllegalStateException("fail")
             }
 
-            val viewModel = createViewModel(
-                testDispatcher = dispatcherExtension.testDispatcher,
-                repository = repository
-            )
+            val viewModel = createViewModel(repository = repository)
             dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
-            viewModel.onEvent(AboutEvent.CopyDeviceInfo(label = "label"))
-            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
-
-            assertThat(viewModel.uiState.value.snackbar).isNull()
+            val message = viewModel.uiState.value.snackbar?.message as? UiTextHelper.StringResource
+            assertThat(message?.resourceId).isEqualTo(R.string.snack_device_info_failed)
         }
-
-    @Test
-    fun `repeated copy events replace snackbar`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = createViewModel(testDispatcher = dispatcherExtension.testDispatcher)
-        dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
-
-        viewModel.onEvent(AboutEvent.CopyDeviceInfo(label = "label"))
-        dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
-        val first = viewModel.uiState.value.snackbar!!.timeStamp
-
-        viewModel.onEvent(AboutEvent.CopyDeviceInfo(label = "label"))
-        dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
-        val second = viewModel.uiState.value.snackbar!!.timeStamp
-
-        assertThat(second).isNotEqualTo(first)
-    }
-
-    @Test
-    fun `rapid successive copy events keep snackbar visible`() =
-        runTest(dispatcherExtension.testDispatcher) {
-            val viewModel = createViewModel(testDispatcher = dispatcherExtension.testDispatcher)
-            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
-
-            repeat(5) { viewModel.onEvent(AboutEvent.CopyDeviceInfo(label = "label")) }
-            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
-
-            assertThat(viewModel.uiState.value.snackbar).isNotNull()
-        }
-
-    @Test
-    fun `repository error shows snackbar`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = createFailingViewModel(testDispatcher = dispatcherExtension.testDispatcher)
-        dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
-
-        val snackbar = viewModel.uiState.value.snackbar!!
-        val msg = snackbar.message as UiTextHelper.StringResource
-        assertThat(msg.resourceId).isEqualTo(R.string.snack_device_info_failed)
-    }
-
-    @Test
-    fun `new viewmodel has default state`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = createViewModel(testDispatcher = dispatcherExtension.testDispatcher)
-        dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
-
-        viewModel.onEvent(AboutEvent.CopyDeviceInfo(label = "label"))
-        dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
-        assertThat(viewModel.uiState.value.snackbar).isNotNull()
-
-        val recreated = createViewModel(testDispatcher = dispatcherExtension.testDispatcher)
-        dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
-
-        val state = recreated.uiState.value
-        assertThat(state.snackbar).isNull()
-        assertThat(state.data?.items?.map { it.key }).isEqualTo(expectedItemKeys)
-    }
 }
-

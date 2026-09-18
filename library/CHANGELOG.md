@@ -6,13 +6,57 @@
 
 ### Added
 
-- Added unit test coverage for `NavigationBackStackActions` covering top-level navigation, single-top deduplication, and back-stack pops.
-- Added unit test coverage for `DefaultFirebaseController` covering consent settings, event tracking, screen views, user properties, and error reporting.
+- Added `:library:feature:licenses`, `:library:feature:privacy`, and `:library:feature:changelog`.
+  The open source licenses screen, the privacy and legal preference list, and the changelog sheet
+  now ship as their own modules, so a host can depend on the one it needs instead of pulling the
+  whole About feature.
+- Added tap to copy to the App Toolkit version and Google Play services version rows on the About
+  screen. Tapping either copies its value, matching the device info row.
+- Added `snack_copied_to_clipboard` and `snack_copy_failed` in all 25 supported locales.
+- Added unit test coverage for `NavigationBackStackActions` covering top-level navigation,
+  single-top deduplication, and back-stack pops.
+- Added unit test coverage for `DefaultFirebaseController` covering consent settings, event
+  tracking, screen views, user properties, and error reporting.
 
 ### Changed
 
-- Renamed `FirebaseControllerImpl` to `DefaultFirebaseController` in `:library:integration:firebase`, conforming to repository naming conventions while retaining a backward-compatible typealias.
-- Relocated `DefaultInAppUpdateRepositoryTest` from `:library:feature:about` to `:library:integration:update` and applied the unit test convention plugin to `:library:integration:update` and `:library:integration:firebase`.
+- Copying from the About screen is handled by `AboutViewModel` instead of `AboutRepository`, and the
+  clipboard write now runs on the main thread. `AboutRepository.copyDeviceInfo` and
+  `CopyDeviceInfoUseCase` are removed.
+- `AboutItemAction.CopyToClipboard` replaces the device specific copy action and carries the label,
+  the exact text, and an optional confirmation message, so any About row can be made copyable.
+- `MainTopAppBar` and `DefaultNavigationRepository` moved from `:library:feature:about` to
+  `:library:navigation`, together with the drawer labels they use. Hosts update the import to
+  `com.mihaicristiancondrea.android.libs.apptoolkit.navigation.views.MainTopAppBar` and
+  `...navigation.data.repositories.DefaultNavigationRepository`.
+- `MainTopAppBar` shows its Support overflow action only when the host passes `onSupportClick`. It
+  no longer opens `SupportActivity` by itself, which removes the dependency on
+  `:library:feature:support`.
+- `LicensesScreen`, `LicensesActivity`, `PrivacySettingsList`, `PrivacySettingsProvider`,
+  `ChangelogDialog`, and the changelog repository, use case, and ViewModel moved to their new
+  modules. Hosts update the imports to the matching `feature.licenses`, `feature.privacy`, and
+  `feature.changelog` packages.
+- Privacy, legal, ads, permissions, and usage and diagnostics strings moved from
+  `:library:feature:about` to `:library:feature:privacy`, and the changelog strings moved to
+  `:library:feature:changelog`.
+- The privacy list is now data driven. `PrivacyViewModel` builds a list of `PrivacyItem` models with
+  pre computed card positions, replacing the hardcoded preference rows.
+- `LicensesScreen` reports its loading and success state through a new `LicensesViewModel` instead
+  of building a screen state inline.
+- Renamed `FirebaseControllerImpl` to `DefaultFirebaseController` in `:library:integration:firebase`,
+  conforming to repository naming conventions while retaining a backward-compatible typealias.
+- Relocated `DefaultInAppUpdateRepositoryTest` from `:library:feature:about` to
+  `:library:integration:update` and applied the unit test convention plugin to
+  `:library:integration:update` and `:library:integration:firebase`.
+
+### Fixed
+
+- Copying device info from the About screen did nothing visible on Android 13 and newer. The copy
+  ran on a background dispatcher, and the confirmation was suppressed on the assumption that the
+  system clipboard preview would appear, which many devices disable or restyle. The copy now runs
+  on the main thread and always confirms in app.
+- Fixed the About screen preference clicks, which built a nested lambda that was discarded instead
+  of being invoked, so tapping a row did nothing.
 
 ---
 
@@ -68,13 +112,6 @@
   application optimization through `optimization { enable = true }`.
 - Updated Ktor from `3.5.2` to `3.6.0`.
 - Updated Robolectric from `4.16.1` to `4.17`.
-
-### Fixed
-
-- A failed device info copy on the About screen said `Unable to load device info`, the message for a
-  failed load. It now says the copy did not go through, in all 25 supported locales. The copy also
-  uses the device report the screen is showing instead of resolving it a second time, so the
-  clipboard always matches what is on screen.
 
 ---
 

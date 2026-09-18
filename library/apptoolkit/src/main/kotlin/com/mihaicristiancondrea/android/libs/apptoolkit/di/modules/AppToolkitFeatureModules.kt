@@ -31,12 +31,15 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.Ap
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.github.GithubConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.di.aboutModule
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.di.changelogModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.di.helpModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.di.issueReporterModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReporterConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.di.licensesModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.di.onboardingModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers.StartupProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.di.permissionsModule
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.di.privacyModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.di.supportModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.di.reviewModule
 import org.koin.core.module.Module
@@ -57,6 +60,9 @@ fun appToolkitFeatureModules(
     supportModule,
     helpModule(hostBuildConfig = hostBuildConfig),
     aboutModule,
+    changelogModule,
+    licensesModule,
+    privacyModule,
     issueReporterModule(hostBuildConfig = hostBuildConfig, config = issueReporterConfig),
     permissionsModule,
     reviewModule,

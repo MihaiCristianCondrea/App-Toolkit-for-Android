@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">廣告</string>
+    <string name="code_of_conduct">行為準則</string>
+    <string name="legal">法律</string>
+    <string name="legal_notices">法律通知</string>
+    <string name="license">許可證</string>
+    <string name="permissions">權限</string>
+    <string name="privacy">隱私</string>
+    <string name="privacy_policy">隱私政策</string>
+    <string name="summary_preference_settings_ads">管理我們如何使用您的資訊來顯示相關廣告</string>
+    <string name="summary_preference_settings_code_of_conduct">了解服務中的行為規範和指南</string>
+    <string name="summary_preference_settings_legal_notices">檢視服務的法律資訊</string>
+    <string name="summary_preference_settings_permissions">管理授予我們服務的權限</string>
+    <string name="summary_preference_settings_privacy_policy">檢視我們如何處理您數據的政策</string>
+    <string name="summary_preference_settings_terms_of_service">檢視您使用我們服務時同意的條款</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">分享數據以幫助改進應用程式體驗</string>
+    <string name="terms_of_service">服務條款</string>
+    <string name="usage_and_diagnostics">使用與診斷</string>
+</resources>

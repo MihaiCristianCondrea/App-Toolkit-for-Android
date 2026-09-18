@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">Iklan</string>
+    <string name="code_of_conduct">Kode etik</string>
+    <string name="legal">Hukum</string>
+    <string name="legal_notices">Pemberitahuan hukum</string>
+    <string name="license">Lisensi</string>
+    <string name="permissions">Izin</string>
+    <string name="privacy">Privasi</string>
+    <string name="privacy_policy">Kebijakan privasi</string>
+    <string name="summary_preference_settings_ads">Kendalikan bagaimana kami menggunakan informasi Anda untuk menampilkan iklan yang relevan</string>
+    <string name="summary_preference_settings_code_of_conduct">Pahami aturan dan pedoman perilaku dalam layanan kami</string>
+    <string name="summary_preference_settings_legal_notices">Lihat informasi hukum tentang layanan kami</string>
+    <string name="summary_preference_settings_permissions">Kelola izin yang diberikan kepada layanan kami</string>
+    <string name="summary_preference_settings_privacy_policy">Lihat kebijakan yang mengatur bagaimana kami menangani data Anda</string>
+    <string name="summary_preference_settings_terms_of_service">Tinjau ketentuan yang Anda setujui saat menggunakan layanan kami</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">Bagikan data untuk membantu meningkatkan pengalaman dalam aplikasi</string>
+    <string name="terms_of_service">Ketentuan layanan</string>
+    <string name="usage_and_diagnostics">Penggunaan dan diagnostik</string>
+</resources>

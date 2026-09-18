@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">Reklam</string>
+    <string name="code_of_conduct">Uppförandekod</string>
+    <string name="legal">Juridisk information</string>
+    <string name="legal_notices">Juridiska meddelanden</string>
+    <string name="license">Licens</string>
+    <string name="permissions">Behörigheter</string>
+    <string name="privacy">Sekretess</string>
+    <string name="privacy_policy">Integritetspolicy</string>
+    <string name="summary_preference_settings_ads">Kontrollera hur vi använder din information för att visa relevanta annonser</string>
+    <string name="summary_preference_settings_code_of_conduct">Förstå reglerna och riktlinjerna för beteende inom vår tjänst</string>
+    <string name="summary_preference_settings_legal_notices">Visa juridisk information om vår tjänst</string>
+    <string name="summary_preference_settings_permissions">Hantera de behörigheter som beviljats vår tjänst</string>
+    <string name="summary_preference_settings_privacy_policy">Se policyn för hur vi hanterar dina data</string>
+    <string name="summary_preference_settings_terms_of_service">Granska villkoren du godkänner vid användning av vår tjänst</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">Dela data för att hjälpa till att förbättra appupplevelsen</string>
+    <string name="terms_of_service">Användarvillkor</string>
+    <string name="usage_and_diagnostics">Användning och diagnostik</string>
+</resources>

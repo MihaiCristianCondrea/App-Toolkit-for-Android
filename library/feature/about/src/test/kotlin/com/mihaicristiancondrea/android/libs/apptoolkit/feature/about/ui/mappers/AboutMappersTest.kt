@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.mapper
 import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItemAction
@@ -70,8 +71,31 @@ class AboutMappersTest {
         assertThat((deviceInfoItem.summary as UiTextHelper.DynamicString).content)
             .isEqualTo("device-info")
         assertThat(deviceInfoItem.position).isEqualTo(GroupedItemPosition.SINGLE)
-        assertThat(deviceInfoItem.action)
-            .isEqualTo(AboutItemAction.CopyDeviceInfo(deviceInfo = "device-info"))
+        assertThat(deviceInfoItem.action).isEqualTo(
+            AboutItemAction.CopyToClipboard(
+                label = UiTextHelper.StringResource(R.string.device_info),
+                text = "device-info",
+                successMessage = UiTextHelper.StringResource(R.string.snack_device_info_copied),
+            )
+        )
+    }
+
+    @Test
+    fun `version rows copy their own value without a custom confirmation`() {
+        val items = aboutInfo.toUiState().items
+
+        assertThat(items.preference(AboutItemKey.APP_TOOLKIT_VERSION).action).isEqualTo(
+            AboutItemAction.CopyToClipboard(
+                label = UiTextHelper.StringResource(R.string.app_toolkit_version),
+                text = "3.0.0-test",
+            )
+        )
+        assertThat(items.preference(AboutItemKey.GOOGLE_PLAY_SERVICES_VERSION).action).isEqualTo(
+            AboutItemAction.CopyToClipboard(
+                label = UiTextHelper.StringResource(R.string.google_play_services_version),
+                text = "24.01.12",
+            )
+        )
     }
 
     @Test

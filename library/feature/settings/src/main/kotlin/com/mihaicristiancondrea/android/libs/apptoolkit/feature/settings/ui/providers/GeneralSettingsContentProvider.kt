@@ -25,7 +25,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.AboutSc
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.AdvancedSettingsList
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.UsageAndDiagnosticsList
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.DisplaySettingsList
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.privacy.PrivacySettingsList
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.PrivacySettingsList
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.constants.SettingsContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.ThemeSettingsList
 

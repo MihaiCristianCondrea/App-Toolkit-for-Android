@@ -45,12 +45,21 @@ sealed interface AboutItemAction {
     data object OpenLicenses : AboutItemAction
 
     /**
-     * Copies [deviceInfo] to the system clipboard.
+     * Copies [text] to the system clipboard under [label].
      *
-     * The text travels with the action so the clipboard receives exactly the report the item
-     * displays, instead of a second lookup that could resolve under a different configuration.
+     * The text travels with the action so the clipboard receives exactly what the item displays,
+     * instead of a second lookup that could resolve under a different configuration.
+     *
+     * @property label Clipboard entry label, also used as the copied item's name.
+     * @property text The exact text written to the clipboard.
+     * @property successMessage Confirmation shown once the copy succeeds. When `null` the screen
+     * falls back to the generic copied-to-clipboard message.
      */
-    data class CopyDeviceInfo(val deviceInfo: String) : AboutItemAction
+    data class CopyToClipboard(
+        val label: UiTextHelper,
+        val text: String,
+        val successMessage: UiTextHelper? = null,
+    ) : AboutItemAction
 }
 
 /**

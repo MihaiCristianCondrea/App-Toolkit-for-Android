@@ -2,39 +2,38 @@
 
 ## Purpose
 
-Owns AppToolkit about, licenses, changelog, privacy, and shared main-navigation surfaces used by
-several settings/help flows.
+Owns the AppToolkit About screen: host application, App Toolkit, and Google Play services metadata,
+plus the tap-to-copy interaction for every entry it renders.
 
 ## Owns
 
-- About information/copy-device-info domain and presentation flows (including host application,
-  App Toolkit, and Google Play services versions).
-- Changelog retrieval/presentation and in-app-update triggering.
-- Licenses and library-extras screens.
-- Privacy/about provider contracts, the feature-specific top app bar, and related navigation
-  handlers.
-- The default repository for hosts that use the four standard drawer entries unchanged.
+- About information presentation (host application, App Toolkit, and Google Play services versions,
+  and the host-formatted device report).
+- Tap-to-copy for About entries, including the clipboard write and its in-app confirmation.
+- The drawer navigation click handler and the library-owned extras destination.
+- The GMS host factory used by consent, review, and update flows.
 
 ## Does not own
 
+- Open-source licenses, owned by [`:library:feature:licenses`](../licenses/README.md).
+- Privacy and legal entries, owned by [`:library:feature:privacy`](../privacy/README.md).
+- Changelog retrieval, presentation, and in-app-update triggering, owned by
+  [`:library:feature:changelog`](../changelog/README.md).
+- The main top app bar and the default drawer repository, owned by
+  [`:library:navigation`](../../navigation/README.md).
 - Host main screen and host route keys, owned by `:sample`.
 - Host identity strings, supplied as overridable defaults by `:library:core:common`.
-- Support, consent, review, and update implementations, owned by their feature/integration modules.
+- The device report itself, supplied by the host through `AboutSettingsProvider`.
 - Root Navigation 3 entry assembly, owned by `:library:apptoolkit`.
-- Generic bottom navigation, rails, and drawer rendering, owned by
-  [`:library:navigation`](../../navigation/README.md).
-- Stable and typed AppToolkit route keys, owned by
-  [`:library:navigation`](../../navigation/README.md).
 
 ## Depends on
 
-- `:library:core:common`, `:library:core:datastore`, `:library:core:network`, `:library:core:ui`,
-  and `:library:navigation` for shared state, persistence, HTTP, Compose, and navigation.
+- `:library:core:common` and `:library:core:ui` for shared state, platform helpers, and Compose.
+- [`:library:navigation`](../../navigation/README.md) for drawer models and routes.
+- [`:library:feature:licenses`](../licenses/README.md) to open the licenses screen from the About
+  list.
 - `:library:integration:consent`, `:library:integration:review`, and `:library:integration:update`
-  for privacy and Play flows.
-- [`:library:feature:support`](../support/README.md) for support navigation/content integration.
-- [`:library:navigation`](../../navigation/README.md) for drawer models, routes, and its host-facing
-  repository contract.
+  for the GMS host factory.
 
 ## Used by
 
@@ -48,50 +47,42 @@ flowchart TD
     AboutVM --> AboutRepo[AboutRepository]
     AboutRepo --> Build[Build and app-info providers]
     AboutVM --> Mapper[AboutMappers to AboutItem list]
-    AboutVM --> CopyUC[CopyDeviceInfoUseCase]
-    CopyUC --> Clipboard[Device report to clipboard]
-    ChangelogUI[Changelog dialog] --> ChangelogVM[ChangelogViewModel]
-    ChangelogVM --> GetChangelog[GetChangelogUseCase]
-    GetChangelog --> ChangelogRepo[ChangelogRepository]
-    ChangelogRepo --> Remote[Remote changelog]
-    ChangelogRepo --> Cache[DataStore cached changelog]
-    ChangelogVM --> Update[InAppUpdateRepository]
-    Update --> Play[Play update flow]
-    Routes[About / privacy / license routes] --> Consumers[Host, help, and settings]
+    AboutScreen --> CopyEvent[AboutEvent.CopyToClipboard]
+    CopyEvent --> AboutVM
+    AboutVM --> Clipboard[Main-thread clipboard write]
+    Clipboard --> Snackbar[In-app confirmation]
+    Routes[About route] --> Consumers[Host, help, and settings]
 ```
 
 ## Architectural decisions
 
-- About and changelog are separate state holders because one is stable application metadata and the
-  other coordinates remote/cache/update work with an independent lifecycle.
-- About screen presentation is data-driven: `AboutRepository` returns the raw `AboutInfo`
-  metadata and `ui/mappers` turns it into an ordered list of `AboutItem` models (headers and
-  grouped preferences) with titles, summaries, actions, and card positions, so `AboutScreen`
-  remains purely declarative and the data layer stays free of rendering concerns.
-- The device report travels with `AboutItemAction.CopyDeviceInfo`, so the clipboard receives the
-  text the item displays rather than a second lookup resolved later under a different
-  configuration.
+- About screen presentation is data-driven: `AboutRepository` returns the raw `AboutInfo` metadata
+  and `ui/mappers` turns it into an ordered list of `AboutItem` models (headers and grouped
+  preferences) with titles, summaries, actions, and card positions, so `AboutScreen` remains purely
+  declarative and the data layer stays free of rendering concerns.
+- Copying is a presentation interaction, not a repository query, so `AboutViewModel` performs the
+  clipboard write itself. It runs on the main dispatcher because writing the clipboard is a system
+  UI interaction, and it always confirms in-app: Android 13 and newer normally raise a system
+  clipboard preview, but OEMs disable or restyle it, which left users with no feedback at all.
+- `AboutItemAction.CopyToClipboard` carries the label, the exact text, and an optional confirmation
+  message, so any row becomes copyable without a new event, and the clipboard receives what the row
+  displays rather than a second lookup resolved under a different configuration.
 - Use cases are retained where they perform a named operation or combine concerns; repository calls
   that only forwarded data were not given synthetic wrappers.
-- Changelog persistence provides fallback content, while the remote response remains authoritative
-  for new versions.
-- Shared typed routes live in `:library:navigation`; this feature owns only its screen-specific
-  builders, labels, and handlers.
 
 ## Public contracts
 
-- About/privacy provider interfaces, `DefaultNavigationRepository`, `AboutItem` (UI model),
-  about/changelog repositories/models, `CopyDeviceInfoUseCase`, `GetChangelogUseCase`, and
-  screen/navigation composables.
+- `AboutSettingsProvider`, `AboutRepository`, `AboutInfo`, `AboutItem`, `AboutItemAction`,
+  `AboutEvent`, `AboutScreen`, `LibraryExtrasScreen`, `handleNavigationItemClick`, and
+  `GmsHostFactory`.
 
 ## Internal implementations
 
 - Device/build-info mapping, About item assembly with grouped card position calculation
-  (`ui/mappers`), Google Play services package inspection, clipboard behavior, changelog
-  HTTP/fallback logic, screen composition, and update-host creation.
+  (`ui/mappers`), Google Play services package inspection, and clipboard behavior.
 
 ## Current risks
 
-The module still extends beyond “about” into changelog, privacy, licenses, updates, and a
-feature-specific top app bar. Generic shell rendering has moved to `:library:navigation`, but the
-remaining presentation surface is still a broad and change-sensitive feature boundary.
+`AboutSettingsProvider` is a host-facing data contract that still lives under `ui/providers`, where
+the data layer reads it. Moving it would break every host that implements it, so it stays until a
+breaking release.

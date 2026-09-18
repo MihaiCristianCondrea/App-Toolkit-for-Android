@@ -56,4 +56,5 @@ dependencies {
     api(project(":library:feature:about"))
     api(project(":library:feature:help"))
     api(project(":library:feature:issuereporter"))
+    api(project(":library:feature:privacy"))
 }

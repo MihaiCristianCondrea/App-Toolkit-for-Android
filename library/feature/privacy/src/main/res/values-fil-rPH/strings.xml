@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">Mga Ad</string>
+    <string name="code_of_conduct">Kodigo ng pag-uugali</string>
+    <string name="legal">Legal</string>
+    <string name="legal_notices">Mga legal na paunawa</string>
+    <string name="license">Lisensya</string>
+    <string name="permissions">Mga Pahintulot</string>
+    <string name="privacy">Pribasya</string>
+    <string name="privacy_policy">Patakaran sa privacy</string>
+    <string name="summary_preference_settings_ads">Kontrolin kung paano namin ginagamit ang iyong impormasyon para ipakita sa iyo ang mga nauugnay na ad</string>
+    <string name="summary_preference_settings_code_of_conduct">Unawain ang mga patakaran at alituntunin para sa pag-uugali sa loob ng aming serbisyo</string>
+    <string name="summary_preference_settings_legal_notices">Tingnan ang legal na impormasyon tungkol sa aming serbisyo</string>
+    <string name="summary_preference_settings_permissions">Pamahalaan ang mga pahintulot na ibinigay sa aming serbisyo</string>
+    <string name="summary_preference_settings_privacy_policy">Tingnan ang patakaran na namamahala kung paano namin hinahawakan ang iyong data</string>
+    <string name="summary_preference_settings_terms_of_service">Suriin ang mga tuntunin na sinasang-ayunan mo kapag ginagamit ang aming serbisyo</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">Ibahagi ang data para makatulong na mapabuti ang karanasan sa loob ng app</string>
+    <string name="terms_of_service">Mga tuntunin ng serbisyo</string>
+    <string name="usage_and_diagnostics">Paggamit at mga diagnostic</string>
+</resources>

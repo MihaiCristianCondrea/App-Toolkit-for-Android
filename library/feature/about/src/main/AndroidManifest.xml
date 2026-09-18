@@ -20,11 +20,4 @@
     <queries>
         <package android:name="com.google.android.gms" />
     </queries>
-
-    <application>
-        <!-- Internal licenses screen displayed from settings/help flows only. -->
-        <activity
-            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.licenses.LicensesActivity"
-            android:exported="false" />
-    </application>
 </manifest>

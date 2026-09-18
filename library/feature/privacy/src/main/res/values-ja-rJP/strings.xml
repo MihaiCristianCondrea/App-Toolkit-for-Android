@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">広告</string>
+    <string name="code_of_conduct">行動規範</string>
+    <string name="legal">法的情報</string>
+    <string name="legal_notices">法的通知</string>
+    <string name="license">ライセンス</string>
+    <string name="permissions">権限</string>
+    <string name="privacy">プライバシー</string>
+    <string name="privacy_policy">プライバシーポリシー</string>
+    <string name="summary_preference_settings_ads">関連性のある広告を表示するために情報をどのように使用するかを制御する</string>
+    <string name="summary_preference_settings_code_of_conduct">サービス内での行動ルールとガイドラインを理解する</string>
+    <string name="summary_preference_settings_legal_notices">サービスに関する法的情報を表示する</string>
+    <string name="summary_preference_settings_permissions">当サービスに付与された権限を管理する</string>
+    <string name="summary_preference_settings_privacy_policy">データをどのように扱うかを規定するポリシーを表示する</string>
+    <string name="summary_preference_settings_terms_of_service">サービス利用時に同意する規約を確認する</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">アプリ内の体験向上に役立つデータを共有する</string>
+    <string name="terms_of_service">利用規約</string>
+    <string name="usage_and_diagnostics">使用状況と診断</string>
+</resources>

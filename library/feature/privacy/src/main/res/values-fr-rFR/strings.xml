@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">Publicités</string>
+    <string name="code_of_conduct">Code de conduite</string>
+    <string name="legal">Légal</string>
+    <string name="legal_notices">Mentions légales</string>
+    <string name="license">Licence</string>
+    <string name="permissions">Autorisations</string>
+    <string name="privacy">Confidentialité</string>
+    <string name="privacy_policy">Politique de confidentialité</string>
+    <string name="summary_preference_settings_ads">Contrôlez comment nous utilisons vos informations pour vous montrer des publicités pertinentes</string>
+    <string name="summary_preference_settings_code_of_conduct">Comprenez les règles et lignes directrices concernant le comportement au sein de notre service</string>
+    <string name="summary_preference_settings_legal_notices">Consultez les informations légales sur notre service</string>
+    <string name="summary_preference_settings_permissions">Gérez les autorisations accordées à notre service</string>
+    <string name="summary_preference_settings_privacy_policy">Consultez la politique qui régit le traitement de vos données</string>
+    <string name="summary_preference_settings_terms_of_service">Examinez les conditions que vous acceptez lors de l\'utilisation de notre service</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">Partagez des données pour améliorer l\'expérience de l\'application</string>
+    <string name="terms_of_service">Conditions d\'utilisation</string>
+    <string name="usage_and_diagnostics">Utilisation et diagnostics</string>
+</resources>

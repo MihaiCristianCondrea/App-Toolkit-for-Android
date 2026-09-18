@@ -17,19 +17,13 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 
+import android.content.Context
 import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories.AboutRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.usecases.CopyDeviceInfoUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutAction
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.mappers.toUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.AboutUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.copyTextToClipboard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onFailure
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onSuccess
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiSnackbar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
@@ -39,6 +33,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoadin
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.showSnackbar
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories.AboutRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutAction
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.mappers.toUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.AboutUiState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -46,13 +45,19 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
- * ViewModel for the About screen, including device info sharing.
+ * ViewModel for the About screen, including tap-to-copy of the entries it renders.
+ *
+ * Writing to the clipboard is a system UI interaction, so it runs on the main dispatcher rather
+ * than on IO, and it reports the outcome in-app on every platform version. Android 13 and newer
+ * normally raise a system clipboard preview, but OEMs disable or restyle it, so relying on it left
+ * users with no confirmation at all.
  */
 open class AboutViewModel(
     private val aboutRepository: AboutRepository,
-    private val copyDeviceInfoUseCase: CopyDeviceInfoUseCase,
+    private val context: Context,
     private val dispatchers: DispatcherProvider,
     firebaseController: FirebaseController,
 ) : LoggedScreenViewModel<AboutUiState, AboutEvent, AboutAction>(
@@ -70,9 +75,11 @@ open class AboutViewModel(
     override fun handleEvent(event: AboutEvent) {
         when (event) {
             is AboutEvent.Load -> loadAboutInfo()
-            is AboutEvent.CopyDeviceInfo -> copyDeviceInfo(
+
+            is AboutEvent.CopyToClipboard -> copyToClipboard(
                 label = event.label,
-                deviceInfo = event.deviceInfo,
+                text = event.text,
+                successMessage = event.successMessage,
             )
 
             is AboutEvent.DismissSnackbar -> dismissSnackbar()
@@ -105,45 +112,44 @@ open class AboutViewModel(
         }
     }
 
-    private fun copyDeviceInfo(label: String, deviceInfo: String) {
-        startOperation(action = Actions.COPY_DEVICE_INFO, extra = mapOf(ExtraKeys.LABEL to label))
+    private fun copyToClipboard(
+        label: String,
+        text: String,
+        successMessage: UiTextHelper?,
+    ) {
+        val extra: Map<String, String> = mapOf(ExtraKeys.LABEL to label)
 
         copyJob = copyJob.restart {
-            copyDeviceInfoUseCase(label = label, deviceInfo = deviceInfo)
-                .flowOn(dispatchers.io)
-                .onEach { result ->
-                    result
-                        .onSuccess { copyResult ->
-                            if (!copyResult.shouldShowFeedback) return@onSuccess
-                            updateStateThreadSafe {
-                                screenState.showSnackbar(
-                                    UiSnackbar(
-                                        message = UiTextHelper.StringResource(R.string.snack_device_info_copied),
-                                        isError = false,
-                                        timeStamp = System.nanoTime(),
-                                        type = ScreenMessageType.SNACKBAR,
-                                    )
-                                )
-                            }
-                        }
-                        .onFailure { showCopyFailure() }
-                }
-                .catchReport(
-                    action = Actions.COPY_DEVICE_INFO,
-                    extra = mapOf(ExtraKeys.LABEL to label)
-                ) {
-                    showCopyFailure()
-                }
-                .launchIn(viewModelScope)
+            launchReport(
+                action = Actions.COPY_TO_CLIPBOARD,
+                extra = extra,
+                block = {
+                    val copied: Boolean = withContext(dispatchers.main) {
+                        context.copyTextToClipboard(label = label, text = text)
+                    }
+                    check(copied) { "Clipboard rejected the copy for \"$label\"" }
+                    showSnackbar(
+                        message = successMessage
+                            ?: UiTextHelper.StringResource(R.string.snack_copied_to_clipboard),
+                        isError = false,
+                    )
+                },
+                onError = {
+                    showSnackbar(
+                        message = UiTextHelper.StringResource(R.string.snack_copy_failed),
+                        isError = true,
+                    )
+                },
+            )
         }
     }
 
-    private suspend fun showCopyFailure() {
+    private suspend fun showSnackbar(message: UiTextHelper, isError: Boolean) {
         updateStateThreadSafe {
             screenState.showSnackbar(
                 UiSnackbar(
-                    message = UiTextHelper.StringResource(R.string.snack_device_info_copy_failed),
-                    isError = true,
+                    message = message,
+                    isError = isError,
                     timeStamp = System.nanoTime(),
                     type = ScreenMessageType.SNACKBAR,
                 )
@@ -161,11 +167,10 @@ open class AboutViewModel(
 
     private object Actions {
         const val LOAD_ABOUT_INFO: String = "loadAboutInfo"
-        const val COPY_DEVICE_INFO: String = "copyDeviceInfo"
+        const val COPY_TO_CLIPBOARD: String = "copyToClipboard"
     }
 
     private object ExtraKeys {
         const val LABEL: String = "label"
     }
 }
-

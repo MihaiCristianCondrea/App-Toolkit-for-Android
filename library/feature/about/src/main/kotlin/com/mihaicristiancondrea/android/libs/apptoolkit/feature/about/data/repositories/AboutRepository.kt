@@ -18,13 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.CopyDeviceInfoResult
 
-/**
- * Repository interface for managing and retrieving application-related information
- * and performing device-specific utility operations.
- */
+/** Supplies the application and device metadata rendered by the About screen. */
 interface AboutRepository {
     suspend fun getAboutInfo(): AboutInfo
-    fun copyDeviceInfo(label: String, deviceInfo: String = ""): CopyDeviceInfoResult
 }

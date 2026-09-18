@@ -14,13 +14,13 @@ transition helpers shared by host and feature UI.
 - Shared activity and bottom-navigation transitions.
 - Click and selection state for navigation icons; reusable AVD resources live in DesignSystem.
 - Bottom navigation, navigation rail, drawer-item content, and hide-on-scroll shell rendering.
+- `MainTopAppBar`, the host main-screen app bar, and its Support overflow action.
+- `DefaultNavigationRepository`, the standard four-entry drawer list, and the labels that name it.
 
 ## Does not own
 
 - Destination registration, owned by `:library:apptoolkit` and host composition roots.
 - The icon slot and its rendering, owned by [`:library:core:designsystem`](../core/designsystem/README.md).
-- The standard four-item drawer implementation, owned by `:library:feature:about` because its labels
-  are feature resources.
 - Host-app routes and the root navigation graph, owned by `:sample`.
 
 ## Depends on
@@ -28,6 +28,8 @@ transition helpers shared by host and feature UI.
 - [`:library:core:common`](../core/common/README.md) for shared sizing constants.
 - [`:library:core:designsystem`](../core/designsystem/README.md) for interaction feedback, global
   UI preference values, and the `ToolkitIcon` slot navigation items expose.
+- [`:library:core:ui`](../core/ui/README.md) for the buttons, dropdown, and shared labels the top
+  app bar renders.
 - Navigation 3, Compose, and immutable collections materially define the module's public role.
 
 ## Used by
@@ -65,8 +67,12 @@ flowchart TD
   and suppress duplicate single-top entries.
 - This module owns shell rendering and mutation primitives but not destination registration; only
   the host/toolkit composition roots know the complete feature set.
-- The standard drawer repository contract is host-facing, while its default localized item list
-  remains in the About feature that owns those labels and actions.
+- The drawer repository contract and its default four-entry implementation live together here,
+  because the entries name navigation destinations this module already owns. Keeping the default in
+  a feature module forced that feature to own navigation labels it did not otherwise use.
+- `MainTopAppBar` takes `onSupportClick` from the host and hides the Support action when it is
+  absent, so this module depends on no feature module and a host without a support surface gets no
+  dead menu entry.
 
 ## Public contracts
 

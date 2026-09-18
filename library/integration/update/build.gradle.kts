@@ -37,6 +37,7 @@ android {
 }
 
 dependencies {
+    testImplementation(project(":library:core:testing"))
     api(project(":library:core:common"))
     api(libs.google.play.app.update.ktx)
 }
