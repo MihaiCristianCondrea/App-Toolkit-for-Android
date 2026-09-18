@@ -20,15 +20,14 @@
     <string name="device_info">Eszközinformációk</string>
     <string name="issue_description_label">Leírás</string>
     <string name="issue_description_placeholder">Írd le a hibát és azt, hogyan reprodukálható</string>
+    <string name="issue_done">Kész</string>
     <string name="issue_email_label">E-mail</string>
     <string name="issue_email_optional_placeholder">E-mail (nem kötelező)</string>
     <string name="issue_section_label">Hiba</string>
     <string name="issue_send">Küldés</string>
-    <string name="issue_submitted">A kérdését benyújtották.</string>
-    <string name="issue_submitted_successfully">A kiadás sikeresen benyújtva</string>
+    <string name="issue_submitted_message">Köszönjük, hogy segítesz jobbá tenni az alkalmazást.</string>
+    <string name="issue_submitted_title">Jelentés elküldve</string>
     <string name="issue_title_label">Cím</string>
-    <string name="open_button_label">Nyitott kérdés</string>
-    <string name="open_issue_in_browser">Nyissa meg a böngészőben</string>
+    <string name="open_button_label">Probléma megnyitása</string>
     <string name="snack_report_failed">A jelentés elküldése nem sikerült</string>
-    <string name="snack_report_success">A jelentés sikeresen elküldve</string>
 </resources>

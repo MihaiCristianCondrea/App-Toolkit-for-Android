@@ -25,6 +25,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.do
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.usecases.SendIssueReportUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.contracts.IssueReporterEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueSubmissionState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
@@ -176,11 +177,14 @@ class IssueReporterViewModelTest {
             advanceUntilIdle()
 
             val state = viewModel.uiState.value
-            val snackbar = state.snackbar!!
             assertThat(state.screenState).isInstanceOf(ScreenState.Success::class.java)
-            assertThat(state.data?.issueUrl).isEqualTo("url")
-            assertThat((snackbar.message as UiTextHelper.StringResource).resourceId)
-                .isEqualTo(R.string.snack_report_success)
+            assertThat(state.data?.submissionState)
+                .isEqualTo(IssueSubmissionState.Submitted(issueUrl = "url"))
+            // The author's text survives submission; clearing it belongs to dismissal.
+            assertThat(state.data?.title).isEqualTo("Bug")
+            assertThat(state.data?.description).isEqualTo("Desc")
+            // No message on success: the sheet's own confirmation is what says so.
+            assertThat(state.snackbar).isNull()
             assertThat(captured.captured.token).isEqualTo("token")
         }
     }
@@ -277,9 +281,81 @@ class IssueReporterViewModelTest {
             val state = viewModel.uiState.value
             val snackbar = state.snackbar!!
             assertThat(state.screenState).isInstanceOf(ScreenState.Error::class.java)
+            // Back to editing, with the report intact, so the author can fix it and try again.
+            assertThat(state.data?.submissionState).isEqualTo(IssueSubmissionState.Editing)
+            assertThat(state.data?.title).isEqualTo("Bug")
             assertThat((snackbar.message as UiTextHelper.StringResource).resourceId).isEqualTo(
                 expected
             )
+        }
+    }
+
+    @Test
+    fun `reset asked for during a send is applied once the report lands`() = runTest {
+        val dispatcher = StandardTestDispatcher(testScheduler)
+
+        withMainDispatcher(dispatcher) {
+            val useCase = mockk<SendIssueReportUseCase>()
+            every { useCase.invoke(any()) } returns flowOf(IssueReportResult.Success("url"))
+            val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
+            val viewModel = IssueReporterViewModel(
+                sendIssueReport = useCase,
+                githubTarget = githubTarget,
+                githubToken = "token",
+                repository = repository,
+                firebaseController = firebaseController,
+                dispatchers = dispatchers,
+            )
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
+
+            viewModel.onEvent(IssueReporterEvent.UpdateTitle("Bug"))
+            viewModel.onEvent(IssueReporterEvent.UpdateDescription("Desc"))
+            advanceUntilIdle()
+
+            // The sheet is dismissed on a report still in flight: the reset cannot run yet, and
+            // dropping it would leave the next opening showing this report's confirmation.
+            viewModel.onEvent(IssueReporterEvent.Send)
+            viewModel.onEvent(IssueReporterEvent.Reset)
+            advanceUntilIdle()
+
+            val data = viewModel.uiState.value.data
+            assertThat(data?.submissionState).isEqualTo(IssueSubmissionState.Editing)
+            assertThat(data?.title).isEmpty()
+        }
+    }
+
+    @Test
+    fun `reset clears the report after it has been submitted`() = runTest {
+        val dispatcher = StandardTestDispatcher(testScheduler)
+
+        withMainDispatcher(dispatcher) {
+            val useCase = mockk<SendIssueReportUseCase>()
+            every { useCase.invoke(any()) } returns flowOf(IssueReportResult.Success("url"))
+            val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
+            val viewModel = IssueReporterViewModel(
+                sendIssueReport = useCase,
+                githubTarget = githubTarget,
+                githubToken = "token",
+                repository = repository,
+                firebaseController = firebaseController,
+                dispatchers = dispatchers,
+            )
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
+
+            viewModel.onEvent(IssueReporterEvent.UpdateTitle("Bug"))
+            viewModel.onEvent(IssueReporterEvent.UpdateDescription("Desc"))
+            advanceUntilIdle()
+            viewModel.onEvent(IssueReporterEvent.Send)
+            advanceUntilIdle()
+            viewModel.onEvent(IssueReporterEvent.Reset)
+            advanceUntilIdle()
+
+            // What the next opening of the sheet starts from: an empty form, not a filed report.
+            val data = viewModel.uiState.value.data
+            assertThat(data?.submissionState).isEqualTo(IssueSubmissionState.Editing)
+            assertThat(data?.title).isEmpty()
+            assertThat(data?.description).isEmpty()
+            assertThat(viewModel.uiState.value.snackbar).isNull()
         }
     }
 }

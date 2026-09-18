@@ -20,15 +20,14 @@
     <string name="device_info">기기 정보</string>
     <string name="issue_description_label">설명</string>
     <string name="issue_description_placeholder">문제 내용과 재현 방법을 설명해 주세요</string>
+    <string name="issue_done">완료</string>
     <string name="issue_email_label">이메일</string>
     <string name="issue_email_optional_placeholder">이메일(선택사항)</string>
     <string name="issue_section_label">문제</string>
     <string name="issue_send">보내기</string>
-    <string name="issue_submitted">귀하의 문제가 제출되었습니다.</string>
-    <string name="issue_submitted_successfully">문제가 성공적으로 제출되었습니다</string>
+    <string name="issue_submitted_message">앱을 개선하는 데 도움을 주셔서 감사합니다.</string>
+    <string name="issue_submitted_title">보고서가 제출되었습니다</string>
     <string name="issue_title_label">제목</string>
-    <string name="open_button_label">열린 문제</string>
-    <string name="open_issue_in_browser">브라우저에서 열립니다</string>
+    <string name="open_button_label">이슈 열기</string>
     <string name="snack_report_failed">보고서 전송 실패</string>
-    <string name="snack_report_success">보고서가 성공적으로 전송되었습니다</string>
 </resources>

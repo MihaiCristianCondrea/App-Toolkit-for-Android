@@ -39,6 +39,8 @@ flowchart TD
     Shake[ShakeDetector via IssueReporterShakeManager] --> Launcher[IssueReporterLauncher]
     Launcher -->|ComposeView on the content view| Sheet
     Sheet --> Screen[IssueReporterContent]
+    Screen -->|Editing / Sending| Form[IssueReportForm and device info]
+    Screen -->|Submitted| Done[IssueSubmittedContent]
     Screen -->|initialize| VM[IssueReporterViewModel]
     VM -->|captureDeviceInfo| Repo[IssueReporterRepository]
     Repo --> Device[DeviceInfoLocalDataSource]
@@ -84,13 +86,28 @@ flowchart TD
 - The send action is a persistent bottom button, not the floating one the full screen used. A
   floating action button inside another floating surface reads as an unrelated second layer, and the
   sheet is one focused operation with one action that commits it.
-- Every screen state renders through the same form. `ScreenState.Error` carries its message
-  separately and leaves `data` intact, so swapping the form for an error layout would throw away a
-  report the author is still holding; loading only marks the send button busy.
-- Results are toasts, not snackbars. A snackbar belongs to the surface hosting it, and this one is a
-  sheet: it would land inside the sheet, over the send button that produced it, and go away with the
-  sheet if the author dismissed it on the way. A toast is the system's own window, so a report that
-  succeeded says so either way.
+- Submission is a state, not an inference. `IssueSubmissionState` names Editing, Sending and
+  Submitted, and the sheet shows exactly one of them. The reporter used to read "submitted" off a
+  non-null issue URL, which left it showing an editable form, a live send button and a confirmation
+  of a report already filed at the same time, telling the author the task was both finished and not.
+  Submitting now replaces the editor outright, so the sheet shrinks to a confirmation and the
+  shrinking is itself the signal that there is nothing left to do.
+- A failure goes back to Editing with the report intact, because the next thing the author does is
+  fix it and send again. `ScreenState.Error` carries its message separately and leaves `data` alone,
+  so swapping the form for an error layout would throw away a report still being held.
+- The form fields survive submission and are cleared on dismissal. They are what the author wrote,
+  and the confirmation is part of the same interaction; clearing them the moment the network
+  answered would destroy that input while the author is still looking at the sheet. Done is a
+  dismissal like any other and takes the same path.
+- Done is the primary action on the confirmation and opening the issue is the quiet one, because
+  finishing is the normal next step. There is deliberately no "report another": it adds a decision
+  to what should be the simplest state in the feature, and reopening the reporter covers it.
+- Messages are toasts, not snackbars. A snackbar belongs to the surface hosting it, and this one is
+  a sheet: it would land inside the sheet, over the send button that produced it, and go away with
+  the sheet if the author dismissed it on the way. A toast is the system's own window, so a report
+  that succeeded says so even when the sheet was dismissed while it was still sending.
+- Success takes the keyboard down, clears focus and fires a confirm haptic. The keyboard belongs to
+  a form that is being replaced, and the sheet shrinking is easy to miss on a glance away.
 - Device capture is a local data-source responsibility. The domain model is a plain immutable value
   and does not read Android globals or a `Context` during construction.
 - The repository is the only data-layer entry point used by the ViewModel; the source-level
@@ -137,8 +154,8 @@ and unavailable versions still produce a null name and version code -1.
 
 ## Internal implementations
 
-- GitHub request DTO/mapping, device inspection, repository implementation, sheet composition, and
-  the `ComposeView` the launcher mounts.
+- GitHub request DTO/mapping, device inspection, repository implementation, sheet composition,
+  `IssueSubmittedContent`, and the `ComposeView` the launcher mounts.
 - `ShakeDetector`, whose thresholds are constructor parameters so they can be tuned against real
   devices without changing the gesture logic.
 

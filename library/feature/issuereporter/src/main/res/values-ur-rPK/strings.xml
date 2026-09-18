@@ -20,15 +20,14 @@
     <string name="device_info">ڈیوائس کی معلومات</string>
     <string name="issue_description_label">تفصیل</string>
     <string name="issue_description_placeholder">مسئلہ اور اسے دہرانے کا طریقہ بیان کریں</string>
+    <string name="issue_done">ہو گیا</string>
     <string name="issue_email_label">ای میل</string>
     <string name="issue_email_optional_placeholder">ای میل (اختیاری)</string>
     <string name="issue_section_label">مسئلہ</string>
     <string name="issue_send">بھیجیں</string>
-    <string name="issue_submitted">آپ کا مسئلہ پیش کیا گیا تھا.</string>
-    <string name="issue_submitted_successfully">مسئلہ کامیابی کے ساتھ جمع کرایا گیا</string>
+    <string name="issue_submitted_message">ایپ کو بہتر بنانے میں مدد کرنے کا شکریہ۔</string>
+    <string name="issue_submitted_title">رپورٹ بھیج دی گئی</string>
     <string name="issue_title_label">عنوان</string>
-    <string name="open_button_label">کھلا مسئلہ</string>
-    <string name="open_issue_in_browser">براؤزر میں کھلا</string>
+    <string name="open_button_label">مسئلہ کھولیں</string>
     <string name="snack_report_failed">رپورٹ بھیجنے میں ناکام</string>
-    <string name="snack_report_success">رپورٹ کامیابی سے بھیج دی گئی</string>
 </resources>

@@ -20,15 +20,14 @@
     <string name="device_info">Thông tin thiết bị</string>
     <string name="issue_description_label">Mô tả</string>
     <string name="issue_description_placeholder">Mô tả sự cố và cách tái hiện</string>
+    <string name="issue_done">Xong</string>
     <string name="issue_email_label">Email</string>
     <string name="issue_email_optional_placeholder">Email (không bắt buộc)</string>
     <string name="issue_section_label">Vấn đề</string>
     <string name="issue_send">Gửi</string>
-    <string name="issue_submitted">Vấn đề của bạn đã được gửi.</string>
-    <string name="issue_submitted_successfully">Vấn đề được gửi thành công</string>
+    <string name="issue_submitted_message">Cảm ơn bạn đã giúp cải thiện ứng dụng.</string>
+    <string name="issue_submitted_title">Đã gửi báo cáo</string>
     <string name="issue_title_label">Tiêu đề</string>
-    <string name="open_button_label">Vấn đề mở</string>
-    <string name="open_issue_in_browser">Mở trong trình duyệt</string>
+    <string name="open_button_label">Mở vấn đề</string>
     <string name="snack_report_failed">Gửi báo cáo thất bại</string>
-    <string name="snack_report_success">Báo cáo đã được gửi thành công</string>
 </resources>

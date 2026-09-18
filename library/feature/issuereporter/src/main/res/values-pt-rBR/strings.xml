@@ -20,15 +20,14 @@
     <string name="device_info">Informações do dispositivo</string>
     <string name="issue_description_label">Descrição</string>
     <string name="issue_description_placeholder">Descreva o problema e como reproduzi-lo</string>
+    <string name="issue_done">Concluído</string>
     <string name="issue_email_label">E-mail</string>
     <string name="issue_email_optional_placeholder">E-mail (opcional)</string>
     <string name="issue_section_label">Problema</string>
     <string name="issue_send">Enviar</string>
-    <string name="issue_submitted">Seu problema foi enviado.</string>
-    <string name="issue_submitted_successfully">Edição enviada com sucesso</string>
+    <string name="issue_submitted_message">Obrigado por ajudar a melhorar o app.</string>
+    <string name="issue_submitted_title">Relatório enviado</string>
     <string name="issue_title_label">Título</string>
-    <string name="open_button_label">Emissão aberta</string>
-    <string name="open_issue_in_browser">Aberto no navegador</string>
+    <string name="open_button_label">Abrir problema</string>
     <string name="snack_report_failed">Falha ao enviar relatório</string>
-    <string name="snack_report_success">Relatório enviado com sucesso</string>
 </resources>

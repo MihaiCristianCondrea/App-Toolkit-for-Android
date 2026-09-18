@@ -20,15 +20,14 @@
     <string name="device_info">Informasi perangkat</string>
     <string name="issue_description_label">Deskripsi</string>
     <string name="issue_description_placeholder">Jelaskan masalahnya dan cara mereproduksinya</string>
+    <string name="issue_done">Selesai</string>
     <string name="issue_email_label">Email</string>
     <string name="issue_email_optional_placeholder">Email (opsional)</string>
     <string name="issue_section_label">Masalah</string>
     <string name="issue_send">Kirim</string>
-    <string name="issue_submitted">Masalah Anda telah diajukan.</string>
-    <string name="issue_submitted_successfully">Masalah yang berhasil diserahkan</string>
+    <string name="issue_submitted_message">Terima kasih telah membantu meningkatkan aplikasi ini.</string>
+    <string name="issue_submitted_title">Laporan terkirim</string>
     <string name="issue_title_label">Judul</string>
-    <string name="open_button_label">Masalah terbuka</string>
-    <string name="open_issue_in_browser">Buka di browser</string>
+    <string name="open_button_label">Buka masalah</string>
     <string name="snack_report_failed">Gagal mengirim laporan</string>
-    <string name="snack_report_success">Laporan berhasil dikirim</string>
 </resources>

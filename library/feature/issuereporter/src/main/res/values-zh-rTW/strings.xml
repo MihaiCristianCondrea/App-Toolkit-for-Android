@@ -20,15 +20,14 @@
     <string name="device_info">設備資訊</string>
     <string name="issue_description_label">描述</string>
     <string name="issue_description_placeholder">請描述問題以及重現步驟</string>
+    <string name="issue_done">完成</string>
     <string name="issue_email_label">電子郵件</string>
     <string name="issue_email_optional_placeholder">電子郵件（選填）</string>
     <string name="issue_section_label">問題</string>
     <string name="issue_send">傳送</string>
-    <string name="issue_submitted">您的問題已提交！</string>
-    <string name="issue_submitted_successfully">問題成功提交</string>
+    <string name="issue_submitted_message">感謝你協助我們改進這個應用程式。</string>
+    <string name="issue_submitted_title">已送出回報</string>
     <string name="issue_title_label">標題</string>
-    <string name="open_button_label">公開問題</string>
-    <string name="open_issue_in_browser">在瀏覽器中打開</string>
+    <string name="open_button_label">開啟問題</string>
     <string name="snack_report_failed">無法傳送報告</string>
-    <string name="snack_report_success">報告已成功送出</string>
 </resources>

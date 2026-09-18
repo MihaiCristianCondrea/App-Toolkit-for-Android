@@ -20,15 +20,14 @@
     <string name="device_info">Impormasyon ng device</string>
     <string name="issue_description_label">Paglalarawan</string>
     <string name="issue_description_placeholder">Ilarawan ang isyu at kung paano ito maulit</string>
+    <string name="issue_done">Tapos na</string>
     <string name="issue_email_label">Email</string>
     <string name="issue_email_optional_placeholder">Email (opsyonal)</string>
     <string name="issue_section_label">Isyu</string>
     <string name="issue_send">Ipadala</string>
-    <string name="issue_submitted">Isinumite ang iyong isyu.</string>
-    <string name="issue_submitted_successfully">Matagumpay na isinumite ang isyu</string>
+    <string name="issue_submitted_message">Salamat sa pagtulong na mapabuti ang app.</string>
+    <string name="issue_submitted_title">Naipadala ang ulat</string>
     <string name="issue_title_label">Pamagat</string>
-    <string name="open_button_label">Bukas na isyu</string>
-    <string name="open_issue_in_browser">Buksan sa browser</string>
+    <string name="open_button_label">Buksan ang isyu</string>
     <string name="snack_report_failed">Nabigo ang pagpapadala ng ulat</string>
-    <string name="snack_report_success">Matagumpay na naipadala ang ulat</string>
 </resources>

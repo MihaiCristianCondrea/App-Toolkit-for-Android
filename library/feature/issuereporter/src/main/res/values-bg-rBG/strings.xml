@@ -20,15 +20,14 @@
     <string name="device_info">Информация за устройството</string>
     <string name="issue_description_label">Описание</string>
     <string name="issue_description_placeholder">Опишете проблема и как да бъде възпроизведен</string>
+    <string name="issue_done">Готово</string>
     <string name="issue_email_label">Имейл</string>
     <string name="issue_email_optional_placeholder">Имейл (по избор)</string>
     <string name="issue_section_label">Проблем</string>
     <string name="issue_send">Изпрати</string>
-    <string name="issue_submitted">Проблемът ви беше изпратен.</string>
-    <string name="issue_submitted_successfully">Емисия, изпратена успешно</string>
+    <string name="issue_submitted_message">Благодарим ви, че помагате да подобрим приложението.</string>
+    <string name="issue_submitted_title">Докладът е изпратен</string>
     <string name="issue_title_label">Заглавие</string>
-    <string name="open_button_label">Отворен брой</string>
-    <string name="open_issue_in_browser">Отворен в браузъра</string>
+    <string name="open_button_label">Отваряне на проблема</string>
     <string name="snack_report_failed">Неуспешно изпращане на доклада</string>
-    <string name="snack_report_success">Докладът е изпратен успешно</string>
 </resources>

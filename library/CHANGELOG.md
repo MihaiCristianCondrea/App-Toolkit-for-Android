@@ -35,6 +35,14 @@
   at the bottom.
 - The reporter reports its results as toasts instead of snackbars, so a report that succeeded says
   so even if the sheet was dismissed on the way.
+- A submitted report now replaces the form with a confirmation instead of stacking a success card on
+  top of it. The sheet shrinks to a check, `Report submitted`, an `Open issue` link and a `Done`
+  button, takes the keyboard down and gives a confirm haptic. The form is cleared when the sheet is
+  dismissed rather than when the network answers, and a failed send returns to the form with the
+  report intact.
+- Corrected the `open_button_label` translations in all 25 supported locales. They rendered "open
+  issue" as an adjective, an issue that happens to be open, rather than the action the button
+  performs.
 - Removed `IssueReporterActivity`, its manifest entry, and the `Theme.AppToolkit.IssueReporter`
   style. Hosts that started the activity directly call `IssueReporterLauncher.show(activity)`.
 - Removed `AdvancedSettingsProvider` and its `bugReportUrl`. Advanced settings stopped using the URL

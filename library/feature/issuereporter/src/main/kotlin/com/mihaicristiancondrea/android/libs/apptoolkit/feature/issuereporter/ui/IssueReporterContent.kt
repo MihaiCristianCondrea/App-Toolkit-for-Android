@@ -19,6 +19,10 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.u
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,7 +40,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.hapticfeedback.HapticFeedback
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -46,7 +57,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiSnackbar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
@@ -58,12 +68,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.La
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.contracts.IssueReporterEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueReporterUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueSubmissionState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.ISSUE_REPORTER_SCREEN_NAME
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.IssueReporterActionNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.issueReporterActionEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.views.DeviceInfoSection
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.views.IssueReportForm
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.views.IssueSubmittedCard
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.views.IssueSubmittedContent
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -73,26 +84,26 @@ private const val ISSUE_REPORTER_SCREEN_CLASS = "IssueReporterContent"
  * The whole issue reporter, as content a container can place anywhere.
  *
  * It owns no window and no navigation. Presentation belongs to whatever shows it, today the modal
- * sheet behind
- * [IssueReporterLauncher][com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.presentation.IssueReporterLauncher];
- * this composable only renders the form and forwards intent to [IssueReporterViewModel]. That is
- * what lets settings and the shake gesture share one implementation instead of one screen each.
+ * sheet in [IssueReporterBottomSheet]; this composable only renders state and forwards intent to
+ * [IssueReporterViewModel]. That is what lets settings and the shake gesture share one
+ * implementation instead of one screen each.
  *
- * The send action is a persistent bottom button rather than the floating one the full screen used.
- * A floating action button inside another floating surface reads as a second, unrelated layer, and
- * the sheet is a single focused operation with exactly one action to commit it.
+ * The reporter is a small state machine, and the sheet shows exactly one of its states. Editing and
+ * sending are the form, with a persistent send button rather than the floating one the full screen
+ * used: a floating action button inside another floating surface reads as an unrelated second
+ * layer. Submitting replaces all of it with [IssueSubmittedContent], so the sheet shrinks to a
+ * confirmation instead of leaving the author reading a form they have already finished with.
  *
- * Every screen state is rendered through the same form. `ScreenState.Error` carries its message
- * separately and leaves `data` intact, so replacing the form with an error layout would throw away
- * a report the author is still holding; `ScreenState.IsLoading` only marks the send button busy.
+ * Failures go the other way, back to editing with the report intact, and say so through a toast. A
+ * snackbar belongs to the surface hosting it, and this one is a sheet: it would land inside the
+ * sheet, over the send button that produced it, and vanish with the sheet if the author dismissed
+ * it on the way. A toast is the system's own window.
  *
- * Results are reported as toasts. A snackbar belongs to the surface that hosts it, and this one is
- * a sheet: it would land inside the sheet, over the send button that produced it, and vanish with
- * the sheet if the author dismissed it on the way. A toast is the system's own window, so a report
- * that succeeded says so whether or not the sheet is still up.
+ * [onDone] is how the confirmation closes the reporter, so a container passes its own dismissal.
  */
 @Composable
 fun IssueReporterContent(
+    onDone: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: IssueReporterViewModel = koinViewModel(),
 ) {
@@ -100,7 +111,7 @@ fun IssueReporterContent(
 
     val uiStateScreen: UiStateScreen<IssueReporterUiState> by viewModel.uiState.collectAsStateWithLifecycle()
     val data: IssueReporterUiState = uiStateScreen.data ?: IssueReporterUiState()
-    val isSending: Boolean = uiStateScreen.screenState is ScreenState.IsLoading
+    val submissionState: IssueSubmissionState = data.submissionState
 
     TrackScreenView(
         firebaseController = firebaseController,
@@ -113,6 +124,8 @@ fun IssueReporterContent(
         screenName = ISSUE_REPORTER_SCREEN_NAME,
         screenState = uiStateScreen.screenState,
     )
+
+    SubmissionSucceeded(submissionState = submissionState)
 
     // navigationBarsPadding() comes first on purpose: it consumes the navigation bar inset, so the
     // imePadding() after it adds only what the keyboard needs on top, instead of both insets
@@ -127,6 +140,48 @@ fun IssueReporterContent(
                 end = SizeConstants.LargeSize,
                 bottom = SizeConstants.LargeSize,
             ),
+    ) {
+        AnimatedContent(
+            // Keyed on the kind of state, not the state itself, so a Submitted value carrying a
+            // different URL does not restart the transition.
+            targetState = submissionState is IssueSubmissionState.Submitted,
+            transitionSpec = { fadeIn() togetherWith fadeOut() },
+            label = "IssueReporterSubmission",
+        ) { submitted: Boolean ->
+            if (submitted && submissionState is IssueSubmissionState.Submitted) {
+                IssueSubmittedContent(
+                    issueUrl = submissionState.issueUrl,
+                    firebaseController = firebaseController,
+                    onDone = onDone,
+                )
+            } else {
+                IssueReportEditor(
+                    data = data,
+                    firebaseController = firebaseController,
+                    isSending = submissionState is IssueSubmissionState.Sending,
+                    onEvent = viewModel::onEvent,
+                )
+            }
+        }
+
+        ScreenMessageToast(
+            snackbar = uiStateScreen.snackbar,
+            onShown = { viewModel.onEvent(IssueReporterEvent.DismissSnackbar) },
+        )
+    }
+}
+
+/** The report being written: the form, what will be attached, and the action that files it. */
+@Composable
+private fun IssueReportEditor(
+    data: IssueReporterUiState,
+    firebaseController: FirebaseController,
+    isSending: Boolean,
+    onEvent: (IssueReporterEvent) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(space = SizeConstants.MediumSize),
     ) {
         Text(
@@ -134,14 +189,29 @@ fun IssueReporterContent(
             style = MaterialTheme.typography.headlineSmall,
         )
 
-        IssueReporterSections(
-            data = data,
-            firebaseController = firebaseController,
-            onEvent = viewModel::onEvent,
-            // The sheet wraps its content while it fits and stops growing once it fills the screen,
-            // at which point the report scrolls under a send button that stays put.
-            modifier = Modifier.weight(weight = 1f, fill = false),
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                // The sheet wraps its content while it fits and stops growing once it fills the
+                // screen, at which point the report scrolls under a send button that stays put.
+                .weight(weight = 1f, fill = false)
+                .verticalScroll(state = rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
+        ) {
+            IssueReportForm(
+                data = data,
+                firebaseController = firebaseController,
+                onEvent = onEvent,
+            )
+
+            LargeVerticalSpacer()
+
+            DeviceInfoSection(
+                deviceInfoText = data.deviceInfoText,
+                firebaseController = firebaseController,
+                onExpandRequested = { onEvent(IssueReporterEvent.RequestDeviceInfo) },
+            )
+        }
 
         GeneralButton(
             onClick = {
@@ -155,7 +225,7 @@ fun IssueReporterContent(
                         ),
                     )
                 )
-                viewModel.onEvent(IssueReporterEvent.Send)
+                onEvent(IssueReporterEvent.Send)
             },
             style = GeneralButtonStyle.Filled,
             enabled = !isSending,
@@ -164,11 +234,28 @@ fun IssueReporterContent(
             measurements = ButtonMeasurements.Medium,
             modifier = Modifier.fillMaxWidth(),
         )
+    }
+}
 
-        ScreenMessageToast(
-            snackbar = uiStateScreen.snackbar,
-            onShown = { viewModel.onEvent(IssueReporterEvent.DismissSnackbar) },
-        )
+/**
+ * Closes the editing session the moment the report lands.
+ *
+ * The keyboard and the focused field belong to a form that is about to be replaced, so leaving them
+ * up would cover the confirmation with an input for something already sent. The haptic is the other
+ * half of that: the sheet shrinking is easy to miss on a glance away from the screen.
+ */
+@Composable
+private fun SubmissionSucceeded(submissionState: IssueSubmissionState) {
+    val keyboardController: SoftwareKeyboardController? = LocalSoftwareKeyboardController.current
+    val focusManager: FocusManager = LocalFocusManager.current
+    val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
+    val submitted: Boolean = submissionState is IssueSubmissionState.Submitted
+
+    LaunchedEffect(submitted) {
+        if (!submitted) return@LaunchedEffect
+        keyboardController?.hide()
+        focusManager.clearFocus(force = true)
+        hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.Confirm)
     }
 }
 
@@ -201,71 +288,52 @@ private fun ScreenMessageToast(
     }
 }
 
-/** The report itself: confirmation when there is one, the form, and what will be attached. */
-@Composable
-private fun IssueReporterSections(
-    data: IssueReporterUiState,
-    firebaseController: FirebaseController,
-    onEvent: (IssueReporterEvent) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .verticalScroll(state = rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
-    ) {
-        if (!data.issueUrl.isNullOrEmpty()) {
-            IssueSubmittedCard(
-                issueUrl = data.issueUrl,
-                firebaseController = firebaseController,
-            )
-        }
-
-        IssueReportForm(
-            data = data,
-            firebaseController = firebaseController,
-            onEvent = onEvent,
-        )
-
-        LargeVerticalSpacer()
-
-        DeviceInfoSection(
-            deviceInfoText = data.deviceInfoText,
-            firebaseController = firebaseController,
-            onExpandRequested = { onEvent(IssueReporterEvent.RequestDeviceInfo) },
-        )
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
-private fun IssueReporterSectionsPreview() {
+private fun IssueReportEditorPreview() {
     val dummyData = IssueReporterUiState(
         title = "Sample Bug Title",
         description = "This is a detailed description of the bug encounter in the sample application.",
         email = "user@example.com",
         deviceInfoText = "Device: Pixel 7\nOS: Android 14\nApp Version: 1.0.0",
     )
-    val dummyController = object : FirebaseController {
-        override fun updateConsent(analyticsGranted: Boolean, adStorageGranted: Boolean, adUserDataGranted: Boolean, adPersonalizationGranted: Boolean) {}
-        override fun setAnalyticsEnabled(enabled: Boolean) {}
-        override fun setCrashlyticsEnabled(enabled: Boolean) {}
-        override fun setPerformanceEnabled(enabled: Boolean) {}
-        override fun logBreadcrumb(message: String, attributes: Map<String, String>) {}
-        override fun reportViewModelError(viewModelName: String, action: String, throwable: Throwable, extraKeys: Map<String, String>) {}
-        override fun recordNonFatal(throwable: Throwable, attributes: Map<String, String>) {}
-        override fun logEvent(event: AnalyticsEvent) {}
-        override fun logScreenView(screenName: String, screenClass: String?) {}
-        override fun setUserProperty(name: String, value: String?) {}
-    }
+
     MaterialTheme {
         Column(modifier = Modifier.padding(all = SizeConstants.LargeSize)) {
-            IssueReporterSections(
+            IssueReportEditor(
                 data = dummyData,
-                firebaseController = dummyController,
+                firebaseController = PreviewFirebaseController,
+                isSending = false,
                 onEvent = {},
             )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun IssueSubmittedContentPreview() {
+    MaterialTheme {
+        Column(modifier = Modifier.padding(all = SizeConstants.LargeSize)) {
+            IssueSubmittedContent(
+                issueUrl = "https://github.com/example/example/issues/1",
+                firebaseController = PreviewFirebaseController,
+                onDone = {},
+            )
+        }
+    }
+}
+
+/** Does nothing, so the previews can render composables that report what the author does. */
+private object PreviewFirebaseController : FirebaseController {
+    override fun updateConsent(analyticsGranted: Boolean, adStorageGranted: Boolean, adUserDataGranted: Boolean, adPersonalizationGranted: Boolean) = Unit
+    override fun setAnalyticsEnabled(enabled: Boolean) = Unit
+    override fun setCrashlyticsEnabled(enabled: Boolean) = Unit
+    override fun setPerformanceEnabled(enabled: Boolean) = Unit
+    override fun logBreadcrumb(message: String, attributes: Map<String, String>) = Unit
+    override fun reportViewModelError(viewModelName: String, action: String, throwable: Throwable, extraKeys: Map<String, String>) = Unit
+    override fun recordNonFatal(throwable: Throwable, attributes: Map<String, String>) = Unit
+    override fun logEvent(event: AnalyticsEvent) = Unit
+    override fun logScreenView(screenName: String, screenClass: String?) = Unit
+    override fun setUserProperty(name: String, value: String?) = Unit
 }

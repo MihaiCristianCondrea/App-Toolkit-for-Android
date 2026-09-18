@@ -66,17 +66,22 @@ fun IssueReporterBottomSheet(
         onDispose { IssueReporterPresence.onHidden() }
     }
 
+    // The report is composed in a ViewModel that outlives the sheet, so an abandoned draft would
+    // come back the next time the sheet opened, along with the confirmation of a report that was
+    // already filed. The reset belongs here, at the end of the interaction, and not to the network
+    // answering: the author's text stays on screen for as long as the sheet does.
+    val dismiss: () -> Unit = {
+        viewModel.onEvent(IssueReporterEvent.Reset)
+        onDismissRequest()
+    }
+
     ModalBottomSheet(
-        onDismissRequest = {
-            // The report is composed in a ViewModel that outlives the sheet, so an abandoned draft
-            // would come back the next time the sheet opened, along with the confirmation card of a
-            // report that was already filed.
-            viewModel.onEvent(IssueReporterEvent.Reset)
-            onDismissRequest()
-        },
+        onDismissRequest = dismiss,
         sheetState = sheetState,
         modifier = modifier,
     ) {
-        IssueReporterContent(viewModel = viewModel)
+        // Done on the confirmation is a dismissal like any other, so it goes through the same path
+        // and gets the same reset.
+        IssueReporterContent(onDone = dismiss, viewModel = viewModel)
     }
 }

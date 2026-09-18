@@ -29,6 +29,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers.asDataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.models.IssueReporterError
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueReporterUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueSubmissionState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.GithubToken
@@ -77,6 +78,7 @@ class IssueReporterViewModel(
 ) {
 
     private var sendJob: Job? = null
+    private var resetAfterSend: Boolean = false
 
     override fun handleEvent(event: IssueReporterEvent) {
         when (event) {
@@ -105,19 +107,32 @@ class IssueReporterViewModel(
     /**
      * Clears the report and any message waiting to be shown.
      *
-     * A send already in flight is left alone rather than cancelled. The author asked for that
-     * report to be filed, and closing the sheet is not taking it back; the state it produces is
-     * cleared by the next reset instead.
+     * A send already in flight is left to finish rather than cancelled. The author asked for that
+     * report to be filed, and closing the sheet is not taking it back. The reset is held until the
+     * answer lands, because dropping it would leave the reporter holding a submitted state that the
+     * next opening of the sheet would show as a fresh confirmation.
      */
     private fun resetReport() {
-        if (sendJob?.isActive == true) return
-
-        viewModelScope.launch {
-            updateStateThreadSafe {
-                screenState.setSuccess(data = IssueReporterUiState())
-                screenState.dismissSnackbar()
-            }
+        if (sendJob?.isActive == true) {
+            resetAfterSend = true
+            return
         }
+
+        viewModelScope.launch { applyReset() }
+    }
+
+    private suspend fun applyReset() {
+        updateStateThreadSafe {
+            screenState.setSuccess(data = IssueReporterUiState())
+            screenState.dismissSnackbar()
+        }
+    }
+
+    /** Runs a reset the author asked for while the report was still on its way. */
+    private suspend fun applyPendingReset() {
+        if (!resetAfterSend) return
+        resetAfterSend = false
+        applyReset()
     }
 
     private fun dismissSnackbar() {
@@ -167,6 +182,7 @@ class IssueReporterViewModel(
                 block = {
                     updateStateThreadSafe {
                         screenState.dismissSnackbar()
+                        screenState.copyData { copy(submissionState = IssueSubmissionState.Sending) }
                         screenState.setLoading()
                     }
 
@@ -234,33 +250,35 @@ class IssueReporterViewModel(
         outcome
             .onSuccess { url ->
                 updateStateThreadSafe {
-                    val updated = (screenData ?: IssueReporterUiState()).copy(issueUrl = url)
+                    // The form fields are carried over untouched. The author is still in the same
+                    // interaction, and the reset belongs to dismissal, not to the network answering.
+                    val updated = (screenData ?: IssueReporterUiState())
+                        .copy(submissionState = IssueSubmissionState.Submitted(issueUrl = url))
+                    // No success message: the sheet swaps to its confirmation, and a report filed
+                    // after the sheet was dismissed has no composition left to show one in.
                     screenState.setSuccess(data = updated)
-
-                    screenState.showSnackbar(
-                        UiSnackbar(
-                            message = UiTextHelper.StringResource(R.string.snack_report_success),
-                            isError = false,
-                            timeStamp = System.nanoTime(),
-                            type = ScreenMessageType.SNACKBAR,
-                        )
-                    )
                 }
             }
             .onFailure { error ->
                 val message = error.toUiText()
                 updateStateThreadSafe {
+                    screenState.copyData { copy(submissionState = IssueSubmissionState.Editing) }
                     screenState.setError(message = message)
                 }
             }
+
+        applyPendingReset()
     }
 
     private suspend fun showFailureSnackbar(
         message: UiTextHelper = UiTextHelper.StringResource(R.string.snack_report_failed),
     ) {
         updateStateThreadSafe {
+            screenState.copyData { copy(submissionState = IssueSubmissionState.Editing) }
             screenState.setError(message = message)
         }
+
+        applyPendingReset()
     }
 
     private fun IssueReporterError.toUiText(): UiTextHelper =
