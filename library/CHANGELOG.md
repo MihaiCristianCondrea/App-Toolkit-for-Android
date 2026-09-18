@@ -25,10 +25,13 @@
   `CopyDeviceInfoUseCase` are removed.
 - `AboutItemAction.CopyToClipboard` replaces the device specific copy action and carries the label,
   the exact text, and an optional confirmation message, so any About row can be made copyable.
-- `MainTopAppBar` and `DefaultNavigationRepository` moved from `:library:feature:about` to
-  `:library:navigation`, together with the drawer labels they use. Hosts update the import to
-  `com.mihaicristiancondrea.android.libs.apptoolkit.navigation.views.MainTopAppBar` and
-  `...navigation.data.repositories.DefaultNavigationRepository`.
+- `DefaultNavigationRepository` moved from `:library:feature:about` to `:library:navigation`,
+  together with the drawer labels it uses. Hosts update the import to
+  `com.mihaicristiancondrea.android.libs.apptoolkit.navigation.data.repositories.DefaultNavigationRepository`.
+- `MainTopAppBar` moved from `:library:feature:about` to `:library:core:ui`. Hosts update the import
+  to `com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.MainTopAppBar`. It
+  sits in `:library:core:ui` rather than `:library:navigation` because it is built from that
+  module's buttons and dropdown, and `:library:core:ui` already depends on `:library:navigation`.
 - `MainTopAppBar` shows its Support overflow action only when the host passes `onSupportClick`. It
   no longer opens `SupportActivity` by itself, which removes the dependency on
   `:library:feature:support`.

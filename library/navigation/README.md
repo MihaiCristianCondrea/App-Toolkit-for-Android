@@ -14,13 +14,13 @@ transition helpers shared by host and feature UI.
 - Shared activity and bottom-navigation transitions.
 - Click and selection state for navigation icons; reusable AVD resources live in DesignSystem.
 - Bottom navigation, navigation rail, drawer-item content, and hide-on-scroll shell rendering.
-- `MainTopAppBar`, the host main-screen app bar, and its Support overflow action.
 - `DefaultNavigationRepository`, the standard four-entry drawer list, and the labels that name it.
 
 ## Does not own
 
 - Destination registration, owned by `:library:apptoolkit` and host composition roots.
 - The icon slot and its rendering, owned by [`:library:core:designsystem`](../core/designsystem/README.md).
+- `MainTopAppBar`, owned by [`:library:core:ui`](../core/ui/README.md).
 - Host-app routes and the root navigation graph, owned by `:sample`.
 
 ## Depends on
@@ -28,8 +28,6 @@ transition helpers shared by host and feature UI.
 - [`:library:core:common`](../core/common/README.md) for shared sizing constants.
 - [`:library:core:designsystem`](../core/designsystem/README.md) for interaction feedback, global
   UI preference values, and the `ToolkitIcon` slot navigation items expose.
-- [`:library:core:ui`](../core/ui/README.md) for the buttons, dropdown, and shared labels the top
-  app bar renders.
 - Navigation 3, Compose, and immutable collections materially define the module's public role.
 
 ## Used by
@@ -70,9 +68,9 @@ flowchart TD
 - The drawer repository contract and its default four-entry implementation live together here,
   because the entries name navigation destinations this module already owns. Keeping the default in
   a feature module forced that feature to own navigation labels it did not otherwise use.
-- `MainTopAppBar` takes `onSupportClick` from the host and hides the Support action when it is
-  absent, so this module depends on no feature module and a host without a support surface gets no
-  dead menu entry.
+- `MainTopAppBar` lives in [`:library:core:ui`](../core/ui/README.md), not here. It is built from
+  that module's buttons and dropdown, and `:library:core:ui` already depends on this module for
+  `StableNavKey`, so hosting the app bar here would invert that edge into a dependency cycle.
 
 ## Public contracts
 

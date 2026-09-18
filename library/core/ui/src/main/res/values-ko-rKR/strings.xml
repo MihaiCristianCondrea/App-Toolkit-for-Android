@@ -50,6 +50,7 @@
     <string name="sponsored_ad_label_plain">스폰서 광고</string>
     <string name="startup_page">시작 페이지</string>
     <string name="summary_dark_theme">다크 테마는 깊은 배경을 활용하여 배터리 수명을 크게 연장합니다. 활성화하려면 Android의 시스템 관리자로 이동하여 선호하는 테마를 선택하십시오.</string>
+    <string name="support_us">지원하기</string>
     <string name="theme_mode">테마 모드</string>
     <string name="try_again">다시 시도</string>
     <string name="wallpaper_colors">배경화면 색상</string>

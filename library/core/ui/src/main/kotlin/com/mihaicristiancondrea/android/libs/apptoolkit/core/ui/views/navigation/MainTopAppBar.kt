@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.views
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateContentSize
@@ -48,13 +48,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonFeedback
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dropdown.CommonDropdownMenuItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 /**
  * A top app bar for the main screen of the application.
@@ -111,7 +110,7 @@ fun MainTopAppBar(
             navigationIcon?.let {
                 AnimatedIconButtonDirection(
                     icon = ToolkitIcon.Vector(imageVector = it),
-                    contentDescription = stringResource(id = CoreUiR.string.go_back),
+                    contentDescription = stringResource(id = R.string.go_back),
                     onClick = onNavigationIconClick,
                     feedback = ButtonFeedback(hapticFeedbackType = null),
                     iconSize = SizeConstants.TwentyFourSize,
@@ -144,7 +143,7 @@ fun SupportMenuAction(onSupportClick: () -> Unit) {
         modifier = Modifier.graphicsLayer { rotationZ = rotation },
         fromRight = true,
         icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.MoreVert),
-        contentDescription = stringResource(id = CoreUiR.string.content_description_more_options),
+        contentDescription = stringResource(id = R.string.content_description_more_options),
         onClick = { setExpandedMenu(true) },
         iconSize = SizeConstants.TwentyFourSize,
     )

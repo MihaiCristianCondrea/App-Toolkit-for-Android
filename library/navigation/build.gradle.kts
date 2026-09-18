@@ -46,7 +46,6 @@ dependencies {
     testImplementation(project(":library:core:testing"))
     api(project(":library:core:common"))
     api(project(":library:core:designsystem"))
-    api(project(":library:core:ui"))
 
     // Navigation3
     api(libs.bundles.androidx.navigation3)
