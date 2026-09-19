@@ -33,13 +33,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
  * - If [isSensitive] is true, the clipboard preview is obfuscated on Android 13+. :contentReference[oaicite:5]{index=5}
  * - [onCopyFallback] is invoked only on API 32 and lower where in-app feedback is still needed.
  *
- * From Android 10 the system only lets the focused window touch the clipboard, and it enforces that
- * by dropping the write in silence: [ClipboardManager.setPrimaryClip] neither throws nor reports
- * anything back. Something as ordinary as the system clipboard preview taking focus is enough for
- * the next copy to disappear, so the write is read back before it is called a success, and a caller
- * that shows a confirmation only shows one for a copy that actually landed.
+ * The write is deliberately not read back to confirm it. `ClipboardService` allows
+ * `OP_WRITE_CLIPBOARD` without window focus ("Writing is allowed without focus.") but gates
+ * `getPrimaryClip`/`getPrimaryClipDescription` behind `OP_READ_CLIPBOARD`, which requires focus and
+ * returns null otherwise. A read-back therefore cannot tell a dropped write from a denied read, and
+ * would report a copy that succeeded while unfocused as a failure.
  *
- * @return true only when the clipboard reports holding the clip that was just written.
+ * @return true when the clipboard accepted the write, false when the service is missing or threw.
  */
 fun Context.copyTextToClipboard(
     label: String,
@@ -69,17 +69,7 @@ fun Context.copyTextToClipboard(
     }
 
     return runCatching {
-        val requestedAtMillis: Long = System.currentTimeMillis()
         clipboard.setPrimaryClip(clip)
-
-        if (!clipboard.holdsClipWrittenAt(label = label, requestedAtMillis = requestedAtMillis)) {
-            Log.w(
-                CLIPBOARD_HELPER_LOG_TAG,
-                "Clipboard dropped the write for \"$label\"; the window was most likely not focused"
-            )
-            return@runCatching false
-        }
-
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
             onCopyFallback()
         }
@@ -89,25 +79,3 @@ fun Context.copyTextToClipboard(
         false
     }
 }
-
-/**
- * True when the clipboard reports holding the clip written at [requestedAtMillis] under [label].
- *
- * Only the clip description is read, never its content, so this never trips the "pasted from your
- * clipboard" notice Android 12 shows for reading another app's clip. A denied write leaves the
- * previous description in place, which fails the timestamp check, and a denied read returns null,
- * which fails outright.
- *
- * [ClipDescription.getTimestamp] is 0 for a clip the platform never stamped; the label alone decides
- * there, which is no weaker than not checking at all.
- */
-private fun ClipboardManager.holdsClipWrittenAt(label: String, requestedAtMillis: Long): Boolean {
-    val description: ClipDescription = runCatching { primaryClipDescription }.getOrNull() ?: return false
-    if (description.label?.toString() != label) return false
-
-    val timestamp: Long = description.timestamp
-    return timestamp == UNSTAMPED_CLIP || timestamp >= requestedAtMillis
-}
-
-/** [ClipDescription.getTimestamp] for a clip the platform did not stamp. */
-private const val UNSTAMPED_CLIP: Long = 0L
