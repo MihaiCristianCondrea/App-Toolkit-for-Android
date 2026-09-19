@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context
 
 import android.content.ClipData
+import android.content.ClipDescription
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Build
@@ -205,5 +206,89 @@ class ClipboardHelperTest {
                 unmockkStatic(Log::class)
             }
         )
+    }
+
+    /**
+     * Stands in for the clipboard, with [heldLabel] and [heldTimestamp] describing what the
+     * clipboard reports holding once the write has been attempted. A denied write leaves the
+     * previous clip in place, which is what a stale [heldTimestamp] represents.
+     */
+    private fun clipboardHolding(
+        heldLabel: String?,
+        heldTimestamp: () -> Long,
+    ): ClipboardManager = mockk<ClipboardManager>().also { clipboard ->
+        justRun { clipboard.setPrimaryClip(any()) }
+        val description: ClipDescription? = heldLabel?.let {
+            mockk<ClipDescription>().also { description ->
+                every { description.label } returns it
+                every { description.timestamp } answers { heldTimestamp() }
+            }
+        }
+        every { clipboard.primaryClipDescription } returns description
+    }
+
+    private fun copyWith(clipboard: ClipboardManager, label: String = "label"): Boolean {
+        val context = mockk<Context>()
+        every { context.getSystemService(ClipboardManager::class.java) } returns clipboard
+
+        mockkStatic(ClipData::class)
+        mockkStatic(Log::class)
+        return runCatchingFinally(
+            block = {
+                every { ClipData.newPlainText(any(), any()) } returns mockk<ClipData>()
+                every { Log.w(any<String>(), any<String>()) } returns 0
+                context.copyTextToClipboard(label = label, text = "text")
+            },
+            finallyBlock = {
+                unmockkStatic(Log::class)
+                unmockkStatic(ClipData::class)
+            },
+        )
+    }
+
+    @Test
+    fun `copyTextToClipboard reports success when the clipboard holds the written clip`() {
+        val clipboard = clipboardHolding(
+            heldLabel = "label",
+            heldTimestamp = { System.currentTimeMillis() },
+        )
+
+        assertTrue(copyWith(clipboard))
+        verify(exactly = 1) { clipboard.setPrimaryClip(any()) }
+    }
+
+    @Test
+    fun `copyTextToClipboard reports failure when the system silently drops the write`() {
+        // The clipboard still holds the previous copy of the same row: same label, older stamp.
+        val clipboard = clipboardHolding(
+            heldLabel = "label",
+            heldTimestamp = { System.currentTimeMillis() - 5_000L },
+        )
+
+        assertFalse(copyWith(clipboard))
+    }
+
+    @Test
+    fun `copyTextToClipboard reports failure when another clip is on the clipboard`() {
+        val clipboard = clipboardHolding(
+            heldLabel = "someone else",
+            heldTimestamp = { System.currentTimeMillis() },
+        )
+
+        assertFalse(copyWith(clipboard))
+    }
+
+    @Test
+    fun `copyTextToClipboard reports failure when the clipboard description is unavailable`() {
+        val clipboard = clipboardHolding(heldLabel = null, heldTimestamp = { 0L })
+
+        assertFalse(copyWith(clipboard))
+    }
+
+    @Test
+    fun `copyTextToClipboard accepts a clip the platform did not stamp`() {
+        val clipboard = clipboardHolding(heldLabel = "label", heldTimestamp = { 0L })
+
+        assertTrue(copyWith(clipboard))
     }
 }

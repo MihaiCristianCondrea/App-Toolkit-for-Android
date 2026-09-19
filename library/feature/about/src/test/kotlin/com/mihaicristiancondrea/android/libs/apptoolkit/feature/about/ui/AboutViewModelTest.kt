@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 
 import android.content.ClipData
+import android.content.ClipDescription
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Build
@@ -34,7 +35,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.model
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.mappers.toUiState
 import io.mockk.every
-import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
@@ -69,14 +69,47 @@ class AboutViewModelTest {
     private lateinit var context: Context
     private lateinit var clipboardManager: ClipboardManager
 
+    /**
+     * False makes the fake clipboard behave the way the platform does for an unfocused window: the
+     * write is dropped and nothing is said about it, [ClipboardManager.setPrimaryClip] returns
+     * normally and the clipboard keeps whatever it held before.
+     */
+    private var clipboardAcceptsWrites: Boolean = true
+    private var writtenLabel: CharSequence? = null
+    private var heldLabel: CharSequence? = null
+    private var heldTimestamp: Long = 0L
+
     @BeforeEach
     fun setUp() {
         mockkStatic(Log::class)
         every { Log.w(any(), any<String>(), any()) } returns 0
+        every { Log.w(any(), any<String>()) } returns 0
         mockkStatic(ClipData::class)
-        every { ClipData.newPlainText(any(), any()) } returns mockk(relaxed = true)
+
+        clipboardAcceptsWrites = true
+        writtenLabel = null
+        heldLabel = null
+        heldTimestamp = 0L
+
+        every { ClipData.newPlainText(any(), any()) } answers {
+            writtenLabel = firstArg()
+            mockk(relaxed = true)
+        }
         clipboardManager = mockk()
-        justRun { clipboardManager.setPrimaryClip(any()) }
+        every { clipboardManager.setPrimaryClip(any()) } answers {
+            if (clipboardAcceptsWrites) {
+                heldLabel = writtenLabel
+                heldTimestamp = System.currentTimeMillis()
+            }
+        }
+        every { clipboardManager.primaryClipDescription } answers {
+            heldLabel?.let { label ->
+                mockk<ClipDescription>().also { description ->
+                    every { description.label } returns label
+                    every { description.timestamp } returns heldTimestamp
+                }
+            }
+        }
         context = mockk()
         every { context.getSystemService(ClipboardManager::class.java) } returns clipboardManager
     }
@@ -245,6 +278,27 @@ class AboutViewModelTest {
 
             verify { ClipData.newPlainText("App name", "App Toolkit") }
             verify { ClipData.newPlainText("Play services", "24.01.12") }
+        }
+
+    @Test
+    fun `a write the system drops in silence is reported as a failure`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            // Android only lets the focused window write, and enforces it by dropping the write
+            // without a word. Reported as a success, the tap looked like it did nothing at all.
+            clipboardAcceptsWrites = false
+
+            val viewModel = createViewModel(sdkInt = Build.VERSION_CODES.TIRAMISU)
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            viewModel.onEvent(
+                AboutEvent.CopyToClipboard(label = "Play services", text = "24.01.12")
+            )
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            val snackbar = viewModel.uiState.value.snackbar!!
+            val message = snackbar.message as UiTextHelper.StringResource
+            assertThat(message.resourceId).isEqualTo(R.string.snack_copy_failed)
+            assertThat(snackbar.isError).isTrue()
         }
 
     @Test

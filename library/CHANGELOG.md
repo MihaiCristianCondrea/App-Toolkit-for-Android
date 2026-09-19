@@ -95,6 +95,15 @@
 
 ### Fixed
 
+- Fixed About screen copies that reported success while the clipboard never changed. From Android 10
+  the system only lets the focused window write to the clipboard and enforces it by dropping the
+  write in silence, which `setPrimaryClip` does not report, so `copyTextToClipboard` in
+  `:library:core:common` now reads the clip description back and returns true only for a write that
+  actually landed. Above Android 13, where the screen relies on the system clipboard preview and
+  stays quiet on success, a dropped write left the row looking dead; it now surfaces the copy
+  failure snackbar. Only the description is read, never the clip contents, so this does not trip the
+  "pasted from your clipboard" notice.
+
 - Copying from the About screen ran the clipboard write on a background dispatcher. It now runs on
   the main thread, where a system UI interaction belongs.
 - A failed copy said `Unable to load device info`, the message for a failed load. It now says the

@@ -67,6 +67,11 @@ flowchart TD
   its own clipboard preview, so an in-app snackbar would report the same copy twice. A failed copy
   raises no system UI on any version, so it is always reported. The platform level is read through
   an injected `sdkIntProvider`, which keeps both paths testable without a device.
+- What counts as a successful copy is decided by reading the clipboard back, in
+  `copyTextToClipboard`. From Android 10 only the focused window may write, and the platform
+  enforces that by dropping the write in silence, so a tap that reported success could leave the
+  clipboard untouched, and above Android 13, where the screen stays quiet on success, the row
+  looked like it did nothing at all.
 - `AboutItemAction.CopyToClipboard` carries the label, the exact text, and an optional confirmation
   message, so any row becomes copyable without a new event, and the clipboard receives what the row
   displays rather than a second lookup resolved under a different configuration. Both texts are
