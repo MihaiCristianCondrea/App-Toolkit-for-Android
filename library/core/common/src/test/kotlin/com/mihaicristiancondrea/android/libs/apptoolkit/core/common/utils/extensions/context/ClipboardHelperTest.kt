@@ -225,7 +225,6 @@ class ClipboardHelperTest {
                 every { ClipData.newPlainText(any(), any()) } returns mockk<ClipData>()
                 every { Log.w(any<String>(), any<String>()) } returns 0
                 every { Log.w(any<String>(), any<String>(), any()) } returns 0
-                every { Log.d(any<String>(), any<String>()) } returns 0
                 context.copyTextToClipboard(label = "label", text = "text")
             },
             finallyBlock = {

@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences
 
-import android.util.Log
 import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.foundation.clickable
@@ -56,9 +55,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extens
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
-
-/** TEMPORARY tag for the About copy-path instrumentation. Remove with the logs it names. */
-private const val COPY_PATH_LOG_TAG: String = "ABOUT_COPY"
 
 /**
  * Creates a clickable preference item for app preference screens.
@@ -102,13 +98,9 @@ fun PreferenceItem(
             .fillMaxWidth()
             .clip(shape = RoundedCornerShape(size = rippleEffectDp))
             .clickable(enabled = enabled, onClick = {
-                // TEMPORARY copy-path instrumentation (ABOUT_COPY). Remove once the About copy
-                // report is diagnosed; it exists to place the failure on one side of a boundary.
-                Log.d(COPY_PATH_LOG_TAG, "1 PreferenceItem clicked: $title")
                 view.playSoundEffect(SoundEffectConstants.CLICK)
                 hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
                 firebaseController.logGa4Event(ga4EventProvider?.invoke() ?: ga4Event)
-                Log.d(COPY_PATH_LOG_TAG, "2 analytics done")
                 onClick()
             }), verticalAlignment = Alignment.CenterVertically
     ) {

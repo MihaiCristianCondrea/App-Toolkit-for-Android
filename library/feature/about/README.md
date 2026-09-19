@@ -81,6 +81,26 @@ flowchart TD
 - Use cases are retained where they perform a named operation or combine concerns; repository calls
   that only forwarded data were not given synthetic wrappers.
 
+## Verifying tap-to-copy
+
+Do not judge a copy on an emulator that has clipboard sharing enabled. It cannot show the Android 13
+confirmation, for reasons that have nothing to do with this module.
+
+The emulator syncs the host clipboard into the guest by writing the primary clip itself, under the
+label `host clipboard`, and it keeps writing while nothing at all is happening on screen. A trace of
+the whole copy path on an API 37 emulator showed every tap reaching `setPrimaryClip` and returning,
+and the clip present 10 to 20ms later carrying that label and a newer timestamp: the app's clip was
+already gone.
+
+SystemUI raises the preview from `ClipboardListener`, whose callback is posted rather than
+immediate, and which reads whatever the clipboard holds by the time it runs. On an emulator that is
+the sync's own clip, which is the case `shouldSuppressOverlay` drops, so no preview appears. Since
+the screen stays silent on success from Android 13 onwards, a working row then looks like a dead
+one, in both directions: no preview and no snackbar.
+
+Verify on a physical device, where the preview appears on every tap, or switch off
+`Extended Controls > Settings > General > Enable clipboard sharing` first.
+
 ## Public contracts
 
 - `AboutSettingsProvider`, `AboutRepository`, `AboutInfo`, `AboutItem`, `AboutItemAction`,
