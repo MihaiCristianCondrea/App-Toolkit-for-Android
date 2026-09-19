@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 
+import android.content.ClipboardManager
 import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
@@ -28,10 +29,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -107,6 +110,29 @@ fun AboutScreen(
     val screenState: UiStateScreen<AboutUiState> by viewModel.uiState.collectAsStateWithLifecycle()
 
     val firebaseController: FirebaseController = koinInject()
+
+    // TEMPORARY copy-path instrumentation (ABOUT_COPY): boundary 7. Boundaries 1 to 6 proved the
+    // app reaches setPrimaryClip on every tap, which leaves two possibilities the trace cannot
+    // separate: the platform rejected the write in silence, or it took it and SystemUI was late
+    // raising its preview. This listener fires only when the clipboard actually changed, and it
+    // reads the description, never the contents, so it does not trip the paste notice. The label it
+    // reports is the clip the system holds when the callback runs, which shows whether several
+    // writes collapsed onto the newest one.
+    val clipboardManager: ClipboardManager? = remember(context) {
+        context.getSystemService(ClipboardManager::class.java)
+    }
+    DisposableEffect(clipboardManager) {
+        val listener = ClipboardManager.OnPrimaryClipChangedListener {
+            val description = runCatching { clipboardManager?.primaryClipDescription }.getOrNull()
+            Log.d(
+                COPY_PATH_LOG_TAG,
+                "7 clipboard changed, system now holds label=${description?.label} " +
+                        "stamp=${description?.timestamp}",
+            )
+        }
+        clipboardManager?.addPrimaryClipChangedListener(listener)
+        onDispose { clipboardManager?.removePrimaryClipChangedListener(listener) }
+    }
 
     TrackScreenView(
         firebaseController = firebaseController,
