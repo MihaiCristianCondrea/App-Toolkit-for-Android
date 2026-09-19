@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 
 import android.content.Context
+import android.util.Log
 import android.os.Build
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
@@ -46,6 +47,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+
+/** TEMPORARY tag for the About copy-path instrumentation. Remove with the logs it names. */
+private const val COPY_PATH_LOG_TAG: String = "ABOUT_COPY"
 
 /**
  * ViewModel for the About screen, including tap-to-copy of the entries it renders.
@@ -79,11 +83,15 @@ open class AboutViewModel(
         when (event) {
             is AboutEvent.Load -> loadAboutInfo()
 
-            is AboutEvent.CopyToClipboard -> copyToClipboard(
-                label = event.label,
-                text = event.text,
-                successMessage = event.successMessage,
-            )
+            is AboutEvent.CopyToClipboard -> {
+                // TEMPORARY copy-path instrumentation (ABOUT_COPY).
+                Log.d(COPY_PATH_LOG_TAG, "4 ViewModel received ${event.label}")
+                copyToClipboard(
+                    label = event.label,
+                    text = event.text,
+                    successMessage = event.successMessage,
+                )
+            }
 
             is AboutEvent.DismissSnackbar -> dismissSnackbar()
         }

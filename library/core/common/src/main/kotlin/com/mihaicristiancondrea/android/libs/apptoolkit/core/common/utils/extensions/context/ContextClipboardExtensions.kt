@@ -26,6 +26,9 @@ import android.os.PersistableBundle
 import android.util.Log
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.CLIPBOARD_HELPER_LOG_TAG
 
+/** TEMPORARY tag for the About copy-path instrumentation. Remove with the logs it names. */
+private const val COPY_PATH_LOG_TAG: String = "ABOUT_COPY"
+
 /**
  * Copies [text] to the clipboard.
  *
@@ -69,7 +72,14 @@ fun Context.copyTextToClipboard(
     }
 
     return runCatching {
+        // TEMPORARY copy-path instrumentation (ABOUT_COPY). The thread is logged because the write
+        // moved from a background dispatcher to the click's own frame during the About refactor.
+        Log.d(
+            COPY_PATH_LOG_TAG,
+            "5 BEFORE setPrimaryClip on ${Thread.currentThread().name}, label=$label"
+        )
         clipboard.setPrimaryClip(clip)
+        Log.d(COPY_PATH_LOG_TAG, "6 AFTER setPrimaryClip")
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
             onCopyFallback()
         }

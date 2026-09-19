@@ -73,6 +73,7 @@ class AboutViewModelTest {
     fun setUp() {
         mockkStatic(Log::class)
         every { Log.w(any(), any<String>(), any()) } returns 0
+        every { Log.d(any<String>(), any<String>()) } returns 0
         mockkStatic(ClipData::class)
         every { ClipData.newPlainText(any(), any()) } returns mockk(relaxed = true)
         clipboardManager = mockk()

@@ -72,6 +72,9 @@ import org.koin.compose.viewmodel.koinViewModel
 import java.util.concurrent.TimeUnit
 import kotlin.time.Duration.Companion.milliseconds
 
+/** TEMPORARY tag for the About copy-path instrumentation. Remove with the logs it names. */
+private const val COPY_PATH_LOG_TAG: String = "ABOUT_COPY"
+
 private const val ABOUT_SCREEN_NAME = "About"
 private const val ABOUT_SCREEN_CLASS = "AboutScreen"
 
@@ -186,6 +189,11 @@ fun AboutScreen(
                                         }
                                         when (val action = item.action) {
                                             is AboutItemAction.CopyToClipboard -> {
+                                                // TEMPORARY copy-path instrumentation (ABOUT_COPY).
+                                                Log.d(
+                                                    COPY_PATH_LOG_TAG,
+                                                    "3 sending CopyToClipboard for ${item.key}",
+                                                )
                                                 viewModel.onEvent(
                                                     event = AboutEvent.CopyToClipboard(
                                                         label = action.label.asString(context),
