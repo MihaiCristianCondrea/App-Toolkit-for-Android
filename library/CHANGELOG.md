@@ -95,6 +95,11 @@
 
 ### Fixed
 
+- The About screen confirms every copy again, on every platform level. It had stopped confirming
+  from Android 13 onwards, on the grounds that the system clipboard preview already reports the
+  copy. SystemUI draws that preview on its own terms and the app cannot observe whether it appeared,
+  so on a cold device the first copies produced no feedback at all and a working row was
+  indistinguishable from a dead one. `AboutViewModel` no longer takes an `sdkIntProvider`.
 - Copying from the About screen ran the clipboard write on a background dispatcher. It now runs on
   the main thread, where a system UI interaction belongs.
 - A failed copy said `Unable to load device info`, the message for a failed load. It now says the

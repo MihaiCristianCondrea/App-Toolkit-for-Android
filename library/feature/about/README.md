@@ -63,10 +63,12 @@ flowchart TD
 - Copying is a presentation interaction, not a repository query, so `AboutViewModel` performs the
   clipboard write itself, on the main dispatcher because writing the clipboard is a system UI
   interaction.
-- A successful copy is confirmed in-app only below Android 13. From Android 13 the platform raises
-  its own clipboard preview, so an in-app snackbar would report the same copy twice. A failed copy
-  raises no system UI on any version, so it is always reported. The platform level is read through
-  an injected `sdkIntProvider`, which keeps both paths testable without a device.
+- Every copy is confirmed in-app, on every platform level, and so is every failure. From Android 13
+  the platform raises its own clipboard preview, and this screen used to stay silent there to avoid
+  reporting the same copy twice. That preview is drawn by SystemUI on its own terms, though: on a
+  cold device it can be missing for the first copies, and the app has no way to observe whether it
+  appeared. Confirming twice is a smaller cost than a row the user cannot tell apart from a dead
+  one.
 - `AboutItemAction.CopyToClipboard` carries the label, the exact text, and an optional confirmation
   message, so any row becomes copyable without a new event, and the clipboard receives what the row
   displays rather than a second lookup resolved under a different configuration. Both texts are
