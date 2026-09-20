@@ -1,7 +1,7 @@
 # Changelog
 
 ---
-# September 20, 2026 - Unreleased
+# September 20, 2026
 
 **Version:** `3.0.0-pre17`
 
