@@ -31,6 +31,19 @@ Do not update module documentation for cosmetic changes, routine maintenance, or
 
 Note: App Toolkit library works on the same patter, its features are documented in the respective modules README files.
 
+## Module layers
+
+Follow the `architecture` skills for placement. Two rules this project has settled that the skills
+leave open:
+
+- No use cases means no `domain/`. A module whose state holder reads its repository directly has no
+  domain layer, so its application models live in `data/models/`, next to the DTOs they are mapped
+  from. Do not keep a `domain/` package that holds only models, and do not invent a use case to
+  justify one.
+- Do not add a use case that only forwards a repository call or tidies its result. Trimming,
+  filtering and de-duplicating a response is transforming a data-source model into an application
+  model, which is repository work. A state holder may depend on a repository directly.
+
 ## Localization
 
 When changing user-facing strings, inspect the target module's existing resources and Gradle configuration first, and use the `android-localization` skill.
@@ -39,6 +52,24 @@ When changing user-facing strings, inspect the target module's existing resource
 - Translate all locales required by the target module when translation is part of the task.
 - Do not create new locale directories unless explicitly required.
 - Preserve resource keys, placeholders, escaping, markup, and formatting tokens exactly.
+
+### Strings belong to the module that owns the feature
+
+Put a string in the module that owns the surface rendering it, not in whichever module already
+happened to have a `res/` directory.
+
+- A feature's strings live in that feature module, across every supported locale.
+- A body of content that stands on its own, such as an FAQ, gets its own module rather than riding
+  along in a general-purpose one. `:library:feature:faq` declares empty placeholder slots and
+  `:sample:feature:faq` answers them with the sample's translated copy. Adding or rewording a
+  question is then a change to one module, and it touches no code.
+- A resource-only module is a legitimate module. It needs no Kotlin sources.
+- A string used by two unrelated features belongs in the shared module both already depend on, such
+  as `:library:core:ui` for button labels. Duplicating a name across sibling feature modules is
+  allowed by resource merging, but prefer one owner.
+- A library module that renders host-supplied copy declares the names as `translatable="false"`
+  placeholders and documents which host module fills them, so lint does not demand translations of
+  empty strings.
 
 ## Documentation
 

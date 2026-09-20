@@ -33,7 +33,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
  * - If [isSensitive] is true, the clipboard preview is obfuscated on Android 13+. :contentReference[oaicite:5]{index=5}
  * - [onCopyFallback] is invoked only on API 32 and lower where in-app feedback is still needed.
  *
- * @return true if the clipboard was written, false otherwise.
+ * The write is deliberately not read back to confirm it. `ClipboardService` allows
+ * `OP_WRITE_CLIPBOARD` without window focus ("Writing is allowed without focus.") but gates
+ * `getPrimaryClip`/`getPrimaryClipDescription` behind `OP_READ_CLIPBOARD`, which requires focus and
+ * returns null otherwise. A read-back therefore cannot tell a dropped write from a denied read, and
+ * would report a copy that succeeded while unfocused as a failure.
+ *
+ * @return true when the clipboard accepted the write, false when the service is missing or threw.
  */
 fun Context.copyTextToClipboard(
     label: String,

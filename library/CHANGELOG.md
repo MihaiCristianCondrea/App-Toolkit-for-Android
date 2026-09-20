@@ -1,57 +1,38 @@
 # Changelog
 
 ---
-
-# September 18, 2026
+# September 20, 2026
 
 **Version:** `3.0.0-pre17`
 
 ### Added
 
-- Added 30 reusable animated vector drawables to `:library:core:designsystem`. The expanded
-  animation set includes paired on/off states for blinds, cameras, fans, garage doors, lights,
-  locks, outlets, security systems, switches, thermostats, TVs, and vacuums, together with
-  play/pause, sound bars, a square container, and volume expand/collapse animations.
-- Added the shared root settings labels to `:library:feature:settings`, translated in all 25
-  supported locales: `notifications`, `display`, `security_and_privacy`, `advanced`,
-  `settings_category_general`, and the matching `summary_preference_settings_*` summaries. Hosts no
-  longer need to declare and translate their own copies to name the destinations `SettingsContent`
-  already defines.
-- Added shake to report to `:library:feature:issuereporter`. Shaking the device opens the issue
-  reporter from any screen. It is off by default and a host turns it on with
-  `IssueReporterConfig(shakeToReportEnabled = true)` passed to `appToolkitModules`, plus
-  `IssueReporterShakeManager.install()` in its `Application`. The accelerometer is read only while
-  an activity is in the foreground, and a shake has to clear a magnitude threshold, a minimum
-  duration and a cooldown before it counts.
-- Added `IssueReporterBottomSheet`, the issue reporter as a composable a host can show from its own
-  screen, plus `IssueReporterLauncher.show(activity)` for callers outside a composition and
-  `IssueReporterContent` for hosts embedding the report form in a container of their own.
+- Added 30 reusable animated vector drawables to `:library:core:designsystem`, including paired on/off animations for blinds, cameras, fans, garage doors, lights, locks, outlets, security systems, switches, thermostats, TVs, and vacuums, plus playback, volume, sound bar, and container animations.
+- Added shared root settings labels to `:library:feature:settings`, translated across all 25 supported locales, so hosts no longer need to define their own labels and summaries for destinations already provided by `SettingsContent`.
+- Added shake-to-report support to `:library:feature:issuereporter`, configurable through `IssueReporterConfig(shakeToReportEnabled = true)` and `IssueReporterShakeManager`.
+- Added App Toolkit and Google Play services version information to the About screen, translated across all 25 supported locales.
+- Added unit test coverage for `NavigationBackStackActions`, including top-level navigation, single-top deduplication, and back-stack popping.
+- Added unit test coverage for `DefaultFirebaseController`, including consent settings, analytics events, screen views, user properties, and error reporting.
 
 ### Changed
 
-- The issue reporter now opens as a bottom sheet over the current screen instead of launching its
-  own activity. Advanced settings no longer leaves the settings screen to report a bug, and the
-  full-screen top app bar and floating send button are replaced by a sheet with a send button fixed
-  at the bottom.
-- The reporter reports its results as toasts instead of snackbars, so a report that succeeded says
-  so even if the sheet was dismissed on the way.
-- A submitted report now replaces the form with a confirmation instead of stacking a success card on
-  top of it. The sheet shrinks to a check, `Report submitted`, an `Open issue` link and a `Done`
-  button, takes the keyboard down and gives a confirm haptic. The form is cleared when the sheet is
-  dismissed rather than when the network answers, and a failed send returns to the form with the
-  report intact.
-- Corrected the `open_button_label` translations in all 25 supported locales. They rendered "open
-  issue" as an adjective, an issue that happens to be open, rather than the action the button
-  performs.
-- Removed `IssueReporterActivity`, its manifest entry, and the `Theme.AppToolkit.IssueReporter`
-  style. Hosts that started the activity directly call `IssueReporterLauncher.show(activity)`.
-- Removed `AdvancedSettingsProvider` and its `bugReportUrl`. Advanced settings stopped using the URL
-  when the reporter began submitting reports itself, so hosts no longer bind this provider.
-- Updated the AGP 9+ release configuration by removing the legacy `proguardFiles(...)` setup from
-  `:library:apptoolkit` and the sample application. The sample now relies on AGP 9's unified R8
-  application optimization through `optimization { enable = true }`.
-- Updated Ktor from `3.5.2` to `3.6.0`.
-- Updated Robolectric from `4.16.1` to `4.17`.
+- Replaced the standalone issue reporter activity with a bottom-sheet implementation using `IssueReporterBottomSheet`, `IssueReporterLauncher.show(activity)`, and `IssueReporterContent`. Advanced settings now opens the reporter over the current screen, while `IssueReporterActivity`, its manifest entry, `Theme.AppToolkit.IssueReporter`, `AdvancedSettingsProvider`, and the unused `bugReportUrl` were removed.
+- Improved issue reporter submission feedback by replacing the form after a successful report with a compact confirmation state containing a check indicator, `Report submitted`, and a `Done` button. Failed submissions preserve the entered report, successful reports are cleared when the sheet is dismissed, results are surfaced through toasts, and the previous `Open issue` action, analytics event, and `open_button_label` resources were removed.
+- Updated the AGP 9+ release configuration by removing the legacy `proguardFiles(...)` setup from `:library:apptoolkit` and the sample application, with the sample now using AGP 9 unified R8 optimization through `optimization { enable = true }`.
+- Updated Ktor from `3.5.2` to `3.6.0` and Robolectric from `4.16.1` to `4.17`.
+- Reworked About screen copy handling so the application name, build version, App Toolkit version, Google Play services version, and device information can all be copied through the generic `AboutItemAction.CopyToClipboard`. Clipboard operations now live in `AboutViewModel`, `AboutRepository.copyDeviceInfo` and `CopyDeviceInfoUseCase` were removed, version taps use `AboutItem.Preference.countsVersionTap`, copy requests run independently on the main thread, and localized success and failure feedback is provided across all 25 supported locales.
+- Split licenses, privacy, and changelog functionality out of `:library:feature:about` into the dedicated `:library:feature:licenses`, `:library:feature:privacy`, and `:library:feature:changelog` modules, moving their screens, resources, repositories, ViewModels, use cases, and providers to their matching packages. `PrivacySettingsList` is now `PrivacyScreen` with a data-driven `PrivacyItem` model, while `LicensesScreen` now exposes its state through `LicensesViewModel`.
+- Replaced `:library:feature:help` with `:library:feature:faq`, moving the FAQ screen, activity, repository, data sources, UI components, native ad slot, overflow menu, and catalog into the new feature. Help-specific classes and constants were renamed to their FAQ equivalents, `helpModule` became `faqModule(hostBuildConfig)`, `GetFaqUseCase` was removed, `FaqMappers` moved to `data/remote/mappers`, `FaqItem` and `FaqId` moved to `data/models`, and the sample FAQ resources moved to `:sample:feature:faq`. The user-facing `Help & feedback` destination, `HelpRoute`, `HELP_NATIVE_AD` qualifier, and GA4 screen name remain unchanged.
+- Moved `AboutInfo` from `domain/models` to `data/models`.
+- Moved `DefaultNavigationRepository` and its drawer labels from `:library:feature:about` to `:library:navigation`.
+- Moved `MainTopAppBar` from `:library:feature:about` to `:library:core:ui` and made its Support action depend on the host-provided `onSupportClick` callback instead of directly opening `SupportActivity`.
+- Renamed `DisplaySettingsList` to `DisplaySettingsScreen`, `ThemeSettingsList` to `ThemeSettingsScreen`, `AdvancedSettingsList` to `AdvancedSettingsScreen`, and `UsageAndDiagnosticsList` to `UsageAndDiagnosticsScreen`.
+- Renamed `FirebaseControllerImpl` to `DefaultFirebaseController` while keeping a backward-compatible typealias.
+- Moved `DefaultInAppUpdateRepositoryTest` from `:library:feature:about` to `:library:integration:update` and applied the unit-test convention plugin to `:library:integration:update` and `:library:integration:firebase`.
+
+### Fixed
+
+- Fixed remote FAQ catalogs containing only blank entries rendering empty rows instead of falling back to the bundled FAQ content.
 
 ---
 

@@ -33,7 +33,7 @@ used by onboarding, consent, ads, diagnostics, review, and theming.
 - `:library:apptoolkit` for host DI assembly.
 - `:library:core:designsystem` for persisted theme state, and `:library:core:ui` for the
   preference-driven modifiers and ad slots.
-- `:library:feature:about`, `:library:feature:help`, `:library:feature:onboarding`, and
+- `:library:feature:about`, `:library:feature:faq`, `:library:feature:onboarding`, and
   `:library:feature:settings`.
 - `:library:integration:ads`, `:library:integration:consent`, and `:library:integration:review`.
 

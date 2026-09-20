@@ -25,7 +25,7 @@ Encapsulates Google Play in-app review eligibility, prompting, and persisted req
 
 - `:sample` and `:library:apptoolkit`.
 - `:library:feature:about` for shared application flows.
-- `:library:feature:help` to request a review after relevant help interactions.
+- `:library:feature:faq` to request a review after relevant FAQ interactions.
 
 ## Flow chart
 

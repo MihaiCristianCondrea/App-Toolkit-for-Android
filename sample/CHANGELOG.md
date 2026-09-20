@@ -1,6 +1,26 @@
 # Changelog
 
-# Unreleased
+---
+
+# September 20, 2026
+
+**Version:** `26.09.17` (`137260917`)
+
+### Added
+
+- Added shake to report gesture, allowing you to shake your device from any screen to quickly report an issue or send feedback.
+- Added App Toolkit and Google Play services version details to the About screen.
+- Added 30 new animated device and media icons to the Animation Showcase in Components, featuring smart home devices and audio controls.
+
+### Improved
+
+- Upgraded the issue reporter into a modern bottom sheet that opens directly over the current screen, with toast status alerts and a streamlined submission confirmation.
+- Standardized settings category labels and navigation across all supported languages.
+- Optimized release builds with Android Gradle Plugin 9 application optimization for improved performance and reduced app size.
+
+---
+
+# September 10, 2026
 
 **Version:** `26.09.16` (`1370016`)
 

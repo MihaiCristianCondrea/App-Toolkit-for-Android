@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">Reclame</string>
+    <string name="code_of_conduct">Cod de conduită</string>
+    <string name="legal">Informații legale</string>
+    <string name="legal_notices">Avertismente legale</string>
+    <string name="license">Licență</string>
+    <string name="permissions">Permisiuni</string>
+    <string name="privacy">Confidențialitate</string>
+    <string name="privacy_policy">Politica de confidențialitate</string>
+    <string name="summary_preference_settings_ads">Controlează modul în care folosim informațiile tale pentru a afișa reclame relevante</string>
+    <string name="summary_preference_settings_code_of_conduct">Înțelege regulile și liniile directoare pentru comportament în cadrul serviciului nostru</string>
+    <string name="summary_preference_settings_legal_notices">Vezi informațiile legale despre serviciul nostru</string>
+    <string name="summary_preference_settings_permissions">Vizualizați permisiunile acordate serviciului nostru</string>
+    <string name="summary_preference_settings_privacy_policy">Vezi politica care reglementează modul în care gestionăm datele tale</string>
+    <string name="summary_preference_settings_terms_of_service">Revizuiește termenii pe care îi accepți utilizând serviciul nostru</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">Partajează date pentru a ajuta la îmbunătățirea experienței în aplicație</string>
+    <string name="terms_of_service">Termeni de serviciu</string>
+    <string name="usage_and_diagnostics">Utilizare și diagnoză</string>
+</resources>

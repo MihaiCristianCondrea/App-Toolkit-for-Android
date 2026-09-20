@@ -24,100 +24,144 @@ import java.time.ZonedDateTime
 import java.util.Locale
 import java.util.Properties
 
-/** Registers the project-scoped [VersioningExtension] as `versioning`. */
+/** Registers typed SDK and application-version access as `versioning`. */
 class VersioningPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         target.extensions.create("versioning", VersioningExtension::class.java, target)
     }
 }
 
-/**
- * Typed access to SDK and phone-version values stored in the root `release.properties` file.
- *
- * Missing values deliberately become `0` so callers receive the validation error produced by
- * [phoneVersion] instead of a nullable configuration surface. SDK accessors are used during Gradle
- * configuration; [phoneVersion] additionally validates ordering and Play version-code limits.
- */
 open class VersioningExtension(project: Project) {
     private val releasePropertiesFile = project.rootProject.file("release.properties")
     private val properties = Properties().apply {
-        if (releasePropertiesFile.exists()) {
-            releasePropertiesFile.inputStream().use { load(it) }
+        check(releasePropertiesFile.exists()) {
+            "Missing release.properties at ${releasePropertiesFile.path}"
         }
+        releasePropertiesFile.inputStream().use { input -> load(input) }
     }
 
-    private fun getProperty(key: String): String = properties.getProperty(key) ?: "0"
+    private fun intProperty(key: String): Int =
+        checkNotNull(properties.getProperty(key)) { "Missing $key in release.properties" }.toInt()
 
-    val minSdk get() = getProperty("MIN_SDK").toInt()
-    val targetSdk get() = getProperty("TARGET_SDK").toInt()
-    val compileSdk get() = getProperty("COMPILE_SDK").toInt()
+    val minSdk: Int get() = intProperty("MIN_SDK")
+    val targetSdk: Int get() = intProperty("TARGET_SDK")
+    val compileSdk: Int get() = intProperty("COMPILE_SDK")
 
-    /** Calculates the phone artifact version using the Bucharest release month and upload counter. */
     fun phoneVersion(): VersionInfo {
-        return calculateVersion(
-            productFamily = getProperty("PHONE_PRODUCT_FAMILY").toInt(),
-            upload = getProperty("PHONE_UPLOAD").toInt()
-        )
-    }
+        val minSdk = minSdk
+        val targetSdk = targetSdk
+        val compileSdk = compileSdk
 
-    private fun calculateVersion(
-        productFamily: Int,
-        upload: Int
-    ): VersionInfo {
-        val minSdk = getProperty("MIN_SDK").toInt()
-        val targetSdk = getProperty("TARGET_SDK").toInt()
-        val compileSdk = getProperty("COMPILE_SDK").toInt()
-
-        // Safety checks
         check(minSdk <= targetSdk) { "MIN_SDK ($minSdk) must be <= TARGET_SDK ($targetSdk)" }
         check(targetSdk <= compileSdk) { "TARGET_SDK ($targetSdk) must be <= COMPILE_SDK ($compileSdk)" }
-        check(productFamily in 1..9) { "PRODUCT_FAMILY ($productFamily) must be in 1..9" }
-        check(upload in 1..9999) { "UPLOAD ($upload) must be in 1..9999" }
 
-        val now = ZonedDateTime.now(ZoneId.of("Europe/Bucharest"))
-        val year = now.year % 100
-        val month = now.monthValue
-        
-        // Version Name: YY.MM.UUUU
-        // Human-readable representation of the release date and sequence.
-        val versionName = String.format(
-            Locale.ROOT,
-            "%02d.%02d.%d",
-            year,
-            month,
-            upload
+        val today = ZonedDateTime.now(ZoneId.of("Europe/Bucharest"))
+        val version = calendarVersion(
+            productFamily = intProperty("PHONE_PRODUCT_FAMILY"),
+            targetSdk = targetSdk,
+            year = today.year,
+            month = today.monthValue,
+            upload = intProperty("PHONE_UPLOAD"),
         )
-
-        // Version code: P SS UUUU (up to 7 digits)
-        // P:   Product Family (1=Phone, 2=TV, 3=Wear)
-        // SS:  Target SDK (2 digits, e.g., 37)
-        // UUUU: Global upload counter (4 digits, max 9999)
-        //
-        // This scheme ensures that version codes are unique, monotonically increasing, 
-        // and safely under the Google Play 2.1 billion limit.
-        // Example: P=1, SDK=37, Upload=42 -> 1,370,042
-
-        val versionCode = productFamily.toLong() * 1_000_000 + // Product Family (Millions)
-                targetSdk.toLong() * 10_000 +                 // Target SDK (Ten Thousands)
-                upload                                        // Upload Counter
-
-        check(versionCode <= 2_100_000_000) { "versionCode ($versionCode) exceeds Google Play limit" }
 
         return VersionInfo(
             compileSdk = compileSdk,
             minSdk = minSdk,
             targetSdk = targetSdk,
-            versionCode = versionCode.toInt(),
-            versionName = versionName
+            versionCode = version.versionCode,
+            versionName = version.versionName,
         )
     }
 }
 
-/** Validated Android SDK and application-version values applied to a build variant. */
+/**
+ * The generated Play Store version for one build.
+ *
+ * Both values encode the same five facts, so either one can be decoded without consulting Git
+ * history or the Play Console.
+ */
+data class CalendarVersion(
+    val versionCode: Int,
+    val versionName: String,
+)
+
+/**
+ * Derives `versionName` and `versionCode` from the release calendar rather than a running counter.
+ *
+ * `versionCode` is nine digits, `FSSYYMMBB`:
+ *
+ * ```
+ * 1 37 26 08 17
+ * │ │  │  │  └─ upload   the build number within this month
+ * │ │  │  └──── month
+ * │ │  └─────── year     two digits
+ * │ └────────── SDK      the target SDK this build compiles against
+ * └──────────── family   the product family (phone is 1)
+ * ```
+ *
+ * `versionName` is the same story without the parts a user cannot act on: `YY.MM.BB`, so
+ * `26.08.17` reads as the seventeenth August 2026 build.
+ *
+ * The only value a release touches by hand is `PHONE_UPLOAD`: reset it to 1 for the first upload of
+ * a month, and increment it for each further upload in the same month. Year and month come from the
+ * build date, which is why a month boundary raises `versionCode` on its own.
+ *
+ * ### Why two digits for the upload counter
+ *
+ * Play caps `versionCode` at 2,100,000,000. Nine digits leave the leading family digit free to run
+ * to 9 (`937261299`) and stay under the cap. A three-digit counter would push a second product
+ * family to 2,372,608,012, which Play rejects — so the counter is capped at 99 uploads per month,
+ * far more than a monthly release train needs.
+ *
+ * ### What keeps versionCode increasing
+ *
+ * Play requires every upload to exceed the last. Because the SDK digits outrank the date, that
+ * holds as long as `TARGET_SDK` never *decreases*: lowering it after a release would generate a
+ * smaller code than one already published and Play would reject the upload.
+ *
+ * @param productFamily 1..9, the leading digit that keeps sibling apps in separate ranges.
+ * @param targetSdk 0..99, the API level this build targets.
+ * @param year the four-digit build year; only its last two digits are encoded.
+ * @param month 1..12, the build month.
+ * @param upload 1..99, the build number within [month].
+ */
+fun calendarVersion(
+    productFamily: Int,
+    targetSdk: Int,
+    year: Int,
+    month: Int,
+    upload: Int,
+): CalendarVersion {
+    check(productFamily in 1..9) { "PHONE_PRODUCT_FAMILY ($productFamily) must be in 1..9" }
+    check(targetSdk in 0..99) { "TARGET_SDK ($targetSdk) must be in 0..99" }
+    check(month in 1..12) { "month ($month) must be in 1..12" }
+    check(upload in 1..99) {
+        "PHONE_UPLOAD ($upload) must be in 1..99; reset it to 1 for the first upload of a month"
+    }
+
+    val shortYear = year % 100
+
+    val versionCode =
+        productFamily * 100_000_000L +
+            targetSdk * 1_000_000L +
+            shortYear * 10_000L +
+            month * 100L +
+            upload
+
+    check(versionCode <= 2_100_000_000L) {
+        "versionCode ($versionCode) exceeds the Google Play limit"
+    }
+
+    return CalendarVersion(
+        versionCode = versionCode.toInt(),
+        versionName = String.format(Locale.ROOT, "%02d.%02d.%02d", shortYear, month, upload),
+    )
+}
+
 data class VersionInfo(
     val compileSdk: Int,
     val minSdk: Int,
     val targetSdk: Int,
     val versionCode: Int,
-    val versionName: String
+    val versionName: String,
 )

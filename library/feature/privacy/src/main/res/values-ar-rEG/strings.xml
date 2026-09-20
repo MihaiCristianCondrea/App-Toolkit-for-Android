@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">الإعلانات</string>
+    <string name="code_of_conduct">مدونة قواعد السلوك</string>
+    <string name="legal">قانوني</string>
+    <string name="legal_notices">إشعارات قانونية</string>
+    <string name="license">الترخيص</string>
+    <string name="permissions">الأذونات</string>
+    <string name="privacy">الخصوصية</string>
+    <string name="privacy_policy">سياسة الخصوصية</string>
+    <string name="summary_preference_settings_ads">تحكم في كيفية استخدامنا لمعلوماتك لعرض إعلانات ذات صلة بك</string>
+    <string name="summary_preference_settings_code_of_conduct">فهم القواعد والإرشادات للسلوك داخل خدمتنا</string>
+    <string name="summary_preference_settings_legal_notices">عرض المعلومات القانونية حول خدمتنا</string>
+    <string name="summary_preference_settings_permissions">إدارة الأذونات الممنوحة لخدمتنا</string>
+    <string name="summary_preference_settings_privacy_policy">عرض السياسة التي تحكم كيفية تعاملنا مع بياناتك</string>
+    <string name="summary_preference_settings_terms_of_service">مراجعة الشروط التي توافق عليها عند استخدام خدمتنا</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">شارك البيانات للمساعدة في تحسين التجربة داخل التطبيق</string>
+    <string name="terms_of_service">شروط الخدمة</string>
+    <string name="usage_and_diagnostics">الاستخدام والتشخيصات</string>
+</resources>

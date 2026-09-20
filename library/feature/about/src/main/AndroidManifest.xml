@@ -17,10 +17,7 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <application>
-        <!-- Internal licenses screen displayed from settings/help flows only. -->
-        <activity
-            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.licenses.LicensesActivity"
-            android:exported="false" />
-    </application>
+    <queries>
+        <package android:name="com.google.android.gms" />
+    </queries>
 </manifest>

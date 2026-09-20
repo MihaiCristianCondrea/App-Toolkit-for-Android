@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">Anuncios</string>
+    <string name="code_of_conduct">Código de conducta</string>
+    <string name="legal">Legal</string>
+    <string name="legal_notices">Avisos legales</string>
+    <string name="license">Licencia</string>
+    <string name="permissions">Permisos</string>
+    <string name="privacy">Privacidad</string>
+    <string name="privacy_policy">Política de privacidad</string>
+    <string name="summary_preference_settings_ads">Controla cómo usamos tu información para mostrarte anuncios relevantes</string>
+    <string name="summary_preference_settings_code_of_conduct">Comprende las reglas y pautas para el comportamiento dentro de nuestro servicio</string>
+    <string name="summary_preference_settings_legal_notices">Consulta información legal sobre nuestro servicio</string>
+    <string name="summary_preference_settings_permissions">Administre los permisos otorgados a nuestro servicio</string>
+    <string name="summary_preference_settings_privacy_policy">Consulta la política que rige cómo manejamos tus datos</string>
+    <string name="summary_preference_settings_terms_of_service">Revisa los términos que aceptas al usar nuestro servicio</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">Comparte datos para ayudar a mejorar la experiencia en la aplicación</string>
+    <string name="terms_of_service">Términos de servicio</string>
+    <string name="usage_and_diagnostics">Uso y diagnóstico</string>
+</resources>

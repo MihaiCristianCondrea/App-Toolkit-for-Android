@@ -14,13 +14,13 @@ transition helpers shared by host and feature UI.
 - Shared activity and bottom-navigation transitions.
 - Click and selection state for navigation icons; reusable AVD resources live in DesignSystem.
 - Bottom navigation, navigation rail, drawer-item content, and hide-on-scroll shell rendering.
+- `DefaultNavigationRepository`, the standard four-entry drawer list, and the labels that name it.
 
 ## Does not own
 
 - Destination registration, owned by `:library:apptoolkit` and host composition roots.
 - The icon slot and its rendering, owned by [`:library:core:designsystem`](../core/designsystem/README.md).
-- The standard four-item drawer implementation, owned by `:library:feature:about` because its labels
-  are feature resources.
+- `MainTopAppBar`, owned by [`:library:core:ui`](../core/ui/README.md).
 - Host-app routes and the root navigation graph, owned by `:sample`.
 
 ## Depends on
@@ -35,7 +35,7 @@ transition helpers shared by host and feature UI.
 - `:sample` for host navigation.
 - `:library:apptoolkit` and `:library:core:ui` for shared destination registration and navigation
   UI.
-- `:library:feature:about`, `:library:feature:help`, `:library:feature:issuereporter`,
+- `:library:feature:about`, `:library:feature:faq`, `:library:feature:issuereporter`,
   `:library:feature:onboarding`, `:library:feature:permissions`, `:library:feature:settings`, and
   `:library:feature:support` for feature routes and navigation surfaces.
 
@@ -65,8 +65,12 @@ flowchart TD
   and suppress duplicate single-top entries.
 - This module owns shell rendering and mutation primitives but not destination registration; only
   the host/toolkit composition roots know the complete feature set.
-- The standard drawer repository contract is host-facing, while its default localized item list
-  remains in the About feature that owns those labels and actions.
+- The drawer repository contract and its default four-entry implementation live together here,
+  because the entries name navigation destinations this module already owns. Keeping the default in
+  a feature module forced that feature to own navigation labels it did not otherwise use.
+- `MainTopAppBar` lives in [`:library:core:ui`](../core/ui/README.md), not here. It is built from
+  that module's buttons and dropdown, and `:library:core:ui` already depends on this module for
+  `StableNavKey`, so hosting the app bar here would invert that edge into a dependency cycle.
 
 ## Public contracts
 

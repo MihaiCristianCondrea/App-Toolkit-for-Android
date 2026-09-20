@@ -11,6 +11,7 @@ entry helpers, state handling, analytics hooks, and shared components.
 - Navigation entry builders and UI state built on stable keys owned by `:library:navigation`.
 - Reusable buttons, fields, preferences, layouts, grids, dialogs, snackbars, ads slots, effects, and
   adaptive-window helpers.
+- `MainTopAppBar`, the host main-screen app bar, and its host-supplied Support overflow action.
 - `GeneralTextField` and the Markdown authoring behind it: the length-preserving highlighter, the
   formatting bar, and the source edits it applies.
 - Render models such as `AppVersionInfo` and `AdsConfig`.
@@ -39,7 +40,7 @@ entry helpers, state handling, analytics hooks, and shared components.
 ## Used by
 
 - `:sample` and `:library:apptoolkit`.
-- `:library:feature:about`, `:library:feature:help`, `:library:feature:issuereporter`,
+- `:library:feature:about`, `:library:feature:faq`, `:library:feature:issuereporter`,
   `:library:feature:onboarding`, `:library:feature:permissions`, `:library:feature:settings`, and
   `:library:feature:support`.
 - `:library:integration:ads` for its settings screen and ad presentation.

@@ -1,0 +1,76 @@
+/*
+ * Copyright (©) 2026 Mihai-Cristian Condrea
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.data.repositories
+
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.EventNote
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
+
+/**
+ * Supplies the standard Settings, Help, Updates, and Share drawer entries.
+ *
+ * Settings and Share use animated vector drawables, which rest on their first frame and play when
+ * the entry is clicked. They are declared once as `animatedIcon`, so the same drawable covers the
+ * unselected and the selected state.
+ *
+ * Hosts can use this implementation as-is instead of duplicating the standard list, or implement
+ * [NavigationRepository] when they need to add, remove, or dynamically change entries.
+ */
+class DefaultNavigationRepository(
+    private val dispatchers: DispatcherProvider
+) : NavigationRepository {
+    override fun getNavigationDrawerItems(): Flow<List<NavigationDrawerItem>> =
+        flow {
+            emit(
+                listOf(
+                    NavigationDrawerItem(
+                        title = R.string.settings,
+                        animatedIcon = ToolkitIcon.AnimatedVector(DesignSystemR.drawable.anim_settings),
+                        route = NavigationDrawerRoutes.ROUTE_SETTINGS,
+                    ),
+                    NavigationDrawerItem(
+                        title = R.string.help_and_feedback,
+                        icon = Icons.AutoMirrored.Outlined.HelpOutline,
+                        selectedIcon = Icons.AutoMirrored.Outlined.HelpOutline,
+                        route = NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK,
+                    ),
+                    NavigationDrawerItem(
+                        title = R.string.updates,
+                        icon = Icons.AutoMirrored.Outlined.EventNote,
+                        selectedIcon = Icons.AutoMirrored.Outlined.EventNote,
+                        route = NavigationDrawerRoutes.ROUTE_UPDATES,
+                    ),
+                    NavigationDrawerItem(
+                        title = R.string.share,
+                        animatedIcon = ToolkitIcon.AnimatedVector(DesignSystemR.drawable.anim_share),
+                        route = NavigationDrawerRoutes.ROUTE_SHARE,
+                    )
+                )
+            )
+        }.flowOn(dispatchers.io)
+}

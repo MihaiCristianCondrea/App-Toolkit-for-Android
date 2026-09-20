@@ -83,8 +83,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.D
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.rememberWindowWidthSizeClass
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.navigation.handleNavigationItemClick
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.views.dialogs.ChangelogDialog
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.views.navigation.MainTopAppBar
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.views.dialogs.ChangelogDialog
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.MainTopAppBar
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.animations.BottomNavTransitions
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.animations.NativeActivityTransitions
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.animations.rememberBottomNavTransitions

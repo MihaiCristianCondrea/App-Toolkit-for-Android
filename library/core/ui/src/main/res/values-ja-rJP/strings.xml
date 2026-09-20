@@ -50,6 +50,7 @@
     <string name="sponsored_ad_label_plain">スポンサー広告</string>
     <string name="startup_page">スタートアップページ</string>
     <string name="summary_dark_theme">暗いテーマは、バッテリー寿命を大幅に延長するために深い背景を活用します。それをアクティブにするには、Androidのシステムマネージャーに移動して、希望するテーマを選択してください</string>
+    <string name="support_us">サポートする</string>
     <string name="theme_mode">テーマモード</string>
     <string name="try_again">もう一度試してください</string>
     <string name="wallpaper_colors">壁紙の色</string>

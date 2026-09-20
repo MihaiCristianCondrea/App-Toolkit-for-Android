@@ -79,7 +79,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.La
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.rememberWindowWidthSizeClass
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.ui.HelpActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.FaqActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsCategory
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsConfig
@@ -295,7 +295,7 @@ fun SettingsDetailPlaceholder(paddingValues: PaddingValues) {
                         .align(alignment = Alignment.Start),
                     onClick = {
                         context.openActivity(
-                            HelpActivity::class.java,
+                            FaqActivity::class.java,
                         )
                     },
                     icon = ToolkitIcon.Vector(imageVector = Icons.AutoMirrored.Outlined.ContactSupport),

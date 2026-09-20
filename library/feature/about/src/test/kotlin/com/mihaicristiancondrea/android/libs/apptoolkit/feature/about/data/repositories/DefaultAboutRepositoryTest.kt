@@ -17,24 +17,15 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.os.Build
-import android.util.Log
 import com.google.common.truth.Truth.assertThat
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.CopyDeviceInfoResult
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.AboutSettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.providers.GooglePlayServicesVersionProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.models.AboutInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.AboutSettingsProvider
 import io.mockk.every
-import io.mockk.justRun
 import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.unmockkStatic
-import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -59,59 +50,57 @@ class TestDefaultAboutRepository {
     }
 
     private fun repository(
-        context: Context = mockk(),
-        sdkIntProvider: () -> Int = { Build.VERSION.SDK_INT },
+        gmsVersionProvider: GooglePlayServicesVersionProvider = mockk {
+            every { getVersion() } returns "24.01.12"
+        },
+        toolkitVersionProvider: () -> String = { "3.0.0-test" },
     ): DefaultAboutRepository =
         DefaultAboutRepository(
             deviceProvider = deviceProvider,
             buildInfoProvider = buildInfoProvider,
-            context = context,
-            sdkIntProvider = sdkIntProvider,
             firebaseController = mockk<FirebaseController>(relaxed = true),
+            gmsVersionProvider = gmsVersionProvider,
+            toolkitVersionProvider = toolkitVersionProvider,
         )
 
     @Test
-    fun `getAboutInfo returns expected info`() = runTest(dispatcherExtension.testDispatcher) {
-        val repo = repository()
+    fun `getAboutInfo returns host and toolkit metadata`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val repo = repository()
 
-        val result: AboutInfo = repo.getAboutInfo()
+            val result: AboutInfo = repo.getAboutInfo()
 
-        assertThat(result.appVersion).isEqualTo(buildInfoProvider.appVersion)
-        assertThat(result.appVersionCode).isEqualTo(buildInfoProvider.appVersionCode)
-        assertThat(result.deviceInfo).isEqualTo(deviceProvider.deviceInfo)
-    }
+            assertThat(result).isEqualTo(
+                AboutInfo(
+                    appVersion = "1.0",
+                    appVersionCode = 1,
+                    appToolkitVersion = "3.0.0-test",
+                    googlePlayServicesVersion = "24.01.12",
+                    deviceInfo = deviceProvider.deviceInfo,
+                )
+            )
+        }
 
     @Test
-    fun `copyDeviceInfo delegates to copyTextToClipboard`() {
-        mockkStatic(Log::class)
-        every { Log.w(any(), any(), any()) } returns 0
-        mockkStatic(ClipData::class)
-        val clipData = mockk<ClipData>()
-        every { ClipData.newPlainText(any(), any()) } returns clipData
-        val context = mockk<Context>()
-        val clipboardManager = mockk<ClipboardManager>()
-        every { context.getSystemService(ClipboardManager::class.java) } returns clipboardManager
-        justRun { clipboardManager.setPrimaryClip(any()) }
-        val repo = repository(
-            context = context,
-            sdkIntProvider = { Build.VERSION_CODES.S_V2 },
-        )
-        val copyResult = runCatching {
-            repo.copyDeviceInfo(
-                "label",
-                "info"
-            )
-        }.also {
-            unmockkStatic(ClipData::class)
-            unmockkStatic(Log::class)
-        }.getOrThrow()
+    fun `getAboutInfo reports absent google play services as null`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val gmsProvider = mockk<GooglePlayServicesVersionProvider> {
+                every { getVersion() } returns null
+            }
+            val repo = repository(gmsVersionProvider = gmsProvider)
 
-        verify { clipboardManager.setPrimaryClip(any()) }
-        assertThat(copyResult).isEqualTo(
-            CopyDeviceInfoResult(
-                copied = true,
-                shouldShowFeedback = true
-            )
-        )
-    }
+            val result: AboutInfo = repo.getAboutInfo()
+
+            assertThat(result.googlePlayServicesVersion).isNull()
+        }
+
+    @Test
+    fun `getAboutInfo reports a blank toolkit version as supplied`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val repo = repository(toolkitVersionProvider = { "" })
+
+            val result: AboutInfo = repo.getAboutInfo()
+
+            assertThat(result.appToolkitVersion).isEmpty()
+        }
 }

@@ -17,46 +17,28 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.di
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.providers.GooglePlayServicesVersionProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories.AboutRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories.ChangelogRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories.DefaultAboutRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories.DefaultChangelogRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories.DefaultNavigationRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.usecases.CopyDeviceInfoUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.usecases.GetChangelogUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.AboutViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.ChangelogViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.factory.GmsHostFactory
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.data.repositories.DefaultNavigationRepository
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val aboutModule: Module = module {
+    single { GooglePlayServicesVersionProvider(context = get()) }
+
     single<DefaultAboutRepository> {
         DefaultAboutRepository(
             deviceProvider = get(),
             buildInfoProvider = get(),
-            context = get(),
             firebaseController = get(),
+            gmsVersionProvider = get(),
         )
     }
     single<AboutRepository> { get<DefaultAboutRepository>() }
-
-    single<DefaultChangelogRepository> {
-        DefaultChangelogRepository(
-            client = get(),
-            apiBaseUrl = get(
-                qualifier = named(AppToolkitDiConstants.ANDROID_APPS_METADATA_API_BASE_URL),
-            ),
-            legacyChangelogUrl = get(
-                qualifier = named(AppToolkitDiConstants.GITHUB_CHANGELOG),
-            ),
-            firebaseController = get(),
-        )
-    }
-    single<ChangelogRepository> { get<DefaultChangelogRepository>() }
 
     single<DefaultNavigationRepository> {
         DefaultNavigationRepository(
@@ -64,32 +46,10 @@ val aboutModule: Module = module {
         )
     }
 
-    single<GetChangelogUseCase> {
-        GetChangelogUseCase(
-            repository = get(),
-            buildInfoProvider = get(),
-        )
-    }
-
-    single<CopyDeviceInfoUseCase> {
-        CopyDeviceInfoUseCase(
-            repository = get(),
-            firebaseController = get(),
-        )
-    }
-
     viewModel {
         AboutViewModel(
             aboutRepository = get(),
-            copyDeviceInfo = get(),
-            dispatchers = get(),
-            firebaseController = get(),
-        )
-    }
-
-    viewModel {
-        ChangelogViewModel(
-            getChangelogUseCase = get(),
+            context = get(),
             dispatchers = get(),
             firebaseController = get(),
         )

@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.di
 import android.content.Context
 import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.di.appToolkitHostModules
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.common.utils.constants.help.HelpConstants
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.common.utils.constants.faq.FaqConstants
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.di.dataStoreModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.di.navigationModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.di.shellModule
@@ -42,7 +42,7 @@ fun sampleAppModules(hostBuildConfig: AppToolkitHostBuildConfig): List<Module> =
     add(navigationModule)
     add(shellModule)
     add(appModule)
-    add(settingsModule)
+    add(settingsModule(hostBuildConfig = hostBuildConfig))
     add(tilesModule)
     add(appsModule)
     add(componentsModule)
@@ -57,7 +57,7 @@ fun initializeKoin(context: Context) {
         versionName = BuildConfig.VERSION_NAME,
         versionCode = BuildConfig.VERSION_CODE.toLong(),
         githubToken = BuildConfig.GITHUB_TOKEN,
-        faqProductId = HelpConstants.FAQ_PRODUCT_ID,
+        faqProductId = FaqConstants.FAQ_PRODUCT_ID,
     )
 
     startKoin {

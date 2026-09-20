@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 
 /**
@@ -24,6 +25,20 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.Ui
  */
 sealed interface AboutEvent : UiEvent {
     data object Load : AboutEvent
-    data class CopyDeviceInfo(val label: String) : AboutEvent
+
+    /**
+     * Requests a clipboard write of [text] under [label].
+     *
+     * @param label Clipboard entry label, resolved by the screen that raised the event.
+     * @param text The exact text to place on the clipboard.
+     * @param successMessage Confirmation to show once the write succeeds. When `null` the generic
+     * copied-to-clipboard message is used.
+     */
+    data class CopyToClipboard(
+        val label: String,
+        val text: String,
+        val successMessage: UiTextHelper? = null,
+    ) : AboutEvent
+
     data object DismissSnackbar : AboutEvent
 }

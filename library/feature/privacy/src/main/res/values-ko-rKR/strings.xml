@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">광고</string>
+    <string name="code_of_conduct">행동 강령</string>
+    <string name="legal">법률 정보</string>
+    <string name="legal_notices">법적 고지</string>
+    <string name="license">라이선스</string>
+    <string name="permissions">권한</string>
+    <string name="privacy">개인 정보 보호</string>
+    <string name="privacy_policy">개인정보처리방침</string>
+    <string name="summary_preference_settings_ads">관련 광고를 표시하기 위해 귀하의 정보를 사용하는 방법 제어</string>
+    <string name="summary_preference_settings_code_of_conduct">서비스 내 행동 규칙 및 지침 이해</string>
+    <string name="summary_preference_settings_legal_notices">서비스 관련 법률 정보 보기</string>
+    <string name="summary_preference_settings_permissions">서비스에 부여된 권한 관리</string>
+    <string name="summary_preference_settings_privacy_policy">데이터 처리 방식을 규정하는 정책 보기</string>
+    <string name="summary_preference_settings_terms_of_service">서비스 사용 시 동의하는 약관 검토</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">인앱 환경 개선을 위해 데이터 공유</string>
+    <string name="terms_of_service">서비스 약관</string>
+    <string name="usage_and_diagnostics">사용량 &amp; 진단</string>
+</resources>

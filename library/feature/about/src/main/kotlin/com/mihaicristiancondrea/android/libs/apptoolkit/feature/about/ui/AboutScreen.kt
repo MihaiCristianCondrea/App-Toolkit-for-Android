@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,12 +36,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.AboutUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.licenses.LicensesActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
@@ -55,12 +51,15 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.No
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItemAction
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.AboutUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.LicensesActivity
 import kotlinx.coroutines.delay
 import nl.dionsegijn.konfetti.compose.KonfettiView
 import nl.dionsegijn.konfetti.core.Angle
@@ -75,12 +74,6 @@ import kotlin.time.Duration.Companion.milliseconds
 
 private const val ABOUT_SCREEN_NAME = "About"
 private const val ABOUT_SCREEN_CLASS = "AboutScreen"
-
-private object AboutPreferenceKeys {
-    const val APP_BUILD_VERSION: String = "app_build_version"
-    const val OSS_LICENSES: String = "oss_licenses"
-    const val DEVICE_INFO: String = "device_info"
-}
 
 /**
  * A Composable that displays the "About" screen's settings list.
@@ -109,7 +102,6 @@ fun AboutScreen(
     val context: Context = LocalContext.current
     val viewModel: AboutViewModel = koinViewModel()
     val screenState: UiStateScreen<AboutUiState> by viewModel.uiState.collectAsStateWithLifecycle()
-    val deviceInfo: String = stringResource(id = R.string.device_info)
 
     val firebaseController: FirebaseController = koinInject()
 
@@ -166,85 +158,69 @@ fun AboutScreen(
                     contentPadding = paddingValues,
                     verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
                 ) {
+                    items(
+                        items = data.items,
+                        key = { it.key },
+                    ) { item ->
+                        when (item) {
+                            is AboutItem.Header -> {
+                                PreferenceCategoryItem(title = item.title.asString())
+                            }
 
-                    item {
-                        PreferenceCategoryItem(title = stringResource(id = R.string.app_info))
-                    }
+                            is AboutItem.Preference -> {
+                                SettingsPreferenceItem(
+                                    title = item.title.asString(),
+                                    summary = item.summary.asString(),
+                                    onClick = {
+                                        if (item.countsVersionTap) {
+                                            appVersionTotalTapCount += 1
+                                            onVersionTap(appVersionTotalTapCount)
+                                            appVersionTapCount += 1
+                                            if (appVersionTapCount >= 5) {
+                                                appVersionTapCount = 0
+                                                showKonfettiAnimationForThisInstance = true
+                                                firebaseController.logUnlockAchievement(
+                                                    "konfetti_easter_egg",
+                                                )
+                                            }
+                                        }
+                                        when (val action = item.action) {
+                                            is AboutItemAction.CopyToClipboard -> {
+                                                viewModel.onEvent(
+                                                    event = AboutEvent.CopyToClipboard(
+                                                        label = action.label.asString(context),
+                                                        text = action.text.asString(context),
+                                                        successMessage = action.successMessage,
+                                                    )
+                                                )
+                                            }
 
-                    item {
-                        SettingsPreferenceItem(
-                            title = stringResource(id = CommonR.string.app_full_name),
-                            summary = stringResource(id = CommonR.string.copyright),
-                            modifier = Modifier.groupedPreferenceItem(
-                                position = GroupedItemPosition.FIRST,
-                                outerRadius = SizeConstants.LargeMediumSize,
-                            )
-                        )
-                    }
+                                            AboutItemAction.OpenLicenses -> {
+                                                val opened = context.openActivity(
+                                                    LicensesActivity::class.java,
+                                                )
+                                                if (!opened) {
+                                                    Log.w(
+                                                        ABOUT_SETTINGS_LOG_TAG,
+                                                        "Failed to open licenses screen from About settings",
+                                                    )
+                                                }
+                                            }
 
-                    item {
-                        SettingsPreferenceItem(
-                            title = stringResource(id = R.string.app_build_version),
-                            summary = "${data.appVersionInfo.versionName.orEmpty()} (${data.appVersionInfo.versionCode})",
-                            onClick = {
-                                appVersionTotalTapCount += 1
-                                onVersionTap(appVersionTotalTapCount)
-                                appVersionTapCount += 1
-                                if (appVersionTapCount >= 5) {
-                                    appVersionTapCount = 0
-                                    showKonfettiAnimationForThisInstance = true
-                                    firebaseController.logUnlockAchievement("konfetti_easter_egg")
-                                }
-                            },
-                            firebaseController = firebaseController,
-                            ga4Event = aboutPreferenceTapEvent(preferenceKey = AboutPreferenceKeys.APP_BUILD_VERSION),
-                            modifier = Modifier.groupedPreferenceItem(
-                                position = GroupedItemPosition.MIDDLE,
-                                outerRadius = SizeConstants.LargeMediumSize,
-                            )
-                        )
-                    }
-
-                    item {
-                        SettingsPreferenceItem(
-                            title = stringResource(id = R.string.oss_license_title),
-                            summary = stringResource(id = R.string.summary_preference_settings_oss),
-                            onClick = {
-                                val opened = context.openActivity(LicensesActivity::class.java)
-                                if (!opened) {
-                                    Log.w(
-                                        ABOUT_SETTINGS_LOG_TAG,
-                                        "Failed to open licenses screen from About settings"
+                                            null -> Unit
+                                        }
+                                    },
+                                    firebaseController = firebaseController,
+                                    ga4Event = item.action?.let {
+                                        aboutPreferenceTapEvent(preferenceKey = item.key)
+                                    },
+                                    modifier = Modifier.groupedPreferenceItem(
+                                        position = item.position,
+                                        outerRadius = SizeConstants.LargeMediumSize,
                                     )
-                                }
-                            },
-                            firebaseController = firebaseController,
-                            ga4Event = aboutPreferenceTapEvent(preferenceKey = AboutPreferenceKeys.OSS_LICENSES),
-                            modifier = Modifier.groupedPreferenceItem(
-                                position = GroupedItemPosition.LAST,
-                                outerRadius = SizeConstants.LargeMediumSize,
-                            )
-                        )
-                    }
-
-                    item {
-                        PreferenceCategoryItem(title = deviceInfo)
-                    }
-
-                    item {
-                        SettingsPreferenceItem(
-                            title = deviceInfo,
-                            summary = data.deviceInfo,
-                            onClick = {
-                                viewModel.onEvent(event = AboutEvent.CopyDeviceInfo(label = deviceInfo))
-                            },
-                            firebaseController = firebaseController,
-                            ga4Event = aboutPreferenceTapEvent(preferenceKey = AboutPreferenceKeys.DEVICE_INFO),
-                            modifier = Modifier.groupedPreferenceItem(
-                                position = GroupedItemPosition.SINGLE,
-                                outerRadius = SizeConstants.LargeMediumSize,
-                            )
-                        )
+                                )
+                            }
+                        }
                     }
                 }
             }

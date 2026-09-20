@@ -17,28 +17,30 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories
 
-import android.content.Context
-import android.os.Build
-import android.util.Log
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.CopyDeviceInfoResult
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.AboutSettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.CLIPBOARD_HELPER_LOG_TAG
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.copyTextToClipboard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.BuildConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.providers.GooglePlayServicesVersionProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.models.AboutInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.AboutSettingsProvider
 
 /**
- * Provides About-related data and handles clipboard interactions for device info.
+ * Provides the raw application and device metadata shown on the About screen.
  *
- * @param sdkIntProvider Supplies the current SDK version for clipboard feedback decisions.
+ * Turning that metadata into rendered entries is the UI layer's responsibility, and copying it is a
+ * presentation interaction owned by the ViewModel, so this repository holds neither.
+ *
+ * @param deviceProvider Supplies the host-formatted device report.
+ * @param buildInfoProvider Supplies the host application version name and code.
+ * @param gmsVersionProvider Supplies the installed Google Play services runtime version, if present.
+ * @param toolkitVersionProvider Supplies the App Toolkit library publishing version.
  */
 class DefaultAboutRepository(
     private val deviceProvider: AboutSettingsProvider,
     private val buildInfoProvider: BuildInfoProvider,
-    private val context: Context,
     private val firebaseController: FirebaseController,
-    private val sdkIntProvider: () -> Int = { Build.VERSION.SDK_INT },
+    private val gmsVersionProvider: GooglePlayServicesVersionProvider,
+    private val toolkitVersionProvider: () -> String = { BuildConfig.APP_TOOLKIT_VERSION },
 ) : AboutRepository {
 
     override suspend fun getAboutInfo(): AboutInfo {
@@ -49,37 +51,9 @@ class DefaultAboutRepository(
         return AboutInfo(
             appVersion = buildInfoProvider.appVersion,
             appVersionCode = buildInfoProvider.appVersionCode,
+            appToolkitVersion = toolkitVersionProvider(),
+            googlePlayServicesVersion = gmsVersionProvider.getVersion(),
             deviceInfo = deviceProvider.deviceInfo,
         )
     }
-
-    override fun copyDeviceInfo(label: String, deviceInfo: String): CopyDeviceInfoResult {
-        firebaseController.logBreadcrumb(
-            message = "Copy device info requested",
-            attributes = mapOf("label" to label),
-        )
-        val allowFeedback = sdkIntProvider() <= Build.VERSION_CODES.S_V2
-        var shouldShowFeedback = false
-        val copied = runCatching {
-            context.copyTextToClipboard(
-                label = label,
-                text = deviceInfo,
-                onCopyFallback = {
-                    if (allowFeedback) {
-                        shouldShowFeedback = true
-                    }
-                }
-            )
-        }.onFailure { throwable ->
-            Log.w(CLIPBOARD_HELPER_LOG_TAG, "Failed to copy device info", throwable)
-            if (allowFeedback) {
-                shouldShowFeedback = true
-            }
-        }.getOrDefault(false)
-        return CopyDeviceInfoResult(
-            copied = copied,
-            shouldShowFeedback = shouldShowFeedback
-        )
-    }
 }
-

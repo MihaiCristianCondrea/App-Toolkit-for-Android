@@ -17,20 +17,12 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.di
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.settings.AppAboutSettingsProvider
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.settings.AppDisplaySettingsProvider
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.settings.AppPrivacySettingsProvider
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.settings.AppSettingsProvider
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.startup.AppStartupProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ColorPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.google.blue.bluePalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitModules
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.AboutSettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.PrivacySettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.SettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.providers.DisplaySettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReporterConfig
 import org.koin.core.module.Module
 import org.koin.core.qualifier.named
@@ -39,13 +31,13 @@ import org.koin.dsl.module
 /**
  * The App Toolkit's Koin graph, with the sample's answers to every extension point it asks about.
  *
- * This is the one call a host makes, and it is what the sample is demonstrating: an app adopting
- * the toolkit needs a module like this one, not a scattering of provider classes and bindings.
+ * This is the one call a host makes for the toolkit itself. Its job is ordering: the toolkit's own
+ * modules go first, so the host modules added after it win wherever Koin's later definition should
+ * replace a toolkit binding.
  *
- * The ordering matters and is the reason it lives here rather than being assembled at the call
- * site: the toolkit's own modules go first, and host bindings follow. Koin's later definitions win
- * when the sample intentionally replaces a toolkit binding, while contracts with no toolkit
- * default are satisfied by this module.
+ * The settings extension points the toolkit asks about are answered by `:sample:feature:settings`,
+ * which owns the surfaces they configure. This module cannot bind them: a `:sample:core:` module
+ * may not depend on a feature, which `ModuleBoundariesPlugin` enforces.
  */
 fun appToolkitHostModules(hostBuildConfig: AppToolkitHostBuildConfig): List<Module> = buildList {
     addAll(
@@ -57,22 +49,16 @@ fun appToolkitHostModules(hostBuildConfig: AppToolkitHostBuildConfig): List<Modu
             issueReporterConfig = IssueReporterConfig(shakeToReportEnabled = true),
         )
     )
-    add(appToolkitProvidersModule(hostBuildConfig = hostBuildConfig))
+    add(appToolkitProvidersModule())
 }
 
 /**
- * The sample's implementations of the provider interfaces the toolkit looks up.
+ * The host-wide toolkit answers that belong to no single feature.
  *
- * Every binding here answers a question the library asks of its host: what the settings screen
- * lists, what "about" says, what the default theme is.
+ * Currently the default theme palette: the toolkit asks every host which one to start from, and
+ * that is an application-level choice rather than a settings one.
  */
-internal fun appToolkitProvidersModule(hostBuildConfig: AppToolkitHostBuildConfig): Module =
+internal fun appToolkitProvidersModule(): Module =
     module {
-        single<SettingsProvider> { AppSettingsProvider(context = get()) }
-        single<AboutSettingsProvider> {
-            AppAboutSettingsProvider(context = get(), hostBuildConfig = hostBuildConfig)
-        }
-        single<DisplaySettingsProvider> { AppDisplaySettingsProvider(context = get()) }
-        single<PrivacySettingsProvider> { AppPrivacySettingsProvider(context = get()) }
         single<ColorPalette>(named(AppToolkitDiConstants.DEFAULT_THEME_PALETTE)) { bluePalette }
     }

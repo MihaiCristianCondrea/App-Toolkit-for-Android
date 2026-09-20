@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">Реклама</string>
+    <string name="code_of_conduct">Кодекс поведения</string>
+    <string name="legal">Юридическая информация</string>
+    <string name="legal_notices">Юридические уведомления</string>
+    <string name="license">Лицензия</string>
+    <string name="permissions">Разрешения</string>
+    <string name="privacy">Конфиденциальность</string>
+    <string name="privacy_policy">Политика конфиденциальности</string>
+    <string name="summary_preference_settings_ads">Контролируйте, как мы используем вашу информацию для показа релевантной рекламы</string>
+    <string name="summary_preference_settings_code_of_conduct">Ознакомьтесь с правилами и руководящими принципами поведения</string>
+    <string name="summary_preference_settings_legal_notices">Просмотрите юридическую информацию о нашем сервисе</string>
+    <string name="summary_preference_settings_permissions">Управляйте разрешениями, предоставленными нашей службе</string>
+    <string name="summary_preference_settings_privacy_policy">Просмотрите политику обработки ваших данных</string>
+    <string name="summary_preference_settings_terms_of_service">Просмотрите условия использования нашего сервиса</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">Отправляйте данные для улучшения работы приложения</string>
+    <string name="terms_of_service">Условия использования</string>
+    <string name="usage_and_diagnostics">Использование и диагностика</string>
+</resources>

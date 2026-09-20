@@ -34,7 +34,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-/** Owns display-preference observation and persistence for [DisplaySettingsList]. */
+/** Owns display-preference observation and persistence for [DisplaySettingsScreen]. */
 class DisplaySettingsViewModel(
     private val displayPreferences: DisplayPreferencesRepository,
     private val themePreferences: ThemePreferencesRepository,

@@ -22,12 +22,12 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.AboutScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.AdvancedSettingsList
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.UsageAndDiagnosticsList
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.DisplaySettingsList
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.privacy.PrivacySettingsList
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.AdvancedSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.UsageAndDiagnosticsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.DisplaySettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.PrivacyScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.constants.SettingsContent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.ThemeSettingsList
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.ThemeSettingsScreen
 
 /**
  * Provider class that handles rendering of different settings sections.
@@ -56,11 +56,11 @@ class GeneralSettingsContentProvider(
                 }
             }
 
-            SettingsContent.ADVANCED -> AdvancedSettingsList(paddingValues = paddingValues)
-            SettingsContent.DISPLAY -> DisplaySettingsList(paddingValues = paddingValues)
-            SettingsContent.SECURITY_AND_PRIVACY -> PrivacySettingsList(paddingValues = paddingValues)
-            SettingsContent.THEME -> ThemeSettingsList(paddingValues = paddingValues)
-            SettingsContent.USAGE_AND_DIAGNOSTICS -> UsageAndDiagnosticsList(paddingValues = paddingValues)
+            SettingsContent.ADVANCED -> AdvancedSettingsScreen(paddingValues = paddingValues)
+            SettingsContent.DISPLAY -> DisplaySettingsScreen(paddingValues = paddingValues)
+            SettingsContent.SECURITY_AND_PRIVACY -> PrivacyScreen(paddingValues = paddingValues)
+            SettingsContent.THEME -> ThemeSettingsScreen(paddingValues = paddingValues)
+            SettingsContent.USAGE_AND_DIAGNOSTICS -> UsageAndDiagnosticsScreen(paddingValues = paddingValues)
             else -> customScreens[contentKey]?.invoke(paddingValues)
         }
     }

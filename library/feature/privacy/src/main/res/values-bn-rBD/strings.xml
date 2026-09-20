@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">বিজ্ঞাপন</string>
+    <string name="code_of_conduct">আচরণবিধি</string>
+    <string name="legal">আইনি</string>
+    <string name="legal_notices">আইনি নোটিশ</string>
+    <string name="license">লাইসেন্স</string>
+    <string name="permissions">অনুমতিসমূহ</string>
+    <string name="privacy">গোপনীয়তা</string>
+    <string name="privacy_policy">গোপনীয়তা নীতি</string>
+    <string name="summary_preference_settings_ads">আপনাকে প্রাসঙ্গিক বিজ্ঞাপন দেখাতে আমরা কীভাবে আপনার তথ্য ব্যবহার করি তা নিয়ন্ত্রণ করুন</string>
+    <string name="summary_preference_settings_code_of_conduct">আমাদের পরিষেবার মধ্যে আচরণের নিয়ম এবং নির্দেশিকা বুঝুন</string>
+    <string name="summary_preference_settings_legal_notices">আমাদের পরিষেবা সম্পর্কে আইনি তথ্য দেখুন</string>
+    <string name="summary_preference_settings_permissions">আমাদের পরিষেবাতে মঞ্জুর করা অনুমতিসমূহ পরিচালনা করুন</string>
+    <string name="summary_preference_settings_privacy_policy">আমরা কীভাবে আপনার ডেটা পরিচালনা করি তা নিয়ন্ত্রণকারী নীতি দেখুন</string>
+    <string name="summary_preference_settings_terms_of_service">আমাদের পরিষেবা ব্যবহার করার সময় আপনি যে শর্তাবলীতে সম্মত হন তা পর্যালোচনা করুন</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">অ্যাপ-মধ্যস্থ অভিজ্ঞতা উন্নত করতে ডেটা শেয়ার করুন</string>
+    <string name="terms_of_service">পরিষেবার শর্তাবলী</string>
+    <string name="usage_and_diagnostics">ব্যবহার এবং ডায়াগনস্টিকস</string>
+</resources>

@@ -33,7 +33,7 @@ theme, advanced, and usage/diagnostics feature modules.
   `:library:feature:theme` for dedicated settings surfaces.
 - [`:library:integration:consent`](../../integration/consent/README.md) for diagnostics consent
   updates.
-- `:library:feature:about`, `:library:feature:help`, and `:library:feature:issuereporter` to compose
+- `:library:feature:about`, `:library:feature:faq`, and `:library:feature:issuereporter` to compose
   related settings destinations/content.
 
 ## Used by

@@ -111,7 +111,7 @@ without an ad, so bind every qualifier whose screen you include:
 | Qualifier           | Injected by                                     | Format          |
 |---------------------|-------------------------------------------------|-----------------|
 | `NO_DATA_NATIVE_AD` | `NoDataScreen`, in `:library:core:ui`           | Native advanced |
-| `HELP_NATIVE_AD`    | `HelpScreenContent`, in `:library:feature:help` | Native advanced |
+| `HELP_NATIVE_AD`    | `FaqScreenContent`, in `:library:feature:faq`   | Native advanced |
 | `SUPPORT_NATIVE_AD` | `SupportScreen`, in `:library:feature:support`  | Native advanced |
 
 `NoDataScreen` is the one to watch: it is a shared empty/error state rather than a screen a host

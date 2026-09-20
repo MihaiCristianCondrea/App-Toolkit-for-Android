@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <!--
+      ~ Empty slots, not copy. The library renders whatever the host declares under these names, and
+      ~ the host translates it: `:sample:feature:faq` carries all nine questions and answers in
+      ~ every supported locale.
+      ~
+      ~ `translatable="false"` therefore describes these placeholders correctly, there is nothing
+      ~ here to send to a translator. Dropping it does not make the FAQ translatable; it makes lint
+      ~ demand 25 translations of an empty string, and `MissingTranslation` is an error in this
+      ~ project, so the build fails.
+      -->
+    <string name="question_1" translatable="false" />
+    <string name="question_2" translatable="false" />
+    <string name="question_3" translatable="false" />
+    <string name="question_4" translatable="false" />
+    <string name="question_5" translatable="false" />
+    <string name="question_6" translatable="false" />
+    <string name="question_7" translatable="false" />
+    <string name="question_8" translatable="false" />
+    <string name="question_9" translatable="false" />
+    <string name="summary_preference_faq_1" translatable="false" />
+    <string name="summary_preference_faq_2" translatable="false" />
+    <string name="summary_preference_faq_3" translatable="false" />
+    <string name="summary_preference_faq_4" translatable="false" />
+    <string name="summary_preference_faq_5" translatable="false" />
+    <string name="summary_preference_faq_6" translatable="false" />
+    <string name="summary_preference_faq_7" translatable="false" />
+    <string name="summary_preference_faq_8" translatable="false" />
+    <string name="summary_preference_faq_9" translatable="false" />
+</resources>

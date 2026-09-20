@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.di
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.data.repositories.FirebaseControllerImpl
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.data.repositories.DefaultFirebaseController
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
@@ -26,5 +26,5 @@ import org.koin.dsl.module
  * Koin module for the firebase integration.
  */
 val firebaseModule: Module = module {
-    single<FirebaseController> { FirebaseControllerImpl() }
+    single<FirebaseController> { DefaultFirebaseController() }
 }

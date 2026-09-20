@@ -206,4 +206,53 @@ class ClipboardHelperTest {
             }
         )
     }
+
+    /**
+     * Runs the helper against [clipboard]. The whole suite above is disabled, so these are the only
+     * tests that actually exercise it; they assert what the helper can know, which is whether the
+     * clipboard accepted the write. Confirming the write by reading the clipboard back is not
+     * possible: a write needs no window focus, a read does, so a denied read is indistinguishable
+     * from a dropped write.
+     */
+    private fun copyWith(clipboard: ClipboardManager?): Boolean {
+        val context = mockk<Context>()
+        every { context.getSystemService(ClipboardManager::class.java) } returns clipboard
+
+        mockkStatic(ClipData::class)
+        mockkStatic(Log::class)
+        return runCatchingFinally(
+            block = {
+                every { ClipData.newPlainText(any(), any()) } returns mockk<ClipData>()
+                every { Log.w(any<String>(), any<String>()) } returns 0
+                every { Log.w(any<String>(), any<String>(), any()) } returns 0
+                context.copyTextToClipboard(label = "label", text = "text")
+            },
+            finallyBlock = {
+                unmockkStatic(Log::class)
+                unmockkStatic(ClipData::class)
+            },
+        )
+    }
+
+    @Test
+    fun `copyTextToClipboard reports success when the clipboard accepts the write`() {
+        val clipboard = mockk<ClipboardManager>()
+        justRun { clipboard.setPrimaryClip(any()) }
+
+        assertTrue(copyWith(clipboard))
+        verify(exactly = 1) { clipboard.setPrimaryClip(any()) }
+    }
+
+    @Test
+    fun `copyTextToClipboard reports failure when the clipboard service is missing`() {
+        assertFalse(copyWith(clipboard = null))
+    }
+
+    @Test
+    fun `copyTextToClipboard reports failure when the clipboard throws`() {
+        val clipboard = mockk<ClipboardManager>()
+        every { clipboard.setPrimaryClip(any()) } throws SecurityException("denied")
+
+        assertFalse(copyWith(clipboard))
+    }
 }

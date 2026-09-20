@@ -7,7 +7,7 @@ service wiring.
 
 ## Owns
 
-- `data.repositories.FirebaseControllerImpl` for analytics events, breadcrumbs, and crash reporting.
+- `data.repositories.DefaultFirebaseController` for analytics events, breadcrumbs, and crash reporting.
 - `firebaseModule` Koin bindings.
 - `data.notifications.FirebaseNotificationsService` and its notification/wake-lock manifest
   permissions.
@@ -35,7 +35,7 @@ Firebase Analytics, Crashlytics, Performance, and Messaging materially define th
 flowchart TD
     Features[Features and LoggedScreenViewModel] --> Contract[FirebaseController]
     Consent[Diagnostics and consent state] --> Contract
-    Contract -->|Koin binding| Impl[FirebaseControllerImpl]
+    Contract -->|Koin binding| Impl[DefaultFirebaseController]
     Impl --> Analytics[Firebase Analytics]
     Impl --> Crash[Crashlytics breadcrumbs and non-fatals]
     Impl --> Performance[Firebase Performance enablement]

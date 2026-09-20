@@ -15,6 +15,7 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+         separates it. Keep the wording identical between them when translating. -->
     <string name="about">About</string>
     <string name="amoled_mode">AMOLED mode</string>
     <string name="color_palette">Color palette</string>
@@ -46,13 +47,11 @@
     <string name="screen_and_display_settings">screen and display settings.</string>
     <string name="select_language_title">Select language</string>
     <string name="sort_by">Sort by</string>
-    <!-- Two forms of the same label. The bulleted form is used where the label
-         stands alone; the plain form where a surrounding chip or container already
-         separates it. Keep the wording identical between them when translating. -->
     <string name="sponsored_ad_label">● Sponsored Ad</string>
     <string name="sponsored_ad_label_plain">Sponsored Ad</string>
     <string name="startup_page">Startup page</string>
     <string name="summary_dark_theme">Dark theme leverages a deep background to significantly extend your battery life. To activate it, simply navigate to your Android\'s system manager and select your preferred theme in</string>
+    <string name="support_us">Support the app</string>
     <string name="theme_mode">Theme mode</string>
     <string name="try_again">Try again</string>
     <string name="wallpaper_colors">Wallpaper colors</string>
