@@ -600,7 +600,9 @@ Useful KDoc and comments explain:
 * unusual platform behavior
 * reasons for a non-obvious implementation decision
 
-Do not add comments that merely translate Kotlin into English.
+Do not use comments as prose decoration. A comment should explain a reason, constraint, invariant,
+lifecycle detail, compatibility requirement, or other information that cannot be understood easily
+from the code itself.
 
 If existing documentation becomes inaccurate because of the change, update it.
 

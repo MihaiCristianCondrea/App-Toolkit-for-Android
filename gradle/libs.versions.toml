@@ -1,6 +1,6 @@
 [versions]
 androidBilling = "9.1.0"
-androidGradlePlugin = "9.4.0"
+androidGradlePlugin = "9.4.1"
 androidxAppCompat = "1.8.0"
 androidxCoreKtx = "1.19.0"
 androidxCoreSplashscreen = "1.2.0"
