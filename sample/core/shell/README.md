@@ -63,11 +63,21 @@ flowchart TD
   selection are projections of the current destination and window state.
 - Drawer items arrive as a flow through `NavigationItemsProvider`, so an item that appears only
   once a feature unlocks it changes the drawer without the shell knowing why.
-- `MainViewModel` answers `RequestReview` once per instance. The activity sends it from `onResume`,
-  so it arrives again on every return from Settings, FAQ or Support, while
-  `RequestInAppReviewUseCase` records a session on each call and the prompt is a once-ever event.
-  Answering every request would count resumes as sessions and cancel the in-flight flow. The guard
-  lives in the ViewModel rather than an activity field so it survives configuration change.
+- The activity sends its GMS events from `onResume`, so each arrives again on every return from
+  Settings, FAQ or Support. `MainViewModel` guards each one on its own terms, and in the ViewModel
+  rather than an activity field so the guards survive configuration change:
+  - `RequestReview` is answered once per instance. `RequestInAppReviewUseCase` records a session on
+    each call and the prompt is a once-ever event, so answering every request would count resumes as
+    sessions and cancel the in-flight flow.
+  - `RequestConsent` is answered once per instance. The repository already joins a request still in
+    flight, but a resume after one completed starts a fresh UMP round trip, and overlapping UMP
+    requests are what drives that SDK into its failure path.
+  - `RequestInAppUpdate` is **not** once per instance. Re-checking on resume is how an immediate
+    update the user interrupted gets resumed — the repository's
+    `DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS` branch exists for exactly that — so guarding it away
+    would strand a half-applied update. Instead the check stops repeating once Play returns an
+    answer that cannot change this session; `Started` keeps it open, because that is the outcome
+    that may still need resuming.
 
 ## Public contracts
 

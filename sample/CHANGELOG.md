@@ -7,6 +7,8 @@
 ### Fixed
 
 - Fixed the rate-the-app prompt appearing far too early. The app asked for a review every time you returned to the main screen rather than once per launch, so returning from Settings a few times was enough to count as three separate sessions and bring the prompt up minutes after installing. It now asks once per launch, as intended.
+- Fixed the privacy consent check restarting every time you returned to the main screen. It now runs once per launch, which avoids repeated consent requests overlapping each other.
+- Stopped re-checking for app updates on every return to the main screen once Google Play has already answered. An update that was interrupted partway through is still picked up when you come back, as before.
 
 ---
 
