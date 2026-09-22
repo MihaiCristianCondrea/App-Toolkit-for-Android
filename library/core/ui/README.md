@@ -176,7 +176,7 @@ Two bars, one shape. Both take the same navigation icon, the same host-supplied 
 and the same destination `actions` slot; they differ only in what occupies the title.
 
 `MainTopAppBar` holds a title that crossfades when the destination changes. `centerTitle` picks the
-Material bar underneath it — off, the default, keeps the small top app bar the toolkit has always
+Material bar underneath it. Off, the default, keeps the small top app bar the toolkit has always
 rendered; on, it becomes a centre-aligned one. It is a parameter rather than a second composable
 because nothing else about the bar changes with it.
 
@@ -184,7 +184,7 @@ because nothing else about the bar changes with it.
 true the title crossfades into a `GeneralTextFieldStyle.Search` field; while it is false the bar is
 indistinguishable from `MainTopAppBar`. The bar owns only that swap. The query, and whether search
 is showing at all, stay with the caller, so one piece of state drives both the bar and the filtering
-underneath it — the bar never holds a query the screen cannot see.
+underneath it, so the bar never holds a query the screen cannot see.
 
 Filters are optional and live inside the field, in the `filters` slot to the left of the clear
 button, which is where a person looks for the controls that shape the results they are reading.

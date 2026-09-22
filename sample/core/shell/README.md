@@ -73,8 +73,8 @@ flowchart TD
     flight, but a resume after one completed starts a fresh UMP round trip, and overlapping UMP
     requests are what drives that SDK into its failure path.
   - `RequestInAppUpdate` is **not** once per instance. Re-checking on resume is how an immediate
-    update the user interrupted gets resumed — the repository's
-    `DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS` branch exists for exactly that — so guarding it away
+    update the user interrupted gets resumed. The repository's
+    `DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS` branch exists for exactly that, so guarding it away
     would strand a half-applied update. Instead the check stops repeating once Play returns an
     answer that cannot change this session; `Started` keeps it open, because that is the outcome
     that may still need resuming.

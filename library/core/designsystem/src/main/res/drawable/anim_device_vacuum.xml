@@ -25,7 +25,7 @@
         </group>
         <group android:name="_R_G_L_0_G" android:translateX="12.5" android:translateY="11.5">
           <group android:name="_R_G_L_0_C_0_G">
-            <clip-path android:name="_R_G_L_0_C_0" android:pathData=" M2.15 -2.94 C2.15,-2.94 -12,-2.94 -12,-2.94 C-12,-2.94 -12,10.58 -12,10.58 C-12,10.58 2.15,10.58 2.15,10.58 C2.15,10.58 2.15,-2.94 2.15,-2.94c "/>
+            <clip-path android:name="_R_G_L_0_C_0" android:pathData=" M2.15 11.63 C2.15,11.63 -12,11.63 -12,11.63 C-12,11.63 -12,10.58 -12,10.58 C-12,10.58 2.15,10.58 2.15,10.58 C2.15,10.58 2.15,11.63 2.15,11.63c "/>
             <group android:name="_R_G_L_0_C_0_G_G">
               <path android:name="_R_G_L_0_G_G_0_D_0_P_0" android:fillColor="@android:color/white" android:fillAlpha="1" android:fillType="nonZero" android:pathData=" M-5.5 -2.5 C-5.5,-2.5 -3.5,-2.5 -3.5,-2.5 C-2.44,-2.5 -1.42,-2.08 -0.67,-1.33 C0.08,-0.58 0.5,0.44 0.5,1.5 C0.5,1.5 0.5,10.5 0.5,10.5 C0.5,10.5 -4.52,10.5 -4.52,10.5 C-3.86,9.64 -3.5,8.59 -3.5,7.5 C-3.5,6.67 -3.7,5.85 -4.1,5.12 C-4.49,4.39 -5.06,3.77 -5.76,3.31 C-6.45,2.86 -7.25,2.59 -8.08,2.52 C-8.91,2.45 -9.74,2.59 -10.5,2.93 C-10.5,2.93 -10.5,-2.5 -10.5,-2.5 C-10.5,-2.5 -7.5,-2.5 -7.5,-2.5 C-7.5,-2.5 -5.5,-2.5 -5.5,-2.5c "/>
             </group>
@@ -54,7 +54,7 @@
   <target android:name="_R_G_L_0_C_0">
     <aapt:attr name="android:animation">
       <set android:ordering="together">
-        <objectAnimator android:propertyName="pathData" android:duration="500" android:startOffset="0" android:valueFrom="M2.15 -2.94 C2.15,-2.94 -12,-2.94 -12,-2.94 C-12,-2.94 -12,10.58 -12,10.58 C-12,10.58 2.15,10.58 2.15,10.58 C2.15,10.58 2.15,-2.94 2.15,-2.94c " android:valueTo="M2.15 11.63 C2.15,11.63 -12,11.63 -12,11.63 C-12,11.63 -12,10.58 -12,10.58 C-12,10.58 2.15,10.58 2.15,10.58 C2.15,10.58 2.15,11.63 2.15,11.63c " android:valueType="pathType">
+        <objectAnimator android:propertyName="pathData" android:duration="500" android:startOffset="0" android:valueFrom="M2.15 11.63 C2.15,11.63 -12,11.63 -12,11.63 C-12,11.63 -12,10.58 -12,10.58 C-12,10.58 2.15,10.58 2.15,10.58 C2.15,10.58 2.15,11.63 2.15,11.63c " android:valueTo="M2.15 -2.94 C2.15,-2.94 -12,-2.94 -12,-2.94 C-12,-2.94 -12,10.58 -12,10.58 C-12,10.58 2.15,10.58 2.15,10.58 C2.15,10.58 2.15,-2.94 2.15,-2.94c " android:valueType="pathType">
           <aapt:attr name="android:interpolator">
             <pathInterpolator android:pathData="M 0.0,0.0 c0.4,0 0.2,1 1.0,1.0"/>
           </aapt:attr>

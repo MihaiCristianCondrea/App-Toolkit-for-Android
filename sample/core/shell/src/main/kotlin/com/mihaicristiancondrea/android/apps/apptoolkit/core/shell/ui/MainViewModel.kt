@@ -81,7 +81,7 @@ class MainViewModel(
     // in the ViewModel, which survives configuration change.
     //
     // Review: the use case records a session per call and the prompt is a once-ever event, so it is
-    // answered once per ViewModel — one app session.
+    // answered once per ViewModel, which is one app session.
     private var hasRequestedReview: Boolean = false
 
     // Consent: a completed round trip is not repeated. The repository already joins a request that
@@ -91,7 +91,7 @@ class MainViewModel(
 
     // Update: NOT once per session. An immediate update the user interrupted by backgrounding the
     // app is resumed by re-checking on the next onResume, which is what the repository's
-    // DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS branch exists for — guarding that away would strand a
+    // DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS branch exists for, so guarding that away would strand a
     // half-applied update. So the check stops repeating only once Play gives an answer that cannot
     // change this session; Started keeps it open, because that is the one that may need resuming.
     private var isUpdateSettledForSession: Boolean = false

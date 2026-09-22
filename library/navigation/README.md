@@ -90,24 +90,31 @@ flowchart TD
 
 ## Drawer layout
 
-A drawer holding nothing but the standard Settings, Help, Updates and Share entries is one block,
-top-aligned, and that is how `NavigationDrawerSheet` renders it.
+`NavigationDrawerSheet` adds two behaviours to the plain list, and they are independent of each
+other. A host can take either, both, or neither.
 
-An app that adds destinations of its own changes what those entries are. They stop being the
-drawer's content and become its footer: the app's destinations take the top, the standard entries
-drop to the bottom edge, and `branding` — the app's logo beside its name, when the host supplies it
-— names the app above them. The rule is `pinnedRoutes`, which defaults to
-`NavigationDrawerRoutes.StandardRoutes`; pass an empty set to render `items` in the order given, as
-before.
+`branding` draws the app's logo and name above the items. It is null by default, which draws no
+header at all, so a drawer that does not name its app renders exactly as it did before the header
+existed. Passing one always shows it, whatever else the drawer contains.
+
+`pinStandardRoutes` moves the entries named by `pinnedRoutes`, which defaults to
+`NavigationDrawerRoutes.StandardRoutes`, to the bottom edge of the drawer. It is true by default.
+Pinning only does something once the host adds a destination outside that set: the app's
+destinations take the top and Settings, Help, Updates and Share become the drawer's footer. A drawer
+holding nothing but the standard entries has nothing to separate them from, so it renders as one
+top-aligned block either way. Pass `false` to render `items` in the order given.
+
+Which items land where is `navigationDrawerPlan`, which is unit tested; the composable renders the
+plan it returns.
 
 The footer is pinned with a weighted spacer rather than a scroll container, so the two groups
 together have to fit the drawer's height. The standard entries plus a handful of app destinations
 do; a drawer long enough to need scrolling wants its own sheet.
 
 `NavigationDrawerHeader` is separately public, for a host that wants its logo and name somewhere the
-sheet does not put them, or wants them in a drawer that has no destinations of its own. It takes
-either a `NavigationDrawerBranding` or an already-resolved title and icon, and sizes the logo to the
-title's line height so the pair stays balanced as the person scales their font up.
+sheet does not put them. It takes either a `NavigationDrawerBranding` or an already-resolved title
+and icon, and sizes the logo to the title's line height so the pair stays balanced as the person
+scales their font up.
 
 The logo is a `ToolkitIcon`, the same slot every other toolkit component takes, so an app can name
 itself with a drawable, a Compose vector, a bitmap resolved at runtime, or an animated mark without
