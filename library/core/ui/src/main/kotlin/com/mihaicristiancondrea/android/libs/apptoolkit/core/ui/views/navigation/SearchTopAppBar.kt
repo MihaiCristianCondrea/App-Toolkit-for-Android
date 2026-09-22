@@ -17,20 +17,21 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
@@ -44,9 +45,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -75,6 +73,12 @@ private val SearchFieldHeight = SizeConstants.FortyFourSize + SizeConstants.Extr
  * [GeneralTextFieldStyle.Search] field while [showSearch] is true. The bar owns only that swap; the
  * query and whether search is showing stay with the caller, so the same state drives the bar and
  * the filtering underneath it.
+ *
+ * Both states share one fixed-height slot and fade in place, so neither the title nor the
+ * placeholder moves while they swap. The title animates between values the way [MainTopAppBar]'s
+ * does. The state the bar is first composed in is shown without an entrance, so a screen that opens
+ * straight into search does not flash its title, and the title still appears the first time search
+ * is turned off.
  *
  * Filters are optional and go in [filters], the row that sits inside the field, to the left of the
  * clear button. [SearchFilterAction] is the ready-made toggle for one: it renders tonally while the
@@ -125,59 +129,44 @@ fun SearchTopAppBar(
     scrollBehavior: TopAppBarScrollBehavior? = null,
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
 ) {
-    // The title animates in on the first composition that is not already searching, so a screen that
-    // opens straight into search does not flash its title first.
-    val titleEverShown = rememberSaveable { mutableStateOf(value = false) }
-
-    LaunchedEffect(key1 = Unit) {
-        if (!showSearch) titleEverShown.value = true
-    }
-
     val titleSlot: @Composable () -> Unit = {
-        Box(
+        // One fixed height for both states. The title is shorter than the field, and letting the
+        // slot follow whichever is showing made the bar re-centre the title a few frames after the
+        // field had gone, which read as a jump.
+        AnimatedContent(
+            targetState = showSearch,
             modifier = Modifier
                 .fillMaxWidth()
-                .animateContentSize(
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioNoBouncy,
-                        stiffness = Spring.StiffnessMediumLow,
-                    ),
-                ),
+                .height(height = SearchFieldHeight),
             contentAlignment = if (centerTitle) Alignment.Center else Alignment.CenterStart,
-        ) {
-            AnimatedVisibility(
-                visible = showSearch,
-                enter = fadeIn(
-                    animationSpec = tween(durationMillis = 180, delayMillis = 40),
-                ) + scaleIn(
-                    initialScale = 0.96f,
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioNoBouncy,
-                        stiffness = Spring.StiffnessMediumLow,
-                    ),
-                ) + expandHorizontally(
-                    expandFrom = Alignment.CenterHorizontally,
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioNoBouncy,
-                        stiffness = Spring.StiffnessMediumLow,
-                    ),
-                ),
-                exit = fadeOut(
-                    animationSpec = tween(durationMillis = 120),
-                ) + scaleOut(
-                    targetScale = 0.98f,
-                    animationSpec = tween(durationMillis = 120),
-                ) + shrinkHorizontally(
-                    shrinkTowards = Alignment.CenterHorizontally,
-                    animationSpec = tween(durationMillis = 160),
-                ),
-            ) {
+            // Both states fill the same box, so there is no size to animate. Fading in place,
+            // rather than growing the field out of its centre, keeps the placeholder where it will
+            // rest instead of sliding it past the title.
+            transitionSpec = {
+                (fadeIn(animationSpec = tween(durationMillis = 200, delayMillis = 60)) +
+                        scaleIn(
+                            initialScale = 0.96f,
+                            animationSpec = spring(
+                                dampingRatio = Spring.DampingRatioNoBouncy,
+                                stiffness = Spring.StiffnessMediumLow,
+                            ),
+                        ))
+                    .togetherWith(
+                        fadeOut(animationSpec = tween(durationMillis = 90)) +
+                                scaleOut(
+                                    targetScale = 0.98f,
+                                    animationSpec = tween(durationMillis = 90),
+                                ),
+                    )
+                    .using(sizeTransform = null)
+            },
+            label = "SearchTopAppBarTitleOrSearch",
+        ) { searching ->
+            if (searching) {
                 GeneralTextField(
                     value = searchQuery,
                     onValueChange = onSearchQueryChange,
-                    modifier = Modifier
-                        .height(height = SearchFieldHeight)
-                        .fillMaxWidth(),
+                    modifier = Modifier.fillMaxSize(),
                     style = GeneralTextFieldStyle.Search,
                     placeholder = searchPlaceholder,
                     textStyle = MaterialTheme.typography.labelMedium,
@@ -199,32 +188,16 @@ fun SearchTopAppBar(
                         }
                     },
                 )
-            }
-
-            AnimatedVisibility(
-                visible = !showSearch && titleEverShown.value,
-                enter = fadeIn(
-                    animationSpec = tween(durationMillis = 200, delayMillis = 60),
-                ) + scaleIn(
-                    initialScale = 0.96f,
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioNoBouncy,
-                        stiffness = Spring.StiffnessMediumLow,
-                    ),
-                ),
-                exit = fadeOut(
-                    animationSpec = tween(durationMillis = 120),
-                ) + scaleOut(
-                    targetScale = 0.98f,
-                    animationSpec = tween(durationMillis = 120),
-                ),
-            ) {
-                Text(
-                    text = title,
-                    textAlign = if (centerTitle) TextAlign.Center else TextAlign.Start,
-                    style = MaterialTheme.typography.titleLarge,
-                    maxLines = 1,
-                )
+            } else {
+                // The slot is as tall as the field, and a title handed that height draws its text
+                // at the top of it, above the navigation icon. The box lets the title keep its own
+                // height and centres it, which is where MainTopAppBar puts it.
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = if (centerTitle) Alignment.Center else Alignment.CenterStart,
+                ) {
+                    SearchTopAppBarTitle(title = title, centerTitle = centerTitle)
+                }
             }
         }
     }
@@ -265,6 +238,35 @@ fun SearchTopAppBar(
             actions = actionsSlot,
             scrollBehavior = scrollBehavior,
             windowInsets = windowInsets,
+        )
+    }
+}
+
+/**
+ * The bar's title, animated between values the way [MainTopAppBar] animates its own, so switching
+ * destinations reads the same whichever of the two bars a screen uses.
+ */
+@Composable
+private fun SearchTopAppBarTitle(title: String, centerTitle: Boolean) {
+    AnimatedContent(
+        targetState = title,
+        transitionSpec = {
+            (fadeIn(animationSpec = tween(durationMillis = 220, delayMillis = 90)) +
+                    scaleIn(
+                        initialScale = 0.92f,
+                        animationSpec = tween(durationMillis = 220, delayMillis = 90),
+                    ))
+                .togetherWith(fadeOut(animationSpec = tween(durationMillis = 90)))
+        },
+        contentAlignment = if (centerTitle) Alignment.Center else Alignment.CenterStart,
+        label = "SearchTopAppBarTitle",
+    ) { targetTitle ->
+        Text(
+            text = targetTitle,
+            modifier = Modifier.animateContentSize(),
+            textAlign = if (centerTitle) TextAlign.Center else TextAlign.Start,
+            style = MaterialTheme.typography.titleLarge,
+            maxLines = 1,
         )
     }
 }
