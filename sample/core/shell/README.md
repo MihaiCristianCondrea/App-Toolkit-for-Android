@@ -63,6 +63,11 @@ flowchart TD
   selection are projections of the current destination and window state.
 - Drawer items arrive as a flow through `NavigationItemsProvider`, so an item that appears only
   once a feature unlocks it changes the drawer without the shell knowing why.
+- `MainViewModel` answers `RequestReview` once per instance. The activity sends it from `onResume`,
+  so it arrives again on every return from Settings, FAQ or Support, while
+  `RequestInAppReviewUseCase` records a session on each call and the prompt is a once-ever event.
+  Answering every request would count resumes as sessions and cancel the in-flight flow. The guard
+  lives in the ViewModel rather than an activity field so it survives configuration change.
 
 ## Public contracts
 

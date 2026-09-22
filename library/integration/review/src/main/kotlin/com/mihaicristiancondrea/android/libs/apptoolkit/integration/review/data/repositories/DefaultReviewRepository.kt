@@ -19,17 +19,26 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.data
 
 import android.app.Activity
 import com.google.android.play.core.review.ReviewManagerFactory
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.hasPlayStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.isInstalledFromPlayStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 /**
  * Data-layer implementation that coordinates persisted review metadata and Play review requests.
+ *
+ * The repository dispatches its own work, so callers can invoke it from anywhere.
+ * `launchReviewFlow` puts a dialog in front of the activity it is given, so it runs on the main
+ * thread whatever dispatcher the caller is on; awaiting the Play task suspends rather than blocks,
+ * so nothing is held up by that. The availability check reads the package manager, which is binder
+ * IPC, so that one goes to IO.
  */
 class DefaultReviewRepository(
     private val dataStore: CommonDataStore,
+    private val dispatchers: DispatcherProvider,
 ) : ReviewRepository {
     override fun sessionCount(): Flow<Int> = dataStore.sessionCount
 
@@ -43,24 +52,26 @@ class DefaultReviewRepository(
         dataStore.setHasPromptedReview(value = value)
     }
 
-    override suspend fun isReviewAvailable(activity: Activity): Boolean {
-        val context = activity.applicationContext
-        if (!context.hasPlayStore()) return false
-        if (!context.isInstalledFromPlayStore()) return false
+    override suspend fun isReviewAvailable(activity: Activity): Boolean =
+        withContext(dispatchers.io) {
+            val context = activity.applicationContext
+            if (!context.hasPlayStore()) return@withContext false
+            if (!context.isInstalledFromPlayStore()) return@withContext false
 
-        val manager = ReviewManagerFactory.create(context)
-        return runCatching {
-            manager.requestReviewFlow().await()
-            true
-        }.getOrDefault(false)
-    }
+            val manager = ReviewManagerFactory.create(context)
+            runCatching {
+                manager.requestReviewFlow().await()
+                true
+            }.getOrDefault(false)
+        }
 
-    override suspend fun launchReview(activity: Activity): Boolean {
-        val reviewManager = ReviewManagerFactory.create(activity)
-        return runCatching {
-            val reviewInfo = reviewManager.requestReviewFlow().await()
-            reviewManager.launchReviewFlow(activity, reviewInfo).await()
-            true
-        }.getOrDefault(false)
-    }
+    override suspend fun launchReview(activity: Activity): Boolean =
+        withContext(dispatchers.main) {
+            val reviewManager = ReviewManagerFactory.create(activity)
+            runCatching {
+                val reviewInfo = reviewManager.requestReviewFlow().await()
+                reviewManager.launchReviewFlow(activity, reviewInfo).await()
+                true
+            }.getOrDefault(false)
+        }
 }

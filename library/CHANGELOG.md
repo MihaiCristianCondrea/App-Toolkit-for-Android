@@ -10,6 +10,11 @@
 - Added `NavigationDrawerHeader` and `NavigationDrawerBranding` to `:library:navigation`, drawing an app's logo beside its name at the top of a drawer. The logo is sized to the title's line height rather than to a fixed dimension, so the pair stays balanced as the person scales their font up.
 - Added `NavigationDrawerRoutes.StandardRoutes`, naming the Settings, Help, Support, Updates, and Share entries every toolkit host has.
 
+### Fixed
+
+- Fixed `RequestInAppReviewUseCase` launching the Play review flow without checking availability first. An eligible user on an install Play cannot serve — sideloaded, no Play Store, a debug build run from the IDE — now reports `ReviewOutcome.Unavailable` instead of `ReviewOutcome.Failed`, which said a launch had failed when no launch was ever possible. The prompt flag stays unset either way, so the user still gets their one prompt once Play can serve it.
+- Fixed `DefaultReviewRepository` running `launchReviewFlow` on whichever dispatcher its caller happened to be on. The call puts a dialog in front of the host activity, so it now runs on the main thread regardless, and the availability check, which reads the package manager over binder, runs on IO. Callers no longer decide where the dialog is shown.
+
 ### Changed
 
 - Added `centerTitle` to `MainTopAppBar`, defaulting to `false`. Left off, the bar is the small top app bar it has always been; turned on, it becomes a centre-aligned one.

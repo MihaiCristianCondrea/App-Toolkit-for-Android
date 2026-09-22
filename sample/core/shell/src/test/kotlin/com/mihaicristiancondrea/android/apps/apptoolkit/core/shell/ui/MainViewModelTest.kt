@@ -35,8 +35,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenSta
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewOutcome
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.usecases.RequestInAppReviewUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
 import io.mockk.clearAllMocks
+import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.collections.immutable.toImmutableList
@@ -66,6 +70,37 @@ class MainViewModelTest {
     fun tearDown() {
         clearAllMocks()
     }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `review is requested once however many times the host asks`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            // The host sends this from onResume, so it arrives again on every return from another
+            // activity. The use case records a session per call, so answering each one would count
+            // resumes as sessions and bring the prompt forward.
+            val requestInAppReviewUseCase = mockk<RequestInAppReviewUseCase>(relaxed = true)
+            coEvery { requestInAppReviewUseCase(any()) } returns ReviewOutcome.NotEligible
+            val host = object : ReviewHost {
+                override val activity: android.app.Activity = mockk(relaxed = true)
+            }
+
+            val viewModel = MainViewModel(
+                navigationItemsProvider = FakeNavigationRepository(flowOf(emptyList())),
+                consentRepository = FakeConsentRepository(),
+                requestInAppReviewUseCase = requestInAppReviewUseCase,
+                inAppUpdateRepository = mockk(relaxed = true),
+                firebaseController = mockk<FirebaseController>(relaxed = true),
+                dispatchers = TestDispatchers(testDispatcher = dispatcherExtension.testDispatcher),
+            )
+
+            repeat(times = 3) {
+                viewModel.onEvent(event = MainEvent.RequestReview(host = host))
+                runCurrent()
+                advanceUntilIdle()
+            }
+
+            coVerify(exactly = 1) { requestInAppReviewUseCase(host = host) }
+        }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test

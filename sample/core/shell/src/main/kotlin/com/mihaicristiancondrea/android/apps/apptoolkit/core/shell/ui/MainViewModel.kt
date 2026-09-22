@@ -76,6 +76,11 @@ class MainViewModel(
     private var reviewJob: Job? = null
     private var updateJob: Job? = null
 
+    // The host sends RequestReview from onResume, which fires again on every return from another
+    // activity. The use case records a session on each call and the prompt is a once-ever event, so
+    // the request is answered once per ViewModel — one app session, surviving configuration change.
+    private var hasRequestedReview: Boolean = false
+
     init {
         onEvent(MainEvent.ApplyInitialConsent)
         onEvent(MainEvent.LoadNavigation)
@@ -247,6 +252,9 @@ class MainViewModel(
     }
 
     private fun requestReview(host: ReviewHost) {
+        if (hasRequestedReview) return
+        hasRequestedReview = true
+
         startOperation(
             action = Actions.REQUEST_REVIEW,
             extra = mapOf(ExtraKeys.HOST to host.activity::class.java.name)
@@ -256,9 +264,14 @@ class MainViewModel(
                 action = Actions.REQUEST_REVIEW,
                 extra = mapOf(ExtraKeys.HOST to host.activity::class.java.name),
                 block = {
-                    val outcome = withContext(dispatchers.io) {
-                        requestInAppReviewUseCase(host = host)
-                    }
+                    val outcome = requestInAppReviewUseCase(host = host)
+                    breadcrumb(
+                        message = "review_outcome",
+                        attributes = mapOf(
+                            ExtraKeys.HOST to host.activity::class.java.name,
+                            ExtraKeys.OUTCOME to outcome::class.java.simpleName,
+                        )
+                    )
                     sendAction(action = MainAction.ReviewOutcomeReported(outcome = outcome))
                 },
                 onError = {
@@ -293,6 +306,7 @@ class MainViewModel(
 
     private object ExtraKeys {
         const val HOST: String = "host"
+        const val OUTCOME: String = "outcome"
         const val STAGE: String = "stage"
         const val ERROR: String = "error"
         const val REASON: String = "reason"

@@ -2,6 +2,14 @@
 
 ---
 
+# Unreleased
+
+### Fixed
+
+- Fixed the rate-the-app prompt appearing far too early. The app asked for a review every time you returned to the main screen rather than once per launch, so returning from Settings a few times was enough to count as three separate sessions and bring the prompt up minutes after installing. It now asks once per launch, as intended.
+
+---
+
 # September 20, 2026
 
 **Version:** `26.09.17` (`137260917`)
