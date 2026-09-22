@@ -4,6 +4,11 @@
 
 # Unreleased
 
+### Changed
+
+- The Animation Showcase in Components now lists each device animation and the media animation once instead of twice. The second copy of each was the same animation running backwards, which the existing replay mode control already plays by switching to Reverse.
+- The navigation drawer now shows the app's logo and name above its own destinations, with Settings, Help, Updates and Share moved to the bottom of the drawer.
+
 ### Fixed
 
 - Fixed the rate-the-app prompt appearing far too early. The app asked for a review every time you returned to the main screen rather than once per launch, so returning from Settings a few times was enough to count as three separate sessions and bring the prompt up minutes after installing. It now asks once per launch, as intended.

@@ -94,6 +94,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.Naviga
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.isTopLevel
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ui.NavigationDrawerBranding
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ui.NavigationDrawerSheet
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
@@ -575,6 +578,7 @@ private fun MainShell(
                 NavigationDrawerSheet(
                     items = uiState.navigationDrawerItems,
                     drawerState = drawerState,
+                    branding = AppToolkitBranding,
                     isSelected = { item -> onIsSelected(item.route, currentRoute) },
                     onItemClick = { item ->
                         onNavigationDrawerItemClick(
@@ -591,6 +595,16 @@ private fun MainShell(
         shellContent()
     }
 }
+
+/**
+ * What the drawer calls this app. Another host swaps its own [NavigationDrawerBranding] in; the
+ * logo is cropped to the mark rather than reusing the launcher foreground, whose adaptive-icon safe
+ * zone would render here as padding and leave the mark smaller than the title beside it.
+ */
+private val AppToolkitBranding = NavigationDrawerBranding(
+    title = R.string.app_product_name,
+    logo = ToolkitIcon.Resource(resId = R.drawable.app_logo),
+)
 
 @Composable
 private fun TopLevelContentNavDisplay(

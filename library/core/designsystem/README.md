@@ -173,6 +173,12 @@ A click that happens while the drawable already rests on its last frame is a rep
   drawable that morphs between two distinct shapes and should visibly travel back, such as a
   play/pause or a menu/close toggle.
 
+This is why a two-state animation is bundled once, not twice. The device animations ship only their
+`_off` direction and `anim_media_play` covers pause: the other direction is the same drawable under
+`Reverse`, so shipping it as its own resource would put the same motion in the APK twice and let the
+two copies drift apart. Bundle a second drawable only when the return journey is genuinely different
+motion rather than the same one backwards.
+
 ```kotlin
 ToolkitIcon.AnimatedVector(
     resId = R.drawable.anim_menu,

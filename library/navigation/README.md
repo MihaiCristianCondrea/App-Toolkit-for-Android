@@ -83,7 +83,7 @@ flowchart TD
 - `StableNavKey` and `AppToolkitNavKey` route implementations.
 - `NavigationDrawerRoutes`, including `StandardRoutes`, and
   `navigation.data.repositories.NavigationRepository`.
-- `NavigationDrawerBranding`, the string and drawable resources naming an app in its drawer.
+- `NavigationDrawerBranding`, the title resource and `ToolkitIcon` naming an app in its drawer.
 - Back-stack action extensions and transition helpers.
 - `BottomNavigationBar`, `LeftNavigationRail`, `NavigationDrawerItemContent`,
   `NavigationDrawerHeader`, `NavigationDrawerSheet`, and `HideOnScrollBottomBar`.
@@ -106,9 +106,15 @@ do; a drawer long enough to need scrolling wants its own sheet.
 
 `NavigationDrawerHeader` is separately public, for a host that wants its logo and name somewhere the
 sheet does not put them, or wants them in a drawer that has no destinations of its own. It takes
-either a `NavigationDrawerBranding` of resource ids or an already-resolved title and painter, and
-sizes the logo to the title's line height so the pair stays balanced as the person scales their font
-up.
+either a `NavigationDrawerBranding` or an already-resolved title and icon, and sizes the logo to the
+title's line height so the pair stays balanced as the person scales their font up.
+
+The logo is a `ToolkitIcon`, the same slot every other toolkit component takes, so an app can name
+itself with a drawable, a Compose vector, a bitmap resolved at runtime, or an animated mark without
+the header knowing which. It is drawn untinted unless `logoTint` says otherwise, so a multi-colour
+brand mark arrives intact. Give it artwork cropped to the mark: a launcher foreground still carries
+its adaptive-icon safe zone, which renders here as padding and leaves the logo looking smaller than
+the title beside it. `:sample` crops its own rather than reusing `ic_launcher_foreground`.
 
 ## Internal implementations
 
