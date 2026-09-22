@@ -51,7 +51,7 @@ Then add the toolkit artifact to the consuming module:
 
 ```kotlin
 dependencies {
-    implementation("com.github.MihaiCristianCondrea.App-Toolkit-for-Android:apptoolkit:3.0.0-pre17")
+    implementation("com.github.MihaiCristianCondrea.App-Toolkit-for-Android:apptoolkit:3.0.0-pre18")
 }
 ```
 

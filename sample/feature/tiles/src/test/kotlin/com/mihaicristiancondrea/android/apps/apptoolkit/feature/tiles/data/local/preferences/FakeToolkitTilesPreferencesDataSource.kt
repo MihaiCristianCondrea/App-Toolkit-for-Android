@@ -17,22 +17,25 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.preferences
 
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 
-/** Local source for the user's Toolkit Tiles catalogue presentation preferences. */
-interface ToolkitTilesPreferencesDataSource {
+internal class FakeToolkitTilesPreferencesDataSource(
+    override val expandedCategoryIds: MutableStateFlow<Set<String>?> = MutableStateFlow(null),
+) : ToolkitTilesPreferencesDataSource {
+    val savedIds = MutableStateFlow<Set<String>?>(null)
 
-    /** Saved expanded category IDs, or `null` before the user has chosen a state. */
-    val expandedCategoryIds: Flow<Set<String>?>
+    override suspend fun saveExpandedCategoryIds(categoryIds: Set<String>) {
+        savedIds.value = categoryIds
+        expandedCategoryIds.value = categoryIds
+    }
 
-    /** Replaces the saved expanded category IDs, including a valid empty set. */
-    suspend fun saveExpandedCategoryIds(categoryIds: Set<String>)
+    override val counterValue = MutableStateFlow(0)
 
-    /** Running count shared by the Counter tool and its Quick Settings tile; `0` when never set. */
-    val counterValue: Flow<Int>
+    override suspend fun incrementCounter() {
+        counterValue.value += 1
+    }
 
-    /** Adds one to [counterValue] in a single atomic read-modify-write. */
-    suspend fun incrementCounter()
-
-    suspend fun resetCounter()
+    override suspend fun resetCounter() {
+        counterValue.value = 0
+    }
 }

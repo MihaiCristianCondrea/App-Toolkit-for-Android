@@ -17,6 +17,7 @@
 <resources>
     <string name="about">เกี่ยวกับแอป</string>
     <string name="amoled_mode">โหมด AMOLED</string>
+    <string name="clear_search">ล้างการค้นหา</string>
     <string name="color_palette">พาเลตสี</string>
     <string name="content_description_more_options">ตัวเลือกเพิ่มเติม</string>
     <string name="dark_mode">โหมดมืด</string>
@@ -44,6 +45,7 @@
     <string name="onboarding_theme_system_desc">ตรงกับอุปกรณ์ของคุณ</string>
     <string name="other_colors">สีอื่นๆ</string>
     <string name="screen_and_display_settings">การตั้งค่าหน้าจอและการแสดงผล</string>
+    <string name="search">ค้นหา</string>
     <string name="select_language_title">เลือกภาษา</string>
     <string name="sort_by">เรียงตาม</string>
     <string name="sponsored_ad_label">● โฆษณาที่ได้รับการสนับสนุน</string>

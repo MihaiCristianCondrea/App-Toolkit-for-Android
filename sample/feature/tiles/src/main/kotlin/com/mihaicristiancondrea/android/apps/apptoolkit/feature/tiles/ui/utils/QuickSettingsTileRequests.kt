@@ -65,9 +65,11 @@ internal fun requestQuickSettingsTile(
             val messageResId = when (result) {
                 StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ADDED -> R.string.tiles_add_result_added
                 StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ALREADY_ADDED -> R.string.tiles_add_result_already_added
+                // The user declined or dismissed the system prompt; that choice is not a failure.
+                StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_NOT_ADDED -> null
                 else -> R.string.tiles_add_result_failed
             }
-            Toast.makeText(context, messageResId, Toast.LENGTH_SHORT).show()
+            messageResId?.let { Toast.makeText(context, it, Toast.LENGTH_SHORT).show() }
         }
     } catch (_: SecurityException) {
         Toast.makeText(context, R.string.tiles_add_result_failed, Toast.LENGTH_SHORT).show()

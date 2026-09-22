@@ -17,35 +17,35 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services
 
-import android.os.Build
 import android.service.quicksettings.Tile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.CounterRepository
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-/** Quick Settings tile that increments an in-memory counter while System UI keeps it alive. */
-class CounterTileService : TrackedTileService() {
+/** Quick Settings tile that increments the count shared with the in-app Counter tool. */
+class CounterTileService : TrackedTileService(), KoinComponent {
+
+    private val counterRepository: CounterRepository by inject()
+
     override fun onStartListening() {
         super.onStartListening()
-        updateCounterTile()
+        renderWhileListening(counterRepository.count, ::renderCount)
     }
 
     override fun onClick() {
         super.onClick()
-        counter += 1
-        updateCounterTile()
+        counterRepository.increment()
     }
 
-    private fun updateCounterTile() {
-        qsTile?.apply {
-            label = getString(R.string.tile_counter_title)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                subtitle = counter.toString()
-            }
-            state = if (counter > 0) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
-            updateTile()
-        }
-    }
-
-    private companion object {
-        var counter: Int = 0
+    private fun renderCount(count: Int) {
+        publishTile(
+            if (count > 0) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE,
+            TileText(
+                title = getString(R.string.tile_counter_title),
+                subtitle = count.toString(),
+                result = count.takeIf { it != 0 }?.toString(),
+            ),
+        )
     }
 }

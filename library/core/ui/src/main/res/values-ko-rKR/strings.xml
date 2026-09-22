@@ -17,6 +17,7 @@
 <resources>
     <string name="about">정보</string>
     <string name="amoled_mode">AMOLED 모드</string>
+    <string name="clear_search">검색어 지우기</string>
     <string name="color_palette">색상 팔레트</string>
     <string name="content_description_more_options">더 많은 옵션</string>
     <string name="dark_mode">다크 모드</string>
@@ -44,6 +45,7 @@
     <string name="onboarding_theme_system_desc">기기 설정과 일치.</string>
     <string name="other_colors">기타 색상</string>
     <string name="screen_and_display_settings">화면 및 디스플레이 설정.</string>
+    <string name="search">검색</string>
     <string name="select_language_title">언어 선택</string>
     <string name="sort_by">정렬 기준</string>
     <string name="sponsored_ad_label">● 스폰서 광고</string>

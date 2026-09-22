@@ -17,6 +17,7 @@
 <resources>
     <string name="about">Sobre</string>
     <string name="amoled_mode">Modo AMOLED</string>
+    <string name="clear_search">Limpar pesquisa</string>
     <string name="color_palette">Paleta de cores</string>
     <string name="content_description_more_options">Mais opções</string>
     <string name="dark_mode">Modo escuro</string>
@@ -44,6 +45,7 @@
     <string name="onboarding_theme_system_desc">Corresponde ao seu dispositivo.</string>
     <string name="other_colors">Outras cores</string>
     <string name="screen_and_display_settings">Configurações de tela e exibição.</string>
+    <string name="search">Pesquisar</string>
     <string name="select_language_title">Selecionar idioma</string>
     <string name="sort_by">Ordenar por</string>
     <string name="sponsored_ad_label">● Anúncio patrocinado</string>

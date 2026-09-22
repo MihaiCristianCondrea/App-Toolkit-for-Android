@@ -17,6 +17,7 @@
 <resources>
     <string name="about">Tungkol sa</string>
     <string name="amoled_mode">AMOLED mode</string>
+    <string name="clear_search">I-clear ang paghahanap</string>
     <string name="color_palette">Paleta ng kulay</string>
     <string name="content_description_more_options">Higit pang mga pagpipilian</string>
     <string name="dark_mode">Dark mode</string>
@@ -44,6 +45,7 @@
     <string name="onboarding_theme_system_desc">Tumutugma sa iyong device.</string>
     <string name="other_colors">Ibang mga kulay</string>
     <string name="screen_and_display_settings">Mga Setting ng Screen at Display.</string>
+    <string name="search">Maghanap</string>
     <string name="select_language_title">Pumili ng wika</string>
     <string name="sort_by">Pagbukud-bukurin ayon sa</string>
     <string name="sponsored_ad_label">● Naka-sponsor na ad</string>

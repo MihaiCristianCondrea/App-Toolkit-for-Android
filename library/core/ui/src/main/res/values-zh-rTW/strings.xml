@@ -17,6 +17,7 @@
 <resources>
     <string name="about">關於</string>
     <string name="amoled_mode">AMOLED 模式</string>
+    <string name="clear_search">清除搜尋</string>
     <string name="color_palette">色彩調色盤</string>
     <string name="content_description_more_options">更多選項</string>
     <string name="dark_mode">深色模式</string>
@@ -44,6 +45,7 @@
     <string name="onboarding_theme_system_desc">與您的裝置設定相符。</string>
     <string name="other_colors">其他顏色</string>
     <string name="screen_and_display_settings">屏幕和顯示設置。</string>
+    <string name="search">搜尋</string>
     <string name="select_language_title">選擇語言</string>
     <string name="sort_by">排序依據：</string>
     <string name="sponsored_ad_label">● 贊助廣告</string>

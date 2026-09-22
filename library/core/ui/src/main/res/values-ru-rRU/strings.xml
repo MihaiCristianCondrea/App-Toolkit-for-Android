@@ -17,6 +17,7 @@
 <resources>
     <string name="about">О приложении</string>
     <string name="amoled_mode">AMOLED-режим</string>
+    <string name="clear_search">Очистить поиск</string>
     <string name="color_palette">Цветовая палитра</string>
     <string name="content_description_more_options">Больше вариантов</string>
     <string name="dark_mode">Тёмный режим</string>
@@ -44,6 +45,7 @@
     <string name="onboarding_theme_system_desc">Соответствует настройкам вашего устройства.</string>
     <string name="other_colors">Другие цвета</string>
     <string name="screen_and_display_settings">Настройки экрана и отображения.</string>
+    <string name="search">Поиск</string>
     <string name="select_language_title">Выберите язык</string>
     <string name="sort_by">Сортировать по</string>
     <string name="sponsored_ad_label">● Спонсируемая реклама</string>

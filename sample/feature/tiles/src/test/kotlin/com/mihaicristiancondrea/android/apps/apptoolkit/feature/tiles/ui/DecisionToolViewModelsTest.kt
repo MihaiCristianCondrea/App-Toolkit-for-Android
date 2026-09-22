@@ -17,13 +17,22 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.preferences.FakeToolkitTilesPreferencesDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.CounterRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.CoinFlipToolState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.DiceRollToolState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class DecisionToolViewModelsTest {
+
+    @JvmField
+    @RegisterExtension
+    val dispatcherExtension = UnconfinedDispatcherExtension()
 
     @Test
     fun `coin flip publishes a new request and resets on dismiss`() {
@@ -49,14 +58,22 @@ class DecisionToolViewModelsTest {
     }
 
     @Test
-    fun `counter increments and resets`() {
-        val viewModel = CounterToolViewModel()
+    fun `counter shares one count across sheets and resets it`() {
+        val repository = CounterRepository(
+            preferencesDataSource = FakeToolkitTilesPreferencesDataSource(),
+            dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
+        )
+        val firstSheet = CounterToolViewModel(repository)
 
-        viewModel.increment()
-        viewModel.increment()
-        assertEquals(2, viewModel.count.value)
+        firstSheet.increment()
+        firstSheet.increment()
+        assertEquals(2, firstSheet.count.value)
 
-        viewModel.dismiss()
-        assertEquals(0, viewModel.count.value)
+        val reopenedSheet = CounterToolViewModel(repository)
+        assertEquals(2, reopenedSheet.count.value)
+
+        reopenedSheet.reset()
+        assertEquals(0, firstSheet.count.value)
+        assertEquals(0, reopenedSheet.count.value)
     }
 }

@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.VolunteerActivism
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -65,6 +66,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
  * configurable.
  *
  * @param title is the optional title that can be provided by the host app
+ * @param centerTitle Whether the title is centered in the bar. Off by default, which keeps the
+ * Material small top app bar; on, the bar becomes a centre-aligned one instead.
  * @param navigationIcon The [ImageVector] to be displayed as the navigation icon.
  * @param onNavigationIconClick A lambda to be executed when the navigation icon is clicked.
  * @param onSupportClick Host callback that opens Support. The overflow action is hidden when it
@@ -80,52 +83,69 @@ fun MainTopAppBar(
     title: String = stringResource(id = CommonR.string.app_name),
     navigationIcon: ImageVector?,
     onNavigationIconClick: () -> Unit,
+    centerTitle: Boolean = false,
     onSupportClick: (() -> Unit)? = null,
     showSupportAction: Boolean = true,
     actions: @Composable RowScope.() -> Unit = {},
     scrollBehavior: TopAppBarScrollBehavior,
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
 ) {
-    TopAppBar(
-        title = {
-            AnimatedContent(
-                targetState = title,
-                transitionSpec = {
-                    (fadeIn(animationSpec = tween(durationMillis = 220, delayMillis = 90)) +
-                            scaleIn(
-                                initialScale = 0.92f,
-                                animationSpec = tween(durationMillis = 220, delayMillis = 90),
-                            ))
-                        .togetherWith(fadeOut(animationSpec = tween(durationMillis = 90)))
-                },
-                label = "MainTopAppBarTitleAnimation",
-            ) { targetTitle ->
-                Text(
-                    text = targetTitle,
-                    modifier = Modifier.animateContentSize(),
-                )
-            }
-        },
-        navigationIcon = {
-            navigationIcon?.let {
-                AnimatedIconButtonDirection(
-                    icon = ToolkitIcon.Vector(imageVector = it),
-                    contentDescription = stringResource(id = R.string.go_back),
-                    onClick = onNavigationIconClick,
-                    feedback = ButtonFeedback(hapticFeedbackType = null),
-                    iconSize = SizeConstants.TwentyFourSize,
-                )
-            }
-        },
-        actions = {
-            if (showSupportAction && onSupportClick != null) {
-                SupportMenuAction(onSupportClick = onSupportClick)
-            }
-            actions()
-        },
-        scrollBehavior = scrollBehavior,
-        windowInsets = windowInsets,
-    )
+    val titleSlot: @Composable () -> Unit = {
+        AnimatedContent(
+            targetState = title,
+            transitionSpec = {
+                (fadeIn(animationSpec = tween(durationMillis = 220, delayMillis = 90)) +
+                        scaleIn(
+                            initialScale = 0.92f,
+                            animationSpec = tween(durationMillis = 220, delayMillis = 90),
+                        ))
+                    .togetherWith(fadeOut(animationSpec = tween(durationMillis = 90)))
+            },
+            label = "MainTopAppBarTitleAnimation",
+        ) { targetTitle ->
+            Text(
+                text = targetTitle,
+                modifier = Modifier.animateContentSize(),
+            )
+        }
+    }
+
+    val navigationSlot: @Composable () -> Unit = {
+        navigationIcon?.let {
+            AnimatedIconButtonDirection(
+                icon = ToolkitIcon.Vector(imageVector = it),
+                contentDescription = stringResource(id = R.string.go_back),
+                onClick = onNavigationIconClick,
+                feedback = ButtonFeedback(hapticFeedbackType = null),
+                iconSize = SizeConstants.TwentyFourSize,
+            )
+        }
+    }
+
+    val actionsSlot: @Composable RowScope.() -> Unit = {
+        if (showSupportAction && onSupportClick != null) {
+            SupportMenuAction(onSupportClick = onSupportClick)
+        }
+        actions()
+    }
+
+    if (centerTitle) {
+        CenterAlignedTopAppBar(
+            title = titleSlot,
+            navigationIcon = navigationSlot,
+            actions = actionsSlot,
+            scrollBehavior = scrollBehavior,
+            windowInsets = windowInsets,
+        )
+    } else {
+        TopAppBar(
+            title = titleSlot,
+            navigationIcon = navigationSlot,
+            actions = actionsSlot,
+            scrollBehavior = scrollBehavior,
+            windowInsets = windowInsets,
+        )
+    }
 }
 
 /** Overflow menu holding the host-provided Support entry. */

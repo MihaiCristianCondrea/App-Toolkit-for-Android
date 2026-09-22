@@ -17,6 +17,7 @@
 <resources>
     <string name="about">Tentang</string>
     <string name="amoled_mode">Mode AMOLED</string>
+    <string name="clear_search">Hapus pencarian</string>
     <string name="color_palette">Palet warna</string>
     <string name="content_description_more_options">Lebih banyak opsi</string>
     <string name="dark_mode">Mode gelap</string>
@@ -44,6 +45,7 @@
     <string name="onboarding_theme_system_desc">Sesuai dengan perangkat Anda.</string>
     <string name="other_colors">Warna lainnya</string>
     <string name="screen_and_display_settings">Layar dan Tampilan Pengaturan.</string>
+    <string name="search">Cari</string>
     <string name="select_language_title">Pilih bahasa</string>
     <string name="sort_by">Urutkan berdasarkan</string>
     <string name="sponsored_ad_label">● Iklan bersponsor</string>

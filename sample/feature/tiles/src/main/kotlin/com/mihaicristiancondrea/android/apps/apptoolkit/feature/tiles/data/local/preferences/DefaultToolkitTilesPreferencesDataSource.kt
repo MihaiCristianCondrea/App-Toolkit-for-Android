@@ -20,8 +20,10 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.loca
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 /** Stores Toolkit Tiles catalogue preferences in the app's shared Preferences DataStore. */
@@ -39,7 +41,22 @@ class DefaultToolkitTilesPreferencesDataSource(
         }
     }
 
+    override val counterValue: Flow<Int> = dataStore.data.map { preferences ->
+        preferences[COUNTER_VALUE] ?: 0
+    }.distinctUntilChanged()
+
+    override suspend fun incrementCounter() {
+        dataStore.edit { preferences ->
+            preferences[COUNTER_VALUE] = (preferences[COUNTER_VALUE] ?: 0) + 1
+        }
+    }
+
+    override suspend fun resetCounter() {
+        dataStore.edit { preferences -> preferences.remove(COUNTER_VALUE) }
+    }
+
     private companion object {
         val EXPANDED_CATEGORY_IDS = stringSetPreferencesKey("expanded_toolkit_tile_category_ids")
+        val COUNTER_VALUE = intPreferencesKey("toolkit_tile_counter_value")
     }
 }

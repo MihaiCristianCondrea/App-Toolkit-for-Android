@@ -42,6 +42,7 @@ class RequestInAppReviewUseCaseTest {
     fun `launches review and marks prompted when eligible`() = runTest {
         every { reviewRepository.sessionCount() } returns flowOf(3)
         every { reviewRepository.hasPromptedReview() } returns flowOf(false)
+        coEvery { reviewRepository.isReviewAvailable(host.activity) } returns true
         coEvery { reviewRepository.launchReview(host.activity) } returns true
 
         val outcome = useCase(host = host)
@@ -77,9 +78,34 @@ class RequestInAppReviewUseCaseTest {
     }
 
     @Test
+    fun `reports unavailable when eligible but play cannot serve the flow`() = runTest {
+        every { reviewRepository.sessionCount() } returns flowOf(3)
+        every { reviewRepository.hasPromptedReview() } returns flowOf(false)
+        coEvery { reviewRepository.isReviewAvailable(host.activity) } returns false
+
+        val outcome = useCase(host = host)
+
+        assertEquals(ReviewOutcome.Unavailable, outcome)
+        coVerify(exactly = 0) { reviewRepository.launchReview(any()) }
+        coVerify(exactly = 0) { reviewRepository.setHasPromptedReview(any()) }
+        coVerify(exactly = 1) { reviewRepository.incrementSessionCount() }
+    }
+
+    @Test
+    fun `does not check availability when the user is not eligible`() = runTest {
+        every { reviewRepository.sessionCount() } returns flowOf(2)
+        every { reviewRepository.hasPromptedReview() } returns flowOf(false)
+
+        useCase(host = host)
+
+        coVerify(exactly = 0) { reviewRepository.isReviewAvailable(any()) }
+    }
+
+    @Test
     fun `reports failure when review launch fails`() = runTest {
         every { reviewRepository.sessionCount() } returns flowOf(3)
         every { reviewRepository.hasPromptedReview() } returns flowOf(false)
+        coEvery { reviewRepository.isReviewAvailable(host.activity) } returns true
         coEvery { reviewRepository.launchReview(host.activity) } returns false
 
         val outcome = useCase(host = host)

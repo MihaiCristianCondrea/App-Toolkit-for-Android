@@ -17,10 +17,28 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes
 
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.persistentSetOf
+
 object NavigationDrawerRoutes {
     const val ROUTE_SETTINGS: String = "settings"
     const val ROUTE_HELP_AND_FEEDBACK: String = "help_and_feedback"
     const val ROUTE_SUPPORT: String = "support"
     const val ROUTE_UPDATES: String = "updates"
     const val ROUTE_SHARE: String = "share"
+
+    /**
+     * The entries every toolkit host has, as opposed to the destinations an app adds of its own.
+     *
+     * A drawer that holds nothing else is just this list, so it renders as one block. Once an app
+     * adds a destination outside this set, these become the drawer's footer: see
+     * `NavigationDrawerSheet`.
+     */
+    val StandardRoutes: ImmutableSet<String> = persistentSetOf(
+        ROUTE_SETTINGS,
+        ROUTE_HELP_AND_FEEDBACK,
+        ROUTE_SUPPORT,
+        ROUTE_UPDATES,
+        ROUTE_SHARE,
+    )
 }

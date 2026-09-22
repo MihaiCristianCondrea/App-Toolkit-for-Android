@@ -17,6 +17,7 @@
 <resources>
     <string name="about">Про додаток</string>
     <string name="amoled_mode">Режим AMOLED</string>
+    <string name="clear_search">Очистити пошук</string>
     <string name="color_palette">Палітра кольорів</string>
     <string name="content_description_more_options">Більше варіантів</string>
     <string name="dark_mode">Темна тема</string>
@@ -44,6 +45,7 @@
     <string name="onboarding_theme_system_desc">Відповідає налаштуванням вашого пристрою.</string>
     <string name="other_colors">Інші кольори</string>
     <string name="screen_and_display_settings">Налаштування екрана та відображення.</string>
+    <string name="search">Пошук</string>
     <string name="select_language_title">Виберіть мову</string>
     <string name="sort_by">Сортувати за</string>
     <string name="sponsored_ad_label">● Спонсорована реклама</string>

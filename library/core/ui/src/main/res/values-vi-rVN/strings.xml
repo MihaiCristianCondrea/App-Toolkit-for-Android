@@ -17,6 +17,7 @@
 <resources>
     <string name="about">Giới thiệu</string>
     <string name="amoled_mode">Chế độ AMOLED</string>
+    <string name="clear_search">Xóa tìm kiếm</string>
     <string name="color_palette">Bảng màu</string>
     <string name="content_description_more_options">Nhiều lựa chọn hơn</string>
     <string name="dark_mode">Chế độ tối</string>
@@ -44,6 +45,7 @@
     <string name="onboarding_theme_system_desc">Phù hợp với thiết bị của bạn.</string>
     <string name="other_colors">Màu khác</string>
     <string name="screen_and_display_settings">màn hình và cài đặt hiển thị.</string>
+    <string name="search">Tìm kiếm</string>
     <string name="select_language_title">Chọn ngôn ngữ</string>
     <string name="sort_by">Sắp xếp theo</string>
     <string name="sponsored_ad_label">● Quảng cáo được tài trợ</string>

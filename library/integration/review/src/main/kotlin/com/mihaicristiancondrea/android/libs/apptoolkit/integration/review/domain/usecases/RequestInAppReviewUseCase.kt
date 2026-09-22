@@ -33,21 +33,34 @@ class RequestInAppReviewUseCase(
      *
      * The caller does not need to manage persisted session counts or prompt flags; both are
      * updated inside this use case.
+     *
+     * An eligible user on an install Play cannot serve — sideloaded, no Play Store, a debug build
+     * run from the IDE — gets [ReviewOutcome.Unavailable] rather than [ReviewOutcome.Failed]. The
+     * two say different things: one is a device that was never going to show a dialog, the other is
+     * a launch that should have worked and did not. The prompt flag stays unset either way, so the
+     * same user still gets their one prompt once Play can serve it.
+     *
+     * The session count is recorded on every invocation, eligible or not, so call this once per app
+     * session. Calling it on every resume counts resumes instead, and the threshold stops meaning
+     * what it says.
      */
     suspend operator fun invoke(host: ReviewHost): ReviewOutcome {
         val sessionCount = reviewRepository.sessionCount().first()
         val hasPromptedBefore = reviewRepository.hasPromptedReview().first()
         val eligible = sessionCount >= MIN_SESSIONS_FOR_REVIEW && !hasPromptedBefore
 
-        val outcome = if (eligible) {
-            if (reviewRepository.launchReview(activity = host.activity)) {
+        val outcome = when {
+            !eligible -> ReviewOutcome.NotEligible
+
+            !reviewRepository.isReviewAvailable(activity = host.activity) ->
+                ReviewOutcome.Unavailable
+
+            reviewRepository.launchReview(activity = host.activity) -> {
                 reviewRepository.setHasPromptedReview(value = true)
                 ReviewOutcome.Launched
-            } else {
-                ReviewOutcome.Failed
             }
-        } else {
-            ReviewOutcome.NotEligible
+
+            else -> ReviewOutcome.Failed
         }
 
         reviewRepository.incrementSessionCount()

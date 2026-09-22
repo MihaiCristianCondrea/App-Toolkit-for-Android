@@ -72,6 +72,10 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
 
+// Each device animation is bundled once, playing from the device's resting state into its active
+// one. The opposite direction is the same animation played backwards, which the replay mode control
+// below reaches through ToolkitIconReplayMode.Reverse, so a second drawable per device would ship
+// the same motion twice. anim_media_play covers pause the same way.
 private val animationSamples = listOf(
     "anim_check" to DesignSystemR.drawable.anim_check,
     "anim_square_container" to DesignSystemR.drawable.anim_square_container,
@@ -87,33 +91,18 @@ private val animationSamples = listOf(
     "anim_timer" to DesignSystemR.drawable.anim_timer,
     "anim_queue_music" to DesignSystemR.drawable.anim_queue_music,
     "anim_visibility_strike" to DesignSystemR.drawable.anim_visibility_strike,
-    "anim_device_blinds_off" to DesignSystemR.drawable.anim_device_blinds_off,
-    "anim_device_blinds_on" to DesignSystemR.drawable.anim_device_blinds_on,
-    "anim_device_camera_off" to DesignSystemR.drawable.anim_device_camera_off,
-    "anim_device_camera_on" to DesignSystemR.drawable.anim_device_camera_on,
-    "anim_device_fan_off" to DesignSystemR.drawable.anim_device_fan_off,
-    "anim_device_fan_on" to DesignSystemR.drawable.anim_device_fan_on,
-    "anim_device_garage_off" to DesignSystemR.drawable.anim_device_garage_off,
-    "anim_device_garage_on" to DesignSystemR.drawable.anim_device_garage_on,
-    "anim_device_light_off" to DesignSystemR.drawable.anim_device_light_off,
-    "anim_device_light_on" to DesignSystemR.drawable.anim_device_light_on,
-    "anim_device_lock_off" to DesignSystemR.drawable.anim_device_lock_off,
-    "anim_device_lock_on" to DesignSystemR.drawable.anim_device_lock_on,
-    "anim_device_outlet_off" to DesignSystemR.drawable.anim_device_outlet_off,
-    "anim_device_outlet_on" to DesignSystemR.drawable.anim_device_outlet_on,
-    "anim_device_security_system_off" to
-        DesignSystemR.drawable.anim_device_security_system_off,
-    "anim_device_security_system_on" to
-        DesignSystemR.drawable.anim_device_security_system_on,
-    "anim_device_switch_off" to DesignSystemR.drawable.anim_device_switch_off,
-    "anim_device_switch_on" to DesignSystemR.drawable.anim_device_switch_on,
-    "anim_device_thermostat_off" to DesignSystemR.drawable.anim_device_thermostat_off,
-    "anim_device_thermostat_on" to DesignSystemR.drawable.anim_device_thermostat_on,
-    "anim_device_tv_off" to DesignSystemR.drawable.anim_device_tv_off,
-    "anim_device_tv_on" to DesignSystemR.drawable.anim_device_tv_on,
-    "anim_device_vacuum_off" to DesignSystemR.drawable.anim_device_vacuum_off,
-    "anim_device_vacuum_on" to DesignSystemR.drawable.anim_device_vacuum_on,
-    "anim_media_pause" to DesignSystemR.drawable.anim_media_pause,
+    "anim_device_blinds" to DesignSystemR.drawable.anim_device_blinds,
+    "anim_device_camera" to DesignSystemR.drawable.anim_device_camera,
+    "anim_device_fan" to DesignSystemR.drawable.anim_device_fan,
+    "anim_device_garage" to DesignSystemR.drawable.anim_device_garage,
+    "anim_device_light" to DesignSystemR.drawable.anim_device_light,
+    "anim_device_lock" to DesignSystemR.drawable.anim_device_lock,
+    "anim_device_outlet" to DesignSystemR.drawable.anim_device_outlet,
+    "anim_device_security_system" to DesignSystemR.drawable.anim_device_security_system,
+    "anim_device_switch" to DesignSystemR.drawable.anim_device_switch,
+    "anim_device_thermostat" to DesignSystemR.drawable.anim_device_thermostat,
+    "anim_device_tv" to DesignSystemR.drawable.anim_device_tv,
+    "anim_device_vacuum" to DesignSystemR.drawable.anim_device_vacuum,
     "anim_media_play" to DesignSystemR.drawable.anim_media_play,
     "anim_sound_bars" to DesignSystemR.drawable.anim_sound_bars,
     "anim_volume_collapse" to DesignSystemR.drawable.anim_volume_collapse,

@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.preferences.FakeToolkitTilesPreferencesDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.preferences.ToolkitTilesPreferencesDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.quicksettings.QuickSettingsTilesLocalDataSource
 import io.mockk.mockk
@@ -63,15 +64,4 @@ class ToolkitTilesExpansionPersistenceTest {
             preferencesDataSource = preferencesDataSource,
             quickSettingsDataSource = mockk<QuickSettingsTilesLocalDataSource>(relaxed = true),
         )
-}
-
-private class FakeToolkitTilesPreferencesDataSource(
-    override val expandedCategoryIds: MutableStateFlow<Set<String>?> = MutableStateFlow(null),
-) : ToolkitTilesPreferencesDataSource {
-    val savedIds = MutableStateFlow<Set<String>?>(null)
-
-    override suspend fun saveExpandedCategoryIds(categoryIds: Set<String>) {
-        savedIds.value = categoryIds
-        expandedCategoryIds.value = categoryIds
-    }
 }
