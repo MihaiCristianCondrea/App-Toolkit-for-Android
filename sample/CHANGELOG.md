@@ -8,12 +8,18 @@
 
 - The Animation Showcase in Components now lists each device animation and the media animation once instead of twice. The second copy of each was the same animation running backwards, which the existing replay mode control already plays by switching to Reverse. The device animations are also named for the device now rather than for one direction, so Light replaces Light on and Light off.
 - The navigation drawer now shows the app's logo and name above its own destinations, with Settings, Help, Updates and Share moved to the bottom of the drawer.
+- The Counter Quick Settings tile now shares its saved value with the in-app Counter, so the count persists across app and tile-service restarts instead of resetting when the service is recreated.
+- Quick Settings tiles now declare themselves as Utilities on Android versions that support tile categories.
 
 ### Fixed
 
 - Fixed the rate-the-app prompt appearing far too early. The app asked for a review every time you returned to the main screen rather than once per launch, so returning from Settings a few times was enough to count as three separate sessions and bring the prompt up minutes after installing. It now asks once per launch, as intended.
 - Fixed the privacy consent check restarting every time you returned to the main screen. It now runs once per launch, which avoids repeated consent requests overlapping each other.
 - Stopped re-checking for app updates on every return to the main screen once Google Play has already answered. An update that was interrupted partway through is still picked up when you come back, as before.
+- Fixed Coin Flip, Dice Roll and Counter Quick Settings tiles not showing their results on Android 8 and 9, where tile subtitles are unavailable.
+- Fixed Counter and Flash Dimmer tiles not always reflecting changes made elsewhere while the Quick Settings panel was open.
+- Fixed Flash Dimmer showing `Off` when the flashlight could not actually be changed, such as while the camera is using it.
+- Declining Android's add-tile prompt is no longer shown as an error.
 
 ---
 
