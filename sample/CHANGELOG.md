@@ -6,7 +6,6 @@
 
 **Version:** `26.09.18` (`137260918`)
 
-
 ### Changed
 
 - The Animation Showcase in Components now lists each device animation and the media animation once instead of twice. The second copy of each was the same animation running backwards, which the existing replay mode control already plays by switching to Reverse. The device animations are also named for the device now rather than for one direction, so Light replaces Light on and Light off.

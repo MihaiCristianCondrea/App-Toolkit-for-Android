@@ -6,7 +6,6 @@
 
 **Version:** `3.0.0-pre18`
 
-
 ### Added
 
 - Added `SearchTopAppBar` to `:library:core:ui`, a top app bar whose title crossfades into a search field while `showSearch` is true. The query and the searching state stay with the caller, so one piece of state drives both the bar and the filtering underneath it. Filters are optional and sit inside the field through the `filters` slot, with `SearchFilterAction` as the ready-made toggle: tonal while a filter is applied, text while it is not. The search placeholder and clear-button description are translated across all 25 supported locales, so a host that has nothing to say about them passes nothing.
