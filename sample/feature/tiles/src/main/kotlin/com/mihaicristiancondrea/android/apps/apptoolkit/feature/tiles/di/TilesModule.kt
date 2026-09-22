@@ -28,6 +28,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.torch.AndroidTorchDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.torch.TorchDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.BreathingRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.CounterRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.DefaultToolkitTilesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.DefaultTorchRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.MorseRepository
@@ -88,6 +89,7 @@ val tilesModule: Module = module {
             dispatchers = get()
         )
     }
+    single { CounterRepository(preferencesDataSource = get(), dispatchers = get()) }
     single {
         SosRepository(
             morseRepository = get(),
@@ -102,7 +104,7 @@ val tilesModule: Module = module {
     }
     viewModel { CoinFlipToolViewModel() }
     viewModel { DiceRollToolViewModel() }
-    viewModel { CounterToolViewModel() }
+    viewModel { CounterToolViewModel(repository = get()) }
     viewModel { CompassToolViewModel(repository = get()) }
     viewModel { LevelToolViewModel(repository = get()) }
     viewModel { BreathingToolViewModel(repository = get()) }

@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services
 
-import android.os.Build
 import android.service.quicksettings.Tile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import kotlin.random.Random
@@ -26,26 +25,20 @@ import kotlin.random.Random
 class CoinFlipTileService : TrackedTileService() {
     override fun onStartListening() {
         super.onStartListening()
-        qsTile?.apply {
-            label = getString(R.string.tile_coin_flip_title)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                subtitle = getString(R.string.tile_coin_flip_summary)
-            }
-            state = Tile.STATE_INACTIVE
-            updateTile()
-        }
+        publishTile(Tile.STATE_INACTIVE, coinFlipText(result = null))
     }
 
     override fun onClick() {
         super.onClick()
-        qsTile?.apply {
-            label = getString(R.string.tile_coin_flip_title)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                subtitle =
-                    getString(if (Random.nextBoolean()) R.string.tile_service_heads else R.string.tile_service_tails)
-            }
-            state = Tile.STATE_ACTIVE
-            updateTile()
-        }
+        val result = getString(
+            if (Random.nextBoolean()) R.string.tile_service_heads else R.string.tile_service_tails
+        )
+        publishTile(Tile.STATE_ACTIVE, coinFlipText(result))
     }
+
+    private fun coinFlipText(result: String?) = TileText(
+        title = getString(R.string.tile_coin_flip_title),
+        subtitle = getString(R.string.tile_coin_flip_summary),
+        result = result,
+    )
 }

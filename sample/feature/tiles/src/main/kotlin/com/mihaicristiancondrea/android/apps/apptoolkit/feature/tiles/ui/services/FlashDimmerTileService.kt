@@ -17,15 +17,21 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services
 
-import android.os.Build
 import android.service.quicksettings.Tile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.TorchState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.MorseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.TorchRepository
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-/** Quick Settings control that cycles through the distinct levels supported by the device. */
+/**
+ * Quick Settings control that cycles through the distinct levels supported by the device.
+ *
+ * It follows the shared torch state while visible, so the system flashlight, the in-app dimmer and
+ * SOS/Morse playback are reflected, and a torch that was already on when the process started is
+ * shown once the camera reports it.
+ */
 class FlashDimmerTileService : TrackedTileService(), KoinComponent {
 
     private val torchRepository: TorchRepository by inject()
@@ -33,41 +39,39 @@ class FlashDimmerTileService : TrackedTileService(), KoinComponent {
 
     override fun onStartListening() {
         super.onStartListening()
-        updateTileState()
+        renderWhileListening(torchRepository.state, ::renderTorchState)
     }
 
     override fun onClick() {
         super.onClick()
         morseRepository.stop()
         torchRepository.cyclePreset()
-        updateTileState()
+        renderTorchState(torchRepository.state.value)
     }
 
-    private fun updateTileState() {
-        val state = torchRepository.state.value
-        qsTile?.apply {
-            label = getString(R.string.tile_flash_dimmer_title)
-            this.state = when {
-                !state.capabilities.isAvailable -> Tile.STATE_UNAVAILABLE
-                state.isEnabled -> Tile.STATE_ACTIVE
-                else -> Tile.STATE_INACTIVE
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                subtitle = when {
-                    !state.capabilities.isAvailable ->
-                        getString(R.string.flash_dimmer_unavailable)
-
-                    !state.isEnabled -> getString(R.string.flash_dimmer_off)
-                    state.capabilities.supportsDimming -> getString(
-                        R.string.flash_dimmer_tile_level,
-                        state.currentLevel,
-                        state.capabilities.maximumLevel,
-                    )
-
-                    else -> getString(R.string.flash_dimmer_on)
-                }
-            }
-            updateTile()
+    private fun renderTorchState(state: TorchState) {
+        val capabilities = state.capabilities
+        val tileState = when {
+            !capabilities.isAvailable -> Tile.STATE_UNAVAILABLE
+            state.isEnabled -> Tile.STATE_ACTIVE
+            else -> Tile.STATE_INACTIVE
         }
+        val subtitle = when {
+            !capabilities.isAvailable || state.error != null ->
+                getString(R.string.flash_dimmer_unavailable)
+
+            !state.isEnabled -> getString(R.string.flash_dimmer_off)
+            capabilities.supportsDimming -> getString(
+                R.string.flash_dimmer_tile_level,
+                state.currentLevel,
+                capabilities.maximumLevel,
+            )
+
+            else -> getString(R.string.flash_dimmer_on)
+        }
+        publishTile(
+            tileState,
+            TileText(title = getString(R.string.tile_flash_dimmer_title), subtitle = subtitle),
+        )
     }
 }

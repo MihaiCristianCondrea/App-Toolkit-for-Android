@@ -23,6 +23,7 @@ import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.TorchPreset
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.TorchState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.BreathingRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.CounterRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.MorseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.SensorRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.SosRepository
@@ -40,10 +41,12 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.random.Random
@@ -73,18 +76,17 @@ class DiceRollToolViewModel : ViewModel() {
     }
 }
 
-class CounterToolViewModel : ViewModel() {
-    private val mutableCount = MutableStateFlow(0)
-    val count: StateFlow<Int> = mutableCount.asStateFlow()
-    fun increment() {
-        mutableCount.value++
-    }
+/** Shows the count shared with the Counter Quick Settings tile, so closing the sheet keeps it. */
+class CounterToolViewModel(private val repository: CounterRepository) : ViewModel() {
+    val count: StateFlow<Int> = repository.count.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = 0,
+    )
 
-    fun reset() {
-        mutableCount.value = 0
-    }
+    fun increment() = repository.increment()
 
-    fun dismiss() = reset()
+    fun reset() = repository.reset()
 }
 
 abstract class FlowToolViewModel<T>(initial: T) : ViewModel() {

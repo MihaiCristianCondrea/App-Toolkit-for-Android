@@ -10,8 +10,9 @@ Quick tools: the in-app tool catalogue and the Quick Settings tile services behi
   status with persisted category expansion preferences.
 - Local data sources for preferences, Quick Settings, sensors/display, haptics, and
   torch access.
-- `SensorRepository`, `BreathingRepository`, `TorchRepository`, `MorseRepository`, and
-  `SosRepository`, which remain the data-layer entry points and own coordination or runtime state.
+- `SensorRepository`, `BreathingRepository`, `TorchRepository`, `MorseRepository`,
+  `SosRepository`, and `CounterRepository`, which remain the data-layer entry points and own
+  coordination or runtime state.
 - UI catalogue models and mappers, the screen and dedicated tool ViewModels, tool composables,
   `toolkitTilesEntryBuilder`, and the Quick Settings services.
 - Localized Quick Tools strings and plurals.
@@ -59,6 +60,10 @@ flowchart TD
     Sos[SosRepository] --> Morse[MorseRepository single playback job]
     Morse --> Torch[TorchRepository shared state]
     Services[Quick Settings services] --> Repositories
+    Services -->|observe while listening| Torch
+    Services --> Counter[CounterRepository persisted count]
+    ToolVMs --> Counter
+    Counter --> Preferences
 ```
 
 ## Architectural decisions
@@ -74,7 +79,8 @@ flowchart TD
 
 ## Public contracts
 
-- `ToolkitTilesRepository`, `TorchRepository`, `MorseRepository`, `ToolkitTilesViewModel`, the
+- `ToolkitTilesRepository`, `TorchRepository`, `MorseRepository`, `CounterRepository`,
+  `ToolkitTilesViewModel`, the
   dedicated tool ViewModels, `toolkitTilesEntryBuilder`, and the source-neutral tile models.
 
 ## Internal implementations
@@ -98,6 +104,22 @@ Settings service share one observable source of truth. `MorseRepository` owns th
 torch playback job; SOS delegates its fixed message to it so custom Morse, SOS and steady
 brightness controls cannot compete. Torch strength is exposed on Android 13+ when hardware reports
 multiple levels; older and single-level devices fall back to a binary toggle.
+
+### Quick Settings tile services
+
+Every service extends `TrackedTileService`. Tiles backed by shared state (Flash Dimmer, Counter)
+render from their repository between `onStartListening` and `onStopListening`, so changes made by the
+in-app tool, the system flashlight or SOS/Morse appear while the panel is open. Rendering a snapshot
+once instead leaves a stale tile, most visibly when the torch was already on before the process
+started and the camera reports it only after the first render.
+
+The Counter tile and the in-app Counter share one DataStore-backed count through
+`CounterRepository`. System UI unbinds tile services freely, so an in-memory count would silently
+reset; closing the Counter sheet no longer clears the count, and its Reset button resets the tile.
+
+Tile subtitles exist only from Android 10, below the module's minimum SDK. `TileText` moves a tap's
+result into the label on Android 8 and 9, where it would otherwise be invisible. Declining the
+system add-tile prompt is treated as the user's choice, not as a failure.
 
 ## Migration notes
 

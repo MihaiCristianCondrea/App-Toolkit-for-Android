@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services
 
-import android.os.Build
 import android.service.quicksettings.Tile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import kotlin.random.Random
@@ -26,26 +25,21 @@ import kotlin.random.Random
 class DiceRollTileService : TrackedTileService() {
     override fun onStartListening() {
         super.onStartListening()
-        qsTile?.apply {
-            label = getString(R.string.tile_dice_roll_title)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                subtitle = getString(R.string.tile_dice_roll_summary)
-            }
-            state = Tile.STATE_INACTIVE
-            updateTile()
-        }
+        publishTile(Tile.STATE_INACTIVE, diceRollText(result = null))
     }
 
     override fun onClick() {
         super.onClick()
         val value = Random.nextInt(from = 1, until = 7)
-        qsTile?.apply {
-            label = getString(R.string.tile_dice_roll_title)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                subtitle = getString(R.string.tile_service_dice_value, value)
-            }
-            state = Tile.STATE_ACTIVE
-            updateTile()
-        }
+        publishTile(
+            Tile.STATE_ACTIVE,
+            diceRollText(getString(R.string.tile_service_dice_value, value)),
+        )
     }
+
+    private fun diceRollText(result: String?) = TileText(
+        title = getString(R.string.tile_dice_roll_title),
+        subtitle = getString(R.string.tile_dice_roll_summary),
+        result = result,
+    )
 }

@@ -48,4 +48,24 @@ class DefaultToolkitTilesPreferencesDataSourceTest {
 
         assertEquals(setOf("utilities", "system"), source.expandedCategoryIds.first())
     }
+
+    @Test
+    fun `counter persists increments and reset`(@TempDir directory: Path) = runTest {
+        val dataStore = PreferenceDataStoreFactory.create(
+            scope = backgroundScope,
+            produceFile = { directory.resolve("toolkit-tiles.preferences_pb").toFile() },
+        )
+        val source = DefaultToolkitTilesPreferencesDataSource(dataStore)
+
+        assertEquals(0, source.counterValue.first())
+
+        source.incrementCounter()
+        source.incrementCounter()
+
+        assertEquals(2, source.counterValue.first())
+
+        source.resetCounter()
+
+        assertEquals(0, source.counterValue.first())
+    }
 }
