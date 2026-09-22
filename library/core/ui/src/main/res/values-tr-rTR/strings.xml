@@ -17,6 +17,7 @@
 <resources>
     <string name="about">Hakkında</string>
     <string name="amoled_mode">AMOLED modu</string>
+    <string name="clear_search">Aramayı temizle</string>
     <string name="color_palette">Renk paleti</string>
     <string name="content_description_more_options">Daha Fazla Seçenekler</string>
     <string name="dark_mode">Koyu mod</string>
@@ -44,6 +45,7 @@
     <string name="onboarding_theme_system_desc">Cihazınızla eşleşir.</string>
     <string name="other_colors">Diğer renkler</string>
     <string name="screen_and_display_settings">Ekran ve görüntüleme ayarları.</string>
+    <string name="search">Ara</string>
     <string name="select_language_title">Dil seç</string>
     <string name="sort_by">Sırala</string>
     <string name="sponsored_ad_label">● Sponsorlu reklam</string>

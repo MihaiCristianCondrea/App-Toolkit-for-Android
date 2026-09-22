@@ -17,6 +17,7 @@
 <resources>
     <string name="about">के बारे में</string>
     <string name="amoled_mode">AMOLED मोड</string>
+    <string name="clear_search">खोज हटाएँ</string>
     <string name="color_palette">रंग पैलेट</string>
     <string name="content_description_more_options">अधिक विकल्प</string>
     <string name="dark_mode">डार्क मोड</string>
@@ -44,6 +45,7 @@
     <string name="onboarding_theme_system_desc">आपके डिवाइस से मेल खाता है।</string>
     <string name="other_colors">अन्य रंग</string>
     <string name="screen_and_display_settings">स्क्रीन और प्रदर्शन सेटिंग्स।</string>
+    <string name="search">खोजें</string>
     <string name="select_language_title">भाषा चुनें</string>
     <string name="sort_by">छांटें</string>
     <string name="sponsored_ad_label">● प्रायोजित विज्ञापन</string>

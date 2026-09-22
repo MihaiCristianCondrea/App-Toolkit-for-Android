@@ -17,6 +17,7 @@
 <resources>
     <string name="about">アプリについて</string>
     <string name="amoled_mode">AMOLEDモード</string>
+    <string name="clear_search">検索をクリア</string>
     <string name="color_palette">カラーパレット</string>
     <string name="content_description_more_options">その他のオプション</string>
     <string name="dark_mode">ダークモード</string>
@@ -44,6 +45,7 @@
     <string name="onboarding_theme_system_desc">デバイスに合わせる。</string>
     <string name="other_colors">その他の色</string>
     <string name="screen_and_display_settings">画面と表示設定。</string>
+    <string name="search">検索</string>
     <string name="select_language_title">言語を選択</string>
     <string name="sort_by">並び替え</string>
     <string name="sponsored_ad_label">● スポンサー広告</string>

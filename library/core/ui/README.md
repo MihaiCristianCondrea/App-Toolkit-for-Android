@@ -11,7 +11,10 @@ entry helpers, state handling, analytics hooks, and shared components.
 - Navigation entry builders and UI state built on stable keys owned by `:library:navigation`.
 - Reusable buttons, fields, preferences, layouts, grids, dialogs, snackbars, ads slots, effects, and
   adaptive-window helpers.
-- `MainTopAppBar`, the host main-screen app bar, and its host-supplied Support overflow action.
+- `MainTopAppBar`, the host main-screen app bar, its optional centre-aligned title, and its
+  host-supplied Support overflow action.
+- `SearchTopAppBar`, the same bar with a search field in place of its title, and `SearchFilterAction`,
+  the filter toggle that sits inside that field.
 - `GeneralTextField` and the Markdown authoring behind it: the length-preserving highlighter, the
   formatting bar, and the source edits it applies.
 - Render models such as `AppVersionInfo` and `AdsConfig`.
@@ -86,6 +89,8 @@ remain available; data-layer callers should use the lower-level APIs.
 - `GeneralButton` is the action-button entry point for all five styles and labelled/icon-only content.
   See the [3.0 button contract and migration](../designsystem/README.md#generalbutton-30).
 - `GeneralTextField` is the text-input entry point; see [GeneralTextField](#generaltextfield).
+- `MainTopAppBar` and `SearchTopAppBar` are the two host app bars; see
+  [Top app bars](#top-app-bars).
 - `GroupedGrid` is the grouped category/action block: `GroupedGridItem` cells, `GroupedGridDefaults`
   for radii, spacing, colors and the badge shape, and `GroupedGridMeasurements` for the size class.
   The corner and ad-placement rules are `groupedGridRows`, which is unit tested; the composable
@@ -164,6 +169,33 @@ Either mode replaces `visualTransformation`, since the field draws the source it
 `onMarkdownFormat` reports which action was used, as a `MarkdownFormatAction` whose `analyticsName`
 is a stable identity for hosts that log them. `MarkdownFormatting`, the source edits behind the bar,
 is plain string transformation and unit tested without a Compose runtime.
+
+## Top app bars
+
+Two bars, one shape. Both take the same navigation icon, the same host-supplied Support overflow,
+and the same destination `actions` slot; they differ only in what occupies the title.
+
+`MainTopAppBar` holds a title that crossfades when the destination changes. `centerTitle` picks the
+Material bar underneath it — off, the default, keeps the small top app bar the toolkit has always
+rendered; on, it becomes a centre-aligned one. It is a parameter rather than a second composable
+because nothing else about the bar changes with it.
+
+`SearchTopAppBar` is that bar for a screen that filters what is behind it. While `showSearch` is
+true the title crossfades into a `GeneralTextFieldStyle.Search` field; while it is false the bar is
+indistinguishable from `MainTopAppBar`. The bar owns only that swap. The query, and whether search
+is showing at all, stay with the caller, so one piece of state drives both the bar and the filtering
+underneath it — the bar never holds a query the screen cannot see.
+
+Filters are optional and live inside the field, in the `filters` slot to the left of the clear
+button, which is where a person looks for the controls that shape the results they are reading.
+`SearchFilterAction` is the ready-made toggle for one: tonal while the filter is applied, text while
+it is not, so an applied sort reads as applied without a second surface announcing it. A filter that
+only applies to some of a screen's content passes `visible`, and the toggle animates itself in and
+out. Actions belonging to the bar rather than to the query stay in `actions`.
+
+Both bars default their strings, so a host that has nothing to say about them passes nothing:
+`title` falls back to the app name, and the search placeholder and clear-button description to
+`core:ui`'s own `search` and `clear_search`.
 
 ## Internal implementations
 

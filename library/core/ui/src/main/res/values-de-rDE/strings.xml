@@ -17,6 +17,7 @@
 <resources>
     <string name="about">Über</string>
     <string name="amoled_mode">AMOLED-Modus</string>
+    <string name="clear_search">Suche löschen</string>
     <string name="color_palette">Farbpalette</string>
     <string name="content_description_more_options">Weitere Optionen</string>
     <string name="dark_mode">Dunkles thema</string>
@@ -44,6 +45,7 @@
     <string name="onboarding_theme_system_desc">Entspricht den Geräteeinstellungen.</string>
     <string name="other_colors">Andere Farben</string>
     <string name="screen_and_display_settings">Bildschirm und Einstellungen anzeigen.</string>
+    <string name="search">Suchen</string>
     <string name="select_language_title">Sprache auswählen</string>
     <string name="sort_by">Sortieren nach</string>
     <string name="sponsored_ad_label">● Gesponserte Anzeige</string>

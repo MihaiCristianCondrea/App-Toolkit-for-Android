@@ -18,6 +18,7 @@
          separates it. Keep the wording identical between them when translating. -->
     <string name="about">About</string>
     <string name="amoled_mode">AMOLED mode</string>
+    <string name="clear_search">Clear search</string>
     <string name="color_palette">Color palette</string>
     <string name="content_description_more_options">More options</string>
     <string name="dark_mode">Dark mode</string>
@@ -45,6 +46,7 @@
     <string name="onboarding_theme_system_desc">Matches your device.</string>
     <string name="other_colors">Other colors</string>
     <string name="screen_and_display_settings">screen and display settings.</string>
+    <string name="search">Search</string>
     <string name="select_language_title">Select language</string>
     <string name="sort_by">Sort by</string>
     <string name="sponsored_ad_label">● Sponsored Ad</string>

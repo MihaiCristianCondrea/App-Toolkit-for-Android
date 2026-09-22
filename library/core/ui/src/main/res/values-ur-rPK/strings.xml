@@ -17,6 +17,7 @@
 <resources>
     <string name="about">کے بارے میں</string>
     <string name="amoled_mode">AMOLED موڈ</string>
+    <string name="clear_search">تلاش صاف کریں</string>
     <string name="color_palette">رنگ پیلیٹ</string>
     <string name="content_description_more_options">مزید اختیارات</string>
     <string name="dark_mode">ڈارک موڈ</string>
@@ -44,6 +45,7 @@
     <string name="onboarding_theme_system_desc">آپ کے آلے سے مطابقت رکھتا ہے۔</string>
     <string name="other_colors">دیگر رنگ</string>
     <string name="screen_and_display_settings">۔ﺕﺎﺒﯿﺗﺮﺗ ﯽﮐ ﮯﻠﭙﺳﮈ ﺭﻭﺍ ﻦﯾﺮﮑﺳﺍ</string>
+    <string name="search">تلاش کریں</string>
     <string name="select_language_title">زبان منتخب کریں</string>
     <string name="sort_by">ترتیب دیں</string>
     <string name="sponsored_ad_label">● اسپانسر شدہ اشتہار</string>

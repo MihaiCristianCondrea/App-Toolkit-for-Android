@@ -17,6 +17,7 @@
 <resources>
     <string name="about">O aplikacji</string>
     <string name="amoled_mode">Tryb AMOLED</string>
+    <string name="clear_search">Wyczyść wyszukiwanie</string>
     <string name="color_palette">Paleta kolorów</string>
     <string name="content_description_more_options">Więcej opcji</string>
     <string name="dark_mode">Tryb ciemny</string>
@@ -44,6 +45,7 @@
     <string name="onboarding_theme_system_desc">Dopasowany do Twojego urządzenia.</string>
     <string name="other_colors">Inne kolory</string>
     <string name="screen_and_display_settings">Ustawienia ekranu i wyświetlania.</string>
+    <string name="search">Szukaj</string>
     <string name="select_language_title">Wybierz język</string>
     <string name="sort_by">Sortuj według</string>
     <string name="sponsored_ad_label">● Reklama sponsorowana</string>

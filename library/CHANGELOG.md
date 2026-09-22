@@ -2,6 +2,21 @@
 
 ---
 
+# Unreleased
+
+### Added
+
+- Added `SearchTopAppBar` to `:library:core:ui`, a top app bar whose title crossfades into a search field while `showSearch` is true. The query and the searching state stay with the caller, so one piece of state drives both the bar and the filtering underneath it. Filters are optional and sit inside the field through the `filters` slot, with `SearchFilterAction` as the ready-made toggle: tonal while a filter is applied, text while it is not. The search placeholder and clear-button description are translated across all 25 supported locales, so a host that has nothing to say about them passes nothing.
+- Added `NavigationDrawerHeader` and `NavigationDrawerBranding` to `:library:navigation`, drawing an app's logo beside its name at the top of a drawer. The logo is sized to the title's line height rather than to a fixed dimension, so the pair stays balanced as the person scales their font up.
+- Added `NavigationDrawerRoutes.StandardRoutes`, naming the Settings, Help, Support, Updates, and Share entries every toolkit host has.
+
+### Changed
+
+- Added `centerTitle` to `MainTopAppBar`, defaulting to `false`. Left off, the bar is the small top app bar it has always been; turned on, it becomes a centre-aligned one.
+- Changed `NavigationDrawerSheet` so a host's own destinations take the top of the drawer and the standard Settings, Help, Updates, and Share entries drop to its bottom edge, with `branding` naming the app above them. A drawer holding nothing but the standard entries renders exactly as before. The rule is `pinnedRoutes`, which defaults to `NavigationDrawerRoutes.StandardRoutes`; pass an empty set to render items in the order given.
+
+---
+
 # September 20, 2026
 
 **Version:** `3.0.0-pre17`

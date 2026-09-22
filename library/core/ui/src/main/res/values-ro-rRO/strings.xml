@@ -17,6 +17,7 @@
 <resources>
     <string name="about">Despre</string>
     <string name="amoled_mode">Mod AMOLED</string>
+    <string name="clear_search">Șterge căutarea</string>
     <string name="color_palette">Paletă de culori</string>
     <string name="content_description_more_options">Mai multe opțiuni</string>
     <string name="dark_mode">Mod întunecat</string>
@@ -44,6 +45,7 @@
     <string name="onboarding_theme_system_desc">Se potrivește cu dispozitivul tău.</string>
     <string name="other_colors">Alte culori</string>
     <string name="screen_and_display_settings">Setări de ecran și afișare.</string>
+    <string name="search">Caută</string>
     <string name="select_language_title">Selectați limba</string>
     <string name="sort_by">Sortează după</string>
     <string name="sponsored_ad_label">● Anunț sponsorizat</string>

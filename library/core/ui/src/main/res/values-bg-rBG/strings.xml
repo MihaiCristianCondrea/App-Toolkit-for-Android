@@ -17,6 +17,7 @@
 <resources>
     <string name="about">Относно</string>
     <string name="amoled_mode">AMOLED режим</string>
+    <string name="clear_search">Изчистване на търсенето</string>
     <string name="color_palette">Цветова палитра</string>
     <string name="content_description_more_options">Още опции</string>
     <string name="dark_mode">Тъмен режим</string>
@@ -44,6 +45,7 @@
     <string name="onboarding_theme_system_desc">Съответства на твоето устройство.</string>
     <string name="other_colors">Други цветове</string>
     <string name="screen_and_display_settings">Настройки на екрана и дисплея.</string>
+    <string name="search">Търсене</string>
     <string name="select_language_title">Изберете език</string>
     <string name="sort_by">Сортиране по</string>
     <string name="sponsored_ad_label">● Спонсорирана реклама</string>

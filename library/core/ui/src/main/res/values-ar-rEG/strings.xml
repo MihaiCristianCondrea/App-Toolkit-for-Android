@@ -17,6 +17,7 @@
 <resources>
     <string name="about">حول</string>
     <string name="amoled_mode">وضع AMOLED</string>
+    <string name="clear_search">مسح البحث</string>
     <string name="color_palette">لوحة الألوان</string>
     <string name="content_description_more_options">المزيد من الخيارات</string>
     <string name="dark_mode">الوضع الداكن</string>
@@ -44,6 +45,7 @@
     <string name="onboarding_theme_system_desc">يطابق جهازك.</string>
     <string name="other_colors">ألوان أخرى</string>
     <string name="screen_and_display_settings">.ﺽﺮﻌﻟﺍﻭ ﺔﺷﺎﺸﻟﺍ ﺕﺍﺩﺍﺪﻋﺇ</string>
+    <string name="search">بحث</string>
     <string name="select_language_title">اختر اللغة</string>
     <string name="sort_by">فرز حسب</string>
     <string name="sponsored_ad_label">● إعلان برعاية</string>

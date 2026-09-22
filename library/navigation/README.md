@@ -15,6 +15,9 @@ transition helpers shared by host and feature UI.
 - Click and selection state for navigation icons; reusable AVD resources live in DesignSystem.
 - Bottom navigation, navigation rail, drawer-item content, and hide-on-scroll shell rendering.
 - `DefaultNavigationRepository`, the standard four-entry drawer list, and the labels that name it.
+- `NavigationDrawerRoutes.StandardRoutes`, and the drawer layout that follows from it.
+- `NavigationDrawerHeader` and `NavigationDrawerBranding`, the app's logo and name at the top of a
+  drawer.
 
 ## Does not own
 
@@ -78,10 +81,34 @@ flowchart TD
   `icon` and `selectedIcon` are `ToolkitIcon` values. The `animatedIcon` constructor accepts a single
   `ToolkitIcon.Animated` and uses it for both states, preserving Restart/Reverse behavior. See [the design system README](../core/designsystem/README.md#toolkit-icon-api).
 - `StableNavKey` and `AppToolkitNavKey` route implementations.
-- `NavigationDrawerRoutes` and `navigation.data.repositories.NavigationRepository`.
+- `NavigationDrawerRoutes`, including `StandardRoutes`, and
+  `navigation.data.repositories.NavigationRepository`.
+- `NavigationDrawerBranding`, the string and drawable resources naming an app in its drawer.
 - Back-stack action extensions and transition helpers.
-- `BottomNavigationBar`, `LeftNavigationRail`, `NavigationDrawerItemContent`, `NavigationDrawerSheet`, and
-  `HideOnScrollBottomBar`.
+- `BottomNavigationBar`, `LeftNavigationRail`, `NavigationDrawerItemContent`,
+  `NavigationDrawerHeader`, `NavigationDrawerSheet`, and `HideOnScrollBottomBar`.
+
+## Drawer layout
+
+A drawer holding nothing but the standard Settings, Help, Updates and Share entries is one block,
+top-aligned, and that is how `NavigationDrawerSheet` renders it.
+
+An app that adds destinations of its own changes what those entries are. They stop being the
+drawer's content and become its footer: the app's destinations take the top, the standard entries
+drop to the bottom edge, and `branding` — the app's logo beside its name, when the host supplies it
+— names the app above them. The rule is `pinnedRoutes`, which defaults to
+`NavigationDrawerRoutes.StandardRoutes`; pass an empty set to render `items` in the order given, as
+before.
+
+The footer is pinned with a weighted spacer rather than a scroll container, so the two groups
+together have to fit the drawer's height. The standard entries plus a handful of app destinations
+do; a drawer long enough to need scrolling wants its own sheet.
+
+`NavigationDrawerHeader` is separately public, for a host that wants its logo and name somewhere the
+sheet does not put them, or wants them in a drawer that has no destinations of its own. It takes
+either a `NavigationDrawerBranding` of resource ids or an already-resolved title and painter, and
+sizes the logo to the title's line height so the pair stays balanced as the person scales their font
+up.
 
 ## Internal implementations
 

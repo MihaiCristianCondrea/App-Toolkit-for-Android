@@ -17,6 +17,7 @@
 <resources>
     <string name="about">সম্পর্কে</string>
     <string name="amoled_mode">AMOLED মোড</string>
+    <string name="clear_search">অনুসন্ধান মুছুন</string>
     <string name="color_palette">রঙের প্যালেট</string>
     <string name="content_description_more_options">আরও বিকল্প</string>
     <string name="dark_mode">ডার্ক মোড</string>
@@ -44,6 +45,7 @@
     <string name="onboarding_theme_system_desc">আপনার ডিভাইসের সাথে মেলে।</string>
     <string name="other_colors">অন্যান্য রং</string>
     <string name="screen_and_display_settings">স্ক্রিন এবং প্রদর্শন সেটিংস।</string>
+    <string name="search">অনুসন্ধান</string>
     <string name="select_language_title">ভাষা নির্বাচন করুন</string>
     <string name="sort_by">সাজান</string>
     <string name="sponsored_ad_label">● স্পনসর্ড বিজ্ঞাপন</string>
