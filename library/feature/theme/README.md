@@ -37,10 +37,10 @@ The overlay is a full-size `ComposeView` added on top of each resumed activity's
 never added to an empty content view: `ComponentActivity.setContent` adopts the first child when it
 is a `ComposeView`, so an activity that sets its content after resuming would otherwise run inside
 the overlay without its navigation owners. Such activities get the overlay after their content's
-first layout. It only draws, so touches reach the screen underneath, and it is hidden from accessibility services and
-focus. Activities from Google Play services, Play Billing and Firebase are skipped. A host that
-prefers to place the overlay itself can compose `SeasonalThemeOverlay()` last in its root `Box`
-instead of installing the manager.
+first layout. It only draws, so touches reach the screen underneath, and it is hidden from
+accessibility services and focus. Activities from Google Play services, Play Billing and Firebase
+are skipped. A host that prefers to place the overlay itself can compose `SeasonalThemeOverlay()`
+last in its root `Box` instead of installing the manager.
 
 What people see:
 
