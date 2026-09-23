@@ -15,19 +15,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.data.repositories
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStoreInterface
-import kotlinx.coroutines.flow.Flow
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.boolean.toApiEnvironment
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
+import kotlin.test.assertEquals
 
-/**
- * Exposes whether the hidden Components showcase has been unlocked.
- *
- * The flag is written by the Settings About gesture and stored in `:sample:core:datastore`, so this
- * feature observes its own availability without owning the surface that reveals it.
- */
-class ComponentsShowcaseRepository(
-    dataStore: DataStoreInterface,
-) {
-    val isUnlocked: Flow<Boolean> = dataStore.componentsShowcaseUnlocked
+class BooleanExtensionsTest {
+
+    @Test
+    fun `toApiEnvironment maps debug flag to environment`() {
+        assertAll(
+            { assertEquals("debug", true.toApiEnvironment()) },
+            { assertEquals("release", false.toApiEnvironment()) },
+        )
+    }
 }

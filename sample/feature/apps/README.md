@@ -52,7 +52,7 @@ flowchart TD
     VM --> Installed[InstalledAppsRepository]
     Installed --> Packages[PackageManager local source]
     VM --> Favorites[FavoritesRepository]
-    Favorites --> Store[DatastoreInterface]
+    Favorites --> Store[DataStoreInterface]
     VM --> Items[UI models and ad interleaving]
     Items --> Screen
     Screen --> Actions[Launch app / store / details / favorite]

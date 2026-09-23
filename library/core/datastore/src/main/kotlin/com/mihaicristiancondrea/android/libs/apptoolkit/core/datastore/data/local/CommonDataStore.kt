@@ -40,7 +40,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.loca
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultAdsPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultAppStatePreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultChangelogPreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultDiagnosticsPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultUsageAndDiagnosticsPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultDisplayPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultFavoritesPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultOnboardingPreferencesDataSource
@@ -101,8 +101,8 @@ open class CommonDataStore(
         DefaultOnboardingPreferencesDataSource(dataStore = dataStore)
 
     /** Consent and usage-diagnostics toggles. */
-    val diagnosticsPreferences: DefaultDiagnosticsPreferencesDataSource =
-        DefaultDiagnosticsPreferencesDataSource(dataStore = dataStore)
+    val diagnosticsPreferences: DefaultUsageAndDiagnosticsPreferencesDataSource =
+        DefaultUsageAndDiagnosticsPreferencesDataSource(dataStore = dataStore)
 
     /** Ads preference, including the shared eagerly started [adsEnabledFlow]. */
     val adsPreferences: AdsPreferencesDataSource = DefaultAdsPreferencesDataSource(

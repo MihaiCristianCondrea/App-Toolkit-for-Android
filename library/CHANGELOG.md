@@ -12,6 +12,14 @@
 
 - Adjusted low-contrast text and container color pairs in the blue, Android, red, yellow, Christmas, and Halloween palettes. Aligned error foregrounds with error containers across the affected palettes.
 
+### Changed
+
+- Renamed `DefaultDiagnosticsPreferencesDataSource` in `:library:core:datastore` to `DefaultUsageAndDiagnosticsPreferencesDataSource`, matching the `UsageAndDiagnosticsPreferencesDataSource` contract it implements. `CommonDataStore.diagnosticsPreferences` keeps its name and now has the renamed type. Hosts that name the class directly update the import.
+
+### Removed
+
+- Removed the forwarding `appToolkitNavigationEntryBuilders` in `feature.about.ui.navigation` from `:library:apptoolkit`. It put a package owned by `:library:feature:about` inside another module. Hosts import `appToolkitNavigationEntryBuilders` from `app.main.ui.navigation` instead, with the same signature, destinations, and route keys.
+
 ---
 
 # September 20, 2026

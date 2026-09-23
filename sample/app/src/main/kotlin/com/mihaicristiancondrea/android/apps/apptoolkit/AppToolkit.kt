@@ -25,7 +25,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DatastoreInterface
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStoreInterface
 import com.mihaicristiancondrea.android.apps.apptoolkit.di.initializeKoin
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.managers.BaseCoreManager
@@ -104,7 +104,7 @@ class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
     }
 
     private suspend fun resolvePreferredColorPalette(): ColorPalette {
-        val dataStore: DatastoreInterface = getKoin().get()
+        val dataStore: DataStoreInterface = getKoin().get()
         val hasInteractedWithSettings: Boolean = dataStore.settingsInteracted.first()
 
         if (!hasInteractedWithSettings) {

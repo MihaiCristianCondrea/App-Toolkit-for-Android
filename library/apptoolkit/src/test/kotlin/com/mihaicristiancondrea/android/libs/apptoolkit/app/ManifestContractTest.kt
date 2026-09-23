@@ -136,6 +136,20 @@ class ManifestContractTest {
         assertThat(offenders).isEmpty()
     }
 
+    @Test
+    fun `module manifests exist only to contribute entries`() {
+        // AGP takes the namespace from Gradle, so a module needs a manifest only when it declares
+        // permissions, queries, features or components. An empty placeholder in one module and
+        // none in its sibling hides which modules actually change the merged host manifest.
+        val offenders = moduleManifests()
+            .filterNot { manifest ->
+                MANIFEST_CHILD.containsMatchIn(manifest.readText().replace(XML_COMMENT, ""))
+            }
+            .map { it.relativePath() }
+
+        assertThat(offenders).isEmpty()
+    }
+
     private data class Component(
         val manifestPath: String,
         val name: String,
@@ -161,6 +175,15 @@ class ManifestContractTest {
         .filter { MAIN_SOURCE_SET in it.invariantPath() }
         .filterNot { BUILD_DIRECTORY in it.invariantPath() }
         .toList()
+
+    private fun moduleManifests(): List<File> = listOf(LIBRARY_ROOT, SAMPLE_ROOT).flatMap { sourceRoot ->
+        File(repositoryRoot, sourceRoot)
+            .walkTopDown()
+            .onEnter { it.name != "build" && it.name != ".gradle" }
+            .filter { it.isFile && it.name == MANIFEST_FILE }
+            .filter { MAIN_SOURCE_SET in it.invariantPath() }
+            .toList()
+    }
 
     private fun File.invariantPath(): String = path.replace(File.separatorChar, '/')
 
@@ -272,6 +295,8 @@ class ManifestContractTest {
         val COMPONENT_NAME = Regex("""android:name="([^"]+)"""")
         val EXPORTED = Regex("""android:exported\s*=""")
         val EXPORTED_TRUE = Regex("""android:exported\s*=\s*"true"""")
+        val XML_COMMENT = Regex("""<!--.*?-->""", RegexOption.DOT_MATCHES_ALL)
+        val MANIFEST_CHILD = Regex("""<(?!\?|/|manifest\b)[\w-]+""")
 
         val repositoryRoot: File = generateSequence(File("").absoluteFile) { it.parentFile }
             .firstOrNull { File(it, SETTINGS_FILE).isFile }

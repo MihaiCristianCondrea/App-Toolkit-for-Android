@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.Flow
  */
 class DataStore(
     private val commonDataStore: CommonDataStore,
-) : DatastoreInterface {
+) : DataStoreInterface {
     override val startup: Flow<Boolean> = commonDataStore.startup
     override val componentsShowcaseUnlocked: Flow<Boolean> =
         commonDataStore.componentsShowcaseUnlocked

@@ -139,4 +139,4 @@ Android platform source, has no alternate implementation, and does not cross a m
 
 Pass-through use cases were removed throughout. Where one wrapped a data source rather than a
 repository, a repository was introduced instead of deleting it outright, so no ViewModel ends up
-holding `DatastoreInterface` directly.
+holding `DataStoreInterface` directly.

@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.Flow
  *
  * This boundary prevents app features from depending on the shared [CommonDataStore] concrete type.
  */
-interface DatastoreInterface {
+interface DataStoreInterface {
     val startup: Flow<Boolean>
     val componentsShowcaseUnlocked: Flow<Boolean>
     val favoriteApps: Flow<Set<String>>

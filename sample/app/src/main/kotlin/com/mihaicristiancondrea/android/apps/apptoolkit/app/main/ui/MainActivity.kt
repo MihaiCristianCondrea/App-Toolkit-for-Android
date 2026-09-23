@@ -32,7 +32,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.MainNavig
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.NavigationRoutes
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.appNavigationEntryBuilders
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.toNavKeyOrDefault
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DatastoreInterface
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStoreInterface
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.data.managers.NavigationManager
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.MainScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.MainViewModel
@@ -72,7 +72,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R as HelpR
 
 class MainActivity : AppCompatActivity() {
 
-    private val dataStore: DatastoreInterface by inject()
+    private val dataStore: DataStoreInterface by inject()
     private val dispatchers: DispatcherProvider by inject()
     private val navigationManager: NavigationManager by inject()
     private val viewModel: MainViewModel by viewModel()

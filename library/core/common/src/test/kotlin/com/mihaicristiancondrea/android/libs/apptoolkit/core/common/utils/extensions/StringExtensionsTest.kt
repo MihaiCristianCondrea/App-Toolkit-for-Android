@@ -19,9 +19,13 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.exten
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.string.extractChangesForVersion
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.string.faqCatalogUrl
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.string.normalizeRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.string.sanitizeUrlOrNull
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.string.toToken
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 class StringExtensionsTest {
 
@@ -126,6 +130,30 @@ class StringExtensionsTest {
         assertEquals(
             "$baseUrl/release/catalog.json",
             baseUrl.faqCatalogUrl(isDebugBuild = false)
+        )
+    }
+
+    @Test
+    fun `sanitizeUrlOrNull trims whitespace and handles blank input`() {
+        assertAll(
+            { assertEquals("https://d4rk.dev", " https://d4rk.dev ".sanitizeUrlOrNull()) },
+            { assertNull("   ".sanitizeUrlOrNull()) },
+            { assertNull(null.sanitizeUrlOrNull()) },
+            { assertNull("https://host.com/image with spaces.png".sanitizeUrlOrNull()) },
+            { assertNull("www.host.com/image.png".sanitizeUrlOrNull()) },
+            { assertNull("ftp://host.com/image.png".sanitizeUrlOrNull()) },
+            { assertNull("https:///image.png".sanitizeUrlOrNull()) },
+        )
+    }
+
+    @Test
+    fun `normalizeRoute extracts route segment`() {
+        assertAll(
+            { assertEquals("home", "home?param=value".normalizeRoute()) },
+            { assertEquals("home", "home/details".normalizeRoute()) },
+            { assertNull("".normalizeRoute()) },
+            { assertNull("   ".normalizeRoute()) },
+            { assertNull(null.normalizeRoute()) },
         )
     }
 }

@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.data.repositories
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DatastoreInterface
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStoreInterface
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test
 
 class ShowcaseUnlockRepositoryTest {
 
-    private val dataStore = mockk<DatastoreInterface>()
+    private val dataStore = mockk<DataStoreInterface>()
     private val firebaseController = mockk<FirebaseController>(relaxed = true)
 
     @Test
