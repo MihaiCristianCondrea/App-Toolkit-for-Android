@@ -27,7 +27,7 @@
 - Improved `AppTheme` so it no longer re-subscribes to the theme preferences on every recomposition. Each re-subscription replayed the defaults, which could briefly swap the whole app's color scheme and recompose everything under it.
 - Improved `DisplaySettingsScreen` so it no longer restarts its startup-page subscription on every recomposition.
 - Improved `VersionInfoAlertDialogContent` so it uses Coil's shared image loader instead of building a new one, with its own caches, on every recomposition.
-- Improved `Modifier.animateVisibility` so an element scrolled into view deep in a long list animates in at once instead of waiting up to 1.3 seconds. Elements that appear together still cascade one after another, counted from the first of them rather than from the top of the list, so the first screenful looks exactly as before and every element scrolled in still animates. `index` is now optional: without it elements cascade in the order they appear. The motion also runs in the draw phase and is skipped when the system's animations are turned off.
+- Improved `Modifier.animateVisibility` so `index` is optional. Without it, elements shown together still cascade, in the order they appear, so a `Column` or a group of cards needs no index. With an index the cascade is unchanged. The motion also runs in the draw phase instead of re-laying out the element on every frame, and is skipped when the system's animations are turned off.
 
 ### Fixed
 

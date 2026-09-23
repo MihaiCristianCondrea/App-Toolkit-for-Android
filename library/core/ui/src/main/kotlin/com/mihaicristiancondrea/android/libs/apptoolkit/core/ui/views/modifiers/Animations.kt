@@ -32,28 +32,29 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.isSystemAnimationDisabled
 import kotlinx.coroutines.delay
-import kotlin.math.abs
 import kotlin.math.min
 
 /**
- * Fades and slides a composable into place the first time it appears, cascading with everything
- * that appears alongside it.
+ * Fades and slides a composable into place the first time it appears, in a cascade.
  *
  * Every element animates in, including the ones scrolled into view later, so a screen built from
- * these stays in motion as it is explored. Elements that appear together form a wave and come in
- * one after another, [staggerDelay] apart. The first screenful is one wave, so it cascades from the
- * top; each row scrolled into view afterwards starts a small wave of its own. An element therefore
- * waits only for the elements that appeared with it, never for the whole list above it, and one
- * scrolled to at the bottom of a long list animates straight away.
+ * these stays in motion as it is explored.
  *
- * Nothing needs to be set up. It works the same in a `LazyColumn`, a lazy grid, a `Column`, or on
- * a single element:
+ * Give list items their [index] and the cascade follows the list: each item waits [staggerDelay]
+ * per position, up to [maxStaggeredItems] positions, so the first screenful runs from the top and
+ * items further down keep arriving, the deepest after about 1.3 seconds with the defaults. Leave
+ * [index] out and elements cascade in the order they appear instead, so a `Column`, a group of
+ * cards, or a list whose index is awkward to thread through still cascades without any setup:
  *
  * ```kotlin
  * LazyColumn {
- *     items(rows, key = { it.id }) { row ->
- *         RowCard(row, modifier = Modifier.animateItem().animateVisibility())
+ *     itemsIndexed(rows, key = { _, row -> row.id }) { index, row ->
+ *         RowCard(row, modifier = Modifier.animateItem().animateVisibility(index = index))
  *     }
+ * }
+ *
+ * Column {
+ *     cards.forEach { card -> Card(modifier = Modifier.animateVisibility()) { Text(card.title) } }
  * }
  * ```
  *
@@ -62,14 +63,12 @@ import kotlin.math.min
  * again. When animations are turned off system-wide the element simply appears. The motion runs in
  * the draw phase, so it neither recomposes nor re-lays out the element on each frame.
  *
- * @param index The element's position in its list, when it has one. It orders the cascade by
- * position rather than by the order elements are composed in, counted from the first element of
- * the wave, so a row scrolled into view deep in a list still starts at once. Leave it out and the
- * cascade follows the order elements appear, which for a list is the same thing.
+ * @param index The element's position in its list. Each position adds [staggerDelay] before the
+ * element starts. Without it, elements cascade in the order they appear.
  * @param invisibleOffsetY How far below its place, in pixels, the element starts.
  * @param animationDuration Duration of the fade and the slide, in milliseconds.
- * @param staggerDelay Delay between two consecutive elements of a wave, in milliseconds.
- * @param maxStaggeredItems Elements further into a wave than this wait no longer than it does.
+ * @param staggerDelay Delay added per position in the cascade, in milliseconds.
+ * @param maxStaggeredItems Positions past this one wait no longer than it does.
  */
 @Composable
 fun Modifier.animateVisibility(
@@ -115,13 +114,13 @@ fun Modifier.animateVisibility(
 }
 
 /**
- * Groups the elements that appear together into waves and staggers each wave.
+ * Decides how long each element waits before its entrance, so elements arrive in a cascade.
  *
- * A wave is every element that starts revealing within [WAVE_WINDOW_MILLIS] of the wave's first
- * one. The effects of the elements composed in one frame all run within a few milliseconds of each
- * other, so the first screenful of a list is one wave, and a list being scrolled starts a new wave
- * every few frames. Counting from the start of the wave, rather than from the top of the list, is
- * what keeps an element deep in a long list from waiting for every position above it.
+ * With an index the wait is simply its position. Without one there is no position to go by, so
+ * the elements that start revealing close together are grouped into a wave, everything within
+ * [WAVE_WINDOW_MILLIS] of the wave's first element, and each waits by its place in the wave. The
+ * effects of the elements composed in one frame run within a few milliseconds of each other, so
+ * elements shown together cascade together.
  *
  * One cascade is shared by the whole app instead of each list owning one, so the modifier needs no
  * setup. It is only touched from effects, which run on the main thread.
@@ -130,31 +129,24 @@ internal class VisibilityCascade(private val clock: () -> Long = SystemClock::up
 
     private var waveStartedAt: Long = NOT_STARTED
     private var arrivalsInWave: Int = 0
-    private var firstIndexInWave: Int? = null
 
     /**
-     * How long an element that is about to be revealed waits.
-     *
-     * With an [index] the position is the distance from the first indexed element of the wave, so
-     * a wave cascades away from where it started in either scroll direction. Without one it is the
-     * element's arrival order within the wave.
+     * How long an element that is about to be revealed waits: [index] positions when it has one,
+     * otherwise its arrival order within the current wave, capped at [maxStaggeredItems].
      */
     fun delayMillisFor(index: Int?, staggerDelayMillis: Long, maxStaggeredItems: Int): Long {
+        val position: Int = index ?: nextArrivalInWave()
+        return min(position.coerceAtLeast(0), maxStaggeredItems.coerceAtLeast(0)) *
+                staggerDelayMillis
+    }
+
+    private fun nextArrivalInWave(): Int {
         val now: Long = clock()
         if (waveStartedAt == NOT_STARTED || now - waveStartedAt > WAVE_WINDOW_MILLIS) {
             waveStartedAt = now
             arrivalsInWave = 0
-            firstIndexInWave = null
         }
-
-        val arrival: Int = arrivalsInWave++
-        val position: Int = if (index != null) {
-            val firstIndex: Int = firstIndexInWave ?: index.also { firstIndexInWave = it }
-            abs(index - firstIndex)
-        } else {
-            arrival
-        }
-        return min(position, maxStaggeredItems.coerceAtLeast(0)) * staggerDelayMillis
+        return arrivalsInWave++
     }
 
     companion object {

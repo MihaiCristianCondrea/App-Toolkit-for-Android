@@ -26,10 +26,24 @@ class VisibilityCascadeTest {
     private val cascade = VisibilityCascade(clock = { now })
 
     @Test
-    fun `the first screenful cascades from the top, as the index-based stagger did`() {
+    fun `an indexed list cascades by position from the top`() {
         val delays = (0 until 5).map { index -> delayFor(index = index) }
 
         assertEquals(listOf(0L, 64L, 128L, 192L, 256L), delays)
+    }
+
+    @Test
+    fun `an item deep in a list keeps the full cascade delay`() {
+        now += 5_000L
+
+        assertEquals(20L * 64L, delayFor(index = 80))
+    }
+
+    @Test
+    fun `indexed positions past the cap wait no longer than the cap`() {
+        val delays = (0 until 6).map { index -> delayFor(index = index, maxStaggeredItems = 3) }
+
+        assertEquals(listOf(0L, 64L, 128L, 192L, 192L, 192L), delays)
     }
 
     @Test
@@ -37,24 +51,6 @@ class VisibilityCascadeTest {
         val delays = List(size = 4) { delayFor(index = null) }
 
         assertEquals(listOf(0L, 64L, 128L, 192L), delays)
-    }
-
-    @Test
-    fun `a row scrolled into view deep in a list starts at once`() {
-        (0 until 20).forEach { index -> delayFor(index = index) }
-
-        now += 400L
-        val delays = listOf(80, 81).map { index -> delayFor(index = index) }
-
-        assertEquals(listOf(0L, 64L), delays)
-    }
-
-    @Test
-    fun `a wave scrolled in from the top cascades away from where it starts`() {
-        now += 400L
-        val delays = listOf(39, 38, 37).map { index -> delayFor(index = index) }
-
-        assertEquals(listOf(0L, 64L, 128L), delays)
     }
 
     @Test
@@ -69,10 +65,12 @@ class VisibilityCascadeTest {
     }
 
     @Test
-    fun `elements past the cap wait no longer than the cap`() {
-        val delays = (0 until 6).map { index -> delayFor(index = index, maxStaggeredItems = 3) }
+    fun `elements shown later without an index start a cascade of their own`() {
+        repeat(times = 10) { delayFor(index = null) }
 
-        assertEquals(listOf(0L, 64L, 128L, 192L, 192L, 192L), delays)
+        now += 1_000L
+
+        assertEquals(listOf(0L, 64L), List(size = 2) { delayFor(index = null) })
     }
 
     private fun delayFor(index: Int?, maxStaggeredItems: Int = 20): Long =
