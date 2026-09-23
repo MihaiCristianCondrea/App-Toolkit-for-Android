@@ -2,7 +2,9 @@
 
 ---
 
-# Unreleased
+# September 23, 2026
+
+**Version:** `3.0.0-pre20`
 
 ### Added
 

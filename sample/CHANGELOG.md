@@ -2,7 +2,9 @@
 
 ---
 
-# Unreleased
+# September 23, 2026
+
+**Version:** `26.09.20` (`137260920`)
 
 ### Added
 
