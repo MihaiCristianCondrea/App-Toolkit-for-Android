@@ -19,10 +19,10 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.st
 
 import androidx.compose.ui.graphics.Color
 
-val primaryLight = Color(0xFF994700)
+val primaryLight = Color(0xFFA34C00)
 val onPrimaryLight = Color(0xFFFFFFFF)
-val primaryContainerLight = Color(0xFFFFDBC8)
-val onPrimaryContainerLight = Color(0xFF743500)
+val primaryContainerLight = Color(0xFFE8710A)
+val onPrimaryContainerLight = Color(0xFF4B2000)
 val secondaryLight = Color(0xFF815436)
 val onSecondaryLight = Color(0xFFFFFFFF)
 val secondaryContainerLight = Color(0xFFFFDBC7)
@@ -66,7 +66,7 @@ val tertiaryFixedLight = Color(0xFFF9E291)
 val tertiaryFixedDimLight = Color(0xFFDCC678)
 val onTertiaryFixedLight = Color(0xFF221B00)
 val onTertiaryFixedVariantLight = Color(0xFF544602)
-val primaryDark = Color(0xFFFFB68A)
+val primaryDark = Color(0xFFF47A18)
 val onPrimaryDark = Color(0xFF522300)
 val primaryContainerDark = Color(0xFF743500)
 val onPrimaryContainerDark = Color(0xFFFFDBC8)

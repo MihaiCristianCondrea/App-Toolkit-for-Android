@@ -306,12 +306,15 @@ playback; it remains local presentation state in `core:designsystem`.
   resolution.
 
 Static palettes include purple and orange alongside blue, Android, green, red, yellow, rose, skin,
-monochrome, and the seasonal Christmas and Halloween options. Every palette except monochrome is
-generated from its brand hues with Material's dynamic-color tone rules, so each role pair keeps
-the contrast Material specifies. Palettes whose brand color is bright (Android, yellow, skin,
-Halloween) keep that color as `primaryContainer` in the light scheme and use a darker `primary` that
-stays readable as text. Every palette also defines its own fixed roles; left out, Compose fills them
-with the baseline purple. `StaticPaletteContrastTest` guards text at 4.5:1 on every surface it is
+monochrome, and the seasonal Christmas and Halloween options. Palettes keep their authored colors
+wherever contrast allows. Where a color is a fill (buttons, containers, chips), only the text
+color on it is chosen, since near-black or near-white always reaches 4.5:1. A color moves only when
+it is itself the text or icon on a surface and cannot reach 4.5:1 there, and then only to the
+nearest passing tone of the same hue and chroma. In practice that is the light-scheme accent of the
+bright palettes (Android, green, yellow, orange, Halloween, skin); their exact brand color then
+becomes the container, so it stays on screen as the FAB, tonal buttons and selected indicators.
+Dark schemes keep their authored accents. Every palette also defines its own fixed roles; left out,
+Compose fills them with the baseline purple. `StaticPaletteContrastTest` guards text at 4.5:1 on every surface it is
 drawn on (including `primary` on surfaces and `inversePrimary` on snackbars), outlines at 3:1, and
 the fixed roles.
 
