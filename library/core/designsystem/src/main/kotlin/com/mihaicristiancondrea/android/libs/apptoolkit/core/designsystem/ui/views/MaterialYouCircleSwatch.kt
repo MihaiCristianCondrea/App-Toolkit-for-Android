@@ -44,8 +44,9 @@ import androidx.compose.ui.unit.dp
  * A round preview of a palette: [primary] across the top half, [secondary] and [tertiary] sharing
  * the bottom, split by thin [dividerColor] lines.
  *
- * The mosaic is one draw call over a cached circle, rather than a column and row of colored boxes,
- * so a row of swatches adds one node each instead of eight.
+ * The mosaic is drawn by one cached drawing node (three rectangles and two divider lines clipped to
+ * a cached circle) rather than a column and row of colored boxes, so a row of swatches adds one
+ * node each instead of eight.
  *
  * The selection check sits in a badge filled with the swatch's own [primary], ringed with
  * [dividerColor], and drawn in black or white, whichever stands out more. It used to take the app's

@@ -16,11 +16,11 @@
 
 ### Improved
 
-- Improved startup and first-frame speed for apps built on the toolkit. `:library:core:designsystem`, `:library:core:ui`, `:library:navigation`, and `:library:feature:theme` now ship baseline profiles, which a host's release build merges so the toolkit's theme, shared components, navigation, and seasonal overlay are compiled ahead of time on install. Before, no toolkit code was in the app's profile.
+- Added baseline profiles to `:library:core:designsystem`, `:library:core:ui`, `:library:navigation`, and `:library:feature:theme`. A host's release build merges them, so the classes a cold launch runs before its first frame (the theme and default palette, the icon slot, navigation state, the drawer and bottom bar, and the seasonal overlay) are compiled ahead of time on install. Before, no toolkit code was in the app's profile. The lists are hand-picked and not yet measured; a generated profile from a startup benchmark is the intended replacement.
 - Improved `AppTheme` so it rebuilds its color scheme only when a theme setting changes, and builds the wallpaper-based schemes only when dynamic colors are on. It used to build both wallpaper schemes on every recomposition.
 - Improved the seasonal overlay so it composes no second app theme over every activity; it borrows a theme only while the holiday greeting is on screen.
 - Improved snowfall drawing so it allocates nothing per frame.
-- Improved palette swatches in the theme picker and onboarding. They show each palette's most colorful variant of every accent, follow the theme the app is actually drawn in rather than the system setting, draw in one step instead of eight nested layouts, and draw the selection check in black or white on the swatch's own color so it no longer disappears on dark palettes.
+- Improved palette swatches in the theme picker and onboarding. They show each palette's most colorful variant of every accent, follow the theme the app is actually drawn in rather than the system setting, draw from one cached drawing node instead of eight nested layouts, and draw the selection check in black or white on the swatch's own color so it no longer disappears on dark palettes.
 
 ### Fixed
 
@@ -28,11 +28,11 @@
 - Fixed error roles out of step with their containers: error, error container, and their foregrounds now come from the same tonal palette in every static scheme.
 - Fixed static palettes showing Material's baseline purple in their fixed roles (`primaryFixed`, `secondaryFixed`, `tertiaryFixed` and their `on` roles). Every palette now defines them from its own colors.
 - Fixed the Christmas palette using red for every accent. It now pairs festive red with evergreen green and gold.
-- Fixed battery saver switching the app to its dark theme only on the next unrelated recomposition, and the status bar icons staying dark on the dark theme it forces.
 - Fixed the build version row on the About screen copying the version to the clipboard on every tap, which buried the five-tap konfetti under clipboard confirmations. The other rows still copy their value.
 
 ### Changed
 
+- Changed `AppTheme` so battery saver no longer forces the dark theme over an explicit Light choice. Light and Dark now mean what they say; "follow system" still goes dark in battery saver, because the system switches its own dark theme on there.
 - Changed `AboutViewModel` to take a `SeasonalThemeRepository` (`seasonalThemes`), which records the easter egg unlock. `aboutModule` passes it; hosts that construct the ViewModel themselves pass `get()` from the graph.
 - Renamed `DefaultDiagnosticsPreferencesDataSource` in `:library:core:datastore` to `DefaultUsageAndDiagnosticsPreferencesDataSource`, matching the `UsageAndDiagnosticsPreferencesDataSource` contract it implements. `CommonDataStore.diagnosticsPreferences` keeps its name and now has the renamed type. Hosts that name the class directly update the import.
 

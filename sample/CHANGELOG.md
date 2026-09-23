@@ -15,9 +15,9 @@
 - Improved how readable the colors are in every palette, especially buttons and links in the Android, yellow, and Halloween themes in light mode.
 - The Christmas theme now mixes red with green and gold.
 - The app no longer switches to the Christmas or Halloween colors on its own during the holidays. It asks first.
-- The app starts and draws its first screens faster after installing or updating.
+- The app's startup code is now compiled when it is installed or updated, instead of warming up over the first launches.
 - The color picker in Theme settings shows brighter, truer previews of each palette, and the check on the selected one is always visible.
-- Battery saver now switches the app to its dark theme right away, with matching status bar icons.
+- Choosing Light in Theme settings now keeps the app light when battery saver is on. Follow system still turns dark with the rest of the phone.
 
 ### Fixed
 

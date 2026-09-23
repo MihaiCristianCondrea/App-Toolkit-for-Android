@@ -18,12 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style
 
 import android.app.Activity
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Build
-import android.os.PowerManager
 import android.view.View
 import android.view.Window
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -34,17 +30,12 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
@@ -55,6 +46,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.sty
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ThemePaletteProvider.paletteById
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.typography.AppTypography
 
+/**
+ * The host's own light and dark schemes for the `default` palette.
+ *
+ * These are configuration, not state: set them before the first composition, normally in
+ * `Application.onCreate`. `AppTheme` reads them when one of its theme inputs changes, so a value
+ * assigned while a screen is showing is not picked up until the next theme change.
+ */
 object AppThemeConfig {
     var customLightScheme: ColorScheme? = null
     var customDarkScheme: ColorScheme? = null
@@ -97,48 +95,18 @@ private fun resolveColorScheme(
 }
 
 /**
- * Whether the app draws in its dark theme for [themeMode]: the person's choice, the system setting
- * when they follow it, and always while battery saver is on.
+ * Whether the app draws in its dark theme for [themeMode]: the person's explicit choice, or the
+ * system setting when they follow it.
  *
- * Battery saver is followed live through its broadcast, so turning it on or off restyles the app
- * at once rather than on whatever happens to recompose next.
+ * Battery saver does not override an explicit choice. On Android 10 and later the system switches
+ * its own dark theme on in battery saver, so "follow system" already goes dark there; someone who
+ * picked Light gets light.
  */
 @Composable
-fun isAppInDarkTheme(themeMode: String): Boolean {
-    val isSystemDarkTheme: Boolean = isSystemInDarkTheme()
-    val isPowerSaveMode: Boolean = rememberPowerSaveMode()
-    val chosenDark: Boolean = when (themeMode) {
-        DataStoreNamesConstants.THEME_MODE_DARK -> true
-        DataStoreNamesConstants.THEME_MODE_LIGHT -> false
-        else -> isSystemDarkTheme
-    }
-    return chosenDark || isPowerSaveMode
-}
-
-@Composable
-private fun rememberPowerSaveMode(): Boolean {
-    val context: Context = LocalContext.current
-    val powerManager: PowerManager? = remember(context) {
-        context.getSystemService(Context.POWER_SERVICE) as? PowerManager
-    }
-    var isPowerSaveMode: Boolean by remember(powerManager) {
-        mutableStateOf(powerManager?.isPowerSaveMode == true)
-    }
-    DisposableEffect(context, powerManager) {
-        val receiver = object : BroadcastReceiver() {
-            override fun onReceive(receiverContext: Context?, intent: Intent?) {
-                isPowerSaveMode = powerManager?.isPowerSaveMode == true
-            }
-        }
-        ContextCompat.registerReceiver(
-            context,
-            receiver,
-            IntentFilter(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED),
-            ContextCompat.RECEIVER_NOT_EXPORTED,
-        )
-        onDispose { context.unregisterReceiver(receiver) }
-    }
-    return isPowerSaveMode
+fun isAppInDarkTheme(themeMode: String): Boolean = when (themeMode) {
+    DataStoreNamesConstants.THEME_MODE_DARK -> true
+    DataStoreNamesConstants.THEME_MODE_LIGHT -> false
+    else -> isSystemInDarkTheme()
 }
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -180,7 +148,6 @@ fun AppTheme(content: @Composable () -> Unit) {
 
     val view: View = LocalView.current
     if (!view.isInEditMode) {
-        // isDarkTheme already includes battery saver, so the status bar icons match the colors.
         SideEffect {
             val window: Window = (view.context as Activity).window
             @Suppress("DEPRECATION")

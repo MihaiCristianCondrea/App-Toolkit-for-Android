@@ -322,18 +322,23 @@ drawn on (including `primary` on surfaces and `inversePrimary` on snackbars), ou
 the fixed roles.
 
 `AppTheme` rebuilds its color scheme only when one of its inputs changes, and builds the wallpaper
-schemes only when dynamic colors are on. Battery saver, which forces the dark theme, is followed
-through its broadcast, and the status bar icons use the same decision as the colors.
+schemes only when dynamic colors are on. Light or dark follows the person's explicit choice, or the
+system when they follow it; battery saver does not override an explicit Light. `AppThemeConfig` is
+configuration set before the first composition, not observable state.
 
 Palette swatches show each accent's more colorful variant (role or container), so a light palette
-whose brand color sits in its container still shows that color. The mosaic is one cached draw, and
+whose brand color sits in its container still shows that color. The mosaic is one cached drawing
+node, and
 the selection check is drawn in black or white on the swatch's own primary with a ring around it,
 so it stays visible on every palette.
 
 The module ships `src/main/baseline-prof.txt`, as do `:library:core:ui`, `:library:navigation` and
 `:library:feature:theme`. A host's release build merges them and `androidx.profileinstaller`
-installs them, so toolkit code is compiled ahead of time on install rather than interpreted on the
-first launches.
+installs them, so the listed code is compiled ahead of time on install. The lists are hand-picked:
+the files and classes a cold launch runs before its first frame (theme, default palette, icon slot,
+navigation state and chrome, the seasonal overlay). They are a stopgap. The intended replacement is
+a profile generated from a Macrobenchmark startup journey on a device, extended with a Settings and
+Theme journey if those screens matter, and measured against a release build before and after.
 
 `Modifier.snowfall(SnowfallStyle)` in `ui.effects.snowfall` draws falling snow over an element. It
 runs in the draw phase only, keeps flake state in plain arrays rather than snapshot state, and
