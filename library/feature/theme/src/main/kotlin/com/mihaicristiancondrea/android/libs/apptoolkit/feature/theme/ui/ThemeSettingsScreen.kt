@@ -50,6 +50,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
+import kotlinx.coroutines.flow.first
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -229,6 +237,15 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues) {
             }
         }
 
+    val variantRowState: LazyListState = rememberScrolledToSelected(
+        selectedIndex = if (isDynamicColors) dynamicVariantIndex else -1,
+    )
+    val selectedStaticIndex: Int = staticOptions.indexOf(staticPaletteId)
+    val staticPagerRowState: LazyListState = rememberScrolledToSelected(
+        selectedIndex = if (!isDynamicColors) selectedStaticIndex else -1,
+    )
+    val staticRowState: LazyListState = rememberScrolledToSelected(selectedIndex = selectedStaticIndex)
+
     val tabTitles = listOf(
         stringResource(id = R.string.wallpaper_colors),
         stringResource(id = R.string.other_colors)
@@ -326,6 +343,7 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues) {
                         pages = persistentListOf(
                             {
                                 LazyRow(
+                                    state = variantRowState,
                                     contentPadding = PaddingValues(horizontal = SizeConstants.LargeSize),
                                     horizontalArrangement = Arrangement.spacedBy(
                                         space = SizeConstants.MediumSize,
@@ -362,6 +380,7 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues) {
                             },
                             {
                                 LazyRow(
+                                    state = staticPagerRowState,
                                     contentPadding = PaddingValues(horizontal = SizeConstants.LargeSize),
                                     horizontalArrangement = Arrangement.spacedBy(
                                         space = SizeConstants.MediumSize,
@@ -409,6 +428,7 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues) {
             } else {
                 item {
                     LazyRow(
+                        state = staticRowState,
                         contentPadding = PaddingValues(horizontal = SizeConstants.LargeSize),
                         horizontalArrangement = Arrangement.spacedBy(
                             space = SizeConstants.MediumSize,
@@ -572,3 +592,28 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues) {
 }
 
 private const val DARK_SURFACE_LUMINANCE: Float = 0.5f
+
+/**
+ * A row state that, once the row first lays out, brings [selectedIndex] to its center.
+ *
+ * It jumps rather than animates, so the screen opens already showing the choice instead of sliding
+ * to it, and it runs once: picking another item later must not scroll the row under the finger.
+ * A negative [selectedIndex] (nothing selected in this row) leaves the row at its start.
+ */
+@Composable
+private fun rememberScrolledToSelected(selectedIndex: Int): LazyListState {
+    val state: LazyListState = rememberLazyListState()
+    var scrolled: Boolean by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(state) {
+        if (scrolled || selectedIndex < 0) return@LaunchedEffect
+        snapshotFlow { state.layoutInfo.totalItemsCount }.first { it > selectedIndex }
+        state.scrollToItem(selectedIndex)
+        val item = state.layoutInfo.visibleItemsInfo.firstOrNull { it.index == selectedIndex }
+        if (item != null) {
+            val viewport = state.layoutInfo.viewportEndOffset - state.layoutInfo.viewportStartOffset
+            state.scrollBy((item.offset + item.size / 2f) - viewport / 2f)
+        }
+        scrolled = true
+    }
+    return state
+}

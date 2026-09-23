@@ -17,6 +17,7 @@
 - The app no longer switches to the Christmas or Halloween colors on its own during the holidays. It asks first.
 - The app's startup code is now compiled when it is installed or updated, instead of warming up over the first launches.
 - The color picker in Theme settings shows brighter, truer previews of each palette, and the check on the selected one is always visible.
+- Theme settings now opens with the color you're using already in view.
 - Choosing Light in Theme settings now keeps the app light when battery saver is on. Follow system still turns dark with the rest of the phone.
 
 ### Fixed

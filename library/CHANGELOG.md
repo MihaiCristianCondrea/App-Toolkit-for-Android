@@ -20,6 +20,7 @@
 - Improved `AppTheme` so it rebuilds its color scheme only when a theme setting changes, and builds the wallpaper-based schemes only when dynamic colors are on. It used to build both wallpaper schemes on every recomposition.
 - Improved the seasonal overlay so it composes no second app theme over every activity; it borrows a theme only while the holiday greeting is on screen.
 - Improved snowfall drawing so it allocates nothing per frame.
+- Improved the theme settings page so each palette row opens scrolled to the palette in use, centered, instead of at the start of the row.
 - Improved palette swatches in the theme picker and onboarding. They show each palette's most colorful variant of every accent, follow the theme the app is actually drawn in rather than the system setting, draw from one cached drawing node instead of eight nested layouts, and draw the selection check in black or white on the swatch's own color so it no longer disappears on dark palettes.
 
 ### Fixed
