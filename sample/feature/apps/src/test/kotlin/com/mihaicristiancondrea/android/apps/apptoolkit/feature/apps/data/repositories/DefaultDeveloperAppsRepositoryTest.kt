@@ -113,6 +113,36 @@ class DefaultDeveloperAppsRepositoryTest {
     }
 
     @Test
+    fun `fetchDeveloperApps keeps one entry per package`() = runTest {
+        val response = AppsListResponseDto(
+            data = AppsListDataDto(
+                apps = listOf("First", "Second").map { name ->
+                    AppSummaryDto(
+                        name = name,
+                        packageName = "com.example.duplicate",
+                        iconUrl = "https://example.com/$name.png",
+                    )
+                },
+            ),
+        )
+        val repository = repositoryReturning(Json.encodeToString(response))
+
+        val result = repository.fetchDeveloperApps().first() as DataState.Success
+
+        assertEquals(listOf("First"), result.data.map { it.name })
+    }
+
+    @Test
+    fun `fetchDeveloperApps keeps one cached entry per package`() = runTest {
+        val local = FakeDeveloperAppsLocalDataSource(cachedApps("Cached") + cachedApps("Cached"))
+        val repository = repositoryWithStatus(HttpStatusCode.InternalServerError, local)
+
+        val result = repository.fetchDeveloperApps().first() as DataState.Error
+
+        assertEquals(listOf("Cached"), result.data?.map { it.name })
+    }
+
+    @Test
     fun `fetchAppDetails requests package route and maps full metadata`() = runTest {
         val response = AppDetailsResponseDto(
             data = AppDetailsDataDto(

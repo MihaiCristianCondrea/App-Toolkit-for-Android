@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style
 
-import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.view.View
@@ -41,6 +40,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.colorscheme.applyDynamicVariant
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.findActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.rememberCommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ColorPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ThemePaletteProvider.paletteById
@@ -149,7 +149,9 @@ fun AppTheme(content: @Composable () -> Unit) {
     val view: View = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
-            val window: Window = (view.context as Activity).window
+            // A dialog's context, or any other wrapper, is unwrapped to its activity rather than
+            // cast. A context with no activity at all has no window to style.
+            val window: Window = (view.context.findActivity() ?: return@SideEffect).window
             @Suppress("DEPRECATION")
             window.statusBarColor = Color.Transparent.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars =

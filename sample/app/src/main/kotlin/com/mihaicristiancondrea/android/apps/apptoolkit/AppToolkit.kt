@@ -63,8 +63,9 @@ class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
     override fun onCreate() {
         initializeKoin(context = this)
         applyDefaultColorPalette()
+        // Also registers this instance for activity callbacks; registering it a second time here
+        // would deliver every callback twice.
         super<BaseCoreManager>.onCreate()
-        registerActivityLifecycleCallbacks(this)
         getKoin().get<IssueReporterShakeManager>().install()
         getKoin().get<SeasonalThemeManager>().install()
         ProcessLifecycleOwner.get().lifecycle.addObserver(observer = this)

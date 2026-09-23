@@ -23,6 +23,7 @@
 ### Fixed
 
 - Fixed tapping the build version in About copying it to the clipboard every time. The other entries still copy their value.
+- Fixed the Apps screen crashing when the app catalogue listed the same app more than once. Each app now appears once.
 
 ---
 

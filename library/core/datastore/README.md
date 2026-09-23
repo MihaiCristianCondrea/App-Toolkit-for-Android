@@ -75,6 +75,10 @@ flowchart TD
   ad surface must observe the same default and subsequent changes.
 - Reduce ads defaults to `false` and suppresses only App Open ads; it does not alter SDK
   initialization or banner/native ad enablement.
+- A `settings` file that can no longer be parsed is replaced with empty preferences, which resets
+  every value to its default and shows first-run state again. Without the handler every read throws
+  `CorruptionException`, and startup reads run outside any catch, so one damaged file crashed each
+  launch until the app's data was cleared.
 
 ## Startup value projection
 
@@ -94,6 +98,8 @@ change stored keys, defaults, or the shared preferences file.
   for the seasonal themes state, the holiday greeting, and the easter egg unlock.
 - `themePreferencesState()` combines stored theme values into the application-facing
   `ThemePreferencesState`; Compose collection of that flow belongs to `:library:core:designsystem`.
+  Each call builds a new flow, so a composable must `remember` it: collecting a fresh instance
+  restarts the subscription and replays the defaults.
 
 ## Internal implementations
 

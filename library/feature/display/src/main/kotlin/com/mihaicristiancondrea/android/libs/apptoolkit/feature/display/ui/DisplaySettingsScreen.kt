@@ -106,7 +106,7 @@ fun DisplaySettingsScreen(
     val screenState: UiStateScreen<DisplaySettingsUiState> by
         viewModel.uiState.collectAsStateWithLifecycle()
     val uiState = screenState.data ?: DisplaySettingsUiState()
-    val startupRoute: String by viewModel.startupRoute(defaultRoute = "")
+    val startupRoute: String by remember(viewModel) { viewModel.startupRoute(defaultRoute = "") }
         .collectAsStateWithLifecycle(initialValue = "")
 
     TrackScreenView(

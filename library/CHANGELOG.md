@@ -22,6 +22,9 @@
 - Improved snowfall drawing so it allocates nothing per frame.
 - Improved the theme settings page so each palette row opens scrolled to the palette in use, centered, instead of at the start of the row.
 - Improved palette swatches in the theme picker and onboarding. They show each palette's most colorful variant of every accent, follow the theme the app is actually drawn in rather than the system setting, draw from one cached drawing node instead of eight nested layouts, and draw the selection check in black or white on the swatch's own color so it no longer disappears on dark palettes.
+- Improved `AppTheme` so it no longer re-subscribes to the theme preferences on every recomposition. Each re-subscription replayed the defaults, which could briefly swap the whole app's color scheme and recompose everything under it.
+- Improved `DisplaySettingsScreen` so it no longer restarts its startup-page subscription on every recomposition.
+- Improved `VersionInfoAlertDialogContent` so it uses Coil's shared image loader instead of building a new one, with its own caches, on every recomposition.
 
 ### Fixed
 
@@ -30,6 +33,9 @@
 - Fixed static palettes showing Material's baseline purple in their fixed roles (`primaryFixed`, `secondaryFixed`, `tertiaryFixed` and their `on` roles). Every palette now defines them from its own colors.
 - Fixed the Christmas palette using red for every accent. It now pairs festive red with evergreen green and gold.
 - Fixed the build version row on the About screen copying the version to the clipboard on every tap, which buried the five-tap konfetti under clipboard confirmations. The other rows still copy their value.
+- Fixed a damaged settings file crashing every app built on the toolkit at launch. The shared `settings` DataStore now replaces a file it can no longer read with empty preferences, so values fall back to their defaults instead of every read throwing `CorruptionException`.
+- Fixed `AppTheme` crashing with `ClassCastException` when composed under a context that wraps its activity, such as a dialog's. It now finds the activity through the wrapper and leaves the status bar alone when there is none.
+- Fixed a completed donation sometimes being followed by a failed purchase message. `DefaultBillingRepository` could consume the same purchase twice when the purchase callback and a purchase check on resume arrived together, and the second attempt reported `Item is not owned`.
 
 ### Changed
 
