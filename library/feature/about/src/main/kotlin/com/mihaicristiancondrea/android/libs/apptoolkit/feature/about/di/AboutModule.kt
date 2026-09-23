@@ -52,6 +52,7 @@ val aboutModule: Module = module {
             context = get(),
             dispatchers = get(),
             firebaseController = get(),
+            seasonalThemes = get(),
         )
     }
 

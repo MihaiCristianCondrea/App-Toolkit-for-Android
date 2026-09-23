@@ -1,0 +1,29 @@
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="8dp"
+    android:viewportWidth="100"
+    android:viewportHeight="8">
+  <path
+      android:strokeWidth="1"
+      android:pathData="M114,4c-5.07,4.67 -10.13,4.67 -15.2,0S88.67,-0.67 83.6,4 73.47,8.67 68.4,4 58.27,-0.67 53.2,4 43.07,8.67 38,4 27.87,-0.67 22.8,4 12.67,8.67 7.6,4 -2.53,-0.67 -7.6,4s-10.13,4.67 -15.2,0S-32.93,-0.67 -38,4s-10.13,4.67 -15.2,0 -10.13,-4.67 -15.2,0 -10.13,4.67 -15.2,0 -10.13,-4.67 -15.2,0 -10.13,4.67 -15.2,0 -10.13,-4.67 -15.2,0 -10.13,4.67 -15.2,0 -10.13,-4.67 -15.2,0 -10.13,4.67 -15.2,0 -10.13,-4.67 -15.2,0 -10.13,4.67 -15.2,0 -10.13,-4.67 -15.2,0 -10.13,4.67 -15.2,0 -10.13,-4.67 -15.2,0 -10.13,4.67 -15.2,0 -10.13,-4.67 -15.2,0 -10.13,4.67 -15.2,0 -10.13,-4.67 -15.2,0 -10.13,4.67 -15.2,0 -10.13,-4.67 -15.2,0 -10.13,4.67 -15.2,0 -10.13,-4.67 -15.2,0 -10.13,4.67 -15.2,0 -10.13,-4.67 -15.2,0 -10.13,4.67 -15.2,0"
+      android:fillColor="#00000000"
+      android:strokeColor="#E1E3E1"
+      android:strokeLineCap="square"/>
+</vector>

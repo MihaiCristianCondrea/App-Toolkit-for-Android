@@ -99,4 +99,9 @@
     <string name="components_text_field_search">Pencarian</string>
     <string name="components_text_field_search_placeholder">Cari komponen</string>
     <string name="components_text_field_search_outlined">Pencarian, bergaris</string>
+    <string name="components_section_dividers">Pemisah</string>
+    <string name="components_divider_wavy">Pemisah bergelombang</string>
+    <string name="components_divider_width">Lebar</string>
+    <string name="components_divider_wave_height">Tinggi gelombang</string>
+    <string name="components_divider_vertical">Vertikal</string>
 </resources>

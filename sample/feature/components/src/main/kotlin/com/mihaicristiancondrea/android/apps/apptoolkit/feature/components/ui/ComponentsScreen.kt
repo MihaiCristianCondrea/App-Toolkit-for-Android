@@ -37,6 +37,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.co
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.AnimationShowcase
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.DividerShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.ButtonShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.FabShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.FilterShowcase
@@ -211,6 +212,8 @@ fun ComponentsScreen(
             }
 
             item(key = "animations") { AnimationShowcase() }
+
+            item(key = "dividers") { DividerShowcase() }
 
             item {
                 NavigationBarSpacer()

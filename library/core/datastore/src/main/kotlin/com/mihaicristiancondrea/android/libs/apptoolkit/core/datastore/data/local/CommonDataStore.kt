@@ -20,7 +20,9 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.loc
 
 import android.content.Context
 import androidx.datastore.core.DataStore
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
@@ -35,16 +37,18 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.loca
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.FavoritesPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.OnboardingPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.ReviewPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.SeasonalThemePreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.ThemePreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.UsageAndDiagnosticsPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultAdsPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultAppStatePreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultChangelogPreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultDiagnosticsPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultUsageAndDiagnosticsPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultDisplayPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultFavoritesPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultOnboardingPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultReviewPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultSeasonalThemePreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultThemePreferencesDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -55,9 +59,15 @@ import kotlinx.coroutines.flow.StateFlow
  * Migrations run here rather than as work a data source does when constructed, so they finish
  * before the first read is served. `AdsCoreManager` samples the ads preference once at startup and
  * would otherwise race them.
+ *
+ * A file that can no longer be parsed is replaced with empty preferences, so every value falls back
+ * to its default and the user sees first-run state again. Without the handler DataStore throws
+ * `CorruptionException` from every read, and several of those reads run at startup outside any
+ * catch, so one damaged file would crash the app on every launch until its data was cleared.
  */
 val Context.commonDataStore: DataStore<Preferences> by preferencesDataStore(
     name = DataStoreNamesConstants.DATA_STORE_SETTINGS,
+    corruptionHandler = ReplaceFileCorruptionHandler { emptyPreferences() },
     produceMigrations = { commonDataStoreMigrations() },
 )
 
@@ -92,6 +102,10 @@ open class CommonDataStore(
     val themePreferences: ThemePreferencesDataSource =
         DefaultThemePreferencesDataSource(dataStore = dataStore)
 
+    /** Seasonal themes: the easter egg unlock, snowfall, and holiday theme bookkeeping. */
+    val seasonalThemePreferences: SeasonalThemePreferencesDataSource =
+        DefaultSeasonalThemePreferencesDataSource(dataStore = dataStore)
+
     /** Display preferences: language, startup destination, and interaction chrome. */
     val displayPreferences: DisplayPreferencesDataSource =
         DefaultDisplayPreferencesDataSource(dataStore = dataStore)
@@ -101,8 +115,8 @@ open class CommonDataStore(
         DefaultOnboardingPreferencesDataSource(dataStore = dataStore)
 
     /** Consent and usage-diagnostics toggles. */
-    val diagnosticsPreferences: DefaultDiagnosticsPreferencesDataSource =
-        DefaultDiagnosticsPreferencesDataSource(dataStore = dataStore)
+    val diagnosticsPreferences: DefaultUsageAndDiagnosticsPreferencesDataSource =
+        DefaultUsageAndDiagnosticsPreferencesDataSource(dataStore = dataStore)
 
     /** Ads preference, including the shared eagerly started [adsEnabledFlow]. */
     val adsPreferences: AdsPreferencesDataSource = DefaultAdsPreferencesDataSource(

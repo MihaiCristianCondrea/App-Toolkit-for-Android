@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.ThemePreferencesState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
@@ -25,7 +26,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.themePreferencesState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.rememberCommonDataStore
 
-/** Collects the application-facing theme preference model at the design-system boundary. */
+/**
+ * Collects the application-facing theme preference model at the design-system boundary.
+ *
+ * The combined flow is remembered because `collectAsStateWithLifecycle` restarts collection
+ * whenever it receives a different flow instance. Built inline, every recomposition of the theme
+ * root would re-subscribe to DataStore and replay the defaults, briefly swapping the whole app's
+ * color scheme and recomposing everything under it.
+ */
 @Composable
 internal fun rememberThemePreferencesState(
     themeModeDefault: String = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
@@ -35,13 +43,23 @@ internal fun rememberThemePreferencesState(
     staticPaletteIdDefault: String = StaticPaletteIds.DEFAULT,
 ): ThemePreferencesState {
     val dataStore = rememberCommonDataStore()
-    return dataStore.themePreferences.themePreferencesState(
-        themeModeDefault = themeModeDefault,
-        dynamicColorsDefault = dynamicColorsDefault,
-        amoledModeDefault = amoledModeDefault,
-        dynamicPaletteVariantDefault = dynamicPaletteVariantDefault,
-        staticPaletteIdDefault = staticPaletteIdDefault,
-    ).collectAsStateWithLifecycle(
+    val themePreferences = remember(
+        dataStore,
+        themeModeDefault,
+        dynamicColorsDefault,
+        amoledModeDefault,
+        dynamicPaletteVariantDefault,
+        staticPaletteIdDefault,
+    ) {
+        dataStore.themePreferences.themePreferencesState(
+            themeModeDefault = themeModeDefault,
+            dynamicColorsDefault = dynamicColorsDefault,
+            amoledModeDefault = amoledModeDefault,
+            dynamicPaletteVariantDefault = dynamicPaletteVariantDefault,
+            staticPaletteIdDefault = staticPaletteIdDefault,
+        )
+    }
+    return themePreferences.collectAsStateWithLifecycle(
         initialValue = ThemePreferencesState(
             themeMode = themeModeDefault,
             dynamicColors = dynamicColorsDefault,

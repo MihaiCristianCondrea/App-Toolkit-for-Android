@@ -99,4 +99,9 @@
     <string name="components_text_field_search">Arama</string>
     <string name="components_text_field_search_placeholder">Bileşenlerde ara</string>
     <string name="components_text_field_search_outlined">Arama, ana hatlı</string>
+    <string name="components_section_dividers">Ayırıcılar</string>
+    <string name="components_divider_wavy">Dalgalı ayırıcı</string>
+    <string name="components_divider_width">Genişlik</string>
+    <string name="components_divider_wave_height">Dalga yüksekliği</string>
+    <string name="components_divider_vertical">Dikey</string>
 </resources>

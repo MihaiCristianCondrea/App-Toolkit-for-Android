@@ -27,13 +27,11 @@ import kotlinx.coroutines.flow.Flow
  */
 class DataStore(
     private val commonDataStore: CommonDataStore,
-) : DatastoreInterface {
+) : DataStoreInterface {
     override val startup: Flow<Boolean> = commonDataStore.startup
     override val componentsShowcaseUnlocked: Flow<Boolean> =
         commonDataStore.componentsShowcaseUnlocked
     override val favoriteApps: Flow<Set<String>> = commonDataStore.favoriteApps
-    override val settingsInteracted: Flow<Boolean> = commonDataStore.settingsInteracted
-    override val staticPaletteId: Flow<String> = commonDataStore.staticPaletteId
 
     override fun <T : StableNavKey> startupDestinationFlow(
         defaultRoute: String,

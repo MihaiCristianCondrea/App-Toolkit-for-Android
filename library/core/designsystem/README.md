@@ -13,6 +13,7 @@ theme-selection visuals, and the shared icon slot used by navigation items and b
 - Theme option/swatch composables.
 - `ToolkitIcon` and its renderers, the icon slot shared by navigation items and buttons.
 - Reusable bundled AVD resources for Check, Clock, Grid, Settings, and Share.
+- `il_wavy_line`, the wavy line the wavy dividers in `:library:core:ui` reproduce.
 
 ## Does not own
 
@@ -71,6 +72,10 @@ flowchart TD
 
 - `AppTheme`, `AppThemeConfig`, `ColorPalette`, palette providers/values, theme models, and
   selection composables.
+- `Modifier.snowfall`, `SnowfallStyle`, and `SnowflakeShape`.
+- `isAppInDarkTheme(themeMode)`, the same light or dark decision `AppTheme` makes, for surfaces
+  that need it without composing a whole theme.
+- `ColorScheme.toSwatchColors()`, the colors a palette swatch shows.
 - `ToolkitIcon`, `ToolkitIconReplayMode`, `resolveToolkitIcon`, `ToolkitIconContent`, and
   `AnimatedToolkitIcon`. See [the Toolkit Icon API](#toolkit-icon-api) below.
 
@@ -303,6 +308,44 @@ playback; it remains local presentation state in `core:designsystem`.
 - `bounceClick`, the shared press-feedback modifier consumed by core and navigation UI.
 - Concrete palette color tables, seasonal filtering, typography definitions, and dynamic-color
   resolution.
+
+Static palettes include purple and orange alongside blue, Android, green, red, yellow, rose, skin,
+monochrome, and the seasonal Christmas and Halloween options. Palettes keep their authored colors
+wherever contrast allows. Where a color is a fill (buttons, containers, chips), only the text
+color on it is chosen, since near-black or near-white always reaches 4.5:1. A color moves only when
+it is itself the text or icon on a surface and cannot reach 4.5:1 there, and then only to the
+nearest passing tone of the same hue and chroma. In practice that is the light-scheme accent of the
+bright palettes (Android, green, yellow, orange, Halloween, skin); their exact brand color then
+becomes the container, so it stays on screen as the FAB, tonal buttons and selected indicators.
+Dark schemes keep their authored accents. Every palette also defines its own fixed roles; left out,
+Compose fills them with the baseline purple. `StaticPaletteContrastTest` guards text at 4.5:1 on every surface it is
+drawn on (including `primary` on surfaces and `inversePrimary` on snackbars), outlines at 3:1, and
+the fixed roles.
+
+`AppTheme` rebuilds its color scheme only when one of its inputs changes, and builds the wallpaper
+schemes only when dynamic colors are on. Light or dark follows the person's explicit choice, or the
+system when they follow it; battery saver does not override an explicit Light. `AppThemeConfig` is
+configuration set before the first composition, not observable state.
+
+Palette swatches show each accent's more colorful variant (role or container), so a light palette
+whose brand color sits in its container still shows that color. The mosaic is one cached drawing
+node, and
+the selection check is drawn in black or white on the swatch's own primary with a ring around it,
+so it stays visible on every palette.
+
+The module ships `src/main/baseline-prof.txt`, as do `:library:core:ui`, `:library:navigation` and
+`:library:feature:theme`. A host's release build merges them and `androidx.profileinstaller`
+installs them, so the listed code is compiled ahead of time on install. The lists are hand-picked:
+the files and classes a cold launch runs before its first frame (theme, default palette, icon slot,
+navigation state and chrome, the seasonal overlay). They are a stopgap. The intended replacement is
+a profile generated from a Macrobenchmark startup journey on a device, extended with a Settings and
+Theme journey if those screens matter, and measured against a release build before and after.
+
+`Modifier.snowfall(SnowfallStyle)` in `ui.effects.snowfall` draws falling snow over an element. It
+runs in the draw phase only, keeps flake state in plain arrays rather than snapshot state, and
+follows the composition's frame clock, so nothing recomposes while snow falls and it stops in the
+background. `SnowfallStyle` sets density, colors, flake size, speed, wind, opacity, and shape. The
+motion lives in `SnowfallSimulation`, which is covered by JVM tests.
 
 ## Current risks
 

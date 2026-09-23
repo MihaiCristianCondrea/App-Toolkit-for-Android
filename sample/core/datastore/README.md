@@ -7,7 +7,7 @@ stores.
 
 ## Owns
 
-- `DatastoreInterface` and its implementation, covering the components-showcase unlock flag,
+- `DataStoreInterface` and its implementation, covering the components-showcase unlock flag,
   favorites, and the host's startup destination.
 
 ## Does not own
@@ -30,12 +30,12 @@ stores.
 
 ```mermaid
 flowchart TD
-    Repos[Host repositories] --> Contract[DatastoreInterface]
+    Repos[Host repositories] --> Contract[DataStoreInterface]
     App[Application startup] --> Contract
     Contract --> Adapter[Sample DataStore adapter]
     Adapter --> Common[Toolkit CommonDataStore]
     Common --> Store["shared settings Preferences DataStore"]
-    Store -->|startup / unlock / favorites / palette Flow| Adapter
+    Store -->|startup / unlock / favorites Flow| Adapter
     Adapter -->|typed values and StableNavKey mapping| Contract
     Contract --> Repos
     Repos -->|suspend mutations| Contract
@@ -45,7 +45,7 @@ flowchart TD
 ## Architectural decisions
 
 - The sample reuses the toolkit's single preferences file and exposes only host-required values
-  through `DatastoreInterface`; feature repositories do not depend on `CommonDataStore` directly.
+  through `DataStoreInterface`; feature repositories do not depend on `CommonDataStore` directly.
 - Persisted routes remain strings at the storage boundary and are mapped to `StableNavKey` values by
   a caller-supplied function, keeping host route knowledge out of the toolkit DataStore.
 - The contract groups sample-wide preference access because there is one implementation and one
@@ -55,7 +55,7 @@ Startup mapping delegates to core DataStore's generic startupValueFlow while ret
 
 ## Public contracts
 
-- `DatastoreInterface`.
+- `DataStoreInterface`.
 
 ## Internal implementations
 

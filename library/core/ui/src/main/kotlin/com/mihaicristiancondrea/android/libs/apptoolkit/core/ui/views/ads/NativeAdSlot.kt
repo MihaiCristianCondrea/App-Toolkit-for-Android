@@ -44,6 +44,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
  *   collapse the slot together with its spacing instead of leaving a gap.
  * - The user's ads preference and a blank [adUnitId] both suppress the request entirely.
  * - Under [LocalInspectionMode] a [NativeAdPlaceholder] is drawn instead of loading anything.
+ * - Inside a lazy list or grid, pass [cache] and [cacheKey] so the ad survives its item scrolling
+ *   out of view instead of being destroyed and requested again; see [NativeAdCache].
  *
  * @param adUnitId the AdMob native ad unit to request.
  * @param presentation the shape the ad takes on screen.
@@ -56,6 +58,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
  * @param style the ad's finish on this screen: badge silhouette and colour, text sizes and colours,
  * and whether the call to action is a filled pill or a text button. It overrides only what it names,
  * so the default leaves the presentation exactly as it was built.
+ * @param cache keeps the ad while the slot is out of composition. Ignored without [cacheKey].
+ * @param cacheKey identifies this slot in [cache]; unique among the slots composed at one time.
  * @param onAdLoaded invoked with whether an ad is currently displayed.
  */
 @Composable
@@ -68,6 +72,8 @@ fun NativeAdSlot(
     cornerRadius: Dp = SizeConstants.ExtraLargeSize,
     containerColor: Color = Color.Unspecified,
     style: NativeAdStyle = NativeAdStyle(),
+    cache: NativeAdCache? = null,
+    cacheKey: Any? = null,
     onAdLoaded: (Boolean) -> Unit = {},
 ) {
     val currentOnAdLoaded: (Boolean) -> Unit by rememberUpdatedState(newValue = onAdLoaded)
@@ -89,6 +95,8 @@ fun NativeAdSlot(
     val slotState: NativeAdSlotState = rememberNativeAdState(
         adUnitId = adUnitId,
         enabled = adsEnabled,
+        cache = cache,
+        cacheKey = cacheKey,
     )
     val nativeAd: NativeAd? = slotState.ad
 

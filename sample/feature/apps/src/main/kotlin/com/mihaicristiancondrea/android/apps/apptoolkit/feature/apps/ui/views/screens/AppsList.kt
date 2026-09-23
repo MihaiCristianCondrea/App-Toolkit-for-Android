@@ -35,9 +35,7 @@ import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -54,6 +52,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constant
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdCache
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberNativeAdCache
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.ads.AppsListNativeAdCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.FilterChipItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.TopListFilters
@@ -64,8 +64,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.distinctUntilChangedBy
-import kotlinx.coroutines.flow.filterNotNull
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
 
@@ -98,7 +96,6 @@ fun AppsList(
     onFavoriteToggle: (String) -> Unit,
     onAppClick: (AppInfo) -> Unit,
     onShareClick: (AppInfo) -> Unit,
-    onFirstVisibleAppChanged: (AppInfo) -> Unit = {},
     adFrequency: Int = AdsConstants.APPS_LIST_AD_FREQUENCY,
     windowWidthSizeClass: AppWindowWidthSizeClass,
 ) {
@@ -146,7 +143,6 @@ fun AppsList(
         onFavoriteToggle = onFavoriteToggle,
         onAppClick = onAppClick,
         onShareClick = onShareClick,
-        onFirstVisibleAppChanged = onFirstVisibleAppChanged,
         adUnitId = adsConfig.bannerAdUnitId,
     )
 }
@@ -186,20 +182,11 @@ private fun AppsGrid(
     onFavoriteToggle: (String) -> Unit,
     onAppClick: (AppInfo) -> Unit,
     onShareClick: (AppInfo) -> Unit,
-    onFirstVisibleAppChanged: (AppInfo) -> Unit,
     adUnitId: String,
 ) {
-    LaunchedEffect(items) {
-        snapshotFlow {
-            listState.layoutInfo.visibleItemsInfo
-                .firstNotNullOfOrNull { visibleItem ->
-                    (items.getOrNull(visibleItem.index) as? AppListItem.App)?.appInfo
-                }
-        }
-            .filterNotNull()
-            .distinctUntilChangedBy(AppInfo::packageName)
-            .collect(onFirstVisibleAppChanged)
-    }
+    // Outside the grid, so an ad cell that scrolls away leaves its ad here instead of destroying it
+    // and requesting another one when it scrolls back.
+    val adCache: NativeAdCache = rememberNativeAdCache()
 
     val layoutDirection = LocalLayoutDirection.current
     LazyVerticalGrid(
@@ -228,11 +215,7 @@ private fun AppsGrid(
         itemsIndexed(
             items = items,
             key = { index, item ->
-                val baseKey = when (item) {
-                    is AppListItem.App -> item.appInfo.packageName
-                    AppListItem.Ad -> "ad_$index"
-                }
-                "${selectedFilter}_$baseKey"
+                appListItemKey(selectedFilter = selectedFilter, index = index, item = item)
             },
             span = { _, item ->
                 when (item) {
@@ -266,6 +249,14 @@ private fun AppsGrid(
                 is AppListItem.Ad -> {
                     AppsListNativeAdCard(
                         adUnitId = adUnitId,
+                        cache = adCache,
+                        // The grid key includes the filter, so a cell fading out after a filter
+                        // change never shares its ad with the cell replacing it.
+                        cacheKey = appListItemKey(
+                            selectedFilter = selectedFilter,
+                            index = index,
+                            item = item,
+                        ),
                         modifier = Modifier
                             .animateItem()
                             .animateVisibility(index = index),
@@ -278,6 +269,15 @@ private fun AppsGrid(
             NavigationBarSpacer()
         }
     }
+}
+
+/** The grid key of [item], unique per filter so a filter change never reuses a cell's state. */
+private fun appListItemKey(selectedFilter: AppsListFilter, index: Int, item: AppListItem): String {
+    val baseKey: String = when (item) {
+        is AppListItem.App -> item.appInfo.packageName
+        AppListItem.Ad -> "ad_$index"
+    }
+    return "${selectedFilter}_$baseKey"
 }
 
 @Composable

@@ -28,4 +28,15 @@
     <string name="summary_dark_theme">Il tema oscuro sfrutta uno sfondo profondo per prolungare significativamente la durata della batteria. Per attivarlo, basta passare al gestore di sistemi del tuo Android e selezionare il tema preferito in</string>
     <string name="theme_mode">Modalità tema</string>
     <string name="wallpaper_colors">Colori dello sfondo</string>
+    <string name="holiday_greeting_christmas_title">Buone feste!</string>
+    <string name="holiday_greeting_christmas_message">Il tema natalizio è arrivato, con la neve che cade in tutta l\'app. Vuoi usarlo fino alla fine delle feste?</string>
+    <string name="holiday_greeting_halloween_title">Buon Halloween!</string>
+    <string name="holiday_greeting_halloween_message">È arrivata la stagione dei brividi. Vuoi usare il tema di Halloween finché dura?</string>
+    <string name="holiday_greeting_use_theme">Usa il tema festivo durante le feste</string>
+    <string name="seasonal_themes_title">Temi stagionali</string>
+    <string name="seasonal_themes_summary">Hai scoperto il segreto. I temi delle feste sono tuoi.</string>
+    <string name="seasonal_themes_all_year">Mostrare i temi stagionali tutto l\'anno?</string>
+    <string name="seasonal_themes_snowfall">Nevicata</string>
+    <string name="seasonal_themes_snowfall_summary">La neve cade in tutta l\'app mentre il tema natalizio è attivo.</string>
+    <string name="seasonal_themes_done">Fatto</string>
 </resources>

@@ -28,4 +28,15 @@
     <string name="summary_dark_theme">Темна тема використовує глибокий фон, щоб значно продовжити час роботи акумулятора. Щоб активувати його, просто перейдіть до системного менеджера Android та виберіть бажану тему в</string>
     <string name="theme_mode">Режим теми</string>
     <string name="wallpaper_colors">Кольори шпалер</string>
+    <string name="holiday_greeting_christmas_title">Зі святами!</string>
+    <string name="holiday_greeting_christmas_message">Різдвяна тема вже тут, і по всьому застосунку падає сніг. Використовувати її до кінця свят?</string>
+    <string name="holiday_greeting_halloween_title">З Гелловіном!</string>
+    <string name="holiday_greeting_halloween_message">Настав моторошний сезон. Використовувати тему Гелловіну, поки він триває?</string>
+    <string name="holiday_greeting_use_theme">Використовувати святкову тему під час свят</string>
+    <string name="seasonal_themes_title">Сезонні теми</string>
+    <string name="seasonal_themes_summary">Ви знайшли секрет. Святкові теми тепер ваші.</string>
+    <string name="seasonal_themes_all_year">Показувати сезонні теми весь рік?</string>
+    <string name="seasonal_themes_snowfall">Снігопад</string>
+    <string name="seasonal_themes_snowfall_summary">Сніг падає по всьому застосунку, поки увімкнена різдвяна тема.</string>
+    <string name="seasonal_themes_done">Готово</string>
 </resources>

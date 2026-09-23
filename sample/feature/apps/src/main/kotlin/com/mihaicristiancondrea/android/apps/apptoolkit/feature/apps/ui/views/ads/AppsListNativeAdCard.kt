@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdCache
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdPresentation
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdSlot
 
@@ -37,6 +38,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.Native
  * reusable primitive. The sample is where a host reads how the toolkit's ad APIs are meant to be
  * used, so a placement belongs beside the screen that makes it.
  *
+ * @param cache keeps the ad while the cell is scrolled out of view, so returning to it shows the
+ * same ad instead of an empty cell and a new request. Ignored without [cacheKey].
+ * @param cacheKey the cell's identity in [cache], normally its lazy-grid key.
  * @param containerColor overrides the card container for hosts whose surfaces are their own.
  * @param onAdLoaded reports whether an ad is currently displayed, so the grid can drop the cell.
  */
@@ -44,6 +48,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.Native
 fun AppsListNativeAdCard(
     modifier: Modifier = Modifier,
     adUnitId: String,
+    cache: NativeAdCache? = null,
+    cacheKey: Any? = null,
     containerColor: Color = Color.Unspecified,
     onAdLoaded: (Boolean) -> Unit = {},
 ) {
@@ -54,6 +60,8 @@ fun AppsListNativeAdCard(
             .fillMaxSize()
             .aspectRatio(ratio = 1f),
         containerColor = containerColor,
+        cache = cache,
+        cacheKey = cacheKey,
         onAdLoaded = onAdLoaded,
     )
 }

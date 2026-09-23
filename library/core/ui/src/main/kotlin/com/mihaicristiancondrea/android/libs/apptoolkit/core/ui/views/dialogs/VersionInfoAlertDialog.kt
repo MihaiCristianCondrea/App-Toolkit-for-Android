@@ -27,10 +27,10 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import coil3.ImageLoader
 import coil3.compose.AsyncImage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
@@ -89,15 +89,18 @@ fun VersionInfoAlertDialogContent(
     versionString: Int
 ) {
     val context: Context = LocalContext.current
-    val appIcon: Drawable = context.packageManager.getApplicationIcon(context.packageName)
-    val imageLoader: ImageLoader = ImageLoader.Builder(context = context).build()
+    // The icon lookup is a package manager call, so it is made once rather than per recomposition.
+    // The image goes through Coil's shared loader; a private one would carry its own caches and
+    // dispatchers and would have to be shut down when the dialog leaves.
+    val appIcon: Drawable = remember(context) {
+        context.packageManager.getApplicationIcon(context.packageName)
+    }
 
     Row(modifier = Modifier.fillMaxWidth()) {
         AsyncImage(
             model = appIcon,
             contentDescription = null,
             modifier = Modifier.size(size = SizeConstants.LauncherIconSize),
-            imageLoader = imageLoader
         )
         LargeHorizontalSpacer()
         Column {

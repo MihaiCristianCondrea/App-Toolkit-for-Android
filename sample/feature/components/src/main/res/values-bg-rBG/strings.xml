@@ -99,4 +99,9 @@
     <string name="components_text_field_search">Търсене</string>
     <string name="components_text_field_search_placeholder">Търсене в компонентите</string>
     <string name="components_text_field_search_outlined">Търсене с контур</string>
+    <string name="components_section_dividers">Разделители</string>
+    <string name="components_divider_wavy">Вълнообразен разделител</string>
+    <string name="components_divider_width">Ширина</string>
+    <string name="components_divider_wave_height">Височина на вълната</string>
+    <string name="components_divider_vertical">Вертикален</string>
 </resources>

@@ -21,6 +21,7 @@ import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.ToolkitTilesRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.logQuickSettingsTileRequest
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ToolkitTilesAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ToolkitTilesEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.toUiModels
@@ -29,7 +30,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logSelectContent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItemList
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
@@ -72,6 +72,8 @@ class ToolkitTilesViewModel(
             is ToolkitTilesEvent.FilterSelected -> selectFilter(event.filter)
             is ToolkitTilesEvent.CategoryToggled -> toggleCategory(event.categoryId)
             is ToolkitTilesEvent.AddTileClicked -> handleAddTile(event.requestKey)
+            is ToolkitTilesEvent.TileRequestFinished ->
+                handleTileRequestFinished(event.requestKey, event.outcome)
             is ToolkitTilesEvent.TileSetupClicked -> handleTileSetup(event.tileId)
             is ToolkitTilesEvent.AdStatusChanged -> updateAdStatus(event.adId, event.isLoaded)
         }
@@ -136,10 +138,8 @@ class ToolkitTilesViewModel(
     }
 
     private fun selectFilter(filter: ToolkitTilesFilter) {
-        firebaseController.logSelectContent(
-            contentType = "tile_filter",
-            itemId = filter.name.lowercase(),
-        )
+        // One event per filter tap: the list it shows already names the filter, so a separate
+        // select_content for the chip would count the same tap twice.
         firebaseController.logViewItemList(
             itemListId = filter.name.lowercase(),
             itemListName = "quick_tools_${filter.name.lowercase()}",
@@ -150,10 +150,13 @@ class ToolkitTilesViewModel(
     }
 
     private fun toggleCategory(categoryId: String) {
-        firebaseController.logSelectContent(
-            contentType = "tile_category",
-            itemId = categoryId,
-        )
+        // Opening a category is the interest worth counting; closing it again is not a second one.
+        if (screenData?.expandedCategoryIds?.contains(categoryId) == false) {
+            firebaseController.logSelectContent(
+                contentType = "tile_category",
+                itemId = categoryId,
+            )
+        }
         var updatedIds: Set<String>? = null
         screenState.update { current ->
             val data = current.data ?: return@update current
@@ -176,10 +179,6 @@ class ToolkitTilesViewModel(
     }
 
     private fun handleAddTile(requestKey: String?) {
-        firebaseController.logSelectContent(
-            contentType = "tile_request",
-            itemId = requestKey ?: "unknown",
-        )
         startOperation(action = Actions.ADD_TILE)
         if (requestKey == null) {
             showNoTileMessage()
@@ -188,15 +187,21 @@ class ToolkitTilesViewModel(
         }
     }
 
+    /**
+     * Records how the request to add a tile ended and re-reads Quick Settings membership.
+     *
+     * The tap itself is not reported: every tap ends here with an outcome, so the outcome event
+     * already counts the requests and says what became of each.
+     */
+    private fun handleTileRequestFinished(requestKey: String, outcome: String) {
+        firebaseController.logQuickSettingsTileRequest(tileId = requestKey, outcome = outcome)
+        refreshStatuses()
+    }
+
     private fun handleTileSetup(tileId: String) {
         firebaseController.logSelectContent(
             contentType = "tile_setup",
             itemId = tileId,
-        )
-        firebaseController.logViewItem(
-            itemId = tileId,
-            itemName = tileId,
-            itemCategory = "quick_tool_setup",
         )
         startOperation(
             action = Actions.OPEN_TILE_SETUP,

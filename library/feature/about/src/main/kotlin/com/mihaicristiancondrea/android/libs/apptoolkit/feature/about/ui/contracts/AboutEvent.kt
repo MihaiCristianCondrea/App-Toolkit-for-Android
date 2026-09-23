@@ -41,4 +41,7 @@ sealed interface AboutEvent : UiEvent {
     ) : AboutEvent
 
     data object DismissSnackbar : AboutEvent
+
+    /** The version was tapped enough times to set off the easter egg. */
+    data object EasterEggFound : AboutEvent
 }

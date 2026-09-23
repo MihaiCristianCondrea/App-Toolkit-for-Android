@@ -98,6 +98,19 @@ remain available; data-layer callers should use the lower-level APIs.
   so a host that passes no `adUnitId` pulls in no ad behaviour at all. The size class also chooses
   the ad's `NativeAdPresentation.GridRow` metrics, so the sponsored row matches the cells rather
   than the other ad surfaces.
+- `NativeAdCache` and `rememberNativeAdCache` keep native ads alive while their slots scroll in
+  and out of a lazy layout. `NativeAdSlot`, `rememberNativeAd`, and `rememberNativeAdState` take a
+  `cache` and a `cacheKey`; without both they keep the uncached behaviour of destroying the ad on
+  disposal. See [Ads inside a lazy list or grid](../../integration/ads/README.md#ads-inside-a-lazy-list-or-grid).
+- `Modifier.animateVisibility` fades and slides every element in the first time it appears, in a
+  cascade. With an `index` each position waits `staggerDelay` more, up to `maxStaggeredItems`, so a
+  list keeps arriving from the top. `index` is optional: without it elements that appear together
+  cascade in the order they appear, grouped by the app-wide `VisibilityCascade`, which is unit
+  tested.
+- `HorizontalWavyDivider`, `VerticalWavyDivider`, and `WavyDividerDefaults` draw the design
+  system's `il_wavy_line` as a divider. The wave is drawn rather than tiled from the drawable, so it
+  scales with the divider's band and fits a whole number of half-waves into any length; the fitting
+  is `wavyLineGeometry`, which is unit tested.
 
 
 - All new ViewModels must extend `ScreenViewModel`, or `LoggedScreenViewModel` when Firebase

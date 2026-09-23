@@ -28,4 +28,15 @@
     <string name="summary_dark_theme">Тъмната тема използва дълбок фон, за да удължи значително живота на батерията ви. За да го активирате, просто отидете до системния мениджър на вашия Android и изберете предпочитаната от вас тема в</string>
     <string name="theme_mode">Режим на тема</string>
     <string name="wallpaper_colors">Цветове на тапета</string>
+    <string name="holiday_greeting_christmas_title">Весели празници!</string>
+    <string name="holiday_greeting_christmas_message">Коледната тема е тук, със сняг, който вали из цялото приложение. Искате ли да я използвате до края на празниците?</string>
+    <string name="holiday_greeting_halloween_title">Честит Хелоуин!</string>
+    <string name="holiday_greeting_halloween_message">Страшният сезон започна. Искате ли да използвате темата за Хелоуин, докато трае?</string>
+    <string name="holiday_greeting_use_theme">Използвай празничната тема по време на празниците</string>
+    <string name="seasonal_themes_title">Сезонни теми</string>
+    <string name="seasonal_themes_summary">Открихте тайната. Празничните теми са ваши.</string>
+    <string name="seasonal_themes_all_year">Показване на сезонните теми през цялата година?</string>
+    <string name="seasonal_themes_snowfall">Снеговалеж</string>
+    <string name="seasonal_themes_snowfall_summary">Снегът вали из цялото приложение, докато коледната тема е включена.</string>
+    <string name="seasonal_themes_done">Готово</string>
 </resources>

@@ -43,13 +43,20 @@ class DefaultDeveloperAppsRepository(
             message = "Developer apps fetch",
         )
         val result: Result<DataState<List<AppSummary>, AppErrors>> = runSuspendCatching {
+            // The package name keys each app in the lazy grid, and a lazy layout throws on a
+            // repeated key, so a catalogue that lists one app twice must not reach the UI.
             val apps = remoteDataSource.fetchDeveloperApps()
+                .distinctBy { it.packageName }
                 .sortedBy { it.name.lowercase() }
             localDataSource.write(apps)
 
             DataState.Success(data = apps)
         }
-        val cachedApps = if (result.isFailure) localDataSource.read() else null
+        val cachedApps = if (result.isFailure) {
+            localDataSource.read()?.distinctBy { it.packageName }
+        } else {
+            null
+        }
         val state: DataState<List<AppSummary>, AppErrors> = result.fold(
             onSuccess = { state -> state },
             onFailure = { throwable ->

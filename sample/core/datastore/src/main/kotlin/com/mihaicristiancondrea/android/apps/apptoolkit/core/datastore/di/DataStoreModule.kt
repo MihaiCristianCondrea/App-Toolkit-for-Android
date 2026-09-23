@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.di
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStore
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DatastoreInterface
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStoreInterface
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
@@ -27,5 +27,5 @@ import org.koin.dsl.module
  */
 val dataStoreModule: Module = module {
     single<DataStore> { DataStore(commonDataStore = get()) }
-    single<DatastoreInterface> { get<DataStore>() }
+    single<DataStoreInterface> { get<DataStore>() }
 }

@@ -15,29 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.api
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.api.ApiHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.boolean.toApiEnvironment
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.string.normalizeRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.string.sanitizeUrlOrNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
-import org.robolectric.annotation.Config
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import kotlin.test.assertNull
 
-@Config(sdk = [34])
-class ExtensionsTest {
-
-    @Test
-    fun `toApiEnvironment maps debug flag to environment`() {
-        assertAll(
-            { assertEquals("debug", true.toApiEnvironment()) },
-            { assertEquals("release", false.toApiEnvironment()) },
-        )
-    }
+class ApiHostTest {
 
     @Test
     fun `ApiHost builds public metadata routes and encodes packages`() {
@@ -73,29 +58,4 @@ class ExtensionsTest {
             ApiHost.appDetailsUrl(packageName = " ", baseUrl = baseUrl)
         }
     }
-
-    @Test
-    fun `sanitizeUrlOrNull trims whitespace and handles blank input`() {
-        assertAll(
-            { assertEquals("https://d4rk.dev", " https://d4rk.dev ".sanitizeUrlOrNull()) },
-            { assertNull("   ".sanitizeUrlOrNull()) },
-            { assertNull(null.sanitizeUrlOrNull()) },
-            { assertNull("https://host.com/image with spaces.png".sanitizeUrlOrNull()) },
-            { assertNull("www.host.com/image.png".sanitizeUrlOrNull()) },
-            { assertNull("ftp://host.com/image.png".sanitizeUrlOrNull()) },
-            { assertNull("https:///image.png".sanitizeUrlOrNull()) },
-        )
-    }
-
-    @Test
-    fun `normalizeRoute extracts route segment`() {
-        assertAll(
-            { assertEquals("home", "home?param=value".normalizeRoute()) },
-            { assertEquals("home", "home/details".normalizeRoute()) },
-            { assertNull("".normalizeRoute()) },
-            { assertNull("   ".normalizeRoute()) },
-            { assertNull(null.normalizeRoute()) },
-        )
-    }
-
 }

@@ -19,34 +19,29 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui
 
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.contracts.ThemeSettingsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.ThemePreferencesState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.updateData
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-/** Owns theme-settings preference observation and mutations. */
+/**
+ * Owns theme-settings preference observation and mutations.
+ *
+ * The state holds no data until the stored preferences arrive. Starting from made-up defaults drew
+ * the page with the wrong palette selected for a frame, and anything keyed to the first selection,
+ * such as scrolling the palette row to it, acted on that wrong one.
+ */
 class ThemeSettingsViewModel(
     private val preferences: ThemePreferencesRepository,
 ) : ScreenViewModel<ThemePreferencesState, ThemeSettingsEvent, ActionEvent>(
-    initialState = UiStateScreen(
-        screenState = ScreenState.Success(),
-        data = ThemePreferencesState(
-            themeMode = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
-            dynamicColors = true,
-            amoledMode = false,
-            dynamicPaletteVariant = 0,
-            staticPaletteId = StaticPaletteIds.DEFAULT,
-        ),
-    ),
+    initialState = UiStateScreen(screenState = ScreenState.IsLoading(), data = null),
 ) {
     private var observationJob: Job? = null
 
@@ -73,9 +68,7 @@ class ThemeSettingsViewModel(
     private fun observePreferences() {
         observationJob?.cancel()
         observationJob = preferences.preferencesState.onEach { state ->
-            updateStateThreadSafe {
-                screenState.updateData(newState = ScreenState.Success()) { state }
-            }
+            updateStateThreadSafe { screenState.setSuccess(data = state) }
         }.launchIn(viewModelScope)
     }
 

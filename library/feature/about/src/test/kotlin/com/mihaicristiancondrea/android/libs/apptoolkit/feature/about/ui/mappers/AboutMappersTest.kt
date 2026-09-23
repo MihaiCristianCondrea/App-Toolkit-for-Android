@@ -123,7 +123,7 @@ class AboutMappersTest {
     }
 
     @Test
-    fun `every row that shows a value copies it, and only licenses navigates`() {
+    fun `every row that shows a value copies it, except licenses and the build version`() {
         val items = aboutInfo.toUiState().items
         val preferences = items.filterIsInstance<AboutItem.Preference>()
 
@@ -132,7 +132,8 @@ class AboutMappersTest {
             .map { it.key }
 
         // A row that looked clickable but did nothing is what made most of this screen seem broken.
-        assertThat(notCopyable).containsExactly(AboutItemKey.OSS_LICENSES)
+        assertThat(notCopyable)
+            .containsExactly(AboutItemKey.OSS_LICENSES, AboutItemKey.APP_BUILD_VERSION)
         assertThat(preferences.first { it.key == AboutItemKey.OSS_LICENSES }.action)
             .isEqualTo(AboutItemAction.OpenLicenses)
     }
@@ -146,16 +147,12 @@ class AboutMappersTest {
     }
 
     @Test
-    fun `the build version row both copies and feeds the version tap counter`() {
+    fun `the build version row feeds the version tap counter and copies nothing`() {
         val buildVersion = aboutInfo.toUiState().items.preference(AboutItemKey.APP_BUILD_VERSION)
 
         assertThat(buildVersion.countsVersionTap).isTrue()
-        assertThat(buildVersion.action).isEqualTo(
-            AboutItemAction.CopyToClipboard(
-                label = UiTextHelper.StringResource(R.string.app_build_version),
-                text = UiTextHelper.DynamicString("1.0 (1)"),
-            )
-        )
+        assertThat(buildVersion.summary).isEqualTo(UiTextHelper.DynamicString("1.0 (1)"))
+        assertThat(buildVersion.action).isNull()
     }
 
     @Test

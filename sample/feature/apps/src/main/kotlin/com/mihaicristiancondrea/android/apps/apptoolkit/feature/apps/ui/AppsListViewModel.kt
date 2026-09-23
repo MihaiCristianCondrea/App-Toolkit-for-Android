@@ -120,7 +120,13 @@ class AppsListViewModel(
         when (event) {
             HomeEvent.FetchApps -> fetchAppsTrigger.tryEmit(Unit)
 
-            is HomeEvent.FilterSelected -> selectFilter(event.filter)
+            is HomeEvent.FilterSelected -> {
+                firebaseController.logViewItemList(
+                    itemListId = event.filter.name.lowercase(),
+                    itemListName = "developer_apps_${event.filter.name.lowercase()}",
+                )
+                selectFilter(event.filter)
+            }
             is HomeEvent.AppSelected -> selectApp(event.packageName)
             HomeEvent.RetryAppDetails -> screenData?.selectedApp?.packageName?.let(::loadSelectedAppDetails)
             HomeEvent.AppDetailsDismissed -> clearSelectedAppInstallInfo()
@@ -221,15 +227,11 @@ class AppsListViewModel(
             .launchIn(viewModelScope)
     }
 
+    /**
+     * Applies [filter] without reporting it: this also runs when a filter stops matching anything
+     * and falls back to All, which nobody tapped. The tap is reported where the event arrives.
+     */
     private fun selectFilter(filter: AppsListFilter) {
-        firebaseController.logSelectContent(
-            contentType = "app_filter",
-            itemId = filter.name.lowercase(),
-        )
-        firebaseController.logViewItemList(
-            itemListId = filter.name.lowercase(),
-            itemListName = "developer_apps_${filter.name.lowercase()}",
-        )
         screenState.update { current ->
             current.copy(data = (current.data ?: AppListUiState()).copy(selectedFilter = filter))
         }
@@ -243,7 +245,7 @@ class AppsListViewModel(
             itemCategory = selectedApp.category?.label,
         )
         firebaseController.logAppInteraction(
-            source = "AppsListViewModel",
+            source = "apps_list",
             appInfo = selectedApp,
             interaction = AppInteractionType.OpenDetailsBottomSheet,
         )

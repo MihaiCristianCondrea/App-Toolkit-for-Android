@@ -21,7 +21,6 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -51,6 +50,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
+import kotlinx.coroutines.flow.first
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -58,6 +65,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -66,6 +74,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.filterSeasonalStaticPalettes
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.contracts.ThemeSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.WallpaperSwatchColors
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.toSwatchColors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ThemePaletteProvider.paletteById
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.views.WallpaperColorOptionCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
@@ -103,9 +112,10 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.SeasonalThemesViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
-private const val THEME_SCREEN_NAME = "Theme"
+internal const val THEME_SCREEN_NAME = "Theme"
 private const val THEME_SCREEN_CLASS = "ThemeSettingsScreen"
 
 /**
@@ -127,6 +137,11 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues) {
     val viewModel: ThemeSettingsViewModel = koinViewModel()
     val screenState: UiStateScreen<ThemePreferencesState> by
         viewModel.uiState.collectAsStateWithLifecycle()
+    val seasonalViewModel: SeasonalThemesViewModel = koinViewModel()
+    val seasonalState by seasonalViewModel.uiState.collectAsStateWithLifecycle()
+    val showSeasonalAllYear: Boolean = seasonalState.data?.seasonal?.let { it.unlocked && it.allYear } == true
+    // The seasonal switch can add palettes to the row, so rows wait for it before scrolling.
+    val seasonalLoaded: Boolean = seasonalState.data != null
 
     TrackScreenView(
         firebaseController = firebaseController,
@@ -172,23 +187,20 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues) {
         ),
     )
 
-    val isSystemInDarkThemeNow: Boolean = isSystemInDarkTheme()
+    // Swatches follow the theme the app is drawn in, which can differ from the system's.
+    val isAppInDarkTheme: Boolean =
+        MaterialTheme.colorScheme.surface.luminance() < DARK_SURFACE_LUMINANCE
 
-    val wallpaperPreviewScheme: ColorScheme? = remember(supportsDynamic, isSystemInDarkThemeNow) {
+    val wallpaperPreviewScheme: ColorScheme? = remember(supportsDynamic, isAppInDarkTheme) {
         if (!supportsDynamic) null
-        else if (isSystemInDarkThemeNow) dynamicDarkColorScheme(context)
+        else if (isAppInDarkTheme) dynamicDarkColorScheme(context)
         else dynamicLightColorScheme(context)
     }
 
     val variantSwatches: List<WallpaperSwatchColors> = remember(wallpaperPreviewScheme) {
         val base = wallpaperPreviewScheme ?: return@remember emptyList()
         DynamicPaletteVariant.indices.map { variant ->
-            val scheme = base.applyDynamicVariant(variant)
-            WallpaperSwatchColors(
-                primary = scheme.primary,
-                secondary = scheme.secondary,
-                tertiary = scheme.tertiaryContainer,
-            )
+            base.applyDynamicVariant(variant).toSwatchColors()
         }
     }
 
@@ -202,13 +214,15 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues) {
     val staticOptions: List<String> = remember(
         isChristmasSeason,
         isHalloweenSeason,
-        staticPaletteId
+        staticPaletteId,
+        showSeasonalAllYear,
     ) {
         val seasonalOptions = filterSeasonalStaticPalettes(
             baseOptions = StaticPaletteIds.withDefault,
             isChristmasSeason = isChristmasSeason,
             isHalloweenSeason = isHalloweenSeason,
-            selectedPaletteId = staticPaletteId
+            selectedPaletteId = staticPaletteId,
+            showAllYear = showSeasonalAllYear,
         )
         dedupeStaticPaletteIds(
             options = seasonalOptions,
@@ -217,13 +231,27 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues) {
     }
 
     val staticSwatches: List<WallpaperSwatchColors> =
-        remember(staticOptions, isSystemInDarkThemeNow) {
+        remember(staticOptions, isAppInDarkTheme) {
             staticOptions.map { id ->
                 val p = paletteById(id)
-                val scheme = if (isSystemInDarkThemeNow) p.darkColorScheme else p.lightColorScheme
-                WallpaperSwatchColors(scheme.primary, scheme.secondary, scheme.tertiary)
+                val scheme = if (isAppInDarkTheme) p.darkColorScheme else p.lightColorScheme
+                scheme.toSwatchColors()
             }
         }
+
+    val variantRowState: LazyListState = rememberScrolledToSelected(
+        selectedIndex = if (isDynamicColors) dynamicVariantIndex else -1,
+        ready = seasonalLoaded,
+    )
+    val selectedStaticIndex: Int = staticOptions.indexOf(staticPaletteId)
+    val staticPagerRowState: LazyListState = rememberScrolledToSelected(
+        selectedIndex = if (!isDynamicColors) selectedStaticIndex else -1,
+        ready = seasonalLoaded,
+    )
+    val staticRowState: LazyListState = rememberScrolledToSelected(
+        selectedIndex = selectedStaticIndex,
+        ready = seasonalLoaded,
+    )
 
     val tabTitles = listOf(
         stringResource(id = R.string.wallpaper_colors),
@@ -322,6 +350,7 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues) {
                         pages = persistentListOf(
                             {
                                 LazyRow(
+                                    state = variantRowState,
                                     contentPadding = PaddingValues(horizontal = SizeConstants.LargeSize),
                                     horizontalArrangement = Arrangement.spacedBy(
                                         space = SizeConstants.MediumSize,
@@ -358,6 +387,7 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues) {
                             },
                             {
                                 LazyRow(
+                                    state = staticPagerRowState,
                                     contentPadding = PaddingValues(horizontal = SizeConstants.LargeSize),
                                     horizontalArrangement = Arrangement.spacedBy(
                                         space = SizeConstants.MediumSize,
@@ -405,6 +435,7 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues) {
             } else {
                 item {
                     LazyRow(
+                        state = staticRowState,
                         contentPadding = PaddingValues(horizontal = SizeConstants.LargeSize),
                         horizontalArrangement = Arrangement.spacedBy(
                             space = SizeConstants.MediumSize,
@@ -565,4 +596,36 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues) {
             }
         }
     }
+}
+
+private const val DARK_SURFACE_LUMINANCE: Float = 0.5f
+
+/**
+ * A row state that, once the row first lays out, brings [selectedIndex] to its center.
+ *
+ * It waits until [ready], so it scrolls to the stored selection rather than to a placeholder, then
+ * jumps rather than animates, so the screen opens already showing the choice. It runs once: picking
+ * another item later must not scroll the row under the finger. A negative [selectedIndex] (nothing
+ * selected in this row) leaves the row at its start.
+ */
+@Composable
+private fun rememberScrolledToSelected(selectedIndex: Int, ready: Boolean): LazyListState {
+    val state: LazyListState = rememberLazyListState()
+    var scrolled: Boolean by rememberSaveable { mutableStateOf(false) }
+    val currentIndex: Int by rememberUpdatedState(selectedIndex)
+    LaunchedEffect(state, ready) {
+        if (!ready || scrolled) return@LaunchedEffect
+        scrolled = true
+        val target = currentIndex
+        if (target < 0) return@LaunchedEffect
+        // The row may sit on a pager page that is not composed yet; this waits for its first layout.
+        snapshotFlow { state.layoutInfo.totalItemsCount }.first { it > target }
+        state.scrollToItem(target)
+        val item = state.layoutInfo.visibleItemsInfo.firstOrNull { it.index == target }
+        if (item != null) {
+            val viewport = state.layoutInfo.viewportEndOffset - state.layoutInfo.viewportStartOffset
+            state.scrollBy((item.offset + item.size / 2f) - viewport / 2f)
+        }
+    }
+    return state
 }

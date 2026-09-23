@@ -24,7 +24,9 @@ import android.os.Build
 import android.util.Log
 import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
@@ -33,6 +35,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repos
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.models.AboutInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.mappers.toUiState
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
@@ -65,6 +69,8 @@ class AboutViewModelTest {
     private val expectedItemKeys: List<String> = defaultAboutInfo.toUiState().items.map { it.key }
 
     private val firebaseController = FakeFirebaseController()
+
+    private val seasonalThemes: SeasonalThemeRepository = mockk(relaxed = true)
 
     private lateinit var context: Context
     private lateinit var clipboardManager: ClipboardManager
@@ -102,6 +108,7 @@ class AboutViewModelTest {
             context = clipboardContext,
             dispatchers = testDispatchers,
             firebaseController = firebaseController,
+            seasonalThemes = seasonalThemes,
             sdkIntProvider = { sdkInt },
         )
     }
@@ -291,4 +298,37 @@ class AboutViewModelTest {
             val message = viewModel.uiState.value.snackbar?.message as? UiTextHelper.StringResource
             assertThat(message?.resourceId).isEqualTo(R.string.snack_device_info_failed)
         }
+
+    @Test
+    fun `the easter egg unlocks seasonal themes and says so the first time`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            coEvery { seasonalThemes.unlockSeasonalThemes() } returns true
+            val viewModel = createViewModel()
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            viewModel.onEvent(AboutEvent.EasterEggFound)
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            coVerify { seasonalThemes.unlockSeasonalThemes() }
+            val message = viewModel.uiState.value.snackbar!!.message as UiTextHelper.StringResource
+            assertThat(message.resourceId).isEqualTo(R.string.snack_seasonal_themes_unlocked)
+            val achievement = firebaseController.loggedEvents
+                .single { it.name == "unlock_achievement" }
+            assertThat(achievement.params["achievement_id"])
+                .isEqualTo(AnalyticsValue.Str("seasonal_themes"))
+        }
+
+    @Test
+    fun `finding the easter egg again stays quiet`() = runTest(dispatcherExtension.testDispatcher) {
+        coEvery { seasonalThemes.unlockSeasonalThemes() } returns false
+        val viewModel = createViewModel()
+        dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+        viewModel.onEvent(AboutEvent.EasterEggFound)
+        dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+        assertThat(viewModel.uiState.value.snackbar).isNull()
+        assertThat(firebaseController.loggedEvents.map { it.name })
+            .doesNotContain("unlock_achievement")
+    }
 }

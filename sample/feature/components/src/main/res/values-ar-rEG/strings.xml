@@ -99,4 +99,9 @@
     <string name="components_text_field_search">بحث</string>
     <string name="components_text_field_search_placeholder">ابحث في المكونات</string>
     <string name="components_text_field_search_outlined">بحث محدد بإطار</string>
+    <string name="components_section_dividers">الفواصل</string>
+    <string name="components_divider_wavy">فاصل متموج</string>
+    <string name="components_divider_width">العرض</string>
+    <string name="components_divider_wave_height">ارتفاع الموجة</string>
+    <string name="components_divider_vertical">عمودي</string>
 </resources>

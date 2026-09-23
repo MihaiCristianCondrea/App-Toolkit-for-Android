@@ -2,6 +2,35 @@
 
 ---
 
+# September 23, 2026
+
+**Version:** `26.09.20` (`137260920`)
+
+### Added
+
+- Added the orange color palette to the theme settings.
+- Added holiday greetings. The first time you open the app at Christmas or Halloween, it wishes you happy holidays and offers the holiday theme. Christmas comes with snow falling over the app. When the holiday is over, your usual theme comes back on its own.
+- Added a secret: tap the build version five times in About to unlock seasonal themes. A new button on the Theme settings page then lets you keep the Christmas and Halloween themes in the color list all year and turn the snow on or off.
+- Added a Dividers section to Components, showing the new wavy divider at its default size, resized live with sliders, and running vertically.
+
+### Changed
+
+- Improved how readable the colors are in every palette, especially buttons and links in the Android, yellow, and Halloween themes in light mode.
+- The Christmas theme now mixes red with green and gold.
+- The app no longer switches to the Christmas or Halloween colors on its own during the holidays. It asks first.
+- The app's startup code is now compiled when it is installed or updated, instead of warming up over the first launches.
+- The color picker in Theme settings shows brighter, truer previews of each palette, and the check on the selected one is always visible.
+- Theme settings now opens with the color you're using already in view.
+- Choosing Light in Theme settings now keeps the app light when battery saver is on. Follow system still turns dark with the rest of the phone.
+- Ads on the Apps screen now stay loaded while you scroll. Scrolling back to an ad shows the same ad at once instead of an empty space while a new one loads.
+
+### Fixed
+
+- Fixed tapping the build version in About copying it to the clipboard every time. The other entries still copy their value.
+- Fixed the Apps screen crashing when the app catalogue listed the same app more than once. Each app now appears once.
+
+---
+
 # September 20, 2026
 
 **Version:** `26.09.18` (`137260918`), `26.09.19` (`137260919`)

@@ -2,6 +2,58 @@
 
 ---
 
+# September 23, 2026
+
+**Version:** `3.0.0-pre20`
+
+### Added
+
+- Added purple and orange static palettes (`purple`, `orange`), each with light and dark schemes. Orange is an everyday palette with soft peach containers, separate from the Halloween pumpkin and purple.
+- Added `Modifier.snowfall` and `SnowfallStyle` to `:library:core:designsystem`: falling snow drawn over any element, with density, colors, flake size, speed, wind, opacity, and shape (dots, crystals, or both). It runs in the draw phase only, so nothing recomposes while snow falls, it stops while the app is in the background, and taps go through it.
+- Added seasonal themes to `:library:feature:theme`. Once a host calls `SeasonalThemeManager.install()`, the first screen opened during Christmas (December 24 to January 7) or Halloween (October 31 to November 2) greets the holiday and offers its theme with a checkbox. The greeting appears once per holiday. An accepted holiday theme is taken off when the holiday ends, bringing back the palette and wallpaper-colors setting from before, unless another palette was picked during the holiday. Snow falls over every screen while the Christmas theme is on, and is skipped when animations are turned off system-wide.
+- Added a seasonal themes easter egg. Tapping the build version five times on the About screen now also unlocks a top app bar action on the theme settings page. Its dialog keeps the Christmas and Halloween palettes in the palette list all year and turns snowfall on or off.
+- Added `SeasonalThemeRepository` to `:library:core:datastore`, which stores the seasonal themes state and owns the rules for applying and restoring a holiday theme.
+- Added `Context.isSystemAnimationDisabled()` to `:library:core:common`, and `isAppInDarkTheme(themeMode)` and `ColorScheme.toSwatchColors()` to `:library:core:designsystem`.
+- Added `GeneralSettingsContentProvider.ProvideActions`, which lets a settings page contribute top app bar actions. On tablets they appear in the settings bar while that page is open in the detail pane.
+- Added `NativeAdCache` and `rememberNativeAdCache` to `:library:core:ui`. `NativeAdSlot`, `rememberNativeAd`, and `rememberNativeAdState` take a `cache` and `cacheKey`, so an ad in a lazy list or grid survives its item scrolling out of view instead of being destroyed and requested again. An ad older than an hour is replaced, and every ad is destroyed when the cache leaves composition.
+- Added `HorizontalWavyDivider` and `VerticalWavyDivider` to `:library:core:ui`, drawing `il_wavy_line` as a divider. The wave scales with the divider and fits a whole number of half-waves into any length, so it ends cleanly at any size. It takes the colour of Material's plain dividers by default.
+
+### Improved
+
+- Added baseline profiles to `:library:core:designsystem`, `:library:core:ui`, `:library:navigation`, and `:library:feature:theme`. A host's release build merges them, so the classes a cold launch runs before its first frame (the theme and default palette, the icon slot, navigation state, the drawer and bottom bar, and the seasonal overlay) are compiled ahead of time on install. Before, no toolkit code was in the app's profile. The lists are hand-picked and not yet measured; a generated profile from a startup benchmark is the intended replacement.
+- Improved `AppTheme` so it rebuilds its color scheme only when a theme setting changes, and builds the wallpaper-based schemes only when dynamic colors are on. It used to build both wallpaper schemes on every recomposition.
+- Improved the seasonal overlay so it composes no second app theme over every activity; it borrows a theme only while the holiday greeting is on screen.
+- Improved snowfall drawing so it allocates nothing per frame.
+- Improved the theme settings page so each palette row opens scrolled to the palette in use, centered, instead of at the start of the row.
+- Improved palette swatches in the theme picker and onboarding. They show each palette's most colorful variant of every accent, follow the theme the app is actually drawn in rather than the system setting, draw from one cached drawing node instead of eight nested layouts, and draw the selection check in black or white on the swatch's own color so it no longer disappears on dark palettes.
+- Improved `AppTheme` so it no longer re-subscribes to the theme preferences on every recomposition. Each re-subscription replayed the defaults, which could briefly swap the whole app's color scheme and recompose everything under it.
+- Improved `DisplaySettingsScreen` so it no longer restarts its startup-page subscription on every recomposition.
+- Improved `VersionInfoAlertDialogContent` so it uses Coil's shared image loader instead of building a new one, with its own caches, on every recomposition.
+- Improved `Modifier.animateVisibility` so `index` is optional. Without it, elements shown together still cascade, in the order they appear, so a `Column` or a group of cards needs no index. With an index the cascade is unchanged. The motion also runs in the draw phase instead of re-laying out the element on every frame, and is skipped when the system's animations are turned off.
+
+### Fixed
+
+- Fixed unreadable text in several static palettes. In light mode, Android green, yellow, skin, Halloween, and green used their bright brand color as `primary`, so text buttons, links, switches, and selected icons drawn in it fell as low as 1.35:1 against the background. Palettes keep their authored colors wherever contrast allows: on fills only the text color is adjusted, and a color moves only when it is the text on a surface and cannot pass there, to the nearest readable tone of the same hue. Those bright brand colors now appear exactly as the light `primaryContainer` or `tertiaryContainer` (floating action buttons, tonal buttons, selected chips). Dark schemes keep their authored accents. Snackbar actions (`inversePrimary`) are readable in every scheme, and monochrome's outline is visible against raised surfaces.
+- Fixed error roles out of step with their containers: error, error container, and their foregrounds now come from the same tonal palette in every static scheme.
+- Fixed static palettes showing Material's baseline purple in their fixed roles (`primaryFixed`, `secondaryFixed`, `tertiaryFixed` and their `on` roles). Every palette now defines them from its own colors.
+- Fixed the Christmas palette using red for every accent. It now pairs festive red with evergreen green and gold.
+- Fixed the build version row on the About screen copying the version to the clipboard on every tap, which buried the five-tap konfetti under clipboard confirmations. The other rows still copy their value.
+- Fixed a damaged settings file crashing every app built on the toolkit at launch. The shared `settings` DataStore now replaces a file it can no longer read with empty preferences, so values fall back to their defaults instead of every read throwing `CorruptionException`.
+- Fixed `AppTheme` crashing with `ClassCastException` when composed under a context that wraps its activity, such as a dialog's. It now finds the activity through the wrapper and leaves the status bar alone when there is none.
+- Fixed a completed donation sometimes being followed by a failed purchase message. `DefaultBillingRepository` could consume the same purchase twice when the purchase callback and a purchase check on resume arrived together, and the second attempt reported `Item is not owned`.
+
+### Changed
+
+- Changed `AppTheme` so battery saver no longer forces the dark theme over an explicit Light choice. Light and Dark now mean what they say; "follow system" still goes dark in battery saver, because the system switches its own dark theme on there.
+- Changed `AboutViewModel` to take a `SeasonalThemeRepository` (`seasonalThemes`), which records the easter egg unlock. `aboutModule` passes it; hosts that construct the ViewModel themselves pass `get()` from the graph.
+- Renamed `DefaultDiagnosticsPreferencesDataSource` in `:library:core:datastore` to `DefaultUsageAndDiagnosticsPreferencesDataSource`, matching the `UsageAndDiagnosticsPreferencesDataSource` contract it implements. `CommonDataStore.diagnosticsPreferences` keeps its name and now has the renamed type. Hosts that name the class directly update the import.
+
+### Removed
+
+- Removed the forwarding `appToolkitNavigationEntryBuilders` in `feature.about.ui.navigation` from `:library:apptoolkit`. It put a package owned by `:library:feature:about` inside another module. Hosts import `appToolkitNavigationEntryBuilders` from `app.main.ui.navigation` instead, with the same signature, destinations, and route keys.
+
+---
+
 # September 20, 2026
 
 **Version:** `3.0.0-pre19`

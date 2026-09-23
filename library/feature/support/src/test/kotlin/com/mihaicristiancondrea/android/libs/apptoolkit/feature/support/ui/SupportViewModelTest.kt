@@ -21,6 +21,7 @@ import android.app.Activity
 import app.cash.turbine.test
 import com.android.billingclient.api.ProductDetails
 import com.google.common.truth.Truth.assertThat
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.contracts.SupportEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.domain.models.DonationProductIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.billing.PurchaseResult
@@ -36,6 +37,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -295,5 +297,73 @@ class SupportViewModelTest {
 
                 cancelAndIgnoreRemainingEvents()
             }
+        }
+
+    private fun readyActivity(): Activity = mockk(relaxed = true) {
+        every { isFinishing } returns false
+        every { isDestroyed } returns false
+    }
+
+    private fun donationProduct(): ProductDetails {
+        val offer = mockOneTimeOfferDetails(currencyCode = "EUR", amountMicros = 990_000)
+        return mockk(relaxed = true) {
+            every { productId } returns DonationProductIds.LOW_DONATION
+            every { oneTimePurchaseOfferDetails } returns offer
+            every { oneTimePurchaseOfferDetailsList } returns listOf(offer)
+        }
+    }
+
+    private fun startedDonationViewModel(): SupportViewModel {
+        val viewModel = createViewModel(
+            linkedMapOf(DonationProductIds.LOW_DONATION to donationProduct())
+        )
+        dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+        viewModel.onDonateClicked(readyActivity(), DonationProductIds.LOW_DONATION)
+        dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+        return viewModel
+    }
+
+    private fun donationResults() =
+        firebaseController.loggedEvents.filter { it.name == "donation_result" }
+
+    @Test
+    fun `starting a donation reports begin_checkout with its price`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            startedDonationViewModel()
+
+            val checkout = firebaseController.loggedEvents.single { it.name == "begin_checkout" }
+            assertThat(checkout.params["product_id"])
+                .isEqualTo(AnalyticsValue.Str(DonationProductIds.LOW_DONATION))
+            assertThat(checkout.params["value"]).isEqualTo(AnalyticsValue.DoubleVal(0.99))
+            assertThat(checkout.params["currency"]).isEqualTo(AnalyticsValue.Str("EUR"))
+            // Firebase records revenue itself as in_app_purchase, so a purchase would double it.
+            assertThat(firebaseController.loggedEvents.none { it.name == "purchase" }).isTrue()
+        }
+
+    @Test
+    fun `a started donation reports how it ended, once`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            startedDonationViewModel()
+
+            purchaseResultFlow.emit(PurchaseResult.UserCancelled)
+            purchaseResultFlow.emit(PurchaseResult.Success)
+            advanceUntilIdle()
+
+            val result = donationResults().single()
+            assertThat(result.params["outcome"]).isEqualTo(AnalyticsValue.Str("cancelled"))
+            assertThat(result.params["product_id"])
+                .isEqualTo(AnalyticsValue.Str(DonationProductIds.LOW_DONATION))
+        }
+
+    @Test
+    fun `a purchase recovered in the background is not a donation outcome`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            createViewModel()
+            advanceUntilIdle()
+
+            purchaseResultFlow.emit(PurchaseResult.Success)
+            advanceUntilIdle()
+
+            assertThat(donationResults()).isEmpty()
         }
 }

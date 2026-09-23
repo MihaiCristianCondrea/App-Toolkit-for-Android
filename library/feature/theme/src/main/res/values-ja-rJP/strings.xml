@@ -28,4 +28,15 @@
     <string name="summary_dark_theme">暗いテーマは、バッテリー寿命を大幅に延長するために深い背景を活用します。それをアクティブにするには、Androidのシステムマネージャーに移動して、希望するテーマを選択してください</string>
     <string name="theme_mode">テーマモード</string>
     <string name="wallpaper_colors">壁紙の色</string>
+    <string name="holiday_greeting_christmas_title">ハッピーホリデー！</string>
+    <string name="holiday_greeting_christmas_message">クリスマステーマが登場しました。アプリ全体に雪が降ります。ホリデーが終わるまで使いますか？</string>
+    <string name="holiday_greeting_halloween_title">ハッピーハロウィン！</string>
+    <string name="holiday_greeting_halloween_message">ハロウィンの季節がやってきました。期間中はハロウィンテーマを使いますか？</string>
+    <string name="holiday_greeting_use_theme">ホリデー期間中はホリデーテーマを使う</string>
+    <string name="seasonal_themes_title">季節のテーマ</string>
+    <string name="seasonal_themes_summary">秘密を見つけました。ホリデーテーマはあなたのものです。</string>
+    <string name="seasonal_themes_all_year">季節のテーマを一年中表示しますか？</string>
+    <string name="seasonal_themes_snowfall">降雪</string>
+    <string name="seasonal_themes_snowfall_summary">クリスマステーマの使用中はアプリ全体に雪が降ります。</string>
+    <string name="seasonal_themes_done">完了</string>
 </resources>

@@ -99,4 +99,9 @@
     <string name="components_text_field_search">Căutare</string>
     <string name="components_text_field_search_placeholder">Caută componente</string>
     <string name="components_text_field_search_outlined">Căutare conturată</string>
+    <string name="components_section_dividers">Separatoare</string>
+    <string name="components_divider_wavy">Separator ondulat</string>
+    <string name="components_divider_width">Lățime</string>
+    <string name="components_divider_wave_height">Înălțimea valului</string>
+    <string name="components_divider_vertical">Vertical</string>
 </resources>

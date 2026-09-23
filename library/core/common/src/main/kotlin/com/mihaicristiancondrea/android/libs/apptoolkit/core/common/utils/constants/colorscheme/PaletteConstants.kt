@@ -34,9 +34,11 @@ object DynamicPaletteVariant {
 object StaticPaletteIds {
     const val MONOCHROME = "monochrome"
     const val GOOGLE_BLUE = "blue"
+    const val PURPLE = "purple"
     const val ANDROID = "android"
     const val GREEN = "green"
     const val RED = "red"
+    const val ORANGE = "orange"
     const val YELLOW = "yellow"
 
     const val ROSE = "rose"
@@ -49,9 +51,11 @@ object StaticPaletteIds {
     private val supportedOrder = listOf(
         MONOCHROME,
         GOOGLE_BLUE,
+        PURPLE,
         ANDROID,
         GREEN,
         RED,
+        ORANGE,
         YELLOW,
         ROSE,
         CHRISTMAS,

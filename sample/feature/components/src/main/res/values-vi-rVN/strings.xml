@@ -99,4 +99,9 @@
     <string name="components_text_field_search">Tìm kiếm</string>
     <string name="components_text_field_search_placeholder">Tìm kiếm thành phần</string>
     <string name="components_text_field_search_outlined">Tìm kiếm, viền ngoài</string>
+    <string name="components_section_dividers">Đường phân cách</string>
+    <string name="components_divider_wavy">Đường phân cách lượn sóng</string>
+    <string name="components_divider_width">Chiều rộng</string>
+    <string name="components_divider_wave_height">Chiều cao sóng</string>
+    <string name="components_divider_vertical">Dọc</string>
 </resources>

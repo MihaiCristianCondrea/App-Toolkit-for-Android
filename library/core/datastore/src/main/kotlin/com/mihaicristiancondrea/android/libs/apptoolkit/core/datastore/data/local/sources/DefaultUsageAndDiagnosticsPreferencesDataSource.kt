@@ -36,7 +36,7 @@ import kotlinx.coroutines.flow.map
  * Implements both contracts because they overlap on the usage-and-diagnostics toggle: the consent
  * feature reads it alongside the ad consents, the diagnostics feature also writes it.
  */
-class DefaultDiagnosticsPreferencesDataSource(
+class DefaultUsageAndDiagnosticsPreferencesDataSource(
     private val dataStore: DataStore<Preferences>,
 ) : UsageAndDiagnosticsPreferencesDataSource, ConsentPreferencesDataSource {
 

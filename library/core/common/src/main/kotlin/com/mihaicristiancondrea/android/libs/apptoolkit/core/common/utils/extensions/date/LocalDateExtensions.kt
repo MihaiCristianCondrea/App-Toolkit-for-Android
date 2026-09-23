@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.HolidaySeason
 import java.time.LocalDate
 import java.time.Month
 import java.time.MonthDay
@@ -44,6 +45,26 @@ val LocalDate.isHalloweenSeason: Boolean
         start = MonthDay.of(Month.OCTOBER, 31),
         end = MonthDay.of(Month.NOVEMBER, 2),
     )
+
+/** The holiday this date falls in, or null on an ordinary day. */
+val LocalDate.holidaySeason: HolidaySeason?
+    get() = when {
+        isChristmasSeason -> HolidaySeason.CHRISTMAS
+        isHalloweenSeason -> HolidaySeason.HALLOWEEN
+        else -> null
+    }
+
+/**
+ * Names the occurrence of [season] this date belongs to, such as `christmas-2026`.
+ *
+ * The Christmas season runs into January, so its January days are named after the December the
+ * season started in. That keeps one season one occurrence: something done "once per Christmas"
+ * does not happen again on New Year's Day.
+ */
+fun LocalDate.holidayOccurrenceKey(season: HolidaySeason): String {
+    val startYear = if (season == HolidaySeason.CHRISTMAS && month == Month.JANUARY) year - 1 else year
+    return "${season.name.lowercase()}-$startYear"
+}
 
 private fun LocalDate.isWithinSeason(start: MonthDay, end: MonthDay): Boolean {
     val today: MonthDay = MonthDay.from(this)

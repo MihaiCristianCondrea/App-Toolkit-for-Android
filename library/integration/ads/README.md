@@ -258,6 +258,35 @@ MyOwnCard {
 Use `rememberNativeAdState` instead when you want to say something about an empty slot; it returns
 the reason alongside the ad.
 
+### Ads inside a lazy list or grid
+
+A lazy layout disposes an item as soon as it scrolls out of view, and an ad slot on its own destroys
+its ad with it. Every scroll back would then send a new request and show an empty cell until it
+came back. Give such slots a `NativeAdCache`, remembered once outside the lazy layout, and a key:
+
+```kotlin
+val adCache = rememberNativeAdCache()
+LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+    items(rows, key = { it.key }) { row ->
+        if (row is Row.Ad) {
+            NativeAdSlot(
+                adUnitId = adUnitId,
+                presentation = NativeAdPresentation.Grid,
+                cache = adCache,
+                cacheKey = row.key,
+            )
+        }
+    }
+}
+```
+
+The slot then leaves its ad in the cache when it scrolls away and takes the same ad back when it
+returns; a request still in flight finishes into the cache. The cache destroys every ad when it
+leaves composition, and replaces an ad older than an hour the next time its slot is shown, since
+native ads should be shown within an hour of loading. A key must belong to one slot at a time: the
+item's lazy key is the natural choice. `rememberNativeAd` and `rememberNativeAdState` take the same
+two parameters. The Apps screen in `sample/feature/apps` is the reference placement.
+
 ### The one rule at every level
 
 Whatever you draw, the assets have to sit inside a `NativeAdView`, each one assigned to its slot

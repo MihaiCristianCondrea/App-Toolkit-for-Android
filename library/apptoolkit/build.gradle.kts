@@ -70,11 +70,11 @@ tasks.withType<Test>().configureEach {
     inputs.files(
         rootProject.fileTree(rootProject.layout.projectDirectory) {
             include("library/**/src/main/AndroidManifest.xml")
+            include("sample/**/src/main/AndroidManifest.xml")
             include("library/apptoolkit/src/main/res/**/*.xml")
             include("library/**/src/main/res/values*/**/*.xml")
             include("sample/**/src/main/res/values*/**/*.xml")
             include("sample/app/build.gradle.kts")
-            include("sample/app/src/main/AndroidManifest.xml")
             include("sample/app/src/main/res/xml/shortcuts.xml")
             include(
                 "sample/core/ui/src/main/res/drawable-anydpi/ic_shortcut_settings_foreground.xml",

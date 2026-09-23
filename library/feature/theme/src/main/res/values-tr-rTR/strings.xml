@@ -28,4 +28,15 @@
     <string name="summary_dark_theme">Karanlık tema, pil ömrünüzü önemli ölçüde uzatmak için derin bir arka plandan yararlanır. Etkinleştirmek için, Android\'in sistem yöneticisine gidin ve tercih ettiğiniz temayı seçin</string>
     <string name="theme_mode">Tema modu</string>
     <string name="wallpaper_colors">Duvar kâğıdı renkleri</string>
+    <string name="holiday_greeting_christmas_title">Mutlu bayramlar!</string>
+    <string name="holiday_greeting_christmas_message">Noel teması geldi, tüm uygulamada kar yağıyor. Tatil bitene kadar kullanmak ister misin?</string>
+    <string name="holiday_greeting_halloween_title">Mutlu Cadılar Bayramı!</string>
+    <string name="holiday_greeting_halloween_message">Ürkütücü sezon geldi. Sürdüğü sürece Cadılar Bayramı temasını kullanmak ister misin?</string>
+    <string name="holiday_greeting_use_theme">Tatil boyunca tatil temasını kullan</string>
+    <string name="seasonal_themes_title">Mevsimsel temalar</string>
+    <string name="seasonal_themes_summary">Sırrı buldun. Tatil temaları artık senin.</string>
+    <string name="seasonal_themes_all_year">Mevsimsel temalar tüm yıl gösterilsin mi?</string>
+    <string name="seasonal_themes_snowfall">Kar yağışı</string>
+    <string name="seasonal_themes_snowfall_summary">Noel teması açıkken tüm uygulamada kar yağar.</string>
+    <string name="seasonal_themes_done">Bitti</string>
 </resources>

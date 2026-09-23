@@ -69,6 +69,7 @@ internal fun DiceRollToolRoute(viewModel: DiceRollToolViewModel = koinViewModel(
 @Composable
 internal fun CounterToolRoute(viewModel: CounterToolViewModel = koinViewModel()) {
     val count by viewModel.count.collectAsStateWithLifecycle()
+    DisposeTool(viewModel::dismiss)
     CounterTool(count, viewModel::increment, viewModel::reset)
 }
 

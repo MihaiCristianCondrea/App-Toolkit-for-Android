@@ -99,4 +99,9 @@
     <string name="components_text_field_search">Wyszukiwanie</string>
     <string name="components_text_field_search_placeholder">Szukaj komponentów</string>
     <string name="components_text_field_search_outlined">Wyszukiwanie konturowe</string>
+    <string name="components_section_dividers">Separatory</string>
+    <string name="components_divider_wavy">Falisty separator</string>
+    <string name="components_divider_width">Szerokość</string>
+    <string name="components_divider_wave_height">Wysokość fali</string>
+    <string name="components_divider_vertical">Pionowy</string>
 </resources>

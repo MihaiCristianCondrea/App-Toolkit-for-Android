@@ -17,75 +17,145 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers
 
-import androidx.compose.animation.core.animateFloatAsState
+import android.os.SystemClock
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.platform.LocalContext
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.isSystemAnimationDisabled
 import kotlinx.coroutines.delay
 import kotlin.math.min
 
-
 /**
- * Animates the visibility of a composable with a fade and vertical offset animation.
+ * Fades and slides a composable into place the first time it appears, in a cascade.
  *
- * The composable will fade and slide into place the first time it enters the
- * composition. The animation for each item can be staggered by providing an
- * [index]. After the initial animation runs, the composable remains visible even
- * if it leaves and re-enters the composition.
+ * Every element animates in, including the ones scrolled into view later, so a screen built from
+ * these stays in motion as it is explored.
  *
- * @param index Used to stagger the start time of the animation for items in a
- * list or grid.
- * @param invisibleOffsetY The vertical offset in pixels applied before the
- * animation starts. Defaults to 50.
- * @param animationDuration Duration of the fade/offset animation in
- * milliseconds. Defaults to 300.
- * @param staggerDelay Amount of delay in milliseconds per [index] before the
- * animation starts. Defaults to 64.
+ * Give list items their [index] and the cascade follows the list: each item waits [staggerDelay]
+ * per position, up to [maxStaggeredItems] positions, so the first screenful runs from the top and
+ * items further down keep arriving, the deepest after about 1.3 seconds with the defaults. Leave
+ * [index] out and elements cascade in the order they appear instead, so a `Column`, a group of
+ * cards, or a list whose index is awkward to thread through still cascades without any setup:
+ *
+ * ```kotlin
+ * LazyColumn {
+ *     itemsIndexed(rows, key = { _, row -> row.id }) { index, row ->
+ *         RowCard(row, modifier = Modifier.animateItem().animateVisibility(index = index))
+ *     }
+ * }
+ *
+ * Column {
+ *     cards.forEach { card -> Card(modifier = Modifier.animateVisibility()) { Text(card.title) } }
+ * }
+ * ```
+ *
+ * Once revealed, an element stays revealed. Inside a lazy list that is saved with the item, so an
+ * item scrolled away and back, or restored after a configuration change, is shown without playing
+ * again. When animations are turned off system-wide the element simply appears. The motion runs in
+ * the draw phase, so it neither recomposes nor re-lays out the element on each frame.
+ *
+ * @param index The element's position in its list. Each position adds [staggerDelay] before the
+ * element starts. Without it, elements cascade in the order they appear.
+ * @param invisibleOffsetY How far below its place, in pixels, the element starts.
+ * @param animationDuration Duration of the fade and the slide, in milliseconds.
+ * @param staggerDelay Delay added per position in the cascade, in milliseconds.
+ * @param maxStaggeredItems Positions past this one wait no longer than it does.
  */
 @Composable
 fun Modifier.animateVisibility(
-    index: Int = 0,
+    index: Int? = null,
     invisibleOffsetY: Int = 50,
     animationDuration: Int = 300,
     staggerDelay: Int = 64,
     maxStaggeredItems: Int = 20,
 ): Modifier {
-    var visible by rememberSaveable { mutableStateOf(false) }
+    var revealed: Boolean by rememberSaveable { mutableStateOf(value = false) }
+    val progress = remember { Animatable(initialValue = if (revealed) 1f else 0f) }
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
-        if (!visible) {
-            val delayMillis: Int = min(index, maxStaggeredItems) * staggerDelay
-            delay(timeMillis = delayMillis.toLong())
-            visible = true
+        if (revealed) return@LaunchedEffect
+        if (context.isSystemAnimationDisabled()) {
+            revealed = true
+            progress.snapTo(targetValue = 1f)
+            return@LaunchedEffect
         }
+
+        delay(
+            timeMillis = VisibilityCascade.Shared.delayMillisFor(
+                index = index,
+                staggerDelayMillis = staggerDelay.toLong(),
+                maxStaggeredItems = maxStaggeredItems,
+            ),
+        )
+        // Marked before the motion runs, so an element that leaves halfway through comes back
+        // whole rather than playing again.
+        revealed = true
+        progress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(durationMillis = animationDuration),
+        )
     }
 
-    val alpha: State<Float> = animateFloatAsState(
-        targetValue = if (visible) 1f else 0f,
-        animationSpec = tween(durationMillis = animationDuration),
-        label = "Alpha"
-    )
+    return graphicsLayer {
+        val fraction: Float = progress.value
+        alpha = fraction
+        translationY = (1f - fraction) * invisibleOffsetY
+    }
+}
 
-    val offsetState: State<Float> = animateFloatAsState(
-        targetValue = if (visible) 0f else invisibleOffsetY.toFloat(),
-        animationSpec = tween(durationMillis = animationDuration),
-        label = "OffsetY"
-    )
+/**
+ * Decides how long each element waits before its entrance, so elements arrive in a cascade.
+ *
+ * With an index the wait is simply its position. Without one there is no position to go by, so
+ * the elements that start revealing close together are grouped into a wave, everything within
+ * [WAVE_WINDOW_MILLIS] of the wave's first element, and each waits by its place in the wave. The
+ * effects of the elements composed in one frame run within a few milliseconds of each other, so
+ * elements shown together cascade together.
+ *
+ * One cascade is shared by the whole app instead of each list owning one, so the modifier needs no
+ * setup. It is only touched from effects, which run on the main thread.
+ */
+internal class VisibilityCascade(private val clock: () -> Long = SystemClock::uptimeMillis) {
 
-    return this
-        .offset {
-            IntOffset(x = 0, y = offsetState.value.toInt())
+    private var waveStartedAt: Long = NOT_STARTED
+    private var arrivalsInWave: Int = 0
+
+    /**
+     * How long an element that is about to be revealed waits: [index] positions when it has one,
+     * otherwise its arrival order within the current wave, capped at [maxStaggeredItems].
+     */
+    fun delayMillisFor(index: Int?, staggerDelayMillis: Long, maxStaggeredItems: Int): Long {
+        val position: Int = index ?: nextArrivalInWave()
+        return min(position.coerceAtLeast(0), maxStaggeredItems.coerceAtLeast(0)) *
+                staggerDelayMillis
+    }
+
+    private fun nextArrivalInWave(): Int {
+        val now: Long = clock()
+        if (waveStartedAt == NOT_STARTED || now - waveStartedAt > WAVE_WINDOW_MILLIS) {
+            waveStartedAt = now
+            arrivalsInWave = 0
         }
-        .graphicsLayer {
-            this.alpha = alpha.value
-        }
+        return arrivalsInWave++
+    }
+
+    companion object {
+        /** How long after a wave starts an element still joins it. About three frames. */
+        const val WAVE_WINDOW_MILLIS: Long = 50L
+
+        private const val NOT_STARTED: Long = -1L
+
+        /** The app-wide cascade every [animateVisibility] joins. */
+        val Shared: VisibilityCascade = VisibilityCascade()
+    }
 }

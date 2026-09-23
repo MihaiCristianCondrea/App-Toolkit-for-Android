@@ -99,4 +99,9 @@
     <string name="components_text_field_search">সার্চ</string>
     <string name="components_text_field_search_placeholder">কম্পোনেন্ট সার্চ করুন</string>
     <string name="components_text_field_search_outlined">সার্চ, আউটলাইনড</string>
+    <string name="components_section_dividers">বিভাজক</string>
+    <string name="components_divider_wavy">ঢেউখেলানো বিভাজক</string>
+    <string name="components_divider_width">প্রস্থ</string>
+    <string name="components_divider_wave_height">ঢেউয়ের উচ্চতা</string>
+    <string name="components_divider_vertical">উল্লম্ব</string>
 </resources>

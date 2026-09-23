@@ -99,4 +99,9 @@
     <string name="components_text_field_search">Paghahanap</string>
     <string name="components_text_field_search_placeholder">Maghanap ng mga bahagi</string>
     <string name="components_text_field_search_outlined">Paghahanap, outlined</string>
+    <string name="components_section_dividers">Mga divider</string>
+    <string name="components_divider_wavy">Kulot na divider</string>
+    <string name="components_divider_width">Lapad</string>
+    <string name="components_divider_wave_height">Taas ng alon</string>
+    <string name="components_divider_vertical">Patayo</string>
 </resources>

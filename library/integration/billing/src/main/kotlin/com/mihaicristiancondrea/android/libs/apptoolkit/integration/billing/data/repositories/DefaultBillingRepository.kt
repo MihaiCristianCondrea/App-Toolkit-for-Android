@@ -33,6 +33,7 @@ import com.android.billingclient.api.QueryPurchasesParams
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.billing.PurchaseResult
+import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -76,6 +77,18 @@ class DefaultBillingRepository private constructor(
     private val _purchaseResult = MutableSharedFlow<PurchaseResult>()
     override val purchaseResult: Flow<PurchaseResult> =
         _purchaseResult.asSharedFlow()
+
+    /**
+     * Purchase tokens whose consumption is in flight or has succeeded.
+     *
+     * One unconsumed purchase can reach [handlePurchases] from several paths at once: the purchase
+     * callback, and [processPastPurchases] on connection and whenever the app resumes, which
+     * returning from Play's purchase screen can trigger. Consuming the same token twice fails the
+     * second call with `ITEM_NOT_OWNED`, which would reach the UI as a failed purchase right after
+     * the successful one. A token leaves the set only when its consumption fails, so a later pass
+     * can retry it.
+     */
+    private val consumingTokens: MutableSet<String> = ConcurrentHashMap.newKeySet()
 
     private val billingClient: BillingClient = BillingClient.newBuilder(context)
         .setListener(this)
@@ -183,16 +196,27 @@ class DefaultBillingRepository private constructor(
     }
 
     private fun consumePurchase(purchase: Purchase) {
+        val purchaseToken: String = purchase.purchaseToken
+        if (!consumingTokens.add(purchaseToken)) return
+
         scope.launch {
             val params = ConsumeParams.newBuilder()
-                .setPurchaseToken(purchase.purchaseToken)
+                .setPurchaseToken(purchaseToken)
                 .build()
-            val result = retryBillingCall(RetryStrategy.Exponential()) {
-                awaitBillingCallback { complete ->
-                    billingClient.consumeAsync(params) { billingResult: BillingResult, _: String? ->
-                        complete(BillingCallResult(billingResult, Unit))
+            val result: BillingCallResult<Unit> = try {
+                retryBillingCall(RetryStrategy.Exponential()) {
+                    awaitBillingCallback { complete ->
+                        billingClient.consumeAsync(params) { billingResult: BillingResult, _ ->
+                            complete(BillingCallResult(billingResult, Unit))
+                        }
                     }
                 }
+            } catch (throwable: Throwable) {
+                consumingTokens.remove(purchaseToken)
+                throw throwable
+            }
+            if (result.billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
+                consumingTokens.remove(purchaseToken)
             }
             when (result.billingResult.responseCode) {
                 BillingClient.BillingResponseCode.OK -> _purchaseResult.emit(PurchaseResult.Success)

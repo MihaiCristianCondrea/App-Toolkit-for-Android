@@ -39,8 +39,6 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.startupValueFlow
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.appToolkitNavigationEntryBuilders
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.navigation.appToolkitNavigationEntryBuilders as legacyEntryBuilders
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -59,19 +57,6 @@ class AppNavigationHostTest {
             flowOf("", " ", default, "favorite_apps", "unknown", AppsListRoute.ROUTE_ID, AppsListRoute.ROUTE_ID)
         val expected = dataStore.startupValueFlow(default) { it.toNavKeyOrDefault() }.toList()
         assertEquals(expected, dataStore.startupDestinationFlow(default) { it.toNavKeyOrDefault() }.toList())
-    }
-
-    @Test
-    fun legacyNavigationBuilderPreservesDestinationContentKeys() {
-        val canonical = entryProviderFor(appToolkitNavigationEntryBuilders())
-        val legacy = entryProviderFor(legacyEntryBuilders())
-        val routes: List<StableNavKey> = listOf(
-            LibraryExtrasRoute, SettingsRoute, HelpRoute, SupportRoute,
-            AdsSettingsRoute, PermissionsRoute, LicensesRoute,
-        )
-        routes.forEach { route ->
-            assertEquals(canonical(route).contentKey, legacy(route).contentKey)
-        }
     }
 
     private val dataStore: CommonDataStore = mockk()

@@ -94,6 +94,11 @@ placeholders for `app_name` and `app_full_name`, and the copyright resource. Int
 contribute the permissions and metadata they own; for example, ads owns network/ad-ID permissions
 and Mobile Ads tuning metadata.
 
+A module ships `src/main/AndroidManifest.xml` only when it contributes manifest entries. AGP takes
+each module's namespace from Gradle, so modules with nothing to merge, such as
+`:library:integration:consent` or `:library:core:datastore`, have no manifest. The
+`ManifestContractTest` rejects an empty placeholder manifest in any `library` or `sample` module.
+
 Android's manifest merger does not carry `android:localeConfig` from a library into the final
 application manifest. A host using the bundled locale list therefore keeps the one-line
 `android:localeConfig="@xml/config_locales"` application attribute while the XML list itself remains
@@ -120,12 +125,13 @@ The module exports nearly the complete internal graph, so consumers can couple t
 modules transitively. Its module-list functions must stay synchronized with the feature
 modules they compose.
 
-## Navigation compatibility
+## Navigation
 
-The canonical appToolkitNavigationEntryBuilders function lives in app.main.ui.navigation in this
-module. The historical feature.about.ui.navigation function remains a forwarding entry point in the
-same artifact, with its original signature and JVM file name. Both register the same destinations;
-hosts can migrate imports without changing route keys or behavior.
+`appToolkitNavigationEntryBuilders` lives in `app.main.ui.navigation` and registers the shared
+AppToolkit destinations for a host Navigation 3 graph. The historical forwarding function in
+`feature.about.ui.navigation` was removed so this module no longer ships a package owned by
+`:library:feature:about`; hosts importing it must switch to the `app.main.ui.navigation` import.
+Route keys and behavior are unchanged.
 
 ## Architecture guards
 

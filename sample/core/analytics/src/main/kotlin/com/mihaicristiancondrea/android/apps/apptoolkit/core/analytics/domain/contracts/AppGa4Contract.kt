@@ -30,6 +30,18 @@ object AppGa4Contract {
         const val TUTORIAL_BEGIN = "tutorial_begin"
         const val TUTORIAL_COMPLETE = "tutorial_complete"
         const val UNLOCK_ACHIEVEMENT = "unlock_achievement"
+
+        /** Recommended event: one finished Reaction Test round, scored in milliseconds. */
+        const val POST_SCORE = "post_score"
+
+        /**
+         * A quick tool was actually used, not just opened: reported once per time its sheet is
+         * open, at the first action that shows real use.
+         */
+        const val TOOL_USED = "tool_used"
+
+        /** The answer to Android's prompt for adding a quick tool to Quick Settings. */
+        const val QUICK_SETTINGS_TILE_REQUEST = "quick_settings_tile_request"
     }
 
     object Param {
@@ -52,6 +64,24 @@ object AppGa4Contract {
         const val SEARCH_TERM = "search_term"
         const val METHOD = "method"
         const val ACHIEVEMENT_ID = "achievement_id"
+        const val SCORE = "score"
+        const val CHARACTER = "character"
+        const val TOOL_ID = "tool_id"
+        const val TILE_ID = "tile_id"
+        const val OUTCOME = "outcome"
+    }
+
+    /** Bounded values for [Param.OUTCOME] on [EventName.QUICK_SETTINGS_TILE_REQUEST]. */
+    object TileRequestOutcome {
+        const val ADDED = "added"
+        const val ALREADY_ADDED = "already_added"
+        const val DECLINED = "declined"
+        const val FAILED = "failed"
+        const val UNSUPPORTED = "unsupported"
+        const val UNAVAILABLE = "unavailable"
+
+        val all: Set<String> =
+            setOf(ADDED, ALREADY_ADDED, DECLINED, FAILED, UNSUPPORTED, UNAVAILABLE)
     }
 
     val forbiddenParamKeys: Set<String> = setOf(
@@ -101,6 +131,17 @@ object AppGa4Contract {
         EventName.TUTORIAL_COMPLETE to emptySet(),
         EventName.UNLOCK_ACHIEVEMENT to setOf(
             Param.ACHIEVEMENT_ID,
+        ),
+        EventName.POST_SCORE to setOf(
+            Param.SCORE,
+            Param.CHARACTER,
+        ),
+        EventName.TOOL_USED to setOf(
+            Param.TOOL_ID,
+        ),
+        EventName.QUICK_SETTINGS_TILE_REQUEST to setOf(
+            Param.TILE_ID,
+            Param.OUTCOME,
         ),
     )
 

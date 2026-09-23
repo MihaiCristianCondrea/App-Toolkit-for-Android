@@ -80,7 +80,7 @@ flowchart TD
   retains final Koin startup and app-only configuration.
 - `MainActivity` resolves first-run state and the persisted startup key before composing the shell,
   preventing a default destination from flashing before the real route is known.
-- Process-lifetime ads, billing recovery, seasonal palette selection, and current-activity tracking
+- Process-lifetime ads, billing recovery, installing the seasonal overlay, and current-activity tracking
   stay in the application class because their lifetime exceeds any screen ViewModel.
 
 ## Public contracts
@@ -139,4 +139,4 @@ Android platform source, has no alternate implementation, and does not cross a m
 
 Pass-through use cases were removed throughout. Where one wrapped a data source rather than a
 repository, a repository was introduced instead of deleting it outright, so no ViewModel ends up
-holding `DatastoreInterface` directly.
+holding `DataStoreInterface` directly.

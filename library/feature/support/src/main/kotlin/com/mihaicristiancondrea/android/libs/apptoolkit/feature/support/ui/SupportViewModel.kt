@@ -47,6 +47,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSucces
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.showSnackbar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.updateState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.utils.SupportAnalytics
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.utils.beginCheckoutEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.utils.donationResultEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repositories.BillingRepository
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toPersistentMap
@@ -85,6 +88,15 @@ class SupportViewModel(
     )
 
     private var currentProductDetails: Map<String, ProductDetails> = emptyMap()
+
+    /**
+     * The donation this screen started and has not yet heard back about.
+     *
+     * Purchase results also arrive for purchases recovered in the background, such as one finished
+     * while the app was closed. Only a result for a donation started here is a step in this
+     * screen's funnel, so only those are reported.
+     */
+    private var checkoutProductId: String? = null
 
     private var productDetailsJob: Job? = null
     private var purchaseResultJob: Job? = null
@@ -126,6 +138,8 @@ class SupportViewModel(
             return
         }
         val hostName = activity::class.java.name
+        firebaseController.logEvent(beginCheckoutEvent(productId = productId, details = details))
+        checkoutProductId = productId
         billingLaunchJob = billingLaunchJob.restart {
             launchReport(
                 action = Actions.DONATE_CLICKED,
@@ -141,6 +155,7 @@ class SupportViewModel(
                     billingRepository.launchInAppDonationFlow(activity, details)
                 },
                 onError = { throwable ->
+                    reportDonationResult(outcome = SupportAnalytics.Outcomes.FAILED)
                     updateStateThreadSafe {
                         setBillingInProgress(inProgress = false)
                         screenState.setError(
@@ -200,6 +215,14 @@ class SupportViewModel(
         purchaseResultJob = purchaseResultJob.restart {
             billingRepository.purchaseResult
                 .onEach { result ->
+                    reportDonationResult(
+                        outcome = when (result) {
+                            PurchaseResult.Pending -> SupportAnalytics.Outcomes.PENDING
+                            PurchaseResult.Success -> SupportAnalytics.Outcomes.SUCCESS
+                            is PurchaseResult.Failed -> SupportAnalytics.Outcomes.FAILED
+                            PurchaseResult.UserCancelled -> SupportAnalytics.Outcomes.CANCELLED
+                        },
+                    )
                     when (result) {
                         PurchaseResult.Pending -> updateStateThreadSafe {
                             setBillingInProgress(inProgress = false)
@@ -264,6 +287,13 @@ class SupportViewModel(
                 }
                 .launchIn(viewModelScope)
         }
+    }
+
+    /** Reports how the donation this screen started ended, once, and forgets it. */
+    private fun reportDonationResult(outcome: String) {
+        val productId: String = checkoutProductId ?: return
+        checkoutProductId = null
+        firebaseController.logEvent(donationResultEvent(productId = productId, outcome = outcome))
     }
 
     private fun queryProductDetails() {

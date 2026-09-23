@@ -99,4 +99,9 @@
     <string name="components_text_field_search">検索</string>
     <string name="components_text_field_search_placeholder">コンポーネントを検索</string>
     <string name="components_text_field_search_outlined">検索（アウトライン）</string>
+    <string name="components_section_dividers">区切り線</string>
+    <string name="components_divider_wavy">波線の区切り線</string>
+    <string name="components_divider_width">幅</string>
+    <string name="components_divider_wave_height">波の高さ</string>
+    <string name="components_divider_vertical">縦</string>
 </resources>

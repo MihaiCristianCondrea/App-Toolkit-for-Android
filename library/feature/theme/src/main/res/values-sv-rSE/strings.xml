@@ -28,4 +28,15 @@
     <string name="summary_dark_theme">Dark Theme utnyttjar en djup bakgrund för att avsevärt förlänga batteritiden. För att aktivera det, navigera bara till din Androids systemhanterare och välj ditt föredragna tema i</string>
     <string name="theme_mode">Temaläge</string>
     <string name="wallpaper_colors">Bakgrundsfärger</string>
+    <string name="holiday_greeting_christmas_title">Trevlig helg!</string>
+    <string name="holiday_greeting_christmas_message">Jultemat är här, med snö som faller över hela appen. Vill du använda det tills helgerna är över?</string>
+    <string name="holiday_greeting_halloween_title">Glad Halloween!</string>
+    <string name="holiday_greeting_halloween_message">Den läskiga säsongen är här. Vill du använda Halloween-temat så länge den varar?</string>
+    <string name="holiday_greeting_use_theme">Använd högtidstemat under helgerna</string>
+    <string name="seasonal_themes_title">Säsongsteman</string>
+    <string name="seasonal_themes_summary">Du hittade hemligheten. Högtidstemana är dina.</string>
+    <string name="seasonal_themes_all_year">Visa säsongsteman hela året?</string>
+    <string name="seasonal_themes_snowfall">Snöfall</string>
+    <string name="seasonal_themes_snowfall_summary">Snö faller över hela appen medan jultemat är på.</string>
+    <string name="seasonal_themes_done">Klar</string>
 </resources>

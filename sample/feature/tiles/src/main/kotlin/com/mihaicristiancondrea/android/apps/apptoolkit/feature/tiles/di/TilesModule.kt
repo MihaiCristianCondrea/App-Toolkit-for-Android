@@ -102,14 +102,20 @@ val tilesModule: Module = module {
             firebaseController = get(),
         )
     }
-    viewModel { CoinFlipToolViewModel() }
-    viewModel { DiceRollToolViewModel() }
-    viewModel { CounterToolViewModel(repository = get()) }
-    viewModel { CompassToolViewModel(repository = get()) }
-    viewModel { LevelToolViewModel(repository = get()) }
-    viewModel { BreathingToolViewModel(repository = get()) }
-    viewModel { SosToolViewModel(repository = get()) }
-    viewModel { MorseToolViewModel(repository = get()) }
-    viewModel { FlashDimmerToolViewModel(torchRepository = get(), morseRepository = get()) }
-    viewModel { ReactionTestToolViewModel() }
+    viewModel { CoinFlipToolViewModel(firebaseController = get()) }
+    viewModel { DiceRollToolViewModel(firebaseController = get()) }
+    viewModel { CounterToolViewModel(repository = get(), firebaseController = get()) }
+    viewModel { CompassToolViewModel(repository = get(), firebaseController = get()) }
+    viewModel { LevelToolViewModel(repository = get(), firebaseController = get()) }
+    viewModel { BreathingToolViewModel(repository = get(), firebaseController = get()) }
+    viewModel { SosToolViewModel(repository = get(), firebaseController = get()) }
+    viewModel { MorseToolViewModel(repository = get(), firebaseController = get()) }
+    viewModel {
+        FlashDimmerToolViewModel(
+            torchRepository = get(),
+            morseRepository = get(),
+            firebaseController = get(),
+        )
+    }
+    viewModel { ReactionTestToolViewModel(firebaseController = get()) }
 }
