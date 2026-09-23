@@ -33,9 +33,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.
  * Entries that have nothing to show are dropped, so grouped card positions are assigned after
  * filtering and always describe the list the user actually sees.
  *
- * Every row that displays a value copies it on tap. The licenses row is the sole exception, it
- * navigates instead, and a row that only looked clickable was the reason tapping most of this
- * screen appeared to do nothing.
+ * Every row that displays a value copies it on tap, with two exceptions. The licenses row
+ * navigates instead. The build version row is where the easter egg lives: people tap it over and
+ * over, and copying on every one of those taps put the version on the clipboard five times and
+ * covered the konfetti with clipboard confirmations.
  */
 internal fun AboutInfo.toUiState(): AboutUiState = AboutUiState(items = toAboutItems())
 
@@ -53,17 +54,11 @@ private fun AboutInfo.toAboutItems(): List<AboutItem> {
                 ),
             )
         )
-        val buildVersionTitle = UiTextHelper.StringResource(R.string.app_build_version)
-        val buildVersion = UiTextHelper.DynamicString("$appVersion ($appVersionCode)")
         add(
             AboutItem.Preference(
                 key = AboutItemKey.APP_BUILD_VERSION,
-                title = buildVersionTitle,
-                summary = buildVersion,
-                action = AboutItemAction.CopyToClipboard(
-                    label = buildVersionTitle,
-                    text = buildVersion,
-                ),
+                title = UiTextHelper.StringResource(R.string.app_build_version),
+                summary = UiTextHelper.DynamicString("$appVersion ($appVersionCode)"),
                 countsVersionTap = true,
             )
         )

@@ -25,29 +25,19 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStoreInterface
 import com.mihaicristiancondrea.android.apps.apptoolkit.di.initializeKoin
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.managers.BaseCoreManager
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.isChristmasSeason
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.isHalloweenSeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppThemeConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ColorPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ThemePaletteProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.managers.AdsCoreManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.shake.IssueReporterShakeManager
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.SeasonalThemeManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repositories.BillingRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
-import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.getKoin
-import java.time.LocalDate
-import java.time.ZoneId
 
 /**
  * Main application class for AppToolkit that handles core system initialization,
@@ -59,15 +49,14 @@ import java.time.ZoneId
  * - Handle dynamic color palette switching, including seasonal themes (Halloween, Christmas).
  * - Monitor activity lifecycles to track the current UI context.
  * - Install shake-to-report, which opens the toolkit's issue reporter from any screen.
+ * - Install the seasonal overlay: the holiday greeting and snow with the Christmas theme.
  * - Process billing and purchases on application resume.
  *
  * @property currentActivity The currently active [Activity] instance, used for showing ads.
- * @property appScope A [CoroutineScope] tied to the application's lifecycle for background tasks.
  * @property adsCoreManager Manager responsible for handling advertisement logic.
  */
 class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
     private var currentActivity: Activity? = null
-    private val appScope = CoroutineScope(SupervisorJob() + dispatchers.io)
 
     private val adsCoreManager: AdsCoreManager by lazy { getKoin().get<AdsCoreManager>() }
 
@@ -77,6 +66,7 @@ class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
         super<BaseCoreManager>.onCreate()
         registerActivityLifecycleCallbacks(this)
         getKoin().get<IssueReporterShakeManager>().install()
+        getKoin().get<SeasonalThemeManager>().install()
         ProcessLifecycleOwner.get().lifecycle.addObserver(observer = this)
     }
 
@@ -91,37 +81,15 @@ class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
         )
     }
 
+    /**
+     * Applies the host's default palette.
+     *
+     * Holiday palettes are not swapped in here. They are offered by the holiday greeting that
+     * [SeasonalThemeManager] shows, applied only when the person agrees, and taken off again when
+     * the holiday ends.
+     */
     private fun applyDefaultColorPalette() {
-        val initialPalette: ColorPalette = getKoin().get()
-        applyColorPalette(initialPalette)
-
-        appScope.launch {
-            val palette = resolvePreferredColorPalette()
-            withContext(dispatchers.main) {
-                applyColorPalette(palette)
-            }
-        }
-    }
-
-    private suspend fun resolvePreferredColorPalette(): ColorPalette {
-        val dataStore: DataStoreInterface = getKoin().get()
-        val hasInteractedWithSettings: Boolean = dataStore.settingsInteracted.first()
-
-        if (!hasInteractedWithSettings) {
-            val staticPaletteId: String = dataStore.staticPaletteId.first()
-            val today: LocalDate = LocalDate.now(ZoneId.systemDefault())
-            val shouldUseSeasonalPalette: Boolean = staticPaletteId == StaticPaletteIds.DEFAULT
-
-            if (shouldUseSeasonalPalette) {
-                return when {
-                    today.isHalloweenSeason -> ThemePaletteProvider.paletteById(StaticPaletteIds.HALLOWEEN)
-                    today.isChristmasSeason -> ThemePaletteProvider.paletteById(StaticPaletteIds.CHRISTMAS)
-                    else -> getKoin().get()
-                }
-            }
-        }
-
-        return getKoin().get()
+        applyColorPalette(getKoin().get())
     }
 
     private fun applyColorPalette(colorPalette: ColorPalette) {
@@ -156,10 +124,5 @@ class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
         if (currentActivity === activity) {
             currentActivity = null
         }
-    }
-
-    override fun onTerminate() {
-        appScope.cancel()
-        super.onTerminate()
     }
 }

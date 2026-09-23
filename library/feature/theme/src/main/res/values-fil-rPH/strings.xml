@@ -28,4 +28,18 @@
     <string name="summary_dark_theme">Ang madilim na tema ay gumagamit ng isang malalim na background upang makabuluhang mapalawak ang iyong buhay ng baterya. Upang maisaaktibo ito, mag -navigate lamang sa manager ng system ng iyong Android at piliin ang iyong ginustong tema sa</string>
     <string name="theme_mode">Mode ng tema</string>
     <string name="wallpaper_colors">Mga kulay ng wallpaper</string>
+    <string name="holiday_greeting_christmas_title">Maligayang pista!</string>
+    <string name="holiday_greeting_christmas_message">Narito na ang Christmas theme, may niyebeng bumabagsak sa buong app. Gusto mo ba itong gamitin hanggang matapos ang pista?</string>
+    <string name="holiday_greeting_halloween_title">Maligayang Halloween!</string>
+    <string name="holiday_greeting_halloween_message">Narito na ang nakakatakot na season. Gusto mo bang gamitin ang Halloween theme habang tumatagal ito?</string>
+    <string name="holiday_greeting_use_theme">Gamitin ang holiday theme habang pista</string>
+    <string name="seasonal_themes_title">Mga seasonal na theme</string>
+    <string name="seasonal_themes_summary">Natuklasan mo ang sikreto. Sa iyo na ang mga holiday theme.</string>
+    <string name="seasonal_themes_all_year">Ipakita ang mga seasonal na theme buong taon?</string>
+    <string name="seasonal_themes_wear">Holiday theme</string>
+    <string name="seasonal_theme_christmas">Pasko</string>
+    <string name="seasonal_theme_halloween">Halloween</string>
+    <string name="seasonal_themes_snowfall">Pag-ulan ng niyebe</string>
+    <string name="seasonal_themes_snowfall_summary">Umuulan ng niyebe sa buong app habang naka-on ang Christmas theme.</string>
+    <string name="seasonal_themes_done">Tapos na</string>
 </resources>

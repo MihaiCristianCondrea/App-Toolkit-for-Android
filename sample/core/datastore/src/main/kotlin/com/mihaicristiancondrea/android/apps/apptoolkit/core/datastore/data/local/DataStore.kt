@@ -32,8 +32,6 @@ class DataStore(
     override val componentsShowcaseUnlocked: Flow<Boolean> =
         commonDataStore.componentsShowcaseUnlocked
     override val favoriteApps: Flow<Set<String>> = commonDataStore.favoriteApps
-    override val settingsInteracted: Flow<Boolean> = commonDataStore.settingsInteracted
-    override val staticPaletteId: Flow<String> = commonDataStore.staticPaletteId
 
     override fun <T : StableNavKey> startupDestinationFlow(
         defaultRoute: String,

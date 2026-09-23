@@ -28,4 +28,18 @@
     <string name="summary_dark_theme">Темная тема использует глубокий фон, чтобы значительно продлить срок службы батареи. Чтобы активировать его, просто перейдите к системному менеджеру Android и выберите свою предпочтительную тему в</string>
     <string name="theme_mode">Режим темы</string>
     <string name="wallpaper_colors">Цвета обоев</string>
+    <string name="holiday_greeting_christmas_title">С праздниками!</string>
+    <string name="holiday_greeting_christmas_message">Новогодняя тема уже здесь, и по всему приложению идёт снег. Использовать её до конца праздников?</string>
+    <string name="holiday_greeting_halloween_title">С Хэллоуином!</string>
+    <string name="holiday_greeting_halloween_message">Настал жуткий сезон. Использовать тему Хэллоуина, пока он длится?</string>
+    <string name="holiday_greeting_use_theme">Использовать праздничную тему во время праздников</string>
+    <string name="seasonal_themes_title">Сезонные темы</string>
+    <string name="seasonal_themes_summary">Вы нашли секрет. Праздничные темы теперь ваши.</string>
+    <string name="seasonal_themes_all_year">Показывать сезонные темы весь год?</string>
+    <string name="seasonal_themes_wear">Праздничная тема</string>
+    <string name="seasonal_theme_christmas">Рождество</string>
+    <string name="seasonal_theme_halloween">Хэллоуин</string>
+    <string name="seasonal_themes_snowfall">Снегопад</string>
+    <string name="seasonal_themes_snowfall_summary">Снег идёт по всему приложению, пока включена рождественская тема.</string>
+    <string name="seasonal_themes_done">Готово</string>
 </resources>

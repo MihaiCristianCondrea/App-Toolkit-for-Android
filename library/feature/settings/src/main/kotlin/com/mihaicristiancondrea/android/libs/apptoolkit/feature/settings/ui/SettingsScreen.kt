@@ -114,6 +114,8 @@ fun SettingsScreen(
     val contentProvider: GeneralSettingsContentProvider = koinInject()
     val screenState: UiStateScreen<SettingsConfig> by viewModel.uiState.collectAsStateWithLifecycle()
     val context: Context = LocalContext.current
+    // The page open in the tablet detail pane, whose own actions join this top app bar there.
+    var detailContentKey: String? by remember { mutableStateOf(null) }
 
     val firebaseController: FirebaseController = koinInject()
     TrackScreenView(
@@ -154,6 +156,7 @@ fun SettingsScreen(
                     settingsConfig = config,
                     contentProvider = contentProvider,
                     firebaseController = firebaseController,
+                    onDetailChange = { detailContentKey = it },
                 )
             },
         )
@@ -170,7 +173,10 @@ fun SettingsScreen(
                 )
                 (context as? android.app.Activity)?.finish()
             },
-            actions = { SettingsMenuActions() },
+            actions = {
+                with(contentProvider) { ProvideActions(contentKey = detailContentKey) }
+                SettingsMenuActions()
+            },
             content = content
         )
     }
@@ -182,9 +188,11 @@ fun SettingsScreenContent(
     settingsConfig: SettingsConfig,
     contentProvider: GeneralSettingsContentProvider,
     firebaseController: FirebaseController,
+    onDetailChange: (contentKey: String?) -> Unit = {},
 ) {
     val windowWidthSizeClass: AppWindowWidthSizeClass = rememberWindowWidthSizeClass()
     if (windowWidthSizeClass == AppWindowWidthSizeClass.Compact) {
+        LaunchedEffect(Unit) { onDetailChange(null) }
         PhoneSettingsScreen(
             paddingValues = paddingValues,
             settingsConfig = settingsConfig,
@@ -196,6 +204,7 @@ fun SettingsScreenContent(
             settingsConfig = settingsConfig,
             contentProvider = contentProvider,
             firebaseController = firebaseController,
+            onDetailChange = onDetailChange,
         )
     }
 }
@@ -220,8 +229,10 @@ fun TabletSettingsScreen(
     settingsConfig: SettingsConfig,
     contentProvider: GeneralSettingsContentProvider,
     firebaseController: FirebaseController,
+    onDetailChange: (contentKey: String?) -> Unit = {},
 ) {
     var selected: SettingsPreference? by remember { mutableStateOf(null) }
+    LaunchedEffect(selected?.key) { onDetailChange(selected?.key) }
 
     Row(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier.weight(1f)) {

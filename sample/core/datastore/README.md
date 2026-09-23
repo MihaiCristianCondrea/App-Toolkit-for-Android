@@ -35,7 +35,7 @@ flowchart TD
     Contract --> Adapter[Sample DataStore adapter]
     Adapter --> Common[Toolkit CommonDataStore]
     Common --> Store["shared settings Preferences DataStore"]
-    Store -->|startup / unlock / favorites / palette Flow| Adapter
+    Store -->|startup / unlock / favorites Flow| Adapter
     Adapter -->|typed values and StableNavKey mapping| Contract
     Contract --> Repos
     Repos -->|suspend mutations| Contract

@@ -103,6 +103,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.SeasonalThemesViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 private const val THEME_SCREEN_NAME = "Theme"
@@ -127,6 +128,9 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues) {
     val viewModel: ThemeSettingsViewModel = koinViewModel()
     val screenState: UiStateScreen<ThemePreferencesState> by
         viewModel.uiState.collectAsStateWithLifecycle()
+    val seasonalViewModel: SeasonalThemesViewModel = koinViewModel()
+    val seasonalState by seasonalViewModel.uiState.collectAsStateWithLifecycle()
+    val showSeasonalAllYear: Boolean = seasonalState.data?.seasonal?.let { it.unlocked && it.allYear } == true
 
     TrackScreenView(
         firebaseController = firebaseController,
@@ -202,13 +206,15 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues) {
     val staticOptions: List<String> = remember(
         isChristmasSeason,
         isHalloweenSeason,
-        staticPaletteId
+        staticPaletteId,
+        showSeasonalAllYear,
     ) {
         val seasonalOptions = filterSeasonalStaticPalettes(
             baseOptions = StaticPaletteIds.withDefault,
             isChristmasSeason = isChristmasSeason,
             isHalloweenSeason = isHalloweenSeason,
-            selectedPaletteId = staticPaletteId
+            selectedPaletteId = staticPaletteId,
+            showAllYear = showSeasonalAllYear,
         )
         dedupeStaticPaletteIds(
             options = seasonalOptions,

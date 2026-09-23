@@ -22,13 +22,18 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 /**
  * Filters seasonal palette options so they are available only during their seasonal windows or
  * when the user currently has them selected.
+ *
+ * @param showAllYear Keeps every seasonal palette available regardless of the date. This is the
+ * "seasonal themes the entire year" switch people get from the About screen easter egg.
  */
 fun filterSeasonalStaticPalettes(
     baseOptions: List<String>,
     isChristmasSeason: Boolean,
     isHalloweenSeason: Boolean,
-    selectedPaletteId: String
+    selectedPaletteId: String,
+    showAllYear: Boolean = false,
 ): List<String> {
+    if (showAllYear) return baseOptions
     return baseOptions.filter { id ->
         when (id) {
             StaticPaletteIds.CHRISTMAS -> isChristmasSeason || selectedPaletteId == StaticPaletteIds.CHRISTMAS

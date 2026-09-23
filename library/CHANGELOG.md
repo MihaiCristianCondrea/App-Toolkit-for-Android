@@ -6,14 +6,25 @@
 
 ### Added
 
-- Added a purple static palette with matching light and dark Material color schemes.
+- Added purple and orange static palettes (`purple`, `orange`), each with light and dark schemes. Orange is an everyday palette with soft peach containers, separate from the Halloween pumpkin and purple.
+- Added `Modifier.snowfall` and `SnowfallStyle` to `:library:core:designsystem`: falling snow drawn over any element, with density, colors, flake size, speed, wind, opacity, and shape (dots, crystals, or both). It runs in the draw phase only, so nothing recomposes while snow falls, it stops while the app is in the background, and taps go through it.
+- Added seasonal themes to `:library:feature:theme`. Once a host calls `SeasonalThemeManager.install()`, the first screen opened during Christmas (December 24 to January 7) or Halloween (October 31 to November 2) greets the holiday and offers its theme with a checkbox. The greeting appears once per holiday. An accepted holiday theme is taken off when the holiday ends, bringing back the palette and wallpaper-colors setting from before, unless another palette was picked during the holiday. Snow falls over every screen while the Christmas theme is on, and is skipped when animations are turned off system-wide.
+- Added a seasonal themes easter egg. Tapping the build version five times on the About screen now also unlocks a top app bar action on the theme settings page. Its dialog keeps the seasonal palettes available all year, switches between Christmas and Halloween, and turns snowfall on or off.
+- Added `SeasonalThemeRepository` to `:library:core:datastore`, which stores the seasonal themes state and owns the rules for applying and restoring a holiday theme.
+- Added `Context.isSystemAnimationDisabled()` to `:library:core:common`.
+- Added `GeneralSettingsContentProvider.ProvideActions`, which lets a settings page contribute top app bar actions. On tablets they appear in the settings bar while that page is open in the detail pane.
 
 ### Fixed
 
-- Adjusted low-contrast text and container color pairs in the blue, Android, red, yellow, Christmas, and Halloween palettes. Aligned error foregrounds with error containers across the affected palettes.
+- Fixed unreadable text in several static palettes. In light mode, Android green, yellow, skin, Halloween, and green used their bright brand color as `primary`, so text buttons, links, switches, and selected icons drawn in it fell as low as 1.35:1 against the background. Every palette except monochrome is now generated from its own brand hues with Material's contrast-aware tone rules. Bright brand colors stay on screen as the light `primaryContainer` (floating action buttons, tonal buttons, selected chips), next to a darker `primary` that reads as text. Snackbar actions (`inversePrimary`) are readable in every scheme, and monochrome's outline is visible against raised surfaces.
+- Fixed error roles out of step with their containers: error, error container, and their foregrounds now come from the same tonal palette in every static scheme.
+- Fixed static palettes showing Material's baseline purple in their fixed roles (`primaryFixed`, `secondaryFixed`, `tertiaryFixed` and their `on` roles). Every palette now defines them from its own colors.
+- Fixed the Christmas palette using red for every accent. It now pairs festive red with evergreen green and gold.
+- Fixed the build version row on the About screen copying the version to the clipboard on every tap, which buried the five-tap konfetti under clipboard confirmations. The other rows still copy their value.
 
 ### Changed
 
+- Changed `AboutViewModel` to take a `SeasonalThemeRepository` (`seasonalThemes`), which records the easter egg unlock. `aboutModule` passes it; hosts that construct the ViewModel themselves pass `get()` from the graph.
 - Renamed `DefaultDiagnosticsPreferencesDataSource` in `:library:core:datastore` to `DefaultUsageAndDiagnosticsPreferencesDataSource`, matching the `UsageAndDiagnosticsPreferencesDataSource` contract it implements. `CommonDataStore.diagnosticsPreferences` keeps its name and now has the renamed type. Hosts that name the class directly update the import.
 
 ### Removed

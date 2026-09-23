@@ -28,4 +28,18 @@
     <string name="summary_dark_theme">Tema întunecată folosește un fundal profund pentru a -ți extinde semnificativ durata de viață a bateriei. Pentru a -l activa, pur și simplu navigați la managerul de sistem Android și selectați tema preferată în</string>
     <string name="theme_mode">Mod temă</string>
     <string name="wallpaper_colors">Culorile fundalului</string>
+    <string name="holiday_greeting_christmas_title">Sărbători fericite!</string>
+    <string name="holiday_greeting_christmas_message">Tema de Crăciun a sosit, cu zăpadă care cade în toată aplicația. Vrei să o folosești până se termină sărbătorile?</string>
+    <string name="holiday_greeting_halloween_title">Halloween fericit!</string>
+    <string name="holiday_greeting_halloween_message">A venit sezonul înfricoșător. Vrei să folosești tema de Halloween cât durează?</string>
+    <string name="holiday_greeting_use_theme">Folosește tema de sărbători în timpul sărbătorilor</string>
+    <string name="seasonal_themes_title">Teme de sezon</string>
+    <string name="seasonal_themes_summary">Ai descoperit secretul. Temele de sărbători sunt ale tale.</string>
+    <string name="seasonal_themes_all_year">Afișezi temele de sezon tot anul?</string>
+    <string name="seasonal_themes_wear">Temă de sărbători</string>
+    <string name="seasonal_theme_christmas">Crăciun</string>
+    <string name="seasonal_theme_halloween">Halloween</string>
+    <string name="seasonal_themes_snowfall">Ninsoare</string>
+    <string name="seasonal_themes_snowfall_summary">Ninge în toată aplicația cât timp tema de Crăciun este activă.</string>
+    <string name="seasonal_themes_done">Gata</string>
 </resources>

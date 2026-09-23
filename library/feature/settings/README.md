@@ -75,6 +75,11 @@ flowchart TD
   one presentation surface, including onboarding.
 - Content keys select a known toolkit surface instead of allowing providers to reach into internal
   composables.
+- A page can add its own top app bar actions through `GeneralSettingsContentProvider.ProvideActions`.
+  `GeneralSettingsScreen` shows them in its bar, and on tablets `SettingsScreen` shows the open
+  detail page's actions next to its own. The theme page uses this for the seasonal themes action,
+  which stays hidden until the About screen easter egg is found. Embedded pages have no bar of
+  their own, so their actions are the host's to place.
 - Cache work and consent application stay behind their repositories; settings UI coordinates them
   but does not become a platform or SDK data source.
 

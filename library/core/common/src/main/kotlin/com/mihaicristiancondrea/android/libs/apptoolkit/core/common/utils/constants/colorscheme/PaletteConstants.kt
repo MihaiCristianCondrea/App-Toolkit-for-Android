@@ -38,6 +38,7 @@ object StaticPaletteIds {
     const val ANDROID = "android"
     const val GREEN = "green"
     const val RED = "red"
+    const val ORANGE = "orange"
     const val YELLOW = "yellow"
 
     const val ROSE = "rose"
@@ -54,6 +55,7 @@ object StaticPaletteIds {
         ANDROID,
         GREEN,
         RED,
+        ORANGE,
         YELLOW,
         ROSE,
         CHRISTMAS,

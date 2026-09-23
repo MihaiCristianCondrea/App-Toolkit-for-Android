@@ -80,7 +80,7 @@ flowchart TD
   retains final Koin startup and app-only configuration.
 - `MainActivity` resolves first-run state and the persisted startup key before composing the shell,
   preventing a default destination from flashing before the real route is known.
-- Process-lifetime ads, billing recovery, seasonal palette selection, and current-activity tracking
+- Process-lifetime ads, billing recovery, installing the seasonal overlay, and current-activity tracking
   stay in the application class because their lifetime exceeds any screen ViewModel.
 
 ## Public contracts

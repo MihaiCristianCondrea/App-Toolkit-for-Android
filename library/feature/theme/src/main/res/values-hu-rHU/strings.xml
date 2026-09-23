@@ -28,4 +28,18 @@
     <string name="summary_dark_theme">A sötét téma mély hátteret használ ki, hogy jelentősen meghosszabbítsa az akkumulátor élettartamát. Az aktiváláshoz egyszerűen keresse meg az Android Rendszerkezelőjét, és válassza ki a kívánt témát</string>
     <string name="theme_mode">Téma mód</string>
     <string name="wallpaper_colors">Háttérkép színei</string>
+    <string name="holiday_greeting_christmas_title">Boldog ünnepeket!</string>
+    <string name="holiday_greeting_christmas_message">Megérkezett a karácsonyi téma, hóeséssel az egész alkalmazásban. Szeretnéd használni az ünnepek végéig?</string>
+    <string name="holiday_greeting_halloween_title">Boldog Halloweent!</string>
+    <string name="holiday_greeting_halloween_message">Itt a borzongós szezon. Szeretnéd használni a Halloween-témát, amíg tart?</string>
+    <string name="holiday_greeting_use_theme">Ünnepi téma használata az ünnepek alatt</string>
+    <string name="seasonal_themes_title">Szezonális témák</string>
+    <string name="seasonal_themes_summary">Megtaláltad a titkot. Az ünnepi témák a tieid.</string>
+    <string name="seasonal_themes_all_year">Szezonális témák megjelenítése egész évben?</string>
+    <string name="seasonal_themes_wear">Ünnepi téma</string>
+    <string name="seasonal_theme_christmas">Karácsony</string>
+    <string name="seasonal_theme_halloween">Halloween</string>
+    <string name="seasonal_themes_snowfall">Hóesés</string>
+    <string name="seasonal_themes_snowfall_summary">Hó esik az egész alkalmazásban, amíg a karácsonyi téma be van kapcsolva.</string>
+    <string name="seasonal_themes_done">Kész</string>
 </resources>

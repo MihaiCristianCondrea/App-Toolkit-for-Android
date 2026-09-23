@@ -8,8 +8,8 @@ used by onboarding, consent, ads, diagnostics, review, and theming.
 ## Owns
 
 - The single `settings` Preferences DataStore instance, handed out by `Context.commonDataStore`.
-- Cohesive preference data sources over that instance: theme, display, onboarding, consent and
-  diagnostics, ads, review, changelog, app state, and favorites.
+- Cohesive preference data sources over that instance: theme, seasonal themes, display, onboarding,
+  consent and diagnostics, ads, review, changelog, app state, and favorites.
 - `CommonDataStore`, which owns one instance of each source, exposes them, and keeps the flat
   pre-split API delegating to them.
 - Persisted theme, review, display-ads, reduce-ads, and consent-related values.
@@ -33,8 +33,8 @@ used by onboarding, consent, ads, diagnostics, review, and theming.
 - `:library:apptoolkit` for host DI assembly.
 - `:library:core:designsystem` for persisted theme state, and `:library:core:ui` for the
   preference-driven modifiers and ad slots.
-- `:library:feature:about`, `:library:feature:faq`, `:library:feature:onboarding`, and
-  `:library:feature:settings`.
+- `:library:feature:about`, `:library:feature:faq`, `:library:feature:onboarding`,
+  `:library:feature:settings`, and `:library:feature:theme`.
 - `:library:integration:ads`, `:library:integration:consent`, and `:library:integration:review`.
 
 ## Flow chart
@@ -65,6 +65,12 @@ flowchart TD
   `CommonDataStore` wrapper remains only for source compatibility with older callers.
 - Reads are observable `Flow`s and mutations are suspend functions; the stored preferences are the
   source of truth except for explicitly documented UI mirrors.
+- `SeasonalThemeRepository` owns the holiday rules because they span two sources: applying a
+  holiday palette from the greeting saves the palette and wallpaper-colors setting it replaces in
+  the seasonal source, and `restoreThemeAfterHoliday` puts them back once the holiday is over,
+  unless the person picked another palette in the meantime. Each holiday is greeted once per
+  occurrence, keyed like `christmas-2026`, so a Christmas season that runs into January is still
+  one occurrence.
 - Ads enablement is eagerly shared by one process-scoped instance because initialization and every
   ad surface must observe the same default and subsequent changes.
 - Reduce ads defaults to `false` and suppresses only App Open ads; it does not alter SDK
@@ -84,6 +90,8 @@ change stored keys, defaults, or the shared preferences file.
 - New code should depend on the narrow contract it needs (`ThemePreferencesDataSource`,
   `ReviewPreferencesDataSource`, …), all of which `dataStoreModule` registers. `CommonDataStore`
   remains for callers written against the earlier single-class API.
+- `SeasonalThemeRepository` and `DefaultSeasonalThemeRepository`, registered by `dataStoreModule`,
+  for the seasonal themes state, the holiday greeting, and the easter egg unlock.
 - `themePreferencesState()` combines stored theme values into the application-facing
   `ThemePreferencesState`; Compose collection of that flow belongs to `:library:core:designsystem`.
 

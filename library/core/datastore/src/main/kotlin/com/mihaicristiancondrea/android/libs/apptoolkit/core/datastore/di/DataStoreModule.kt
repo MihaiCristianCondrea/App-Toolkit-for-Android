@@ -27,11 +27,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.loca
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.FavoritesPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.OnboardingPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.ReviewPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.SeasonalThemePreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.ThemePreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.UsageAndDiagnosticsPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DefaultDisplayPreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DefaultSeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DefaultThemePreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DisplayPreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
 import org.koin.core.module.Module
 import org.koin.dsl.module
@@ -64,6 +67,7 @@ fun dataStoreModule(): Module = module {
     // group exists per process. DefaultAdsPreferencesDataSource in particular starts an eager
     // collector, so a second copy would observe the same preference twice.
     single<ThemePreferencesDataSource> { get<CommonDataStore>().themePreferences }
+    single<SeasonalThemePreferencesDataSource> { get<CommonDataStore>().seasonalThemePreferences }
     single<DisplayPreferencesDataSource> { get<CommonDataStore>().displayPreferences }
     single<AdsPreferencesDataSource> { get<CommonDataStore>().adsPreferences }
     single<ReviewPreferencesDataSource> { get<CommonDataStore>().reviewPreferences }
@@ -82,5 +86,8 @@ fun dataStoreModule(): Module = module {
     }
     single<DisplayPreferencesRepository> {
         DefaultDisplayPreferencesRepository(preferences = get())
+    }
+    single<SeasonalThemeRepository> {
+        DefaultSeasonalThemeRepository(seasonal = get(), theme = get())
     }
 }

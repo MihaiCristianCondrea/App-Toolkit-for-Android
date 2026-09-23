@@ -28,4 +28,18 @@
     <string name="summary_dark_theme">ﻲﻓ ﻚﻳﺪﻟ ﺔﻠﻀﻔﻤﻟﺍ ﺔﻤﺴﻟﺍ ﺩﺪﺣﻭ Android ﻡﺎﻈﻧ ﺮﻳﺪﻣ ﻰﻟﺇ ﻝﺎﻘﺘﻧﻻﺍ ﻯﻮﺳ ﻚﻴﻠﻋ ﺎﻣ ، ﻪﻠﻴﻌﻔﺘﻟ</string>
     <string name="theme_mode">وضع المظهر</string>
     <string name="wallpaper_colors">ألوان خلفية الشاشة</string>
+    <string name="holiday_greeting_christmas_title">أعياد سعيدة!</string>
+    <string name="holiday_greeting_christmas_message">ثيم الكريسماس وصل، ومعاه ثلج بينزل على التطبيق كله. تحب تستخدمه لحد ما الأعياد تخلص؟</string>
+    <string name="holiday_greeting_halloween_title">هالوين سعيد!</string>
+    <string name="holiday_greeting_halloween_message">موسم الرعب وصل. تحب تستخدم ثيم الهالوين لحد ما يخلص؟</string>
+    <string name="holiday_greeting_use_theme">استخدم ثيم الأعياد خلال الأعياد</string>
+    <string name="seasonal_themes_title">الثيمات الموسمية</string>
+    <string name="seasonal_themes_summary">لقيت السر. ثيمات الأعياد بقت بتاعتك.</string>
+    <string name="seasonal_themes_all_year">عرض الثيمات الموسمية طول السنة؟</string>
+    <string name="seasonal_themes_wear">ثيم الأعياد</string>
+    <string name="seasonal_theme_christmas">الكريسماس</string>
+    <string name="seasonal_theme_halloween">الهالوين</string>
+    <string name="seasonal_themes_snowfall">تساقط الثلج</string>
+    <string name="seasonal_themes_snowfall_summary">الثلج بينزل على التطبيق كله طول ما ثيم الكريسماس شغال.</string>
+    <string name="seasonal_themes_done">تم</string>
 </resources>

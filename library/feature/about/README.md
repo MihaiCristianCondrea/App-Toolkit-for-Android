@@ -3,13 +3,14 @@
 ## Purpose
 
 Owns the AppToolkit About screen: host application, App Toolkit, and Google Play services metadata,
-plus the tap-to-copy interaction for every entry it renders.
+plus the tap-to-copy interaction for the entries it renders and the version-tap easter egg.
 
 ## Owns
 
 - About information presentation (host application, App Toolkit, and Google Play services versions,
   and the host-formatted device report).
 - Tap-to-copy for About entries, including the clipboard write and its in-app confirmation.
+- The version-tap easter egg: konfetti on the fifth tap, and the seasonal themes unlock it records.
 - The drawer navigation click handler and the library-owned extras destination.
 - The GMS host factory used by consent, review, and update flows.
 
@@ -29,6 +30,8 @@ plus the tap-to-copy interaction for every entry it renders.
 ## Depends on
 
 - `:library:core:common` and `:library:core:ui` for shared state, platform helpers, and Compose.
+- [`:library:core:datastore`](../../core/datastore/README.md) for `SeasonalThemeRepository`, which
+  stores the easter egg unlock.
 - [`:library:navigation`](../../navigation/README.md) for drawer models and routes.
 - [`:library:feature:licenses`](../licenses/README.md) to open the licenses screen from the About
   list.
@@ -72,12 +75,16 @@ flowchart TD
   displays rather than a second lookup resolved under a different configuration. Both texts are
   `UiTextHelper`, so a row whose value is a string resource copies as readily as one holding a
   formatted value.
-- Every row that displays a value copies it on tap. Open source licenses is the only preference
-  that does something else, because it navigates. Rows that rendered as clickable but carried no
-  action were the reason tapping most of this screen appeared to do nothing.
-- The hidden version-tap gesture is `Preference.countsVersionTap`, not an `AboutItemAction`. It is
-  layered on top of whatever the row does, so the build version row counts taps and copies its
-  value on the same click instead of having to choose.
+- Every row that displays a value copies it on tap, with two exceptions. Open source licenses
+  navigates. The build version row copies nothing: it is where the easter egg lives, people tap it
+  over and over, and copying on each tap filled the clipboard and covered the konfetti with
+  confirmations. Rows that rendered as clickable but carried no action were the reason tapping most
+  of this screen appeared to do nothing.
+- The hidden version-tap gesture is `Preference.countsVersionTap`, not an `AboutItemAction`, so it
+  can sit on a row whatever that row does.
+- The fifth tap plays konfetti and raises `AboutEvent.EasterEggFound`. `AboutViewModel` records the
+  unlock through `SeasonalThemeRepository`, which gives the theme screen its seasonal themes action.
+  Only the first unlock shows a snackbar, since nothing else points at where the reward went.
 - Use cases are retained where they perform a named operation or combine concerns; repository calls
   that only forwarded data were not given synthetic wrappers.
 

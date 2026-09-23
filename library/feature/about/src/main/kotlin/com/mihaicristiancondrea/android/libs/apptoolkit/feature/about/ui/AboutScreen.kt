@@ -182,6 +182,7 @@ fun AboutScreen(
                                                 firebaseController.logUnlockAchievement(
                                                     "konfetti_easter_egg",
                                                 )
+                                                viewModel.onEvent(AboutEvent.EasterEggFound)
                                             }
                                         }
                                         when (val action = item.action) {

@@ -71,6 +71,7 @@ flowchart TD
 
 - `AppTheme`, `AppThemeConfig`, `ColorPalette`, palette providers/values, theme models, and
   selection composables.
+- `Modifier.snowfall`, `SnowfallStyle`, and `SnowflakeShape`.
 - `ToolkitIcon`, `ToolkitIconReplayMode`, `resolveToolkitIcon`, `ToolkitIconContent`, and
   `AnimatedToolkitIcon`. See [the Toolkit Icon API](#toolkit-icon-api) below.
 
@@ -304,9 +305,21 @@ playback; it remains local presentation state in `core:designsystem`.
 - Concrete palette color tables, seasonal filtering, typography definitions, and dynamic-color
   resolution.
 
-Static palettes include purple alongside the existing blue, Android, green, red, yellow, rose,
-monochrome, and seasonal options. Paired foreground and background roles target at least 4.5:1
-contrast in both light and dark schemes.
+Static palettes include purple and orange alongside blue, Android, green, red, yellow, rose, skin,
+monochrome, and the seasonal Christmas and Halloween options. Every palette except monochrome is
+generated from its brand hues with Material's dynamic-color tone rules, so each role pair keeps
+the contrast Material specifies. Palettes whose brand color is bright (Android, yellow, skin,
+Halloween) keep that color as `primaryContainer` in the light scheme and use a darker `primary` that
+stays readable as text. Every palette also defines its own fixed roles; left out, Compose fills them
+with the baseline purple. `StaticPaletteContrastTest` guards text at 4.5:1 on every surface it is
+drawn on (including `primary` on surfaces and `inversePrimary` on snackbars), outlines at 3:1, and
+the fixed roles.
+
+`Modifier.snowfall(SnowfallStyle)` in `ui.effects.snowfall` draws falling snow over an element. It
+runs in the draw phase only, keeps flake state in plain arrays rather than snapshot state, and
+follows the composition's frame clock, so nothing recomposes while snow falls and it stops in the
+background. `SnowfallStyle` sets density, colors, flake size, speed, wind, opacity, and shape. The
+motion lives in `SnowfallSimulation`, which is covered by JVM tests.
 
 ## Current risks
 

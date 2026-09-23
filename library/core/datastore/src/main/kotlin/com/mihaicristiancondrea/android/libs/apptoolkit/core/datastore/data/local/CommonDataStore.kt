@@ -35,6 +35,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.loca
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.FavoritesPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.OnboardingPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.ReviewPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.SeasonalThemePreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.ThemePreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.UsageAndDiagnosticsPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultAdsPreferencesDataSource
@@ -45,6 +46,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.loca
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultFavoritesPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultOnboardingPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultReviewPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultSeasonalThemePreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultThemePreferencesDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -91,6 +93,10 @@ open class CommonDataStore(
     /** Appearance preferences: theme mode, AMOLED, and palette selection. */
     val themePreferences: ThemePreferencesDataSource =
         DefaultThemePreferencesDataSource(dataStore = dataStore)
+
+    /** Seasonal themes: the easter egg unlock, snowfall, and holiday theme bookkeeping. */
+    val seasonalThemePreferences: SeasonalThemePreferencesDataSource =
+        DefaultSeasonalThemePreferencesDataSource(dataStore = dataStore)
 
     /** Display preferences: language, startup destination, and interaction chrome. */
     val displayPreferences: DisplayPreferencesDataSource =

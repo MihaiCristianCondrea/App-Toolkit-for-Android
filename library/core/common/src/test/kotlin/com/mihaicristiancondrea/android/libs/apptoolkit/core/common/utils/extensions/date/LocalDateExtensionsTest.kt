@@ -17,8 +17,12 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.HolidaySeason
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import java.time.LocalDate
@@ -77,5 +81,34 @@ class LocalDateExtensionsTest {
     )
     fun `halloween season should exclude dates outside the window`(date: String) {
         assertFalse(LocalDate.parse(date).isHalloweenSeason)
+    }
+
+    @Test
+    fun `holiday season names the holiday a date falls in`() {
+        assertEquals(HolidaySeason.CHRISTMAS, LocalDate.parse("2026-12-25").holidaySeason)
+        assertEquals(HolidaySeason.CHRISTMAS, LocalDate.parse("2027-01-03").holidaySeason)
+        assertEquals(HolidaySeason.HALLOWEEN, LocalDate.parse("2026-10-31").holidaySeason)
+        assertNull(LocalDate.parse("2026-07-14").holidaySeason)
+    }
+
+    @Test
+    fun `a christmas season that crosses new year is one occurrence`() {
+        val christmasEve = LocalDate.parse("2026-12-24").holidayOccurrenceKey(HolidaySeason.CHRISTMAS)
+        val newYear = LocalDate.parse("2027-01-01").holidayOccurrenceKey(HolidaySeason.CHRISTMAS)
+
+        assertEquals("christmas-2026", christmasEve)
+        assertEquals(christmasEve, newYear)
+        assertEquals(
+            "christmas-2027",
+            LocalDate.parse("2027-12-24").holidayOccurrenceKey(HolidaySeason.CHRISTMAS),
+        )
+    }
+
+    @Test
+    fun `each halloween is its own occurrence`() {
+        assertEquals(
+            "halloween-2026",
+            LocalDate.parse("2026-11-01").holidayOccurrenceKey(HolidaySeason.HALLOWEEN),
+        )
     }
 }

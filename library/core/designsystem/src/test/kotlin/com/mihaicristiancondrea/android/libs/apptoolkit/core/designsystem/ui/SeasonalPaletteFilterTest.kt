@@ -68,4 +68,17 @@ class SeasonalPaletteFilterTest {
 
         assertEquals(expected, filtered)
     }
+
+    @Test
+    fun `seasonal palettes stay available all year once unlocked`() {
+        val filtered = filterSeasonalStaticPalettes(
+            baseOptions = baseOptions,
+            isChristmasSeason = false,
+            isHalloweenSeason = false,
+            selectedPaletteId = StaticPaletteIds.DEFAULT,
+            showAllYear = true,
+        )
+
+        assertEquals(baseOptions, filtered)
+    }
 }

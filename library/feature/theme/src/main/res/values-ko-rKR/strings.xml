@@ -28,4 +28,18 @@
     <string name="summary_dark_theme">다크 테마는 깊은 배경을 활용하여 배터리 수명을 크게 연장합니다. 활성화하려면 Android의 시스템 관리자로 이동하여 선호하는 테마를 선택하십시오.</string>
     <string name="theme_mode">테마 모드</string>
     <string name="wallpaper_colors">배경화면 색상</string>
+    <string name="holiday_greeting_christmas_title">즐거운 연휴 보내세요!</string>
+    <string name="holiday_greeting_christmas_message">크리스마스 테마가 도착했어요. 앱 전체에 눈이 내려요. 연휴가 끝날 때까지 사용할까요?</string>
+    <string name="holiday_greeting_halloween_title">해피 할로윈!</string>
+    <string name="holiday_greeting_halloween_message">으스스한 시즌이 왔어요. 시즌 동안 할로윈 테마를 사용할까요?</string>
+    <string name="holiday_greeting_use_theme">연휴 동안 연휴 테마 사용</string>
+    <string name="seasonal_themes_title">시즌 테마</string>
+    <string name="seasonal_themes_summary">비밀을 찾았어요. 연휴 테마는 이제 당신 거예요.</string>
+    <string name="seasonal_themes_all_year">시즌 테마를 일 년 내내 표시할까요?</string>
+    <string name="seasonal_themes_wear">연휴 테마</string>
+    <string name="seasonal_theme_christmas">크리스마스</string>
+    <string name="seasonal_theme_halloween">할로윈</string>
+    <string name="seasonal_themes_snowfall">눈 내림</string>
+    <string name="seasonal_themes_snowfall_summary">크리스마스 테마를 사용하는 동안 앱 전체에 눈이 내려요.</string>
+    <string name="seasonal_themes_done">완료</string>
 </resources>

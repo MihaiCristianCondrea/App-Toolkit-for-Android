@@ -25,6 +25,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.reposit
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.copyTextToClipboard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiSnackbar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
@@ -55,6 +56,10 @@ import kotlinx.coroutines.launch
  * so a successful copy is confirmed in-app only below that, where nothing else tells the user
  * anything happened. A failed copy raises no system UI at all, so it is always reported.
  *
+ * The version-tap easter egg also unlocks the seasonal themes controls on the theme screen. The
+ * first unlock is announced, since nothing else points at where the reward went.
+ *
+ * @param seasonalThemes Records the easter egg unlock.
  * @param sdkIntProvider Supplies the running platform level, so the confirmation rule is testable
  * without a device.
  */
@@ -63,6 +68,7 @@ open class AboutViewModel(
     private val context: Context,
     private val dispatchers: DispatcherProvider,
     firebaseController: FirebaseController,
+    private val seasonalThemes: SeasonalThemeRepository,
     private val sdkIntProvider: () -> Int = { Build.VERSION.SDK_INT },
 ) : LoggedScreenViewModel<AboutUiState, AboutEvent, AboutAction>(
     initialState = UiStateScreen(data = AboutUiState()),
@@ -86,6 +92,8 @@ open class AboutViewModel(
             )
 
             is AboutEvent.DismissSnackbar -> dismissSnackbar()
+
+            is AboutEvent.EasterEggFound -> unlockSeasonalThemes()
         }
     }
 
@@ -152,6 +160,22 @@ open class AboutViewModel(
         )
     }
 
+    private fun unlockSeasonalThemes() {
+        launchReport(
+            action = Actions.UNLOCK_SEASONAL_THEMES,
+            block = {
+                if (seasonalThemes.unlockSeasonalThemes()) {
+                    showSnackbar(
+                        message = UiTextHelper.StringResource(R.string.snack_seasonal_themes_unlocked),
+                        isError = false,
+                    )
+                }
+            },
+            // Konfetti already played; a failed write only means the unlock is offered next time.
+            onError = {},
+        )
+    }
+
     /**
      * True when the platform raises its own clipboard preview, making an in-app confirmation a
      * duplicate report of the same copy.
@@ -183,6 +207,7 @@ open class AboutViewModel(
     private object Actions {
         const val LOAD_ABOUT_INFO: String = "loadAboutInfo"
         const val COPY_TO_CLIPBOARD: String = "copyToClipboard"
+        const val UNLOCK_SEASONAL_THEMES: String = "unlockSeasonalThemes"
     }
 
     private object ExtraKeys {

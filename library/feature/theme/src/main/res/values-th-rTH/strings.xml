@@ -28,4 +28,18 @@
     <string name="summary_dark_theme">ธีมมืดใช้ประโยชน์จากพื้นหลังลึกเพื่อยืดอายุการใช้งานแบตเตอรี่ของคุณอย่างมีนัยสำคัญ ในการเปิดใช้งานเพียงแค่นำทางไปยังตัวจัดการระบบของ Android และเลือกธีมที่คุณต้องการใน</string>
     <string name="theme_mode">โหมดธีม</string>
     <string name="wallpaper_colors">สีของวอลเปเปอร์</string>
+    <string name="holiday_greeting_christmas_title">สุขสันต์วันหยุด!</string>
+    <string name="holiday_greeting_christmas_message">ธีมคริสต์มาสมาแล้ว พร้อมหิมะตกทั่วทั้งแอป อยากใช้ธีมนี้จนจบเทศกาลไหม</string>
+    <string name="holiday_greeting_halloween_title">สุขสันต์วันฮาโลวีน!</string>
+    <string name="holiday_greeting_halloween_message">ฤดูแห่งความหลอนมาถึงแล้ว อยากใช้ธีมฮาโลวีนตลอดช่วงนี้ไหม</string>
+    <string name="holiday_greeting_use_theme">ใช้ธีมเทศกาลในช่วงเทศกาล</string>
+    <string name="seasonal_themes_title">ธีมตามฤดูกาล</string>
+    <string name="seasonal_themes_summary">คุณค้นพบความลับแล้ว ธีมเทศกาลเป็นของคุณ</string>
+    <string name="seasonal_themes_all_year">แสดงธีมตามฤดูกาลตลอดทั้งปีไหม</string>
+    <string name="seasonal_themes_wear">ธีมเทศกาล</string>
+    <string name="seasonal_theme_christmas">คริสต์มาส</string>
+    <string name="seasonal_theme_halloween">ฮาโลวีน</string>
+    <string name="seasonal_themes_snowfall">หิมะตก</string>
+    <string name="seasonal_themes_snowfall_summary">หิมะจะตกทั่วทั้งแอปขณะเปิดธีมคริสต์มาส</string>
+    <string name="seasonal_themes_done">เสร็จสิ้น</string>
 </resources>
