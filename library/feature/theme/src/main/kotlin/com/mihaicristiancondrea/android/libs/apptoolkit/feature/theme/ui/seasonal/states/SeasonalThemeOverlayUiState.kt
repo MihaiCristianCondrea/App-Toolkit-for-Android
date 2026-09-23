@@ -18,14 +18,18 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.states
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.HolidaySeason
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 
 /**
  * What the app-wide seasonal overlay draws.
  *
  * @property showSnowfall Whether snow falls over the screen.
  * @property greeting The holiday to greet, or null when no greeting is due.
+ * @property themeMode The stored theme mode, so the overlay can tell light from dark without
+ * composing a whole app theme of its own.
  */
 data class SeasonalThemeOverlayUiState(
     val showSnowfall: Boolean = false,
     val greeting: HolidaySeason? = null,
+    val themeMode: String = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
 )

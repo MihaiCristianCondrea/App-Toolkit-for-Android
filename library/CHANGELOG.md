@@ -9,10 +9,18 @@
 - Added purple and orange static palettes (`purple`, `orange`), each with light and dark schemes. Orange is an everyday palette with soft peach containers, separate from the Halloween pumpkin and purple.
 - Added `Modifier.snowfall` and `SnowfallStyle` to `:library:core:designsystem`: falling snow drawn over any element, with density, colors, flake size, speed, wind, opacity, and shape (dots, crystals, or both). It runs in the draw phase only, so nothing recomposes while snow falls, it stops while the app is in the background, and taps go through it.
 - Added seasonal themes to `:library:feature:theme`. Once a host calls `SeasonalThemeManager.install()`, the first screen opened during Christmas (December 24 to January 7) or Halloween (October 31 to November 2) greets the holiday and offers its theme with a checkbox. The greeting appears once per holiday. An accepted holiday theme is taken off when the holiday ends, bringing back the palette and wallpaper-colors setting from before, unless another palette was picked during the holiday. Snow falls over every screen while the Christmas theme is on, and is skipped when animations are turned off system-wide.
-- Added a seasonal themes easter egg. Tapping the build version five times on the About screen now also unlocks a top app bar action on the theme settings page. Its dialog keeps the seasonal palettes available all year, switches between Christmas and Halloween, and turns snowfall on or off.
+- Added a seasonal themes easter egg. Tapping the build version five times on the About screen now also unlocks a top app bar action on the theme settings page. Its dialog keeps the Christmas and Halloween palettes in the palette list all year and turns snowfall on or off.
 - Added `SeasonalThemeRepository` to `:library:core:datastore`, which stores the seasonal themes state and owns the rules for applying and restoring a holiday theme.
-- Added `Context.isSystemAnimationDisabled()` to `:library:core:common`.
+- Added `Context.isSystemAnimationDisabled()` to `:library:core:common`, and `isAppInDarkTheme(themeMode)` and `ColorScheme.toSwatchColors()` to `:library:core:designsystem`.
 - Added `GeneralSettingsContentProvider.ProvideActions`, which lets a settings page contribute top app bar actions. On tablets they appear in the settings bar while that page is open in the detail pane.
+
+### Improved
+
+- Improved startup and first-frame speed for apps built on the toolkit. `:library:core:designsystem`, `:library:core:ui`, `:library:navigation`, and `:library:feature:theme` now ship baseline profiles, which a host's release build merges so the toolkit's theme, shared components, navigation, and seasonal overlay are compiled ahead of time on install. Before, no toolkit code was in the app's profile.
+- Improved `AppTheme` so it rebuilds its color scheme only when a theme setting changes, and builds the wallpaper-based schemes only when dynamic colors are on. It used to build both wallpaper schemes on every recomposition.
+- Improved the seasonal overlay so it composes no second app theme over every activity; it borrows a theme only while the holiday greeting is on screen.
+- Improved snowfall drawing so it allocates nothing per frame.
+- Improved palette swatches in the theme picker and onboarding. They show each palette's most colorful variant of every accent, follow the theme the app is actually drawn in rather than the system setting, draw in one step instead of eight nested layouts, and draw the selection check in black or white on the swatch's own color so it no longer disappears on dark palettes.
 
 ### Fixed
 
@@ -20,6 +28,7 @@
 - Fixed error roles out of step with their containers: error, error container, and their foregrounds now come from the same tonal palette in every static scheme.
 - Fixed static palettes showing Material's baseline purple in their fixed roles (`primaryFixed`, `secondaryFixed`, `tertiaryFixed` and their `on` roles). Every palette now defines them from its own colors.
 - Fixed the Christmas palette using red for every accent. It now pairs festive red with evergreen green and gold.
+- Fixed battery saver switching the app to its dark theme only on the next unrelated recomposition, and the status bar icons staying dark on the dark theme it forces.
 - Fixed the build version row on the About screen copying the version to the clipboard on every tap, which buried the five-tap konfetti under clipboard confirmations. The other rows still copy their value.
 
 ### Changed

@@ -36,9 +36,6 @@
     <string name="seasonal_themes_title">시즌 테마</string>
     <string name="seasonal_themes_summary">비밀을 찾았어요. 연휴 테마는 이제 당신 거예요.</string>
     <string name="seasonal_themes_all_year">시즌 테마를 일 년 내내 표시할까요?</string>
-    <string name="seasonal_themes_wear">연휴 테마</string>
-    <string name="seasonal_theme_christmas">크리스마스</string>
-    <string name="seasonal_theme_halloween">할로윈</string>
     <string name="seasonal_themes_snowfall">눈 내림</string>
     <string name="seasonal_themes_snowfall_summary">크리스마스 테마를 사용하는 동안 앱 전체에 눈이 내려요.</string>
     <string name="seasonal_themes_done">완료</string>

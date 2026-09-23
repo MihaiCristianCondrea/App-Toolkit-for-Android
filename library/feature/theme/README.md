@@ -39,7 +39,8 @@ is a `ComposeView`, so an activity that sets its content after resuming would ot
 the overlay without its navigation owners. Such activities get the overlay after their content's
 first layout. It only draws, so touches reach the screen underneath, and it is hidden from
 accessibility services and focus. Activities from Google Play services, Play Billing and Firebase
-are skipped. A host that prefers to place the overlay itself can compose `SeasonalThemeOverlay()`
+are skipped. The overlay composes no app theme of its own until a greeting is due, so outside
+Christmas it costs one small composition per activity. A host that prefers to place the overlay itself can compose `SeasonalThemeOverlay()`
 last in its root `Box` instead of installing the manager.
 
 What people see:
@@ -53,8 +54,8 @@ What people see:
   Snow is skipped when animations are turned off system-wide.
 - Tapping the build version five times on the About screen unlocks the seasonal themes controls.
   `SeasonalThemesAction` then shows a top app bar action on the theme page that opens a dialog to
-  keep the seasonal palettes all year, switch between Christmas and Halloween, and turn snowfall
-  on or off. With the easter egg, snow also follows the Christmas palette outside the season.
+  keep the seasonal palettes in the palette list all year and to turn snowfall on or off. With
+  the easter egg, snow also follows the Christmas palette outside the season.
 
 ## Validation and risks
 

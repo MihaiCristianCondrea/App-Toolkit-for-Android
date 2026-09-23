@@ -1,0 +1,5 @@
+# The main screen scaffold is the sample's first frame after launch.
+# Merged into the host's release build and installed by androidx.profileinstaller, so this code is
+# compiled ahead of time on install instead of running interpreted on the first launches.
+HSPLcom/mihaicristiancondrea/android/apps/apptoolkit/core/shell/**;->**(**)**
+Lcom/mihaicristiancondrea/android/apps/apptoolkit/core/shell/**;

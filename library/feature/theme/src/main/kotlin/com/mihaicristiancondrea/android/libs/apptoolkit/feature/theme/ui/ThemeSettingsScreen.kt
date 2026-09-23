@@ -21,7 +21,6 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -58,6 +57,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -66,6 +66,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.filterSeasonalStaticPalettes
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.contracts.ThemeSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.WallpaperSwatchColors
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.toSwatchColors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ThemePaletteProvider.paletteById
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.views.WallpaperColorOptionCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
@@ -176,23 +177,20 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues) {
         ),
     )
 
-    val isSystemInDarkThemeNow: Boolean = isSystemInDarkTheme()
+    // Swatches follow the theme the app is drawn in, which can differ from the system's.
+    val isAppInDarkTheme: Boolean =
+        MaterialTheme.colorScheme.surface.luminance() < DARK_SURFACE_LUMINANCE
 
-    val wallpaperPreviewScheme: ColorScheme? = remember(supportsDynamic, isSystemInDarkThemeNow) {
+    val wallpaperPreviewScheme: ColorScheme? = remember(supportsDynamic, isAppInDarkTheme) {
         if (!supportsDynamic) null
-        else if (isSystemInDarkThemeNow) dynamicDarkColorScheme(context)
+        else if (isAppInDarkTheme) dynamicDarkColorScheme(context)
         else dynamicLightColorScheme(context)
     }
 
     val variantSwatches: List<WallpaperSwatchColors> = remember(wallpaperPreviewScheme) {
         val base = wallpaperPreviewScheme ?: return@remember emptyList()
         DynamicPaletteVariant.indices.map { variant ->
-            val scheme = base.applyDynamicVariant(variant)
-            WallpaperSwatchColors(
-                primary = scheme.primary,
-                secondary = scheme.secondary,
-                tertiary = scheme.tertiaryContainer,
-            )
+            base.applyDynamicVariant(variant).toSwatchColors()
         }
     }
 
@@ -223,11 +221,11 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues) {
     }
 
     val staticSwatches: List<WallpaperSwatchColors> =
-        remember(staticOptions, isSystemInDarkThemeNow) {
+        remember(staticOptions, isAppInDarkTheme) {
             staticOptions.map { id ->
                 val p = paletteById(id)
-                val scheme = if (isSystemInDarkThemeNow) p.darkColorScheme else p.lightColorScheme
-                WallpaperSwatchColors(scheme.primary, scheme.secondary, scheme.tertiary)
+                val scheme = if (isAppInDarkTheme) p.darkColorScheme else p.lightColorScheme
+                scheme.toSwatchColors()
             }
         }
 
@@ -572,3 +570,5 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues) {
         }
     }
 }
+
+private const val DARK_SURFACE_LUMINANCE: Float = 0.5f

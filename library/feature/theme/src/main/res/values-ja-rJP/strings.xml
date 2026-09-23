@@ -36,9 +36,6 @@
     <string name="seasonal_themes_title">季節のテーマ</string>
     <string name="seasonal_themes_summary">秘密を見つけました。ホリデーテーマはあなたのものです。</string>
     <string name="seasonal_themes_all_year">季節のテーマを一年中表示しますか？</string>
-    <string name="seasonal_themes_wear">ホリデーテーマ</string>
-    <string name="seasonal_theme_christmas">クリスマス</string>
-    <string name="seasonal_theme_halloween">ハロウィン</string>
     <string name="seasonal_themes_snowfall">降雪</string>
     <string name="seasonal_themes_snowfall_summary">クリスマステーマの使用中はアプリ全体に雪が降ります。</string>
     <string name="seasonal_themes_done">完了</string>

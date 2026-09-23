@@ -8,13 +8,16 @@
 
 - Added the orange color palette to the theme settings.
 - Added holiday greetings. The first time you open the app at Christmas or Halloween, it wishes you happy holidays and offers the holiday theme. Christmas comes with snow falling over the app. When the holiday is over, your usual theme comes back on its own.
-- Added a secret: tap the build version five times in About to unlock seasonal themes. A new button on the Theme settings page then lets you keep the Christmas and Halloween themes all year, switch between them, and turn the snow on or off.
+- Added a secret: tap the build version five times in About to unlock seasonal themes. A new button on the Theme settings page then lets you keep the Christmas and Halloween themes in the color list all year and turn the snow on or off.
 
 ### Changed
 
 - Improved how readable the colors are in every palette, especially buttons and links in the Android, yellow, and Halloween themes in light mode.
 - The Christmas theme now mixes red with green and gold.
 - The app no longer switches to the Christmas or Halloween colors on its own during the holidays. It asks first.
+- The app starts and draws its first screens faster after installing or updating.
+- The color picker in Theme settings shows brighter, truer previews of each palette, and the check on the selected one is always visible.
+- Battery saver now switches the app to its dark theme right away, with matching status bar icons.
 
 ### Fixed
 

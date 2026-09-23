@@ -36,9 +36,6 @@
     <string name="seasonal_themes_title">ธีมตามฤดูกาล</string>
     <string name="seasonal_themes_summary">คุณค้นพบความลับแล้ว ธีมเทศกาลเป็นของคุณ</string>
     <string name="seasonal_themes_all_year">แสดงธีมตามฤดูกาลตลอดทั้งปีไหม</string>
-    <string name="seasonal_themes_wear">ธีมเทศกาล</string>
-    <string name="seasonal_theme_christmas">คริสต์มาส</string>
-    <string name="seasonal_theme_halloween">ฮาโลวีน</string>
     <string name="seasonal_themes_snowfall">หิมะตก</string>
     <string name="seasonal_themes_snowfall_summary">หิมะจะตกทั่วทั้งแอปขณะเปิดธีมคริสต์มาส</string>
     <string name="seasonal_themes_done">เสร็จสิ้น</string>

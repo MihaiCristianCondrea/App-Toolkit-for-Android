@@ -36,9 +36,6 @@
     <string name="seasonal_themes_title">Mevsimsel temalar</string>
     <string name="seasonal_themes_summary">Sırrı buldun. Tatil temaları artık senin.</string>
     <string name="seasonal_themes_all_year">Mevsimsel temalar tüm yıl gösterilsin mi?</string>
-    <string name="seasonal_themes_wear">Tatil teması</string>
-    <string name="seasonal_theme_christmas">Noel</string>
-    <string name="seasonal_theme_halloween">Cadılar Bayramı</string>
     <string name="seasonal_themes_snowfall">Kar yağışı</string>
     <string name="seasonal_themes_snowfall_summary">Noel teması açıkken tüm uygulamada kar yağar.</string>
     <string name="seasonal_themes_done">Bitti</string>

@@ -1,0 +1,7 @@
+# The launcher activity, application startup and app-owned navigation assembly.
+# Merged into the host's release build and installed by androidx.profileinstaller, so this code is
+# compiled ahead of time on install instead of running interpreted on the first launches.
+HSPLcom/mihaicristiancondrea/android/apps/apptoolkit/app/**;->**(**)**
+Lcom/mihaicristiancondrea/android/apps/apptoolkit/app/**;
+HSPLcom/mihaicristiancondrea/android/apps/apptoolkit/AppToolkit;->**(**)**
+Lcom/mihaicristiancondrea/android/apps/apptoolkit/AppToolkit;

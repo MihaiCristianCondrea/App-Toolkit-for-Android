@@ -36,9 +36,6 @@
     <string name="seasonal_themes_title">Szezonális témák</string>
     <string name="seasonal_themes_summary">Megtaláltad a titkot. Az ünnepi témák a tieid.</string>
     <string name="seasonal_themes_all_year">Szezonális témák megjelenítése egész évben?</string>
-    <string name="seasonal_themes_wear">Ünnepi téma</string>
-    <string name="seasonal_theme_christmas">Karácsony</string>
-    <string name="seasonal_theme_halloween">Halloween</string>
     <string name="seasonal_themes_snowfall">Hóesés</string>
     <string name="seasonal_themes_snowfall_summary">Hó esik az egész alkalmazásban, amíg a karácsonyi téma be van kapcsolva.</string>
     <string name="seasonal_themes_done">Kész</string>

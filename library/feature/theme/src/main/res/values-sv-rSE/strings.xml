@@ -36,9 +36,6 @@
     <string name="seasonal_themes_title">Säsongsteman</string>
     <string name="seasonal_themes_summary">Du hittade hemligheten. Högtidstemana är dina.</string>
     <string name="seasonal_themes_all_year">Visa säsongsteman hela året?</string>
-    <string name="seasonal_themes_wear">Högtidstema</string>
-    <string name="seasonal_theme_christmas">Jul</string>
-    <string name="seasonal_theme_halloween">Halloween</string>
     <string name="seasonal_themes_snowfall">Snöfall</string>
     <string name="seasonal_themes_snowfall_summary">Snö faller över hela appen medan jultemat är på.</string>
     <string name="seasonal_themes_done">Klar</string>

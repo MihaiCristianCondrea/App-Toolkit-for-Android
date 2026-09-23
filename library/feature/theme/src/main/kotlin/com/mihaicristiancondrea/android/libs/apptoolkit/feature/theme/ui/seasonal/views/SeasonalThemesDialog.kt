@@ -17,28 +17,27 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.views
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Celebration
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.HolidaySeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.BasicAlertDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.R
@@ -49,7 +48,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasona
  * The easter egg's seasonal themes controls.
  *
  * Every change applies at once, like the rest of the theme screen, so the dialog has a single
- * button that closes it rather than a confirm and cancel pair.
+ * button that closes it rather than a confirm and cancel pair. The holiday palettes themselves are
+ * picked from the palette list, where the all-year switch keeps them.
  */
 @Composable
 fun SeasonalThemesDialog(
@@ -78,21 +78,6 @@ fun SeasonalThemesDialog(
                     checked = state.seasonal.allYear,
                     onCheckedChange = { onEvent(SeasonalThemesEvent.SetAllYear(it)) },
                 )
-                Text(
-                    text = stringResource(id = R.string.seasonal_themes_wear),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(top = SizeConstants.SmallSize),
-                )
-                Column(modifier = Modifier.selectableGroup()) {
-                    HolidaySeason.entries.forEach { season ->
-                        HolidayRow(
-                            label = stringResource(id = season.labelRes),
-                            selected = state.wornHoliday == season,
-                            onClick = { onEvent(SeasonalThemesEvent.WearHolidayTheme(season)) },
-                        )
-                    }
-                }
                 SwitchRow(
                     label = stringResource(id = R.string.seasonal_themes_snowfall),
                     summary = stringResource(id = R.string.seasonal_themes_snowfall_summary),
@@ -104,12 +89,10 @@ fun SeasonalThemesDialog(
     )
 }
 
-private val HolidaySeason.labelRes: Int
-    get() = when (this) {
-        HolidaySeason.CHRISTMAS -> R.string.seasonal_theme_christmas
-        HolidaySeason.HALLOWEEN -> R.string.seasonal_theme_halloween
-    }
-
+/**
+ * A switch setting drawn as its own rounded tile, the way grouped preferences look elsewhere in the
+ * toolkit. The whole tile toggles, so the switch itself takes no clicks of its own.
+ */
 @Composable
 private fun SwitchRow(
     label: String,
@@ -120,8 +103,10 @@ private fun SwitchRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .clip(RoundedCornerShape(SizeConstants.LargeSize))
+            .background(MaterialTheme.colorScheme.surfaceContainerHighest)
             .toggleable(value = checked, role = Role.Switch, onValueChange = onCheckedChange)
-            .padding(vertical = SizeConstants.SmallSize),
+            .padding(horizontal = SizeConstants.LargeSize, vertical = SizeConstants.MediumSize),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
     ) {
@@ -136,27 +121,5 @@ private fun SwitchRow(
             }
         }
         Switch(checked = checked, onCheckedChange = null)
-    }
-}
-
-@Composable
-private fun HolidayRow(
-    label: String,
-    selected: Boolean,
-    onClick: () -> Unit,
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .selectable(selected = selected, role = Role.RadioButton, onClick = onClick)
-            .padding(vertical = SizeConstants.ExtraSmallSize),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        RadioButton(selected = selected, onClick = null)
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(start = SizeConstants.SmallSize),
-        )
     }
 }

@@ -36,9 +36,6 @@
     <string name="seasonal_themes_title">Teme de sezon</string>
     <string name="seasonal_themes_summary">Ai descoperit secretul. Temele de sărbători sunt ale tale.</string>
     <string name="seasonal_themes_all_year">Afișezi temele de sezon tot anul?</string>
-    <string name="seasonal_themes_wear">Temă de sărbători</string>
-    <string name="seasonal_theme_christmas">Crăciun</string>
-    <string name="seasonal_theme_halloween">Halloween</string>
     <string name="seasonal_themes_snowfall">Ninsoare</string>
     <string name="seasonal_themes_snowfall_summary">Ninge în toată aplicația cât timp tema de Crăciun este activă.</string>
     <string name="seasonal_themes_done">Gata</string>

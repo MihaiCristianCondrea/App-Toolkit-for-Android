@@ -17,16 +17,13 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.states
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.HolidaySeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.SeasonalThemeState
 
 /**
  * What the seasonal themes controls on the theme screen show.
  *
  * @property seasonal The stored seasonal state, including whether the controls are unlocked.
- * @property wornHoliday The holiday whose palette is on screen right now, or null.
  */
 data class SeasonalThemesUiState(
     val seasonal: SeasonalThemeState = SeasonalThemeState(),
-    val wornHoliday: HolidaySeason? = null,
 )

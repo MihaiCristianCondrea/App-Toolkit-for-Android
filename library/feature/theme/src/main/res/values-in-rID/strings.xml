@@ -36,9 +36,6 @@
     <string name="seasonal_themes_title">Tema musiman</string>
     <string name="seasonal_themes_summary">Kamu menemukan rahasianya. Tema liburan kini milikmu.</string>
     <string name="seasonal_themes_all_year">Tampilkan tema musiman sepanjang tahun?</string>
-    <string name="seasonal_themes_wear">Tema liburan</string>
-    <string name="seasonal_theme_christmas">Natal</string>
-    <string name="seasonal_theme_halloween">Halloween</string>
     <string name="seasonal_themes_snowfall">Salju turun</string>
     <string name="seasonal_themes_snowfall_summary">Salju turun di seluruh aplikasi selama tema Natal aktif.</string>
     <string name="seasonal_themes_done">Selesai</string>

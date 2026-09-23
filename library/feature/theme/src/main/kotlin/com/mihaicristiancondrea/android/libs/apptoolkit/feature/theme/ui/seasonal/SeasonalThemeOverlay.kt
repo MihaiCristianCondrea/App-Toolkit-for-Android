@@ -19,18 +19,18 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.season
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.isSystemAnimationDisabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.effects.snowfall.SnowfallStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.effects.snowfall.snowfall
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppTheme
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.isAppInDarkTheme
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.contracts.SeasonalThemeOverlayEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.views.HolidayGreetingDialog
 import org.koin.compose.viewmodel.koinViewModel
@@ -44,6 +44,10 @@ import org.koin.compose.viewmodel.koinViewModel
  * takes no input, so it belongs last in a `Box` above the content.
  *
  * Snow is skipped when the person has turned animations off system-wide.
+ *
+ * It composes no app theme of its own until there is a greeting to show. It sits over every
+ * activity, and a second theme there meant a second set of preference collectors and a second
+ * color scheme per screen, most of the year for nothing. Snow only needs to know light from dark.
  */
 @Composable
 fun SeasonalThemeOverlay(modifier: Modifier = Modifier) {
@@ -53,7 +57,7 @@ fun SeasonalThemeOverlay(modifier: Modifier = Modifier) {
 
     val context = LocalContext.current
     val animationsDisabled: Boolean = remember(context) { context.isSystemAnimationDisabled() }
-    val isDarkSurface: Boolean = MaterialTheme.colorScheme.surface.luminance() < DARK_SURFACE_LUMINANCE
+    val isDarkSurface: Boolean = isAppInDarkTheme(themeMode = state.themeMode)
     val style: SnowfallStyle = remember(isDarkSurface) {
         SnowfallStyle(colors = if (isDarkSurface) darkSurfaceSnow else lightSurfaceSnow)
     }
@@ -65,16 +69,16 @@ fun SeasonalThemeOverlay(modifier: Modifier = Modifier) {
     )
 
     state.greeting?.let { season ->
-        HolidayGreetingDialog(
-            season = season,
-            onAnswer = { useHolidayTheme ->
-                viewModel.onEvent(SeasonalThemeOverlayEvent.AnswerGreeting(useHolidayTheme))
-            },
-        )
+        AppTheme {
+            HolidayGreetingDialog(
+                season = season,
+                onAnswer = { useHolidayTheme ->
+                    viewModel.onEvent(SeasonalThemeOverlayEvent.AnswerGreeting(useHolidayTheme))
+                },
+            )
+        }
     }
 }
-
-private const val DARK_SURFACE_LUMINANCE: Float = 0.5f
 
 private val darkSurfaceSnow: List<Color> = listOf(Color.White, Color(0xFFDCE8F5))
 

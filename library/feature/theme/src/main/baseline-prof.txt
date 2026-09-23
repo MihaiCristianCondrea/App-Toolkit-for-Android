@@ -1,0 +1,5 @@
+# The seasonal overlay is composed over every activity; the theme page is a common settings stop.
+# Merged into the host's release build and installed by androidx.profileinstaller, so this code is
+# compiled ahead of time on install instead of running interpreted on the first launches.
+HSPLcom/mihaicristiancondrea/android/libs/apptoolkit/feature/theme/**;->**(**)**
+Lcom/mihaicristiancondrea/android/libs/apptoolkit/feature/theme/**;

@@ -72,6 +72,9 @@ flowchart TD
 - `AppTheme`, `AppThemeConfig`, `ColorPalette`, palette providers/values, theme models, and
   selection composables.
 - `Modifier.snowfall`, `SnowfallStyle`, and `SnowflakeShape`.
+- `isAppInDarkTheme(themeMode)`, the same light or dark decision `AppTheme` makes, for surfaces
+  that need it without composing a whole theme.
+- `ColorScheme.toSwatchColors()`, the colors a palette swatch shows.
 - `ToolkitIcon`, `ToolkitIconReplayMode`, `resolveToolkitIcon`, `ToolkitIconContent`, and
   `AnimatedToolkitIcon`. See [the Toolkit Icon API](#toolkit-icon-api) below.
 
@@ -317,6 +320,20 @@ Dark schemes keep their authored accents. Every palette also defines its own fix
 Compose fills them with the baseline purple. `StaticPaletteContrastTest` guards text at 4.5:1 on every surface it is
 drawn on (including `primary` on surfaces and `inversePrimary` on snackbars), outlines at 3:1, and
 the fixed roles.
+
+`AppTheme` rebuilds its color scheme only when one of its inputs changes, and builds the wallpaper
+schemes only when dynamic colors are on. Battery saver, which forces the dark theme, is followed
+through its broadcast, and the status bar icons use the same decision as the colors.
+
+Palette swatches show each accent's more colorful variant (role or container), so a light palette
+whose brand color sits in its container still shows that color. The mosaic is one cached draw, and
+the selection check is drawn in black or white on the swatch's own primary with a ring around it,
+so it stays visible on every palette.
+
+The module ships `src/main/baseline-prof.txt`, as do `:library:core:ui`, `:library:navigation` and
+`:library:feature:theme`. A host's release build merges them and `androidx.profileinstaller`
+installs them, so toolkit code is compiled ahead of time on install rather than interpreted on the
+first launches.
 
 `Modifier.snowfall(SnowfallStyle)` in `ui.effects.snowfall` draws falling snow over an element. It
 runs in the draw phase only, keeps flake state in plain arrays rather than snapshot state, and

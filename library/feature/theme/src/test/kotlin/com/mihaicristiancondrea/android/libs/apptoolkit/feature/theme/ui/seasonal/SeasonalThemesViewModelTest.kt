@@ -17,12 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.HolidaySeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.SeasonalThemeState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.ThemePreferencesState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.contracts.SeasonalThemesEvent
 import io.mockk.coVerify
@@ -33,7 +29,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertEquals
-import kotlin.test.assertNull
 
 class SeasonalThemesViewModelTest {
 
@@ -43,41 +38,28 @@ class SeasonalThemesViewModelTest {
         val dispatcherExtension = UnconfinedDispatcherExtension()
     }
 
-    private val themeState = MutableStateFlow(themeWith(StaticPaletteIds.HALLOWEEN, dynamic = false))
+    private val seasonalState = MutableStateFlow(SeasonalThemeState(unlocked = true))
     private val seasonal: SeasonalThemeRepository = mockk(relaxed = true) {
-        every { state } returns MutableStateFlow(SeasonalThemeState(unlocked = true))
-    }
-    private val theme: ThemePreferencesRepository = mockk(relaxed = true) {
-        every { preferencesState } returns themeState
+        every { state } returns seasonalState
     }
 
     @Test
-    fun `the worn holiday follows the palette on screen`() = runTest {
-        val viewModel = SeasonalThemesViewModel(seasonal = seasonal, theme = theme)
-        assertEquals(HolidaySeason.HALLOWEEN, viewModel.uiState.value.data!!.wornHoliday)
+    fun `the state follows the stored seasonal themes`() = runTest {
+        val viewModel = SeasonalThemesViewModel(seasonal = seasonal)
+        assertEquals(SeasonalThemeState(unlocked = true), viewModel.uiState.value.data!!.seasonal)
 
-        themeState.value = themeWith(StaticPaletteIds.HALLOWEEN, dynamic = true)
-        assertNull(viewModel.uiState.value.data!!.wornHoliday, "wallpaper colors hide the palette")
+        seasonalState.value = SeasonalThemeState(unlocked = true, allYear = true)
+        assertEquals(true, viewModel.uiState.value.data!!.seasonal.allYear)
     }
 
     @Test
-    fun `events reach the repositories`() = runTest {
-        val viewModel = SeasonalThemesViewModel(seasonal = seasonal, theme = theme)
+    fun `events reach the repository`() = runTest {
+        val viewModel = SeasonalThemesViewModel(seasonal = seasonal)
 
         viewModel.onEvent(SeasonalThemesEvent.SetAllYear(true))
         viewModel.onEvent(SeasonalThemesEvent.SetSnowfall(false))
-        viewModel.onEvent(SeasonalThemesEvent.WearHolidayTheme(HolidaySeason.CHRISTMAS))
 
         coVerify { seasonal.setSeasonalThemesAllYear(true) }
         coVerify { seasonal.setSnowfallEnabled(false) }
-        coVerify { theme.selectStaticPalette(StaticPaletteIds.CHRISTMAS) }
     }
-
-    private fun themeWith(paletteId: String, dynamic: Boolean) = ThemePreferencesState(
-        themeMode = "follow_system",
-        dynamicColors = dynamic,
-        amoledMode = false,
-        dynamicPaletteVariant = 0,
-        staticPaletteId = paletteId,
-    )
 }

@@ -36,9 +36,6 @@
     <string name="seasonal_themes_title">Mga seasonal na theme</string>
     <string name="seasonal_themes_summary">Natuklasan mo ang sikreto. Sa iyo na ang mga holiday theme.</string>
     <string name="seasonal_themes_all_year">Ipakita ang mga seasonal na theme buong taon?</string>
-    <string name="seasonal_themes_wear">Holiday theme</string>
-    <string name="seasonal_theme_christmas">Pasko</string>
-    <string name="seasonal_theme_halloween">Halloween</string>
     <string name="seasonal_themes_snowfall">Pag-ulan ng niyebe</string>
     <string name="seasonal_themes_snowfall_summary">Umuulan ng niyebe sa buong app habang naka-on ang Christmas theme.</string>
     <string name="seasonal_themes_done">Tapos na</string>

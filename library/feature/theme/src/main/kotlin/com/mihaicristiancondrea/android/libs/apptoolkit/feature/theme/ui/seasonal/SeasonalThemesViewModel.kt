@@ -18,9 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal
 
 import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.HolidaySeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
@@ -28,18 +26,16 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateSc
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.updateData
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.contracts.SeasonalThemesEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.states.SeasonalThemesUiState
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 /**
- * Owns the seasonal themes controls on the theme screen: whether they show at all, which holiday
- * palette is worn, and the easter egg switches.
+ * Owns the seasonal themes controls on the theme screen: whether they show at all, and the easter
+ * egg switches.
  */
 class SeasonalThemesViewModel(
     private val seasonal: SeasonalThemeRepository,
-    private val theme: ThemePreferencesRepository,
 ) : ScreenViewModel<SeasonalThemesUiState, SeasonalThemesEvent, ActionEvent>(
     initialState = UiStateScreen(
         screenState = ScreenState.Success(),
@@ -48,13 +44,8 @@ class SeasonalThemesViewModel(
 ) {
 
     init {
-        combine(seasonal.state, theme.preferencesState) { seasonalState, themeState ->
-            SeasonalThemesUiState(
-                seasonal = seasonalState,
-                wornHoliday = HolidaySeason.fromPaletteId(themeState.staticPaletteId)
-                    .takeUnless { themeState.dynamicColors },
-            )
-        }.onEach { state ->
+        seasonal.state.onEach { seasonalState ->
+            val state = SeasonalThemesUiState(seasonal = seasonalState)
             updateStateThreadSafe {
                 screenState.updateData(newState = ScreenState.Success()) { state }
             }
@@ -69,10 +60,6 @@ class SeasonalThemesViewModel(
 
             is SeasonalThemesEvent.SetSnowfall -> persist {
                 seasonal.setSnowfallEnabled(event.enabled)
-            }
-
-            is SeasonalThemesEvent.WearHolidayTheme -> persist {
-                theme.selectStaticPalette(event.season.paletteId)
             }
         }
     }

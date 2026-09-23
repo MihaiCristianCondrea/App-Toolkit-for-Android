@@ -36,9 +36,6 @@
     <string name="seasonal_themes_title">Temi stagionali</string>
     <string name="seasonal_themes_summary">Hai scoperto il segreto. I temi delle feste sono tuoi.</string>
     <string name="seasonal_themes_all_year">Mostrare i temi stagionali tutto l\'anno?</string>
-    <string name="seasonal_themes_wear">Tema festivo</string>
-    <string name="seasonal_theme_christmas">Natale</string>
-    <string name="seasonal_theme_halloween">Halloween</string>
     <string name="seasonal_themes_snowfall">Nevicata</string>
     <string name="seasonal_themes_snowfall_summary">La neve cade in tutta l\'app mentre il tema natalizio è attivo.</string>
     <string name="seasonal_themes_done">Fatto</string>

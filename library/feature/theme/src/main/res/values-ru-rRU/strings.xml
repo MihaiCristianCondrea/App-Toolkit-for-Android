@@ -36,9 +36,6 @@
     <string name="seasonal_themes_title">Сезонные темы</string>
     <string name="seasonal_themes_summary">Вы нашли секрет. Праздничные темы теперь ваши.</string>
     <string name="seasonal_themes_all_year">Показывать сезонные темы весь год?</string>
-    <string name="seasonal_themes_wear">Праздничная тема</string>
-    <string name="seasonal_theme_christmas">Рождество</string>
-    <string name="seasonal_theme_halloween">Хэллоуин</string>
     <string name="seasonal_themes_snowfall">Снегопад</string>
     <string name="seasonal_themes_snowfall_summary">Снег идёт по всему приложению, пока включена рождественская тема.</string>
     <string name="seasonal_themes_done">Готово</string>

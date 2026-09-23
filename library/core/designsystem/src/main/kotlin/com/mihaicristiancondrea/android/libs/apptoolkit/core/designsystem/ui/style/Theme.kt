@@ -18,7 +18,10 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style
 
 import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.os.PowerManager
 import android.view.View
@@ -31,72 +34,111 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ColorPalette
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ThemePaletteProvider.paletteById
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.typography.AppTypography
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.colorscheme.applyDynamicVariant
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.rememberCommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ColorPalette
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ThemePaletteProvider.paletteById
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.typography.AppTypography
 
 object AppThemeConfig {
     var customLightScheme: ColorScheme? = null
     var customDarkScheme: ColorScheme? = null
 }
 
-private fun getColorScheme(
+/**
+ * Resolves the color scheme the app is drawn in.
+ *
+ * The wallpaper-based schemes are only built when they are used: each one reads roughly fifty
+ * colors from the system, and this runs whenever an input changes.
+ */
+private fun resolveColorScheme(
     isDarkTheme: Boolean,
     isAmoledMode: Boolean,
     isDynamicColors: Boolean,
     dynamicPaletteVariant: Int,
     staticPaletteId: String,
-    context: Context
+    customLightScheme: ColorScheme?,
+    customDarkScheme: ColorScheme?,
+    context: Context,
 ): ColorScheme {
-    val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-    val shouldUseDarkTheme = isDarkTheme || powerManager.isPowerSaveMode
-
-    val supportsDynamic = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-
-    val selectedPalette: ColorPalette = paletteById(staticPaletteId)
-
-    val useCustomOverride: Boolean = staticPaletteId == StaticPaletteIds.DEFAULT
-
-    val baseLightScheme: ColorScheme =
-        if (useCustomOverride) AppThemeConfig.customLightScheme ?: selectedPalette.lightColorScheme
-        else selectedPalette.lightColorScheme
-
-    val baseDarkScheme: ColorScheme =
-        if (useCustomOverride) AppThemeConfig.customDarkScheme ?: selectedPalette.darkColorScheme
-        else selectedPalette.darkColorScheme
-
-    val dynamicDark: ColorScheme =
-        if (supportsDynamic) dynamicDarkColorScheme(context) else baseDarkScheme
-    val dynamicLight: ColorScheme =
-        if (supportsDynamic) dynamicLightColorScheme(context) else baseLightScheme
-
-    val dynamicDarkVariant = dynamicDark.applyDynamicVariant(dynamicPaletteVariant)
-    val dynamicLightVariant = dynamicLight.applyDynamicVariant(dynamicPaletteVariant)
-
-    val chosen: ColorScheme = when {
-        isDynamicColors && supportsDynamic -> if (shouldUseDarkTheme) dynamicDarkVariant else dynamicLightVariant
-        else -> if (shouldUseDarkTheme) baseDarkScheme else baseLightScheme
+    val chosen: ColorScheme = if (isDynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        val dynamic = if (isDarkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+        dynamic.applyDynamicVariant(dynamicPaletteVariant)
+    } else {
+        val selectedPalette: ColorPalette = paletteById(staticPaletteId)
+        val useCustomOverride: Boolean = staticPaletteId == StaticPaletteIds.DEFAULT
+        if (isDarkTheme) {
+            (if (useCustomOverride) customDarkScheme else null) ?: selectedPalette.darkColorScheme
+        } else {
+            (if (useCustomOverride) customLightScheme else null) ?: selectedPalette.lightColorScheme
+        }
     }
 
-    return when {
-        isAmoledMode && shouldUseDarkTheme -> chosen.copy(
-            surface = Color.Black,
-            background = Color.Black,
+    return if (isAmoledMode && isDarkTheme) {
+        chosen.copy(surface = Color.Black, background = Color.Black)
+    } else {
+        chosen
+    }
+}
+
+/**
+ * Whether the app draws in its dark theme for [themeMode]: the person's choice, the system setting
+ * when they follow it, and always while battery saver is on.
+ *
+ * Battery saver is followed live through its broadcast, so turning it on or off restyles the app
+ * at once rather than on whatever happens to recompose next.
+ */
+@Composable
+fun isAppInDarkTheme(themeMode: String): Boolean {
+    val isSystemDarkTheme: Boolean = isSystemInDarkTheme()
+    val isPowerSaveMode: Boolean = rememberPowerSaveMode()
+    val chosenDark: Boolean = when (themeMode) {
+        DataStoreNamesConstants.THEME_MODE_DARK -> true
+        DataStoreNamesConstants.THEME_MODE_LIGHT -> false
+        else -> isSystemDarkTheme
+    }
+    return chosenDark || isPowerSaveMode
+}
+
+@Composable
+private fun rememberPowerSaveMode(): Boolean {
+    val context: Context = LocalContext.current
+    val powerManager: PowerManager? = remember(context) {
+        context.getSystemService(Context.POWER_SERVICE) as? PowerManager
+    }
+    var isPowerSaveMode: Boolean by remember(powerManager) {
+        mutableStateOf(powerManager?.isPowerSaveMode == true)
+    }
+    DisposableEffect(context, powerManager) {
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(receiverContext: Context?, intent: Intent?) {
+                isPowerSaveMode = powerManager?.isPowerSaveMode == true
+            }
+        }
+        ContextCompat.registerReceiver(
+            context,
+            receiver,
+            IntentFilter(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED),
+            ContextCompat.RECEIVER_NOT_EXPORTED,
         )
-
-        else -> chosen
+        onDispose { context.unregisterReceiver(receiver) }
     }
+    return isPowerSaveMode
 }
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -112,24 +154,33 @@ fun AppTheme(content: @Composable () -> Unit) {
     val adsEnabled = dataStore.adsEnabledFlow
         .collectAsStateWithLifecycle()
 
-    val isSystemDarkTheme: Boolean = isSystemInDarkTheme()
-    val isDarkTheme: Boolean = when (themePreferences.themeMode) {
-        DataStoreNamesConstants.THEME_MODE_DARK -> true
-        DataStoreNamesConstants.THEME_MODE_LIGHT -> false
-        else -> isSystemDarkTheme
-    }
+    val isDarkTheme: Boolean = isAppInDarkTheme(themeMode = themePreferences.themeMode)
+    val customLightScheme: ColorScheme? = AppThemeConfig.customLightScheme
+    val customDarkScheme: ColorScheme? = AppThemeConfig.customDarkScheme
 
-    val colorScheme: ColorScheme = getColorScheme(
-        isDarkTheme = isDarkTheme,
-        isAmoledMode = themePreferences.amoledMode,
-        isDynamicColors = themePreferences.dynamicColors,
-        dynamicPaletteVariant = themePreferences.dynamicPaletteVariant,
-        staticPaletteId = themePreferences.staticPaletteId,
-        context = context
-    )
+    // Rebuilt only when an input changes, not on every recomposition of the root.
+    val colorScheme: ColorScheme = remember(
+        isDarkTheme,
+        themePreferences,
+        customLightScheme,
+        customDarkScheme,
+        context,
+    ) {
+        resolveColorScheme(
+            isDarkTheme = isDarkTheme,
+            isAmoledMode = themePreferences.amoledMode,
+            isDynamicColors = themePreferences.dynamicColors,
+            dynamicPaletteVariant = themePreferences.dynamicPaletteVariant,
+            staticPaletteId = themePreferences.staticPaletteId,
+            customLightScheme = customLightScheme,
+            customDarkScheme = customDarkScheme,
+            context = context,
+        )
+    }
 
     val view: View = LocalView.current
     if (!view.isInEditMode) {
+        // isDarkTheme already includes battery saver, so the status bar icons match the colors.
         SideEffect {
             val window: Window = (view.context as Activity).window
             @Suppress("DEPRECATION")

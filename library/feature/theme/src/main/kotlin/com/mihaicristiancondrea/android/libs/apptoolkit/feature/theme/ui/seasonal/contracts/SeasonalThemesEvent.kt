@@ -17,11 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.contracts
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.HolidaySeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 
 sealed interface SeasonalThemesEvent : UiEvent {
     data class SetAllYear(val enabled: Boolean) : SeasonalThemesEvent
     data class SetSnowfall(val enabled: Boolean) : SeasonalThemesEvent
-    data class WearHolidayTheme(val season: HolidaySeason) : SeasonalThemesEvent
 }

@@ -36,9 +36,6 @@
     <string name="seasonal_themes_title">Saisonale Designs</string>
     <string name="seasonal_themes_summary">Du hast das Geheimnis gefunden. Die Feiertagsdesigns gehören dir.</string>
     <string name="seasonal_themes_all_year">Saisonale Designs das ganze Jahr anzeigen?</string>
-    <string name="seasonal_themes_wear">Feiertagsdesign</string>
-    <string name="seasonal_theme_christmas">Weihnachten</string>
-    <string name="seasonal_theme_halloween">Halloween</string>
     <string name="seasonal_themes_snowfall">Schneefall</string>
     <string name="seasonal_themes_snowfall_summary">Schnee fällt in der ganzen App, solange das Weihnachtsdesign aktiv ist.</string>
     <string name="seasonal_themes_done">Fertig</string>

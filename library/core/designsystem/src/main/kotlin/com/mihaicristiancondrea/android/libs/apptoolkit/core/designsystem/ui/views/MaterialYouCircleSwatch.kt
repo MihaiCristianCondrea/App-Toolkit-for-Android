@@ -20,16 +20,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.vi
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material3.Icon
@@ -37,12 +29,29 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.graphics.graphicsLayer
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.unit.dp
 
+/**
+ * A round preview of a palette: [primary] across the top half, [secondary] and [tertiary] sharing
+ * the bottom, split by thin [dividerColor] lines.
+ *
+ * The mosaic is one draw call over a cached circle, rather than a column and row of colored boxes,
+ * so a row of swatches adds one node each instead of eight.
+ *
+ * The selection check sits in a badge filled with the swatch's own [primary], ringed with
+ * [dividerColor], and drawn in black or white, whichever stands out more. It used to take the app's
+ * current theme colors, which on some palettes (every dark one among them) matched the swatch
+ * underneath closely enough to hide the check.
+ */
 @Composable
 fun MaterialYouCircleSwatch(
     primary: Color,
@@ -50,76 +59,78 @@ fun MaterialYouCircleSwatch(
     tertiary: Color,
     selected: Boolean,
     modifier: Modifier = Modifier,
-    indicatorFraction: Float = 0.58f,
+    indicatorFraction: Float = 0.5f,
+    dividerColor: Color = MaterialTheme.colorScheme.surfaceContainer,
 ) {
+    val progress = animateFloatAsState(
+        targetValue = if (selected) 1f else 0f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessMediumLow,
+        ),
+        label = "swatchSelectionProgress",
+    )
+
     Box(
-        modifier = modifier.clip(CircleShape)
+        modifier = modifier.drawWithCache {
+            val circle = Path().apply { addOval(Rect(Offset.Zero, size)) }
+            val half = size.height / 2f
+            val divider = DIVIDER_WIDTH.toPx()
+            onDrawBehind {
+                clipPath(circle) {
+                    drawRect(primary, size = Size(size.width, half))
+                    drawRect(secondary, topLeft = Offset(0f, half), size = Size(size.width / 2f, half))
+                    drawRect(
+                        tertiary,
+                        topLeft = Offset(size.width / 2f, half),
+                        size = Size(size.width / 2f, half),
+                    )
+                    drawLine(dividerColor, Offset(0f, half), Offset(size.width, half), divider)
+                    drawLine(
+                        dividerColor,
+                        Offset(size.width / 2f, half),
+                        Offset(size.width / 2f, size.height),
+                        divider,
+                    )
+                }
+            }
+        },
+        contentAlignment = Alignment.Center,
     ) {
-        Column(Modifier.fillMaxSize()) {
-            Box(
-                Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .clipToBounds()
-            ) {
-                Spacer(
-                    Modifier
-                        .fillMaxSize()
-                        .background(primary)
-                )
-            }
-
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-            ) {
-                Spacer(
-                    Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                        .background(secondary)
-                )
-                Spacer(
-                    Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                        .background(tertiary)
-                )
-            }
-        }
-
-        val progress = animateFloatAsState(
-            targetValue = if (selected) 1f else 0f,
-            animationSpec = spring(
-                dampingRatio = Spring.DampingRatioMediumBouncy,
-                stiffness = Spring.StiffnessMediumLow
-            ),
-            label = "swatchSelectionProgress"
-        ).value
-
-        val scale = 0.80f + (0.20f * progress)
-
+        val checkColor = if (primary.luminance() > DARK_CHECK_LUMINANCE) Color.Black else Color.White
         Box(
             modifier = Modifier
-                .align(Alignment.Center)
                 .fillMaxSize(indicatorFraction)
                 .graphicsLayer {
-                    alpha = progress
+                    // Read in the draw phase, so the selection spring never recomposes the swatch.
+                    val value = progress.value
+                    alpha = value.coerceIn(0f, 1f)
+                    val scale = 0.8f + 0.2f * value
                     scaleX = scale
                     scaleY = scale
                 }
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.onPrimaryContainer)
-                .padding(SizeConstants.ExtraSmallSize),
-            contentAlignment = Alignment.Center
+                .drawWithCache {
+                    val ring = DIVIDER_WIDTH.toPx()
+                    onDrawBehind {
+                        drawCircle(dividerColor)
+                        drawCircle(primary, radius = size.minDimension / 2f - ring)
+                    }
+                },
+            contentAlignment = Alignment.Center,
         ) {
             Icon(
                 imageVector = Icons.Rounded.Check,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.fillMaxSize(0.7f)
+                tint = checkColor,
+                modifier = Modifier.fillMaxSize(CHECK_FRACTION),
             )
         }
     }
 }
+
+private val DIVIDER_WIDTH = 2.dp
+
+/** Above this luminance black reads better on the badge than white does. */
+private const val DARK_CHECK_LUMINANCE: Float = 0.18f
+
+private const val CHECK_FRACTION: Float = 0.62f

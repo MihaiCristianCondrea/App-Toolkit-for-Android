@@ -33,6 +33,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasona
 import java.time.LocalDate
 import java.time.ZoneId
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -75,12 +76,13 @@ class SeasonalThemeOverlayViewModel(
         }
 
         combine(seasonal.state, theme.preferencesState) { seasonalState, themeState ->
-            seasonalState.snowfallEnabled &&
+            val showSnowfall = seasonalState.snowfallEnabled &&
                 !themeState.dynamicColors &&
                 themeState.staticPaletteId == StaticPaletteIds.CHRISTMAS &&
                 (seasonalState.unlocked || today().isChristmasSeason)
-        }.onEach { showSnowfall ->
-            update { it.copy(showSnowfall = showSnowfall) }
+            showSnowfall to themeState.themeMode
+        }.distinctUntilChanged().onEach { (showSnowfall, themeMode) ->
+            update { it.copy(showSnowfall = showSnowfall, themeMode = themeMode) }
         }.launchIn(viewModelScope)
     }
 

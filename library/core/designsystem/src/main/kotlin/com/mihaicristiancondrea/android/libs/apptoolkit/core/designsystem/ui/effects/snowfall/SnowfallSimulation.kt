@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.effects.snowfall
 
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -60,10 +61,11 @@ internal class SnowfallSimulation(
 
     /** Radians per millisecond. */
     private var swayFrequency = FloatArray(0)
-    private var alpha = FloatArray(0)
     private var rotation = FloatArray(0)
     private var rotationSpeed = FloatArray(0)
-    private var colorIndex = IntArray(0)
+
+    /** Each flake's final color, its opacity already applied, so drawing does no color math. */
+    private var color = Array(0) { Color.Unspecified }
     private var crystal = BooleanArray(0)
 
     /**
@@ -93,6 +95,8 @@ internal class SnowfallSimulation(
             }
         }
     }
+
+    private val crystalStroke = Stroke(width = CRYSTAL_STROKE, cap = StrokeCap.Round)
 
     private var windPxPerMs: Float = 0f
 
@@ -128,10 +132,9 @@ internal class SnowfallSimulation(
         swayAmplitude = FloatArray(count)
         swayPhase = FloatArray(count)
         swayFrequency = FloatArray(count)
-        alpha = FloatArray(count)
         rotation = FloatArray(count)
         rotationSpeed = FloatArray(count)
-        colorIndex = IntArray(count)
+        color = Array(count) { Color.Unspecified }
         crystal = BooleanArray(count)
 
         val minRadius = style.minSize.value * pxPerDp / 2f
@@ -145,14 +148,15 @@ internal class SnowfallSimulation(
             radius[index] = minRadius + (maxRadius - minRadius) * depth
             fallSpeed[index] = (MIN_FALL_DP_PER_SECOND + FALL_RANGE_DP_PER_SECOND * depth) *
                 speed * pxPerDp / MILLIS_PER_SECOND
-            alpha[index] = style.minAlpha + (style.maxAlpha - style.minAlpha) * depth
+            val opacity = style.minAlpha + (style.maxAlpha - style.minAlpha) * depth
             swayAmplitude[index] = (MIN_SWAY_DP + random.nextFloat() * SWAY_RANGE_DP) * pxPerDp
             swayPhase[index] = random.nextFloat() * TWO_PI
             swayFrequency[index] = (MIN_SWAY_HZ + random.nextFloat() * SWAY_RANGE_HZ) * TWO_PI /
                 MILLIS_PER_SECOND
             rotation[index] = random.nextFloat() * FULL_TURN_DEGREES
             rotationSpeed[index] = (random.nextFloat() - 0.5f) * MAX_ROTATION_DEGREES_PER_MS
-            colorIndex[index] = random.nextInt(style.colors.size)
+            val base = style.colors[random.nextInt(style.colors.size)]
+            color[index] = base.copy(alpha = base.alpha * opacity)
             crystal[index] = when (style.shape) {
                 SnowflakeShape.Dots -> false
                 SnowflakeShape.Crystals -> true
@@ -192,9 +196,7 @@ internal class SnowfallSimulation(
     /** Draws every flake into this scope. */
     fun draw(scope: DrawScope) {
         for (index in 0 until flakeCount) {
-            val color = style.colors[colorIndex[index]].copy(
-                alpha = style.colors[colorIndex[index]].alpha * alpha[index],
-            )
+            val color = color[index]
             val center = positionOf(index)
             if (crystal[index]) {
                 scope.translate(left = center.x, top = center.y) {
@@ -203,7 +205,7 @@ internal class SnowfallSimulation(
                             drawPath(
                                 path = crystalPath,
                                 color = color,
-                                style = Stroke(width = CRYSTAL_STROKE, cap = StrokeCap.Round),
+                                style = crystalStroke,
                             )
                         }
                     }
