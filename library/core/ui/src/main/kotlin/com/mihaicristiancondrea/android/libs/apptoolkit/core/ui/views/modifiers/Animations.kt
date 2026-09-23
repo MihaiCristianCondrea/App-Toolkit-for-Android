@@ -17,47 +17,153 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers
 
+import android.os.SystemClock
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.isSystemAnimationDisabled
+import kotlinx.coroutines.delay
+import kotlin.math.abs
 import kotlin.math.min
-import kotlin.time.Duration.Companion.milliseconds
 
 /**
- * Animates the visibility of a composable with a fade and vertical offset animation.
+ * Fades and slides a composable into place the first time it appears, cascading with everything
+ * that appears alongside it.
  *
- * Staggering by [index] makes an item far down a list wait for every position above it, so a cell
- * scrolled into view later stayed blank for up to [maxStaggeredItems] × [staggerDelay]
- * milliseconds. [animateEntrance] staggers by arrival instead, only for the list's first reveal,
- * and takes its offset in dp.
+ * Every element animates in, including the ones scrolled into view later, so a screen built from
+ * these stays in motion as it is explored. Elements that appear together form a wave and come in
+ * one after another, [staggerDelay] apart. The first screenful is one wave, so it cascades from the
+ * top; each row scrolled into view afterwards starts a small wave of its own. An element therefore
+ * waits only for the elements that appeared with it, never for the whole list above it, and one
+ * scrolled to at the bottom of a long list animates straight away.
  *
- * @param index Used to stagger the start time of the animation for items in a list or grid.
- * @param invisibleOffsetY The vertical offset in pixels applied before the animation starts.
- * @param animationDuration Duration of the fade/offset animation in milliseconds.
- * @param staggerDelay Amount of delay in milliseconds per [index] before the animation starts.
- * @param maxStaggeredItems Positions past this one wait no longer than it.
+ * Nothing needs to be set up. It works the same in a `LazyColumn`, a lazy grid, a `Column`, or on
+ * a single element:
+ *
+ * ```kotlin
+ * LazyColumn {
+ *     items(rows, key = { it.id }) { row ->
+ *         RowCard(row, modifier = Modifier.animateItem().animateVisibility())
+ *     }
+ * }
+ * ```
+ *
+ * Once revealed, an element stays revealed. Inside a lazy list that is saved with the item, so an
+ * item scrolled away and back, or restored after a configuration change, is shown without playing
+ * again. When animations are turned off system-wide the element simply appears. The motion runs in
+ * the draw phase, so it neither recomposes nor re-lays out the element on each frame.
+ *
+ * @param index The element's position in its list, when it has one. It orders the cascade by
+ * position rather than by the order elements are composed in, counted from the first element of
+ * the wave, so a row scrolled into view deep in a list still starts at once. Leave it out and the
+ * cascade follows the order elements appear, which for a list is the same thing.
+ * @param invisibleOffsetY How far below its place, in pixels, the element starts.
+ * @param animationDuration Duration of the fade and the slide, in milliseconds.
+ * @param staggerDelay Delay between two consecutive elements of a wave, in milliseconds.
+ * @param maxStaggeredItems Elements further into a wave than this wait no longer than it does.
  */
-@Deprecated(
-    message = "Stagger by arrival with animateEntrance and a list-level " +
-            "rememberEntranceStagger(). Staggering by index delays items scrolled into view later.",
-    replaceWith = ReplaceWith(
-        expression = "animateEntrance()",
-        imports = [
-            "com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateEntrance",
-        ],
-    ),
-)
 @Composable
 fun Modifier.animateVisibility(
-    index: Int = 0,
+    index: Int? = null,
     invisibleOffsetY: Int = 50,
     animationDuration: Int = 300,
     staggerDelay: Int = 64,
     maxStaggeredItems: Int = 20,
 ): Modifier {
-    val offsetY = with(LocalDensity.current) { invisibleOffsetY.toDp() }
-    return entranceAnimation(
-        spec = EntranceSpec(offsetY = offsetY, duration = animationDuration.milliseconds),
-        startDelayMillis = { min(index, maxStaggeredItems) * staggerDelay.toLong() },
-    )
+    var revealed: Boolean by rememberSaveable { mutableStateOf(value = false) }
+    val progress = remember { Animatable(initialValue = if (revealed) 1f else 0f) }
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        if (revealed) return@LaunchedEffect
+        if (context.isSystemAnimationDisabled()) {
+            revealed = true
+            progress.snapTo(targetValue = 1f)
+            return@LaunchedEffect
+        }
+
+        delay(
+            timeMillis = VisibilityCascade.Shared.delayMillisFor(
+                index = index,
+                staggerDelayMillis = staggerDelay.toLong(),
+                maxStaggeredItems = maxStaggeredItems,
+            ),
+        )
+        // Marked before the motion runs, so an element that leaves halfway through comes back
+        // whole rather than playing again.
+        revealed = true
+        progress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(durationMillis = animationDuration),
+        )
+    }
+
+    return graphicsLayer {
+        val fraction: Float = progress.value
+        alpha = fraction
+        translationY = (1f - fraction) * invisibleOffsetY
+    }
+}
+
+/**
+ * Groups the elements that appear together into waves and staggers each wave.
+ *
+ * A wave is every element that starts revealing within [WAVE_WINDOW_MILLIS] of the wave's first
+ * one. The effects of the elements composed in one frame all run within a few milliseconds of each
+ * other, so the first screenful of a list is one wave, and a list being scrolled starts a new wave
+ * every few frames. Counting from the start of the wave, rather than from the top of the list, is
+ * what keeps an element deep in a long list from waiting for every position above it.
+ *
+ * One cascade is shared by the whole app instead of each list owning one, so the modifier needs no
+ * setup. It is only touched from effects, which run on the main thread.
+ */
+internal class VisibilityCascade(private val clock: () -> Long = SystemClock::uptimeMillis) {
+
+    private var waveStartedAt: Long = NOT_STARTED
+    private var arrivalsInWave: Int = 0
+    private var firstIndexInWave: Int? = null
+
+    /**
+     * How long an element that is about to be revealed waits.
+     *
+     * With an [index] the position is the distance from the first indexed element of the wave, so
+     * a wave cascades away from where it started in either scroll direction. Without one it is the
+     * element's arrival order within the wave.
+     */
+    fun delayMillisFor(index: Int?, staggerDelayMillis: Long, maxStaggeredItems: Int): Long {
+        val now: Long = clock()
+        if (waveStartedAt == NOT_STARTED || now - waveStartedAt > WAVE_WINDOW_MILLIS) {
+            waveStartedAt = now
+            arrivalsInWave = 0
+            firstIndexInWave = null
+        }
+
+        val arrival: Int = arrivalsInWave++
+        val position: Int = if (index != null) {
+            val firstIndex: Int = firstIndexInWave ?: index.also { firstIndexInWave = it }
+            abs(index - firstIndex)
+        } else {
+            arrival
+        }
+        return min(position, maxStaggeredItems.coerceAtLeast(0)) * staggerDelayMillis
+    }
+
+    companion object {
+        /** How long after a wave starts an element still joins it. About three frames. */
+        const val WAVE_WINDOW_MILLIS: Long = 50L
+
+        private const val NOT_STARTED: Long = -1L
+
+        /** The app-wide cascade every [animateVisibility] joins. */
+        val Shared: VisibilityCascade = VisibilityCascade()
+    }
 }

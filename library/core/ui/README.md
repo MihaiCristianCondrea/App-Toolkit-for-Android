@@ -102,11 +102,12 @@ remain available; data-layer callers should use the lower-level APIs.
   and out of a lazy layout. `NativeAdSlot`, `rememberNativeAd`, and `rememberNativeAdState` take a
   `cache` and a `cacheKey`; without both they keep the uncached behaviour of destroying the ad on
   disposal. See [Ads inside a lazy list or grid](../../integration/ads/README.md#ads-inside-a-lazy-list-or-grid).
-- `Modifier.animateEntrance`, `EntranceSpec`, and `rememberEntranceStagger` reveal content with a
-  fade and a rise. A stagger is shared by one list and orders items by arrival, so callers pass no
-  index, and only the list's first reveal is staggered: items scrolled in later come in at once.
-  The deprecated `animateVisibility` staggered by index, which held items far down a list back for
-  over a second; it now runs on the same implementation.
+- `Modifier.animateVisibility` fades and slides every element in the first time it appears, scrolled
+  in or not. Elements that appear together form a wave and cascade `staggerDelay` apart, counted
+  from the start of the wave rather than the top of the list, so the first screenful cascades from
+  the top and a row scrolled into view deep in a long list starts at once. `index` is optional; one
+  app-wide cascade groups the waves, so the modifier needs no setup. That grouping is
+  `VisibilityCascade`, which is unit tested.
 - `HorizontalWavyDivider`, `VerticalWavyDivider`, and `WavyDividerDefaults` draw the design
   system's `il_wavy_line` as a divider. The wave is drawn rather than tiled from the drawable, so it
   scales with the divider's band and fits a whole number of half-waves into any length; the fitting

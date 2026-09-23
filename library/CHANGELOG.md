@@ -14,7 +14,6 @@
 - Added `Context.isSystemAnimationDisabled()` to `:library:core:common`, and `isAppInDarkTheme(themeMode)` and `ColorScheme.toSwatchColors()` to `:library:core:designsystem`.
 - Added `GeneralSettingsContentProvider.ProvideActions`, which lets a settings page contribute top app bar actions. On tablets they appear in the settings bar while that page is open in the detail pane.
 - Added `NativeAdCache` and `rememberNativeAdCache` to `:library:core:ui`. `NativeAdSlot`, `rememberNativeAd`, and `rememberNativeAdState` take a `cache` and `cacheKey`, so an ad in a lazy list or grid survives its item scrolling out of view instead of being destroyed and requested again. An ad older than an hour is replaced, and every ad is destroyed when the cache leaves composition.
-- Added `Modifier.animateEntrance`, `EntranceSpec`, and `rememberEntranceStagger` to `:library:core:ui`. A list shares one stagger and needs no index: only its first reveal is staggered, in arrival order, and items scrolled into view later come in at once. The offset is in dp, durations are `Duration`s, the motion runs in the draw phase, and nothing animates when the system's animations are turned off.
 - Added `HorizontalWavyDivider` and `VerticalWavyDivider` to `:library:core:ui`, drawing `il_wavy_line` as a divider. The wave scales with the divider and fits a whole number of half-waves into any length, so it ends cleanly at any size. It takes the colour of Material's plain dividers by default.
 
 ### Improved
@@ -28,6 +27,7 @@
 - Improved `AppTheme` so it no longer re-subscribes to the theme preferences on every recomposition. Each re-subscription replayed the defaults, which could briefly swap the whole app's color scheme and recompose everything under it.
 - Improved `DisplaySettingsScreen` so it no longer restarts its startup-page subscription on every recomposition.
 - Improved `VersionInfoAlertDialogContent` so it uses Coil's shared image loader instead of building a new one, with its own caches, on every recomposition.
+- Improved `Modifier.animateVisibility` so an element scrolled into view deep in a long list animates in at once instead of waiting up to 1.3 seconds. Elements that appear together still cascade one after another, counted from the first of them rather than from the top of the list, so the first screenful looks exactly as before and every element scrolled in still animates. `index` is now optional: without it elements cascade in the order they appear. The motion also runs in the draw phase and is skipped when the system's animations are turned off.
 
 ### Fixed
 
@@ -45,7 +45,6 @@
 - Changed `AppTheme` so battery saver no longer forces the dark theme over an explicit Light choice. Light and Dark now mean what they say; "follow system" still goes dark in battery saver, because the system switches its own dark theme on there.
 - Changed `AboutViewModel` to take a `SeasonalThemeRepository` (`seasonalThemes`), which records the easter egg unlock. `aboutModule` passes it; hosts that construct the ViewModel themselves pass `get()` from the graph.
 - Renamed `DefaultDiagnosticsPreferencesDataSource` in `:library:core:datastore` to `DefaultUsageAndDiagnosticsPreferencesDataSource`, matching the `UsageAndDiagnosticsPreferencesDataSource` contract it implements. `CommonDataStore.diagnosticsPreferences` keeps its name and now has the renamed type. Hosts that name the class directly update the import.
-- Deprecated `Modifier.animateVisibility` in favour of `animateEntrance`. Its index-based stagger held an item far down a list back for up to 1.3 seconds after it scrolled into view. It keeps working, now with a density-independent offset, draw-phase motion, and the system's animation setting respected.
 
 ### Removed
 

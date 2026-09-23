@@ -21,7 +21,7 @@
 - Theme settings now opens with the color you're using already in view.
 - Choosing Light in Theme settings now keeps the app light when battery saver is on. Follow system still turns dark with the rest of the phone.
 - Ads on the Apps screen now stay loaded while you scroll. Scrolling back to an ad shows the same ad at once instead of an empty space while a new one loads.
-- Apps, Quick Tools, and Help now show items that scroll into view straight away. Only the first screenful comes in one after another, so items further down no longer stay blank for up to a second.
+- Items scrolled into view at the bottom of long lists on Apps, Quick Tools, and Help now animate in straight away instead of appearing after a long pause.
 
 ### Fixed
 

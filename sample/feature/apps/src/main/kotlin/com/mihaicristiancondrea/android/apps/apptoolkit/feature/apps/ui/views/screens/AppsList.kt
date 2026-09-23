@@ -59,8 +59,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememb
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.ads.AppsListNativeAdCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.FilterChipItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.TopListFilters
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateEntrance
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.rememberEntranceStagger
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import kotlinx.collections.immutable.ImmutableList
@@ -207,8 +206,6 @@ private fun AppsGrid(
     // Outside the grid, so an ad cell that scrolls away leaves its ad here instead of destroying it
     // and requesting another one when it scrolls back.
     val adCache: NativeAdCache = rememberNativeAdCache()
-    // Keyed on the filter so each filter's contents come in as a fresh staggered reveal.
-    val entrance = rememberEntranceStagger(selectedFilter)
 
     val layoutDirection = LocalLayoutDirection.current
     LazyVerticalGrid(
@@ -261,7 +258,7 @@ private fun AppsGrid(
                         isFavorite = isFavorite,
                         modifier = Modifier
                             .animateItem()
-                            .animateEntrance(stagger = entrance),
+                            .animateVisibility(index = index),
                         onFavoriteToggle = onFavoriteToggle,
                         onAppClick = onAppClick,
                         onShareClick = onShareClick
@@ -281,7 +278,7 @@ private fun AppsGrid(
                         ),
                         modifier = Modifier
                             .animateItem()
-                            .animateEntrance(stagger = entrance),
+                            .animateVisibility(index = index),
                     )
                 }
             }
