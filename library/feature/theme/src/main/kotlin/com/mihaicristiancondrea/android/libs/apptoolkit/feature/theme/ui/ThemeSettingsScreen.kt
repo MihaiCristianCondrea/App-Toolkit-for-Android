@@ -140,6 +140,8 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues) {
     val seasonalViewModel: SeasonalThemesViewModel = koinViewModel()
     val seasonalState by seasonalViewModel.uiState.collectAsStateWithLifecycle()
     val showSeasonalAllYear: Boolean = seasonalState.data?.seasonal?.let { it.unlocked && it.allYear } == true
+    // The seasonal switch can add palettes to the row, so rows wait for it before scrolling.
+    val seasonalLoaded: Boolean = seasonalState.data != null
 
     TrackScreenView(
         firebaseController = firebaseController,
@@ -239,12 +241,17 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues) {
 
     val variantRowState: LazyListState = rememberScrolledToSelected(
         selectedIndex = if (isDynamicColors) dynamicVariantIndex else -1,
+        ready = seasonalLoaded,
     )
     val selectedStaticIndex: Int = staticOptions.indexOf(staticPaletteId)
     val staticPagerRowState: LazyListState = rememberScrolledToSelected(
         selectedIndex = if (!isDynamicColors) selectedStaticIndex else -1,
+        ready = seasonalLoaded,
     )
-    val staticRowState: LazyListState = rememberScrolledToSelected(selectedIndex = selectedStaticIndex)
+    val staticRowState: LazyListState = rememberScrolledToSelected(
+        selectedIndex = selectedStaticIndex,
+        ready = seasonalLoaded,
+    )
 
     val tabTitles = listOf(
         stringResource(id = R.string.wallpaper_colors),
@@ -596,24 +603,29 @@ private const val DARK_SURFACE_LUMINANCE: Float = 0.5f
 /**
  * A row state that, once the row first lays out, brings [selectedIndex] to its center.
  *
- * It jumps rather than animates, so the screen opens already showing the choice instead of sliding
- * to it, and it runs once: picking another item later must not scroll the row under the finger.
- * A negative [selectedIndex] (nothing selected in this row) leaves the row at its start.
+ * It waits until [ready], so it scrolls to the stored selection rather than to a placeholder, then
+ * jumps rather than animates, so the screen opens already showing the choice. It runs once: picking
+ * another item later must not scroll the row under the finger. A negative [selectedIndex] (nothing
+ * selected in this row) leaves the row at its start.
  */
 @Composable
-private fun rememberScrolledToSelected(selectedIndex: Int): LazyListState {
+private fun rememberScrolledToSelected(selectedIndex: Int, ready: Boolean): LazyListState {
     val state: LazyListState = rememberLazyListState()
     var scrolled: Boolean by rememberSaveable { mutableStateOf(false) }
-    LaunchedEffect(state) {
-        if (scrolled || selectedIndex < 0) return@LaunchedEffect
-        snapshotFlow { state.layoutInfo.totalItemsCount }.first { it > selectedIndex }
-        state.scrollToItem(selectedIndex)
-        val item = state.layoutInfo.visibleItemsInfo.firstOrNull { it.index == selectedIndex }
+    val currentIndex: Int by rememberUpdatedState(selectedIndex)
+    LaunchedEffect(state, ready) {
+        if (!ready || scrolled) return@LaunchedEffect
+        scrolled = true
+        val target = currentIndex
+        if (target < 0) return@LaunchedEffect
+        // The row may sit on a pager page that is not composed yet; this waits for its first layout.
+        snapshotFlow { state.layoutInfo.totalItemsCount }.first { it > target }
+        state.scrollToItem(target)
+        val item = state.layoutInfo.visibleItemsInfo.firstOrNull { it.index == target }
         if (item != null) {
             val viewport = state.layoutInfo.viewportEndOffset - state.layoutInfo.viewportStartOffset
             state.scrollBy((item.offset + item.size / 2f) - viewport / 2f)
         }
-        scrolled = true
     }
     return state
 }

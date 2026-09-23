@@ -24,11 +24,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedD
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 class ThemeSettingsViewModelTest {
 
@@ -56,6 +58,32 @@ class ThemeSettingsViewModelTest {
         viewModel.onEvent(ThemeSettingsEvent.SelectStaticPalette("rose"))
 
         coVerify { preferences.selectStaticPalette("rose") }
+    }
+
+    /**
+     * The page scrolls its palette rows to the first selection it sees. A placeholder selection
+     * before the stored one arrived made it scroll to the wrong palette.
+     */
+    @Test
+    fun `nothing is selected until the stored preferences arrive`() = runTest {
+        val stored = MutableSharedFlow<ThemePreferencesState>()
+        val preferences: ThemePreferencesRepository = mockk(relaxed = true) {
+            every { preferencesState } returns stored
+        }
+
+        val viewModel = ThemeSettingsViewModel(preferences)
+        assertNull(viewModel.uiState.value.data)
+
+        stored.emit(
+            ThemePreferencesState(
+                themeMode = "dark",
+                dynamicColors = false,
+                amoledMode = false,
+                dynamicPaletteVariant = 0,
+                staticPaletteId = "rose",
+            )
+        )
+        assertEquals("rose", viewModel.uiState.value.data?.staticPaletteId)
     }
 
     private fun preferences(): ThemePreferencesRepository = mockk(relaxed = true) {

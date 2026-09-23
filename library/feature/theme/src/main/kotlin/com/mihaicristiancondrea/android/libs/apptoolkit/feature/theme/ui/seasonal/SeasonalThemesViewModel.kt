@@ -23,7 +23,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.ScreenViewM
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.updateData
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.contracts.SeasonalThemesEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.states.SeasonalThemesUiState
 import kotlinx.coroutines.flow.launchIn
@@ -37,18 +37,14 @@ import kotlinx.coroutines.launch
 class SeasonalThemesViewModel(
     private val seasonal: SeasonalThemeRepository,
 ) : ScreenViewModel<SeasonalThemesUiState, SeasonalThemesEvent, ActionEvent>(
-    initialState = UiStateScreen(
-        screenState = ScreenState.Success(),
-        data = SeasonalThemesUiState(),
-    ),
+    // No data until the stored state arrives, so the theme page never filters palettes by a guess.
+    initialState = UiStateScreen(screenState = ScreenState.IsLoading(), data = null),
 ) {
 
     init {
         seasonal.state.onEach { seasonalState ->
             val state = SeasonalThemesUiState(seasonal = seasonalState)
-            updateStateThreadSafe {
-                screenState.updateData(newState = ScreenState.Success()) { state }
-            }
+            updateStateThreadSafe { screenState.setSuccess(data = state) }
         }.launchIn(viewModelScope)
     }
 
