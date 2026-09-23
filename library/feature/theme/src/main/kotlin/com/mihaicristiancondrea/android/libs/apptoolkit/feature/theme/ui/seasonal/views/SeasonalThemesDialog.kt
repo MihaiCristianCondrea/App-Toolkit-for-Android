@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -35,11 +34,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.BasicAlertDialog
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.contracts.SeasonalThemesEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.states.SeasonalThemesUiState
@@ -73,37 +73,47 @@ fun SeasonalThemesDialog(
                     text = stringResource(id = R.string.seasonal_themes_summary),
                     style = MaterialTheme.typography.bodyMedium,
                 )
-                SwitchRow(
-                    label = stringResource(id = R.string.seasonal_themes_all_year),
-                    checked = state.seasonal.allYear,
-                    onCheckedChange = { onEvent(SeasonalThemesEvent.SetAllYear(it)) },
-                )
-                SwitchRow(
-                    label = stringResource(id = R.string.seasonal_themes_snowfall),
-                    summary = stringResource(id = R.string.seasonal_themes_snowfall_summary),
-                    checked = state.seasonal.snowfallEnabled,
-                    onCheckedChange = { onEvent(SeasonalThemesEvent.SetSnowfall(it)) },
-                )
+                // One group, like the preference lists elsewhere: tiles 2dp apart, outer corners round.
+                Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)) {
+                    SwitchRow(
+                        label = stringResource(id = R.string.seasonal_themes_all_year),
+                        checked = state.seasonal.allYear,
+                        onCheckedChange = { onEvent(SeasonalThemesEvent.SetAllYear(it)) },
+                        position = GroupedItemPosition.FIRST,
+                    )
+                    SwitchRow(
+                        label = stringResource(id = R.string.seasonal_themes_snowfall),
+                        summary = stringResource(id = R.string.seasonal_themes_snowfall_summary),
+                        checked = state.seasonal.snowfallEnabled,
+                        onCheckedChange = { onEvent(SeasonalThemesEvent.SetSnowfall(it)) },
+                        position = GroupedItemPosition.LAST,
+                    )
+                }
             }
         },
     )
 }
 
 /**
- * A switch setting drawn as its own rounded tile, the way grouped preferences look elsewhere in the
- * toolkit. The whole tile toggles, so the switch itself takes no clicks of its own.
+ * A switch setting drawn as a tile of a grouped preference list, with the same corners as the
+ * toolkit's other grouped lists. The whole tile toggles, so the switch takes no clicks of its own.
  */
 @Composable
 private fun SwitchRow(
     label: String,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
+    position: GroupedItemPosition,
     summary: String? = null,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(SizeConstants.LargeSize))
+            .groupedPreferenceItem(
+                position = position,
+                outerRadius = SizeConstants.LargeSize,
+                horizontalPadding = SizeConstants.ZeroSize,
+            )
             .background(MaterialTheme.colorScheme.surfaceContainerHighest)
             .toggleable(value = checked, role = Role.Switch, onValueChange = onCheckedChange)
             .padding(horizontal = SizeConstants.LargeSize, vertical = SizeConstants.MediumSize),
