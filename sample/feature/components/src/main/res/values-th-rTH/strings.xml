@@ -99,4 +99,9 @@
     <string name="components_text_field_search">ค้นหา</string>
     <string name="components_text_field_search_placeholder">ค้นหาคอมโพเนนต์</string>
     <string name="components_text_field_search_outlined">ค้นหา แบบมีเส้นขอบ</string>
+    <string name="components_section_dividers">เส้นแบ่ง</string>
+    <string name="components_divider_wavy">เส้นแบ่งแบบคลื่น</string>
+    <string name="components_divider_width">ความกว้าง</string>
+    <string name="components_divider_wave_height">ความสูงคลื่น</string>
+    <string name="components_divider_vertical">แนวตั้ง</string>
 </resources>

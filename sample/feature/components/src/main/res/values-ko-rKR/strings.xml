@@ -99,4 +99,9 @@
     <string name="components_text_field_search">검색</string>
     <string name="components_text_field_search_placeholder">구성요소 검색</string>
     <string name="components_text_field_search_outlined">검색, 외곽선</string>
+    <string name="components_section_dividers">구분선</string>
+    <string name="components_divider_wavy">물결 구분선</string>
+    <string name="components_divider_width">너비</string>
+    <string name="components_divider_wave_height">물결 높이</string>
+    <string name="components_divider_vertical">세로</string>
 </resources>

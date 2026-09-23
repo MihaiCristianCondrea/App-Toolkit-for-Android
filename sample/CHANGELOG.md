@@ -9,6 +9,7 @@
 - Added the orange color palette to the theme settings.
 - Added holiday greetings. The first time you open the app at Christmas or Halloween, it wishes you happy holidays and offers the holiday theme. Christmas comes with snow falling over the app. When the holiday is over, your usual theme comes back on its own.
 - Added a secret: tap the build version five times in About to unlock seasonal themes. A new button on the Theme settings page then lets you keep the Christmas and Halloween themes in the color list all year and turn the snow on or off.
+- Added a Dividers section to Components, showing the new wavy divider at its default size, resized live with sliders, and running vertically.
 
 ### Changed
 
@@ -19,6 +20,8 @@
 - The color picker in Theme settings shows brighter, truer previews of each palette, and the check on the selected one is always visible.
 - Theme settings now opens with the color you're using already in view.
 - Choosing Light in Theme settings now keeps the app light when battery saver is on. Follow system still turns dark with the rest of the phone.
+- Ads on the Apps screen now stay loaded while you scroll. Scrolling back to an ad shows the same ad at once instead of an empty space while a new one loads.
+- Apps, Quick Tools, and Help now show items that scroll into view straight away. Only the first screenful comes in one after another, so items further down no longer stay blank for up to a second.
 
 ### Fixed
 

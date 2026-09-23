@@ -17,40 +17,36 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.unit.IntOffset
-import kotlinx.coroutines.delay
+import androidx.compose.ui.platform.LocalDensity
 import kotlin.math.min
-
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Animates the visibility of a composable with a fade and vertical offset animation.
  *
- * The composable will fade and slide into place the first time it enters the
- * composition. The animation for each item can be staggered by providing an
- * [index]. After the initial animation runs, the composable remains visible even
- * if it leaves and re-enters the composition.
+ * Staggering by [index] makes an item far down a list wait for every position above it, so a cell
+ * scrolled into view later stayed blank for up to [maxStaggeredItems] × [staggerDelay]
+ * milliseconds. [animateEntrance] staggers by arrival instead, only for the list's first reveal,
+ * and takes its offset in dp.
  *
- * @param index Used to stagger the start time of the animation for items in a
- * list or grid.
- * @param invisibleOffsetY The vertical offset in pixels applied before the
- * animation starts. Defaults to 50.
- * @param animationDuration Duration of the fade/offset animation in
- * milliseconds. Defaults to 300.
- * @param staggerDelay Amount of delay in milliseconds per [index] before the
- * animation starts. Defaults to 64.
+ * @param index Used to stagger the start time of the animation for items in a list or grid.
+ * @param invisibleOffsetY The vertical offset in pixels applied before the animation starts.
+ * @param animationDuration Duration of the fade/offset animation in milliseconds.
+ * @param staggerDelay Amount of delay in milliseconds per [index] before the animation starts.
+ * @param maxStaggeredItems Positions past this one wait no longer than it.
  */
+@Deprecated(
+    message = "Stagger by arrival with animateEntrance and a list-level " +
+            "rememberEntranceStagger(). Staggering by index delays items scrolled into view later.",
+    replaceWith = ReplaceWith(
+        expression = "animateEntrance()",
+        imports = [
+            "com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateEntrance",
+        ],
+    ),
+)
 @Composable
 fun Modifier.animateVisibility(
     index: Int = 0,
@@ -59,33 +55,9 @@ fun Modifier.animateVisibility(
     staggerDelay: Int = 64,
     maxStaggeredItems: Int = 20,
 ): Modifier {
-    var visible by rememberSaveable { mutableStateOf(false) }
-
-    LaunchedEffect(Unit) {
-        if (!visible) {
-            val delayMillis: Int = min(index, maxStaggeredItems) * staggerDelay
-            delay(timeMillis = delayMillis.toLong())
-            visible = true
-        }
-    }
-
-    val alpha: State<Float> = animateFloatAsState(
-        targetValue = if (visible) 1f else 0f,
-        animationSpec = tween(durationMillis = animationDuration),
-        label = "Alpha"
+    val offsetY = with(LocalDensity.current) { invisibleOffsetY.toDp() }
+    return entranceAnimation(
+        spec = EntranceSpec(offsetY = offsetY, duration = animationDuration.milliseconds),
+        startDelayMillis = { min(index, maxStaggeredItems) * staggerDelay.toLong() },
     )
-
-    val offsetState: State<Float> = animateFloatAsState(
-        targetValue = if (visible) 0f else invisibleOffsetY.toFloat(),
-        animationSpec = tween(durationMillis = animationDuration),
-        label = "OffsetY"
-    )
-
-    return this
-        .offset {
-            IntOffset(x = 0, y = offsetState.value.toInt())
-        }
-        .graphicsLayer {
-            this.alpha = alpha.value
-        }
 }

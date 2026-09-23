@@ -61,7 +61,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.Ge
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.FilterChipItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.TopListFilters
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateEntrance
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.rememberEntranceStagger
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
@@ -176,13 +177,15 @@ internal fun TileCategorySection(
                 )
             }
             AnimatedVisibility(visible = expanded) {
+                // Remembered inside the expanding content, so every expansion staggers its tiles.
+                val entrance = rememberEntranceStagger()
                 Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)) {
                     Spacer(modifier = Modifier.height(SizeConstants.ExtraTinySize))
                     category.tiles.forEachIndexed { index, tile ->
                         ToolkitTileCard(
                             tile = tile,
                             position = groupedItemPosition(index, category.tiles.size),
-                            modifier = Modifier.animateVisibility(index = index),
+                            modifier = Modifier.animateEntrance(stagger = entrance),
                             key = "${selectedFilter}_${tile.id}",
                             onPreviewTile = { onPreviewTile(tile) },
                         )

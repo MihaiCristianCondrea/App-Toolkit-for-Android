@@ -99,4 +99,9 @@
     <string name="components_text_field_search">Recherche</string>
     <string name="components_text_field_search_placeholder">Rechercher des composants</string>
     <string name="components_text_field_search_outlined">Recherche, contourée</string>
+    <string name="components_section_dividers">Séparateurs</string>
+    <string name="components_divider_wavy">Séparateur ondulé</string>
+    <string name="components_divider_width">Largeur</string>
+    <string name="components_divider_wave_height">Hauteur de vague</string>
+    <string name="components_divider_vertical">Vertical</string>
 </resources>

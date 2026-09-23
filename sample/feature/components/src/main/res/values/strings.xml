@@ -99,4 +99,9 @@
     <string name="components_text_field_search">Search</string>
     <string name="components_text_field_search_placeholder">Search components</string>
     <string name="components_text_field_search_outlined">Search, outlined</string>
+    <string name="components_section_dividers">Dividers</string>
+    <string name="components_divider_wavy">Wavy divider</string>
+    <string name="components_divider_width">Width</string>
+    <string name="components_divider_wave_height">Wave height</string>
+    <string name="components_divider_vertical">Vertical</string>
 </resources>

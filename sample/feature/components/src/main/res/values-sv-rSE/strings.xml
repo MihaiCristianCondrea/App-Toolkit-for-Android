@@ -99,4 +99,9 @@
     <string name="components_text_field_search">Sök</string>
     <string name="components_text_field_search_placeholder">Sök komponenter</string>
     <string name="components_text_field_search_outlined">Sök, konturerad</string>
+    <string name="components_section_dividers">Avdelare</string>
+    <string name="components_divider_wavy">Vågig avdelare</string>
+    <string name="components_divider_width">Bredd</string>
+    <string name="components_divider_wave_height">Våghöjd</string>
+    <string name="components_divider_vertical">Vertikal</string>
 </resources>

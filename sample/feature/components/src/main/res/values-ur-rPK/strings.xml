@@ -99,4 +99,9 @@
     <string name="components_text_field_search">تلاش</string>
     <string name="components_text_field_search_placeholder">کمپوننٹس تلاش کریں</string>
     <string name="components_text_field_search_outlined">تلاش، خاکہ دار</string>
+    <string name="components_section_dividers">تقسیم کار</string>
+    <string name="components_divider_wavy">لہردار تقسیم کار</string>
+    <string name="components_divider_width">چوڑائی</string>
+    <string name="components_divider_wave_height">لہر کی اونچائی</string>
+    <string name="components_divider_vertical">عمودی</string>
 </resources>

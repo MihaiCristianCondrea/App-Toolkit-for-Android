@@ -99,4 +99,9 @@
     <string name="components_text_field_search">Suche</string>
     <string name="components_text_field_search_placeholder">Komponenten suchen</string>
     <string name="components_text_field_search_outlined">Suche, umrandet</string>
+    <string name="components_section_dividers">Trennlinien</string>
+    <string name="components_divider_wavy">Wellenlinie</string>
+    <string name="components_divider_width">Breite</string>
+    <string name="components_divider_wave_height">Wellenhöhe</string>
+    <string name="components_divider_vertical">Vertikal</string>
 </resources>

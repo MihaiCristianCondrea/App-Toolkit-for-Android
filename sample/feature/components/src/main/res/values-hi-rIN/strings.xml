@@ -99,4 +99,9 @@
     <string name="components_text_field_search">खोज</string>
     <string name="components_text_field_search_placeholder">कॉम्पोनेंट खोजें</string>
     <string name="components_text_field_search_outlined">खोज, आउटलाइन</string>
+    <string name="components_section_dividers">विभाजक</string>
+    <string name="components_divider_wavy">लहरदार विभाजक</string>
+    <string name="components_divider_width">चौड़ाई</string>
+    <string name="components_divider_wave_height">लहर की ऊँचाई</string>
+    <string name="components_divider_vertical">लंबवत</string>
 </resources>

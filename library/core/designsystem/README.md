@@ -13,6 +13,7 @@ theme-selection visuals, and the shared icon slot used by navigation items and b
 - Theme option/swatch composables.
 - `ToolkitIcon` and its renderers, the icon slot shared by navigation items and buttons.
 - Reusable bundled AVD resources for Check, Clock, Grid, Settings, and Share.
+- `il_wavy_line`, the wavy line the wavy dividers in `:library:core:ui` reproduce.
 
 ## Does not own
 

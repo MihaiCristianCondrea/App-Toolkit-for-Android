@@ -73,7 +73,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememb
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateEntrance
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.rememberEntranceStagger
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
 import kotlinx.collections.immutable.persistentListOf
@@ -199,6 +200,8 @@ fun ToolkitTilesScreen(
             .toImmutableList()
     }
 
+    val entrance = rememberEntranceStagger(state.selectedFilter)
+
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -226,7 +229,7 @@ fun ToolkitTilesScreen(
                 itemsIndexed(
                     items = visibleListItems,
                     key = { _, positionedItem -> "${state.selectedFilter}_${positionedItem.item.stableKey}" },
-                ) { index, positionedItem ->
+                ) { _, positionedItem ->
                     val item = positionedItem.item
                     val position = positionedItem.position
 
@@ -240,7 +243,7 @@ fun ToolkitTilesScreen(
                                 expanded = expanded,
                                 modifier = Modifier
                                     .animateItem()
-                                    .animateVisibility(index = index),
+                                    .animateEntrance(stagger = entrance),
                                 selectedFilter = state.selectedFilter,
                                 onToggle = { onEvent(ToolkitTilesEvent.CategoryToggled(category.id)) },
                                 onPreviewTile = { tile ->
@@ -266,7 +269,7 @@ fun ToolkitTilesScreen(
                             QuickToolsNativeAdCard(
                                 modifier = Modifier
                                     .animateItem()
-                                    .animateVisibility(index = index),
+                                    .animateEntrance(stagger = entrance),
                                 adUnitId = item.adUnitId,
                                 position = position,
                                 initiallyLoaded = item.id in state.loadedAdIds,

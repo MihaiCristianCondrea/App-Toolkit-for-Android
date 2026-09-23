@@ -63,7 +63,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.ads.FaqNativeAdCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateEntrance
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.rememberEntranceStagger
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraLargeVerticalSpacer
@@ -94,6 +95,8 @@ fun FaqScreenContent(
     val hasHiddenQuestions = questions.size > INITIAL_VISIBLE_QUESTION_COUNT
     val popularGroupItemCount = visibleQuestions.size + if (hasHiddenQuestions) 1 else 0
     val supportGroupItemCount = 1 + if (hasAdSlot && isAdLoaded) 1 else 0
+
+    val entrance = rememberEntranceStagger()
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -143,7 +146,7 @@ fun FaqScreenContent(
                                 stiffness = Spring.StiffnessLow,
                             )
                         )
-                        .animateVisibility(index = index),
+                        .animateEntrance(stagger = entrance),
                 )
             }
         }
@@ -177,7 +180,7 @@ fun FaqScreenContent(
                                 ),
                                 outerRadius = SizeConstants.ExtraLargeIncreasedSize,
                             )
-                            .animateVisibility(index = popularGroupItemCount - 1),
+                            .animateEntrance(stagger = entrance),
                         shape = RectangleShape,
                         onClick = {
                             firebaseController.logGa4Event(
