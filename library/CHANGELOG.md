@@ -4,6 +4,22 @@
 
 # September 20, 2026
 
+**Version:** `3.0.0-pre19`
+
+### Changed
+
+- Changed the `SearchTopAppBar` title to animate between values the way `MainTopAppBar`'s does, instead of swapping instantly.
+
+### Fixed
+
+- Fixed `SearchTopAppBar` jumping as it swapped between its title and the search field. The slot followed the height of whichever was showing, so the title snapped up and slid back when search closed, and the field grew out of its centre, sliding the placeholder across the title. Both states now share one fixed-height slot and crossfade in place.
+- Fixed the `SearchTopAppBar` title sitting above the navigation icon instead of centred beside it, where `MainTopAppBar` puts it.
+- Fixed `SearchTopAppBar` never showing its title when its first composition was already searching. A host whose first screen searches no longer gets a blank title on its other screens.
+
+---
+
+# September 20, 2026
+
 **Version:** `3.0.0-pre18`
 
 ### Added

@@ -186,6 +186,14 @@ indistinguishable from `MainTopAppBar`. The bar owns only that swap. The query, 
 is showing at all, stay with the caller, so one piece of state drives both the bar and the filtering
 underneath it, so the bar never holds a query the screen cannot see.
 
+Title and field share one slot pinned to the field's height and crossfade in place. Letting the slot
+follow whichever was showing made the title snap up and settle back as the field left, and growing
+the field from its centre slid the placeholder across the title; both read as a jump. The title is
+centred in that slot rather than handed its full height, which would draw it above the navigation
+icon, and it animates between values exactly as `MainTopAppBar`'s does. The state the bar is first
+composed in appears without an entrance, so a screen that opens into search shows no title flash,
+and the title still appears the first time search is turned off.
+
 Filters are optional and live inside the field, in the `filters` slot to the left of the clear
 button, which is where a person looks for the controls that shape the results they are reading.
 `SearchFilterAction` is the ready-made toggle for one: tonal while the filter is applied, text while
