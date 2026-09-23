@@ -17,12 +17,14 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.HolidaySeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.SeasonalThemeState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.ThemePreferencesState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.contracts.SeasonalThemeOverlayEvent
 import io.mockk.coEvery
@@ -61,6 +63,7 @@ class SeasonalThemeOverlayViewModelTest {
     private val theme: ThemePreferencesRepository = mockk(relaxed = true) {
         every { preferencesState } returns themeState
     }
+    private val firebaseController = FakeFirebaseController()
 
     @AfterEach
     fun tearDown() {
@@ -120,6 +123,10 @@ class SeasonalThemeOverlayViewModelTest {
         coVerify {
             seasonal.answerHolidayGreeting(HolidaySeason.CHRISTMAS, christmas, useHolidayTheme = true)
         }
+        val answered = firebaseController.loggedEvents.single()
+        assertEquals("holiday_greeting_answered", answered.name)
+        assertEquals(AnalyticsValue.Str("christmas"), answered.params["season"])
+        assertEquals(AnalyticsValue.Str("use_holiday_theme"), answered.params["choice"])
     }
 
     @Test
@@ -138,6 +145,7 @@ class SeasonalThemeOverlayViewModelTest {
     private fun viewModel(today: LocalDate) = SeasonalThemeOverlayViewModel(
         seasonal = seasonal,
         theme = theme,
+        firebaseController = firebaseController,
         today = { today },
     )
 

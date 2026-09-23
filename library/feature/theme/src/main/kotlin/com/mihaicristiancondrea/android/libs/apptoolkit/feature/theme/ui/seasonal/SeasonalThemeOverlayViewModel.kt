@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal
 
 import androidx.lifecycle.viewModelScope
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.HolidaySeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.isChristmasSeason
@@ -50,11 +51,13 @@ import kotlinx.coroutines.launch
  * Christmas season it also needs the easter egg: a person without it who kept the Christmas palette
  * gets the colors, not snow in July.
  *
+ * @param firebaseController Reports how the holiday greeting was answered.
  * @param today Supplies the local date, so tests can pick the season.
  */
 class SeasonalThemeOverlayViewModel(
     private val seasonal: SeasonalThemeRepository,
     theme: ThemePreferencesRepository,
+    private val firebaseController: FirebaseController,
     private val today: () -> LocalDate = { LocalDate.now(ZoneId.systemDefault()) },
 ) : ScreenViewModel<SeasonalThemeOverlayUiState, SeasonalThemeOverlayEvent, ActionEvent>(
     initialState = UiStateScreen(
@@ -96,6 +99,9 @@ class SeasonalThemeOverlayViewModel(
         val season: HolidaySeason = screenData?.greeting ?: return
         viewModelScope.launch {
             update { it.copy(greeting = null) }
+            firebaseController.logEvent(
+                holidayGreetingAnsweredEvent(season = season, useHolidayTheme = useHolidayTheme),
+            )
             runCatching {
                 seasonal.answerHolidayGreeting(
                     season = season,

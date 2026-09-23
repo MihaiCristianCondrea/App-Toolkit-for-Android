@@ -26,6 +26,9 @@ sealed interface ToolkitTilesEvent : UiEvent {
     data class FilterSelected(val filter: ToolkitTilesFilter) : ToolkitTilesEvent
     data class CategoryToggled(val categoryId: String) : ToolkitTilesEvent
     data class AddTileClicked(val requestKey: String?) : ToolkitTilesEvent
+
+    /** Android answered a request to add [requestKey]; [outcome] is a `TileRequestOutcome`. */
+    data class TileRequestFinished(val requestKey: String, val outcome: String) : ToolkitTilesEvent
     data class TileSetupClicked(val tileId: String) : ToolkitTilesEvent
     data class AdStatusChanged(val adId: String, val isLoaded: Boolean) : ToolkitTilesEvent
 }

@@ -32,6 +32,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.domain.models.RandomAppHandler
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.HomeAction
@@ -54,6 +55,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateSc
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.flow.collectLatest
@@ -103,6 +105,12 @@ fun AppsListScreen(
         koinInject(qualifier = named(AppAdsQualifiers.APP_DETAILS_NATIVE_AD))
     val firebaseController: FirebaseController = koinInject()
 
+    TrackScreenView(
+        firebaseController = firebaseController,
+        screenName = AppScreenTracking.Screens.APPS_LIST.name,
+        screenClass = AppScreenTracking.Screens.APPS_LIST.className,
+    )
+
     val onFavoriteToggle: (String) -> Unit =
         remember(viewModel, firebaseController, screenState.data?.apps, favorites) {
             { pkg ->
@@ -125,16 +133,12 @@ fun AppsListScreen(
     val openApp: (AppInfo) -> Unit = remember { buildAppClick }
     val onShareClick: (AppInfo) -> Unit = remember(buildShareClick, firebaseController) {
         { app ->
+            // The recommended share event covers this tap; a second app_card_interaction for it
+            // would count every share twice.
             firebaseController.logShare(
                 method = "system_share",
                 contentType = "app",
                 itemId = app.packageName,
-            )
-            firebaseController.logAppInteraction(
-                source = "apps_list",
-                appInfo = app,
-                interaction = AppInteractionType.Share,
-                interactionContext = "grid_share"
             )
             buildShareClick(app)
         }
@@ -237,22 +241,9 @@ fun AppsListScreen(
                 adsEnabled = adsEnabled,
                 onFilterSelected = { filter -> viewModel.onEvent(HomeEvent.FilterSelected(filter)) },
                 onFavoriteToggle = onFavoriteToggle,
-                onAppClick = { app ->
-                    firebaseController.logAppInteraction(
-                        source = "apps_list",
-                        appInfo = app,
-                        interaction = AppInteractionType.OpenDetailsBottomSheet
-                    )
-                    viewModel.onEvent(HomeEvent.AppSelected(app.packageName))
-                },
+                // AppsListViewModel reports the opened details once it has resolved the app.
+                onAppClick = { app -> viewModel.onEvent(HomeEvent.AppSelected(app.packageName)) },
                 onShareClick = onShareClick,
-                onFirstVisibleAppChanged = { firstVisibleApp ->
-                    firebaseController.logAppInteraction(
-                        source = "apps_list",
-                        appInfo = firstVisibleApp,
-                        interaction = AppInteractionType.GridAppImpression
-                    )
-                },
                 windowWidthSizeClass = windowWidthSizeClass,
             )
         }

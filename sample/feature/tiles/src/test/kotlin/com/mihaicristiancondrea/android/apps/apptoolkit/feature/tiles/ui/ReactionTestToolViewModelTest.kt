@@ -19,6 +19,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ReactionRating
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ReactionTestPhase
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -49,7 +50,12 @@ class ReactionTestToolViewModelTest {
         Dispatchers.resetMain()
     }
 
-    private fun createViewModel() = ReactionTestToolViewModel(timeProvider = { simulatedTimeMs })
+    private val firebaseController = FakeFirebaseController()
+
+    private fun createViewModel() = ReactionTestToolViewModel(
+        firebaseController = firebaseController,
+        timeProvider = { simulatedTimeMs },
+    )
 
     @Test
     fun `initial state is Idle with no statistics`() {

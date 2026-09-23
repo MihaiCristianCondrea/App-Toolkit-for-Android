@@ -23,6 +23,7 @@ import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logUnlockAchievement
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.copyTextToClipboard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
@@ -47,6 +48,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+
+/** Reported as `unlock_achievement` the first time the version-tap easter egg is found. */
+private const val SEASONAL_THEMES_ACHIEVEMENT: String = "seasonal_themes"
 
 /**
  * ViewModel for the About screen, including tap-to-copy of the entries it renders.
@@ -165,6 +169,9 @@ open class AboutViewModel(
             action = Actions.UNLOCK_SEASONAL_THEMES,
             block = {
                 if (seasonalThemes.unlockSeasonalThemes()) {
+                    firebaseController.logUnlockAchievement(
+                        achievementId = SEASONAL_THEMES_ACHIEVEMENT,
+                    )
                     showSnackbar(
                         message = UiTextHelper.StringResource(R.string.snack_seasonal_themes_unlocked),
                         isError = false,

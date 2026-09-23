@@ -41,6 +41,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitQuickTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ToolkitTilesAction
@@ -65,7 +66,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.c
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logSelectContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.LocalNativeAdViewFactory
@@ -73,6 +73,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememb
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
@@ -89,6 +90,13 @@ fun ToolkitTilesScreen(
     val viewModel: ToolkitTilesViewModel = koinViewModel()
     val screenState: UiStateScreen<ToolkitTilesUiState> by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val firebaseController: FirebaseController = koinInject()
+
+    TrackScreenView(
+        firebaseController = firebaseController,
+        screenName = AppScreenTracking.Screens.TOOLKIT_TILES.name,
+        screenClass = AppScreenTracking.Screens.TOOLKIT_TILES.className,
+    )
     val lifecycleOwner = LocalLifecycleOwner.current
 
     DisposableEffect(viewModel, lifecycleOwner) {
@@ -109,7 +117,14 @@ fun ToolkitTilesScreen(
                 is ToolkitTilesAction.RequestAddTile -> requestQuickSettingsTile(
                     context = context,
                     requestKey = action.requestKey,
-                    onResult = { viewModel.onEvent(ToolkitTilesEvent.Refresh) },
+                    onResult = { outcome ->
+                        viewModel.onEvent(
+                            ToolkitTilesEvent.TileRequestFinished(
+                                requestKey = action.requestKey,
+                                outcome = outcome,
+                            ),
+                        )
+                    },
                 )
 
                 ToolkitTilesAction.ShowNoTileMessage -> Toast.makeText(
@@ -248,10 +263,6 @@ fun ToolkitTilesScreen(
                                         itemId = tile.id,
                                         itemName = tile.id,
                                         itemCategory = category.id,
-                                    )
-                                    firebaseController.logSelectContent(
-                                        contentType = "quick_tool_preview",
-                                        itemId = tile.id,
                                     )
                                     if (tile.quickTool == ToolkitQuickTool.MaterialColors) {
                                         quickToolDialog = ToolkitQuickTool.MaterialColors

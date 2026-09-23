@@ -35,9 +35,7 @@ import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -66,8 +64,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.distinctUntilChangedBy
-import kotlinx.coroutines.flow.filterNotNull
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
 
@@ -100,7 +96,6 @@ fun AppsList(
     onFavoriteToggle: (String) -> Unit,
     onAppClick: (AppInfo) -> Unit,
     onShareClick: (AppInfo) -> Unit,
-    onFirstVisibleAppChanged: (AppInfo) -> Unit = {},
     adFrequency: Int = AdsConstants.APPS_LIST_AD_FREQUENCY,
     windowWidthSizeClass: AppWindowWidthSizeClass,
 ) {
@@ -148,7 +143,6 @@ fun AppsList(
         onFavoriteToggle = onFavoriteToggle,
         onAppClick = onAppClick,
         onShareClick = onShareClick,
-        onFirstVisibleAppChanged = onFirstVisibleAppChanged,
         adUnitId = adsConfig.bannerAdUnitId,
     )
 }
@@ -188,21 +182,8 @@ private fun AppsGrid(
     onFavoriteToggle: (String) -> Unit,
     onAppClick: (AppInfo) -> Unit,
     onShareClick: (AppInfo) -> Unit,
-    onFirstVisibleAppChanged: (AppInfo) -> Unit,
     adUnitId: String,
 ) {
-    LaunchedEffect(items) {
-        snapshotFlow {
-            listState.layoutInfo.visibleItemsInfo
-                .firstNotNullOfOrNull { visibleItem ->
-                    (items.getOrNull(visibleItem.index) as? AppListItem.App)?.appInfo
-                }
-        }
-            .filterNotNull()
-            .distinctUntilChangedBy(AppInfo::packageName)
-            .collect(onFirstVisibleAppChanged)
-    }
-
     // Outside the grid, so an ad cell that scrolls away leaves its ad here instead of destroying it
     // and requesting another one when it scrolls back.
     val adCache: NativeAdCache = rememberNativeAdCache()

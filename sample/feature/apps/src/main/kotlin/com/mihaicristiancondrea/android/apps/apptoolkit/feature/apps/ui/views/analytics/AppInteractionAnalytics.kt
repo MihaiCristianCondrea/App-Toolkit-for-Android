@@ -29,12 +29,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model
 enum class AppInteractionType {
     AddFavorite,
     RemoveFavorite,
-    Share,
     OpenDetailsBottomSheet,
     OpenInPlayStore,
     OpenInstalledApp,
     CloseDetailsBottomSheet,
-    GridAppImpression,
 }
 
 /**

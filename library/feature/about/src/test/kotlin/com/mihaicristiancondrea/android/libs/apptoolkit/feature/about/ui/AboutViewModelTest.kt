@@ -24,6 +24,7 @@ import android.os.Build
 import android.util.Log
 import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
@@ -311,6 +312,10 @@ class AboutViewModelTest {
             coVerify { seasonalThemes.unlockSeasonalThemes() }
             val message = viewModel.uiState.value.snackbar!!.message as UiTextHelper.StringResource
             assertThat(message.resourceId).isEqualTo(R.string.snack_seasonal_themes_unlocked)
+            val achievement = firebaseController.loggedEvents
+                .single { it.name == "unlock_achievement" }
+            assertThat(achievement.params["achievement_id"])
+                .isEqualTo(AnalyticsValue.Str("seasonal_themes"))
         }
 
     @Test
@@ -323,5 +328,7 @@ class AboutViewModelTest {
         dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
         assertThat(viewModel.uiState.value.snackbar).isNull()
+        assertThat(firebaseController.loggedEvents.map { it.name })
+            .doesNotContain("unlock_achievement")
     }
 }

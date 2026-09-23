@@ -43,8 +43,10 @@ import org.koin.dsl.module
 
 val themeSettingsModule: Module = module {
     viewModel { ThemeSettingsViewModel(preferences = get()) }
-    viewModel { SeasonalThemesViewModel(seasonal = get()) }
-    viewModel { SeasonalThemeOverlayViewModel(seasonal = get(), theme = get()) }
+    viewModel { SeasonalThemesViewModel(seasonal = get(), firebaseController = get()) }
+    viewModel {
+        SeasonalThemeOverlayViewModel(seasonal = get(), theme = get(), firebaseController = get())
+    }
     single<SeasonalThemeManager> { SeasonalThemeManager(application = androidApplication()) }
 
     single<ColorPalette>(named(AppToolkitDiConstants.MONOCHROME_THEME_PALETTE)) { monochromePalette }

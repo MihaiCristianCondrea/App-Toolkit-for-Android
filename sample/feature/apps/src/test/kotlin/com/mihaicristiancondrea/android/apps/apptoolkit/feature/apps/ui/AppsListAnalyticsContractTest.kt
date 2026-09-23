@@ -26,6 +26,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.mode
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.HomeEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppsListFilter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.StandardDispatcherExtension
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -105,5 +106,48 @@ class AppsListAnalyticsContractTest : AppsListViewModelBaseTest() {
                 .first { it.name == AppGa4Contract.EventName.VIEW_ITEM_LIST }
             assertTrue(AppGa4Contract.Param.ITEM_LIST_ID in viewItemList.params)
             assertTrue(AppGa4Contract.Param.ITEM_LIST_NAME in viewItemList.params)
+        }
+
+    @Test
+    fun `opening an app's details is reported once`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            setup(fetchApps = APPS)
+            advanceUntilIdle()
+            firebaseController.loggedEvents.clear()
+
+            viewModel.onEvent(HomeEvent.AppSelected(APPS.first().packageName))
+            advanceUntilIdle()
+
+            val names = firebaseController.loggedEvents.map { it.name }
+            assertEquals(1, names.count { it == AppGa4Contract.EventName.VIEW_ITEM })
+            val interaction = firebaseController.loggedEvents
+                .single { it.name == AppGa4Contract.EventName.APP_CARD_INTERACTION }
+            assertEquals(
+                AnalyticsValue.Str("apps_list"),
+                interaction.params[AppGa4Contract.Param.SOURCE],
+            )
+        }
+
+    @Test
+    fun `a filter tap is reported once and its automatic fallback is not`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            // Nothing is installed, so Installed matches nothing and falls back to All by itself.
+            setup(fetchApps = APPS)
+            advanceUntilIdle()
+            firebaseController.loggedEvents.clear()
+
+            viewModel.onEvent(HomeEvent.FilterSelected(AppsListFilter.Installed))
+            advanceUntilIdle()
+
+            assertEquals(AppsListFilter.All, viewModel.uiState.value.data?.selectedFilter)
+            val lists = firebaseController.loggedEvents
+                .filter { it.name == AppGa4Contract.EventName.VIEW_ITEM_LIST }
+            assertEquals(
+                listOf(AnalyticsValue.Str("installed")),
+                lists.map { it.params[AppGa4Contract.Param.ITEM_LIST_ID] },
+            )
+            assertTrue(firebaseController.loggedEvents.none {
+                it.name == AppGa4Contract.EventName.SELECT_CONTENT
+            })
         }
 }

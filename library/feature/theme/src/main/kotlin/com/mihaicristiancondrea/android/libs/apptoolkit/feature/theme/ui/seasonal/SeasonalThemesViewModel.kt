@@ -18,6 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal
 
 import androidx.lifecycle.viewModelScope
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
@@ -36,6 +38,7 @@ import kotlinx.coroutines.launch
  */
 class SeasonalThemesViewModel(
     private val seasonal: SeasonalThemeRepository,
+    private val firebaseController: FirebaseController,
 ) : ScreenViewModel<SeasonalThemesUiState, SeasonalThemesEvent, ActionEvent>(
     // No data until the stored state arrives, so the theme page never filters palettes by a guess.
     initialState = UiStateScreen(screenState = ScreenState.IsLoading(), data = null),
@@ -50,17 +53,30 @@ class SeasonalThemesViewModel(
 
     override fun onEvent(event: SeasonalThemesEvent) {
         when (event) {
-            is SeasonalThemesEvent.SetAllYear -> persist {
+            is SeasonalThemesEvent.SetAllYear -> persist(
+                event = seasonalToggleEvent(
+                    preferenceKey = SeasonalThemeAnalytics.PreferenceKeys.ALL_YEAR,
+                    enabled = event.enabled,
+                ),
+            ) {
                 seasonal.setSeasonalThemesAllYear(event.enabled)
             }
 
-            is SeasonalThemesEvent.SetSnowfall -> persist {
+            is SeasonalThemesEvent.SetSnowfall -> persist(
+                event = seasonalToggleEvent(
+                    preferenceKey = SeasonalThemeAnalytics.PreferenceKeys.SNOWFALL,
+                    enabled = event.enabled,
+                ),
+            ) {
                 seasonal.setSnowfallEnabled(event.enabled)
             }
         }
     }
 
-    private fun persist(block: suspend () -> Unit) {
-        viewModelScope.launch { runCatching { block() } }
+    /** Stores a switch and reports it; [event] is logged once the change has been saved. */
+    private fun persist(event: AnalyticsEvent, block: suspend () -> Unit) {
+        viewModelScope.launch {
+            runCatching { block() }.onSuccess { firebaseController.logEvent(event) }
+        }
     }
 }

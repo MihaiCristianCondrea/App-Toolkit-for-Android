@@ -115,7 +115,7 @@ import org.koin.compose.koinInject
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.SeasonalThemesViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
-private const val THEME_SCREEN_NAME = "Theme"
+internal const val THEME_SCREEN_NAME = "Theme"
 private const val THEME_SCREEN_CLASS = "ThemeSettingsScreen"
 
 /**

@@ -28,7 +28,11 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repos
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.SensorRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.SosRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.TorchRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.domain.models.BreathingPhase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.domain.models.BreathingState
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.domain.utils.ToolkitTileIds
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.ToolUsageTracker
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.logReactionScore
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.CoinFlipToolState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.DiceRollToolState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.LevelToolState
@@ -37,6 +41,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ReactionRating
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ReactionTestPhase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ReactionTestToolState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -52,77 +57,131 @@ import java.util.Locale
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.milliseconds
 
-class CoinFlipToolViewModel : ViewModel() {
+class CoinFlipToolViewModel(firebaseController: FirebaseController) : ViewModel() {
+    private val usage = ToolUsageTracker(firebaseController, ToolkitTileIds.COIN_FLIP)
     private val mutableState = MutableStateFlow(CoinFlipToolState())
     val state: StateFlow<CoinFlipToolState> = mutableState.asStateFlow()
     fun flip() {
         mutableState.value = CoinFlipToolState(Random.nextBoolean(), state.value.request + 1)
+        usage.markUsed()
     }
 
     fun dismiss() {
         mutableState.value = CoinFlipToolState()
+        usage.endSession()
     }
 }
 
-class DiceRollToolViewModel : ViewModel() {
+class DiceRollToolViewModel(firebaseController: FirebaseController) : ViewModel() {
+    private val usage = ToolUsageTracker(firebaseController, ToolkitTileIds.DICE_ROLL)
     private val mutableState = MutableStateFlow(DiceRollToolState())
     val state: StateFlow<DiceRollToolState> = mutableState.asStateFlow()
     fun roll() {
         mutableState.value = DiceRollToolState(Random.nextInt(1, 7), state.value.request + 1)
+        usage.markUsed()
     }
 
     fun dismiss() {
         mutableState.value = DiceRollToolState()
+        usage.endSession()
     }
 }
 
 /** Shows the count shared with the Counter Quick Settings tile, so closing the sheet keeps it. */
-class CounterToolViewModel(private val repository: CounterRepository) : ViewModel() {
+class CounterToolViewModel(
+    private val repository: CounterRepository,
+    firebaseController: FirebaseController,
+) : ViewModel() {
+    private val usage = ToolUsageTracker(firebaseController, ToolkitTileIds.COUNTER)
+
     val count: StateFlow<Int> = repository.count.stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = 0,
     )
 
-    fun increment() = repository.increment()
+    fun increment() {
+        repository.increment()
+        usage.markUsed()
+    }
 
     fun reset() = repository.reset()
+
+    fun dismiss() = usage.endSession()
 }
 
-abstract class FlowToolViewModel<T>(initial: T) : ViewModel() {
+abstract class FlowToolViewModel<T>(initial: T, protected val usage: ToolUsageTracker) :
+    ViewModel() {
     protected val mutableState = MutableStateFlow(initial)
     val state: StateFlow<T> = mutableState.asStateFlow()
     protected var observation: Job? = null
+    private var watchedUse: Job? = null
+
+    /**
+     * For a tool that is used by looking at it, such as the compass, reports use once the sheet
+     * has stayed open for [WATCHED_USE_DELAY_MS]. Opening and closing it straight away is not use.
+     */
+    protected fun reportUseOnceWatched() {
+        watchedUse?.cancel()
+        watchedUse = viewModelScope.launch {
+            delay(WATCHED_USE_DELAY_MS.milliseconds)
+            usage.markUsed()
+        }
+    }
+
     fun dismiss() {
         observation?.cancel(); observation = null
+        watchedUse?.cancel(); watchedUse = null
+        usage.endSession()
+    }
+
+    companion object {
+        const val WATCHED_USE_DELAY_MS: Long = 5_000L
     }
 }
 
-class CompassToolViewModel(private val repository: SensorRepository) :
-    FlowToolViewModel<Float>(0f) {
+class CompassToolViewModel(
+    private val repository: SensorRepository,
+    firebaseController: FirebaseController,
+) : FlowToolViewModel<Float>(0f, ToolUsageTracker(firebaseController, ToolkitTileIds.COMPASS)) {
     fun open() {
         observation?.cancel(); observation =
             repository.getCompassAzimuth().onEach { mutableState.value = it }
                 .launchIn(viewModelScope)
+        reportUseOnceWatched()
     }
 }
 
-class LevelToolViewModel(private val repository: SensorRepository) :
-    FlowToolViewModel<LevelToolState>(LevelToolState()) {
+class LevelToolViewModel(
+    private val repository: SensorRepository,
+    firebaseController: FirebaseController,
+) : FlowToolViewModel<LevelToolState>(
+    LevelToolState(),
+    ToolUsageTracker(firebaseController, ToolkitTileIds.BUBBLE_LEVEL),
+) {
     fun open() {
         observation?.cancel(); observation = repository.getLevelOrientation()
             .onEach { mutableState.value = LevelToolState(it.first, it.second) }
             .launchIn(viewModelScope)
+        reportUseOnceWatched()
     }
 }
 
-class BreathingToolViewModel(private val repository: BreathingRepository) :
-    FlowToolViewModel<BreathingState>(BreathingState()) {
+class BreathingToolViewModel(
+    private val repository: BreathingRepository,
+    firebaseController: FirebaseController,
+) : FlowToolViewModel<BreathingState>(
+    BreathingState(),
+    ToolUsageTracker(firebaseController, ToolkitTileIds.BREATHING),
+) {
     fun open() {
         observation?.cancel()
         repository.start()
-        observation =
-            repository.breathingState.onEach { mutableState.value = it }.launchIn(viewModelScope)
+        observation = repository.breathingState.onEach { breathing ->
+            mutableState.value = breathing
+            // The hold after breathing out closes a cycle, so reaching it means one full breath.
+            if (breathing.phase == BreathingPhase.HOLD_EMPTY) usage.markUsed()
+        }.launchIn(viewModelScope)
     }
 
     fun close() {
@@ -130,13 +189,29 @@ class BreathingToolViewModel(private val repository: BreathingRepository) :
     }
 }
 
-class SosToolViewModel(private val repository: SosRepository) : ViewModel() {
+class SosToolViewModel(
+    private val repository: SosRepository,
+    firebaseController: FirebaseController,
+) : ViewModel() {
+    private val usage = ToolUsageTracker(firebaseController, ToolkitTileIds.SOS)
     val state = repository.state
-    fun toggle() = repository.toggle()
-    fun dismiss() = repository.stop()
+    fun toggle() {
+        val starting: Boolean = !repository.isActive
+        repository.toggle()
+        if (starting) usage.markUsed()
+    }
+
+    fun dismiss() {
+        repository.stop()
+        usage.endSession()
+    }
 }
 
-class MorseToolViewModel(private val repository: MorseRepository) : ViewModel() {
+class MorseToolViewModel(
+    private val repository: MorseRepository,
+    firebaseController: FirebaseController,
+) : ViewModel() {
+    private val usage = ToolUsageTracker(firebaseController, ToolkitTileIds.MORSE)
     private val mutableState = MutableStateFlow(MorseToolState(playback = repository.state.value))
     val state: StateFlow<MorseToolState> = mutableState.asStateFlow()
 
@@ -168,33 +243,46 @@ class MorseToolViewModel(private val repository: MorseRepository) : ViewModel() 
             else -> null
         }
         mutableState.value = mutableState.value.copy(inputError = error)
-        if (error == null) repository.start(message)
+        if (error == null) {
+            repository.start(message)
+            usage.markUsed()
+        }
     }
 
-    fun dismiss() = repository.stop()
+    fun dismiss() {
+        repository.stop()
+        usage.endSession()
+    }
 }
 
 class FlashDimmerToolViewModel(
     private val torchRepository: TorchRepository,
     private val morseRepository: MorseRepository,
+    firebaseController: FirebaseController,
 ) : ViewModel() {
+    private val usage = ToolUsageTracker(firebaseController, ToolkitTileIds.FLASH_DIMMER)
     val state: StateFlow<TorchState> = torchRepository.state
     fun setLevel(level: Int) {
         morseRepository.stop(); torchRepository.setLevel(level)
+        usage.markUsed()
     }
 
     fun applyPreset(preset: TorchPreset) {
         morseRepository.stop(); torchRepository.applyPreset(preset)
+        usage.markUsed()
     }
 
     fun dismiss() {
         morseRepository.stop(); torchRepository.turnOff()
+        usage.endSession()
     }
 }
 
 class ReactionTestToolViewModel(
+    private val firebaseController: FirebaseController,
     private val timeProvider: () -> Long = SystemClock::elapsedRealtime,
 ) : ViewModel() {
+    private val usage = ToolUsageTracker(firebaseController, ToolkitTileIds.REACTION_TEST)
     private val mutableState = MutableStateFlow(ReactionTestToolState())
     val state: StateFlow<ReactionTestToolState> = mutableState.asStateFlow()
 
@@ -247,6 +335,8 @@ class ReactionTestToolViewModel(
                     roundCount = nextRound,
                     rating = rating,
                 )
+                firebaseController.logReactionScore(reactionTimeMs = reactionTime)
+                usage.markUsed()
             }
 
             else -> {
@@ -263,5 +353,6 @@ class ReactionTestToolViewModel(
     fun dismiss() {
         waitingJob?.cancel()
         mutableState.value = state.value.copy(phase = ReactionTestPhase.Idle)
+        usage.endSession()
     }
 }

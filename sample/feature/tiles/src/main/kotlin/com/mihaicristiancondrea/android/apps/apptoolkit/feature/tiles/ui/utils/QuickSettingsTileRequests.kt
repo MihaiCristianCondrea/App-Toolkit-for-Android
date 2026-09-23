@@ -19,6 +19,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils
 
 import android.app.StatusBarManager
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.contracts.AppGa4Contract.TileRequestOutcome
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.quicksettings.AndroidQuickSettingsTilesLocalDataSource
 import android.content.Context
 import android.graphics.drawable.Icon
@@ -27,19 +28,27 @@ import android.widget.Toast
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services.getTileServiceRequests
 
+/**
+ * Asks Android to add the quick tool behind [requestKey] to Quick Settings.
+ *
+ * [onResult] receives how the request ended, as one of [TileRequestOutcome], whether Android
+ * answered the prompt or the request could not be made at all.
+ */
 internal fun requestQuickSettingsTile(
     context: Context,
     requestKey: String,
-    onResult: () -> Unit = {},
+    onResult: (outcome: String) -> Unit = {},
 ) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
         Toast.makeText(context, R.string.tiles_add_pre_android_13, Toast.LENGTH_LONG).show()
+        onResult(TileRequestOutcome.UNSUPPORTED)
         return
     }
 
     val request = getTileServiceRequests()[requestKey]
     if (request == null) {
         Toast.makeText(context, R.string.tiles_no_tile_message, Toast.LENGTH_SHORT).show()
+        onResult(TileRequestOutcome.UNAVAILABLE)
         return
     }
 
@@ -47,6 +56,7 @@ internal fun requestQuickSettingsTile(
     try {
         if (statusBarManager == null) {
             Toast.makeText(context, R.string.tiles_add_result_failed, Toast.LENGTH_SHORT).show()
+            onResult(TileRequestOutcome.FAILED)
             return
         }
         statusBarManager.requestAddTileService(
@@ -61,7 +71,18 @@ internal fun requestQuickSettingsTile(
                 AndroidQuickSettingsTilesLocalDataSource(context)
                     .recordTileAdded(request.componentName(context), true)
             }
-            onResult()
+            onResult(
+                when (result) {
+                    StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ADDED -> TileRequestOutcome.ADDED
+                    StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ALREADY_ADDED ->
+                        TileRequestOutcome.ALREADY_ADDED
+
+                    StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_NOT_ADDED ->
+                        TileRequestOutcome.DECLINED
+
+                    else -> TileRequestOutcome.FAILED
+                },
+            )
             val messageResId = when (result) {
                 StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ADDED -> R.string.tiles_add_result_added
                 StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ALREADY_ADDED -> R.string.tiles_add_result_already_added
@@ -73,7 +94,9 @@ internal fun requestQuickSettingsTile(
         }
     } catch (_: SecurityException) {
         Toast.makeText(context, R.string.tiles_add_result_failed, Toast.LENGTH_SHORT).show()
+        onResult(TileRequestOutcome.FAILED)
     } catch (_: IllegalArgumentException) {
         Toast.makeText(context, R.string.tiles_add_result_failed, Toast.LENGTH_SHORT).show()
+        onResult(TileRequestOutcome.FAILED)
     }
 }
