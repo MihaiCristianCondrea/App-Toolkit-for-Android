@@ -32,6 +32,7 @@ object AppToolkitDiConstants {
     const val DEFAULT_THEME_PALETTE = "default_theme_palette"
     const val MONOCHROME_THEME_PALETTE = "monochromePalette"
     const val BLUE_THEME_PALETTE = "bluePalette"
+    const val PURPLE_THEME_PALETTE = "purplePalette"
     const val GREEN_THEME_PALETTE = "greenPalette"
     const val RED_THEME_PALETTE = "redPalette"
     const val YELLOW_THEME_PALETTE = "yellowPalette"

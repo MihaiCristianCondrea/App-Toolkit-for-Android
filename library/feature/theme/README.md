@@ -16,6 +16,7 @@ the application theme. The same preferences also serve onboarding appearance sel
 Public entry points include ThemeSettingsList, ThemeSettingsViewModel, its state/events, and
 themeSettingsModule. The DI module registers the built-in qualified palettes and resolves the
 host's default palette override, falling back to blue. Palette definitions remain in the design system.
+The purple palette is available through the `purple` static ID and `purplePalette` qualifier.
 Only ui and di layers are needed; there is no duplicate data layer or pass-through domain layer.
 
 ## Validation and risks

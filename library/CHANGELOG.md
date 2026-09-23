@@ -2,6 +2,18 @@
 
 ---
 
+# Unreleased
+
+### Added
+
+- Added a purple static palette with matching light and dark Material color schemes.
+
+### Fixed
+
+- Adjusted low-contrast text and container color pairs in the blue, Android, red, yellow, Christmas, and Halloween palettes. Aligned error foregrounds with error containers across the affected palettes.
+
+---
+
 # September 20, 2026
 
 **Version:** `3.0.0-pre19`

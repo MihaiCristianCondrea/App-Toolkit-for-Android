@@ -304,6 +304,10 @@ playback; it remains local presentation state in `core:designsystem`.
 - Concrete palette color tables, seasonal filtering, typography definitions, and dynamic-color
   resolution.
 
+Static palettes include purple alongside the existing blue, Android, green, red, yellow, rose,
+monochrome, and seasonal options. Paired foreground and background roles target at least 4.5:1
+contrast in both light and dark schemes.
+
 ## Current risks
 
 The module still depends directly on the preference contracts needed by `AppTheme`. The persisted

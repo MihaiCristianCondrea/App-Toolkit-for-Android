@@ -19,6 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.st
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.google.android.androidPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.google.blue.bluePalette
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.google.purple.purplePalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.google.green.greenPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.google.red.redPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.google.yellow.yellowPalette
@@ -35,6 +36,7 @@ object ThemePaletteProvider {
     fun paletteById(id: String): ColorPalette = when (id) {
         StaticPaletteIds.MONOCHROME -> monochromePalette
         StaticPaletteIds.GOOGLE_BLUE -> bluePalette
+        StaticPaletteIds.PURPLE -> purplePalette
         StaticPaletteIds.ANDROID -> androidPalette
         StaticPaletteIds.GREEN -> greenPalette
         StaticPaletteIds.RED -> redPalette
