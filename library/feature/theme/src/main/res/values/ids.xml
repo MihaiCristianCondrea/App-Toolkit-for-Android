@@ -21,4 +21,6 @@
       would share one key.
     -->
     <item name="seasonal_theme_overlay" type="id" />
+    <!-- Marks a content view the seasonal overlay already watches for new content. -->
+    <item name="seasonal_theme_overlay_watcher" type="id" />
 </resources>

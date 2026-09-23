@@ -37,6 +37,15 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.R
  *
  * Like shake-to-report, this is application-scoped so no activity has to opt in or copy anything.
  * When an activity resumes, a full-size `ComposeView` is added on top of its content view, once.
+ *
+ * The overlay is only ever added above content that already exists. `ComponentActivity.setContent`
+ * reuses the content view's first child when that child is a `ComposeView`, so an overlay added to
+ * an activity that sets its content late (after an asynchronous startup check, for example) was
+ * taken over as the activity's own content, without the view tree owners `setContent` normally
+ * installs, and navigation crashed. Activities that have no content yet get the overlay after the
+ * layout that follows their `setContent`. A later `setContentView` clears the content view, and the
+ * overlay is put back on top the same way.
+ *
  * The overlay only draws: a Compose view with no pointer input returns false from
  * `dispatchTouchEvent`, so every touch reaches the screen underneath. It is also hidden from
  * accessibility services and cannot take focus, so it never interrupts a screen reader or keyboard.
@@ -67,7 +76,10 @@ class SeasonalThemeManager(
     }
 
     override fun onActivityResumed(activity: Activity) {
-        attachOverlay(activity)
+        if (!isEligible(activity)) return
+        val content: ViewGroup = activity.findViewById(android.R.id.content) ?: return
+        watchContent(activity = activity, content = content)
+        attachOverlay(activity = activity, content = content)
     }
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) = Unit
@@ -77,13 +89,33 @@ class SeasonalThemeManager(
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) = Unit
     override fun onActivityDestroyed(activity: Activity) = Unit
 
-    private fun attachOverlay(activity: Activity) {
-        if (activity !is ComponentActivity) return
-        if (activity.isFinishing || activity.isDestroyed) return
-        if (isThirdPartyActivity(activity)) return
+    private fun isEligible(activity: Activity): Boolean =
+        activity is ComponentActivity &&
+            !activity.isFinishing &&
+            !activity.isDestroyed &&
+            !isThirdPartyActivity(activity)
 
-        val content: ViewGroup = activity.findViewById(android.R.id.content) ?: return
-        if (content.findViewWithTag<View?>(OVERLAY_TAG) != null) return
+    /**
+     * Re-checks the content view whenever it lays out, which is what adding the activity's content
+     * or replacing it causes. The listener is registered once per content view and dies with it.
+     */
+    private fun watchContent(activity: Activity, content: ViewGroup) {
+        if (content.getTag(R.id.seasonal_theme_overlay_watcher) != null) return
+        val listener = View.OnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+            // Adding a view from inside a layout pass would request another layout mid-pass.
+            content.post {
+                if (isEligible(activity)) attachOverlay(activity = activity, content = content)
+            }
+        }
+        content.setTag(R.id.seasonal_theme_overlay_watcher, listener)
+        content.addOnLayoutChangeListener(listener)
+    }
+
+    private fun attachOverlay(activity: Activity, content: ViewGroup) {
+        if (activity !is ComponentActivity) return
+        // Never be the first child: setContent would adopt the overlay as the activity's content.
+        if (content.childCount == 0) return
+        if (hasOverlay(content)) return
 
         val overlay = ComposeView(activity).apply {
             tag = OVERLAY_TAG
@@ -108,6 +140,10 @@ class SeasonalThemeManager(
             ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT),
         )
     }
+
+    /** Looks at direct children only, so the check stays cheap on every layout. */
+    private fun hasOverlay(content: ViewGroup): Boolean =
+        (0 until content.childCount).any { index -> content.getChildAt(index).tag == OVERLAY_TAG }
 
     private fun isThirdPartyActivity(activity: Activity): Boolean {
         val name: String = activity.javaClass.name
