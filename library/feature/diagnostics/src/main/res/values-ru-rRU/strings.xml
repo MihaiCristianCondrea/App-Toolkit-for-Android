@@ -48,5 +48,4 @@
     <string name="privacy_choices_title">Параметры конфиденциальности</string>
     <string name="summary_advanced_privacy_settings">Выберите, чем вы делитесь для аналитики и рекламы.</string>
     <string name="learn_more_about_provider">Подробнее об этом поставщике</string>
-    <string name="error_an_error_occurred">Произошла ошибка</string>
 </resources>

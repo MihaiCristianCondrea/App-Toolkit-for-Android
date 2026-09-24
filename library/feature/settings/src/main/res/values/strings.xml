@@ -28,6 +28,4 @@
     <string name="summary_preference_settings_display">Personalize your app\'s look and feel</string>
     <string name="summary_preference_settings_notifications">Manage app notifications</string>
     <string name="summary_preference_settings_privacy_and_security">Manage your privacy settings</string>
-    <string name="error_invalid_content_key">Invalid content key.</string>
-    <string name="error_no_settings_found">No settings found</string>
 </resources>

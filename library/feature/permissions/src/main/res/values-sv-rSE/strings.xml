@@ -34,5 +34,4 @@
     <string name="summary_preference_permissions_post_notifications">Tillåter appen att visa aviseringar på enheter med Android 13 eller senare.</string>
     <string name="summary_preference_permissions_wake_lock">Tillåter appen att förhindra att enheten går i viloläge (t.ex. skärmdimning или processorvila) under kritiska operationer för att säkerställa att de slutförs utan avbrott. Detta används sparsamt för att spara batteri.</string>
     <string name="wake_lock">Håll enheten vaken [WAKE_LOCK]</string>
-    <string name="error_no_settings_found">Inga inställningar hittades</string>
 </resources>

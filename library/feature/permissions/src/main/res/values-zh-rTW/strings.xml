@@ -34,5 +34,4 @@
     <string name="summary_preference_permissions_post_notifications">允許應用程式在搭載 Android 13 或更新版本的裝置上顯示通知。</string>
     <string name="summary_preference_permissions_wake_lock">允許應用程式在關鍵作業期間防止裝置進入休眠狀態 (例如螢幕變暗或處理器休眠)，以確保作業不中斷並順利完成。此功能會謹慎使用以節省電池電量。</string>
     <string name="wake_lock">保持裝置喚醒 [WAKE_LOCK]</string>
-    <string name="error_no_settings_found">找不到設定</string>
 </resources>

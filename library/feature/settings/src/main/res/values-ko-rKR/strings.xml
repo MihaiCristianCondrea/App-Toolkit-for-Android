@@ -28,6 +28,4 @@
     <string name="summary_preference_settings_display">앱의 모양과 느낌을 맞춤 설정하세요.</string>
     <string name="summary_preference_settings_notifications">앱 알림 관리</string>
     <string name="summary_preference_settings_privacy_and_security">개인 정보 설정을 관리합니다.</string>
-    <string name="error_invalid_content_key">잘못된 콘텐츠 키입니다.</string>
-    <string name="error_no_settings_found">설정을 찾을 수 없습니다</string>
 </resources>

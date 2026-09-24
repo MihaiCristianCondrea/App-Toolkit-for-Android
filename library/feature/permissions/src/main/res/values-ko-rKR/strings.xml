@@ -34,5 +34,4 @@
     <string name="summary_preference_permissions_post_notifications">앱이 Android 13 이상이 설치된 기기에서 알림을 표시하도록 허용합니다.</string>
     <string name="summary_preference_permissions_wake_lock">앱이 중요한 작업을 수행하는 동안 기기가 절전 모드(예: 화면 어두워짐 또는 프로세서 절전)로 전환되는 것을 방지하여 중단 없이 완료되도록 합니다. 배터리를 절약하기 위해 최소한으로 사용됩니다.</string>
     <string name="wake_lock">기기를 절전 모드로 전환하지 않음 [WAKE_LOCK]</string>
-    <string name="error_no_settings_found">설정을 찾을 수 없습니다</string>
 </resources>

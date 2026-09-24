@@ -17,6 +17,4 @@
 <resources>
     <string name="changelog_title">Jurnal de modificări al aplicației</string>
     <string name="no_new_updates_message">Nu există actualizări noi disponibile.</string>
-    <string name="error_loading_changelog_message">Nu s-a putut încărca jurnalul de modificări al aplicației. Vă rugăm să încercați din nou.</string>
-    <string name="loading_changelog_message">Se preia jurnalul de modificări al aplicației…</string>
 </resources>

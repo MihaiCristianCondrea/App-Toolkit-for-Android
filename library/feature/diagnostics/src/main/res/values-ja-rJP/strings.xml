@@ -48,5 +48,4 @@
     <string name="privacy_choices_title">プライバシーの選択</string>
     <string name="summary_advanced_privacy_settings">分析と広告のために共有する内容を選択します。</string>
     <string name="learn_more_about_provider">このプロバイダについて詳しく知る</string>
-    <string name="error_an_error_occurred">エラーが発生しました</string>
 </resources>

@@ -17,6 +17,4 @@
 <resources>
     <string name="changelog_title">Uygulama değişiklik günlüğü</string>
     <string name="no_new_updates_message">Yeni güncelleme yok.</string>
-    <string name="error_loading_changelog_message">Uygulama değişiklik günlüğü yüklenemedi. Lütfen tekrar deneyin.</string>
-    <string name="loading_changelog_message">Uygulama değişiklik günlüğü alınıyor…</string>
 </resources>

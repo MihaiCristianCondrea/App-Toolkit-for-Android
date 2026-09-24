@@ -34,5 +34,4 @@
     <string name="summary_preference_permissions_post_notifications">Cho phép ứng dụng hiển thị thông báo trên các thiết bị chạy Android 13 trở lên.</string>
     <string name="summary_preference_permissions_wake_lock">Cho phép ứng dụng ngăn thiết bị chuyển sang chế độ ngủ (ví dụ: làm mờ màn hình hoặc bộ xử lý ngủ) trong các hoạt động quan trọng để đảm bảo chúng hoàn thành mà không bị gián đoạn. Điều này được sử dụng một cách tiết kiệm để bảo tồn pin.</string>
     <string name="wake_lock">Giữ thiết bị luôn bật [WAKE_LOCK]</string>
-    <string name="error_no_settings_found">Không tìm thấy cài đặt</string>
 </resources>

@@ -48,5 +48,4 @@
     <string name="privacy_choices_title">Параметри конфіденційності</string>
     <string name="summary_advanced_privacy_settings">Виберіть, чим ви ділитеся для аналітики та реклами.</string>
     <string name="learn_more_about_provider">Дізнатися більше про цього постачальника</string>
-    <string name="error_an_error_occurred">Сталася помилка</string>
 </resources>

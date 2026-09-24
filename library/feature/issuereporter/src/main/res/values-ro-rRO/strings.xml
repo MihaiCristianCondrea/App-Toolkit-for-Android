@@ -29,9 +29,4 @@
     <string name="issue_submitted_title">Raport trimis</string>
     <string name="issue_title_label">Titlu</string>
     <string name="snack_report_failed">Trimiterea raportului a eșuat</string>
-    <string name="error_forbidden">Interzis: permisiuni insuficiente</string>
-    <string name="error_gone">Punctul final API a fost eliminat</string>
-    <string name="error_invalid_report">Titlul și descrierea nu pot fi goale</string>
-    <string name="error_unauthorized">Neautorizat: token invalid</string>
-    <string name="error_unprocessable">Date invalide pentru crearea problemei</string>
 </resources>

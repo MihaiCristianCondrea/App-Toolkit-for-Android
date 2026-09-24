@@ -17,6 +17,4 @@
 <resources>
     <string name="changelog_title">سجل تغييرات التطبيق</string>
     <string name="no_new_updates_message">لا توجد تحديثات جديدة متاحة.</string>
-    <string name="error_loading_changelog_message">تعذر تحميل سجل تغييرات التطبيق. يرجى المحاولة مرة أخرى.</string>
-    <string name="loading_changelog_message">جارٍ جلب سجل تغييرات التطبيق…</string>
 </resources>

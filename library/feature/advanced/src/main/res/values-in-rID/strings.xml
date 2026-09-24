@@ -22,5 +22,4 @@
     <string name="error_reporting">Pelaporan kesalahan</string>
     <string name="summary_preference_settings_bug_report">Kirim laporan bug dan permintaan fitur ke halaman masalah di repositori GitHub aplikasi</string>
     <string name="summary_preference_settings_clear_cache">Bersihkan data aplikasi sementara.</string>
-    <string name="cache_cleared_error">Cache dibersihkan dengan beberapa kesalahan</string>
 </resources>

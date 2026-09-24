@@ -29,9 +29,4 @@
     <string name="issue_submitted_title">レポートを送信しました</string>
     <string name="issue_title_label">タイトル</string>
     <string name="snack_report_failed">レポートの送信に失敗しました</string>
-    <string name="error_forbidden">禁止: 権限が不足しています</string>
-    <string name="error_gone">API エンドポイントが削除されました</string>
-    <string name="error_invalid_report">タイトルと説明を空にすることはできません</string>
-    <string name="error_unauthorized">未認証: 無効なトークン</string>
-    <string name="error_unprocessable">課題作成のためのデータが無効です</string>
 </resources>

@@ -24,5 +24,4 @@
     <string name="support_offer_unavailable">Opsi donasi ini saat ini tidak tersedia.</string>
     <string name="support_us">Dukung kami</string>
     <string name="web_ad">Iklan web</string>
-    <string name="error_failed_to_load_sku_details">Gagal memuat detail SKU</string>
 </resources>

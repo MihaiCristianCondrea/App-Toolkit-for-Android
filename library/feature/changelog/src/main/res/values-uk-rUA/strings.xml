@@ -17,6 +17,4 @@
 <resources>
     <string name="changelog_title">Журнал змін</string>
     <string name="no_new_updates_message">Немає нових оновлень.</string>
-    <string name="error_loading_changelog_message">Не вдалося завантажити журнал змін застосунку. Будь ласка, спробуйте ще раз.</string>
-    <string name="loading_changelog_message">Отримання журналу змін застосунку…</string>
 </resources>

@@ -28,6 +28,4 @@
     <string name="summary_preference_settings_display">Uygulamanızın görünümünü ve hissini kişiselleştirin</string>
     <string name="summary_preference_settings_notifications">Uygulama bildirimlerini yönetin</string>
     <string name="summary_preference_settings_privacy_and_security">Gizlilik ayarlarınızı yönetin</string>
-    <string name="error_invalid_content_key">Geçersiz içerik anahtarı.</string>
-    <string name="error_no_settings_found">Ayar bulunamadı</string>
 </resources>

@@ -28,6 +28,4 @@
     <string name="summary_preference_settings_display">Персонализирайте облика на приложението</string>
     <string name="summary_preference_settings_notifications">Управлявайте известията на приложението</string>
     <string name="summary_preference_settings_privacy_and_security">Управлявайте настройките за поверителност</string>
-    <string name="error_invalid_content_key">Невалиден ключ за съдържание.</string>
-    <string name="error_no_settings_found">Не са намерени настройки</string>
 </resources>

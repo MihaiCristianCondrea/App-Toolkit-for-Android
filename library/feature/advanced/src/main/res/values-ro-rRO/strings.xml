@@ -22,5 +22,4 @@
     <string name="error_reporting">Raportare erori</string>
     <string name="summary_preference_settings_bug_report">Trimite rapoarte de erori și solicitări de funcții pe pagina de probleme a aplicației din GitHub</string>
     <string name="summary_preference_settings_clear_cache">Șterge datele temporare ale aplicației.</string>
-    <string name="cache_cleared_error">Cache-ul a fost curățat cu unele erori</string>
 </resources>

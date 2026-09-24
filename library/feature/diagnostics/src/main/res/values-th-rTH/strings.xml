@@ -48,5 +48,4 @@
     <string name="privacy_choices_title">ตัวเลือกความเป็นส่วนตัว</string>
     <string name="summary_advanced_privacy_settings">เลือกสิ่งที่คุณแบ่งปันเพื่อการวิเคราะห์และโฆษณา</string>
     <string name="learn_more_about_provider">ดูข้อมูลเพิ่มเติมเกี่ยวกับผู้ให้บริการนี้</string>
-    <string name="error_an_error_occurred">เกิดข้อผิดพลาด</string>
 </resources>

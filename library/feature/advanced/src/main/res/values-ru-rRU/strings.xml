@@ -22,5 +22,4 @@
     <string name="error_reporting">Отчёт об ошибках</string>
     <string name="summary_preference_settings_bug_report">Отправьте отчёты об ошибках и запросы на функции на страницу GitHub проекта</string>
     <string name="summary_preference_settings_clear_cache">Очистить временные данные приложения.</string>
-    <string name="cache_cleared_error">Кэш очищен с некоторыми ошибками</string>
 </resources>

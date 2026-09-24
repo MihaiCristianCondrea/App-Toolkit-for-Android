@@ -29,9 +29,4 @@
     <string name="issue_submitted_title">Naipadala ang ulat</string>
     <string name="issue_title_label">Pamagat</string>
     <string name="snack_report_failed">Nabigo ang pagpapadala ng ulat</string>
-    <string name="error_forbidden">Ipinagbabawal: kulang ang mga pahintulot</string>
-    <string name="error_gone">Inalis ang API endpoint</string>
-    <string name="error_invalid_report">Hindi maaaring walang laman ang pamagat at paglalarawan</string>
-    <string name="error_unauthorized">Hindi awtorisado: Hindi wastong token</string>
-    <string name="error_unprocessable">Hindi wastong data para sa paglikha ng isyu</string>
 </resources>

@@ -29,9 +29,4 @@
     <string name="issue_submitted_title">Relatório enviado</string>
     <string name="issue_title_label">Título</string>
     <string name="snack_report_failed">Falha ao enviar relatório</string>
-    <string name="error_forbidden">Proibido: permissões insuficientes</string>
-    <string name="error_gone">Endpoint da API removido</string>
-    <string name="error_invalid_report">Título e descrição não podem estar vazios</string>
-    <string name="error_unauthorized">Não autorizado: token inválido</string>
-    <string name="error_unprocessable">Dados inválidos para criação do problema</string>
 </resources>

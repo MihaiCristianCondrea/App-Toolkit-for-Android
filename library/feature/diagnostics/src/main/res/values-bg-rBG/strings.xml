@@ -48,5 +48,4 @@
     <string name="privacy_choices_title">Настройки за поверителност</string>
     <string name="summary_advanced_privacy_settings">Изберете какво споделяте за анализи и реклама.</string>
     <string name="learn_more_about_provider">Научи повече за този доставчик</string>
-    <string name="error_an_error_occurred">Възникна грешка</string>
 </resources>

@@ -28,6 +28,4 @@
     <string name="summary_preference_settings_display">خصص شكل ومظهر تطبيقك</string>
     <string name="summary_preference_settings_notifications">إدارة إشعارات التطبيق</string>
     <string name="summary_preference_settings_privacy_and_security">إدارة إعدادات الخصوصية الخاصة بك</string>
-    <string name="error_invalid_content_key">مفتاح المحتوى غير صالح.</string>
-    <string name="error_no_settings_found">لم يتم العثور على إعدادات</string>
 </resources>

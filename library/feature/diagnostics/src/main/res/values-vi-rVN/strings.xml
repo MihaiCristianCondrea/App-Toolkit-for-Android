@@ -48,5 +48,4 @@
     <string name="privacy_choices_title">Tùy chọn quyền riêng tư</string>
     <string name="summary_advanced_privacy_settings">Chọn những gì bạn chia sẻ cho phân tích và quảng cáo.</string>
     <string name="learn_more_about_provider">Tìm hiểu thêm về nhà cung cấp này</string>
-    <string name="error_an_error_occurred">Đã xảy ra lỗi</string>
 </resources>

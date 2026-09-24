@@ -17,6 +17,4 @@
 <resources>
     <string name="changelog_title">Alkalmazás változásnapló</string>
     <string name="no_new_updates_message">Nincs új frissítés elérhető.</string>
-    <string name="error_loading_changelog_message">Nem sikerült betölteni az alkalmazás változásnaplóját. Kérjük, próbálja újra.</string>
-    <string name="loading_changelog_message">Az alkalmazás változásnaplójának lekérése…</string>
 </resources>

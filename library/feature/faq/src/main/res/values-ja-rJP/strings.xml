@@ -34,5 +34,4 @@
     <string name="view_in_google_play_store">Google Playストアで表示</string>
     <string name="need_more_help">さらにサポートが必要ですか？</string>
     <string name="show_more">さらに表示</string>
-    <string name="error_failed_to_load_faq">FAQ の読み込みに失敗しました</string>
 </resources>

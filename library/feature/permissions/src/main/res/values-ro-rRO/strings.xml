@@ -34,5 +34,4 @@
     <string name="summary_preference_permissions_post_notifications">Permite aplicației să afișeze notificări pe dispozitivele cu Android 13 sau mai nou.</string>
     <string name="summary_preference_permissions_wake_lock">Permite aplicației să împiedice dispozitivul să intre în modul de repaus (de ex., estomparea ecranului sau repausul procesorului) în timpul operațiunilor critice pentru a se asigura că acestea se finalizează fără întrerupere. Aceasta este utilizată cu moderație pentru a conserva bateria.</string>
     <string name="wake_lock">Menține dispozitivul activ [WAKE_LOCK]</string>
-    <string name="error_no_settings_found">Nu au fost găsite setări</string>
 </resources>

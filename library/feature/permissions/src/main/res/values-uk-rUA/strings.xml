@@ -34,5 +34,4 @@
     <string name="summary_preference_permissions_post_notifications">Дозволяє додатку відображати сповіщення на пристроях з Android 13 або новіших версій.</string>
     <string name="summary_preference_permissions_wake_lock">Дозволяє програмі запобігати переходу пристрою в режим сну (наприклад, затемнення екрана або перехід процесора в режим сну) під час критичних операцій, щоб забезпечити їх завершення без переривань. Використовується економно для збереження заряду батареї.</string>
     <string name="wake_lock">Залишати пристрій увімкненим [WAKE_LOCK]</string>
-    <string name="error_no_settings_found">Налаштування не знайдено</string>
 </resources>

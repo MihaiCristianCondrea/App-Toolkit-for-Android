@@ -17,6 +17,4 @@
 <resources>
     <string name="changelog_title">Дневник на промените</string>
     <string name="no_new_updates_message">Няма налични нови актуализации.</string>
-    <string name="error_loading_changelog_message">Не може да се зареди дневникът с промените на приложението. Моля, опитайте отново.</string>
-    <string name="loading_changelog_message">Извличане на дневника с промените на приложението…</string>
 </resources>

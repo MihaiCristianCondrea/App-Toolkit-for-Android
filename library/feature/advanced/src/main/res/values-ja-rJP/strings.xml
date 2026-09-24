@@ -22,5 +22,4 @@
     <string name="error_reporting">エラー報告</string>
     <string name="summary_preference_settings_bug_report">アプリのGitHubリポジトリの問題ページにバグ報告と機能リクエストを送信する</string>
     <string name="summary_preference_settings_clear_cache">一時的なアプリケーションデータをクリアします。</string>
-    <string name="cache_cleared_error">一部のエラーとともにキャッシュがクリアされました</string>
 </resources>

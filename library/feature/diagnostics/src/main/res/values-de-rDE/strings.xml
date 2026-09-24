@@ -48,5 +48,4 @@
     <string name="privacy_choices_title">Datenschutzoptionen</string>
     <string name="summary_advanced_privacy_settings">Wählen Sie, was Sie für Analysen und Werbung teilen.</string>
     <string name="learn_more_about_provider">Mehr über diesen Anbieter erfahren</string>
-    <string name="error_an_error_occurred">Ein Fehler ist aufgetreten</string>
 </resources>

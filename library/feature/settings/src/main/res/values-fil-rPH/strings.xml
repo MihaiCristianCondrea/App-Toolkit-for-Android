@@ -28,6 +28,4 @@
     <string name="summary_preference_settings_display">I-personalize ang itsura at pakiramdam ng iyong app</string>
     <string name="summary_preference_settings_notifications">Pamahalaan ang mga notipikasyon ng app</string>
     <string name="summary_preference_settings_privacy_and_security">Pamahalaan ang iyong mga setting ng privacy</string>
-    <string name="error_invalid_content_key">Hindi wastong content key.</string>
-    <string name="error_no_settings_found">Walang nakitang mga setting</string>
 </resources>

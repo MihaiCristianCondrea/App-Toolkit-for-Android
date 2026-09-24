@@ -34,5 +34,4 @@
     <string name="summary_preference_permissions_post_notifications">Lehetővé teszi az alkalmazás számára, hogy értesítéseket jelenítsen meg Android 13 vagy újabb rendszert futtató eszközökön.</string>
     <string name="summary_preference_permissions_wake_lock">Lehetővé teszi az alkalmazás számára, hogy megakadályozza az eszköz alvó állapotba kerülését (pl. képernyő elsötétítése vagy processzor alvó állapota) kritikus műveletek során, biztosítva azok megszakítás nélküli befejezését. Ezt takarékosan használják az akkumulátor kímélése érdekében.</string>
     <string name="wake_lock">Eszköz ébren tartása [WAKE_LOCK]</string>
-    <string name="error_no_settings_found">Nem találhatók beállítások</string>
 </resources>

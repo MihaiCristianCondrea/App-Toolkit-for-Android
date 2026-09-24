@@ -28,6 +28,4 @@
     <string name="summary_preference_settings_display">Персоналізуйте вигляд та функціонал вашого додатка</string>
     <string name="summary_preference_settings_notifications">Керуйте сповіщеннями додатка</string>
     <string name="summary_preference_settings_privacy_and_security">Керуйте своїми налаштуваннями конфіденційності</string>
-    <string name="error_invalid_content_key">Недійсний ключ вмісту.</string>
-    <string name="error_no_settings_found">Налаштування не знайдено</string>
 </resources>

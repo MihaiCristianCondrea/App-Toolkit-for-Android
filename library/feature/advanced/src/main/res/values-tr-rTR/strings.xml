@@ -22,5 +22,4 @@
     <string name="error_reporting">Hata raporlama</string>
     <string name="summary_preference_settings_bug_report">Hata raporları ve istekleri GitHub sorunlar sayfasına gönderin</string>
     <string name="summary_preference_settings_clear_cache">Geçici uygulama verilerini temizle.</string>
-    <string name="cache_cleared_error">Önbellek bazı hatalarla temizlendi</string>
 </resources>

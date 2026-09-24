@@ -34,5 +34,4 @@
     <string name="summary_preference_permissions_post_notifications">অ্যাপটিকে অ্যান্ড্রয়েড ১৩ বা তার পরের ডিভাইসগুলোতে বিজ্ঞপ্তি প্রদর্শন করার অনুমতি দেয়।</string>
     <string name="summary_preference_permissions_wake_lock">অ্যাপটিকে জরুরি অপারেশনের সময় ডিভাইসকে ঘুমাতে যাওয়া (যেমন, স্ক্রিন অনুজ্জ্বল হওয়া বা প্রসেসর ঘুমানো) থেকে বিরত রাখতে দেয় যাতে সেগুলি বাধা ছাড়াই সম্পন্ন হয়। ব্যাটারি সংরক্ষণের জন্য এটি অল্প পরিমাণে ব্যবহৃত হয়।</string>
     <string name="wake_lock">ডিভাইসকে জাগিয়ে রাখুন [WAKE_LOCK]</string>
-    <string name="error_no_settings_found">কোনো সেটিংস পাওয়া যায়নি</string>
 </resources>

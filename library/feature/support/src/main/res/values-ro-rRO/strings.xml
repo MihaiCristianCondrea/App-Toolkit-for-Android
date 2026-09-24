@@ -24,5 +24,4 @@
     <string name="support_offer_unavailable">Această opțiune de donație nu este disponibilă în prezent.</string>
     <string name="support_us">Susține-ne</string>
     <string name="web_ad">Reclamă web</string>
-    <string name="error_failed_to_load_sku_details">Nu s-au putut încărca detaliile SKU</string>
 </resources>

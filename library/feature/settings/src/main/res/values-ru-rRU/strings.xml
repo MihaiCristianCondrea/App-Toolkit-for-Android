@@ -28,6 +28,4 @@
     <string name="summary_preference_settings_display">Настройте внешний вид и поведение приложения</string>
     <string name="summary_preference_settings_notifications">Управляйте уведомлениями приложения</string>
     <string name="summary_preference_settings_privacy_and_security">Управляйте настройками конфиденциальности</string>
-    <string name="error_invalid_content_key">Недопустимый ключ содержимого.</string>
-    <string name="error_no_settings_found">Настройки не найдены</string>
 </resources>

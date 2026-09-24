@@ -48,5 +48,4 @@
     <string name="privacy_choices_title">隱私選項</string>
     <string name="summary_advanced_privacy_settings">選擇你要為分析與廣告分享的內容。</string>
     <string name="learn_more_about_provider">進一步瞭解此服務提供者</string>
-    <string name="error_an_error_occurred">發生錯誤</string>
 </resources>

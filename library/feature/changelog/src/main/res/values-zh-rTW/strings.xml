@@ -17,6 +17,4 @@
 <resources>
     <string name="changelog_title">應用程式變更紀錄</string>
     <string name="no_new_updates_message">沒有新的更新可用。</string>
-    <string name="error_loading_changelog_message">無法載入應用程式變更記錄。請再試一次。</string>
-    <string name="loading_changelog_message">正在擷取應用程式變更記錄…</string>
 </resources>

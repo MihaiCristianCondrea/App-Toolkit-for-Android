@@ -28,6 +28,4 @@
     <string name="summary_preference_settings_display">আপনার অ্যাপের চেহারা ও অনুভূতি ব্যক্তিগত করুন</string>
     <string name="summary_preference_settings_notifications">অ্যাপ বিজ্ঞপ্তি পরিচালনা করুন</string>
     <string name="summary_preference_settings_privacy_and_security">আপনার গোপনীয়তা সেটিংস পরিচালনা করুন</string>
-    <string name="error_invalid_content_key">অবৈধ কনটেন্ট কী।</string>
-    <string name="error_no_settings_found">কোনো সেটিংস পাওয়া যায়নি</string>
 </resources>

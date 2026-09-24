@@ -28,6 +28,4 @@
     <string name="summary_preference_settings_display">個性化您的應用程式外觀和感受</string>
     <string name="summary_preference_settings_notifications">管理應用程式通知</string>
     <string name="summary_preference_settings_privacy_and_security">管理您的隱私設定</string>
-    <string name="error_invalid_content_key">內容金鑰無效。</string>
-    <string name="error_no_settings_found">找不到設定</string>
 </resources>

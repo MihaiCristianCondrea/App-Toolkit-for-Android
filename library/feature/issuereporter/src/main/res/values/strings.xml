@@ -29,9 +29,4 @@
     <string name="issue_submitted_title">Report submitted</string>
     <string name="issue_title_label">Title</string>
     <string name="snack_report_failed">Failed to send report</string>
-    <string name="error_forbidden">Forbidden: insufficient permissions</string>
-    <string name="error_gone">API endpoint removed</string>
-    <string name="error_invalid_report">Title and description cannot be empty</string>
-    <string name="error_unauthorized">Unauthorized: Invalid token</string>
-    <string name="error_unprocessable">Invalid data for issue creation</string>
 </resources>

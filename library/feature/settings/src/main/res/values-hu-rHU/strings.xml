@@ -28,6 +28,4 @@
     <string name="summary_preference_settings_display">Személyre szabhatod az alkalmazás megjelenését</string>
     <string name="summary_preference_settings_notifications">Alkalmazás értesítéseinek kezelése</string>
     <string name="summary_preference_settings_privacy_and_security">Kezeld az adatvédelmi beállításaidat</string>
-    <string name="error_invalid_content_key">Érvénytelen tartalomkulcs.</string>
-    <string name="error_no_settings_found">Nem találhatók beállítások</string>
 </resources>

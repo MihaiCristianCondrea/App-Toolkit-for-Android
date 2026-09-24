@@ -22,5 +22,4 @@
     <string name="error_reporting">Felrapportering</string>
     <string name="summary_preference_settings_bug_report">Skicka felrapporter och funktionsförfrågningar till appens GitHub-sida</string>
     <string name="summary_preference_settings_clear_cache">Rensa tillfälliga applikationsdata.</string>
-    <string name="cache_cleared_error">Cachen rensades med vissa fel</string>
 </resources>

@@ -22,5 +22,4 @@
     <string name="error_reporting">Докладване на грешки</string>
     <string name="summary_preference_settings_bug_report">Изпращайте доклади за грешки и предложения за функции към страницата с проблеми в GitHub</string>
     <string name="summary_preference_settings_clear_cache">Изчисти временните данни на приложението.</string>
-    <string name="cache_cleared_error">Кешът е изчистен с някои грешки</string>
 </resources>

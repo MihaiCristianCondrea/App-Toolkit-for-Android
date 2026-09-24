@@ -24,5 +24,4 @@
     <string name="support_offer_unavailable">This donation option is currently unavailable.</string>
     <string name="support_us">Support the app</string>
     <string name="web_ad">Web ad</string>
-    <string name="error_failed_to_load_sku_details">Failed to load SKU details</string>
 </resources>

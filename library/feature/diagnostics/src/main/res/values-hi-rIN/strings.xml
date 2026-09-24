@@ -48,5 +48,4 @@
     <string name="privacy_choices_title">गोपनीयता विकल्प</string>
     <string name="summary_advanced_privacy_settings">चुनें कि आप एनालिटिक्स और विज्ञापन के लिए क्या साझा करते हैं।</string>
     <string name="learn_more_about_provider">इस प्रदाता के बारे में और जानें</string>
-    <string name="error_an_error_occurred">एक त्रुटि हुई</string>
 </resources>

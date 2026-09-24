@@ -34,5 +34,4 @@
     <string name="summary_preference_permissions_post_notifications">ایپ کو Android 13 یا اس کے بعد والے آلات پر اطلاعات دکھانے کی اجازت دیتا ہے۔</string>
     <string name="summary_preference_permissions_wake_lock">ایپ کو اہم کارروائیوں کے دوران ڈیوائس کو سلیپ موڈ (مثلاً، اسکرین کا مدھم ہونا یا پروسیسر کا سلیپ موڈ) میں جانے سے روکنے کی اجازت دیتا ہے تاکہ یہ یقینی بنایا جا سکے کہ وہ بغیر کسی رکاوٹ کے مکمل ہوں۔ بیٹری بچانے کے لیے اسے किफایت سے استعمال کیا جاتا ہے۔</string>
     <string name="wake_lock">ڈیوائس کو بیدار رکھیں [WAKE_LOCK]</string>
-    <string name="error_no_settings_found">کوئی ترتیبات نہیں ملیں</string>
 </resources>

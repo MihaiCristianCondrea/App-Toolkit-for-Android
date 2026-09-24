@@ -22,5 +22,4 @@
     <string name="error_reporting">Informe de errores</string>
     <string name="summary_preference_settings_bug_report">Envía informes de errores y solicitudes de funciones a la página de incidencias del repositorio de GitHub de la aplicación</string>
     <string name="summary_preference_settings_clear_cache">Borrar datos temporales de la aplicación.</string>
-    <string name="cache_cleared_error">La caché se limpió con algunos errores</string>
 </resources>

@@ -17,6 +17,4 @@
 <resources>
     <string name="changelog_title">Ändringslogg</string>
     <string name="no_new_updates_message">Inga nya uppdateringar tillgängliga.</string>
-    <string name="error_loading_changelog_message">Det gick inte att läsa in programmets ändringslogg. Försök igen.</string>
-    <string name="loading_changelog_message">Hämtar programmets ändringslogg…</string>
 </resources>

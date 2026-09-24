@@ -28,6 +28,4 @@
     <string name="summary_preference_settings_display">Cá nhân hóa giao diện và cảm nhận của ứng dụng</string>
     <string name="summary_preference_settings_notifications">Quản lý thông báo ứng dụng</string>
     <string name="summary_preference_settings_privacy_and_security">Quản lý cài đặt quyền riêng tư của bạn</string>
-    <string name="error_invalid_content_key">Khóa nội dung không hợp lệ.</string>
-    <string name="error_no_settings_found">Không tìm thấy cài đặt</string>
 </resources>

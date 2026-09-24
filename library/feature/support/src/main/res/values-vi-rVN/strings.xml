@@ -24,5 +24,4 @@
     <string name="support_offer_unavailable">Tùy chọn quyên góp này hiện không khả dụng.</string>
     <string name="support_us">Ủng hộ chúng tôi</string>
     <string name="web_ad">Quảng cáo web</string>
-    <string name="error_failed_to_load_sku_details">Không thể tải chi tiết SKU</string>
 </resources>

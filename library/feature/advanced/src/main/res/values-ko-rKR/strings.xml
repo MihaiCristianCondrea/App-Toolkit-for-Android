@@ -22,5 +22,4 @@
     <string name="error_reporting">오류 보고</string>
     <string name="summary_preference_settings_bug_report">버그 신고 및 기능 요청을 앱의 GitHub 저장소 문제 페이지로 보내세요.</string>
     <string name="summary_preference_settings_clear_cache">임시 애플리케이션 데이터를 지웁니다.</string>
-    <string name="cache_cleared_error">일부 오류와 함께 캐시가 삭제되었습니다</string>
 </resources>

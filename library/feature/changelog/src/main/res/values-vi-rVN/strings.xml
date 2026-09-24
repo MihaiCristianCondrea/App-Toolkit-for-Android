@@ -17,6 +17,4 @@
 <resources>
     <string name="changelog_title">Nhật ký thay đổi ứng dụng</string>
     <string name="no_new_updates_message">Không có bản cập nhật mới.</string>
-    <string name="error_loading_changelog_message">Không thể tải nhật ký thay đổi của ứng dụng. Vui lòng thử lại.</string>
-    <string name="loading_changelog_message">Đang lấy nhật ký thay đổi của ứng dụng…</string>
 </resources>

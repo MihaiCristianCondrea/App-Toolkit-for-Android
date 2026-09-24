@@ -29,9 +29,4 @@
     <string name="issue_submitted_title">Jelentés elküldve</string>
     <string name="issue_title_label">Cím</string>
     <string name="snack_report_failed">A jelentés elküldése nem sikerült</string>
-    <string name="error_forbidden">Tiltott: elégtelen jogosultságok</string>
-    <string name="error_gone">Az API végpont eltávolítva</string>
-    <string name="error_invalid_report">A cím és a leírás nem lehet üres</string>
-    <string name="error_unauthorized">Nem engedélyezett: érvénytelen token</string>
-    <string name="error_unprocessable">Érvénytelen adatok a probléma létrehozásához</string>
 </resources>

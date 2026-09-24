@@ -34,5 +34,4 @@
     <string name="summary_preference_permissions_post_notifications">Permite que o aplicativo exiba notificações em dispositivos com Android 13 ou posterior.</string>
     <string name="summary_preference_permissions_wake_lock">Permite que o app impeça o dispositivo de entrar em suspensão (ex.: escurecimento da tela ou suspensão do processador) durante operações críticas para garantir que sejam concluídas sem interrupção. Isso é usado com moderação para conservar a bateria.</string>
     <string name="wake_lock">Manter dispositivo ativo [WAKE_LOCK]</string>
-    <string name="error_no_settings_found">Nenhuma configuração encontrada</string>
 </resources>

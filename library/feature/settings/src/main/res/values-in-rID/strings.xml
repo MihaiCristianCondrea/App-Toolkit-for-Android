@@ -28,6 +28,4 @@
     <string name="summary_preference_settings_display">Personalisasi tampilan dan nuansa aplikasi Anda</string>
     <string name="summary_preference_settings_notifications">Kelola notifikasi aplikasi</string>
     <string name="summary_preference_settings_privacy_and_security">Kelola pengaturan privasi Anda</string>
-    <string name="error_invalid_content_key">Kunci konten tidak valid.</string>
-    <string name="error_no_settings_found">Tidak ada pengaturan yang ditemukan</string>
 </resources>

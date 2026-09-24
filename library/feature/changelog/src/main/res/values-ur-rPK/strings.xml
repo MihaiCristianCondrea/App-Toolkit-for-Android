@@ -17,6 +17,4 @@
 <resources>
     <string name="changelog_title">ایپ چینج لاگ</string>
     <string name="no_new_updates_message">کوئی نئی اپ ڈیٹس دستیاب نہیں ہیں۔</string>
-    <string name="error_loading_changelog_message">ایپلیکیشن کی تبدیلیوں کی فہرست لوڈ نہیں ہو سکی۔ براہ کرم دوبارہ کوشش کریں.</string>
-    <string name="loading_changelog_message">ایپلیکیشن کی تبدیلیوں کی فہرست حاصل کی جا رہی ہے…</string>
 </resources>

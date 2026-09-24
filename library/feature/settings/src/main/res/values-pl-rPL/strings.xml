@@ -28,6 +28,4 @@
     <string name="summary_preference_settings_display">Spersonalizuj wygląd i działanie swojej aplikacji</string>
     <string name="summary_preference_settings_notifications">Zarządzaj powiadomieniami aplikacji</string>
     <string name="summary_preference_settings_privacy_and_security">Zarządzaj ustawieniami prywatności</string>
-    <string name="error_invalid_content_key">Nieprawidłowy klucz treści.</string>
-    <string name="error_no_settings_found">Nie znaleziono ustawień</string>
 </resources>

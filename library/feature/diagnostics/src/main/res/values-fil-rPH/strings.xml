@@ -48,5 +48,4 @@
     <string name="privacy_choices_title">Mga pagpipilian sa privacy</string>
     <string name="summary_advanced_privacy_settings">Piliin kung ano ang ibinabahagi mo para sa analytics at advertising.</string>
     <string name="learn_more_about_provider">Alamin pa ang tungkol sa provider na ito</string>
-    <string name="error_an_error_occurred">May naganap na error</string>
 </resources>

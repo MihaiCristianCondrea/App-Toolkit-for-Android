@@ -28,6 +28,4 @@
     <string name="summary_preference_settings_display">ปรับแต่งรูปลักษณ์ของแอปตามที่คุณต้องการ</string>
     <string name="summary_preference_settings_notifications">จัดการการแจ้งเตือนแอป</string>
     <string name="summary_preference_settings_privacy_and_security">จัดการการตั้งค่าความเป็นส่วนตัวของคุณ</string>
-    <string name="error_invalid_content_key">คีย์เนื้อหาไม่ถูกต้อง</string>
-    <string name="error_no_settings_found">ไม่พบการตั้งค่า</string>
 </resources>

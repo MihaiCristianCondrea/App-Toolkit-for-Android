@@ -24,5 +24,4 @@
     <string name="support_offer_unavailable">Ta opcja darowizny jest obecnie niedostępna.</string>
     <string name="support_us">Wesprzyj nas</string>
     <string name="web_ad">Reklama internetowa</string>
-    <string name="error_failed_to_load_sku_details">Nie udało się załadować szczegółów SKU</string>
 </resources>

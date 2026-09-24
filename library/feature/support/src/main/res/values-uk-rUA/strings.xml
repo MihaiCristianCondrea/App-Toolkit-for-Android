@@ -24,5 +24,4 @@
     <string name="support_offer_unavailable">Ця опція пожертви наразі недоступна.</string>
     <string name="support_us">Підтримайте нас</string>
     <string name="web_ad">Веб-реклама</string>
-    <string name="error_failed_to_load_sku_details">Не вдалося завантажити відомості SKU</string>
 </resources>

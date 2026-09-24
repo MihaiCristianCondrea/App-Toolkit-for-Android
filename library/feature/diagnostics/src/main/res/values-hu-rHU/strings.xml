@@ -48,5 +48,4 @@
     <string name="privacy_choices_title">Adatvédelmi beállítások</string>
     <string name="summary_advanced_privacy_settings">Válassza ki, mit oszt meg elemzés és hirdetés céljából.</string>
     <string name="learn_more_about_provider">További információ erről a szolgáltatóról</string>
-    <string name="error_an_error_occurred">Hiba történt</string>
 </resources>

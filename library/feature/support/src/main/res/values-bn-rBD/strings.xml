@@ -24,5 +24,4 @@
     <string name="support_offer_unavailable">এই অনুদানের বিকল্পটি বর্তমানে উপলভ্য নয়।</string>
     <string name="support_us">আমাদের সমর্থন করুন</string>
     <string name="web_ad">ওয়েব বিজ্ঞাপন</string>
-    <string name="error_failed_to_load_sku_details">SKU বিস্তারিত লোড করতে ব্যর্থ হয়েছে</string>
 </resources>

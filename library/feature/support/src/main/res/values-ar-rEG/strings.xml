@@ -24,5 +24,4 @@
     <string name="support_offer_unavailable">خيار التبرع هذا غير متاح حاليًا.</string>
     <string name="support_us">ادعمنا</string>
     <string name="web_ad">إعلان ويب</string>
-    <string name="error_failed_to_load_sku_details">فشل في تحميل تفاصيل SKU</string>
 </resources>

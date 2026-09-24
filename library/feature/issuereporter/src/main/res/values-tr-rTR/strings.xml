@@ -29,9 +29,4 @@
     <string name="issue_submitted_title">Rapor gönderildi</string>
     <string name="issue_title_label">Başlık</string>
     <string name="snack_report_failed">Rapor gönderilemedi</string>
-    <string name="error_forbidden">Yasaklı: yetersiz izinler</string>
-    <string name="error_gone">API uç noktası kaldırıldı</string>
-    <string name="error_invalid_report">Başlık ve açıklama boş olamaz</string>
-    <string name="error_unauthorized">Yetkisiz: Geçersiz belirteç</string>
-    <string name="error_unprocessable">Sorun oluşturma için geçersiz veriler</string>
 </resources>

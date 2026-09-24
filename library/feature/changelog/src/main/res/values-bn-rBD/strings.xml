@@ -17,6 +17,4 @@
 <resources>
     <string name="changelog_title">অ্যাপ চেঞ্জলগ</string>
     <string name="no_new_updates_message">কোনো নতুন আপডেট উপলব্ধ নেই।</string>
-    <string name="error_loading_changelog_message">অ্যাপ্লিকেশনের চেঞ্জলগ লোড করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।</string>
-    <string name="loading_changelog_message">অ্যাপ্লিকেশনের চেঞ্জলগ আনা হচ্ছে…</string>
 </resources>

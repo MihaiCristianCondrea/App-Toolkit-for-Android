@@ -34,5 +34,4 @@
     <string name="view_in_google_play_store">Посмотреть в Google Play Store</string>
     <string name="need_more_help">Нужна дополнительная помощь?</string>
     <string name="show_more">Показать ещё</string>
-    <string name="error_failed_to_load_faq">Не удалось загрузить раздел FAQ</string>
 </resources>
