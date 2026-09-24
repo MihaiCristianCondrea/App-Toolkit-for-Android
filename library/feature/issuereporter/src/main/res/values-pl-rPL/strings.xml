@@ -29,4 +29,9 @@
     <string name="issue_submitted_title">Zgłoszenie wysłane</string>
     <string name="issue_title_label">Tytuł</string>
     <string name="snack_report_failed">Nie udało się wysłać zgłoszenia</string>
+    <string name="error_forbidden">Zabronione: niewystarczające uprawnienia</string>
+    <string name="error_gone">Punkt końcowy API został usunięty</string>
+    <string name="error_invalid_report">Tytuł i opis nie mogą być puste</string>
+    <string name="error_unauthorized">Brak autoryzacji: nieprawidłowy token</string>
+    <string name="error_unprocessable">Nieprawidłowe dane do utworzenia zgłoszenia</string>
 </resources>

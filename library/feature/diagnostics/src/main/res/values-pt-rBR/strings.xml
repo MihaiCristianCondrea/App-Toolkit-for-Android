@@ -48,4 +48,5 @@
     <string name="privacy_choices_title">Opções de privacidade</string>
     <string name="summary_advanced_privacy_settings">Escolha o que você compartilha para análises e publicidade.</string>
     <string name="learn_more_about_provider">Saiba mais sobre este provedor</string>
+    <string name="error_an_error_occurred">Ocorreu um erro</string>
 </resources>

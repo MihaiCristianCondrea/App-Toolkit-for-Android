@@ -29,4 +29,9 @@
     <string name="issue_submitted_title">Rapport envoyé</string>
     <string name="issue_title_label">Titre</string>
     <string name="snack_report_failed">Échec de l\'envoi du rapport</string>
+    <string name="error_forbidden">Interdit : autorisations insuffisantes</string>
+    <string name="error_gone">Point de terminaison de l\'API supprimé</string>
+    <string name="error_invalid_report">Le titre et la description ne peuvent pas être vides</string>
+    <string name="error_unauthorized">Non autorisé : jeton non valide</string>
+    <string name="error_unprocessable">Données non valides pour la création du problème</string>
 </resources>

@@ -34,4 +34,5 @@
     <string name="view_in_google_play_store">Переглянути в Google Play Store</string>
     <string name="need_more_help">Потрібна додаткова допомога?</string>
     <string name="show_more">Показати більше</string>
+    <string name="error_failed_to_load_faq">Не вдалося завантажити розділ поширених запитань</string>
 </resources>

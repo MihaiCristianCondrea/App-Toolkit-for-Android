@@ -34,4 +34,5 @@
     <string name="summary_preference_permissions_post_notifications">Permet à l\'application d\'afficher des notifications sur les appareils équipés d\'Android 13 ou version ultérieure.</string>
     <string name="summary_preference_permissions_wake_lock">Permet à l\'application d\'empêcher l\'appareil de se mettre en veille (par exemple, assombrissement de l\'écran ou mise en veille du processeur) pendant les opérations critiques afin de garantir qu\'elles se terminent sans interruption. Ceci est utilisé avec parcimonie pour économiser la batterie.</string>
     <string name="wake_lock">Maintenir l\'appareil éveillé [WAKE_LOCK]</string>
+    <string name="error_no_settings_found">Aucun paramètre trouvé</string>
 </resources>

@@ -29,4 +29,9 @@
     <string name="issue_submitted_title">Отчёт отправлен</string>
     <string name="issue_title_label">Заголовок</string>
     <string name="snack_report_failed">Не удалось отправить отчет</string>
+    <string name="error_forbidden">Доступ запрещён: недостаточно прав</string>
+    <string name="error_gone">Конечная точка API удалена</string>
+    <string name="error_invalid_report">Заголовок и описание не могут быть пустыми</string>
+    <string name="error_unauthorized">Не авторизовано: недопустимый токен</string>
+    <string name="error_unprocessable">Недопустимые данные для создания задачи</string>
 </resources>

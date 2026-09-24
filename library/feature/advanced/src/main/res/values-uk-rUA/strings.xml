@@ -22,4 +22,5 @@
     <string name="error_reporting">Звіт про помилки</string>
     <string name="summary_preference_settings_bug_report">Надішліть звіти про помилки та побажання через сторінку GitHub</string>
     <string name="summary_preference_settings_clear_cache">Очистити тимчасові дані застосунку.</string>
+    <string name="cache_cleared_error">Кеш очищено з деякими помилками</string>
 </resources>

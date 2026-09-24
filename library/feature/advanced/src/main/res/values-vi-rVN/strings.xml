@@ -22,4 +22,5 @@
     <string name="error_reporting">Báo cáo lỗi</string>
     <string name="summary_preference_settings_bug_report">Gửi báo cáo lỗi và yêu cầu tính năng đến trang vấn đề của kho lưu trữ GitHub của ứng dụng</string>
     <string name="summary_preference_settings_clear_cache">Xóa dữ liệu ứng dụng tạm thời.</string>
+    <string name="cache_cleared_error">Bộ nhớ đệm đã được xóa nhưng có một số lỗi</string>
 </resources>

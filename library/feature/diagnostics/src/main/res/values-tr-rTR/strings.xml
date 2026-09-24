@@ -48,4 +48,5 @@
     <string name="privacy_choices_title">Gizlilik seçenekleri</string>
     <string name="summary_advanced_privacy_settings">Analiz ve reklam için nelerin paylaşılacağını seçin.</string>
     <string name="learn_more_about_provider">Bu sağlayıcı hakkında daha fazla bilgi edinin</string>
+    <string name="error_an_error_occurred">Bir hata oluştu</string>
 </resources>

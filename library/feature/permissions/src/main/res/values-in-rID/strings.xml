@@ -34,4 +34,5 @@
     <string name="summary_preference_permissions_post_notifications">Memungkinkan aplikasi untuk menampilkan notifikasi di perangkat dengan Android 13 atau yang lebih baru.</string>
     <string name="summary_preference_permissions_wake_lock">Mengizinkan aplikasi untuk mencegah perangkat beralih ke mode tidur (misalnya, peredupan layar atau mode tidur prosesor) selama operasi penting untuk memastikan operasi tersebut selesai tanpa gangguan. Ini digunakan secukupnya untuk menghemat baterai.</string>
     <string name="wake_lock">Jaga perangkat tetap aktif [WAKE_LOCK]</string>
+    <string name="error_no_settings_found">Tidak ada pengaturan yang ditemukan</string>
 </resources>

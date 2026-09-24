@@ -28,4 +28,6 @@
     <string name="summary_preference_settings_display">Personaliza el aspecto de la aplicación</string>
     <string name="summary_preference_settings_notifications">Gestiona las notificaciones de la aplicación</string>
     <string name="summary_preference_settings_privacy_and_security">Gestiona tu configuración de privacidad</string>
+    <string name="error_invalid_content_key">Clave de contenido no válida.</string>
+    <string name="error_no_settings_found">No se encontraron ajustes</string>
 </resources>

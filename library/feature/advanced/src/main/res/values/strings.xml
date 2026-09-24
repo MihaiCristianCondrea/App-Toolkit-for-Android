@@ -22,4 +22,5 @@
     <string name="error_reporting">Error reporting</string>
     <string name="summary_preference_settings_bug_report">Send bug reports and feature requests to the app\'s GitHub repository issues page</string>
     <string name="summary_preference_settings_clear_cache">Clear temporary application data.</string>
+    <string name="cache_cleared_error">Cache cleared with some errors</string>
 </resources>

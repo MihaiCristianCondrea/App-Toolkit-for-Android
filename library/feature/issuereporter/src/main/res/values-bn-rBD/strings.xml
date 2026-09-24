@@ -29,4 +29,9 @@
     <string name="issue_submitted_title">রিপোর্ট জমা দেওয়া হয়েছে</string>
     <string name="issue_title_label">শিরোনাম</string>
     <string name="snack_report_failed">রিপোর্ট পাঠাতে ব্যর্থ হয়েছে</string>
+    <string name="error_forbidden">নিষিদ্ধ: পর্যাপ্ত অনুমতি নেই</string>
+    <string name="error_gone">API এন্ডপয়েন্ট সরানো হয়েছে</string>
+    <string name="error_invalid_report">শিরোনাম এবং বিবরণ খালি হতে পারে না</string>
+    <string name="error_unauthorized">অননুমোদিত: অবৈধ টোকেন</string>
+    <string name="error_unprocessable">ইস্যু তৈরি করার জন্য অবৈধ ডেটা</string>
 </resources>

@@ -29,4 +29,9 @@
     <string name="issue_submitted_title">ส่งรายงานแล้ว</string>
     <string name="issue_title_label">ชื่อเรื่อง</string>
     <string name="snack_report_failed">ส่งรายงานไม่สำเร็จ</string>
+    <string name="error_forbidden">ถูกปฏิเสธ: สิทธิ์ไม่เพียงพอ</string>
+    <string name="error_gone">ปลายทาง API ถูกลบแล้ว</string>
+    <string name="error_invalid_report">ชื่อเรื่องและคำอธิบายต้องไม่เว้นว่าง</string>
+    <string name="error_unauthorized">ไม่ได้รับอนุญาต: โทเค็นไม่ถูกต้อง</string>
+    <string name="error_unprocessable">ข้อมูลไม่ถูกต้องสำหรับการสร้างปัญหา</string>
 </resources>

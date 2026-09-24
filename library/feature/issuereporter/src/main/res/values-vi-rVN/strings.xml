@@ -29,4 +29,9 @@
     <string name="issue_submitted_title">Đã gửi báo cáo</string>
     <string name="issue_title_label">Tiêu đề</string>
     <string name="snack_report_failed">Gửi báo cáo thất bại</string>
+    <string name="error_forbidden">Bị cấm: không đủ quyền</string>
+    <string name="error_gone">Điểm cuối API đã bị xóa</string>
+    <string name="error_invalid_report">Tiêu đề và mô tả không được để trống</string>
+    <string name="error_unauthorized">Không được ủy quyền: mã thông báo không hợp lệ</string>
+    <string name="error_unprocessable">Dữ liệu không hợp lệ để tạo vấn đề</string>
 </resources>

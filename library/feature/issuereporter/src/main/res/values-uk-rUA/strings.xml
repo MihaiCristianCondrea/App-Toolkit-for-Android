@@ -29,4 +29,9 @@
     <string name="issue_submitted_title">Звіт надіслано</string>
     <string name="issue_title_label">Заголовок</string>
     <string name="snack_report_failed">Не вдалося надіслати звіт</string>
+    <string name="error_forbidden">Заборонено: недостатньо дозволів</string>
+    <string name="error_gone">Кінцеву точку API видалено</string>
+    <string name="error_invalid_report">Заголовок і опис не можуть бути порожніми</string>
+    <string name="error_unauthorized">Неавторизовано: недійсний токен</string>
+    <string name="error_unprocessable">Недійсні дані для створення запиту</string>
 </resources>

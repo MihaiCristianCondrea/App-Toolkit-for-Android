@@ -17,4 +17,6 @@
 <resources>
     <string name="changelog_title">App changelog</string>
     <string name="no_new_updates_message">No new updates available.</string>
+    <string name="error_loading_changelog_message">Unable to load the application changelog. Please try again.</string>
+    <string name="loading_changelog_message">Fetching application changelog…</string>
 </resources>

@@ -29,4 +29,9 @@
     <string name="issue_submitted_title">Laporan terkirim</string>
     <string name="issue_title_label">Judul</string>
     <string name="snack_report_failed">Gagal mengirim laporan</string>
+    <string name="error_forbidden">Dilarang: izin tidak mencukupi</string>
+    <string name="error_gone">Endpoint API dihapus</string>
+    <string name="error_invalid_report">Judul dan deskripsi tidak boleh kosong</string>
+    <string name="error_unauthorized">Tidak diizinkan: token tidak valid</string>
+    <string name="error_unprocessable">Data tidak valid untuk pembuatan isu</string>
 </resources>

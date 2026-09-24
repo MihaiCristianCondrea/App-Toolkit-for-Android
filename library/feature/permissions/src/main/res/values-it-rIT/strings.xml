@@ -34,4 +34,5 @@
     <string name="summary_preference_permissions_post_notifications">Consente all\'app di visualizzare notifiche sui dispositivi con Android 13 o versioni successive.</string>
     <string name="summary_preference_permissions_wake_lock">Consente all\'app di impedire al dispositivo di entrare in standby (ad es. oscuramento dello schermo o sospensione del processore) durante le operazioni critiche per garantire che vengano completate senza interruzioni. Viene utilizzato con parsimonia per risparmiare la batteria.</string>
     <string name="wake_lock">Mantieni il dispositivo attivo [WAKE_LOCK]</string>
+    <string name="error_no_settings_found">Nessuna impostazione trovata</string>
 </resources>

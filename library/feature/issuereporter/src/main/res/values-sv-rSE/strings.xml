@@ -29,4 +29,9 @@
     <string name="issue_submitted_title">Rapporten har skickats</string>
     <string name="issue_title_label">Titel</string>
     <string name="snack_report_failed">Det gick inte att skicka rapporten</string>
+    <string name="error_forbidden">Åtkomst nekad: otillräckliga behörigheter</string>
+    <string name="error_gone">API-slutpunkt borttagen</string>
+    <string name="error_invalid_report">Titel och beskrivning får inte vara tomma</string>
+    <string name="error_unauthorized">Obehörig: ogiltig token</string>
+    <string name="error_unprocessable">Ogiltiga data för skapande av ärende</string>
 </resources>

@@ -22,4 +22,5 @@
     <string name="error_reporting">Rapport d\'erreurs</string>
     <string name="summary_preference_settings_bug_report">Envoyez des rapports de bugs et des demandes de fonctionnalités à la page de problèmes de GitHub</string>
     <string name="summary_preference_settings_clear_cache">Effacer les données temporaires de l\'application.</string>
+    <string name="cache_cleared_error">Cache vidé avec certaines erreurs</string>
 </resources>

@@ -34,4 +34,5 @@
     <string name="summary_preference_permissions_post_notifications">อนุญาตให้แอปแสดงการแจ้งเตือนบนอุปกรณ์ที่ใช้ Android 13 หรือใหม่กว่า</string>
     <string name="summary_preference_permissions_wake_lock">อนุญาตให้แอปป้องกันไม่ให้อุปกรณ์เข้าสู่โหมดสลีป (เช่น การหรี่แสงหน้าจอหรือการพักการทำงานของโปรเซสเซอร์) ระหว่างการดำเนินการที่สำคัญเพื่อให้แน่ใจว่าจะเสร็จสมบูรณ์โดยไม่หยุดชะงัก ซึ่งจะใช้เท่าที่จำเป็นเพื่อประหยัดแบตเตอรี่</string>
     <string name="wake_lock">เปิดหน้าจออุปกรณ์ค้างไว้ [WAKE_LOCK]</string>
+    <string name="error_no_settings_found">ไม่พบการตั้งค่า</string>
 </resources>

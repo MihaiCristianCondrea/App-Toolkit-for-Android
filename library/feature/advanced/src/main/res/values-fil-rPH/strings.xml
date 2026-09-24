@@ -22,4 +22,5 @@
     <string name="error_reporting">Pag-uulat ng error</string>
     <string name="summary_preference_settings_bug_report">Magpadala ng mga ulat ng bug at mga hiling na feature sa pahina ng mga isyu ng GitHub repository ng app</string>
     <string name="summary_preference_settings_clear_cache">I-clear ang pansamantalang data ng application.</string>
+    <string name="cache_cleared_error">Na-clear ang cache na may ilang error</string>
 </resources>

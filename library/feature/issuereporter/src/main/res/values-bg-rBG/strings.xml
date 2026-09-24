@@ -29,4 +29,9 @@
     <string name="issue_submitted_title">Докладът е изпратен</string>
     <string name="issue_title_label">Заглавие</string>
     <string name="snack_report_failed">Неуспешно изпращане на доклада</string>
+    <string name="error_forbidden">Забранено: недостатъчни разрешения</string>
+    <string name="error_gone">Крайната точка на API е премахната</string>
+    <string name="error_invalid_report">Заглавието и описанието не могат да бъдат празни</string>
+    <string name="error_unauthorized">Неоторизиран достъп: Невалиден токен</string>
+    <string name="error_unprocessable">Невалидни данни за създаване на проблем</string>
 </resources>

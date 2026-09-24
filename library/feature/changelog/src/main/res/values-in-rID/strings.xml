@@ -17,4 +17,6 @@
 <resources>
     <string name="changelog_title">Catatan perubahan aplikasi</string>
     <string name="no_new_updates_message">Tidak ada pembaruan baru yang tersedia.</string>
+    <string name="error_loading_changelog_message">Tidak dapat memuat changelog aplikasi. Silakan coba lagi.</string>
+    <string name="loading_changelog_message">Mengambil changelog aplikasi…</string>
 </resources>

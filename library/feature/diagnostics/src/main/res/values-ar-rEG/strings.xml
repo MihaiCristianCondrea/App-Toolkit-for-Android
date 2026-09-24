@@ -48,4 +48,5 @@
     <string name="privacy_choices_title">خيارات الخصوصية</string>
     <string name="summary_advanced_privacy_settings">اختر ما تشاركه لأغراض التحليلات والإعلانات.</string>
     <string name="learn_more_about_provider">معرفة المزيد عن هذا المزوّد</string>
+    <string name="error_an_error_occurred">حدث خطأ</string>
 </resources>

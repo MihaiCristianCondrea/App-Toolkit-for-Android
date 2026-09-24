@@ -17,4 +17,6 @@
 <resources>
     <string name="changelog_title">Journal des modifications</string>
     <string name="no_new_updates_message">Aucune nouvelle mise à jour disponible.</string>
+    <string name="error_loading_changelog_message">Impossible de charger le journal des modifications de l\'application. Veuillez réessayer.</string>
+    <string name="loading_changelog_message">Récupération du journal des modifications de l\'application…</string>
 </resources>

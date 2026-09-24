@@ -22,4 +22,5 @@
     <string name="error_reporting">錯誤回報</string>
     <string name="summary_preference_settings_bug_report">將錯誤回報和功能請求發送至應用程式的 GitHub 問題頁面</string>
     <string name="summary_preference_settings_clear_cache">清除臨時應用資料</string>
+    <string name="cache_cleared_error">快取已清除，但發生部分錯誤</string>
 </resources>

@@ -29,4 +29,9 @@
     <string name="issue_submitted_title">已送出回報</string>
     <string name="issue_title_label">標題</string>
     <string name="snack_report_failed">無法傳送報告</string>
+    <string name="error_forbidden">禁止存取：權限不足</string>
+    <string name="error_gone">API 端點已移除</string>
+    <string name="error_invalid_report">標題與描述不可為空白</string>
+    <string name="error_unauthorized">未授權：權杖無效</string>
+    <string name="error_unprocessable">建立問題的資料無效</string>
 </resources>

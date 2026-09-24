@@ -17,4 +17,6 @@
 <resources>
     <string name="changelog_title">Änderungsprotokoll</string>
     <string name="no_new_updates_message">Keine neuen Updates verfügbar.</string>
+    <string name="error_loading_changelog_message">Der Anwendungs-Changelog konnte nicht geladen werden. Bitte versuchen Sie es erneut.</string>
+    <string name="loading_changelog_message">Anwendungs-Changelog wird abgerufen…</string>
 </resources>

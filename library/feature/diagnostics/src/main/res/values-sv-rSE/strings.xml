@@ -48,4 +48,5 @@
     <string name="privacy_choices_title">Integritetsval</string>
     <string name="summary_advanced_privacy_settings">Välj vad du delar för analys och annonsering.</string>
     <string name="learn_more_about_provider">Läs mer om den här leverantören</string>
+    <string name="error_an_error_occurred">Ett fel uppstod</string>
 </resources>

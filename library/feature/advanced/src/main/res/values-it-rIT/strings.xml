@@ -22,4 +22,5 @@
     <string name="error_reporting">Segnalazione errori</string>
     <string name="summary_preference_settings_bug_report">Invia segnalazioni di bug e richieste di funzionalità alla pagina di segnalazioni del repository GitHub dell\'app</string>
     <string name="summary_preference_settings_clear_cache">Cancella i dati temporanei dell\'applicazione.</string>
+    <string name="cache_cleared_error">Cache svuotata con alcuni errori</string>
 </resources>

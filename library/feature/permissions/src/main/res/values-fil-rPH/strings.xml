@@ -34,4 +34,5 @@
     <string name="summary_preference_permissions_post_notifications">Pinapayagan ang app na magpakita ng mga notipikasyon sa mga device na may Android 13 o mas bago.</string>
     <string name="summary_preference_permissions_wake_lock">Pinapayagan ang app na pigilan ang device na mag-sleep (hal., pagdidilim ng screen o pag-sleep ng processor) habang may mga kritikal na operasyon para matiyak na makukumpleto ang mga ito nang walang abala. Ginagamit ito nang matipid para makatipid ng baterya.</string>
     <string name="wake_lock">Panatilihing gising ang device [WAKE_LOCK]</string>
+    <string name="error_no_settings_found">Walang nakitang mga setting</string>
 </resources>

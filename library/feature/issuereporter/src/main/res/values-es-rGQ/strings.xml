@@ -29,4 +29,9 @@
     <string name="issue_submitted_title">Informe enviado</string>
     <string name="issue_title_label">Título</string>
     <string name="snack_report_failed">Error al enviar el informe</string>
+    <string name="error_forbidden">Prohibido: permisos insuficientes</string>
+    <string name="error_gone">Punto final de la API eliminado</string>
+    <string name="error_invalid_report">El título y la descripción no pueden estar vacíos</string>
+    <string name="error_unauthorized">No autorizado: token no válido</string>
+    <string name="error_unprocessable">Datos no válidos para la creación del problema</string>
 </resources>

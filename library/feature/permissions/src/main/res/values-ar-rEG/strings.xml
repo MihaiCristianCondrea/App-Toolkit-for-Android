@@ -34,4 +34,5 @@
     <string name="summary_preference_permissions_post_notifications">يسمح للتطبيق بعرض الإشعارات على الأجهزة التي تعمل بنظام أندرويد 13 أو الأحدث.</string>
     <string name="summary_preference_permissions_wake_lock">يسمح للتطبيق بمنع الجهاز من الدخول في وضع السكون (على سبيل المثال، تعتيم الشاشة أو وضع سكون المعالج) أثناء العمليات الحرجة لضمان إكمالها دون انقطاع. يُستخدم هذا بشكل مقتصد للحفاظ على طاقة البطارية.</string>
     <string name="wake_lock">إبقاء الجهاز مستيقظًا [WAKE_LOCK]</string>
+    <string name="error_no_settings_found">لم يتم العثور على إعدادات</string>
 </resources>

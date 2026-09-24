@@ -34,4 +34,5 @@
     <string name="view_in_google_play_store">Xem trên Google Play Store</string>
     <string name="need_more_help">Bạn cần thêm trợ giúp?</string>
     <string name="show_more">Hiển thị thêm</string>
+    <string name="error_failed_to_load_faq">Không thể tải câu hỏi thường gặp</string>
 </resources>

@@ -29,4 +29,9 @@
     <string name="issue_submitted_title">تم إرسال البلاغ</string>
     <string name="issue_title_label">العنوان</string>
     <string name="snack_report_failed">فشل في إرسال التقرير</string>
+    <string name="error_forbidden">محظور: أذونات غير كافية</string>
+    <string name="error_gone">تمت إزالة نقطة نهاية واجهة برمجة التطبيقات</string>
+    <string name="error_invalid_report">لا يمكن أن يكون العنوان والوصف فارغين</string>
+    <string name="error_unauthorized">غير مصرح: رمز غير صالح</string>
+    <string name="error_unprocessable">بيانات غير صالحة لإنشاء المشكلة</string>
 </resources>

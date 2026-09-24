@@ -28,4 +28,6 @@
     <string name="summary_preference_settings_display">अपने ऐप के लुक और अनुभव को वैयक्तिकृत करें</string>
     <string name="summary_preference_settings_notifications">ऐप सूचनाओं का प्रबंधन करें</string>
     <string name="summary_preference_settings_privacy_and_security">अपनी गोपनीयता सेटिंग्स का प्रबंधन करें</string>
+    <string name="error_invalid_content_key">अमान्य सामग्री कुंजी।</string>
+    <string name="error_no_settings_found">कोई सेटिंग्स नहीं मिलीं</string>
 </resources>

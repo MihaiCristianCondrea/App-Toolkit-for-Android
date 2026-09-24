@@ -22,4 +22,5 @@
     <string name="error_reporting">การรายงานข้อผิดพลาด</string>
     <string name="summary_preference_settings_bug_report">ส่งรายงานข้อผิดพลาดไปยังหน้าปัญหาใน GitHub</string>
     <string name="summary_preference_settings_clear_cache">ล้างข้อมูลแอปพลิเคชันชั่วคราว</string>
+    <string name="cache_cleared_error">ล้างแคชแล้ว แต่มีข้อผิดพลาดบางประการ</string>
 </resources>

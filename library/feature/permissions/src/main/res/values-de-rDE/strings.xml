@@ -34,4 +34,5 @@
     <string name="summary_preference_permissions_post_notifications">Ermöglicht der App, Benachrichtigungen auf Geräten mit Android 13 oder höher anzuzeigen.</string>
     <string name="summary_preference_permissions_wake_lock">Ermöglicht der App, das Gerät während kritischer Vorgänge am Übergang in den Ruhezustand (z. B. Bildschirmabdunkelung oder Prozessorruhezustand) zu hindern, um sicherzustellen, dass diese ohne Unterbrechung abgeschlossen werden. Dies wird sparsam verwendet, um den Akku zu schonen.</string>
     <string name="wake_lock">Gerät aktiv lassen [WAKE_LOCK]</string>
+    <string name="error_no_settings_found">Keine Einstellungen gefunden</string>
 </resources>

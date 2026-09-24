@@ -34,4 +34,5 @@
     <string name="summary_preference_permissions_post_notifications">Pozwala aplikacji wyświetlać powiadomienia na urządzeniach z systemem Android 13 lub nowszym.</string>
     <string name="summary_preference_permissions_wake_lock">Pozwala aplikacji zapobiegać przechodzeniu urządzenia w stan uśpienia (np. przyciemnianie ekranu lub usypianie procesora) podczas krytycznych operacji, aby zapewnić ich ukończenie bez przerw. Jest to używane oszczędnie w celu oszczędzania baterii.</string>
     <string name="wake_lock">Utrzymuj urządzenie w stanie czuwania [WAKE_LOCK]</string>
+    <string name="error_no_settings_found">Nie znaleziono ustawień</string>
 </resources>

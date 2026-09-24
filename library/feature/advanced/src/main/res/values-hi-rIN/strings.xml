@@ -22,4 +22,5 @@
     <string name="error_reporting">त्रुटि रिपोर्टिंग</string>
     <string name="summary_preference_settings_bug_report">बग रिपोर्ट और फीचर अनुरोध ऐप के GitHub भंडार मुद्दों पृष्ठ पर भेजें</string>
     <string name="summary_preference_settings_clear_cache">अस्थायी एप्लिकेशन डेटा साफ़ करें.</string>
+    <string name="cache_cleared_error">कुछ त्रुटियों के साथ कैश साफ़ किया गया</string>
 </resources>

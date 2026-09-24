@@ -28,4 +28,6 @@
     <string name="summary_preference_settings_display">اپنی ایپ کی شکل و صورت کو ذاتی بنائیں</string>
     <string name="summary_preference_settings_notifications">ایپ اطلاعات کا نظم کریں</string>
     <string name="summary_preference_settings_privacy_and_security">اپنی رازداری کی ترتیبات کا نظم کریں</string>
+    <string name="error_invalid_content_key">غلط مواد کی کلید.</string>
+    <string name="error_no_settings_found">کوئی ترتیبات نہیں ملیں</string>
 </resources>

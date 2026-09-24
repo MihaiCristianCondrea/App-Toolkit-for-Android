@@ -17,4 +17,6 @@
 <resources>
     <string name="changelog_title">ऐप चेंजलॉग</string>
     <string name="no_new_updates_message">कोई नया अपडेट उपलब्ध नहीं है।</string>
+    <string name="error_loading_changelog_message">एप्लिकेशन चेंजलॉग लोड करने में असमर्थ। कृपया पुनः प्रयास करें।</string>
+    <string name="loading_changelog_message">एप्लिकेशन चेंजलॉग प्राप्त किया जा रहा है…</string>
 </resources>

@@ -34,4 +34,5 @@
     <string name="view_in_google_play_store">Lihat di Google Play Store</string>
     <string name="need_more_help">Butuh bantuan lebih lanjut?</string>
     <string name="show_more">Tampilkan lainnya</string>
+    <string name="error_failed_to_load_faq">Gagal memuat FAQ</string>
 </resources>

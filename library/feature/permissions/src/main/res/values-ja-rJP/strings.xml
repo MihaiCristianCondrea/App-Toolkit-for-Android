@@ -34,4 +34,5 @@
     <string name="summary_preference_permissions_post_notifications">アプリがAndroid 13以降のデバイスで通知を表示することを許可します。</string>
     <string name="summary_preference_permissions_wake_lock">アプリが重要な操作中にデバイスがスリープ状態（例：画面の減光やプロセッサのスリープ）になるのを防ぎ、中断なく完了できるようにします。これはバッテリーを節約するために控えめに使用されます。</string>
     <string name="wake_lock">デバイスをスリープさせない [WAKE_LOCK]</string>
+    <string name="error_no_settings_found">設定が見つかりません</string>
 </resources>

@@ -22,4 +22,5 @@
     <string name="error_reporting">Fehlerberichte</string>
     <string name="summary_preference_settings_bug_report">Senden Sie Fehlerberichte und Funktionsanfragen an die GitHub-Seite des Projekts</string>
     <string name="summary_preference_settings_clear_cache">Temporäre Anwendungsdaten löschen.</string>
+    <string name="cache_cleared_error">Cache mit einigen Fehlern geleert</string>
 </resources>

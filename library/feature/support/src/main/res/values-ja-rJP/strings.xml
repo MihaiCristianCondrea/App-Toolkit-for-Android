@@ -24,4 +24,5 @@
     <string name="support_offer_unavailable">この寄付オプションは現在ご利用いただけません。</string>
     <string name="support_us">サポートする</string>
     <string name="web_ad">ウェブ広告</string>
+    <string name="error_failed_to_load_sku_details">SKU の詳細を読み込めませんでした</string>
 </resources>

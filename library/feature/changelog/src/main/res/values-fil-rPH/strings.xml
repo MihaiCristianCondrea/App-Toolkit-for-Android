@@ -17,4 +17,6 @@
 <resources>
     <string name="changelog_title">Changelog ng app</string>
     <string name="no_new_updates_message">Walang bagong update na available.</string>
+    <string name="error_loading_changelog_message">Hindi ma-load ang changelog ng application. Pakisubukang muli.</string>
+    <string name="loading_changelog_message">Kinukuha ang changelog ng application…</string>
 </resources>

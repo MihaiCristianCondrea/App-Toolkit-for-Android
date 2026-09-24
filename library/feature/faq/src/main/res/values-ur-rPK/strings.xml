@@ -34,4 +34,5 @@
     <string name="view_in_google_play_store">گوگل پلے اسٹور میں دیکھیں</string>
     <string name="need_more_help">مزید مدد چاہیے؟</string>
     <string name="show_more">مزید دکھائیں</string>
+    <string name="error_failed_to_load_faq">اکثر پوچھے گئے سوالات لوڈ کرنے میں ناکام رہا</string>
 </resources>

@@ -22,4 +22,5 @@
     <string name="error_reporting">Zgłaszanie błędów</string>
     <string name="summary_preference_settings_bug_report">Prześlij raporty o błędach i żądania funkcji na stronę zgłoszeń problemów w repozytorium GitHub aplikacji</string>
     <string name="summary_preference_settings_clear_cache">Wyczyść tymczasowe dane aplikacji.</string>
+    <string name="cache_cleared_error">Pamięć podręczna została wyczyszczona z pewnymi błędami</string>
 </resources>

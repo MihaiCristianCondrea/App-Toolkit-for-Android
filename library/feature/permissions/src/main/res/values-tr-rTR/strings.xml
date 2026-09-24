@@ -34,4 +34,5 @@
     <string name="summary_preference_permissions_post_notifications">Uygulamanın Android 13 veya üzeri sürümlü cihazlarda bildirim görüntülemesine olanak tanır.</string>
     <string name="summary_preference_permissions_wake_lock">Uygulamanın, kritik işlemler sırasında kesintisiz tamamlanmalarını sağlamak için cihazın uyku moduna (ör. ekran karartma veya işlemci uyku modu) geçmesini engellemesine olanak tanır. Bu, pilden tasarruf etmek için idareli kullanılır.</string>
     <string name="wake_lock">Cihazı uyanık tut [WAKE_LOCK]</string>
+    <string name="error_no_settings_found">Ayar bulunamadı</string>
 </resources>

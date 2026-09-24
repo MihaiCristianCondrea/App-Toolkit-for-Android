@@ -34,4 +34,5 @@
     <string name="view_in_google_play_store">Visa i Google Play Store</string>
     <string name="need_more_help">Behöver du mer hjälp?</string>
     <string name="show_more">Visa mer</string>
+    <string name="error_failed_to_load_faq">Det gick inte att läsa in vanliga frågor</string>
 </resources>

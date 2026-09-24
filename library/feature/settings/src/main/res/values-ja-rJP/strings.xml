@@ -28,4 +28,6 @@
     <string name="summary_preference_settings_display">アプリの外観と操作感をカスタマイズする</string>
     <string name="summary_preference_settings_notifications">アプリの通知を管理する</string>
     <string name="summary_preference_settings_privacy_and_security">プライバシー設定を管理する</string>
+    <string name="error_invalid_content_key">無効なコンテンツキーです。</string>
+    <string name="error_no_settings_found">設定が見つかりません</string>
 </resources>

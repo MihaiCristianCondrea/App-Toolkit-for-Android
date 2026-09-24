@@ -24,4 +24,5 @@
     <string name="support_offer_unavailable">Esta opção de doação está indisponível no momento.</string>
     <string name="support_us">Apoie-nos</string>
     <string name="web_ad">Anúncio na web</string>
+    <string name="error_failed_to_load_sku_details">Falha ao carregar detalhes do SKU</string>
 </resources>

@@ -22,4 +22,5 @@
     <string name="error_reporting">الإبلاغ عن الأخطاء</string>
     <string name="summary_preference_settings_bug_report">أرسل تقارير الأخطاء وطلبات الميزات إلى صفحة مشكلات مستودع GitHub الخاص بالتطبيق</string>
     <string name="summary_preference_settings_clear_cache">مسح بيانات التطبيق المؤقتة.</string>
+    <string name="cache_cleared_error">تم مسح ذاكرة التخزين المؤقت مع بعض الأخطاء</string>
 </resources>

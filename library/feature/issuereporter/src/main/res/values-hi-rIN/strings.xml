@@ -29,4 +29,9 @@
     <string name="issue_submitted_title">रिपोर्ट भेज दी गई</string>
     <string name="issue_title_label">शीर्षक</string>
     <string name="snack_report_failed">रिपोर्ट भेजने में विफल</string>
+    <string name="error_forbidden">निषिद्ध: अपर्याप्त अनुमतियाँ</string>
+    <string name="error_gone">API एंडपॉइंट हटा दिया गया</string>
+    <string name="error_invalid_report">शीर्षक और विवरण खाली नहीं हो सकते</string>
+    <string name="error_unauthorized">अनधिकृत: अमान्य टोकन</string>
+    <string name="error_unprocessable">इश्यू बनाने के लिए अमान्य डेटा</string>
 </resources>

@@ -29,4 +29,9 @@
     <string name="issue_submitted_title">رپورٹ بھیج دی گئی</string>
     <string name="issue_title_label">عنوان</string>
     <string name="snack_report_failed">رپورٹ بھیجنے میں ناکام</string>
+    <string name="error_forbidden">ممنوع: ناکافی اجازتیں</string>
+    <string name="error_gone">API اینڈ پوائنٹ ہٹا دیا گیا</string>
+    <string name="error_invalid_report">عنوان اور تفصیل خالی نہیں ہو سکتے</string>
+    <string name="error_unauthorized">غیر مجاز: غلط ٹوکن</string>
+    <string name="error_unprocessable">مسئلہ بنانے کے لیے غلط ڈیٹا</string>
 </resources>

@@ -17,4 +17,6 @@
 <resources>
     <string name="changelog_title">บันทึกการเปลี่ยนแปลง</string>
     <string name="no_new_updates_message">ไม่มีการอัปเดตใหม่.</string>
+    <string name="error_loading_changelog_message">ไม่สามารถโหลดบันทึกการเปลี่ยนแปลงของแอปพลิเคชันได้ โปรดลองอีกครั้ง</string>
+    <string name="loading_changelog_message">กำลังดึงบันทึกการเปลี่ยนแปลงของแอปพลิเคชัน…</string>
 </resources>

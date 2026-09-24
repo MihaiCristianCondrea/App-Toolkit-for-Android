@@ -28,4 +28,6 @@
     <string name="summary_preference_settings_display">Anpassa appens utseende och känsla</string>
     <string name="summary_preference_settings_notifications">Hantera appnotifikationer</string>
     <string name="summary_preference_settings_privacy_and_security">Hantera dina sekretessinställningar</string>
+    <string name="error_invalid_content_key">Ogiltig innehållsnyckel.</string>
+    <string name="error_no_settings_found">Inga inställningar hittades</string>
 </resources>

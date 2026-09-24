@@ -24,4 +24,5 @@
     <string name="support_offer_unavailable">यह दान विकल्प फिलहाल उपलब्ध नहीं है।</string>
     <string name="support_us">हमें समर्थन दें</string>
     <string name="web_ad">वेब विज्ञापन</string>
+    <string name="error_failed_to_load_sku_details">SKU विवरण लोड करने में विफल</string>
 </resources>

@@ -34,4 +34,5 @@
     <string name="summary_preference_permissions_post_notifications">Позволява на приложението да показва известия на устройства с Android 13 или по-нова версия.</string>
     <string name="summary_preference_permissions_wake_lock">Позволява на приложението да предотврати преминаването на устройството в спящ режим (напр. затъмняване на екрана или заспиване на процесора) по време на критични операции, за да се гарантира, че те ще завършат без прекъсване. Това се използва пестеливо за пестене на батерията.</string>
     <string name="wake_lock">Поддържане на устройството будно [WAKE_LOCK]</string>
+    <string name="error_no_settings_found">Не са намерени настройки</string>
 </resources>

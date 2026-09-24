@@ -24,4 +24,5 @@
     <string name="support_offer_unavailable">Hindi kasalukuyang available ang opsyong ito ng donasyon.</string>
     <string name="support_us">Suportahan kami</string>
     <string name="web_ad">Web ad</string>
+    <string name="error_failed_to_load_sku_details">Hindi ma-load ang mga detalye ng SKU</string>
 </resources>

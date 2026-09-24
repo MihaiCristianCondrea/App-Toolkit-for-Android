@@ -34,4 +34,5 @@
     <string name="view_in_google_play_store">Im Google Play Store anzeigen</string>
     <string name="need_more_help">Benötigen Sie weitere Hilfe?</string>
     <string name="show_more">Mehr anzeigen</string>
+    <string name="error_failed_to_load_faq">Fehler beim Laden der FAQs</string>
 </resources>

@@ -17,4 +17,6 @@
 <resources>
     <string name="changelog_title">Registro de alterações do aplicativo</string>
     <string name="no_new_updates_message">Nenhuma nova atualização disponível.</string>
+    <string name="error_loading_changelog_message">Não foi possível carregar o registro de alterações do aplicativo. Tente novamente.</string>
+    <string name="loading_changelog_message">Buscando o registro de alterações do aplicativo…</string>
 </resources>

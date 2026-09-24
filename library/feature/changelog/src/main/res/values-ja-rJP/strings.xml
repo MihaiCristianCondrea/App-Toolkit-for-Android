@@ -17,4 +17,6 @@
 <resources>
     <string name="changelog_title">アプリの変更履歴</string>
     <string name="no_new_updates_message">新しい更新はありません。</string>
+    <string name="error_loading_changelog_message">アプリケーションの変更履歴を読み込めません。もう一度お試しください。</string>
+    <string name="loading_changelog_message">アプリケーションの変更履歴を取得しています…</string>
 </resources>
