@@ -37,30 +37,15 @@ class DefaultSeasonalThemeRepository(
 
     override val state: Flow<SeasonalThemeState> = combine(
         seasonal.seasonalThemesUnlocked,
-        seasonal.seasonalThemesAllYear,
-        seasonal.snowfallEnabled,
         seasonal.holidayThemeSnapshot,
-    ) { unlocked, allYear, snowfall, snapshot ->
-        SeasonalThemeState(
-            unlocked = unlocked,
-            allYear = allYear,
-            snowfallEnabled = snowfall,
-            holidayThemeInUse = snapshot?.season,
-        )
+    ) { unlocked, snapshot ->
+        SeasonalThemeState(unlocked = unlocked, holidayThemeInUse = snapshot?.season)
     }
 
     override suspend fun unlockSeasonalThemes(): Boolean {
         if (seasonal.seasonalThemesUnlocked.first()) return false
         seasonal.saveSeasonalThemesUnlocked(true)
         return true
-    }
-
-    override suspend fun setSeasonalThemesAllYear(enabled: Boolean) {
-        seasonal.saveSeasonalThemesAllYear(enabled)
-    }
-
-    override suspend fun setSnowfallEnabled(enabled: Boolean) {
-        seasonal.saveSnowfallEnabled(enabled)
     }
 
     override suspend fun pendingHolidayGreeting(today: LocalDate): HolidaySeason? {

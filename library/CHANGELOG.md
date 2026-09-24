@@ -2,6 +2,29 @@
 
 ---
 
+# September 24, 2026
+
+**Version:** `3.0.0-pre21`
+
+### Changed
+
+- Changed the dark Android palette to pair Android green with Android's navy and light blue on blue-gray surfaces, so it no longer looks like the green palette. The light scheme is unchanged.
+- Changed `MaterialYouCircleSwatch` back to a swatch without divider lines or a ring. The selection check is drawn in the swatch's primary on a darker or lighter disc of the same hue, so it stays visible on every palette without taking colors from the app's theme.
+- Changed `themePreferencesState()` to take only `themeModeDefault` and `staticPaletteIdDefault`. The removed `dynamicColorsDefault`, `amoledModeDefault`, and `dynamicPaletteVariantDefault` only shaped the placeholder first emission; the stored values, with the data source's own defaults for missing keys, were used right after.
+
+### Fixed
+
+- Fixed the theme settings palette rows not opening on the palette in use. `themePreferencesState()` emitted placeholder defaults (wallpaper colors on, default palette) before the stored values, so the rows were positioned on the default palette and stayed there. Its first emission is now the stored state, and each row is created positioned on the selection, then centers it.
+
+### Removed
+
+- Removed `GeneralSettingsContentProvider.ProvideActions`, whose only action was the seasonal themes one.
+- Removed `SeasonalThemesAction`, `SeasonalThemesDialog`, `SeasonalThemesViewModel`, `SeasonalThemesEvent`, and `SeasonalThemesUiState` from `:library:feature:theme`.
+- Removed the seasonal all-year and snowfall switches from `:library:core:datastore` and `:library:core:common`: `SeasonalThemeRepository.setSeasonalThemesAllYear` and `setSnowfallEnabled`, the matching `SeasonalThemePreferencesDataSource` members, `SeasonalThemeState.allYear` and `snowfallEnabled`, and the `DATA_STORE_SEASONAL_THEMES_ALL_YEAR` and `DATA_STORE_SNOWFALL_ENABLED` keys. Values already stored under those keys are ignored.
+- Removed the `dividerColor` parameter from `MaterialYouCircleSwatch`.
+
+---
+
 # September 23, 2026
 
 **Version:** `3.0.0-pre20`

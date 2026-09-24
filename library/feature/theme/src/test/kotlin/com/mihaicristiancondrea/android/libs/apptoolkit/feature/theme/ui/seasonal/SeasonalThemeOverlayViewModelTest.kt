@@ -78,13 +78,9 @@ class SeasonalThemeOverlayViewModelTest {
     }
 
     @Test
-    fun `snow stops when snowfall is turned off or another palette is worn`() = runTest {
+    fun `snow stops when another palette is worn`() = runTest {
         val viewModel = viewModel(today = christmas)
 
-        seasonalState.value = SeasonalThemeState(snowfallEnabled = false)
-        assertFalse(viewModel.uiState.value.data!!.showSnowfall)
-
-        seasonalState.value = SeasonalThemeState()
         themeState.value = themeWith(StaticPaletteIds.GOOGLE_BLUE, dynamic = false)
         assertFalse(viewModel.uiState.value.data!!.showSnowfall)
 

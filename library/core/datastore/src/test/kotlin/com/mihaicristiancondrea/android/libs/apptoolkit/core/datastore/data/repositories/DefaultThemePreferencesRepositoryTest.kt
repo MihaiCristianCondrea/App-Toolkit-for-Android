@@ -19,12 +19,17 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.rep
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.ThemePreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.ThemePreferencesState
 import io.mockk.coVerify
 import io.mockk.coVerifyOrder
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class DefaultThemePreferencesRepositoryTest {
@@ -88,6 +93,34 @@ class DefaultThemePreferencesRepositoryTest {
             preferences.saveDynamicColors(true)
             preferences.saveDynamicPaletteVariant(3)
         }
+    }
+
+    /**
+     * The theme page positions its palette rows on the first state it sees. A first state made of
+     * placeholder defaults (wallpaper colors on, default palette) left them on the wrong palette.
+     */
+    @Test
+    fun `the first state is the stored one, even when the store answers late`() = runTest {
+        val preferences: ThemePreferencesDataSource = mockk(relaxed = true) {
+            every { themeMode } returns flow { delay(50); emit(DataStoreNamesConstants.THEME_MODE_DARK) }
+            every { amoledMode } returns flow { delay(50); emit(true) }
+            every { dynamicColors } returns flow { delay(50); emit(false) }
+            every { dynamicPaletteVariant } returns flow { delay(50); emit(4) }
+            every { staticPaletteId } returns flow { delay(50); emit("skin") }
+        }
+
+        val first = DefaultThemePreferencesRepository(preferences).preferencesState.first()
+
+        assertEquals(
+            ThemePreferencesState(
+                themeMode = DataStoreNamesConstants.THEME_MODE_DARK,
+                dynamicColors = false,
+                amoledMode = true,
+                dynamicPaletteVariant = 4,
+                staticPaletteId = "skin",
+            ),
+            first,
+        )
     }
 
     private fun preferences(amoledMode: Boolean = false): ThemePreferencesDataSource =

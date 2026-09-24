@@ -59,8 +59,6 @@ open class DataStoreNamesConstants {
         const val DATA_STORE_CACHED_CHANGELOG = "cached_changelog"
         const val DATA_STORE_COMPONENTS_SHOWCASE_UNLOCKED = "components_showcase_unlocked"
         const val DATA_STORE_SEASONAL_THEMES_UNLOCKED = "seasonal_themes_unlocked"
-        const val DATA_STORE_SEASONAL_THEMES_ALL_YEAR = "seasonal_themes_all_year"
-        const val DATA_STORE_SNOWFALL_ENABLED = "seasonal_snowfall_enabled"
         const val DATA_STORE_LAST_HOLIDAY_GREETING = "seasonal_last_holiday_greeting"
         const val DATA_STORE_HOLIDAY_THEME_SEASON = "seasonal_holiday_theme_season"
         const val DATA_STORE_HOLIDAY_PREVIOUS_PALETTE_ID = "seasonal_holiday_previous_palette_id"

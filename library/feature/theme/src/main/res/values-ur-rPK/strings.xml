@@ -33,10 +33,4 @@
     <string name="holiday_greeting_halloween_title">ہیلووین مبارک!</string>
     <string name="holiday_greeting_halloween_message">ڈراؤنا موسم آ گیا ہے۔ کیا آپ اس کے دوران ہیلووین تھیم استعمال کرنا چاہیں گے؟</string>
     <string name="holiday_greeting_use_theme">چھٹیوں کے دوران تہوار کی تھیم استعمال کریں</string>
-    <string name="seasonal_themes_title">موسمی تھیمز</string>
-    <string name="seasonal_themes_summary">آپ نے راز ڈھونڈ لیا۔ تہوار کی تھیمز اب آپ کی ہیں۔</string>
-    <string name="seasonal_themes_all_year">موسمی تھیمز پورا سال دکھائیں؟</string>
-    <string name="seasonal_themes_snowfall">برف باری</string>
-    <string name="seasonal_themes_snowfall_summary">کرسمس تھیم آن ہونے پر پوری ایپ میں برف گرتی ہے۔</string>
-    <string name="seasonal_themes_done">ہو گیا</string>
 </resources>

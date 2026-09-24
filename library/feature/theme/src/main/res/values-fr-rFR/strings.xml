@@ -33,10 +33,4 @@
     <string name="holiday_greeting_halloween_title">Joyeux Halloween !</string>
     <string name="holiday_greeting_halloween_message">La saison des frissons est là. Voulez-vous utiliser le thème Halloween tant qu\'elle dure ?</string>
     <string name="holiday_greeting_use_theme">Utiliser le thème des fêtes pendant les fêtes</string>
-    <string name="seasonal_themes_title">Thèmes saisonniers</string>
-    <string name="seasonal_themes_summary">Vous avez trouvé le secret. Les thèmes des fêtes sont à vous.</string>
-    <string name="seasonal_themes_all_year">Afficher les thèmes saisonniers toute l\'année ?</string>
-    <string name="seasonal_themes_snowfall">Chute de neige</string>
-    <string name="seasonal_themes_snowfall_summary">La neige tombe dans toute l\'appli tant que le thème de Noël est actif.</string>
-    <string name="seasonal_themes_done">OK</string>
 </resources>

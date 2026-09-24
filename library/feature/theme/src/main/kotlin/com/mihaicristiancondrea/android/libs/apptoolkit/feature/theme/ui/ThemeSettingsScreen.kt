@@ -50,6 +50,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
@@ -90,7 +91,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extens
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openDisplaySettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.isChristmasSeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.isHalloweenSeason
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.ThemePreferencesState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.theme.ThemeModeChoice
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
@@ -112,7 +112,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.SeasonalThemesViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.states.ThemeSettingsUiState
 import org.koin.compose.viewmodel.koinViewModel
 
 internal const val THEME_SCREEN_NAME = "Theme"
@@ -135,13 +135,8 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues) {
     val firebaseController: FirebaseController = koinInject()
     val firebase = rememberUpdatedState(firebaseController)
     val viewModel: ThemeSettingsViewModel = koinViewModel()
-    val screenState: UiStateScreen<ThemePreferencesState> by
+    val screenState: UiStateScreen<ThemeSettingsUiState> by
         viewModel.uiState.collectAsStateWithLifecycle()
-    val seasonalViewModel: SeasonalThemesViewModel = koinViewModel()
-    val seasonalState by seasonalViewModel.uiState.collectAsStateWithLifecycle()
-    val showSeasonalAllYear: Boolean = seasonalState.data?.seasonal?.let { it.unlocked && it.allYear } == true
-    // The seasonal switch can add palettes to the row, so rows wait for it before scrolling.
-    val seasonalLoaded: Boolean = seasonalState.data != null
 
     TrackScreenView(
         firebaseController = firebaseController,
@@ -156,7 +151,9 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues) {
 
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val context: Context = LocalContext.current
-    val themePreferences = screenState.data ?: return
+    val uiState: ThemeSettingsUiState = screenState.data ?: return
+    val themePreferences = uiState.preferences
+    val showSeasonalAllYear: Boolean = uiState.seasonalThemesUnlocked
     val currentThemeModeKey = themePreferences.themeMode
     val isAmoledMode = themePreferences.amoledMode
     val isDynamicColors: Boolean = themePreferences.dynamicColors
@@ -241,17 +238,12 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues) {
 
     val variantRowState: LazyListState = rememberScrolledToSelected(
         selectedIndex = if (isDynamicColors) dynamicVariantIndex else -1,
-        ready = seasonalLoaded,
     )
     val selectedStaticIndex: Int = staticOptions.indexOf(staticPaletteId)
     val staticPagerRowState: LazyListState = rememberScrolledToSelected(
         selectedIndex = if (!isDynamicColors) selectedStaticIndex else -1,
-        ready = seasonalLoaded,
     )
-    val staticRowState: LazyListState = rememberScrolledToSelected(
-        selectedIndex = selectedStaticIndex,
-        ready = seasonalLoaded,
-    )
+    val staticRowState: LazyListState = rememberScrolledToSelected(selectedIndex = selectedStaticIndex)
 
     val tabTitles = listOf(
         stringResource(id = R.string.wallpaper_colors),
@@ -601,31 +593,32 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues) {
 private const val DARK_SURFACE_LUMINANCE: Float = 0.5f
 
 /**
- * A row state that, once the row first lays out, brings [selectedIndex] to its center.
+ * A row state that opens with [selectedIndex] in view and then centers it.
  *
- * It waits until [ready], so it scrolls to the stored selection rather than to a placeholder, then
- * jumps rather than animates, so the screen opens already showing the choice. It runs once: picking
- * another item later must not scroll the row under the finger. A negative [selectedIndex] (nothing
- * selected in this row) leaves the row at its start.
+ * The state is created already positioned on the selection, so the first layout shows it without
+ * waiting for anything to run. Once that layout exists the item is moved to the center of the row.
+ * This happens once: picking another item later must not scroll the row under the finger. A
+ * negative [selectedIndex] (nothing selected in this row) leaves the row at its start.
+ *
+ * Callers create it only once the stored selection has loaded, so it never positions on a
+ * placeholder.
  */
 @Composable
-private fun rememberScrolledToSelected(selectedIndex: Int, ready: Boolean): LazyListState {
-    val state: LazyListState = rememberLazyListState()
-    var scrolled: Boolean by rememberSaveable { mutableStateOf(false) }
-    val currentIndex: Int by rememberUpdatedState(selectedIndex)
-    LaunchedEffect(state, ready) {
-        if (!ready || scrolled) return@LaunchedEffect
-        scrolled = true
-        val target = currentIndex
-        if (target < 0) return@LaunchedEffect
+private fun rememberScrolledToSelected(selectedIndex: Int): LazyListState {
+    val state: LazyListState = rememberLazyListState(
+        initialFirstVisibleItemIndex = selectedIndex.coerceAtLeast(0),
+    )
+    var centered: Boolean by rememberSaveable { mutableStateOf(selectedIndex < 0) }
+    LaunchedEffect(state) {
+        if (centered) return@LaunchedEffect
         // The row may sit on a pager page that is not composed yet; this waits for its first layout.
-        snapshotFlow { state.layoutInfo.totalItemsCount }.first { it > target }
-        state.scrollToItem(target)
-        val item = state.layoutInfo.visibleItemsInfo.firstOrNull { it.index == target }
-        if (item != null) {
-            val viewport = state.layoutInfo.viewportEndOffset - state.layoutInfo.viewportStartOffset
-            state.scrollBy((item.offset + item.size / 2f) - viewport / 2f)
-        }
+        val item = snapshotFlow {
+            state.layoutInfo.visibleItemsInfo.firstOrNull { it.index == selectedIndex }
+        }.filterNotNull().first()
+        val layoutInfo = state.layoutInfo
+        val center = (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2f
+        state.scrollBy(item.offset + item.size / 2f - center)
+        centered = true
     }
     return state
 }

@@ -3,14 +3,15 @@
 ## Responsibility and consumers
 
 Owns ThemeSettingsList, ThemeSettingsViewModel, themeSettingsModule, theme-selection presentation,
-the seasonal themes (holiday greeting, holiday snowfall, and the easter egg controls), and localized
-resources. Settings composes the list and its top app bar action, and the main toolkit module
-assembles DI.
+the seasonal themes (holiday greeting, holiday snowfall, and what the easter egg unlocks), and
+localized resources. Settings composes the list, and the main toolkit module assembles DI.
 
 ## Dependencies and flow
 
 Depends on core common, DataStore, UI, and design system. The ViewModels consume the shared
-`ThemePreferencesRepository` and `SeasonalThemeRepository` directly. Core DataStore persists values
+`ThemePreferencesRepository` and `SeasonalThemeRepository` directly. `ThemeSettingsViewModel`
+emits nothing until both the stored preferences and the easter egg unlock have loaded, so the
+palette rows open positioned on the stored selection rather than on a placeholder. Core DataStore persists values
 and owns the holiday rules; the design system renders the application theme and the snowfall. The
 same preferences also serve onboarding appearance selection.
 
@@ -52,14 +53,14 @@ What people see:
   setting they had before come back, unless they picked another palette during the holiday.
 - Snow falls over the app while the Christmas palette is on screen, during the Christmas season.
   Snow is skipped when animations are turned off system-wide.
-- Tapping the build version five times on the About screen unlocks the seasonal themes controls.
-  `SeasonalThemesAction` then shows a top app bar action on the theme page that opens a dialog to
-  keep the seasonal palettes in the palette list all year and to turn snowfall on or off. With
-  the easter egg, snow also follows the Christmas palette outside the season.
+- Tapping the build version five times on the About screen unlocks the seasonal themes. From then
+  on the Christmas and Halloween palettes stay in the palette list all year, and snow follows the
+  Christmas palette outside the season too. There are no switches for either: the unlock turns
+  both on.
 
 ## Validation and risks
 
-ThemeSettingsViewModelTest covers preference changes. SeasonalThemeOverlayViewModelTest covers when
-snow falls, the greeting flow, and that two activities never stack two greetings.
-SeasonalThemesViewModelTest covers the easter egg controls. Keep palette qualifiers, stored
-identifiers, and default selection compatible with host overrides and existing preferences.
+ThemeSettingsViewModelTest covers preference changes and the easter egg unlock.
+SeasonalThemeOverlayViewModelTest covers when snow falls, the greeting flow, and that two
+activities never stack two greetings. Keep palette qualifiers, stored identifiers, and default
+selection compatible with host overrides and existing preferences.

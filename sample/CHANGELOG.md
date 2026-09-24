@@ -2,6 +2,21 @@
 
 ---
 
+# September 24, 2026
+
+**Version:** `26.09.21` (`137260921`)
+
+### Changed
+
+- The Android theme in dark mode now uses Android's green with navy and light blue, so it no longer looks like the green theme.
+- The color previews in Theme settings are back to their plain look without the outline, and the check on the selected color is still easy to see.
+
+### Fixed
+
+- Fixed Theme settings not scrolling the color list to the color you're using.
+
+---
+
 # September 23, 2026
 
 **Version:** `26.09.20` (`137260920`)

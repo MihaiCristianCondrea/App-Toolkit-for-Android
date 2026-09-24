@@ -34,7 +34,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.sty
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.ThemeSettingsViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.SeasonalThemeManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.SeasonalThemeOverlayViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.SeasonalThemesViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
@@ -42,8 +41,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val themeSettingsModule: Module = module {
-    viewModel { ThemeSettingsViewModel(preferences = get()) }
-    viewModel { SeasonalThemesViewModel(seasonal = get(), firebaseController = get()) }
+    viewModel { ThemeSettingsViewModel(preferences = get(), seasonal = get()) }
     viewModel {
         SeasonalThemeOverlayViewModel(seasonal = get(), theme = get(), firebaseController = get())
     }

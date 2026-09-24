@@ -98,8 +98,9 @@ change stored keys, defaults, or the shared preferences file.
   for the seasonal themes state, the holiday greeting, and the easter egg unlock.
 - `themePreferencesState()` combines stored theme values into the application-facing
   `ThemePreferencesState`; Compose collection of that flow belongs to `:library:core:designsystem`.
-  Each call builds a new flow, so a composable must `remember` it: collecting a fresh instance
-  restarts the subscription and replays the defaults.
+  Its first emission is the stored state, never placeholder defaults, so a screen can act on the
+  first state it receives. Each call builds a new flow, so a composable must `remember` it:
+  collecting a fresh instance restarts the subscription from the collector's initial value.
 
 ## Internal implementations
 

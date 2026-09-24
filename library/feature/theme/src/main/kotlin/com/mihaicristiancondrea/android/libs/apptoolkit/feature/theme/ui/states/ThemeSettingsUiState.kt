@@ -15,15 +15,18 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.states
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.states
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.SeasonalThemeState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.ThemePreferencesState
 
 /**
- * What the seasonal themes controls on the theme screen show.
+ * What the theme settings page shows.
  *
- * @property seasonal The stored seasonal state, including whether the controls are unlocked.
+ * @property preferences The stored theme preferences.
+ * @property seasonalThemesUnlocked Whether the About screen easter egg was found, which keeps the
+ * Christmas and Halloween palettes in the palette list all year.
  */
-data class SeasonalThemesUiState(
-    val seasonal: SeasonalThemeState = SeasonalThemeState(),
+data class ThemeSettingsUiState(
+    val preferences: ThemePreferencesState,
+    val seasonalThemesUnlocked: Boolean,
 )
