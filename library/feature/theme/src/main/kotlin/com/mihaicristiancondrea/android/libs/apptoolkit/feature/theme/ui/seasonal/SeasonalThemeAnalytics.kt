@@ -20,10 +20,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.season
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.HolidaySeason
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.THEME_SCREEN_NAME
 
-/** GA4 vocabulary for the seasonal themes: the holiday greeting and its settings. */
+/** GA4 vocabulary for the seasonal themes: the holiday greeting. */
 internal object SeasonalThemeAnalytics {
 
     object Events {
@@ -39,12 +37,6 @@ internal object SeasonalThemeAnalytics {
     object Choices {
         const val USE_HOLIDAY_THEME: String = "use_holiday_theme"
         const val KEEP_CURRENT_THEME: String = "keep_current_theme"
-    }
-
-    /** Preference keys the seasonal switches report under `settings_preference_toggle`. */
-    object PreferenceKeys {
-        const val ALL_YEAR: String = "seasonal_themes_all_year"
-        const val SNOWFALL: String = "seasonal_themes_snowfall"
     }
 }
 
@@ -66,16 +58,3 @@ internal fun holidayGreetingAnsweredEvent(
     ),
 )
 
-/**
- * The shared settings toggle event for a seasonal switch, reported against the theme screen that
- * hosts the seasonal themes dialog, in the same shape as every other settings switch.
- */
-internal fun seasonalToggleEvent(preferenceKey: String, enabled: Boolean): AnalyticsEvent =
-    AnalyticsEvent(
-        name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
-        params = mapOf(
-            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(THEME_SCREEN_NAME),
-            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
-            SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(enabled.toString()),
-        ),
-    )

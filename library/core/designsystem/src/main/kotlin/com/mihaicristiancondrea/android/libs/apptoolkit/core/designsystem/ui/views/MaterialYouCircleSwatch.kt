@@ -22,11 +22,12 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
@@ -37,21 +38,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.luminance
-import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 
 /**
  * A round preview of a palette: [primary] across the top half, [secondary] and [tertiary] sharing
- * the bottom, split by thin [dividerColor] lines.
+ * the bottom.
  *
- * The mosaic is drawn by one cached drawing node (three rectangles and two divider lines clipped to
- * a cached circle) rather than a column and row of colored boxes, so a row of swatches adds one
- * node each instead of eight.
+ * The mosaic is drawn by one cached drawing node (three rectangles clipped to a cached circle)
+ * rather than a column and row of colored boxes, so a row of swatches adds one node each instead
+ * of eight.
  *
- * The selection check sits in a badge filled with the swatch's own [primary], ringed with
- * [dividerColor], and drawn in black or white, whichever stands out more. It used to take the app's
- * current theme colors, which on some palettes (every dark one among them) matched the swatch
- * underneath closely enough to hide the check.
+ * The selection check is drawn in [primary] on a disc of the same hue, darkened or lightened,
+ * whichever stands further from [primary]. Both come from the swatch rather than the app's theme:
+ * the selected swatch shows the palette the app is drawn in, and on dark schemes the theme's
+ * `onPrimaryContainer` sat so close to the swatch's primary that the check disappeared.
  */
 @Composable
 fun MaterialYouCircleSwatch(
@@ -60,8 +62,7 @@ fun MaterialYouCircleSwatch(
     tertiary: Color,
     selected: Boolean,
     modifier: Modifier = Modifier,
-    indicatorFraction: Float = 0.5f,
-    dividerColor: Color = MaterialTheme.colorScheme.surfaceContainer,
+    indicatorFraction: Float = 0.58f,
 ) {
     val progress = animateFloatAsState(
         targetValue = if (selected) 1f else 0f,
@@ -76,7 +77,6 @@ fun MaterialYouCircleSwatch(
         modifier = modifier.drawWithCache {
             val circle = Path().apply { addOval(Rect(Offset.Zero, size)) }
             val half = size.height / 2f
-            val divider = DIVIDER_WIDTH.toPx()
             onDrawBehind {
                 clipPath(circle) {
                     drawRect(primary, size = Size(size.width, half))
@@ -86,19 +86,12 @@ fun MaterialYouCircleSwatch(
                         topLeft = Offset(size.width / 2f, half),
                         size = Size(size.width / 2f, half),
                     )
-                    drawLine(dividerColor, Offset(0f, half), Offset(size.width, half), divider)
-                    drawLine(
-                        dividerColor,
-                        Offset(size.width / 2f, half),
-                        Offset(size.width / 2f, size.height),
-                        divider,
-                    )
                 }
             }
         },
         contentAlignment = Alignment.Center,
     ) {
-        val checkColor = if (primary.luminance() > DARK_CHECK_LUMINANCE) Color.Black else Color.White
+        val badgeColor: Color = remember(primary) { selectionBadgeColor(primary) }
         Box(
             modifier = Modifier
                 .fillMaxSize(indicatorFraction)
@@ -110,28 +103,36 @@ fun MaterialYouCircleSwatch(
                     scaleX = scale
                     scaleY = scale
                 }
-                .drawWithCache {
-                    val ring = DIVIDER_WIDTH.toPx()
-                    onDrawBehind {
-                        drawCircle(dividerColor)
-                        drawCircle(primary, radius = size.minDimension / 2f - ring)
-                    }
-                },
+                .drawWithCache { onDrawBehind { drawCircle(badgeColor) } }
+                .padding(SizeConstants.ExtraSmallSize),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
                 imageVector = Icons.Rounded.Check,
                 contentDescription = null,
-                tint = checkColor,
+                tint = primary,
                 modifier = Modifier.fillMaxSize(CHECK_FRACTION),
             )
         }
     }
 }
 
-private val DIVIDER_WIDTH = 2.dp
+/**
+ * The disc behind the selection check: [primary] taken most of the way to black or to white,
+ * whichever contrasts more with it, so the check drawn in [primary] on top always shows.
+ */
+internal fun selectionBadgeColor(primary: Color): Color {
+    val deep = lerp(primary, Color.Black, BADGE_DEEP_FRACTION)
+    val pale = lerp(primary, Color.White, BADGE_PALE_FRACTION)
+    return if (contrast(deep, primary) >= contrast(pale, primary)) deep else pale
+}
 
-/** Above this luminance black reads better on the badge than white does. */
-private const val DARK_CHECK_LUMINANCE: Float = 0.18f
+private fun contrast(first: Color, second: Color): Float {
+    val lighter = maxOf(first.luminance(), second.luminance())
+    val darker = minOf(first.luminance(), second.luminance())
+    return (lighter + 0.05f) / (darker + 0.05f)
+}
 
-private const val CHECK_FRACTION: Float = 0.62f
+private const val BADGE_DEEP_FRACTION: Float = 0.72f
+private const val BADGE_PALE_FRACTION: Float = 0.8f
+private const val CHECK_FRACTION: Float = 0.7f

@@ -20,18 +20,13 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.mode
 /**
  * Stored state of the seasonal themes.
  *
- * @property unlocked Whether the person found the About screen easter egg, which gives them the
- * seasonal themes controls on the theme screen.
- * @property allYear Whether the Christmas and Halloween palettes stay in the palette list outside
- * their holidays. Only reachable once [unlocked].
- * @property snowfallEnabled Whether snow falls while the Christmas palette is worn. Defaults to on;
- * only people who [unlocked] the controls can turn it off.
+ * @property unlocked Whether the person found the About screen easter egg. Once found, the Christmas
+ * and Halloween palettes stay in the palette list all year, and snow falls with the Christmas
+ * palette outside the Christmas season too.
  * @property holidayThemeInUse The holiday whose palette was applied from the holiday greeting and
  * will be taken off again when the holiday ends, or null when none is.
  */
 data class SeasonalThemeState(
     val unlocked: Boolean = false,
-    val allYear: Boolean = false,
-    val snowfallEnabled: Boolean = true,
     val holidayThemeInUse: HolidaySeason? = null,
 )

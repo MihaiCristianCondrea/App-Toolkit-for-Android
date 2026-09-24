@@ -79,8 +79,7 @@ class SeasonalThemeOverlayViewModel(
         }
 
         combine(seasonal.state, theme.preferencesState) { seasonalState, themeState ->
-            val showSnowfall = seasonalState.snowfallEnabled &&
-                !themeState.dynamicColors &&
+            val showSnowfall = !themeState.dynamicColors &&
                 themeState.staticPaletteId == StaticPaletteIds.CHRISTMAS &&
                 (seasonalState.unlocked || today().isChristmasSeason)
             showSnowfall to themeState.themeMode

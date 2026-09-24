@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.Flow
 
 /**
  * The way to read and change the seasonal themes: the holiday greeting, the holiday palette that
- * comes with it, and the easter egg controls.
+ * comes with it, and the easter egg unlock.
  *
  * It is separate from [ThemePreferencesRepository] because it owns rules that span both stores:
  * applying a holiday palette records the appearance it replaces, and the end of the holiday puts
@@ -41,12 +41,6 @@ interface SeasonalThemeRepository {
      * @return true only for the call that unlocked them, so the unlock can be announced once.
      */
     suspend fun unlockSeasonalThemes(): Boolean
-
-    /** Keeps the seasonal palettes available outside their holidays, or stops doing so. */
-    suspend fun setSeasonalThemesAllYear(enabled: Boolean)
-
-    /** Turns the snowfall that comes with the Christmas palette on or off. */
-    suspend fun setSnowfallEnabled(enabled: Boolean)
 
     /**
      * The holiday whose greeting should be shown on [today], or null.

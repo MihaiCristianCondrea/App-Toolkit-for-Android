@@ -19,28 +19,34 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui
 
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.contracts.ThemeSettingsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.ThemePreferencesState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.states.ThemeSettingsUiState
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 /**
  * Owns theme-settings preference observation and mutations.
  *
- * The state holds no data until the stored preferences arrive. Starting from made-up defaults drew
- * the page with the wrong palette selected for a frame, and anything keyed to the first selection,
- * such as scrolling the palette row to it, acted on that wrong one.
+ * The state holds no data until both the stored preferences and the seasonal themes unlock arrive.
+ * Starting from made-up defaults drew the page with the wrong palette selected for a frame, and
+ * anything keyed to the first selection, such as scrolling the palette row to it, acted on that
+ * wrong one. The unlock can add palettes to the row, so it is part of the same first state.
  */
 class ThemeSettingsViewModel(
     private val preferences: ThemePreferencesRepository,
-) : ScreenViewModel<ThemePreferencesState, ThemeSettingsEvent, ActionEvent>(
+    private val seasonal: SeasonalThemeRepository,
+) : ScreenViewModel<ThemeSettingsUiState, ThemeSettingsEvent, ActionEvent>(
     initialState = UiStateScreen(screenState = ScreenState.IsLoading(), data = null),
 ) {
     private var observationJob: Job? = null
@@ -67,7 +73,12 @@ class ThemeSettingsViewModel(
 
     private fun observePreferences() {
         observationJob?.cancel()
-        observationJob = preferences.preferencesState.onEach { state ->
+        observationJob = combine(
+            preferences.preferencesState,
+            seasonal.state.map { it.unlocked }.distinctUntilChanged(),
+        ) { preferencesState, unlocked ->
+            ThemeSettingsUiState(preferences = preferencesState, seasonalThemesUnlocked = unlocked)
+        }.onEach { state ->
             updateStateThreadSafe { screenState.setSuccess(data = state) }
         }.launchIn(viewModelScope)
     }

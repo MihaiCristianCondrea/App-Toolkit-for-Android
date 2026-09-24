@@ -20,17 +20,11 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.loc
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.models.HolidayThemeSnapshot
 import kotlinx.coroutines.flow.Flow
 
-/** Persisted seasonal theme state: the easter egg unlock, its switches, and holiday bookkeeping. */
+/** Persisted seasonal theme state: the easter egg unlock and holiday bookkeeping. */
 interface SeasonalThemePreferencesDataSource {
 
     /** Emits whether the About screen easter egg has been found. */
     val seasonalThemesUnlocked: Flow<Boolean>
-
-    /** Emits whether seasonal palettes stay available all year. */
-    val seasonalThemesAllYear: Flow<Boolean>
-
-    /** Emits whether snow falls with the Christmas palette, defaulting to on. */
-    val snowfallEnabled: Flow<Boolean>
 
     /** Emits the occurrence key of the last holiday greeting answered, or null if none was. */
     val lastHolidayGreeting: Flow<String?>
@@ -40,12 +34,6 @@ interface SeasonalThemePreferencesDataSource {
 
     /** Persists the easter egg unlock. */
     suspend fun saveSeasonalThemesUnlocked(unlocked: Boolean)
-
-    /** Persists whether seasonal palettes stay available all year. */
-    suspend fun saveSeasonalThemesAllYear(enabled: Boolean)
-
-    /** Persists the snowfall switch. */
-    suspend fun saveSnowfallEnabled(enabled: Boolean)
 
     /** Persists the occurrence key of the holiday greeting just answered. */
     suspend fun saveLastHolidayGreeting(occurrenceKey: String)

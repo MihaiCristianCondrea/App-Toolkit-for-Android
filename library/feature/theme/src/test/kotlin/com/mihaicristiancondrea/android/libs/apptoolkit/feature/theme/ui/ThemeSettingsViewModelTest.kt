@@ -18,7 +18,9 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.contracts.ThemeSettingsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.SeasonalThemeState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.ThemePreferencesState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import io.mockk.coVerify
@@ -40,20 +42,25 @@ class ThemeSettingsViewModelTest {
         val dispatcherExtension = UnconfinedDispatcherExtension()
     }
 
+    private val seasonalState = MutableStateFlow(SeasonalThemeState())
+    private val seasonal: SeasonalThemeRepository = mockk(relaxed = true) {
+        every { state } returns seasonalState
+    }
+
     @Test
     fun `initialize event observes theme preferences`() = runTest {
         val preferences = preferences()
 
-        val viewModel = ThemeSettingsViewModel(preferences)
+        val viewModel = ThemeSettingsViewModel(preferences, seasonal)
 
-        assertEquals("dark", viewModel.uiState.value.data?.themeMode)
-        assertEquals(2, viewModel.uiState.value.data?.dynamicPaletteVariant)
+        assertEquals("dark", viewModel.uiState.value.data?.preferences?.themeMode)
+        assertEquals(2, viewModel.uiState.value.data?.preferences?.dynamicPaletteVariant)
     }
 
     @Test
     fun `selecting a static palette asks the repository for it`() = runTest {
         val preferences = preferences()
-        val viewModel = ThemeSettingsViewModel(preferences)
+        val viewModel = ThemeSettingsViewModel(preferences, seasonal)
 
         viewModel.onEvent(ThemeSettingsEvent.SelectStaticPalette("rose"))
 
@@ -71,7 +78,7 @@ class ThemeSettingsViewModelTest {
             every { preferencesState } returns stored
         }
 
-        val viewModel = ThemeSettingsViewModel(preferences)
+        val viewModel = ThemeSettingsViewModel(preferences, seasonal)
         assertNull(viewModel.uiState.value.data)
 
         stored.emit(
@@ -83,7 +90,18 @@ class ThemeSettingsViewModelTest {
                 staticPaletteId = "rose",
             )
         )
-        assertEquals("rose", viewModel.uiState.value.data?.staticPaletteId)
+        assertEquals("rose", viewModel.uiState.value.data?.preferences?.staticPaletteId)
+    }
+
+    /** The easter egg keeps the holiday palettes in the row, so it is part of the first state. */
+    @Test
+    fun `the state follows the seasonal themes unlock`() = runTest {
+        val viewModel = ThemeSettingsViewModel(preferences(), seasonal)
+        assertEquals(false, viewModel.uiState.value.data?.seasonalThemesUnlocked)
+
+        seasonalState.value = SeasonalThemeState(unlocked = true)
+
+        assertEquals(true, viewModel.uiState.value.data?.seasonalThemesUnlocked)
     }
 
     private fun preferences(): ThemePreferencesRepository = mockk(relaxed = true) {

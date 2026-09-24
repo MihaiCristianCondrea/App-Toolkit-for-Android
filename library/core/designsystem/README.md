@@ -329,9 +329,9 @@ configuration set before the first composition, not observable state.
 
 Palette swatches show each accent's more colorful variant (role or container), so a light palette
 whose brand color sits in its container still shows that color. The mosaic is one cached drawing
-node, and
-the selection check is drawn in black or white on the swatch's own primary with a ring around it,
-so it stays visible on every palette.
+node. The selection check is drawn in the swatch's own primary on a disc of the same hue, darkened
+or lightened for contrast, so it stays visible on every palette without taking colors from the
+app's current theme.
 
 The module ships `src/main/baseline-prof.txt`, as do `:library:core:ui`, `:library:navigation` and
 `:library:feature:theme`. A host's release build merges them and `androidx.profileinstaller`

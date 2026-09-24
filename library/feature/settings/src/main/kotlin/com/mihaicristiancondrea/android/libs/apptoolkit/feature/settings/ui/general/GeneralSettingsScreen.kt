@@ -88,7 +88,6 @@ fun GeneralSettingsScreen(
         LargeTopAppBarWithScaffold(
             title = title,
             onBackClicked = onBackClicked,
-            actions = { with(contentProvider) { ProvideActions(contentKey = contentKey) } },
             snackbarHostState = snackbarHostState,
             content = content
         )

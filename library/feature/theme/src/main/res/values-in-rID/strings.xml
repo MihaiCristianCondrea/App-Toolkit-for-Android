@@ -33,10 +33,4 @@
     <string name="holiday_greeting_halloween_title">Selamat Halloween!</string>
     <string name="holiday_greeting_halloween_message">Musim seram telah tiba. Ingin memakai tema Halloween selama musimnya?</string>
     <string name="holiday_greeting_use_theme">Gunakan tema liburan selama liburan</string>
-    <string name="seasonal_themes_title">Tema musiman</string>
-    <string name="seasonal_themes_summary">Kamu menemukan rahasianya. Tema liburan kini milikmu.</string>
-    <string name="seasonal_themes_all_year">Tampilkan tema musiman sepanjang tahun?</string>
-    <string name="seasonal_themes_snowfall">Salju turun</string>
-    <string name="seasonal_themes_snowfall_summary">Salju turun di seluruh aplikasi selama tema Natal aktif.</string>
-    <string name="seasonal_themes_done">Selesai</string>
 </resources>

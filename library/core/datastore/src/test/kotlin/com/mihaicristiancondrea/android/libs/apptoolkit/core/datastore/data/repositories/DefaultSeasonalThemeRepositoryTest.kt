@@ -132,40 +132,22 @@ class DefaultSeasonalThemeRepositoryTest {
     }
 
     @Test
-    fun `unlocking and the easter egg switches are stored`() = runTest {
-        val initial = repository.state.first()
-        assertFalse(initial.unlocked)
-        assertFalse(initial.allYear)
-        assertTrue(initial.snowfallEnabled, "snow is on until someone turns it off")
+    fun `unlocking is stored once`() = runTest {
+        assertFalse(repository.state.first().unlocked)
 
         assertTrue(repository.unlockSeasonalThemes(), "the first unlock is news")
         assertFalse(repository.unlockSeasonalThemes(), "later ones are not")
-        repository.setSeasonalThemesAllYear(true)
-        repository.setSnowfallEnabled(false)
 
-        val state = repository.state.first()
-        assertTrue(state.unlocked)
-        assertTrue(state.allYear)
-        assertFalse(state.snowfallEnabled)
+        assertTrue(repository.state.first().unlocked)
     }
 
     private class FakeSeasonalPreferences : SeasonalThemePreferencesDataSource {
         override val seasonalThemesUnlocked = MutableStateFlow(false)
-        override val seasonalThemesAllYear = MutableStateFlow(false)
-        override val snowfallEnabled = MutableStateFlow(true)
         override val lastHolidayGreeting = MutableStateFlow<String?>(null)
         override val holidayThemeSnapshot = MutableStateFlow<HolidayThemeSnapshot?>(null)
 
         override suspend fun saveSeasonalThemesUnlocked(unlocked: Boolean) {
             seasonalThemesUnlocked.value = unlocked
-        }
-
-        override suspend fun saveSeasonalThemesAllYear(enabled: Boolean) {
-            seasonalThemesAllYear.value = enabled
-        }
-
-        override suspend fun saveSnowfallEnabled(enabled: Boolean) {
-            snowfallEnabled.value = enabled
         }
 
         override suspend fun saveLastHolidayGreeting(occurrenceKey: String) {

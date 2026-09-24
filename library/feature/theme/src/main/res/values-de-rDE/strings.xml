@@ -33,10 +33,4 @@
     <string name="holiday_greeting_halloween_title">Fröhliches Halloween!</string>
     <string name="holiday_greeting_halloween_message">Die gruselige Zeit ist da. Möchtest du das Halloween-Design verwenden, solange sie dauert?</string>
     <string name="holiday_greeting_use_theme">Feiertagsdesign während der Feiertage verwenden</string>
-    <string name="seasonal_themes_title">Saisonale Designs</string>
-    <string name="seasonal_themes_summary">Du hast das Geheimnis gefunden. Die Feiertagsdesigns gehören dir.</string>
-    <string name="seasonal_themes_all_year">Saisonale Designs das ganze Jahr anzeigen?</string>
-    <string name="seasonal_themes_snowfall">Schneefall</string>
-    <string name="seasonal_themes_snowfall_summary">Schnee fällt in der ganzen App, solange das Weihnachtsdesign aktiv ist.</string>
-    <string name="seasonal_themes_done">Fertig</string>
 </resources>

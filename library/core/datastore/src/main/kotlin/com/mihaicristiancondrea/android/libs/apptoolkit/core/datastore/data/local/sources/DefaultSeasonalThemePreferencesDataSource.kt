@@ -39,10 +39,6 @@ class DefaultSeasonalThemePreferencesDataSource(
 
     private val unlockedKey =
         booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_SEASONAL_THEMES_UNLOCKED)
-    private val allYearKey =
-        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_SEASONAL_THEMES_ALL_YEAR)
-    private val snowfallKey =
-        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_SNOWFALL_ENABLED)
     private val lastGreetingKey =
         stringPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_LAST_HOLIDAY_GREETING)
     private val holidaySeasonKey =
@@ -54,14 +50,6 @@ class DefaultSeasonalThemePreferencesDataSource(
 
     override val seasonalThemesUnlocked: Flow<Boolean> = dataStore.data.map { preferences ->
         preferences[unlockedKey] == true
-    }.distinctUntilChanged()
-
-    override val seasonalThemesAllYear: Flow<Boolean> = dataStore.data.map { preferences ->
-        preferences[allYearKey] == true
-    }.distinctUntilChanged()
-
-    override val snowfallEnabled: Flow<Boolean> = dataStore.data.map { preferences ->
-        preferences[snowfallKey] != false
     }.distinctUntilChanged()
 
     override val lastHolidayGreeting: Flow<String?> = dataStore.data.map { preferences ->
@@ -85,14 +73,6 @@ class DefaultSeasonalThemePreferencesDataSource(
 
     override suspend fun saveSeasonalThemesUnlocked(unlocked: Boolean) {
         dataStore.edit { preferences: MutablePreferences -> preferences[unlockedKey] = unlocked }
-    }
-
-    override suspend fun saveSeasonalThemesAllYear(enabled: Boolean) {
-        dataStore.edit { preferences: MutablePreferences -> preferences[allYearKey] = enabled }
-    }
-
-    override suspend fun saveSnowfallEnabled(enabled: Boolean) {
-        dataStore.edit { preferences: MutablePreferences -> preferences[snowfallKey] = enabled }
     }
 
     override suspend fun saveLastHolidayGreeting(occurrenceKey: String) {

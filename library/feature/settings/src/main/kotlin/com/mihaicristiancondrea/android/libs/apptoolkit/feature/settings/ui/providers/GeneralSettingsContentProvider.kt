@@ -18,7 +18,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -29,7 +28,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.Displ
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.PrivacyScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.constants.SettingsContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.ThemeSettingsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.SeasonalThemesAction
 
 /**
  * Provider class that handles rendering of different settings sections.
@@ -64,20 +62,6 @@ class GeneralSettingsContentProvider(
             SettingsContent.THEME -> ThemeSettingsScreen(paddingValues = paddingValues)
             SettingsContent.USAGE_AND_DIAGNOSTICS -> UsageAndDiagnosticsScreen(paddingValues = paddingValues)
             else -> customScreens[contentKey]?.invoke(paddingValues)
-        }
-    }
-
-    /**
-     * Top app bar actions for the page shown under [contentKey].
-     *
-     * Only the theme page has any: the seasonal themes action, which stays hidden until the About
-     * screen easter egg is found.
-     */
-    @Composable
-    fun RowScope.ProvideActions(contentKey: String?) {
-        when (contentKey) {
-            SettingsContent.THEME -> SeasonalThemesAction()
-            else -> Unit
         }
     }
 }

@@ -83,7 +83,8 @@ flowchart TD
 - The hidden version-tap gesture is `Preference.countsVersionTap`, not an `AboutItemAction`, so it
   can sit on a row whatever that row does.
 - The fifth tap plays konfetti and raises `AboutEvent.EasterEggFound`. `AboutViewModel` records the
-  unlock through `SeasonalThemeRepository`, which gives the theme screen its seasonal themes action.
+  unlock through `SeasonalThemeRepository`, which keeps the holiday palettes and snowfall available
+  all year.
   Only the first unlock shows a snackbar, since nothing else points at where the reward went.
 - Use cases are retained where they perform a named operation or combine concerns; repository calls
   that only forwarded data were not given synthetic wrappers.
