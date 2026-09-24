@@ -9,11 +9,12 @@
 - Changed the seasonal themes easter egg so finding it is the whole setup: the Christmas and Halloween palettes stay in the palette list all year, and snow follows the Christmas palette outside the season. The theme settings page no longer has a seasonal themes action or dialog.
 - Changed the dark Android palette to pair Android green with Android's navy and light blue on blue-gray surfaces, so it no longer looks like the green palette. The light scheme is unchanged.
 - Changed `MaterialYouCircleSwatch` back to a swatch without divider lines or a ring. The selection check is drawn in the swatch's primary on a darker or lighter disc of the same hue, so it stays visible on every palette without taking colors from the app's theme.
+- Changed `themePreferencesState()` to take only `themeModeDefault` and `staticPaletteIdDefault`. The removed `dynamicColorsDefault`, `amoledModeDefault`, and `dynamicPaletteVariantDefault` only shaped the placeholder first emission; the stored values, with the data source's own defaults for missing keys, were used right after.
 - Changed `ThemeSettingsViewModel` to take a `SeasonalThemeRepository` (`seasonal`). Its state is now `ThemeSettingsUiState`, holding the theme preferences and whether the seasonal themes are unlocked. `themeSettingsModule` passes the repository.
 
 ### Fixed
 
-- Fixed the theme settings palette rows not opening on the palette in use. Each row is now created positioned on the selection, then centers it.
+- Fixed the theme settings palette rows not opening on the palette in use. `themePreferencesState()` emitted placeholder defaults (wallpaper colors on, default palette) before the stored values, so the rows were positioned on the default palette and stayed there. Its first emission is now the stored state, and each row is created positioned on the selection, then centers it.
 
 ### Removed
 

@@ -31,8 +31,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.loca
  *
  * The combined flow is remembered because `collectAsStateWithLifecycle` restarts collection
  * whenever it receives a different flow instance. Built inline, every recomposition of the theme
- * root would re-subscribe to DataStore and replay the defaults, briefly swapping the whole app's
- * color scheme and recomposing everything under it.
+ * root would re-subscribe to DataStore and fall back to the initial value, briefly swapping the
+ * whole app's color scheme and recomposing everything under it. The defaults here only fill that
+ * initial value, for the frames before the stored preferences arrive.
  */
 @Composable
 internal fun rememberThemePreferencesState(
@@ -43,19 +44,9 @@ internal fun rememberThemePreferencesState(
     staticPaletteIdDefault: String = StaticPaletteIds.DEFAULT,
 ): ThemePreferencesState {
     val dataStore = rememberCommonDataStore()
-    val themePreferences = remember(
-        dataStore,
-        themeModeDefault,
-        dynamicColorsDefault,
-        amoledModeDefault,
-        dynamicPaletteVariantDefault,
-        staticPaletteIdDefault,
-    ) {
+    val themePreferences = remember(dataStore, themeModeDefault, staticPaletteIdDefault) {
         dataStore.themePreferences.themePreferencesState(
             themeModeDefault = themeModeDefault,
-            dynamicColorsDefault = dynamicColorsDefault,
-            amoledModeDefault = amoledModeDefault,
-            dynamicPaletteVariantDefault = dynamicPaletteVariantDefault,
             staticPaletteIdDefault = staticPaletteIdDefault,
         )
     }
