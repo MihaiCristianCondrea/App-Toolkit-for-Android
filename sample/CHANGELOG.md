@@ -2,11 +2,12 @@
 
 ---
 
-# Unreleased
+# September 24, 2026
+
+**Version:** `26.09.21` (`137260921`)
 
 ### Changed
 
-- Unlocking the secret seasonal themes now needs no setup. The Christmas and Halloween themes stay in the color list all year, and snow falls with the Christmas theme. The extra button and window on the Theme settings page are gone.
 - The Android theme in dark mode now uses Android's green with navy and light blue, so it no longer looks like the green theme.
 - The color previews in Theme settings are back to their plain look without the outline, and the check on the selected color is still easy to see.
 
