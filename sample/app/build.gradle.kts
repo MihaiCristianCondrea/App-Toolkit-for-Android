@@ -196,6 +196,9 @@ android {
             } else {
                 null
             }
+            ndk {
+                debugSymbolLevel = "SYMBOL_TABLE"
+            }
             optimization {
                 enable = true
             }

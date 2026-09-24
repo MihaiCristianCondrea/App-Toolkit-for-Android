@@ -4,6 +4,16 @@
 
 # September 24, 2026
 
+**Version:** `26.09.22` (`137260922`)
+
+### Added
+
+- Fixed some Google Play Store issues.
+
+---
+
+# September 24, 2026
+
 **Version:** `26.09.21` (`137260921`)
 
 ### Changed
