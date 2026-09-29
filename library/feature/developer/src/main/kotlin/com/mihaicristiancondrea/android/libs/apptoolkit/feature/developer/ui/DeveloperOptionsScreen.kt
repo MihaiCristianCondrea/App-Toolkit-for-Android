@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.ChoicePreferenceItem
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,42 +29,27 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Animation
-import androidx.compose.material.icons.outlined.CallToAction
 import androidx.compose.material.icons.outlined.Dashboard
-import androidx.compose.material.icons.outlined.FormatColorFill
 import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.material.icons.outlined.RocketLaunch
 import androidx.compose.material.icons.outlined.SmartDisplay
-import androidx.compose.material.icons.outlined.SwapHoriz
-import androidx.compose.material.icons.outlined.Swipe
-import androidx.compose.material.icons.outlined.VerticalAlignBottom
-import androidx.compose.material.icons.outlined.ViewColumn
-import androidx.compose.material.icons.outlined.ViewDay
-import androidx.compose.material.icons.outlined.Web
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.isSpecified
 import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.BasicAlertDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.RadioButtonPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
@@ -73,19 +59,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNav
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalShellLayout
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.TabTransitionStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.AccessoryMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.AnimationSpeed
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.BackEdgeStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.BannerStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellPreferences
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationBarStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationTint
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.TopBarOverride
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 /**
  * Every variation of the shell, switchable while the app runs, and a live readout of the state it
@@ -121,20 +100,23 @@ fun DeveloperOptionsScreen() {
         StateLine(stringResource(R.string.shell_dev_page_stack), navigator.pages.describe()),
     ) + tabStacks
 
-    val navigation: List<@Composable (Modifier) -> Unit> = listOf(
-        { modifier ->
-            ChoiceItem(
-                title = stringResource(R.string.shell_dev_start),
-                icon = Icons.Outlined.RocketLaunch,
-                options = listOf(-1) + graph.startOptions.indices,
-                selected = settings.startOverride.takeIf { it in graph.startOptions.indices } ?: -1,
-                optionLabel = { index -> startLabel(graph, index) },
-                onSelect = { scope.launch { preferences.setStartOverride(it) } },
-                modifier = modifier,
-            )
-        },
-        { modifier ->
-            ChoiceItem(
+    // Only what the app's graph gives the options something to act on.
+    val navigation: List<@Composable (Modifier) -> Unit> = buildList {
+        if (graph.startOptions.size > 1) {
+            add { modifier ->
+                ChoicePreferenceItem(
+                    title = stringResource(R.string.shell_dev_start),
+                    icon = Icons.Outlined.RocketLaunch,
+                    options = listOf(-1) + graph.startOptions.indices,
+                    selected = settings.startOverride.takeIf { it in graph.startOptions.indices } ?: -1,
+                    optionLabel = { index -> startLabel(graph, index) },
+                    onSelect = { scope.launch { preferences.setStartOverride(it) } },
+                    modifier = modifier,
+                )
+            }
+        }
+        add { modifier ->
+            ChoicePreferenceItem(
                 title = stringResource(R.string.shell_dev_layout),
                 icon = Icons.Outlined.Dashboard,
                 options = ShellLayoutMode.entries,
@@ -143,116 +125,28 @@ fun DeveloperOptionsScreen() {
                 onSelect = { scope.launch { preferences.setLayoutMode(it) } },
                 modifier = modifier,
             )
-        },
-        { modifier ->
-            ChoiceItem(
-                title = stringResource(R.string.shell_dev_top_bar),
-                icon = Icons.Outlined.Web,
-                options = TopBarOverride.entries,
-                selected = settings.topBarOverride,
-                optionLabel = { topBarLabel(it) },
-                onSelect = { scope.launch { preferences.setTopBarOverride(it) } },
-                modifier = modifier,
-            )
-        },
-        { modifier ->
-            ChoiceItem(
-                title = stringResource(R.string.shell_dev_navigation_bar),
-                icon = Icons.Outlined.CallToAction,
-                options = NavigationBarStyle.entries,
-                selected = settings.navigationBarStyle,
-                optionLabel = { navigationBarLabel(it) },
-                onSelect = { scope.launch { preferences.setNavigationBarStyle(it) } },
-                modifier = modifier,
-            )
-        },
-        { modifier ->
-            ChoiceItem(
-                title = stringResource(R.string.shell_dev_navigation_tint),
-                icon = Icons.Outlined.FormatColorFill,
-                options = NavigationTint.entries,
-                selected = settings.navigationTint,
-                optionLabel = { navigationTintLabel(it) },
-                onSelect = { scope.launch { preferences.setNavigationTint(it) } },
-                modifier = modifier,
-            )
-        },
-        { modifier ->
-            SwitchPreferenceItem(
-                modifier = modifier,
-                icon = Icons.Outlined.VerticalAlignBottom,
-                title = stringResource(R.string.shell_dev_hide_bottom_bar),
-                summary = stringResource(R.string.shell_dev_hide_bottom_bar_summary),
-                checked = settings.hideBottomBarOnScroll,
-                onCheckedChange = { scope.launch { preferences.setHideBottomBarOnScroll(it) } },
-            )
-        },
-        { modifier ->
-            SwitchPreferenceItem(
-                modifier = modifier,
-                icon = Icons.Outlined.ViewColumn,
-                title = stringResource(R.string.shell_dev_limit_width),
-                summary = if (layout.contentMaxWidth.isSpecified || !settings.limitContentWidth) {
-                    stringResource(R.string.shell_dev_limit_width_summary)
-                } else {
-                    stringResource(R.string.shell_dev_limit_width_unset)
-                },
-                checked = settings.limitContentWidth,
-                onCheckedChange = { scope.launch { preferences.setLimitContentWidth(it) } },
-            )
-        },
-    )
+        }
+    }
 
-    val accessories: List<@Composable (Modifier) -> Unit> = listOf(
-        { modifier ->
-            ChoiceItem(
-                title = stringResource(R.string.shell_dev_bottom_accessory),
-                icon = Icons.Outlined.SmartDisplay,
-                options = AccessoryMode.entries,
-                selected = settings.accessoryMode,
-                optionLabel = { accessoryLabel(it) },
-                onSelect = { scope.launch { preferences.setAccessoryMode(it) } },
-                modifier = modifier,
-            )
-        },
-        { modifier ->
-            ChoiceItem(
-                title = stringResource(R.string.shell_dev_banner_style),
-                icon = Icons.Outlined.ViewDay,
-                options = BannerStyle.entries,
-                selected = settings.bannerStyle,
-                optionLabel = { bannerStyleLabel(it) },
-                onSelect = { scope.launch { preferences.setBannerStyle(it) } },
-                modifier = modifier,
-            )
-        },
-    )
+    val accessories: List<@Composable (Modifier) -> Unit> = buildList {
+        if (graph.banner != null || graph.player != null) {
+            add { modifier ->
+                ChoicePreferenceItem(
+                    title = stringResource(R.string.shell_dev_bottom_accessory),
+                    icon = Icons.Outlined.SmartDisplay,
+                    options = AccessoryMode.entries,
+                    selected = settings.accessoryMode,
+                    optionLabel = { accessoryLabel(it) },
+                    onSelect = { scope.launch { preferences.setAccessoryMode(it) } },
+                    modifier = modifier,
+                )
+            }
+        }
+    }
 
     val motion: List<@Composable (Modifier) -> Unit> = listOf(
         { modifier ->
-            ChoiceItem(
-                title = stringResource(R.string.shell_dev_tab_transition),
-                icon = Icons.Outlined.SwapHoriz,
-                options = TabTransitionStyle.entries,
-                selected = settings.tabTransition,
-                optionLabel = { tabTransitionLabel(it) },
-                onSelect = { scope.launch { preferences.setTabTransition(it) } },
-                modifier = modifier,
-            )
-        },
-        { modifier ->
-            ChoiceItem(
-                title = stringResource(R.string.shell_dev_back_edge),
-                icon = Icons.Outlined.Swipe,
-                options = BackEdgeStyle.entries,
-                selected = settings.backEdgeStyle,
-                optionLabel = { backEdgeLabel(it) },
-                onSelect = { scope.launch { preferences.setBackEdgeStyle(it) } },
-                modifier = modifier,
-            )
-        },
-        { modifier ->
-            ChoiceItem(
+            ChoicePreferenceItem(
                 title = stringResource(R.string.shell_dev_animation_speed),
                 icon = Icons.Outlined.Animation,
                 options = AnimationSpeed.entries,
@@ -298,6 +192,7 @@ fun DeveloperOptionsScreen() {
 }
 
 private fun LazyListScope.group(title: String, rows: List<@Composable (Modifier) -> Unit>) {
+    if (rows.isEmpty()) return
     item { PreferenceCategoryItem(title = title) }
     itemsIndexed(rows) { index, row -> row(Modifier.grouped(groupedItemPosition(index, rows.size))) }
 }
@@ -330,56 +225,6 @@ private fun StateItem(line: StateLine, modifier: Modifier) {
     }
 }
 
-/** A row showing the chosen option, which opens a dialog listing all of [options]. */
-@Composable
-private fun <T> ChoiceItem(
-    title: String,
-    icon: ImageVector,
-    options: List<T>,
-    selected: T,
-    optionLabel: @Composable (T) -> String,
-    onSelect: (T) -> Unit,
-    modifier: Modifier,
-) {
-    var open by rememberSaveable { mutableStateOf(false) }
-    SettingsPreferenceItem(
-        modifier = modifier,
-        icon = icon,
-        title = title,
-        summary = optionLabel(selected),
-        onClick = { open = true },
-    )
-    if (open) {
-        BasicAlertDialog(
-            onDismiss = { open = false },
-            onConfirm = { open = false },
-            icon = icon,
-            title = title,
-            showDismissButton = false,
-            confirmButtonText = stringResource(CoreUiR.string.done_button_content_description),
-            content = {
-                Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)) {
-                    options.forEachIndexed { index, option ->
-                        RadioButtonPreferenceItem(
-                            modifier = Modifier.groupedPreferenceItem(
-                                position = groupedItemPosition(index, options.size),
-                                outerRadius = SizeConstants.LargeMediumSize,
-                                horizontalPadding = SizeConstants.ZeroSize,
-                            ),
-                            text = optionLabel(option),
-                            isChecked = option == selected,
-                            onCheckedChange = {
-                                onSelect(option)
-                                open = false
-                            },
-                        )
-                    }
-                }
-            },
-        )
-    }
-}
-
 private fun List<NavKey>.describe(): String = joinToString(separator = "  ›  ") { key ->
     key.toString().substringAfterLast('.').substringBefore('@').substringBefore('(')
 }
@@ -396,50 +241,12 @@ private fun layoutModeLabel(mode: ShellLayoutMode): String = stringResource(
 )
 
 @Composable
-private fun topBarLabel(value: TopBarOverride): String = stringResource(
-    when (value) {
-        TopBarOverride.AsDeclared -> R.string.shell_as_declared
-        TopBarOverride.Small -> R.string.shell_top_bar_small
-        TopBarOverride.CenterAligned -> R.string.shell_top_bar_center
-        TopBarOverride.Large -> R.string.shell_top_bar_large
-        TopBarOverride.LargeCollapsed -> R.string.shell_top_bar_large_collapsed
-        TopBarOverride.Hidden -> R.string.shell_top_bar_hidden
-    },
-)
-
-@Composable
 private fun accessoryLabel(value: AccessoryMode): String = stringResource(
     when (value) {
         AccessoryMode.AsDeclared -> R.string.shell_accessory_as_declared
         AccessoryMode.None -> R.string.shell_accessory_none
         AccessoryMode.BannerOnly -> R.string.shell_accessory_banner
         AccessoryMode.PlayerOnly -> R.string.shell_accessory_player
-    },
-)
-
-@Composable
-private fun navigationBarLabel(value: NavigationBarStyle): String = stringResource(
-    when (value) {
-        NavigationBarStyle.Standard -> R.string.shell_navigation_bar_standard
-        NavigationBarStyle.Short -> R.string.shell_navigation_bar_short
-    },
-)
-
-@Composable
-private fun navigationTintLabel(value: NavigationTint): String = stringResource(
-    when (value) {
-        NavigationTint.None -> R.string.shell_navigation_tint_none
-        NavigationTint.Always -> R.string.shell_navigation_tint_always
-        NavigationTint.OnScroll -> R.string.shell_navigation_tint_on_scroll
-    },
-)
-
-@Composable
-private fun bannerStyleLabel(value: BannerStyle): String = stringResource(
-    when (value) {
-        BannerStyle.Automatic -> R.string.shell_banner_automatic
-        BannerStyle.Floating -> R.string.shell_banner_floating
-        BannerStyle.Docked -> R.string.shell_banner_docked
     },
 )
 
@@ -458,24 +265,6 @@ private fun startLabelOf(graph: ShellGraph, key: NavKey): String {
     val title = graph.destination(key).title?.invoke(key) ?: key.toString().substringAfterLast('.')
     return stringResource(R.string.shell_start_screen, title)
 }
-
-@Composable
-private fun backEdgeLabel(value: BackEdgeStyle): String = stringResource(
-    when (value) {
-        BackEdgeStyle.System -> R.string.shell_back_edge_system
-        BackEdgeStyle.FollowFinger -> R.string.shell_back_edge_follow
-    },
-)
-
-@Composable
-private fun tabTransitionLabel(value: TabTransitionStyle): String = stringResource(
-    when (value) {
-        TabTransitionStyle.Directional -> R.string.shell_transition_directional
-        TabTransitionStyle.FadeThrough -> R.string.shell_transition_fade_through
-        TabTransitionStyle.Fade -> R.string.shell_transition_fade
-        TabTransitionStyle.None -> R.string.shell_transition_none
-    },
-)
 
 @Composable
 private fun animationSpeedLabel(value: AnimationSpeed): String = stringResource(

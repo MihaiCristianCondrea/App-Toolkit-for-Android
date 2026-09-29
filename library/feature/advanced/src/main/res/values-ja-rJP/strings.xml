@@ -23,4 +23,6 @@
     <string name="summary_preference_settings_bug_report">アプリのGitHubリポジトリの問題ページにバグ報告と機能リクエストを送信する</string>
     <string name="summary_preference_settings_clear_cache">一時的なアプリケーションデータをクリアします。</string>
     <string name="advanced">詳細設定</string>
+    <string name="developer_options">開発者向けオプション</string>
+    <string name="summary_preference_settings_developer_options">開始ページ、ナビゲーション レイアウト、アニメーションをテストします</string>
 </resources>

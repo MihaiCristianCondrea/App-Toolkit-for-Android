@@ -17,6 +17,11 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DeveloperOptionsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.outlined.DeveloperMode
+import androidx.compose.material.icons.Icons
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
@@ -63,6 +68,7 @@ private const val ADVANCED_SETTINGS_SCREEN_CLASS = "AdvancedSettingsScreen"
 private object AdvancedPreferenceKeys {
     const val BUG_REPORT: String = "bug_report"
     const val CLEAR_CACHE: String = "clear_cache"
+    const val DEVELOPER_OPTIONS: String = "developer_options"
 }
 
 /**
@@ -111,6 +117,9 @@ fun AdvancedSettingsScreen(
     if (showIssueReporter) {
         issueReporterSheet?.Show(onDismissRequest = { showIssueReporter = false })
     }
+
+    val developerOptionsUnlocked by viewModel.developerOptionsUnlocked.collectAsStateWithLifecycle()
+    val navigator = LocalShellNavigator.current
 
     val messageRes: Int? = screenState.data?.cacheClearMessage
     val toastText: String? = messageRes?.let { stringResource(id = it) }
@@ -170,6 +179,25 @@ fun AdvancedSettingsScreen(
                             outerRadius = SizeConstants.LargeMediumSize,
                         )
                     )
+                }
+
+                if (developerOptionsUnlocked) {
+                    item {
+                        SettingsPreferenceItem(
+                            icon = Icons.Outlined.DeveloperMode,
+                            title = stringResource(id = R.string.developer_options),
+                            summary = stringResource(id = R.string.summary_preference_settings_developer_options),
+                            onClick = { navigator.navigate(DeveloperOptionsRoute) },
+                            firebaseController = firebaseController,
+                            ga4Event = advancedPreferenceTapEvent(preferenceKey = AdvancedPreferenceKeys.DEVELOPER_OPTIONS),
+                            modifier = Modifier
+                                .padding(top = SizeConstants.LargeSize)
+                                .groupedPreferenceItem(
+                                    position = GroupedItemPosition.SINGLE,
+                                    outerRadius = SizeConstants.LargeMediumSize,
+                                ),
+                        )
+                    }
                 }
             }
         },

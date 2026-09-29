@@ -31,6 +31,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -142,4 +143,21 @@ class AdvancedSettingsViewModelTest {
                 cancelAndIgnoreRemainingEvents()
             }
         }
+
+    @Test
+    fun `the developer options are offered once the easter egg is found`() = runTest(dispatcherExtension.testDispatcher) {
+        val unlocked = MutableStateFlow(false)
+        val viewModel = AdvancedSettingsViewModel(
+            repository = FakeCacheRepository(DataState.Success(Unit)),
+            dispatchers = testDispatchers,
+            firebaseController = firebaseController,
+            developerOptionsUnlocked = unlocked,
+        )
+
+        viewModel.developerOptionsUnlocked.test {
+            assertThat(awaitItem()).isFalse()
+            unlocked.value = true
+            assertThat(awaitItem()).isTrue()
+        }
+    }
 }

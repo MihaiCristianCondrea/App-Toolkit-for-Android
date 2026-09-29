@@ -17,6 +17,14 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellPreferences
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellGraph
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.views.preferences.ShellDisplayRows
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.LazyListScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.ThemeSettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
@@ -205,17 +213,17 @@ fun DisplaySettingsScreen(
         )
     }
 
-    LazyColumn(
-        contentPadding = paddingValues,
-        modifier = Modifier.fillMaxHeight(),
-        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
-    ) {
+    // The shell's layout choices, offered only where the app's graph uses them: an app without
+    // tabs has no bottom bar to style, one without a banner no banner to place.
+    val graph = LocalShellGraph.current
+    val shellSettings = LocalShellSettings.current
+    val shellPreferences = LocalShellPreferences.current
+    val scope = rememberCoroutineScope()
+    val hasTabs = graph.tabs.isNotEmpty()
+    val shell = ShellDisplayRows(shellSettings, shellPreferences, scope)
 
-        item {
-            PreferenceCategoryItem(title = stringResource(id = R.string.appearance))
-        }
-
-        item {
+    val appearanceRows: List<@Composable (Modifier) -> Unit> = buildList {
+        add { modifier ->
             SwitchPreferenceItemWithDivider(
                 title = stringResource(id = R.string.dark_theme),
                 summary = themeSummary,
@@ -232,15 +240,11 @@ fun DisplaySettingsScreen(
                     )
                     navigator.navigate(ThemeSettingsRoute)
                 },
-                modifier = Modifier.groupedPreferenceItem(
-                    position = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) GroupedItemPosition.FIRST else GroupedItemPosition.SINGLE,
-                    outerRadius = SizeConstants.LargeMediumSize,
-                )
+                modifier = modifier,
             )
         }
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            item {
+            add { modifier ->
                 SwitchPreferenceItem(
                     title = stringResource(id = R.string.dynamic_colors),
                     summary = stringResource(id = R.string.summary_preference_settings_dynamic_colors),
@@ -248,13 +252,61 @@ fun DisplaySettingsScreen(
                     onCheckedChange = { isChecked ->
                         viewModel.onEvent(DisplaySettingsEvent.DynamicColorsChanged(isChecked))
                     },
-                    modifier = Modifier.groupedPreferenceItem(
-                        position = GroupedItemPosition.LAST,
-                        outerRadius = SizeConstants.LargeMediumSize,
-                    )
+                    modifier = modifier,
                 )
             }
         }
+        add { modifier -> shell.TopBarStyle(modifier) }
+        if (hasTabs) add { modifier -> shell.NavigationTint(modifier) }
+        add { modifier -> shell.ContentWidth(modifier) }
+        if (graph.banner != null) add { modifier -> shell.BannerStyle(modifier) }
+    }
+
+    val navigationRows: List<@Composable (Modifier) -> Unit> = buildList {
+        if (provider.supportsStartupPage && graph.tabs.size > 1) {
+            add { modifier ->
+                SettingsPreferenceItem(
+                    title = stringResource(id = R.string.startup_page),
+                    summary = stringResource(id = R.string.summary_preference_settings_startup_page),
+                    onClick = { showStartupDialog.value = true },
+                    firebaseController = firebaseController,
+                    ga4Event = displayActionGa4Event(
+                        actionName = DisplayActionNames.OPEN_STARTUP_DIALOG,
+                        preferenceKey = DisplayPreferenceKeys.STARTUP_PAGE,
+                    ),
+                    modifier = modifier,
+                )
+            }
+        }
+        if (hasTabs) {
+            add { modifier -> shell.NavigationBarStyle(modifier) }
+            add { modifier ->
+                SwitchPreferenceItem(
+                    title = stringResource(id = R.string.show_labels_on_bottom_bar),
+                    summary = stringResource(id = R.string.summary_preference_settings_show_labels_on_bottom_bar),
+                    checked = uiState.showBottomBarLabels,
+                    onCheckedChange = { isChecked ->
+                        viewModel.onEvent(DisplaySettingsEvent.BottomBarLabelsChanged(isChecked))
+                    },
+                    modifier = modifier,
+                )
+            }
+            add { modifier -> shell.HideBottomBarOnScroll(modifier) }
+        }
+        if (graph.tabs.size > 1) add { modifier -> shell.TabTransition(modifier) }
+        add { modifier -> shell.BackEdge(modifier) }
+    }
+
+    val appearanceTitle = stringResource(id = R.string.appearance)
+    val navigationTitle = stringResource(id = R.string.navigation)
+
+    LazyColumn(
+        contentPadding = paddingValues,
+        modifier = Modifier.fillMaxHeight(),
+        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
+    ) {
+
+        group(appearanceTitle, appearanceRows)
 
         item {
             PreferenceCategoryItem(title = stringResource(id = R.string.app_behavior))
@@ -275,44 +327,7 @@ fun DisplaySettingsScreen(
             )
         }
 
-        if (provider.supportsStartupPage) {
-
-            item {
-                PreferenceCategoryItem(title = stringResource(id = R.string.navigation))
-            }
-
-            item {
-                SettingsPreferenceItem(
-                    title = stringResource(id = R.string.startup_page),
-                    summary = stringResource(id = R.string.summary_preference_settings_startup_page),
-                    onClick = { showStartupDialog.value = true },
-                    firebaseController = firebaseController,
-                    ga4Event = displayActionGa4Event(
-                        actionName = DisplayActionNames.OPEN_STARTUP_DIALOG,
-                        preferenceKey = DisplayPreferenceKeys.STARTUP_PAGE,
-                    ),
-                    modifier = Modifier.groupedPreferenceItem(
-                        position = GroupedItemPosition.FIRST,
-                        outerRadius = SizeConstants.LargeMediumSize,
-                    )
-                )
-            }
-
-            item {
-                SwitchPreferenceItem(
-                    title = stringResource(id = R.string.show_labels_on_bottom_bar),
-                    summary = stringResource(id = R.string.summary_preference_settings_show_labels_on_bottom_bar),
-                    checked = uiState.showBottomBarLabels,
-                    onCheckedChange = { isChecked ->
-                        viewModel.onEvent(DisplaySettingsEvent.BottomBarLabelsChanged(isChecked))
-                    },
-                    modifier = Modifier.groupedPreferenceItem(
-                        position = GroupedItemPosition.LAST,
-                        outerRadius = SizeConstants.LargeMediumSize,
-                    )
-                )
-            }
-        }
+        group(navigationTitle, navigationRows)
 
         item {
             PreferenceCategoryItem(title = stringResource(id = R.string.language))
@@ -402,4 +417,13 @@ private fun displayActionEvent(
         name = SettingsAnalytics.Events.ACTION,
         params = base,
     )
+}
+
+/** A category and its rows, drawn as one group of cards; nothing when there are no rows. */
+private fun LazyListScope.group(title: String, rows: List<@Composable (Modifier) -> Unit>) {
+    if (rows.isEmpty()) return
+    item { PreferenceCategoryItem(title = title) }
+    itemsIndexed(rows) { index, row ->
+        row(Modifier.groupedPreferenceItem(position = groupedItemPosition(index, rows.size), outerRadius = SizeConstants.LargeMediumSize))
+    }
 }

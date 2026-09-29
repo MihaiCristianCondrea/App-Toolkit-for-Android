@@ -23,4 +23,6 @@
     <string name="summary_preference_settings_bug_report">Magpadala ng mga ulat ng bug at mga hiling na feature sa pahina ng mga isyu ng GitHub repository ng app</string>
     <string name="summary_preference_settings_clear_cache">I-clear ang pansamantalang data ng application.</string>
     <string name="advanced">Advanced</string>
+    <string name="developer_options">Mga opsyon ng developer</string>
+    <string name="summary_preference_settings_developer_options">Subukan ang start page, layout ng navigation at mga animation</string>
 </resources>

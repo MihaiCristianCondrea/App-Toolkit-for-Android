@@ -99,12 +99,13 @@ enum class AnimationSpeed(val durationScale: Float) {
 }
 
 /**
- * The shell's persisted developer options: how it lays out, moves and draws its chrome.
+ * The shell's persisted settings: how it lays out, moves and draws its chrome.
  *
- * The defaults are what an app gets before anyone opens the developer options, so each one leaves
- * the app exactly as its graph declares it. The person's own choices live with the features that
- * offer them: the theme in `:library:feature:theme`, the bottom bar labels and the start page in
- * `:library:feature:display`.
+ * Most are the person's layout choices, offered in the display settings of
+ * `:library:feature:display` (app bar and bottom bar style, navigation colour, content width,
+ * banner, tab transition, back swipe). The rest are developer options, offered by
+ * `:library:feature:developer` once unlocked: [startOverride], [layoutMode], [accessoryMode] and
+ * [animationSpeed]. The defaults leave the app exactly as its graph declares it.
  */
 @Immutable
 data class ShellSettings(

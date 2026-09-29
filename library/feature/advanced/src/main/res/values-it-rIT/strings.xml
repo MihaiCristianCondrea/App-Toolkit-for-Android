@@ -23,4 +23,6 @@
     <string name="summary_preference_settings_bug_report">Invia segnalazioni di bug e richieste di funzionalità alla pagina di segnalazioni del repository GitHub dell\'app</string>
     <string name="summary_preference_settings_clear_cache">Cancella i dati temporanei dell\'applicazione.</string>
     <string name="advanced">Avanzate</string>
+    <string name="developer_options">Opzioni sviluppatore</string>
+    <string name="summary_preference_settings_developer_options">Prova la pagina iniziale, il layout di navigazione e le animazioni</string>
 </resources>

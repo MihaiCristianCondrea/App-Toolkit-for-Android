@@ -23,4 +23,6 @@
     <string name="summary_preference_settings_bug_report">Gửi báo cáo lỗi và yêu cầu tính năng đến trang vấn đề của kho lưu trữ GitHub của ứng dụng</string>
     <string name="summary_preference_settings_clear_cache">Xóa dữ liệu ứng dụng tạm thời.</string>
     <string name="advanced">Nâng cao</string>
+    <string name="developer_options">Tùy chọn cho nhà phát triển</string>
+    <string name="summary_preference_settings_developer_options">Kiểm thử trang bắt đầu, bố cục điều hướng và ảnh động</string>
 </resources>

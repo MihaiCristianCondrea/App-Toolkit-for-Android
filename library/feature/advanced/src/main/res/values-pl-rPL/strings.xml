@@ -23,4 +23,6 @@
     <string name="summary_preference_settings_bug_report">Prześlij raporty o błędach i żądania funkcji na stronę zgłoszeń problemów w repozytorium GitHub aplikacji</string>
     <string name="summary_preference_settings_clear_cache">Wyczyść tymczasowe dane aplikacji.</string>
     <string name="advanced">Zaawansowane</string>
+    <string name="developer_options">Opcje programisty</string>
+    <string name="summary_preference_settings_developer_options">Testuj stronę startową, układ nawigacji i animacje</string>
 </resources>

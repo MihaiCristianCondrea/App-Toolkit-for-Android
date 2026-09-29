@@ -59,8 +59,20 @@ interface ShellPreferences {
     suspend fun setBannerStyle(value: BannerStyle) = update { it.copy(bannerStyle = value) }
     suspend fun setNavigationTint(value: NavigationTint) = update { it.copy(navigationTint = value) }
 
-    /** Puts every developer option back to its default. */
-    suspend fun resetDeveloperOptions() = update { ShellSettings() }
+    /**
+     * Puts the developer options back to their defaults: where the app starts, the forced
+     * layout, the bottom accessories and the animation speed. The layout choices the display
+     * settings offer are the person's own and stay as they are.
+     */
+    suspend fun resetDeveloperOptions() = update { current ->
+        val defaults = ShellSettings()
+        current.copy(
+            startOverride = defaults.startOverride,
+            layoutMode = defaults.layoutMode,
+            accessoryMode = defaults.accessoryMode,
+            animationSpeed = defaults.animationSpeed,
+        )
+    }
 }
 
 /** The shell's own store: a DataStore shared by every instance built from the same application. */

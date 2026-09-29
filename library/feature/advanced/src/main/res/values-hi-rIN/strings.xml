@@ -23,4 +23,6 @@
     <string name="summary_preference_settings_bug_report">बग रिपोर्ट और फीचर अनुरोध ऐप के GitHub भंडार मुद्दों पृष्ठ पर भेजें</string>
     <string name="summary_preference_settings_clear_cache">अस्थायी एप्लिकेशन डेटा साफ़ करें.</string>
     <string name="advanced">उन्नत</string>
+    <string name="developer_options">डेवलपर विकल्प</string>
+    <string name="summary_preference_settings_developer_options">शुरुआती पेज, नेविगेशन लेआउट और ऐनिमेशन जांचें</string>
 </resources>

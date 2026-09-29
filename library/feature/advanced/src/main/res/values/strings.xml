@@ -23,4 +23,6 @@
     <string name="summary_preference_settings_bug_report">Send bug reports and feature requests to the app\'s GitHub repository issues page</string>
     <string name="summary_preference_settings_clear_cache">Clear temporary application data.</string>
     <string name="advanced">Advanced</string>
+    <string name="developer_options">Developer options</string>
+    <string name="summary_preference_settings_developer_options">Test the start page, navigation layout and animations</string>
 </resources>

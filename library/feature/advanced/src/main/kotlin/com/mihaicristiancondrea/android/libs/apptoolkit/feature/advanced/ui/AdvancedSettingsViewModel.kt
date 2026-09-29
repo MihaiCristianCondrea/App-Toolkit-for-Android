@@ -17,6 +17,11 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui
 
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.Flow
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.data.repositories.CacheRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.contracts.AdvancedSettingsAction
@@ -43,11 +48,15 @@ import kotlinx.coroutines.launch
 
 /**
  * ViewModel for advanced settings actions such as cache clearing.
+ *
+ * @param developerOptionsUnlocked Whether the About screen's version easter egg has been found,
+ * which offers the developer options here.
  */
 class AdvancedSettingsViewModel(
     private val repository: CacheRepository,
     private val dispatchers: DispatcherProvider,
     firebaseController: FirebaseController,
+    developerOptionsUnlocked: Flow<Boolean> = flowOf(false),
 ) : LoggedScreenViewModel<AdvancedSettingsUiState, AdvancedSettingsEvent, AdvancedSettingsAction>(
     initialState = UiStateScreen(
         screenState = ScreenState.Success(),
@@ -57,6 +66,10 @@ class AdvancedSettingsViewModel(
     screenName = "AdvancedSettings",
 ) {
     private var observeJob: Job? = null
+
+    /** Whether the developer options entry is shown. */
+    val developerOptionsUnlocked: StateFlow<Boolean> = developerOptionsUnlocked
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000), initialValue = false)
 
     override fun handleEvent(event: AdvancedSettingsEvent) {
         when (event) {

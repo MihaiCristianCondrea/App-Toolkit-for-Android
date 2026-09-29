@@ -23,4 +23,6 @@
     <string name="summary_preference_settings_bug_report">Küldj hibajelentéseket és funkciókéréseket az alkalmazás GitHub-archívumának hibajelentő oldalára</string>
     <string name="summary_preference_settings_clear_cache">Törölje az ideiglenes alkalmazásadatokat.</string>
     <string name="advanced">Haladó</string>
+    <string name="developer_options">Fejlesztői beállítások</string>
+    <string name="summary_preference_settings_developer_options">A kezdőlap, a navigáció elrendezése és az animációk tesztelése</string>
 </resources>

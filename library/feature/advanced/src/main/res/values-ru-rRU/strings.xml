@@ -23,4 +23,6 @@
     <string name="summary_preference_settings_bug_report">Отправьте отчёты об ошибках и запросы на функции на страницу GitHub проекта</string>
     <string name="summary_preference_settings_clear_cache">Очистить временные данные приложения.</string>
     <string name="advanced">Дополнительно</string>
+    <string name="developer_options">Параметры разработчика</string>
+    <string name="summary_preference_settings_developer_options">Проверка стартовой страницы, макета навигации и анимаций</string>
 </resources>

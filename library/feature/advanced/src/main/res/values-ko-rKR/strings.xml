@@ -23,4 +23,6 @@
     <string name="summary_preference_settings_bug_report">버그 신고 및 기능 요청을 앱의 GitHub 저장소 문제 페이지로 보내세요.</string>
     <string name="summary_preference_settings_clear_cache">임시 애플리케이션 데이터를 지웁니다.</string>
     <string name="advanced">고급</string>
+    <string name="developer_options">개발자 옵션</string>
+    <string name="summary_preference_settings_developer_options">시작 페이지, 탐색 레이아웃, 애니메이션 테스트</string>
 </resources>

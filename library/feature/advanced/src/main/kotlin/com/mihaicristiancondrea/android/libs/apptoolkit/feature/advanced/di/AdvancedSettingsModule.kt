@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.di
 
+import kotlinx.coroutines.flow.map
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.data.repositories.CacheRepository
@@ -39,6 +41,8 @@ val advancedSettingsModule: Module = module {
             repository = get(),
             dispatchers = get(),
             firebaseController = get(),
+            // The About screen's version easter egg unlocks the developer options.
+            developerOptionsUnlocked = get<SeasonalThemeRepository>().state.map { it.unlocked },
         )
     }
 }

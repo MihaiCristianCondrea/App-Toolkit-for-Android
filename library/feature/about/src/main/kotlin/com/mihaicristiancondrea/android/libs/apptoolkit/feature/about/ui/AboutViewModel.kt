@@ -60,8 +60,9 @@ private const val SEASONAL_THEMES_ACHIEVEMENT: String = "seasonal_themes"
  * so a successful copy is confirmed in-app only below that, where nothing else tells the user
  * anything happened. A failed copy raises no system UI at all, so it is always reported.
  *
- * The version-tap easter egg also unlocks the seasonal themes controls on the theme screen. The
- * first unlock is announced, since nothing else points at where the reward went.
+ * The version-tap easter egg also unlocks the seasonal themes controls on the theme screen and the
+ * developer options entry in the advanced settings. The first unlock is announced, since nothing
+ * else points at where the reward went.
  *
  * @param seasonalThemes Records the easter egg unlock.
  * @param sdkIntProvider Supplies the running platform level, so the confirmation rule is testable
