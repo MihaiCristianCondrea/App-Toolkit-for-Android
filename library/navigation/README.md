@@ -170,7 +170,8 @@ Screens then call `LocalShellNavigator.current.navigate(key)` with any registere
   `ScreenTransition`, `ShellTransitions`, `CrossActivityBackMotion` and `ShellLayoutPolicy`.
 - The composition locals `LocalShellNavigator`, `LocalShellGraph`, `LocalPageKey`,
   `LocalPaneRole`, `LocalSelectedDetail`, `LocalShellSearch`, `LocalShellLayout`,
-  `LocalShellMotion` and `LocalBesideNavigation`, with `isTopLevelPage`.
+  `LocalShellMotion` and `LocalBesideNavigation`, with `isTopLevelPage`. `ShellLayoutInfo`
+  carries both the content width in force and `declaredContentMaxWidth`, the app's own limit.
 - `AppToolkitNavKey` and its keys. Their class names are part of saved state: renaming or moving
   one loses a restored back stack that held it.
 

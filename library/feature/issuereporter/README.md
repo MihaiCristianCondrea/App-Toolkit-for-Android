@@ -15,6 +15,7 @@ Collects device/report data and submits structured issues to a configured GitHub
 - Report, device-info, GitHub-target, and result domain models.
 - Report use case, repository/provider contracts, remote source, local device source, DTO, and
   mapper.
+- The `GithubToken` Koin qualifier and `toToken`, which decodes the host's token.
 
 ## Does not own
 

@@ -111,7 +111,8 @@ on screen, and `ShellHost` draws it itself, around the displays:
   gets the tab's small app bar with no back button and, when the navigation and the app bar share
   a colour, the tab's rounded content card over that colour. Pages opened from it keep their back
   button. `ShellFrame` provides `LocalBesideNavigation` for this, and `PageScaffold` and the
-  list-detail scene read it through `isTopLevelPage`.
+  list-detail scene read it through `isTopLevelPage`. A page keeps that look while another entry
+  replaces it and it animates out, so it never grows a back button on the way.
 - **Start screens stay whole-window.** Before the shell is entered there is no navigation, so a
   welcome or onboarding page covers the window at every width.
 
@@ -169,6 +170,11 @@ JUnit 5. They start Koin with a `CommonDataStore`, which `AppTheme` reads.
   the app bar can share one colour with the content in a card (`NavigationTint.Always`, the
   default), take it only once content scrolls (`OnScroll`), or keep Material's own behaviour
   (`None`).
+- **Navigating recomposes what changed.** The chrome keeps its callbacks and the
+  `LocalShellChrome` controller across recompositions: that local is static, so a new controller
+  would recompose every tab screen under it on each navigation. Animated values (the frame tint, the
+  player's expansion) are read where they are drawn or through `derivedStateOf`, so an animation
+  does not recompose the chrome on each frame.
 - **The shell stands down under a page.** While a page is open, even one still opening, the tabs'
   display, the drawer and the search field leave back to the page.
 - **One activity.** The launch intent and every later one are turned into keys by the graph's deep

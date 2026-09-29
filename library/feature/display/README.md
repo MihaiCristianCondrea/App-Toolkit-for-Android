@@ -17,8 +17,9 @@ style; under Navigation the start page, the bottom bar style, its labels, hiding
 tab transition and the right-edge back swipe. They are read from `LocalShellSettings` and written
 through `LocalShellPreferences` (the rows are `ShellDisplayRows`), so they apply to the whole app at
 once. Each is offered only when the app's graph (`LocalShellGraph`) gives it something to change:
-nothing about a bottom bar without tabs, no banner style without a banner, no tab transition or
-start page with a single tab. The screen therefore works only as a page of `ShellHost`.
+nothing about a bottom bar without tabs, no banner style without a banner, no content width limit
+when the app's `ShellLayoutPolicy` sets no maximum width, no tab transition or start page with a
+single tab. Like the other settings rows, they draw no leading icon. The screen therefore works only as a page of `ShellHost`.
 
 The dark
 theme row opens the theme page by navigating to `ThemeSettingsRoute`, so the provider no longer

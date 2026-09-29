@@ -9,7 +9,8 @@ and the bottom sheet that renders it.
 
 - `ChangelogRepository` and `DefaultChangelogRepository`, including the Android App Metadata API
   call and the legacy GitHub fallback.
-- `GetChangelogUseCase`, which picks the current-version section or the full history.
+- `GetChangelogUseCase`, which picks the current-version section or the full history, and
+  `extractChangesForVersion`, which finds that section's heading.
 - `ChangelogViewModel`, `ChangelogUiState`, and the retry contract.
 - `ChangelogDialog`, the modal bottom sheet the host shows from its drawer.
 

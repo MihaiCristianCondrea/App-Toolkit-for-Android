@@ -12,7 +12,7 @@ transitions) are display settings instead, in
 
 - `DeveloperOptionsScreen`: where the next launch starts (when the app has more than one start
   option), a forced navigation layout, the bottom accessories (when the app has a banner or a
-  player), the animation speed, a reset of those, and the window size and every back stack as they
+  player, offering only the ones it has), the animation speed, a reset of those, and the window size and every back stack as they
   change.
 - `developerOptionsPage()`, the registration of `DeveloperOptionsRoute`.
 - Its strings, in every supported locale, including the page title `shell_developer_options`.

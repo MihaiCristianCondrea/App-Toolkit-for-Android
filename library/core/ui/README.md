@@ -23,7 +23,7 @@ page frame, state handling, analytics hooks, and shared components.
   `ScaffoldFabs` with `FabHost` and `LocalFabHost` let a screen put its own buttons in the
   scaffold around it. See [Floating action buttons](#floating-action-buttons).
 - `ChoicePreferenceItem`, the settings row that shows the chosen option and opens a radio-list
-  dialog to change it.
+  dialog to change it. Its `icon` is optional; the Toolkit's settings rows go without one.
 - Reusable buttons, fields, preferences, layouts, grids, dialogs, snackbars, ads slots, effects, and
   adaptive-window helpers.
 - `MainTopAppBar`, the host main-screen app bar, its optional centre-aligned title, and its

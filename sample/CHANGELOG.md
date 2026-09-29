@@ -27,6 +27,8 @@
 - The labelled floating action buttons shrink to their icon while you scroll down and grow back when you scroll up.
 - Settings on a tablet shows its illustration and a Get help button beside the list until you open a category.
 - Text is no longer black on some screens in the dark theme.
+- Display settings and developer options look like the rest of the settings, and only offer options that change something in this app.
+- On tablets, switching between pages from the side navigation no longer flashes a back button, and moving around the app does less work.
 - The ad above the bottom navigation is back, and messages such as a consent form failing to load now appear above the navigation bar instead of not at all.
 
 ---

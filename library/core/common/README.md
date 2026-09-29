@@ -11,7 +11,9 @@ Android utility abstractions shared across the toolkit.
 - `FirebaseController`, `BillingCore`, dispatcher, build-info, app-info, permissions, and ad-SDK
   contracts.
 - Host DI configuration (`AppToolkitHostBuildConfig`, qualifiers, and constants).
-- Small platform and Kotlin extensions used across modules.
+- Small platform and Kotlin extensions used across modules. An extension or constant that one
+  module uses lives in that module instead: FAQ, changelog, issue reporter, billing, ads and review
+  each own theirs.
 - The Play Integrity license-check manifest permission required by the shared App Check setup.
 - The `App Name` placeholders for `app_name` and `app_full_name`, plus the default copyright
   resource used by toolkit UI. A host replaces the name resources with its application identity.

@@ -16,6 +16,8 @@ review, and store actions around it. This module replaced `:library:feature:help
 - `FaqItem` and `FaqId` in `data/models`, `QuestionCard`, `ContactUsCard`, `FaqNativeAdCard`, and
   the overflow menu.
 - The nine question and nine answer placeholder resources a host fills in.
+- `FaqConstants.FAQ_BASE_URL` and `faqCatalogUrl`, which build the catalogue address for the
+  build type.
 
 ## Does not own
 

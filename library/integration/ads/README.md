@@ -11,6 +11,7 @@ Owns ad enablement settings and Google Mobile Ads integration UI used by AppTool
 - Ads settings repository, ViewModel and screen, and `adsSettingsPage()`, the registration of
   `AdsSettingsRoute` (opened from the privacy page).
 - `AdsCoreManager`, `AdsSdkInitializer`, and Google Mobile Ads SDK initialization.
+- `OnShowAdCompleteListener`, called once an app-open ad has been shown.
 - App-open ad lifecycle; the `INTERNET`, `ACCESS_NETWORK_STATE`, and `AD_ID` permissions required by
   the SDK; and default Mobile Ads initialization/loading metadata.
 

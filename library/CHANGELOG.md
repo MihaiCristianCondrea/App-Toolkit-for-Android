@@ -28,6 +28,7 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Added `FabScrollBehavior` to `:library:core:ui`, and an `expanded` parameter to `ToolkitFabColumn` and `ToolkitFloatingActionButton`: `PageScaffold` and the shell's tab scaffold fold extended buttons to their icon while the content scrolls down and unfold them when it scrolls back.
 - Added `placeholder` to `page { }` and `pageIfAbsent { }` in `:library:navigation`: what the detail side of a `PaneRole.List` page shows while no detail is open, `ListPlaceholder` when absent.
 - Added `LocalBesideNavigation` and `isTopLevelPage(key)` to `:library:navigation`, which tell a page whether the rail or permanent drawer opened it.
+- Added `ShellLayoutInfo.declaredContentMaxWidth`: the app's own maximum content width, whether or not the display settings lift it.
 - Added `AboutRoute`, `ThemeSettingsRoute`, `DisplaySettingsRoute`, `PrivacySettingsRoute`, `AdvancedSettingsRoute`, `DiagnosticsSettingsRoute`, `DeveloperOptionsRoute`, `StartupRoute` and `OnboardingRoute`, one key per Toolkit page.
 
 ### Changed
@@ -44,11 +45,16 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - The shell's layout choices moved from the developer options to the display settings: app bar style, bottom bar style, labels, hide on scroll, navigation colour, content width, banner style, tab transition and back swipe. Each shows only when the app's graph uses it. The developer options keep the start, the forced layout, the bottom accessories and the animation speed, and `ShellPreferences.resetDeveloperOptions()` resets only those. `:library:feature:display` depends on `:library:shell`.
 - A page the rail or permanent drawer opens is drawn like a tab: a small app bar without a back button, and, when the navigation and the app bar share a colour, the tab's rounded content card. `PageScaffold` and the list-detail scene both do this.
 - The settings list shows its illustrated card, with a Get help button, beside it on wide windows while no category is open, instead of the generic placeholder.
+- Moved single-owner code out of `:library:core:common` into the module that uses it: `FaqConstants` and `faqCatalogUrl` to `:library:feature:faq`, `extractChangesForVersion` to `:library:feature:changelog`, `GithubToken` and `toToken` to `:library:feature:issuereporter`, `PurchaseResult` and `isValidForBilling` to `:library:integration:billing`, `OnShowAdCompleteListener` to `:library:integration:ads`, and `installingPackageNameOrNull`, `hasPlayStore` and `isInstalledFromPlayStore` to `:library:integration:review`. The [3.0.0 migration guide](../docs/migration/3.0.0.md#moved-apis) lists the new packages.
+- The display settings rows, the developer options rows and the advanced settings' Developer options row no longer draw leading icons, matching the other settings rows. `ChoicePreferenceItem`'s `icon` moved after `modifier` and defaults to none.
+- The content width row shows only when the app's `ShellLayoutPolicy` sets a maximum width, and the developer options offer the player accessory only to an app with a player.
 - `PageSurface`, `PageScaffold`, the list-detail scene and the shell's tab scaffold now provide `LocalContentColor` for the colour they draw on, so text and icons outside a Material `Surface` follow the theme instead of defaulting to black in the dark theme.
 
 ### Improved
 
 - `AnimatedIconButtonDirection` crossfades its glyph when `icon` changes, so one button can turn from a menu button into a back arrow without popping.
+- A navigation no longer recomposes every tab screen: the shell keeps its callbacks and the static `LocalShellChrome` controller across recompositions. The chrome and the player overlay no longer recompose on every frame the player moves.
+- A page beside the rail or permanent drawer keeps its tab-like app bar while another entry replaces it, instead of showing a back button for the length of its exit.
 - The startup and onboarding pages keep to a 640dp column centred on tablets and wide windows instead of stretching across them.
 
 ### Removed

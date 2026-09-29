@@ -8,7 +8,9 @@ Encapsulates Google Play in-app review eligibility, prompting, and persisted req
 
 - Review repository contract/implementation and review outcome/host models.
 - Normal and forced in-app-review use cases.
-- Activity extension helpers for the Play review flow.
+- Activity extension helpers for the Play review flow, and the install source checks
+  (`installingPackageNameOrNull`, `hasPlayStore`, `isInstalledFromPlayStore`) that decide whether
+  to ask.
 
 ## Does not own
 
