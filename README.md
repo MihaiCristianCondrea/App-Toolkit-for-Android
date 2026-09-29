@@ -21,8 +21,9 @@ demonstrates the library in a real application.
   toolkit modules and assembles their Koin modules and Navigation 3 destinations.
 - [`library/core`](library/core/README.md) contains shared models, data, design-system, networking,
   testing, and UI foundations.
-- [`library/feature`](library/feature/README.md) contains reusable About, Help, Issue Reporter,
-  Onboarding, Permissions, Settings, and Support features.
+- [`library/feature`](library/feature/README.md) contains reusable features: About, Advanced
+  settings, Changelog, Diagnostics, Display, Help, Issue Reporter, Licenses, Onboarding,
+  Permissions, Privacy, Settings, Support, and Theme.
 - [`library/integration`](library/integration/README.md) contains optional integrations for ads,
   billing, consent, Firebase, in-app review, and in-app updates.
 - [`library/navigation`](library/navigation/README.md) provides shared navigation contracts, models,
@@ -51,7 +52,7 @@ Then add the toolkit artifact to the consuming module:
 
 ```kotlin
 dependencies {
-    implementation("com.github.MihaiCristianCondrea.App-Toolkit-for-Android:apptoolkit:3.0.0-pre20")
+    implementation("com.github.MihaiCristianCondrea.App-Toolkit-for-Android:apptoolkit:3.0.0-pre21")
 }
 ```
 

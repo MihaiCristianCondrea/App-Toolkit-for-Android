@@ -1,5 +1,5 @@
 ---
-name: android-architecture
+name: android-data-layer
 description: >
   Design, review, refactor, and explain Android application architecture
   following Google's official Android architecture guidance. Use when working

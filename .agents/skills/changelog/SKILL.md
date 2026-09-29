@@ -15,7 +15,7 @@ metadata:
 
 # Changelog
 
-Maintain `CHANGELOG.md` as a curated record of meaningful changes, not a commit log.
+Maintain the project's changelog as a curated record of meaningful changes, not a commit log.
 
 Inspect the existing changelog and relevant implementation before editing it.
 
@@ -23,9 +23,9 @@ Inspect the existing changelog and relevant implementation before editing it.
 
 Determine the project structure to structure the changelog correctly:
 
-- **Library with Sample App**: The project consists of a library module and a sample/demo app
-  module. Update the relevant section (`## Library Changes`, `## Sample App Changes`, or both)
-  depending on where the change took place.
+- **Library with Sample App**: The project consists of library modules and a sample app. The
+  library and the sample each keep their own changelog (`library/CHANGELOG.md` and
+  `sample/CHANGELOG.md` in App Toolkit). Update the one, or both, where the change took place.
 - **Normal App (No Library)**: The project is a standalone application without a library module.
   Update the changelog directly as an app changelog.
 
@@ -47,17 +47,10 @@ Describe the outcome rather than the implementation for non-developer users.
 
 ### Library with Sample App
 
-Separate changes into:
-
-- `## Library Changes`
-- `## Sample App Changes`
-
-Update the section relevant to your change:
-
-- If a change affects only the library, update `## Library Changes`.
-- If a change affects only the sample app, update `## Sample App Changes`.
-- If a change affects both, describe each distinct impact in its appropriate section without
-  duplicating the same entry.
+- If a change affects only the library, update the library changelog.
+- If a change affects only the sample app, update the sample changelog.
+- If a change affects both, describe each distinct impact in its own changelog without duplicating
+  the same entry.
 
 ### Normal App (No Library)
 
