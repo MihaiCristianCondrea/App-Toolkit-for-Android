@@ -26,4 +26,5 @@
     <string name="summary_preference_settings_display">Персонализирайте облика на приложението</string>
     <string name="summary_preference_settings_notifications">Управлявайте известията на приложението</string>
     <string name="summary_preference_settings_privacy_and_security">Управлявайте настройките за поверителност</string>
+    <string name="get_help">Получете помощ</string>
 </resources>

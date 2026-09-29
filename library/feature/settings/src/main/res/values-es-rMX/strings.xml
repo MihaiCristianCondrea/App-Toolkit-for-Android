@@ -26,4 +26,5 @@
     <string name="summary_preference_settings_display">Personaliza el aspecto y la sensación de tu aplicación</string>
     <string name="summary_preference_settings_notifications">Administrar notificaciones de la aplicación</string>
     <string name="summary_preference_settings_privacy_and_security">Administra tu configuración de privacidad</string>
+    <string name="get_help">Obtener ayuda</string>
 </resources>

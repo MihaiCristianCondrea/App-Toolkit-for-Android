@@ -26,4 +26,5 @@
     <string name="summary_preference_settings_display">خصص شكل ومظهر تطبيقك</string>
     <string name="summary_preference_settings_notifications">إدارة إشعارات التطبيق</string>
     <string name="summary_preference_settings_privacy_and_security">إدارة إعدادات الخصوصية الخاصة بك</string>
+    <string name="get_help">احصل على مساعدة</string>
 </resources>

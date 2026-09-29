@@ -26,4 +26,5 @@
     <string name="summary_preference_settings_display">Personalisasi tampilan dan nuansa aplikasi Anda</string>
     <string name="summary_preference_settings_notifications">Kelola notifikasi aplikasi</string>
     <string name="summary_preference_settings_privacy_and_security">Kelola pengaturan privasi Anda</string>
+    <string name="get_help">Dapatkan bantuan</string>
 </resources>

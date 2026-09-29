@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.nav
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.SettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.views.SettingsDetailPlaceholder
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.views.dropdowns.SettingsMenuActions
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
@@ -36,6 +37,7 @@ fun ShellGraphBuilder.settingsPage() {
         paneRole = PaneRole.List,
         title = { stringResource(R.string.settings) },
         actions = { SettingsMenuActions() },
+        placeholder = { SettingsDetailPlaceholder() },
     ) {
         SettingsScreen()
     }

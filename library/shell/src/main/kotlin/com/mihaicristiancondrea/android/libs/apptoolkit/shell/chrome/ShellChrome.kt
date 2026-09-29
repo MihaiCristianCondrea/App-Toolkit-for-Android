@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.rememberFabScrollBehavior
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.Arrangement
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ToolkitFabColumn
@@ -129,6 +130,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.DrawerE
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ContentCardShape
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalShellLayout
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.LocalShellMotion
@@ -347,9 +349,6 @@ internal fun highlightedTab(
 /** No tab is shown as selected. */
 internal const val NoTab = -1
 
-/** The content's corner beside a tinted rail or drawer, under the app bar. */
-private val ContentCardShape = RoundedCornerShape(topStart = 24.dp)
-
 /** A drawer keeps clear of the top and start; its rows pad the bottom themselves, to scroll behind it. */
 internal val DrawerContentInsets: WindowInsets
     @Composable get() = WindowInsets.safeDrawing.only(WindowInsetsSides.Start + WindowInsetsSides.Top)
@@ -383,11 +382,14 @@ private fun ShellBody(
     val style = layout.topBarFor(LocalTopBarStyleOverride.current ?: destination.topBar)
     val topScroll = rememberTopBarScrollBehavior(style)
     val bottomScroll = BottomAppBarDefaults.exitAlwaysScrollBehavior()
+    // Extended buttons fold to their icon while the content scrolls down.
+    val fabScroll = rememberFabScrollBehavior()
     val hideOnScroll = settings.hideBottomBarOnScroll && !playerActive
     val search = tab.search?.takeIf { !isChild }?.let { TopBarSearch(searches[tabIndex], stringResource(it.hint)) }
 
     // Every destination starts with its bars as it declares them, whatever the last one scrolled them to.
     LaunchedEffect(topKey, hideOnScroll) {
+        fabScroll.expanded = true
         launch { topScroll.resetTo(collapsed = style == TopBarStyle.LargeCollapsed) }
         val offset = bottomScroll.state.heightOffset
         if (offset != 0f) animate(offset, 0f) { value, _ -> bottomScroll.state.heightOffset = value }
@@ -431,6 +433,7 @@ private fun ShellBody(
     Scaffold(
         modifier = Modifier
             .nestedScroll(topScroll.nestedScrollConnection)
+            .nestedScroll(fabScroll.nestedScrollConnection)
             .then(if (hideOnScroll) Modifier.nestedScroll(bottomScroll.nestedScrollConnection) else Modifier),
         topBar = {
             ShellTopAppBar(
@@ -507,7 +510,7 @@ private fun ShellBody(
                         horizontalAlignment = Alignment.End,
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
-                        ToolkitFabColumn(described)
+                        ToolkitFabColumn(described, expanded = fabScroll.expanded)
                         fab?.invoke(key)
                     }
                 }
@@ -515,6 +518,9 @@ private fun ShellBody(
         },
         contentWindowInsets = contentInsets,
         containerColor = if (tinted) Color.Transparent else MaterialTheme.colorScheme.background,
+        // Explicit, since a transparent container would take its content colour from outside,
+        // which is black by default: tab text on the dark theme would be unreadable.
+        contentColor = MaterialTheme.colorScheme.onBackground,
     ) { padding ->
         // The tabs reach the bottom of the window, behind the bars, the banner and the player, and
         // receive what covers them as content padding, so their lists scroll under all of it.

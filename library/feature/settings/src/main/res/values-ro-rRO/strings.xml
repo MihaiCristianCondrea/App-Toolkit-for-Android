@@ -26,4 +26,5 @@
     <string name="summary_preference_settings_display">Personalizează aspectul și funcționalitatea aplicației</string>
     <string name="summary_preference_settings_notifications">Gestionează notificările aplicației</string>
     <string name="summary_preference_settings_privacy_and_security">Gestionează setările de confidențialitate</string>
+    <string name="get_help">Obține ajutor</string>
 </resources>

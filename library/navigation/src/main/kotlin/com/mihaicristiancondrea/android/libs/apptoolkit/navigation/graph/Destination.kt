@@ -90,6 +90,11 @@ class Destination<K : NavKey> @PublishedApi internal constructor(
      * screen can add its own with `ScaffoldFabs` from `:library:core:ui`.
      */
     val floatingActionButtons: (@Composable (K) -> List<ToolkitFab>)? = null,
+    /**
+     * For a [PaneRole.List] page: what the detail side shows before anything is chosen. Null takes
+     * the shell's own placeholder.
+     */
+    val placeholder: (@Composable () -> Unit)? = null,
 )
 
 /**

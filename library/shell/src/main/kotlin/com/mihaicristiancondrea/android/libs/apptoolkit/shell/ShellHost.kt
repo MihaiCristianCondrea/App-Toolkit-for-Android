@@ -26,6 +26,7 @@ import androidx.core.util.Consumer
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -169,6 +170,8 @@ fun ShellHost(
         LocalShellLayout provides layoutInfo,
         LocalShellMotion provides motion,
         LocalTopBarStyleOverride provides current.topBarOverride.style,
+        // Text drawn outside any Material surface takes the theme's colour instead of black.
+        LocalContentColor provides MaterialTheme.colorScheme.onBackground,
     ) {
         val entries = rememberDecoratedNavEntries(
             backStack = navigator.pages,
@@ -249,7 +252,8 @@ private fun pageEntry(graph: ShellGraph, navigator: ShellNavigator, key: NavKey)
     }
     val destination = graph.destination(key)
     val placeholder: Map<String, Any> = if (destination.paneRole == PaneRole.List) {
-        val content: @Composable () -> Unit = { ListPlaceholder() }
+        // The page's own placeholder, or the shell's.
+        val content: @Composable () -> Unit = destination.placeholder ?: { ListPlaceholder() }
         metadata { put(ListDetailScene.DetailPlaceholderKey, content) }
     } else {
         emptyMap()
@@ -259,6 +263,7 @@ private fun pageEntry(graph: ShellGraph, navigator: ShellNavigator, key: NavKey)
         PageChrome(
             title = { title(key) },
             actions = destination.actions?.let { actions -> { actions(this, key) } },
+            key = key,
         ).toMetadata()
     } else {
         emptyMap()

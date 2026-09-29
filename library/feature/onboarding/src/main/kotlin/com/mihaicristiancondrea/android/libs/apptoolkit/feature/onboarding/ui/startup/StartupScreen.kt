@@ -20,9 +20,11 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.s
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
@@ -56,6 +58,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.se
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.TopAppBarScaffold
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.OnboardingContentMaxWidth
 import org.koin.compose.koinInject
 
 private const val STARTUP_SCREEN_NAME = "Startup"
@@ -137,7 +140,10 @@ fun StartupScreenContent(
 
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
+                // A readable width, centred, on a tablet or desktop window.
+                .align(Alignment.TopCenter)
+                .fillMaxHeight()
+                .widthIn(max = OnboardingContentMaxWidth)
                 .padding(paddingValues = paddingValues)
                 .padding(all = SizeConstants.MediumSize * 2)
                 .safeDrawingPadding(),

@@ -73,6 +73,12 @@ fun ToolkitFabColumn(
     modifier: Modifier = Modifier,
     spacing: Dp = 16.dp,
     feedback: ButtonFeedback = ButtonFeedback(),
+    /**
+     * False folds every extended button to its icon, as the Toolkit's scaffolds do while content
+     * scrolls toward its end (see [FabScrollBehavior]); a button's own [ToolkitFab.expanded] still
+     * applies.
+     */
+    expanded: Boolean = true,
 ) {
     if (fabs.isEmpty()) return
     Column(
@@ -87,7 +93,7 @@ fun ToolkitFabColumn(
                     enter = scaleIn(transformOrigin = FabOrigin) + fadeIn(),
                     exit = scaleOut(transformOrigin = FabOrigin) + fadeOut(),
                 ) {
-                    ToolkitFloatingActionButton(fab, feedback)
+                    ToolkitFloatingActionButton(fab, feedback, expanded = expanded)
                 }
             }
         }
@@ -97,7 +103,13 @@ fun ToolkitFabColumn(
 /** One [ToolkitFab], in the Material 3 button its size and label call for. */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun ToolkitFloatingActionButton(fab: ToolkitFab, feedback: ButtonFeedback = ButtonFeedback()) {
+fun ToolkitFloatingActionButton(
+    fab: ToolkitFab,
+    feedback: ButtonFeedback = ButtonFeedback(),
+    /** False folds an extended button to its icon whatever [ToolkitFab.expanded] says. */
+    expanded: Boolean = true,
+) {
+    val extended = fab.expanded && expanded
     val view = LocalView.current
     val haptics = LocalHapticFeedback.current
     var clickCount by remember { mutableIntStateOf(0) }
@@ -134,10 +146,10 @@ fun ToolkitFloatingActionButton(fab: ToolkitFab, feedback: ButtonFeedback = Butt
     } else {
         val text: @Composable () -> Unit = { Text(label) }
         when (fab.size) {
-            FabSize.Small -> SmallExtendedFloatingActionButton(text, icon, onClick, modifier, fab.expanded, containerColor = containerColor, contentColor = contentColor)
-            FabSize.Regular -> ExtendedFloatingActionButton(text, icon, onClick, modifier, fab.expanded, containerColor = containerColor, contentColor = contentColor)
-            FabSize.Medium -> MediumExtendedFloatingActionButton(text, icon, onClick, modifier, fab.expanded, containerColor = containerColor, contentColor = contentColor)
-            FabSize.Large -> LargeExtendedFloatingActionButton(text, icon, onClick, modifier, fab.expanded, containerColor = containerColor, contentColor = contentColor)
+            FabSize.Small -> SmallExtendedFloatingActionButton(text, icon, onClick, modifier, extended, containerColor = containerColor, contentColor = contentColor)
+            FabSize.Regular -> ExtendedFloatingActionButton(text, icon, onClick, modifier, extended, containerColor = containerColor, contentColor = contentColor)
+            FabSize.Medium -> MediumExtendedFloatingActionButton(text, icon, onClick, modifier, extended, containerColor = containerColor, contentColor = contentColor)
+            FabSize.Large -> LargeExtendedFloatingActionButton(text, icon, onClick, modifier, extended, containerColor = containerColor, contentColor = contentColor)
         }
     }
 }

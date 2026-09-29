@@ -26,4 +26,5 @@
     <string name="summary_preference_settings_display">আপনার অ্যাপের চেহারা ও অনুভূতি ব্যক্তিগত করুন</string>
     <string name="summary_preference_settings_notifications">অ্যাপ বিজ্ঞপ্তি পরিচালনা করুন</string>
     <string name="summary_preference_settings_privacy_and_security">আপনার গোপনীয়তা সেটিংস পরিচালনা করুন</string>
+    <string name="get_help">সাহায্য পান</string>
 </resources>

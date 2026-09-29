@@ -49,6 +49,8 @@ import androidx.compose.ui.platform.LocalContext
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellNavigator
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.DrawerEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.BesideNavigation
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalBesideNavigation
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalShellLayout
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellSettings
@@ -130,6 +132,15 @@ internal fun ShellFrame(
     val untintedColor = MaterialTheme.colorScheme.surface
     val tintedColor = MaterialTheme.colorScheme.surfaceContainer
     val frameColor = if (tinted) Color.Transparent else untintedColor
+    val besideNavigation = remember(framed, tinted, untintedColor, tintedColor) {
+        if (framed) {
+            BesideNavigation(tinted = tinted) {
+                if (tinted) lerp(untintedColor, tintedColor, state.tint.value) else untintedColor
+            }
+        } else {
+            null
+        }
+    }
 
     // The navigation replaces what is beside it instead of stacking on it: a tab closes the open
     // pages, and an entry swaps them for its own page.
@@ -195,7 +206,12 @@ internal fun ShellFrame(
                     // The navigation already keeps clear of the start edge's cutout and bars.
                     .then(if (framed) Modifier.consumeWindowInsets(WindowInsets.safeDrawing.only(WindowInsetsSides.Start)) else Modifier),
             ) {
-                CompositionLocalProvider(LocalShellFrame provides state, content = content)
+                CompositionLocalProvider(
+                    LocalShellFrame provides state,
+                    // Pages the navigation opens beside it are drawn like tabs.
+                    LocalBesideNavigation provides besideNavigation,
+                    content = content,
+                )
             }
         }
         if (framed && layout.mode == ShellLayoutMode.Rail) {

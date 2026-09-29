@@ -17,6 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell
 
+import androidx.compose.ui.test.swipeDown
+import androidx.compose.ui.test.swipeUp
+import androidx.compose.ui.test.performTouchInput
 import org.junit.Assert.assertTrue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ScaffoldFabs
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
@@ -333,6 +336,44 @@ class ShellScreenshotTest {
     }
 
     @Test
+    @Config(qualifiers = EXPANDED_NIGHT)
+    fun expanded_detail_beside_the_list_in_the_dark_theme() {
+        // Every title and row must take the dark theme's light text, including the list-detail
+        // scene's own app bar, which is drawn outside any Material surface.
+        show()
+        openSettingsDetail()
+        capture("expanded_list_detail_dark")
+    }
+
+    @Test
+    @Config(qualifiers = EXPANDED)
+    fun expanded_page_opened_from_the_drawer_looks_like_a_tab() {
+        show()
+        compose.onNodeWithText("Help & feedback").performClick()
+        compose.waitForIdle()
+        // No way back but the navigation beside it.
+        compose.onAllNodesWithContentDescription("Go back").assertCountEquals(0)
+        capture("expanded_top_level_page")
+    }
+
+    @Test
+    fun an_extended_button_folds_while_the_list_scrolls_down_and_unfolds_going_up() {
+        show()
+        compose.onNodeWithText("Updates").performClick()
+        compose.waitForIdle()
+        compose.onNodeWithText("Check", useUnmergedTree = true).assertExists()
+
+        // A long swipe: the large app bar takes the first part of it as it collapses.
+        compose.onRoot().performTouchInput { swipeUp(startY = centerY + 500f, endY = centerY - 700f) }
+        compose.waitForIdle()
+        compose.onAllNodesWithText("Check", useUnmergedTree = true).assertCountEquals(0)
+
+        compose.onRoot().performTouchInput { swipeDown(startY = centerY - 300f, endY = centerY + 300f) }
+        compose.waitForIdle()
+        compose.onNodeWithText("Check", useUnmergedTree = true).assertExists()
+    }
+
+    @Test
     @Config(qualifiers = EXPANDED)
     fun tablet_detail_sliding_away_under_the_back_gesture() {
         show()
@@ -556,5 +597,6 @@ private fun Rows(
 private const val PHONE = "w411dp-h891dp-xhdpi"
 private const val RAIL = "w700dp-h1000dp-xhdpi"
 private const val EXPANDED = "w1000dp-h760dp-xhdpi"
+private const val EXPANDED_NIGHT = "w1000dp-h760dp-night-xhdpi"
 private const val LANDSCAPE = "w891dp-h411dp-land-xhdpi"
 private const val DESKTOP = "w1400dp-h900dp-mdpi"

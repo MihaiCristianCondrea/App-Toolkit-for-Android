@@ -72,7 +72,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalView
@@ -97,6 +100,9 @@ import androidx.navigationevent.compose.rememberNavigationEventState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ContentCardShape
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalBesideNavigation
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.isTopLevelPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.LocalShellMotion
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -209,16 +215,31 @@ private fun <T : Any> ListDetailLayout(
             scope.launch { fraction.snapTo((fraction.value + direction * delta / widthPx).coerceIn(MinFraction, max)) }
         }
 
-        Column(Modifier.fillMaxSize()) {
+        // The list the navigation beside it opened stands in for a tab, and is drawn like one.
+        val beside = LocalBesideNavigation.current
+        val topLevel = framed && isTopLevelPage(listEntry.pageChrome?.key)
+        val carded = topLevel && beside?.tinted == true
+        Column(
+            Modifier
+                .fillMaxSize()
+                .then(if (carded && beside != null) Modifier.drawBehind { drawRect(beside.frameColor()) } else Modifier),
+        ) {
             if (framed) {
                 ListDetailTopBar(
                     listChrome = listEntry.pageChrome,
                     detailChrome = detailEntry?.pageChrome,
                     listWidth = listWidth,
                     onCloseList = closeList,
+                    showsBack = !topLevel,
+                    // Over the shared frame colour, the bar draws no colour of its own.
+                    containerColor = if (carded) Color.Transparent else MaterialTheme.colorScheme.surface,
                 )
             }
-            Row(Modifier.weight(1f)) {
+            Row(
+                Modifier
+                    .weight(1f)
+                    .then(if (carded) Modifier.clip(ContentCardShape).background(MaterialTheme.colorScheme.surface) else Modifier),
+            ) {
                 Box(Modifier.width(listWidth).fillMaxHeight()) {
                     CompositionLocalProvider(
                         LocalPaneRole provides PaneRole.List,
@@ -287,12 +308,14 @@ private fun ListDetailTopBar(
     detailChrome: PageChrome?,
     listWidth: Dp,
     onCloseList: () -> Unit,
+    showsBack: Boolean,
+    containerColor: Color,
 ) {
     val view = LocalView.current
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)
+            .background(containerColor)
             .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top))
             .height(64.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -303,25 +326,28 @@ private fun ListDetailTopBar(
                 .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Start)),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            // The Toolkit's press feedback: this module sits below `:library:core:ui`, so it
-            // cannot use `AnimatedIconButtonDirection`, but it gives the same bounce and sound.
-            IconButton(
-                onClick = {
-                    view.playSoundEffect(SoundEffectConstants.CLICK)
-                    onCloseList()
-                },
-                modifier = Modifier
-                    .padding(start = 4.dp)
-                    .bounceClick(),
-            ) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.shell_navigate_back))
+            // A list standing in for a tab has no way back but the navigation beside it.
+            if (showsBack) {
+                // The Toolkit's press feedback: this module sits below `:library:core:ui`, so it
+                // cannot use `AnimatedIconButtonDirection`, but it gives the same bounce and sound.
+                IconButton(
+                    onClick = {
+                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                        onCloseList()
+                    },
+                    modifier = Modifier
+                        .padding(start = 4.dp)
+                        .bounceClick(),
+                ) {
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.shell_navigate_back))
+                }
             }
             Text(
                 text = listChrome?.title?.invoke().orEmpty(),
                 style = MaterialTheme.typography.titleLarge,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(start = 4.dp, end = 16.dp),
+                modifier = Modifier.padding(start = if (showsBack) 4.dp else 16.dp, end = 16.dp),
             )
         }
         Spacer(Modifier.width(SeparatorWidth))

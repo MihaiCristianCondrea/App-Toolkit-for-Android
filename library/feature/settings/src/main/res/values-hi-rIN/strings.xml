@@ -26,4 +26,5 @@
     <string name="summary_preference_settings_display">अपने ऐप के लुक और अनुभव को वैयक्तिकृत करें</string>
     <string name="summary_preference_settings_notifications">ऐप सूचनाओं का प्रबंधन करें</string>
     <string name="summary_preference_settings_privacy_and_security">अपनी गोपनीयता सेटिंग्स का प्रबंधन करें</string>
+    <string name="get_help">मदद प्राप्त करें</string>
 </resources>

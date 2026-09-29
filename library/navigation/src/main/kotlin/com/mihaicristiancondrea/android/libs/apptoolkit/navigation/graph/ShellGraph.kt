@@ -234,6 +234,7 @@ class ShellGraphBuilder(
         transition: ScreenTransition? = null,
         noinline fab: (@Composable (K) -> Unit)? = null,
         noinline fabs: (@Composable (K) -> List<ToolkitFab>)? = null,
+        noinline placeholder: (@Composable () -> Unit)? = null,
         noinline content: @Composable (K) -> Unit,
     ) {
         register(
@@ -249,6 +250,7 @@ class ShellGraphBuilder(
                 content = content,
                 floatingActionButton = fab,
                 floatingActionButtons = fabs,
+                placeholder = placeholder,
                 transition = transition,
             ),
         )
@@ -266,10 +268,19 @@ class ShellGraphBuilder(
         topBar: TopBarStyle = TopBarStyle.Large,
         noinline actions: (@Composable RowScope.(K) -> Unit)? = null,
         noinline fabs: (@Composable (K) -> List<ToolkitFab>)? = null,
+        noinline placeholder: (@Composable () -> Unit)? = null,
         noinline content: @Composable (K) -> Unit,
     ) {
         if (K::class !in destinations) {
-            page(topBar = topBar, paneRole = paneRole, title = title, actions = actions, fabs = fabs, content = content)
+            page(
+                topBar = topBar,
+                paneRole = paneRole,
+                title = title,
+                actions = actions,
+                fabs = fabs,
+                placeholder = placeholder,
+                content = content,
+            )
         }
     }
 

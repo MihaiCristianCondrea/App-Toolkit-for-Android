@@ -24,9 +24,12 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -41,9 +44,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
@@ -67,6 +73,9 @@ import org.koin.compose.viewmodel.koinViewModel
 
 private const val ONBOARDING_SCREEN_NAME = "Onboarding"
 private const val ONBOARDING_SCREEN_CLASS = "OnboardingScreen"
+
+/** How wide an onboarding page grows on a large window; it is centred in the rest. */
+internal val OnboardingContentMaxWidth: Dp = 640.dp
 
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
@@ -178,9 +187,19 @@ fun OnboardingScreen() {
                 .hapticPagerSwipe(pagerState = pagerState)
                 .padding(paddingValues = paddingValues)
         ) { pageIndex: Int ->
-            when (val page = pages[pageIndex]) {
-                is OnboardingPage.DefaultPage -> DefaultOnboardingPage(page = page)
-                is OnboardingPage.CustomPage -> page.content(pageIndex == pagerState.currentPage)
+            // On a tablet or a desktop window each page keeps a readable width, centred, instead
+            // of stretching its cards and text across the whole window.
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+                Box(
+                    Modifier
+                        .fillMaxHeight()
+                        .widthIn(max = OnboardingContentMaxWidth),
+                ) {
+                    when (val page = pages[pageIndex]) {
+                        is OnboardingPage.DefaultPage -> DefaultOnboardingPage(page = page)
+                        is OnboardingPage.CustomPage -> page.content(pageIndex == pagerState.currentPage)
+                    }
+                }
             }
         }
     }

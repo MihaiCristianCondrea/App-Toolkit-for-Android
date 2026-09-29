@@ -62,6 +62,8 @@ val Scene<*>.topShellInfo: ShellEntryInfo?
 class PageChrome(
     val title: @Composable () -> String,
     val actions: (@Composable RowScope.() -> Unit)? = null,
+    /** The page's key, to tell whether it stands in for a tab beside the navigation. */
+    val key: Any? = null,
 ) {
     object Key : NavMetadataKey<PageChrome>
 

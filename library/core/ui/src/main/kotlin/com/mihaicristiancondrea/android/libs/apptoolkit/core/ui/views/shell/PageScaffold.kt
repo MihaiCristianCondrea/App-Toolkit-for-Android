@@ -17,14 +17,24 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ContentCardShape
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalBesideNavigation
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.isTopLevelPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.FabHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.LocalFabHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ToolkitFabColumn
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.rememberFabScrollBehavior
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
@@ -90,35 +100,58 @@ fun PageScaffold(
     val navigator = LocalShellNavigator.current
     val pageKey = LocalPageKey.current
     val pane = LocalPaneRole.current
-    val declared = LocalTopBarStyleOverride.current ?: style
+    // Beside a rail or permanent drawer, the page the navigation opened stands in for a tab and is
+    // drawn like one: the tab's small bar with no back button, and the tab's card when the
+    // navigation and the app bar share a colour.
+    val beside = LocalBesideNavigation.current
+    val topLevel = pane == PaneRole.None && isTopLevelPage(pageKey)
+    val carded = topLevel && beside?.tinted == true
+    val declared = LocalTopBarStyleOverride.current ?: if (topLevel) TopBarStyle.Small else style
     val resolvedStyle = if (pane == PaneRole.None) LocalShellLayout.current.topBarFor(declared) else TopBarStyle.Hidden
     val scrollBehavior = rememberTopBarScrollBehavior(resolvedStyle)
     val fabHost = remember { FabHost() }
+    val fabScroll = rememberFabScrollBehavior()
     val contentInsets = when (pane) {
         PaneRole.None -> WindowInsets.safeDrawing
         PaneRole.List -> WindowInsets.safeDrawing.only(WindowInsetsSides.Start + WindowInsetsSides.Bottom)
         PaneRole.Detail -> WindowInsets.safeDrawing.only(WindowInsetsSides.End + WindowInsetsSides.Bottom)
     }
     Scaffold(
-        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = modifier
+            .then(if (carded && beside != null) Modifier.drawBehind { drawRect(beside.frameColor()) } else Modifier)
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .nestedScroll(fabScroll.nestedScrollConnection),
         topBar = {
             ShellTopAppBar(
                 style = resolvedStyle,
                 title = title,
                 navigationIcon = {
-                    AnimatedIconButtonDirection(
-                        icon = ToolkitIcon.Vector(Icons.AutoMirrored.Filled.ArrowBack),
-                        contentDescription = stringResource(R.string.go_back),
-                        onClick = { if (pageKey != null) navigator.close(pageKey) else navigator.goBack() },
-                    )
+                    if (!topLevel) {
+                        AnimatedIconButtonDirection(
+                            icon = ToolkitIcon.Vector(Icons.AutoMirrored.Filled.ArrowBack),
+                            contentDescription = stringResource(R.string.go_back),
+                            onClick = { if (pageKey != null) navigator.close(pageKey) else navigator.goBack() },
+                        )
+                    }
                 },
                 actions = actions,
                 scrollBehavior = scrollBehavior,
+                // Over the shared frame colour, as the tabs' bar is.
+                colors = if (carded) {
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color.Transparent,
+                        scrolledContainerColor = Color.Transparent,
+                    )
+                } else {
+                    null
+                },
             )
         },
+        containerColor = if (carded) Color.Transparent else MaterialTheme.colorScheme.background,
+        contentColor = MaterialTheme.colorScheme.onBackground,
         floatingActionButton = {
             Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                ToolkitFabColumn(fabs + fabHost.fabs)
+                ToolkitFabColumn(fabs + fabHost.fabs, expanded = fabScroll.expanded)
                 floatingActionButton()
             }
         },
@@ -129,7 +162,8 @@ fun PageScaffold(
             Modifier
                 .fillMaxSize()
                 .padding(padding.withoutBottom())
-                .consumeWindowInsets(padding),
+                .consumeWindowInsets(padding)
+                .then(if (carded) Modifier.clip(ContentCardShape).background(MaterialTheme.colorScheme.surface) else Modifier),
         ) {
             CompositionLocalProvider(
                 LocalContentPadding provides PaddingValues(bottom = padding.calculateBottomPadding()),
