@@ -106,9 +106,13 @@ Screens then call `LocalShellNavigator.current.navigate(key)` with any registere
   next start screen, and navigating to a tab, or `enterShell()`, replaces the last with the shell
   for good.
 - **Intents are destinations too.** `deepLinks { }` maps an intent's action, data or extras to a
-  key, so a shortcut, a notification, a widget or a system entry point such as
-  `VIEW_PERMISSION_USAGE` opens a page instead of an activity of its own. `keyFor` drops keys the
-  graph does not register.
+  key, so a shortcut, a notification or a widget opens a page instead of an activity of its own.
+  `keyFor` drops keys the graph does not register.
+- **A graph can be pages only.** Without tabs, a graph must `start(page)`: it shows that page with
+  no shell under it, opens the pages it links to, and back from it (or its back arrow, or
+  `enterShell()`) leaves the activity. It is for a separate entry point that opens over another
+  app, such as the Toolkit's permission usage screen, where back must return to the caller rather
+  than into the app.
 - **Features register, apps decide.** `pageIfAbsent` registers a page only when the app has not
   registered the key itself, so an app replaces any Toolkit page by registering its key first. The
   app alone decides where a page is offered: drawer, overflow menu or a screen's button.

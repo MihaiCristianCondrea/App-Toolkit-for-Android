@@ -46,6 +46,18 @@ android {
         compose = true
     }
 
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+        unitTests.all { test ->
+            // Robolectric reaches into these JDK internals; newer JDKs close them by default.
+            test.jvmArgs(
+                "--add-opens=java.base/java.io=ALL-UNNAMED",
+                "--add-opens=java.base/java.lang=ALL-UNNAMED",
+                "--add-opens=java.base/java.util=ALL-UNNAMED",
+                "--add-exports=java.base/jdk.internal.access=ALL-UNNAMED",
+            )
+        }
+    }
 }
 
 // `RepositoryConventionsTest` and `ManifestContractTest` read production source trees rather than
@@ -89,6 +101,10 @@ tasks.withType<Test>().configureEach {
 
 dependencies {
     testImplementation(project(":library:core:testing"))
+    // `PermissionUsageActivityTest` launches the activity under Robolectric, which runs on JUnit 4.
+    testImplementation(dependencyNotation = libs.androidx.compose.ui.test.junit4)
+    testImplementation(dependencyNotation = libs.androidx.test.ext.junit)
+    testRuntimeOnly(dependencyNotation = libs.test.junit.vintage.engine)
     // Internal modules
     api(project(":library:core:common"))
     api(project(":library:core:datastore"))

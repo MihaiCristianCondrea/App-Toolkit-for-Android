@@ -165,7 +165,12 @@ class ShellNavigator internal constructor(
      * start screen calls this, or navigates to a tab, when it is done.
      */
     fun enterShell() {
-        if (inShell) closePages() else replaceStart(ShellHomeRoute)
+        when {
+            inShell -> closePages()
+            // A graph of pages only has no shell to enter: the entry point is done.
+            graph.tabs.isEmpty() -> onExit()
+            else -> replaceStart(ShellHomeRoute)
+        }
     }
 
     /**
@@ -185,12 +190,16 @@ class ShellNavigator internal constructor(
 
     /**
      * Closes the page [key] and every page opened above it. A list page uses this for its back
-     * button, so the detail open beside it closes with it.
+     * button, so the detail open beside it closes with it. Closing the start page, the bottom of
+     * the stack when no shell is under it, leaves the app, as back does.
      */
     fun close(key: NavKey) {
         val index = pageStack.lastIndexOf(key)
-        if (index <= 0) return
-        while (pageStack.size > index) pageStack.removeAt(pageStack.lastIndex)
+        when {
+            index < 0 -> Unit
+            index == 0 -> if (!inShell) onExit()
+            else -> while (pageStack.size > index) pageStack.removeAt(pageStack.lastIndex)
+        }
     }
 
     /** Closes every page, showing the shell. */

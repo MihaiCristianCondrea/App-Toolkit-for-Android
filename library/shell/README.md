@@ -142,6 +142,9 @@ JUnit 5. They start Koin with a `CommonDataStore`, which `AppTheme` reads.
   launch intent is handled once, not again after rotation or process death, since the restored
   stacks already hold it. Work that needs the activity (a permission request, a consent form, a
   review or update flow, a purchase) is done from the page, through `LocalActivity.current`.
+  The exception is a screen another app opens over itself, where back must return to that app:
+  that activity hosts its own `ShellHost` with a graph of pages only, as the Toolkit's
+  `PermissionUsageActivity` does for Android's permission manager.
 - **The start is decided before the first frame.** `resolveStart` may read stored state and is
   awaited with the settings; `onReady` then tells the activity it can drop its splash screen.
 - **The shell keeps its own store.** Its settings are developer options, not the person's

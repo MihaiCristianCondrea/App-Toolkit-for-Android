@@ -90,9 +90,8 @@ flowchart TD
   start screens while onboarding is not done, the stored start page after. The splash screen stays
   up until `onReady`, so a default tab never flashes before the chosen one, and first launch no
   longer leaves for a second activity.
-- Android's permission usage screen reaches the Permissions page through an `<activity-alias>` of
-  `MainActivity` that holds `START_VIEW_PERMISSION_USAGE`; the Toolkit's deep links map the intent
-  to the page.
+- Android's permission manager and privacy dashboard open the privacy page through the Toolkit's
+  built-in `PermissionUsageActivity`, so this manifest declares nothing for them.
 - The graph's banner slot shows the bottom navigation native ad, so it sits above the bottom bar on
   every tab.
 - `MainViewModel`'s messages (a consent form that fails to load) are shown by a

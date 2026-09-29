@@ -13,6 +13,8 @@ through Gradle `api` dependencies.
   granular lists `appToolkitModules` composes.
 - `toolkitGraph { }` and `ShellGraphBuilder.toolkitPages()`, which register the Toolkit's pages in
   an app's shell graph. See [Navigation](#navigation).
+- `PermissionUsageActivity` and `permissionUsageGraph()`: the screen Android opens from the
+  information icon beside the app. See [Permission usage](#permission-usage).
 - Host-to-library composition using `AppToolkitHostBuildConfig` and host provider factories.
 - Common host defaults contributed through manifest/resource merging: the AppCompat application
   theme, RTL/window behavior, backup and data-extraction rules, locale configuration resource,
@@ -138,7 +140,7 @@ modules they compose.
 | `themeSettingsPage()` | theme | `ThemeSettingsRoute` | None |
 | `privacySettingsPage()` | privacy | `PrivacySettingsRoute` | Detail |
 | `diagnosticsSettingsPage()` | diagnostics | `DiagnosticsSettingsRoute` | None |
-| `permissionsPage()` | permissions | `PermissionsRoute`, plus the permission usage deep links | None |
+| `permissionsPage()` | permissions | `PermissionsRoute` | None |
 | `adsSettingsPage()` | integration:ads | `AdsSettingsRoute` | None |
 | `advancedSettingsPage()` | advanced | `AdvancedSettingsRoute` | Detail |
 | `aboutPages()` | about | `AboutRoute`, `LibraryExtrasRoute` | Detail, None |
@@ -160,6 +162,36 @@ the drawer and overflow builders, links, or a screen's button). An app that need
 registration arguments calls it in its own builder first, such as `aboutPages { ... }`. An app that
 builds its graph with `ShellGraphBuilder` directly calls `toolkitPages()` after its own
 destinations.
+
+## Permission usage
+
+Android's permission manager (from each permission's page) and its privacy dashboard show an
+information icon beside an app that declares an activity for `VIEW_PERMISSION_USAGE` and
+`VIEW_PERMISSION_USAGE_FOR_PERIOD`, protected by `START_VIEW_PERMISSION_USAGE`. This module's
+manifest declares `PermissionUsageActivity` for both, so every app built on the Toolkit gets the
+icon without declaring anything. Tapping it opens the privacy page.
+
+- **Only the system can open it.** `START_VIEW_PERMISSION_USAGE` is held by the permission
+  controller alone, which is why the activity may be exported.
+- **It opens over the system's settings.** It is a second activity on purpose: routing the intent
+  to the app's own activity would bring the app's task forward (for a `singleTask` activity, push
+  the page onto whatever the person had open) and back would stay in the app. Its empty
+  `taskAffinity` keeps it out of the app's task even when the caller starts a new one.
+- **It is a shell of its own.** It hosts `ShellHost` with `permissionUsageGraph()`, a graph of
+  pages only: the privacy page as its start, and the permissions, ads and diagnostics pages it
+  links to. Back from the privacy page, gesture or arrow, finishes it.
+- **It uses the Toolkit's pages.** It cannot see the app's graph, so a page the app registered for
+  one of these keys is not used here, though the app's `PrivacySettingsProvider` is. An app that
+  wants its own screen removes this one and declares its own:
+
+```xml
+<activity
+    android:name="com.mihaicristiancondrea.android.libs.apptoolkit.app.privacy.ui.PermissionUsageActivity"
+    tools:node="remove" />
+```
+
+`PermissionUsageActivityTest` launches it under Robolectric with both actions, and
+`ManifestContractTest` checks its declaration.
 
 ## Architecture guards
 

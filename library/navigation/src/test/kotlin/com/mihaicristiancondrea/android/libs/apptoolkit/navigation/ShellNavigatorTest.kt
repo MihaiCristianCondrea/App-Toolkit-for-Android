@@ -29,6 +29,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class ShellNavigatorTest {
 
@@ -310,5 +311,55 @@ class ShellNavigatorTest {
         navigator.navigate(ShellHomeRoute)
 
         assertEquals(listOf<NavKey>(ShellHomeRoute), navigator.pages)
+    }
+
+    @Test
+    fun `closing the start screen with its back button leaves, as back does`() {
+        val startPages = mutableListOf<NavKey>(Page)
+        val startNavigator = ShellNavigator(graph, startPages, tabs, mutableListOf(0)) { exits++ }
+
+        startNavigator.close(Page)
+
+        assertEquals(1, exits)
+        assertEquals(listOf<NavKey>(Page), startPages)
+    }
+
+    @Test
+    fun `a graph of pages only starts on its page, opens the pages it links to, and is left from it`() {
+        val entry = ShellGraphBuilder(appTitle = 0).apply {
+            page<Page> {}
+            page<OtherPage> {}
+            start(Page)
+        }.build()
+        val entryPages = mutableListOf<NavKey>(entry.start)
+        val entryNavigator = ShellNavigator(entry, entryPages, emptyList(), mutableListOf()) { exits++ }
+
+        assertTrue(entry.tabs.isEmpty())
+        assertEquals(null, entry.startTab)
+        entryNavigator.navigate(OtherPage)
+        entryNavigator.goBack()
+        assertEquals(listOf<NavKey>(Page), entryPages)
+        entryNavigator.goBack()
+        assertEquals(1, exits)
+    }
+
+    @Test
+    fun `a graph of pages only has no shell to enter, so entering it leaves`() {
+        val entry = ShellGraphBuilder(appTitle = 0).apply {
+            page<Page> {}
+            start(Page)
+        }.build()
+        val entryNavigator = ShellNavigator(entry, mutableListOf(Page), emptyList(), mutableListOf()) { exits++ }
+
+        entryNavigator.enterShell()
+
+        assertEquals(1, exits)
+    }
+
+    @Test
+    fun `a graph without tabs needs a page to start on`() {
+        assertThrows<IllegalArgumentException> {
+            ShellGraphBuilder(appTitle = 0).apply { page<Page> {} }.build()
+        }
     }
 }

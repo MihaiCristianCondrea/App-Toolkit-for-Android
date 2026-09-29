@@ -7,17 +7,16 @@ Displays a localized explanation of the permissions used by AppToolkit hosts.
 ## Owns
 
 - `PermissionsScreen`, `PermissionsViewModel` and their event and action contracts.
-- `permissionsPage()`, the registration of `PermissionsRoute`, and the deep links that open it for
-  Android's permission usage intents (`ACTION_VIEW_PERMISSION_USAGE` and
-  `ACTION_VIEW_PERMISSION_USAGE_FOR_PERIOD`).
+- `permissionsPage()`, the registration of `PermissionsRoute`.
 - `PermissionsRepository` and its resource-backed implementation, which builds the normal/runtime
   permission catalog.
 
 ## Does not own
 
 - The privacy page that links here, owned by [`:library:feature:privacy`](../privacy/README.md).
-- The exported entry point for the permission usage intents. The app declares it, as an
-  `<activity-alias>` of the activity that hosts the shell; see [Using it](#using-it).
+- The screen Android's permission manager opens for the app. That is the privacy page, opened by
+  `PermissionUsageActivity` in [`:library:apptoolkit`](../../apptoolkit/README.md), which links
+  here.
 - Generic permission helpers/constants, owned by `:library:core:common`.
 - Runtime grant inspection or system-settings actions; this screen is descriptive and does not
   claim to report current grant state.
@@ -35,32 +34,11 @@ Displays a localized explanation of the permissions used by AppToolkit hosts.
 - [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `permissionsPage()` from
   `toolkitPages()`.
 
-## Using it
-
-Android's permission manager opens an app's explanation of its permissions through an exported
-activity that handles `VIEW_PERMISSION_USAGE` and is protected by `START_VIEW_PERMISSION_USAGE`.
-Declare it as an alias of the shell's activity; the page's deep links do the rest:
-
-```xml
-<activity-alias
-    android:name=".PermissionUsageActivity"
-    android:exported="true"
-    android:permission="android.permission.START_VIEW_PERMISSION_USAGE"
-    android:targetActivity=".MainActivity">
-    <intent-filter>
-        <action android:name="android.intent.action.VIEW_PERMISSION_USAGE" />
-        <action android:name="android.intent.action.VIEW_PERMISSION_USAGE_FOR_PERIOD" />
-        <category android:name="android.intent.category.DEFAULT" />
-    </intent-filter>
-</activity-alias>
-```
-
 ## Flow chart
 
 ```mermaid
 flowchart TD
     Privacy[Privacy page] -->|navigate| Page[permissionsPage: PermissionsRoute]
-    System[VIEW_PERMISSION_USAGE intent] -->|deep link| Page
     Page --> Screen[PermissionsScreen]
     Screen -->|load| VM[PermissionsViewModel]
     VM --> Repo[PermissionsRepository]
@@ -89,8 +67,7 @@ flowchart TD
 
 ## Public contracts
 
-- `PermissionsRepository`, `PermissionsScreen`, `permissionsPage()`, `ACTION_VIEW_PERMISSION_USAGE`,
-  `ACTION_VIEW_PERMISSION_USAGE_FOR_PERIOD` and the presentation contracts.
+- `PermissionsRepository`, `PermissionsScreen`, `permissionsPage()` and the presentation contracts.
 
 ## Internal implementations
 
@@ -98,5 +75,5 @@ flowchart TD
 
 ## Current risks
 
-The permission usage entry point is the app's own manifest declaration. An app that leaves out the
-alias still gets the page, but Android's permission manager has nothing to link to.
+The catalog is descriptive and fixed at build time: a permission added to the app's manifest
+appears here only once its name and summary are added to the resources.

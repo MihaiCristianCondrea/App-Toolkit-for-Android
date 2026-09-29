@@ -171,13 +171,6 @@ class AppGraphTest {
     }
 
     @Test
-    fun `android's permission usage screen opens the permissions page`() {
-        val usage = mockk<Intent> { every { action } returns "android.intent.action.VIEW_PERMISSION_USAGE" }
-
-        assertEquals(PermissionsRoute, graph().keyFor(usage))
-    }
-
-    @Test
     fun `the settings shortcut opens the settings page`() {
         val shortcut = mockk<Intent> { every { action } returns ACTION_OPEN_SETTINGS }
         val launcher = mockk<Intent> { every { action } returns Intent.ACTION_MAIN }

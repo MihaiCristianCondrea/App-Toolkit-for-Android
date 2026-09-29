@@ -12,6 +12,9 @@ and the strings that name them.
 - `PrivacySettingsProvider`, the host contract supplying the legal URLs.
 - `privacySettingsPage()`, the registration of `PrivacySettingsRoute` as a detail of the settings
   list.
+- Being the page Android's permission manager and privacy dashboard open from the information icon
+  beside the app. `PermissionUsageActivity` in [`:library:apptoolkit`](../../apptoolkit/README.md)
+  shows it on its own, with the pages it links to, over the system's settings.
 - Privacy, legal, ads, permissions, and usage-and-diagnostics strings.
 
 ## Does not own

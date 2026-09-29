@@ -115,6 +115,24 @@ class ManifestContractTest {
     }
 
     @Test
+    fun `the permission usage entry point is built in and only the system can open it`() {
+        val manifest = File(repositoryRoot, APPTOOLKIT_MANIFEST).readText().replace(XML_COMMENT, "")
+        val entry = Regex("""<activity\b[^>]*\.PermissionUsageActivity".*?</activity>""", RegexOption.DOT_MATCHES_ALL)
+            .find(manifest)?.value
+
+        assertThat(entry).isNotNull()
+        assertThat(entry).contains("android:exported=\"true\"")
+        assertThat(entry).contains("android:permission=\"android.permission.START_VIEW_PERMISSION_USAGE\"")
+        assertThat(entry).contains("android.intent.action.VIEW_PERMISSION_USAGE\"")
+        assertThat(entry).contains("android.intent.action.VIEW_PERMISSION_USAGE_FOR_PERIOD\"")
+        assertThat(entry).contains("android.intent.category.DEFAULT")
+        // Opened over the system's settings, never inside the app's own task.
+        assertThat(entry).contains("android:taskAffinity=\"\"")
+        // The host no longer declares one, which would give the system two entry points.
+        assertThat(File(repositoryRoot, SAMPLE_MANIFEST).readText()).doesNotContain("VIEW_PERMISSION_USAGE")
+    }
+
+    @Test
     fun `library components declare whether they are exported`() {
         val offenders = libraryComponents()
             .filterNot { component -> EXPORTED.containsMatchIn(component.declaration) }

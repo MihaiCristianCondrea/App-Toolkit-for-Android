@@ -69,7 +69,11 @@ class ShellGraph internal constructor(
     private val destinations: Map<KClass<out NavKey>, Destination<*>>,
 ) {
     init {
-        require(tabs.isNotEmpty()) { "A shell needs at least one tab." }
+        // A graph without tabs is a single entry point, such as the screen the system opens from
+        // outside the app: it starts on a page and is left from it, never showing the shell.
+        require(tabs.isNotEmpty() || destinationOrNull(start)?.kind == DestinationKind.Page) {
+            "A shell needs at least one tab, or a page to start on."
+        }
         tabs.forEach { tab ->
             require(destinationOrNull(tab.key)?.kind == DestinationKind.Tab) {
                 "${tab.key} is listed as a tab but was not registered with tab()."
@@ -93,7 +97,8 @@ class ShellGraph internal constructor(
     /** Every place the app can start: the tabs, then the start screens. */
     val startOptions: List<NavKey> get() = tabs.map { it.key } + startScreens
 
-    val startTab: NavKey get() = tabs.first().key
+    /** The first tab, or null in a graph of pages only. */
+    val startTab: NavKey? get() = tabs.firstOrNull()?.key
 
     fun tabIndexOf(key: NavKey): Int = tabs.indexOfFirst { it.key == key }
 
@@ -293,9 +298,8 @@ class ShellGraphBuilder(
 
     /**
      * Maps the intents the app's activity receives, at launch or while running, to destinations:
-     * a launcher shortcut, a notification, a link, or the system asking for a screen, such as
-     * `Intent.ACTION_VIEW_PERMISSION_USAGE`. The host opens the destination as if a screen had
-     * called `navigate(key)`.
+     * a launcher shortcut, a notification, a widget or a link. The host opens the destination as
+     * if a screen had called `navigate(key)`.
      *
      * ```
      * deepLinks {
@@ -333,7 +337,9 @@ class ShellGraphBuilder(
         banner = banner,
         player = player,
         transitions = transitions,
-        start = start ?: tabs.first().key,
+        start = start ?: requireNotNull(tabs.firstOrNull()?.key) {
+            "A graph without tabs needs start(page)."
+        },
         startScreens = startScreens.toList(),
         deepLinks = deepLinks.toList(),
         destinations = destinations.toMap(),
