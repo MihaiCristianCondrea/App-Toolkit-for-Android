@@ -62,7 +62,7 @@ the [`:library:apptoolkit` documentation](library/apptoolkit/README.md).
 ## Explore the sample
 
 The sample app is both a component showcase and a collection of practical utilities. Its feature
-list, screenshots, Play Store link, and usage overview now live in the
+list, screenshots, Play Store link, and usage overview live in the
 [`sample` README](sample/README.md). Implementation details for its application composition root are
 in [`sample/app/README.md`](sample/app/README.md).
 

@@ -278,7 +278,8 @@ Use it when working with:
 
 Notification channels are part of the public behavior of the app.
 
-Create channels around stable categories that users can understand.
+Inspect the existing channels before adding another one, and create channels around stable categories
+that users can understand.
 
 Examples:
 
@@ -303,7 +304,9 @@ Read:
 
 [`references/notification-permission.md`](references/notification-permission.md)
 
-Use it when working with Android 13 and newer notification permission behavior.
+Use it when working with Android 13 and newer notification permission behavior. On those versions a
+posted notification is not necessarily visible: `POST_NOTIFICATIONS` is a runtime permission the
+user can deny or revoke in system settings.
 
 Review:
 
@@ -485,50 +488,6 @@ For frequent updates:
 
 The visible notification state should not lag behind the application's committed state.
 
-## Notification channels
-
-Notification channel design is part of notification behavior.
-
-Inspect existing channels before adding another one.
-
-Channels should represent stable user-understandable notification categories.
-
-Examples:
-
-```text
-Downloads
-Playback
-Reminders
-Security alerts
-Background processing
-```
-
-Do not create a new channel for every individual notification.
-
-Do not encode volatile state into channel IDs.
-
-Remember that after a channel is created, the user controls many of its behaviors.
-
-Changing builder priority does not replace channel importance on Android 8.0 and newer.
-
-## Permission handling
-
-Android 13 and newer uses the `POST_NOTIFICATIONS` runtime permission for non-exempt notifications.
-
-Do not assume that posting a notification means it will be visible.
-
-Before designing notification behavior, inspect how the app:
-
-- declares the permission
-- requests the permission
-- explains the reason for the permission
-- handles denial
-- handles notifications disabled in system settings
-
-Do not request notification permission at an unrelated moment merely because the app has started.
-
-Ask when the user can understand what notifications will provide.
-
 ## PendingIntent safety
 
 Use the narrowest `PendingIntent` behavior required.
@@ -680,32 +639,6 @@ Device or emulator validation should cover behavior that local tests cannot prov
 - OEM-specific rendering when relevant
 
 Record the Android API level for platform-specific notification validation.
-
-## Implementation workflow
-
-Use this sequence:
-
-```text
-Inspect current notification system
-        ↓
-Identify notification use case
-        ↓
-Choose system style or custom layout
-        ↓
-Read the relevant reference
-        ↓
-Check permissions, channels, navigation, and identity
-        ↓
-Implement the smallest correct change
-        ↓
-Add or update tests
-        ↓
-Run targeted tests
-        ↓
-Validate on Android runtime when required
-        ↓
-Run repository-wide verification
-```
 
 ## Review checklist
 

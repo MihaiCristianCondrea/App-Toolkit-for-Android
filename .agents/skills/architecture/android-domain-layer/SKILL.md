@@ -104,3 +104,10 @@ class GetUserUseCase(
     suspend operator fun invoke(): User =
         userRepository.getUser()
 }
+```
+
+adds a class, a binding and a test without adding behavior; the ViewModel can call the repository.
+Keep such a use case only when the project's conventions require every call to go through one.
+
+For naming, dependencies, threading, lifecycle, combining repositories, and testing use cases, read
+`references/domain-layer.md`.

@@ -71,6 +71,7 @@ Use existing categories under the relevant section:
 - `### Added`
 - `### Changed`
 - `### Improved`
+- `### Removed`
 - `### Fixed`
 
 Only include categories that contain entries.
@@ -117,8 +118,8 @@ release that actually shipped them.
 
 ## Writing
 
-- Keep entries brief, simple, pinpoint, and on-point. Avoid long, essay-like descriptions.
+- Keep each entry to the outcome and what a reader needs to act on it, usually one or two sentences.
 - **Never use em dashes (`—`)** or overly verbose AI phrasing. Use commas, parentheses, or short direct sentences.
-- Use clean, flat bullet points under standard categories (`Added`, `Changed`, `Improved`, `Removed`, `Fixed`) without nested sub-lists.
+- Use flat bullet points under the categories above, without nested sub-lists.
 - Combine several implementation commits when they represent one meaningful outcome.
 - Do not invent version codes, release dates, behavior, or release history.

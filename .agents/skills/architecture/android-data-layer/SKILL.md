@@ -175,12 +175,12 @@ Network model -> application/data model -> UI model
 
 but this is not mandatory for every feature.
 
-Never expose a network DTO merely because mapping it would require another
-class when the DTO already represents the application's required data and
-does not leak inappropriate external concerns.
+Do not add a mapping only for symmetry: a network DTO that already represents
+the data the application needs, and carries no external concerns, can serve as
+the application model.
 
-Conversely, map external models when their structure does not match what the
-application needs.
+Map external models when their structure does not match what the application
+needs.
 
 Keep UI-specific models in the UI layer.
 

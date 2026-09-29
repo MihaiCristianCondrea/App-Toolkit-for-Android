@@ -52,7 +52,8 @@ Preserve exactly:
 * HTML/XML markup
 * `\\n`, escaped quotes, apostrophes, and other escapes
 * intentional whitespace
-* remove duplicated string resources if they are already exists
+
+Remove a string resource that duplicates one already defined under the same name in the same file.
 
 Escape Android XML correctly:
 
