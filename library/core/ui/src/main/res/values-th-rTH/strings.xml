@@ -56,4 +56,5 @@
     <string name="theme_mode">โหมดธีม</string>
     <string name="try_again">ลองอีกครั้ง</string>
     <string name="wallpaper_colors">สีของวอลเปเปอร์</string>
+    <string name="shell_list_placeholder">เลือกรายการเพื่อดูที่นี่</string>
 </resources>

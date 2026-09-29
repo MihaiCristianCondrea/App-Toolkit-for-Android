@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="shell_dev_live_state">Текущо състояние</string>
+    <string name="shell_dev_window">Прозорец</string>
+    <string name="shell_dev_window_summary">%1$d × %2$d dp · %3$s</string>
+    <string name="shell_dev_page_stack">Стек от страници</string>
+    <string name="shell_dev_tab_stack">Стек „%1$s“</string>
+    <string name="shell_dev_navigation">Навигация</string>
+    <string name="shell_dev_start">Стартиране в, от следващото отваряне</string>
+    <string name="shell_dev_layout">Оформление на навигацията</string>
+    <string name="shell_dev_top_bar">Горна лента на приложението</string>
+    <string name="shell_dev_navigation_bar">Долна лента за навигация</string>
+    <string name="shell_dev_navigation_tint">Цвят на страничната лента и лентата на приложението</string>
+    <string name="shell_dev_hide_bottom_bar">Скриване на долната лента при превъртане</string>
+    <string name="shell_dev_hide_bottom_bar_summary">Изчезва, когато съдържанието се превърта надолу, докато не се показва плейър</string>
+    <string name="shell_dev_limit_width">Ограничаване на ширината на съдържанието в големи прозорци</string>
+    <string name="shell_dev_limit_width_summary">Центриране на съдържанието с полета, като уебсайт, над максималната ширина на правилата за оформление</string>
+    <string name="shell_dev_limit_width_unset">Приложението не задава максимална ширина, така че съдържанието винаги запълва прозореца</string>
+    <string name="shell_dev_accessories">Долни елементи</string>
+    <string name="shell_dev_bottom_accessory">Над лентата за навигация</string>
+    <string name="shell_dev_banner_style">Банер</string>
+    <string name="shell_dev_motion">Движение</string>
+    <string name="shell_dev_tab_transition">Между разделите</string>
+    <string name="shell_dev_back_edge">Плъзгане назад от десния край</string>
+    <string name="shell_dev_animation_speed">Скорост на анимацията</string>
+    <string name="shell_dev_reset">Нулиране на опциите за програмисти</string>
+    <string name="shell_dev_reset_summary">Връщане към зададеното от приложението</string>
+    <string name="shell_as_declared">Както задава всеки екран</string>
+    <string name="shell_layout_auto">Автоматично, според ширината на прозореца</string>
+    <string name="shell_layout_bottom_bar">Долна лента и чекмедже</string>
+    <string name="shell_layout_rail">Странична лента за навигация</string>
+    <string name="shell_layout_expanded_rail">Разширена странична лента за навигация</string>
+    <string name="shell_layout_permanent_drawer">Постоянно чекмедже</string>
+    <string name="shell_top_bar_small">Малка</string>
+    <string name="shell_top_bar_center">Центрирана</string>
+    <string name="shell_top_bar_large">Голяма, свиваща се</string>
+    <string name="shell_top_bar_large_collapsed">Голяма, отваря се свита</string>
+    <string name="shell_top_bar_hidden">Скрита</string>
+    <string name="shell_accessory_as_declared">Банер, заменян от плейъра по време на възпроизвеждане</string>
+    <string name="shell_accessory_none">Нищо</string>
+    <string name="shell_accessory_banner">Само банер</string>
+    <string name="shell_accessory_player">Само плейър</string>
+    <string name="shell_navigation_bar_standard">Стандартна, 80 dp</string>
+    <string name="shell_navigation_bar_short">Къса, 64 dp</string>
+    <string name="shell_navigation_tint_none">Повърхност; лентата на приложението се оцветява при превъртане</string>
+    <string name="shell_navigation_tint_always">Оцветени заедно, съдържание в карта</string>
+    <string name="shell_navigation_tint_on_scroll">Оцветени заедно, щом съдържанието се превърти</string>
+    <string name="shell_banner_automatic">Закачен за долната лента, плаващ до страничната лента</string>
+    <string name="shell_banner_floating">Винаги плаващ, като плейъра</string>
+    <string name="shell_banner_docked">Винаги закачен</string>
+    <string name="shell_start_as_declared">Както задава приложението: %1$s</string>
+    <string name="shell_start_screen">%1$s, преди основния интерфейс</string>
+    <string name="shell_back_edge_system">Като Android: страницата се свива на място</string>
+    <string name="shell_back_edge_follow">Следва пръста, огледално на левия край (по подразбиране)</string>
+    <string name="shell_transition_directional">Насочено плъзгане</string>
+    <string name="shell_transition_fade_through">Преливане през фона</string>
+    <string name="shell_transition_fade">Кръстосано преливане</string>
+    <string name="shell_transition_none">Няма</string>
+    <string name="shell_speed_normal">Нормална</string>
+    <string name="shell_speed_slow">2× по-бавна</string>
+    <string name="shell_speed_very_slow">5× по-бавна</string>
+    <string name="shell_developer_options">Опции за програмисти</string>
+</resources>

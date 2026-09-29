@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="shell_dev_live_state">Текущее состояние</string>
+    <string name="shell_dev_window">Окно</string>
+    <string name="shell_dev_window_summary">%1$d × %2$d dp · %3$s</string>
+    <string name="shell_dev_page_stack">Стек страниц</string>
+    <string name="shell_dev_tab_stack">Стек «%1$s»</string>
+    <string name="shell_dev_navigation">Навигация</string>
+    <string name="shell_dev_start">Открывать при следующем запуске</string>
+    <string name="shell_dev_layout">Макет навигации</string>
+    <string name="shell_dev_top_bar">Верхняя панель приложения</string>
+    <string name="shell_dev_navigation_bar">Нижняя панель навигации</string>
+    <string name="shell_dev_navigation_tint">Цвет боковой панели и панели приложения</string>
+    <string name="shell_dev_hide_bottom_bar">Скрывать нижнюю панель при прокрутке</string>
+    <string name="shell_dev_hide_bottom_bar_summary">Уезжает, когда контент прокручивается вниз и проигрыватель не показан</string>
+    <string name="shell_dev_limit_width">Ограничивать ширину контента в больших окнах</string>
+    <string name="shell_dev_limit_width_summary">Центрировать контент с полями, как на сайте, сверх максимальной ширины правил макета</string>
+    <string name="shell_dev_limit_width_unset">Приложение не задаёт максимальную ширину, поэтому контент всегда заполняет окно</string>
+    <string name="shell_dev_accessories">Нижние элементы</string>
+    <string name="shell_dev_bottom_accessory">Над панелью навигации</string>
+    <string name="shell_dev_banner_style">Баннер</string>
+    <string name="shell_dev_motion">Движение</string>
+    <string name="shell_dev_tab_transition">Между вкладками</string>
+    <string name="shell_dev_back_edge">Жест «назад» от правого края</string>
+    <string name="shell_dev_animation_speed">Скорость анимации</string>
+    <string name="shell_dev_reset">Сбросить параметры разработчика</string>
+    <string name="shell_dev_reset_summary">Вернуть то, что задаёт приложение</string>
+    <string name="shell_as_declared">Как задаёт каждый экран</string>
+    <string name="shell_layout_auto">Автоматически, по ширине окна</string>
+    <string name="shell_layout_bottom_bar">Нижняя панель и меню</string>
+    <string name="shell_layout_rail">Боковая панель навигации</string>
+    <string name="shell_layout_expanded_rail">Расширенная боковая панель навигации</string>
+    <string name="shell_layout_permanent_drawer">Постоянное меню</string>
+    <string name="shell_top_bar_small">Маленькая</string>
+    <string name="shell_top_bar_center">По центру</string>
+    <string name="shell_top_bar_large">Большая, сворачивается</string>
+    <string name="shell_top_bar_large_collapsed">Большая, открывается свёрнутой</string>
+    <string name="shell_top_bar_hidden">Скрыта</string>
+    <string name="shell_accessory_as_declared">Баннер, заменяемый проигрывателем во время воспроизведения</string>
+    <string name="shell_accessory_none">Ничего</string>
+    <string name="shell_accessory_banner">Только баннер</string>
+    <string name="shell_accessory_player">Только проигрыватель</string>
+    <string name="shell_navigation_bar_standard">Стандартная, 80 dp</string>
+    <string name="shell_navigation_bar_short">Короткая, 64 dp</string>
+    <string name="shell_navigation_tint_none">Поверхность; панель приложения окрашивается при прокрутке</string>
+    <string name="shell_navigation_tint_always">Окрашены вместе, контент в карточке</string>
+    <string name="shell_navigation_tint_on_scroll">Окрашены вместе, как только контент прокручивается</string>
+    <string name="shell_banner_automatic">Прикреплён к нижней панели, плавает рядом с боковой панелью</string>
+    <string name="shell_banner_floating">Всегда плавает, как проигрыватель</string>
+    <string name="shell_banner_docked">Всегда прикреплён</string>
+    <string name="shell_start_as_declared">Как задаёт приложение: %1$s</string>
+    <string name="shell_start_screen">%1$s, до основного интерфейса</string>
+    <string name="shell_back_edge_system">Как в Android: страница уменьшается на месте</string>
+    <string name="shell_back_edge_follow">Следует за пальцем, зеркально левому краю (по умолчанию)</string>
+    <string name="shell_transition_directional">Направленный сдвиг</string>
+    <string name="shell_transition_fade_through">Проявление через фон</string>
+    <string name="shell_transition_fade">Плавный переход</string>
+    <string name="shell_transition_none">Нет</string>
+    <string name="shell_speed_normal">Обычная</string>
+    <string name="shell_speed_slow">В 2 раза медленнее</string>
+    <string name="shell_speed_very_slow">В 5 раз медленнее</string>
+    <string name="shell_developer_options">Параметры разработчика</string>
+</resources>

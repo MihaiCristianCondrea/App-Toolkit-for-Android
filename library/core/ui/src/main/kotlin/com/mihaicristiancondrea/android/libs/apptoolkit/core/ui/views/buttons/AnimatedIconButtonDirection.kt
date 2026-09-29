@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -25,6 +26,7 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,7 +48,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics
  *
  * @param modifier Modifier to be applied to the button.
  * @param visible Controls the visibility of the button. If true, the button will be visible, otherwise it will be hidden.
- * @param icon The icon to display within the button. An animated icon plays on every click.
+ * @param icon The icon to display within the button. An animated icon plays on every click. A
+ *   different icon crossfades in place, without replaying the button's entrance.
  * @param contentDescription The content description for the icon, used for accessibility.
  * @param onClick The callback that will be invoked when the button is clicked.
  * @param durationMillis The duration of the animation in milliseconds. Defaults to 500ms.
@@ -108,17 +111,28 @@ fun AnimatedIconButtonDirection(
                     animationSpec = tween(durationMillis = durationMillis)
                 )
     ) {
-        GeneralButton(
-            modifier = modifier,
-            onClick = onClick,
-            enabled = enabled,
-            contentDescription = contentDescription,
-            icon = icon,
-            iconSize = iconSize,
-            feedback = feedback,
-            firebaseController = firebaseController,
-            ga4Event = ga4Event,
-            style = GeneralButtonStyle.Text,
-        )
+        // A new icon on the same button, such as a menu becoming a back arrow, crossfades in place
+        // with the timing of the app bar title instead of replaying the button's entrance.
+        AnimatedContent(
+            targetState = icon to contentDescription,
+            transitionSpec = {
+                (fadeIn(tween(220, delayMillis = 90)) + scaleIn(tween(220, delayMillis = 90), initialScale = 0.92f))
+                    .togetherWith(fadeOut(tween(90)))
+            },
+            label = "AnimatedIconButtonDirectionIcon",
+        ) { (targetIcon, targetDescription) ->
+            GeneralButton(
+                modifier = modifier,
+                onClick = onClick,
+                enabled = enabled,
+                contentDescription = targetDescription,
+                icon = targetIcon,
+                iconSize = iconSize,
+                feedback = feedback,
+                firebaseController = firebaseController,
+                ga4Event = ga4Event,
+                style = GeneralButtonStyle.Text,
+            )
+        }
     }
 }

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="shell_dev_live_state">Bieżący stan</string>
+    <string name="shell_dev_window">Okno</string>
+    <string name="shell_dev_window_summary">%1$d × %2$d dp · %3$s</string>
+    <string name="shell_dev_page_stack">Stos stron</string>
+    <string name="shell_dev_tab_stack">Stos: %1$s</string>
+    <string name="shell_dev_navigation">Nawigacja</string>
+    <string name="shell_dev_start">Uruchamiaj na, od następnego uruchomienia</string>
+    <string name="shell_dev_layout">Układ nawigacji</string>
+    <string name="shell_dev_top_bar">Górny pasek aplikacji</string>
+    <string name="shell_dev_navigation_bar">Dolny pasek nawigacji</string>
+    <string name="shell_dev_navigation_tint">Kolor paska bocznego i paska aplikacji</string>
+    <string name="shell_dev_hide_bottom_bar">Ukrywaj dolny pasek podczas przewijania</string>
+    <string name="shell_dev_hide_bottom_bar_summary">Chowa się, gdy treść przewija się w dół, dopóki nie jest widoczny odtwarzacz</string>
+    <string name="shell_dev_limit_width">Ogranicz szerokość treści w dużych oknach</string>
+    <string name="shell_dev_limit_width_summary">Wyśrodkuj treść z marginesami, jak na stronie internetowej, powyżej maksymalnej szerokości zasad układu</string>
+    <string name="shell_dev_limit_width_unset">Aplikacja nie ustawia maksymalnej szerokości, więc treść zawsze wypełnia okno</string>
+    <string name="shell_dev_accessories">Dolne elementy</string>
+    <string name="shell_dev_bottom_accessory">Nad paskiem nawigacji</string>
+    <string name="shell_dev_banner_style">Baner</string>
+    <string name="shell_dev_motion">Ruch</string>
+    <string name="shell_dev_tab_transition">Między kartami</string>
+    <string name="shell_dev_back_edge">Przesunięcie wstecz od prawej krawędzi</string>
+    <string name="shell_dev_animation_speed">Szybkość animacji</string>
+    <string name="shell_dev_reset">Resetuj opcje programisty</string>
+    <string name="shell_dev_reset_summary">Powrót do tego, co deklaruje aplikacja</string>
+    <string name="shell_as_declared">Tak jak deklaruje każdy ekran</string>
+    <string name="shell_layout_auto">Automatycznie, według szerokości okna</string>
+    <string name="shell_layout_bottom_bar">Dolny pasek i szuflada</string>
+    <string name="shell_layout_rail">Pasek boczny nawigacji</string>
+    <string name="shell_layout_expanded_rail">Rozwinięty pasek boczny nawigacji</string>
+    <string name="shell_layout_permanent_drawer">Stała szuflada</string>
+    <string name="shell_top_bar_small">Mały</string>
+    <string name="shell_top_bar_center">Wyśrodkowany</string>
+    <string name="shell_top_bar_large">Duży, zwijany</string>
+    <string name="shell_top_bar_large_collapsed">Duży, otwiera się zwinięty</string>
+    <string name="shell_top_bar_hidden">Ukryty</string>
+    <string name="shell_accessory_as_declared">Baner, zastępowany przez odtwarzacz podczas odtwarzania</string>
+    <string name="shell_accessory_none">Nic</string>
+    <string name="shell_accessory_banner">Tylko baner</string>
+    <string name="shell_accessory_player">Tylko odtwarzacz</string>
+    <string name="shell_navigation_bar_standard">Standardowy, 80 dp</string>
+    <string name="shell_navigation_bar_short">Krótki, 64 dp</string>
+    <string name="shell_navigation_tint_none">Powierzchnia; pasek aplikacji zabarwia się podczas przewijania</string>
+    <string name="shell_navigation_tint_always">Zabarwione razem, treść na karcie</string>
+    <string name="shell_navigation_tint_on_scroll">Zabarwione razem, gdy treść się przewinie</string>
+    <string name="shell_banner_automatic">Zadokowany przy dolnym pasku, pływający obok paska bocznego</string>
+    <string name="shell_banner_floating">Zawsze pływający, jak odtwarzacz</string>
+    <string name="shell_banner_docked">Zawsze zadokowany</string>
+    <string name="shell_start_as_declared">Tak jak deklaruje aplikacja: %1$s</string>
+    <string name="shell_start_screen">%1$s, przed głównym interfejsem</string>
+    <string name="shell_back_edge_system">Jak w Androidzie: strona zmniejsza się w miejscu</string>
+    <string name="shell_back_edge_follow">Podąża za palcem, jak przy lewej krawędzi (domyślnie)</string>
+    <string name="shell_transition_directional">Przesunięcie kierunkowe</string>
+    <string name="shell_transition_fade_through">Przenikanie przez tło</string>
+    <string name="shell_transition_fade">Przenikanie</string>
+    <string name="shell_transition_none">Brak</string>
+    <string name="shell_speed_normal">Normalna</string>
+    <string name="shell_speed_slow">2× wolniej</string>
+    <string name="shell_speed_very_slow">5× wolniej</string>
+    <string name="shell_developer_options">Opcje programisty</string>
+</resources>

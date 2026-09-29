@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="shell_dev_live_state">Stato attuale</string>
+    <string name="shell_dev_window">Finestra</string>
+    <string name="shell_dev_window_summary">%1$d × %2$d dp · %3$s</string>
+    <string name="shell_dev_page_stack">Pila delle pagine</string>
+    <string name="shell_dev_tab_stack">Pila di %1$s</string>
+    <string name="shell_dev_navigation">Navigazione</string>
+    <string name="shell_dev_start">Avvia su, dal prossimo avvio</string>
+    <string name="shell_dev_layout">Layout di navigazione</string>
+    <string name="shell_dev_top_bar">Barra superiore dell\'app</string>
+    <string name="shell_dev_navigation_bar">Barra di navigazione inferiore</string>
+    <string name="shell_dev_navigation_tint">Colore della barra laterale e della barra dell\'app</string>
+    <string name="shell_dev_hide_bottom_bar">Nascondi la barra inferiore durante lo scorrimento</string>
+    <string name="shell_dev_hide_bottom_bar_summary">Scompare quando il contenuto scorre verso il basso, finché non è visibile nessun lettore</string>
+    <string name="shell_dev_limit_width">Limita la larghezza del contenuto nelle finestre grandi</string>
+    <string name="shell_dev_limit_width_summary">Centra il contenuto con margini, come un sito web, oltre la larghezza massima della regola di layout</string>
+    <string name="shell_dev_limit_width_unset">L\'app non imposta una larghezza massima, quindi il contenuto riempie sempre la finestra</string>
+    <string name="shell_dev_accessories">Accessori inferiori</string>
+    <string name="shell_dev_bottom_accessory">Sopra la barra di navigazione</string>
+    <string name="shell_dev_banner_style">Banner</string>
+    <string name="shell_dev_motion">Movimento</string>
+    <string name="shell_dev_tab_transition">Tra le schede</string>
+    <string name="shell_dev_back_edge">Scorrimento indietro dal bordo destro</string>
+    <string name="shell_dev_animation_speed">Velocità delle animazioni</string>
+    <string name="shell_dev_reset">Ripristina le opzioni sviluppatore</string>
+    <string name="shell_dev_reset_summary">Torna a quanto dichiarato dall\'app</string>
+    <string name="shell_as_declared">Come dichiara ogni schermata</string>
+    <string name="shell_layout_auto">Automatico, in base alla larghezza della finestra</string>
+    <string name="shell_layout_bottom_bar">Barra inferiore e menu laterale</string>
+    <string name="shell_layout_rail">Barra di navigazione laterale</string>
+    <string name="shell_layout_expanded_rail">Barra di navigazione laterale espansa</string>
+    <string name="shell_layout_permanent_drawer">Menu laterale permanente</string>
+    <string name="shell_top_bar_small">Piccola</string>
+    <string name="shell_top_bar_center">Centrata</string>
+    <string name="shell_top_bar_large">Grande, si comprime</string>
+    <string name="shell_top_bar_large_collapsed">Grande, si apre compressa</string>
+    <string name="shell_top_bar_hidden">Nascosta</string>
+    <string name="shell_accessory_as_declared">Banner, sostituito dal lettore durante la riproduzione</string>
+    <string name="shell_accessory_none">Niente</string>
+    <string name="shell_accessory_banner">Solo banner</string>
+    <string name="shell_accessory_player">Solo lettore</string>
+    <string name="shell_navigation_bar_standard">Standard, 80 dp</string>
+    <string name="shell_navigation_bar_short">Corta, 64 dp</string>
+    <string name="shell_navigation_tint_none">Superficie; la barra dell\'app si colora durante lo scorrimento</string>
+    <string name="shell_navigation_tint_always">Colorate insieme, contenuto in una scheda</string>
+    <string name="shell_navigation_tint_on_scroll">Colorate insieme appena il contenuto scorre</string>
+    <string name="shell_banner_automatic">Agganciato alla barra inferiore, fluttuante accanto alla barra laterale</string>
+    <string name="shell_banner_floating">Sempre fluttuante, come il lettore</string>
+    <string name="shell_banner_docked">Sempre agganciato</string>
+    <string name="shell_start_as_declared">Come dichiara l\'app: %1$s</string>
+    <string name="shell_start_screen">%1$s, prima dell\'interfaccia principale</string>
+    <string name="shell_back_edge_system">Come Android: la pagina si riduce sul posto</string>
+    <string name="shell_back_edge_follow">Segue il dito, speculare al bordo sinistro (predefinito)</string>
+    <string name="shell_transition_directional">Scorrimento direzionale</string>
+    <string name="shell_transition_fade_through">Dissolvenza attraverso</string>
+    <string name="shell_transition_fade">Dissolvenza incrociata</string>
+    <string name="shell_transition_none">Nessuna</string>
+    <string name="shell_speed_normal">Normale</string>
+    <string name="shell_speed_slow">2× più lenta</string>
+    <string name="shell_speed_very_slow">5× più lenta</string>
+    <string name="shell_developer_options">Opzioni sviluppatore</string>
+</resources>

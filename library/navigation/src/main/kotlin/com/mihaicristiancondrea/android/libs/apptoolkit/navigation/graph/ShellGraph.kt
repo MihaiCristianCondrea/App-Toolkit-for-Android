@@ -249,9 +249,12 @@ class ShellGraphBuilder(
         paneRole: PaneRole,
         noinline title: @Composable (K) -> String,
         topBar: TopBarStyle = TopBarStyle.Large,
+        noinline actions: (@Composable RowScope.(K) -> Unit)? = null,
         noinline content: @Composable (K) -> Unit,
     ) {
-        if (K::class !in destinations) page(topBar = topBar, paneRole = paneRole, title = title, content = content)
+        if (K::class !in destinations) {
+            page(topBar = topBar, paneRole = paneRole, title = title, actions = actions, content = content)
+        }
     }
 
     /** Lists the drawer's entries, top to bottom. */
@@ -342,6 +345,26 @@ class ShellGraphBuilder(
     }
 }
 
+/**
+ * Builds a [ShellGraph]: an app's tabs, children, pages, drawer, overflow menu, start screens and
+ * deep links.
+ *
+ * ```
+ * val graph = shellGraph(appTitle = R.string.app_name) {
+ *     tab(HomeRoute, R.string.home, ToolkitIcon.Vector(Icons.Outlined.Home)) { HomeScreen() }
+ *     child<ItemRoute>(title = { it.name }) { ItemScreen(it) }
+ *     drawer { settings(); spacer(); link(HelpRoute, R.string.help, ToolkitIcon.Vector(Icons.Outlined.Help)) }
+ * }
+ * ```
+ *
+ * `:library:apptoolkit`'s `toolkitGraph { }` wraps this and adds the Toolkit's own pages.
+ */
+fun shellGraph(
+    @StringRes appTitle: Int,
+    appIcon: ToolkitIcon? = null,
+    builder: ShellGraphBuilder.() -> Unit,
+): ShellGraph = ShellGraphBuilder(appTitle, appIcon).apply(builder).build()
+
 /** Collects [ShellGraphBuilder.deepLinks]. The first link that returns a key wins. */
 class DeepLinkBuilder internal constructor() {
     internal val links = mutableListOf<(Intent) -> NavKey?>()
@@ -391,8 +414,8 @@ class DrawerBuilder internal constructor() {
     }
 
     /**
-     * The settings list, with the Toolkit's standard label and animated icon, the same as
-     * `DefaultNavigationRepository`'s entry. The settings feature registers the page.
+     * The settings list, with the Toolkit's standard label and its animated settings icon. The
+     * settings feature registers the page.
      */
     fun settings() {
         link(SettingsRoute, R.string.settings, ToolkitIcon.AnimatedVector(DesignSystemR.drawable.anim_settings))

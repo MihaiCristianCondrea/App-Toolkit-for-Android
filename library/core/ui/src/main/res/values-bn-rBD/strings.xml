@@ -56,4 +56,5 @@
     <string name="theme_mode">থিম মোড</string>
     <string name="try_again">আবার চেষ্টা করুন</string>
     <string name="wallpaper_colors">ওয়ালপেপারের রং</string>
+    <string name="shell_list_placeholder">এখানে দেখতে একটি আইটেম বেছে নিন।</string>
 </resources>

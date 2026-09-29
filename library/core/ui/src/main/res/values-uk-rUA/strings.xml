@@ -56,4 +56,5 @@
     <string name="theme_mode">Режим теми</string>
     <string name="try_again">Спробувати знову</string>
     <string name="wallpaper_colors">Кольори шпалер</string>
+    <string name="shell_list_placeholder">Виберіть елемент, щоб побачити його тут.</string>
 </resources>

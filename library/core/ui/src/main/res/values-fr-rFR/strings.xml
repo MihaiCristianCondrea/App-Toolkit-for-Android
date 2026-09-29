@@ -56,4 +56,5 @@
     <string name="theme_mode">Mode du thème</string>
     <string name="try_again">Réessayer</string>
     <string name="wallpaper_colors">Couleurs du fond d\'écran</string>
+    <string name="shell_list_placeholder">Sélectionnez un élément pour l\'afficher ici.</string>
 </resources>

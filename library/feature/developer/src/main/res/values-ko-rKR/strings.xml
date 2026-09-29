@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="shell_dev_live_state">현재 상태</string>
+    <string name="shell_dev_window">창</string>
+    <string name="shell_dev_window_summary">%1$d × %2$d dp · %3$s</string>
+    <string name="shell_dev_page_stack">페이지 스택</string>
+    <string name="shell_dev_tab_stack">%1$s 스택</string>
+    <string name="shell_dev_navigation">탐색</string>
+    <string name="shell_dev_start">다음 실행부터 시작 화면</string>
+    <string name="shell_dev_layout">탐색 레이아웃</string>
+    <string name="shell_dev_top_bar">상단 앱 바</string>
+    <string name="shell_dev_navigation_bar">하단 탐색 바</string>
+    <string name="shell_dev_navigation_tint">레일 및 앱 바 색상</string>
+    <string name="shell_dev_hide_bottom_bar">스크롤 시 하단 바 숨기기</string>
+    <string name="shell_dev_hide_bottom_bar_summary">플레이어가 표시되지 않을 때 콘텐츠를 아래로 스크롤하면 밀려나 사라집니다</string>
+    <string name="shell_dev_limit_width">큰 창에서 콘텐츠 너비 제한</string>
+    <string name="shell_dev_limit_width_summary">레이아웃 정책의 최대 너비를 넘으면 웹사이트처럼 여백을 두고 콘텐츠를 가운데에 배치합니다</string>
+    <string name="shell_dev_limit_width_unset">앱이 최대 너비를 설정하지 않아 콘텐츠가 항상 창을 채웁니다</string>
+    <string name="shell_dev_accessories">하단 액세서리</string>
+    <string name="shell_dev_bottom_accessory">탐색 바 위</string>
+    <string name="shell_dev_banner_style">배너</string>
+    <string name="shell_dev_motion">모션</string>
+    <string name="shell_dev_tab_transition">탭 간</string>
+    <string name="shell_dev_back_edge">오른쪽 가장자리에서 뒤로 스와이프</string>
+    <string name="shell_dev_animation_speed">애니메이션 속도</string>
+    <string name="shell_dev_reset">개발자 옵션 초기화</string>
+    <string name="shell_dev_reset_summary">앱이 선언한 값으로 되돌리기</string>
+    <string name="shell_as_declared">각 화면의 선언대로</string>
+    <string name="shell_layout_auto">자동, 창 너비 기준</string>
+    <string name="shell_layout_bottom_bar">하단 바 및 창</string>
+    <string name="shell_layout_rail">탐색 레일</string>
+    <string name="shell_layout_expanded_rail">확장된 탐색 레일</string>
+    <string name="shell_layout_permanent_drawer">고정 창</string>
+    <string name="shell_top_bar_small">작게</string>
+    <string name="shell_top_bar_center">가운데 정렬</string>
+    <string name="shell_top_bar_large">크게, 접힘</string>
+    <string name="shell_top_bar_large_collapsed">크게, 접힌 상태로 열림</string>
+    <string name="shell_top_bar_hidden">숨김</string>
+    <string name="shell_accessory_as_declared">배너, 재생 중에는 플레이어로 대체</string>
+    <string name="shell_accessory_none">없음</string>
+    <string name="shell_accessory_banner">배너만</string>
+    <string name="shell_accessory_player">플레이어만</string>
+    <string name="shell_navigation_bar_standard">표준, 80dp</string>
+    <string name="shell_navigation_bar_short">짧게, 64dp</string>
+    <string name="shell_navigation_tint_none">표면, 스크롤 시 앱 바에 색상 적용</string>
+    <string name="shell_navigation_tint_always">함께 색상 적용, 콘텐츠는 카드 안에 표시</string>
+    <string name="shell_navigation_tint_on_scroll">콘텐츠가 스크롤되면 함께 색상 적용</string>
+    <string name="shell_banner_automatic">하단 바에는 고정, 레일 옆에서는 플로팅</string>
+    <string name="shell_banner_floating">항상 플로팅, 플레이어처럼</string>
+    <string name="shell_banner_docked">항상 고정</string>
+    <string name="shell_start_as_declared">앱의 선언대로: %1$s</string>
+    <string name="shell_start_screen">%1$s, 기본 화면 전</string>
+    <string name="shell_back_edge_system">Android와 동일: 페이지가 제자리에서 축소</string>
+    <string name="shell_back_edge_follow">손가락을 따라 이동, 왼쪽 가장자리와 대칭(기본값)</string>
+    <string name="shell_transition_directional">방향성 슬라이드</string>
+    <string name="shell_transition_fade_through">페이드 스루</string>
+    <string name="shell_transition_fade">크로스 페이드</string>
+    <string name="shell_transition_none">없음</string>
+    <string name="shell_speed_normal">보통</string>
+    <string name="shell_speed_slow">2배 느리게</string>
+    <string name="shell_speed_very_slow">5배 느리게</string>
+    <string name="shell_developer_options">개발자 옵션</string>
+</resources>

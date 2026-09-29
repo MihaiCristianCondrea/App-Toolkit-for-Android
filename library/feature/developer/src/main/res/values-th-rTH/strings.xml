@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="shell_dev_live_state">สถานะปัจจุบัน</string>
+    <string name="shell_dev_window">หน้าต่าง</string>
+    <string name="shell_dev_window_summary">%1$d × %2$d dp · %3$s</string>
+    <string name="shell_dev_page_stack">สแต็กหน้า</string>
+    <string name="shell_dev_tab_stack">สแต็กของ %1$s</string>
+    <string name="shell_dev_navigation">การนำทาง</string>
+    <string name="shell_dev_start">เริ่มที่ ตั้งแต่การเปิดครั้งถัดไป</string>
+    <string name="shell_dev_layout">เลย์เอาต์การนำทาง</string>
+    <string name="shell_dev_top_bar">แถบแอปด้านบน</string>
+    <string name="shell_dev_navigation_bar">แถบนำทางด้านล่าง</string>
+    <string name="shell_dev_navigation_tint">สีของแถบด้านข้างและแถบแอป</string>
+    <string name="shell_dev_hide_bottom_bar">ซ่อนแถบด้านล่างเมื่อเลื่อน</string>
+    <string name="shell_dev_hide_bottom_bar_summary">เลื่อนหายไปเมื่อเนื้อหาเลื่อนลง ขณะที่ไม่มีเครื่องเล่นแสดงอยู่</string>
+    <string name="shell_dev_limit_width">จำกัดความกว้างของเนื้อหาในหน้าต่างขนาดใหญ่</string>
+    <string name="shell_dev_limit_width_summary">จัดเนื้อหาไว้ตรงกลางพร้อมระยะขอบ เหมือนเว็บไซต์ เมื่อเกินความกว้างสูงสุดของนโยบายเลย์เอาต์</string>
+    <string name="shell_dev_limit_width_unset">แอปไม่ได้กำหนดความกว้างสูงสุด เนื้อหาจึงเต็มหน้าต่างเสมอ</string>
+    <string name="shell_dev_accessories">ส่วนเสริมด้านล่าง</string>
+    <string name="shell_dev_bottom_accessory">เหนือแถบนำทาง</string>
+    <string name="shell_dev_banner_style">แบนเนอร์</string>
+    <string name="shell_dev_motion">การเคลื่อนไหว</string>
+    <string name="shell_dev_tab_transition">ระหว่างแท็บ</string>
+    <string name="shell_dev_back_edge">ปัดย้อนกลับจากขอบขวา</string>
+    <string name="shell_dev_animation_speed">ความเร็วของภาพเคลื่อนไหว</string>
+    <string name="shell_dev_reset">รีเซ็ตตัวเลือกสำหรับนักพัฒนาแอป</string>
+    <string name="shell_dev_reset_summary">กลับไปตามที่แอปกำหนด</string>
+    <string name="shell_as_declared">ตามที่แต่ละหน้าจอกำหนด</string>
+    <string name="shell_layout_auto">อัตโนมัติ ตามความกว้างของหน้าต่าง</string>
+    <string name="shell_layout_bottom_bar">แถบด้านล่างและลิ้นชัก</string>
+    <string name="shell_layout_rail">แถบนำทางด้านข้าง</string>
+    <string name="shell_layout_expanded_rail">แถบนำทางด้านข้างแบบขยาย</string>
+    <string name="shell_layout_permanent_drawer">ลิ้นชักแบบถาวร</string>
+    <string name="shell_top_bar_small">เล็ก</string>
+    <string name="shell_top_bar_center">กึ่งกลาง</string>
+    <string name="shell_top_bar_large">ใหญ่ ยุบได้</string>
+    <string name="shell_top_bar_large_collapsed">ใหญ่ เปิดแบบยุบไว้</string>
+    <string name="shell_top_bar_hidden">ซ่อน</string>
+    <string name="shell_accessory_as_declared">แบนเนอร์ ถูกแทนที่ด้วยเครื่องเล่นขณะเล่น</string>
+    <string name="shell_accessory_none">ไม่มีอะไร</string>
+    <string name="shell_accessory_banner">แบนเนอร์เท่านั้น</string>
+    <string name="shell_accessory_player">เครื่องเล่นเท่านั้น</string>
+    <string name="shell_navigation_bar_standard">มาตรฐาน 80 dp</string>
+    <string name="shell_navigation_bar_short">สั้น 64 dp</string>
+    <string name="shell_navigation_tint_none">พื้นผิว แถบแอปเปลี่ยนสีเมื่อเลื่อน</string>
+    <string name="shell_navigation_tint_always">ลงสีพร้อมกัน เนื้อหาอยู่ในการ์ด</string>
+    <string name="shell_navigation_tint_on_scroll">ลงสีพร้อมกันเมื่อเนื้อหาเลื่อน</string>
+    <string name="shell_banner_automatic">ติดกับแถบด้านล่าง ลอยข้างแถบด้านข้าง</string>
+    <string name="shell_banner_floating">ลอยเสมอ เหมือนเครื่องเล่น</string>
+    <string name="shell_banner_docked">ติดอยู่เสมอ</string>
+    <string name="shell_start_as_declared">ตามที่แอปกำหนด: %1$s</string>
+    <string name="shell_start_screen">%1$s ก่อนหน้าจอหลัก</string>
+    <string name="shell_back_edge_system">เหมือน Android: หน้าหดลงอยู่กับที่</string>
+    <string name="shell_back_edge_follow">ตามนิ้ว สะท้อนขอบซ้าย (ค่าเริ่มต้น)</string>
+    <string name="shell_transition_directional">เลื่อนตามทิศทาง</string>
+    <string name="shell_transition_fade_through">จางผ่าน</string>
+    <string name="shell_transition_fade">จางไขว้</string>
+    <string name="shell_transition_none">ไม่มี</string>
+    <string name="shell_speed_normal">ปกติ</string>
+    <string name="shell_speed_slow">ช้าลง 2 เท่า</string>
+    <string name="shell_speed_very_slow">ช้าลง 5 เท่า</string>
+    <string name="shell_developer_options">ตัวเลือกสำหรับนักพัฒนาแอป</string>
+</resources>

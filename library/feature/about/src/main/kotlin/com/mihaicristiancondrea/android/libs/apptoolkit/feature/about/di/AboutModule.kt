@@ -22,7 +22,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repos
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories.DefaultAboutRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.AboutViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.factory.GmsHostFactory
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.data.repositories.DefaultNavigationRepository
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -39,12 +38,6 @@ val aboutModule: Module = module {
         )
     }
     single<AboutRepository> { get<DefaultAboutRepository>() }
-
-    single<DefaultNavigationRepository> {
-        DefaultNavigationRepository(
-            dispatchers = get(),
-        )
-    }
 
     viewModel {
         AboutViewModel(

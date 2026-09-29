@@ -20,7 +20,6 @@ import com.mihaicristiancondrea.android.apptoolkit.buildlogic.VersioningExtensio
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
     id("com.mihaicristiancondrea.android.apptoolkit.unit-test")
     id("com.mihaicristiancondrea.android.apptoolkit.versioning")

@@ -56,4 +56,5 @@
     <string name="theme_mode">Modo de tema</string>
     <string name="try_again">Tente novamente</string>
     <string name="wallpaper_colors">Cores do papel de parede</string>
+    <string name="shell_list_placeholder">Escolha um item para vê-lo aqui.</string>
 </resources>
