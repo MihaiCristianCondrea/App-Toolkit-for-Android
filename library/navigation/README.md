@@ -145,7 +145,9 @@ Screens then call `LocalShellNavigator.current.navigate(key)` with any registere
 - **List and detail share the window.** A `PaneRole.List` page shows the `PaneRole.Detail` page
   opened from it beside it from 600dp, under one app bar titled over each pane, with a separator
   that can be dragged to resize the panes or to the end to close the detail. The back gesture on
-  the detail slides the separator the same way. While no detail is open, the detail side shows
+  the detail slides the separator the same way when it comes from the list's side. From the
+  detail's own side the finger moves toward the list, so the detail shrinks in place and leans
+  after it instead, then fades out when back completes. While no detail is open, the detail side shows
   the page's `placeholder`, or `ListPlaceholder`.
 - **Scenes set their content colour.** `PageSurface` and the list-detail scene draw on the
   theme's surface and provide `onSurface` as `LocalContentColor`, so text outside a Material

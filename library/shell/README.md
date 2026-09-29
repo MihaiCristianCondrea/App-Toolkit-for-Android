@@ -113,6 +113,15 @@ on screen, and `ShellHost` draws it itself, around the displays:
   button. `ShellFrame` provides `LocalBesideNavigation` for this, and `PageScaffold` and the
   list-detail scene read it through `isTopLevelPage`. A page keeps that look while another entry
   replaces it and it animates out, so it never grows a back button on the way.
+- **The tabs and that page swap in place.** Between them the shell fades one out and the other
+  in without moving anything (`TabTransitions.inPlace()`), whatever the tab transition: the
+  navigation and the app bar's place are already on screen, so the page does not slide in like a
+  new window. Pages opened from it still do, and back from it keeps the system's gesture.
+- **Its start corners are square.** A page clips to the display's rounded corners, as a window
+  does, but beside the navigation its start edge meets the rail or drawer rather than the
+  screen's corners, so only its end corners follow the display.
+- **The expanded rail starts collapsed,** and collapses again whenever the layout changes, as a
+  rotation does. Within one layout it keeps what its button left it at.
 - **Start screens stay whole-window.** Before the shell is entered there is no navigation, so a
   welcome or onboarding page covers the window at every width.
 
@@ -157,7 +166,7 @@ JUnit 5. They start Koin with a `CommonDataStore`, which `AppTheme` reads.
   well as the system bars, on whichever side it is.
 - **Search lives in the app bar.** A tab declared with `TabSearch` gets a field in the app bar's
   title slot, which crossfades with the title in place. The query is kept per tab and cleared by
-  back.
+  back. Between two tabs that both search, the field stays and only its hint and query change.
 - **Content keeps a readable width.** Tabs, children and pages are centred in a column no wider
   than `ShellLayoutPolicy.contentMaxWidth`, unless they declare `ContentWidth.Full`.
 - **The app is named once.** Where the navigation shows the app's name (the permanent drawer's

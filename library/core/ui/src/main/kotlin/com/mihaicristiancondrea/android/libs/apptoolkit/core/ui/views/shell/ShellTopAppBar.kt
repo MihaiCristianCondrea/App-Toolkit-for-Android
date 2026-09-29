@@ -140,7 +140,10 @@ fun ShellTopAppBar(
         // button and its actions stay put while one crossfades into the other.
         AnimatedContent(
             targetState = search to title,
-            contentKey = { (field, text) -> field?.state ?: text },
+            // Every search field shares one key: moving between two tabs that search keeps the
+            // field in place, and only its hint and query change, rather than fading one field
+            // out and another in, a flicker.
+            contentKey = { (field, text) -> if (field != null) SearchFieldKey else text },
             // A centred title grows and shrinks between titles instead of snapping, as App
             // Toolkit's app bars do.
             modifier = Modifier
@@ -202,3 +205,6 @@ fun ShellTopAppBar(
         TopBarStyle.Hidden -> Unit
     }
 }
+
+/** The title slot's content key for a search field, whichever tab's it is. */
+private object SearchFieldKey

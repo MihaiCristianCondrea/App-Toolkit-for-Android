@@ -81,5 +81,14 @@ class TabTransitions internal constructor(
         TabTransitionStyle.None -> EnterTransition.None togetherWith ExitTransition.None
     }
 
+    /**
+     * One destination replacing another in the same place, with nothing moving: the old fades out,
+     * then the new fades in. Beside a rail or a permanent drawer, the shell uses it between the
+     * tabs and the page the navigation opened, so the app bar over them seems to stay where it is,
+     * whatever [TabTransitionStyle] the tabs use.
+     */
+    fun inPlace(): ContentTransform =
+        fadeIn(tween(duration(210), delayMillis = duration(90))) togetherWith fadeOut(tween(duration(90)))
+
     private fun duration(millis: Int): Int = (millis * durationScale).roundToInt()
 }

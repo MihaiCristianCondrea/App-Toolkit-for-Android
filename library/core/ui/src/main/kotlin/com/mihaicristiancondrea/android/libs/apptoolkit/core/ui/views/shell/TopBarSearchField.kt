@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -77,12 +78,15 @@ internal fun TopBarSearchField(search: TopBarSearch) {
             )
             Box(Modifier.weight(1f), contentAlignment = Alignment.CenterStart) {
                 if (state.query.isEmpty()) {
-                    Text(
-                        search.hint,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 1,
-                    )
+                    // The field stays when another tab's search takes it over; its hint crossfades.
+                    Crossfade(targetState = search.hint, label = "SearchHint") { hint ->
+                        Text(
+                            hint,
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 1,
+                        )
+                    }
                 }
                 BasicTextField(
                     value = state.query,

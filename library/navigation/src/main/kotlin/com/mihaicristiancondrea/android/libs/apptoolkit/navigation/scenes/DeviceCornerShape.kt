@@ -35,24 +35,28 @@ import androidx.core.view.ViewCompat
  *
  * Read from the root view's insets when the page is composed rather than through a listener, so
  * pages never replace a listener another part of the app installed.
+ *
+ * @param squareStart Leaves the start corners square, for a page that does not reach the start
+ * edge of the screen: beside a rail or a drawer, its start corners meet the navigation, not the
+ * display's corners, and rounding them would round the app bar next to the rail.
  */
 @Composable
-fun rememberDeviceCornerShape(): Shape {
+fun rememberDeviceCornerShape(squareStart: Boolean = false): Shape {
     val view = LocalView.current
     val density = LocalDensity.current
     val layoutDirection = LocalLayoutDirection.current
     val insets = ViewCompat.getRootWindowInsets(view)
     fun radius(position: Int): Int = insets?.getRoundedCorner(position)?.radius ?: 0
-    val topLeft = radius(RoundedCornerCompat.POSITION_TOP_LEFT)
-    val topRight = radius(RoundedCornerCompat.POSITION_TOP_RIGHT)
-    val bottomRight = radius(RoundedCornerCompat.POSITION_BOTTOM_RIGHT)
-    val bottomLeft = radius(RoundedCornerCompat.POSITION_BOTTOM_LEFT)
+    val ltr = layoutDirection == LayoutDirection.Ltr
+    val topLeft = if (squareStart && ltr) 0 else radius(RoundedCornerCompat.POSITION_TOP_LEFT)
+    val topRight = if (squareStart && !ltr) 0 else radius(RoundedCornerCompat.POSITION_TOP_RIGHT)
+    val bottomRight = if (squareStart && !ltr) 0 else radius(RoundedCornerCompat.POSITION_BOTTOM_RIGHT)
+    val bottomLeft = if (squareStart && ltr) 0 else radius(RoundedCornerCompat.POSITION_BOTTOM_LEFT)
     return remember(topLeft, topRight, bottomRight, bottomLeft, density, layoutDirection) {
         if (topLeft + topRight + bottomRight + bottomLeft == 0) {
             RectangleShape
         } else {
             with(density) {
-                val ltr = layoutDirection == LayoutDirection.Ltr
                 RoundedCornerShape(
                     topStart = (if (ltr) topLeft else topRight).toDp(),
                     topEnd = (if (ltr) topRight else topLeft).toDp(),

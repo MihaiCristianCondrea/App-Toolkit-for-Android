@@ -49,6 +49,7 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Moved single-owner code out of `:library:core:common` into the module that uses it: `FaqConstants` and `faqCatalogUrl` to `:library:feature:faq`, `extractChangesForVersion` to `:library:feature:changelog`, `GithubToken` and `toToken` to `:library:feature:issuereporter`, `PurchaseResult` and `isValidForBilling` to `:library:integration:billing`, `OnShowAdCompleteListener` to `:library:integration:ads`, and `installingPackageNameOrNull`, `hasPlayStore` and `isInstalledFromPlayStore` to `:library:integration:review`. The [3.0.0 migration guide](../docs/migration/3.0.0.md#moved-apis) lists the new packages.
 - The display settings rows, the developer options rows and the advanced settings' Developer options row no longer draw leading icons, matching the other settings rows. `ChoicePreferenceItem`'s `icon` moved after `modifier` and defaults to none.
 - The content width row shows only when the app's `ShellLayoutPolicy` sets a maximum width, and the developer options offer the player accessory only to an app with a player.
+- A page beside a rail or a permanent drawer keeps square start corners (`rememberDeviceCornerShape(squareStart = true)`), so its app bar is no longer rounded next to the rail on phones with rounded screens, in landscape.
 - `PageSurface`, `PageScaffold`, the list-detail scene and the shell's tab scaffold now provide `LocalContentColor` for the colour they draw on, so text and icons outside a Material `Surface` follow the theme instead of defaulting to black in the dark theme.
 
 ### Improved
@@ -56,6 +57,10 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - `AnimatedIconButtonDirection` crossfades its glyph when `icon` changes, so one button can turn from a menu button into a back arrow without popping.
 - A navigation no longer recomposes every tab screen: the shell keeps its callbacks and the static `LocalShellChrome` controller across recompositions. The chrome and the player overlay no longer recompose on every frame the player moves.
 - A page beside the rail or permanent drawer keeps its tab-like app bar while another entry replaces it, instead of showing a back button for the length of its exit.
+- Beside a rail or a permanent drawer, the tabs and the page the navigation opened replace one another with a fade in place (`TabTransitions.inPlace()`), instead of the page sliding in like a new window under a navigation already on screen.
+- The expanded rail starts collapsed and collapses again when the layout changes, such as on rotation.
+- A back swipe from the detail's own edge of a list and detail shrinks the detail in place, following the finger, instead of sliding the separator away from it.
+- Switching between two tabs that both search keeps the search field in place instead of fading it out and in.
 - The startup and onboarding pages keep to a 640dp column centred on tablets and wide windows instead of stretching across them.
 
 ### Removed

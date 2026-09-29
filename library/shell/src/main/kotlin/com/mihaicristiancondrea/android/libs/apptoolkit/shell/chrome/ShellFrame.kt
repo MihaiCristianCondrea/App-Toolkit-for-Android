@@ -85,11 +85,23 @@ internal class ShellFrameState(railExpanded: Boolean) {
     }
 }
 
+/**
+ * The frame's state for the layout [mode] the window has now. The expanded rail starts collapsed,
+ * and collapses again whenever the layout changes, as a rotation does: it is opened for the
+ * window it was opened in. Within one layout it keeps what its button left it at, across
+ * recreation and process death.
+ */
 @Composable
-internal fun rememberShellFrameState(): ShellFrameState {
-    var railExpanded by rememberSaveable { mutableStateOf(true) }
-    val state = remember { ShellFrameState(railExpanded) }
-    // Kept across rotation and process death, as the rail's own button left it.
+internal fun rememberShellFrameState(mode: ShellLayoutMode): ShellFrameState {
+    var railExpanded by rememberSaveable { mutableStateOf(false) }
+    var expandedIn by rememberSaveable { mutableStateOf(mode) }
+    val state = remember { ShellFrameState(railExpanded && expandedIn == mode) }
+    LaunchedEffect(mode) {
+        if (mode != expandedIn) {
+            state.railExpanded = false
+            expandedIn = mode
+        }
+    }
     LaunchedEffect(state.railExpanded) { railExpanded = state.railExpanded }
     return state
 }

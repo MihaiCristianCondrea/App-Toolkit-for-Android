@@ -29,6 +29,8 @@
 - Text is no longer black on some screens in the dark theme.
 - Display settings and developer options look like the rest of the settings, and only offer options that change something in this app.
 - On tablets, switching between pages from the side navigation no longer flashes a back button, and moving around the app does less work.
+- On tablets and in landscape, Help and the other pages from the side navigation fade in place instead of sliding in, the side rail starts collapsed after a rotation, and the app bar next to the rail has square corners.
+- Switching between Quick tools and Apps no longer makes the search bar flicker, and a back swipe from the right edge on a tablet's settings detail follows your finger.
 - The ad above the bottom navigation is back, and messages such as a consent form failing to load now appear above the navigation bar instead of not at all.
 
 ---

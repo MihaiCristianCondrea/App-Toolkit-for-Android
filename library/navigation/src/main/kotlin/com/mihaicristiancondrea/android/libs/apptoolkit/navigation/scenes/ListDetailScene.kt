@@ -17,6 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes
 
+import androidx.compose.foundation.shape.RoundedCornerShape
+import kotlinx.coroutines.coroutineScope
+import androidx.navigationevent.NavigationEvent
+import androidx.compose.ui.graphics.graphicsLayer
 import android.view.SoundEffectConstants
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Animatable
@@ -156,6 +160,26 @@ data class ListDetailScene<T : Any>(
     object DetailPlaceholderKey : NavMetadataKey<@Composable () -> Unit>
 }
 
+/** The back gesture on a detail as last seen, kept for the moment back completes. */
+private class ListDetailGesture {
+    var fromDetailSide: Boolean = false
+    var progress: Float = 0f
+
+    fun clear() {
+        fromDetailSide = false
+        progress = 0f
+    }
+}
+
+/** How small the detail gets under a back gesture from its own side, as a closing window does. */
+private const val DetailBackScale = 0.9f
+
+/** How far the detail leans toward the list under that gesture. */
+private val DetailBackLean = 24.dp
+
+/** The corners the shrinking detail takes. */
+private val DetailBackCorner = 24.dp
+
 @Composable
 private fun <T : Any> ListDetailLayout(
     listEntry: NavEntry<T>,
@@ -181,24 +205,58 @@ private fun <T : Any> ListDetailLayout(
         }
     }
 
-    // The back gesture on a detail is the separator sliding to the end, following the finger.
+    // The back gesture on a detail follows the finger. From the list's side, the separator slides
+    // to the end with it. From the detail's own side the finger moves toward the list, where a
+    // separator sliding the other way felt wrong, so the detail shrinks in place and leans after
+    // the finger instead, as a window does under the system's gesture from that edge.
     val backState = rememberNavigationEventState(NavigationEventInfo.None)
     val gesture = backState.transitionState
-    val gestureProgress = (gesture as? NavigationEventTransitionState.InProgress)?.latestEvent?.progress ?: 0f
-    val shownFraction = lerp(fraction.value, 1f, gestureProgress)
+    val latestEvent = (gesture as? NavigationEventTransitionState.InProgress)?.latestEvent
+    val gestureProgress = latestEvent?.progress ?: 0f
+    val detailEdge = if (direction > 0f) NavigationEvent.EDGE_RIGHT else NavigationEvent.EDGE_LEFT
+    val fromDetailSide = latestEvent?.swipeEdge == detailEdge
+    val shownFraction = if (fromDetailSide) fraction.value else lerp(fraction.value, 1f, gestureProgress)
+    // How far the detail has shrunk in place, and how visible it still is, once released.
+    val inPlace = remember { Animatable(0f) }
+    val inPlaceAlpha = remember { Animatable(1f) }
+    // The gesture as last seen, for the moment back completes: the state may be idle by then.
+    val lastGesture = remember { ListDetailGesture() }
+    if (latestEvent != null) {
+        lastGesture.fromDetailSide = fromDetailSide
+        lastGesture.progress = gestureProgress
+    }
+    val detailShrink = if (fromDetailSide) gestureProgress else inPlace.value
     val slideToPop: suspend () -> Unit = {
         fraction.animateTo(1f, tween((200 * motion.durationScale).roundToInt()))
         closeDetail()
         fraction.animateTo(restingFraction, tween((350 * motion.durationScale).roundToInt()))
     }
+    val shrinkToPop: suspend (from: Float) -> Unit = { from ->
+        val duration = (200 * motion.durationScale).roundToInt()
+        inPlace.snapTo(from)
+        coroutineScope {
+            launch { inPlaceAlpha.animateTo(0f, tween(duration)) }
+            inPlace.animateTo(1f, tween(duration))
+        }
+        closeDetail()
+        inPlace.snapTo(0f)
+        inPlaceAlpha.snapTo(1f)
+    }
     NavigationBackHandler(
         state = backState,
         isBackEnabled = hasDetail,
-        onBackCancelled = {},
+        onBackCancelled = { lastGesture.clear() },
         onBackCompleted = {
+            val fromDetail = lastGesture.fromDetailSide
+            val progress = lastGesture.progress
+            lastGesture.clear()
             scope.launch {
-                fraction.snapTo(shownFraction)
-                slideToPop()
+                if (fromDetail) {
+                    shrinkToPop(progress)
+                } else {
+                    fraction.snapTo(shownFraction)
+                    slideToPop()
+                }
             }
         },
     )
@@ -268,6 +326,17 @@ private fun <T : Any> ListDetailLayout(
                     Modifier
                         .weight(1f)
                         .fillMaxHeight()
+                        .graphicsLayer {
+                            if (detailShrink <= 0f) return@graphicsLayer
+                            val scale = 1f - (1f - DetailBackScale) * detailShrink
+                            scaleX = scale
+                            scaleY = scale
+                            // Toward the list, after the finger.
+                            translationX = -direction * DetailBackLean.toPx() * detailShrink
+                            alpha = inPlaceAlpha.value
+                            shape = RoundedCornerShape(DetailBackCorner * detailShrink)
+                            clip = true
+                        }
                         .clipToBounds(),
                 ) {
                     Box(

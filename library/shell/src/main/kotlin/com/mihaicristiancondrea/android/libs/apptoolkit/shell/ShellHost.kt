@@ -19,6 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.shell
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.rememberShellFrameState
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.ShellFrame
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.keepsNavigationBeside
 import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivity
@@ -150,7 +151,7 @@ fun ShellHost(
     // The developer options' choice, then the app's choice at launch, then the graph's.
     val startKey = graph.startOptions.getOrNull(current.startOverride) ?: launchStart.key ?: graph.start
     val navigator = rememberShellNavigator(graph, onExit = { activity?.finish() }, start = startKey)
-    val frameState = rememberShellFrameState()
+    val frameState = rememberShellFrameState(layoutInfo.mode)
     DeepLinks(graph, navigator)
     val currentOnDestinationChanged by rememberUpdatedState(onDestinationChanged)
     LaunchedEffect(navigator) {
@@ -194,8 +195,20 @@ fun ShellHost(
                     .background(MaterialTheme.colorScheme.surfaceDim),
                 // Pages move as their destination declares, like activities by default; the
                 // predictive gesture on anything but the activity transition seeks it instead.
-                transitionSpec = { motion.screens.forward(targetState.pageTransition(graph, layoutInfo.mode)) },
-                popTransitionSpec = { motion.screens.back(initialState.pageTransition(graph, layoutInfo.mode)) },
+                transitionSpec = {
+                    if (swapsInPlace(initialState, targetState, layoutInfo.mode, navigator)) {
+                        motion.tabs.inPlace()
+                    } else {
+                        motion.screens.forward(targetState.pageTransition(graph, layoutInfo.mode))
+                    }
+                },
+                popTransitionSpec = {
+                    if (swapsInPlace(initialState, targetState, layoutInfo.mode, navigator)) {
+                        motion.tabs.inPlace()
+                    } else {
+                        motion.screens.back(initialState.pageTransition(graph, layoutInfo.mode))
+                    }
+                },
                 activityBack = {
                     graph.transitionOf(navigator.pages.last(), layoutInfo.mode) == ScreenTransition.Activity
                 },
@@ -234,6 +247,20 @@ private fun DeepLinks(graph: ShellGraph, navigator: ShellNavigator) {
         onDispose { intents.removeOnNewIntentListener(listener) }
     }
 }
+
+/**
+ * Whether [from] and [to] replace one another in place: beside a rail or a permanent drawer, the
+ * tabs and the page the navigation opened stand for one another, under a navigation that is
+ * already on screen, so neither slides in like a new window. Pages opened from that page still do.
+ */
+private fun swapsInPlace(from: Scene<*>, to: Scene<*>, layout: ShellLayoutMode, navigator: ShellNavigator): Boolean =
+    layout.keepsNavigationBeside && navigator.inShell && from.depth <= 1 && to.depth <= 1
+
+/**
+ * How far into the outer stack a scene starts: 0 for the shell, 1 for the first page over it. A
+ * list and its detail count as the list.
+ */
+private val Scene<*>.depth: Int get() = previousEntries.size - (entries.size - 1)
 
 private fun Scene<*>.pageTransition(graph: ShellGraph, layout: ShellLayoutMode): ScreenTransition {
     val info = topShellInfo ?: return graph.transitions.pages

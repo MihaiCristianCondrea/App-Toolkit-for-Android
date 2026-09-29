@@ -26,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalBesideNavigation
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.scene.Scene
 import androidx.navigation3.scene.SceneStrategy
@@ -34,7 +35,8 @@ import androidx.navigation3.scene.SceneStrategyScope
 /**
  * One page filling the window, drawn like a window: opaque and clipped to the display's rounded
  * corners. At full size the clip hides behind the physical corners; while the back gesture
- * shrinks the page, the page keeps the corners the screen had, as a system window does.
+ * shrinks the page, the page keeps the corners the screen had, as a system window does. Beside a
+ * rail or a drawer the page's start corners meet the navigation instead, and stay square.
  */
 data class PageScene<T : Any>(
     override val key: Any,
@@ -57,7 +59,7 @@ fun PageSurface(content: @Composable () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .clip(rememberDeviceCornerShape())
+            .clip(rememberDeviceCornerShape(squareStart = LocalBesideNavigation.current != null))
             .background(MaterialTheme.colorScheme.surface),
     ) {
         // The surface's own content colour, as a Material surface sets it: text and icons drawn
