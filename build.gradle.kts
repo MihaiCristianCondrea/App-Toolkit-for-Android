@@ -26,6 +26,7 @@ plugins {
     alias(notation = libs.plugins.firebase.performance) apply false
     alias(notation = libs.plugins.about.libraries) apply true
     alias(notation = libs.plugins.mannodermaus.android.junit5) apply false
+    alias(notation = libs.plugins.roborazzi) apply false
 }
 
 val publishingGroupId = providers.gradleProperty("JITPACK_GROUP_ID")

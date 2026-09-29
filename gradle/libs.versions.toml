@@ -54,6 +54,7 @@ testJupiter = "6.1.3"
 testKotlinCoroutines = "1.11.0"
 testMockk = "1.14.11"
 testRobolectric = "4.17"
+testRoborazzi = "1.75.0"
 testSlf4jSimple = "2.0.20"
 testTurbine = "1.2.1"
 #noinspection GradleDependency
@@ -161,11 +162,13 @@ test-junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", versi
 #noinspection UnusedVersionCatalogEntry
 test-junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "testJupiter" }
 #noinspection UnusedVersionCatalogEntry
-test-junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "testJupiter" } # Intentionally unwired; see the note above the `unitTestRuntime` bundle.
+test-junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "testJupiter" } # Wired only in `:library:shell` for its screenshot tests; see the note above the `unitTestRuntime` bundle.
 test-junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "testJupiter" }
 test-kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "testKotlinCoroutines" }
 test-mockk = { module = "io.mockk:mockk", version.ref = "testMockk" }
 test-robolectric = { module = "org.robolectric:robolectric", version.ref = "testRobolectric" }
+test-roborazzi = { module = "io.github.takahirom.roborazzi:roborazzi", version.ref = "testRoborazzi" }
+test-roborazzi-compose = { module = "io.github.takahirom.roborazzi:roborazzi-compose", version.ref = "testRoborazzi" }
 test-slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "testSlf4jSimple" }
 test-turbine = { module = "app.cash.turbine:turbine", version.ref = "testTurbine" }
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "androidxComposeUiTestManifest" }
@@ -177,6 +180,7 @@ androidx-test-truth = { module = "androidx.test.ext:truth", version.ref = "andro
 test-mockk-android = { module = "io.mockk:mockk-android", version.ref = "testMockk" }
 
 [plugins]
+roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "testRoborazzi" }
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
@@ -310,7 +314,8 @@ unitTest = [
     "test-turbine",
 ]
 
-# NOTE: `test-junit-vintage-engine` is declared but deliberately not in this bundle yet. Adding it
+# NOTE: `test-junit-vintage-engine` is deliberately not in this bundle yet (only `:library:shell`
+# adds it, for its Roborazzi screenshot tests). Adding it to the bundle
 # makes the 13 JUnit 4 suites run, and 11 of their tests fail immediately, because they stub
 # `Build.VERSION.SDK_INT` with `mockkStatic`, which cannot intercept a static final field. Those
 # suites have therefore never passed; they need porting to Robolectric's `@Config(sdk = …)` first.
