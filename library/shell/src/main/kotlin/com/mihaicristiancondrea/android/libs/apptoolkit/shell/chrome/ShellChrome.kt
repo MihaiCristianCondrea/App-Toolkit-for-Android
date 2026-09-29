@@ -333,7 +333,8 @@ internal fun highlightedTab(
     listDetail: Boolean,
     pagesReplaceTab: Boolean = false,
 ): Int {
-    if (pagesReplaceTab && navigator.pages.size > 1) return NoTab
+    // A graph of pages only has no tab to mark.
+    if (graph.tabs.isEmpty() || (pagesReplaceTab && navigator.pages.size > 1)) return NoTab
     val tabStack = navigator.currentTabStack
     val rootVisible = tabStack.size == 1 || (
         listDetail && tabStack.size == 2 &&

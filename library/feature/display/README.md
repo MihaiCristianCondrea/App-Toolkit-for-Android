@@ -9,7 +9,18 @@ list; the main toolkit module calls it and assembles DI, and hosts supply Displa
 
 ## Dependencies and flow
 
-Depends on core common, DataStore, UI, and navigation, and on no other feature module. The dark
+Depends on core common, DataStore, UI, navigation and the shell, and on no other feature module.
+
+The screen offers the shell's layout choices as the person's own settings: under Appearance the app
+bar style, the navigation colour beside a rail or drawer, the content width limit and the banner
+style; under Navigation the start page, the bottom bar style, its labels, hiding it on scroll, the
+tab transition and the right-edge back swipe. They are read from `LocalShellSettings` and written
+through `LocalShellPreferences` (the rows are `ShellDisplayRows`), so they apply to the whole app at
+once. Each is offered only when the app's graph (`LocalShellGraph`) gives it something to change:
+nothing about a bottom bar without tabs, no banner style without a banner, no tab transition or
+start page with a single tab. The screen therefore works only as a page of `ShellHost`.
+
+The dark
 theme row opens the theme page by navigating to `ThemeSettingsRoute`, so the provider no longer
 supplies an `openThemeSettings` callback. The ViewModel reads and updates the shared
 DisplayPreferencesRepository and ThemePreferencesRepository. Host startup selection returns a

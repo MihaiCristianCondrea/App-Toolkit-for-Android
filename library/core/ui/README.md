@@ -18,6 +18,12 @@ page frame, state handling, analytics hooks, and shared components.
   app's provider) need no dependency on that feature.
 - Cross-feature contracts, such as `IssueReporterSheet` in `views/sheets`: one feature binds it in
   Koin and another resolves it, so neither depends on the other.
+- The floating action button column, in `views/buttons/fab`: `ToolkitFabColumn` and
+  `ToolkitFloatingActionButton` draw the `ToolkitFab`s of `:library:core:designsystem`, and
+  `ScaffoldFabs` with `FabHost` and `LocalFabHost` let a screen put its own buttons in the
+  scaffold around it. See [Floating action buttons](#floating-action-buttons).
+- `ChoicePreferenceItem`, the settings row that shows the chosen option and opens a radio-list
+  dialog to change it.
 - Reusable buttons, fields, preferences, layouts, grids, dialogs, snackbars, ads slots, effects, and
   adaptive-window helpers.
 - `MainTopAppBar`, the host main-screen app bar, its optional centre-aligned title, and its
@@ -259,6 +265,30 @@ app bar, such as tabs, call `PageScaffold` themselves.
   one, so a page never shows two.
 - `ContentWidthBox` centres content no wider than the layout policy's maximum width, and
   `PanePlaceholder` and `ListPlaceholder` fill a detail pane nothing is open in.
+
+## Floating action buttons
+
+A screen's floating action buttons are described, and the Toolkit's scaffolds draw them: a column
+at the bottom end, the last button in the corner, each with the Toolkit's click sound, haptic,
+press bounce and animated icon, scaling in and out on its own.
+
+```kotlin
+ScaffoldFabs(
+    listOf(
+        ToolkitFab(ToolkitIcon.Vector(Icons.Outlined.Search), onClick = ::search, contentDescription = searchLabel, size = FabSize.Small, color = FabColor.Secondary),
+        ToolkitFab(ToolkitIcon.Vector(Icons.Outlined.Add), onClick = ::add, label = newLabel, expanded = !listScrolled),
+    ),
+)
+```
+
+- `ToolkitFab` takes an icon, an action and, for an extended button, a label; a `FabSize` (small,
+  regular, medium, large, for plain and extended buttons alike), a `FabColor` (the primary,
+  secondary or tertiary container, or a raised surface), and `expanded` and `visible`.
+- **From the graph:** `fabs = { listOf(...) }` on a tab, child or page, read in composition.
+- **From the screen:** `ScaffoldFabs(listOf(...))`, for buttons that depend on the screen's own
+  state. They leave with the screen. `PageScaffold` and the shell's tab scaffold each keep a
+  `FabHost` for the screen inside; outside a Toolkit scaffold `ScaffoldFabs` draws nothing.
+- **Directly:** `PageScaffold(fabs = ...)`, or `ToolkitFabColumn` in a scaffold of your own.
 
 ## Internal implementations
 

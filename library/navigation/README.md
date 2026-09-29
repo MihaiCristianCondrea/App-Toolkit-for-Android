@@ -80,10 +80,19 @@ A host describes its app once:
 
 ```kotlin
 val graph = shellGraph(appTitle = R.string.app_name) {
-    tab(HomeRoute, R.string.home, ToolkitIcon.AnimatedVector(R.drawable.anim_home)) { HomeScreen() }
+    tab(
+        key = HomeRoute,
+        label = R.string.home,
+        icon = ToolkitIcon.AnimatedVector(R.drawable.anim_home),
+        search = TabSearch(hint = R.string.search_home),
+        fabs = { listOf(ToolkitFab(ToolkitIcon.Vector(Icons.Outlined.Add), onClick = ::add, label = "New")) },
+    ) { HomeScreen() }
     child<ItemRoute>(title = { it.name }) { ItemScreen(it) }
     page<LicensesRoute>(paneRole = PaneRole.Detail, title = { stringResource(R.string.licenses) }) { LicensesScreen() }
-    drawer { settings(); spacer(); link(HelpRoute, R.string.help_and_feedback, ToolkitIcon.Vector(Icons.Outlined.HelpOutline)) }
+    drawer {
+        link(LibraryRoute, R.string.library, ToolkitIcon.Vector(Icons.Outlined.VideoLibrary))
+        footer { settings(); link(HelpRoute, R.string.help_and_feedback, ToolkitIcon.Vector(Icons.Outlined.HelpOutline)) }
+    }
     overflow { supportUs() }
     deepLinks { action(ACTION_OPEN_SETTINGS) { SettingsRoute } }
 }
@@ -113,6 +122,13 @@ Screens then call `LocalShellNavigator.current.navigate(key)` with any registere
   `enterShell()`) leaves the activity. It is for a separate entry point that opens over another
   app, such as the Toolkit's permission usage screen, where back must return to the caller rather
   than into the app.
+- **The drawer ends with its footer.** Entries given to `footer { }` come after every other entry,
+  pinned to the bottom edge, whichever `drawer { }` call adds them and in whatever order. The
+  Toolkit's Settings, Help, Updates and Share go there (`toolkitFooter` in `:library:apptoolkit`),
+  so they are always last, below anything the app lists.
+- **Floating action buttons are described, not drawn.** A tab, child or page lists them with
+  `fabs = { listOf(ToolkitFab(...)) }`, read in composition so they follow state; the shell draws
+  them as one column. The `fab` slot stays for a button drawn by hand.
 - **Features register, apps decide.** `pageIfAbsent` registers a page only when the app has not
   registered the key itself, so an app replaces any Toolkit page by registering its key first. The
   app alone decides where a page is offered: drawer, overflow menu or a screen's button.

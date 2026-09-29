@@ -4,6 +4,10 @@
 
 # Unreleased
 
+### Added
+
+- Search the quick tools and the apps from the app bar.
+
 ### Changed
 
 - Settings, Help, Support and the components showcase now open as pages of the main screen, with the same back swipe animation as before, and the Settings shortcut opens Settings directly.
@@ -11,6 +15,9 @@
 - The first-launch screens now run inside the app, so finishing onboarding takes you straight to your start page.
 - The information icon beside the app in Android's permission manager and privacy dashboard opens the app's privacy settings again, and back returns you to the system's settings.
 - On tablets, foldables and wide windows the navigation becomes a side rail or a permanent drawer, and long pages keep a comfortable width.
+- On tablets and wide windows, Settings, Help and the other pages open beside the side navigation, which stays in place and shows where you are, so you can switch straight to another page or tab.
+- Settings, Help & feedback, Updates and Share are always at the bottom of the navigation drawer.
+- Layout options such as the app bar and bottom bar style, the navigation colour and the back swipe now live in Display settings. Developer options move to Advanced settings, and appear once you find the easter egg on the About screen.
 
 ### Improved
 

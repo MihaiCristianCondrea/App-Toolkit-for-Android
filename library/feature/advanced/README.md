@@ -19,6 +19,11 @@ CacheRepository.
 DefaultCacheRepository performs cache operations on the injected dispatcher and reports results
 through the existing screen state. The feature owns its localized resources.
 
+The Developer options row opens `DeveloperOptionsRoute` and is hidden until the About screen's
+version easter egg is found. The view model takes that as a `Flow<Boolean>`
+(`developerOptionsUnlocked`); the Koin module maps it from `SeasonalThemeRepository`'s unlock,
+the same flag that keeps the seasonal themes all year, so one discovery unlocks both.
+
 ## Contracts and boundaries
 
 Public entry points are AdvancedSettingsScreen, `advancedSettingsPage()`,

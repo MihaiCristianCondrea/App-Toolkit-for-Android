@@ -13,6 +13,8 @@ through Gradle `api` dependencies.
   granular lists `appToolkitModules` composes.
 - `toolkitGraph { }` and `ShellGraphBuilder.toolkitPages()`, which register the Toolkit's pages in
   an app's shell graph. See [Navigation](#navigation).
+- `toolkitFooter(onShowUpdates)`, the drawer footer every Toolkit app ends with. See
+  [The drawer's footer](#the-drawers-footer).
 - `PermissionUsageActivity` and `permissionUsageGraph()`: the screen Android opens from the
   information icon beside the app. See [Permission usage](#permission-usage).
 - Host-to-library composition using `AppToolkitHostBuildConfig` and host provider factories.
@@ -162,6 +164,22 @@ the drawer and overflow builders, links, or a screen's button). An app that need
 registration arguments calls it in its own builder first, such as `aboutPages { ... }`. An app that
 builds its graph with `ShellGraphBuilder` directly calls `toolkitPages()` after its own
 destinations.
+
+### The drawer's footer
+
+Every Toolkit app ends its drawer the same way: Settings, Help and feedback, Updates and Share, in
+that order, pinned to the bottom. `toolkitFooter(onShowUpdates)` adds them to the drawer's footer,
+which the graph always places after the app's own entries:
+
+```kotlin
+drawer {
+    link(DownloadsRoute, R.string.downloads, ToolkitIcon.Vector(Icons.Outlined.Download))
+    toolkitFooter(onShowUpdates = { showChangelog = true })
+}
+```
+
+Pass `null` for `onShowUpdates` to leave Updates out. The developer options are not a drawer entry:
+the advanced settings offer them once the About screen's version easter egg is found.
 
 ## Permission usage
 

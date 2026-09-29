@@ -20,6 +20,10 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Added `LocalPageSnackbarHostState` and `rememberPageSnackbarHostState()` to `:library:core:ui`, so a page's snackbars sit above the shell's bottom chrome.
 - Added the `IssueReporterSheet` contract to `:library:core:ui`, bound by `:library:feature:issuereporter`, and `ConsentHost(activity)` and `ReviewHost(activity)` builders.
 - Added screenshot tests of the shell's chrome to `:library:shell`, recorded with Roborazzi.
+- Added a column of floating action buttons to the Toolkit's scaffolds: `ToolkitFab` in `:library:core:designsystem` describes one (icon, action, optional label for an extended button, Material 3 size, container colour, expanded, visible), and `ToolkitFabColumn` in `:library:core:ui` draws a list with the Toolkit's sound, haptics, bounce and animated icons. Declare them in the graph with `fabs = { listOf(...) }` on a tab, child or page, or from the screen with `ScaffoldFabs(listOf(...))`; `PageScaffold` takes `fabs` too.
+- Added `DrawerBuilder.footer { }`, entries that always close the drawer, pinned to its bottom edge, and `toolkitFooter(onShowUpdates)` in `:library:apptoolkit`, which puts Settings, Help and feedback, Updates and Share there.
+- Added `ChoicePreferenceItem` to `:library:core:ui`: a settings row that shows the chosen option and opens a radio-list dialog.
+- Added a Developer options row to the advanced settings, shown once the About screen's version easter egg is found.
 - Added the page frame to `:library:core:ui`: `PageScaffold`, `ShellTopAppBar`, `LocalContentPadding` and `contentPadding()`, `ContentWidthBox`, `PanePlaceholder` and `ListPlaceholder`.
 - Added `AboutRoute`, `ThemeSettingsRoute`, `DisplaySettingsRoute`, `PrivacySettingsRoute`, `AdvancedSettingsRoute`, `DiagnosticsSettingsRoute`, `DeveloperOptionsRoute`, `StartupRoute` and `OnboardingRoute`, one key per Toolkit page.
 
@@ -33,6 +37,8 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Moved `SettingsConfig`, `SettingsCategory` and `SettingsPreference` to `:library:core:ui` (`core.ui.models.settings`).
 - Moved `FirebaseOnboardingPage` and its strings from `:library:feature:onboarding` to `:library:feature:diagnostics`.
 - `StartupProvider` supplies only `requiredPermissions`, and `OnboardingProvider` only the pages; finishing onboarding enters the shell.
+- Beside a rail, an expanded rail or a permanent drawer, pages now open in the space next to the navigation instead of covering it: the navigation stays, marks the entry whose page is open, and a tab or another entry replaces the open pages. `ShellHost` draws that navigation itself, around its displays.
+- The shell's layout choices moved from the developer options to the display settings: app bar style, bottom bar style, labels, hide on scroll, navigation colour, content width, banner style, tab transition and back swipe. Each shows only when the app's graph uses it. The developer options keep the start, the forced layout, the bottom accessories and the animation speed, and `ShellPreferences.resetDeveloperOptions()` resets only those. `:library:feature:display` depends on `:library:shell`.
 
 ### Improved
 

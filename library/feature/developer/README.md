@@ -2,16 +2,18 @@
 
 ## Purpose
 
-The developer options page: every variation of the shell, switchable while the app runs, and a
-live readout of the state the shell is in. Changes apply at once and persist, so the app can be
-restarted into a variation.
+The developer options page: the shell's testing switches, applied while the app runs, and a live
+readout of the state the shell is in. Changes apply at once and persist, so the app can be
+restarted into a variation. The shell's layout choices a person would make (bar styles, colours,
+transitions) are display settings instead, in
+[`:library:feature:display`](../display/README.md).
 
 ## Owns
 
-- `DeveloperOptionsScreen`: where the next launch starts, the navigation layout, the app bar style,
-  the bottom bar style, the rail and app bar colour, hide-on-scroll, the content width limit, the
-  bottom accessories and banner style, the tab transition, the right-edge back swipe, the
-  animation speed, a reset, and the window size and every back stack as they change.
+- `DeveloperOptionsScreen`: where the next launch starts (when the app has more than one start
+  option), a forced navigation layout, the bottom accessories (when the app has a banner or a
+  player), the animation speed, a reset of those, and the window size and every back stack as they
+  change.
 - `developerOptionsPage()`, the registration of `DeveloperOptionsRoute`.
 - Its strings, in every supported locale, including the page title `shell_developer_options`.
 
@@ -22,8 +24,9 @@ restarted into a variation.
 - Adding the page to a graph, done by `toolkitPages()` in
   [`:library:apptoolkit`](../../apptoolkit/README.md). An app replaces the page by registering
   `DeveloperOptionsRoute` itself.
-- Where the page is offered. The app links to it, typically from the drawer in debug builds only,
-  as `:sample:app` does.
+- Where the page is offered. The advanced settings of
+  [`:library:feature:advanced`](../advanced/README.md) list it once the About screen's version
+  easter egg is found; an app may link to it elsewhere too.
 
 ## Depends on
 
@@ -40,8 +43,10 @@ restarted into a variation.
 - The page reads the shell's composition locals (`LocalShellSettings`, `LocalShellPreferences`,
   `LocalShellLayout`, `LocalShellNavigator`, `LocalShellGraph`), so it only works as a page of a
   `ShellHost`. It keeps no view model: the settings store is its state.
-- It uses the Toolkit's grouped preference rows and `BasicAlertDialog`, so it looks like the
+- It uses the Toolkit's grouped preference rows and `ChoicePreferenceItem`, so it looks like the
   Toolkit's other settings pages. NavTest's own preference rows were not ported.
+- Reset puts back only these options (`ShellPreferences.resetDeveloperOptions()`); the display
+  settings are the person's and stay.
 
 ## Public contracts
 

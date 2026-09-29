@@ -14,8 +14,13 @@ drawer and transition the graph describes. It is the chrome around the navigatio
 - Delivering intents: the launch intent once, and every later one from `onNewIntent`, through the
   graph's deep links to the navigator.
 - Reporting the destination on top (`onDestinationChanged`).
-- The floating action button slot: above the bottom bar, the banner and the mini player on tabs
-  and children, in the page frame on pages.
+- The floating action buttons: above the bottom bar, the banner and the mini player on tabs and
+  children, in the page frame on pages. A destination's `fab` slot and its `fabs` list come from
+  the graph; a screen adds its own with `ScaffoldFabs`, through a `FabHost` the shell keeps per
+  tab screen. The described ones are drawn as one `ToolkitFabColumn`.
+- The frame (`ShellFrame`): beside a rail, an expanded rail or a permanent drawer, the navigation is
+  drawn around the displays, so pages open next to it. See
+  [Pages beside the navigation](#pages-beside-the-navigation).
 - The chrome, in `chrome`: app bar (with the search field of searchable tabs and the overflow
   menu), navigation bar, rail, expanded rail, modal and permanent drawers with the app's header,
   banner slot, docked player, and the inner display. `ShellChromeController` and
@@ -31,10 +36,11 @@ drawer and transition the graph describes. It is the chrome around the navigatio
   [`:library:core:ui`](../core/ui/README.md).
 - The theme. The app wraps `ShellHost` in `AppTheme`; theme mode and dynamic colour stay in
   [`:library:feature:theme`](../feature/theme/README.md).
-- The person's navigation choices: the bottom bar labels and the start page stay in
-  [`:library:feature:display`](../feature/display/README.md) and reach the shell through
-  `LocalShowBottomBarLabels` and the app's `resolveStart`.
-- The developer options page, owned by [`:library:feature:developer`](../feature/developer/README.md).
+- The screens that change its settings. The person's layout choices are offered by the display
+  settings of [`:library:feature:display`](../feature/display/README.md), which also keeps the
+  bottom bar labels and the start page (reaching the shell through `LocalShowBottomBarLabels` and
+  the app's `resolveStart`); the rest by the developer options page of
+  [`:library:feature:developer`](../feature/developer/README.md).
 - The Toolkit's pages and `toolkitGraph { }`, owned by [`:library:apptoolkit`](../apptoolkit/README.md).
 
 ## Depends on
@@ -45,7 +51,8 @@ drawer and transition the graph describes. It is the chrome around the navigatio
 
 ## Used by
 
-- [`:library:feature:developer`](../feature/developer/README.md), which reads and writes the
+- [`:library:feature:display`](../feature/display/README.md) and
+  [`:library:feature:developer`](../feature/developer/README.md), which read and write the
   settings.
 - [`:library:apptoolkit`](../apptoolkit/README.md), which exposes it as `api`, and through it every
   app built on the Toolkit.
@@ -87,6 +94,26 @@ setContent {
 The activity is declared `launchMode="singleTop"` or `singleTask`, so intents that arrive while it
 runs reach `onNewIntent` and the shell instead of a second activity.
 
+## Pages beside the navigation
+
+Below the rail's width the chrome is part of the shell's own screen: a bottom bar and a modal
+drawer, which a page covers like an activity would. From the rail's width up, the navigation stays
+on screen, and `ShellHost` draws it itself, around the displays:
+
+- **A page opens in the space next to the navigation**, and moves, and answers the back gesture,
+  there. The rail or drawer never moves.
+- **The navigation shows where you are.** The drawer entry whose page is open is marked, and so is
+  it while pages opened from that page stack above it; no tab is marked while a page is open.
+- **The navigation replaces, it does not stack.** A tab closes the open pages and shows the tab;
+  another entry swaps the open pages for its own. Its page already open alone, an entry does
+  nothing.
+- **Start screens stay whole-window.** Before the shell is entered there is no navigation, so a
+  welcome or onboarding page covers the window at every width.
+
+Every page over the shell opens this way, not only the drawer's, so moving between them is always
+one tap. The navigation keeps clear of the start edge's cutout and bars, and the space beside it
+consumes that inset, so a page does not pad it twice.
+
 ## Screenshot tests
 
 `ShellScreenshotTest` draws the chrome under Robolectric and compares it with the reference images
@@ -106,6 +133,8 @@ JUnit 5. They start Koin with a `CommonDataStore`, which `AppTheme` reads.
 
 - **Two displays.** The outer display holds the shell and its pages, the inner one the tabs, so
   each level has its own transition and its own predictive back while the chrome stays still.
+  Beside a rail or permanent drawer both sit inside `ShellFrame`, next to the navigation, which
+  therefore belongs to no entry and never moves with a page.
 - **Toolkit components throughout.** Tab, rail and drawer icons are `AnimatedToolkitIcon`s with
   `bounceClick`, a click sound and haptic feedback, so an animated vector plays on each click; the
   drawer header sizes the app's `ToolkitIcon` to the title's line height; the app bar's buttons are
@@ -147,9 +176,11 @@ JUnit 5. They start Koin with a `CommonDataStore`, which `AppTheme` reads.
   `PermissionUsageActivity` does for Android's permission manager.
 - **The start is decided before the first frame.** `resolveStart` may read stored state and is
   awaited with the settings; `onReady` then tells the activity it can drop its splash screen.
-- **The shell keeps its own store.** Its settings are developer options, not the person's
-  preferences, so they live in a DataStore of their own rather than in `:library:core:datastore`;
-  that also keeps the datastore module free of navigation types. `ShellHost(preferences = ...)`
+- **The shell keeps its own store.** Its settings describe the shell (layout choices the display
+  settings offer, and developer options), so they live in a DataStore of their own rather than in
+  `:library:core:datastore`; that also keeps the datastore module free of navigation types.
+  `resetDeveloperOptions()` puts back only the developer options: the start, the forced layout,
+  the accessories and the animation speed. `ShellHost(preferences = ...)`
   takes any `ShellPreferences`, and tests pass an `InMemoryShellPreferences`.
 - **A tab is selected only while it shows.** No navigation item is highlighted while a child
   covers its tab.
