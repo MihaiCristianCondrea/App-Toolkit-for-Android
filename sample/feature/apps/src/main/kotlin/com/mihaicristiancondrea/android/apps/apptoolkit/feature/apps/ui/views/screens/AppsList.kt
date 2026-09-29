@@ -98,18 +98,21 @@ fun AppsList(
     onShareClick: (AppInfo) -> Unit,
     adFrequency: Int = AdsConstants.APPS_LIST_AD_FREQUENCY,
     windowWidthSizeClass: AppWindowWidthSizeClass,
+    // What the tab's search field holds: narrows the grid to apps whose name or package match.
+    searchQuery: String = "",
 ) {
     val apps: ImmutableList<AppInfo> = remember(
         uiHomeScreen.apps,
         uiHomeScreen.selectedFilter,
         installedPackages,
         favorites,
+        searchQuery,
     ) {
         uiHomeScreen.apps.filterFor(
             filter = uiHomeScreen.selectedFilter,
             installedPackages = installedPackages,
             favorites = favorites,
-        ).toImmutableList()
+        ).search(searchQuery).toImmutableList()
     }
 
     val columnCount = remember(windowWidthSizeClass) {
@@ -345,6 +348,17 @@ private val AppsFilterItems: ImmutableList<AppsFilterItem> = persistentListOf(
     ),
     AppsFilterItem(AppsListFilter.Favorites, R.string.favorite_apps, Icons.Outlined.StarOutline),
 )
+
+/** The apps whose name, package or short description contain [query]; all of them for a blank one. */
+internal fun List<AppInfo>.search(query: String): List<AppInfo> {
+    val needle = query.trim()
+    if (needle.isEmpty()) return this
+    return filter { app ->
+        app.name.contains(needle, ignoreCase = true) ||
+            app.packageName.contains(needle, ignoreCase = true) ||
+            app.shortDescription.contains(needle, ignoreCase = true)
+    }
+}
 
 private fun ImmutableList<AppInfo>.filterFor(
     filter: AppsListFilter,

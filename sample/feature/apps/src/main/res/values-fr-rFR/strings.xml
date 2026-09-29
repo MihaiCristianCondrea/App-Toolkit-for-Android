@@ -42,4 +42,5 @@
     <string name="summary_share_message">Découvrez cette application incroyable que j\'utilise. Elle propose des fonctionnalités vraiment intéressantes que vous pourriez aimer. Vous pouvez la télécharger depuis le Play Store à: %1$s</string>
     <string name="apps_tools_title">Applications</string>
     <string name="open_random_app">Ouvrir une application aléatoire</string>
+    <string name="apps_search_hint">Rechercher des applications</string>
 </resources>

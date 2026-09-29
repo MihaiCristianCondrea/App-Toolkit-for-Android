@@ -42,4 +42,5 @@
     <string name="summary_share_message">Bu harika uygulamaya bir göz atın. Kullanmakta olduğum ve ilginizi çekebilecek bazı harika özelliklere sahip. Play Store\'dan indirilebilir: %1$s</string>
     <string name="apps_tools_title">Uygulamalar</string>
     <string name="open_random_app">Rastgele uygulama aç</string>
+    <string name="apps_search_hint">Uygulama ara</string>
 </resources>

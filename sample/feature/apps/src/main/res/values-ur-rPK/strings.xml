@@ -42,4 +42,5 @@
     <string name="summary_share_message">یہ حیرت انگیز ایپ دیکھیں جو میں استعمال کر رہا ہوں. اس میں کچھ واقعی عمدہ خصوصیات ہیں جو آپ کو دلچسپ لگ سکتی ہیں۔ آپ اسے پلے اسٹور سے یہاں سے ڈاؤن لوڈ کر سکتے ہیں: %1$s</string>
     <string name="apps_tools_title">ایپس</string>
     <string name="open_random_app">بے ترتیب ایپ کھولیں</string>
+    <string name="apps_search_hint">ایپس تلاش کریں</string>
 </resources>

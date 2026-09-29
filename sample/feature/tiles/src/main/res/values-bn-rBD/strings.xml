@@ -132,4 +132,5 @@
     <string name="tiles_qs_integration_title">কুইক সেটিংস টাইল</string>
     <string name="tiles_qs_integration_summary_format">App Toolkit না খুলেই আপনার ফোনের কুইক সেটিংস থেকে %1$s ব্যবহার করুন।</string>
     <string name="tiles_add_to_qs">কুইক সেটিংসে যোগ করুন</string>
+    <string name="tiles_search_hint">টুল খুঁজুন</string>
 </resources>

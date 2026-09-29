@@ -42,4 +42,5 @@
     <string name="summary_share_message">Sprawdź tę niesamowitą aplikację, której używam. Ma kilka naprawdę ciekawych funkcji, które mogą Ci się spodobać. Pobierz ją z Play Store pod adresem: %1$s</string>
     <string name="apps_tools_title">Aplikacje</string>
     <string name="open_random_app">Otwórz losową aplikację</string>
+    <string name="apps_search_hint">Szukaj aplikacji</string>
 </resources>

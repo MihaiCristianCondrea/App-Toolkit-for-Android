@@ -132,4 +132,5 @@
     <string name="tiles_qs_integration_title">Cuadro de Ajustes rápidos</string>
     <string name="tiles_qs_integration_summary_format">Usa %1$s desde los Ajustes rápidos de tu teléfono sin abrir App Toolkit.</string>
     <string name="tiles_add_to_qs">Añadir a Ajustes rápidos</string>
+    <string name="tiles_search_hint">Buscar herramientas</string>
 </resources>

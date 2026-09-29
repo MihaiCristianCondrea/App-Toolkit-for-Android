@@ -132,4 +132,5 @@
     <string name="tiles_qs_integration_title">Casetă Setări rapide</string>
     <string name="tiles_qs_integration_summary_format">Folosește %1$s din Setările rapide ale telefonului tău fără a deschide App Toolkit.</string>
     <string name="tiles_add_to_qs">Adaugă la Setări rapide</string>
+    <string name="tiles_search_hint">Caută instrumente</string>
 </resources>

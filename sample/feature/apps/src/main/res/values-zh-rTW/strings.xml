@@ -42,4 +42,5 @@
     <string name="summary_share_message">看看我正在使用的這個很棒的應用程式！它有一些您可能感興趣的酷炫功能。您可以從 Play 商店下載：%1$s</string>
     <string name="apps_tools_title">應用程式</string>
     <string name="open_random_app">開啟隨機應用程式</string>
+    <string name="apps_search_hint">搜尋應用程式</string>
 </resources>

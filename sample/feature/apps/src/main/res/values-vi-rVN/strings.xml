@@ -42,4 +42,5 @@
     <string name="summary_share_message">Hãy xem ứng dụng tuyệt vời này mà tôi đang dùng. Nó có một số tính năng rất thú vị mà bạn có thể thấy hay. Bạn có thể tải xuống từ Play Store tại: %1$s</string>
     <string name="apps_tools_title">Ứng dụng</string>
     <string name="open_random_app">Mở ứng dụng ngẫu nhiên</string>
+    <string name="apps_search_hint">Tìm ứng dụng</string>
 </resources>

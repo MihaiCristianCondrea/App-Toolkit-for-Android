@@ -42,4 +42,5 @@
     <string name="summary_share_message">この素晴らしいアプリを見てください！本当に面白い機能があります。Playストアからダウンロードできます：%1$s</string>
     <string name="apps_tools_title">アプリ</string>
     <string name="open_random_app">ランダムなアプリを開く</string>
+    <string name="apps_search_hint">アプリを検索</string>
 </resources>

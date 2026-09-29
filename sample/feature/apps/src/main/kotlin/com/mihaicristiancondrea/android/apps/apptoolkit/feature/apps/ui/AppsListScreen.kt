@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellSearch
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ScaffoldFabs
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
@@ -251,6 +252,7 @@ fun AppsListScreen(
                 onAppClick = { app -> viewModel.onEvent(HomeEvent.AppSelected(app.packageName)) },
                 onShareClick = onShareClick,
                 windowWidthSizeClass = windowWidthSizeClass,
+                searchQuery = LocalShellSearch.current?.query.orEmpty(),
             )
         }
     )

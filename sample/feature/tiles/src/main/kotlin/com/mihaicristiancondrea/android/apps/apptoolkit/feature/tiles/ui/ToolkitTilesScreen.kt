@@ -18,6 +18,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellSearch
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils.search
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -149,6 +151,7 @@ fun ToolkitTilesScreen(
                     state = state,
                     paddingValues = paddingValues,
                     onEvent = viewModel::onEvent,
+                    searchQuery = LocalShellSearch.current?.query.orEmpty(),
                 )
             }
         },
@@ -161,14 +164,18 @@ fun ToolkitTilesScreen(
     state: ToolkitTilesUiState,
     paddingValues: PaddingValues,
     onEvent: (ToolkitTilesEvent) -> Unit,
+    // What the tab's search field holds; the stateful screen reads it from the shell.
+    searchQuery: String = "",
 ) {
     val showAds = rememberAdsEnabled()
     val firebaseController: FirebaseController = koinInject()
     var selectedTile by remember { mutableStateOf<ToolkitTile?>(null) }
     var quickToolDialog by remember { mutableStateOf<ToolkitQuickTool?>(null) }
-    val filteredCategories = remember(state.categories, state.selectedFilter) {
-        state.categories.filterFor(state.selectedFilter)
+    val resources = LocalContext.current.resources
+    val filteredCategories = remember(state.categories, state.selectedFilter, searchQuery, resources) {
+        state.categories.filterFor(state.selectedFilter).search(searchQuery, resources::getString)
     }
+    val searching = searchQuery.isNotBlank()
     val listItems = remember(filteredCategories) {
         buildList {
             filteredCategories.forEachIndexed { index, category ->
@@ -248,7 +255,8 @@ fun ToolkitTilesScreen(
                     when (item) {
                         is ToolkitTilesListItem.Category -> {
                             val category = item.category
-                            val expanded = category.id in state.expandedCategoryIds
+                            // While searching, every match is shown, collapsed or not.
+                            val expanded = searching || category.id in state.expandedCategoryIds
                             TileCategorySection(
                                 category = category,
                                 position = position,

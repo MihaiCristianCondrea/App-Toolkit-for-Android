@@ -42,4 +42,5 @@
     <string name="summary_share_message">इस शानदार ऐप को देखें जिसे मैं उपयोग कर रहा हूँ. इसमें कुछ बहुत ही शानदार फीचर्स हैं जो आपको रोचक लग सकते हैं। इसे Play Store से डाउनलोड करें: %1$s</string>
     <string name="apps_tools_title">ऐप्स</string>
     <string name="open_random_app">रैंडम ऐप खोलें</string>
+    <string name="apps_search_hint">ऐप्स खोजें</string>
 </resources>

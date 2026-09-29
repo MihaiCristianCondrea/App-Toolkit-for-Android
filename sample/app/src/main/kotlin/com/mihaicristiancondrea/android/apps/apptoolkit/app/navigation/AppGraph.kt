@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TabSearch
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.views.AboutSettingsContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
@@ -79,6 +80,8 @@ fun appGraph(
             resId = DesignSystemR.drawable.anim_grid_select,
             replayMode = ToolkitIconReplayMode.Reverse,
         ),
+        // The app bar holds a search field for the tools; the screen filters by its query.
+        search = TabSearch(hint = TilesR.string.tiles_search_hint),
     ) {
         ToolkitTilesScreen(paddingValues = contentPadding())
     }
@@ -89,6 +92,7 @@ fun appGraph(
         // Every `Apps` variant bundled with Compose is squares; the selected state uses the dot
         // grid Material Symbols draws for this glyph.
         selectedIcon = ToolkitIcon.Resource(CoreUiR.drawable.ic_apps_dots),
+        search = TabSearch(hint = AppsR.string.apps_search_hint),
     ) {
         AppsListScreen(
             paddingValues = contentPadding(),
