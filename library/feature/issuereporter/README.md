@@ -8,6 +8,8 @@ Collects device/report data and submits structured issues to a configured GitHub
 
 - Issue-report sheet content, the `ModalBottomSheet` that presents it, the launcher for callers
   outside a composition, ViewModel, state, events, and actions.
+- The Koin binding of core UI's `IssueReporterSheet` contract to that sheet, which is how other
+  features show it without depending on this module.
 - Shake-to-report: the detector, the application-scoped manager that drives it, and the host
   configuration that enables it.
 - Report, device-info, GitHub-target, and result domain models.
@@ -24,18 +26,20 @@ Collects device/report data and submits structured issues to a configured GitHub
 - [`:library:core:common`](../../core/common/README.md) for dispatchers, Firebase reporting, and
   host constants.
 - [`:library:core:network`](../../core/network/README.md) for Ktor/error handling.
-- [`:library:core:ui`](../../core/ui/README.md) for screen/ViewModel contracts and UI components.
-- [`:library:navigation`](../../navigation/README.md) for navigation support.
+- [`:library:core:ui`](../../core/ui/README.md) for screen/ViewModel contracts, UI components and
+  the `IssueReporterSheet` contract it binds.
 
 ## Used by
 
-- `:sample`, `:library:apptoolkit`, and `:library:feature:settings`.
+- [`:library:apptoolkit`](../../apptoolkit/README.md), which includes its Koin module, and `:sample`.
+- [`:library:feature:advanced`](../advanced/README.md) reaches the sheet only through the
+  `IssueReporterSheet` binding, not as a dependency.
 
 ## Flow chart
 
 ```mermaid
 flowchart TD
-    Settings[Advanced settings row] --> Sheet[IssueReporterBottomSheet]
+    Settings[Advanced settings row] -->|Koin: IssueReporterSheet| Sheet[IssueReporterBottomSheet]
     Shake[ShakeDetector via IssueReporterShakeManager] --> Launcher[IssueReporterLauncher]
     Launcher -->|ComposeView on the content view| Sheet
     Sheet --> Screen[IssueReporterContent]
@@ -65,7 +69,8 @@ flowchart TD
   in a modal bottom sheet over whatever the author was looking at, so reporting a problem no longer
   costs a task transition and no longer hides the screen the report is about.
 - There is one sheet, reached two ways. `IssueReporterBottomSheet` is a Compose `ModalBottomSheet`,
-  and a host already composing shows it directly, the way the advanced settings row does. The shake
+  and a host already composing shows it directly, or through the `IssueReporterSheet` contract the
+  way the advanced settings row does. The shake
   gesture cannot: it is detected by an application-scoped sensor listener with an `Activity` and no
   composition, so `IssueReporterLauncher` mounts a `ComposeView` on the activity's content view and
   puts the same composable in it. The mounting differs; the sheet does not.
@@ -139,6 +144,8 @@ and unavailable versions still produce a null name and version code -1.
 
 ## Public contracts
 
+- The `single<IssueReporterSheet>` binding in the module's Koin module. A feature that offers a
+  bug report resolves it with `getOrNull()` and hides the entry when it is absent.
 - `IssueReporterBottomSheet(onDismissRequest)` is the entry point for a host inside a composition,
   and `IssueReporterLauncher.show(activity)` for one that is not. `IssueReporterContent` is public
   for a host embedding the form in a container of its own, which then owns its presentation and its

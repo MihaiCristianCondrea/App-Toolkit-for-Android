@@ -2,13 +2,17 @@
 
 ## Responsibility and consumers
 
-Owns usage/diagnostics preferences presentation, the privacy choices dialog, UsageAndDiagnosticsSettings,
-UsageAndDiagnosticsRepository and its default implementation, and diagnosticsSettingsModule.
-Settings embeds the list; onboarding also consumes the ViewModel, state and dialog. The main toolkit module assembles DI.
+Owns usage/diagnostics preferences presentation, the privacy choices dialog, the onboarding page
+that shows it (`FirebaseOnboardingPage`), UsageAndDiagnosticsSettings, UsageAndDiagnosticsRepository
+and its default implementation, and diagnosticsSettingsModule. `diagnosticsSettingsPage()` registers
+UsageAndDiagnosticsScreen for `DiagnosticsSettingsRoute`, opened from the privacy page, so it is
+`PaneRole.None` rather than a detail that would replace privacy. A host adds `FirebaseOnboardingPage`
+to its onboarding pages through its `OnboardingProvider`. The main toolkit module assembles DI.
 
 ## Dependencies and flow
 
-Depends on core common, DataStore, and UI, plus integration consent.
+Depends on core common, DataStore and UI (which exposes navigation), plus integration consent, and on no other
+feature module.
 UsageAndDiagnosticsViewModel observes the repository and coordinates consent application through
 ConsentRepository. The repository combines and updates the shared preference source; FirebaseController
 receives diagnostic breadcrumbs. Defaults depend on the supplied build configuration.
@@ -20,9 +24,10 @@ consent surface belonging to it. There it is the AdMob consent form; here it is 
 the privacy choices dialog the onboarding flow shows, so a person meets the same surface in both
 places and the two settings screens asking the same kind of question look alike.
 
-That dialog lives here rather than in onboarding, because it reads and writes this feature's state;
-onboarding depends on this module, not the other way round. Its `privacy_choices_*` strings moved
-with it. The four granular consents were also drawn on the settings screen as an expandable block of
+That dialog lives here rather than in onboarding, because it reads and writes this feature's state.
+The onboarding page that shows it lives here for the same reason, with its own strings, so neither
+feature depends on the other: onboarding draws whatever pages the host's provider lists. The
+`privacy_choices_*` strings moved with the dialog. The four granular consents were also drawn on the settings screen as an expandable block of
 switch cards (a second, plainer copy of what the dialog's Details tab already explains) and that
 block, `ConsentToggleCard`, `ConsentSectionHeader` and `ExpandableConsentSectionHeader` are gone.
 
@@ -33,7 +38,8 @@ are sharing something.
 
 ## Contracts and boundaries
 
-Public entry points include UsageAndDiagnosticsList, FirebaseConsentDialog, UsageAndDiagnosticsViewModel,
+Public entry points include UsageAndDiagnosticsScreen, `diagnosticsSettingsPage()`,
+FirebaseOnboardingPage, FirebaseConsentDialog, UsageAndDiagnosticsViewModel,
 its state/events, UsageAndDiagnosticsRepository, and diagnosticsSettingsModule. The domain model describes preference
 values; no pass-through use case is required. Core DataStore owns persistence, integration consent
 owns SDK operations, and this feature owns localized UI resources.

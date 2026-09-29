@@ -24,7 +24,6 @@ and the bottom sheet that renders it.
 
 - `:library:core:common`, `:library:core:datastore`, `:library:core:network`, and
   `:library:core:ui` for shared state, persistence, HTTP, and Compose.
-- `:library:integration:update` for the Play update flow hosts pair with a new changelog.
 - `compose-markdown` to render the fetched Markdown.
 
 ## Used by

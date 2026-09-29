@@ -87,6 +87,21 @@ setContent {
 The activity is declared `launchMode="singleTop"` or `singleTask`, so intents that arrive while it
 runs reach `onNewIntent` and the shell instead of a second activity.
 
+## Screenshot tests
+
+`ShellScreenshotTest` draws the chrome under Robolectric and compares it with the reference images
+in `src/test/screenshots`: the phone, rail, expanded rail, landscape and desktop layouts, the modal
+drawer, the overflow menu, list-detail, edge to edge, the app bar's buttons mid-move, and frames of
+the predictive back gesture from either edge. They run with the unit tests.
+
+```shell
+./gradlew :library:shell:verifyRoborazziDebug   # fails when the chrome no longer matches
+./gradlew :library:shell:recordRoborazziDebug   # rewrites the reference images after an intended change
+```
+
+The tests are JUnit 4, so this module, and only this one, adds the JUnit vintage engine beside
+JUnit 5. They start Koin with a `CommonDataStore`, which `AppTheme` reads.
+
 ## Architectural decisions
 
 - **Two displays.** The outer display holds the shell and its pages, the inner one the tabs, so
@@ -155,5 +170,3 @@ runs reach `onNewIntent` and the shell instead of a second activity.
   register, but a matcher must still validate the ids it reads before building a key from them.
 - `resolveStart` runs before the first frame: it should read, not compute, or the splash screen
   stays up for as long as it takes.
-- Screenshot tests of the chrome against the Toolkit's theme are not ported yet; NavTest keeps
-  them for the same layouts.

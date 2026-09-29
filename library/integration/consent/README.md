@@ -69,6 +69,8 @@ flowchart TD
 ## Public contracts
 
 - `ConsentRepository`, `ConsentSettings`, `ConsentHost`, and `ConsentHostAvailability`.
+- `ConsentHost(activity)`, which builds the host from the activity a page reads from
+  `LocalActivity.current`. It replaced About's `GmsHostFactory`.
 
 ## Internal implementations
 

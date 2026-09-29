@@ -17,11 +17,9 @@
 <resources>
     <string name="advanced">অ্যাডভান্সড</string>
     <string name="display">ডিসপ্লে</string>
-    <string name="get_help">সাহায্য পান</string>
     <string name="notifications">বিজ্ঞপ্তি</string>
     <string name="security_and_privacy">নিরাপত্তা ও গোপনীয়তা</string>
     <string name="settings">সেটিংস</string>
-    <string name="settings_category_general">সাধারণ</string>
     <string name="settings_placeholder_description">কোনো সেটিংস নির্বাচন করা হয়নি। এর বিবরণ এখানে দেখতে একটি বিকল্প পছন্দ করুন।</string>
     <string name="summary_preference_settings_about">অ্যাপ সম্পর্কে আরও জানুন</string>
     <string name="summary_preference_settings_advanced">আরও অ্যাডভান্সড সেটিংস অন্বেষণ করুন</string>

@@ -7,7 +7,8 @@ review, and store actions around it. This module replaced `:library:feature:help
 
 ## Owns
 
-- `FaqScreen`, `FaqActivity`, `FaqViewModel`, and their state, event, and action contracts.
+- `FaqScreen`, `FaqViewModel`, and their state, event, and action contracts.
+- `helpPage()`, the registration of `HelpRoute`, with `FaqMenuActions` in its app bar.
 - `FaqRepository` and `DefaultFaqRepository`, which normalize both sources, prefer the remote
   catalog, and fall back to the resources bundled in the host.
 - `FaqRemoteDataSource`, `FaqLocalDataSource`, the catalog DTOs, and the DTO mappers under
@@ -19,7 +20,7 @@ review, and store actions around it. This module replaced `:library:feature:help
 ## Does not own
 
 - Open-source licenses, owned by [`:library:feature:licenses`](../licenses/README.md); the overflow
-  menu only opens them.
+  menu only navigates to `LicensesRoute`.
 - In-app review implementation, owned by
   [`:library:integration:review`](../../integration/review/README.md).
 - HTTP client construction, owned by [`:library:core:network`](../../core/network/README.md).
@@ -69,20 +70,22 @@ The screen already skips the slot when the id is blank or the user has ads switc
 
 - `:library:core:common`, `:library:core:datastore`, `:library:core:network`, and `:library:core:ui`
   for shared configuration, persistence access, networking, and UI.
-- [`:library:navigation`](../../navigation/README.md) for feature routes.
+- [`:library:navigation`](../../navigation/README.md) for the keys and the graph builder.
 - [`:library:integration:review`](../../integration/review/README.md) for review prompts.
-- [`:library:feature:licenses`](../licenses/README.md), which the overflow menu opens.
+- No other feature module.
 
 ## Used by
 
-- `:library:apptoolkit`, `:library:feature:settings`, and `:sample`.
+- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `helpPage()` from
+  `toolkitPages()`, and `:sample:feature:faq`, which fills in the questions.
 
 ## Flow chart
 
 ```mermaid
 flowchart TD
-    Screen[FaqScreen] --> VM[FaqViewModel]
-    Activity[FaqActivity] --> Screen
+    Page[helpPage: HelpRoute] --> Screen[FaqScreen]
+    Page --> Menu[FaqMenuActions]
+    Screen --> VM[FaqViewModel]
     VM --> Repo[FaqRepository]
     Repo --> Remote[FaqRemoteDataSource]
     Remote --> Catalog[FAQ catalog endpoint]
@@ -91,7 +94,7 @@ flowchart TD
     Screen --> Card[QuestionCard]
     Screen --> Contact[ContactUsCard]
     VM --> Review[ForceInAppReviewUseCase]
-    Menu[Overflow menu] --> Licenses[LicensesActivity]
+    Menu --> Licenses[navigate LicensesRoute]
 ```
 
 ## Architectural decisions
@@ -107,14 +110,16 @@ flowchart TD
 - There is no FAQ use case. Cleaning the catalog is transforming a data-source model into an
   application model, which is repository work, and the one thing a use case would have added is a
   layer the single caller does not need. `FaqViewModel` reads `FaqRepository` directly.
+- The feedback button stays in the screen's body rather than the shell's FAB slot: it belongs to
+  this page only, and the page pads it by `contentPadding()`.
 - Normalizing inside the repository, before the emptiness check rather than after it, is what makes
   the fallback correct: a remote catalog of nothing but blank rows now counts as empty and falls
   through to the local questions instead of rendering blank rows.
 
 ## Public contracts
 
-- `FaqScreen`, `FaqActivity`, `FaqViewModel`, `FaqUiState`, `FaqEvent`, `FaqAction`,
-  `FaqRepository`, `FaqItem`, `FaqId`, `QuestionCard`, and `faqModule`.
+- `FaqScreen`, `helpPage()`, `FaqMenuActions`, `FaqViewModel`, `FaqUiState`, `FaqEvent`,
+  `FaqAction`, `FaqRepository`, `FaqItem`, `FaqId`, `QuestionCard`, and `faqModule`.
 
 ## Internal implementations
 

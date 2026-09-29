@@ -2,94 +2,100 @@
 
 ## Purpose
 
-Composes the toolkit's root and general settings experiences, and integrates the dedicated display,
-theme, advanced, and usage/diagnostics feature modules.
+Draws the Toolkit's settings list: the categories and rows an app's `SettingsProvider` describes,
+each row opening its destination in the shell.
 
 ## Owns
 
-- Settings screen/activity/ViewModel and configurable category/preference models.
-- General settings repository/presentation flow, including the standalone screen's Help & feedback
-  top-app-bar shortcut.
-- `SettingsProvider`, and default content providers that integrate the dedicated settings modules.
-- Localized labels for the root destinations the toolkit itself defines in `SettingsContent`, so
-  every host names Notifications, Display, Security & privacy, Advanced and About identically.
+- `SettingsScreen`, `SettingsViewModel`, their action and event contracts, and the list's overflow
+  menu (`SettingsMenuActions`, which opens Help and feedback).
+- `SettingsProvider`, the contract an app implements to describe its settings.
+- `settingsPage()`, the registration of `SettingsRoute` as a list page.
+- Localized labels and summaries for the rows most apps list (Notifications, Display, Security and
+  privacy, Advanced and About), so every host names them identically.
 
 ## Does not own
 
-- Host-specific settings categories/content, owned by `:sample` provider implementations. Hosts
-  still choose which destinations to list and in what order; only the shared labels live here.
+- The settings models (`SettingsConfig`, `SettingsCategory`, `SettingsPreference`), owned by
+  [`:library:core:ui`](../../core/ui/README.md) so a provider can be written without this module's
+  screens.
+- The pages the rows open. Display, theme, privacy, advanced, diagnostics and about register their
+  own keys; this module names them only through `:library:navigation`'s keys.
+- Which rows an app lists, and in what order, owned by the app's provider.
 - Host identity strings, supplied as overridable defaults by `:library:core:common`.
-- Consent SDK operations, delegated to `:library:integration:consent`.
-- About/help/issue-reporter feature implementations, owned by their modules.
-- Theme primitives and persisted storage, owned by core design system/DataStore.
 
 ## Depends on
 
 - `:library:core:common`, `:library:core:datastore`, `:library:core:network`, `:library:core:ui`,
-  and `:library:navigation` for shared infrastructure.
-- Each settings feature owns its localized resources in `src/main/res`; no shared settings resource
-  subproject is required.
-- `:library:feature:advanced`, `:library:feature:diagnostics`, `:library:feature:display`, and
-  `:library:feature:theme` for dedicated settings surfaces.
-- [`:library:integration:consent`](../../integration/consent/README.md) for diagnostics consent
-  updates.
-- `:library:feature:about`, `:library:feature:faq`, and `:library:feature:issuereporter` to compose
-  related settings destinations/content.
+  and [`:library:navigation`](../../navigation/README.md) for the keys and the graph builder.
+- No other feature module.
 
 ## Used by
 
-- `:sample`, `:library:apptoolkit`, `:library:feature:onboarding`, and
-  `:library:feature:permissions`.
+- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `settingsPage()` from
+  `toolkitPages()`, and through it every app built on the Toolkit.
+- `:sample:feature:settings`, which provides the sample's `SettingsProvider`.
 
 ## Flow chart
 
 ```mermaid
 flowchart TD
-    Host[Host application] --> Providers[Settings provider implementations]
-    Providers --> Root[SettingsScreen categories]
-    Root --> General[GeneralSettingsActivity content key]
-    General --> Help[Help & feedback top-app-bar action]
-    General --> Display[feature:display]
-    General --> Theme[feature:theme]
-    General --> Advanced[feature:advanced]
-    General --> Diagnostics[feature:diagnostics]
-    Display --> DisplayRepo[DisplayPreferencesRepository]
-    Theme --> ThemeRepo[ThemePreferencesRepository]
-    DisplayRepo --> Store[Preferences DataStore]
-    ThemeRepo --> Store
-    Advanced --> Cache[Android cache operations]
-    Diagnostics --> Store
-    Diagnostics --> Consent[ConsentRepository]
-    Root --> Related[About / help / issue reporter destinations]
+    Host[App's SettingsProvider] --> VM[SettingsViewModel]
+    VM --> Screen[SettingsScreen]
+    Screen -->|row clicked| Action{preference.action handled?}
+    Action -->|yes| Done[App's own action]
+    Action -->|no| Navigate[navigator.navigate: preference.destination]
+    Navigate --> Pages[Display, privacy, advanced, about... pages beside the list]
+    Screen --> Menu[SettingsMenuActions] --> Help[HelpRoute]
+```
+
+## Using it
+
+```kotlin
+class AppSettingsProvider(private val context: Context) : SettingsProvider {
+    override fun provideSettingsConfig() = SettingsConfig(
+        title = context.getString(R.string.settings),
+        categories = listOf(
+            SettingsCategory(
+                preferences = listOf(
+                    SettingsPreference(
+                        key = "notifications",
+                        title = context.getString(SettingsR.string.notifications),
+                        destination = PrivacySettingsRoute,
+                        action = { context.openAppNotificationSettings() },
+                    ),
+                    SettingsPreference(
+                        key = "display",
+                        title = context.getString(SettingsR.string.display),
+                        destination = DisplaySettingsRoute,
+                    ),
+                ),
+            ),
+        ),
+    )
+}
 ```
 
 ## Architectural decisions
 
-- `ui/general` is the explicit category-content route: the root settings screen lists categories,
-  and General Settings renders the selected content key, either embedded or in its own activity.
+- **A row carries a key, not a callback into another feature.** `SettingsPreference.destination`
+  is a `NavKey`; the list navigates to it, and the module that registers that key draws the page.
+  The list therefore depends on no other feature, and an app can replace any page by registering
+  the same key.
+- **An app action runs first.** `SettingsPreference.action` returns whether it handled the click;
+  when it did not (or there is none), the destination opens. Notifications uses this to open the
+  system's notification settings and fall back to the privacy page.
+- **A list page.** `SettingsRoute` is registered with `PaneRole.List`, so on wide windows the
+  category pages, registered as `PaneRole.Detail`, open beside it.
 - Layers follow ownership, as described in [the architecture rules](../../../.agents/skills/architecture/layered-tree-review/references/android-tree-rules.md).
-  Display and theme consume core preference repositories directly and do not duplicate data layers.
-- Host provider contracts describe categories and callbacks; each settings feature module owns its
-  own state holders, repositories, UI, and Koin bindings.
-- Display and theme remain separate modules because they expose live preference state to more than
-  one presentation surface, including onboarding.
-- Content keys select a known toolkit surface instead of allowing providers to reach into internal
-  composables.
-- Cache work and consent application stay behind their repositories; settings UI coordinates them
-  but does not become a platform or SDK data source.
 
 ## Public contracts
 
-- Settings/provider interfaces, settings category/preference/config models, repository contracts,
-  and screen/ViewModel contracts. Host startup dialogs receive the current route and return only a
-  confirmed selection; the toolkit state holder performs persistence.
-
-## Internal implementations
-
-- Default content providers, the General Settings repository, category routing, and settings lists. Cache operations and consent UI belong to advanced and diagnostics respectively.
+- `SettingsProvider`, `SettingsScreen`, `SettingsViewModel`, `SettingsAction`, `SettingsEvent`,
+  `SettingsMenuActions` and `settingsPage()`.
+- The label and summary strings listed under Owns.
 
 ## Current risks
 
-This composition module directly depends on seven other feature modules and is itself a dependency of onboarding
-and permissions. The resulting feature-level coupling makes route/provider changes likely to ripple
-across the graph.
+- A row whose destination no module registers opens nothing visible: the navigator keeps the key,
+  but the graph has no page for it. `:sample:app`'s `AppGraphTest` checks the sample's rows.

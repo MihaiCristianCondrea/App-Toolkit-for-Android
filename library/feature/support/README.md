@@ -6,7 +6,9 @@ Presents donation/support products and coordinates purchases through the billing
 
 ## Owns
 
-- Support screen/activity/ViewModel and state/event/action contracts.
+- `SupportScreen`, `SupportViewModel` and their state, event and action contracts.
+- `supportPage()`, the registration of `SupportRoute`, which the overflow menu's `supportUs()`
+  entry opens.
 - Donation product IDs and product-detail mapping helpers.
 
 ## Does not own
@@ -19,11 +21,12 @@ Presents donation/support products and coordinates purchases through the billing
 - `:library:core:common`, `:library:core:network`, and `:library:core:ui` for shared
   billing/Firebase contracts, errors, and Compose foundations.
 - [`:library:integration:billing`](../../integration/billing/README.md) for Play Billing access.
-- [`:library:navigation`](../../navigation/README.md) for navigation support.
+- [`:library:navigation`](../../navigation/README.md) for the key and the graph builder.
 
 ## Used by
 
-- `:sample`, `:library:apptoolkit`, and `:library:feature:about`.
+- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `supportPage()` from
+  `toolkitPages()`.
 
 ## Flow chart
 
@@ -56,12 +59,15 @@ flowchart TD
   retries, purchase recovery, and consumption belong to the billing integration.
 - Product details have no synthetic initial value. The screen remains loading until the first query
   emits, then distinguishes an empty catalog from available options.
+- Purchase results are shown in the page's snackbar host (`rememberPageSnackbarHostState()`), so
+  they sit above the shell's bottom chrome. The purchase itself needs the activity, which the screen
+  reads from `LocalActivity.current`.
 - A purchase launch is guarded against invalid activities and duplicate taps, with a UI timeout so
   an absent SDK callback cannot leave the screen permanently busy.
 
 ## Public contracts
 
-- Support presentation entry points/contracts and donation product IDs.
+- `SupportScreen`, `supportPage()`, the presentation contracts and the donation product IDs.
 
 ## Internal implementations
 

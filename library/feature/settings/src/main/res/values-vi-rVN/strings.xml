@@ -17,11 +17,9 @@
 <resources>
     <string name="advanced">Nâng cao</string>
     <string name="display">Hiển thị</string>
-    <string name="get_help">Nhận trợ giúp</string>
     <string name="notifications">Thông báo</string>
     <string name="security_and_privacy">Bảo mật &amp; quyền riêng tư</string>
     <string name="settings">Cài đặt</string>
-    <string name="settings_category_general">Chung</string>
     <string name="settings_placeholder_description">Chưa chọn cài đặt nào. Chọn một tùy chọn để xem chi tiết tại đây.</string>
     <string name="summary_preference_settings_about">Tìm hiểu thêm về ứng dụng</string>
     <string name="summary_preference_settings_advanced">Khám phá thêm các cài đặt nâng cao</string>

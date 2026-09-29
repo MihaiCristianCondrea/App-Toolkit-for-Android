@@ -10,7 +10,14 @@ page frame, state handling, analytics hooks, and shared components.
 - `ScreenViewModel`, `LoggedScreenViewModel`, event/action bases, and `UiStateScreen` handling.
 - The shell's page frame, in `views/shell`: `PageScaffold`, `ShellTopAppBar` and
   `rememberTopBarScrollBehavior`, the app bar's search field, `LocalContentPadding` and
-  `contentPadding`, `ContentWidthBox`, and the pane placeholders. See [Page frame](#page-frame).
+  `contentPadding`, `ContentWidthBox`, the pane placeholders, and the page's snackbar host
+  (`LocalPageSnackbarHostState`, `rememberPageSnackbarHostState`). See [Page frame](#page-frame).
+- The settings models, in `models/settings`: `SettingsConfig`, `SettingsCategory` and
+  `SettingsPreference`, whose rows carry a `destination` key and an optional app `action`. They
+  live here, not in the settings feature, so the features that describe settings (permissions, the
+  app's provider) need no dependency on that feature.
+- Cross-feature contracts, such as `IssueReporterSheet` in `views/sheets`: one feature binds it in
+  Koin and another resolves it, so neither depends on the other.
 - Reusable buttons, fields, preferences, layouts, grids, dialogs, snackbars, ads slots, effects, and
   adaptive-window helpers.
 - `MainTopAppBar`, the host main-screen app bar, its optional centre-aligned title, and its
@@ -46,9 +53,7 @@ page frame, state handling, analytics hooks, and shared components.
 ## Used by
 
 - `:sample` and `:library:apptoolkit`.
-- `:library:feature:about`, `:library:feature:faq`, `:library:feature:issuereporter`,
-  `:library:feature:onboarding`, `:library:feature:permissions`, `:library:feature:settings`, and
-  `:library:feature:support`.
+- Every `:library:feature` module.
 - `:library:integration:ads` for its settings screen and ad presentation.
 
 ## Flow chart
@@ -95,7 +100,12 @@ available; data-layer callers should use the lower-level API.
   [Top app bars](#top-app-bars). Pages of the shell get `ShellTopAppBar` from the page frame
   instead.
 - `PageScaffold`, `ShellTopAppBar`, `LocalContentPadding` and `contentPadding`, `ContentWidthBox`,
-  `PanePlaceholder` and `ListPlaceholder`; see [Page frame](#page-frame).
+  `PanePlaceholder`, `ListPlaceholder`, `LocalPageSnackbarHostState` and
+  `rememberPageSnackbarHostState`; see [Page frame](#page-frame).
+- `SettingsConfig`, `SettingsCategory` and `SettingsPreference`. A row opens its `destination` key
+  unless its `action` returns `true`.
+- `IssueReporterSheet`, a `fun interface` whose `Show(onDismissRequest)` draws the issue reporter.
+  Resolve it with `getKoin().getOrNull()`: it is absent when the issue reporter is not installed.
 - `AnimatedIconButtonDirection` slides, fades and scales in and out from its edge, and crossfades
   its glyph when `icon` changes, so one button can turn from a menu button into a back arrow.
 - `GroupedGrid` is the grouped category/action block: `GroupedGridItem` cells, `GroupedGridDefaults`
@@ -242,6 +252,11 @@ app bar, such as tabs, call `PageScaffold` themselves.
   above them.
 - **The back button is `AnimatedIconButtonDirection`,** the same button the shell's app bar uses,
   with its slide, press bounce, click sound and haptic.
+- **Snackbars sit above the bottom chrome.** `PageScaffold` provides its own `SnackbarHostState` as
+  `LocalPageSnackbarHostState`. A screen shows its messages with
+  `rememberPageSnackbarHostState()`, which returns the page's host inside the frame and a fresh one
+  outside it; `DefaultSnackbarHandler` draws a host of its own only when it was given a different
+  one, so a page never shows two.
 - `ContentWidthBox` centres content no wider than the layout policy's maximum width, and
   `PanePlaceholder` and `ListPlaceholder` fill a detail pane nothing is open in.
 

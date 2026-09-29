@@ -17,11 +17,9 @@
 <resources>
     <string name="advanced">Разширени</string>
     <string name="display">Екран</string>
-    <string name="get_help">Получете помощ</string>
     <string name="notifications">Известия</string>
     <string name="security_and_privacy">Сигурност и поверителност</string>
     <string name="settings">Настройки</string>
-    <string name="settings_category_general">Общи</string>
     <string name="settings_placeholder_description">Няма избрани настройки. Изберете опция, за да видите подробностите тук.</string>
     <string name="summary_preference_settings_about">Научете повече за приложението</string>
     <string name="summary_preference_settings_advanced">Разгледайте повече разширени настройки</string>

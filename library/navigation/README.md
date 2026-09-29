@@ -20,8 +20,7 @@ it in the activity; this module has no chrome of its own.
 - `ScreenTransition`, `ShellTransitions`, the tab transitions and `CrossActivityBackMotion`, in
   `motion`.
 - `ShellLayoutPolicy`, `ShellLayoutMode` and `ShellLayout`, in `layout`.
-- `AppToolkitNavKey`, one `@Serializable` key per Toolkit page: `SettingsRoute`,
-  `GeneralSettingsRoute`, `HelpRoute`, `SupportRoute`, `AdsSettingsRoute`, `PermissionsRoute`,
+- `AppToolkitNavKey`, one `@Serializable` key per Toolkit page: `SettingsRoute`, `HelpRoute`, `SupportRoute`, `AdsSettingsRoute`, `PermissionsRoute`,
   `LicensesRoute`, `LibraryExtrasRoute`, `AboutRoute`, `ThemeSettingsRoute`,
   `DisplaySettingsRoute`, `PrivacySettingsRoute`, `AdvancedSettingsRoute`,
   `DiagnosticsSettingsRoute`, `DeveloperOptionsRoute`, `StartupRoute` and `OnboardingRoute`.

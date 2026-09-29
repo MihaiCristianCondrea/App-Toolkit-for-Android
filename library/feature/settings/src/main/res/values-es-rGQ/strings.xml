@@ -17,11 +17,9 @@
 <resources>
     <string name="advanced">Avanzado</string>
     <string name="display">Pantalla</string>
-    <string name="get_help">Obtener ayuda</string>
     <string name="notifications">Notificaciones</string>
     <string name="security_and_privacy">Seguridad y privacidad</string>
     <string name="settings">Configuración</string>
-    <string name="settings_category_general">General</string>
     <string name="settings_placeholder_description">No se seleccionaron configuraciones. Elige una opción para ver los detalles aquí.</string>
     <string name="summary_preference_settings_about">Aprende más sobre la aplicación</string>
     <string name="summary_preference_settings_advanced">Explora configuraciones avanzadas</string>

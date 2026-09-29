@@ -2,9 +2,12 @@
 
 ## Responsibility and consumers
 
-Owns ThemeSettingsList, ThemeSettingsViewModel, themeSettingsModule, theme-selection presentation,
+Owns ThemeSettingsScreen, ThemeSettingsViewModel, themeSettingsModule, theme-selection presentation,
 the seasonal themes (holiday greeting, holiday snowfall, and what the easter egg unlocks), and
-localized resources. Settings composes the list, and the main toolkit module assembles DI.
+localized resources. `themeSettingsPage()` registers the screen for `ThemeSettingsRoute`, and the
+main toolkit module calls it and assembles DI. The display settings' dark theme row opens it by key.
+The page is `PaneRole.None`: display is itself a detail beside the settings list, and a detail
+opened from a detail would replace it instead of stacking on it.
 
 ## Dependencies and flow
 
@@ -17,12 +20,12 @@ same preferences also serve onboarding appearance selection.
 
 ## Contracts and boundaries
 
-Public entry points include ThemeSettingsList, ThemeSettingsViewModel, its state/events, and
-themeSettingsModule. The DI module registers the built-in qualified palettes and resolves the
+Public entry points include ThemeSettingsScreen, `themeSettingsPage()`, ThemeSettingsViewModel,
+its state/events, and themeSettingsModule. The DI module registers the built-in qualified palettes and resolves the
 host's default palette override, falling back to blue. Palette definitions remain in the design system.
 The purple and orange palettes are available through the `purple` and `orange` static IDs and the
 `purplePalette` and `orangePalette` qualifiers. Android and Halloween have qualifiers too.
-Only ui and di layers are needed; there is no duplicate data layer or pass-through domain layer.
+No other feature module is a dependency. Only ui and di layers are needed; there is no duplicate data layer or pass-through domain layer.
 
 ## Seasonal themes
 

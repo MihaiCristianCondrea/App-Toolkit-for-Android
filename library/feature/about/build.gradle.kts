@@ -50,9 +50,6 @@ dependencies {
     api(project(":library:core:datastore"))
     api(project(":library:core:ui"))
     api(project(":library:navigation"))
-    api(project(":library:integration:consent"))
-    api(project(":library:integration:review"))
-    api(project(":library:integration:update"))
 
     api(libs.konfetti.compose)
 }

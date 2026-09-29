@@ -7,11 +7,15 @@
 ### Changed
 
 - Settings, Help, Support and the components showcase now open as pages of the main screen, with the same back swipe animation as before, and the Settings shortcut opens Settings directly.
+- Every settings page, About, the licenses, permissions and ads settings now open inside the app too. On tablets and wide windows the settings categories open beside the list.
+- The first-launch screens now run inside the app, so finishing onboarding takes you straight to your start page.
+- Android's permission usage screen now opens the app's Permissions page.
 - On tablets, foldables and wide windows the navigation becomes a side rail or a permanent drawer, and long pages keep a comfortable width.
 
 ### Improved
 
 - The menu button turns into a back arrow when you open a screen, instead of popping in and out, and the navigation icons animate when you tap them.
+- The ad above the bottom navigation is back, and messages such as a consent form failing to load now appear above the navigation bar instead of not at all.
 
 ---
 

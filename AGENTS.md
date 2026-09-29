@@ -707,9 +707,10 @@ Its library rules include:
 * `:library:core:*`, `:library:integration:*`, `:library:navigation` and `:library:shell` cannot depend on
   `:library:feature:*` or `:library:apptoolkit`
 * no library module can depend on a `:sample:*` module
-* sibling `:library:feature:*` modules cannot depend on each other, except the edges listed in
-  `ALLOWED_LIBRARY_FEATURE_EDGES` in `ModuleBoundariesPlugin`; remove an edge from that list in the
-  change that removes it from the build, and never add one
+* sibling `:library:feature:*` modules cannot depend on each other. A feature opens another's page
+  by navigating to its key from `:library:navigation`, and shares a contract through
+  `:library:core:ui` and Koin (as `IssueReporterSheet` does); only `:library:apptoolkit` names every
+  feature
 * packages in the library must not be split across modules
 
 These rules are build-enforced inside App Toolkit.

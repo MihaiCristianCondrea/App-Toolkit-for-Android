@@ -2,13 +2,13 @@
 
 ## Purpose
 
-Owns the open-source licenses surface: the list of bundled libraries, its standalone activity, and
-the AboutLibraries metadata that backs them.
+Owns the open-source licenses surface: the list of bundled libraries, its shell page, and the
+AboutLibraries metadata that backs them.
 
 ## Owns
 
-- `LicensesScreen`, both standalone and embedded in a host scaffold.
-- `LicensesActivity`, the internal entry point opened from About and Help.
+- `LicensesScreen`, drawn inside the shell's page frame.
+- `licensesPage()`, the registration of `LicensesRoute`, opened from About and Help.
 - `LicensesViewModel` and `LicensesUiState`, which turn metadata parsing into loading and success
   states.
 - The AboutLibraries Gradle plugin and its generated `raw/aboutlibraries` resource.
@@ -19,24 +19,26 @@ the AboutLibraries metadata that backs them.
   [`:library:feature:about`](../about/README.md).
 - The Help overflow entry that opens this screen, owned by
   [`:library:feature:faq`](../faq/README.md).
-- The `LicensesRoute` key and its Navigation 3 entry, owned by
-  [`:library:navigation`](../../navigation/README.md) and `:library:apptoolkit`.
+- The `LicensesRoute` key, owned by [`:library:navigation`](../../navigation/README.md). Pages that
+  open this one navigate to the key, so neither About nor Help depends on this module.
 
 ## Depends on
 
-- `:library:core:common` and `:library:core:ui` for shared state, Compose, and the scaffold.
+- `:library:core:common` and `:library:core:ui` for shared state, Compose, the page frame and, through
+  `:library:core:ui`, the graph builder of `:library:navigation`.
 - `aboutlibraries-compose-m3` for the library list rendering and metadata producer.
 
 ## Used by
 
-- `:library:apptoolkit`, `:library:feature:about`, and `:library:feature:faq`.
+- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `licensesPage()` from
+  `toolkitPages()`.
 
 ## Flow chart
 
 ```mermaid
 flowchart TD
-    Entry[About / Help / Licenses route] --> Screen[LicensesScreen]
-    Activity[LicensesActivity] --> Screen
+    Entry[About / Help: navigate LicensesRoute] --> Page[licensesPage]
+    Page --> Screen[LicensesScreen]
     Screen --> Producer[produceLibraries on raw metadata]
     Producer --> VM[LicensesViewModel]
     VM --> State[Loading and success state]
@@ -51,12 +53,14 @@ flowchart TD
   building a `ScreenState` inline.
 - The module carries the AboutLibraries plugin so the generated metadata resource stays next to the
   screen that reads it, and so modules that only link to licenses do not inherit the plugin.
-- `isEmbedded` keeps a single screen usable both as an activity and inside an existing scaffold,
-  rather than duplicating the list for the Navigation 3 destination.
+- The page is `PaneRole.None`, not a detail: it opens from About, itself a detail beside the
+  settings list, and a detail opened from a detail would replace it instead of stacking on it.
+- The screen pads its list by `contentPadding()` and draws no scaffold of its own; the shell's page
+  frame supplies the app bar and title.
 
 ## Public contracts
 
-- `LicensesScreen`, `LicensesActivity`, `LicensesViewModel`, `LicensesUiState`, `LicensesEvent`, and
+- `LicensesScreen`, `licensesPage()`, `LicensesViewModel`, `LicensesUiState`, `LicensesEvent`, and
   `licensesModule`.
 
 ## Internal implementations

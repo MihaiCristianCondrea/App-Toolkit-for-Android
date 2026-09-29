@@ -31,10 +31,8 @@ through Gradle `api` dependencies.
 - `:library:core:common`, `:library:core:datastore`, `:library:core:network`, `:library:core:ui`,
   `:library:core:designsystem`, `:library:navigation` and `:library:shell` to assemble common
   infrastructure, UI contracts and the shell.
-- `:library:feature:about`, `:library:feature:faq`, `:library:feature:issuereporter`,
-  `:library:feature:onboarding`, `:library:feature:permissions`, `:library:feature:settings`,
-  `:library:feature:support` and `:library:feature:developer` to provision toolkit ViewModels,
-  repositories, and pages.
+- Every `:library:feature` module to provision toolkit ViewModels and repositories and to call each
+  feature's page registration.
 - `:library:integration:ads`, `:library:integration:billing`, `:library:integration:consent`,
   `:library:integration:firebase`, `:library:integration:review`, and `:library:integration:update`
   to connect SDK implementations.
@@ -114,9 +112,8 @@ their product identity by defining `app_name`, `app_full_name`, and `copyright` 
 
 ## Internal implementations
 
-- Koin module-list composition, qualifier wiring, and `EmbeddedPage`, which pads a screen that still
-  has an embedded mode by the shell's bars. Individual feature modules own their DI definitions and
-  default palette registration.
+- Koin module-list composition and qualifier wiring. Individual feature modules own their DI
+  definitions and default palette registration.
 
 ## Publishing
 
@@ -131,28 +128,38 @@ modules they compose.
 ## Navigation
 
 `toolkitGraph { }` lives in `app.main.ui.navigation`. It runs the app's builder first and then
-registers, with `pageIfAbsent`, a page for each Toolkit key the app left alone:
+`toolkitPages()`, which calls each feature's own registration. Every registration uses
+`pageIfAbsent`, so a key the app registered itself keeps the app's page:
 
-| Key | Page |
-|---|---|
-| `SettingsRoute` | `SettingsScreen`, with the settings menu in its app bar |
-| `GeneralSettingsRoute` | `GeneralSettingsScreen`, titled from the key |
-| `HelpRoute` | `FaqScreen` |
-| `SupportRoute` | `SupportScreen` |
-| `AdsSettingsRoute` | `AdsSettingsScreen` |
-| `PermissionsRoute` | `PermissionsScreen` |
-| `LicensesRoute` | `LicensesScreen` |
-| `LibraryExtrasRoute` | `LibraryExtrasScreen` |
-| `DeveloperOptionsRoute` | `DeveloperOptionsScreen` |
+| Registration | Module | Keys | Pane role |
+|---|---|---|---|
+| `settingsPage()` | settings | `SettingsRoute` | List |
+| `displaySettingsPage()` | display | `DisplaySettingsRoute` | Detail |
+| `themeSettingsPage()` | theme | `ThemeSettingsRoute` | None |
+| `privacySettingsPage()` | privacy | `PrivacySettingsRoute` | Detail |
+| `diagnosticsSettingsPage()` | diagnostics | `DiagnosticsSettingsRoute` | None |
+| `permissionsPage()` | permissions | `PermissionsRoute`, plus the permission usage deep links | None |
+| `adsSettingsPage()` | integration:ads | `AdsSettingsRoute` | None |
+| `advancedSettingsPage()` | advanced | `AdvancedSettingsRoute` | Detail |
+| `aboutPages()` | about | `AboutRoute`, `LibraryExtrasRoute` | Detail, None |
+| `licensesPage()` | licenses | `LicensesRoute` | None |
+| `helpPage()` | faq | `HelpRoute` | None |
+| `supportPage()` | support | `SupportRoute` | None |
+| `developerOptionsPage()` | developer | `DeveloperOptionsRoute` | None |
+| `onboardingPages()` | onboarding | `StartupRoute`, `OnboardingRoute`, as start screens | None |
+
+The settings categories are details, so on a wide window they open beside the list. Pages opened
+from a detail are `None`: a detail opened from a detail replaces it instead of stacking on it.
+
+`toolkitPages()` is the only place that names every feature. The features know nothing of each
+other and open one another's pages by key, which `checkModuleBoundaries` enforces: no
+`:library:feature` module may depend on another.
 
 It registers pages only; the app decides where each is offered (`settings()` and `supportUs()` in
-the drawer and overflow builders, links, or a screen's button). An app that builds its graph with
-`ShellGraphBuilder` directly calls `toolkitPages()` after its own destinations.
-
-The screens above still have the embedded mode they had inside their activities, so they are drawn
-with `isEmbedded = true` inside `EmbeddedPage`, which pads them by the shell's bars. As each feature
-reads `LocalContentPadding` itself and drops its activity, it registers its own page and leaves
-this list.
+the drawer and overflow builders, links, or a screen's button). An app that needs to pass a
+registration arguments calls it in its own builder first, such as `aboutPages { ... }`. An app that
+builds its graph with `ShellGraphBuilder` directly calls `toolkitPages()` after its own
+destinations.
 
 ## Architecture guards
 

@@ -66,16 +66,18 @@ flowchart TD
     App --> Lifecycle[Process/activity lifecycle]
     Lifecycle --> Ads[Ads initialization and app-open display]
     Lifecycle --> Billing[Past-purchase processing]
-    Launcher[MainActivity] --> FirstRun{Onboarding complete?}
-    FirstRun -->|no| Startup[Toolkit StartupActivity]
-    FirstRun -->|yes| Theme[AppTheme]
+    Launcher[MainActivity] --> Theme[AppTheme]
     Theme --> Host[ShellHost]
     Launcher --> Graph[appGraph]
     Graph --> HostPages[":sample:feature:* tabs and pages"]
     Graph --> ToolkitPages["toolkitGraph { }: Toolkit pages"]
     Host --> Graph
-    Host --> Start[resolveStart: stored start page]
-    Start --> Ready[onReady: splash screen leaves]
+    Host --> Start{resolveStart: onboarding done?}
+    Start -->|no| FirstRun[StartupRoute, then OnboardingRoute]
+    Start -->|yes| Stored[Stored start page]
+    FirstRun --> Ready[onReady: splash screen leaves]
+    Stored --> Ready
+    Host --> Snackbars[MainViewModel snackbars above the bottom chrome]
 ```
 
 ## Architectural decisions
@@ -84,9 +86,17 @@ flowchart TD
   and destination set; feature modules remain unaware of their siblings.
 - Host-to-toolkit provider adaptation is isolated in `:sample:core:apptoolkit`, while this module
   retains final Koin startup and app-only configuration.
-- `MainActivity` resolves first-run state before composing anything, and `ShellHost` reads the stored
-  start page in `resolveStart` before its first frame; the splash screen stays up until `onReady`, so
-  a default tab never flashes before the chosen one.
+- `ShellHost` decides the start in `resolveStart` before its first frame: the Toolkit's first-launch
+  start screens while onboarding is not done, the stored start page after. The splash screen stays
+  up until `onReady`, so a default tab never flashes before the chosen one, and first launch no
+  longer leaves for a second activity.
+- Android's permission usage screen reaches the Permissions page through an `<activity-alias>` of
+  `MainActivity` that holds `START_VIEW_PERMISSION_USAGE`; the Toolkit's deep links map the intent
+  to the page.
+- The graph's banner slot shows the bottom navigation native ad, so it sits above the bottom bar on
+  every tab.
+- `MainViewModel`'s messages (a consent form that fails to load) are shown by a
+  `DefaultSnackbarHandler` over the shell, raised above the bottom chrome.
 - The launcher shortcut's `OPEN_SETTINGS` action is a deep link in `appGraph`, so the shell opens
   the settings page for it at launch and while running, with no activity of its own.
 - The Apps tab's random-app button is the tab's `fab`. The shell draws it outside the tab's
@@ -120,9 +130,6 @@ the application-level locale link.
 `appGraph` is the single place that knows the full feature set, so every new destination touches
 this module. That is deliberate, it is what keeps the feature modules from depending on each other,
 but it does make this file a merge point.
-
-First launch still leaves for the Toolkit's `StartupActivity`; it becomes a start screen of the
-graph when onboarding moves onto the shell.
 
 ## Architecture guards
 

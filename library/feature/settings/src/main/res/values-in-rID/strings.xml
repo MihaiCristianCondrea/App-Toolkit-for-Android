@@ -17,11 +17,9 @@
 <resources>
     <string name="advanced">Lanjutan</string>
     <string name="display">Tampilan</string>
-    <string name="get_help">Dapatkan bantuan</string>
     <string name="notifications">Notifikasi</string>
     <string name="security_and_privacy">Keamanan &amp; privasi</string>
     <string name="settings">Pengaturan</string>
-    <string name="settings_category_general">Umum</string>
     <string name="settings_placeholder_description">Tidak ada pengaturan yang dipilih. Pilih opsi untuk melihat detailnya di sini.</string>
     <string name="summary_preference_settings_about">Pelajari lebih lanjut tentang aplikasi</string>
     <string name="summary_preference_settings_advanced">Jelajahi lebih banyak pengaturan lanjutan</string>

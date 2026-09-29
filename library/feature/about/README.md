@@ -12,11 +12,13 @@ plus the tap-to-copy interaction for the entries it renders and the version-tap 
 - Tap-to-copy for About entries, including the clipboard write and its in-app confirmation.
 - The version-tap easter egg: konfetti on the fifth tap, and the seasonal themes unlock it records.
 - The library-owned extras screen, `LibraryExtrasScreen`.
-- The GMS host factory used by consent, review, and update flows.
+- `aboutPages()`, the registration of `AboutRoute` (a detail of the settings list) and
+  `LibraryExtrasRoute`.
 
 ## Does not own
 
-- Open-source licenses, owned by [`:library:feature:licenses`](../licenses/README.md).
+- Open-source licenses, owned by [`:library:feature:licenses`](../licenses/README.md); the About
+  list only navigates to `LicensesRoute`.
 - Privacy and legal entries, owned by [`:library:feature:privacy`](../privacy/README.md).
 - Changelog retrieval, presentation, and in-app-update triggering, owned by
   [`:library:feature:changelog`](../changelog/README.md).
@@ -25,22 +27,23 @@ plus the tap-to-copy interaction for the entries it renders and the version-tap 
 - Host main screen and host route keys, owned by `:sample`.
 - Host identity strings, supplied as overridable defaults by `:library:core:common`.
 - The device report itself, supplied by the host through `AboutSettingsProvider`.
-- Page registration, done by `toolkitGraph { }` in `:library:apptoolkit`.
+- The consent, review and update hosts. Each integration module builds its own from the activity
+  (`ConsentHost`, `ReviewHost`, `InAppUpdateHost`).
 
 ## Depends on
 
 - `:library:core:common` and `:library:core:ui` for shared state, platform helpers, and Compose.
 - [`:library:core:datastore`](../../core/datastore/README.md) for `SeasonalThemeRepository`, which
   stores the easter egg unlock.
-- [`:library:navigation`](../../navigation/README.md) for drawer models and routes.
-- [`:library:feature:licenses`](../licenses/README.md) to open the licenses screen from the About
-  list.
-- `:library:integration:consent`, `:library:integration:review`, and `:library:integration:update`
-  for the GMS host factory.
+- [`:library:navigation`](../../navigation/README.md) for the keys and the graph builder.
+- No other feature or integration module.
 
 ## Used by
 
-- `:sample`, `:library:apptoolkit`, `:library:feature:faq`, and `:library:feature:settings`.
+- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `aboutPages()` from
+  `toolkitPages()`.
+- `:sample:app`, which registers About first with its own content (`aboutPages {
+  AboutSettingsContent() }`), and `:sample:feature:settings`, which provides the device report.
 
 ## Flow chart
 
@@ -54,7 +57,8 @@ flowchart TD
     CopyEvent --> AboutVM
     AboutVM --> Clipboard[Main-thread clipboard write]
     Clipboard --> Snackbar[In-app confirmation]
-    Routes[About route] --> Consumers[Host, help, and settings]
+    Page[aboutPages: AboutRoute] --> AboutScreen
+    AboutScreen -->|licenses row| Licenses[navigate LicensesRoute]
 ```
 
 ## Architectural decisions
@@ -86,6 +90,11 @@ flowchart TD
   unlock through `SeasonalThemeRepository`, which keeps the holiday palettes and snowfall available
   all year.
   Only the first unlock shows a snackbar, since nothing else points at where the reward went.
+- The page takes its content as a parameter. `aboutPages(about = ...)` lets an app wrap
+  `AboutScreen` (to react to version taps, say) and keep the Toolkit's key and pane role, instead of
+  re-declaring the page.
+- Confirmations go to the page's snackbar host (`rememberPageSnackbarHostState()`), so they sit
+  above the shell's bottom chrome rather than under it.
 - Use cases are retained where they perform a named operation or combine concerns; repository calls
   that only forwarded data were not given synthetic wrappers.
 
@@ -112,8 +121,7 @@ Verify on a physical device, where the preview appears on every tap, or switch o
 ## Public contracts
 
 - `AboutSettingsProvider`, `AboutRepository`, `AboutInfo`, `AboutItem`, `AboutItemAction`,
-  `AboutEvent`, `AboutScreen`, `LibraryExtrasScreen`, and
-  `GmsHostFactory`.
+  `AboutEvent`, `AboutScreen`, `LibraryExtrasScreen`, and `aboutPages()`.
 
 ## Internal implementations
 

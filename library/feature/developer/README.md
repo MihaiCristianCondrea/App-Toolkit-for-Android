@@ -12,15 +12,16 @@ restarted into a variation.
   the bottom bar style, the rail and app bar colour, hide-on-scroll, the content width limit, the
   bottom accessories and banner style, the tab transition, the right-edge back swipe, the
   animation speed, a reset, and the window size and every back stack as they change.
+- `developerOptionsPage()`, the registration of `DeveloperOptionsRoute`.
 - Its strings, in every supported locale, including the page title `shell_developer_options`.
 
 ## Does not own
 
 - The settings it edits, owned by [`:library:shell`](../../shell/README.md) (`ShellSettings`,
   `ShellPreferences`).
-- Its registration in the graph, done by `toolkitGraph { }` in
-  [`:library:apptoolkit`](../../apptoolkit/README.md) for `DeveloperOptionsRoute`. An app replaces
-  the page by registering that key itself.
+- Adding the page to a graph, done by `toolkitPages()` in
+  [`:library:apptoolkit`](../../apptoolkit/README.md). An app replaces the page by registering
+  `DeveloperOptionsRoute` itself.
 - Where the page is offered. The app links to it, typically from the drawer in debug builds only,
   as `:sample:app` does.
 
@@ -44,4 +45,4 @@ restarted into a variation.
 
 ## Public contracts
 
-- `DeveloperOptionsScreen()`.
+- `DeveloperOptionsScreen()` and `developerOptionsPage()`.

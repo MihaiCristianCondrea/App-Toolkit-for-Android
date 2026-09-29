@@ -8,7 +8,8 @@ Owns ad enablement settings and Google Mobile Ads integration UI used by AppTool
 
 - `di.adsIntegrationModule()` binds the ads manager, settings repository, and ViewModel. The main toolkit
   module composes it; hosts supply their placement configuration and foundation providers.
-- Ads settings repository, ViewModel, screen, and activity.
+- Ads settings repository, ViewModel and screen, and `adsSettingsPage()`, the registration of
+  `AdsSettingsRoute` (opened from the privacy page).
 - `AdsCoreManager`, `AdsSdkInitializer`, and Google Mobile Ads SDK initialization.
 - App-open ad lifecycle; the `INTERNET`, `ACCESS_NETWORK_STATE`, and `AD_ID` permissions required by
   the SDK; and default Mobile Ads initialization/loading metadata.
@@ -525,7 +526,8 @@ so none of them need a `NativeAdView`.
 
 ## Public contracts
 
-- Ads settings screen/activity, repository contract, and UI event/action/state contracts.
+- `AdsSettingsScreen`, `adsSettingsPage()`, the repository contract, and the UI event, action and
+  state contracts.
 - `AdsCoreManager` and its replaceable `AdsSdkInitializer` test seam.
 
 ## Internal implementations

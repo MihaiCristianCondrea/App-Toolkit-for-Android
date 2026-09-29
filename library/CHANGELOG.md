@@ -11,14 +11,27 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Added the shell navigation core to `:library:navigation`: `shellGraph { }` describes tabs, children, pages, the drawer, the overflow menu, start screens and deep links; `ShellNavigator` moves through them with one stack per tab and a tab history that back follows; `ShellNavDisplay` plays Android's cross-activity back animation on the back gesture; `ListDetailScene` shows a list page and its detail side by side with a draggable separator. Tabs, drawer entries and overflow entries take `ToolkitIcon`, so animated vector drawables and Lottie icons play on them.
 - Added `:library:shell` with `ShellHost`, which draws an app's graph in its one activity: app bar, navigation bar, rail, drawers with the app's header, overflow menu, banner, player and floating action button, built from the Toolkit's own buttons and icons.
 - Added `:library:feature:developer` with `DeveloperOptionsScreen`, which switches every shell variation while the app runs and shows the window size and every back stack.
-- Added `toolkitGraph { }` to `:library:apptoolkit`, which registers the Toolkit's pages (settings, help, support, licenses, permissions, ads settings, developer options) in an app's graph unless the app registers the key itself.
+- Added `toolkitGraph { }` and `toolkitPages()` to `:library:apptoolkit`, which register the Toolkit's pages in an app's graph unless the app registers the key itself.
+- Added a page registration to each feature: `settingsPage()`, `displaySettingsPage()`, `themeSettingsPage()`, `privacySettingsPage()`, `diagnosticsSettingsPage()`, `advancedSettingsPage()`, `aboutPages()`, `licensesPage()`, `helpPage()`, `supportPage()`, `permissionsPage()`, `adsSettingsPage()`, `developerOptionsPage()` and `onboardingPages()`. The settings categories are details of the settings list, so on wide windows they open beside it.
+- Added `StartupRoute` and `OnboardingRoute` as start screens: the first launch runs inside the app's one activity, chosen in `ShellHost(resolveStart = ...)`.
+- Added deep links for `VIEW_PERMISSION_USAGE` and `VIEW_PERMISSION_USAGE_FOR_PERIOD` to the permissions page. The app declares an `<activity-alias>` of its shell activity for them.
+- Added `SettingsPreference.destination` and `SettingsPreference.action`: a settings row opens a key, unless the app's action handles the click first.
+- Added `LocalPageSnackbarHostState` and `rememberPageSnackbarHostState()` to `:library:core:ui`, so a page's snackbars sit above the shell's bottom chrome.
+- Added the `IssueReporterSheet` contract to `:library:core:ui`, bound by `:library:feature:issuereporter`, and `ConsentHost(activity)` and `ReviewHost(activity)` builders.
+- Added screenshot tests of the shell's chrome to `:library:shell`, recorded with Roborazzi.
 - Added the page frame to `:library:core:ui`: `PageScaffold`, `ShellTopAppBar`, `LocalContentPadding` and `contentPadding()`, `ContentWidthBox`, `PanePlaceholder` and `ListPlaceholder`.
 - Added `AboutRoute`, `ThemeSettingsRoute`, `DisplaySettingsRoute`, `PrivacySettingsRoute`, `AdvancedSettingsRoute`, `DiagnosticsSettingsRoute`, `DeveloperOptionsRoute`, `StartupRoute` and `OnboardingRoute`, one key per Toolkit page.
 
 ### Changed
 
 - Every `AppToolkitNavKey` is now a plain `@Serializable` `NavKey`, no longer `Parcelable` or a `StableNavKey`. `:library:navigation` exposes `kotlinx-serialization-core` as `api`.
-- `:library:apptoolkit` now exposes `:library:shell` and `:library:feature:developer` through `api`.
+- `:library:apptoolkit` now exposes `:library:shell`, `:library:feature:developer`, `:library:feature:advanced`, `:library:feature:diagnostics`, `:library:feature:display` and `:library:feature:theme` through `api`.
+- Every Toolkit screen is now a page of the shell instead of an activity. Screens pad by `contentPadding()` and lost their `isEmbedded` and navigation callback parameters: `LicensesScreen()`, `FaqScreen()`, `SupportScreen()`, `PermissionsScreen()`, `AdsSettingsScreen()` and `LibraryExtrasScreen()` take none.
+- Features open one another's pages by key and no longer depend on each other: `PrivacyAction.Navigate(key)` opens permissions, ads and diagnostics; the display settings open `ThemeSettingsRoute`; About and Help open `LicensesRoute`; the advanced settings resolve `IssueReporterSheet` from Koin and hide the bug report when it is absent.
+- `PrivacySettingsProvider` supplies only the legal links, and `DisplaySettingsProvider` no longer has `openThemeSettings`.
+- Moved `SettingsConfig`, `SettingsCategory` and `SettingsPreference` to `:library:core:ui` (`core.ui.models.settings`).
+- Moved `FirebaseOnboardingPage` and its strings from `:library:feature:onboarding` to `:library:feature:diagnostics`.
+- `StartupProvider` supplies only `requiredPermissions`, and `OnboardingProvider` only the pages; finishing onboarding enters the shell.
 
 ### Improved
 
@@ -29,6 +42,10 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Removed the old navigation from `:library:navigation`: the `animations`, `backstack`, `data`, `models` and `ui` packages (`BottomNavigationBar`, `LeftNavigationRail`, `NavigationDrawerSheet`, `NavigationDrawerHeader`, `HideOnScrollBottomBar`, `BottomBarItem`, `NavigationDrawerItem`, `StableNavKey`, `NavigationRepository` and the back-stack helpers) and `NavigationDrawerRoutes`. Use `shellGraph { }` or `toolkitGraph { }` with `ShellHost`.
 - Removed `:library:core:ui`'s `navigation` package (`NavigationState`, `NavigationEntryBuilder`, `NavigationAnimations`) and `startupDestinationFlow`. Use `ShellNavigator`, and `startupValueFlow` from `:library:core:datastore`.
 - Removed `appToolkitNavigationEntryBuilders`, replaced by `toolkitGraph { }`, and `handleNavigationItemClick` with the `DefaultNavigationRepository` binding from `:library:feature:about`; drawer entries are declared in the graph.
+- Removed the Toolkit's activities and their manifest entries: `SettingsActivity`, `GeneralSettingsActivity`, `FaqActivity`, `SupportActivity`, `PermissionsActivity`, `AdsSettingsActivity`, `LicensesActivity`, `StartupActivity` and `OnboardingActivity`. Navigate to their keys instead.
+- Removed `GeneralSettingsRoute`, `GeneralSettingsScreen`, `GeneralSettingsContentProvider`, `GeneralSettingsRepository` and `SettingsContent`; each settings category is its own page.
+- Removed `BaseActivity` from `:library:core:ui`, `Context.openActivity` from `:library:core:common`, and `GmsHostFactory` from `:library:feature:about`.
+- Removed the dependencies between feature modules, and `ALLOWED_LIBRARY_FEATURE_EDGES` with them: `checkModuleBoundaries` now rejects every feature-to-feature edge.
 
 ---
 
