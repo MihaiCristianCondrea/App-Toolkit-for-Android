@@ -43,4 +43,5 @@
     <!-- Navigation -->
     <string name="apps_tools_title">Apps</string>
 
+    <string name="open_random_app">Open random app</string>
 </resources>

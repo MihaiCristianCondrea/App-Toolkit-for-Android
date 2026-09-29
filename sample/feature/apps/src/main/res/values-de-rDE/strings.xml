@@ -41,4 +41,5 @@
     <string name="favorite_apps">Favoriten</string>
     <string name="summary_share_message">Schauen Sie sich diese großartige App an, die ich benutze. Sie bietet wirklich coole Funktionen, die Sie interessieren könnten. Sie können sie im Play Store herunterladen unter: %1$s</string>
     <string name="apps_tools_title">Apps</string>
+    <string name="open_random_app">Zufällige App öffnen</string>
 </resources>

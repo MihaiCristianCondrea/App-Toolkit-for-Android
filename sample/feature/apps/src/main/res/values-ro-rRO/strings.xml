@@ -41,4 +41,5 @@
     <string name="favorite_apps">Favorite</string>
     <string name="summary_share_message">Verifică această aplicație uimitoare pe care o folosesc. Are câteva funcții interesante. O poți descărca din Play Store la: %1$s</string>
     <string name="apps_tools_title">Aplicații</string>
+    <string name="open_random_app">Deschide o aplicație aleatorie</string>
 </resources>

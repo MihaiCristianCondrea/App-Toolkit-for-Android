@@ -15,19 +15,19 @@ The developer's app catalogue: listing, details, favorites, and install state.
 - `AppsListViewModel`, the list and detail-sheet composables, and the native-ad placement in the
   list.
 - Localized app-catalogue strings and app-specific error-to-text mapping.
-- `appsListEntryBuilder`, this feature's navigation entry.
+- `AppsListRoute`, this feature's tab key, and `RandomAppFloatingActionButton` with the
+  `RandomAppAction` the list registers its random-app handler in.
 - `FavoritesChangedReceiver`, which keeps the widget in step with favorites.
 
 ## Does not own
 
-- The route keys it registers against, owned by [
-  `:sample:core:navigation`](../../core/navigation/README.md).
+- Its registration as a tab, done by `:sample:app`'s `appGraph`.
 - Widget rendering, owned by [`:sample:widget`](../../widget/README.md), which reads this module's
   repository.
 
 ## Depends on
 
-- `:sample:core:navigation`, `:sample:core:common`, `:sample:core:datastore`, `:sample:core:ui`.
+- `:sample:core:common`, `:sample:core:datastore`, `:sample:core:ui`.
 - [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for ad slots, state contracts and
   Ktor.
 
@@ -80,7 +80,8 @@ and unavailable version behavior are unchanged; the feature still owns install-s
 
 ## Public contracts
 
-- The three repositories, `AppsListViewModel`, `appsListEntryBuilder`, `AppInfo`/`AppSummary`/
+- The three repositories, `AppsListViewModel`, `AppsListScreen`, `AppsListRoute`,
+  `RandomAppFloatingActionButton`, `RandomAppAction`, `AppInfo`/`AppSummary`/
   `AppDetails`.
 
 ## Internal implementations
@@ -97,7 +98,8 @@ widget to remain useful offline. Corrupt snapshots are deleted and treated as ca
 
 ## Current risks
 
-The module applies the Kotlin serialization plugin because its DTOs are `@Serializable`. Compiling
+The module applies the Kotlin serialization plugin because its DTOs and its route are
+`@Serializable`. Compiling
 without it succeeds and fails only at decode time, so the plugin has to stay even though nothing
 about the source makes the dependency visible.
 

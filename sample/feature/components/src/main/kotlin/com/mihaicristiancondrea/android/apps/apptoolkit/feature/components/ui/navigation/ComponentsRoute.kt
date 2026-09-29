@@ -17,11 +17,12 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.navigation
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.domain.models.AppNavKey
-import kotlinx.parcelize.Parcelize
+import androidx.navigation3.runtime.NavKey
+import kotlinx.serialization.Serializable
 
-@Parcelize
-data object ComponentsRoute : AppNavKey {
-    /** Persisted identifier for this destination, shared by DI qualifiers and the drawer item. */
+/** The components showcase. */
+@Serializable
+data object ComponentsRoute : NavKey {
+    /** Persisted identifier for this destination, shared by DI qualifiers and the drawer entry. */
     const val ROUTE_ID: String = "components"
 }

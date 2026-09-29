@@ -2,6 +2,19 @@
 
 ---
 
+# Unreleased
+
+### Changed
+
+- Settings, Help, Support and the components showcase now open as pages of the main screen, with the same back swipe animation as before, and the Settings shortcut opens Settings directly.
+- On tablets, foldables and wide windows the navigation becomes a side rail or a permanent drawer, and long pages keep a comfortable width.
+
+### Improved
+
+- The menu button turns into a back arrow when you open a screen, instead of popping in and out, and the navigation icons animate when you tap them.
+
+---
+
 # September 24, 2026
 
 **Version:** `26.09.22` (`137260922`)

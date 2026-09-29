@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -25,56 +24,46 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.res.stringResource
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.MainNavigationDefaults
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.NavigationRoutes
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.appNavigationEntryBuilders
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.toNavKeyOrDefault
+import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.MainAction
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.MainEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.appGraph
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.startKeyFor
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStoreInterface
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.data.managers.NavigationManager
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.MainScreen
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.MainViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.contracts.MainAction
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.contracts.MainEvent
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ComponentsActivity
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.navigation.ComponentsRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.fab.RandomAppAction
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.data.repositories.ComponentsShowcaseRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ToolkitTilesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppTheme
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.activity.observeActions
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.factory.GmsHostFactory
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.FaqActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.views.dialogs.ChangelogDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.startup.StartupActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.SettingsActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.SupportActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.GeneralSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LibraryExtrasRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.ShellHost
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R as ComponentsR
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R as AboutR
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.R as PrivacyR
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R as HelpR
 
+/**
+ * The sample's only screen host: [ShellHost] with the graph from `appGraph`, which draws every tab,
+ * page, bar and drawer. Consent, review and update run from here, where the activity is.
+ */
 class MainActivity : AppCompatActivity() {
 
     private val dataStore: DataStoreInterface by inject()
     private val dispatchers: DispatcherProvider by inject()
-    private val navigationManager: NavigationManager by inject()
+    private val componentsShowcaseRepository: ComponentsShowcaseRepository by inject()
     private val viewModel: MainViewModel by viewModel()
     private val gmsHostFactory: GmsHostFactory by inject()
     private var updateResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
@@ -95,114 +84,53 @@ class MainActivity : AppCompatActivity() {
         handleGmsEvents()
     }
 
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        setIntent(intent)
-        openSettingsForShortcut(intent)
-    }
-
     private fun handleStartup() {
-        val openSettings = intent.action == ACTION_OPEN_SETTINGS
         lifecycleScope.launch {
             val isFirstLaunch: Boolean =
                 withContext(context = dispatchers.io) { dataStore.startup.first() }
-            keepSplashVisible = false
             if (isFirstLaunch) {
-                startStartupActivity()
+                keepSplashVisible = false
+                openActivity(activityClass = StartupActivity::class.java)
+                finish()
             } else {
-                val startRoute: StableNavKey = withContext(context = dispatchers.io) {
-                    dataStore.startupDestinationFlow(
-                        defaultRoute = NavigationRoutes.ROUTE_TOOLKIT_TILES,
-                        mapToKey = String::toNavKeyOrDefault,
-                    ).first()
-                }
-                setMainActivityContent(startRoute = startRoute)
-                if (openSettings) {
-                    openSettingsActivity()
-                }
+                setShellContent()
             }
         }
     }
 
-    private fun openSettingsForShortcut(intent: Intent) {
-        if (intent.action == ACTION_OPEN_SETTINGS) {
-            openSettingsActivity()
-        }
-    }
-
-    private fun openSettingsActivity() {
-        openActivity(activityClass = SettingsActivity::class.java)
-    }
-
-    private fun startStartupActivity() {
-        openActivity(activityClass = StartupActivity::class.java)
-        finish()
-    }
-
-    private fun setMainActivityContent(startRoute: StableNavKey) {
+    private fun setShellContent() {
         setContent {
             AppTheme {
-                MainScreen(
-                    startRoute = startRoute,
-                    bottomBarItems = MainNavigationDefaults.bottomBarItems,
-                    fabSupportedRoutes = MainNavigationDefaults.fabSupportedRoutes,
-                    entryBuilders = { context -> appNavigationEntryBuilders(context = context) },
-                    onTitleLookup = { route ->
-                        when (route) {
-                            is SettingsRoute -> stringResource(AboutR.string.settings)
-                            is GeneralSettingsRoute -> route.title
-                            is HelpRoute -> stringResource(HelpR.string.help)
-                            is AdsSettingsRoute -> stringResource(PrivacyR.string.ads)
-                            is PermissionsRoute -> stringResource(PrivacyR.string.permissions)
-                            is LicensesRoute -> stringResource(AboutR.string.oss_license_title)
-                            is SupportRoute -> stringResource(AboutR.string.support_us)
-                            is LibraryExtrasRoute -> stringResource(CommonR.string.app_name)
-                            is ComponentsRoute -> stringResource(ComponentsR.string.components_title)
-                            else -> {
-                                MainNavigationDefaults.bottomBarItems
-                                    .find { it.route == route }?.let { stringResource(it.title) }
-                                    ?: stringResource(CommonR.string.app_name)
-                            }
+                val randomApp = remember { RandomAppAction() }
+                var showChangelog by rememberSaveable { mutableStateOf(false) }
+                val isShowcaseUnlocked by componentsShowcaseRepository.isUnlocked
+                    .collectAsStateWithLifecycle(initialValue = false)
+                val showComponents = BuildConfig.DEBUG || isShowcaseUnlocked
+                val graph = remember(showComponents) {
+                    appGraph(
+                        randomApp = randomApp,
+                        showComponents = showComponents,
+                        onShowChangelog = { showChangelog = true },
+                    )
+                }
+
+                ShellHost(
+                    graph = graph,
+                    // The start page chosen in the display settings, read before the first frame.
+                    resolveStart = {
+                        withContext(context = dispatchers.io) {
+                            dataStore.startupDestinationFlow(
+                                defaultRoute = ToolkitTilesRoute.ROUTE_ID,
+                                mapToKey = ::startKeyFor,
+                            ).first()
                         }
                     },
-                    onIsSelected = { itemRoute, currentRoute ->
-                        when (itemRoute) {
-                            NavigationRoutes.ROUTE_COMPONENTS -> currentRoute is ComponentsRoute
-                            NavigationDrawerRoutes.ROUTE_SETTINGS -> currentRoute is SettingsRoute || currentRoute is GeneralSettingsRoute
-                            NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK -> currentRoute is HelpRoute
-                            NavigationDrawerRoutes.ROUTE_SUPPORT -> currentRoute is SupportRoute
-                            else -> false
-                        }
-                    },
-                    onLaunchActivity = { route: StableNavKey ->
-                        when (route) {
-                            is ComponentsRoute -> {
-                                openActivity(activityClass = ComponentsActivity::class.java)
-                                true
-                            }
-
-                            is SettingsRoute -> {
-                                openActivity(activityClass = SettingsActivity::class.java)
-                                true
-                            }
-
-                            is HelpRoute -> {
-                                openActivity(activityClass = FaqActivity::class.java)
-                                true
-                            }
-
-                            is SupportRoute -> {
-                                openActivity(activityClass = SupportActivity::class.java)
-                                true
-                            }
-
-                            else -> false
-                        }
-                    },
-                    onNavigationRequested = { route ->
-                        navigationManager.navigateTo(route = route.toNavKeyOrDefault())
-                    }
+                    onReady = { keepSplashVisible = false },
                 )
+
+                if (showChangelog) {
+                    ChangelogDialog(onDismiss = { showChangelog = false })
+                }
             }
         }
     }
@@ -239,10 +167,5 @@ class MainActivity : AppCompatActivity() {
                 )
             )
         )
-    }
-
-    private companion object {
-        const val ACTION_OPEN_SETTINGS =
-            "com.d4rk.android.apps.apptoolkit.action.OPEN_SETTINGS"
     }
 }

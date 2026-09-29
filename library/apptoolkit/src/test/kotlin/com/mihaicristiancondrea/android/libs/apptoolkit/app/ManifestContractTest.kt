@@ -99,6 +99,7 @@ class ManifestContractTest {
         val shortcut = File(repositoryRoot, SAMPLE_SHORTCUTS).readText()
         val buildScript = File(repositoryRoot, SAMPLE_BUILD_SCRIPT).readText()
         val mainActivity = File(repositoryRoot, SAMPLE_MAIN_ACTIVITY_SOURCE).readText()
+        val appGraph = File(repositoryRoot, SAMPLE_APP_GRAPH_SOURCE).readText()
 
         assertThat(shortcut).contains("android:action=\"$OPEN_SETTINGS_ACTION\"")
         assertThat(shortcut).contains("android:targetClass=\"$SAMPLE_MAIN_ACTIVITY\"")
@@ -106,11 +107,11 @@ class ManifestContractTest {
         assertThat(buildScript).contains("val releasedApplicationId = \"$SAMPLE_APPLICATION_ID\"")
         assertThat(buildScript).contains("applicationId = releasedApplicationId")
         assertThat(buildScript).contains("resValue(\"string\", \"app_package_name\", releasedApplicationId)")
-        assertThat(mainActivity).contains("override fun onNewIntent(intent: Intent)")
-        assertThat(mainActivity).contains("setIntent(intent)")
-        assertThat(mainActivity).contains("\"$OPEN_SETTINGS_ACTION\"")
-        assertThat(mainActivity)
-            .contains("openActivity(activityClass = SettingsActivity::class.java)")
+        // The shell opens the page a deep link maps an intent to, at launch and for the intents a
+        // running activity receives, so the shortcut needs only the mapping in the graph.
+        assertThat(mainActivity).contains("ShellHost(")
+        assertThat(appGraph).contains("\"$OPEN_SETTINGS_ACTION\"")
+        assertThat(appGraph).contains("deepLinks { action(ACTION_OPEN_SETTINGS) { SettingsRoute } }")
     }
 
     @Test
@@ -236,6 +237,9 @@ class ManifestContractTest {
         const val SAMPLE_MAIN_ACTIVITY_SOURCE =
             "sample/app/src/main/kotlin/com/mihaicristiancondrea/android/apps/apptoolkit/" +
                 "app/main/ui/MainActivity.kt"
+        const val SAMPLE_APP_GRAPH_SOURCE =
+            "sample/app/src/main/kotlin/com/mihaicristiancondrea/android/apps/apptoolkit/" +
+                "app/navigation/AppGraph.kt"
 
         val APPTOOLKIT_APPLICATION_ATTRIBUTES = setOf(
             "android:allowBackup",

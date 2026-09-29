@@ -15,17 +15,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    id("com.mihaicristiancondrea.android.apptoolkit.sample-module")
-}
+package com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.states
 
-android {
-    namespace = "com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding"
-}
+import androidx.compose.runtime.Immutable
 
-dependencies {
-    testImplementation(project(":library:core:testing"))
-    api(project(":sample:core:common"))
-    api(project(":sample:core:datastore"))
-    api(project(":library:apptoolkit"))
-}
+/**
+ * The main screen holds no data of its own: its state carries only the snackbars the consent,
+ * review and update flows report.
+ */
+@Immutable
+data object MainUiState

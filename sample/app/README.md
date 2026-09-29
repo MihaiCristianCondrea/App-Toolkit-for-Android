@@ -8,10 +8,15 @@ libraries with the host's own feature modules.
 ## Owns
 
 - The `AppToolkit` application class, the manifest, `MainActivity`, and the Koin bootstrap.
+- `MainViewModel`, which runs the consent, in-app review and in-app update requests `MainActivity`
+  sends from `onResume`.
 - `sampleAppModules`, the single source of truth used by runtime startup and DI graph tests.
 - App-only bridges that intentionally connect otherwise independent features, such as the About
   version-tap callback to the Components unlock repository.
-- `appNavigationEntryBuilders`, the one declaration that names every host feature.
+- `appGraph`, the one declaration that names every host feature: the Tiles and Apps tabs, the
+  components page, the drawer, the overflow menu and the settings shortcut's deep link, on top of
+  the Toolkit's pages from `toolkitGraph { }`. `startKeyFor` maps the stored start page to its tab.
+- The drawer header's `app_logo`.
 - The sample onboarding provider; startup and settings provider adapters live in
   [`:sample:core:apptoolkit`](../core/apptoolkit/README.md).
 - Application identity resources: launcher mipmaps and host-specific `xml/` configuration
@@ -33,16 +38,17 @@ libraries with the host's own feature modules.
   [`:sample:core:ui`](../core/ui/README.md).
 - Advertising configuration, including the sample's AdMob application ID and merged-manifest
   declaration, owned by [`:sample:integration:ads`](../integration/ads/README.md).
-- Route keys and the entry-builder context, owned by
-  [`:sample:core:navigation`](../core/navigation/README.md).
+- Route keys, owned by the feature each belongs to (`ToolkitTilesRoute`, `AppsListRoute`,
+  `ComponentsRoute`).
+- The chrome and navigation, owned by [`:library:shell`](../../library/shell/README.md) and
+  [`:library:navigation`](../../library/navigation/README.md).
 
 ## Depends on
 
 - Every `:sample:core:*`, `:sample:feature:*` and `:sample:widget` module, including
   `:sample:core:apptoolkit` for the host's toolkit adapter.
-- [`:library:apptoolkit`](../../library/apptoolkit/README.md) for shared DI and navigation
-  composition,
-  plus the toolkit feature and integration modules it configures.
+- [`:library:apptoolkit`](../../library/apptoolkit/README.md) for shared DI, `toolkitGraph { }` and
+  `ShellHost`, plus the toolkit feature and integration modules it configures.
 
 ## Used by
 
@@ -62,14 +68,14 @@ flowchart TD
     Lifecycle --> Billing[Past-purchase processing]
     Launcher[MainActivity] --> FirstRun{Onboarding complete?}
     FirstRun -->|no| Startup[Toolkit StartupActivity]
-    FirstRun -->|yes| Route[Persisted StableNavKey]
-    Route --> Theme[AppTheme]
-    Theme --> Shell["MainScreen (:sample:core:shell)"]
-    Launcher --> Builders[appNavigationEntryBuilders]
-    Builders --> HostEntries[":sample:feature:* entries"]
-    Builders --> ToolkitEntries[Toolkit entries]
-    Shell --> HostEntries
-    Shell --> ToolkitEntries
+    FirstRun -->|yes| Theme[AppTheme]
+    Theme --> Host[ShellHost]
+    Launcher --> Graph[appGraph]
+    Graph --> HostPages[":sample:feature:* tabs and pages"]
+    Graph --> ToolkitPages["toolkitGraph { }: Toolkit pages"]
+    Host --> Graph
+    Host --> Start[resolveStart: stored start page]
+    Start --> Ready[onReady: splash screen leaves]
 ```
 
 ## Architectural decisions
@@ -78,8 +84,15 @@ flowchart TD
   and destination set; feature modules remain unaware of their siblings.
 - Host-to-toolkit provider adaptation is isolated in `:sample:core:apptoolkit`, while this module
   retains final Koin startup and app-only configuration.
-- `MainActivity` resolves first-run state and the persisted startup key before composing the shell,
-  preventing a default destination from flashing before the real route is known.
+- `MainActivity` resolves first-run state before composing anything, and `ShellHost` reads the stored
+  start page in `resolveStart` before its first frame; the splash screen stays up until `onReady`, so
+  a default tab never flashes before the chosen one.
+- The launcher shortcut's `OPEN_SETTINGS` action is a deep link in `appGraph`, so the shell opens
+  the settings page for it at launch and while running, with no activity of its own.
+- The Apps tab's random-app button is the tab's `fab`. The shell draws it outside the tab's
+  content, so the list registers what it does in a `RandomAppAction` the activity holds.
+- The drawer's Components entry depends on the showcase being unlocked, so the graph is rebuilt
+  when that changes; the back stacks are kept, since they are saved by position, not by graph.
 - Process-lifetime ads, billing recovery, installing the seasonal overlay, and current-activity tracking
   stay in the application class because their lifetime exceeds any screen ViewModel.
 
@@ -100,16 +113,16 @@ the application-level locale link.
 
 ## Internal implementations
 
-- Koin module wiring, host provider bindings, and the navigation entry aggregation.
+- Koin module wiring, host provider bindings, and the graph.
 
 ## Current risks
 
-`appNavigationEntryBuilders` is the single place that knows the full feature set, so every new
-destination touches this module. That is deliberate, it is what keeps the feature modules from
-depending on each other, but it does make this file a merge point.
+`appGraph` is the single place that knows the full feature set, so every new destination touches
+this module. That is deliberate, it is what keeps the feature modules from depending on each other,
+but it does make this file a merge point.
 
-The application still names the complete feature and destination set. This is an intentional merge
-point, but conflicts are possible when several features are added at once.
+First launch still leaves for the Toolkit's `StartupActivity`; it becomes a start screen of the
+graph when onboarding moves onto the shell.
 
 ## Architecture guards
 
@@ -127,9 +140,9 @@ startup without also becoming part of graph verification.
 The host was a single `:sample` module until the split. Three couplings had to be broken to make the
 feature modules leaves rather than a chain:
 
-- `MainScreen` imported `appNavigationEntryBuilders`, which would have made the shell depend on
-  every
-  feature it renders. It now takes the builders as a parameter, supplied here by `MainActivity`.
+- The old `MainScreen` imported the app's entry builders, which would have made the shell depend on
+  every feature it renders. In 3.0.0 the shell became `:library:shell` and the graph moved here as
+  `appGraph`; `:sample:core:shell` and `:sample:core:navigation` were removed.
 - `APPS_LIST_AD_FREQUENCY` was a `buildConfigField` here, which no library module can read. It is a
   fixed tuning value, so it became a constant in [`:sample:core:common`](../core/common/README.md).
 

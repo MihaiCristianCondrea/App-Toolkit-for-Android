@@ -18,16 +18,20 @@ demonstrates the library in a real application.
 ## Repository structure
 
 - [`library/apptoolkit`](library/apptoolkit/README.md) is the host-facing entry point. It exports the
-  toolkit modules and assembles their Koin modules and Navigation 3 destinations.
+  toolkit modules, assembles their Koin modules, and registers the Toolkit's pages with
+  `toolkitGraph { }`.
 - [`library/core`](library/core/README.md) contains shared models, data, design-system, networking,
   testing, and UI foundations.
 - [`library/feature`](library/feature/README.md) contains reusable features: About, Advanced
-  settings, Changelog, Diagnostics, Display, Help, Issue Reporter, Licenses, Onboarding,
-  Permissions, Privacy, Settings, Support, and Theme.
+  settings, Changelog, Developer options, Diagnostics, Display, Help, Issue Reporter, Licenses,
+  Onboarding, Permissions, Privacy, Settings, Support, and Theme.
 - [`library/integration`](library/integration/README.md) contains optional integrations for ads,
   billing, consent, Firebase, in-app review, and in-app updates.
-- [`library/navigation`](library/navigation/README.md) provides shared navigation contracts, models,
-  UI, and back-stack helpers, and the shell navigation core that one-activity apps are moving to.
+- [`library/navigation`](library/navigation/README.md) is the navigation core of the one-activity
+  shell: the graph an app describes, the navigator, the page and list-detail scenes, the
+  transitions and predictive back, and the Toolkit's route keys.
+- [`library/shell`](library/shell/README.md) hosts the graph in the app's one activity: the app bar,
+  navigation bar, rail, drawers, overflow menu, banner and player.
 - [`sample`](sample/README.md) documents the sample application and its user-facing features.
 
 Each module has a README describing its responsibilities, dependencies, public contracts, and known
@@ -59,6 +63,9 @@ dependencies {
 The published version is maintained as `PUBLISHING_VERSION` in [`gradle.properties`](gradle.properties).
 For host configuration, dependency-injection entry points, and navigation integration details, see
 the [`:library:apptoolkit` documentation](library/apptoolkit/README.md).
+
+Upgrading from 2.x? The [3.0.0 migration guide](docs/migration/3.0.0.md) maps the removed navigation
+APIs to the shell that replaces them.
 
 ## Explore the sample
 
@@ -102,7 +109,7 @@ plugin and depend only on the core, integration, and library modules they need. 
 depend on sibling features.
 
 A feature owns and exports its route key, route identifier, screen, and Koin module. It does not
-register itself. `:sample:app` aggregates navigation entry builders, drawer items, bottom-bar items,
+register itself. `:sample:app` declares the graph (tabs, pages, drawer and overflow entries),
 startup choices, and cross-feature adapters because it is the only module allowed to see the whole
 feature set. Route identifiers are declared once and referenced through their route constants.
 
@@ -113,10 +120,11 @@ The build enforces these boundaries:
 - Core, feature, and integration modules cannot depend on `:sample:app`.
 - Kotlin packages cannot be split across sample modules.
 - App composition packages cannot be imported from reusable sample modules.
-- Core navigation cannot import feature implementations.
+- Core modules cannot import feature implementations.
 - Analytics screen names come from `AppScreenTracking`, not inline literals.
 
-The library has rules of its own: shared library modules cannot depend on features or on
+The library has rules of its own: shared library modules (core, integration, navigation and shell)
+cannot depend on features or on
 `:library:apptoolkit`, the library never depends on the sample, library packages are not split, and
 library features cannot depend on each other beyond the edges listed in `ModuleBoundariesPlugin`,
 which shrink as each feature moves to the shell graph.

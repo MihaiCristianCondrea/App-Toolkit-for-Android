@@ -7,7 +7,7 @@ organizational container, not a runtime artifact.
 
 ## Owns
 
-- Grouping for about, help, issue reporter, onboarding, permissions, settings, support, advanced, diagnostics, display, and theme modules.
+- Grouping for about, help, issue reporter, onboarding, permissions, settings, support, advanced, diagnostics, display, theme, and developer modules.
 
 ## Does not own
 
@@ -35,6 +35,7 @@ flowchart TD
     Parent --> Permissions["permissions: inspection and settings actions"]
     Parent --> Settings["settings: toolkit settings surfaces"]
     Parent --> Support["support: donation UI"]
+    Parent --> Developer["developer: shell developer options"]
     Settings --> Advanced["advanced: cache and advanced actions"]
     Settings --> Diagnostics["diagnostics: usage and consent preferences"]
     Settings --> Display["display: display and startup preferences"]

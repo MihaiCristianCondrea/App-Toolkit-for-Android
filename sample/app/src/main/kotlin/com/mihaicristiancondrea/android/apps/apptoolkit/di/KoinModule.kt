@@ -22,8 +22,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.di.appToolkitHostModules
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.common.utils.constants.faq.FaqConstants
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.di.dataStoreModule
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.di.navigationModule
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.di.shellModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.di.appsModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.di.componentsModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.di.onboardingModule
@@ -39,8 +37,6 @@ import org.koin.core.module.Module
 fun sampleAppModules(hostBuildConfig: AppToolkitHostBuildConfig): List<Module> = buildList {
     addAll(appToolkitHostModules(hostBuildConfig = hostBuildConfig))
     add(dataStoreModule)
-    add(navigationModule)
-    add(shellModule)
     add(appModule)
     add(settingsModule(hostBuildConfig = hostBuildConfig))
     add(tilesModule)

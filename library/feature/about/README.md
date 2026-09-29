@@ -11,7 +11,7 @@ plus the tap-to-copy interaction for the entries it renders and the version-tap 
   and the host-formatted device report).
 - Tap-to-copy for About entries, including the clipboard write and its in-app confirmation.
 - The version-tap easter egg: konfetti on the fifth tap, and the seasonal themes unlock it records.
-- The drawer navigation click handler and the library-owned extras destination.
+- The library-owned extras screen, `LibraryExtrasScreen`.
 - The GMS host factory used by consent, review, and update flows.
 
 ## Does not own
@@ -20,12 +20,12 @@ plus the tap-to-copy interaction for the entries it renders and the version-tap 
 - Privacy and legal entries, owned by [`:library:feature:privacy`](../privacy/README.md).
 - Changelog retrieval, presentation, and in-app-update triggering, owned by
   [`:library:feature:changelog`](../changelog/README.md).
-- The main top app bar and the default drawer repository, owned by
-  [`:library:navigation`](../../navigation/README.md).
+- The drawer and its entries, declared by the app in its shell graph; Share and Updates are drawer
+  actions there.
 - Host main screen and host route keys, owned by `:sample`.
 - Host identity strings, supplied as overridable defaults by `:library:core:common`.
 - The device report itself, supplied by the host through `AboutSettingsProvider`.
-- Root Navigation 3 entry assembly, owned by `:library:apptoolkit`.
+- Page registration, done by `toolkitGraph { }` in `:library:apptoolkit`.
 
 ## Depends on
 
@@ -112,7 +112,7 @@ Verify on a physical device, where the preview appears on every tap, or switch o
 ## Public contracts
 
 - `AboutSettingsProvider`, `AboutRepository`, `AboutInfo`, `AboutItem`, `AboutItemAction`,
-  `AboutEvent`, `AboutScreen`, `LibraryExtrasScreen`, `handleNavigationItemClick`, and
+  `AboutEvent`, `AboutScreen`, `LibraryExtrasScreen`, and
   `GmsHostFactory`.
 
 ## Internal implementations

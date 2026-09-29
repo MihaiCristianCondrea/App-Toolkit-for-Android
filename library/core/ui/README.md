@@ -2,13 +2,15 @@
 
 ## Purpose
 
-Provides the reusable Compose presentation foundation: screen/ViewModel contracts, Navigation 3
-entry helpers, state handling, analytics hooks, and shared components.
+Provides the reusable Compose presentation foundation: screen/ViewModel contracts, the shell's
+page frame, state handling, analytics hooks, and shared components.
 
 ## Owns
 
 - `ScreenViewModel`, `LoggedScreenViewModel`, event/action bases, and `UiStateScreen` handling.
-- Navigation entry builders and UI state built on stable keys owned by `:library:navigation`.
+- The shell's page frame, in `views/shell`: `PageScaffold`, `ShellTopAppBar` and
+  `rememberTopBarScrollBehavior`, the app bar's search field, `LocalContentPadding` and
+  `contentPadding`, `ContentWidthBox`, and the pane placeholders. See [Page frame](#page-frame).
 - Reusable buttons, fields, preferences, layouts, grids, dialogs, snackbars, ads slots, effects, and
   adaptive-window helpers.
 - `MainTopAppBar`, the host main-screen app bar, its optional centre-aligned title, and its
@@ -38,7 +40,8 @@ entry helpers, state handling, analytics hooks, and shared components.
   reusable modifiers and ad slots consume design-system-provided values rather than DataStore.
 - [`:library:core:designsystem`](../designsystem/README.md) for theme primitives and the
   `ToolkitIcon` slot the buttons render.
-- [`:library:navigation`](../../navigation/README.md) for shared navigation models and transitions.
+- [`:library:navigation`](../../navigation/README.md) for the navigator, the page key and pane
+  role, and the layout the page frame reads.
 
 ## Used by
 
@@ -63,7 +66,7 @@ flowchart TD
     Action --> Host[Navigation, intent, or transient UI handler]
     Theme[AppTheme CompositionLocals] --> Components[Reusable components and ad slots]
     Components --> Screen
-    Nav[Navigation entry helpers] --> Screen
+    Frame[PageScaffold page frame] --> Screen
 ```
 
 ## Architectural decisions
@@ -79,10 +82,9 @@ flowchart TD
 
 ## Compatibility adapters
 
-The existing startupDestinationFlow extension delegates to core DataStore's generic startupValueFlow.
 The existing getVersionInfo extension delegates to core common's getVersionMetadata and returns the
-unchanged AppVersionInfo class. Their original packages, function signatures, and JVM file names
-remain available; data-layer callers should use the lower-level APIs.
+unchanged AppVersionInfo class. Its original package, function signature, and JVM file name remain
+available; data-layer callers should use the lower-level API.
 
 ## Public contracts
 
@@ -90,7 +92,12 @@ remain available; data-layer callers should use the lower-level APIs.
   See the [3.0 button contract and migration](../designsystem/README.md#generalbutton-30).
 - `GeneralTextField` is the text-input entry point; see [GeneralTextField](#generaltextfield).
 - `MainTopAppBar` and `SearchTopAppBar` are the two host app bars; see
-  [Top app bars](#top-app-bars).
+  [Top app bars](#top-app-bars). Pages of the shell get `ShellTopAppBar` from the page frame
+  instead.
+- `PageScaffold`, `ShellTopAppBar`, `LocalContentPadding` and `contentPadding`, `ContentWidthBox`,
+  `PanePlaceholder` and `ListPlaceholder`; see [Page frame](#page-frame).
+- `AnimatedIconButtonDirection` slides, fades and scales in and out from its edge, and crossfades
+  its glyph when `icon` changes, so one button can turn from a menu button into a back arrow.
 - `GroupedGrid` is the grouped category/action block: `GroupedGridItem` cells, `GroupedGridDefaults`
   for radii, spacing, colors and the badge shape, and `GroupedGridMeasurements` for the size class.
   The corner and ad-placement rules are `groupedGridRows`, which is unit tested; the composable
@@ -120,8 +127,8 @@ remain available; data-layer callers should use the lower-level APIs.
 - Initialization is represented by an event sent from `init`; long-running work is owned and
   cancelled by the ViewModel. Flow pipelines use `catch` and dispatcher selection rather than
   `runCatching` in ViewModels.
-- Shared navigation types, state/render models, reusable composables, lifecycle effects, and
-  analytics APIs are intentional cross-module contracts.
+- State/render models, reusable composables, lifecycle effects, and analytics APIs are intentional
+  cross-module contracts.
 - Every button takes its icon as a single `ToolkitIcon`, so a button can carry a Compose icon, a
   drawable resource, or an animated vector that plays on each click. See
   [the design system README](../designsystem/README.md#toolkit-icon-api).
@@ -217,6 +224,26 @@ out. Actions belonging to the bar rather than to the query stay in `actions`.
 Both bars default their strings, so a host that has nothing to say about them passes nothing:
 `title` falls back to the app name, and the search placeholder and clear-button description to
 `core:ui`'s own `search` and `clear_search`.
+
+## Page frame
+
+`views/shell` holds what a page of the shell is drawn in. `ShellHost` in `:library:shell` wraps
+every page registered with a title in `PageScaffold`: a `ShellTopAppBar` with a back button that
+closes the page through the navigator, and a body under it. Pages that need something under their
+app bar, such as tabs, call `PageScaffold` themselves.
+
+- **The style is the page's, the size the window's.** A page declares its `TopBarStyle`; a large
+  bar becomes a small one on a window too short for it, and inside a list-detail pane the frame
+  draws no bar at all, because the scene draws one across both panes.
+  `LocalTopBarStyleOverride` lets the developer options try one style across the app.
+- **Content is edge to edge at the bottom.** The body reaches behind the system navigation bar and,
+  on tabs, the bottom bar, banner and player. What covers it arrives as `LocalContentPadding`, so a
+  list adds `contentPadding()` to its own padding and scrolls under the bars instead of stopping
+  above them.
+- **The back button is `AnimatedIconButtonDirection`,** the same button the shell's app bar uses,
+  with its slide, press bounce, click sound and haptic.
+- `ContentWidthBox` centres content no wider than the layout policy's maximum width, and
+  `PanePlaceholder` and `ListPlaceholder` fill a detail pane nothing is open in.
 
 ## Internal implementations
 

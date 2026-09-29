@@ -14,21 +14,20 @@ Quick tools: the in-app tool catalogue and the Quick Settings tile services behi
   `SosRepository`, and `CounterRepository`, which remain the data-layer entry points and own
   coordination or runtime state.
 - UI catalogue models and mappers, the screen and dedicated tool ViewModels, tool composables,
-  `toolkitTilesEntryBuilder`, and the Quick Settings services.
+  `ToolkitTilesRoute`, this feature's tab key, and the Quick Settings services.
 - Localized Quick Tools strings and plurals.
 - Feature-owned manifest permissions for haptics and flashlight access. The feature
   declares no foreground service and no wake locks.
 
 ## Does not own
 
-- The route key it registers against, owned by
-  [`:sample:core:navigation`](../../core/navigation/README.md).
+- Its registration as a tab, done by `:sample:app`'s `appGraph`.
 - Native ad rendering, owned by [`:library:core:ui`](../../../library/core/ui/README.md); this
   module supplies only the quick-tools card styling.
 
 ## Depends on
 
-- `:sample:core:navigation`, `:sample:core:common`, `:sample:core:ui`.
+- `:sample:core:common`, `:sample:core:ui`.
 - [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for ad slots and screen contracts.
 
 ## Used by
@@ -81,7 +80,8 @@ flowchart TD
 
 - `ToolkitTilesRepository`, `TorchRepository`, `MorseRepository`, `CounterRepository`,
   `ToolkitTilesViewModel`, the
-  dedicated tool ViewModels, `toolkitTilesEntryBuilder`, and the source-neutral tile models.
+  dedicated tool ViewModels, `ToolkitTilesScreen`, `ToolkitTilesRoute`, and the source-neutral
+  tile models.
 
 ## Internal implementations
 

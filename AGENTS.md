@@ -699,12 +699,12 @@ Its sample rules include:
 * feature modules cannot depend on `:sample:app`
 * packages in the sample must not be split across modules
 * non-app sample modules must not import app-owned composition packages
-* `:sample:core:navigation` must not import product feature implementations
+* `:sample:core:*` must not import product feature implementations
 * inline analytics screen names are rejected
 
 Its library rules include:
 
-* `:library:core:*`, `:library:integration:*` and `:library:navigation` cannot depend on
+* `:library:core:*`, `:library:integration:*`, `:library:navigation` and `:library:shell` cannot depend on
   `:library:feature:*` or `:library:apptoolkit`
 * no library module can depend on a `:sample:*` module
 * sibling `:library:feature:*` modules cannot depend on each other, except the edges listed in

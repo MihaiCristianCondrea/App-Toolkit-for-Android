@@ -16,7 +16,6 @@ completion logic to the App Toolkit's onboarding infrastructure.
 
 ## Depends on
 
-- `:sample:core:navigation` for navigation keys.
 - `:sample:core:common` for shared utilities.
 - [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for the core onboarding UI and
   logic.

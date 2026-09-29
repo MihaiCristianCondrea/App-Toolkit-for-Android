@@ -15,17 +15,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    id("com.mihaicristiancondrea.android.apptoolkit.sample-module")
-}
+package com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts
 
-android {
-    namespace = "com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding"
-}
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewOutcome
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.update.domain.models.InAppUpdateResult
 
-dependencies {
-    testImplementation(project(":library:core:testing"))
-    api(project(":sample:core:common"))
-    api(project(":sample:core:datastore"))
-    api(project(":library:apptoolkit"))
+sealed interface MainAction : ActionEvent {
+    data class ReviewOutcomeReported(val outcome: ReviewOutcome) : MainAction
+    data class InAppUpdateResultReported(val result: InAppUpdateResult) : MainAction
 }

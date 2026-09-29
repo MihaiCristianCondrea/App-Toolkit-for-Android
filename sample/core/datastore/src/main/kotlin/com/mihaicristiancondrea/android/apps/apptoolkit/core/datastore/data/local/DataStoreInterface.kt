@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
+import androidx.navigation3.runtime.NavKey
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -30,7 +30,7 @@ interface DataStoreInterface {
     val componentsShowcaseUnlocked: Flow<Boolean>
     val favoriteApps: Flow<Set<String>>
 
-    fun <T : StableNavKey> startupDestinationFlow(
+    fun <T : NavKey> startupDestinationFlow(
         defaultRoute: String,
         mapToKey: (String) -> T
     ): Flow<T>

@@ -34,7 +34,7 @@ flowchart TD
     App[":sample:app"] -->|initializes Koin| Module[adsIntegrationModule]
     Module --> Configs[AdsConfig instances]
     Config1[Apps List AdsConfig] -.->|injected into| FeatureApps[":sample:feature:apps"]
-    Config2[Bottom Nav AdsConfig] -.->|injected into| Shell[":sample:core:shell"]
+    Config2[Bottom Nav AdsConfig] -.->|reserved for| Banner["the graph's banner slot"]
     Configs --> ToolkitAds[":library:integration:ads"]
 ```
 
@@ -57,4 +57,6 @@ pair here places all of the sample's advertising configuration in one module; th
 
 The module binds seven placements: general native, no-data, bottom navigation, Help, Support, Apps
 List, and App Details. `AdsIntegrationModuleTest` resolves every qualifier and rejects blank unit
-IDs, while the app graph test verifies this module is part of runtime composition.
+IDs, while the app graph test verifies this module is part of runtime composition. No screen places
+the bottom navigation ad yet; the shell's `banner { }` slot in `:sample:app`'s `appGraph` is where it
+goes.

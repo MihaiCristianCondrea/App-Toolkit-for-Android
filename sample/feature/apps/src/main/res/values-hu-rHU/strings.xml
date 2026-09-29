@@ -41,4 +41,5 @@
     <string name="favorite_apps">Kedvencek</string>
     <string name="summary_share_message">Nézd meg ezt a fantasztikus alkalmazást, amit használok. Nagyon érdekes funkciói vannak, amik neked is tetszhetnek. Letöltheted a Play Áruházból itt: %1$s</string>
     <string name="apps_tools_title">Alkalmazások elemre</string>
+    <string name="open_random_app">Véletlenszerű app megnyitása</string>
 </resources>

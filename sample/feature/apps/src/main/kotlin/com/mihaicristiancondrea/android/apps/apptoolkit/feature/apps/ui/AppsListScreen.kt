@@ -33,7 +33,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.models.AppScreenTracking
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.domain.models.RandomAppHandler
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.HomeAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.HomeEvent
@@ -81,7 +80,7 @@ import org.koin.core.qualifier.named
  * @param windowWidthSizeClass The window width size class, used to adapt the layout for
  *   different screen sizes.
  * @param onRegisterRandomAppHandler A callback to register or unregister the "open random app"
- *   action. It passes a [RandomAppHandler] lambda when the action is available (i.e., when
+ *   action. It passes a lambda when the action is available (i.e., when
  *   there are apps to choose from), and `null` otherwise.
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -89,7 +88,7 @@ import org.koin.core.qualifier.named
 fun AppsListScreen(
     paddingValues: PaddingValues,
     windowWidthSizeClass: AppWindowWidthSizeClass,
-    onRegisterRandomAppHandler: (RandomAppHandler?) -> Unit,
+    onRegisterRandomAppHandler: ((() -> Unit)?) -> Unit,
 ) {
     val viewModel: AppsListViewModel = koinViewModel()
 
@@ -194,7 +193,7 @@ fun AppsListScreen(
         }
     }
 
-    val randomAppHandler: RandomAppHandler =
+    val randomAppHandler: () -> Unit =
         remember(viewModel) { { viewModel.onEvent(HomeEvent.OpenRandomApp) } }
 
     val registerHandler by rememberUpdatedState(onRegisterRandomAppHandler)

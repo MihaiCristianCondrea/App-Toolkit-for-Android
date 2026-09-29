@@ -41,4 +41,5 @@
     <string name="favorite_apps">รายการโปรด</string>
     <string name="summary_share_message">ลองดูแอปนี้ที่ฉันใช้อยู่. มีฟีเจอร์เจ๋ง ๆ มากมายที่คุณอาจสนใจ ดาวน์โหลดได้จาก Play Store ที่: %1$s</string>
     <string name="apps_tools_title">แอพ</string>
+    <string name="open_random_app">เปิดแอปแบบสุ่ม</string>
 </resources>

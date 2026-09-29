@@ -4,14 +4,31 @@
 
 # Unreleased
 
+This release replaces the Toolkit's navigation with a one-activity shell. It removes the old navigation instead of deprecating it; the [3.0.0 migration guide](../docs/migration/3.0.0.md) maps every removed API to its replacement.
+
 ### Added
 
-- Added the shell navigation core to `:library:navigation`, the first step toward apps with one activity whose screens move like activities: `ShellGraphBuilder` and `ShellGraph` describe tabs, children, pages, the drawer, the overflow menu, start screens and deep links; `ShellNavigator` moves through them with one stack per tab and a tab history that back follows; `ShellNavDisplay` plays Android's cross-activity back animation on the back gesture; `ListDetailScene` shows a list page and its detail side by side with a draggable separator. Tabs, drawer entries and overflow entries take `ToolkitIcon`, so animated vector drawables and Lottie icons play on them. Nothing uses it yet; the existing navigation is unchanged.
-- Added `AboutRoute`, `ThemeSettingsRoute`, `DisplaySettingsRoute`, `PrivacySettingsRoute`, `AdvancedSettingsRoute`, `DiagnosticsSettingsRoute`, `DeveloperOptionsRoute`, `StartupRoute` and `OnboardingRoute`, one key per page the features will register in the shell graph.
+- Added the shell navigation core to `:library:navigation`: `shellGraph { }` describes tabs, children, pages, the drawer, the overflow menu, start screens and deep links; `ShellNavigator` moves through them with one stack per tab and a tab history that back follows; `ShellNavDisplay` plays Android's cross-activity back animation on the back gesture; `ListDetailScene` shows a list page and its detail side by side with a draggable separator. Tabs, drawer entries and overflow entries take `ToolkitIcon`, so animated vector drawables and Lottie icons play on them.
+- Added `:library:shell` with `ShellHost`, which draws an app's graph in its one activity: app bar, navigation bar, rail, drawers with the app's header, overflow menu, banner, player and floating action button, built from the Toolkit's own buttons and icons.
+- Added `:library:feature:developer` with `DeveloperOptionsScreen`, which switches every shell variation while the app runs and shows the window size and every back stack.
+- Added `toolkitGraph { }` to `:library:apptoolkit`, which registers the Toolkit's pages (settings, help, support, licenses, permissions, ads settings, developer options) in an app's graph unless the app registers the key itself.
+- Added the page frame to `:library:core:ui`: `PageScaffold`, `ShellTopAppBar`, `LocalContentPadding` and `contentPadding()`, `ContentWidthBox`, `PanePlaceholder` and `ListPlaceholder`.
+- Added `AboutRoute`, `ThemeSettingsRoute`, `DisplaySettingsRoute`, `PrivacySettingsRoute`, `AdvancedSettingsRoute`, `DiagnosticsSettingsRoute`, `DeveloperOptionsRoute`, `StartupRoute` and `OnboardingRoute`, one key per Toolkit page.
 
 ### Changed
 
-- Every `AppToolkitNavKey` is now `@Serializable` as well as `@Parcelize`, so the keys can live on `rememberNavBackStack` stacks. `:library:navigation` exposes `kotlinx-serialization-core` as `api`.
+- Every `AppToolkitNavKey` is now a plain `@Serializable` `NavKey`, no longer `Parcelable` or a `StableNavKey`. `:library:navigation` exposes `kotlinx-serialization-core` as `api`.
+- `:library:apptoolkit` now exposes `:library:shell` and `:library:feature:developer` through `api`.
+
+### Improved
+
+- `AnimatedIconButtonDirection` crossfades its glyph when `icon` changes, so one button can turn from a menu button into a back arrow without popping.
+
+### Removed
+
+- Removed the old navigation from `:library:navigation`: the `animations`, `backstack`, `data`, `models` and `ui` packages (`BottomNavigationBar`, `LeftNavigationRail`, `NavigationDrawerSheet`, `NavigationDrawerHeader`, `HideOnScrollBottomBar`, `BottomBarItem`, `NavigationDrawerItem`, `StableNavKey`, `NavigationRepository` and the back-stack helpers) and `NavigationDrawerRoutes`. Use `shellGraph { }` or `toolkitGraph { }` with `ShellHost`.
+- Removed `:library:core:ui`'s `navigation` package (`NavigationState`, `NavigationEntryBuilder`, `NavigationAnimations`) and `startupDestinationFlow`. Use `ShellNavigator`, and `startupValueFlow` from `:library:core:datastore`.
+- Removed `appToolkitNavigationEntryBuilders`, replaced by `toolkitGraph { }`, and `handleNavigationItemClick` with the `DefaultNavigationRepository` binding from `:library:feature:about`; drawer entries are declared in the graph.
 
 ---
 

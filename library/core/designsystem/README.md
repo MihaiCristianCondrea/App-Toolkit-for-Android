@@ -444,23 +444,22 @@ another theme color.
 
 ### One animation for a navigation item
 
-`BottomBarItem` and `NavigationDrawerItem` accept a dedicated `animatedIcon` constructor. It needs
-no `icon` or `selectedIcon` arguments and accepts only `ToolkitIcon.Animated` (AVD or Lottie).
-Internally both non-null icon states reference that same value, so existing custom navigation
-renderers can continue consuming `item.icon` and `item.selectedIcon`. Selection changes animate
-between the first and last frames; repeated clicks follow the chosen replay mode.
+A shell tab takes `icon` and `selectedIcon`, and `selectedIcon` defaults to `icon`. Passing one
+`ToolkitIcon.Animated` (AVD or Lottie) as `icon` therefore uses the same animation for both states:
+selection changes animate between its first and last frames, and repeated clicks follow the chosen
+replay mode.
 
 ```kotlin
-BottomBarItem(
-    route = ToolkitTilesRoute,
-    title = R.string.tiles_title,
-    animatedIcon = ToolkitIcon.AnimatedVector(
-        resId = DesignSystemR.drawable.anim_grid,
+tab(
+    key = ToolkitTilesRoute,
+    label = R.string.tiles_title,
+    icon = ToolkitIcon.AnimatedVector(
+        resId = DesignSystemR.drawable.anim_grid_select,
         replayMode = ToolkitIconReplayMode.Reverse,
     ),
-)
+) { ToolkitTilesScreen() }
 ```
 
-Use the `icon` / `selectedIcon` constructor when the two states need distinct artwork; both
-arguments are required. Pass the same static icon twice when it should not change on selection.
+Pass a distinct `selectedIcon` when the two states need different artwork. Drawer and overflow
+entries take one `ToolkitIcon`, which plays on each click.
 Moved resources must now be imported from `core.designsystem.R`, not `navigation.R`.

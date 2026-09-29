@@ -17,15 +17,12 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.navigation
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.domain.models.AppNavKey
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDestinationType
-import kotlinx.parcelize.Parcelize
+import androidx.navigation3.runtime.NavKey
+import kotlinx.serialization.Serializable
 
-@Parcelize
-data object AppsListRoute : AppNavKey {
-    override val destinationType: NavigationDestinationType
-        get() = NavigationDestinationType.TopLevel
-
+/** The Apps tab. */
+@Serializable
+data object AppsListRoute : NavKey {
     /** Persisted identifier for this destination, shared by DI qualifiers and the startup-page setting. */
     const val ROUTE_ID: String = "apps_list"
 }

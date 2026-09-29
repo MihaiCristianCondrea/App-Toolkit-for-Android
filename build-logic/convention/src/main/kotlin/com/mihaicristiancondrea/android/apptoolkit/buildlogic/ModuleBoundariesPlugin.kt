@@ -67,7 +67,7 @@ class ModuleBoundariesPlugin : Plugin<Project> {
                 checkSplitPackages(sampleRoot, sourceFiles, violations)
                 checkSplitPackages(libraryRoot, librarySourceFiles, violations)
                 checkAppOwnership(sampleRoot, sourceFiles, violations)
-                checkCoreNavigation(sampleRoot, sourceFiles, violations)
+                checkSampleCore(sampleRoot, sourceFiles, violations)
                 checkScreenTracking(sampleRoot, sourceFiles, violations)
 
                 if (violations.isNotEmpty()) {
@@ -127,7 +127,8 @@ class ModuleBoundariesPlugin : Plugin<Project> {
                 .mapTo(mutableSetOf()) { dependency -> dependency.path }
             val shared = projectPath.startsWith(":library:core:") ||
                 projectPath.startsWith(":library:integration:") ||
-                projectPath == ":library:navigation"
+                projectPath == ":library:navigation" ||
+                projectPath == ":library:shell"
 
             projectDependencies.forEach { dependencyPath ->
                 check(!dependencyPath.startsWith(":sample:")) {
@@ -177,12 +178,13 @@ class ModuleBoundariesPlugin : Plugin<Project> {
         }
     }
 
-    private fun checkCoreNavigation(
+    /** The sample's core modules sit under its features, so none may import one. */
+    private fun checkSampleCore(
         sampleRoot: File,
         sourceFiles: Set<File>,
         violations: MutableList<String>,
     ) {
-        sourceFiles.filter { modulePath(sampleRoot, it) == ":sample:core:navigation" }.forEach { file ->
+        sourceFiles.filter { modulePath(sampleRoot, it).startsWith(":sample:core:") }.forEach { file ->
             if (FEATURE_IMPORT_REGEX.containsMatchIn(file.readText())) {
                 violations += "${file.relativeTo(sampleRoot)} imports a product feature"
             }

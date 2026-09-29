@@ -3,15 +3,16 @@
 ## Purpose
 
 Acts as the host-facing entry point and composition root for reusable AppToolkit features. It assembles
-Koin modules and Navigation 3 destinations while re-exporting the toolkit modules through Gradle
-`api` dependencies.
+Koin modules and the Toolkit's pages of the shell graph while re-exporting the toolkit modules
+through Gradle `api` dependencies.
 
 ## Owns
 
 - `appToolkitModules`, the single entry point returning the toolkit's whole Koin graph.
 - `appToolkitFoundationModules`, `appToolkitFeatureModules`, and `appToolkitSettingsModules`, the
   granular lists `appToolkitModules` composes.
-- `appToolkitNavigationEntryBuilders` for shared embedded destinations.
+- `toolkitGraph { }` and `ShellGraphBuilder.toolkitPages()`, which register the Toolkit's pages in
+  an app's shell graph. See [Navigation](#navigation).
 - Host-to-library composition using `AppToolkitHostBuildConfig` and host provider factories.
 - Common host defaults contributed through manifest/resource merging: the AppCompat application
   theme, RTL/window behavior, backup and data-extraction rules, locale configuration resource,
@@ -28,11 +29,12 @@ Koin modules and Navigation 3 destinations while re-exporting the toolkit module
 ## Depends on
 
 - `:library:core:common`, `:library:core:datastore`, `:library:core:network`, `:library:core:ui`,
-  `:library:core:designsystem` and `:library:navigation` to assemble common infrastructure and UI
-  contracts.
+  `:library:core:designsystem`, `:library:navigation` and `:library:shell` to assemble common
+  infrastructure, UI contracts and the shell.
 - `:library:feature:about`, `:library:feature:faq`, `:library:feature:issuereporter`,
-  `:library:feature:onboarding`, `:library:feature:permissions`, `:library:feature:settings`, and
-  `:library:feature:support` to provision toolkit ViewModels, repositories, and destinations.
+  `:library:feature:onboarding`, `:library:feature:permissions`, `:library:feature:settings`,
+  `:library:feature:support` and `:library:feature:developer` to provision toolkit ViewModels,
+  repositories, and pages.
 - `:library:integration:ads`, `:library:integration:billing`, `:library:integration:consent`,
   `:library:integration:firebase`, `:library:integration:review`, and `:library:integration:update`
   to connect SDK implementations.
@@ -42,7 +44,7 @@ boundary.
 
 ## Used by
 
-- `:sample`, which loads the assembled DI modules and navigation builders.
+- `:sample`, which loads the assembled DI modules and builds its graph with `toolkitGraph { }`.
 
 ## Flow chart
 
@@ -59,9 +61,9 @@ flowchart TD
     Settings --> ProviderDefaults[Default host extension bindings]
     Features --> FeatureVMs[Feature repositories and ViewModels]
     Features --> Integrations[SDK-backed integrations]
-    Host --> NavBuilders[appToolkitNavigationEntryBuilders]
-    NavBuilders --> Entries[Navigation 3 entries]
-    Entries --> Screens[Embedded toolkit screens]
+    Host --> Graph["toolkitGraph { }"]
+    Graph --> Pages[Toolkit pages, unless the app registered the key]
+    Pages --> Screens[Toolkit screens in the page frame]
     Manifest[AppToolkit manifest and resources] -->|manifest/resource merge| Host
 ```
 
@@ -80,8 +82,8 @@ flowchart TD
 
 ## Public contracts
 
-- `appToolkitModules`, the three DI module-list factories it composes, and
-  `appToolkitNavigationEntryBuilders`.
+- `appToolkitModules`, the three DI module-list factories it composes, `toolkitGraph`, and
+  `toolkitPages`.
 - Transitive APIs from all `api(project(...))` dependencies are also visible to consumers.
 
 ### Manifest and resource defaults
@@ -112,8 +114,9 @@ their product identity by defining `app_name`, `app_full_name`, and `copyright` 
 
 ## Internal implementations
 
-- Koin module-list composition, qualifier wiring, and private destination builders. Individual
-  feature modules own their DI definitions and default palette registration.
+- Koin module-list composition, qualifier wiring, and `EmbeddedPage`, which pads a screen that still
+  has an embedded mode by the shell's bars. Individual feature modules own their DI definitions and
+  default palette registration.
 
 ## Publishing
 
@@ -127,11 +130,29 @@ modules they compose.
 
 ## Navigation
 
-`appToolkitNavigationEntryBuilders` lives in `app.main.ui.navigation` and registers the shared
-AppToolkit destinations for a host Navigation 3 graph. The historical forwarding function in
-`feature.about.ui.navigation` was removed so this module no longer ships a package owned by
-`:library:feature:about`; hosts importing it must switch to the `app.main.ui.navigation` import.
-Route keys and behavior are unchanged.
+`toolkitGraph { }` lives in `app.main.ui.navigation`. It runs the app's builder first and then
+registers, with `pageIfAbsent`, a page for each Toolkit key the app left alone:
+
+| Key | Page |
+|---|---|
+| `SettingsRoute` | `SettingsScreen`, with the settings menu in its app bar |
+| `GeneralSettingsRoute` | `GeneralSettingsScreen`, titled from the key |
+| `HelpRoute` | `FaqScreen` |
+| `SupportRoute` | `SupportScreen` |
+| `AdsSettingsRoute` | `AdsSettingsScreen` |
+| `PermissionsRoute` | `PermissionsScreen` |
+| `LicensesRoute` | `LicensesScreen` |
+| `LibraryExtrasRoute` | `LibraryExtrasScreen` |
+| `DeveloperOptionsRoute` | `DeveloperOptionsScreen` |
+
+It registers pages only; the app decides where each is offered (`settings()` and `supportUs()` in
+the drawer and overflow builders, links, or a screen's button). An app that builds its graph with
+`ShellGraphBuilder` directly calls `toolkitPages()` after its own destinations.
+
+The screens above still have the embedded mode they had inside their activities, so they are drawn
+with `isEmbedded = true` inside `EmbeddedPage`, which pads them by the shell's bars. As each feature
+reads `LocalContentPadding` itself and drops its activity, it registers its own page and leaves
+this list.
 
 ## Architecture guards
 

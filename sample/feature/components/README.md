@@ -7,7 +7,7 @@ The hidden components showcase and the unlock gesture that reveals it.
 ## Owns
 
 - The concrete `ComponentsShowcaseRepository`, which owns the unlock flag.
-- `ComponentsActivity`, `ComponentsScreen`, and the unlock threshold behavior.
+- `ComponentsRoute`, `ComponentsScreen`, and the unlock threshold behavior.
 - Localized strings for the component showcase.
 - The `GeneralTextField` gallery: one card per variant, including the error state and the Markdown
   editor. The text typed into it is the showcase's own scratch state and stays inside the section.
@@ -19,16 +19,17 @@ The hidden components showcase and the unlock gesture that reveals it.
 
 - Where the unlock gesture is performed. The app composition root supplies that bridge to the
   reusable About screen.
-- Drawer rendering, owned by [`:sample:core:shell`](../../core/shell/README.md).
+- The page registration and the drawer entry, both in `:sample:app`'s `appGraph`, and drawer
+  rendering, owned by [`:library:shell`](../../../library/shell/README.md).
 
 ## Depends on
 
-- `:sample:core:navigation`, `:sample:core:datastore`, and `:sample:core:analytics`.
+- `:sample:core:datastore` and `:sample:core:analytics`.
 - [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for the screen and state contracts.
 
 ## Used by
 
-- `:sample:app`, which composes the feature and launches its standalone activity.
+- `:sample:app`, which registers `ComponentsScreen` as a page of its graph.
 
 ## Flow chart
 
@@ -41,8 +42,8 @@ flowchart TD
     Counter -->|yes| Store[DataStoreInterface]
     Store --> Repo[ComponentsShowcaseRepository.isUnlocked]
     Repo --> Drawer[":sample:app" drawer entry, shown when unlocked]
-    Drawer --> Activity[ComponentsActivity]
-    Activity --> Screen[ComponentsScreen]
+    Drawer --> Page[ComponentsRoute page]
+    Page --> Screen[ComponentsScreen]
     Screen --> Sections[Button / FAB / text field / filter / input / layout / preference showcases]
 ```
 
@@ -52,13 +53,13 @@ flowchart TD
   one repository, so a pass-through use case would add no business logic or reusable operation.
 - The app owns the cross-feature gesture bridge and the drawer entry, while this feature owns the
   threshold rule and the persisted unlock state it exposes as `isUnlocked`.
-- The shell never sees this feature: it renders whatever drawer items the app hands it.
+- The shell never sees this feature: it renders whatever drawer entries the app's graph declares.
 - A concrete repository is sufficient because there is one DataStore-backed implementation and no
   module boundary that requires substitution.
 
 ## Public contracts
 
-- `ComponentsShowcaseRepository` and `ComponentsActivity`. The drawer entry that reveals the
+- `ComponentsShowcaseRepository`, `ComponentsRoute` and `ComponentsScreen`. The drawer entry that reveals the
   showcase is assembled by `:sample:app`, which reads `isUnlocked`.
 
 ## Internal implementations
