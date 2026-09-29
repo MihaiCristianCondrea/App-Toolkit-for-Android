@@ -17,6 +17,14 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.FabHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.LocalFabHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ToolkitFabColumn
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
@@ -62,6 +70,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.LocalP
  *
  * Pages registered with a title get this frame from the shell; pages that need something under
  * their app bar, such as tabs, call it themselves.
+ *
+ * Floating action buttons come from [fabs], from what the screen inside declares with
+ * `ScaffoldFabs`, and from [floatingActionButton] for a button drawn by hand; the frame stacks the
+ * described ones in a column at the bottom end.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,6 +83,7 @@ fun PageScaffold(
     style: TopBarStyle = TopBarStyle.Large,
     actions: @Composable RowScope.() -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
+    fabs: List<ToolkitFab> = emptyList(),
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     content: @Composable () -> Unit,
 ) {
@@ -80,6 +93,7 @@ fun PageScaffold(
     val declared = LocalTopBarStyleOverride.current ?: style
     val resolvedStyle = if (pane == PaneRole.None) LocalShellLayout.current.topBarFor(declared) else TopBarStyle.Hidden
     val scrollBehavior = rememberTopBarScrollBehavior(resolvedStyle)
+    val fabHost = remember { FabHost() }
     val contentInsets = when (pane) {
         PaneRole.None -> WindowInsets.safeDrawing
         PaneRole.List -> WindowInsets.safeDrawing.only(WindowInsetsSides.Start + WindowInsetsSides.Bottom)
@@ -102,7 +116,12 @@ fun PageScaffold(
                 scrollBehavior = scrollBehavior,
             )
         },
-        floatingActionButton = floatingActionButton,
+        floatingActionButton = {
+            Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                ToolkitFabColumn(fabs + fabHost.fabs)
+                floatingActionButton()
+            }
+        },
         snackbarHost = { DefaultSnackbarHost(snackbarState = snackbarHostState) },
         contentWindowInsets = contentInsets,
     ) { padding ->
@@ -115,6 +134,7 @@ fun PageScaffold(
             CompositionLocalProvider(
                 LocalContentPadding provides PaddingValues(bottom = padding.calculateBottomPadding()),
                 LocalPageSnackbarHostState provides snackbarHostState,
+                LocalFabHost provides fabHost,
                 content = content,
             )
         }

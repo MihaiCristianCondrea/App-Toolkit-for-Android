@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.ScreenTransition
 import kotlin.reflect.KClass
 
@@ -83,6 +84,12 @@ class Destination<K : NavKey> @PublishedApi internal constructor(
      * the banner and the mini player on a tab or child, in the page's frame on a page.
      */
     val floatingActionButton: (@Composable (K) -> Unit)? = null,
+    /**
+     * Floating action buttons described rather than drawn, shown in the same place as
+     * [floatingActionButton], as a column: the shell draws each with the Toolkit's buttons. A
+     * screen can add its own with `ScaffoldFabs` from `:library:core:ui`.
+     */
+    val floatingActionButtons: (@Composable (K) -> List<ToolkitFab>)? = null,
 )
 
 /**

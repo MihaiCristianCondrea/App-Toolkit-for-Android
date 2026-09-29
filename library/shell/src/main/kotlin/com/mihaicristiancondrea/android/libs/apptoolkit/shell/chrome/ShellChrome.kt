@@ -17,6 +17,11 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome
 
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.Arrangement
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ToolkitFabColumn
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.LocalFabHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.FabHost
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
@@ -183,6 +188,8 @@ internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
     val searches = rememberSaveable(
         saver = listSaver(save = { list -> list.map { it.query } }, restore = { queries -> queries.map(::ShellSearch) }),
     ) { graph.tabs.map { ShellSearch() } }
+    // Where each tab screen puts the floating action buttons it declares, by the screen's entry.
+    val fabHosts = remember { mutableMapOf<String, FabHost>() }
 
     val player = graph.player?.takeIf { settings.accessoryMode.showsPlayer }
     val playerActive = player?.isActive?.invoke() == true
@@ -255,6 +262,7 @@ internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
             graph = graph,
             navigator = navigator,
             searches = searches,
+            fabHosts = fabHosts,
             callbacks = callbacks,
             // With the app named in the navigation beside it, the app bar names the tab instead.
             navigationNamesApp = layout.mode == ShellLayoutMode.PermanentDrawer ||
@@ -404,6 +412,7 @@ private fun ShellBody(
     graph: ShellGraph,
     navigator: ShellNavigator,
     searches: List<ShellSearch>,
+    fabHosts: MutableMap<String, FabHost>,
     callbacks: NavigationCallbacks,
     navigationNamesApp: Boolean,
     showMenuButton: Boolean,
@@ -530,20 +539,29 @@ private fun ShellBody(
         // and in as destinations change, and simply is not there for one without a button.
         floatingActionButton = {
             AnimatedContent(
-                targetState = topKey,
-                contentKey = { key -> key::class },
+                targetState = tabIndex to topKey,
+                contentKey = { (index, key) -> index to key::class },
                 transitionSpec = {
                     (scaleIn(initialScale = 0.6f) + fadeIn()) togetherWith (scaleOut(targetScale = 0.6f) + fadeOut())
                 },
                 label = "FloatingActionButton",
-            ) { key ->
-                val fab = graph.destination(key).floatingActionButton
-                if (fab != null) {
-                    Box(
-                        Modifier
+            ) { (index, key) ->
+                val shown = graph.destination(key)
+                val fab = shown.floatingActionButton
+                // The buttons the graph describes, then those the screen itself declares.
+                val described = shown.floatingActionButtons?.invoke(key).orEmpty() +
+                    fabHosts.getOrPut(tabEntryKey(index, key)) { FabHost() }.fabs
+                if (fab != null || described.isNotEmpty()) {
+                    Column(
+                        modifier = Modifier
                             .padding(bottom = playerReserve)
                             .graphicsLayer { alpha = 1f - playerExpansion() },
-                    ) { fab(key) }
+                        horizontalAlignment = Alignment.End,
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                    ) {
+                        ToolkitFabColumn(described)
+                        fab?.invoke(key)
+                    }
                 }
             }
         },
@@ -563,7 +581,7 @@ private fun ShellBody(
             CompositionLocalProvider(
                 LocalContentPadding provides PaddingValues(bottom = padding.calculateBottomPadding() + playerReserve),
             ) {
-                TabsNavDisplay(graph, navigator, searches)
+                TabsNavDisplay(graph, navigator, searches, fabHosts)
             }
         }
     }
@@ -577,7 +595,12 @@ private fun ShellBody(
  * children within one tab uses the activity transition.
  */
 @Composable
-private fun TabsNavDisplay(graph: ShellGraph, navigator: ShellNavigator, searches: List<ShellSearch>) {
+private fun TabsNavDisplay(
+    graph: ShellGraph,
+    navigator: ShellNavigator,
+    searches: List<ShellSearch>,
+    fabHosts: MutableMap<String, FabHost>,
+) {
     val motion = LocalShellMotion.current
     val layout = LocalShellLayout.current
     val entriesByTab = graph.tabs.indices.map { tabIndex ->
@@ -587,7 +610,9 @@ private fun TabsNavDisplay(graph: ShellGraph, navigator: ShellNavigator, searche
                 rememberSaveableStateHolderNavEntryDecorator(),
                 rememberViewModelStoreNavEntryDecorator(),
             ),
-            entryProvider = { key -> tabEntry(graph, key, tabIndex, searches[tabIndex]) },
+            entryProvider = { key ->
+                tabEntry(graph, key, tabIndex, searches[tabIndex], fabHosts.getOrPut(tabEntryKey(tabIndex, key)) { FabHost() })
+            },
         )
     }
     // A tab declared as a list shows its detail child beside it on wide windows.
@@ -642,16 +667,25 @@ private fun ShellMotion.forTabs(
     }
 }
 
-private fun tabEntry(graph: ShellGraph, key: NavKey, tabIndex: Int, search: ShellSearch): NavEntry<NavKey> {
+/** A tab screen's entry key: the same child can be open in two tabs at once. */
+private fun tabEntryKey(tabIndex: Int, key: NavKey): String = "$tabIndex/$key"
+
+private fun tabEntry(
+    graph: ShellGraph,
+    key: NavKey,
+    tabIndex: Int,
+    search: ShellSearch,
+    fabHost: FabHost,
+): NavEntry<NavKey> {
     val destination = graph.destination(key)
     return NavEntry(
         key = key,
         // The same child can be open in two tabs at once; the tab keeps their states apart.
-        contentKey = "$tabIndex/$key",
+        contentKey = tabEntryKey(tabIndex, key),
         metadata = ShellEntryInfo(destination.kind, tabIndex, destination.paneRole, destination.transition).toMetadata(),
     ) { entryKey ->
         val provided = if (graph.tabs[tabIndex].search != null) search else null
-        CompositionLocalProvider(LocalShellSearch provides provided) {
+        CompositionLocalProvider(LocalShellSearch provides provided, LocalFabHost provides fabHost) {
             ContentWidthBox(
                 maxWidth = LocalShellLayout.current.maxWidthFor(destination.contentWidth),
                 modifier = Modifier.background(MaterialTheme.colorScheme.surface),

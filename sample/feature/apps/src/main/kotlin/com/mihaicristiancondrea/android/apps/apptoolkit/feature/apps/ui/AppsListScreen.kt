@@ -17,6 +17,13 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ScaffoldFabs
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import androidx.compose.ui.res.stringResource
+import androidx.compose.material.icons.outlined.Casino
+import androidx.compose.material.icons.Icons
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,7 +35,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -72,23 +78,18 @@ import org.koin.core.qualifier.named
  * - Managing user interactions such as toggling favorites, clicking on an app to view details,
  *   sharing an app, and retrying data fetching.
  * - Displaying a modal bottom sheet for app details when an app is selected.
- * - Registering a handler for opening a random app, which can be triggered by a parent composable
- *   (e.g., a Floating Action Button in the main scaffold).
+ * - Declaring the "open random app" floating action button, shown while there is an app to open.
  *
  * @param paddingValues The padding values to be applied to the screen content, typically from a
  *   [Scaffold].
  * @param windowWidthSizeClass The window width size class, used to adapt the layout for
  *   different screen sizes.
- * @param onRegisterRandomAppHandler A callback to register or unregister the "open random app"
- *   action. It passes a lambda when the action is available (i.e., when
- *   there are apps to choose from), and `null` otherwise.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppsListScreen(
     paddingValues: PaddingValues,
     windowWidthSizeClass: AppWindowWidthSizeClass,
-    onRegisterRandomAppHandler: ((() -> Unit)?) -> Unit,
 ) {
     val viewModel: AppsListViewModel = koinViewModel()
 
@@ -196,11 +197,17 @@ fun AppsListScreen(
     val randomAppHandler: () -> Unit =
         remember(viewModel) { { viewModel.onEvent(HomeEvent.OpenRandomApp) } }
 
-    val registerHandler by rememberUpdatedState(onRegisterRandomAppHandler)
-
-    LaunchedEffect(canOpenRandomApp) {
-        registerHandler(if (canOpenRandomApp) randomAppHandler else null)
-    }
+    // The tab's scaffold draws it; it scales out while there is no app to open.
+    ScaffoldFabs(
+        listOf(
+            ToolkitFab(
+                icon = ToolkitIcon.Vector(Icons.Outlined.Casino),
+                onClick = randomAppHandler,
+                label = stringResource(R.string.open_random_app),
+                visible = canOpenRandomApp,
+            ),
+        ),
+    )
 
     LaunchedEffect(viewModel) {
         viewModel.actionEvent.collectLatest { action ->

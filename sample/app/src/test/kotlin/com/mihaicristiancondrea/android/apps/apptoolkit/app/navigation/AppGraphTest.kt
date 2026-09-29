@@ -18,9 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation
 
 import android.content.Intent
-import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.navigation.AppsListRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.fab.RandomAppAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.navigation.ComponentsRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ToolkitTilesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
@@ -62,7 +60,6 @@ class AppGraphTest {
         showComponents: Boolean = false,
         onShowChangelog: () -> Unit = {},
     ): ShellGraph = appGraph(
-        randomApp = RandomAppAction(),
         showComponents = showComponents,
         onShowChangelog = onShowChangelog,
     )
@@ -127,12 +124,18 @@ class AppGraphTest {
     }
 
     @Test
-    fun `the drawer offers settings and help, and developer options only in debug builds`() {
-        val links = graph().drawerLinks()
+    fun `the drawer ends with settings, help, updates and share, pinned to the bottom`() {
+        val drawer = graph(showComponents = true).drawer
+        val footer = drawer.takeLast(4)
 
-        assertTrue(SettingsRoute in links)
-        assertTrue(HelpRoute in links)
-        assertEquals(BuildConfig.DEBUG, DeveloperOptionsRoute in links)
+        assertEquals(DrawerEntry.Spacer, drawer[drawer.size - 5])
+        assertEquals(SettingsRoute, (footer[0] as DrawerEntry.Link).key)
+        assertEquals(HelpRoute, (footer[1] as DrawerEntry.Link).key)
+        assertEquals(AboutR.string.updates, (footer[2] as DrawerEntry.Action).label)
+        assertEquals(AboutR.string.share, (footer[3] as DrawerEntry.Action).label)
+        // The app's own entries come first, and developer options are reached from Advanced.
+        assertEquals(ComponentsRoute, (drawer.first() as DrawerEntry.Link).key)
+        assertFalse(DeveloperOptionsRoute in graph().drawerLinks())
     }
 
     @Test

@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellHomeRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
@@ -137,6 +138,7 @@ class ShellGraphBuilder(
     internal val tabs: MutableList<ShellTab> = mutableListOf()
 
     private val drawerEntries: MutableList<DrawerEntry> = mutableListOf()
+    private val drawerFooter: MutableList<DrawerEntry> = mutableListOf()
     private val overflowEntries: MutableList<DrawerEntry> = mutableListOf()
     private var banner: (@Composable () -> Unit)? = null
     private var player: ShellPlayer? = null
@@ -165,6 +167,7 @@ class ShellGraphBuilder(
         paneRole: PaneRole = PaneRole.None,
         noinline actions: (@Composable RowScope.(K) -> Unit)? = null,
         noinline fab: (@Composable (K) -> Unit)? = null,
+        noinline fabs: (@Composable (K) -> List<ToolkitFab>)? = null,
         noinline content: @Composable (K) -> Unit,
     ) {
         tabs += ShellTab(key = key, label = label, icon = icon, selectedIcon = selectedIcon, badge = badge, search = search, shortLabel = shortLabel)
@@ -180,6 +183,7 @@ class ShellGraphBuilder(
                 actions = actions,
                 content = content,
                 floatingActionButton = fab,
+                floatingActionButtons = fabs,
             ),
         )
     }
@@ -193,6 +197,7 @@ class ShellGraphBuilder(
         noinline actions: (@Composable RowScope.(K) -> Unit)? = null,
         transition: ScreenTransition? = null,
         noinline fab: (@Composable (K) -> Unit)? = null,
+        noinline fabs: (@Composable (K) -> List<ToolkitFab>)? = null,
         noinline content: @Composable (K) -> Unit,
     ) {
         register(
@@ -207,6 +212,7 @@ class ShellGraphBuilder(
                 actions = actions,
                 content = content,
                 floatingActionButton = fab,
+                floatingActionButtons = fabs,
                 transition = transition,
             ),
         )
@@ -227,6 +233,7 @@ class ShellGraphBuilder(
         noinline actions: (@Composable RowScope.(K) -> Unit)? = null,
         transition: ScreenTransition? = null,
         noinline fab: (@Composable (K) -> Unit)? = null,
+        noinline fabs: (@Composable (K) -> List<ToolkitFab>)? = null,
         noinline content: @Composable (K) -> Unit,
     ) {
         register(
@@ -241,6 +248,7 @@ class ShellGraphBuilder(
                 actions = actions,
                 content = content,
                 floatingActionButton = fab,
+                floatingActionButtons = fabs,
                 transition = transition,
             ),
         )
@@ -257,16 +265,22 @@ class ShellGraphBuilder(
         noinline title: (@Composable (K) -> String)?,
         topBar: TopBarStyle = TopBarStyle.Large,
         noinline actions: (@Composable RowScope.(K) -> Unit)? = null,
+        noinline fabs: (@Composable (K) -> List<ToolkitFab>)? = null,
         noinline content: @Composable (K) -> Unit,
     ) {
         if (K::class !in destinations) {
-            page(topBar = topBar, paneRole = paneRole, title = title, actions = actions, content = content)
+            page(topBar = topBar, paneRole = paneRole, title = title, actions = actions, fabs = fabs, content = content)
         }
     }
 
-    /** Lists the drawer's entries, top to bottom. */
+    /**
+     * Lists the drawer's entries, top to bottom. Entries given to [DrawerBuilder.footer] come after
+     * all of them, pinned to the bottom edge, whatever order the calls were made in.
+     */
     fun drawer(builder: DrawerBuilder.() -> Unit) {
-        drawerEntries += DrawerBuilder().apply(builder).entries
+        val drawer = DrawerBuilder().apply(builder)
+        drawerEntries += drawer.entries
+        drawerFooter += drawer.footer
     }
 
     /**
@@ -274,7 +288,8 @@ class ShellGraphBuilder(
      * draws a divider. `supportUs()` adds the Support page, the way the Toolkit's app bar offers it.
      */
     fun overflow(builder: DrawerBuilder.() -> Unit) {
-        overflowEntries += DrawerBuilder().apply(builder).entries
+        val overflow = DrawerBuilder().apply(builder)
+        overflowEntries += overflow.entries + overflow.footer
     }
 
     /** Shown above the navigation bar, such as an ad. Steps aside while the player is showing. */
@@ -332,7 +347,12 @@ class ShellGraphBuilder(
         appTitle = appTitle,
         appIcon = appIcon,
         tabs = tabs.toList(),
-        drawer = drawerEntries.toList(),
+        drawer = drawerEntries + when {
+            drawerFooter.isEmpty() -> emptyList()
+            // Already split: whatever follows the spacer is at the bottom, and the footer after it.
+            DrawerEntry.Spacer in drawerEntries -> drawerFooter
+            else -> listOf(DrawerEntry.Spacer) + drawerFooter
+        },
         overflow = overflowEntries.toList(),
         banner = banner,
         player = player,
@@ -390,6 +410,16 @@ class DeepLinkBuilder internal constructor() {
 
 class DrawerBuilder internal constructor() {
     internal val entries = mutableListOf<DrawerEntry>()
+    internal val footer = mutableListOf<DrawerEntry>()
+
+    /**
+     * Entries that always close the drawer, after every other entry and pinned to its bottom edge,
+     * such as the Toolkit's Settings, Help, Updates and Share. An entry the app adds later, even in
+     * a later `drawer { }` call, still comes before them.
+     */
+    fun footer(builder: DrawerBuilder.() -> Unit) {
+        footer += DrawerBuilder().apply(builder).let { it.entries + it.footer }
+    }
 
     /** An entry that opens [key], normally a page. */
     fun link(key: NavKey, @StringRes label: Int, icon: ToolkitIcon, @StringRes shortLabel: Int? = null) {

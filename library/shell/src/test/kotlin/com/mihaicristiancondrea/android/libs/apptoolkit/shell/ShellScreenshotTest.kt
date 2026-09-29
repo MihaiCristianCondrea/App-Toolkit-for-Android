@@ -17,6 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ScaffoldFabs
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.FabSize
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.FabColor
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,7 +34,6 @@ import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Update
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -154,6 +157,19 @@ class ShellScreenshotTest {
         compose.onNodeWithText("Updates").performClick()
         compose.waitForIdle()
         capture("phone_updates")
+    }
+
+    @Test
+    fun a_screen_declares_its_own_floating_action_button_and_it_leaves_with_the_screen() {
+        show()
+        compose.onNodeWithText("Item 2").performClick()
+        compose.waitForIdle()
+        // The label is merged into the button's semantics.
+        compose.onNodeWithText("Item action", useUnmergedTree = true).assertExists()
+
+        compose.onNodeWithContentDescription("Go back").performClick()
+        compose.waitForIdle()
+        compose.onAllNodesWithText("Item action", useUnmergedTree = true).assertCountEquals(0)
     }
 
     @Test
@@ -446,11 +462,29 @@ private val TestGraph: ShellGraph = shellGraph(appTitle = CommonR.string.app_nam
         label = NavigationR.string.updates,
         icon = ToolkitIcon.Vector(Icons.Outlined.Update),
         topBar = TopBarStyle.Large,
-        fab = { ExtendedFloatingActionButton(onClick = {}) { Text("Check") } },
+        // A column: a small secondary button over the main, extended one.
+        fabs = {
+            listOf(
+                ToolkitFab(
+                    icon = ToolkitIcon.Vector(Icons.Outlined.Search),
+                    onClick = {},
+                    contentDescription = "Search updates",
+                    size = FabSize.Small,
+                    color = FabColor.Secondary,
+                ),
+                ToolkitFab(icon = ToolkitIcon.Vector(Icons.Outlined.Update), onClick = {}, label = "Check"),
+            )
+        },
     ) {
         Rows(prefix = "Update") { name -> ItemKey(name) }
     }
-    child<ItemKey>(title = { it.name }) { key -> Text(key.name, Modifier.padding(16.dp)) }
+    child<ItemKey>(title = { it.name }) { key ->
+        // One screen declares a button of its own, from inside, as a screen with state would.
+        if (key.name == "Item 2") {
+            ScaffoldFabs(listOf(ToolkitFab(ToolkitIcon.Vector(Icons.Outlined.Info), onClick = {}, label = "Item action")))
+        }
+        Text(key.name, Modifier.padding(16.dp))
+    }
     page<SettingsListKey>(paneRole = PaneRole.List, title = { "Settings" }) {
         Rows(prefix = null, names = listOf("Display", "Privacy", "Advanced")) { name -> SettingsDetailKey(name) }
     }

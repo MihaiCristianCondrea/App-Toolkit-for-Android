@@ -48,7 +48,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.Ma
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.appGraph
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.startKeyFor
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStoreInterface
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.fab.RandomAppAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.data.repositories.ComponentsShowcaseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ToolkitTilesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
@@ -99,14 +98,12 @@ class MainActivity : AppCompatActivity() {
     private fun setShellContent() {
         setContent {
             AppTheme {
-                val randomApp = remember { RandomAppAction() }
                 var showChangelog by rememberSaveable { mutableStateOf(false) }
                 val isShowcaseUnlocked by componentsShowcaseRepository.isUnlocked
                     .collectAsStateWithLifecycle(initialValue = false)
                 val showComponents = BuildConfig.DEBUG || isShowcaseUnlocked
                 val graph = remember(showComponents) {
                     appGraph(
-                        randomApp = randomApp,
                         showComponents = showComponents,
                         onShowChangelog = { showChangelog = true },
                     )

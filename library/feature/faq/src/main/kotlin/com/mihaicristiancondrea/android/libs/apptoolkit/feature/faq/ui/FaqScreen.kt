@@ -17,18 +17,18 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ScaffoldFabs
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import androidx.activity.compose.LocalActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Lightbulb
 import androidx.compose.material.icons.outlined.RateReview
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetValue
@@ -40,7 +40,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -60,7 +59,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extens
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedExtendedFloatingActionButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
@@ -132,63 +130,52 @@ fun FaqScreen() {
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        ScreenStateHandler(
-            screenState = screenState,
-            onLoading = { LoadingScreen() },
-            onEmpty = {
-                NoDataScreen(
-                    showRetry = true,
-                    onRetry = {
-                        firebaseController.logEvent(faqActionEvent(actionName = FaqActionNames.RETRY_LOAD))
-                        viewModel.onEvent(FaqEvent.LoadFaq)
-                    },
-                    paddingValues = paddingValues
-                )
-            },
-            onError = {
-                NoDataScreen(
-                    isError = true,
-                    showRetry = true,
-                    onRetry = {
-                        firebaseController.logEvent(faqActionEvent(actionName = FaqActionNames.RETRY_LOAD))
-                        viewModel.onEvent(FaqEvent.LoadFaq)
-                    },
-                    paddingValues = paddingValues
-                )
-            },
-            onSuccess = { data: FaqUiState ->
-                FaqScreenContent(
-                    questions = data.questions,
-                    paddingValues = paddingValues,
-                )
-            }
-        )
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(paddingValues)
-                .padding(all = SizeConstants.LargeSize)
-        ) {
-            AnimatedExtendedFloatingActionButton(
-                visible = true,
-                expanded = true,
+    // The page frame draws it at the bottom end, above the system bar.
+    ScaffoldFabs(
+        listOf(
+            ToolkitFab(
+                icon = ToolkitIcon.Vector(Icons.Outlined.RateReview),
+                label = stringResource(id = R.string.feedback),
                 onClick = {
+                    firebaseController.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.FEEDBACK))
                     firebaseController.logEvent(faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_OPENED))
                     showFeedbackBottomSheet.value = true
                 },
-                firebaseController = firebaseController,
-                ga4Event = faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.FEEDBACK),
-                text = { Text(text = stringResource(id = R.string.feedback)) },
-                icon = {
-                    Icon(
-                        imageVector = Icons.Outlined.RateReview,
-                        contentDescription = null
-                    )
+            ),
+        ),
+    )
+
+    ScreenStateHandler(
+        screenState = screenState,
+        onLoading = { LoadingScreen() },
+        onEmpty = {
+            NoDataScreen(
+                showRetry = true,
+                onRetry = {
+                    firebaseController.logEvent(faqActionEvent(actionName = FaqActionNames.RETRY_LOAD))
+                    viewModel.onEvent(FaqEvent.LoadFaq)
                 },
+                paddingValues = paddingValues
+            )
+        },
+        onError = {
+            NoDataScreen(
+                isError = true,
+                showRetry = true,
+                onRetry = {
+                    firebaseController.logEvent(faqActionEvent(actionName = FaqActionNames.RETRY_LOAD))
+                    viewModel.onEvent(FaqEvent.LoadFaq)
+                },
+                paddingValues = paddingValues
+            )
+        },
+        onSuccess = { data: FaqUiState ->
+            FaqScreenContent(
+                questions = data.questions,
+                paddingValues = paddingValues,
             )
         }
-    }
+    )
 
     if (showFeedbackBottomSheet.value) {
         ModalBottomSheet(
