@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell
 
+import org.junit.Assert.assertTrue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ScaffoldFabs
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.FabSize
@@ -379,6 +380,26 @@ class ShellScreenshotTest {
     }
 
     /** Opens the settings list page from the drawer, or the rail and permanent drawer where shown. */
+    @Test
+    @Config(qualifiers = EXPANDED)
+    fun beside_the_navigation_an_entry_replaces_the_page_and_a_tab_closes_it() {
+        show()
+        openSettings()
+        // Settings opened beside the permanent drawer, which stays.
+        compose.onNodeWithText("Privacy").assertExists()
+        compose.onNodeWithText("Help & feedback").assertExists()
+
+        compose.onNodeWithText("Help & feedback").performClick()
+        compose.waitForIdle()
+        compose.onAllNodesWithText("Privacy").assertCountEquals(0)
+        compose.onAllNodesWithText("Support").fetchSemanticsNodes().isNotEmpty().let(::assertTrue)
+
+        compose.onAllNodesWithText("Search")[0].performClick()
+        compose.waitForIdle()
+        compose.onAllNodesWithText("Support").assertCountEquals(0)
+        compose.onNodeWithText("Item 1").assertExists()
+    }
+
     private fun openSettings() {
         if (compose.onAllNodesWithContentDescription("Open navigation").fetchSemanticsNodes().isNotEmpty()) {
             compose.onNodeWithContentDescription("Open navigation").performClick()

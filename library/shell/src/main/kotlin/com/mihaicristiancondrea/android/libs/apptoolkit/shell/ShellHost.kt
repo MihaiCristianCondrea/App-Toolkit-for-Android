@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.rememberShellFrameState
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.ShellFrame
 import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivity
@@ -147,6 +149,7 @@ fun ShellHost(
     // The developer options' choice, then the app's choice at launch, then the graph's.
     val startKey = graph.startOptions.getOrNull(current.startOverride) ?: launchStart.key ?: graph.start
     val navigator = rememberShellNavigator(graph, onExit = { activity?.finish() }, start = startKey)
+    val frameState = rememberShellFrameState()
     DeepLinks(graph, navigator)
     val currentOnDestinationChanged by rememberUpdatedState(onDestinationChanged)
     LaunchedEffect(navigator) {
@@ -175,28 +178,32 @@ fun ShellHost(
             ),
             entryProvider = { key -> pageEntry(graph, navigator, key) },
         )
-        ShellNavDisplay(
-            entries = entries,
-            sceneStrategies = sceneStrategies,
-            onBack = { navigator.popPage() },
-            // Seen around the pages while the back gesture shrinks them, as behind closing windows.
-            modifier = modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surfaceDim),
-            // Pages move as their destination declares, like activities by default; the
-            // predictive gesture on anything but the activity transition seeks it instead.
-            transitionSpec = { motion.screens.forward(targetState.pageTransition(graph, layoutInfo.mode)) },
-            popTransitionSpec = { motion.screens.back(initialState.pageTransition(graph, layoutInfo.mode)) },
-            activityBack = {
-                graph.transitionOf(navigator.pages.last(), layoutInfo.mode) == ScreenTransition.Activity
-            },
-            predictivePopTransitionSpec = { swipeEdge ->
-                motion.screens.back(
-                    initialState.pageTransition(graph, layoutInfo.mode),
-                    mirrored = motion.followFingerFromRight && swipeEdge == NavigationEvent.EDGE_RIGHT,
-                )
-            },
-        )
+        // Beside a rail or a permanent drawer, the displays sit next to the navigation, so pages
+        // open there; otherwise the frame adds nothing.
+        ShellFrame(graph, navigator, frameState) {
+            ShellNavDisplay(
+                entries = entries,
+                sceneStrategies = sceneStrategies,
+                onBack = { navigator.popPage() },
+                // Seen around the pages while the back gesture shrinks them, as behind closing windows.
+                modifier = modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.surfaceDim),
+                // Pages move as their destination declares, like activities by default; the
+                // predictive gesture on anything but the activity transition seeks it instead.
+                transitionSpec = { motion.screens.forward(targetState.pageTransition(graph, layoutInfo.mode)) },
+                popTransitionSpec = { motion.screens.back(initialState.pageTransition(graph, layoutInfo.mode)) },
+                activityBack = {
+                    graph.transitionOf(navigator.pages.last(), layoutInfo.mode) == ScreenTransition.Activity
+                },
+                predictivePopTransitionSpec = { swipeEdge ->
+                    motion.screens.back(
+                        initialState.pageTransition(graph, layoutInfo.mode),
+                        mirrored = motion.followFingerFromRight && swipeEdge == NavigationEvent.EDGE_RIGHT,
+                    )
+                },
+            )
+        }
     }
 }
 

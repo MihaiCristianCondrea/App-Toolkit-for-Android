@@ -45,7 +45,6 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -56,21 +55,17 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.BottomAppBarDefaults
-import androidx.compose.material3.DrawerDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.PermanentDrawerSheet
-import androidx.compose.material3.PermanentNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
@@ -176,15 +171,12 @@ val LocalShellChrome = staticCompositionLocalOf { ShellChromeController(showsMen
 internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
     val settings = LocalShellSettings.current
     val layout = LocalShellLayout.current
+    val frame = LocalShellFrame.current
     val context = LocalContext.current
-    val density = LocalDensity.current
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
-    var railExpanded by rememberSaveable { mutableStateOf(true) }
-    var railOverlayOpen by rememberSaveable { mutableStateOf(false) }
     val playerExpansion = remember { Animatable(0f) }
     var bottomDock by remember { mutableStateOf(0.dp) }
-    var railWidth by remember { mutableStateOf(0.dp) }
     val searches = rememberSaveable(
         saver = listSaver(save = { list -> list.map { it.query } }, restore = { queries -> queries.map(::ShellSearch) }),
     ) { graph.tabs.map { ShellSearch() } }
@@ -196,21 +188,20 @@ internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
     val banner = graph.banner?.takeIf { settings.accessoryMode.showsBanner }
 
     LaunchedEffect(layout.mode) {
-        railOverlayOpen = false
         drawerState.snapTo(DrawerValue.Closed)
     }
 
-    val closeOverlays: () -> Unit = {
-        railOverlayOpen = false
-        if (drawerState.isOpen) scope.launch { drawerState.close() }
-    }
+    // Beside a rail or a permanent drawer the navigation belongs to the frame around the displays
+    // (ShellFrame), so pages open next to it; below, the chrome draws the bottom bar and the
+    // modal drawer itself, and pages cover them.
+    val wide = frame != null && layout.mode.keepsNavigationBeside
     val callbacks = NavigationCallbacks(
         onTabClick = { index ->
-            closeOverlays()
+            if (drawerState.isOpen) scope.launch { drawerState.close() }
             navigator.selectTab(index)
         },
         onEntryClick = { entry ->
-            closeOverlays()
+            if (drawerState.isOpen) scope.launch { drawerState.close() }
             when (entry) {
                 is DrawerEntry.Link -> navigator.navigate(entry.key)
                 is DrawerEntry.Action -> entry.onClick(context)
@@ -219,43 +210,16 @@ internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
         },
     )
     val openNavigation: () -> Unit = {
-        when (layout.mode) {
-            ShellLayoutMode.BottomBar -> scope.launch { drawerState.open() }
-            ShellLayoutMode.Rail -> railOverlayOpen = true
-            ShellLayoutMode.ExpandedRail -> railExpanded = !railExpanded
-            ShellLayoutMode.PermanentDrawer, ShellLayoutMode.Auto -> Unit
+        when {
+            wide -> frame?.openNavigation(layout.mode)
+            layout.mode == ShellLayoutMode.BottomBar || layout.mode == ShellLayoutMode.Auto -> scope.launch { drawerState.open() }
         }
     }
     val chrome = ShellChromeController(showsMenuButton = layout.mode == ShellLayoutMode.BottomBar, openNavigation)
+    val highlightedTab = highlightedTab(graph, navigator, layout.listDetail)
 
-    // A tab reads as selected while its root is on screen: not while a child covers it, but still
-    // when the child is the detail open beside it.
-    val tabStack = navigator.currentTabStack
-    val rootVisible = tabStack.size == 1 || (
-        layout.listDetail && tabStack.size == 2 &&
-            graph.destination(tabStack[0]).paneRole == PaneRole.List &&
-            graph.destination(tabStack[1]).paneRole == PaneRole.Detail
-        )
-    val highlightedTab = if (rootVisible) navigator.currentTabIndex else NoTab
-
-    // Beside a rail or a permanent drawer, the navigation and the app bar can share one colour,
-    // drawn once behind both, so they read as one frame around the content.
-    val wide = layout.mode == ShellLayoutMode.Rail ||
-        layout.mode == ShellLayoutMode.ExpandedRail ||
-        layout.mode == ShellLayoutMode.PermanentDrawer
     val tintMode = if (wide) settings.navigationTint else NavigationTint.None
-    val tint = remember { Animatable(0f) }
-    LaunchedEffect(tintMode) {
-        when (tintMode) {
-            NavigationTint.None -> tint.snapTo(0f)
-            NavigationTint.Always -> tint.snapTo(1f)
-            NavigationTint.OnScroll -> Unit // ShellBody follows the app bar.
-        }
-    }
     val tinted = tintMode != NavigationTint.None
-    val untintedColor = MaterialTheme.colorScheme.surface
-    val tintedColor = MaterialTheme.colorScheme.surfaceContainer
-    val frameColor = if (tinted) Color.Transparent else untintedColor
 
     val body: @Composable (bottomBar: @Composable () -> Unit) -> Unit = { bottomBar ->
         ShellBody(
@@ -266,14 +230,14 @@ internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
             callbacks = callbacks,
             // With the app named in the navigation beside it, the app bar names the tab instead.
             navigationNamesApp = layout.mode == ShellLayoutMode.PermanentDrawer ||
-                (layout.mode == ShellLayoutMode.ExpandedRail && railExpanded),
+                (layout.mode == ShellLayoutMode.ExpandedRail && frame?.railExpanded == true),
             showMenuButton = chrome.showsMenuButton,
             onMenuClick = openNavigation,
             playerActive = playerActive,
             playerExpansion = { playerExpansion.value },
             onBottomDockChange = { bottomDock = it },
             tinted = tinted,
-            followScrollTint = if (tintMode == NavigationTint.OnScroll) tint else null,
+            followScrollTint = if (tintMode == NavigationTint.OnScroll) frame?.tint else null,
             bottomBar = bottomBar,
         )
     }
@@ -284,30 +248,38 @@ internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
                 active = playerActive,
                 expansion = playerExpansion,
                 dockBottom = bottomDock,
-                dockStart = if (layout.mode == ShellLayoutMode.BottomBar) 0.dp else railWidth,
+                // Beside the navigation the chrome already starts after it.
+                dockStart = 0.dp,
             )
         }
     }
-    val wideBottomBar: @Composable () -> Unit = {
-        Column(Modifier.windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Bottom))) {
-            BannerSlot(banner, visible = !playerActive, settings.bannerStyle, navigationBelow = false)
-        }
-    }
 
+    // The same shared colour the frame draws behind the navigation, drawn again behind the app bar
+    // here, since the display between the two paints its own background.
+    val untintedColor = MaterialTheme.colorScheme.surface
+    val tintedColor = MaterialTheme.colorScheme.surfaceContainer
+    val frameTint = frame?.tint
     CompositionLocalProvider(LocalShellChrome provides chrome) {
         Box(
             Modifier
                 .fillMaxSize()
                 .then(
-                    if (tinted) {
-                        Modifier.drawBehind { drawRect(lerp(untintedColor, tintedColor, tint.value)) }
+                    if (tinted && frameTint != null) {
+                        Modifier.drawBehind { drawRect(lerp(untintedColor, tintedColor, frameTint.value)) }
                     } else {
                         Modifier
                     },
                 ),
         ) {
-            when (layout.mode) {
-                ShellLayoutMode.BottomBar, ShellLayoutMode.Auto -> ModalNavigationDrawer(
+            if (wide) {
+                body {
+                    Column(Modifier.windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Bottom))) {
+                        BannerSlot(banner, visible = !playerActive, settings.bannerStyle, navigationBelow = false)
+                    }
+                }
+                playerOverlay()
+            } else {
+                ModalNavigationDrawer(
                     drawerState = drawerState,
                     gesturesEnabled = !navigator.isShowingChild && playerExpansion.value == 0f,
                     drawerContent = {
@@ -332,53 +304,6 @@ internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
                         playerOverlay()
                     }
                 }
-
-                ShellLayoutMode.Rail, ShellLayoutMode.ExpandedRail -> {
-                    Row(Modifier.fillMaxSize()) {
-                        ShellRail(
-                            graph = graph,
-                            selectedIndex = highlightedTab,
-                            expanded = layout.mode == ShellLayoutMode.ExpandedRail && railExpanded,
-                            callbacks = callbacks,
-                            onMenuClick = openNavigation,
-                            modifier = Modifier.onSizeChanged { railWidth = with(density) { it.width.toDp() } },
-                            containerColor = frameColor,
-                        )
-                        Box(Modifier.weight(1f)) { body(wideBottomBar) }
-                    }
-                    playerOverlay()
-                    if (layout.mode == ShellLayoutMode.Rail) {
-                        RailOverlay(open = railOverlayOpen, onDismiss = { railOverlayOpen = false }) {
-                            ShellRail(
-                                graph = graph,
-                                selectedIndex = highlightedTab,
-                                expanded = true,
-                                callbacks = callbacks,
-                                onMenuClick = { railOverlayOpen = false },
-                                containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                            )
-                        }
-                    }
-                }
-
-                ShellLayoutMode.PermanentDrawer -> {
-                    PermanentNavigationDrawer(
-                        drawerContent = {
-                            PermanentDrawerSheet(
-                                Modifier
-                                    .width(PermanentDrawerWidth)
-                                    .onSizeChanged { railWidth = with(density) { it.width.toDp() } },
-                                drawerContainerColor = if (tinted) frameColor else DrawerDefaults.standardContainerColor,
-                                windowInsets = DrawerContentInsets,
-                            ) {
-                                ShellDrawerContent(graph, highlightedTab, showTabs = true, callbacks)
-                            }
-                        },
-                    ) {
-                        body(wideBottomBar)
-                    }
-                    playerOverlay()
-                }
             }
 
             // Composed only while needed, so they register after the displays' handlers and win.
@@ -396,14 +321,36 @@ internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
     }
 }
 
+/**
+ * The tab to draw as selected, or [NoTab]. A tab reads as selected while its root is on screen: not
+ * while a child covers it, but still when the child is the detail open beside it. With
+ * [pagesReplaceTab], as beside a rail or drawer where an open page takes the tab's place, not
+ * while a page is open either; a bottom bar under a page keeps its tab marked for when it returns.
+ */
+internal fun highlightedTab(
+    graph: ShellGraph,
+    navigator: ShellNavigator,
+    listDetail: Boolean,
+    pagesReplaceTab: Boolean = false,
+): Int {
+    if (pagesReplaceTab && navigator.pages.size > 1) return NoTab
+    val tabStack = navigator.currentTabStack
+    val rootVisible = tabStack.size == 1 || (
+        listDetail && tabStack.size == 2 &&
+            graph.destination(tabStack[0]).paneRole == PaneRole.List &&
+            graph.destination(tabStack[1]).paneRole == PaneRole.Detail
+        )
+    return if (rootVisible) navigator.currentTabIndex else NoTab
+}
+
 /** No tab is shown as selected. */
-private const val NoTab = -1
+internal const val NoTab = -1
 
 /** The content's corner beside a tinted rail or drawer, under the app bar. */
 private val ContentCardShape = RoundedCornerShape(topStart = 24.dp)
 
 /** A drawer keeps clear of the top and start; its rows pad the bottom themselves, to scroll behind it. */
-private val DrawerContentInsets: WindowInsets
+internal val DrawerContentInsets: WindowInsets
     @Composable get() = WindowInsets.safeDrawing.only(WindowInsetsSides.Start + WindowInsetsSides.Top)
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -740,7 +687,7 @@ private fun BannerSlot(
 }
 
 @Composable
-private fun RailOverlay(open: Boolean, onDismiss: () -> Unit, rail: @Composable () -> Unit) {
+internal fun RailOverlay(open: Boolean, onDismiss: () -> Unit, rail: @Composable () -> Unit) {
     // The rail sits at the start edge, so it slides in from the left, or from the right in RTL.
     val fromStart = if (LocalLayoutDirection.current == LayoutDirection.Ltr) -1 else 1
     AnimatedVisibility(visible = open, enter = fadeIn(), exit = fadeOut()) {

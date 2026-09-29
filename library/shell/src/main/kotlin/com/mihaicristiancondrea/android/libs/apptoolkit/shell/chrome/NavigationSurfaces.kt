@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome
 
+import androidx.navigation3.runtime.NavKey
 import android.view.SoundEffectConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
@@ -189,6 +190,8 @@ internal fun ShellRail(
     onMenuClick: () -> Unit,
     modifier: Modifier = Modifier,
     containerColor: Color = MaterialTheme.colorScheme.surface,
+    /** The drawer entry whose page is open beside the rail, drawn as selected. */
+    selectedEntry: NavKey? = null,
 ) {
     val feedback = rememberNavigationFeedback(haptic = true)
     val width by animateDpAsState(if (expanded) ExpandedRailWidth else CollapsedRailWidth, label = "RailWidth")
@@ -258,10 +261,10 @@ internal fun ShellRail(
                         )
                     }
                     if (top.isNotEmpty()) RailDivider(expanded)
-                    top.forEach { entry -> RailEntry(entry, expanded, itemModifier, callbacks) }
+                    top.forEach { entry -> RailEntry(entry, expanded, itemModifier, callbacks, entry.opens(selectedEntry)) }
                 },
                 footer = {
-                    footer.forEach { entry -> RailEntry(entry, expanded, itemModifier, callbacks) }
+                    footer.forEach { entry -> RailEntry(entry, expanded, itemModifier, callbacks, entry.opens(selectedEntry)) }
                     Spacer(Modifier.size(8.dp))
                 },
             )
@@ -279,6 +282,8 @@ internal fun ColumnScope.ShellDrawerContent(
     selectedIndex: Int,
     showTabs: Boolean,
     callbacks: NavigationCallbacks,
+    /** The drawer entry whose page is open beside the drawer, drawn as selected. */
+    selectedEntry: NavKey? = null,
 ) {
     val (top, footer) = graph.drawer.splitAtSpacer()
     DrawerHeader(graph)
@@ -300,10 +305,10 @@ internal fun ColumnScope.ShellDrawerContent(
                     HorizontalDivider(Modifier.padding(horizontal = 28.dp, vertical = 8.dp))
                 }
             }
-            top.forEach { entry -> DrawerEntryRow(entry, callbacks) }
+            top.forEach { entry -> DrawerEntryRow(entry, callbacks, entry.opens(selectedEntry)) }
         },
         footer = {
-            footer.forEach { entry -> DrawerEntryRow(entry, callbacks) }
+            footer.forEach { entry -> DrawerEntryRow(entry, callbacks, entry.opens(selectedEntry)) }
             Spacer(Modifier.size(12.dp))
         },
     )
@@ -373,13 +378,19 @@ private fun RailDivider(expanded: Boolean) {
 }
 
 @Composable
-private fun RailEntry(entry: DrawerEntry, expanded: Boolean, modifier: Modifier, callbacks: NavigationCallbacks) {
+private fun RailEntry(
+    entry: DrawerEntry,
+    expanded: Boolean,
+    modifier: Modifier,
+    callbacks: NavigationCallbacks,
+    selected: Boolean,
+) {
     val (fullLabel, icon) = entry.labelAndIcon() ?: return
     val label = if (expanded) fullLabel else entry.shortLabel ?: fullLabel
     val feedback = rememberNavigationFeedback(haptic = false)
     var clicks by remember(entry) { mutableIntStateOf(0) }
     WideNavigationRailItem(
-        selected = false,
+        selected = selected,
         onClick = {
             clicks++
             feedback()
@@ -402,10 +413,13 @@ private fun RailEntry(entry: DrawerEntry, expanded: Boolean, modifier: Modifier,
 }
 
 @Composable
-private fun DrawerEntryRow(entry: DrawerEntry, callbacks: NavigationCallbacks) {
+private fun DrawerEntryRow(entry: DrawerEntry, callbacks: NavigationCallbacks, selected: Boolean) {
     val (label, icon) = entry.labelAndIcon() ?: return
-    DrawerRow(label = label, icon = icon, onClick = { callbacks.onEntryClick(entry) })
+    DrawerRow(label = label, icon = icon, selected = selected, onClick = { callbacks.onEntryClick(entry) })
 }
+
+/** Whether this entry opens [key], the page shown beside the navigation. */
+private fun DrawerEntry.opens(key: NavKey?): Boolean = key != null && this is DrawerEntry.Link && this.key == key
 
 /** One drawer row, as the Toolkit's drawers draw it: animated icon, click sound, press bounce. */
 @Composable
