@@ -39,7 +39,6 @@
     <string name="shell_hide_bottom_bar_summary">플레이어가 표시되지 않을 때 콘텐츠를 아래로 스크롤하면 밀려나 사라집니다</string>
     <string name="shell_limit_width">큰 창에서 콘텐츠 너비 제한</string>
     <string name="shell_limit_width_summary">레이아웃 정책의 최대 너비를 넘으면 웹사이트처럼 여백을 두고 콘텐츠를 가운데에 배치합니다</string>
-    <string name="shell_limit_width_unset">앱이 최대 너비를 설정하지 않아 콘텐츠가 항상 창을 채웁니다</string>
     <string name="shell_banner_style">배너</string>
     <string name="shell_tab_transition">탭 간</string>
     <string name="shell_back_edge">오른쪽 가장자리에서 뒤로 스와이프</string>

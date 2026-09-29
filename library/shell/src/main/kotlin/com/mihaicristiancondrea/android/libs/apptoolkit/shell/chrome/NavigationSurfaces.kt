@@ -200,7 +200,7 @@ internal fun ShellRail(
     // the middle of the still-wide rail and then slide back as the width caught up.
     val openness = ((width - CollapsedRailWidth) / (ExpandedRailWidth - CollapsedRailWidth)).coerceIn(0f, 1f)
     val alignment = BiasAlignment.Horizontal(-openness)
-    val (top, footer) = graph.drawer.splitAtSpacer()
+    val (top, footer) = remember(graph.drawer) { graph.drawer.splitAtSpacer() }
     // The rail's own width comes after the start inset, so a display cutout or a three-button
     // navigation bar on that side widens the surface instead of squeezing the items.
     Surface(modifier = modifier.fillMaxHeight(), color = containerColor) {
@@ -285,7 +285,7 @@ internal fun ColumnScope.ShellDrawerContent(
     /** The drawer entry whose page is open beside the drawer, drawn as selected. */
     selectedEntry: NavKey? = null,
 ) {
-    val (top, footer) = graph.drawer.splitAtSpacer()
+    val (top, footer) = remember(graph.drawer) { graph.drawer.splitAtSpacer() }
     DrawerHeader(graph)
     PinnedFooterColumn(
         modifier = Modifier.weight(1f),

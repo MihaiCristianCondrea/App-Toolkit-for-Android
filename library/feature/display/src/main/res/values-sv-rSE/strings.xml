@@ -39,7 +39,6 @@
     <string name="shell_hide_bottom_bar_summary">Glider undan när innehållet rullar nedåt, så länge ingen spelare visas</string>
     <string name="shell_limit_width">Begränsa innehållets bredd i stora fönster</string>
     <string name="shell_limit_width_summary">Centrera innehållet med marginaler, som en webbplats, utöver layoutpolicyns maximala bredd</string>
-    <string name="shell_limit_width_unset">Appen anger ingen maximal bredd, så innehållet fyller alltid fönstret</string>
     <string name="shell_banner_style">Banner</string>
     <string name="shell_tab_transition">Mellan flikar</string>
     <string name="shell_back_edge">Svep tillbaka från högerkanten</string>

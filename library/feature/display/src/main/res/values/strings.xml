@@ -39,7 +39,6 @@
     <string name="shell_hide_bottom_bar_summary">Slides away as the content scrolls down, while no player is showing</string>
     <string name="shell_limit_width">Limit content width on large windows</string>
     <string name="shell_limit_width_summary">Center content with margins, like a website, past the layout policy\'s maximum width</string>
-    <string name="shell_limit_width_unset">The app sets no maximum width, so content always fills the window</string>
     <string name="shell_banner_style">Banner</string>
     <string name="shell_tab_transition">Between tabs</string>
     <string name="shell_back_edge">Back swipe from the right edge</string>

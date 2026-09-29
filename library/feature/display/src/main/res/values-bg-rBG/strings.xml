@@ -39,7 +39,6 @@
     <string name="shell_hide_bottom_bar_summary">Изчезва, когато съдържанието се превърта надолу, докато не се показва плейър</string>
     <string name="shell_limit_width">Ограничаване на ширината на съдържанието в големи прозорци</string>
     <string name="shell_limit_width_summary">Центриране на съдържанието с полета, като уебсайт, над максималната ширина на правилата за оформление</string>
-    <string name="shell_limit_width_unset">Приложението не задава максимална ширина, така че съдържанието винаги запълва прозореца</string>
     <string name="shell_banner_style">Банер</string>
     <string name="shell_tab_transition">Между разделите</string>
     <string name="shell_back_edge">Плъзгане назад от десния край</string>

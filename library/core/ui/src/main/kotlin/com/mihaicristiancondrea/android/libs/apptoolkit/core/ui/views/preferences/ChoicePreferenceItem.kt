@@ -38,12 +38,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.Ba
 @Composable
 fun <T> ChoicePreferenceItem(
     title: String,
-    icon: ImageVector?,
     options: List<T>,
     selected: T,
     optionLabel: @Composable (T) -> String,
     onSelect: (T) -> Unit,
     modifier: Modifier = Modifier,
+    /** Drawn before the title and atop the dialog; settings rows go without one. */
+    icon: ImageVector? = null,
 ) {
     var open by rememberSaveable { mutableStateOf(false) }
     SettingsPreferenceItem(

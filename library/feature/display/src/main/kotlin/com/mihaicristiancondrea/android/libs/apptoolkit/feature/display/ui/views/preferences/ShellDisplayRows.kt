@@ -17,24 +17,13 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.views.preferences
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CallToAction
-import androidx.compose.material.icons.outlined.FormatColorFill
-import androidx.compose.material.icons.outlined.SwapHoriz
-import androidx.compose.material.icons.outlined.Swipe
-import androidx.compose.material.icons.outlined.VerticalAlignBottom
-import androidx.compose.material.icons.outlined.ViewColumn
-import androidx.compose.material.icons.outlined.ViewDay
-import androidx.compose.material.icons.outlined.Web
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.isSpecified
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.ChoicePreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalShellLayout
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.TabTransitionStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.BackEdgeStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.BannerStyle
@@ -61,7 +50,6 @@ internal class ShellDisplayRows(
     @Composable
     fun TopBarStyle(modifier: Modifier) = ChoicePreferenceItem(
         title = stringResource(R.string.shell_top_bar),
-        icon = Icons.Outlined.Web,
         options = TopBarOverride.entries,
         selected = settings.topBarOverride,
         optionLabel = { topBarLabel(it) },
@@ -72,7 +60,6 @@ internal class ShellDisplayRows(
     @Composable
     fun NavigationTint(modifier: Modifier) = ChoicePreferenceItem(
         title = stringResource(R.string.shell_navigation_tint),
-        icon = Icons.Outlined.FormatColorFill,
         options = NavigationTint.entries,
         selected = settings.navigationTint,
         optionLabel = { navigationTintLabel(it) },
@@ -83,13 +70,8 @@ internal class ShellDisplayRows(
     @Composable
     fun ContentWidth(modifier: Modifier) = SwitchPreferenceItem(
         modifier = modifier,
-        icon = Icons.Outlined.ViewColumn,
         title = stringResource(R.string.shell_limit_width),
-        summary = if (LocalShellLayout.current.contentMaxWidth.isSpecified || !settings.limitContentWidth) {
-            stringResource(R.string.shell_limit_width_summary)
-        } else {
-            stringResource(R.string.shell_limit_width_unset)
-        },
+        summary = stringResource(R.string.shell_limit_width_summary),
         checked = settings.limitContentWidth,
         onCheckedChange = { scope.launch { preferences.setLimitContentWidth(it) } },
     )
@@ -97,7 +79,6 @@ internal class ShellDisplayRows(
     @Composable
     fun BannerStyle(modifier: Modifier) = ChoicePreferenceItem(
         title = stringResource(R.string.shell_banner_style),
-        icon = Icons.Outlined.ViewDay,
         options = BannerStyle.entries,
         selected = settings.bannerStyle,
         optionLabel = { bannerStyleLabel(it) },
@@ -108,7 +89,6 @@ internal class ShellDisplayRows(
     @Composable
     fun NavigationBarStyle(modifier: Modifier) = ChoicePreferenceItem(
         title = stringResource(R.string.shell_navigation_bar),
-        icon = Icons.Outlined.CallToAction,
         options = NavigationBarStyle.entries,
         selected = settings.navigationBarStyle,
         optionLabel = { navigationBarLabel(it) },
@@ -119,7 +99,6 @@ internal class ShellDisplayRows(
     @Composable
     fun HideBottomBarOnScroll(modifier: Modifier) = SwitchPreferenceItem(
         modifier = modifier,
-        icon = Icons.Outlined.VerticalAlignBottom,
         title = stringResource(R.string.shell_hide_bottom_bar),
         summary = stringResource(R.string.shell_hide_bottom_bar_summary),
         checked = settings.hideBottomBarOnScroll,
@@ -129,7 +108,6 @@ internal class ShellDisplayRows(
     @Composable
     fun TabTransition(modifier: Modifier) = ChoicePreferenceItem(
         title = stringResource(R.string.shell_tab_transition),
-        icon = Icons.Outlined.SwapHoriz,
         options = TabTransitionStyle.entries,
         selected = settings.tabTransition,
         optionLabel = { tabTransitionLabel(it) },
@@ -140,7 +118,6 @@ internal class ShellDisplayRows(
     @Composable
     fun BackEdge(modifier: Modifier) = ChoicePreferenceItem(
         title = stringResource(R.string.shell_back_edge),
-        icon = Icons.Outlined.Swipe,
         options = BackEdgeStyle.entries,
         selected = settings.backEdgeStyle,
         optionLabel = { backEdgeLabel(it) },

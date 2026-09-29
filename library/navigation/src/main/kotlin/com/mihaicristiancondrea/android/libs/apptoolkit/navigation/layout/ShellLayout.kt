@@ -87,6 +87,11 @@ data class ShellLayoutInfo(
     val contentMaxWidth: Dp = Dp.Unspecified,
     /** Whether the window is tall enough for large, collapsing app bars. */
     val allowsLargeTopBar: Boolean = true,
+    /**
+     * [ShellLayoutPolicy.contentMaxWidth] whether or not the developer options lift it, so a
+     * setting that limits the width can tell whether the app sets a limit at all.
+     */
+    val declaredContentMaxWidth: Dp = contentMaxWidth,
 ) {
     /** The width a destination's content is limited to, given its own [ContentWidth]. */
     fun maxWidthFor(contentWidth: ContentWidth): Dp = when (contentWidth) {
@@ -117,6 +122,7 @@ fun rememberShellLayoutInfo(
         listDetail = width >= policy.listDetailFrom,
         contentMaxWidth = if (limitContentWidth) policy.contentMaxWidth else Dp.Unspecified,
         allowsLargeTopBar = height >= policy.largeTopBarFrom,
+        declaredContentMaxWidth = policy.contentMaxWidth,
     )
 }
 

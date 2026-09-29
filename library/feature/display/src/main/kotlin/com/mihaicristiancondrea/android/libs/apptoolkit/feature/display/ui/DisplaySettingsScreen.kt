@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui
 
+import androidx.compose.ui.unit.isSpecified
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalShellLayout
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellPreferences
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellGraph
@@ -220,6 +222,7 @@ fun DisplaySettingsScreen(
     val shellPreferences = LocalShellPreferences.current
     val scope = rememberCoroutineScope()
     val hasTabs = graph.tabs.isNotEmpty()
+    val appLimitsWidth = LocalShellLayout.current.declaredContentMaxWidth.isSpecified
     val shell = ShellDisplayRows(shellSettings, shellPreferences, scope)
 
     val appearanceRows: List<@Composable (Modifier) -> Unit> = buildList {
@@ -258,7 +261,8 @@ fun DisplaySettingsScreen(
         }
         add { modifier -> shell.TopBarStyle(modifier) }
         if (hasTabs) add { modifier -> shell.NavigationTint(modifier) }
-        add { modifier -> shell.ContentWidth(modifier) }
+        // Only an app that sets a maximum content width has one to lift.
+        if (appLimitsWidth) add { modifier -> shell.ContentWidth(modifier) }
         if (graph.banner != null) add { modifier -> shell.BannerStyle(modifier) }
     }
 

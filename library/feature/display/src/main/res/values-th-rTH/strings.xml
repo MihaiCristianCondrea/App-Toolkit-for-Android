@@ -39,7 +39,6 @@
     <string name="shell_hide_bottom_bar_summary">เลื่อนหายไปเมื่อเนื้อหาเลื่อนลง ขณะที่ไม่มีเครื่องเล่นแสดงอยู่</string>
     <string name="shell_limit_width">จำกัดความกว้างของเนื้อหาในหน้าต่างขนาดใหญ่</string>
     <string name="shell_limit_width_summary">จัดเนื้อหาไว้ตรงกลางพร้อมระยะขอบ เหมือนเว็บไซต์ เมื่อเกินความกว้างสูงสุดของนโยบายเลย์เอาต์</string>
-    <string name="shell_limit_width_unset">แอปไม่ได้กำหนดความกว้างสูงสุด เนื้อหาจึงเต็มหน้าต่างเสมอ</string>
     <string name="shell_banner_style">แบนเนอร์</string>
     <string name="shell_tab_transition">ระหว่างแท็บ</string>
     <string name="shell_back_edge">ปัดย้อนกลับจากขอบขวา</string>

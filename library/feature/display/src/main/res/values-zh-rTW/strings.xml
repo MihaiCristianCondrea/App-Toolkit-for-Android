@@ -39,7 +39,6 @@
     <string name="shell_hide_bottom_bar_summary">未顯示播放器時，內容向下捲動會滑出畫面</string>
     <string name="shell_limit_width">在大型視窗中限制內容寬度</string>
     <string name="shell_limit_width_summary">超過版面配置政策的寬度上限時，像網站一樣以邊界將內容置中</string>
-    <string name="shell_limit_width_unset">應用程式未設定寬度上限，因此內容一律填滿視窗</string>
     <string name="shell_banner_style">橫幅</string>
     <string name="shell_tab_transition">分頁之間</string>
     <string name="shell_back_edge">從右側邊緣滑動返回</string>

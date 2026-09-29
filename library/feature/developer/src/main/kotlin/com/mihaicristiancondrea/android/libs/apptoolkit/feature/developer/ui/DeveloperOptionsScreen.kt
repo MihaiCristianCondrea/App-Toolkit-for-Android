@@ -27,12 +27,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Animation
-import androidx.compose.material.icons.outlined.Dashboard
-import androidx.compose.material.icons.outlined.RestartAlt
-import androidx.compose.material.icons.outlined.RocketLaunch
-import androidx.compose.material.icons.outlined.SmartDisplay
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -106,7 +100,6 @@ fun DeveloperOptionsScreen() {
             add { modifier ->
                 ChoicePreferenceItem(
                     title = stringResource(R.string.shell_dev_start),
-                    icon = Icons.Outlined.RocketLaunch,
                     options = listOf(-1) + graph.startOptions.indices,
                     selected = settings.startOverride.takeIf { it in graph.startOptions.indices } ?: -1,
                     optionLabel = { index -> startLabel(graph, index) },
@@ -118,7 +111,6 @@ fun DeveloperOptionsScreen() {
         add { modifier ->
             ChoicePreferenceItem(
                 title = stringResource(R.string.shell_dev_layout),
-                icon = Icons.Outlined.Dashboard,
                 options = ShellLayoutMode.entries,
                 selected = settings.layoutMode,
                 optionLabel = { layoutModeLabel(it) },
@@ -130,11 +122,17 @@ fun DeveloperOptionsScreen() {
 
     val accessories: List<@Composable (Modifier) -> Unit> = buildList {
         if (graph.banner != null || graph.player != null) {
+            // Only the accessories the app declares: with one of the two, showing it or not is
+            // the whole choice, and a player option in an app without a player does nothing.
+            val options = if (graph.banner != null && graph.player != null) {
+                AccessoryMode.entries
+            } else {
+                listOf(AccessoryMode.AsDeclared, AccessoryMode.None)
+            }
             add { modifier ->
                 ChoicePreferenceItem(
                     title = stringResource(R.string.shell_dev_bottom_accessory),
-                    icon = Icons.Outlined.SmartDisplay,
-                    options = AccessoryMode.entries,
+                    options = options,
                     selected = settings.accessoryMode,
                     optionLabel = { accessoryLabel(it) },
                     onSelect = { scope.launch { preferences.setAccessoryMode(it) } },
@@ -148,7 +146,6 @@ fun DeveloperOptionsScreen() {
         { modifier ->
             ChoicePreferenceItem(
                 title = stringResource(R.string.shell_dev_animation_speed),
-                icon = Icons.Outlined.Animation,
                 options = AnimationSpeed.entries,
                 selected = settings.animationSpeed,
                 optionLabel = { animationSpeedLabel(it) },
@@ -182,7 +179,6 @@ fun DeveloperOptionsScreen() {
                 modifier = Modifier
                     .padding(top = SizeConstants.LargeSize)
                     .grouped(GroupedItemPosition.SINGLE),
-                icon = Icons.Outlined.RestartAlt,
                 title = resetTitle,
                 summary = resetSummary,
                 onClick = { scope.launch { preferences.resetDeveloperOptions() } },

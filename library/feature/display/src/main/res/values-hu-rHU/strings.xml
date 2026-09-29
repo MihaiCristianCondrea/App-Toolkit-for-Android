@@ -39,7 +39,6 @@
     <string name="shell_hide_bottom_bar_summary">Eltűnik, amikor a tartalom lefelé görget, amíg nem látszik lejátszó</string>
     <string name="shell_limit_width">Tartalomszélesség korlátozása nagy ablakokban</string>
     <string name="shell_limit_width_summary">Tartalom középre igazítása margókkal, mint egy weboldalon, az elrendezési szabály maximális szélessége felett</string>
-    <string name="shell_limit_width_unset">Az alkalmazás nem ad meg maximális szélességet, ezért a tartalom mindig kitölti az ablakot</string>
     <string name="shell_banner_style">Szalaghirdetés</string>
     <string name="shell_tab_transition">Lapok között</string>
     <string name="shell_back_edge">Vissza-húzás a jobb szélről</string>

@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
@@ -54,9 +55,20 @@ val ContentCardShape: Shape = RoundedCornerShape(topStart = 24.dp)
  * Whether [key] is the page the navigation beside it opened, which stands in for a tab: the first
  * page over the shell while pages open beside a rail or permanent drawer. Pages opened from it
  * stack above and keep their back button.
+ *
+ * A page keeps the answer it had while it animates out: once the navigation swaps it for another
+ * entry it is no longer on the stack, and without this it would grow a back button and a large
+ * app bar for the length of its exit.
  */
 @Composable
 fun isTopLevelPage(key: Any?): Boolean {
     if (key == null || LocalBesideNavigation.current == null) return false
-    return LocalShellNavigator.current.pages.getOrNull(1) == key
+    val pages = LocalShellNavigator.current.pages
+    // Plain memory rather than state: it only ever changes along with the stack it is read from.
+    val last = remember(key) { TopLevelMemory() }
+    val index = pages.indexOf(key)
+    if (index >= 0) last.value = index == 1
+    return last.value
 }
+
+private class TopLevelMemory(var value: Boolean = false)

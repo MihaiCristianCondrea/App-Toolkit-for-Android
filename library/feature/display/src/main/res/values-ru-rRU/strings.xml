@@ -39,7 +39,6 @@
     <string name="shell_hide_bottom_bar_summary">Уезжает, когда контент прокручивается вниз и проигрыватель не показан</string>
     <string name="shell_limit_width">Ограничивать ширину контента в больших окнах</string>
     <string name="shell_limit_width_summary">Центрировать контент с полями, как на сайте, сверх максимальной ширины правил макета</string>
-    <string name="shell_limit_width_unset">Приложение не задаёт максимальную ширину, поэтому контент всегда заполняет окно</string>
     <string name="shell_banner_style">Баннер</string>
     <string name="shell_tab_transition">Между вкладками</string>
     <string name="shell_back_edge">Жест «назад» от правого края</string>

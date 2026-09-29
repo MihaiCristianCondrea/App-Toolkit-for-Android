@@ -39,7 +39,6 @@
     <string name="shell_hide_bottom_bar_summary">プレーヤーが表示されていないとき、コンテンツを下にスクロールするとスライドして隠れます</string>
     <string name="shell_limit_width">大きなウィンドウでコンテンツの幅を制限</string>
     <string name="shell_limit_width_summary">レイアウトポリシーの最大幅を超えたら、ウェブサイトのように余白を付けてコンテンツを中央に配置します</string>
-    <string name="shell_limit_width_unset">アプリが最大幅を設定していないため、コンテンツは常にウィンドウいっぱいに表示されます</string>
     <string name="shell_banner_style">バナー</string>
     <string name="shell_tab_transition">タブ間</string>
     <string name="shell_back_edge">右端からの戻るスワイプ</string>

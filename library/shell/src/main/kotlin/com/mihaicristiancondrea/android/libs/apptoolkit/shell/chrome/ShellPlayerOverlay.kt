@@ -42,6 +42,9 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -164,8 +167,10 @@ internal fun ShellPlayerOverlay(
         }
     }
 
-    // Composed only while needed, so it registers after every other back handler and wins.
-    if (active && (expansion.value > 0f || expansion.targetValue > 0f)) {
+    // Composed only while needed, so it registers after every other back handler and wins. Derived,
+    // so this scope follows the player opening, not each frame of it.
+    val opened by remember(expansion) { derivedStateOf { expansion.value > 0f || expansion.targetValue > 0f } }
+    if (active && opened) {
         ShellBackHandler { settle(0f) }
     }
 }

@@ -39,7 +39,6 @@
     <string name="shell_hide_bottom_bar_summary">Scompare quando il contenuto scorre verso il basso, finché non è visibile nessun lettore</string>
     <string name="shell_limit_width">Limita la larghezza del contenuto nelle finestre grandi</string>
     <string name="shell_limit_width_summary">Centra il contenuto con margini, come un sito web, oltre la larghezza massima della regola di layout</string>
-    <string name="shell_limit_width_unset">L\'app non imposta una larghezza massima, quindi il contenuto riempie sempre la finestra</string>
     <string name="shell_banner_style">Banner</string>
     <string name="shell_tab_transition">Tra le schede</string>
     <string name="shell_back_edge">Scorrimento indietro dal bordo destro</string>

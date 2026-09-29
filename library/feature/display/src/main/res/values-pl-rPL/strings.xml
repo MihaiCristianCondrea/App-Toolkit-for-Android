@@ -39,7 +39,6 @@
     <string name="shell_hide_bottom_bar_summary">Chowa się, gdy treść przewija się w dół, dopóki nie jest widoczny odtwarzacz</string>
     <string name="shell_limit_width">Ogranicz szerokość treści w dużych oknach</string>
     <string name="shell_limit_width_summary">Wyśrodkuj treść z marginesami, jak na stronie internetowej, powyżej maksymalnej szerokości zasad układu</string>
-    <string name="shell_limit_width_unset">Aplikacja nie ustawia maksymalnej szerokości, więc treść zawsze wypełnia okno</string>
     <string name="shell_banner_style">Baner</string>
     <string name="shell_tab_transition">Między kartami</string>
     <string name="shell_back_edge">Przesunięcie wstecz od prawej krawędzi</string>

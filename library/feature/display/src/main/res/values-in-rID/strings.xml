@@ -39,7 +39,6 @@
     <string name="shell_hide_bottom_bar_summary">Bergeser pergi saat konten digulir ke bawah, selama tidak ada pemutar yang tampil</string>
     <string name="shell_limit_width">Batasi lebar konten di jendela besar</string>
     <string name="shell_limit_width_summary">Pusatkan konten dengan margin, seperti situs web, melewati lebar maksimum kebijakan tata letak</string>
-    <string name="shell_limit_width_unset">Aplikasi tidak menetapkan lebar maksimum, jadi konten selalu memenuhi jendela</string>
     <string name="shell_banner_style">Banner</string>
     <string name="shell_tab_transition">Antar-tab</string>
     <string name="shell_back_edge">Geser kembali dari tepi kanan</string>

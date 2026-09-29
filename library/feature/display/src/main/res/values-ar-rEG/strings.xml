@@ -39,7 +39,6 @@
     <string name="shell_hide_bottom_bar_summary">ينزلق بعيدًا عند تمرير المحتوى لأسفل، ما دام لا يظهر مشغل</string>
     <string name="shell_limit_width">تحديد عرض المحتوى في النوافذ الكبيرة</string>
     <string name="shell_limit_width_summary">توسيط المحتوى بهوامش، مثل موقع ويب، بعد تجاوز الحد الأقصى للعرض في سياسة التخطيط</string>
-    <string name="shell_limit_width_unset">لا يحدد التطبيق حدًا أقصى للعرض، لذا يملأ المحتوى النافذة دائمًا</string>
     <string name="shell_banner_style">البانر</string>
     <string name="shell_tab_transition">بين علامات التبويب</string>
     <string name="shell_back_edge">التمرير للرجوع من الحافة اليمنى</string>

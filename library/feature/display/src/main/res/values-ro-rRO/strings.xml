@@ -39,7 +39,6 @@
     <string name="shell_hide_bottom_bar_summary">Dispare când conținutul se derulează în jos, cât timp nu este afișat niciun player</string>
     <string name="shell_limit_width">Limitează lățimea conținutului în ferestre mari</string>
     <string name="shell_limit_width_summary">Centrează conținutul cu margini, ca un site web, peste lățimea maximă a regulii de aspect</string>
-    <string name="shell_limit_width_unset">Aplicația nu setează o lățime maximă, așa că conținutul umple mereu fereastra</string>
     <string name="shell_banner_style">Banner</string>
     <string name="shell_tab_transition">Între file</string>
     <string name="shell_back_edge">Glisare înapoi de la marginea dreaptă</string>

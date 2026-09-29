@@ -39,7 +39,6 @@
     <string name="shell_hide_bottom_bar_summary">কোনো প্লেয়ার দেখানো না থাকলে কনটেন্ট নিচে স্ক্রল করলে সরে যায়</string>
     <string name="shell_limit_width">বড় উইন্ডোতে কনটেন্টের প্রস্থ সীমিত করুন</string>
     <string name="shell_limit_width_summary">লেআউট নীতির সর্বোচ্চ প্রস্থ ছাড়িয়ে গেলে ওয়েবসাইটের মতো মার্জিন দিয়ে কনটেন্ট মাঝখানে রাখুন</string>
-    <string name="shell_limit_width_unset">অ্যাপ কোনো সর্বোচ্চ প্রস্থ ঠিক করে না, তাই কনটেন্ট সবসময় উইন্ডো ভরে রাখে</string>
     <string name="shell_banner_style">ব্যানার</string>
     <string name="shell_tab_transition">ট্যাবগুলোর মধ্যে</string>
     <string name="shell_back_edge">ডান প্রান্ত থেকে পেছনে সোয়াইপ</string>

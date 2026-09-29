@@ -39,7 +39,6 @@
     <string name="shell_hide_bottom_bar_summary">कंटेंट नीचे स्क्रॉल होने पर हट जाता है, जब तक कोई प्लेयर नहीं दिख रहा</string>
     <string name="shell_limit_width">बड़ी विंडो में कंटेंट की चौड़ाई सीमित करें</string>
     <string name="shell_limit_width_summary">लेआउट नीति की अधिकतम चौड़ाई से आगे, वेबसाइट की तरह मार्जिन के साथ कंटेंट को बीच में रखें</string>
-    <string name="shell_limit_width_unset">ऐप कोई अधिकतम चौड़ाई तय नहीं करता, इसलिए कंटेंट हमेशा विंडो भरता है</string>
     <string name="shell_banner_style">बैनर</string>
     <string name="shell_tab_transition">टैब के बीच</string>
     <string name="shell_back_edge">दाएँ किनारे से वापस स्वाइप</string>

@@ -39,7 +39,6 @@
     <string name="shell_hide_bottom_bar_summary">İçerik aşağı kaydırıldığında, oynatıcı gösterilmiyorsa kayarak gizlenir</string>
     <string name="shell_limit_width">Büyük pencerelerde içerik genişliğini sınırla</string>
     <string name="shell_limit_width_summary">Düzen politikasının azami genişliğini aşınca içeriği bir web sitesi gibi kenar boşluklarıyla ortala</string>
-    <string name="shell_limit_width_unset">Uygulama azami genişlik belirlemiyor, bu yüzden içerik her zaman pencereyi doldurur</string>
     <string name="shell_banner_style">Banner</string>
     <string name="shell_tab_transition">Sekmeler arasında</string>
     <string name="shell_back_edge">Sağ kenardan geri kaydırma</string>

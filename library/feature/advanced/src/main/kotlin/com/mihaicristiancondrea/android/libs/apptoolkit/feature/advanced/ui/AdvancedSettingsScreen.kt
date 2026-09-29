@@ -20,8 +20,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DeveloperOptionsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.outlined.DeveloperMode
-import androidx.compose.material.icons.Icons
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
@@ -184,7 +182,6 @@ fun AdvancedSettingsScreen(
                 if (developerOptionsUnlocked) {
                     item {
                         SettingsPreferenceItem(
-                            icon = Icons.Outlined.DeveloperMode,
                             title = stringResource(id = R.string.developer_options),
                             summary = stringResource(id = R.string.summary_preference_settings_developer_options),
                             onClick = { navigator.navigate(DeveloperOptionsRoute) },

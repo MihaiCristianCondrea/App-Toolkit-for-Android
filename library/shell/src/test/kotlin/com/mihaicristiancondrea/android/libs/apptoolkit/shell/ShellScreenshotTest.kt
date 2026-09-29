@@ -357,6 +357,22 @@ class ShellScreenshotTest {
     }
 
     @Test
+    @Config(qualifiers = EXPANDED)
+    fun a_page_swapped_for_another_leaves_without_growing_a_back_button() {
+        show()
+        compose.onNodeWithText("Help & feedback").performClick()
+        compose.waitForIdle()
+        compose.mainClock.autoAdvance = false
+        compose.onNodeWithText("Updates").performClick()
+        // Mid-swap, both pages are drawn; the one leaving is still the drawer's page.
+        repeat(6) {
+            compose.mainClock.advanceTimeByFrame()
+            compose.onAllNodesWithContentDescription("Go back").assertCountEquals(0)
+        }
+        compose.mainClock.autoAdvance = true
+    }
+
+    @Test
     fun an_extended_button_folds_while_the_list_scrolls_down_and_unfolds_going_up() {
         show()
         compose.onNodeWithText("Updates").performClick()

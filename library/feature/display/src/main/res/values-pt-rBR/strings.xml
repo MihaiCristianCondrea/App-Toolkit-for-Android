@@ -39,7 +39,6 @@
     <string name="shell_hide_bottom_bar_summary">Desliza para fora quando o conteúdo rola para baixo, enquanto nenhum player é exibido</string>
     <string name="shell_limit_width">Limitar a largura do conteúdo em janelas grandes</string>
     <string name="shell_limit_width_summary">Centralizar o conteúdo com margens, como um site, além da largura máxima da política de layout</string>
-    <string name="shell_limit_width_unset">O app não define uma largura máxima, então o conteúdo sempre preenche a janela</string>
     <string name="shell_banner_style">Banner</string>
     <string name="shell_tab_transition">Entre guias</string>
     <string name="shell_back_edge">Deslizar para voltar a partir da borda direita</string>

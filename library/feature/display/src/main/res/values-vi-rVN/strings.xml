@@ -39,7 +39,6 @@
     <string name="shell_hide_bottom_bar_summary">Trượt đi khi nội dung cuộn xuống, khi không có trình phát nào hiển thị</string>
     <string name="shell_limit_width">Giới hạn chiều rộng nội dung trên cửa sổ lớn</string>
     <string name="shell_limit_width_summary">Căn giữa nội dung với lề, như một trang web, khi vượt quá chiều rộng tối đa của chính sách bố cục</string>
-    <string name="shell_limit_width_unset">Ứng dụng không đặt chiều rộng tối đa, nên nội dung luôn lấp đầy cửa sổ</string>
     <string name="shell_banner_style">Biểu ngữ</string>
     <string name="shell_tab_transition">Giữa các thẻ</string>
     <string name="shell_back_edge">Vuốt quay lại từ cạnh phải</string>

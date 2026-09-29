@@ -39,7 +39,6 @@
     <string name="shell_hide_bottom_bar_summary">مواد نیچے اسکرول ہونے پر ہٹ جاتا ہے، جب تک کوئی پلیئر نظر نہ آ رہا ہو</string>
     <string name="shell_limit_width">بڑی ونڈوز میں مواد کی چوڑائی محدود کریں</string>
     <string name="shell_limit_width_summary">لے آؤٹ پالیسی کی زیادہ سے زیادہ چوڑائی سے آگے، ویب سائٹ کی طرح حاشیوں کے ساتھ مواد کو درمیان میں رکھیں</string>
-    <string name="shell_limit_width_unset">ایپ کوئی زیادہ سے زیادہ چوڑائی مقرر نہیں کرتی، اس لیے مواد ہمیشہ ونڈو بھرتا ہے</string>
     <string name="shell_banner_style">بینر</string>
     <string name="shell_tab_transition">ٹیبز کے درمیان</string>
     <string name="shell_back_edge">دائیں کنارے سے واپس سوائپ</string>

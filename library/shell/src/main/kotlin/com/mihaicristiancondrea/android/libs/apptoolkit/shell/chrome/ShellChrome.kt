@@ -75,10 +75,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -178,6 +180,9 @@ internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val playerExpansion = remember { Animatable(0f) }
+    // Read as a yes or no, so the chrome recomposes when the player starts or stops opening, not on
+    // every frame of it.
+    val playerCollapsed by remember { derivedStateOf { playerExpansion.value == 0f } }
     var bottomDock by remember { mutableStateOf(0.dp) }
     val searches = rememberSaveable(
         saver = listSaver(save = { list -> list.map { it.query } }, restore = { queries -> queries.map(::ShellSearch) }),
@@ -197,27 +202,36 @@ internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
     // (ShellFrame), so pages open next to it; below, the chrome draws the bottom bar and the
     // modal drawer itself, and pages cover them.
     val wide = frame != null && layout.mode.keepsNavigationBeside
-    val callbacks = NavigationCallbacks(
-        onTabClick = { index ->
-            if (drawerState.isOpen) scope.launch { drawerState.close() }
-            navigator.selectTab(index)
-        },
-        onEntryClick = { entry ->
-            if (drawerState.isOpen) scope.launch { drawerState.close() }
-            when (entry) {
-                is DrawerEntry.Link -> navigator.navigate(entry.key)
-                is DrawerEntry.Action -> entry.onClick(context)
-                DrawerEntry.Spacer -> Unit
+    // Kept across recompositions: the bars and drawers they are passed to can then skip, and a new
+    // controller would recompose everything under LocalShellChrome, a static local, on every
+    // navigation.
+    val callbacks = remember(navigator, drawerState, scope, context) {
+        NavigationCallbacks(
+            onTabClick = { index ->
+                if (drawerState.isOpen) scope.launch { drawerState.close() }
+                navigator.selectTab(index)
+            },
+            onEntryClick = { entry ->
+                if (drawerState.isOpen) scope.launch { drawerState.close() }
+                when (entry) {
+                    is DrawerEntry.Link -> navigator.navigate(entry.key)
+                    is DrawerEntry.Action -> entry.onClick(context)
+                    DrawerEntry.Spacer -> Unit
+                }
+            },
+        )
+    }
+    val openNavigation: () -> Unit = remember(wide, frame, layout.mode, drawerState, scope) {
+        {
+            when {
+                wide -> frame?.openNavigation(layout.mode)
+                layout.mode == ShellLayoutMode.BottomBar || layout.mode == ShellLayoutMode.Auto -> scope.launch { drawerState.open() }
             }
-        },
-    )
-    val openNavigation: () -> Unit = {
-        when {
-            wide -> frame?.openNavigation(layout.mode)
-            layout.mode == ShellLayoutMode.BottomBar || layout.mode == ShellLayoutMode.Auto -> scope.launch { drawerState.open() }
         }
     }
-    val chrome = ShellChromeController(showsMenuButton = layout.mode == ShellLayoutMode.BottomBar, openNavigation)
+    val currentOpenNavigation by rememberUpdatedState(openNavigation)
+    val showsMenuButton = layout.mode == ShellLayoutMode.BottomBar
+    val chrome = remember(showsMenuButton) { ShellChromeController(showsMenuButton) { currentOpenNavigation() } }
     val highlightedTab = highlightedTab(graph, navigator, layout.listDetail)
 
     val tintMode = if (wide) settings.navigationTint else NavigationTint.None
@@ -283,7 +297,7 @@ internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
             } else {
                 ModalNavigationDrawer(
                     drawerState = drawerState,
-                    gesturesEnabled = !navigator.isShowingChild && playerExpansion.value == 0f,
+                    gesturesEnabled = !navigator.isShowingChild && playerCollapsed,
                     drawerContent = {
                         ModalDrawerSheet(drawerState, windowInsets = DrawerContentInsets) {
                             ShellDrawerContent(graph, highlightedTab, showTabs = false, callbacks)

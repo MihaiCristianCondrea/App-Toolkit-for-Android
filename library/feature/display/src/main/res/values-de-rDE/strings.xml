@@ -39,7 +39,6 @@
     <string name="shell_hide_bottom_bar_summary">Gleitet weg, wenn der Inhalt nach unten scrollt und kein Player angezeigt wird</string>
     <string name="shell_limit_width">Inhaltsbreite auf großen Fenstern begrenzen</string>
     <string name="shell_limit_width_summary">Inhalt mit Rändern zentrieren, wie eine Website, ab der maximalen Breite der Layoutrichtlinie</string>
-    <string name="shell_limit_width_unset">Die App legt keine maximale Breite fest, daher füllt der Inhalt immer das Fenster</string>
     <string name="shell_banner_style">Banner</string>
     <string name="shell_tab_transition">Zwischen Tabs</string>
     <string name="shell_back_edge">Zurückwischen vom rechten Rand</string>
