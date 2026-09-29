@@ -18,18 +18,15 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.startup
 
 import android.Manifest
-import android.content.Context
-import android.content.Intent
 import android.os.Build
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers.StartupProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.OnboardingActivity
 import javax.inject.Inject
 
 /**
  * Sample startup policy used by the reusable startup feature.
  *
- * Notification permission is requested only where it is runtime-gated, and successful startup
- * always proceeds to the toolkit onboarding activity.
+ * Notification permission is requested only where it is runtime-gated. The startup screen then
+ * hands over to the Toolkit's onboarding start screen.
  */
 class AppStartupProvider @Inject constructor() : StartupProvider {
     override val requiredPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -37,6 +34,4 @@ class AppStartupProvider @Inject constructor() : StartupProvider {
     } else {
         emptyArray()
     }
-
-    override fun getNextIntent(context: Context) = Intent(context, OnboardingActivity::class.java)
 }

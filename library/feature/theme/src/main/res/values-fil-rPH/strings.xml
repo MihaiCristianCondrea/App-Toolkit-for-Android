@@ -33,4 +33,5 @@
     <string name="holiday_greeting_halloween_title">Maligayang Halloween!</string>
     <string name="holiday_greeting_halloween_message">Narito na ang nakakatakot na season. Gusto mo bang gamitin ang Halloween theme habang tumatagal ito?</string>
     <string name="holiday_greeting_use_theme">Gamitin ang holiday theme habang pista</string>
+    <string name="dark_theme">Madilim na tema</string>
 </resources>

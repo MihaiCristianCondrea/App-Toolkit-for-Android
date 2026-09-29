@@ -31,4 +31,5 @@
     <string name="summary_preference_settings_startup_page">Виберіть екран, який відображатиметься при запуску додатка.</string>
     <string name="will_never_turn_on_automatically">Ніколи не буде ввімкнено автоматично</string>
     <string name="will_turn_on_automatically_by_system">Автоматично увімкнеться системою</string>
+    <string name="display">Екран</string>
 </resources>

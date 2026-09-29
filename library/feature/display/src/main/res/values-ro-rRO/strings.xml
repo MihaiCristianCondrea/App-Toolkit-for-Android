@@ -31,4 +31,5 @@
     <string name="summary_preference_settings_startup_page">Alege ecranul care va fi afișat la pornirea aplicației.</string>
     <string name="will_never_turn_on_automatically">Nu se va activa niciodată automat</string>
     <string name="will_turn_on_automatically_by_system">Se va activa automat prin setările sistemului</string>
+    <string name="display">Afișaj</string>
 </resources>

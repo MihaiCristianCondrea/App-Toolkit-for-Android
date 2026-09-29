@@ -31,4 +31,5 @@
     <string name="summary_preference_settings_startup_page">Pilih layar yang akan ditampilkan saat aplikasi dimulai.</string>
     <string name="will_never_turn_on_automatically">Tidak akan pernah diaktifkan secara otomatis</string>
     <string name="will_turn_on_automatically_by_system">Akan diaktifkan secara otomatis oleh sistem</string>
+    <string name="display">Tampilan</string>
 </resources>

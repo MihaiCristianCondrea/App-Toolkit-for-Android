@@ -17,6 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.ThemeSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -91,16 +94,17 @@ private object DisplayActionNames {
  * - **Navigation:** Configuration for the startup page and visibility of bottom bar labels.
  * - **Language:** Access to per-app language settings via system settings (Android 13+) or an internal dialog.
  *
- * Persistence is owned by [DisplaySettingsViewModel]; [DisplaySettingsProvider] supplies host UI.
+ * Persistence is owned by [DisplaySettingsViewModel]; [DisplaySettingsProvider] supplies host UI. The dark theme row opens `ThemeSettingsRoute`.
  *
  * @param paddingValues The padding to be applied to the [LazyColumn] container,
  * typically used to avoid overlap with system bars or scaffolds.
  */
 @Composable
 fun DisplaySettingsScreen(
-    paddingValues: PaddingValues = PaddingValues(),
+    paddingValues: PaddingValues = contentPadding(),
 ) {
     val provider: DisplaySettingsProvider = koinInject()
+    val navigator = LocalShellNavigator.current
     val firebaseController: FirebaseController = koinInject()
     val viewModel: DisplaySettingsViewModel = koinViewModel()
     val screenState: UiStateScreen<DisplaySettingsUiState> by
@@ -226,7 +230,7 @@ fun DisplaySettingsScreen(
                             value = DisplayActionNames.THEME_REDIRECT,
                         )
                     )
-                    provider.openThemeSettings()
+                    navigator.navigate(ThemeSettingsRoute)
                 },
                 modifier = Modifier.groupedPreferenceItem(
                     position = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) GroupedItemPosition.FIRST else GroupedItemPosition.SINGLE,

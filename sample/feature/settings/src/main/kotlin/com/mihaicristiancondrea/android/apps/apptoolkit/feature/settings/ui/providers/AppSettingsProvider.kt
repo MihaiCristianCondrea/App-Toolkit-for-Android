@@ -17,6 +17,10 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.providers
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DisplaySettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsRoute
 import android.content.Context
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Build
@@ -26,11 +30,9 @@ import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.ui.graphics.Color
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openAppNotificationSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.general.GeneralSettingsActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsCategory
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsPreference
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.constants.SettingsContent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsCategory
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsPreference
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.SettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R as SettingsR
@@ -38,8 +40,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R as Se
 /**
  * Builds the sample's root settings categories using an application context.
  *
- * Notification settings prefer the platform app-notification page and fall back to the toolkit's
- * privacy surface when that intent is unavailable.
+ * Each row names the Toolkit page it opens. Notification settings prefer the platform
+ * app-notification page and fall back to the Toolkit's privacy page when that intent is unavailable.
  */
 class AppSettingsProvider(context: Context) : SettingsProvider {
     private val context: Context = context.applicationContext
@@ -58,84 +60,52 @@ class AppSettingsProvider(context: Context) : SettingsProvider {
                             iconContainerColor = Color(0xFFFFD8EF),
                             title = context.getString(SettingsR.string.notifications),
                             summary = context.getString(SettingsR.string.summary_preference_settings_notifications),
-                            action = {
-                                val opened = context.openAppNotificationSettings()
-                                if (!opened) {
-                                    GeneralSettingsActivity.start(
-                                        context = context,
-                                        title = context.getString(SettingsR.string.security_and_privacy),
-                                        contentKey = SettingsContent.SECURITY_AND_PRIVACY,
-                                    )
-                                }
-                            },
+                            destination = PrivacySettingsRoute,
+                            action = { context.openAppNotificationSettings() },
                         ),
                         SettingsPreference(
-                            key = SettingsContent.DISPLAY,
+                            key = SettingsConstants.KEY_SETTINGS_DISPLAY,
                             icon = Icons.Outlined.Palette,
                             useIconContainer = true,
                             iconColor = Color(0xFF763504),
                             iconContainerColor = Color(0xFFFFDCC3),
                             title = context.getString(SettingsR.string.display),
                             summary = context.getString(SettingsR.string.summary_preference_settings_display),
-                            action = {
-                                GeneralSettingsActivity.start(
-                                    context = context,
-                                    title = context.getString(SettingsR.string.display),
-                                    contentKey = SettingsContent.DISPLAY,
-                                )
-                            },
+                            destination = DisplaySettingsRoute,
                         ),
                     ),
                 ),
                 SettingsCategory(
                     preferences = listOf(
                         SettingsPreference(
-                            key = SettingsContent.SECURITY_AND_PRIVACY,
+                            key = SettingsConstants.KEY_SETTINGS_SECURITY_AND_PRIVACY,
                             icon = Icons.Outlined.Security,
                             useIconContainer = true,
                             iconColor = Color(0xFF014E69),
                             iconContainerColor = Color(0xFFBDE9FF),
                             title = context.getString(SettingsR.string.security_and_privacy),
                             summary = context.getString(SettingsR.string.summary_preference_settings_privacy_and_security),
-                            action = {
-                                GeneralSettingsActivity.start(
-                                    context = context,
-                                    title = context.getString(SettingsR.string.security_and_privacy),
-                                    contentKey = SettingsContent.SECURITY_AND_PRIVACY,
-                                )
-                            },
+                            destination = PrivacySettingsRoute,
                         ),
                         SettingsPreference(
-                            key = SettingsContent.ADVANCED,
+                            key = SettingsConstants.KEY_SETTINGS_ADVANCED,
                             icon = Icons.Outlined.Build,
                             useIconContainer = true,
                             iconColor = Color(0xFF572AA4),
                             iconContainerColor = Color(0xFFEEDCFE),
                             title = context.getString(SettingsR.string.advanced),
                             summary = context.getString(SettingsR.string.summary_preference_settings_advanced),
-                            action = {
-                                GeneralSettingsActivity.start(
-                                    context = context,
-                                    title = context.getString(SettingsR.string.advanced),
-                                    contentKey = SettingsContent.ADVANCED,
-                                )
-                            },
+                            destination = AdvancedSettingsRoute,
                         ),
                         SettingsPreference(
-                            key = SettingsContent.ABOUT,
+                            key = SettingsConstants.KEY_SETTINGS_ABOUT,
                             icon = Icons.Outlined.Info,
                             useIconContainer = true,
                             iconColor = Color(0xFF484848),
                             iconContainerColor = Color(0xFFE3E3E3),
                             title = context.getString(CoreUiR.string.about),
                             summary = context.getString(SettingsR.string.summary_preference_settings_about),
-                            action = {
-                                GeneralSettingsActivity.start(
-                                    context = context,
-                                    title = context.getString(CoreUiR.string.about),
-                                    contentKey = SettingsContent.ABOUT,
-                                )
-                            },
+                            destination = AboutRoute,
                         ),
                     ),
                 ),

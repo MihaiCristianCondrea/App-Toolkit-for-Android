@@ -48,4 +48,13 @@
     <string name="privacy_choices_title">Tùy chọn quyền riêng tư</string>
     <string name="summary_advanced_privacy_settings">Chọn những gì bạn chia sẻ cho phân tích và quảng cáo.</string>
     <string name="learn_more_about_provider">Tìm hiểu thêm về nhà cung cấp này</string>
+    <string name="onboarding_crashlytics_title">Giúp chúng tôi cải thiện</string>
+    <string name="onboarding_crashlytics_description">Cho phép ứng dụng gửi dữ liệu sử dụng ẩn danh và báo cáo sự cố. Điều này giúp chúng tôi sửa lỗi và cải thiện trải nghiệm của bạn. Không có thông tin cá nhân nào được thu thập.</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">Hiển thị thông tin chi tiết về việc sử dụng và chẩn đoán</string>
+    <string name="onboarding_crashlytics_show_details_button">Hiển thị thông tin chi tiết</string>
+    <string name="error">Lỗi</string>
+    <string name="onboarding_crashlytics_privacy_info">Quyền riêng tư của bạn rất quan trọng. Chúng tôi chỉ sử dụng dữ liệu này để sửa lỗi và cải thiện các tính năng. Để biết thêm chi tiết, vui lòng xem lại chính sách quyền riêng tư của chúng tôi.</string>
+    <string name="learn_more_privacy_policy">Xem lại Chính sách quyền riêng tư của chúng tôi</string>
+    <string name="onboarding_crashlytics_enabled_desc">Báo cáo dữ liệu đang hoạt động.</string>
+    <string name="onboarding_crashlytics_disabled_desc">Báo cáo dữ liệu không hoạt động.</string>
 </resources>

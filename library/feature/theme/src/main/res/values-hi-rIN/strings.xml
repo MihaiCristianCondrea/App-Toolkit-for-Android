@@ -33,4 +33,5 @@
     <string name="holiday_greeting_halloween_title">हैप्पी हैलोवीन!</string>
     <string name="holiday_greeting_halloween_message">डरावना मौसम आ गया है। क्या आप इसके रहते हैलोवीन थीम इस्तेमाल करना चाहेंगे?</string>
     <string name="holiday_greeting_use_theme">छुट्टियों के दौरान त्योहार थीम इस्तेमाल करें</string>
+    <string name="dark_theme">डार्क थीम</string>
 </resources>

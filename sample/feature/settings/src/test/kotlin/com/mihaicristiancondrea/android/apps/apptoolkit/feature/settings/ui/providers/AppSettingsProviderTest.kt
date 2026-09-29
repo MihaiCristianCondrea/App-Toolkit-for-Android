@@ -17,15 +17,16 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.providers
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DisplaySettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsRoute
+import kotlin.test.assertTrue
+import kotlin.test.assertFalse
 import android.content.Context
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openAppNotificationSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.general.GeneralSettingsActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.constants.SettingsContent
-import io.mockk.Runs
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -63,9 +64,7 @@ class AppSettingsProviderTest {
         val context = createContext(defaultStrings)
         val provider = AppSettingsProvider(context)
         mockkStatic("com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.ContextIntentExtensionsKt")
-        mockkObject(GeneralSettingsActivity.Companion)
         every { context.openAppNotificationSettings() } returns true
-        every { GeneralSettingsActivity.start(any(), any(), any()) } just Runs
 
         val config = provider.provideSettingsConfig()
 
@@ -84,7 +83,7 @@ class AppSettingsProviderTest {
         )
 
         val display = generalPreferences[1]
-        assertEquals(SettingsContent.DISPLAY, display.key)
+        assertEquals(SettingsConstants.KEY_SETTINGS_DISPLAY, display.key)
         assertEquals(defaultStrings[SettingsR.string.display], display.title)
         assertEquals(defaultStrings[SettingsR.string.summary_preference_settings_display], display.summary)
 
@@ -92,7 +91,7 @@ class AppSettingsProviderTest {
         assertEquals(3, advancedCategory.size)
 
         val security = advancedCategory[0]
-        assertEquals(SettingsContent.SECURITY_AND_PRIVACY, security.key)
+        assertEquals(SettingsConstants.KEY_SETTINGS_SECURITY_AND_PRIVACY, security.key)
         assertEquals(defaultStrings[SettingsR.string.security_and_privacy], security.title)
         assertEquals(
             defaultStrings[SettingsR.string.summary_preference_settings_privacy_and_security],
@@ -100,7 +99,7 @@ class AppSettingsProviderTest {
         )
 
         val advanced = advancedCategory[1]
-        assertEquals(SettingsContent.ADVANCED, advanced.key)
+        assertEquals(SettingsConstants.KEY_SETTINGS_ADVANCED, advanced.key)
         assertEquals(defaultStrings[SettingsR.string.advanced], advanced.title)
         assertEquals(
             defaultStrings[SettingsR.string.summary_preference_settings_advanced],
@@ -108,35 +107,19 @@ class AppSettingsProviderTest {
         )
 
         val about = advancedCategory[2]
-        assertEquals(SettingsContent.ABOUT, about.key)
+        assertEquals(SettingsConstants.KEY_SETTINGS_ABOUT, about.key)
         assertEquals(defaultStrings[CoreUiR.string.about], about.title)
         assertEquals(defaultStrings[SettingsR.string.summary_preference_settings_about], about.summary)
 
-        notifications.action.invoke()
+        // Each row opens its Toolkit page; notifications first tries the system's page.
+        assertEquals(PrivacySettingsRoute, notifications.destination)
+        assertEquals(DisplaySettingsRoute, display.destination)
+        assertEquals(PrivacySettingsRoute, security.destination)
+        assertEquals(AdvancedSettingsRoute, advanced.destination)
+        assertEquals(AboutRoute, about.destination)
+        assertTrue(notifications.action?.invoke() == true)
         verify(exactly = 1) { context.openAppNotificationSettings() }
-        verify(exactly = 0) {
-            GeneralSettingsActivity.start(any(), any(), any())
-        }
-
-        display.action.invoke()
-        verify(exactly = 1) {
-            GeneralSettingsActivity.start(any(), any(), any())
-        }
-
-        security.action.invoke()
-        verify(exactly = 2) {
-            GeneralSettingsActivity.start(any(), any(), any())
-        }
-
-        advanced.action.invoke()
-        verify(exactly = 3) {
-            GeneralSettingsActivity.start(any(), any(), any())
-        }
-
-        about.action.invoke()
-        verify(exactly = 4) {
-            GeneralSettingsActivity.start(any(), any(), any())
-        }
+        listOf(display, security, advanced, about).forEach { assertNull(it.action) }
 
         assertNull(config.categories[0].title)
         assertEquals(defaultStrings[SettingsR.string.settings], config.title)
@@ -147,19 +130,15 @@ class AppSettingsProviderTest {
         val context = createContext(defaultStrings)
         val provider = AppSettingsProvider(context)
         mockkStatic("com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.ContextIntentExtensionsKt")
-        mockkObject(GeneralSettingsActivity.Companion)
         every { context.openAppNotificationSettings() } returns false
-        every { GeneralSettingsActivity.start(any(), any(), any()) } just Runs
 
         val config = provider.provideSettingsConfig()
         val notifications = config.categories.first().preferences.first()
 
-        assertDoesNotThrow { notifications.action.invoke() }
-
+        // Unhandled, so the settings list opens the row's destination instead.
+        assertFalse(assertDoesNotThrow { notifications.action?.invoke() } == true)
+        assertEquals(PrivacySettingsRoute, notifications.destination)
         verify(exactly = 1) { context.openAppNotificationSettings() }
-        verify(exactly = 1) {
-            GeneralSettingsActivity.start(any(), any(), any())
-        }
     }
 
     @Test

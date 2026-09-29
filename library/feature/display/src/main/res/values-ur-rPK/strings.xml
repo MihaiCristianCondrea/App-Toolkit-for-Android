@@ -31,4 +31,5 @@
     <string name="summary_preference_settings_startup_page">ایپ شروع ہونے پر دکھائی جانے والی اسکرین منتخب کریں۔</string>
     <string name="will_never_turn_on_automatically">کبھی خود بخود آن نہیں ہوگا</string>
     <string name="will_turn_on_automatically_by_system">سسٹم کے ذریعے خود بخود آن ہو جائے گا</string>
+    <string name="display">ڈسپلے</string>
 </resources>

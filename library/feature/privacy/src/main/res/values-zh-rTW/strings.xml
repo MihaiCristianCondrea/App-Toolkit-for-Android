@@ -32,4 +32,5 @@
     <string name="summary_preference_settings_usage_and_diagnostics">分享數據以幫助改進應用程式體驗</string>
     <string name="terms_of_service">服務條款</string>
     <string name="usage_and_diagnostics">使用與診斷</string>
+    <string name="security_and_privacy">安全與隱私</string>
 </resources>

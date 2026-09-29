@@ -48,4 +48,13 @@
     <string name="privacy_choices_title">Adatvédelmi beállítások</string>
     <string name="summary_advanced_privacy_settings">Válassza ki, mit oszt meg elemzés és hirdetés céljából.</string>
     <string name="learn_more_about_provider">További információ erről a szolgáltatóról</string>
+    <string name="onboarding_crashlytics_title">Segítsen nekünk fejlődni</string>
+    <string name="onboarding_crashlytics_description">Engedélyezze az alkalmazásnak, hogy névtelen használati adatokat és összeomlási jelentéseket küldjön. Ez segít nekünk kijavítani a hibákat és javítani az élményét. Soha nem gyűjtünk személyes adatokat.</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">Részletes információk megjelenítése a használatról és a diagnosztikáról</string>
+    <string name="onboarding_crashlytics_show_details_button">Részletes információk megjelenítése</string>
+    <string name="error">Hiba</string>
+    <string name="onboarding_crashlytics_privacy_info">Az Ön adatvédelme fontos. Ezeket az adatokat csak hibajavításra és funkciófejlesztésre használjuk. További részletekért kérjük, tekintse át adatvédelmi irányelveinket.</string>
+    <string name="learn_more_privacy_policy">Tekintse át adatvédelmi irányelveinket</string>
+    <string name="onboarding_crashlytics_enabled_desc">Az adatok jelentése aktív.</string>
+    <string name="onboarding_crashlytics_disabled_desc">Az adatok jelentése inaktív.</string>
 </resources>

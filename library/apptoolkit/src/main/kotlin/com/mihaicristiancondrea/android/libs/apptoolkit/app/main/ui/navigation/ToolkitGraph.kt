@@ -18,55 +18,33 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalContentPadding
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.views.extras.LibraryExtrasScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.DeveloperOptionsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.FaqScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.LicensesScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.PermissionsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.SettingsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.general.GeneralSettingsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.views.dropdowns.SettingsMenuActions
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.SupportScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.AdsSettingsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.navigation.aboutPages
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.navigation.advancedSettingsPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.navigation.developerOptionsPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.navigation.diagnosticsSettingsPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.navigation.displaySettingsPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.navigation.helpPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.navigation.licensesPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.navigation.onboardingPages
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.navigation.permissionsPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.navigation.privacySettingsPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.navigation.settingsPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.navigation.supportPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.navigation.themeSettingsPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.navigation.adsSettingsPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DeveloperOptionsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.GeneralSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LibraryExtrasRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportRoute
-import org.koin.compose.koinInject
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.R as DeveloperR
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R as FaqR
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.R as LicensesR
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.R as PermissionsR
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R as SettingsR
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.R as SupportR
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.R as AdsR
 
 /**
- * Builds a [ShellGraph] with the Toolkit's own pages already in it: settings, help, support,
- * licenses, permissions, ads settings and developer options.
+ * Builds a [ShellGraph] with the Toolkit's own pages already in it: the settings list and its
+ * pages, about, licenses, help, support, permissions, ads settings, developer options and the
+ * first-launch start screens.
  *
  * The app's [builder] runs first, so a page it registers for one of the Toolkit's keys replaces
- * the Toolkit's page. The app still decides where each page is offered: in the drawer, the overflow
- * menu or from a screen.
+ * the Toolkit's page, and a feature's registration function it calls itself, such as
+ * `aboutPages { ... }`, takes its arguments. The app still decides where each page is offered: in
+ * the drawer, the overflow menu or from a screen.
  *
  * ```
  * val graph = toolkitGraph(appTitle = R.string.app_name) {
@@ -86,67 +64,26 @@ fun toolkitGraph(
 }.build()
 
 /**
- * Registers the Toolkit's pages the app has not registered itself. [toolkitGraph] calls it; an app
- * that builds its graph with `ShellGraphBuilder` directly calls it after its own destinations.
+ * Registers the Toolkit's pages the app has not registered itself, each through its own feature's
+ * registration function. [toolkitGraph] calls it; an app that builds its graph with
+ * `ShellGraphBuilder` directly calls it after its own destinations.
+ *
+ * This is the only place that names every feature; the features know nothing of each other and
+ * open one another's pages by key.
  */
 fun ShellGraphBuilder.toolkitPages() {
-    pageIfAbsent<SettingsRoute>(
-        paneRole = PaneRole.None,
-        title = { stringResource(SettingsR.string.settings) },
-        actions = { SettingsMenuActions() },
-    ) {
-        EmbeddedPage { SettingsScreen(isEmbedded = true) }
-    }
-    pageIfAbsent<GeneralSettingsRoute>(paneRole = PaneRole.None, title = { it.title }) { route ->
-        EmbeddedPage {
-            GeneralSettingsScreen(
-                title = route.title,
-                contentKey = route.contentKey,
-                onBackClicked = {},
-                isEmbedded = true,
-            )
-        }
-    }
-    pageIfAbsent<HelpRoute>(paneRole = PaneRole.None, title = { stringResource(FaqR.string.help) }) {
-        val config: AppVersionInfo = koinInject()
-        EmbeddedPage { FaqScreen(config = config, isEmbedded = true) }
-    }
-    pageIfAbsent<SupportRoute>(paneRole = PaneRole.None, title = { stringResource(SupportR.string.support_us) }) {
-        EmbeddedPage { SupportScreen(isEmbedded = true) }
-    }
-    pageIfAbsent<AdsSettingsRoute>(paneRole = PaneRole.None, title = { stringResource(AdsR.string.ads) }) {
-        EmbeddedPage { AdsSettingsScreen(isEmbedded = true) }
-    }
-    pageIfAbsent<PermissionsRoute>(
-        paneRole = PaneRole.None,
-        title = { stringResource(PermissionsR.string.permissions) },
-    ) {
-        EmbeddedPage { PermissionsScreen(isEmbedded = true) }
-    }
-    pageIfAbsent<LicensesRoute>(
-        paneRole = PaneRole.None,
-        title = { stringResource(LicensesR.string.oss_license_title) },
-    ) {
-        EmbeddedPage { LicensesScreen(isEmbedded = true) }
-    }
-    pageIfAbsent<LibraryExtrasRoute>(paneRole = PaneRole.None, title = { stringResource(CommonR.string.app_name) }) {
-        LibraryExtrasScreen(paddingValues = contentPadding())
-    }
-    pageIfAbsent<DeveloperOptionsRoute>(
-        paneRole = PaneRole.None,
-        title = { stringResource(DeveloperR.string.shell_developer_options) },
-    ) {
-        DeveloperOptionsScreen()
-    }
-}
-
-/**
- * Pads a screen that still has an embedded mode by the shell's bars, which its own padding does
- * not account for. Each feature drops it when its screen reads [LocalContentPadding] itself.
- */
-@Composable
-private fun EmbeddedPage(content: @Composable () -> Unit) {
-    Box(modifier = Modifier.fillMaxSize().padding(LocalContentPadding.current)) {
-        content()
-    }
+    settingsPage()
+    displaySettingsPage()
+    themeSettingsPage()
+    privacySettingsPage()
+    diagnosticsSettingsPage()
+    permissionsPage()
+    adsSettingsPage()
+    advancedSettingsPage()
+    aboutPages()
+    licensesPage()
+    helpPage()
+    supportPage()
+    developerOptionsPage()
+    onboardingPages()
 }

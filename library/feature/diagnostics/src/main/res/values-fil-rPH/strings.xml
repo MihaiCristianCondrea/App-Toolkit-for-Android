@@ -48,4 +48,13 @@
     <string name="privacy_choices_title">Mga pagpipilian sa privacy</string>
     <string name="summary_advanced_privacy_settings">Piliin kung ano ang ibinabahagi mo para sa analytics at advertising.</string>
     <string name="learn_more_about_provider">Alamin pa ang tungkol sa provider na ito</string>
+    <string name="onboarding_crashlytics_title">Tulungan kaming mapabuti</string>
+    <string name="onboarding_crashlytics_description">Payagan ang app na magpadala ng anonymous na data ng paggamit at mga ulat ng pag-crash. Nakakatulong ito sa amin na ayusin ang mga bug at pagandahin ang iyong karanasan. Walang personal na impormasyon ang kailanman kinokolekta.</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">Ipakita ang detalyadong impormasyon tungkol sa paggamit at diagnostics</string>
+    <string name="onboarding_crashlytics_show_details_button">Ipakita ang detalyadong impormasyon</string>
+    <string name="error">Error</string>
+    <string name="onboarding_crashlytics_privacy_info">Mahalaga ang iyong privacy. Ginagamit lang namin ang data na ito para ayusin ang mga bug at pagbutihin ang mga feature. Para sa karagdagang detalye, pakisuri ang aming patakaran sa privacy.</string>
+    <string name="learn_more_privacy_policy">Suriin ang aming Patakaran sa Privacy</string>
+    <string name="onboarding_crashlytics_enabled_desc">Aktibo ang pag-uulat ng data.</string>
+    <string name="onboarding_crashlytics_disabled_desc">Hindi aktibo ang pag-uulat ng data.</string>
 </resources>

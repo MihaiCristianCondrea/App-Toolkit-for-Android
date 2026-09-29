@@ -17,30 +17,16 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.providers
 
-import android.content.Context
 import androidx.compose.runtime.Composable
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.views.dialogs.SelectStartupScreenAlertDialog
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.general.GeneralSettingsActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.constants.SettingsContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.providers.DisplaySettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.R as DisplayR
 
 /**
- * Supplies the sample's theme route and startup-destination dialog to toolkit display settings.
+ * Supplies the sample's startup-destination dialog to toolkit display settings.
  *
  * The dialog reports only a confirmed route; persistence remains owned by the toolkit state holder.
  */
-class AppDisplaySettingsProvider(
-    private val context: Context,
-) : DisplaySettingsProvider {
-    override fun openThemeSettings() {
-        GeneralSettingsActivity.start(
-            context = context,
-            title = context.getString(DisplayR.string.dark_theme),
-            contentKey = SettingsContent.THEME,
-        )
-    }
-
+class AppDisplaySettingsProvider : DisplaySettingsProvider {
     override val supportsStartupPage: Boolean = true
 
     @Composable

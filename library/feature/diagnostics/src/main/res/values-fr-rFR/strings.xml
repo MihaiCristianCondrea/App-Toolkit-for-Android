@@ -48,4 +48,13 @@
     <string name="privacy_choices_title">Choix de confidentialité</string>
     <string name="summary_advanced_privacy_settings">Choisissez ce que vous partagez pour les analyses et la publicité.</string>
     <string name="learn_more_about_provider">En savoir plus sur ce fournisseur</string>
+    <string name="onboarding_crashlytics_title">Aidez-nous à améliorer</string>
+    <string name="onboarding_crashlytics_description">Autorisez l\'application à envoyer des données d\'utilisation anonymes et des rapports d\'erreur. Cela nous aide à corriger les bugs et à améliorer votre expérience. Aucune information personnelle n\'est jamais collectée.</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">Afficher les informations détaillées sur l\'utilisation et les diagnostics</string>
+    <string name="onboarding_crashlytics_show_details_button">Afficher les informations détaillées</string>
+    <string name="error">Erreur</string>
+    <string name="onboarding_crashlytics_privacy_info">Votre confidentialité est importante. Nous utilisons ces données uniquement pour corriger les bugs et améliorer les fonctionnalités. Pour plus de détails, veuillez consulter notre politique de confidentialité.</string>
+    <string name="learn_more_privacy_policy">Consultez notre politique de confidentialité</string>
+    <string name="onboarding_crashlytics_enabled_desc">Le rapport de données est actif.</string>
+    <string name="onboarding_crashlytics_disabled_desc">Le rapport de données est inactif.</string>
 </resources>

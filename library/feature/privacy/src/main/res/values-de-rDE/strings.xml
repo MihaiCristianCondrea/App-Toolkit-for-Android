@@ -32,4 +32,5 @@
     <string name="summary_preference_settings_usage_and_diagnostics">Teilen Sie Daten, um die App-Erfahrung zu verbessern</string>
     <string name="terms_of_service">Nutzungsbedingungen</string>
     <string name="usage_and_diagnostics">Nutzung und Diagnostik</string>
+    <string name="security_and_privacy">Sicherheit &amp; Datenschutz</string>
 </resources>

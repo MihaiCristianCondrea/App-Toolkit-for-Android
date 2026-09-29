@@ -48,4 +48,13 @@
     <string name="privacy_choices_title">ตัวเลือกความเป็นส่วนตัว</string>
     <string name="summary_advanced_privacy_settings">เลือกสิ่งที่คุณแบ่งปันเพื่อการวิเคราะห์และโฆษณา</string>
     <string name="learn_more_about_provider">ดูข้อมูลเพิ่มเติมเกี่ยวกับผู้ให้บริการนี้</string>
+    <string name="onboarding_crashlytics_title">ช่วยเราปรับปรุง</string>
+    <string name="onboarding_crashlytics_description">อนุญาตให้แอปส่งข้อมูลการใช้งานที่ไม่ระบุตัวตนและรายงานข้อขัดข้อง ซึ่งช่วยให้เราแก้ไขข้อบกพร่องและปรับปรุงประสบการณ์ของคุณให้ดีขึ้น จะไม่มีการรวบรวมข้อมูลส่วนบุคคลใดๆ</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">แสดงข้อมูลโดยละเอียดเกี่ยวกับการใช้งานและการวินิจฉัย</string>
+    <string name="onboarding_crashlytics_show_details_button">แสดงข้อมูลโดยละเอียด</string>
+    <string name="error">ข้อผิดพลาด</string>
+    <string name="onboarding_crashlytics_privacy_info">ความเป็นส่วนตัวของคุณเป็นสิ่งสำคัญ เราใช้ข้อมูลนี้เพื่อแก้ไขข้อบกพร่องและปรับปรุงคุณสมบัติเท่านั้น สำหรับรายละเอียดเพิ่มเติม โปรดอ่านนโยบายความเป็นส่วนตัวของเรา</string>
+    <string name="learn_more_privacy_policy">อ่านนโยบายความเป็นส่วนตัวของเรา</string>
+    <string name="onboarding_crashlytics_enabled_desc">การรายงานข้อมูลทำงานอยู่</string>
+    <string name="onboarding_crashlytics_disabled_desc">การรายงานข้อมูลไม่ทำงาน</string>
 </resources>

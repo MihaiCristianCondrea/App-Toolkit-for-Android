@@ -31,4 +31,5 @@
     <string name="summary_preference_settings_startup_page">Elige la pantalla que se mostrará cuando se inicie la aplicación.</string>
     <string name="will_never_turn_on_automatically">Nunca se activará automáticamente</string>
     <string name="will_turn_on_automatically_by_system">Se activará automáticamente por el sistema</string>
+    <string name="display">Pantalla</string>
 </resources>

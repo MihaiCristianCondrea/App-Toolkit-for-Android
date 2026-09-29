@@ -33,4 +33,5 @@
     <string name="holiday_greeting_halloween_title">Joyeux Halloween !</string>
     <string name="holiday_greeting_halloween_message">La saison des frissons est là. Voulez-vous utiliser le thème Halloween tant qu\'elle dure ?</string>
     <string name="holiday_greeting_use_theme">Utiliser le thème des fêtes pendant les fêtes</string>
+    <string name="dark_theme">Thème sombre</string>
 </resources>

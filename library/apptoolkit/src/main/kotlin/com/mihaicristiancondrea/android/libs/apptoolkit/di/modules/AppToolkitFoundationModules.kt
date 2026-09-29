@@ -18,7 +18,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.di.modules
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.AdLoadReporter
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.factory.GmsHostFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
@@ -40,7 +39,7 @@ import org.koin.dsl.module
  * AppToolkit foundation modules to be loaded by the host app.
  *
  * Composes dispatchers, datastore, host providers, networking, and the ads, consent, and update
- * integration modules, along with shared dependencies such as [GmsHostFactory].
+ * integration modules, along with shared values such as the apps metadata API address.
  */
 fun appToolkitFoundationModules(hostBuildConfig: AppToolkitHostBuildConfig): List<Module> =
     listOf(
@@ -78,7 +77,6 @@ private fun corePlatformModule(hostBuildConfig: AppToolkitHostBuildConfig): Modu
 }
 
 private fun mainSharedModule(): Module = module {
-    single { GmsHostFactory() } // Lightweight creator without screen references; safe as singleton.
     single<String>(qualifier = named(name = AppToolkitDiConstants.ANDROID_APPS_METADATA_API_BASE_URL)) {
         ApiHost.BASE_URL
     }

@@ -17,14 +17,13 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers
 
-import android.content.Context
-import android.content.Intent
 
+/**
+ * The host's answers for the startup screen, the first-launch start screen that hands over to
+ * onboarding.
+ */
 interface StartupProvider {
 
-    /** Which runtime permissions (if any) should we request? */
+    /** The runtime permissions the startup screen asks for once, such as notifications. */
     val requiredPermissions: Array<String>
-
-    /** Once everything’s done, where do we go? */
-    fun getNextIntent(context: Context): Intent
 }

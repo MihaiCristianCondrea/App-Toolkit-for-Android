@@ -48,4 +48,13 @@
     <string name="privacy_choices_title">Integritetsval</string>
     <string name="summary_advanced_privacy_settings">Välj vad du delar för analys och annonsering.</string>
     <string name="learn_more_about_provider">Läs mer om den här leverantören</string>
+    <string name="onboarding_crashlytics_title">Hjälp oss att förbättra</string>
+    <string name="onboarding_crashlytics_description">Tillåt appen att skicka anonym användningsdata och kraschrapporter. Detta hjälper oss att åtgärda buggar och förbättra din upplevelse. Ingen personlig information samlas in.</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">Visa detaljerad information om användning och diagnostik</string>
+    <string name="onboarding_crashlytics_show_details_button">Visa detaljerad information</string>
+    <string name="error">Fel</string>
+    <string name="onboarding_crashlytics_privacy_info">Din integritet är viktig. Vi använder endast dessa data för att åtgärda buggar och förbättra funktioner. För mer information, läs vår integritetspolicy.</string>
+    <string name="learn_more_privacy_policy">Granska vår integritetspolicy</string>
+    <string name="onboarding_crashlytics_enabled_desc">Datarapportering är aktiv.</string>
+    <string name="onboarding_crashlytics_disabled_desc">Datarapportering är inaktiv.</string>
 </resources>

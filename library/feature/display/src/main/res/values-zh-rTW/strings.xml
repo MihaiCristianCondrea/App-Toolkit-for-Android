@@ -31,4 +31,5 @@
     <string name="summary_preference_settings_startup_page">選擇應用程式啟動時要顯示的畫面。</string>
     <string name="will_never_turn_on_automatically">永遠不會自動啟用</string>
     <string name="will_turn_on_automatically_by_system">將由系統自動啟用</string>
+    <string name="display">顯示</string>
 </resources>

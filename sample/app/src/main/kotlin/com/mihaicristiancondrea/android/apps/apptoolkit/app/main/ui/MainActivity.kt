@@ -17,6 +17,17 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.states.MainUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.StartupRoute
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -31,7 +42,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.MainAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.MainEvent
@@ -42,22 +52,25 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.fa
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.data.repositories.ComponentsShowcaseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ToolkitTilesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppTheme
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.activity.observeActions
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.factory.GmsHostFactory
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.update.domain.models.InAppUpdateHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.views.dialogs.ChangelogDialog
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.startup.StartupActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.ShellHost
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+/** Clears the bottom navigation bar, which is 80dp tall, for the activity's own snackbars. */
+private val SnackbarBottomOffset = 88.dp
+
 /**
- * The sample's only screen host: [ShellHost] with the graph from `appGraph`, which draws every tab,
- * page, bar and drawer. Consent, review and update run from here, where the activity is.
+ * The sample's only activity: [ShellHost] with the graph from `appGraph`, which draws every tab,
+ * page, bar and drawer, and the first-launch start screens. Consent, review and update run from
+ * here, where the activity is.
  */
 class MainActivity : AppCompatActivity() {
 
@@ -65,7 +78,6 @@ class MainActivity : AppCompatActivity() {
     private val dispatchers: DispatcherProvider by inject()
     private val componentsShowcaseRepository: ComponentsShowcaseRepository by inject()
     private val viewModel: MainViewModel by viewModel()
-    private val gmsHostFactory: GmsHostFactory by inject()
     private var updateResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
         registerForActivityResult(contract = ActivityResultContracts.StartIntentSenderForResult()) {}
     private var keepSplashVisible: Boolean = true
@@ -75,27 +87,13 @@ class MainActivity : AppCompatActivity() {
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition { keepSplashVisible }
         enableEdgeToEdge()
-        handleStartup()
+        setShellContent()
         initObservers()
     }
 
     override fun onResume() {
         super.onResume()
         handleGmsEvents()
-    }
-
-    private fun handleStartup() {
-        lifecycleScope.launch {
-            val isFirstLaunch: Boolean =
-                withContext(context = dispatchers.io) { dataStore.startup.first() }
-            if (isFirstLaunch) {
-                keepSplashVisible = false
-                openActivity(activityClass = StartupActivity::class.java)
-                finish()
-            } else {
-                setShellContent()
-            }
-        }
     }
 
     private fun setShellContent() {
@@ -114,19 +112,40 @@ class MainActivity : AppCompatActivity() {
                     )
                 }
 
-                ShellHost(
-                    graph = graph,
-                    // The start page chosen in the display settings, read before the first frame.
-                    resolveStart = {
-                        withContext(context = dispatchers.io) {
-                            dataStore.startupDestinationFlow(
-                                defaultRoute = ToolkitTilesRoute.ROUTE_ID,
-                                mapToKey = ::startKeyFor,
-                            ).first()
-                        }
-                    },
-                    onReady = { keepSplashVisible = false },
-                )
+                Box(modifier = Modifier.fillMaxSize()) {
+                    ShellHost(
+                        graph = graph,
+                        // Read before the first frame: the first-launch start screens until
+                        // onboarding is done, then the start page chosen in the display settings.
+                        resolveStart = {
+                            withContext(context = dispatchers.io) {
+                                if (dataStore.startup.first()) {
+                                    StartupRoute
+                                } else {
+                                    dataStore.startupDestinationFlow(
+                                        defaultRoute = ToolkitTilesRoute.ROUTE_ID,
+                                        mapToKey = ::startKeyFor,
+                                    ).first()
+                                }
+                            }
+                        },
+                        onReady = { keepSplashVisible = false },
+                    )
+
+                    // Consent failures reported by MainViewModel, above the bottom navigation.
+                    val mainState by viewModel.uiState.collectAsStateWithLifecycle()
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .navigationBarsPadding()
+                            .padding(bottom = SnackbarBottomOffset),
+                    ) {
+                        DefaultSnackbarHandler<MainUiState, MainEvent>(
+                            screenState = mainState,
+                            snackbarHostState = remember { SnackbarHostState() },
+                        )
+                    }
+                }
 
                 if (showChangelog) {
                     ChangelogDialog(onDismiss = { showChangelog = false })
@@ -146,25 +165,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleGmsEvents() {
         viewModel.onEvent(
-            event = MainEvent.RequestConsent(
-                host = gmsHostFactory.createConsentHost(
-                    activity = this
-                )
-            )
+            event = MainEvent.RequestConsent(host = ConsentHost(activity = this))
         )
         viewModel.onEvent(
-            event = MainEvent.RequestReview(
-                host = gmsHostFactory.createReviewHost(
-                    activity = this
-                )
-            )
+            event = MainEvent.RequestReview(host = ReviewHost(activity = this))
         )
         viewModel.onEvent(
             event = MainEvent.RequestInAppUpdate(
-                host = gmsHostFactory.createUpdateHost(
-                    activity = this,
-                    launcher = updateResultLauncher
-                )
+                host = InAppUpdateHost(activity = this, updateResultLauncher = updateResultLauncher)
             )
         )
     }

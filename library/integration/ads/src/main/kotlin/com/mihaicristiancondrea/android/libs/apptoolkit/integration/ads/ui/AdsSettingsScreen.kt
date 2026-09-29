@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,7 +26,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -53,7 +53,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.Sc
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.R
@@ -70,16 +69,12 @@ private object AdsPreferenceKeys {
     const val LEARN_MORE: String = "learn_more"
 }
 
-private object AdsActionNames {
-    const val BACK_CLICK: String = "back_click"
-}
-
-/** Compose screen displaying ad preferences. */
-@OptIn(ExperimentalMaterial3Api::class)
+/**
+ * The ad preferences: the body of the ads settings page, which `adsSettingsPage()` registers and
+ * the privacy page opens.
+ */
 @Composable
-fun AdsSettingsScreen(
-    isEmbedded: Boolean = false,
-) {
+fun AdsSettingsScreen() {
     val viewModel: AdsSettingsViewModel = koinViewModel()
     val screenState: UiStateScreen<AdsSettingsUiState> by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -100,13 +95,7 @@ fun AdsSettingsScreen(
     )
 
     val activity = LocalActivity.current
-    val consentHost = remember(activity) {
-        activity?.let {
-            object : ConsentHost {
-                override val activity = it
-            }
-        }
-    }
+    val consentHost = remember(activity) { activity?.let(::ConsentHost) }
 
     val content: @Composable (PaddingValues) -> Unit = { paddingValues ->
         ScreenStateHandler(
@@ -227,30 +216,5 @@ fun AdsSettingsScreen(
         )
     }
 
-    if (isEmbedded) {
-        content(PaddingValues())
-    } else {
-        LargeTopAppBarWithScaffold(
-            title = stringResource(id = R.string.ads),
-            onBackClicked = remember(activity) {
-                {
-                    firebaseController.logEvent(
-                        AnalyticsEvent(
-                            name = SettingsAnalytics.Events.ACTION,
-                            params = mapOf(
-                                SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
-                                    ADS_SETTINGS_SCREEN_NAME
-                                ),
-                                SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(
-                                    AdsActionNames.BACK_CLICK
-                                ),
-                            ),
-                        )
-                    )
-                    activity?.finish()
-                }
-            },
-            content = content
-        )
-    }
+    content(contentPadding())
 }

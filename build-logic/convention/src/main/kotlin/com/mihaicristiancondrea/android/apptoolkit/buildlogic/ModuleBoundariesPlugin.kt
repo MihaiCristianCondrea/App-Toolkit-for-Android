@@ -115,9 +115,8 @@ class ModuleBoundariesPlugin : Plugin<Project> {
 
     /**
      * The library's rules: shared modules never reach up into features or the assembly module, the
-     * library never depends on the sample, and features do not depend on each other. The features
-     * that still do are listed in [ALLOWED_LIBRARY_FEATURE_EDGES]; each edge is removed from the
-     * list in the change that removes it from the build, so no new one can appear unnoticed.
+     * library never depends on the sample, and features do not depend on each other: a feature
+     * opens another's page by key, and `:library:apptoolkit` is the one module that knows them all.
      */
     private fun enforceLibraryDependencies(target: Project) {
         target.afterEvaluate {
@@ -140,7 +139,7 @@ class ModuleBoundariesPlugin : Plugin<Project> {
                     }
                 }
                 if (projectPath.startsWith(":library:feature:") && dependencyPath.startsWith(":library:feature:")) {
-                    check(dependencyPath == projectPath || (projectPath to dependencyPath) in ALLOWED_LIBRARY_FEATURE_EDGES) {
+                    check(dependencyPath == projectPath) {
                         "Architecture violation: $projectPath cannot depend on sibling feature $dependencyPath"
                     }
                 }
@@ -218,25 +217,6 @@ class ModuleBoundariesPlugin : Plugin<Project> {
         const val CHECK_TASK_NAME = "checkModuleBoundaries"
         val NESTED_MODULE_GROUPS = setOf("core", "feature", "integration")
 
-        /**
-         * Library feature-to-feature dependencies that exist today. Each goes when its feature
-         * registers its pages in the shell graph and opens the other by key instead.
-         */
-        val ALLOWED_LIBRARY_FEATURE_EDGES = setOf(
-            ":library:feature:about" to ":library:feature:licenses",
-            ":library:feature:advanced" to ":library:feature:issuereporter",
-            ":library:feature:faq" to ":library:feature:licenses",
-            ":library:feature:onboarding" to ":library:feature:settings",
-            ":library:feature:permissions" to ":library:feature:settings",
-            ":library:feature:settings" to ":library:feature:about",
-            ":library:feature:settings" to ":library:feature:advanced",
-            ":library:feature:settings" to ":library:feature:diagnostics",
-            ":library:feature:settings" to ":library:feature:display",
-            ":library:feature:settings" to ":library:feature:faq",
-            ":library:feature:settings" to ":library:feature:issuereporter",
-            ":library:feature:settings" to ":library:feature:privacy",
-            ":library:feature:settings" to ":library:feature:theme",
-        )
         val PACKAGE_REGEX = Regex("(?m)^package\\s+([A-Za-z0-9_.]+)")
         val APP_OWNED_IMPORT_REGEX = Regex(
             "(?m)^import\\s+com\\.mihaicristiancondrea\\.android\\.apps\\.apptoolkit\\.app\\.(main|integration|navigation)(\\.|$)",

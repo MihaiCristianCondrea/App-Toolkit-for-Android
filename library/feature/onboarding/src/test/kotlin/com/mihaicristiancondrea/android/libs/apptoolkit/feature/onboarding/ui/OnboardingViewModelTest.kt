@@ -184,19 +184,6 @@ class OnboardingViewModelTest {
             assertThat(viewModel.uiState.value.data?.isOnboardingCompleted).isFalse()
         }
 
-    @Test
-    fun `crashlytics dialog visibility toggles`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = createViewModel(FakeOnboardingRepository())
-
-        assertThat(viewModel.uiState.value.data?.isCrashlyticsDialogVisible).isTrue()
-
-        viewModel.onEvent(OnboardingEvent.HideCrashlyticsDialog)
-        assertThat(viewModel.uiState.value.data?.isCrashlyticsDialogVisible).isFalse()
-
-        viewModel.onEvent(OnboardingEvent.ShowCrashlyticsDialog)
-        assertThat(viewModel.uiState.value.data?.isCrashlyticsDialogVisible).isTrue()
-    }
-
     private fun createViewModel(repository: OnboardingRepository): OnboardingViewModel =
         OnboardingViewModel(
             onboardingRepository = repository,

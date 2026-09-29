@@ -32,4 +32,5 @@
     <string name="summary_preference_settings_usage_and_diagnostics">Share data to help improve in-app experience</string>
     <string name="terms_of_service">Terms of service</string>
     <string name="usage_and_diagnostics">Usage and diagnostics</string>
+    <string name="security_and_privacy">Security &amp; privacy</string>
 </resources>

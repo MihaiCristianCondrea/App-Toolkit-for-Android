@@ -32,4 +32,5 @@
     <string name="summary_preference_settings_usage_and_diagnostics">Ibahagi ang data para makatulong na mapabuti ang karanasan sa loob ng app</string>
     <string name="terms_of_service">Mga tuntunin ng serbisyo</string>
     <string name="usage_and_diagnostics">Paggamit at mga diagnostic</string>
+    <string name="security_and_privacy">Seguridad &amp; Pribasya</string>
 </resources>

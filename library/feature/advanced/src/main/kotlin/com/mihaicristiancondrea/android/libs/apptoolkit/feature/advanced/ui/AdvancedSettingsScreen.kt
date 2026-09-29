@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -35,7 +36,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.contracts.AdvancedSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.states.AdvancedSettingsUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterBottomSheet
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.sheets.IssueReporterSheet
+import org.koin.compose.getKoin
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
@@ -79,7 +81,7 @@ private object AdvancedPreferenceKeys {
  */
 @Composable
 fun AdvancedSettingsScreen(
-    paddingValues: PaddingValues = PaddingValues(),
+    paddingValues: PaddingValues = contentPadding(),
 ) {
     val viewModel: AdvancedSettingsViewModel = koinViewModel()
     val screenState: UiStateScreen<AdvancedSettingsUiState> by viewModel.uiState.collectAsStateWithLifecycle()
@@ -104,8 +106,10 @@ fun AdvancedSettingsScreen(
     // rememberSaveable, so rotating with the reporter open does not close it.
     var showIssueReporter: Boolean by rememberSaveable { mutableStateOf(value = false) }
 
+    // Bound by the issue reporter; without it the bug report entry is left out.
+    val issueReporterSheet: IssueReporterSheet? = getKoin().getOrNull()
     if (showIssueReporter) {
-        IssueReporterBottomSheet(onDismissRequest = { showIssueReporter = false })
+        issueReporterSheet?.Show(onDismissRequest = { showIssueReporter = false })
     }
 
     val messageRes: Int? = screenState.data?.cacheClearMessage
@@ -130,11 +134,13 @@ fun AdvancedSettingsScreen(
                 verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
             ) {
 
-                item {
-                    PreferenceCategoryItem(title = stringResource(id = R.string.error_reporting))
+                if (issueReporterSheet != null) {
+                    item {
+                        PreferenceCategoryItem(title = stringResource(id = R.string.error_reporting))
+                    }
                 }
 
-                item {
+                if (issueReporterSheet != null) item {
                     SettingsPreferenceItem(
                         title = stringResource(id = R.string.bug_report),
                         summary = stringResource(id = R.string.summary_preference_settings_bug_report),

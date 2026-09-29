@@ -17,6 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
@@ -33,8 +36,8 @@ import kotlinx.coroutines.launch
 /**
  * Owns the privacy screen entries and routes their clicks.
  *
- * Host destinations that live outside this module are reached through [PrivacySettingsProvider];
- * opening a URL needs a `Context`, so it leaves as a [PrivacyAction] for the screen to perform.
+ * The rows come from [PrivacySettingsProvider]. Opening a URL needs a `Context` and opening a page
+ * needs the navigator, so both leave as a [PrivacyAction] for the screen to perform.
  */
 class PrivacyViewModel(
     private val provider: PrivacySettingsProvider,
@@ -69,9 +72,10 @@ class PrivacyViewModel(
         startOperation(action = Actions.OPEN_PRIVACY_ITEM)
         when (action) {
             is PrivacyItemAction.OpenUrl -> sendAction(PrivacyAction.OpenUrl(url = action.url))
-            is PrivacyItemAction.OpenPermissions -> provider.openPermissionsScreen()
-            is PrivacyItemAction.OpenAds -> provider.openAdsScreen()
-            is PrivacyItemAction.OpenUsageAndDiagnostics -> provider.openUsageAndDiagnosticsScreen()
+            is PrivacyItemAction.OpenPermissions -> sendAction(PrivacyAction.Navigate(key = PermissionsRoute))
+            is PrivacyItemAction.OpenAds -> sendAction(PrivacyAction.Navigate(key = AdsSettingsRoute))
+            is PrivacyItemAction.OpenUsageAndDiagnostics ->
+                sendAction(PrivacyAction.Navigate(key = DiagnosticsSettingsRoute))
         }
     }
 

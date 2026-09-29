@@ -48,4 +48,13 @@
     <string name="privacy_choices_title">Privacy choices</string>
     <string name="summary_advanced_privacy_settings">Choose what you share for analytics and advertising.</string>
     <string name="learn_more_about_provider">Learn more about this provider</string>
+    <string name="onboarding_crashlytics_title">Help improve the app</string>
+    <string name="onboarding_crashlytics_description">Allow the app to send anonymous usage data and crash reports. This information fixes bugs and makes your experience better. No personal information is ever collected.</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">Show detailed information about usage and diagnostics</string>
+    <string name="onboarding_crashlytics_show_details_button">Show detailed information</string>
+    <string name="error">Error</string>
+    <string name="onboarding_crashlytics_privacy_info">Your privacy is important. The data is used only to fix bugs and improve features. For more details, review the privacy policy.</string>
+    <string name="learn_more_privacy_policy">Review the Privacy Policy</string>
+    <string name="onboarding_crashlytics_enabled_desc">Data reporting is active.</string>
+    <string name="onboarding_crashlytics_disabled_desc">Data reporting is inactive.</string>
 </resources>

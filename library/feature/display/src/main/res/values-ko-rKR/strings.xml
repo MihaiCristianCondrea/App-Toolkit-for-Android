@@ -31,4 +31,5 @@
     <string name="summary_preference_settings_startup_page">앱 시작 시 표시될 화면을 선택하세요.</string>
     <string name="will_never_turn_on_automatically">자동으로 켜지지 않습니다.</string>
     <string name="will_turn_on_automatically_by_system">시스템에 의해 자동으로 켜집니다.</string>
+    <string name="display">디스플레이</string>
 </resources>

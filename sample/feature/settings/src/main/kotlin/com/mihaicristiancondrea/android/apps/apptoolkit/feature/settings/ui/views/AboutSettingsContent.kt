@@ -17,8 +17,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.views
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.data.repositories.ShowcaseUnlockRepository
@@ -29,17 +27,12 @@ import org.koin.compose.koinInject
 
 /** The About surface for this app: the toolkit screen plus the hidden version-tap unlock. */
 @Composable
-fun AboutSettingsContent(
-    paddingValues: PaddingValues,
-    snackbarHostState: SnackbarHostState,
-) {
+fun AboutSettingsContent() {
     val showcaseUnlockRepository: ShowcaseUnlockRepository = koinInject()
     val firebaseController: FirebaseController = koinInject()
     val coroutineScope = rememberCoroutineScope()
 
     AboutScreen(
-        paddingValues = paddingValues,
-        snackbarHostState = snackbarHostState,
         onVersionTap = { tapCount ->
             coroutineScope.launch {
                 runCatching {

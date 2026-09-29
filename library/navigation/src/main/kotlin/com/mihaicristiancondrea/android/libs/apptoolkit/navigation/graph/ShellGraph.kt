@@ -244,10 +244,12 @@ class ShellGraphBuilder(
     /**
      * Adds a page unless the app registered its own for [K]. Toolkit features register their
      * pages with it, so an app replaces any of them by registering the same key first.
+     *
+     * A null [title], as for a start screen, leaves the whole page to [content], as with [page].
      */
     inline fun <reified K : NavKey> pageIfAbsent(
         paneRole: PaneRole,
-        noinline title: @Composable (K) -> String,
+        noinline title: (@Composable (K) -> String)?,
         topBar: TopBarStyle = TopBarStyle.Large,
         noinline actions: (@Composable RowScope.(K) -> Unit)? = null,
         noinline content: @Composable (K) -> Unit,

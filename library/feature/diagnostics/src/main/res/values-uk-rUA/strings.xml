@@ -48,4 +48,13 @@
     <string name="privacy_choices_title">Параметри конфіденційності</string>
     <string name="summary_advanced_privacy_settings">Виберіть, чим ви ділитеся для аналітики та реклами.</string>
     <string name="learn_more_about_provider">Дізнатися більше про цього постачальника</string>
+    <string name="onboarding_crashlytics_title">Допоможіть нам покращити</string>
+    <string name="onboarding_crashlytics_description">Дозвольте додатку надсилати анонімні дані про використання та звіти про збої. Це допомагає нам виправляти помилки та покращувати ваш досвід. Особиста інформація ніколи не збирається.</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">Показати детальну інформацію про використання та діагностику</string>
+    <string name="onboarding_crashlytics_show_details_button">Показати детальну інформацію</string>
+    <string name="error">Помилка</string>
+    <string name="onboarding_crashlytics_privacy_info">Ваша конфіденційність важлива. Ми використовуємо ці дані лише для виправлення помилок та покращення функцій. Для отримання додаткової інформації, будь ласка, перегляньте нашу політику конфіденційності.</string>
+    <string name="learn_more_privacy_policy">Переглянути нашу Політику конфіденційності</string>
+    <string name="onboarding_crashlytics_enabled_desc">Звітність даних активна.</string>
+    <string name="onboarding_crashlytics_disabled_desc">Звітність даних неактивна.</string>
 </resources>

@@ -51,5 +51,21 @@
                 android:resource="@xml/shortcuts" />
         </activity>
 
+        <!-- Android's permission manager opens this to explain why the app uses a permission. It
+             holds the system's permission, so only the system can start it, and the permissions
+             page's deep links open the Toolkit's permissions page for it. -->
+        <activity-alias
+            android:name=".app.main.ui.PermissionUsageActivity"
+            android:exported="true"
+            android:permission="android.permission.START_VIEW_PERMISSION_USAGE"
+            android:targetActivity=".app.main.ui.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW_PERMISSION_USAGE" />
+                <action android:name="android.intent.action.VIEW_PERMISSION_USAGE_FOR_PERIOD" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity-alias>
+
     </application>
 </manifest>

@@ -33,4 +33,5 @@
     <string name="holiday_greeting_halloween_title">Happy Halloween!</string>
     <string name="holiday_greeting_halloween_message">Spooky season is here. Want to wear the Halloween theme until it is over?</string>
     <string name="holiday_greeting_use_theme">Use the holiday theme during the holidays</string>
+    <string name="dark_theme">Dark theme</string>
 </resources>

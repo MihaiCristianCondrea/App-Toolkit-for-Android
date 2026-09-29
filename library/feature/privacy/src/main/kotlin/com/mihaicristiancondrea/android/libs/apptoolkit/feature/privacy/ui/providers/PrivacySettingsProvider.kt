@@ -50,8 +50,4 @@ interface PrivacySettingsProvider {
      */
     val licenseUrl: String
         get() = AppLinks.GPL_V3
-
-    fun openPermissionsScreen()
-    fun openAdsScreen()
-    fun openUsageAndDiagnosticsScreen()
 }

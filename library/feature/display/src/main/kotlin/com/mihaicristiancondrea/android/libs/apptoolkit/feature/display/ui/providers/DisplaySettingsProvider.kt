@@ -23,7 +23,7 @@ import androidx.compose.runtime.Composable
  * Interface for providing access to display-related settings and UI components.
  *
  * This interface defines methods and properties for interacting with display settings,
- * such as managing the startup page, selecting the language, and opening the theme settings.
+ * such as managing the startup page. The theme settings are the Toolkit's `ThemeSettingsRoute` page.
  */
 interface DisplaySettingsProvider {
 
@@ -59,27 +59,6 @@ interface DisplaySettingsProvider {
         onDismiss: () -> Unit,
         onStartupSelected: (String) -> Unit,
     ) {
-
-    }
-
-    /**
-     * Opens the theme settings screen or activity.
-     *
-     * This function is responsible for initiating the navigation or display of
-     * the user interface where the user can customize the application's theme.
-     * This might include options for:
-     * - Switching between light and dark mode.
-     * - Selecting a custom color scheme.
-     * - Adjusting font sizes or styles.
-     * - Enabling high contrast mode.
-     *
-     * The exact implementation details of how the theme settings are opened
-     * (e.g., launching a new activity, displaying a dialog, etc.) are
-     * handled internally by this function.
-     *
-     * @see [closeThemeSettings] for closing the theme settings
-     */
-    fun openThemeSettings() {
 
     }
 }

@@ -31,11 +31,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHost
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -103,7 +103,7 @@ fun PageScaffold(
             )
         },
         floatingActionButton = floatingActionButton,
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+        snackbarHost = { DefaultSnackbarHost(snackbarState = snackbarHostState) },
         contentWindowInsets = contentInsets,
     ) { padding ->
         Box(
@@ -114,6 +114,7 @@ fun PageScaffold(
         ) {
             CompositionLocalProvider(
                 LocalContentPadding provides PaddingValues(bottom = padding.calculateBottomPadding()),
+                LocalPageSnackbarHostState provides snackbarHostState,
                 content = content,
             )
         }

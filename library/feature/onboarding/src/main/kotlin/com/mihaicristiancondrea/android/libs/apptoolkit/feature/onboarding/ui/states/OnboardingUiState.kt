@@ -23,6 +23,5 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.s
 data class OnboardingUiState(
     val currentTabIndex: Int = 0,
     val isOnboardingCompleted: Boolean = false,
-    val isCrashlyticsDialogVisible: Boolean = true,
 )
 

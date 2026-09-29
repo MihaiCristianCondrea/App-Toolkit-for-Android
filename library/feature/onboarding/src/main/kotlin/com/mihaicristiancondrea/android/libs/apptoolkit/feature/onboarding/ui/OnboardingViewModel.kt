@@ -69,8 +69,6 @@ class OnboardingViewModel(
             is OnboardingEvent.UpdateCurrentTab -> updateCurrentTab(event.index)
             is OnboardingEvent.CompleteOnboarding -> completeOnboarding()
             is OnboardingEvent.RequestConsent -> requestConsent()
-            is OnboardingEvent.ShowCrashlyticsDialog -> setCrashlyticsDialogVisibility(isVisible = true)
-            is OnboardingEvent.HideCrashlyticsDialog -> setCrashlyticsDialogVisibility(isVisible = false)
             is OnboardingEvent.DismissSnackbar -> dismissSnackbar()
         }
     }
@@ -157,14 +155,6 @@ class OnboardingViewModel(
         startOperation(action = Actions.REQUEST_CONSENT)
         viewModelScope.launch {
             sendAction(OnboardingAction.RequestConsentUi)
-        }
-    }
-
-    private fun setCrashlyticsDialogVisibility(isVisible: Boolean) {
-        viewModelScope.launch {
-            updateStateThreadSafe {
-                screenState.copyData { copy(isCrashlyticsDialogVisible = isVisible) }
-            }
         }
     }
 

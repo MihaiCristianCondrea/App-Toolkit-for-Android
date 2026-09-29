@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -78,7 +79,7 @@ private object UsageAndDiagnosticsPreferenceKeys {
  */
 @Composable
 fun UsageAndDiagnosticsScreen(
-    paddingValues: PaddingValues,
+    paddingValues: PaddingValues = contentPadding(),
 ) {
     val viewModel: UsageAndDiagnosticsViewModel = koinViewModel()
     val screenState: UiStateScreen<UsageAndDiagnosticsUiState> by viewModel.uiState.collectAsStateWithLifecycle()

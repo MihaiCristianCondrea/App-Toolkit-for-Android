@@ -33,4 +33,5 @@
     <string name="holiday_greeting_halloween_title">해피 할로윈!</string>
     <string name="holiday_greeting_halloween_message">으스스한 시즌이 왔어요. 시즌 동안 할로윈 테마를 사용할까요?</string>
     <string name="holiday_greeting_use_theme">연휴 동안 연휴 테마 사용</string>
+    <string name="dark_theme">어두운 테마</string>
 </resources>

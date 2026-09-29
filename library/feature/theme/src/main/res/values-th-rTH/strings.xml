@@ -33,4 +33,5 @@
     <string name="holiday_greeting_halloween_title">สุขสันต์วันฮาโลวีน!</string>
     <string name="holiday_greeting_halloween_message">ฤดูแห่งความหลอนมาถึงแล้ว อยากใช้ธีมฮาโลวีนตลอดช่วงนี้ไหม</string>
     <string name="holiday_greeting_use_theme">ใช้ธีมเทศกาลในช่วงเทศกาล</string>
+    <string name="dark_theme">ธีมมืด</string>
 </resources>

@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.CustomSnackbarVisuals
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiSnackbar
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalPageSnackbarHostState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 
 /**
@@ -71,5 +72,8 @@ fun <T, E : UiEvent> DefaultSnackbarHandler(
         }
     }
 
-    SnackbarHost(hostState = snackbarHostState)
+    // A page frame already draws its own host; a second one here would show every message twice.
+    if (snackbarHostState !== LocalPageSnackbarHostState.current) {
+        SnackbarHost(hostState = snackbarHostState)
+    }
 }

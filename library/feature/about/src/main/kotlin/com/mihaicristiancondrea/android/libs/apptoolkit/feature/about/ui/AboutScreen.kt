@@ -18,10 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -40,9 +38,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.ABOUT_SETTINGS_LOG_TAG
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
@@ -53,12 +49,15 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.Tr
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.rememberPageSnackbarHostState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.AboutUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.LicensesActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
 import kotlinx.coroutines.delay
 import nl.dionsegijn.konfetti.compose.KonfettiView
 import nl.dionsegijn.konfetti.core.Angle
@@ -86,18 +85,15 @@ private const val ABOUT_SCREEN_CLASS = "AboutScreen"
  *
  * It also features an easter egg: tapping the app version five times triggers a konfetti animation.
  *
- * @param paddingValues The padding values to be applied to the content of the lazy column,
- * typically provided by a Scaffold.
- * @param snackbarHostState The [SnackbarHostState] to manage and display Snackbars for user feedback,
- * such as when device info is copied.
  * @param onVersionTap Callback invoked with the cumulative number of taps on the app version item.
  */
 @Composable
 fun AboutScreen(
-    paddingValues: PaddingValues = PaddingValues(),
-    snackbarHostState: SnackbarHostState,
     onVersionTap: (Int) -> Unit = {},
 ) {
+    val paddingValues = contentPadding()
+    val snackbarHostState: SnackbarHostState = rememberPageSnackbarHostState()
+    val navigator = LocalShellNavigator.current
     val context: Context = LocalContext.current
     val viewModel: AboutViewModel = koinViewModel()
     val screenState: UiStateScreen<AboutUiState> by viewModel.uiState.collectAsStateWithLifecycle()
@@ -194,17 +190,7 @@ fun AboutScreen(
                                                 )
                                             }
 
-                                            AboutItemAction.OpenLicenses -> {
-                                                val opened = context.openActivity(
-                                                    LicensesActivity::class.java,
-                                                )
-                                                if (!opened) {
-                                                    Log.w(
-                                                        ABOUT_SETTINGS_LOG_TAG,
-                                                        "Failed to open licenses screen from About settings",
-                                                    )
-                                                }
-                                            }
+                                            AboutItemAction.OpenLicenses -> navigator.navigate(LicensesRoute)
 
                                             null -> Unit
                                         }

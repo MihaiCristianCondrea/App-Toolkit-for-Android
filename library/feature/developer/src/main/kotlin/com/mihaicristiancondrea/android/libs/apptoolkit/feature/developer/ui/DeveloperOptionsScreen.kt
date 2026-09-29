@@ -92,7 +92,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
  * is in. Changes apply at once and persist, so the app can be restarted into a variation.
  *
  * It reads the shell's own locals, so it only works as a page of a `ShellHost`. The page comes with
- * `toolkitGraph { }` from `:library:apptoolkit`, which registers it for `DeveloperOptionsRoute`.
+ * `developerOptionsPage()`, which `toolkitGraph { }` in `:library:apptoolkit` calls.
  */
 @Composable
 fun DeveloperOptionsScreen() {

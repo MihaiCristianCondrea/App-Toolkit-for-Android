@@ -31,4 +31,5 @@
     <string name="summary_preference_settings_startup_page">Piliin ang screen na ipapakita kapag nagsimula ang app.</string>
     <string name="will_never_turn_on_automatically">Hindi kailanman awtomatikong mag-o-on</string>
     <string name="will_turn_on_automatically_by_system">Awtomatikong mag-o-on sa pamamagitan ng system</string>
+    <string name="display">Display</string>
 </resources>

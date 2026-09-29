@@ -33,10 +33,6 @@ class PrivacyMappersTest {
         override val codeOfConductUrl: String = "https://example.test/conduct"
         override val legalNoticesUrl: String = "https://example.test/legal"
         override val licenseUrl: String = "https://example.test/license"
-
-        override fun openPermissionsScreen() = Unit
-        override fun openAdsScreen() = Unit
-        override fun openUsageAndDiagnosticsScreen() = Unit
     }
 
     @Test

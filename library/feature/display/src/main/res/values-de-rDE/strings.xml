@@ -31,4 +31,5 @@
     <string name="summary_preference_settings_startup_page">Wählen Sie den Bildschirm, der beim Start der App angezeigt wird.</string>
     <string name="will_never_turn_on_automatically">Wird niemals automatisch aktiviert</string>
     <string name="will_turn_on_automatically_by_system">Wird automatisch vom System aktiviert</string>
+    <string name="display">Anzeige</string>
 </resources>

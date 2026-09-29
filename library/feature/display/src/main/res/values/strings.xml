@@ -31,4 +31,5 @@
     <string name="summary_preference_settings_startup_page">Choose the screen to be displayed when the app starts.</string>
     <string name="will_never_turn_on_automatically">Will never turn on automatically</string>
     <string name="will_turn_on_automatically_by_system">Will turn on automatically by the system</string>
+    <string name="display">Display</string>
 </resources>

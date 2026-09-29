@@ -31,41 +31,33 @@ import kotlinx.serialization.Serializable
 @Immutable
 sealed interface AppToolkitNavKey : NavKey
 
-/** Library extras destination. */
+/** The library extras page, registered by `:library:feature:about`. */
 @Serializable
 data object LibraryExtrasRoute : AppToolkitNavKey
 
-/** Root settings destination. */
+/** The settings list, a list page registered by `:library:feature:settings`. */
 @Serializable
 data object SettingsRoute : AppToolkitNavKey
 
-/** Destination for a settings category identified by [contentKey]. */
-@Serializable
-data class GeneralSettingsRoute(val title: String, val contentKey: String) : AppToolkitNavKey
-
-/** Help and feedback FAQ destination. */
+/** Help and feedback, registered by `:library:feature:faq`. */
 @Serializable
 data object HelpRoute : AppToolkitNavKey
 
-/** Support and donations destination. */
+/** Support and donations, registered by `:library:feature:support`. */
 @Serializable
 data object SupportRoute : AppToolkitNavKey
 
-/** Advertising settings destination. */
+/** Advertising settings, registered by `:library:integration:ads`. */
 @Serializable
 data object AdsSettingsRoute : AppToolkitNavKey
 
-/** Runtime permissions destination. */
+/** The app's permissions, registered by `:library:feature:permissions`. */
 @Serializable
 data object PermissionsRoute : AppToolkitNavKey
 
-/** Open-source licenses destination. */
+/** Open-source licenses, registered by `:library:feature:licenses`. */
 @Serializable
 data object LicensesRoute : AppToolkitNavKey
-
-// One key per page that `GeneralSettingsRoute` reaches today through a content key, and per
-// activity that becomes a page. Nothing registers them yet: each feature registers its own when it
-// moves to the shell graph, which replaces `GeneralSettingsRoute` and the string content keys.
 
 /** About the app, registered by `:library:feature:about`. */
 @Serializable
@@ -91,7 +83,7 @@ data object AdvancedSettingsRoute : AppToolkitNavKey
 @Serializable
 data object DiagnosticsSettingsRoute : AppToolkitNavKey
 
-/** The shell's developer options, registered by the developer feature. */
+/** The shell's developer options, registered by `:library:feature:developer`. */
 @Serializable
 data object DeveloperOptionsRoute : AppToolkitNavKey
 

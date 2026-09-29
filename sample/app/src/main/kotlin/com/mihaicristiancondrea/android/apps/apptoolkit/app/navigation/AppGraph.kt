@@ -17,6 +17,13 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.views.AboutSettingsContent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.BottomAppBarNativeAdBanner
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.navigation.aboutPages
+import org.koin.compose.koinInject
+import org.koin.core.qualifier.named
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.EventNote
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
@@ -57,9 +64,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.R as D
 const val ACTION_OPEN_SETTINGS: String = "com.d4rk.android.apps.apptoolkit.action.OPEN_SETTINGS"
 
 /**
- * The sample's whole navigation: two tabs, the drawer, the overflow menu, the components page and
- * the intents it answers. `toolkitGraph` adds the Toolkit's own pages (settings, help, support and
- * the rest).
+ * The sample's whole navigation: two tabs, the drawer, the overflow menu, the components page, the
+ * bottom banner and the intents it answers. `toolkitGraph` adds the Toolkit's own pages (settings,
+ * help, support, the first-launch start screens and the rest).
  *
  * This is the one place that knows the full feature set, which is why it stays in `:sample:app`:
  * each feature provides its screens, and the graph decides where they appear.
@@ -103,7 +110,14 @@ fun appGraph(
         )
     }
     page<ComponentsRoute>(title = { stringResource(ComponentsR.string.components_title) }) {
-        ComponentsScreen(paddingValues = contentPadding())
+        ComponentsScreen()
+    }
+    // The Toolkit's About page, with the hidden version-tap unlock of the components showcase.
+    aboutPages { AboutSettingsContent() }
+    // A native ad docked on the bottom bar, or floating beside a rail; nothing while ads are off.
+    banner {
+        val config: AdsConfig = koinInject(qualifier = named(AdsQualifiers.BOTTOM_NAV_BAR_NATIVE_AD))
+        BottomAppBarNativeAdBanner(adUnitId = config.bannerAdUnitId)
     }
 
     drawer {

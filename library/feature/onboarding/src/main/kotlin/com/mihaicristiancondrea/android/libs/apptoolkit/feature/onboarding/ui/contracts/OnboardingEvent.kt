@@ -24,8 +24,6 @@ sealed interface OnboardingEvent : UiEvent {
     data class UpdateCurrentTab(val index: Int) : OnboardingEvent
     data object RequestConsent : OnboardingEvent
     data object CompleteOnboarding : OnboardingEvent
-    data object ShowCrashlyticsDialog : OnboardingEvent
-    data object HideCrashlyticsDialog : OnboardingEvent
     data object DismissSnackbar : OnboardingEvent
 }
 

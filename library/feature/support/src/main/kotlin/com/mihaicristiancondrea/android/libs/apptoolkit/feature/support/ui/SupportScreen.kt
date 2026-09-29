@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.rememberPageSnackbarHostState
 import android.app.Activity
 import android.content.Context
 import androidx.activity.compose.LocalActivity
@@ -47,7 +49,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
@@ -65,7 +66,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.No
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.domain.models.DonationProductIds
@@ -91,29 +91,22 @@ private object SupportPreferenceKeys {
     const val DESTINATION: String = "destination"
 }
 
-private object SupportActionNames {
-    const val BACK_CLICK: String = "back_click"
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SupportComposable() {
     SupportScreen()
 }
 
 /**
- * Renders the support and donation screen.
- *
- * @param isEmbedded When true, the screen omits its own top app bar so a host navigation shell can
- * provide app-level chrome.
+ * Renders the support and donation screen: the body of the support page, which `supportPage()`
+ * registers and the overflow menu's `supportUs()` entry opens.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SupportScreen(isEmbedded: Boolean = false) {
+fun SupportScreen() {
     val viewModel: SupportViewModel = koinViewModel()
     val activity = LocalActivity.current
     val screenState: UiStateScreen<SupportScreenUiState> by viewModel.uiState.collectAsStateWithLifecycle()
-    val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
+    val snackbarHostState: SnackbarHostState = rememberPageSnackbarHostState()
+    val paddingValues = contentPadding()
     val currentViewModel = rememberUpdatedState(newValue = viewModel)
 
     val onDonateClick: (Activity, String) -> Unit =
@@ -139,53 +132,37 @@ fun SupportScreen(isEmbedded: Boolean = false) {
         screenState = screenState.screenState,
     )
 
-    val content: @Composable (PaddingValues) -> Unit = { paddingValues ->
-        ScreenStateHandler(
-            screenState = screenState,
-            onLoading = { LoadingScreen() },
-            onEmpty = { NoDataScreen(paddingValues = paddingValues) },
-            onError = {
-                NoDataScreen(
-                    icon = Icons.Outlined.MoneyOff,
-                    isError = true,
-                    textMessage = R.string.error_failed_to_load_sku_details,
-                    paddingValues = paddingValues
-                )
-            },
-            onSuccess = { data: SupportScreenUiState ->
-                SupportScreenContent(
-                    paddingValues = paddingValues,
-                    donationOptions = data.donationOptions,
-                    isBillingInProgress = data.isBillingInProgress,
-                    firebaseController = firebaseController,
-                    onDonateClick = { productId ->
-                        activity?.let { hostActivity ->
-                            onDonateClick(hostActivity, productId)
-                        }
-                    },
-                )
-            })
-        DefaultSnackbarHandler(
-            screenState = screenState,
-            snackbarHostState = snackbarHostState,
-            getDismissEvent = { SupportEvent.DismissSnackbar },
-            onEvent = { viewModel.onEvent(it) }
-        )
-    }
-
-    if (isEmbedded) {
-        content(PaddingValues())
-    } else {
-        LargeTopAppBarWithScaffold(
-            title = stringResource(id = R.string.support_us),
-            onBackClicked = {
-                firebaseController.logEvent(supportActionEvent(actionName = SupportActionNames.BACK_CLICK))
-                activity?.finish()
-            },
-            snackbarHostState = snackbarHostState,
-            content = content,
-        )
-    }
+    ScreenStateHandler(
+        screenState = screenState,
+        onLoading = { LoadingScreen() },
+        onEmpty = { NoDataScreen(paddingValues = paddingValues) },
+        onError = {
+            NoDataScreen(
+                icon = Icons.Outlined.MoneyOff,
+                isError = true,
+                textMessage = R.string.error_failed_to_load_sku_details,
+                paddingValues = paddingValues
+            )
+        },
+        onSuccess = { data: SupportScreenUiState ->
+            SupportScreenContent(
+                paddingValues = paddingValues,
+                donationOptions = data.donationOptions,
+                isBillingInProgress = data.isBillingInProgress,
+                firebaseController = firebaseController,
+                onDonateClick = { productId ->
+                    activity?.let { hostActivity ->
+                        onDonateClick(hostActivity, productId)
+                    }
+                },
+            )
+        })
+    DefaultSnackbarHandler(
+        screenState = screenState,
+        snackbarHostState = snackbarHostState,
+        getDismissEvent = { SupportEvent.DismissSnackbar },
+        onEvent = { viewModel.onEvent(it) }
+    )
 }
 
 @Composable
@@ -368,14 +345,3 @@ private fun supportPreferenceTapEvent(
         },
     )
 }
-
-private fun supportActionEvent(actionName: String): AnalyticsEvent {
-    return AnalyticsEvent(
-        name = SettingsAnalytics.Events.ACTION,
-        params = mapOf(
-            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(SUPPORT_SCREEN_NAME),
-            SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(actionName),
-        ),
-    )
-}
-

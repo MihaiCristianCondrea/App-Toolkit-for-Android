@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.ui
 
-import android.app.Activity
 import android.content.Context
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
@@ -27,7 +26,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.domain.models.OnboardingKeys
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.models.OnboardingPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.finish.FinishOnboardingPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.firebase.FirebaseOnboardingPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.onboarding.FirebaseOnboardingPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.theme.ThemeOnboardingPageTab
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers.OnboardingProvider
 
@@ -76,16 +75,6 @@ class AppOnboardingProvider : OnboardingProvider {
                 is OnboardingPage.DefaultPage -> it.isEnabled
                 is OnboardingPage.CustomPage -> it.isEnabled
             }
-        }
-    }
-
-    override fun onOnboardingFinished(context: Context) {
-        val launchIntent = context.packageManager.getLaunchIntentForPackage(context.packageName)
-        if (launchIntent != null) {
-            context.startActivity(launchIntent)
-        }
-        if (context is Activity) {
-            context.finish()
         }
     }
 }

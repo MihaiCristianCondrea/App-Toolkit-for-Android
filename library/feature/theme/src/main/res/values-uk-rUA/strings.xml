@@ -33,4 +33,5 @@
     <string name="holiday_greeting_halloween_title">З Гелловіном!</string>
     <string name="holiday_greeting_halloween_message">Настав моторошний сезон. Використовувати тему Гелловіну, поки він триває?</string>
     <string name="holiday_greeting_use_theme">Використовувати святкову тему під час свят</string>
+    <string name="dark_theme">Темна тема</string>
 </resources>

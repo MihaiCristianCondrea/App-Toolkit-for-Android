@@ -48,4 +48,13 @@
     <string name="privacy_choices_title">Настройки за поверителност</string>
     <string name="summary_advanced_privacy_settings">Изберете какво споделяте за анализи и реклама.</string>
     <string name="learn_more_about_provider">Научи повече за този доставчик</string>
+    <string name="onboarding_crashlytics_title">Помогни ни да се подобрим</string>
+    <string name="onboarding_crashlytics_description">Разреши на приложението да изпраща анонимни данни за употреба и отчети за сривове. Това ни помага да поправяме грешки и да подобрим твоето преживяване. Не се събира лична информация.</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">Покажи подробна информация за употребата и диагностиката</string>
+    <string name="onboarding_crashlytics_show_details_button">Покажи подробна информация</string>
+    <string name="error">Грешка</string>
+    <string name="onboarding_crashlytics_privacy_info">Твоята поверителност е важна. Ние използваме тези данни само за поправяне на грешки и подобряване на функциите. За повече подробности, моля, прегледай нашата политика за поверителност.</string>
+    <string name="learn_more_privacy_policy">Прегледай нашата политика за поверителност</string>
+    <string name="onboarding_crashlytics_enabled_desc">Докладването на данни е активно.</string>
+    <string name="onboarding_crashlytics_disabled_desc">Докладването на данни е неактивно.</string>
 </resources>

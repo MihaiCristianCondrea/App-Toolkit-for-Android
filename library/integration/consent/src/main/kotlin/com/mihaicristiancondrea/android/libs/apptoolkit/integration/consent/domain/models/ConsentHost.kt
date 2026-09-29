@@ -28,3 +28,8 @@ import android.app.Activity
 interface ConsentHost {
     val activity: Activity
 }
+
+/** A [ConsentHost] for [activity], such as `LocalActivity.current` in a page or the app's activity. */
+fun ConsentHost(activity: Activity): ConsentHost = object : ConsentHost {
+    override val activity: Activity = activity
+}

@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.di
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.sheets.IssueReporterSheet
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterBottomSheet
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.GithubToken
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
@@ -52,6 +54,8 @@ fun issueReporterModule(
     hostBuildConfig: AppToolkitHostBuildConfig,
     config: IssueReporterConfig = IssueReporterConfig(),
 ): Module = module {
+    // What screens outside this feature open, such as the advanced settings' bug report entry.
+    single<IssueReporterSheet> { IssueReporterSheet { onDismissRequest -> IssueReporterBottomSheet(onDismissRequest) } }
     single<IssueReporterRemoteDataSource> { IssueReporterRemoteDataSource(client = get()) }
     single<DeviceInfoProvider> { DeviceInfoLocalDataSource(get(), get()) }
     single<IssueReporterRepository> { DefaultIssueReporterRepository(get(), get(), get(), get()) }

@@ -48,4 +48,13 @@
     <string name="privacy_choices_title">خيارات الخصوصية</string>
     <string name="summary_advanced_privacy_settings">اختر ما تشاركه لأغراض التحليلات والإعلانات.</string>
     <string name="learn_more_about_provider">معرفة المزيد عن هذا المزوّد</string>
+    <string name="onboarding_crashlytics_title">ساعدنا على التحسين</string>
+    <string name="onboarding_crashlytics_description">اسمح للتطبيق بإرسال بيانات استخدام مجهولة وتقارير الأعطال. يساعدنا هذا في إصلاح الأخطاء وتحسين تجربتك. لا يتم جمع أي معلومات شخصية على الإطلاق.</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">عرض معلومات تفصيلية حول الاستخدام والتشخيصات</string>
+    <string name="onboarding_crashlytics_show_details_button">عرض معلومات تفصيلية</string>
+    <string name="error">خطأ</string>
+    <string name="onboarding_crashlytics_privacy_info">خصوصيتك مهمة. نحن نستخدم هذه البيانات فقط لإصلاح الأخطاء وتحسين الميزات. لمزيد من التفاصيل، يرجى مراجعة سياسة الخصوصية الخاصة بنا.</string>
+    <string name="learn_more_privacy_policy">مراجعة سياسة الخصوصية الخاصة بنا</string>
+    <string name="onboarding_crashlytics_enabled_desc">الإبلاغ عن البيانات نشط.</string>
+    <string name="onboarding_crashlytics_disabled_desc">الإبلاغ عن البيانات غير نشط.</string>
 </resources>

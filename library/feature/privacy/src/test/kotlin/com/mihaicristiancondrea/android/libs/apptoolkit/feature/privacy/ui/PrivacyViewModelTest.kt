@@ -17,6 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
 import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
@@ -38,19 +41,11 @@ class PrivacyViewModelTest {
         val dispatcherExtension = UnconfinedDispatcherExtension()
     }
 
-    private class RecordingProvider : PrivacySettingsProvider {
-        var permissionsOpened: Int = 0
-        var adsOpened: Int = 0
-        var diagnosticsOpened: Int = 0
-
+    private class TestProvider : PrivacySettingsProvider {
         override val privacyPolicyUrl: String = "https://example.test/privacy"
-
-        override fun openPermissionsScreen() { permissionsOpened += 1 }
-        override fun openAdsScreen() { adsOpened += 1 }
-        override fun openUsageAndDiagnosticsScreen() { diagnosticsOpened += 1 }
     }
 
-    private fun createViewModel(provider: PrivacySettingsProvider = RecordingProvider()) =
+    private fun createViewModel(provider: PrivacySettingsProvider = TestProvider()) =
         PrivacyViewModel(provider = provider, firebaseController = FakeFirebaseController())
 
     @Test
@@ -85,10 +80,9 @@ class PrivacyViewModelTest {
         }
 
     @Test
-    fun `host destinations are opened through the provider, not emitted as actions`() =
+    fun `toolkit pages leave as navigation actions`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val provider = RecordingProvider()
-            val viewModel = createViewModel(provider = provider)
+            val viewModel = createViewModel()
             val actions = mutableListOf<PrivacyAction>()
             val job = launch { viewModel.actionEvent.collect { actions.add(it) } }
             dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
@@ -98,10 +92,11 @@ class PrivacyViewModelTest {
             viewModel.onEvent(PrivacyEvent.ItemClicked(PrivacyItemAction.OpenUsageAndDiagnostics))
             dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
-            assertThat(provider.permissionsOpened).isEqualTo(1)
-            assertThat(provider.adsOpened).isEqualTo(1)
-            assertThat(provider.diagnosticsOpened).isEqualTo(1)
-            assertThat(actions).isEmpty()
+            assertThat(actions).containsExactly(
+                PrivacyAction.Navigate(key = PermissionsRoute),
+                PrivacyAction.Navigate(key = AdsSettingsRoute),
+                PrivacyAction.Navigate(key = DiagnosticsSettingsRoute),
+            ).inOrder()
             job.cancel()
         }
 }

@@ -17,8 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui
 
+import androidx.activity.compose.LocalActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -32,17 +33,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberBottomSheetState
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -52,17 +49,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.contracts
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.contracts.FaqEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.states.FaqUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.content.FaqScreenContent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.dropdowns.FaqScreenMenuActions
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.findActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openPlayStoreForApp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
@@ -74,10 +68,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.Tr
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists.GroupedAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists.GroupedActionList
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.flow.distinctUntilChanged
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -93,34 +85,26 @@ private object FaqPreferenceKeys {
 }
 
 private object FaqActionNames {
-    const val BACK_CLICK: String = "back_click"
     const val RETRY_LOAD: String = "retry_load"
     const val FEEDBACK_SHEET_OPENED: String = "feedback_sheet_opened"
 }
 
+/**
+ * Help and feedback: the questions, a contact card and a button that opens the feedback sheet.
+ *
+ * The body of the help page, which `helpPage()` registers with [FaqMenuActions] in its app bar.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FaqScreen(
-    config: AppVersionInfo,
-    isEmbedded: Boolean = false,
-) {
+fun FaqScreen() {
     val viewModel: FaqViewModel = koinViewModel()
     val firebaseController: FirebaseController = koinInject()
 
     val context = LocalContext.current
-    val activity = remember(context) { context.findActivity() }
-    val reviewHost = remember(activity) {
-        activity?.let { hostActivity ->
-            object : ReviewHost {
-                override val activity = hostActivity
-            }
-        }
-    }
+    val activity = LocalActivity.current
+    val reviewHost = remember(activity) { activity?.let(::ReviewHost) }
+    val paddingValues = contentPadding()
 
-    val scrollBehavior: TopAppBarScrollBehavior =
-        TopAppBarDefaults.enterAlwaysScrollBehavior(state = rememberTopAppBarState())
-    val isFabExtended = rememberSaveable { mutableStateOf(true) }
-    val showDialog = rememberSaveable { mutableStateOf(false) }
     val showFeedbackBottomSheet = rememberSaveable { mutableStateOf(false) }
     val feedbackBottomSheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
 
@@ -148,15 +132,7 @@ fun FaqScreen(
         }
     }
 
-    LaunchedEffect(scrollBehavior) {
-        snapshotFlow { scrollBehavior.state.contentOffset >= 0f }
-            .distinctUntilChanged()
-            .collect { extended ->
-                isFabExtended.value = extended
-            }
-    }
-
-    val content: @Composable (PaddingValues) -> Unit = { paddingValues ->
+    Box(modifier = Modifier.fillMaxSize()) {
         ScreenStateHandler(
             screenState = screenState,
             onLoading = { LoadingScreen() },
@@ -188,71 +164,30 @@ fun FaqScreen(
                 )
             }
         )
-    }
-
-    if (isEmbedded) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            content(PaddingValues())
-            Box(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(all = SizeConstants.LargeSize)
-            ) {
-                AnimatedExtendedFloatingActionButton(
-                    visible = true,
-                    expanded = isFabExtended.value,
-                    onClick = {
-                        firebaseController.logEvent(faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_OPENED))
-                        showFeedbackBottomSheet.value = true
-                    },
-                    firebaseController = firebaseController,
-                    ga4Event = faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.FEEDBACK),
-                    text = { Text(text = stringResource(id = R.string.feedback)) },
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Outlined.RateReview,
-                            contentDescription = null
-                        )
-                    },
-                )
-            }
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(paddingValues)
+                .padding(all = SizeConstants.LargeSize)
+        ) {
+            AnimatedExtendedFloatingActionButton(
+                visible = true,
+                expanded = true,
+                onClick = {
+                    firebaseController.logEvent(faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_OPENED))
+                    showFeedbackBottomSheet.value = true
+                },
+                firebaseController = firebaseController,
+                ga4Event = faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.FEEDBACK),
+                text = { Text(text = stringResource(id = R.string.feedback)) },
+                icon = {
+                    Icon(
+                        imageVector = Icons.Outlined.RateReview,
+                        contentDescription = null
+                    )
+                },
+            )
         }
-    } else {
-        LargeTopAppBarWithScaffold(
-            title = stringResource(id = R.string.help),
-            onBackClicked = {
-                firebaseController.logEvent(faqActionEvent(actionName = FaqActionNames.BACK_CLICK))
-                activity?.finish()
-            },
-            actions = {
-                FaqScreenMenuActions(
-                    config = config,
-                    showDialog = showDialog.value,
-                    onShowDialogChange = { showDialog.value = it }
-                )
-            },
-            scrollBehavior = scrollBehavior,
-            floatingActionButton = {
-                AnimatedExtendedFloatingActionButton(
-                    visible = true,
-                    expanded = isFabExtended.value,
-                    onClick = {
-                        firebaseController.logEvent(faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_OPENED))
-                        showFeedbackBottomSheet.value = true
-                    },
-                    firebaseController = firebaseController,
-                    ga4Event = faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.FEEDBACK),
-                    text = { Text(text = stringResource(id = R.string.feedback)) },
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Outlined.RateReview,
-                            contentDescription = null
-                        )
-                    },
-                )
-            },
-            content = content
-        )
     }
 
     if (showFeedbackBottomSheet.value) {

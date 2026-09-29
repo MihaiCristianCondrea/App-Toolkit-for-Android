@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -57,13 +59,15 @@ private const val PRIVACY_SCREEN_CLASS = "PrivacyScreen"
 /**
  * Renders the privacy and legal preference entries owned by [PrivacyViewModel].
  *
- * @param paddingValues Content padding, typically supplied by the hosting scaffold.
+ * @param paddingValues Content padding; by default the page frame's, so the list scrolls under the
+ *   system bars.
  */
 @Composable
 fun PrivacyScreen(
-    paddingValues: PaddingValues = PaddingValues(),
+    paddingValues: PaddingValues = contentPadding(),
 ) {
     val context: Context = LocalContext.current
+    val navigator = LocalShellNavigator.current
     val viewModel: PrivacyViewModel = koinViewModel()
     val screenState: UiStateScreen<PrivacyUiState> by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -85,6 +89,7 @@ fun PrivacyScreen(
         viewModel.actionEvent.collect { action ->
             when (action) {
                 is PrivacyAction.OpenUrl -> context.openUrl(action.url)
+                is PrivacyAction.Navigate -> navigator.navigate(action.key)
             }
         }
     }

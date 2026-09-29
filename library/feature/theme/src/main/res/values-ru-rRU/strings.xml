@@ -33,4 +33,5 @@
     <string name="holiday_greeting_halloween_title">С Хэллоуином!</string>
     <string name="holiday_greeting_halloween_message">Настал жуткий сезон. Использовать тему Хэллоуина, пока он длится?</string>
     <string name="holiday_greeting_use_theme">Использовать праздничную тему во время праздников</string>
+    <string name="dark_theme">Тёмная тема</string>
 </resources>

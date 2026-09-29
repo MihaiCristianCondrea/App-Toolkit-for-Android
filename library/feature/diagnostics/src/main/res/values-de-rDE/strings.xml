@@ -48,4 +48,13 @@
     <string name="privacy_choices_title">Datenschutzoptionen</string>
     <string name="summary_advanced_privacy_settings">Wählen Sie, was Sie für Analysen und Werbung teilen.</string>
     <string name="learn_more_about_provider">Mehr über diesen Anbieter erfahren</string>
+    <string name="onboarding_crashlytics_title">Hilf uns zu verbessern</string>
+    <string name="onboarding_crashlytics_description">Erlaube der App, anonyme Nutzungsdaten und Absturzberichte zu senden. Dies hilft uns, Fehler zu beheben und deine Erfahrung zu verbessern. Es werden niemals persönliche Informationen gesammelt.</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">Detaillierte Informationen zu Nutzung und Diagnose anzeigen</string>
+    <string name="onboarding_crashlytics_show_details_button">Detaillierte informationen anzeigen</string>
+    <string name="error">Fehler</string>
+    <string name="onboarding_crashlytics_privacy_info">Deine Privatsphäre ist uns wichtig. Wir verwenden diese Daten nur zur Fehlerbehebung und Funktionsverbesserung. Weitere Details findest du in unserer Datenschutzerklärung.</string>
+    <string name="learn_more_privacy_policy">Unsere Datenschutzerklärung überprüfen</string>
+    <string name="onboarding_crashlytics_enabled_desc">Datenberichterstattung ist aktiv.</string>
+    <string name="onboarding_crashlytics_disabled_desc">Datenberichterstattung ist inaktiv.</string>
 </resources>

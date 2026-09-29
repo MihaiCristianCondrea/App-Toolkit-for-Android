@@ -33,4 +33,5 @@
     <string name="holiday_greeting_halloween_title">Boldog Halloweent!</string>
     <string name="holiday_greeting_halloween_message">Itt a borzongós szezon. Szeretnéd használni a Halloween-témát, amíg tart?</string>
     <string name="holiday_greeting_use_theme">Ünnepi téma használata az ünnepek alatt</string>
+    <string name="dark_theme">Sötét téma</string>
 </resources>

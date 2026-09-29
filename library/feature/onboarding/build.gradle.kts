@@ -49,7 +49,6 @@ dependencies {
     api(project(":library:core:ui"))
     api(project(":library:navigation"))
     api(project(":library:integration:consent"))
-    api(project(":library:feature:settings"))
 
     api(libs.konfetti.compose)
     api(libs.lottie.compose)

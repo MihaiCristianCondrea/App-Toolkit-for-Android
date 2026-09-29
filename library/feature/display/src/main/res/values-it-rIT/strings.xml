@@ -31,4 +31,5 @@
     <string name="summary_preference_settings_startup_page">Scegli la schermata da visualizzare all\'avvio dell\'app.</string>
     <string name="will_never_turn_on_automatically">Non si attiverà mai automaticamente</string>
     <string name="will_turn_on_automatically_by_system">Si attiverà automaticamente dal sistema</string>
+    <string name="display">Schermo</string>
 </resources>

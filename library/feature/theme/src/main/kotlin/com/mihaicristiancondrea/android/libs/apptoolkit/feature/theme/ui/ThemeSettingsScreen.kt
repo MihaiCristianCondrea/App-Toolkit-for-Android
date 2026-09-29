@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import android.content.Context
 import android.os.Build
 import android.util.Log
@@ -131,7 +132,7 @@ private const val THEME_SCREEN_CLASS = "ThemeSettingsScreen"
  * [ThemeSettingsViewModel] owns persisted state and mutations.
  */
 @Composable
-fun ThemeSettingsScreen(paddingValues: PaddingValues) {
+fun ThemeSettingsScreen(paddingValues: PaddingValues = contentPadding()) {
     val firebaseController: FirebaseController = koinInject()
     val firebase = rememberUpdatedState(firebaseController)
     val viewModel: ThemeSettingsViewModel = koinViewModel()

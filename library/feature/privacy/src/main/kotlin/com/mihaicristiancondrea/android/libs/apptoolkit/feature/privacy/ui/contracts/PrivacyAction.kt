@@ -17,10 +17,14 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.contracts
 
+import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
 
 /** One-off outputs raised by the privacy screen. */
 sealed interface PrivacyAction : ActionEvent {
     /** Asks the host surface to open [url] in the browser. */
     data class OpenUrl(val url: String) : PrivacyAction
+
+    /** Asks the screen to open the Toolkit page [key]: permissions, ads or usage and diagnostics. */
+    data class Navigate(val key: NavKey) : PrivacyAction
 }

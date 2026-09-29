@@ -53,7 +53,6 @@ dependencies {
     api(project(":library:integration:consent"))
     api(project(":library:integration:review"))
     api(project(":library:integration:update"))
-    api(project(":library:feature:licenses"))
 
     api(libs.konfetti.compose)
 }

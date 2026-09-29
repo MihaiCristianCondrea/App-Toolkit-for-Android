@@ -33,4 +33,5 @@
     <string name="holiday_greeting_halloween_title">Halloween fericit!</string>
     <string name="holiday_greeting_halloween_message">A venit sezonul înfricoșător. Vrei să folosești tema de Halloween cât durează?</string>
     <string name="holiday_greeting_use_theme">Folosește tema de sărbători în timpul sărbătorilor</string>
+    <string name="dark_theme">Temă întunecată</string>
 </resources>

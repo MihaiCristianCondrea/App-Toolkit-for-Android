@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.dropdowns
 
+import androidx.compose.runtime.setValue
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -38,16 +39,33 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.LicensesActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
+import org.koin.compose.koinInject
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.VersionInfoAlertDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dropdown.CommonDropdownMenuItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
+
+/**
+ * The help page's app bar menu: version information, terms, privacy policy and licenses.
+ *
+ * `helpPage()` puts it in the page's app bar. It keeps whether the version dialog is showing itself.
+ */
+@Composable
+fun FaqMenuActions() {
+    val config: AppVersionInfo = koinInject()
+    var showDialog by rememberSaveable { mutableStateOf(value = false) }
+    FaqScreenMenuActions(
+        config = config,
+        showDialog = showDialog,
+        onShowDialogChange = { showDialog = it },
+    )
+}
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -57,6 +75,7 @@ fun FaqScreenMenuActions(
     onShowDialogChange: (Boolean) -> Unit,
 ) {
     val context = LocalContext.current
+    val navigator = LocalShellNavigator.current
     val showMenu = rememberSaveable { mutableStateOf(value = false) }
 
     val rotation by animateFloatAsState(
@@ -135,9 +154,7 @@ fun FaqScreenMenuActions(
             icon = Icons.Outlined.Balance,
             onClick = {
                 closeMenu()
-                context.openActivity(
-                    LicensesActivity::class.java
-                )
+                navigator.navigate(LicensesRoute)
             }
         )
     }

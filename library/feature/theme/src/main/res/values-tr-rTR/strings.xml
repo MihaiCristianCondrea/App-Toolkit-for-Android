@@ -33,4 +33,5 @@
     <string name="holiday_greeting_halloween_title">Mutlu Cadılar Bayramı!</string>
     <string name="holiday_greeting_halloween_message">Ürkütücü sezon geldi. Sürdüğü sürece Cadılar Bayramı temasını kullanmak ister misin?</string>
     <string name="holiday_greeting_use_theme">Tatil boyunca tatil temasını kullan</string>
+    <string name="dark_theme">Koyu tema</string>
 </resources>

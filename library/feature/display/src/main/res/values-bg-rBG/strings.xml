@@ -31,4 +31,5 @@
     <string name="summary_preference_settings_startup_page">Изберете екрана, който ще се показва при стартиране на приложението.</string>
     <string name="will_never_turn_on_automatically">Никога няма да се включи автоматично</string>
     <string name="will_turn_on_automatically_by_system">Ще се включи автоматично от системата</string>
+    <string name="display">Екран</string>
 </resources>

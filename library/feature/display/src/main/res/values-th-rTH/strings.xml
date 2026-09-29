@@ -31,4 +31,5 @@
     <string name="summary_preference_settings_startup_page">เลือกหน้าจอที่จะแสดงเมื่อเริ่มต้นแอป</string>
     <string name="will_never_turn_on_automatically">จะไม่มีการเปิดใช้งานอัตโนมัติ</string>
     <string name="will_turn_on_automatically_by_system">ระบบจะเปิดใช้งานโดยอัตโนมัติ</string>
+    <string name="display">หน้าจอ</string>
 </resources>

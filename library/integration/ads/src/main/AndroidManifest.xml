@@ -25,11 +25,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application>
-        <!-- Internal ads/preferences screen launched only from in-app navigation. -->
-        <activity
-            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.AdsSettingsActivity"
-            android:exported="false" />
-
         <meta-data
             android:name="com.google.android.gms.ads.flag.OPTIMIZE_INITIALIZATION"
             android:value="true" />

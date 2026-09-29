@@ -33,4 +33,5 @@
     <string name="holiday_greeting_halloween_title">শুভ হ্যালোইন!</string>
     <string name="holiday_greeting_halloween_message">ভুতুড়ে মৌসুম এসে গেছে। যতদিন চলে ততদিন হ্যালোইন থিম ব্যবহার করতে চান?</string>
     <string name="holiday_greeting_use_theme">ছুটির সময় ছুটির থিম ব্যবহার করুন</string>
+    <string name="dark_theme">ডার্ক থিম</string>
 </resources>

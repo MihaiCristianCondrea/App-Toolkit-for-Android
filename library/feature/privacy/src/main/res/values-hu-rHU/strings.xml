@@ -32,4 +32,5 @@
     <string name="summary_preference_settings_usage_and_diagnostics">Oszd meg az adatokat az alkalmazásélmény javítása érdekében</string>
     <string name="terms_of_service">Szolgáltatási feltételek</string>
     <string name="usage_and_diagnostics">Használat és diagnosztika</string>
+    <string name="security_and_privacy">Biztonság és adatvédelem</string>
 </resources>

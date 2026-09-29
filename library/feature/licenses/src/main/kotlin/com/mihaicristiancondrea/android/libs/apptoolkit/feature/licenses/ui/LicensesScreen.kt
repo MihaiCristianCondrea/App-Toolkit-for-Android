@@ -17,25 +17,17 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui
 
-import androidx.activity.compose.LocalActivity
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.contracts.LicensesEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.states.LicensesUiState
@@ -52,15 +44,10 @@ private const val LICENSES_SCREEN_CLASS = "LicensesScreen"
 /**
  * Lists the open-source libraries bundled with the host application.
  *
- * @param onBackClicked Navigates back. Defaults to finishing the hosting activity.
- * @param isEmbedded True when the caller already provides a scaffold and top app bar.
+ * The body of the licenses page, which `licensesPage()` registers; the page frame draws the app bar.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LicensesScreen(
-    onBackClicked: (() -> Unit)? = null,
-    isEmbedded: Boolean = false,
-) {
+fun LicensesScreen() {
     val firebaseController: FirebaseController = koinInject()
     val viewModel: LicensesViewModel = koinViewModel()
     val screenState: UiStateScreen<LicensesUiState> by
@@ -78,43 +65,23 @@ fun LicensesScreen(
         screenState = screenState.screenState,
     )
 
-    val scrollBehavior: TopAppBarScrollBehavior =
-        TopAppBarDefaults.enterAlwaysScrollBehavior(state = rememberTopAppBarState())
+    val libraries: Libs? by produceLibraries(resId = R.raw.aboutlibraries)
 
-    val activity = LocalActivity.current
-    val defaultBackClicked: () -> Unit = remember(activity) { { activity?.finish() } }
-    val backClicked: () -> Unit = onBackClicked ?: defaultBackClicked
-
-    val content: @Composable (PaddingValues) -> Unit = { paddingValues ->
-        val libraries: Libs? by produceLibraries(resId = R.raw.aboutlibraries)
-
-        LaunchedEffect(libraries) {
-            libraries?.let { loaded ->
-                viewModel.onEvent(
-                    event = LicensesEvent.LibrariesLoaded(libraryCount = loaded.libraries.size),
-                )
-            }
+    LaunchedEffect(libraries) {
+        libraries?.let { loaded ->
+            viewModel.onEvent(
+                event = LicensesEvent.LibrariesLoaded(libraryCount = loaded.libraries.size),
+            )
         }
-
-        LibrariesContainer(
-            libraries = libraries,
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = paddingValues,
-            badges = LibraryBadges(
-                description = true,
-                funding = true,
-            ),
-        )
     }
 
-    if (isEmbedded) {
-        content(PaddingValues())
-    } else {
-        LargeTopAppBarWithScaffold(
-            title = stringResource(id = R.string.oss_license_title),
-            onBackClicked = backClicked,
-            scrollBehavior = scrollBehavior,
-            content = content,
-        )
-    }
+    LibrariesContainer(
+        libraries = libraries,
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = contentPadding(),
+        badges = LibraryBadges(
+            description = true,
+            funding = true,
+        ),
+    )
 }

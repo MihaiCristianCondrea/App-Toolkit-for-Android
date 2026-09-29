@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui
 
-import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
@@ -51,22 +50,22 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import kotlinx.collections.immutable.persistentListOf
 import org.koin.compose.koinInject
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as ToolkitR
 
 /**
- * Composable that manages state and renders the components showcase screen.
+ * The components showcase: the body of the components page `:sample:app` registers.
+ *
+ * @param paddingValues Content padding; by default the page frame's, so the list scrolls under the
+ *   system bars.
  */
 @Composable
 fun ComponentsScreen(
-    paddingValues: PaddingValues = PaddingValues(),
-    isEmbedded: Boolean = true,
+    paddingValues: PaddingValues = contentPadding(),
 ) {
     val firebaseController: FirebaseController = koinInject()
-    val activity = LocalActivity.current
     val trackedScreen = AppScreenTracking.Screens.COMPONENTS
 
     TrackScreenView(
@@ -214,20 +213,8 @@ fun ComponentsScreen(
             item(key = "animations") { AnimationShowcase() }
 
             item(key = "dividers") { DividerShowcase() }
-
-            item {
-                NavigationBarSpacer()
-            }
         }
     }
 
-    if (isEmbedded) {
-        content(paddingValues)
-    } else {
-        LargeTopAppBarWithScaffold(
-            title = stringResource(id = R.string.components_title),
-            onBackClicked = { activity?.finish() },
-            content = content,
-        )
-    }
+    content(paddingValues)
 }

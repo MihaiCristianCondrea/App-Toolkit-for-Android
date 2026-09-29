@@ -26,10 +26,18 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.startupValueFlow
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.DrawerEntry
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DeveloperOptionsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.GeneralSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DisplaySettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.OnboardingRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.StartupRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.ThemeSettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LibraryExtrasRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
@@ -89,7 +97,14 @@ class AppGraphTest {
         val graph = graph(showComponents = true)
         val pages = listOf(
             SettingsRoute,
-            GeneralSettingsRoute(title = "Display", contentKey = "display"),
+            DisplaySettingsRoute,
+            ThemeSettingsRoute,
+            PrivacySettingsRoute,
+            DiagnosticsSettingsRoute,
+            AdvancedSettingsRoute,
+            AboutRoute,
+            StartupRoute,
+            OnboardingRoute,
             HelpRoute,
             SupportRoute,
             AdsSettingsRoute,
@@ -138,6 +153,28 @@ class AppGraphTest {
             listOf(SupportRoute),
             graph().overflow.filterIsInstance<DrawerEntry.Link>().map { it.key },
         )
+    }
+
+    @Test
+    fun `the settings list is a list page and its categories open beside it`() {
+        val graph = graph()
+
+        assertEquals(PaneRole.List, graph.destination(SettingsRoute).paneRole)
+        listOf(DisplaySettingsRoute, PrivacySettingsRoute, AdvancedSettingsRoute, AboutRoute).forEach { key ->
+            assertEquals(PaneRole.Detail, graph.destination(key).paneRole, "$key")
+        }
+    }
+
+    @Test
+    fun `the first-launch screens are start screens`() {
+        assertTrue(graph().startOptions.containsAll(listOf(StartupRoute, OnboardingRoute)))
+    }
+
+    @Test
+    fun `android's permission usage screen opens the permissions page`() {
+        val usage = mockk<Intent> { every { action } returns "android.intent.action.VIEW_PERMISSION_USAGE" }
+
+        assertEquals(PermissionsRoute, graph().keyFor(usage))
     }
 
     @Test

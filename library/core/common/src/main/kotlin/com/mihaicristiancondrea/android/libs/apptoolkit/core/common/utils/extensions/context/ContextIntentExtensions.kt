@@ -48,9 +48,6 @@ fun Context.startActivitySafely(
         )
 }
 
-fun Context.openActivity(activityClass: Class<*>): Boolean =
-    startActivitySafely(Intent(this, activityClass))
-
 fun Context.openUrl(url: String): Boolean {
     val trimmed = url.trim()
     if (trimmed.isBlank()) return false

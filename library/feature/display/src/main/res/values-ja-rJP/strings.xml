@@ -31,4 +31,5 @@
     <string name="summary_preference_settings_startup_page">アプリ起動時に表示される画面を選択する</string>
     <string name="will_never_turn_on_automatically">自動的にオンにはなりません</string>
     <string name="will_turn_on_automatically_by_system">システムによって自動的にオンになります</string>
+    <string name="display">ディスプレイ</string>
 </resources>

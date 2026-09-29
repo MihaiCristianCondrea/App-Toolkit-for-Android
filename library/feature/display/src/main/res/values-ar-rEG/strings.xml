@@ -31,4 +31,5 @@
     <string name="summary_preference_settings_startup_page">اختر الشاشة التي سيتم عرضها عند بدء تشغيل التطبيق.</string>
     <string name="will_never_turn_on_automatically">لن يتم تشغيله تلقائيًا أبدًا</string>
     <string name="will_turn_on_automatically_by_system">سيتم تشغيله تلقائيًا بواسطة النظام</string>
+    <string name="display">العرض</string>
 </resources>

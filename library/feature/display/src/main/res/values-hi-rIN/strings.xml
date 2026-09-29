@@ -31,4 +31,5 @@
     <string name="summary_preference_settings_startup_page">ऐप शुरू होने पर प्रदर्शित होने वाली स्क्रीन चुनें।</string>
     <string name="will_never_turn_on_automatically">स्वचालित रूप से कभी चालू नहीं होगी</string>
     <string name="will_turn_on_automatically_by_system">सिस्टम द्वारा स्वचालित रूप से चालू हो जाएगी</string>
+    <string name="display">डिस्प्ले</string>
 </resources>
