@@ -15,7 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="agree">同意する</string>
     <string name="amoled_mode">AMOLEDモード</string>
     <string name="back_button_content_description">戻る</string>
     <string name="back_button_text">戻る</string>
@@ -23,7 +22,6 @@
     <string name="done_button_content_description">完了</string>
     <string name="done_button_text">完了</string>
     <string name="follow_system">システムモードに従う</string>
-    <string name="learn_more">詳しく見る</string>
     <string name="light_mode">ライトモード</string>
     <string name="next_button_content_description">次へ</string>
     <string name="next_button_text">次へ</string>
@@ -40,8 +38,6 @@
     <string name="other_colors">その他の色</string>
     <string name="skip_button_content_description">スキップ</string>
     <string name="skip_button_text">スキップ</string>
-    <string name="summary_browse_terms_of_service_and_privacy_policy">続行するには、利用規約およびプライバシーポリシーをお読みいただき、同意してください</string>
     <string name="usage_and_diagnostics">使用状況と診断</string>
     <string name="wallpaper_colors">壁紙の色</string>
-    <string name="welcome">ようこそ</string>
 </resources>

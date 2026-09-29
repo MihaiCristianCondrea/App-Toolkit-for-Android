@@ -25,8 +25,8 @@ features.
 
 - `:library:apptoolkit` for DI composition.
 - `:library:feature:about`, `:library:feature:faq`, `:library:feature:issuereporter`,
-  `:library:feature:onboarding`, `:library:feature:permissions`, `:library:feature:settings`, and
-  `:library:feature:support`.
+  `:library:feature:onboarding`, `:library:feature:permissions`, `:library:feature:settings`,
+  `:library:feature:startup`, and `:library:feature:support`.
 - `:library:integration:ads` and `:library:integration:consent`.
 
 ## Flow chart

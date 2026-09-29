@@ -15,7 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="agree">متفق ہوں</string>
     <string name="amoled_mode">AMOLED موڈ</string>
     <string name="back_button_content_description">پیچھے</string>
     <string name="back_button_text">پیچھے</string>
@@ -23,7 +22,6 @@
     <string name="done_button_content_description">ہو گیا</string>
     <string name="done_button_text">ہو گیا</string>
     <string name="follow_system">سسٹم موڈ فالو کریں</string>
-    <string name="learn_more">مزید جانیں</string>
     <string name="light_mode">لائٹ موڈ</string>
     <string name="next_button_content_description">آگے</string>
     <string name="next_button_text">آگے</string>
@@ -40,8 +38,6 @@
     <string name="other_colors">دیگر رنگ</string>
     <string name="skip_button_content_description">اسکپ کریں</string>
     <string name="skip_button_text">اسکپ کریں</string>
-    <string name="summary_browse_terms_of_service_and_privacy_policy">جاری رکھنے کے لیے ہماری سروس کی شرائط اور رازداری کی پالیسی کو پڑھیں اور ان سے اتفاق کریں</string>
     <string name="usage_and_diagnostics">استعمال اور تشخیص</string>
     <string name="wallpaper_colors">وال پیپر کے رنگ</string>
-    <string name="welcome">خوش آمدید</string>
 </resources>

@@ -2,27 +2,29 @@
 
 ## Purpose
 
-Owns the first launch: the startup screen (consent and runtime permissions) and the multi-page
-onboarding flow, including theme choice and completion persistence. Both are start screens of the
-shell, drawn before its tabs.
+Owns the multi-page onboarding flow of a first launch, including theme choice and completion
+persistence. It is a start screen of the shell, drawn before its tabs, and follows the startup
+screen of [`:library:feature:startup`](../startup/README.md).
 
 ## Owns
 
-- `onboardingPages()`, which registers `StartupRoute` and `OnboardingRoute` as pages without a
-  title and offers both as start screens (`startScreens`).
-- The startup and onboarding screens, their ViewModels and state, event and action contracts, and
-  the page glue that performs their actions: the permission request, the consent form, and handing
-  over (`continueStart(OnboardingRoute)`, then `enterShell()`).
+- `onboardingPages()`, which registers `OnboardingRoute` as a page without a title and offers it
+  as a start screen (`startScreens`).
+- The onboarding screen, its ViewModel and state, event and action contracts, and the page glue
+  that performs their actions: the consent check and `enterShell()` on completion.
+- `onboardingModule`, which binds `OnboardingThemeViewModel`.
 - `OnboardingThemeViewModel`, which keeps the theme onboarding page independent from DataStore and
   exposes the shared immutable theme-preferences model.
-- `StartupProvider` and `OnboardingProvider` host extension contracts.
+- The `OnboardingProvider` host extension contract.
 - Onboarding repository, page models, controls, and the theme and finish pages.
 
 ## Does not own
 
+- The startup screen before it, `StartupProvider` and the permission request, owned by
+  [`:library:feature:startup`](../startup/README.md), which hands over to `OnboardingRoute` by key.
 - Deciding whether the first launch runs. The app starts on `StartupRoute` from
   `ShellHost(resolveStart = ...)` while its startup flag is set; see [Using it](#using-it).
-- Host-specific startup/onboarding provider implementations, owned by `:sample`.
+- Host-specific onboarding provider implementations, owned by `:sample:feature:onboarding`.
 - Consent SDK orchestration, owned by `:library:integration:consent`.
 - The diagnostics page and the privacy choices dialog it opens, owned by
   [`:library:feature:diagnostics`](../diagnostics/README.md) (`FirebaseOnboardingPage`) along with
@@ -54,7 +56,8 @@ ShellHost(
 )
 ```
 
-Neither screen has the shell under it, so back from either leaves the app. Finishing onboarding
+The startup screen hands over to onboarding. Neither has the shell under it, so back from either
+leaves the app. Finishing onboarding
 writes completion and enters the shell on its start tab; the next launch then resolves past
 `StartupRoute`.
 
@@ -62,12 +65,10 @@ writes completion and enters the shell on its start tab; the next launch then re
 
 ```mermaid
 flowchart TD
-    Host[ShellHost resolveStart] -->|startup flag set| Startup[StartupRoute page]
+    Host[ShellHost resolveStart] -->|startup flag set| Startup[StartupRoute page, feature:startup]
     Host -->|otherwise| Tabs[Shell tabs]
-    Startup --> Permissions[Required permissions, once]
-    Startup --> ConsentForm[ConsentHost: consent form]
-    Startup -->|continue| Continue[continueStart: OnboardingRoute]
-    Continue --> Onboarding[OnboardingRoute page]
+    Startup -->|continueStart| Onboarding[OnboardingRoute page]
+    Onboarding --> ConsentCheck[Consent check on each resume]
     Onboarding --> Pages[Provider-defined ordered pages]
     Pages --> Theme[OnboardingThemeViewModel]
     Theme --> ThemeRepo[ThemePreferencesRepository]
@@ -84,11 +85,9 @@ flowchart TD
 - Start screens, not activities. The first launch runs inside the one activity, so consent and
   permission requests go through `LocalActivity.current`, and the shell's start is decided once in
   `resolveStart` instead of by a launcher activity that forwarded to the main one.
-- Startup and onboarding are separate state holders: startup asks for permissions and consent,
-  while onboarding owns page progress and completion.
-- Permissions are requested once per screen instance, saved across the resume the system dialog
-  causes, so a person who declined is not asked again on the spot. Consent is asked for on each
-  resume until it has resolved.
+- Startup and onboarding are separate modules: startup asks for permissions and consent, while
+  onboarding owns page progress and completion. They meet only at `OnboardingRoute`, a key in
+  `:library:navigation`.
 - Each action reaches a single collector, the page glue in `OnboardingPages.kt`; the screens only
   send events.
 - The host supplies page/routing extension points, but toolkit state holders persist confirmed
@@ -102,8 +101,8 @@ flowchart TD
 
 ## Public contracts
 
-- `onboardingPages()`, the startup/onboarding provider contracts, repository and models, and the
-  presentation entry points.
+- `onboardingPages()`, `onboardingModule`, the onboarding provider contract, repository and
+  models, and the presentation entry points.
 
 ## Internal implementations
 

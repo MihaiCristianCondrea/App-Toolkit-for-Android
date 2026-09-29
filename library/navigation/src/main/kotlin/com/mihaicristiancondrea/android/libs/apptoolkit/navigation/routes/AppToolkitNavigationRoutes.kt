@@ -87,7 +87,7 @@ data object DiagnosticsSettingsRoute : AppToolkitNavKey
 @Serializable
 data object DeveloperOptionsRoute : AppToolkitNavKey
 
-/** The first-launch start screen (consent and permissions), registered by `:library:feature:onboarding`. */
+/** The first-launch start screen (consent and permissions), registered by `:library:feature:startup`. */
 @Serializable
 data object StartupRoute : AppToolkitNavKey
 

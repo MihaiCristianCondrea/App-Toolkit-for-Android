@@ -123,6 +123,7 @@ dependencies {
     api(project(":library:feature:issuereporter"))
     api(project(":library:feature:licenses"))
     api(project(":library:feature:onboarding"))
+    api(project(":library:feature:startup"))
     api(project(":library:feature:permissions"))
     api(project(":library:feature:privacy"))
     api(project(":library:feature:settings"))

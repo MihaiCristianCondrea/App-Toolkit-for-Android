@@ -15,8 +15,8 @@ permissions the first-launch startup screen asks for.
 ## Does not own
 
 - Toolkit provider contracts or default implementations, owned by `:library:feature:*` modules.
-  The startup and onboarding screens themselves are
-  [`:library:feature:onboarding`](../../../library/feature/onboarding/README.md)'s.
+  The startup screen itself is [`:library:feature:startup`](../../../library/feature/startup/README.md)'s,
+  the module this one mirrors.
 - The onboarding pages, owned by [`:sample:feature:onboarding`](../onboarding/README.md).
 - The sample's FAQ questions and answers, owned by [`:sample:feature:faq`](../faq/README.md).
 - The settings, about, display, and privacy provider implementations, owned by

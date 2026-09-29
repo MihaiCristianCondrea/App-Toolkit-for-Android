@@ -28,8 +28,8 @@ Platform (UMP).
 ## Used by
 
 - `:sample` and `:library:apptoolkit`.
-- `:library:feature:about`, `:library:feature:onboarding`, and `:library:feature:settings` for
-  privacy/diagnostics flows.
+- `:library:feature:about`, `:library:feature:onboarding`, `:library:feature:startup`, and
+  `:library:feature:settings` for privacy/diagnostics flows.
 - `:library:integration:ads` before enabling ads.
 
 ## Flow chart

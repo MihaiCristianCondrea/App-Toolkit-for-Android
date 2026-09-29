@@ -15,7 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="agree">Kabul et</string>
     <string name="amoled_mode">AMOLED modu</string>
     <string name="back_button_content_description">Geri</string>
     <string name="back_button_text">Geri̇</string>
@@ -23,7 +22,6 @@
     <string name="done_button_content_description">Bitti</string>
     <string name="done_button_text">Bi̇tti̇</string>
     <string name="follow_system">Sistem modunu takip et</string>
-    <string name="learn_more">Daha fazla bilgi</string>
     <string name="light_mode">Aydınlık mod</string>
     <string name="next_button_content_description">İleri</string>
     <string name="next_button_text">İleri̇</string>
@@ -40,8 +38,6 @@
     <string name="other_colors">Diğer renkler</string>
     <string name="skip_button_content_description">Atla</string>
     <string name="skip_button_text">Atla</string>
-    <string name="summary_browse_terms_of_service_and_privacy_policy">Devam etmek için Hizmet şartlarımızı ve Gizlilik Politikamızı okuyun ve kabul edin</string>
     <string name="usage_and_diagnostics">Kullanım ve teşhis</string>
     <string name="wallpaper_colors">Duvar kâğıdı renkleri</string>
-    <string name="welcome">Hoş geldiniz</string>
 </resources>

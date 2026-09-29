@@ -15,7 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="agree">أوافق</string>
     <string name="amoled_mode">وضع AMOLED</string>
     <string name="back_button_content_description">رجوع</string>
     <string name="back_button_text">رجوع</string>
@@ -23,7 +22,6 @@
     <string name="done_button_content_description">تم</string>
     <string name="done_button_text">تم</string>
     <string name="follow_system">اتباع وضع النظام</string>
-    <string name="learn_more">اعرف المزيد</string>
     <string name="light_mode">الوضع الفاتح</string>
     <string name="next_button_content_description">التالي</string>
     <string name="next_button_text">التالي</string>
@@ -40,8 +38,6 @@
     <string name="other_colors">ألوان أخرى</string>
     <string name="skip_button_content_description">تخطي</string>
     <string name="skip_button_text">تخطي</string>
-    <string name="summary_browse_terms_of_service_and_privacy_policy">اقرأ ووافق على شروط الخدمة وسياسة الخصوصية الخاصة بنا للمتابعة</string>
     <string name="usage_and_diagnostics">الاستخدام والتشخيصات</string>
     <string name="wallpaper_colors">ألوان خلفية الشاشة</string>
-    <string name="welcome">مرحباً</string>
 </resources>

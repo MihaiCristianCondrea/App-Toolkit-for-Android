@@ -51,5 +51,4 @@ dependencies {
     api(project(":library:integration:consent"))
 
     api(libs.konfetti.compose)
-    api(libs.lottie.compose)
 }

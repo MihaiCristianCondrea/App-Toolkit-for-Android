@@ -15,7 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="agree">동의</string>
     <string name="amoled_mode">AMOLED 모드</string>
     <string name="back_button_content_description">뒤로</string>
     <string name="back_button_text">뒤로</string>
@@ -23,7 +22,6 @@
     <string name="done_button_content_description">완료</string>
     <string name="done_button_text">완료</string>
     <string name="follow_system">시스템 모드 따르기</string>
-    <string name="learn_more">더 알아보기</string>
     <string name="light_mode">라이트 모드</string>
     <string name="next_button_content_description">다음</string>
     <string name="next_button_text">다음</string>
@@ -40,8 +38,6 @@
     <string name="other_colors">기타 색상</string>
     <string name="skip_button_content_description">건너뛰기</string>
     <string name="skip_button_text">건너뛰기</string>
-    <string name="summary_browse_terms_of_service_and_privacy_policy">계속하려면 서비스 약관 및 개인정보처리방침을 읽고 동의하세요.</string>
     <string name="usage_and_diagnostics">사용량 &amp; 진단</string>
     <string name="wallpaper_colors">배경화면 색상</string>
-    <string name="welcome">환영합니다</string>
 </resources>

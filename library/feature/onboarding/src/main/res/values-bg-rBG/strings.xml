@@ -15,7 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="agree">Съгласен съм</string>
     <string name="amoled_mode">AMOLED режим</string>
     <string name="back_button_content_description">Назад</string>
     <string name="back_button_text">Назад</string>
@@ -23,7 +22,6 @@
     <string name="done_button_content_description">Готово</string>
     <string name="done_button_text">Готово</string>
     <string name="follow_system">Следвай системния режим</string>
-    <string name="learn_more">Научете повече</string>
     <string name="light_mode">Светъл режим</string>
     <string name="next_button_content_description">Напред</string>
     <string name="next_button_text">Напред</string>
@@ -40,8 +38,6 @@
     <string name="other_colors">Други цветове</string>
     <string name="skip_button_content_description">Пропусни</string>
     <string name="skip_button_text">Пропусни</string>
-    <string name="summary_browse_terms_of_service_and_privacy_policy">Прочетете и се съгласете с нашите Общи условия и Политика за поверителност, за да продължите</string>
     <string name="usage_and_diagnostics">Използване и диагностика</string>
     <string name="wallpaper_colors">Цветове на тапета</string>
-    <string name="welcome">Добре дошли</string>
 </resources>

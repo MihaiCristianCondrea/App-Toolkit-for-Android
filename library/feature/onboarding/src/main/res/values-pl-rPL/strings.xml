@@ -15,7 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="agree">Zgadzam się</string>
     <string name="amoled_mode">Tryb AMOLED</string>
     <string name="back_button_content_description">Wstecz</string>
     <string name="back_button_text">Wstecz</string>
@@ -23,7 +22,6 @@
     <string name="done_button_content_description">Gotowe</string>
     <string name="done_button_text">Gotowe</string>
     <string name="follow_system">Podążaj za ustawieniami systemu</string>
-    <string name="learn_more">Dowiedz się więcej</string>
     <string name="light_mode">Tryb jasny</string>
     <string name="next_button_content_description">Dalej</string>
     <string name="next_button_text">Dalej</string>
@@ -40,8 +38,6 @@
     <string name="other_colors">Inne kolory</string>
     <string name="skip_button_content_description">Pomiń</string>
     <string name="skip_button_text">Pomiń</string>
-    <string name="summary_browse_terms_of_service_and_privacy_policy">Przeczytaj i zaakceptuj nasze Warunki korzystania z usługi oraz Politykę prywatności, aby kontynuować</string>
     <string name="usage_and_diagnostics">Użycie i diagnostyka</string>
     <string name="wallpaper_colors">Kolory tapety</string>
-    <string name="welcome">Witamy</string>
 </resources>

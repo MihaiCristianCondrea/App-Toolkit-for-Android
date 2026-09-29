@@ -27,6 +27,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.navig
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.navigation.helpPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.navigation.licensesPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.navigation.onboardingPages
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.navigation.startupPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.navigation.permissionsPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.navigation.privacySettingsPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.navigation.settingsPage
@@ -85,5 +86,6 @@ fun ShellGraphBuilder.toolkitPages() {
     helpPage()
     supportPage()
     developerOptionsPage()
+    startupPage()
     onboardingPages()
 }

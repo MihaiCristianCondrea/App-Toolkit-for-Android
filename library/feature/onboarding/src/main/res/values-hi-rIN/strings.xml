@@ -15,7 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="agree">सहमत</string>
     <string name="amoled_mode">AMOLED मोड</string>
     <string name="back_button_content_description">वापस</string>
     <string name="back_button_text">वापस</string>
@@ -23,7 +22,6 @@
     <string name="done_button_content_description">हो गया</string>
     <string name="done_button_text">हो गया</string>
     <string name="follow_system">सिस्टम मोड का अनुसरण करें</string>
-    <string name="learn_more">अधिक जानें</string>
     <string name="light_mode">लाइट मोड</string>
     <string name="next_button_content_description">अगला</string>
     <string name="next_button_text">अगला</string>
@@ -40,8 +38,6 @@
     <string name="other_colors">अन्य रंग</string>
     <string name="skip_button_content_description">छोड़ें</string>
     <string name="skip_button_text">छोड़ें</string>
-    <string name="summary_browse_terms_of_service_and_privacy_policy">जारी रखने के लिए हमारी सेवा की शर्तें और गोपनीयता नीति पढ़ें और सहमति दें</string>
     <string name="usage_and_diagnostics">उपयोग और निदान</string>
     <string name="wallpaper_colors">वॉलपेपर के रंग</string>
-    <string name="welcome">स्वागत है</string>
 </resources>

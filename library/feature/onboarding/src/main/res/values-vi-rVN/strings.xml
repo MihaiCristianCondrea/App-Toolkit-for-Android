@@ -15,7 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="agree">Đồng ý</string>
     <string name="amoled_mode">Chế độ AMOLED</string>
     <string name="back_button_content_description">Quay lại</string>
     <string name="back_button_text">Quay lại</string>
@@ -23,7 +22,6 @@
     <string name="done_button_content_description">Xong</string>
     <string name="done_button_text">Xong</string>
     <string name="follow_system">Theo chế độ hệ thống</string>
-    <string name="learn_more">Tìm hiểu thêm</string>
     <string name="light_mode">Chế độ sáng</string>
     <string name="next_button_content_description">Tiếp theo</string>
     <string name="next_button_text">Tiếp theo</string>
@@ -40,8 +38,6 @@
     <string name="other_colors">Màu khác</string>
     <string name="skip_button_content_description">Bỏ qua</string>
     <string name="skip_button_text">Bỏ qua</string>
-    <string name="summary_browse_terms_of_service_and_privacy_policy">Đọc và đồng ý với Điều khoản dịch vụ và Chính sách quyền riêng tư của chúng tôi để tiếp tục</string>
     <string name="usage_and_diagnostics">Sử dụng và chẩn đoán</string>
     <string name="wallpaper_colors">Màu hình nền</string>
-    <string name="welcome">Chào mừng</string>
 </resources>

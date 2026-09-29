@@ -15,7 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="agree">Concordo</string>
     <string name="amoled_mode">Modo AMOLED</string>
     <string name="back_button_content_description">Voltar</string>
     <string name="back_button_text">Voltar</string>
@@ -23,7 +22,6 @@
     <string name="done_button_content_description">Concluído</string>
     <string name="done_button_text">Concluído</string>
     <string name="follow_system">Seguir o sistema</string>
-    <string name="learn_more">Saiba mais</string>
     <string name="light_mode">Modo claro</string>
     <string name="next_button_content_description">Próximo</string>
     <string name="next_button_text">Próximo</string>
@@ -40,8 +38,6 @@
     <string name="other_colors">Outras cores</string>
     <string name="skip_button_content_description">Pular</string>
     <string name="skip_button_text">Pular</string>
-    <string name="summary_browse_terms_of_service_and_privacy_policy">Leia e concorde com nossos Termos de serviço e Política de Privacidade para continuar</string>
     <string name="usage_and_diagnostics">Uso e diagnósticos</string>
     <string name="wallpaper_colors">Cores do papel de parede</string>
-    <string name="welcome">Bem-vindo</string>
 </resources>

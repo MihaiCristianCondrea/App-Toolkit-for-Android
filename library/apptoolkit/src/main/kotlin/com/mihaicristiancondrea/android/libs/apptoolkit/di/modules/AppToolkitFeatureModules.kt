@@ -16,7 +16,7 @@
  */
 
 /*
- * Copyright (Â©) 2026 Mihai-Cristian Condrea
+ * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,9 +37,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.di
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReporterConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.di.licensesModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.di.onboardingModule
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers.StartupProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.di.permissionsModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.di.privacyModule
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.di.startupModule
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.providers.StartupProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.di.supportModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.di.reviewModule
 import org.koin.core.module.Module
@@ -56,7 +57,8 @@ fun appToolkitFeatureModules(
     issueReporterConfig: IssueReporterConfig = IssueReporterConfig(),
 ): List<Module> = listOf(
     appToolkitCoreModule(hostBuildConfig = hostBuildConfig),
-    onboardingModule(startupProviderFactory = startupProviderFactory),
+    startupModule(startupProviderFactory = startupProviderFactory),
+    onboardingModule,
     supportModule,
     faqModule(hostBuildConfig = hostBuildConfig),
     aboutModule,

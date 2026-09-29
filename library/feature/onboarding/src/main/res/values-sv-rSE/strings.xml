@@ -15,7 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="agree">Godkänn</string>
     <string name="amoled_mode">AMOLED-läge</string>
     <string name="back_button_content_description">Tillbaka</string>
     <string name="back_button_text">Tillbaka</string>
@@ -23,7 +22,6 @@
     <string name="done_button_content_description">Klar</string>
     <string name="done_button_text">Klar</string>
     <string name="follow_system">Följ systeminställningar</string>
-    <string name="learn_more">Läs mer</string>
     <string name="light_mode">Ljust läge</string>
     <string name="next_button_content_description">Nästa</string>
     <string name="next_button_text">Nästa</string>
@@ -40,8 +38,6 @@
     <string name="other_colors">Andra färger</string>
     <string name="skip_button_content_description">Hoppa över</string>
     <string name="skip_button_text">Hoppa över</string>
-    <string name="summary_browse_terms_of_service_and_privacy_policy">Läs och godkänn våra användarvillkor och integritetspolicy för att fortsätta</string>
     <string name="usage_and_diagnostics">Användning och diagnostik</string>
     <string name="wallpaper_colors">Bakgrundsfärger</string>
-    <string name="welcome">Välkommen</string>
 </resources>

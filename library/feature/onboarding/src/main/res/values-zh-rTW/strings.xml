@@ -15,7 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="agree">同意</string>
     <string name="amoled_mode">AMOLED 模式</string>
     <string name="back_button_content_description">返回</string>
     <string name="back_button_text">返回</string>
@@ -23,7 +22,6 @@
     <string name="done_button_content_description">完成</string>
     <string name="done_button_text">完成</string>
     <string name="follow_system">跟隨系統模式</string>
-    <string name="learn_more">了解更多</string>
     <string name="light_mode">淺色模式</string>
     <string name="next_button_content_description">下一步</string>
     <string name="next_button_text">下一步</string>
@@ -40,8 +38,6 @@
     <string name="other_colors">其他顏色</string>
     <string name="skip_button_content_description">跳過</string>
     <string name="skip_button_text">跳過</string>
-    <string name="summary_browse_terms_of_service_and_privacy_policy">閱讀並同意我們的服務條款和隱私政策以繼續</string>
     <string name="usage_and_diagnostics">使用與診斷</string>
     <string name="wallpaper_colors">桌布顏色</string>
-    <string name="welcome">歡迎</string>
 </resources>

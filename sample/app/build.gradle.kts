@@ -258,6 +258,7 @@ dependencies {
     implementation(project(":library:feature:faq"))
     implementation(project(":library:feature:issuereporter"))
     implementation(project(":library:feature:onboarding"))
+    implementation(project(":library:feature:startup"))
     implementation(project(":library:feature:permissions"))
     implementation(project(":library:feature:settings"))
     implementation(project(":library:feature:support"))

@@ -15,7 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="agree">Agree</string>
     <string name="amoled_mode">AMOLED mode</string>
     <string name="back_button_content_description">Back</string>
     <string name="back_button_text">Back</string>
@@ -23,7 +22,6 @@
     <string name="done_button_content_description">Done</string>
     <string name="done_button_text">Done</string>
     <string name="follow_system">Follow system mode</string>
-    <string name="learn_more">Learn more</string>
     <string name="light_mode">Light mode</string>
     <string name="next_button_content_description">Next</string>
     <string name="next_button_text">Next</string>
@@ -40,8 +38,6 @@
     <string name="other_colors">Other colors</string>
     <string name="skip_button_content_description">Skip</string>
     <string name="skip_button_text">Skip</string>
-    <string name="summary_browse_terms_of_service_and_privacy_policy">Read and agree to the Terms of Service and Privacy Policy to continue</string>
     <string name="usage_and_diagnostics">Usage and diagnostics</string>
     <string name="wallpaper_colors">Wallpaper colors</string>
-    <string name="welcome">Welcome</string>
 </resources>

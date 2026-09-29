@@ -35,8 +35,8 @@ No internal Gradle modules. This is the bottom shared runtime dependency for mos
 - `:library:core:datastore`, `:library:core:network`, `:library:core:ui`, and
   `:library:core:designsystem`.
 - `:library:feature:about`, `:library:feature:faq`, `:library:feature:issuereporter`,
-  `:library:feature:onboarding`, `:library:feature:permissions`, `:library:feature:settings`, and
-  `:library:feature:support`.
+  `:library:feature:onboarding`, `:library:feature:permissions`, `:library:feature:settings`,
+  `:library:feature:startup`, and `:library:feature:support`.
 - `:library:integration:ads`, `:library:integration:billing`, `:library:integration:consent`,
   `:library:integration:firebase`, `:library:integration:review`, and `:library:integration:update`.
 

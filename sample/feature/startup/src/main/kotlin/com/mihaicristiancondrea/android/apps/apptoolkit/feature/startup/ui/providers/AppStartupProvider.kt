@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.startup.ui.prov
 
 import android.Manifest
 import android.os.Build
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers.StartupProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.providers.StartupProvider
 import javax.inject.Inject
 
 /**

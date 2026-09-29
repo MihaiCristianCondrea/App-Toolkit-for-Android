@@ -15,7 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="agree">Погодитися</string>
     <string name="amoled_mode">Режим AMOLED</string>
     <string name="back_button_content_description">Назад</string>
     <string name="back_button_text">Назад</string>
@@ -23,7 +22,6 @@
     <string name="done_button_content_description">Готово</string>
     <string name="done_button_text">Готово</string>
     <string name="follow_system">Дотримуватися системного режиму</string>
-    <string name="learn_more">Дізнатися більше</string>
     <string name="light_mode">Світла тема</string>
     <string name="next_button_content_description">Далі</string>
     <string name="next_button_text">Далі</string>
@@ -40,8 +38,6 @@
     <string name="other_colors">Інші кольори</string>
     <string name="skip_button_content_description">Пропустити</string>
     <string name="skip_button_text">Пропустити</string>
-    <string name="summary_browse_terms_of_service_and_privacy_policy">Прочитайте та погодьтеся з нашими Умовами використання та Політикою конфіденційності, щоб продовжити</string>
     <string name="usage_and_diagnostics">Використання та діагностика</string>
     <string name="wallpaper_colors">Кольори шпалер</string>
-    <string name="welcome">Ласкаво просимо</string>
 </resources>

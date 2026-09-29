@@ -150,7 +150,8 @@ modules they compose.
 | `helpPage()` | faq | `HelpRoute` | None |
 | `supportPage()` | support | `SupportRoute` | None |
 | `developerOptionsPage()` | developer | `DeveloperOptionsRoute` | None |
-| `onboardingPages()` | onboarding | `StartupRoute`, `OnboardingRoute`, as start screens | None |
+| `startupPage()` | startup | `StartupRoute`, as a start screen | None |
+| `onboardingPages()` | onboarding | `OnboardingRoute`, as a start screen | None |
 
 The settings categories are details, so on a wide window they open beside the list. Pages opened
 from a detail are `None`: a detail opened from a detail replaces it instead of stacking on it.

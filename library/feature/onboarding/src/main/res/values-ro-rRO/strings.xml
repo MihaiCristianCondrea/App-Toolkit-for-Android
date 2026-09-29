@@ -15,7 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="agree">Sunt de acord</string>
     <string name="amoled_mode">Mod AMOLED</string>
     <string name="back_button_content_description">Înapoi</string>
     <string name="back_button_text">Înapoi</string>
@@ -23,7 +22,6 @@
     <string name="done_button_content_description">Gata</string>
     <string name="done_button_text">Gata</string>
     <string name="follow_system">Urmărește setările sistemului</string>
-    <string name="learn_more">Află mai multe</string>
     <string name="light_mode">Mod luminos</string>
     <string name="next_button_content_description">Următorul</string>
     <string name="next_button_text">Următorul</string>
@@ -40,8 +38,6 @@
     <string name="other_colors">Alte culori</string>
     <string name="skip_button_content_description">Omite</string>
     <string name="skip_button_text">Omite</string>
-    <string name="summary_browse_terms_of_service_and_privacy_policy">Citește și acceptă Termenii de utilizare și Politica de confidențialitate pentru a continua</string>
     <string name="usage_and_diagnostics">Utilizare și diagnoză</string>
     <string name="wallpaper_colors">Culorile fundalului</string>
-    <string name="welcome">Bine ai venit</string>
 </resources>

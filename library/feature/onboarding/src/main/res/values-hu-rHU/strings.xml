@@ -15,7 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="agree">Elfogadom</string>
     <string name="amoled_mode">AMOLED mód</string>
     <string name="back_button_content_description">Vissza</string>
     <string name="back_button_text">Vissza</string>
@@ -23,7 +22,6 @@
     <string name="done_button_content_description">Kész</string>
     <string name="done_button_text">Kész</string>
     <string name="follow_system">Rendszerbeállítás követése</string>
-    <string name="learn_more">Tudj meg többet</string>
     <string name="light_mode">Világos mód</string>
     <string name="next_button_content_description">Tovább</string>
     <string name="next_button_text">Tovább</string>
@@ -40,8 +38,6 @@
     <string name="other_colors">Egyéb színek</string>
     <string name="skip_button_content_description">Kihagyás</string>
     <string name="skip_button_text">Kihagyás</string>
-    <string name="summary_browse_terms_of_service_and_privacy_policy">Olvasd el és fogadd el a Szolgáltatási feltételeinket és az Adatvédelmi irányelveinket a folytatáshoz</string>
     <string name="usage_and_diagnostics">Használat és diagnosztika</string>
     <string name="wallpaper_colors">Háttérkép színei</string>
-    <string name="welcome">Üdvözlünk</string>
 </resources>

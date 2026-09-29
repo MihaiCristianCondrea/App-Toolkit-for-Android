@@ -15,7 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="agree">Sumang-ayon</string>
     <string name="amoled_mode">AMOLED mode</string>
     <string name="back_button_content_description">Bumalik</string>
     <string name="back_button_text">Bumalik</string>
@@ -23,7 +22,6 @@
     <string name="done_button_content_description">Tapos na</string>
     <string name="done_button_text">Tapos na</string>
     <string name="follow_system">Sundin ang system mode</string>
-    <string name="learn_more">Matuto pa</string>
     <string name="light_mode">Light mode</string>
     <string name="next_button_content_description">Susunod</string>
     <string name="next_button_text">Susunod</string>
@@ -40,8 +38,6 @@
     <string name="other_colors">Ibang mga kulay</string>
     <string name="skip_button_content_description">Laktawan</string>
     <string name="skip_button_text">Laktawan</string>
-    <string name="summary_browse_terms_of_service_and_privacy_policy">Basahin at sumang-ayon sa aming Mga tuntunin ng serbisyo at Patakaran sa Privacy upang magpatuloy</string>
     <string name="usage_and_diagnostics">Paggamit at mga diagnostic</string>
     <string name="wallpaper_colors">Mga kulay ng wallpaper</string>
-    <string name="welcome">Maligayang pagdating</string>
 </resources>

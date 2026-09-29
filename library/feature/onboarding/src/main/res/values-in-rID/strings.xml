@@ -15,7 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="agree">Setuju</string>
     <string name="amoled_mode">Mode AMOLED</string>
     <string name="back_button_content_description">Kembali</string>
     <string name="back_button_text">Kembali</string>
@@ -23,7 +22,6 @@
     <string name="done_button_content_description">Selesai</string>
     <string name="done_button_text">Selesai</string>
     <string name="follow_system">Ikuti mode sistem</string>
-    <string name="learn_more">Pelajari lebih lanjut</string>
     <string name="light_mode">Mode terang</string>
     <string name="next_button_content_description">Selanjutnya</string>
     <string name="next_button_text">Selanjutnya</string>
@@ -40,8 +38,6 @@
     <string name="other_colors">Warna lainnya</string>
     <string name="skip_button_content_description">Lewati</string>
     <string name="skip_button_text">Lewati</string>
-    <string name="summary_browse_terms_of_service_and_privacy_policy">Baca dan setujui Ketentuan layanan dan Kebijakan Privasi kami untuk melanjutkan</string>
     <string name="usage_and_diagnostics">Penggunaan dan diagnostik</string>
     <string name="wallpaper_colors">Warna wallpaper</string>
-    <string name="welcome">Selamat datang</string>
 </resources>
