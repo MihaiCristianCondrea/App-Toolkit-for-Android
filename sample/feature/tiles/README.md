@@ -121,6 +121,14 @@ Tile subtitles exist only from Android 10, below the module's minimum SDK. `Tile
 result into the label on Android 8 and 9, where it would otherwise be invisible. Declining the
 system add-tile prompt is treated as the user's choice, not as a failure.
 
+## Search
+
+The tab declares a search field in its app bar, and `ToolkitTilesScreen` reads its query from
+`LocalShellSearch`. After the filter chips, `search` keeps a whole category whose name matches, or
+only the tiles whose title or summary match; every match is shown expanded, whatever the stored
+expansion. Titles and summaries are string resources, so the query is matched against them in the
+current language. `ToolkitTilesSearchTest` covers the rules.
+
 ## Migration notes
 
 The catalogue and status pass formerly lived in pass-through use cases. They remain repository

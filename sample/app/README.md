@@ -98,10 +98,13 @@ flowchart TD
   `DefaultSnackbarHandler` over the shell, raised above the bottom chrome.
 - The launcher shortcut's `OPEN_SETTINGS` action is a deep link in `appGraph`, so the shell opens
   the settings page for it at launch and while running, with no activity of its own.
-- The Apps tab's random-app button is the tab's `fab`. The shell draws it outside the tab's
-  content, so the list registers what it does in a `RandomAppAction` the activity holds.
+- Both tabs declare a `TabSearch`, so the app bar holds a search field that filters the quick
+  tools and the apps. The Apps tab's random-app button is declared by the list itself with
+  `ScaffoldFabs`, so the graph holds no button of its own.
 - The drawer's Components entry depends on the showcase being unlocked, so the graph is rebuilt
-  when that changes; the back stacks are kept, since they are saved by position, not by graph.
+  when that changes; the back stacks are kept, since they are saved by position, not by graph. The
+  drawer ends with `toolkitFooter`, so Settings, Help, Updates and Share stay last; the developer
+  options are reached from Advanced settings, not the drawer.
 - Process-lifetime ads, billing recovery, installing the seasonal overlay, and current-activity tracking
   stay in the application class because their lifetime exceeds any screen ViewModel.
 

@@ -15,8 +15,11 @@ The developer's app catalogue: listing, details, favorites, and install state.
 - `AppsListViewModel`, the list and detail-sheet composables, and the native-ad placement in the
   list.
 - Localized app-catalogue strings and app-specific error-to-text mapping.
-- `AppsListRoute`, this feature's tab key, and `RandomAppFloatingActionButton` with the
-  `RandomAppAction` the list registers its random-app handler in.
+- `AppsListRoute`, this feature's tab key.
+- The random-app button, declared by `AppsListScreen` with `ScaffoldFabs` so the tab's scaffold
+  draws it; it scales out while there is no app to open.
+- Filtering the grid by the tab's search field (`LocalShellSearch`): an app matches by name,
+  package or description, after the filter chips.
 - `FavoritesChangedReceiver`, which keeps the widget in step with favorites.
 
 ## Does not own
@@ -81,8 +84,7 @@ and unavailable version behavior are unchanged; the feature still owns install-s
 ## Public contracts
 
 - The three repositories, `AppsListViewModel`, `AppsListScreen`, `AppsListRoute`,
-  `RandomAppFloatingActionButton`, `RandomAppAction`, `AppInfo`/`AppSummary`/
-  `AppDetails`.
+  `AppInfo`/`AppSummary`/`AppDetails`.
 
 ## Internal implementations
 
