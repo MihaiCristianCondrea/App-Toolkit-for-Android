@@ -19,4 +19,8 @@
     <string name="settings">Mga Setting</string>
     <string name="share">Ibahagi</string>
     <string name="updates">Mga Update</string>
+    <string name="shell_navigate_back">Bumalik</string>
+    <string name="shell_pane_separator">Baguhin ang laki ng mga pane</string>
+    <string name="shell_support_us">Suportahan kami</string>
+    <string name="shell_support_short">Suporta</string>
 </resources>

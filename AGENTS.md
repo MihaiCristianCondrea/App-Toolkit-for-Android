@@ -688,10 +688,10 @@ These are examples. Run only tasks that actually exist in the current project.
 
 ### App Toolkit
 
-The App Toolkit repository currently contains a `checkModuleBoundaries` verification task for the
-sample application.
+The App Toolkit repository contains a `checkModuleBoundaries` verification task for the sample
+application and the library.
 
-Its rules include:
+Its sample rules include:
 
 * `:sample:core:*` cannot depend on `:sample:feature:*` or `:sample:app`
 * `:sample:integration:*` cannot depend on `:sample:feature:*` or `:sample:app`
@@ -702,7 +702,17 @@ Its rules include:
 * `:sample:core:navigation` must not import product feature implementations
 * inline analytics screen names are rejected
 
-These rules are build-enforced inside App Toolkit's sample.
+Its library rules include:
+
+* `:library:core:*`, `:library:integration:*` and `:library:navigation` cannot depend on
+  `:library:feature:*` or `:library:apptoolkit`
+* no library module can depend on a `:sample:*` module
+* sibling `:library:feature:*` modules cannot depend on each other, except the edges listed in
+  `ALLOWED_LIBRARY_FEATURE_EDGES` in `ModuleBoundariesPlugin`; remove an edge from that list in the
+  change that removes it from the build, and never add one
+* packages in the library must not be split across modules
+
+These rules are build-enforced inside App Toolkit.
 
 Consumer applications should follow the equivalent architectural rules, but do not claim they are
 build-enforced unless that repository actually contains equivalent verification.

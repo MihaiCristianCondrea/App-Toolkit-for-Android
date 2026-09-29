@@ -19,4 +19,8 @@
     <string name="settings">ترتیبات</string>
     <string name="share">شیئر کریں</string>
     <string name="updates">اپ ڈیٹس</string>
+    <string name="shell_navigate_back">پیچھے جائیں</string>
+    <string name="shell_pane_separator">پینلز کا سائز تبدیل کریں</string>
+    <string name="shell_support_us">ہماری مدد کریں</string>
+    <string name="shell_support_short">مدد</string>
 </resources>

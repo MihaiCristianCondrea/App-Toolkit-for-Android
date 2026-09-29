@@ -19,4 +19,8 @@
     <string name="settings">การตั้งค่า</string>
     <string name="share">แชร์</string>
     <string name="updates">การอัปเดต</string>
+    <string name="shell_navigate_back">กลับ</string>
+    <string name="shell_pane_separator">ปรับขนาดแผง</string>
+    <string name="shell_support_us">สนับสนุนเรา</string>
+    <string name="shell_support_short">สนับสนุน</string>
 </resources>

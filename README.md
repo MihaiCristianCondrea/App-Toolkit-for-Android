@@ -26,7 +26,7 @@ demonstrates the library in a real application.
 - [`library/integration`](library/integration/README.md) contains optional integrations for ads,
   billing, consent, Firebase, in-app review, and in-app updates.
 - [`library/navigation`](library/navigation/README.md) provides shared navigation contracts, models,
-  UI, and back-stack helpers.
+  UI, and back-stack helpers, and the shell navigation core that one-activity apps are moving to.
 - [`sample`](sample/README.md) documents the sample application and its user-facing features.
 
 Each module has a README describing its responsibilities, dependencies, public contracts, and known
@@ -114,6 +114,11 @@ The build enforces these boundaries:
 - App composition packages cannot be imported from reusable sample modules.
 - Core navigation cannot import feature implementations.
 - Analytics screen names come from `AppScreenTracking`, not inline literals.
+
+The library has rules of its own: shared library modules cannot depend on features or on
+`:library:apptoolkit`, the library never depends on the sample, library packages are not split, and
+library features cannot depend on each other beyond the edges listed in `ModuleBoundariesPlugin`,
+which shrink as each feature moves to the shell graph.
 
 Run `./gradlew checkModuleBoundaries` to execute the repository-wide source checks. These targeted
 guards complement compilation, unit tests, lint, and on-device validation.

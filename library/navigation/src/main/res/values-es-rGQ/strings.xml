@@ -19,4 +19,8 @@
     <string name="settings">Configuración</string>
     <string name="share">Compartir</string>
     <string name="updates">Actualizaciones</string>
+    <string name="shell_navigate_back">Volver</string>
+    <string name="shell_pane_separator">Cambiar el tamaño de los paneles</string>
+    <string name="shell_support_us">Apóyanos</string>
+    <string name="shell_support_short">Apoyar</string>
 </resources>

@@ -2,6 +2,19 @@
 
 ---
 
+# Unreleased
+
+### Added
+
+- Added the shell navigation core to `:library:navigation`, the first step toward apps with one activity whose screens move like activities: `ShellGraphBuilder` and `ShellGraph` describe tabs, children, pages, the drawer, the overflow menu, start screens and deep links; `ShellNavigator` moves through them with one stack per tab and a tab history that back follows; `ShellNavDisplay` plays Android's cross-activity back animation on the back gesture; `ListDetailScene` shows a list page and its detail side by side with a draggable separator. Tabs, drawer entries and overflow entries take `ToolkitIcon`, so animated vector drawables and Lottie icons play on them. Nothing uses it yet; the existing navigation is unchanged.
+- Added `AboutRoute`, `ThemeSettingsRoute`, `DisplaySettingsRoute`, `PrivacySettingsRoute`, `AdvancedSettingsRoute`, `DiagnosticsSettingsRoute`, `DeveloperOptionsRoute`, `StartupRoute` and `OnboardingRoute`, one key per page the features will register in the shell graph.
+
+### Changed
+
+- Every `AppToolkitNavKey` is now `@Serializable` as well as `@Parcelize`, so the keys can live on `rememberNavBackStack` stacks. `:library:navigation` exposes `kotlinx-serialization-core` as `api`.
+
+---
+
 # September 24, 2026
 
 **Version:** `3.0.0-pre21`

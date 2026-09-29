@@ -19,4 +19,8 @@
     <string name="settings">설정</string>
     <string name="share">공유</string>
     <string name="updates">업데이트</string>
+    <string name="shell_navigate_back">뒤로 가기</string>
+    <string name="shell_pane_separator">패널 크기 조절</string>
+    <string name="shell_support_us">지원하기</string>
+    <string name="shell_support_short">지원</string>
 </resources>

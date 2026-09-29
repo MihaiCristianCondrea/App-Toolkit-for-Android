@@ -19,4 +19,8 @@
     <string name="settings">सेटिंग्स</string>
     <string name="share">साझा करें</string>
     <string name="updates">अपडेट्स</string>
+    <string name="shell_navigate_back">वापस जाओ</string>
+    <string name="shell_pane_separator">पैनल का आकार बदलें</string>
+    <string name="shell_support_us">हमें समर्थन दें</string>
+    <string name="shell_support_short">समर्थन</string>
 </resources>

@@ -19,4 +19,8 @@
     <string name="settings">Inställningar</string>
     <string name="share">Dela</string>
     <string name="updates">Uppdateringar</string>
+    <string name="shell_navigate_back">Tillbaka</string>
+    <string name="shell_pane_separator">Ändra storlek på panelerna</string>
+    <string name="shell_support_us">Stöd oss</string>
+    <string name="shell_support_short">Stöd</string>
 </resources>

@@ -19,4 +19,8 @@
     <string name="settings">সেটিংস</string>
     <string name="share">শেয়ার করুন</string>
     <string name="updates">আপডেট</string>
+    <string name="shell_navigate_back">ফিরে যান</string>
+    <string name="shell_pane_separator">প্যানেলের আকার পরিবর্তন করুন</string>
+    <string name="shell_support_us">আমাদের সমর্থন করুন</string>
+    <string name="shell_support_short">সমর্থন</string>
 </resources>

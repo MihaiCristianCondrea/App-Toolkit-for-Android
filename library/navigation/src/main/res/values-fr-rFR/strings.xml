@@ -19,4 +19,8 @@
     <string name="settings">Paramètres</string>
     <string name="share">Partager</string>
     <string name="updates">Mises à jour</string>
+    <string name="shell_navigate_back">Retour</string>
+    <string name="shell_pane_separator">Redimensionner les volets</string>
+    <string name="shell_support_us">Soutenez-nous</string>
+    <string name="shell_support_short">Soutenir</string>
 </resources>

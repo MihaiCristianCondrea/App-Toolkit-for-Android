@@ -19,4 +19,8 @@
     <string name="settings">Setări</string>
     <string name="share">Distribuie</string>
     <string name="updates">Actualizări</string>
+    <string name="shell_navigate_back">Înapoi</string>
+    <string name="shell_pane_separator">Redimensionează panourile</string>
+    <string name="shell_support_us">Susține-ne</string>
+    <string name="shell_support_short">Susține</string>
 </resources>

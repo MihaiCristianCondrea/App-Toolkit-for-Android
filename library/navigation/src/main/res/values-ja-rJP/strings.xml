@@ -19,4 +19,8 @@
     <string name="settings">設定</string>
     <string name="share">共有</string>
     <string name="updates">更新情報</string>
+    <string name="shell_navigate_back">戻る</string>
+    <string name="shell_pane_separator">ペインのサイズを変更</string>
+    <string name="shell_support_us">サポートする</string>
+    <string name="shell_support_short">サポート</string>
 </resources>
