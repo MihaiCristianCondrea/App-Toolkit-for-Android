@@ -252,6 +252,11 @@ app bar, such as tabs, call `PageScaffold` themselves.
   bar becomes a small one on a window too short for it, and inside a list-detail pane the frame
   draws no bar at all, because the scene draws one across both panes.
   `LocalTopBarStyleOverride` lets the developer options try one style across the app.
+- **Beside a rail or permanent drawer, the page it opened is a tab.** When `isTopLevelPage` says
+  the navigation opened this page, the frame draws a small bar without a back button and, over a
+  tinted frame, the tab's content card. Back still closes it.
+- **The content colour is set.** The frame provides `onBackground` as `LocalContentColor`, so text
+  in a page follows the theme even where no Material `Surface` sets it.
 - **Content is edge to edge at the bottom.** The body reaches behind the system navigation bar and,
   on tabs, the bottom bar, banner and player. What covers it arrives as `LocalContentPadding`, so a
   list adds `contentPadding()` to its own padding and scrolls under the bars instead of stopping
@@ -276,7 +281,7 @@ press bounce and animated icon, scaling in and out on its own.
 ScaffoldFabs(
     listOf(
         ToolkitFab(ToolkitIcon.Vector(Icons.Outlined.Search), onClick = ::search, contentDescription = searchLabel, size = FabSize.Small, color = FabColor.Secondary),
-        ToolkitFab(ToolkitIcon.Vector(Icons.Outlined.Add), onClick = ::add, label = newLabel, expanded = !listScrolled),
+        ToolkitFab(ToolkitIcon.Vector(Icons.Outlined.Add), onClick = ::add, label = newLabel),
     ),
 )
 ```
@@ -289,6 +294,11 @@ ScaffoldFabs(
   state. They leave with the screen. `PageScaffold` and the shell's tab scaffold each keep a
   `FabHost` for the screen inside; outside a Toolkit scaffold `ScaffoldFabs` draws nothing.
 - **Directly:** `PageScaffold(fabs = ...)`, or `ToolkitFabColumn` in a scaffold of your own.
+- **They fold while the content scrolls.** The Toolkit's scaffolds attach a `FabScrollBehavior`
+  to their content: extended buttons fold to their icon while it scrolls down and unfold as soon as
+  it scrolls back, and a new tab or page starts unfolded. A button's own `expanded` still applies.
+  In a scaffold of your own, attach `rememberFabScrollBehavior().nestedScrollConnection` and pass
+  its `expanded` to `ToolkitFabColumn`.
 
 ## Internal implementations
 

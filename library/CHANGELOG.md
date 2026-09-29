@@ -25,6 +25,9 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Added `ChoicePreferenceItem` to `:library:core:ui`: a settings row that shows the chosen option and opens a radio-list dialog.
 - Added a Developer options row to the advanced settings, shown once the About screen's version easter egg is found.
 - Added the page frame to `:library:core:ui`: `PageScaffold`, `ShellTopAppBar`, `LocalContentPadding` and `contentPadding()`, `ContentWidthBox`, `PanePlaceholder` and `ListPlaceholder`.
+- Added `FabScrollBehavior` to `:library:core:ui`, and an `expanded` parameter to `ToolkitFabColumn` and `ToolkitFloatingActionButton`: `PageScaffold` and the shell's tab scaffold fold extended buttons to their icon while the content scrolls down and unfold them when it scrolls back.
+- Added `placeholder` to `page { }` and `pageIfAbsent { }` in `:library:navigation`: what the detail side of a `PaneRole.List` page shows while no detail is open, `ListPlaceholder` when absent.
+- Added `LocalBesideNavigation` and `isTopLevelPage(key)` to `:library:navigation`, which tell a page whether the rail or permanent drawer opened it.
 - Added `AboutRoute`, `ThemeSettingsRoute`, `DisplaySettingsRoute`, `PrivacySettingsRoute`, `AdvancedSettingsRoute`, `DiagnosticsSettingsRoute`, `DeveloperOptionsRoute`, `StartupRoute` and `OnboardingRoute`, one key per Toolkit page.
 
 ### Changed
@@ -39,10 +42,14 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - `StartupProvider` supplies only `requiredPermissions`, and `OnboardingProvider` only the pages; finishing onboarding enters the shell.
 - Beside a rail, an expanded rail or a permanent drawer, pages now open in the space next to the navigation instead of covering it: the navigation stays, marks the entry whose page is open, and a tab or another entry replaces the open pages. `ShellHost` draws that navigation itself, around its displays.
 - The shell's layout choices moved from the developer options to the display settings: app bar style, bottom bar style, labels, hide on scroll, navigation colour, content width, banner style, tab transition and back swipe. Each shows only when the app's graph uses it. The developer options keep the start, the forced layout, the bottom accessories and the animation speed, and `ShellPreferences.resetDeveloperOptions()` resets only those. `:library:feature:display` depends on `:library:shell`.
+- A page the rail or permanent drawer opens is drawn like a tab: a small app bar without a back button, and, when the navigation and the app bar share a colour, the tab's rounded content card. `PageScaffold` and the list-detail scene both do this.
+- The settings list shows its illustrated card, with a Get help button, beside it on wide windows while no category is open, instead of the generic placeholder.
+- `PageSurface`, `PageScaffold`, the list-detail scene and the shell's tab scaffold now provide `LocalContentColor` for the colour they draw on, so text and icons outside a Material `Surface` follow the theme instead of defaulting to black in the dark theme.
 
 ### Improved
 
 - `AnimatedIconButtonDirection` crossfades its glyph when `icon` changes, so one button can turn from a menu button into a back arrow without popping.
+- The startup and onboarding pages keep to a 640dp column centred on tablets and wide windows instead of stretching across them.
 
 ### Removed
 

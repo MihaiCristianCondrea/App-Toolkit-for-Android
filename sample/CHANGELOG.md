@@ -22,6 +22,11 @@
 ### Improved
 
 - The menu button turns into a back arrow when you open a screen, instead of popping in and out, and the navigation icons animate when you tap them.
+- The welcome and onboarding pages keep a comfortable width on tablets.
+- On tablets and wide windows, a page opened from the side navigation looks like a tab, without a back button.
+- The labelled floating action buttons shrink to their icon while you scroll down and grow back when you scroll up.
+- Settings on a tablet shows its illustration and a Get help button beside the list until you open a category.
+- Text is no longer black on some screens in the dark theme.
 - The ad above the bottom navigation is back, and messages such as a consent form failing to load now appear above the navigation bar instead of not at all.
 
 ---

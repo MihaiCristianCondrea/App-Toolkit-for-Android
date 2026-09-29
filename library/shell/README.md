@@ -107,6 +107,11 @@ on screen, and `ShellHost` draws it itself, around the displays:
 - **The navigation replaces, it does not stack.** A tab closes the open pages and shows the tab;
   another entry swaps the open pages for its own. Its page already open alone, an entry does
   nothing.
+- **The page it opened looks like a tab.** The page an entry opened stands in for a tab, so it
+  gets the tab's small app bar with no back button and, when the navigation and the app bar share
+  a colour, the tab's rounded content card over that colour. Pages opened from it keep their back
+  button. `ShellFrame` provides `LocalBesideNavigation` for this, and `PageScaffold` and the
+  list-detail scene read it through `isTopLevelPage`.
 - **Start screens stay whole-window.** Before the shell is entered there is no navigation, so a
   welcome or onboarding page covers the window at every width.
 

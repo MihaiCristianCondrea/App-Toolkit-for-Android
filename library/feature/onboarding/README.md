@@ -95,6 +95,8 @@ flowchart TD
   choices. Presentation callbacks do not write DataStore directly.
 - Theme and consent pages use their owning repositories/ViewModels so onboarding does not become a
   second implementation of settings behavior.
+- On large screens the pages keep to a column at most 640dp wide, centred, so a tablet shows them
+  at a readable width instead of stretched across the window.
 - Completion is written only after the final confirmed action; navigation is emitted separately as
   a one-off effect.
 

@@ -145,7 +145,11 @@ Screens then call `LocalShellNavigator.current.navigate(key)` with any registere
 - **List and detail share the window.** A `PaneRole.List` page shows the `PaneRole.Detail` page
   opened from it beside it from 600dp, under one app bar titled over each pane, with a separator
   that can be dragged to resize the panes or to the end to close the detail. The back gesture on
-  the detail slides the separator the same way.
+  the detail slides the separator the same way. While no detail is open, the detail side shows
+  the page's `placeholder`, or `ListPlaceholder`.
+- **Scenes set their content colour.** `PageSurface` and the list-detail scene draw on the
+  theme's surface and provide `onSurface` as `LocalContentColor`, so text outside a Material
+  `Surface` never falls back to black.
 - **Covered displays stand down.** A scene stays composed while another opens over it, so
   `ShellNavDisplay(backEnabled = false)` keeps a covered display from taking a back gesture meant
   for what covers it.
@@ -165,8 +169,8 @@ Screens then call `LocalShellNavigator.current.navigate(key)` with any registere
 - `ShellNavDisplay`, `ShellBackHandler`, `ShellHomeRoute`, the scenes and their strategies,
   `ScreenTransition`, `ShellTransitions`, `CrossActivityBackMotion` and `ShellLayoutPolicy`.
 - The composition locals `LocalShellNavigator`, `LocalShellGraph`, `LocalPageKey`,
-  `LocalPaneRole`, `LocalSelectedDetail`, `LocalShellSearch`, `LocalShellLayout` and
-  `LocalShellMotion`.
+  `LocalPaneRole`, `LocalSelectedDetail`, `LocalShellSearch`, `LocalShellLayout`,
+  `LocalShellMotion` and `LocalBesideNavigation`, with `isTopLevelPage`.
 - `AppToolkitNavKey` and its keys. Their class names are part of saved state: renaming or moving
   one loses a restored back stack that held it.
 

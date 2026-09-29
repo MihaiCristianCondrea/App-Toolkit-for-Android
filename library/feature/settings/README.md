@@ -86,7 +86,9 @@ class AppSettingsProvider(private val context: Context) : SettingsProvider {
   when it did not (or there is none), the destination opens. Notifications uses this to open the
   system's notification settings and fall back to the privacy page.
 - **A list page.** `SettingsRoute` is registered with `PaneRole.List`, so on wide windows the
-  category pages, registered as `PaneRole.Detail`, open beside it.
+  category pages, registered as `PaneRole.Detail`, open beside it. Until one is, the detail side
+  shows `SettingsDetailPlaceholder`: the settings illustration, the app's name and a Get help
+  button that opens `HelpRoute`.
 - Layers follow ownership, as described in [the architecture rules](../../../.agents/skills/architecture/layered-tree-review/references/android-tree-rules.md).
 
 ## Public contracts
