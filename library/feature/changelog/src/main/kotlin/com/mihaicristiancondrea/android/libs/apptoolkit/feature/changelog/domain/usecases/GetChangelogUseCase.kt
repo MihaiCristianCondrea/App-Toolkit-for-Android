@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.domain.usecases
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.string.extractChangesForVersion
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.utils.extensions.extractChangesForVersion
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors

@@ -59,7 +59,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R as CoreUiR
 
 @Composable
 fun CoinFlipTool(isHeads: Boolean, flipRequest: Int, onFlip: () -> Unit) {
@@ -156,14 +155,14 @@ private fun Coin(
         if (isBackVisible) {
             Box(Modifier.graphicsLayer { this.rotationY = 180f }) {
                 CoinFace(
-                    iconRes = CoreUiR.drawable.ic_coin_tails,
+                    iconRes = R.drawable.ic_coin_tails,
                     color = MaterialTheme.colorScheme.secondaryContainer,
                     tint = MaterialTheme.colorScheme.onSecondaryContainer
                 )
             }
         } else {
             CoinFace(
-                iconRes = CoreUiR.drawable.ic_coin_heads,
+                iconRes = R.drawable.ic_coin_heads,
                 color = MaterialTheme.colorScheme.primaryContainer,
                 tint = MaterialTheme.colorScheme.onPrimaryContainer
             )

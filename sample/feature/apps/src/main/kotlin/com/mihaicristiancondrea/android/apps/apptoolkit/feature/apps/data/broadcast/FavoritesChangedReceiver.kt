@@ -21,7 +21,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.common.utils.constants.logging.FAVORITES_CHANGED_LOG_TAG
 
 class FavoritesChangedReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
@@ -36,3 +35,5 @@ class FavoritesChangedReceiver : BroadcastReceiver() {
         const val EXTRA_PACKAGE_NAME = "extra_package_name"
     }
 }
+
+private const val FAVORITES_CHANGED_LOG_TAG = "FavoritesChangedRcvr"

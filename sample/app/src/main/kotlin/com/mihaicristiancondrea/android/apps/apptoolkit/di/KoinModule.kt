@@ -19,8 +19,8 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.di
 
 import android.content.Context
 import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.di.appToolkitHostModules
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.common.utils.constants.faq.FaqConstants
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.startup.di.appToolkitHostModules
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.faq.utils.constants.FaqConstants
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.di.dataStoreModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.di.appsModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.di.componentsModule

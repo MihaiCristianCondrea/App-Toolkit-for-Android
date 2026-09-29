@@ -20,8 +20,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.data
 import android.app.Activity
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.hasPlayStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.isInstalledFromPlayStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.utils.extensions.hasPlayStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.utils.extensions.isInstalledFromPlayStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await

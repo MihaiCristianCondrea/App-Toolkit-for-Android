@@ -29,6 +29,5 @@ dependencies {
     testImplementation(project(":library:core:testing"))
     implementation(project(":sample:core:analytics"))
     api(project(":sample:integration:ads"))
-    api(project(":sample:core:ui"))
     api(project(":library:apptoolkit"))
 }

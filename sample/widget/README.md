@@ -9,7 +9,8 @@ The home-screen app-icons widget.
 - `AppIconsWidget` and `AppIconsWidgetReceiver`.
 - `RefreshWidgetAction`, which retries an unsuccessful catalogue load through Glance's action
   worker.
-- The widget's localized strings and fallback layouts.
+- The widget's localized strings and fallback layouts, and the preview image the widget picker
+  shows.
 
 ## Does not own
 

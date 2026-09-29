@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.dat
 import android.app.Activity
 import com.android.billingclient.api.ProductDetails
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BillingCore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.billing.PurchaseResult
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.domain.models.PurchaseResult
 import kotlinx.coroutines.flow.Flow
 
 /**

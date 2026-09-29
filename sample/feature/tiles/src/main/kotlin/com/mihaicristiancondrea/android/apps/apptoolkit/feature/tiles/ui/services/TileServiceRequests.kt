@@ -21,7 +21,6 @@ import android.content.ComponentName
 import android.content.Context
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.domain.utils.ToolkitTileIds
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R as CoreUiR
 
 /**
  * Quick Settings registration details for one [android.service.quicksettings.TileService].
@@ -42,21 +41,21 @@ fun getTileServiceRequests(): Map<String, TileServiceRequest> = mapOf(
     ToolkitTileIds.COIN_FLIP to TileServiceRequest(
         CoinFlipTileService::class.java,
         R.string.tile_coin_flip_title,
-        CoreUiR.drawable.ic_tile_coin
+        R.drawable.ic_tile_coin
     ),
     ToolkitTileIds.COUNTER to TileServiceRequest(
         CounterTileService::class.java,
         R.string.tile_counter_title,
-        CoreUiR.drawable.ic_tile_counter
+        R.drawable.ic_tile_counter
     ),
     ToolkitTileIds.DICE_ROLL to TileServiceRequest(
         DiceRollTileService::class.java,
         R.string.tile_dice_roll_title,
-        CoreUiR.drawable.ic_tile_dice
+        R.drawable.ic_tile_dice
     ),
     ToolkitTileIds.FLASH_DIMMER to TileServiceRequest(
         FlashDimmerTileService::class.java,
         R.string.tile_flash_dimmer_title,
-        CoreUiR.drawable.ic_tile_flash_dimmer,
+        R.drawable.ic_tile_flash_dimmer,
     ),
 )

@@ -23,9 +23,9 @@ android {
     namespace = "com.mihaicristiancondrea.android.apps.apptoolkit.feature.faq"
 }
 
-// Resource-only: this module answers `:library:feature:faq`'s placeholder strings with the sample's
-// own questions and answers, in every supported locale. Adding or reworking a question is a change
-// to this module alone.
+// The sample's FAQ: it answers `:library:feature:faq`'s placeholder strings with the sample's own
+// questions and answers, in every supported locale, and names the product whose catalogue the
+// Help page loads. Adding or reworking a question is a change to this module alone.
 dependencies {
     api(project(":library:feature:faq"))
 }

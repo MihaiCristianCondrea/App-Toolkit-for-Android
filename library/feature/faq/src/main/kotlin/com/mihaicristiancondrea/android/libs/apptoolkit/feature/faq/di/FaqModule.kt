@@ -19,8 +19,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.di
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.faq.FaqConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.string.faqCatalogUrl
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.utils.constants.FaqConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.utils.extensions.faqCatalogUrl
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.local.FaqLocalDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.FaqRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.repositories.DefaultFaqRepository

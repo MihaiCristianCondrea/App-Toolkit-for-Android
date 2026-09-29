@@ -239,7 +239,6 @@ android {
 dependencies {
     testImplementation(project(":library:core:testing"))
     implementation(project(":sample:core:analytics"))
-    implementation(project(":sample:core:common"))
     implementation(project(":sample:core:datastore"))
     implementation(project(":sample:integration:ads"))
     implementation(project(":sample:feature:apps"))
@@ -249,8 +248,7 @@ dependencies {
     implementation(project(":sample:feature:settings"))
     implementation(project(":sample:feature:tiles"))
     implementation(project(":sample:widget"))
-    implementation(project(":sample:core:apptoolkit"))
-    implementation(project(":sample:core:ui"))
+    implementation(project(":sample:feature:startup"))
     implementation(project(":library:apptoolkit"))
     implementation(project(":library:core:common"))
     implementation(project(":library:core:ui"))

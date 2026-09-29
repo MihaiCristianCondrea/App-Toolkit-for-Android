@@ -15,7 +15,7 @@ Quick tools: the in-app tool catalogue and the Quick Settings tile services behi
   coordination or runtime state.
 - UI catalogue models and mappers, the screen and dedicated tool ViewModels, tool composables,
   `ToolkitTilesRoute`, this feature's tab key, and the Quick Settings services.
-- Localized Quick Tools strings and plurals.
+- Localized Quick Tools strings and plurals, and the Quick Settings tile and coin icons.
 - Feature-owned manifest permissions for haptics and flashlight access. The feature
   declares no foreground service and no wake locks.
 
@@ -27,7 +27,7 @@ Quick tools: the in-app tool catalogue and the Quick Settings tile services behi
 
 ## Depends on
 
-- `:sample:core:common`, `:sample:core:ui`.
+- `:sample:core:analytics` and `:sample:integration:ads`.
 - [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for ad slots and screen contracts.
 
 ## Used by

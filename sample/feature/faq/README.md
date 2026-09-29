@@ -8,6 +8,8 @@ every supported locale.
 ## Owns
 
 - The sample's `question_*` and `summary_preference_faq_*` string resources, in all 25 locales.
+- `FaqConstants.FAQ_PRODUCT_ID`, the product whose catalogue the Help page loads, which
+  `:sample:app` passes to the toolkit as `AppToolkitHostBuildConfig.faqProductId`.
 
 ## Does not own
 
@@ -39,8 +41,9 @@ flowchart TD
 - This module is resource-only and deliberately has no Kotlin. Its whole job is to answer the
   library's placeholder names, so a new or reworded question is a one-module change that touches no
   code and no other feature.
-- The content lives here rather than in `:sample:core:apptoolkit` because that module is the host's
-  toolkit wiring. FAQ copy shares nothing with it beyond having been convenient to put there.
+- The content lives here rather than beside the host's toolkit wiring, now
+  `:sample:feature:startup`: FAQ copy shares nothing with it beyond having once been convenient to
+  put there.
 
 ## Public contracts
 

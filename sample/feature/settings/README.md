@@ -19,8 +19,8 @@ and the hidden version-tap gesture that content hosts.
 - The settings pages themselves, owned by
   [`:library:feature:settings`](../../../library/feature/settings/README.md) and the feature modules
   that register the keys the rows open.
-- Host startup provider implementations and their localized resources, owned by
-  [`:sample:core:apptoolkit`](../../core/apptoolkit/README.md).
+- The startup provider and the toolkit module ordering, owned by
+  [`:sample:feature:startup`](../startup/README.md).
 - The showcase the gesture reveals, owned by
   [`:sample:feature:components`](../components/README.md), which only reads the same flag.
 - The startup-screen choices, composed by `:sample:app`, which is the only module that may name

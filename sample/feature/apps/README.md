@@ -6,6 +6,7 @@ The developer's app catalogue: listing, details, favorites, and install state.
 
 ## Owns
 
+- `AppErrors`, the feature's error surface over the toolkit's network errors.
 - `DeveloperAppsRepository`, `InstalledAppsRepository`, `FavoritesRepository` and their `Default`
   implementations.
 - `DeveloperAppsRemoteDataSource`, which owns Ktor requests, DTO decoding, and remote failure
@@ -16,6 +17,7 @@ The developer's app catalogue: listing, details, favorites, and install state.
   list.
 - Localized app-catalogue strings and app-specific error-to-text mapping.
 - `AppsListRoute`, this feature's tab key.
+- The Get it on Google Play badge the detail sheet shows.
 - The random-app button, declared by `AppsListScreen` with `ScaffoldFabs` so the tab's scaffold
   draws it; it scales out while there is no app to open.
 - Filtering the grid by the tab's search field (`LocalShellSearch`): an app matches by name,
@@ -30,7 +32,7 @@ The developer's app catalogue: listing, details, favorites, and install state.
 
 ## Depends on
 
-- `:sample:core:common`, `:sample:core:datastore`, `:sample:core:ui`.
+- `:sample:core:analytics`, `:sample:core:datastore` and `:sample:integration:ads`.
 - [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for ad slots, state contracts and
   Ktor.
 

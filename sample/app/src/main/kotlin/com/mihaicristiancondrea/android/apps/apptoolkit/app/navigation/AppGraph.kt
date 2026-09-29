@@ -45,7 +45,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.cont
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.rememberWindowWidthSizeClass
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R as AppsR
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R as ComponentsR
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R as TilesR
@@ -91,7 +90,7 @@ fun appGraph(
         icon = ToolkitIcon.Vector(Icons.Outlined.Apps),
         // Every `Apps` variant bundled with Compose is squares; the selected state uses the dot
         // grid Material Symbols draws for this glyph.
-        selectedIcon = ToolkitIcon.Resource(CoreUiR.drawable.ic_apps_dots),
+        selectedIcon = ToolkitIcon.Resource(R.drawable.ic_apps_dots),
         search = TabSearch(hint = AppsR.string.apps_search_hint),
     ) {
         AppsListScreen(

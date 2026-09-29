@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R as CoreUiR
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -278,7 +277,7 @@ private fun AppDetailsActions(
             false -> {
                 Spacer(modifier = Modifier.weight(1f))
                 Image(
-                    painter = painterResource(id = CoreUiR.drawable.get_it_on_google_play),
+                    painter = painterResource(id = R.drawable.get_it_on_google_play),
                     contentDescription = stringResource(R.string.app_details_view_on_play_store),
                     contentScale = ContentScale.Fit,
                     modifier = Modifier

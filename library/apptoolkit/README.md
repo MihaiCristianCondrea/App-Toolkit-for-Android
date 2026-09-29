@@ -248,8 +248,8 @@ things:
 This is not a complete generic-host contract test. Reflection verification sees constructor
 dependencies, but it cannot discover `koinInject()` calls inside composables such as
 `DisplaySettingsProvider` and `PrivacySettingsProvider`. Those host requirements are documented and
-bound in [`:sample:core:apptoolkit`](../../sample/core/apptoolkit/README.md), whose own tests resolve
-the provider bindings directly.
+bound in [`:sample:feature:settings`](../../sample/feature/settings/README.md), whose own tests
+resolve the provider bindings directly.
 
 Two mechanics are easy to get wrong when editing that test. Koin resolves a definition against its
 own module plus that module's `includes`, so the graph must be wrapped as

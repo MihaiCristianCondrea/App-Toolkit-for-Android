@@ -17,8 +17,10 @@ libraries with the host's own feature modules.
   components page, the drawer, the overflow menu and the settings shortcut's deep link, on top of
   the Toolkit's pages from `toolkitGraph { }`. `startKeyFor` maps the stored start page to its tab.
 - The drawer header's `app_logo`.
-- The sample onboarding provider; startup and settings provider adapters live in
-  [`:sample:core:apptoolkit`](../core/apptoolkit/README.md).
+- The sample onboarding provider, the startup provider and the toolkit module ordering, owned by
+  [`:sample:feature:onboarding`](../feature/onboarding/README.md) and
+  [`:sample:feature:startup`](../feature/startup/README.md); the settings providers, owned by
+  [`:sample:feature:settings`](../feature/settings/README.md).
 - Application identity resources: launcher mipmaps and host-specific `xml/` configuration
   (shortcuts and widget provider info), including the shortcut target package generated from the
   released application ID.
@@ -34,8 +36,9 @@ libraries with the host's own feature modules.
   `:sample:widget`.
 - Feature strings and layouts, owned by their respective `:sample:feature:*`, core, or widget
   module. Default themes, colors and backup policies come from
-  [`:library:apptoolkit`](../../library/apptoolkit/README.md); shared host artwork remains in
-  [`:sample:core:ui`](../core/ui/README.md).
+  [`:library:apptoolkit`](../../library/apptoolkit/README.md). Artwork lives with the module
+  that draws it; this module keeps only its own: the launcher foreground, the TV banner and the
+  Apps tab's selected icon.
 - Advertising configuration, including the sample's AdMob application ID and merged-manifest
   declaration, owned by [`:sample:integration:ads`](../integration/ads/README.md).
 - Route keys, owned by the feature each belongs to (`ToolkitTilesRoute`, `AppsListRoute`,
@@ -46,7 +49,7 @@ libraries with the host's own feature modules.
 ## Depends on
 
 - Every `:sample:core:*`, `:sample:feature:*` and `:sample:widget` module, including
-  `:sample:core:apptoolkit` for the host's toolkit adapter.
+  `:sample:feature:startup` for the toolkit's module graph.
 - [`:library:apptoolkit`](../../library/apptoolkit/README.md) for shared DI, `toolkitGraph { }` and
   `ShellHost`, plus the toolkit feature and integration modules it configures.
 
@@ -60,7 +63,7 @@ Nothing. This is the application entry point.
 flowchart TD
     Process[Android process] --> App[AppToolkit Application]
     App --> Koin[initializeKoin]
-    Koin --> Adapter[":sample:core:apptoolkit host modules"]
+    Koin --> Adapter[":sample:feature:startup host modules"]
     Adapter --> AppToolkit[AppToolkit module graph]
     Koin --> HostModules[App-specific data and feature bindings]
     App --> Lifecycle[Process/activity lifecycle]
@@ -84,7 +87,7 @@ flowchart TD
 
 - The application module is the only place that knows the complete runtime graph, final manifest,
   and destination set; feature modules remain unaware of their siblings.
-- Host-to-toolkit provider adaptation is isolated in `:sample:core:apptoolkit`, while this module
+- Host-to-toolkit module ordering is isolated in `:sample:feature:startup`, while this module
   retains final Koin startup and app-only configuration.
 - `ShellHost` decides the start in `resolveStart` before its first frame: the Toolkit's first-launch
   start screens while onboarding is not done, the stored start page after. The splash screen stays
@@ -111,7 +114,8 @@ flowchart TD
 ## Public contracts
 
 Not a library. Its integration surface is the host configuration and app-specific modules passed
-through the adapter in `:sample:core:apptoolkit`, plus the final manifest/resource overrides.
+through `appToolkitHostModules` in `:sample:feature:startup`, plus the final manifest/resource
+overrides.
 
 The host inherits common application attributes, backup/data-extraction rules, colors and themes
 from `:library:apptoolkit`. Android's manifest and resource merger gives this application higher
@@ -153,7 +157,8 @@ feature modules leaves rather than a chain:
   every feature it renders. In 3.0.0 the shell became `:library:shell` and the graph moved here as
   `appGraph`; `:sample:core:shell` and `:sample:core:navigation` were removed.
 - `APPS_LIST_AD_FREQUENCY` was a `buildConfigField` here, which no library module can read. It is a
-  fixed tuning value, so it became a constant in [`:sample:core:common`](../core/common/README.md).
+  fixed tuning value, so it became `AdsConstants.APPS_LIST_AD_FREQUENCY` in
+  [`:sample:integration:ads`](../integration/ads/README.md).
 
 Quick-tool repositories in `:sample:feature:tiles` intentionally stay concrete classes: each wraps
 one
