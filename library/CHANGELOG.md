@@ -35,6 +35,7 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Added hiding the app bar on scroll, for every style: `ShellSettings.hideTopBarOnScroll`, offered in the display settings, and `HideOnScrollTopBar`, `TopBarHideState` and `LocalHideTopBarOnScroll` in `:library:core:ui`, which `PageScaffold` and the shell's tab scaffold use. A large bar collapses before it slides away.
 - Added `ShellLayoutInfo.declaredContentMaxWidth`: the app's own maximum content width, whether or not the display settings lift it.
 - Added `AboutRoute`, `ThemeSettingsRoute`, `DisplaySettingsRoute`, `PrivacySettingsRoute`, `AdvancedSettingsRoute`, `DiagnosticsSettingsRoute`, `DeveloperOptionsRoute`, `StartupRoute` and `OnboardingRoute`, one key per Toolkit page.
+- Added `FrameScrollTint`, `FrameTint`, `FollowScrollWithFrameTint` and `BesideNavigation.scrollTint` to `:library:navigation`, and `TopAppBarScrollBehavior.frameTint` to `:library:core:ui`: while the navigation colour follows scrolling, the app bar on top drives it, a page's as well as a tab's.
 
 ### Changed
 
@@ -47,7 +48,7 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Moved `FirebaseOnboardingPage` and its strings from `:library:feature:onboarding` to `:library:feature:diagnostics`.
 - `StartupProvider` supplies only `requiredPermissions`, and `OnboardingProvider` only the pages; finishing onboarding enters the shell.
 - Beside a rail, an expanded rail or a permanent drawer, pages now open in the space next to the navigation instead of covering it: the navigation stays, marks the entry whose page is open, and a tab or another entry replaces the open pages. `ShellHost` draws that navigation itself, around its displays.
-- The shell's layout choices moved from the developer options to the display settings: app bar style, bottom bar style, labels, hide on scroll, navigation colour, content width, banner style, tab transition and back swipe. Each shows only when the app's graph uses it. The developer options keep the start, the forced layout, the bottom accessories and the animation speed, and `ShellPreferences.resetDeveloperOptions()` resets only those. `:library:feature:display` depends on `:library:shell`.
+- The shell's layout choices moved from the developer options to the display settings: app bar style, bottom bar style, labels, hide on scroll, navigation colour, content width, tab transition and back swipe. Each shows only when the app's graph uses it. The developer options keep the start, the forced layout, the bottom accessories and the animation speed, and `ShellPreferences.resetDeveloperOptions()` resets only those. `:library:feature:display` depends on `:library:shell`.
 - A page the rail or permanent drawer opens is drawn like a tab: a small app bar without a back button, and, when the navigation and the app bar share a colour, the tab's rounded content card. `PageScaffold` and the list-detail scene both do this.
 - The settings list shows its illustrated card, with a Get help button, beside it on wide windows while no category is open, instead of the generic placeholder.
 - `ChangelogDialog` draws the Toolkit's wavy line between releases, where the Markdown has a rule (`splitAtThematicBreaks`), instead of the Markdown renderer's flat line.
@@ -78,12 +79,16 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Removed `GeneralSettingsRoute`, `GeneralSettingsScreen`, `GeneralSettingsContentProvider`, `GeneralSettingsRepository` and `SettingsContent`; each settings category is its own page.
 - Removed `BaseActivity` from `:library:core:ui`, `Context.openActivity` from `:library:core:common`, and `GmsHostFactory` from `:library:feature:about`.
 - Removed the dependencies between feature modules, and `ALLOWED_LIBRARY_FEATURE_EDGES` with them: `checkModuleBoundaries` now rejects every feature-to-feature edge.
+- Removed the banner style setting: `BannerStyle`, `ShellSettings.bannerStyle`, `ShellPreferences.setBannerStyle` and its display settings row. The banner now shows only docked on the bottom navigation bar, and not at all beside a rail or drawer. A value already stored under `banner_style` is ignored.
 
 ### Fixed
 
 - Fixed the holiday greeting's checkbox sitting against its label and its press ripple being cut off: the row is rounded and padded, with room between the box and the text.
 - Fixed the display settings' and developer options' choice dialogs losing their top icon along with their rows' icons.
 - Fixed the tabs' floating action buttons sitting over the gesture bar once the bottom bar had hidden on scroll: they now rise by the part of the navigation bar's inset the hiding bar no longer covers.
+- Fixed clicking the tab already shown replaying its icon: an icon used for both states and set to `ToolkitIconReplayMode.Reverse` travelled back to its unselected frame while the tab stayed selected. The bar, rail and drawers no longer replay the selected tab's icon, and `AnimatedToolkitIcon` keeps a selected component on its selected frame.
+- Fixed the navigation colour not following scrolling (`NavigationTint.OnScroll`) on pages opened beside a rail or drawer, such as settings and its list-detail pages.
+- Fixed rain replacing the snow of the Christmas theme: during the Christmas season, while the Christmas palette is worn, snow falls even with the Rain weather effect, and the rain comes back after the season.
 
 ---
 

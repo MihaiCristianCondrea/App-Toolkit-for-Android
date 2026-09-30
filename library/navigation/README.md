@@ -172,7 +172,10 @@ Screens then call `LocalShellNavigator.current.navigate(key)` with any registere
   `ScreenTransition`, `ShellTransitions`, `CrossActivityBackMotion` and `ShellLayoutPolicy`.
 - The composition locals `LocalShellNavigator`, `LocalShellGraph`, `LocalPageKey`,
   `LocalPaneRole`, `LocalSelectedDetail`, `LocalShellSearch`, `LocalShellLayout`,
-  `LocalShellMotion` and `LocalBesideNavigation`, with `isTopLevelPage`. `ShellLayoutInfo`
+  `LocalShellMotion` and `LocalBesideNavigation`, with `isTopLevelPage`. While the shared colour
+  beside the navigation follows scrolling, `BesideNavigation.scrollTint` is a `FrameScrollTint`,
+  and app bars join it with `FollowScrollWithFrameTint`, saying how far to tint as a `FrameTint`:
+  the one on top decides, pages above the tabs. `ShellLayoutInfo`
   carries both the content width in force and `declaredContentMaxWidth`, the app's own limit.
 - `AppToolkitNavKey` and its keys. Their class names are part of saved state: renaming or moving
   one loses a restored back stack that held it.

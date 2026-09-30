@@ -49,18 +49,6 @@ enum class NavigationBarStyle {
     Short,
 }
 
-/** How the banner above the bottom navigation is drawn. */
-enum class BannerStyle {
-    /** [Docked] on a bottom navigation bar, [Floating] where nothing is below it: beside a rail or drawer. */
-    Automatic,
-
-    /** A card floating over the content with rounded corners and margins, like the mini player. */
-    Floating,
-
-    /** A full-width strip joined to the navigation bar. */
-    Docked,
-}
-
 /**
  * Whether the rail or permanent drawer and the app bar share one container colour on wide
  * windows, framing the content as a card.
@@ -103,7 +91,7 @@ enum class AnimationSpeed(val durationScale: Float) {
  *
  * Most are the person's layout choices, offered in the display settings of
  * `:library:feature:display` (app bar and bottom bar style, navigation colour, content width,
- * banner, tab transition, back swipe, hiding the bars on scroll). The rest are developer options, offered by
+ * tab transition, back swipe, hiding the bars on scroll). The rest are developer options, offered by
  * `:library:feature:developer` once unlocked: [startOverride], [layoutMode], [accessoryMode] and
  * [animationSpeed]. The defaults leave the app exactly as its graph declares it.
  */
@@ -121,7 +109,6 @@ data class ShellSettings(
     /** Where the next launch opens, as an index into the graph's start options; -1 as declared. */
     val startOverride: Int = -1,
     val navigationBarStyle: NavigationBarStyle = NavigationBarStyle.Standard,
-    val bannerStyle: BannerStyle = BannerStyle.Automatic,
     val navigationTint: NavigationTint = NavigationTint.Always,
     /**
      * Whether the app bar slides away as content scrolls down, whatever its style, and comes back

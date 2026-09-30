@@ -41,7 +41,6 @@
     <string name="shell_hide_top_bar_summary">Scompare quando il contenuto scorre verso il basso, una barra grande dopo essersi ridotta, e torna appena scorre verso l\'alto</string>
     <string name="shell_limit_width">Limita la larghezza del contenuto nelle finestre grandi</string>
     <string name="shell_limit_width_summary">Centra il contenuto con margini, come un sito web, oltre la larghezza massima della regola di layout</string>
-    <string name="shell_banner_style">Banner</string>
     <string name="shell_tab_transition">Tra le schede</string>
     <string name="shell_back_edge">Scorrimento indietro dal bordo destro</string>
     <string name="shell_as_declared">Come dichiara ogni schermata</string>
@@ -55,9 +54,6 @@
     <string name="shell_navigation_tint_none">Superficie; la barra dell\'app si colora durante lo scorrimento</string>
     <string name="shell_navigation_tint_always">Colorate insieme, contenuto in una scheda</string>
     <string name="shell_navigation_tint_on_scroll">Colorate insieme appena il contenuto scorre</string>
-    <string name="shell_banner_automatic">Agganciato alla barra inferiore, fluttuante accanto alla barra laterale</string>
-    <string name="shell_banner_floating">Sempre fluttuante, come il lettore</string>
-    <string name="shell_banner_docked">Sempre agganciato</string>
     <string name="shell_back_edge_system">Come Android: la pagina si riduce sul posto</string>
     <string name="shell_back_edge_follow">Segue il dito, speculare al bordo sinistro (predefinito)</string>
     <string name="shell_transition_directional">Scorrimento direzionale</string>

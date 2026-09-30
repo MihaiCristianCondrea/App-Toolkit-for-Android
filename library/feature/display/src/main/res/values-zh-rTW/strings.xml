@@ -41,7 +41,6 @@
     <string name="shell_hide_top_bar_summary">內容向下捲動時會滑出畫面（大型列會先收合），向上捲動時立即返回</string>
     <string name="shell_limit_width">在大型視窗中限制內容寬度</string>
     <string name="shell_limit_width_summary">超過版面配置政策的寬度上限時，像網站一樣以邊界將內容置中</string>
-    <string name="shell_banner_style">橫幅</string>
     <string name="shell_tab_transition">分頁之間</string>
     <string name="shell_back_edge">從右側邊緣滑動返回</string>
     <string name="shell_as_declared">依各畫面宣告</string>
@@ -55,9 +54,6 @@
     <string name="shell_navigation_tint_none">表面；捲動時應用程式列會著色</string>
     <string name="shell_navigation_tint_always">一同著色，內容顯示在卡片中</string>
     <string name="shell_navigation_tint_on_scroll">內容捲動後一同著色</string>
-    <string name="shell_banner_automatic">在底部列時停駐，在邊欄旁時浮動</string>
-    <string name="shell_banner_floating">一律浮動，如同播放器</string>
-    <string name="shell_banner_docked">一律停駐</string>
     <string name="shell_back_edge_system">如同 Android：頁面在原地縮小</string>
     <string name="shell_back_edge_follow">跟隨手指，與左側邊緣對稱 (預設)</string>
     <string name="shell_transition_directional">方向性滑動</string>

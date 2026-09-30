@@ -46,7 +46,9 @@ import androidx.compose.ui.graphics.Color
  *
  * A repeated click restarts the animation from its first frame by default. Drawables that morph
  * between two distinct shapes can instead travel back by declaring
- * [ToolkitIconReplayMode.Reverse] on the [ToolkitIcon.AnimatedVector].
+ * [ToolkitIconReplayMode.Reverse] on the [ToolkitIcon.AnimatedVector]. They only travel back while
+ * the component is unselected: a selected one stays on its selected frame, so clicking a selected
+ * tab again never draws it unselected.
  *
  * An icon that declares [ToolkitIcon.Animated.loop] opts out of all of this once its loop is
  * running: it animates on its own for as long as it is composed, so clicks and selection no longer
@@ -148,6 +150,10 @@ fun AnimatedToolkitIcon(
 
                 displayedIcon.replayMode == ToolkitIconReplayMode.Restart ->
                     restingAtEnd || clickCount > 0
+
+                // A selected component rests on its selected frame: travelling back would draw it
+                // unselected while it is still selected.
+                selected -> restingAtEnd
 
                 clickCount > 0 -> !atEnd
 

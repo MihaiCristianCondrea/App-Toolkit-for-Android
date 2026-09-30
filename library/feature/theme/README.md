@@ -65,7 +65,8 @@ What people see:
   - Automatic, the default: snow with the Christmas palette, as described above.
   - Snow: snow falls over the app, whatever the palette and the season.
   - Rain: rain falls over the app, whatever the palette. It gusts, comes and goes in showers,
-    and splashes where it lands.
+    and splashes where it lands. While the Christmas palette is worn during the Christmas season,
+    snow falls instead, and the rain comes back once the season is over.
   - Off: nothing falls, and the Christmas palette stays.
 
   The choice is stored with `SeasonalThemeRepository.setWeatherEffect` as a `WeatherEffect`. The

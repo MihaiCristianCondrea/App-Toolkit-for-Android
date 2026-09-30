@@ -33,11 +33,8 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector1D
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animate
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -55,11 +52,9 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -87,7 +82,6 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -112,7 +106,6 @@ import androidx.navigation3.runtime.rememberDecoratedNavEntries
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.scene.Scene
 import androidx.navigation3.scene.SinglePaneSceneStrategy
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.BannerStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationTint
@@ -124,6 +117,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.ShellTopAppBar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.TopBarSearch
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.rememberTopBarHideState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.frameTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.rememberTopBarScrollBehavior
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.resetTo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.topBarInsets
@@ -138,6 +132,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRol
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ContentCardShape
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FollowScrollWithFrameTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalShellLayout
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.LocalShellMotion
@@ -148,7 +143,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.ShellE
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.topShellInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellBackHandler
 import androidx.navigationevent.NavigationEvent
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.LocalShowBottomBarLabels
@@ -170,7 +164,8 @@ val LocalShellChrome = staticCompositionLocalOf { ShellChromeController(showsMen
 
 /**
  * The shell: app bar, tab content, and the navigation surface [LocalShellLayout] asks for, with
- * the banner and player docked above the bottom edge.
+ * the player docked above the bottom edge and the banner on the bottom navigation bar, the only
+ * place it shows.
  *
  * The player sits under the drawer and the modal rail, so opening either covers it; on a permanent
  * drawer it docks beside the drawer and covers it only when expanded.
@@ -258,7 +253,6 @@ internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
             playerExpansion = { playerExpansion.value },
             onBottomDockChange = { bottomDock = it },
             tinted = tinted,
-            followScrollTint = if (tintMode == NavigationTint.OnScroll) frame?.tint else null,
             bottomBar = bottomBar,
         )
     }
@@ -293,11 +287,9 @@ internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
                 ),
         ) {
             if (wide) {
-                body {
-                    Column(Modifier.windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Bottom))) {
-                        BannerSlot(banner, visible = !playerActive, settings.bannerStyle, navigationBelow = false)
-                    }
-                }
+                // The banner docks on the bottom navigation bar only: beside a rail or drawer
+                // there is none to dock on, so the app shows none.
+                body {}
                 playerOverlay()
             } else {
                 ModalNavigationDrawer(
@@ -312,7 +304,7 @@ internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
                     Box(Modifier.fillMaxSize()) {
                         body {
                             Column {
-                                BannerSlot(banner, visible = !playerActive, settings.bannerStyle, navigationBelow = true)
+                                BannerSlot(banner, visible = !playerActive)
                                 ShellNavigationBar(
                                     tabs = graph.tabs,
                                     selectedIndex = highlightedTab,
@@ -387,7 +379,6 @@ private fun ShellBody(
     playerExpansion: () -> Float,
     onBottomDockChange: (Dp) -> Unit,
     tinted: Boolean,
-    followScrollTint: Animatable<Float, AnimationVector1D>?,
     bottomBar: @Composable () -> Unit,
 ) {
     val settings = LocalShellSettings.current
@@ -421,25 +412,9 @@ private fun ShellBody(
         if (offset != 0f) animate(offset, 0f) { value, _ -> bottomScroll.state.heightOffset = value }
     }
 
-    // The shared frame colour follows the app bar the way Material tints the bar itself: a large
-    // bar blends as it collapses, the others switch, with a spring, once content scrolls under.
-    if (followScrollTint != null) {
-        LaunchedEffect(topScroll, style, followScrollTint) {
-            snapshotFlow {
-                when {
-                    style.isLarge -> topScroll.state.collapsedFraction
-                    topScroll.state.overlappedFraction > 0.01f -> 1f
-                    else -> 0f
-                }
-            }.collectLatest { target ->
-                if (style.isLarge) {
-                    followScrollTint.snapTo(target)
-                } else {
-                    followScrollTint.animateTo(target, spring(stiffness = Spring.StiffnessMediumLow))
-                }
-            }
-        }
-    }
+    // Beside the navigation, the shared frame colour can follow this bar; a page the navigation
+    // opens takes over from it while shown.
+    FollowScrollWithFrameTint(underneath = true) { topScroll.frameTint(style) }
 
     val title = when {
         isChild -> destination.title?.invoke(topKey).orEmpty()
@@ -690,44 +665,22 @@ private fun tabEntry(
 }
 
 /**
- * The app's banner, in the container its [style] asks for: a card floating over the content with
- * the mini player's corners and margins, or a strip joined to the navigation bar. Automatically,
- * it docks onto a bottom navigation bar and floats where [navigationBelow] is false, beside a
- * rail or drawer. The banner itself draws no background.
+ * The app's banner, docked on the bottom navigation bar as a full-width strip joined to it. It
+ * draws no background of its own.
  */
 @Composable
-private fun BannerSlot(
-    banner: (@Composable () -> Unit)?,
-    visible: Boolean,
-    style: BannerStyle,
-    navigationBelow: Boolean,
-) {
+private fun BannerSlot(banner: (@Composable () -> Unit)?, visible: Boolean) {
     if (banner == null) return
-    val floating = style == BannerStyle.Floating || (style == BannerStyle.Automatic && !navigationBelow)
     AnimatedVisibility(
         visible = visible,
         enter = expandVertically() + fadeIn(),
         exit = shrinkVertically() + fadeOut(),
     ) {
-        when (floating) {
-            true -> Surface(
-                shape = RoundedCornerShape(20.dp),
-                color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                tonalElevation = 3.dp,
-                shadowElevation = 6.dp,
-                modifier = Modifier
-                    .padding(horizontal = 12.dp, vertical = 8.dp)
-                    .fillMaxWidth(),
-            ) {
-                banner()
-            }
-
-            false -> Surface(
-                color = MaterialTheme.colorScheme.surfaceContainer,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                banner()
-            }
+        Surface(
+            color = MaterialTheme.colorScheme.surfaceContainer,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            banner()
         }
     }
 }

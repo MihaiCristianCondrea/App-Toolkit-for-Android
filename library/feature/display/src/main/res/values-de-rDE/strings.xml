@@ -41,7 +41,6 @@
     <string name="shell_hide_top_bar_summary">Gleitet weg, wenn der Inhalt nach unten scrollt, eine große Leiste erst nach dem Einklappen, und kehrt zurück, sobald er nach oben scrollt</string>
     <string name="shell_limit_width">Inhaltsbreite auf großen Fenstern begrenzen</string>
     <string name="shell_limit_width_summary">Inhalt mit Rändern zentrieren, wie eine Website, ab der maximalen Breite der Layoutrichtlinie</string>
-    <string name="shell_banner_style">Banner</string>
     <string name="shell_tab_transition">Zwischen Tabs</string>
     <string name="shell_back_edge">Zurückwischen vom rechten Rand</string>
     <string name="shell_as_declared">Wie jeder Bildschirm es festlegt</string>
@@ -55,9 +54,6 @@
     <string name="shell_navigation_tint_none">Oberfläche; die App-Leiste färbt sich beim Scrollen</string>
     <string name="shell_navigation_tint_always">Gemeinsam gefärbt, Inhalt in einer Karte</string>
     <string name="shell_navigation_tint_on_scroll">Gemeinsam gefärbt, sobald der Inhalt scrollt</string>
-    <string name="shell_banner_automatic">An der unteren Leiste angedockt, schwebend neben einer seitlichen Leiste</string>
-    <string name="shell_banner_floating">Immer schwebend, wie der Player</string>
-    <string name="shell_banner_docked">Immer angedockt</string>
     <string name="shell_back_edge_system">Wie Android: die Seite schrumpft an Ort und Stelle</string>
     <string name="shell_back_edge_follow">Folgt dem Finger, gespiegelt zum linken Rand (Standard)</string>
     <string name="shell_transition_directional">Gerichtetes Schieben</string>

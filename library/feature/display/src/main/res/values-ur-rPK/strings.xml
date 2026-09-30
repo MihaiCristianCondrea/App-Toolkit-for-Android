@@ -41,7 +41,6 @@
     <string name="shell_hide_top_bar_summary">مواد نیچے اسکرول ہونے پر ہٹ جاتا ہے، بڑا بار سکڑنے کے بعد، اور اوپر اسکرول کرتے ہی واپس آ جاتا ہے</string>
     <string name="shell_limit_width">بڑی ونڈوز میں مواد کی چوڑائی محدود کریں</string>
     <string name="shell_limit_width_summary">لے آؤٹ پالیسی کی زیادہ سے زیادہ چوڑائی سے آگے، ویب سائٹ کی طرح حاشیوں کے ساتھ مواد کو درمیان میں رکھیں</string>
-    <string name="shell_banner_style">بینر</string>
     <string name="shell_tab_transition">ٹیبز کے درمیان</string>
     <string name="shell_back_edge">دائیں کنارے سے واپس سوائپ</string>
     <string name="shell_as_declared">جیسا ہر اسکرین مقرر کرتی ہے</string>
@@ -55,9 +54,6 @@
     <string name="shell_navigation_tint_none">سطح؛ اسکرول کرنے پر ایپ بار رنگین ہوتا ہے</string>
     <string name="shell_navigation_tint_always">ایک ساتھ رنگین، مواد ایک کارڈ میں</string>
     <string name="shell_navigation_tint_on_scroll">مواد اسکرول ہوتے ہی ایک ساتھ رنگین</string>
-    <string name="shell_banner_automatic">نچلے بار پر جڑا ہوا، ریل کے ساتھ تیرتا ہوا</string>
-    <string name="shell_banner_floating">ہمیشہ تیرتا ہوا، پلیئر کی طرح</string>
-    <string name="shell_banner_docked">ہمیشہ جڑا ہوا</string>
     <string name="shell_back_edge_system">Android کی طرح: صفحہ اپنی جگہ پر سکڑتا ہے</string>
     <string name="shell_back_edge_follow">انگلی کے ساتھ چلتا ہے، بائیں کنارے کی طرح (ڈیفالٹ)</string>
     <string name="shell_transition_directional">سمت والی سلائیڈ</string>

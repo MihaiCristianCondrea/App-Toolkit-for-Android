@@ -41,7 +41,6 @@
     <string name="shell_hide_top_bar_summary">Disparaît quand le contenu défile vers le bas, une grande barre une fois réduite, et revient dès qu\'il défile vers le haut</string>
     <string name="shell_limit_width">Limiter la largeur du contenu sur les grandes fenêtres</string>
     <string name="shell_limit_width_summary">Centrer le contenu avec des marges, comme un site web, au-delà de la largeur maximale de la règle de disposition</string>
-    <string name="shell_banner_style">Bannière</string>
     <string name="shell_tab_transition">Entre les onglets</string>
     <string name="shell_back_edge">Balayage retour depuis le bord droit</string>
     <string name="shell_as_declared">Comme chaque écran le déclare</string>
@@ -55,9 +54,6 @@
     <string name="shell_navigation_tint_none">Surface ; la barre d\'application se colore au défilement</string>
     <string name="shell_navigation_tint_always">Colorés ensemble, contenu dans une carte</string>
     <string name="shell_navigation_tint_on_scroll">Colorés ensemble dès que le contenu défile</string>
-    <string name="shell_banner_automatic">Ancrée sur une barre inférieure, flottante à côté d\'un rail</string>
-    <string name="shell_banner_floating">Toujours flottante, comme le lecteur</string>
-    <string name="shell_banner_docked">Toujours ancrée</string>
     <string name="shell_back_edge_system">Comme Android : la page se réduit sur place</string>
     <string name="shell_back_edge_follow">Suit le doigt, en miroir du bord gauche (par défaut)</string>
     <string name="shell_transition_directional">Glissement directionnel</string>

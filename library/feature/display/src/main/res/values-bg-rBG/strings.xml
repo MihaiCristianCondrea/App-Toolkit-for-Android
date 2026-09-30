@@ -41,7 +41,6 @@
     <string name="shell_hide_top_bar_summary">Изчезва, когато съдържанието се превърта надолу, голямата лента след като се свие, и се връща щом се превърти нагоре</string>
     <string name="shell_limit_width">Ограничаване на ширината на съдържанието в големи прозорци</string>
     <string name="shell_limit_width_summary">Центриране на съдържанието с полета, като уебсайт, над максималната ширина на правилата за оформление</string>
-    <string name="shell_banner_style">Банер</string>
     <string name="shell_tab_transition">Между разделите</string>
     <string name="shell_back_edge">Плъзгане назад от десния край</string>
     <string name="shell_as_declared">Както задава всеки екран</string>
@@ -55,9 +54,6 @@
     <string name="shell_navigation_tint_none">Повърхност; лентата на приложението се оцветява при превъртане</string>
     <string name="shell_navigation_tint_always">Оцветени заедно, съдържание в карта</string>
     <string name="shell_navigation_tint_on_scroll">Оцветени заедно, щом съдържанието се превърти</string>
-    <string name="shell_banner_automatic">Закачен за долната лента, плаващ до страничната лента</string>
-    <string name="shell_banner_floating">Винаги плаващ, като плейъра</string>
-    <string name="shell_banner_docked">Винаги закачен</string>
     <string name="shell_back_edge_system">Като Android: страницата се свива на място</string>
     <string name="shell_back_edge_follow">Следва пръста, огледално на левия край (по подразбиране)</string>
     <string name="shell_transition_directional">Насочено плъзгане</string>

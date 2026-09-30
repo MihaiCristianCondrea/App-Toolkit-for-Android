@@ -41,7 +41,6 @@
     <string name="shell_hide_top_bar_summary">Slides away as the content scrolls down, a large bar once it has collapsed, and comes back as soon as it scrolls up</string>
     <string name="shell_limit_width">Limit content width on large windows</string>
     <string name="shell_limit_width_summary">Center content with margins, like a website, past the layout policy\'s maximum width</string>
-    <string name="shell_banner_style">Banner</string>
     <string name="shell_tab_transition">Between tabs</string>
     <string name="shell_back_edge">Back swipe from the right edge</string>
     <string name="shell_as_declared">As each screen declares</string>
@@ -55,9 +54,6 @@
     <string name="shell_navigation_tint_none">Surface; the app bar tints on scroll</string>
     <string name="shell_navigation_tint_always">Tinted together, content in a card</string>
     <string name="shell_navigation_tint_on_scroll">Tinted together once content scrolls</string>
-    <string name="shell_banner_automatic">Docked on a bottom bar, floating beside a rail</string>
-    <string name="shell_banner_floating">Always floating, like the player</string>
-    <string name="shell_banner_docked">Always docked</string>
     <string name="shell_back_edge_system">As Android: the page shrinks in place</string>
     <string name="shell_back_edge_follow">Follows the finger, mirroring the left edge (default)</string>
     <string name="shell_transition_directional">Directional slide</string>

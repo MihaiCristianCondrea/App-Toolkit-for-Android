@@ -73,7 +73,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarS
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.BackEdgeStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.BannerStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.InMemoryShellPreferences
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationTint
@@ -147,12 +146,6 @@ class ShellScreenshotTest {
     fun phone_center_aligned_top_bar() {
         show(ShellSettings(topBarOverride = TopBarOverride.CenterAligned))
         capture("phone_center_aligned")
-    }
-
-    @Test
-    fun phone_docked_banner() {
-        show(ShellSettings(bannerStyle = BannerStyle.Docked))
-        capture("phone_docked_banner")
     }
 
     @Test

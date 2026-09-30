@@ -25,7 +25,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.Displa
 
 /**
  * The display settings rows the settings search finds, under the same conditions the page shows
- * them: nothing about a bottom bar without tabs, no banner style without a banner. The content
+ * them: nothing about a bottom bar without tabs. The content
  * width row depends on the window's layout policy, which the search cannot see, so it is left out.
  */
 internal val displaySettingsSearch = SettingsSearchProvider { graph ->
@@ -39,7 +39,6 @@ internal val displaySettingsSearch = SettingsSearchProvider { graph ->
         entry(R.string.shell_top_bar),
         entry(R.string.shell_hide_top_bar, R.string.shell_hide_top_bar_summary),
         entry(R.string.shell_navigation_tint).takeIf { hasTabs },
-        entry(R.string.shell_banner_style).takeIf { graph.banner != null },
         entry(R.string.shell_navigation_bar).takeIf { hasTabs },
         entry(R.string.show_labels_on_bottom_bar, R.string.summary_preference_settings_show_labels_on_bottom_bar)
             .takeIf { hasTabs },

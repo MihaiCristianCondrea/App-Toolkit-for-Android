@@ -23,7 +23,8 @@ drawer and transition the graph describes. It is the chrome around the navigatio
   [Pages beside the navigation](#pages-beside-the-navigation).
 - The chrome, in `chrome`: app bar (with the search field of searchable tabs and the overflow
   menu), navigation bar, rail, expanded rail, modal and permanent drawers with the app's header,
-  banner slot, docked player, and the inner display. `ShellChromeController` and
+  banner slot, docked on the bottom navigation bar and nowhere else, docked player, and the inner
+  display. `ShellChromeController` and
   `LocalShellChrome` let a page's own frame open the navigation.
 - The shell's developer settings, in `settings`: `ShellSettings`, `ShellPreferences`, its DataStore
   and `InMemoryShellPreferences` for tests.
@@ -189,7 +190,12 @@ JUnit 5. They start Koin with a `CommonDataStore`, which `AppTheme` reads.
 - **Wide windows can frame the content.** Beside a rail or a permanent drawer, the navigation and
   the app bar can share one colour with the content in a card (`NavigationTint.Always`, the
   default), take it only once content scrolls (`OnScroll`), or keep Material's own behaviour
-  (`None`).
+  (`None`). With `OnScroll`, the app bar on top drives the colour: the tab's, or that of the page
+  the navigation opened beside it, list-detail pages included. Each joins through
+  `FollowScrollWithFrameTint` in `:library:navigation`, and the tab's bar takes over again when the
+  page leaves.
+- **The banner shows on the bottom navigation bar only.** It docks there as a strip joined to the
+  bar. Beside a rail or a drawer there is no bar to dock on, so the app shows no banner.
 - **Navigating recomposes what changed.** The chrome keeps its callbacks and the
   `LocalShellChrome` controller across recompositions: that local is static, so a new controller
   would recompose every tab screen under it on each navigation. Animated values (the frame tint, the

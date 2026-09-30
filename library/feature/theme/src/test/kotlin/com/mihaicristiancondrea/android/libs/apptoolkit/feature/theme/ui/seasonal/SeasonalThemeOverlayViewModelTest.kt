@@ -110,7 +110,7 @@ class SeasonalThemeOverlayViewModelTest {
 
     @Test
     fun `the rain weather effect rains over any palette instead of snowing`() = runTest {
-        val viewModel = viewModel(today = christmas)
+        val viewModel = viewModel(today = july)
 
         seasonalState.value = SeasonalThemeState(unlocked = true, weatherEffect = WeatherEffect.Rain)
         assertTrue(viewModel.uiState.value.data!!.showRain)
@@ -118,6 +118,24 @@ class SeasonalThemeOverlayViewModelTest {
 
         themeState.value = themeWith(StaticPaletteIds.GOOGLE_BLUE, dynamic = true)
         assertTrue(viewModel.uiState.value.data!!.showRain)
+    }
+
+    @Test
+    fun `the christmas theme turns rain into snow for the season`() = runTest {
+        seasonalState.value = SeasonalThemeState(unlocked = true, weatherEffect = WeatherEffect.Rain)
+
+        val holidays = viewModel(today = christmas)
+        assertTrue(holidays.uiState.value.data!!.showSnowfall)
+        assertFalse(holidays.uiState.value.data!!.showRain)
+
+        themeState.value = themeWith(StaticPaletteIds.GOOGLE_BLUE, dynamic = false)
+        assertTrue(holidays.uiState.value.data!!.showRain, "another palette keeps the rain")
+        assertFalse(holidays.uiState.value.data!!.showSnowfall)
+
+        themeState.value = themeWith(StaticPaletteIds.CHRISTMAS, dynamic = false)
+        val afterwards = viewModel(today = july)
+        assertTrue(afterwards.uiState.value.data!!.showRain, "the season is over")
+        assertFalse(afterwards.uiState.value.data!!.showSnowfall)
     }
 
     @Test

@@ -216,7 +216,7 @@ fun DisplaySettingsScreen(
     }
 
     // The shell's layout choices, offered only where the app's graph uses them: an app without
-    // tabs has no bottom bar to style, one without a banner no banner to place.
+    // tabs has no bottom bar to style.
     val graph = LocalShellGraph.current
     val shellSettings = LocalShellSettings.current
     val shellPreferences = LocalShellPreferences.current
@@ -264,7 +264,6 @@ fun DisplaySettingsScreen(
         if (hasTabs) add { modifier -> shell.NavigationTint(modifier) }
         // Only an app that sets a maximum content width has one to lift.
         if (appLimitsWidth) add { modifier -> shell.ContentWidth(modifier) }
-        if (graph.banner != null) add { modifier -> shell.BannerStyle(modifier) }
     }
 
     val navigationRows: List<@Composable (Modifier) -> Unit> = buildList {

@@ -54,7 +54,8 @@ import kotlinx.coroutines.launch
  * egg: a person without it who kept the Christmas palette gets the colors, not snow in July.
  * [WeatherEffect.Snow] and [WeatherEffect.Rain] fall over every palette, and [WeatherEffect.Off]
  * lets nothing fall. They are picked from the theme settings' app bar, which only the easter egg
- * opens, so snow and rain on any palette need it too.
+ * opens, so snow and rain on any palette need it too. Rain gives way to snow while the Christmas
+ * palette is worn during the Christmas season, and comes back once the season is over.
  *
  * @param firebaseController Reports how the holiday greeting was answered.
  * @param today Supplies the local date, so tests can pick the season.
@@ -84,13 +85,18 @@ class SeasonalThemeOverlayViewModel(
         }
 
         combine(seasonal.state, theme.preferencesState) { seasonalState, themeState ->
-            val effect = seasonalState.weatherEffect
-            val christmasSnow = effect == WeatherEffect.Automatic &&
-                !themeState.dynamicColors &&
-                themeState.staticPaletteId == StaticPaletteIds.CHRISTMAS &&
-                (seasonalState.unlocked || today().isChristmasSeason)
-            val showSnowfall = christmasSnow || (effect == WeatherEffect.Snow && seasonalState.unlocked)
-            val showRain = effect == WeatherEffect.Rain && seasonalState.unlocked
+            val unlocked = seasonalState.unlocked
+            val christmasOnScreen = !themeState.dynamicColors &&
+                themeState.staticPaletteId == StaticPaletteIds.CHRISTMAS
+            val holidaySnow = christmasOnScreen && today().isChristmasSeason
+            val showSnowfall = when (seasonalState.weatherEffect) {
+                WeatherEffect.Automatic -> holidaySnow || (christmasOnScreen && unlocked)
+                WeatherEffect.Snow -> unlocked
+                // The Christmas theme brings its snow even to someone who picked rain.
+                WeatherEffect.Rain -> holidaySnow
+                WeatherEffect.Off -> false
+            }
+            val showRain = seasonalState.weatherEffect == WeatherEffect.Rain && unlocked && !holidaySnow
             Triple(showSnowfall, showRain, themeState.themeMode)
         }.distinctUntilChanged().onEach { (showSnowfall, showRain, themeMode) ->
             update {

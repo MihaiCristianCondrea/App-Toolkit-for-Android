@@ -41,7 +41,6 @@
     <string name="shell_hide_top_bar_summary">Glider undan när innehållet rullar nedåt, ett stort fält när det har fällts ihop, och kommer tillbaka så fort det rullar uppåt</string>
     <string name="shell_limit_width">Begränsa innehållets bredd i stora fönster</string>
     <string name="shell_limit_width_summary">Centrera innehållet med marginaler, som en webbplats, utöver layoutpolicyns maximala bredd</string>
-    <string name="shell_banner_style">Banner</string>
     <string name="shell_tab_transition">Mellan flikar</string>
     <string name="shell_back_edge">Svep tillbaka från högerkanten</string>
     <string name="shell_as_declared">Som varje skärm anger</string>
@@ -55,9 +54,6 @@
     <string name="shell_navigation_tint_none">Yta; appfältet färgas vid rullning</string>
     <string name="shell_navigation_tint_always">Färgade tillsammans, innehållet på ett kort</string>
     <string name="shell_navigation_tint_on_scroll">Färgade tillsammans när innehållet rullar</string>
-    <string name="shell_banner_automatic">Dockad vid ett nedre fält, flytande bredvid ett sidofält</string>
-    <string name="shell_banner_floating">Alltid flytande, som spelaren</string>
-    <string name="shell_banner_docked">Alltid dockad</string>
     <string name="shell_back_edge_system">Som Android: sidan krymper på plats</string>
     <string name="shell_back_edge_follow">Följer fingret, speglat mot vänsterkanten (standard)</string>
     <string name="shell_transition_directional">Riktad glidning</string>

@@ -79,7 +79,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalView
@@ -105,6 +109,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.sty
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ContentCardShape
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FollowScrollWithFrameTint
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FrameTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalBesideNavigation
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.isTopLevelPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.LocalShellMotion
@@ -277,6 +283,16 @@ private fun <T : Any> ListDetailLayout(
         val beside = LocalBesideNavigation.current
         val topLevel = framed && isTopLevelPage(listEntry.pageChrome?.key)
         val carded = topLevel && beside?.tinted == true
+        // The bar spans both panes, so the navigation's shared colour follows whichever of them
+        // has content scrolled under it. A new detail starts at its top.
+        val listScroll = remember { PaneScrollOffset() }
+        val detailScroll = remember { PaneScrollOffset() }
+        LaunchedEffect(detailEntry?.contentKey) { detailScroll.offset = 0f }
+        if (framed) {
+            FollowScrollWithFrameTint {
+                if (listScroll.scrolledUnder || detailScroll.scrolledUnder) FrameTint.Full else FrameTint.None
+            }
+        }
         Column(
             Modifier
                 .fillMaxSize()
@@ -298,7 +314,7 @@ private fun <T : Any> ListDetailLayout(
                     .weight(1f)
                     .then(if (carded) Modifier.clip(ContentCardShape).background(MaterialTheme.colorScheme.surface) else Modifier),
             ) {
-                Box(Modifier.width(listWidth).fillMaxHeight()) {
+                Box(Modifier.width(listWidth).fillMaxHeight().nestedScroll(listScroll)) {
                     CompositionLocalProvider(
                         LocalPaneRole provides PaneRole.List,
                         LocalSelectedDetail provides detailEntry?.contentKey,
@@ -343,7 +359,8 @@ private fun <T : Any> ListDetailLayout(
                         Modifier
                             .wrapContentWidth(Alignment.Start, unbounded = true)
                             .requiredWidth(detailWidth)
-                            .fillMaxHeight(),
+                            .fillMaxHeight()
+                            .nestedScroll(detailScroll),
                     ) {
                         CompositionLocalProvider(LocalPaneRole provides PaneRole.Detail) {
                             AnimatedContent(
@@ -367,6 +384,23 @@ private fun <T : Any> ListDetailLayout(
                 }
             }
         }
+    }
+}
+
+/**
+ * How far a pane's content has scrolled from its top, as Material's pinned app bar counts it: what
+ * the content consumed, back to zero once it is pulled past its top.
+ */
+private class PaneScrollOffset : NestedScrollConnection {
+    var offset: Float by mutableFloatStateOf(0f)
+
+    /** Whether content has scrolled under the app bar. */
+    val scrolledUnder: Boolean
+        get() = offset < -1f
+
+    override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
+        offset = if (consumed.y == 0f && available.y > 0f) 0f else offset + consumed.y
+        return Offset.Zero
     }
 }
 

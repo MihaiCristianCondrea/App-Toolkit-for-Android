@@ -38,12 +38,19 @@
 - The app bar can hide as you scroll too, in Display settings, so the whole screen makes room for the content.
 - The ad above the bottom navigation is back, and messages such as a consent form failing to load now appear above the navigation bar instead of not at all.
 
+### Removed
+
+- The banner setting is gone: the ad shows only above the bottom navigation bar, and not at all next to the side navigation on tablets.
+
 ### Fixed
 
 - The holiday greeting's checkbox no longer sits against its text, and its ripple is no longer cut off.
 - The favourite star in an app's details now fills and empties as you tap it, as it does on the app's card.
 - The display settings dialogs have their icons again.
 - The floating button no longer slips under the gesture bar when the bottom bar hides as you scroll.
+- Tapping the tab you are already on no longer plays its icon backwards or shows it unselected.
+- On tablets, the side navigation now takes its colour as you scroll on Settings, Components and every other page, not only on the tabs, when set to change colour on scroll.
+- The Christmas theme brings its snow even if you picked rain, and the rain comes back after the holidays.
 
 ---
 

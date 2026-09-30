@@ -41,7 +41,6 @@
     <string name="shell_hide_top_bar_summary">Trượt đi khi nội dung cuộn xuống, thanh lớn sau khi thu gọn, và quay lại ngay khi cuộn lên</string>
     <string name="shell_limit_width">Giới hạn chiều rộng nội dung trên cửa sổ lớn</string>
     <string name="shell_limit_width_summary">Căn giữa nội dung với lề, như một trang web, khi vượt quá chiều rộng tối đa của chính sách bố cục</string>
-    <string name="shell_banner_style">Biểu ngữ</string>
     <string name="shell_tab_transition">Giữa các thẻ</string>
     <string name="shell_back_edge">Vuốt quay lại từ cạnh phải</string>
     <string name="shell_as_declared">Như mỗi màn hình khai báo</string>
@@ -55,9 +54,6 @@
     <string name="shell_navigation_tint_none">Bề mặt; thanh ứng dụng đổi màu khi cuộn</string>
     <string name="shell_navigation_tint_always">Tô màu cùng nhau, nội dung trong thẻ</string>
     <string name="shell_navigation_tint_on_scroll">Tô màu cùng nhau khi nội dung cuộn</string>
-    <string name="shell_banner_automatic">Gắn vào thanh dưới cùng, nổi cạnh thanh bên</string>
-    <string name="shell_banner_floating">Luôn nổi, như trình phát</string>
-    <string name="shell_banner_docked">Luôn gắn</string>
     <string name="shell_back_edge_system">Như Android: trang thu nhỏ tại chỗ</string>
     <string name="shell_back_edge_follow">Theo ngón tay, đối xứng với cạnh trái (mặc định)</string>
     <string name="shell_transition_directional">Trượt theo hướng</string>

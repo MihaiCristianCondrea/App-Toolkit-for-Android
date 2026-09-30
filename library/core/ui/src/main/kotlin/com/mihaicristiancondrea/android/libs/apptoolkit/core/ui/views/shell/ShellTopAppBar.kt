@@ -56,6 +56,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FrameTint
 
 /**
  * A style that replaces every destination's own, set from the developer options to try one bar
@@ -84,6 +85,18 @@ fun rememberTopBarScrollBehavior(style: TopBarStyle): TopAppBarScrollBehavior {
         }
     }
     return collapsing
+}
+
+/**
+ * How far the navigation's shared colour should follow this bar, the way Material tints the bar
+ * itself: a large bar blends as it collapses, the others switch once content scrolls under them.
+ * Read it inside `FollowScrollWithFrameTint`.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+fun TopAppBarScrollBehavior.frameTint(style: TopBarStyle): FrameTint = when {
+    style.isLarge -> FrameTint(amount = state.collapsedFraction, snap = true)
+    state.overlappedFraction > 0.01f -> FrameTint.Full
+    else -> FrameTint.None
 }
 
 /**

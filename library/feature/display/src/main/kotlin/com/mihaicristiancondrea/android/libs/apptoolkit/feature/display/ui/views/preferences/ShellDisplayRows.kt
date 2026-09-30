@@ -22,7 +22,6 @@ import androidx.compose.material.icons.outlined.CallToAction
 import androidx.compose.material.icons.outlined.FormatColorFill
 import androidx.compose.material.icons.outlined.SwapHoriz
 import androidx.compose.material.icons.outlined.Swipe
-import androidx.compose.material.icons.outlined.ViewDay
 import androidx.compose.material.icons.outlined.Web
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -33,7 +32,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.TabTransitionStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.BackEdgeStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.BannerStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellPreferences
@@ -92,17 +90,6 @@ internal class ShellDisplayRows(
         summary = stringResource(R.string.shell_limit_width_summary),
         checked = settings.limitContentWidth,
         onCheckedChange = { scope.launch { preferences.setLimitContentWidth(it) } },
-    )
-
-    @Composable
-    fun BannerStyle(modifier: Modifier) = ChoicePreferenceItem(
-        title = stringResource(R.string.shell_banner_style),
-        options = BannerStyle.entries,
-        selected = settings.bannerStyle,
-        optionLabel = { bannerStyleLabel(it) },
-        onSelect = { scope.launch { preferences.setBannerStyle(it) } },
-        dialogIcon = Icons.Outlined.ViewDay,
-        modifier = modifier,
     )
 
     @Composable
@@ -174,15 +161,6 @@ private fun navigationTintLabel(value: NavigationTint): String = stringResource(
         NavigationTint.None -> R.string.shell_navigation_tint_none
         NavigationTint.Always -> R.string.shell_navigation_tint_always
         NavigationTint.OnScroll -> R.string.shell_navigation_tint_on_scroll
-    },
-)
-
-@Composable
-private fun bannerStyleLabel(value: BannerStyle): String = stringResource(
-    when (value) {
-        BannerStyle.Automatic -> R.string.shell_banner_automatic
-        BannerStyle.Floating -> R.string.shell_banner_floating
-        BannerStyle.Docked -> R.string.shell_banner_docked
     },
 )
 

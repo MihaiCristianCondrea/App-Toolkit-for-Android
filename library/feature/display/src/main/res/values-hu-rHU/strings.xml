@@ -41,7 +41,6 @@
     <string name="shell_hide_top_bar_summary">Eltűnik, amikor a tartalom lefelé görget, a nagy sáv az összecsukása után, és visszatér, amint felfelé görget</string>
     <string name="shell_limit_width">Tartalomszélesség korlátozása nagy ablakokban</string>
     <string name="shell_limit_width_summary">Tartalom középre igazítása margókkal, mint egy weboldalon, az elrendezési szabály maximális szélessége felett</string>
-    <string name="shell_banner_style">Szalaghirdetés</string>
     <string name="shell_tab_transition">Lapok között</string>
     <string name="shell_back_edge">Vissza-húzás a jobb szélről</string>
     <string name="shell_as_declared">Ahogy az egyes képernyők megadják</string>
@@ -55,9 +54,6 @@
     <string name="shell_navigation_tint_none">Felület; az alkalmazássáv görgetéskor színeződik</string>
     <string name="shell_navigation_tint_always">Együtt színezve, a tartalom kártyán</string>
     <string name="shell_navigation_tint_on_scroll">Együtt színezve, amint a tartalom görget</string>
-    <string name="shell_banner_automatic">Az alsó sávhoz rögzítve, az oldalsáv mellett lebegve</string>
-    <string name="shell_banner_floating">Mindig lebeg, mint a lejátszó</string>
-    <string name="shell_banner_docked">Mindig rögzítve</string>
     <string name="shell_back_edge_system">Mint az Android: az oldal helyben zsugorodik</string>
     <string name="shell_back_edge_follow">Követi az ujjat, a bal szél tükreként (alapértelmezett)</string>
     <string name="shell_transition_directional">Irányított csúsztatás</string>

@@ -142,7 +142,8 @@ internal fun ShellNavigationBar(
                 ShortNavigationBarItem(
                     selected = selected,
                     onClick = {
-                        clicks++
+                        // The tab already shown plays nothing: nothing changes.
+                        if (!selected) clicks++
                         feedback()
                         callbacks.onTabClick(index)
                     },
@@ -159,7 +160,8 @@ internal fun ShellNavigationBar(
                 NavigationBarItem(
                     selected = selected,
                     onClick = {
-                        clicks++
+                        // The tab already shown plays nothing: nothing changes.
+                        if (!selected) clicks++
                         feedback()
                         callbacks.onTabClick(index)
                     },
@@ -250,7 +252,7 @@ internal fun ShellRail(
                         WideNavigationRailItem(
                             selected = selected,
                             onClick = {
-                                clicks++
+                                if (!selected) clicks++
                                 feedback()
                                 callbacks.onTabClick(index)
                             },
@@ -343,7 +345,8 @@ internal fun HideOnScrollBottomBar(
 
 /**
  * A tab's icon: [ShellTab.icon], or [ShellTab.selectedIcon] while selected, played on every click
- * when it animates, and pressed in with the Toolkit's bounce.
+ * that selects the tab when it animates, and pressed in with the Toolkit's bounce. Clicking the
+ * tab already selected leaves it as it is.
  */
 @Composable
 private fun TabIcon(tab: ShellTab, selected: Boolean, clicks: Int) {
@@ -392,7 +395,7 @@ private fun RailEntry(
     WideNavigationRailItem(
         selected = selected,
         onClick = {
-            clicks++
+            if (!selected) clicks++
             feedback()
             callbacks.onEntryClick(entry)
         },
@@ -437,7 +440,7 @@ private fun DrawerRow(
         label = { Text(stringResource(label)) },
         selected = selected,
         onClick = {
-            clicks++
+            if (!selected) clicks++
             feedback()
             onClick()
         },

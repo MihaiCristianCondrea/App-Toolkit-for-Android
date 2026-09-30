@@ -41,7 +41,6 @@
     <string name="shell_hide_top_bar_summary">Dispare când conținutul se derulează în jos, o bară mare după ce se restrânge, și revine imediat ce se derulează în sus</string>
     <string name="shell_limit_width">Limitează lățimea conținutului în ferestre mari</string>
     <string name="shell_limit_width_summary">Centrează conținutul cu margini, ca un site web, peste lățimea maximă a regulii de aspect</string>
-    <string name="shell_banner_style">Banner</string>
     <string name="shell_tab_transition">Între file</string>
     <string name="shell_back_edge">Glisare înapoi de la marginea dreaptă</string>
     <string name="shell_as_declared">Cum declară fiecare ecran</string>
@@ -55,9 +54,6 @@
     <string name="shell_navigation_tint_none">Suprafață; bara aplicației se colorează la derulare</string>
     <string name="shell_navigation_tint_always">Colorate împreună, conținut într-un card</string>
     <string name="shell_navigation_tint_on_scroll">Colorate împreună odată ce conținutul se derulează</string>
-    <string name="shell_banner_automatic">Fixat pe bara de jos, plutitor lângă bara laterală</string>
-    <string name="shell_banner_floating">Mereu plutitor, ca playerul</string>
-    <string name="shell_banner_docked">Mereu fixat</string>
     <string name="shell_back_edge_system">Ca Android: pagina se micșorează pe loc</string>
     <string name="shell_back_edge_follow">Urmează degetul, în oglindă cu marginea stângă (implicit)</string>
     <string name="shell_transition_directional">Glisare direcțională</string>

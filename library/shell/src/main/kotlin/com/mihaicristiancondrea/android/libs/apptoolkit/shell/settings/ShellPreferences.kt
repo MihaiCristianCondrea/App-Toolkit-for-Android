@@ -57,7 +57,6 @@ interface ShellPreferences {
     suspend fun setBackEdgeStyle(value: BackEdgeStyle) = update { it.copy(backEdgeStyle = value) }
     suspend fun setStartOverride(value: Int) = update { it.copy(startOverride = value) }
     suspend fun setNavigationBarStyle(value: NavigationBarStyle) = update { it.copy(navigationBarStyle = value) }
-    suspend fun setBannerStyle(value: BannerStyle) = update { it.copy(bannerStyle = value) }
     suspend fun setNavigationTint(value: NavigationTint) = update { it.copy(navigationTint = value) }
 
     /**

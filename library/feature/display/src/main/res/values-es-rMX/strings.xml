@@ -41,7 +41,6 @@
     <string name="shell_hide_top_bar_summary">Se desliza fuera cuando el contenido se desplaza hacia abajo, una barra grande después de contraerse, y vuelve en cuanto se desplaza hacia arriba</string>
     <string name="shell_limit_width">Limitar el ancho del contenido en ventanas grandes</string>
     <string name="shell_limit_width_summary">Centrar el contenido con márgenes, como un sitio web, más allá del ancho máximo de la política de diseño</string>
-    <string name="shell_banner_style">Banner</string>
     <string name="shell_tab_transition">Entre pestañas</string>
     <string name="shell_back_edge">Deslizar para volver desde el borde derecho</string>
     <string name="shell_as_declared">Como declara cada pantalla</string>
@@ -55,9 +54,6 @@
     <string name="shell_navigation_tint_none">Superficie; la barra de la app se tiñe al desplazarse</string>
     <string name="shell_navigation_tint_always">Teñidos juntos, contenido en una tarjeta</string>
     <string name="shell_navigation_tint_on_scroll">Teñidos juntos cuando el contenido se desplaza</string>
-    <string name="shell_banner_automatic">Acoplado a una barra inferior, flotante junto a un riel</string>
-    <string name="shell_banner_floating">Siempre flotante, como el reproductor</string>
-    <string name="shell_banner_docked">Siempre acoplado</string>
     <string name="shell_back_edge_system">Como Android: la página se encoge en su lugar</string>
     <string name="shell_back_edge_follow">Sigue el dedo, reflejando el borde izquierdo (predeterminado)</string>
     <string name="shell_transition_directional">Deslizamiento direccional</string>

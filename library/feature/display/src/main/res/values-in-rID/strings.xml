@@ -41,7 +41,6 @@
     <string name="shell_hide_top_bar_summary">Bergeser pergi saat konten digulir ke bawah, panel besar setelah menciut, dan kembali begitu digulir ke atas</string>
     <string name="shell_limit_width">Batasi lebar konten di jendela besar</string>
     <string name="shell_limit_width_summary">Pusatkan konten dengan margin, seperti situs web, melewati lebar maksimum kebijakan tata letak</string>
-    <string name="shell_banner_style">Banner</string>
     <string name="shell_tab_transition">Antar-tab</string>
     <string name="shell_back_edge">Geser kembali dari tepi kanan</string>
     <string name="shell_as_declared">Seperti yang ditetapkan tiap layar</string>
@@ -55,9 +54,6 @@
     <string name="shell_navigation_tint_none">Permukaan; panel aplikasi berwarna saat menggulir</string>
     <string name="shell_navigation_tint_always">Berwarna bersama, konten di dalam kartu</string>
     <string name="shell_navigation_tint_on_scroll">Berwarna bersama setelah konten digulir</string>
-    <string name="shell_banner_automatic">Menempel di panel bawah, mengambang di samping rel</string>
-    <string name="shell_banner_floating">Selalu mengambang, seperti pemutar</string>
-    <string name="shell_banner_docked">Selalu menempel</string>
     <string name="shell_back_edge_system">Seperti Android: halaman mengecil di tempat</string>
     <string name="shell_back_edge_follow">Mengikuti jari, mencerminkan tepi kiri (default)</string>
     <string name="shell_transition_directional">Geser berarah</string>

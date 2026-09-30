@@ -19,6 +19,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -40,6 +42,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -50,11 +53,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellNavigato
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.DrawerEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.BesideNavigation
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FrameScrollTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalBesideNavigation
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalShellLayout
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationTint
+import kotlinx.coroutines.flow.collectLatest
 
 /** Whether this layout keeps the navigation on screen beside the content: a rail or a permanent drawer. */
 internal val ShellLayoutMode.keepsNavigationBeside: Boolean
@@ -133,20 +138,32 @@ internal fun ShellFrame(
     // Beside a rail or a permanent drawer, the navigation and the app bar can share one colour,
     // drawn once behind both, so they read as one frame around the content.
     val tintMode = if (framed) settings.navigationTint else NavigationTint.None
+    // Every app bar beside the navigation that follows scrolling, the tabs' and the pages'; the
+    // one on top drives the colour.
+    val scrollTint = remember { FrameScrollTint() }
     LaunchedEffect(tintMode) {
         when (tintMode) {
             NavigationTint.None -> state.tint.snapTo(0f)
             NavigationTint.Always -> state.tint.snapTo(1f)
-            NavigationTint.OnScroll -> Unit // The app bar drives it.
+            // The bar on top drives it the way Material tints a bar: a large bar blends as it
+            // collapses, the others switch, with a spring, once content scrolls under them.
+            NavigationTint.OnScroll -> snapshotFlow { scrollTint.current }.collectLatest { target ->
+                if (target.snap) {
+                    state.tint.snapTo(target.amount)
+                } else {
+                    state.tint.animateTo(target.amount, spring(stiffness = Spring.StiffnessMediumLow))
+                }
+            }
         }
     }
     val tinted = tintMode != NavigationTint.None
+    val followsScroll = tintMode == NavigationTint.OnScroll
     val untintedColor = MaterialTheme.colorScheme.surface
     val tintedColor = MaterialTheme.colorScheme.surfaceContainer
     val frameColor = if (tinted) Color.Transparent else untintedColor
-    val besideNavigation = remember(framed, tinted, untintedColor, tintedColor) {
+    val besideNavigation = remember(framed, tinted, followsScroll, untintedColor, tintedColor) {
         if (framed) {
-            BesideNavigation(tinted = tinted) {
+            BesideNavigation(tinted = tinted, scrollTint = scrollTint.takeIf { followsScroll }) {
                 if (tinted) lerp(untintedColor, tintedColor, state.tint.value) else untintedColor
             }
         } else {

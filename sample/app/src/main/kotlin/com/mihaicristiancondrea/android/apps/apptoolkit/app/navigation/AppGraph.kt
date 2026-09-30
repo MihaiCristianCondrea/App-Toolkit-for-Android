@@ -103,7 +103,7 @@ fun appGraph(
     }
     // The Toolkit's About page, with the hidden version-tap unlock of the components showcase.
     aboutPages { AboutSettingsContent() }
-    // A native ad docked on the bottom bar, or floating beside a rail; nothing while ads are off.
+    // A native ad docked on the bottom navigation bar, and only there; nothing while ads are off.
     banner {
         val config: AdsConfig = koinInject(qualifier = named(AdsQualifiers.BOTTOM_NAV_BAR_NATIVE_AD))
         BottomAppBarNativeAdBanner(adUnitId = config.bannerAdUnitId)

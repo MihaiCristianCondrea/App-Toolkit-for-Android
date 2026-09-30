@@ -41,7 +41,6 @@
     <string name="shell_hide_top_bar_summary">Chowa się, gdy treść przewija się w dół, duży pasek po zwinięciu, i wraca, gdy tylko przewinie się w górę</string>
     <string name="shell_limit_width">Ogranicz szerokość treści w dużych oknach</string>
     <string name="shell_limit_width_summary">Wyśrodkuj treść z marginesami, jak na stronie internetowej, powyżej maksymalnej szerokości zasad układu</string>
-    <string name="shell_banner_style">Baner</string>
     <string name="shell_tab_transition">Między kartami</string>
     <string name="shell_back_edge">Przesunięcie wstecz od prawej krawędzi</string>
     <string name="shell_as_declared">Tak jak deklaruje każdy ekran</string>
@@ -55,9 +54,6 @@
     <string name="shell_navigation_tint_none">Powierzchnia; pasek aplikacji zabarwia się podczas przewijania</string>
     <string name="shell_navigation_tint_always">Zabarwione razem, treść na karcie</string>
     <string name="shell_navigation_tint_on_scroll">Zabarwione razem, gdy treść się przewinie</string>
-    <string name="shell_banner_automatic">Zadokowany przy dolnym pasku, pływający obok paska bocznego</string>
-    <string name="shell_banner_floating">Zawsze pływający, jak odtwarzacz</string>
-    <string name="shell_banner_docked">Zawsze zadokowany</string>
     <string name="shell_back_edge_system">Jak w Androidzie: strona zmniejsza się w miejscu</string>
     <string name="shell_back_edge_follow">Podąża za palcem, jak przy lewej krawędzi (domyślnie)</string>
     <string name="shell_transition_directional">Przesunięcie kierunkowe</string>

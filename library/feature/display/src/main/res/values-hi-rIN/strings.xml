@@ -41,7 +41,6 @@
     <string name="shell_hide_top_bar_summary">कंटेंट नीचे स्क्रॉल होने पर हट जाता है, बड़ा बार सिकुड़ने के बाद, और ऊपर स्क्रॉल करते ही वापस आ जाता है</string>
     <string name="shell_limit_width">बड़ी विंडो में कंटेंट की चौड़ाई सीमित करें</string>
     <string name="shell_limit_width_summary">लेआउट नीति की अधिकतम चौड़ाई से आगे, वेबसाइट की तरह मार्जिन के साथ कंटेंट को बीच में रखें</string>
-    <string name="shell_banner_style">बैनर</string>
     <string name="shell_tab_transition">टैब के बीच</string>
     <string name="shell_back_edge">दाएँ किनारे से वापस स्वाइप</string>
     <string name="shell_as_declared">जैसा हर स्क्रीन तय करती है</string>
@@ -55,9 +54,6 @@
     <string name="shell_navigation_tint_none">सरफ़ेस; स्क्रॉल करने पर ऐप बार रंगीन होता है</string>
     <string name="shell_navigation_tint_always">साथ में रंगीन, कंटेंट एक कार्ड में</string>
     <string name="shell_navigation_tint_on_scroll">कंटेंट स्क्रॉल होते ही साथ में रंगीन</string>
-    <string name="shell_banner_automatic">निचले बार पर जुड़ा हुआ, रेल के बगल में तैरता हुआ</string>
-    <string name="shell_banner_floating">हमेशा तैरता हुआ, प्लेयर की तरह</string>
-    <string name="shell_banner_docked">हमेशा जुड़ा हुआ</string>
     <string name="shell_back_edge_system">Android की तरह: पेज अपनी जगह पर छोटा होता है</string>
     <string name="shell_back_edge_follow">उंगली के साथ चलता है, बाएँ किनारे की तरह (डिफ़ॉल्ट)</string>
     <string name="shell_transition_directional">दिशा वाली स्लाइड</string>

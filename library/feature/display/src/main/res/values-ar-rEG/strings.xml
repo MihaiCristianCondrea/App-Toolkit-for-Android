@@ -41,7 +41,6 @@
     <string name="shell_hide_top_bar_summary">ينزلق بعيدًا عند تمرير المحتوى لأسفل، والشريط الكبير بعد أن يُطوى، ويعود فور التمرير لأعلى</string>
     <string name="shell_limit_width">تحديد عرض المحتوى في النوافذ الكبيرة</string>
     <string name="shell_limit_width_summary">توسيط المحتوى بهوامش، مثل موقع ويب، بعد تجاوز الحد الأقصى للعرض في سياسة التخطيط</string>
-    <string name="shell_banner_style">البانر</string>
     <string name="shell_tab_transition">بين علامات التبويب</string>
     <string name="shell_back_edge">التمرير للرجوع من الحافة اليمنى</string>
     <string name="shell_as_declared">كما تحدد كل شاشة</string>
@@ -55,9 +54,6 @@
     <string name="shell_navigation_tint_none">السطح؛ يتلون شريط التطبيق عند التمرير</string>
     <string name="shell_navigation_tint_always">ملونان معًا، والمحتوى داخل بطاقة</string>
     <string name="shell_navigation_tint_on_scroll">ملونان معًا بمجرد تمرير المحتوى</string>
-    <string name="shell_banner_automatic">مثبت على الشريط السفلي، عائم بجوار الشريط الجانبي</string>
-    <string name="shell_banner_floating">عائم دائمًا، مثل المشغل</string>
-    <string name="shell_banner_docked">مثبت دائمًا</string>
     <string name="shell_back_edge_system">مثل Android: تتقلص الصفحة في مكانها</string>
     <string name="shell_back_edge_follow">تتبع الإصبع، مثل الحافة اليسرى (الافتراضي)</string>
     <string name="shell_transition_directional">انزلاق اتجاهي</string>

@@ -64,6 +64,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FollowScrollWithFrameTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalShellLayout
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.LocalPaneRole
 
@@ -113,6 +114,11 @@ fun PageScaffold(
     val topHide = rememberTopBarHideState()
     val fabHost = remember { FabHost() }
     val fabScroll = rememberFabScrollBehavior()
+    // Beside the navigation, its shared colour follows this bar while the page is shown, as it
+    // follows the tabs' bar, when the person has it follow scrolling.
+    if (beside != null && pane == PaneRole.None) {
+        FollowScrollWithFrameTint { scrollBehavior.frameTint(resolvedStyle) }
+    }
     val contentInsets = when (pane) {
         PaneRole.None -> WindowInsets.safeDrawing
         PaneRole.List -> WindowInsets.safeDrawing.only(WindowInsetsSides.Start + WindowInsetsSides.Bottom)

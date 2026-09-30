@@ -41,7 +41,6 @@
     <string name="shell_hide_top_bar_summary">コンテンツを下にスクロールするとスライドして隠れ（大きなバーは折りたたまれた後）、上にスクロールするとすぐに戻ります</string>
     <string name="shell_limit_width">大きなウィンドウでコンテンツの幅を制限</string>
     <string name="shell_limit_width_summary">レイアウトポリシーの最大幅を超えたら、ウェブサイトのように余白を付けてコンテンツを中央に配置します</string>
-    <string name="shell_banner_style">バナー</string>
     <string name="shell_tab_transition">タブ間</string>
     <string name="shell_back_edge">右端からの戻るスワイプ</string>
     <string name="shell_as_declared">各画面の宣言どおり</string>
@@ -55,9 +54,6 @@
     <string name="shell_navigation_tint_none">サーフェス。スクロールするとアプリバーに色が付きます</string>
     <string name="shell_navigation_tint_always">一緒に着色し、コンテンツをカードに表示</string>
     <string name="shell_navigation_tint_on_scroll">コンテンツがスクロールしたら一緒に着色</string>
-    <string name="shell_banner_automatic">下部バーではドッキング、レールの横ではフローティング</string>
-    <string name="shell_banner_floating">常にフローティング（プレーヤーと同様）</string>
-    <string name="shell_banner_docked">常にドッキング</string>
     <string name="shell_back_edge_system">Android と同じ: ページがその場で縮小</string>
     <string name="shell_back_edge_follow">指に追従し、左端と対称に動く（デフォルト）</string>
     <string name="shell_transition_directional">方向付きスライド</string>
