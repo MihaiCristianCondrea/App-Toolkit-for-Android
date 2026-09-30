@@ -95,4 +95,23 @@ class ChangelogExtensionsTest {
             result,
         )
     }
+
+    @Test
+    fun `splitAtThematicBreaks splits at breaks after a blank line`() {
+        val markdown = "# Unreleased\n- One\n\n---\n\n# 1.0.0\n- Two\n\n***\n\n# 0.9.0"
+
+        assertEquals(listOf("# Unreleased\n- One", "# 1.0.0\n- Two", "# 0.9.0"), markdown.splitAtThematicBreaks())
+    }
+
+    @Test
+    fun `splitAtThematicBreaks keeps a heading underline and code fences whole`() {
+        val markdown = "Title\n---\n\n```\n\n---\n```"
+
+        assertEquals(listOf(markdown), markdown.splitAtThematicBreaks())
+    }
+
+    @Test
+    fun `splitAtThematicBreaks drops blank parts`() {
+        assertEquals(listOf("# Only"), "---\n\n# Only\n\n---\n".splitAtThematicBreaks())
+    }
 }

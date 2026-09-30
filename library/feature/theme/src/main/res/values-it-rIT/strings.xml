@@ -34,4 +34,5 @@
     <string name="holiday_greeting_halloween_message">È arrivata la stagione dei brividi. Vuoi usare il tema di Halloween finché dura?</string>
     <string name="holiday_greeting_use_theme">Usa il tema festivo durante le feste</string>
     <string name="dark_theme">Tema scuro</string>
+    <string name="snowfall">Nevicata</string>
 </resources>

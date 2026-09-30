@@ -47,7 +47,8 @@ import kotlinx.coroutines.launch
  * already back in the person's own colors, and a greeting is never offered for a holiday that just
  * finished.
  *
- * Snow falls only while the Christmas palette is actually on screen and snowfall is on. Outside the
+ * Snow falls only while the Christmas palette is actually on screen and snowfall is on, which it is
+ * until switched off in the theme settings. Outside the
  * Christmas season it also needs the easter egg: a person without it who kept the Christmas palette
  * gets the colors, not snow in July.
  *
@@ -79,7 +80,8 @@ class SeasonalThemeOverlayViewModel(
         }
 
         combine(seasonal.state, theme.preferencesState) { seasonalState, themeState ->
-            val showSnowfall = !themeState.dynamicColors &&
+            val showSnowfall = seasonalState.snowfall &&
+                !themeState.dynamicColors &&
                 themeState.staticPaletteId == StaticPaletteIds.CHRISTMAS &&
                 (seasonalState.unlocked || today().isChristmasSeason)
             showSnowfall to themeState.themeMode

@@ -12,7 +12,9 @@ and the bottom sheet that renders it.
 - `GetChangelogUseCase`, which picks the current-version section or the full history, and
   `extractChangesForVersion`, which finds that section's heading.
 - `ChangelogViewModel`, `ChangelogUiState`, and the retry contract.
-- `ChangelogDialog`, the modal bottom sheet the host shows from its drawer.
+- `ChangelogDialog`, the modal bottom sheet the host shows from its drawer. It draws each part of
+  the Markdown on its own and the Toolkit's `HorizontalWavyDivider` where the Markdown has a rule
+  (`splitAtThematicBreaks`), in place of the renderer's flat line.
 
 ## Does not own
 

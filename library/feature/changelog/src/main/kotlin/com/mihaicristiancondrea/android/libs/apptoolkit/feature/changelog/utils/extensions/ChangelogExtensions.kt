@@ -43,3 +43,34 @@ fun String.extractChangesForVersion(version: String): String {
         changelogSectionLines.forEach { appendLine(it) }
     }.trim()
 }
+
+/**
+ * Splits Markdown at its thematic breaks (`---`, `***` or `___` on a line of their own), so each
+ * part can be drawn on its own and the breaks as something other than the renderer's plain rule.
+ * Blank parts are dropped.
+ *
+ * A break counts only after a blank line, or at the start: under a line of text, `---` underlines
+ * a heading instead. Lines inside a fenced code block are never breaks.
+ */
+fun String.splitAtThematicBreaks(): List<String> {
+    val parts = mutableListOf<String>()
+    val current = StringBuilder()
+    var inFence = false
+    var previousBlank = true
+    lineSequence().forEach { line ->
+        val trimmed = line.trim()
+        if (trimmed.startsWith("```") || trimmed.startsWith("~~~")) inFence = !inFence
+        if (!inFence && previousBlank && ThematicBreak.matches(line)) {
+            parts += current.toString()
+            current.clear()
+        } else {
+            current.appendLine(line)
+        }
+        previousBlank = trimmed.isEmpty()
+    }
+    parts += current.toString()
+    return parts.map { it.trim() }.filter { it.isNotEmpty() }
+}
+
+/** Three or more of the same `-`, `*` or `_`, spaces allowed between, indented at most three. */
+private val ThematicBreak = Regex("""^ {0,3}([-*_])(?:\s*\1){2,}\s*$""")

@@ -17,6 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.views.dialogs
 
+import androidx.compose.runtime.remember
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dividers.HorizontalWavyDivider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.utils.extensions.splitAtThematicBreaks
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -158,15 +161,23 @@ private fun ChangelogDialogContent(
             val markdown = screenState.data?.markdown.orEmpty().ifBlank {
                 stringResource(id = R.string.no_new_updates_message)
             }
+            // Each release on its own, with the Toolkit's wavy line where the Markdown has a rule:
+            // the renderer's own rule is a flat line.
+            val sections = remember(markdown) { markdown.splitAtThematicBreaks() }
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState()),
             ) {
-                MarkdownText(
-                    modifier = Modifier.fillMaxWidth(),
-                    markdown = markdown,
-                )
+                sections.forEachIndexed { index, section ->
+                    if (index > 0) {
+                        HorizontalWavyDivider(modifier = Modifier.padding(vertical = SizeConstants.LargeSize))
+                    }
+                    MarkdownText(
+                        modifier = Modifier.fillMaxWidth(),
+                        markdown = section,
+                    )
+                }
             }
         }
     }

@@ -145,6 +145,11 @@ class DefaultSeasonalThemeRepositoryTest {
         override val seasonalThemesUnlocked = MutableStateFlow(false)
         override val lastHolidayGreeting = MutableStateFlow<String?>(null)
         override val holidayThemeSnapshot = MutableStateFlow<HolidayThemeSnapshot?>(null)
+        override val snowfall = MutableStateFlow(true)
+
+        override suspend fun saveSnowfall(enabled: Boolean) {
+            snowfall.value = enabled
+        }
 
         override suspend fun saveSeasonalThemesUnlocked(unlocked: Boolean) {
             seasonalThemesUnlocked.value = unlocked

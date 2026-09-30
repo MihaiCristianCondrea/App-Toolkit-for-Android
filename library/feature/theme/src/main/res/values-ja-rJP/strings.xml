@@ -34,4 +34,5 @@
     <string name="holiday_greeting_halloween_message">ハロウィンの季節がやってきました。期間中はハロウィンテーマを使いますか？</string>
     <string name="holiday_greeting_use_theme">ホリデー期間中はホリデーテーマを使う</string>
     <string name="dark_theme">ダークテーマ</string>
+    <string name="snowfall">降雪</string>
 </resources>

@@ -34,4 +34,5 @@
     <string name="holiday_greeting_halloween_message">Den läskiga säsongen är här. Vill du använda Halloween-temat så länge den varar?</string>
     <string name="holiday_greeting_use_theme">Använd högtidstemat under helgerna</string>
     <string name="dark_theme">Mörkt tema</string>
+    <string name="snowfall">Snöfall</string>
 </resources>

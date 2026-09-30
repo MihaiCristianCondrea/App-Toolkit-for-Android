@@ -17,6 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.views
 
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -82,14 +85,20 @@ fun HolidayGreetingDialog(
                     ),
                     style = MaterialTheme.typography.bodyMedium,
                 )
+                // Rounded and padded, so the press ripple has a shape of its own inside the dialog
+                // rather than filling the row edge to edge and being cut off, and the box keeps
+                // its distance from the label it no longer pads itself from.
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .clip(RoundedCornerShape(SizeConstants.LargeSize))
                         .toggleable(
                             value = useHolidayTheme,
                             role = Role.Checkbox,
                             onValueChange = { useHolidayTheme = it },
-                        ),
+                        )
+                        .padding(horizontal = SizeConstants.MediumSize, vertical = SizeConstants.MediumSize),
+                    horizontalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     // The row carries the toggle, so the box itself takes no clicks of its own and

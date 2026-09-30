@@ -24,9 +24,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model
  *
  * @property preferences The stored theme preferences.
  * @property seasonalThemesUnlocked Whether the About screen easter egg was found, which keeps the
- * Christmas and Halloween palettes in the palette list all year.
+ * Christmas and Halloween palettes in the palette list all year, and offers the snowfall switch.
+ * @property snowfall Whether snow falls with the Christmas palette.
  */
 data class ThemeSettingsUiState(
     val preferences: ThemePreferencesState,
     val seasonalThemesUnlocked: Boolean,
+    val snowfall: Boolean = true,
 )

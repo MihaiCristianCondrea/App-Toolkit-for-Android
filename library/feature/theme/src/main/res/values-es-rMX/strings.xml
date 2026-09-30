@@ -34,4 +34,5 @@
     <string name="holiday_greeting_halloween_message">Llegó la temporada de sustos. ¿Quieres usar el tema de Halloween mientras dure?</string>
     <string name="holiday_greeting_use_theme">Usar el tema festivo durante las fiestas</string>
     <string name="dark_theme">Tema oscuro</string>
+    <string name="snowfall">Nevada</string>
 </resources>

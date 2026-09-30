@@ -42,6 +42,9 @@ interface SeasonalThemeRepository {
      */
     suspend fun unlockSeasonalThemes(): Boolean
 
+    /** Lets snow fall with the Christmas palette, or stops it; offered once the easter egg is found. */
+    suspend fun setSnowfall(enabled: Boolean)
+
     /**
      * The holiday whose greeting should be shown on [today], or null.
      *

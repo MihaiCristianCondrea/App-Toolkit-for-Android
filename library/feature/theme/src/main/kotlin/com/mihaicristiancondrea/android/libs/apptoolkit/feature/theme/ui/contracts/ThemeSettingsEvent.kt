@@ -23,6 +23,7 @@ sealed interface ThemeSettingsEvent : UiEvent {
     data object Initialize : ThemeSettingsEvent
     data class SelectThemeMode(val mode: String) : ThemeSettingsEvent
     data class SetAmoledMode(val enabled: Boolean) : ThemeSettingsEvent
+    data class SetSnowfall(val enabled: Boolean) : ThemeSettingsEvent
     data class SelectDynamicPalette(val variant: Int) : ThemeSettingsEvent
     data class SelectStaticPalette(val id: String) : ThemeSettingsEvent
 }

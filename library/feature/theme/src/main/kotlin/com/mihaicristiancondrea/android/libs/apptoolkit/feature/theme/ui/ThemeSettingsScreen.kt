@@ -37,6 +37,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AcUnit
 import androidx.compose.material.icons.filled.BrightnessAuto
 import androidx.compose.material.icons.filled.Contrast
 import androidx.compose.material.icons.filled.DarkMode
@@ -555,6 +556,36 @@ fun ThemeSettingsScreen(paddingValues: PaddingValues = contentPadding()) {
                     },
                     checkIcon = Icons.Filled.Contrast
                 )
+            }
+
+            // Snow falls with the Christmas palette; once the About screen's easter egg is found
+            // it can be switched off, the palette kept.
+            if (showSeasonalAllYear) {
+                item {
+                    SwitchCardItem(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = SizeConstants.MediumSize * 2)
+                            .padding(top = SizeConstants.MediumSize),
+                        title = stringResource(id = R.string.snowfall),
+                        switchState = rememberUpdatedState(uiState.snowfall),
+                        onSwitchToggled = { isChecked ->
+                            firebase.value.logEvent(
+                                AnalyticsEvent(
+                                    name = "theme_toggle_snowfall",
+                                    params = mapOf(
+                                        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
+                                            THEME_SCREEN_NAME
+                                        ),
+                                        "enabled" to AnalyticsValue.Str(isChecked.toString()),
+                                    ),
+                                ),
+                            )
+                            viewModel.onEvent(ThemeSettingsEvent.SetSnowfall(isChecked))
+                        },
+                        checkIcon = Icons.Filled.AcUnit,
+                    )
+                }
             }
 
             item {

@@ -57,9 +57,10 @@ What people see:
 - Snow falls over the app while the Christmas palette is on screen, during the Christmas season.
   Snow is skipped when animations are turned off system-wide.
 - Tapping the build version five times on the About screen unlocks the seasonal themes. From then
-  on the Christmas and Halloween palettes stay in the palette list all year, and snow follows the
-  Christmas palette outside the season too. There are no switches for either: the unlock turns
-  both on.
+  on the Christmas and Halloween palettes stay in the palette list all year, snow follows the
+  Christmas palette outside the season too, and the theme page offers a Snowfall switch, under
+  AMOLED, to keep the palette without the snow. Snow is on until switched off
+  (`SeasonalThemeRepository.setSnowfall`), and the switch is the unlock's only one.
 
 ## Validation and risks
 
