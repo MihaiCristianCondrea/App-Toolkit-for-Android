@@ -12,7 +12,7 @@ list; the main toolkit module calls it and assembles DI, and hosts supply Displa
 Depends on core common, DataStore, UI, navigation and the shell, and on no other feature module.
 
 The screen offers the shell's layout choices as the person's own settings: under Appearance the app
-bar style, the navigation colour beside a rail or drawer, the content width limit and the banner
+bar style, hiding the app bar on scroll, the navigation colour beside a rail or drawer, the content width limit and the banner
 style; under Navigation the start page, the bottom bar style, its labels, hiding it on scroll, the
 tab transition and the right-edge back swipe. They are read from `LocalShellSettings` and written
 through `LocalShellPreferences` (the rows are `ShellDisplayRows`), so they apply to the whole app at

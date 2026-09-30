@@ -37,6 +37,8 @@
     <string name="shell_navigation_tint">Цвет боковой панели и панели приложения</string>
     <string name="shell_hide_bottom_bar">Скрывать нижнюю панель при прокрутке</string>
     <string name="shell_hide_bottom_bar_summary">Уезжает, когда контент прокручивается вниз и проигрыватель не показан</string>
+    <string name="shell_hide_top_bar">Скрывать панель приложения при прокрутке</string>
+    <string name="shell_hide_top_bar_summary">Уезжает, когда контент прокручивается вниз, большая панель после сворачивания, и возвращается, как только он прокручивается вверх</string>
     <string name="shell_limit_width">Ограничивать ширину контента в больших окнах</string>
     <string name="shell_limit_width_summary">Центрировать контент с полями, как на сайте, сверх максимальной ширины правил макета</string>
     <string name="shell_banner_style">Баннер</string>

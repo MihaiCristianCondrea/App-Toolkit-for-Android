@@ -37,6 +37,8 @@
     <string name="shell_navigation_tint">Färg på sidofält och appfält</string>
     <string name="shell_hide_bottom_bar">Dölj det nedre fältet vid rullning</string>
     <string name="shell_hide_bottom_bar_summary">Glider undan när innehållet rullar nedåt, så länge ingen spelare visas</string>
+    <string name="shell_hide_top_bar">Dölj appfältet vid rullning</string>
+    <string name="shell_hide_top_bar_summary">Glider undan när innehållet rullar nedåt, ett stort fält när det har fällts ihop, och kommer tillbaka så fort det rullar uppåt</string>
     <string name="shell_limit_width">Begränsa innehållets bredd i stora fönster</string>
     <string name="shell_limit_width_summary">Centrera innehållet med marginaler, som en webbplats, utöver layoutpolicyns maximala bredd</string>
     <string name="shell_banner_style">Banner</string>

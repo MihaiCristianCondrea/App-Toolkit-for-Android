@@ -37,6 +37,8 @@
     <string name="shell_navigation_tint">Цвят на страничната лента и лентата на приложението</string>
     <string name="shell_hide_bottom_bar">Скриване на долната лента при превъртане</string>
     <string name="shell_hide_bottom_bar_summary">Изчезва, когато съдържанието се превърта надолу, докато не се показва плейър</string>
+    <string name="shell_hide_top_bar">Скриване на лентата на приложението при превъртане</string>
+    <string name="shell_hide_top_bar_summary">Изчезва, когато съдържанието се превърта надолу, голямата лента след като се свие, и се връща щом се превърти нагоре</string>
     <string name="shell_limit_width">Ограничаване на ширината на съдържанието в големи прозорци</string>
     <string name="shell_limit_width_summary">Центриране на съдържанието с полета, като уебсайт, над максималната ширина на правилата за оформление</string>
     <string name="shell_banner_style">Банер</string>

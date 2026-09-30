@@ -58,6 +58,15 @@ internal class ShellDisplayRows(
     )
 
     @Composable
+    fun HideTopBarOnScroll(modifier: Modifier) = SwitchPreferenceItem(
+        modifier = modifier,
+        title = stringResource(R.string.shell_hide_top_bar),
+        summary = stringResource(R.string.shell_hide_top_bar_summary),
+        checked = settings.hideTopBarOnScroll,
+        onCheckedChange = { scope.launch { preferences.setHideTopBarOnScroll(it) } },
+    )
+
+    @Composable
     fun NavigationTint(modifier: Modifier) = ChoicePreferenceItem(
         title = stringResource(R.string.shell_navigation_tint),
         options = NavigationTint.entries,

@@ -51,6 +51,7 @@ interface ShellPreferences {
     suspend fun setTabTransition(value: TabTransitionStyle) = update { it.copy(tabTransition = value) }
     suspend fun setAccessoryMode(value: AccessoryMode) = update { it.copy(accessoryMode = value) }
     suspend fun setHideBottomBarOnScroll(value: Boolean) = update { it.copy(hideBottomBarOnScroll = value) }
+    suspend fun setHideTopBarOnScroll(value: Boolean) = update { it.copy(hideTopBarOnScroll = value) }
     suspend fun setLimitContentWidth(value: Boolean) = update { it.copy(limitContentWidth = value) }
     suspend fun setAnimationSpeed(value: AnimationSpeed) = update { it.copy(animationSpeed = value) }
     suspend fun setBackEdgeStyle(value: BackEdgeStyle) = update { it.copy(backEdgeStyle = value) }

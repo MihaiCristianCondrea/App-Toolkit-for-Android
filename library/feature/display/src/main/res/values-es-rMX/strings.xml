@@ -37,6 +37,8 @@
     <string name="shell_navigation_tint">Color del riel y de la barra de la app</string>
     <string name="shell_hide_bottom_bar">Ocultar la barra inferior al desplazarse</string>
     <string name="shell_hide_bottom_bar_summary">Se desliza fuera cuando el contenido se desplaza hacia abajo, mientras no se muestre ningún reproductor</string>
+    <string name="shell_hide_top_bar">Ocultar la barra de la app al desplazarse</string>
+    <string name="shell_hide_top_bar_summary">Se desliza fuera cuando el contenido se desplaza hacia abajo, una barra grande después de contraerse, y vuelve en cuanto se desplaza hacia arriba</string>
     <string name="shell_limit_width">Limitar el ancho del contenido en ventanas grandes</string>
     <string name="shell_limit_width_summary">Centrar el contenido con márgenes, como un sitio web, más allá del ancho máximo de la política de diseño</string>
     <string name="shell_banner_style">Banner</string>

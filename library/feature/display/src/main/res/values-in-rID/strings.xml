@@ -37,6 +37,8 @@
     <string name="shell_navigation_tint">Warna rel dan panel aplikasi</string>
     <string name="shell_hide_bottom_bar">Sembunyikan panel bawah saat menggulir</string>
     <string name="shell_hide_bottom_bar_summary">Bergeser pergi saat konten digulir ke bawah, selama tidak ada pemutar yang tampil</string>
+    <string name="shell_hide_top_bar">Sembunyikan panel aplikasi saat menggulir</string>
+    <string name="shell_hide_top_bar_summary">Bergeser pergi saat konten digulir ke bawah, panel besar setelah menciut, dan kembali begitu digulir ke atas</string>
     <string name="shell_limit_width">Batasi lebar konten di jendela besar</string>
     <string name="shell_limit_width_summary">Pusatkan konten dengan margin, seperti situs web, melewati lebar maksimum kebijakan tata letak</string>
     <string name="shell_banner_style">Banner</string>

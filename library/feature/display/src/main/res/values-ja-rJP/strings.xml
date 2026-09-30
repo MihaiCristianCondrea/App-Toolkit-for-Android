@@ -37,6 +37,8 @@
     <string name="shell_navigation_tint">レールとアプリバーの色</string>
     <string name="shell_hide_bottom_bar">スクロール時に下部バーを隠す</string>
     <string name="shell_hide_bottom_bar_summary">プレーヤーが表示されていないとき、コンテンツを下にスクロールするとスライドして隠れます</string>
+    <string name="shell_hide_top_bar">スクロール時にアプリバーを隠す</string>
+    <string name="shell_hide_top_bar_summary">コンテンツを下にスクロールするとスライドして隠れ（大きなバーは折りたたまれた後）、上にスクロールするとすぐに戻ります</string>
     <string name="shell_limit_width">大きなウィンドウでコンテンツの幅を制限</string>
     <string name="shell_limit_width_summary">レイアウトポリシーの最大幅を超えたら、ウェブサイトのように余白を付けてコンテンツを中央に配置します</string>
     <string name="shell_banner_style">バナー</string>

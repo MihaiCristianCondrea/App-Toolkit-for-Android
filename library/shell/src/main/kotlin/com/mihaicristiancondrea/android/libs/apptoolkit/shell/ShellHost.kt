@@ -60,6 +60,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellPref
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.ContentWidthBox
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.ListPlaceholder
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalTopBarStyleOverride
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalHideTopBarOnScroll
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.PageScaffold
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalPageKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellGraph
@@ -171,6 +172,7 @@ fun ShellHost(
         LocalShellLayout provides layoutInfo,
         LocalShellMotion provides motion,
         LocalTopBarStyleOverride provides current.topBarOverride.style,
+        LocalHideTopBarOnScroll provides current.hideTopBarOnScroll,
         // Text drawn outside any Material surface takes the theme's colour instead of black.
         LocalContentColor provides MaterialTheme.colorScheme.onBackground,
     ) {
@@ -204,7 +206,7 @@ fun ShellHost(
                 },
                 popTransitionSpec = {
                     if (swapsInPlace(initialState, targetState, layoutInfo.mode, navigator)) {
-                        motion.tabs.inPlace()
+                        motion.tabs.inPlace(back = true)
                     } else {
                         motion.screens.back(initialState.pageTransition(graph, layoutInfo.mode))
                     }

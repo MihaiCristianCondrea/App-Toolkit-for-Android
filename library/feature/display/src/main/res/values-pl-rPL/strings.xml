@@ -37,6 +37,8 @@
     <string name="shell_navigation_tint">Kolor paska bocznego i paska aplikacji</string>
     <string name="shell_hide_bottom_bar">Ukrywaj dolny pasek podczas przewijania</string>
     <string name="shell_hide_bottom_bar_summary">Chowa się, gdy treść przewija się w dół, dopóki nie jest widoczny odtwarzacz</string>
+    <string name="shell_hide_top_bar">Ukrywaj pasek aplikacji podczas przewijania</string>
+    <string name="shell_hide_top_bar_summary">Chowa się, gdy treść przewija się w dół, duży pasek po zwinięciu, i wraca, gdy tylko przewinie się w górę</string>
     <string name="shell_limit_width">Ogranicz szerokość treści w dużych oknach</string>
     <string name="shell_limit_width_summary">Wyśrodkuj treść z marginesami, jak na stronie internetowej, powyżej maksymalnej szerokości zasad układu</string>
     <string name="shell_banner_style">Baner</string>

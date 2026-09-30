@@ -37,6 +37,8 @@
     <string name="shell_navigation_tint">Colore della barra laterale e della barra dell\'app</string>
     <string name="shell_hide_bottom_bar">Nascondi la barra inferiore durante lo scorrimento</string>
     <string name="shell_hide_bottom_bar_summary">Scompare quando il contenuto scorre verso il basso, finché non è visibile nessun lettore</string>
+    <string name="shell_hide_top_bar">Nascondi la barra dell\'app durante lo scorrimento</string>
+    <string name="shell_hide_top_bar_summary">Scompare quando il contenuto scorre verso il basso, una barra grande dopo essersi ridotta, e torna appena scorre verso l\'alto</string>
     <string name="shell_limit_width">Limita la larghezza del contenuto nelle finestre grandi</string>
     <string name="shell_limit_width_summary">Centra il contenuto con margini, come un sito web, oltre la larghezza massima della regola di layout</string>
     <string name="shell_banner_style">Banner</string>

@@ -37,6 +37,8 @@
     <string name="shell_navigation_tint">Màu thanh bên và thanh ứng dụng</string>
     <string name="shell_hide_bottom_bar">Ẩn thanh dưới cùng khi cuộn</string>
     <string name="shell_hide_bottom_bar_summary">Trượt đi khi nội dung cuộn xuống, khi không có trình phát nào hiển thị</string>
+    <string name="shell_hide_top_bar">Ẩn thanh ứng dụng khi cuộn</string>
+    <string name="shell_hide_top_bar_summary">Trượt đi khi nội dung cuộn xuống, thanh lớn sau khi thu gọn, và quay lại ngay khi cuộn lên</string>
     <string name="shell_limit_width">Giới hạn chiều rộng nội dung trên cửa sổ lớn</string>
     <string name="shell_limit_width_summary">Căn giữa nội dung với lề, như một trang web, khi vượt quá chiều rộng tối đa của chính sách bố cục</string>
     <string name="shell_banner_style">Biểu ngữ</string>

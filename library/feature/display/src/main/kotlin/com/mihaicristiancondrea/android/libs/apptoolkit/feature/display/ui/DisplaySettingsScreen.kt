@@ -260,6 +260,7 @@ fun DisplaySettingsScreen(
             }
         }
         add { modifier -> shell.TopBarStyle(modifier) }
+        add { modifier -> shell.HideTopBarOnScroll(modifier) }
         if (hasTabs) add { modifier -> shell.NavigationTint(modifier) }
         // Only an app that sets a maximum content width has one to lift.
         if (appLimitsWidth) add { modifier -> shell.ContentWidth(modifier) }

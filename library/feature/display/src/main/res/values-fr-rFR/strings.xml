@@ -37,6 +37,8 @@
     <string name="shell_navigation_tint">Couleur du rail et de la barre d\'application</string>
     <string name="shell_hide_bottom_bar">Masquer la barre inférieure au défilement</string>
     <string name="shell_hide_bottom_bar_summary">Disparaît quand le contenu défile vers le bas, tant qu\'aucun lecteur n\'est affiché</string>
+    <string name="shell_hide_top_bar">Masquer la barre d\'application au défilement</string>
+    <string name="shell_hide_top_bar_summary">Disparaît quand le contenu défile vers le bas, une grande barre une fois réduite, et revient dès qu\'il défile vers le haut</string>
     <string name="shell_limit_width">Limiter la largeur du contenu sur les grandes fenêtres</string>
     <string name="shell_limit_width_summary">Centrer le contenu avec des marges, comme un site web, au-delà de la largeur maximale de la règle de disposition</string>
     <string name="shell_banner_style">Bannière</string>

@@ -37,6 +37,8 @@
     <string name="shell_navigation_tint">Rail and app bar color</string>
     <string name="shell_hide_bottom_bar">Hide the bottom bar on scroll</string>
     <string name="shell_hide_bottom_bar_summary">Slides away as the content scrolls down, while no player is showing</string>
+    <string name="shell_hide_top_bar">Hide the app bar on scroll</string>
+    <string name="shell_hide_top_bar_summary">Slides away as the content scrolls down, a large bar once it has collapsed, and comes back as soon as it scrolls up</string>
     <string name="shell_limit_width">Limit content width on large windows</string>
     <string name="shell_limit_width_summary">Center content with margins, like a website, past the layout policy\'s maximum width</string>
     <string name="shell_banner_style">Banner</string>

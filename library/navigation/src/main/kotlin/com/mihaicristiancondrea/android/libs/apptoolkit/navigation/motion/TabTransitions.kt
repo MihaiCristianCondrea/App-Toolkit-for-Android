@@ -82,13 +82,26 @@ class TabTransitions internal constructor(
     }
 
     /**
-     * One destination replacing another in the same place, with nothing moving: the old fades out,
-     * then the new fades in. Beside a rail or a permanent drawer, the shell uses it between the
-     * tabs and the page the navigation opened, so the app bar over them seems to stay where it is,
-     * whatever [TabTransitionStyle] the tabs use.
+     * One destination replacing another in the same place, with nothing moving. Beside a rail or a
+     * permanent drawer, the shell uses it between the tabs and the page the navigation opened, so
+     * the app bar over them seems to stay where it is, whatever [TabTransitionStyle] the tabs use.
+     *
+     * Only the destination on top fades, over one that stays opaque: going forward the new one
+     * fades in over the old, which holds until it has; going [back] the old one fades out over the
+     * new, drawn in full under it. A fade through, the old fading out before the new fades in,
+     * showed the display's backdrop between the two, a grey flash, and a destination slow to
+     * compose held the old one and then swapped it at once.
      */
-    fun inPlace(): ContentTransform =
-        fadeIn(tween(duration(210), delayMillis = duration(90))) togetherWith fadeOut(tween(duration(90)))
+    fun inPlace(back: Boolean = false): ContentTransform = if (back) {
+        EnterTransition.None togetherWith fadeOut(tween(duration(InPlaceMillis)))
+    } else {
+        // Kept whole until the new one covers it: a fade out of one frame, after the fade in.
+        fadeIn(tween(duration(InPlaceMillis))) togetherWith
+            fadeOut(tween(durationMillis = 1, delayMillis = duration(InPlaceMillis)))
+    }
 
     private fun duration(millis: Int): Int = (millis * durationScale).roundToInt()
 }
+
+/** How long a destination takes to fade in or out in place. */
+private const val InPlaceMillis = 220

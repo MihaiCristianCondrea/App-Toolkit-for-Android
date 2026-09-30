@@ -71,6 +71,7 @@ internal class DataStoreShellPreferences(context: Context) : ShellPreferences {
             navigationBarStyle = enum(Keys.navigationBarStyle, defaults.navigationBarStyle),
             bannerStyle = enum(Keys.bannerStyle, defaults.bannerStyle),
             navigationTint = enum(Keys.navigationTint, defaults.navigationTint),
+            hideTopBarOnScroll = this[Keys.hideTopBarOnScroll] ?: defaults.hideTopBarOnScroll,
         )
     }
 
@@ -110,6 +111,7 @@ internal class DataStoreShellPreferences(context: Context) : ShellPreferences {
                 enum(Keys.navigationBarStyle) { it.navigationBarStyle },
                 enum(Keys.bannerStyle) { it.bannerStyle },
                 enum(Keys.navigationTint) { it.navigationTint },
+                flag(Keys.hideTopBarOnScroll) { it.hideTopBarOnScroll },
             )
         }
     }
@@ -127,6 +129,7 @@ internal class DataStoreShellPreferences(context: Context) : ShellPreferences {
         val navigationBarStyle = stringPreferencesKey("navigation_bar_style")
         val bannerStyle = stringPreferencesKey("banner_style")
         val navigationTint = stringPreferencesKey("navigation_tint")
+        val hideTopBarOnScroll = booleanPreferencesKey("hide_top_bar_on_scroll")
     }
 
     private companion object {

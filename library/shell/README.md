@@ -113,10 +113,12 @@ on screen, and `ShellHost` draws it itself, around the displays:
   button. `ShellFrame` provides `LocalBesideNavigation` for this, and `PageScaffold` and the
   list-detail scene read it through `isTopLevelPage`. A page keeps that look while another entry
   replaces it and it animates out, so it never grows a back button on the way.
-- **The tabs and that page swap in place.** Between them the shell fades one out and the other
-  in without moving anything (`TabTransitions.inPlace()`), whatever the tab transition: the
-  navigation and the app bar's place are already on screen, so the page does not slide in like a
-  new window. Pages opened from it still do, and back from it keeps the system's gesture.
+- **The tabs and that page swap in place.** Nothing moves between them
+  (`TabTransitions.inPlace()`), whatever the tab transition: the navigation and the app bar's
+  place are already on screen, so the page does not slide in like a new window. Only the one on
+  top fades, over one that stays opaque: an opening page fades in over the old, a closing one
+  fades out over the tabs, so the display's backdrop never shows between them. Pages opened from
+  it still slide in, and back from it keeps the system's gesture.
 - **Its start corners are square.** A page clips to the display's rounded corners, as a window
   does, but beside the navigation its start edge meets the rail or drawer rather than the
   screen's corners, so only its end corners follow the display.
@@ -175,6 +177,15 @@ JUnit 5. They start Koin with a `CommonDataStore`, which `AppTheme` reads.
 - **Content passes under the bottom chrome.** Tabs reach the bottom of the window, behind the
   bottom bar, the banner, the mini player and the system bar; their total height reaches the tabs
   as `LocalContentPadding`.
+- **The bars can hide on scroll, the whole chrome together.** The bottom bar slides away as
+  content scrolls down (`hideBottomBarOnScroll`), and so, with `hideTopBarOnScroll`, does the app
+  bar, whatever its style: a large bar collapses first. Both return as soon as content scrolls up,
+  and the floating action buttons fold. Material's `Scaffold` places the buttons above the bottom
+  bar as it is laid out, and the hiding bar takes the navigation bar's inset with it, so the
+  buttons rise by whatever part of that inset the bar no longer covers, rather than sitting over
+  the gesture bar.
+- **Both scaffolds are Material's.** The tabs' scaffold here and `PageScaffold` are Material 3
+  `Scaffold`s; the Toolkit supplies what goes in their slots.
 - **Wide windows can frame the content.** Beside a rail or a permanent drawer, the navigation and
   the app bar can share one colour with the content in a card (`NavigationTint.Always`, the
   default), take it only once content scrolls (`OnScroll`), or keep Material's own behaviour

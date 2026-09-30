@@ -37,6 +37,8 @@
     <string name="shell_navigation_tint">Kulay ng rail at app bar</string>
     <string name="shell_hide_bottom_bar">Itago ang ibabang bar habang nag-i-scroll</string>
     <string name="shell_hide_bottom_bar_summary">Umaalis kapag nag-scroll pababa ang content, habang walang player na ipinapakita</string>
+    <string name="shell_hide_top_bar">Itago ang app bar habang nag-i-scroll</string>
+    <string name="shell_hide_top_bar_summary">Umaalis kapag nag-scroll pababa ang content, ang malaking bar pagkatapos nitong lumiit, at bumabalik agad kapag nag-scroll pataas</string>
     <string name="shell_limit_width">Limitahan ang lapad ng content sa malalaking window</string>
     <string name="shell_limit_width_summary">Igitna ang content na may margin, parang website, lampas sa maximum na lapad ng layout policy</string>
     <string name="shell_banner_style">Banner</string>

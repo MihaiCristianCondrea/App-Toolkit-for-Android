@@ -37,6 +37,8 @@
     <string name="shell_navigation_tint">ریل اور ایپ بار کا رنگ</string>
     <string name="shell_hide_bottom_bar">اسکرول کرنے پر نچلا بار چھپائیں</string>
     <string name="shell_hide_bottom_bar_summary">مواد نیچے اسکرول ہونے پر ہٹ جاتا ہے، جب تک کوئی پلیئر نظر نہ آ رہا ہو</string>
+    <string name="shell_hide_top_bar">اسکرول کرنے پر ایپ بار چھپائیں</string>
+    <string name="shell_hide_top_bar_summary">مواد نیچے اسکرول ہونے پر ہٹ جاتا ہے، بڑا بار سکڑنے کے بعد، اور اوپر اسکرول کرتے ہی واپس آ جاتا ہے</string>
     <string name="shell_limit_width">بڑی ونڈوز میں مواد کی چوڑائی محدود کریں</string>
     <string name="shell_limit_width_summary">لے آؤٹ پالیسی کی زیادہ سے زیادہ چوڑائی سے آگے، ویب سائٹ کی طرح حاشیوں کے ساتھ مواد کو درمیان میں رکھیں</string>
     <string name="shell_banner_style">بینر</string>

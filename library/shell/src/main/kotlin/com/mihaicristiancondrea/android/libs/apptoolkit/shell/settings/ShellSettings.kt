@@ -103,7 +103,7 @@ enum class AnimationSpeed(val durationScale: Float) {
  *
  * Most are the person's layout choices, offered in the display settings of
  * `:library:feature:display` (app bar and bottom bar style, navigation colour, content width,
- * banner, tab transition, back swipe). The rest are developer options, offered by
+ * banner, tab transition, back swipe, hiding the bars on scroll). The rest are developer options, offered by
  * `:library:feature:developer` once unlocked: [startOverride], [layoutMode], [accessoryMode] and
  * [animationSpeed]. The defaults leave the app exactly as its graph declares it.
  */
@@ -123,4 +123,9 @@ data class ShellSettings(
     val navigationBarStyle: NavigationBarStyle = NavigationBarStyle.Standard,
     val bannerStyle: BannerStyle = BannerStyle.Automatic,
     val navigationTint: NavigationTint = NavigationTint.Always,
+    /**
+     * Whether the app bar slides away as content scrolls down, whatever its style, and comes back
+     * as soon as it scrolls up. A large bar collapses first. The status bar keeps its strip.
+     */
+    val hideTopBarOnScroll: Boolean = false,
 )

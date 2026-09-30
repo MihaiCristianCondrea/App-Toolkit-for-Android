@@ -37,6 +37,8 @@
     <string name="shell_navigation_tint">Farbe von Leiste und App-Leiste</string>
     <string name="shell_hide_bottom_bar">Untere Leiste beim Scrollen ausblenden</string>
     <string name="shell_hide_bottom_bar_summary">Gleitet weg, wenn der Inhalt nach unten scrollt und kein Player angezeigt wird</string>
+    <string name="shell_hide_top_bar">App-Leiste beim Scrollen ausblenden</string>
+    <string name="shell_hide_top_bar_summary">Gleitet weg, wenn der Inhalt nach unten scrollt, eine große Leiste erst nach dem Einklappen, und kehrt zurück, sobald er nach oben scrollt</string>
     <string name="shell_limit_width">Inhaltsbreite auf großen Fenstern begrenzen</string>
     <string name="shell_limit_width_summary">Inhalt mit Rändern zentrieren, wie eine Website, ab der maximalen Breite der Layoutrichtlinie</string>
     <string name="shell_banner_style">Banner</string>

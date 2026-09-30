@@ -17,6 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome
 
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.foundation.layout.offset
+import androidx.compose.runtime.mutableIntStateOf
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.rememberFabScrollBehavior
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.Arrangement
@@ -114,11 +117,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShel
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.ContentWidthBox
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.HideOnScrollTopBar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalContentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalTopBarStyleOverride
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.ShellTopAppBar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.TopBarSearch
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.rememberTopBarHideState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.rememberTopBarScrollBehavior
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.resetTo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.topBarInsets
@@ -399,11 +404,18 @@ private fun ShellBody(
     // Extended buttons fold to their icon while the content scrolls down.
     val fabScroll = rememberFabScrollBehavior()
     val hideOnScroll = settings.hideBottomBarOnScroll && !playerActive
+    // The app bar slides away too, whatever its style, when the settings ask for it.
+    val hideTopBar = settings.hideTopBarOnScroll
+    val topHide = rememberTopBarHideState()
+    // The bottom bar's height as laid out now, which shrinks as it hides.
+    var bottomBarHeight by remember { mutableIntStateOf(0) }
+    val bottomInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
     val search = tab.search?.takeIf { !isChild }?.let { TopBarSearch(searches[tabIndex], stringResource(it.hint)) }
 
     // Every destination starts with its bars as it declares them, whatever the last one scrolled them to.
-    LaunchedEffect(topKey, hideOnScroll) {
+    LaunchedEffect(topKey, hideOnScroll, hideTopBar) {
         fabScroll.expanded = true
+        topHide.show()
         launch { topScroll.resetTo(collapsed = style == TopBarStyle.LargeCollapsed) }
         val offset = bottomScroll.state.heightOffset
         if (offset != 0f) animate(offset, 0f) { value, _ -> bottomScroll.state.heightOffset = value }
@@ -447,50 +459,58 @@ private fun ShellBody(
     Scaffold(
         modifier = Modifier
             .nestedScroll(topScroll.nestedScrollConnection)
+            // After the bar's own behaviour, so a large bar collapses before it slides away.
+            .then(if (hideTopBar) Modifier.nestedScroll(topHide.nestedScrollConnection) else Modifier)
             .nestedScroll(fabScroll.nestedScrollConnection)
             .then(if (hideOnScroll) Modifier.nestedScroll(bottomScroll.nestedScrollConnection) else Modifier),
         topBar = {
-            ShellTopAppBar(
-                style = style,
-                title = title,
-                navigationIcon = {
-                    // One button for both roles, so the menu becoming a back arrow crossfades in
-                    // place; it slides out only where there is neither, beside a rail or drawer.
-                    AnimatedIconButtonDirection(
-                        visible = isChild || showMenuButton,
-                        icon = ToolkitIcon.Vector(if (isChild) Icons.AutoMirrored.Filled.ArrowBack else Icons.Outlined.Menu),
-                        contentDescription = stringResource(
-                            if (isChild) CoreUiR.string.go_back else R.string.shell_open_navigation,
-                        ),
-                        onClick = if (isChild) navigator::goBack else onMenuClick,
-                        // Opening the drawer or going back already moves the screen, so the
-                        // Toolkit's main app bar plays only the click sound here.
-                        feedback = ButtonFeedback(hapticFeedbackType = null),
-                    )
-                },
-                actions = {
-                    destination.actions?.invoke(this, topKey)
-                    OverflowMenu(graph.overflow, callbacks, visible = !isChild)
-                },
-                scrollBehavior = topScroll,
-                windowInsets = topBarInsets(reachesStart = !besideNavigation),
-                search = search,
-                // Tinted, the frame behind draws the bar's colour for the bar and the rail together.
-                colors = if (tinted) {
-                    TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color.Transparent,
-                        scrolledContainerColor = Color.Transparent,
-                    )
-                } else {
-                    null
-                },
-            )
+            val barInsets = topBarInsets(reachesStart = !besideNavigation)
+            HideOnScrollTopBar(topHide, enabled = hideTopBar, windowInsets = barInsets) {
+                ShellTopAppBar(
+                    style = style,
+                    title = title,
+                    navigationIcon = {
+                        // One button for both roles, so the menu becoming a back arrow crossfades in
+                        // place; it slides out only where there is neither, beside a rail or drawer.
+                        AnimatedIconButtonDirection(
+                            visible = isChild || showMenuButton,
+                            icon = ToolkitIcon.Vector(if (isChild) Icons.AutoMirrored.Filled.ArrowBack else Icons.Outlined.Menu),
+                            contentDescription = stringResource(
+                                if (isChild) CoreUiR.string.go_back else R.string.shell_open_navigation,
+                            ),
+                            onClick = if (isChild) navigator::goBack else onMenuClick,
+                            // Opening the drawer or going back already moves the screen, so the
+                            // Toolkit's main app bar plays only the click sound here.
+                            feedback = ButtonFeedback(hapticFeedbackType = null),
+                        )
+                    },
+                    actions = {
+                        destination.actions?.invoke(this, topKey)
+                        OverflowMenu(graph.overflow, callbacks, visible = !isChild)
+                    },
+                    scrollBehavior = topScroll,
+                    windowInsets = barInsets,
+                    search = search,
+                    // Tinted, the frame behind draws the bar's colour for the bar and the rail together.
+                    colors = if (tinted) {
+                        TopAppBarDefaults.topAppBarColors(
+                            containerColor = Color.Transparent,
+                            scrolledContainerColor = Color.Transparent,
+                        )
+                    } else {
+                        null
+                    },
+                )
+            }
         },
         bottomBar = {
             HideOnScrollBottomBar(
                 scrollBehavior = if (hideOnScroll) bottomScroll else null,
                 modifier = Modifier
-                    .onSizeChanged { size -> onBottomDockChange(with(density) { size.height.toDp() }) }
+                    .onSizeChanged { size ->
+                        bottomBarHeight = size.height
+                        onBottomDockChange(with(density) { size.height.toDp() })
+                    }
                     .graphicsLayer {
                         val expansion = playerExpansion()
                         translationY = size.height * expansion
@@ -520,6 +540,11 @@ private fun ShellBody(
                     Column(
                         modifier = Modifier
                             .padding(bottom = playerReserve)
+                            // Material's Scaffold places the buttons above the bottom bar as it is
+                            // laid out, and the hiding bar takes the navigation bar's inset with it:
+                            // hidden, it left them over the gesture bar. They rise by the part of
+                            // the inset the bar no longer covers.
+                            .offset { IntOffset(0, -(bottomInsets.getBottom(this) - bottomBarHeight).coerceAtLeast(0)) }
                             .graphicsLayer { alpha = 1f - playerExpansion() },
                         horizontalAlignment = Alignment.End,
                         verticalArrangement = Arrangement.spacedBy(16.dp),

@@ -37,6 +37,8 @@
     <string name="shell_navigation_tint">Culoarea barei laterale și a barei aplicației</string>
     <string name="shell_hide_bottom_bar">Ascunde bara de jos la derulare</string>
     <string name="shell_hide_bottom_bar_summary">Dispare când conținutul se derulează în jos, cât timp nu este afișat niciun player</string>
+    <string name="shell_hide_top_bar">Ascunde bara aplicației la derulare</string>
+    <string name="shell_hide_top_bar_summary">Dispare când conținutul se derulează în jos, o bară mare după ce se restrânge, și revine imediat ce se derulează în sus</string>
     <string name="shell_limit_width">Limitează lățimea conținutului în ferestre mari</string>
     <string name="shell_limit_width_summary">Centrează conținutul cu margini, ca un site web, peste lățimea maximă a regulii de aspect</string>
     <string name="shell_banner_style">Banner</string>

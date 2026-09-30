@@ -109,6 +109,9 @@ fun PageScaffold(
     val declared = LocalTopBarStyleOverride.current ?: if (topLevel) TopBarStyle.Small else style
     val resolvedStyle = if (pane == PaneRole.None) LocalShellLayout.current.topBarFor(declared) else TopBarStyle.Hidden
     val scrollBehavior = rememberTopBarScrollBehavior(resolvedStyle)
+    val hideTopBar = LocalHideTopBarOnScroll.current && pane == PaneRole.None
+    val topHide = rememberTopBarHideState()
+    val barInsets = topBarInsets()
     val fabHost = remember { FabHost() }
     val fabScroll = rememberFabScrollBehavior()
     val contentInsets = when (pane) {
@@ -120,32 +123,36 @@ fun PageScaffold(
         modifier = modifier
             .then(if (carded && beside != null) Modifier.drawBehind { drawRect(beside.frameColor()) } else Modifier)
             .nestedScroll(scrollBehavior.nestedScrollConnection)
+            // After the bar's own behaviour, so a large bar collapses before it slides away.
+            .then(if (hideTopBar) Modifier.nestedScroll(topHide.nestedScrollConnection) else Modifier)
             .nestedScroll(fabScroll.nestedScrollConnection),
         topBar = {
-            ShellTopAppBar(
-                style = resolvedStyle,
-                title = title,
-                navigationIcon = {
-                    if (!topLevel) {
-                        AnimatedIconButtonDirection(
-                            icon = ToolkitIcon.Vector(Icons.AutoMirrored.Filled.ArrowBack),
-                            contentDescription = stringResource(R.string.go_back),
-                            onClick = { if (pageKey != null) navigator.close(pageKey) else navigator.goBack() },
+            HideOnScrollTopBar(topHide, enabled = hideTopBar, windowInsets = barInsets) {
+                ShellTopAppBar(
+                    style = resolvedStyle,
+                    title = title,
+                    navigationIcon = {
+                        if (!topLevel) {
+                            AnimatedIconButtonDirection(
+                                icon = ToolkitIcon.Vector(Icons.AutoMirrored.Filled.ArrowBack),
+                                contentDescription = stringResource(R.string.go_back),
+                                onClick = { if (pageKey != null) navigator.close(pageKey) else navigator.goBack() },
+                            )
+                        }
+                    },
+                    actions = actions,
+                    scrollBehavior = scrollBehavior,
+                    // Over the shared frame colour, as the tabs' bar is.
+                    colors = if (carded) {
+                        TopAppBarDefaults.topAppBarColors(
+                            containerColor = Color.Transparent,
+                            scrolledContainerColor = Color.Transparent,
                         )
-                    }
-                },
-                actions = actions,
-                scrollBehavior = scrollBehavior,
-                // Over the shared frame colour, as the tabs' bar is.
-                colors = if (carded) {
-                    TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color.Transparent,
-                        scrolledContainerColor = Color.Transparent,
-                    )
-                } else {
-                    null
-                },
-            )
+                    } else {
+                        null
+                    },
+                )
+            }
         },
         containerColor = if (carded) Color.Transparent else MaterialTheme.colorScheme.background,
         contentColor = MaterialTheme.colorScheme.onBackground,

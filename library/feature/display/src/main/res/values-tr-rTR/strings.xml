@@ -37,6 +37,8 @@
     <string name="shell_navigation_tint">Yan çubuk ve uygulama çubuğu rengi</string>
     <string name="shell_hide_bottom_bar">Kaydırırken alt çubuğu gizle</string>
     <string name="shell_hide_bottom_bar_summary">İçerik aşağı kaydırıldığında, oynatıcı gösterilmiyorsa kayarak gizlenir</string>
+    <string name="shell_hide_top_bar">Kaydırırken uygulama çubuğunu gizle</string>
+    <string name="shell_hide_top_bar_summary">İçerik aşağı kaydırıldığında kayarak gizlenir, büyük çubuk daraldıktan sonra, ve yukarı kaydırılınca hemen geri gelir</string>
     <string name="shell_limit_width">Büyük pencerelerde içerik genişliğini sınırla</string>
     <string name="shell_limit_width_summary">Düzen politikasının azami genişliğini aşınca içeriği bir web sitesi gibi kenar boşluklarıyla ortala</string>
     <string name="shell_banner_style">Banner</string>

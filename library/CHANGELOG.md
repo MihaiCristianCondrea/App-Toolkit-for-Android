@@ -28,6 +28,7 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Added `FabScrollBehavior` to `:library:core:ui`, and an `expanded` parameter to `ToolkitFabColumn` and `ToolkitFloatingActionButton`: `PageScaffold` and the shell's tab scaffold fold extended buttons to their icon while the content scrolls down and unfold them when it scrolls back.
 - Added `placeholder` to `page { }` and `pageIfAbsent { }` in `:library:navigation`: what the detail side of a `PaneRole.List` page shows while no detail is open, `ListPlaceholder` when absent.
 - Added `LocalBesideNavigation` and `isTopLevelPage(key)` to `:library:navigation`, which tell a page whether the rail or permanent drawer opened it.
+- Added hiding the app bar on scroll, for every style: `ShellSettings.hideTopBarOnScroll`, offered in the display settings, and `HideOnScrollTopBar`, `TopBarHideState` and `LocalHideTopBarOnScroll` in `:library:core:ui`, which `PageScaffold` and the shell's tab scaffold use. A large bar collapses before it slides away.
 - Added `ShellLayoutInfo.declaredContentMaxWidth`: the app's own maximum content width, whether or not the display settings lift it.
 - Added `AboutRoute`, `ThemeSettingsRoute`, `DisplaySettingsRoute`, `PrivacySettingsRoute`, `AdvancedSettingsRoute`, `DiagnosticsSettingsRoute`, `DeveloperOptionsRoute`, `StartupRoute` and `OnboardingRoute`, one key per Toolkit page.
 
@@ -57,7 +58,7 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - `AnimatedIconButtonDirection` crossfades its glyph when `icon` changes, so one button can turn from a menu button into a back arrow without popping.
 - A navigation no longer recomposes every tab screen: the shell keeps its callbacks and the static `LocalShellChrome` controller across recompositions. The chrome and the player overlay no longer recompose on every frame the player moves.
 - A page beside the rail or permanent drawer keeps its tab-like app bar while another entry replaces it, instead of showing a back button for the length of its exit.
-- Beside a rail or a permanent drawer, the tabs and the page the navigation opened replace one another with a fade in place (`TabTransitions.inPlace()`), instead of the page sliding in like a new window under a navigation already on screen.
+- Beside a rail or a permanent drawer, the tabs and the page the navigation opened replace one another with a fade in place (`TabTransitions.inPlace(back)`), instead of the page sliding in like a new window under a navigation already on screen. Only the one on top fades, over one that stays opaque, so the display's grey backdrop no longer flashes between them.
 - The expanded rail starts collapsed and collapses again when the layout changes, such as on rotation.
 - A back swipe from the detail's own edge of a list and detail shrinks the detail in place, following the finger, instead of sliding the separator away from it.
 - Switching between two tabs that both search keeps the search field in place instead of fading it out and in.
@@ -72,6 +73,10 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Removed `GeneralSettingsRoute`, `GeneralSettingsScreen`, `GeneralSettingsContentProvider`, `GeneralSettingsRepository` and `SettingsContent`; each settings category is its own page.
 - Removed `BaseActivity` from `:library:core:ui`, `Context.openActivity` from `:library:core:common`, and `GmsHostFactory` from `:library:feature:about`.
 - Removed the dependencies between feature modules, and `ALLOWED_LIBRARY_FEATURE_EDGES` with them: `checkModuleBoundaries` now rejects every feature-to-feature edge.
+
+### Fixed
+
+- Fixed the tabs' floating action buttons sitting over the gesture bar once the bottom bar had hidden on scroll: they now rise by the part of the navigation bar's inset the hiding bar no longer covers.
 
 ---
 
