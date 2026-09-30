@@ -36,7 +36,8 @@
     <string name="dark_theme">ธีมมืด</string>
     <string name="weather_effect">เอฟเฟกต์สภาพอากาศ</string>
     <string name="weather_effect_automatic">อัตโนมัติ</string>
+    <string name="weather_effect_snow">หิมะ</string>
     <string name="weather_effect_off">ปิด</string>
     <string name="weather_effect_rain">ฝน</string>
-    <string name="weather_effect_info">โหมดอัตโนมัติจะให้หิมะตกขณะใช้พาเลตต์คริสต์มาส ฝนจะตกกับทุกพาเลตต์</string>
+    <string name="weather_effect_info">โหมดอัตโนมัติจะให้หิมะตกขณะใช้พาเลตต์คริสต์มาส หิมะและฝนจะตกกับทุกพาเลตต์</string>
 </resources>

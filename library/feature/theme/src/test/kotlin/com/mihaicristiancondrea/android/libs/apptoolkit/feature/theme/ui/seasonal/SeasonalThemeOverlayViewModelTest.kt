@@ -121,6 +121,27 @@ class SeasonalThemeOverlayViewModelTest {
     }
 
     @Test
+    fun `the snow weather effect snows over any palette all year`() = runTest {
+        val viewModel = viewModel(today = july)
+        themeState.value = themeWith(StaticPaletteIds.GOOGLE_BLUE, dynamic = true)
+
+        seasonalState.value = SeasonalThemeState(unlocked = true, weatherEffect = WeatherEffect.Snow)
+
+        assertTrue(viewModel.uiState.value.data!!.showSnowfall)
+        assertFalse(viewModel.uiState.value.data!!.showRain)
+    }
+
+    @Test
+    fun `snow on any palette needs the easter egg`() = runTest {
+        val viewModel = viewModel(today = july)
+        themeState.value = themeWith(StaticPaletteIds.GOOGLE_BLUE, dynamic = false)
+
+        seasonalState.value = SeasonalThemeState(weatherEffect = WeatherEffect.Snow)
+
+        assertFalse(viewModel.uiState.value.data!!.showSnowfall)
+    }
+
+    @Test
     fun `rain needs the easter egg`() = runTest {
         val viewModel = viewModel(today = july)
 

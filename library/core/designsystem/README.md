@@ -352,10 +352,13 @@ follows the composition's frame clock, so nothing recomposes while snow falls an
 background. `SnowfallStyle` sets density, colors, flake size, speed, wind, opacity, and shape. The
 motion lives in `SnowfallSimulation`, which is covered by JVM tests.
 
-`Modifier.rainfall(RainfallStyle)` in `ui.effects.rainfall` draws falling rain the same way: slanted
-streaks, drawn in the draw phase only from plain arrays, following the frame clock. `RainfallStyle`
-sets density, colors, streak length and thickness, speed, wind, opacity, and a cap on the number of
-drops. The motion lives in `RainfallSimulation`, which is covered by JVM tests.
+`Modifier.rainfall(RainfallStyle)` in `ui.effects.rainfall` draws falling rain the same way: drawn
+in the draw phase only from plain arrays, following the frame clock. Each drop has a depth, and a
+nearer drop is longer, thicker, brighter and faster, and lands lower. Landing drops leave a flat
+ring that widens and fades, the wind gusts around its set value, and the rain thickens and thins
+in showers. `RainfallStyle` sets density, colors, streak length and thickness, speed, wind, gusts,
+showers, splashes and their size, opacity, and a cap on the number of drops. The motion lives in
+`RainfallSimulation`, which is covered by JVM tests.
 
 ## Current risks
 

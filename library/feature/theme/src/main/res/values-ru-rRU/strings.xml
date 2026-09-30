@@ -36,7 +36,8 @@
     <string name="dark_theme">Тёмная тема</string>
     <string name="weather_effect">Погодный эффект</string>
     <string name="weather_effect_automatic">Автоматически</string>
+    <string name="weather_effect_snow">Снег</string>
     <string name="weather_effect_off">Выкл.</string>
     <string name="weather_effect_rain">Дождь</string>
-    <string name="weather_effect_info">В автоматическом режиме снег идёт, пока используется рождественская палитра. Дождь идёт с любой палитрой.</string>
+    <string name="weather_effect_info">В автоматическом режиме снег идёт, пока используется рождественская палитра. Снег и дождь идут с любой палитрой.</string>
 </resources>

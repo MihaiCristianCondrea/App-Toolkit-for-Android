@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AcUnit
+import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.CloudOff
 import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.runtime.Composable
@@ -125,14 +126,16 @@ internal fun WeatherEffectDialog(
 
 private val WeatherEffect.icon: ImageVector
     get() = when (this) {
-        WeatherEffect.Automatic -> Icons.Outlined.AcUnit
-        WeatherEffect.Off -> Icons.Outlined.CloudOff
+        WeatherEffect.Automatic -> Icons.Outlined.AutoAwesome
+        WeatherEffect.Snow -> Icons.Outlined.AcUnit
         WeatherEffect.Rain -> Icons.Outlined.WaterDrop
+        WeatherEffect.Off -> Icons.Outlined.CloudOff
     }
 
 private val WeatherEffect.label: Int
     get() = when (this) {
         WeatherEffect.Automatic -> R.string.weather_effect_automatic
-        WeatherEffect.Off -> R.string.weather_effect_off
+        WeatherEffect.Snow -> R.string.weather_effect_snow
         WeatherEffect.Rain -> R.string.weather_effect_rain
+        WeatherEffect.Off -> R.string.weather_effect_off
     }

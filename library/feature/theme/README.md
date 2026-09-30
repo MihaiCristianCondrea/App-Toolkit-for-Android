@@ -63,8 +63,10 @@ What people see:
   action. Its icon shows the effect in use, and it opens a dialog of radio rows, applied with Done,
   like the display settings' startup page dialog:
   - Automatic, the default: snow with the Christmas palette, as described above.
+  - Snow: snow falls over the app, whatever the palette and the season.
+  - Rain: rain falls over the app, whatever the palette. It gusts, comes and goes in showers,
+    and splashes where it lands.
   - Off: nothing falls, and the Christmas palette stays.
-  - Rain: rain falls over the app, whatever the palette.
 
   The choice is stored with `SeasonalThemeRepository.setWeatherEffect` as a `WeatherEffect`. The
   action is `WeatherEffectAction`, which shares the page's `ThemeSettingsViewModel`.

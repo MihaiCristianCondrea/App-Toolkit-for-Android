@@ -36,7 +36,8 @@
     <string name="dark_theme">Koyu tema</string>
     <string name="weather_effect">Hava efekti</string>
     <string name="weather_effect_automatic">Otomatik</string>
+    <string name="weather_effect_snow">Kar</string>
     <string name="weather_effect_off">Kapalı</string>
     <string name="weather_effect_rain">Yağmur</string>
-    <string name="weather_effect_info">Otomatik seçiliyken Noel paleti kullanıldığı sürece kar yağar. Yağmur her paletle yağar.</string>
+    <string name="weather_effect_info">Otomatik seçiliyken Noel paleti kullanıldığı sürece kar yağar. Kar ve yağmur her paletle yağar.</string>
 </resources>

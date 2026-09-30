@@ -36,7 +36,8 @@
     <string name="dark_theme">Temă întunecată</string>
     <string name="weather_effect">Efect meteo</string>
     <string name="weather_effect_automatic">Automat</string>
+    <string name="weather_effect_snow">Zăpadă</string>
     <string name="weather_effect_off">Dezactivat</string>
     <string name="weather_effect_rain">Ploaie</string>
-    <string name="weather_effect_info">Pe Automat ninge cât timp este folosită paleta de Crăciun. Ploaia cade cu orice paletă.</string>
+    <string name="weather_effect_info">Pe Automat ninge cât timp este folosită paleta de Crăciun. Zăpada și ploaia cad cu orice paletă.</string>
 </resources>

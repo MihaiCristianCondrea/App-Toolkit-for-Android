@@ -36,7 +36,8 @@
     <string name="dark_theme">डार्क थीम</string>
     <string name="weather_effect">मौसम इफ़ेक्ट</string>
     <string name="weather_effect_automatic">अपने-आप</string>
+    <string name="weather_effect_snow">बर्फ़</string>
     <string name="weather_effect_off">बंद</string>
     <string name="weather_effect_rain">बारिश</string>
-    <string name="weather_effect_info">अपने-आप पर, क्रिसमस पैलेट इस्तेमाल होने तक बर्फ़ गिरती है। बारिश किसी भी पैलेट के साथ होती है।</string>
+    <string name="weather_effect_info">अपने-आप पर, क्रिसमस पैलेट इस्तेमाल होने तक बर्फ़ गिरती है। बर्फ़ और बारिश किसी भी पैलेट के साथ होती हैं।</string>
 </resources>

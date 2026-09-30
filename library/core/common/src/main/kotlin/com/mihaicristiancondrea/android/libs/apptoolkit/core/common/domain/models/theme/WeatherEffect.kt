@@ -19,15 +19,18 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.mode
 
 /**
  * What falls over the app, chosen from the theme settings' app bar once the About screen's easter
- * egg is found.
+ * egg is found. Listed in the order the dialog offers them; stored by name, so the order can change.
  */
 enum class WeatherEffect {
     /** Snow while the Christmas palette is worn, as the seasonal themes decide; the default. */
     Automatic,
 
-    /** Nothing falls, whatever the palette. */
-    Off,
+    /** Snow falls over the whole app, whatever the palette. */
+    Snow,
 
     /** Rain falls over the whole app, whatever the palette. */
     Rain,
+
+    /** Nothing falls, whatever the palette. */
+    Off,
 }

@@ -32,7 +32,9 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 /**
- * Draws falling rain over this element's content, the way `snowfall` draws snow.
+ * Draws falling rain over this element's content, the way `snowfall` draws snow: streaks at
+ * different depths that lean with gusting wind, thicken and thin in showers, and splash where they
+ * land.
  *
  * The rain is drawn after the content, so it sits on top of it, and it takes no input: taps go
  * through to whatever is underneath. Apply it last in a chain to cover everything the element draws.

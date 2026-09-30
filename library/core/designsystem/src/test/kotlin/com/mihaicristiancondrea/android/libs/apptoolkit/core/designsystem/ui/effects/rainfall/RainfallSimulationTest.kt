@@ -19,6 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ef
 
 import kotlin.random.Random
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
@@ -64,6 +65,55 @@ class RainfallSimulationTest {
             assertTrue(position.y > before[index] || position.y < 0f)
             assertTrue(position.x in 0f..phoneWidthPx.toFloat())
         }
+    }
+
+    @Test
+    fun `landing drops splash, unless splashes are off`() {
+        val splashing = simulation(RainfallStyle(density = 0.5f))
+        val dry = simulation(RainfallStyle(density = 0.5f, splashes = false))
+
+        repeat(times = 120) {
+            splashing.advance(elapsedMillis = 16f)
+            dry.advance(elapsedMillis = 16f)
+        }
+
+        assertTrue(splashing.splashCount > 0)
+        assertEquals(0, dry.splashCount)
+    }
+
+    @Test
+    fun `gusts swing the wind and steady wind stays put`() {
+        val gusty = simulation(RainfallStyle(gusts = 1f))
+        val steady = simulation(RainfallStyle(gusts = 0f))
+        val gustySlants = mutableSetOf<Float>()
+        val steadySlants = mutableSetOf<Float>()
+
+        repeat(times = 200) {
+            gusty.advance(elapsedMillis = 50f)
+            steady.advance(elapsedMillis = 50f)
+            gustySlants += gusty.windSlant
+            steadySlants += steady.windSlant
+        }
+
+        assertTrue(gustySlants.max() - gustySlants.min() > 0.2f)
+        assertEquals(1, steadySlants.size)
+    }
+
+    @Test
+    fun `showers thin the rain and steady rain keeps every drop`() {
+        val showery = simulation(RainfallStyle(showers = 1f))
+        val steady = simulation(RainfallStyle(showers = 0f))
+        var thinnest = 1f
+
+        repeat(times = 600) {
+            showery.advance(elapsedMillis = 50f)
+            steady.advance(elapsedMillis = 50f)
+            thinnest = minOf(thinnest, showery.intensity)
+            assertEquals(1f, steady.intensity)
+        }
+
+        assertTrue(thinnest < 0.5f)
+        assertFalse(showery.intensity > 1f)
     }
 
     private fun simulation(style: RainfallStyle) = RainfallSimulation(style, Random(7)).apply {

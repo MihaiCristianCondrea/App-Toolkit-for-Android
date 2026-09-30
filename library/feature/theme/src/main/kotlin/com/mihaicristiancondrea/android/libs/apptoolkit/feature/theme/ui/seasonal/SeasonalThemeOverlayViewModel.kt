@@ -52,8 +52,9 @@ import kotlinx.coroutines.launch
  * With the [WeatherEffect.Automatic] weather effect, the default, snow falls only while the
  * Christmas palette is actually on screen. Outside the Christmas season it also needs the easter
  * egg: a person without it who kept the Christmas palette gets the colors, not snow in July.
- * [WeatherEffect.Off] lets nothing fall, and [WeatherEffect.Rain] rains over every palette. Both are
- * picked from the theme settings' app bar, which only the easter egg opens, so rain needs it too.
+ * [WeatherEffect.Snow] and [WeatherEffect.Rain] fall over every palette, and [WeatherEffect.Off]
+ * lets nothing fall. They are picked from the theme settings' app bar, which only the easter egg
+ * opens, so snow and rain on any palette need it too.
  *
  * @param firebaseController Reports how the holiday greeting was answered.
  * @param today Supplies the local date, so tests can pick the season.
@@ -83,11 +84,13 @@ class SeasonalThemeOverlayViewModel(
         }
 
         combine(seasonal.state, theme.preferencesState) { seasonalState, themeState ->
-            val showSnowfall = seasonalState.weatherEffect == WeatherEffect.Automatic &&
+            val effect = seasonalState.weatherEffect
+            val christmasSnow = effect == WeatherEffect.Automatic &&
                 !themeState.dynamicColors &&
                 themeState.staticPaletteId == StaticPaletteIds.CHRISTMAS &&
                 (seasonalState.unlocked || today().isChristmasSeason)
-            val showRain = seasonalState.weatherEffect == WeatherEffect.Rain && seasonalState.unlocked
+            val showSnowfall = christmasSnow || (effect == WeatherEffect.Snow && seasonalState.unlocked)
+            val showRain = effect == WeatherEffect.Rain && seasonalState.unlocked
             Triple(showSnowfall, showRain, themeState.themeMode)
         }.distinctUntilChanged().onEach { (showSnowfall, showRain, themeMode) ->
             update {

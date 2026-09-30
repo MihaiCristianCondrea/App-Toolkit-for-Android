@@ -36,7 +36,8 @@
     <string name="dark_theme">ڈارک تھیم</string>
     <string name="weather_effect">موسمی اثر</string>
     <string name="weather_effect_automatic">خودکار</string>
+    <string name="weather_effect_snow">برف</string>
     <string name="weather_effect_off">بند</string>
     <string name="weather_effect_rain">بارش</string>
-    <string name="weather_effect_info">خودکار پر کرسمس پیلیٹ کے استعمال کے دوران برف گرتی ہے۔ بارش کسی بھی پیلیٹ کے ساتھ ہوتی ہے۔</string>
+    <string name="weather_effect_info">خودکار پر کرسمس پیلیٹ کے استعمال کے دوران برف گرتی ہے۔ برف اور بارش کسی بھی پیلیٹ کے ساتھ ہوتی ہیں۔</string>
 </resources>

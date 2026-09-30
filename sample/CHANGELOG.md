@@ -7,7 +7,7 @@
 ### Added
 
 - Search the quick tools and the apps from the app bar.
-- Pick the weather from a new button in the theme settings' top bar, once you find the easter egg on the About screen: snow with the Christmas colours, nothing at all, or rain over any colours.
+- Pick the weather from a new button in the theme settings' top bar, once you find the easter egg on the About screen: snow with the Christmas colours, snow or rain over any colours all year, or nothing at all. The rain gusts, comes and goes in showers, and splashes where it lands.
 
 ### Changed
 

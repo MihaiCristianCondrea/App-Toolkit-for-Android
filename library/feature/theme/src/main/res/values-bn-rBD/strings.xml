@@ -36,7 +36,8 @@
     <string name="dark_theme">ডার্ক থিম</string>
     <string name="weather_effect">আবহাওয়ার ইফেক্ট</string>
     <string name="weather_effect_automatic">স্বয়ংক্রিয়</string>
+    <string name="weather_effect_snow">তুষার</string>
     <string name="weather_effect_off">বন্ধ</string>
     <string name="weather_effect_rain">বৃষ্টি</string>
-    <string name="weather_effect_info">স্বয়ংক্রিয় থাকলে ক্রিসমাস প্যালেট ব্যবহারের সময় তুষার পড়ে। বৃষ্টি যেকোনো প্যালেটের সাথে পড়ে।</string>
+    <string name="weather_effect_info">স্বয়ংক্রিয় থাকলে ক্রিসমাস প্যালেট ব্যবহারের সময় তুষার পড়ে। তুষার ও বৃষ্টি যেকোনো প্যালেটের সাথে পড়ে।</string>
 </resources>

@@ -36,7 +36,8 @@
     <string name="dark_theme">المظهر الداكن</string>
     <string name="weather_effect">تأثير الطقس</string>
     <string name="weather_effect_automatic">تلقائي</string>
+    <string name="weather_effect_snow">ثلج</string>
     <string name="weather_effect_off">إيقاف</string>
     <string name="weather_effect_rain">مطر</string>
-    <string name="weather_effect_info">يُسقط الوضع التلقائي الثلج أثناء استخدام لوحة ألوان عيد الميلاد. ويهطل المطر مع أي لوحة ألوان.</string>
+    <string name="weather_effect_info">يُسقط الوضع التلقائي الثلج أثناء استخدام لوحة ألوان عيد الميلاد. ويتساقط الثلج والمطر مع أي لوحة ألوان.</string>
 </resources>

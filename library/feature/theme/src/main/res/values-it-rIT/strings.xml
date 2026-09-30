@@ -36,7 +36,8 @@
     <string name="dark_theme">Tema scuro</string>
     <string name="weather_effect">Effetto meteo</string>
     <string name="weather_effect_automatic">Automatico</string>
+    <string name="weather_effect_snow">Neve</string>
     <string name="weather_effect_off">Disattivato</string>
     <string name="weather_effect_rain">Pioggia</string>
-    <string name="weather_effect_info">Con Automatico la neve cade mentre è in uso la tavolozza natalizia. La pioggia cade con qualsiasi tavolozza.</string>
+    <string name="weather_effect_info">Con Automatico la neve cade mentre è in uso la tavolozza natalizia. Neve e pioggia cadono con qualsiasi tavolozza.</string>
 </resources>

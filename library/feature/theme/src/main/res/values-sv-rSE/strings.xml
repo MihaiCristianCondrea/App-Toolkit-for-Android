@@ -36,7 +36,8 @@
     <string name="dark_theme">Mörkt tema</string>
     <string name="weather_effect">Vädereffekt</string>
     <string name="weather_effect_automatic">Automatiskt</string>
+    <string name="weather_effect_snow">Snö</string>
     <string name="weather_effect_off">Av</string>
     <string name="weather_effect_rain">Regn</string>
-    <string name="weather_effect_info">Med Automatiskt faller snö medan julpaletten används. Regn faller med alla paletter.</string>
+    <string name="weather_effect_info">Med Automatiskt faller snö medan julpaletten används. Snö och regn faller med alla paletter.</string>
 </resources>

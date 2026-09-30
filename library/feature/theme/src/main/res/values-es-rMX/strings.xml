@@ -36,7 +36,8 @@
     <string name="dark_theme">Tema oscuro</string>
     <string name="weather_effect">Efecto del clima</string>
     <string name="weather_effect_automatic">Automático</string>
+    <string name="weather_effect_snow">Nieve</string>
     <string name="weather_effect_off">Desactivado</string>
     <string name="weather_effect_rain">Lluvia</string>
-    <string name="weather_effect_info">En Automático cae nieve mientras se usa la paleta navideña. La lluvia cae con cualquier paleta.</string>
+    <string name="weather_effect_info">En Automático cae nieve mientras se usa la paleta navideña. La nieve y la lluvia caen con cualquier paleta.</string>
 </resources>

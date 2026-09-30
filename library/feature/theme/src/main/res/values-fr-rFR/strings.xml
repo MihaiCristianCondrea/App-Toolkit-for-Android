@@ -36,7 +36,8 @@
     <string name="dark_theme">Thème sombre</string>
     <string name="weather_effect">Effet météo</string>
     <string name="weather_effect_automatic">Automatique</string>
+    <string name="weather_effect_snow">Neige</string>
     <string name="weather_effect_off">Désactivé</string>
     <string name="weather_effect_rain">Pluie</string>
-    <string name="weather_effect_info">En mode Automatique, la neige tombe tant que la palette de Noël est utilisée. La pluie tombe avec toutes les palettes.</string>
+    <string name="weather_effect_info">En mode Automatique, la neige tombe tant que la palette de Noël est utilisée. La neige et la pluie tombent avec toutes les palettes.</string>
 </resources>

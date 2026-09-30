@@ -36,7 +36,8 @@
     <string name="dark_theme">Madilim na tema</string>
     <string name="weather_effect">Epekto ng panahon</string>
     <string name="weather_effect_automatic">Awtomatiko</string>
+    <string name="weather_effect_snow">Niyebe</string>
     <string name="weather_effect_off">Naka-off</string>
     <string name="weather_effect_rain">Ulan</string>
-    <string name="weather_effect_info">Sa Awtomatiko, bumabagsak ang niyebe habang ginagamit ang Christmas palette. Umuulan sa anumang palette.</string>
+    <string name="weather_effect_info">Sa Awtomatiko, bumabagsak ang niyebe habang ginagamit ang Christmas palette. Bumabagsak ang niyebe at ulan sa anumang palette.</string>
 </resources>

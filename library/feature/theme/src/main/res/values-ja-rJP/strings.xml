@@ -36,7 +36,8 @@
     <string name="dark_theme">ダークテーマ</string>
     <string name="weather_effect">天気エフェクト</string>
     <string name="weather_effect_automatic">自動</string>
+    <string name="weather_effect_snow">雪</string>
     <string name="weather_effect_off">オフ</string>
     <string name="weather_effect_rain">雨</string>
-    <string name="weather_effect_info">自動では、クリスマスパレットの使用中に雪が降ります。雨はどのパレットでも降ります。</string>
+    <string name="weather_effect_info">自動では、クリスマスパレットの使用中に雪が降ります。雪と雨はどのパレットでも降ります。</string>
 </resources>

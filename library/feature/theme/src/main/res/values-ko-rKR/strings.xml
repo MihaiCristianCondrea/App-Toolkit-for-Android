@@ -36,7 +36,8 @@
     <string name="dark_theme">어두운 테마</string>
     <string name="weather_effect">날씨 효과</string>
     <string name="weather_effect_automatic">자동</string>
+    <string name="weather_effect_snow">눈</string>
     <string name="weather_effect_off">사용 안함</string>
     <string name="weather_effect_rain">비</string>
-    <string name="weather_effect_info">자동으로 설정하면 크리스마스 팔레트를 사용하는 동안 눈이 내립니다. 비는 모든 팔레트에서 내립니다.</string>
+    <string name="weather_effect_info">자동으로 설정하면 크리스마스 팔레트를 사용하는 동안 눈이 내립니다. 눈과 비는 모든 팔레트에서 내립니다.</string>
 </resources>

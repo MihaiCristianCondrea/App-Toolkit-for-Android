@@ -36,7 +36,8 @@
     <string name="dark_theme">Sötét téma</string>
     <string name="weather_effect">Időjárás-effektus</string>
     <string name="weather_effect_automatic">Automatikus</string>
+    <string name="weather_effect_snow">Hó</string>
     <string name="weather_effect_off">Ki</string>
     <string name="weather_effect_rain">Eső</string>
-    <string name="weather_effect_info">Automatikus módban havazik, amíg a karácsonyi paletta van használatban. Az eső bármelyik palettával esik.</string>
+    <string name="weather_effect_info">Automatikus módban havazik, amíg a karácsonyi paletta van használatban. A hó és az eső bármelyik palettával esik.</string>
 </resources>

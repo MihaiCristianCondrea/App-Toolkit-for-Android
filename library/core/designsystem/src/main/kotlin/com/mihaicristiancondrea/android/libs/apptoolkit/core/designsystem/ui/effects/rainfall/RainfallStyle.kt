@@ -31,9 +31,15 @@ import androidx.compose.ui.unit.dp
  * surface behind them.
  * @property minLength Shortest streak.
  * @property maxLength Longest streak. Longer streaks also fall faster, so length doubles as depth.
- * @property thickness Stroke width of a streak.
+ * @property thickness Stroke width of a streak at middle depth. Near streaks are drawn thicker, far
+ * ones thinner.
  * @property speed Fall speed multiplier. `1` is steady rain.
  * @property wind Slant and drift from `-1` (blown to the left) to `1` (to the right).
+ * @property gusts How much the wind swings around [wind], from `0` (steady) to `1` (stormy).
+ * @property showers How much the rain comes and goes, from `0` (steady) to `1` (dropping to
+ * nothing between showers).
+ * @property splashes Whether landing drops leave a widening ring.
+ * @property splashSize How wide the splash of a drop at middle depth grows.
  * @property minAlpha Opacity of the faintest drops.
  * @property maxAlpha Opacity of the most visible drops.
  * @property maxDrops Hard cap on the drop count, which bounds the per-frame cost.
@@ -47,6 +53,10 @@ data class RainfallStyle(
     val thickness: Dp = 1.5.dp,
     val speed: Float = 1f,
     val wind: Float = 0.15f,
+    val gusts: Float = 0.5f,
+    val showers: Float = 0.35f,
+    val splashes: Boolean = true,
+    val splashSize: Dp = 7.dp,
     val minAlpha: Float = 0.25f,
     val maxAlpha: Float = 0.6f,
     val maxDrops: Int = 180,
@@ -56,5 +66,7 @@ data class RainfallStyle(
         require(minLength <= maxLength) { "minLength must not exceed maxLength" }
         require(minAlpha <= maxAlpha) { "minAlpha must not exceed maxAlpha" }
         require(maxDrops >= 0) { "maxDrops must not be negative" }
+        require(gusts in 0f..1f) { "gusts must be between 0 and 1" }
+        require(showers in 0f..1f) { "showers must be between 0 and 1" }
     }
 }
