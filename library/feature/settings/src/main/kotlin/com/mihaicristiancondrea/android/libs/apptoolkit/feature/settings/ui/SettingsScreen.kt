@@ -180,7 +180,7 @@ fun SettingsList(
                 GeneralTextField(
                     value = query,
                     onValueChange = onQueryChange,
-                    style = GeneralTextFieldStyle.Search,
+                    style = GeneralTextFieldStyle.SearchOutlined,
                     placeholder = stringResource(R.string.search_settings),
                     leadingIcon = ToolkitIcon.Vector(Icons.Outlined.Search),
                     trailingIcon = if (query.isNotEmpty()) ToolkitIcon.Vector(Icons.Outlined.Close) else null,
