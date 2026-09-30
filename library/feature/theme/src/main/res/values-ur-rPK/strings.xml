@@ -34,5 +34,9 @@
     <string name="holiday_greeting_halloween_message">ڈراؤنا موسم آ گیا ہے۔ کیا آپ اس کے دوران ہیلووین تھیم استعمال کرنا چاہیں گے؟</string>
     <string name="holiday_greeting_use_theme">چھٹیوں کے دوران تہوار کی تھیم استعمال کریں</string>
     <string name="dark_theme">ڈارک تھیم</string>
-    <string name="snowfall">برف باری</string>
+    <string name="weather_effect">موسمی اثر</string>
+    <string name="weather_effect_automatic">خودکار</string>
+    <string name="weather_effect_off">بند</string>
+    <string name="weather_effect_rain">بارش</string>
+    <string name="weather_effect_info">خودکار پر کرسمس پیلیٹ کے استعمال کے دوران برف گرتی ہے۔ بارش کسی بھی پیلیٹ کے ساتھ ہوتی ہے۔</string>
 </resources>

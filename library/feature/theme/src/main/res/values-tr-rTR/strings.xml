@@ -34,5 +34,9 @@
     <string name="holiday_greeting_halloween_message">Ürkütücü sezon geldi. Sürdüğü sürece Cadılar Bayramı temasını kullanmak ister misin?</string>
     <string name="holiday_greeting_use_theme">Tatil boyunca tatil temasını kullan</string>
     <string name="dark_theme">Koyu tema</string>
-    <string name="snowfall">Kar yağışı</string>
+    <string name="weather_effect">Hava efekti</string>
+    <string name="weather_effect_automatic">Otomatik</string>
+    <string name="weather_effect_off">Kapalı</string>
+    <string name="weather_effect_rain">Yağmur</string>
+    <string name="weather_effect_info">Otomatik seçiliyken Noel paleti kullanıldığı sürece kar yağar. Yağmur her paletle yağar.</string>
 </resources>

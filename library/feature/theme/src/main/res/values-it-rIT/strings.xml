@@ -34,5 +34,9 @@
     <string name="holiday_greeting_halloween_message">È arrivata la stagione dei brividi. Vuoi usare il tema di Halloween finché dura?</string>
     <string name="holiday_greeting_use_theme">Usa il tema festivo durante le feste</string>
     <string name="dark_theme">Tema scuro</string>
-    <string name="snowfall">Nevicata</string>
+    <string name="weather_effect">Effetto meteo</string>
+    <string name="weather_effect_automatic">Automatico</string>
+    <string name="weather_effect_off">Disattivato</string>
+    <string name="weather_effect_rain">Pioggia</string>
+    <string name="weather_effect_info">Con Automatico la neve cade mentre è in uso la tavolozza natalizia. La pioggia cade con qualsiasi tavolozza.</string>
 </resources>

@@ -34,5 +34,9 @@
     <string name="holiday_greeting_halloween_message">Musim seram telah tiba. Ingin memakai tema Halloween selama musimnya?</string>
     <string name="holiday_greeting_use_theme">Gunakan tema liburan selama liburan</string>
     <string name="dark_theme">Tema gelap</string>
-    <string name="snowfall">Salju turun</string>
+    <string name="weather_effect">Efek cuaca</string>
+    <string name="weather_effect_automatic">Otomatis</string>
+    <string name="weather_effect_off">Nonaktif</string>
+    <string name="weather_effect_rain">Hujan</string>
+    <string name="weather_effect_info">Otomatis membuat salju turun selama palet Natal digunakan. Hujan turun dengan palet apa pun.</string>
 </resources>

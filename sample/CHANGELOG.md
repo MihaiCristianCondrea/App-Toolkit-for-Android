@@ -7,6 +7,7 @@
 ### Added
 
 - Search the quick tools and the apps from the app bar.
+- Pick the weather from a new button in the theme settings' top bar, once you find the easter egg on the About screen: snow with the Christmas colours, nothing at all, or rain over any colours.
 
 ### Changed
 
@@ -31,7 +32,6 @@
 - On tablets, switching between pages from the side navigation no longer flashes a back button, and moving around the app does less work.
 - On tablets and in landscape, Help and the other pages from the side navigation fade in place instead of sliding in, the side rail starts collapsed after a rotation, and the app bar next to the rail has square corners.
 - Switching between Quick tools and Apps no longer makes the search bar flicker, and a back swipe from the right edge on a tablet's settings detail follows your finger.
-- Once you find the easter egg on the About screen, the theme settings let you turn the Christmas snow off and keep the colours.
 - What's new now separates releases with a wavy line.
 - Search the settings from the top of the settings list, down to single options such as dark theme or the app bar.
 - Moving between Components, Settings and the tabs on a tablet or in landscape no longer flashes grey.

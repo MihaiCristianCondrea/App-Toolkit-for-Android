@@ -34,5 +34,9 @@
     <string name="holiday_greeting_halloween_message">Narito na ang nakakatakot na season. Gusto mo bang gamitin ang Halloween theme habang tumatagal ito?</string>
     <string name="holiday_greeting_use_theme">Gamitin ang holiday theme habang pista</string>
     <string name="dark_theme">Madilim na tema</string>
-    <string name="snowfall">Pagbagsak ng niyebe</string>
+    <string name="weather_effect">Epekto ng panahon</string>
+    <string name="weather_effect_automatic">Awtomatiko</string>
+    <string name="weather_effect_off">Naka-off</string>
+    <string name="weather_effect_rain">Ulan</string>
+    <string name="weather_effect_info">Sa Awtomatiko, bumabagsak ang niyebe habang ginagamit ang Christmas palette. Umuulan sa anumang palette.</string>
 </resources>

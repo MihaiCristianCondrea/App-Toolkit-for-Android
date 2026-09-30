@@ -34,5 +34,9 @@
     <string name="holiday_greeting_halloween_message">Llegó la temporada de sustos. ¿Quieres usar el tema de Halloween mientras dure?</string>
     <string name="holiday_greeting_use_theme">Usar el tema festivo durante las fiestas</string>
     <string name="dark_theme">Tema oscuro</string>
-    <string name="snowfall">Nevada</string>
+    <string name="weather_effect">Efecto del tiempo</string>
+    <string name="weather_effect_automatic">Automático</string>
+    <string name="weather_effect_off">Desactivado</string>
+    <string name="weather_effect_rain">Lluvia</string>
+    <string name="weather_effect_info">En Automático cae nieve mientras se usa la paleta navideña. La lluvia cae con cualquier paleta.</string>
 </resources>

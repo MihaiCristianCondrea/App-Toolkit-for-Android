@@ -3,7 +3,8 @@
 ## Responsibility and consumers
 
 Owns ThemeSettingsScreen, ThemeSettingsViewModel, themeSettingsModule, theme-selection presentation,
-the seasonal themes (holiday greeting, holiday snowfall, and what the easter egg unlocks), and
+the seasonal themes (holiday greeting, holiday snowfall, the weather effect, and what the easter
+egg unlocks), and
 localized resources. `themeSettingsPage()` registers the screen for `ThemeSettingsRoute`, and the
 main toolkit module calls it and assembles DI. The display settings' dark theme row opens it by key.
 The page is `PaneRole.None`: display is itself a detail beside the settings list, and a detail
@@ -15,7 +16,7 @@ Depends on core common, DataStore, UI, and design system. The ViewModels consume
 `ThemePreferencesRepository` and `SeasonalThemeRepository` directly. `ThemeSettingsViewModel`
 emits nothing until both the stored preferences and the easter egg unlock have loaded, so the
 palette rows open positioned on the stored selection rather than on a placeholder. Core DataStore persists values
-and owns the holiday rules; the design system renders the application theme and the snowfall. The
+and owns the holiday rules; the design system renders the application theme, the snow and the rain. The
 same preferences also serve onboarding appearance selection.
 
 ## Contracts and boundaries
@@ -58,13 +59,19 @@ What people see:
   Snow is skipped when animations are turned off system-wide.
 - Tapping the build version five times on the About screen unlocks the seasonal themes. From then
   on the Christmas and Halloween palettes stay in the palette list all year, snow follows the
-  Christmas palette outside the season too, and the theme page offers a Snowfall switch, under
-  AMOLED, to keep the palette without the snow. Snow is on until switched off
-  (`SeasonalThemeRepository.setSnowfall`), and the switch is the unlock's only one.
+  Christmas palette outside the season too, and the theme page's app bar gets a weather effect
+  action. Its icon shows the effect in use, and it opens a dialog of radio rows, applied with Done,
+  like the display settings' startup page dialog:
+  - Automatic, the default: snow with the Christmas palette, as described above.
+  - Off: nothing falls, and the Christmas palette stays.
+  - Rain: rain falls over the app, whatever the palette.
+
+  The choice is stored with `SeasonalThemeRepository.setWeatherEffect` as a `WeatherEffect`. The
+  action is `WeatherEffectAction`, which shares the page's `ThemeSettingsViewModel`.
 
 ## Validation and risks
 
-ThemeSettingsViewModelTest covers preference changes and the easter egg unlock.
-SeasonalThemeOverlayViewModelTest covers when snow falls, the greeting flow, and that two
+ThemeSettingsViewModelTest covers preference changes, the easter egg unlock, and the weather effect.
+SeasonalThemeOverlayViewModelTest covers when snow or rain falls, the greeting flow, and that two
 activities never stack two greetings. Keep palette qualifiers, stored identifiers, and default
 selection compatible with host overrides and existing preferences.

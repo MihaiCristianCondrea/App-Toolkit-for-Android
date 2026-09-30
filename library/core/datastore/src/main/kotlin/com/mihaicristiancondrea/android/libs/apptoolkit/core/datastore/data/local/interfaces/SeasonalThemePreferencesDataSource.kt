@@ -17,17 +17,18 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.WeatherEffect
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.models.HolidayThemeSnapshot
 import kotlinx.coroutines.flow.Flow
 
-/** Persisted seasonal theme state: the easter egg unlock, snowfall, and holiday bookkeeping. */
+/** Persisted seasonal theme state: the easter egg unlock, the weather effect, and holiday bookkeeping. */
 interface SeasonalThemePreferencesDataSource {
 
     /** Emits whether the About screen easter egg has been found. */
     val seasonalThemesUnlocked: Flow<Boolean>
 
-    /** Emits whether snow falls with the Christmas palette; true until switched off. */
-    val snowfall: Flow<Boolean>
+    /** Emits what falls over the app; [WeatherEffect.Automatic] until another is chosen. */
+    val weatherEffect: Flow<WeatherEffect>
 
     /** Emits the occurrence key of the last holiday greeting answered, or null if none was. */
     val lastHolidayGreeting: Flow<String?>
@@ -38,8 +39,8 @@ interface SeasonalThemePreferencesDataSource {
     /** Persists the easter egg unlock. */
     suspend fun saveSeasonalThemesUnlocked(unlocked: Boolean)
 
-    /** Persists whether snow falls with the Christmas palette. */
-    suspend fun saveSnowfall(enabled: Boolean)
+    /** Persists what falls over the app. */
+    suspend fun saveWeatherEffect(effect: WeatherEffect)
 
     /** Persists the occurrence key of the holiday greeting just answered. */
     suspend fun saveLastHolidayGreeting(occurrenceKey: String)

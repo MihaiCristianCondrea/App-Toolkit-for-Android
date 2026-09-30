@@ -34,5 +34,9 @@
     <string name="holiday_greeting_halloween_message">Настал жуткий сезон. Использовать тему Хэллоуина, пока он длится?</string>
     <string name="holiday_greeting_use_theme">Использовать праздничную тему во время праздников</string>
     <string name="dark_theme">Тёмная тема</string>
-    <string name="snowfall">Снегопад</string>
+    <string name="weather_effect">Погодный эффект</string>
+    <string name="weather_effect_automatic">Автоматически</string>
+    <string name="weather_effect_off">Выкл.</string>
+    <string name="weather_effect_rain">Дождь</string>
+    <string name="weather_effect_info">В автоматическом режиме снег идёт, пока используется рождественская палитра. Дождь идёт с любой палитрой.</string>
 </resources>

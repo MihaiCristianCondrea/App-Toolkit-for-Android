@@ -102,7 +102,7 @@ open class CommonDataStore(
     val themePreferences: ThemePreferencesDataSource =
         DefaultThemePreferencesDataSource(dataStore = dataStore)
 
-    /** Seasonal themes: the easter egg unlock, snowfall, and holiday theme bookkeeping. */
+    /** Seasonal themes: the easter egg unlock, the weather effect, and holiday theme bookkeeping. */
     val seasonalThemePreferences: SeasonalThemePreferencesDataSource =
         DefaultSeasonalThemePreferencesDataSource(dataStore = dataStore)
 

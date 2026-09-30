@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.contracts.ThemeSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.SeasonalThemeState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.ThemePreferencesState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.WeatherEffect
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
@@ -102,6 +103,18 @@ class ThemeSettingsViewModelTest {
         seasonalState.value = SeasonalThemeState(unlocked = true)
 
         assertEquals(true, viewModel.uiState.value.data?.seasonalThemesUnlocked)
+    }
+
+    @Test
+    fun `the weather effect is shown and saved`() = runTest {
+        val viewModel = ThemeSettingsViewModel(preferences(), seasonal)
+        assertEquals(WeatherEffect.Automatic, viewModel.uiState.value.data?.weatherEffect)
+
+        seasonalState.value = SeasonalThemeState(unlocked = true, weatherEffect = WeatherEffect.Off)
+        assertEquals(WeatherEffect.Off, viewModel.uiState.value.data?.weatherEffect)
+
+        viewModel.onEvent(ThemeSettingsEvent.SetWeatherEffect(WeatherEffect.Rain))
+        coVerify { seasonal.setWeatherEffect(WeatherEffect.Rain) }
     }
 
     private fun preferences(): ThemePreferencesRepository = mockk(relaxed = true) {

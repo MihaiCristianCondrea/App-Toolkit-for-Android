@@ -34,5 +34,9 @@
     <string name="holiday_greeting_halloween_message">Настав моторошний сезон. Використовувати тему Гелловіну, поки він триває?</string>
     <string name="holiday_greeting_use_theme">Використовувати святкову тему під час свят</string>
     <string name="dark_theme">Темна тема</string>
-    <string name="snowfall">Снігопад</string>
+    <string name="weather_effect">Погодний ефект</string>
+    <string name="weather_effect_automatic">Автоматично</string>
+    <string name="weather_effect_off">Вимк.</string>
+    <string name="weather_effect_rain">Дощ</string>
+    <string name="weather_effect_info">В автоматичному режимі сніг падає, поки використовується різдвяна палітра. Дощ падає з будь-якою палітрою.</string>
 </resources>

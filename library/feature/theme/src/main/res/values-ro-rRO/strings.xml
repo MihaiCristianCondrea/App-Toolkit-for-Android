@@ -34,5 +34,9 @@
     <string name="holiday_greeting_halloween_message">A venit sezonul înfricoșător. Vrei să folosești tema de Halloween cât durează?</string>
     <string name="holiday_greeting_use_theme">Folosește tema de sărbători în timpul sărbătorilor</string>
     <string name="dark_theme">Temă întunecată</string>
-    <string name="snowfall">Ninsoare</string>
+    <string name="weather_effect">Efect meteo</string>
+    <string name="weather_effect_automatic">Automat</string>
+    <string name="weather_effect_off">Dezactivat</string>
+    <string name="weather_effect_rain">Ploaie</string>
+    <string name="weather_effect_info">Pe Automat ninge cât timp este folosită paleta de Crăciun. Ploaia cade cu orice paletă.</string>
 </resources>

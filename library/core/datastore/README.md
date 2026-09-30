@@ -95,8 +95,9 @@ change stored keys, defaults, or the shared preferences file.
   `ReviewPreferencesDataSource`, …), all of which `dataStoreModule` registers. `CommonDataStore`
   remains for callers written against the earlier single-class API.
 - `SeasonalThemeRepository` and `DefaultSeasonalThemeRepository`, registered by `dataStoreModule`,
-  for the seasonal themes state, the holiday greeting, the easter egg unlock, and the snowfall
-  switch it unlocks (`setSnowfall`, stored under `seasonal_snowfall`).
+  for the seasonal themes state, the holiday greeting, the easter egg unlock, and the weather
+  effect it unlocks (`setWeatherEffect`, a `WeatherEffect` stored by name under
+  `seasonal_weather_effect`; an unknown name reads as `WeatherEffect.Automatic`).
 - `themePreferencesState()` combines stored theme values into the application-facing
   `ThemePreferencesState`; Compose collection of that flow belongs to `:library:core:designsystem`.
   Its first emission is the stored state, never placeholder defaults, so a screen can act on the

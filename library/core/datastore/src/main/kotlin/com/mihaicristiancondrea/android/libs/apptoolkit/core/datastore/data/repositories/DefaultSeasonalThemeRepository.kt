@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.WeatherEffect
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.HolidaySeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.SeasonalThemeState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.holidayOccurrenceKey
@@ -38,12 +39,12 @@ class DefaultSeasonalThemeRepository(
     override val state: Flow<SeasonalThemeState> = combine(
         seasonal.seasonalThemesUnlocked,
         seasonal.holidayThemeSnapshot,
-        seasonal.snowfall,
-    ) { unlocked, snapshot, snowfall ->
-        SeasonalThemeState(unlocked = unlocked, holidayThemeInUse = snapshot?.season, snowfall = snowfall)
+        seasonal.weatherEffect,
+    ) { unlocked, snapshot, weatherEffect ->
+        SeasonalThemeState(unlocked = unlocked, holidayThemeInUse = snapshot?.season, weatherEffect = weatherEffect)
     }
 
-    override suspend fun setSnowfall(enabled: Boolean) = seasonal.saveSnowfall(enabled)
+    override suspend fun setWeatherEffect(effect: WeatherEffect) = seasonal.saveWeatherEffect(effect)
 
     override suspend fun unlockSeasonalThemes(): Boolean {
         if (seasonal.seasonalThemesUnlocked.first()) return false

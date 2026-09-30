@@ -21,6 +21,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.HolidaySeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.SeasonalThemeState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.ThemePreferencesState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.WeatherEffect
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
@@ -95,6 +96,37 @@ class SeasonalThemeOverlayViewModelTest {
 
         seasonalState.value = SeasonalThemeState(unlocked = true)
         assertTrue(viewModel.uiState.value.data!!.showSnowfall)
+    }
+
+    @Test
+    fun `the off weather effect keeps the christmas palette without snow`() = runTest {
+        val viewModel = viewModel(today = christmas)
+
+        seasonalState.value = SeasonalThemeState(unlocked = true, weatherEffect = WeatherEffect.Off)
+
+        assertFalse(viewModel.uiState.value.data!!.showSnowfall)
+        assertFalse(viewModel.uiState.value.data!!.showRain)
+    }
+
+    @Test
+    fun `the rain weather effect rains over any palette instead of snowing`() = runTest {
+        val viewModel = viewModel(today = christmas)
+
+        seasonalState.value = SeasonalThemeState(unlocked = true, weatherEffect = WeatherEffect.Rain)
+        assertTrue(viewModel.uiState.value.data!!.showRain)
+        assertFalse(viewModel.uiState.value.data!!.showSnowfall)
+
+        themeState.value = themeWith(StaticPaletteIds.GOOGLE_BLUE, dynamic = true)
+        assertTrue(viewModel.uiState.value.data!!.showRain)
+    }
+
+    @Test
+    fun `rain needs the easter egg`() = runTest {
+        val viewModel = viewModel(today = july)
+
+        seasonalState.value = SeasonalThemeState(weatherEffect = WeatherEffect.Rain)
+
+        assertFalse(viewModel.uiState.value.data!!.showRain)
     }
 
     @Test

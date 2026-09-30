@@ -61,7 +61,7 @@ open class DataStoreNamesConstants {
         const val DATA_STORE_SEASONAL_THEMES_UNLOCKED = "seasonal_themes_unlocked"
         // A new key: the snowfall switch removed in 3.0.0-pre21 stored under another one, whose
         // old values stay ignored.
-        const val DATA_STORE_SEASONAL_SNOWFALL = "seasonal_snowfall"
+        const val DATA_STORE_SEASONAL_WEATHER_EFFECT = "seasonal_weather_effect"
         const val DATA_STORE_LAST_HOLIDAY_GREETING = "seasonal_last_holiday_greeting"
         const val DATA_STORE_HOLIDAY_THEME_SEASON = "seasonal_holiday_theme_season"
         const val DATA_STORE_HOLIDAY_PREVIOUS_PALETTE_ID = "seasonal_holiday_previous_palette_id"

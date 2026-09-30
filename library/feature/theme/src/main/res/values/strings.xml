@@ -34,5 +34,9 @@
     <string name="holiday_greeting_halloween_message">Spooky season is here. Want to wear the Halloween theme until it is over?</string>
     <string name="holiday_greeting_use_theme">Use the holiday theme during the holidays</string>
     <string name="dark_theme">Dark theme</string>
-    <string name="snowfall">Snowfall</string>
+    <string name="weather_effect">Weather effect</string>
+    <string name="weather_effect_automatic">Automatic</string>
+    <string name="weather_effect_off">Off</string>
+    <string name="weather_effect_rain">Rain</string>
+    <string name="weather_effect_info">Automatic lets snow fall while the Christmas palette is in use. Rain falls with any palette.</string>
 </resources>

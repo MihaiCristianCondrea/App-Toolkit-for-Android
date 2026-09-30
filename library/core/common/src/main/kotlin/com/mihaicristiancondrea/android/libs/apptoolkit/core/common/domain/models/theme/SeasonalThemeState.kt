@@ -25,11 +25,11 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.mode
  * palette outside the Christmas season too.
  * @property holidayThemeInUse The holiday whose palette was applied from the holiday greeting and
  * will be taken off again when the holiday ends, or null when none is.
- * @property snowfall Whether snow falls with the Christmas palette. On until the person, once they
- * found the easter egg, switches it off in the theme settings.
+ * @property weatherEffect What falls over the app: snow with the Christmas palette unless the
+ * person, once they found the easter egg, chose rain or nothing in the theme settings.
  */
 data class SeasonalThemeState(
     val unlocked: Boolean = false,
     val holidayThemeInUse: HolidaySeason? = null,
-    val snowfall: Boolean = true,
+    val weatherEffect: WeatherEffect = WeatherEffect.Automatic,
 )

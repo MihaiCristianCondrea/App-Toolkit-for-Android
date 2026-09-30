@@ -62,8 +62,8 @@ class ThemeSettingsViewModel(
             is ThemeSettingsEvent.SetAmoledMode -> persist {
                 preferences.setAmoledMode(event.enabled)
             }
-            is ThemeSettingsEvent.SetSnowfall -> persist {
-                seasonal.setSnowfall(event.enabled)
+            is ThemeSettingsEvent.SetWeatherEffect -> persist {
+                seasonal.setWeatherEffect(event.effect)
             }
             is ThemeSettingsEvent.SelectDynamicPalette -> persist {
                 preferences.selectDynamicPalette(event.variant)
@@ -78,12 +78,12 @@ class ThemeSettingsViewModel(
         observationJob?.cancel()
         observationJob = combine(
             preferences.preferencesState,
-            seasonal.state.map { it.unlocked to it.snowfall }.distinctUntilChanged(),
-        ) { preferencesState, (unlocked, snowfall) ->
+            seasonal.state.map { it.unlocked to it.weatherEffect }.distinctUntilChanged(),
+        ) { preferencesState, (unlocked, weatherEffect) ->
             ThemeSettingsUiState(
                 preferences = preferencesState,
                 seasonalThemesUnlocked = unlocked,
-                snowfall = snowfall,
+                weatherEffect = weatherEffect,
             )
         }.onEach { state ->
             updateStateThreadSafe { screenState.setSuccess(data = state) }

@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.naviga
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.ThemeSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.views.weather.WeatherEffectAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.ThemeSettingsRoute
@@ -34,6 +35,8 @@ fun ShellGraphBuilder.themeSettingsPage() {
     pageIfAbsent<ThemeSettingsRoute>(
         paneRole = PaneRole.None,
         title = { stringResource(R.string.dark_theme) },
+        // The weather effect, for those who found the About screen's easter egg.
+        actions = { WeatherEffectAction() },
     ) {
         ThemeSettingsScreen()
     }

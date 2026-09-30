@@ -76,6 +76,7 @@ flowchart TD
 - `AppTheme`, `AppThemeConfig`, `ColorPalette`, palette providers/values, theme models, and
   selection composables.
 - `Modifier.snowfall`, `SnowfallStyle`, and `SnowflakeShape`.
+- `Modifier.rainfall` and `RainfallStyle`.
 - `isAppInDarkTheme(themeMode)`, the same light or dark decision `AppTheme` makes, for surfaces
   that need it without composing a whole theme.
 - `ColorScheme.toSwatchColors()`, the colors a palette swatch shows.
@@ -350,6 +351,11 @@ runs in the draw phase only, keeps flake state in plain arrays rather than snaps
 follows the composition's frame clock, so nothing recomposes while snow falls and it stops in the
 background. `SnowfallStyle` sets density, colors, flake size, speed, wind, opacity, and shape. The
 motion lives in `SnowfallSimulation`, which is covered by JVM tests.
+
+`Modifier.rainfall(RainfallStyle)` in `ui.effects.rainfall` draws falling rain the same way: slanted
+streaks, drawn in the draw phase only from plain arrays, following the frame clock. `RainfallStyle`
+sets density, colors, streak length and thickness, speed, wind, opacity, and a cap on the number of
+drops. The motion lives in `RainfallSimulation`, which is covered by JVM tests.
 
 ## Current risks
 

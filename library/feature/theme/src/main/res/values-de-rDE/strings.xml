@@ -34,5 +34,9 @@
     <string name="holiday_greeting_halloween_message">Die gruselige Zeit ist da. Möchtest du das Halloween-Design verwenden, solange sie dauert?</string>
     <string name="holiday_greeting_use_theme">Feiertagsdesign während der Feiertage verwenden</string>
     <string name="dark_theme">Dunkles Thema</string>
-    <string name="snowfall">Schneefall</string>
+    <string name="weather_effect">Wettereffekt</string>
+    <string name="weather_effect_automatic">Automatisch</string>
+    <string name="weather_effect_off">Aus</string>
+    <string name="weather_effect_rain">Regen</string>
+    <string name="weather_effect_info">Bei „Automatisch“ fällt Schnee, solange die Weihnachtspalette verwendet wird. Regen fällt bei jeder Palette.</string>
 </resources>

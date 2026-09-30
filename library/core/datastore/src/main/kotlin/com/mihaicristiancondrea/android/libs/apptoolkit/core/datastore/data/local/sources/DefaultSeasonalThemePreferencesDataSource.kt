@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.WeatherEffect
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
@@ -39,8 +40,8 @@ class DefaultSeasonalThemePreferencesDataSource(
 
     private val unlockedKey =
         booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_SEASONAL_THEMES_UNLOCKED)
-    private val snowfallKey =
-        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_SEASONAL_SNOWFALL)
+    private val weatherEffectKey =
+        stringPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_SEASONAL_WEATHER_EFFECT)
     private val lastGreetingKey =
         stringPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_LAST_HOLIDAY_GREETING)
     private val holidaySeasonKey =
@@ -54,8 +55,11 @@ class DefaultSeasonalThemePreferencesDataSource(
         preferences[unlockedKey] == true
     }.distinctUntilChanged()
 
-    override val snowfall: Flow<Boolean> = dataStore.data.map { preferences ->
-        preferences[snowfallKey] != false
+    override val weatherEffect: Flow<WeatherEffect> = dataStore.data.map { preferences ->
+        // A name this build no longer knows reads as the default.
+        preferences[weatherEffectKey]
+            ?.let { name -> WeatherEffect.entries.firstOrNull { it.name == name } }
+            ?: WeatherEffect.Automatic
     }.distinctUntilChanged()
 
     override val lastHolidayGreeting: Flow<String?> = dataStore.data.map { preferences ->
@@ -81,8 +85,8 @@ class DefaultSeasonalThemePreferencesDataSource(
         dataStore.edit { preferences: MutablePreferences -> preferences[unlockedKey] = unlocked }
     }
 
-    override suspend fun saveSnowfall(enabled: Boolean) {
-        dataStore.edit { preferences: MutablePreferences -> preferences[snowfallKey] = enabled }
+    override suspend fun saveWeatherEffect(effect: WeatherEffect) {
+        dataStore.edit { preferences: MutablePreferences -> preferences[weatherEffectKey] = effect.name }
     }
 
     override suspend fun saveLastHolidayGreeting(occurrenceKey: String) {

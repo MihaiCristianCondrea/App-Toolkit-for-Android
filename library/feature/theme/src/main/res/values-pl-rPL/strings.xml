@@ -34,5 +34,9 @@
     <string name="holiday_greeting_halloween_message">Nadszedł straszny sezon. Chcesz używać motywu Halloween, dopóki trwa?</string>
     <string name="holiday_greeting_use_theme">Używaj świątecznego motywu w czasie świąt</string>
     <string name="dark_theme">Motyw ciemny</string>
-    <string name="snowfall">Opady śniegu</string>
+    <string name="weather_effect">Efekt pogody</string>
+    <string name="weather_effect_automatic">Automatycznie</string>
+    <string name="weather_effect_off">Wyłączony</string>
+    <string name="weather_effect_rain">Deszcz</string>
+    <string name="weather_effect_info">W trybie automatycznym śnieg pada, gdy używana jest paleta świąteczna. Deszcz pada przy każdej palecie.</string>
 </resources>
