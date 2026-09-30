@@ -8,6 +8,8 @@ and the strings that name them.
 ## Owns
 
 - `PrivacyScreen`, the data-driven privacy and legal preference list.
+- Its rows in the settings search (`SettingsSearchProvider`): permissions, ads and usage and
+  diagnostics, each opening its own page.
 - `PrivacyViewModel`, `PrivacyUiState`, `PrivacyItem`, and the click routing between them.
 - `PrivacySettingsProvider`, the host contract supplying the legal URLs.
 - `privacySettingsPage()`, the registration of `PrivacySettingsRoute` as a detail of the settings

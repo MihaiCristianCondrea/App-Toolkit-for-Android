@@ -23,7 +23,8 @@ page frame, state handling, analytics hooks, and shared components.
   `ScaffoldFabs` with `FabHost` and `LocalFabHost` let a screen put its own buttons in the
   scaffold around it. See [Floating action buttons](#floating-action-buttons).
 - `ChoicePreferenceItem`, the settings row that shows the chosen option and opens a radio-list
-  dialog to change it. Its `icon` is optional; the Toolkit's settings rows go without one.
+  dialog to change it. Its `icon` is optional; the Toolkit's settings rows go without one, while
+  their dialogs keep an icon on top through `dialogIcon`.
 - Reusable buttons, fields, preferences, layouts, grids, dialogs, snackbars, ads slots, effects, and
   adaptive-window helpers.
 - `MainTopAppBar`, the host main-screen app bar, its optional centre-aligned title, and its
@@ -110,6 +111,10 @@ available; data-layer callers should use the lower-level API.
   `rememberPageSnackbarHostState`; see [Page frame](#page-frame).
 - `SettingsConfig`, `SettingsCategory` and `SettingsPreference`. A row opens its `destination` key
   unless its `action` returns `true`.
+- `SettingsSearchEntry` and `SettingsSearchProvider`, the settings search's contract: each settings
+  page's module binds a provider in Koin listing its rows (title, the page they live on, the key
+  they open), and the settings list collects them all with `getAll`, depending on none of the
+  pages. A provider receives the app's `ShellGraph`, to leave out rows the app does not show.
 - `IssueReporterSheet`, a `fun interface` whose `Show(onDismissRequest)` draws the issue reporter.
   Resolve it with `getKoin().getOrNull()`: it is absent when the issue reporter is not installed.
 - `AnimatedIconButtonDirection` slides, fades and scales in and out from its edge, and crossfades

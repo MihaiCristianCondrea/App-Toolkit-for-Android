@@ -11,6 +11,10 @@ each row opening its destination in the shell.
   menu (`SettingsMenuActions`, which opens Help and feedback).
 - `SettingsProvider`, the contract an app implements to describe its settings.
 - `settingsPage()`, the registration of `SettingsRoute` as a list page.
+- The settings search: a field above the rows, not in the app bar, that searches the host's rows
+  and every row the settings pages register as a `SettingsSearchProvider`, ignoring case and
+  accents. Results replace the categories while there is a query; back clears it first, and a
+  result opens the page that holds the setting, beside the list on a wide window.
 - Localized labels and summaries for the rows most apps list (Notifications, Display, Security and
   privacy, Advanced and About), so every host names them identically.
 

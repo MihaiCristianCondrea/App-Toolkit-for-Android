@@ -27,4 +27,6 @@
     <string name="summary_preference_settings_notifications">Керуйте сповіщеннями додатка</string>
     <string name="summary_preference_settings_privacy_and_security">Керуйте своїми налаштуваннями конфіденційності</string>
     <string name="get_help">Отримати допомогу</string>
+    <string name="search_settings">Пошук у налаштуваннях</string>
+    <string name="no_settings_found">Немає налаштувань, що відповідають пошуку</string>
 </resources>

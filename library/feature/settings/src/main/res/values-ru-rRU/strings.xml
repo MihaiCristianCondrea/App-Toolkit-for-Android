@@ -27,4 +27,6 @@
     <string name="summary_preference_settings_notifications">Управляйте уведомлениями приложения</string>
     <string name="summary_preference_settings_privacy_and_security">Управляйте настройками конфиденциальности</string>
     <string name="get_help">Получить помощь</string>
+    <string name="search_settings">Поиск по настройкам</string>
+    <string name="no_settings_found">Настройки по запросу не найдены</string>
 </resources>

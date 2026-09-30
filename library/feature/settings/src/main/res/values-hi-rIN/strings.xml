@@ -27,4 +27,6 @@
     <string name="summary_preference_settings_notifications">ऐप सूचनाओं का प्रबंधन करें</string>
     <string name="summary_preference_settings_privacy_and_security">अपनी गोपनीयता सेटिंग्स का प्रबंधन करें</string>
     <string name="get_help">मदद प्राप्त करें</string>
+    <string name="search_settings">सेटिंग खोजें</string>
+    <string name="no_settings_found">आपकी खोज से कोई सेटिंग मेल नहीं खाती</string>
 </resources>

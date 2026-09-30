@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.di
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.search.themeSettingsSearch
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ColorPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.google.android.androidPalette
@@ -41,6 +43,8 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val themeSettingsModule: Module = module {
+    // What the settings search finds on this page; the settings list collects every page's.
+    single<SettingsSearchProvider>(named("theme")) { themeSettingsSearch }
     viewModel { ThemeSettingsViewModel(preferences = get(), seasonal = get()) }
     viewModel {
         SeasonalThemeOverlayViewModel(seasonal = get(), theme = get(), firebaseController = get())

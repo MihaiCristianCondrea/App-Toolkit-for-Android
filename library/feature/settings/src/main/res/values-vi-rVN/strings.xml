@@ -27,4 +27,6 @@
     <string name="summary_preference_settings_notifications">Quản lý thông báo ứng dụng</string>
     <string name="summary_preference_settings_privacy_and_security">Quản lý cài đặt quyền riêng tư của bạn</string>
     <string name="get_help">Nhận trợ giúp</string>
+    <string name="search_settings">Tìm trong cài đặt</string>
+    <string name="no_settings_found">Không có cài đặt nào khớp với nội dung tìm kiếm</string>
 </resources>

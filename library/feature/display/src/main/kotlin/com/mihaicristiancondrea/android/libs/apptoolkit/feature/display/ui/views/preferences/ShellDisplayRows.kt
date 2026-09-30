@@ -17,6 +17,13 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.views.preferences
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CallToAction
+import androidx.compose.material.icons.outlined.FormatColorFill
+import androidx.compose.material.icons.outlined.SwapHoriz
+import androidx.compose.material.icons.outlined.Swipe
+import androidx.compose.material.icons.outlined.ViewDay
+import androidx.compose.material.icons.outlined.Web
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
@@ -54,6 +61,7 @@ internal class ShellDisplayRows(
         selected = settings.topBarOverride,
         optionLabel = { topBarLabel(it) },
         onSelect = { scope.launch { preferences.setTopBarOverride(it) } },
+        dialogIcon = Icons.Outlined.Web,
         modifier = modifier,
     )
 
@@ -73,6 +81,7 @@ internal class ShellDisplayRows(
         selected = settings.navigationTint,
         optionLabel = { navigationTintLabel(it) },
         onSelect = { scope.launch { preferences.setNavigationTint(it) } },
+        dialogIcon = Icons.Outlined.FormatColorFill,
         modifier = modifier,
     )
 
@@ -92,6 +101,7 @@ internal class ShellDisplayRows(
         selected = settings.bannerStyle,
         optionLabel = { bannerStyleLabel(it) },
         onSelect = { scope.launch { preferences.setBannerStyle(it) } },
+        dialogIcon = Icons.Outlined.ViewDay,
         modifier = modifier,
     )
 
@@ -102,6 +112,7 @@ internal class ShellDisplayRows(
         selected = settings.navigationBarStyle,
         optionLabel = { navigationBarLabel(it) },
         onSelect = { scope.launch { preferences.setNavigationBarStyle(it) } },
+        dialogIcon = Icons.Outlined.CallToAction,
         modifier = modifier,
     )
 
@@ -121,6 +132,7 @@ internal class ShellDisplayRows(
         selected = settings.tabTransition,
         optionLabel = { tabTransitionLabel(it) },
         onSelect = { scope.launch { preferences.setTabTransition(it) } },
+        dialogIcon = Icons.Outlined.SwapHoriz,
         modifier = modifier,
     )
 
@@ -131,6 +143,7 @@ internal class ShellDisplayRows(
         selected = settings.backEdgeStyle,
         optionLabel = { backEdgeLabel(it) },
         onSelect = { scope.launch { preferences.setBackEdgeStyle(it) } },
+        dialogIcon = Icons.Outlined.Swipe,
         modifier = modifier,
     )
 }

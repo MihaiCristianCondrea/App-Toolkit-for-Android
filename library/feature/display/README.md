@@ -5,7 +5,7 @@
 Owns DisplaySettingsScreen, DisplaySettingsViewModel, DisplaySettingsProvider, language/startup
 selection dialogs, displaySettingsModule, and localized display settings resources.
 `displaySettingsPage()` registers the screen for `DisplaySettingsRoute` as a detail of the settings
-list; the main toolkit module calls it and assembles DI, and hosts supply DisplaySettingsProvider.
+list; the main toolkit module calls it and assembles DI, and hosts supply DisplaySettingsProvider. It also registers the display rows it shows for this app with the settings search, as a `SettingsSearchProvider`.
 
 ## Dependencies and flow
 

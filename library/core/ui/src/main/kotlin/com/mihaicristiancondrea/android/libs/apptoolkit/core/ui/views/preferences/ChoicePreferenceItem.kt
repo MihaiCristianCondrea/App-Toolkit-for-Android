@@ -43,8 +43,10 @@ fun <T> ChoicePreferenceItem(
     optionLabel: @Composable (T) -> String,
     onSelect: (T) -> Unit,
     modifier: Modifier = Modifier,
-    /** Drawn before the title and atop the dialog; settings rows go without one. */
+    /** Drawn before the title; settings rows go without one. */
     icon: ImageVector? = null,
+    /** Drawn atop the dialog, as every choice dialog has one, even where the row draws none. */
+    dialogIcon: ImageVector? = icon,
 ) {
     var open by rememberSaveable { mutableStateOf(false) }
     SettingsPreferenceItem(
@@ -58,7 +60,7 @@ fun <T> ChoicePreferenceItem(
         BasicAlertDialog(
             onDismiss = { open = false },
             onConfirm = { open = false },
-            icon = icon,
+            icon = dialogIcon,
             title = title,
             showDismissButton = false,
             confirmButtonText = stringResource(R.string.done_button_content_description),

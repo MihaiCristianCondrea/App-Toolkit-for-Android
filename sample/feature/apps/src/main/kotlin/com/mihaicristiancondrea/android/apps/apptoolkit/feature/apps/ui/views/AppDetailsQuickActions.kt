@@ -26,7 +26,7 @@ import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material.icons.outlined.Security
-import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.outlined.Storage
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialShapes
@@ -119,8 +119,10 @@ internal fun AppDetailsQuickActions(
             }.takeIf { installed },
             GroupedGridItem(
                 title = favoriteLabel,
+                // The grid card's pair: Material's "outlined" Star is drawn filled like the other,
+                // so the two states looked the same, and they were the wrong way round.
                 icon = ToolkitIcon.Vector(
-                    imageVector = if (isFavorite) Icons.Outlined.Star else Icons.Default.Star,
+                    imageVector = if (isFavorite) Icons.Filled.Star else Icons.Outlined.StarOutline,
                 ),
                 onClick = onFavoriteClick,
             ),

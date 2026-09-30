@@ -17,12 +17,17 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.di
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.DisplaySettingsViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.search.displaySettingsSearch
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val displaySettingsModule: Module = module {
+    // What the settings search finds on this page; the settings list collects every page's.
+    single<SettingsSearchProvider>(named("display")) { displaySettingsSearch }
     viewModel {
         DisplaySettingsViewModel(
             displayPreferences = get(),

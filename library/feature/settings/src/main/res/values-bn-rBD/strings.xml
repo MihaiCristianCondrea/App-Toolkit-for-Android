@@ -27,4 +27,6 @@
     <string name="summary_preference_settings_notifications">অ্যাপ বিজ্ঞপ্তি পরিচালনা করুন</string>
     <string name="summary_preference_settings_privacy_and_security">আপনার গোপনীয়তা সেটিংস পরিচালনা করুন</string>
     <string name="get_help">সাহায্য পান</string>
+    <string name="search_settings">সেটিংস খুঁজুন</string>
+    <string name="no_settings_found">আপনার খোঁজের সঙ্গে কোনো সেটিং মেলেনি</string>
 </resources>

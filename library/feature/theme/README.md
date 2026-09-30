@@ -7,7 +7,7 @@ the seasonal themes (holiday greeting, holiday snowfall, and what the easter egg
 localized resources. `themeSettingsPage()` registers the screen for `ThemeSettingsRoute`, and the
 main toolkit module calls it and assembles DI. The display settings' dark theme row opens it by key.
 The page is `PaneRole.None`: display is itself a detail beside the settings list, and a detail
-opened from a detail would replace it instead of stacking on it.
+opened from a detail would replace it instead of stacking on it. It also registers its theme mode, AMOLED, wallpaper colours and palette rows with the settings search, as a `SettingsSearchProvider`.
 
 ## Dependencies and flow
 

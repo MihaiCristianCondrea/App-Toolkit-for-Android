@@ -27,4 +27,6 @@
     <string name="summary_preference_settings_notifications">管理應用程式通知</string>
     <string name="summary_preference_settings_privacy_and_security">管理您的隱私設定</string>
     <string name="get_help">獲取幫助</string>
+    <string name="search_settings">搜尋設定</string>
+    <string name="no_settings_found">找不到符合搜尋的設定</string>
 </resources>

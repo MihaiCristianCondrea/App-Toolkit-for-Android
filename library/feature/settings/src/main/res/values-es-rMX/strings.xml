@@ -27,4 +27,6 @@
     <string name="summary_preference_settings_notifications">Administrar notificaciones de la aplicación</string>
     <string name="summary_preference_settings_privacy_and_security">Administra tu configuración de privacidad</string>
     <string name="get_help">Obtener ayuda</string>
+    <string name="search_settings">Buscar en la configuración</string>
+    <string name="no_settings_found">Ninguna opción coincide con tu búsqueda</string>
 </resources>

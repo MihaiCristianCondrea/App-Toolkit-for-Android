@@ -28,6 +28,8 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Added `FabScrollBehavior` to `:library:core:ui`, and an `expanded` parameter to `ToolkitFabColumn` and `ToolkitFloatingActionButton`: `PageScaffold` and the shell's tab scaffold fold extended buttons to their icon while the content scrolls down and unfold them when it scrolls back.
 - Added `placeholder` to `page { }` and `pageIfAbsent { }` in `:library:navigation`: what the detail side of a `PaneRole.List` page shows while no detail is open, `ListPlaceholder` when absent.
 - Added `LocalBesideNavigation` and `isTopLevelPage(key)` to `:library:navigation`, which tell a page whether the rail or permanent drawer opened it.
+- Added a settings search to `:library:feature:settings`: a field above the rows that finds the host's rows and the rows of the display, theme, privacy, advanced and About pages, which each register them as a `SettingsSearchProvider` (with `SettingsSearchEntry`, in `:library:core:ui`).
+- Added `dialogIcon` to `ChoicePreferenceItem`, so a row without an icon still gives its dialog one.
 - Added hiding the app bar on scroll, for every style: `ShellSettings.hideTopBarOnScroll`, offered in the display settings, and `HideOnScrollTopBar`, `TopBarHideState` and `LocalHideTopBarOnScroll` in `:library:core:ui`, which `PageScaffold` and the shell's tab scaffold use. A large bar collapses before it slides away.
 - Added `ShellLayoutInfo.declaredContentMaxWidth`: the app's own maximum content width, whether or not the display settings lift it.
 - Added `AboutRoute`, `ThemeSettingsRoute`, `DisplaySettingsRoute`, `PrivacySettingsRoute`, `AdvancedSettingsRoute`, `DiagnosticsSettingsRoute`, `DeveloperOptionsRoute`, `StartupRoute` and `OnboardingRoute`, one key per Toolkit page.
@@ -76,6 +78,7 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 
 ### Fixed
 
+- Fixed the display settings' and developer options' choice dialogs losing their top icon along with their rows' icons.
 - Fixed the tabs' floating action buttons sitting over the gesture bar once the bottom bar had hidden on scroll: they now rise by the part of the navigation bar's inset the hiding bar no longer covers.
 
 ---

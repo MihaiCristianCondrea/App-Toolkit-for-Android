@@ -27,4 +27,6 @@
     <string name="summary_preference_settings_notifications">アプリの通知を管理する</string>
     <string name="summary_preference_settings_privacy_and_security">プライバシー設定を管理する</string>
     <string name="get_help">ヘルプを取得</string>
+    <string name="search_settings">設定を検索</string>
+    <string name="no_settings_found">検索に一致する設定はありません</string>
 </resources>

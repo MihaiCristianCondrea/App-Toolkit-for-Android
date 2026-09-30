@@ -27,4 +27,6 @@
     <string name="summary_preference_settings_notifications">Manage app notifications</string>
     <string name="summary_preference_settings_privacy_and_security">Manage your privacy settings</string>
     <string name="get_help">Get help</string>
+    <string name="search_settings">Search settings</string>
+    <string name="no_settings_found">No settings match your search</string>
 </resources>

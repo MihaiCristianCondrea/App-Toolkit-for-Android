@@ -27,4 +27,6 @@
     <string name="summary_preference_settings_notifications">Verwalten Sie die App-Benachrichtigungen</string>
     <string name="summary_preference_settings_privacy_and_security">Verwalten Sie Ihre Datenschutzeinstellungen</string>
     <string name="get_help">Hilfe erhalten</string>
+    <string name="search_settings">Einstellungen durchsuchen</string>
+    <string name="no_settings_found">Keine Einstellungen gefunden</string>
 </resources>

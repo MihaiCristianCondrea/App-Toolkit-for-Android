@@ -27,4 +27,6 @@
     <string name="summary_preference_settings_notifications">Pamahalaan ang mga notipikasyon ng app</string>
     <string name="summary_preference_settings_privacy_and_security">Pamahalaan ang iyong mga setting ng privacy</string>
     <string name="get_help">Humingi ng tulong</string>
+    <string name="search_settings">Maghanap sa mga setting</string>
+    <string name="no_settings_found">Walang setting na tumugma sa iyong hinahanap</string>
 </resources>

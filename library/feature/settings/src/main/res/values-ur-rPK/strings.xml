@@ -27,4 +27,6 @@
     <string name="summary_preference_settings_notifications">ایپ اطلاعات کا نظم کریں</string>
     <string name="summary_preference_settings_privacy_and_security">اپنی رازداری کی ترتیبات کا نظم کریں</string>
     <string name="get_help">مدد حاصل کریں</string>
+    <string name="search_settings">ترتیبات میں تلاش کریں</string>
+    <string name="no_settings_found">آپ کی تلاش سے کوئی ترتیب میل نہیں کھاتی</string>
 </resources>

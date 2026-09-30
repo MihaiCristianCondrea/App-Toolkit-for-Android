@@ -27,4 +27,6 @@
     <string name="summary_preference_settings_notifications">Kelola notifikasi aplikasi</string>
     <string name="summary_preference_settings_privacy_and_security">Kelola pengaturan privasi Anda</string>
     <string name="get_help">Dapatkan bantuan</string>
+    <string name="search_settings">Telusuri setelan</string>
+    <string name="no_settings_found">Tidak ada setelan yang cocok dengan penelusuran Anda</string>
 </resources>

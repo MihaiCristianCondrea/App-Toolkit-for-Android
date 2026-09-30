@@ -27,4 +27,6 @@
     <string name="summary_preference_settings_notifications">Hantera appnotifikationer</string>
     <string name="summary_preference_settings_privacy_and_security">Hantera dina sekretessinställningar</string>
     <string name="get_help">Få hjälp</string>
+    <string name="search_settings">Sök i inställningar</string>
+    <string name="no_settings_found">Inga inställningar matchar sökningen</string>
 </resources>

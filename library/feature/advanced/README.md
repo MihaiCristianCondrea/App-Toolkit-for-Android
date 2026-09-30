@@ -7,7 +7,7 @@ CacheRepository/DefaultCacheRepository, and advancedSettingsModule. `advancedSet
 registers the screen for `AdvancedSettingsRoute` as a detail of the settings list; the main toolkit
 module calls it and assembles its DI module. The feature asks nothing of its host: the removed
 AdvancedSettingsProvider existed only to supply a bug-report URL, which the list stopped using once
-the issue reporter began submitting reports itself.
+the issue reporter began submitting reports itself. It also registers its clear cache row with the settings search, as a `SettingsSearchProvider`.
 
 ## Dependencies and flow
 

@@ -17,6 +17,11 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.RocketLaunch
+import androidx.compose.material.icons.outlined.Dashboard
+import androidx.compose.material.icons.outlined.SmartDisplay
+import androidx.compose.material.icons.outlined.Animation
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.ChoicePreferenceItem
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -104,6 +109,7 @@ fun DeveloperOptionsScreen() {
                     selected = settings.startOverride.takeIf { it in graph.startOptions.indices } ?: -1,
                     optionLabel = { index -> startLabel(graph, index) },
                     onSelect = { scope.launch { preferences.setStartOverride(it) } },
+                    dialogIcon = Icons.Outlined.RocketLaunch,
                     modifier = modifier,
                 )
             }
@@ -115,6 +121,7 @@ fun DeveloperOptionsScreen() {
                 selected = settings.layoutMode,
                 optionLabel = { layoutModeLabel(it) },
                 onSelect = { scope.launch { preferences.setLayoutMode(it) } },
+                dialogIcon = Icons.Outlined.Dashboard,
                 modifier = modifier,
             )
         }
@@ -136,6 +143,7 @@ fun DeveloperOptionsScreen() {
                     selected = settings.accessoryMode,
                     optionLabel = { accessoryLabel(it) },
                     onSelect = { scope.launch { preferences.setAccessoryMode(it) } },
+                    dialogIcon = Icons.Outlined.SmartDisplay,
                     modifier = modifier,
                 )
             }
@@ -150,6 +158,7 @@ fun DeveloperOptionsScreen() {
                 selected = settings.animationSpeed,
                 optionLabel = { animationSpeedLabel(it) },
                 onSelect = { scope.launch { preferences.setAnimationSpeed(it) } },
+                dialogIcon = Icons.Outlined.Animation,
                 modifier = modifier,
             )
         },

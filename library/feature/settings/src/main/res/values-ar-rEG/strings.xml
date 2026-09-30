@@ -27,4 +27,6 @@
     <string name="summary_preference_settings_notifications">إدارة إشعارات التطبيق</string>
     <string name="summary_preference_settings_privacy_and_security">إدارة إعدادات الخصوصية الخاصة بك</string>
     <string name="get_help">احصل على مساعدة</string>
+    <string name="search_settings">البحث في الإعدادات</string>
+    <string name="no_settings_found">لا توجد إعدادات تطابق بحثك</string>
 </resources>

@@ -27,4 +27,6 @@
     <string name="summary_preference_settings_notifications">Gestionează notificările aplicației</string>
     <string name="summary_preference_settings_privacy_and_security">Gestionează setările de confidențialitate</string>
     <string name="get_help">Obține ajutor</string>
+    <string name="search_settings">Caută în setări</string>
+    <string name="no_settings_found">Nicio setare nu corespunde căutării</string>
 </resources>

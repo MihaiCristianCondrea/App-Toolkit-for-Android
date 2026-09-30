@@ -17,6 +17,26 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui
 
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextField
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextFieldStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.search.rememberSettingsSearchIndex
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellBackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -109,6 +129,13 @@ fun SettingsScreen() {
             )
         },
         onSuccess = { config: SettingsConfig ->
+            // Searched above the rows, not from the app bar: the query stays with the list while
+            // a result opens beside it on a wide window.
+            var query by rememberSaveable { mutableStateOf("") }
+            val index = rememberSettingsSearchIndex(config)
+            val results = remember(index, query) { if (query.isBlank()) null else index.matching(query) }
+            // Back clears the search before it leaves the page.
+            ShellBackHandler(enabled = query.isNotEmpty()) { query = "" }
             SettingsList(
                 paddingValues = paddingValues,
                 settingsConfig = config,
@@ -118,23 +145,59 @@ fun SettingsScreen() {
                         preference.destination?.let(navigator::navigate)
                     }
                 },
+                query = query,
+                onQueryChange = { query = it },
+                results = results,
             )
         },
     )
 }
 
+/**
+ * The settings rows, grouped by category.
+ *
+ * With [onQueryChange] set, a search field heads the list, and while [results] is not null the
+ * list shows those instead of the categories: every row the search found, host rows and the rows
+ * of the settings pages alike, or a line saying none did.
+ */
 @Composable
 fun SettingsList(
     paddingValues: PaddingValues,
     settingsConfig: SettingsConfig,
     firebaseController: FirebaseController,
     onPreferenceClick: (SettingsPreference) -> Unit = {},
+    query: String = "",
+    onQueryChange: ((String) -> Unit)? = null,
+    results: List<SettingsPreference>? = null,
 ) {
     LazyColumn(
         contentPadding = paddingValues,
         modifier = Modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
     ) {
+        if (onQueryChange != null) {
+            item(key = "settings_search") {
+                GeneralTextField(
+                    value = query,
+                    onValueChange = onQueryChange,
+                    style = GeneralTextFieldStyle.Search,
+                    placeholder = stringResource(R.string.search_settings),
+                    leadingIcon = ToolkitIcon.Vector(Icons.Outlined.Search),
+                    trailingIcon = if (query.isNotEmpty()) ToolkitIcon.Vector(Icons.Outlined.Close) else null,
+                    trailingIconContentDescription = stringResource(CoreUiR.string.clear_search),
+                    onTrailingIconClick = { onQueryChange("") },
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = SizeConstants.LargeSize)
+                        .padding(top = SizeConstants.MediumSize),
+                )
+            }
+        }
+        if (results != null) {
+            searchResults(results, firebaseController, onPreferenceClick)
+            return@LazyColumn
+        }
         settingsConfig.categories.forEachIndexed { categoryIndex: Int, category: SettingsCategory ->
             if (category.preferences.isNotEmpty()) {
                 item(key = "settings_category_spacing_$categoryIndex") {
@@ -184,6 +247,48 @@ fun SettingsList(
                 }
             }
         }
+    }
+}
+
+/** The rows the search found, as one group, or a line saying there are none. */
+private fun LazyListScope.searchResults(
+    results: List<SettingsPreference>,
+    firebaseController: FirebaseController,
+    onPreferenceClick: (SettingsPreference) -> Unit,
+) {
+    item(key = "settings_search_spacing") { LargeVerticalSpacer() }
+    if (results.isEmpty()) {
+        item(key = "settings_search_empty") {
+            Text(
+                text = stringResource(R.string.no_settings_found),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(SizeConstants.LargeSize),
+            )
+        }
+        return
+    }
+    itemsIndexed(
+        items = results,
+        key = { index: Int, preference: SettingsPreference -> "settings_search_${preference.key ?: index}_$index" },
+    ) { index: Int, preference: SettingsPreference ->
+        SettingsPreferenceItem(
+            icon = preference.icon,
+            title = preference.title,
+            summary = preference.summary,
+            useIconContainer = preference.useIconContainer,
+            iconColor = preference.iconColor,
+            iconContainerColor = preference.iconContainerColor,
+            firebaseController = firebaseController,
+            onClick = { onPreferenceClick(preference) },
+            modifier = Modifier.groupedPreferenceItem(
+                position = groupedItemPosition(index = index, size = results.size),
+                outerRadius = SizeConstants.ExtraLargeSize,
+            ),
+        )
     }
 }
 

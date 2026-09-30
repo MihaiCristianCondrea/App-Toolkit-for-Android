@@ -17,6 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.di
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.search.advancedSettingsSearch
+import org.koin.core.qualifier.named
 import kotlinx.coroutines.flow.map
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
@@ -29,6 +32,8 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val advancedSettingsModule: Module = module {
+    // What the settings search finds on this page; the settings list collects every page's.
+    single<SettingsSearchProvider>(named("advanced")) { advancedSettingsSearch }
     single<CacheRepository> {
         DefaultCacheRepository(
             context = get(),
