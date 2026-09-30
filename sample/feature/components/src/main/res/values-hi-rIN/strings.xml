@@ -104,4 +104,12 @@
     <string name="components_divider_width">चौड़ाई</string>
     <string name="components_divider_wave_height">लहर की ऊँचाई</string>
     <string name="components_divider_vertical">लंबवत</string>
+    <string name="components_snackbar_pressed">आपने एक बटन दबाया</string>
+    <string name="components_snackbar_action_message">बटन की कार्रवाई पूरी हुई</string>
+    <string name="components_snackbar_undo">पहले जैसा करें</string>
+    <string name="components_snackbar_undone">पहले जैसा किया गया</string>
+    <string name="components_snackbar_error">कुछ गलत हो गया</string>
+    <string name="components_snackbar_retry">फिर से कोशिश करें</string>
+    <string name="components_snackbar_icon">आइकन और अपने रंगों वाला स्नैकबार</string>
+    <string name="components_snackbar_custom">%1$s: स्क्रीन द्वारा खुद बनाया गया स्नैकबार</string>
 </resources>

@@ -104,4 +104,12 @@
     <string name="components_divider_width">Chiều rộng</string>
     <string name="components_divider_wave_height">Chiều cao sóng</string>
     <string name="components_divider_vertical">Dọc</string>
+    <string name="components_snackbar_pressed">Bạn đã nhấn một nút</string>
+    <string name="components_snackbar_action_message">Đã thực hiện thao tác của nút</string>
+    <string name="components_snackbar_undo">Hoàn tác</string>
+    <string name="components_snackbar_undone">Đã hoàn tác</string>
+    <string name="components_snackbar_error">Đã xảy ra lỗi</string>
+    <string name="components_snackbar_retry">Thử lại</string>
+    <string name="components_snackbar_icon">Thanh thông báo có biểu tượng và màu riêng</string>
+    <string name="components_snackbar_custom">%1$s: thanh thông báo do chính màn hình vẽ</string>
 </resources>

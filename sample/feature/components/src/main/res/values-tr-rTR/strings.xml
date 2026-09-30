@@ -104,4 +104,12 @@
     <string name="components_divider_width">Genişlik</string>
     <string name="components_divider_wave_height">Dalga yüksekliği</string>
     <string name="components_divider_vertical">Dikey</string>
+    <string name="components_snackbar_pressed">Bir düğmeye bastınız</string>
+    <string name="components_snackbar_action_message">Düğme işlemi yapıldı</string>
+    <string name="components_snackbar_undo">Geri al</string>
+    <string name="components_snackbar_undone">Geri alındı</string>
+    <string name="components_snackbar_error">Bir sorun oluştu</string>
+    <string name="components_snackbar_retry">Yeniden dene</string>
+    <string name="components_snackbar_icon">Simgesi ve kendi renkleri olan bir bilgi çubuğu</string>
+    <string name="components_snackbar_custom">%1$s: ekranın kendisinin çizdiği bir bilgi çubuğu</string>
 </resources>

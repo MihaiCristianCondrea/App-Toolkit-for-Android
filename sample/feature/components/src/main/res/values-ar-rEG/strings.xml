@@ -104,4 +104,12 @@
     <string name="components_divider_width">العرض</string>
     <string name="components_divider_wave_height">ارتفاع الموجة</string>
     <string name="components_divider_vertical">عمودي</string>
+    <string name="components_snackbar_pressed">لقد ضغطت على زر</string>
+    <string name="components_snackbar_action_message">تم تنفيذ إجراء الزر</string>
+    <string name="components_snackbar_undo">تراجع</string>
+    <string name="components_snackbar_undone">تم التراجع</string>
+    <string name="components_snackbar_error">حدث خطأ ما</string>
+    <string name="components_snackbar_retry">إعادة المحاولة</string>
+    <string name="components_snackbar_icon">شريط إشعار بأيقونة وألوان خاصة به</string>
+    <string name="components_snackbar_custom">%1$s: شريط إشعار ترسمه الشاشة بنفسها</string>
 </resources>

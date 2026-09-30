@@ -104,4 +104,12 @@
     <string name="components_divider_width">寬度</string>
     <string name="components_divider_wave_height">波浪高度</string>
     <string name="components_divider_vertical">垂直</string>
+    <string name="components_snackbar_pressed">你按下了按鈕</string>
+    <string name="components_snackbar_action_message">已執行按鈕動作</string>
+    <string name="components_snackbar_undo">復原</string>
+    <string name="components_snackbar_undone">已復原</string>
+    <string name="components_snackbar_error">發生錯誤</string>
+    <string name="components_snackbar_retry">重試</string>
+    <string name="components_snackbar_icon">帶有圖示和專屬顏色的訊息列</string>
+    <string name="components_snackbar_custom">%1$s：由畫面自行繪製的訊息列</string>
 </resources>

@@ -104,4 +104,12 @@
     <string name="components_divider_width">Lățime</string>
     <string name="components_divider_wave_height">Înălțimea valului</string>
     <string name="components_divider_vertical">Vertical</string>
+    <string name="components_snackbar_pressed">Ai apăsat un buton</string>
+    <string name="components_snackbar_action_message">Acțiunea butonului a fost făcută</string>
+    <string name="components_snackbar_undo">Anulează</string>
+    <string name="components_snackbar_undone">Anulat</string>
+    <string name="components_snackbar_error">Ceva nu a mers bine</string>
+    <string name="components_snackbar_retry">Reîncearcă</string>
+    <string name="components_snackbar_icon">Un snackbar cu pictogramă și culori proprii</string>
+    <string name="components_snackbar_custom">%1$s: un snackbar desenat chiar de ecran</string>
 </resources>

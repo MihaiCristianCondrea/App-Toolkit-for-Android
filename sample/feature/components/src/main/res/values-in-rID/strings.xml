@@ -104,4 +104,12 @@
     <string name="components_divider_width">Lebar</string>
     <string name="components_divider_wave_height">Tinggi gelombang</string>
     <string name="components_divider_vertical">Vertikal</string>
+    <string name="components_snackbar_pressed">Anda menekan tombol</string>
+    <string name="components_snackbar_action_message">Aksi tombol selesai</string>
+    <string name="components_snackbar_undo">Urungkan</string>
+    <string name="components_snackbar_undone">Diurungkan</string>
+    <string name="components_snackbar_error">Terjadi kesalahan</string>
+    <string name="components_snackbar_retry">Coba lagi</string>
+    <string name="components_snackbar_icon">Snackbar dengan ikon dan warnanya sendiri</string>
+    <string name="components_snackbar_custom">%1$s: snackbar yang digambar oleh layar sendiri</string>
 </resources>

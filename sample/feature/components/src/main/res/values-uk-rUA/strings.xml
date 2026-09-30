@@ -104,4 +104,12 @@
     <string name="components_divider_width">Ширина</string>
     <string name="components_divider_wave_height">Висота хвилі</string>
     <string name="components_divider_vertical">Вертикальний</string>
+    <string name="components_snackbar_pressed">Ви натиснули кнопку</string>
+    <string name="components_snackbar_action_message">Дію кнопки виконано</string>
+    <string name="components_snackbar_undo">Скасувати</string>
+    <string name="components_snackbar_undone">Скасовано</string>
+    <string name="components_snackbar_error">Щось пішло не так</string>
+    <string name="components_snackbar_retry">Повторити</string>
+    <string name="components_snackbar_icon">Спливне повідомлення зі значком і власними кольорами</string>
+    <string name="components_snackbar_custom">%1$s: спливне повідомлення, яке малює сам екран</string>
 </resources>

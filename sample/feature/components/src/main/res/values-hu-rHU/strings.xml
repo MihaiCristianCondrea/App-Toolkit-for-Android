@@ -104,4 +104,12 @@
     <string name="components_divider_width">Szélesség</string>
     <string name="components_divider_wave_height">Hullámmagasság</string>
     <string name="components_divider_vertical">Függőleges</string>
+    <string name="components_snackbar_pressed">Megnyomtál egy gombot</string>
+    <string name="components_snackbar_action_message">A gomb művelete megtörtént</string>
+    <string name="components_snackbar_undo">Visszavonás</string>
+    <string name="components_snackbar_undone">Visszavonva</string>
+    <string name="components_snackbar_error">Hiba történt</string>
+    <string name="components_snackbar_retry">Újra</string>
+    <string name="components_snackbar_icon">Értesítősáv ikonnal és saját színekkel</string>
+    <string name="components_snackbar_custom">%1$s: a képernyő által rajzolt értesítősáv</string>
 </resources>

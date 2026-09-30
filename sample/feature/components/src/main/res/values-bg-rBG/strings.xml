@@ -104,4 +104,12 @@
     <string name="components_divider_width">Ширина</string>
     <string name="components_divider_wave_height">Височина на вълната</string>
     <string name="components_divider_vertical">Вертикален</string>
+    <string name="components_snackbar_pressed">Натиснахте бутон</string>
+    <string name="components_snackbar_action_message">Действието на бутона е изпълнено</string>
+    <string name="components_snackbar_undo">Отмяна</string>
+    <string name="components_snackbar_undone">Отменено</string>
+    <string name="components_snackbar_error">Нещо се обърка</string>
+    <string name="components_snackbar_retry">Опитай отново</string>
+    <string name="components_snackbar_icon">Лента с известие с икона и собствени цветове</string>
+    <string name="components_snackbar_custom">%1$s: лента с известие, която екранът рисува сам</string>
 </resources>

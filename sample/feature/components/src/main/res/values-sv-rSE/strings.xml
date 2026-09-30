@@ -104,4 +104,12 @@
     <string name="components_divider_width">Bredd</string>
     <string name="components_divider_wave_height">Våghöjd</string>
     <string name="components_divider_vertical">Vertikal</string>
+    <string name="components_snackbar_pressed">Du tryckte på en knapp</string>
+    <string name="components_snackbar_action_message">Knappens åtgärd utförd</string>
+    <string name="components_snackbar_undo">Ångra</string>
+    <string name="components_snackbar_undone">Ångrat</string>
+    <string name="components_snackbar_error">Något gick fel</string>
+    <string name="components_snackbar_retry">Försök igen</string>
+    <string name="components_snackbar_icon">En snackbar med ikon och egna färger</string>
+    <string name="components_snackbar_custom">%1$s: en snackbar som skärmen själv ritar</string>
 </resources>

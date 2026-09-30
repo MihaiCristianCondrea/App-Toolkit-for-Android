@@ -104,4 +104,12 @@
     <string name="components_divider_width">幅</string>
     <string name="components_divider_wave_height">波の高さ</string>
     <string name="components_divider_vertical">縦</string>
+    <string name="components_snackbar_pressed">ボタンを押しました</string>
+    <string name="components_snackbar_action_message">ボタンの操作を実行しました</string>
+    <string name="components_snackbar_undo">元に戻す</string>
+    <string name="components_snackbar_undone">元に戻しました</string>
+    <string name="components_snackbar_error">問題が発生しました</string>
+    <string name="components_snackbar_retry">再試行</string>
+    <string name="components_snackbar_icon">アイコンと独自の色を持つスナックバー</string>
+    <string name="components_snackbar_custom">%1$s: 画面が自分で描くスナックバー</string>
 </resources>

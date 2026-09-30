@@ -104,4 +104,12 @@
     <string name="components_divider_width">Larghezza</string>
     <string name="components_divider_wave_height">Altezza onda</string>
     <string name="components_divider_vertical">Verticale</string>
+    <string name="components_snackbar_pressed">Hai premuto un pulsante</string>
+    <string name="components_snackbar_action_message">Azione del pulsante eseguita</string>
+    <string name="components_snackbar_undo">Annulla</string>
+    <string name="components_snackbar_undone">Annullato</string>
+    <string name="components_snackbar_error">Si è verificato un errore</string>
+    <string name="components_snackbar_retry">Riprova</string>
+    <string name="components_snackbar_icon">Una snackbar con icona e colori propri</string>
+    <string name="components_snackbar_custom">%1$s: una snackbar disegnata dalla schermata stessa</string>
 </resources>

@@ -104,4 +104,12 @@
     <string name="components_divider_width">Ширина</string>
     <string name="components_divider_wave_height">Высота волны</string>
     <string name="components_divider_vertical">Вертикальный</string>
+    <string name="components_snackbar_pressed">Вы нажали кнопку</string>
+    <string name="components_snackbar_action_message">Действие кнопки выполнено</string>
+    <string name="components_snackbar_undo">Отменить</string>
+    <string name="components_snackbar_undone">Отменено</string>
+    <string name="components_snackbar_error">Что-то пошло не так</string>
+    <string name="components_snackbar_retry">Повторить</string>
+    <string name="components_snackbar_icon">Всплывающее сообщение со значком и собственными цветами</string>
+    <string name="components_snackbar_custom">%1$s: всплывающее сообщение, которое рисует сам экран</string>
 </resources>

@@ -104,4 +104,12 @@
     <string name="components_divider_width">ความกว้าง</string>
     <string name="components_divider_wave_height">ความสูงคลื่น</string>
     <string name="components_divider_vertical">แนวตั้ง</string>
+    <string name="components_snackbar_pressed">คุณกดปุ่มแล้ว</string>
+    <string name="components_snackbar_action_message">ดำเนินการของปุ่มเสร็จแล้ว</string>
+    <string name="components_snackbar_undo">เลิกทำ</string>
+    <string name="components_snackbar_undone">เลิกทำแล้ว</string>
+    <string name="components_snackbar_error">เกิดข้อผิดพลาด</string>
+    <string name="components_snackbar_retry">ลองอีกครั้ง</string>
+    <string name="components_snackbar_icon">สแน็กบาร์ที่มีไอคอนและสีของตัวเอง</string>
+    <string name="components_snackbar_custom">%1$s: สแน็กบาร์ที่หน้าจอวาดเอง</string>
 </resources>

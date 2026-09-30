@@ -104,4 +104,12 @@
     <string name="components_divider_width">Width</string>
     <string name="components_divider_wave_height">Wave height</string>
     <string name="components_divider_vertical">Vertical</string>
+    <string name="components_snackbar_pressed">You pressed a button</string>
+    <string name="components_snackbar_action_message">Button action done</string>
+    <string name="components_snackbar_undo">Undo</string>
+    <string name="components_snackbar_undone">Undone</string>
+    <string name="components_snackbar_error">Something went wrong</string>
+    <string name="components_snackbar_retry">Retry</string>
+    <string name="components_snackbar_icon">A snackbar with an icon and colours of its own</string>
+    <string name="components_snackbar_custom">%1$s: a snackbar the screen draws itself</string>
 </resources>

@@ -104,4 +104,12 @@
     <string name="components_divider_width">Lapad</string>
     <string name="components_divider_wave_height">Taas ng alon</string>
     <string name="components_divider_vertical">Patayo</string>
+    <string name="components_snackbar_pressed">Pumindot ka ng button</string>
+    <string name="components_snackbar_action_message">Tapos na ang aksyon ng button</string>
+    <string name="components_snackbar_undo">I-undo</string>
+    <string name="components_snackbar_undone">Na-undo</string>
+    <string name="components_snackbar_error">May nangyaring mali</string>
+    <string name="components_snackbar_retry">Subukang muli</string>
+    <string name="components_snackbar_icon">Isang snackbar na may icon at sariling mga kulay</string>
+    <string name="components_snackbar_custom">%1$s: isang snackbar na ang screen mismo ang gumuhit</string>
 </resources>

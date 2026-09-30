@@ -14,6 +14,11 @@ The hidden components showcase and the unlock gesture that reveals it.
 - The animation playground for bundled DesignSystem AVDs: a replay-mode menu, a Loop checkbox, and
   the menu that chooses whether a loop starts right away or on the first tap. Changing a control
   resets preview state; previews animate only on taps until a loop is started.
+- The snackbar examples, inside the buttons section rather than a section of their own: each group
+  of buttons shows one kind through `rememberScaffoldSnackbars()`. Standard buttons show a plain
+  message, tonal ones a message with an Undo action, outlined ones the error style with Retry, text
+  and icon buttons an icon with colours of its own, and the size groups a snackbar the screen draws
+  itself through `content`.
 
 ## Does not own
 

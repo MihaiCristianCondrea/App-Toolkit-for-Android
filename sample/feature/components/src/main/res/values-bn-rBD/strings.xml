@@ -104,4 +104,12 @@
     <string name="components_divider_width">প্রস্থ</string>
     <string name="components_divider_wave_height">ঢেউয়ের উচ্চতা</string>
     <string name="components_divider_vertical">উল্লম্ব</string>
+    <string name="components_snackbar_pressed">আপনি একটি বোতাম টিপেছেন</string>
+    <string name="components_snackbar_action_message">বোতামের কাজ সম্পন্ন হয়েছে</string>
+    <string name="components_snackbar_undo">পূর্বাবস্থায় ফেরান</string>
+    <string name="components_snackbar_undone">পূর্বাবস্থায় ফেরানো হয়েছে</string>
+    <string name="components_snackbar_error">কিছু ভুল হয়েছে</string>
+    <string name="components_snackbar_retry">আবার চেষ্টা করুন</string>
+    <string name="components_snackbar_icon">নিজস্ব আইকন ও রঙসহ একটি স্ন্যাকবার</string>
+    <string name="components_snackbar_custom">%1$s: স্ক্রিন নিজে আঁকা একটি স্ন্যাকবার</string>
 </resources>

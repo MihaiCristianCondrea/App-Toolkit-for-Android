@@ -104,4 +104,12 @@
     <string name="components_divider_width">Szerokość</string>
     <string name="components_divider_wave_height">Wysokość fali</string>
     <string name="components_divider_vertical">Pionowy</string>
+    <string name="components_snackbar_pressed">Naciśnięto przycisk</string>
+    <string name="components_snackbar_action_message">Wykonano akcję przycisku</string>
+    <string name="components_snackbar_undo">Cofnij</string>
+    <string name="components_snackbar_undone">Cofnięto</string>
+    <string name="components_snackbar_error">Coś poszło nie tak</string>
+    <string name="components_snackbar_retry">Ponów</string>
+    <string name="components_snackbar_icon">Pasek powiadomień z ikoną i własnymi kolorami</string>
+    <string name="components_snackbar_custom">%1$s: pasek powiadomień rysowany przez sam ekran</string>
 </resources>

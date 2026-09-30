@@ -104,4 +104,12 @@
     <string name="components_divider_width">Largeur</string>
     <string name="components_divider_wave_height">Hauteur de vague</string>
     <string name="components_divider_vertical">Vertical</string>
+    <string name="components_snackbar_pressed">Vous avez appuyé sur un bouton</string>
+    <string name="components_snackbar_action_message">Action du bouton effectuée</string>
+    <string name="components_snackbar_undo">Annuler</string>
+    <string name="components_snackbar_undone">Annulé</string>
+    <string name="components_snackbar_error">Un problème est survenu</string>
+    <string name="components_snackbar_retry">Réessayer</string>
+    <string name="components_snackbar_icon">Une barre de message avec une icône et ses propres couleurs</string>
+    <string name="components_snackbar_custom">%1$s : une barre de message dessinée par l’écran lui-même</string>
 </resources>

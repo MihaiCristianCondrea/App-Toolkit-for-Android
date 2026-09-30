@@ -104,4 +104,12 @@
     <string name="components_divider_width">چوڑائی</string>
     <string name="components_divider_wave_height">لہر کی اونچائی</string>
     <string name="components_divider_vertical">عمودی</string>
+    <string name="components_snackbar_pressed">آپ نے ایک بٹن دبایا</string>
+    <string name="components_snackbar_action_message">بٹن کی کارروائی مکمل ہو گئی</string>
+    <string name="components_snackbar_undo">کالعدم کریں</string>
+    <string name="components_snackbar_undone">کالعدم ہو گیا</string>
+    <string name="components_snackbar_error">کچھ غلط ہو گیا</string>
+    <string name="components_snackbar_retry">دوبارہ کوشش کریں</string>
+    <string name="components_snackbar_icon">آئیکن اور اپنے رنگوں والا اسنیک بار</string>
+    <string name="components_snackbar_custom">%1$s: اسکرین کا خود بنایا ہوا اسنیک بار</string>
 </resources>
