@@ -14,6 +14,9 @@ drawer and transition the graph describes. It is the chrome around the navigatio
 - Delivering intents: the launch intent once, and every later one from `onNewIntent`, through the
   graph's deep links to the navigator.
 - Reporting the destination on top (`onDestinationChanged`).
+- The snackbars: the tabs' scaffold draws them above the bottom bar, the banner, the player and the
+  floating action buttons, and gives the tab screens `rememberScaffoldSnackbars()`. The host is
+  the one passed as `ShellHost(snackbarHostState)`, so the app can show its own messages there.
 - The floating action buttons: above the bottom bar, the banner and the mini player on tabs and
   children, in the page frame on pages. A destination's `fab` slot and its `fabs` list come from
   the graph; a screen adds its own with `ScaffoldFabs`, through a `FabHost` the shell keeps per

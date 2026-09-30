@@ -86,6 +86,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.topShe
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.ScreenTransition
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import androidx.navigation3.scene.Scene
+import androidx.compose.material3.SnackbarHostState
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.LocalShellSnackbarHostState
 
 /**
  * The whole app below the activity: every tab, page, bar, rail, drawer and transition described
@@ -117,6 +119,10 @@ import androidx.navigation3.scene.Scene
  * the one the app opens on: for analytics and the like.
  * @param layoutPolicy The window widths at which the navigation changes form, and how wide content
  * may grow on large windows.
+ * @param snackbarHostState Where the tabs' scaffold shows its snackbars. Pass one to show messages
+ * that belong to the whole app, such as those of the activity's own view model, above the bottom
+ * bar with the rest: `DefaultSnackbarHandler(state, snackbarHostState = it, drawHost = false)`.
+ * The shell keeps a host of its own by default.
  */
 @Composable
 fun ShellHost(
@@ -128,8 +134,10 @@ fun ShellHost(
     onReady: () -> Unit = {},
     onDestinationChanged: (NavKey) -> Unit = {},
     layoutPolicy: ShellLayoutPolicy = ShellLayoutPolicy(),
+    snackbarHostState: SnackbarHostState? = null,
 ) {
     val context = LocalContext.current
+    val shellSnackbars = snackbarHostState ?: remember { SnackbarHostState() }
     val store = preferences ?: remember(context) { ShellPreferences(context) }
     // A cold start waits a frame for the stored settings rather than drawing a layout it would
     // replace a frame later.
@@ -173,6 +181,7 @@ fun ShellHost(
         LocalShellMotion provides motion,
         LocalTopBarStyleOverride provides current.topBarOverride.style,
         LocalHideTopBarOnScroll provides current.hideTopBarOnScroll,
+        LocalShellSnackbarHostState provides shellSnackbars,
         // Text drawn outside any Material surface takes the theme's colour instead of black.
         LocalContentColor provides MaterialTheme.colorScheme.onBackground,
     ) {

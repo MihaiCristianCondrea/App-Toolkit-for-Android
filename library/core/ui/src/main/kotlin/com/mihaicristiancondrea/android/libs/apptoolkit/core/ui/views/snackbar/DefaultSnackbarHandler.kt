@@ -46,6 +46,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateSc
  * @param onEvent Callback receiving the events created by [getDismissEvent] and [getActionEvent].
  * @param getActionEvent Factory for an event sent when the snackbar's action is performed, before
  * the dismiss event.
+ * @param drawHost Whether to draw [snackbarHostState] here. By default only when it is not the
+ * scaffold's, which draws its own; false for a host drawn elsewhere, such as the one an app hands
+ * to `ShellHost`.
  */
 @Composable
 fun <T, E : UiEvent> DefaultSnackbarHandler(
@@ -54,6 +57,7 @@ fun <T, E : UiEvent> DefaultSnackbarHandler(
     getDismissEvent: (() -> E)? = null,
     onEvent: ((E) -> Unit)? = null,
     getActionEvent: (() -> E)? = null,
+    drawHost: Boolean = snackbarHostState !== LocalPageSnackbarHostState.current,
 ) {
     val context: Context = LocalContext.current
 
@@ -83,7 +87,7 @@ fun <T, E : UiEvent> DefaultSnackbarHandler(
     }
 
     // A Toolkit scaffold already draws its own host; a second one here would show every message twice.
-    if (snackbarHostState !== LocalPageSnackbarHostState.current) {
+    if (drawHost) {
         DefaultSnackbarHost(snackbarState = snackbarHostState)
     }
 }

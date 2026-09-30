@@ -37,7 +37,8 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Added `AboutRoute`, `ThemeSettingsRoute`, `DisplaySettingsRoute`, `PrivacySettingsRoute`, `AdvancedSettingsRoute`, `DiagnosticsSettingsRoute`, `DeveloperOptionsRoute`, `StartupRoute` and `OnboardingRoute`, one key per Toolkit page.
 - Added `FrameScrollTint`, `FrameTint`, `FollowScrollWithFrameTint` and `BesideNavigation.scrollTint` to `:library:navigation`, and `TopAppBarScrollBehavior.frameTint` to `:library:core:ui`: while the navigation colour follows scrolling, the app bar on top drives it, a page's as well as a tab's.
 - Added `ScaffoldSnackbars`, `LocalScaffoldSnackbars` and `rememberScaffoldSnackbars()` to `:library:core:ui`: the shell's tab scaffold now draws snackbars too, as `PageScaffold` does, and a screen shows one through the scaffold around it with `post` or `show`, in the normal or error style (`ToolkitSnackbarStyle`), with an action, an icon, its own `ToolkitSnackbarColors`, or drawn by the screen through `content`. `ToolkitSnackbar` and `ToolkitSnackbarDefaults` draw the default look.
-- Added `UiSnackbar.actionLabel` and `DefaultSnackbarHandler(getActionEvent)`, and `DefaultSnackbarHandler` now uses the scaffold's host when given none.
+- Added `UiSnackbar.actionLabel` and `DefaultSnackbarHandler(getActionEvent, drawHost)`, and `DefaultSnackbarHandler` now uses the scaffold's host when given none.
+- Added `ShellHost(snackbarHostState)`: an app shows its own messages, such as its activity's view model's, in the tabs' scaffold with every other snackbar, above the bottom bar, its buttons and the player, on any window size.
 - Added `besideNavigationTitle()` and `LocalBesideNavigationTransitions` to `:library:navigation`, and `titleModifier` to `ShellTopAppBar`: beside a rail or drawer, the title of the tab's bar and of the page standing in for it grow or shrink into one another as one replaces the other in place.
 
 ### Changed
@@ -94,6 +95,7 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Fixed rain replacing the snow of the Christmas theme: during the Christmas season, while the Christmas palette is worn, snow falls even with the Rain weather effect, and the rain comes back after the season.
 - Fixed `DefaultSnackbarHost` drawing nothing for snackbars without `CustomSnackbarVisuals` and never drawing an action: every snackbar now shows, with its action when it has one.
 - Fixed the ads settings page never showing its consent failures.
+- Fixed `LargeTopAppBarWithScaffold` creating a new snackbar host on every recomposition, which dropped the snackbar showing, and drawing Material's plain snackbars: it keeps one host, draws the Toolkit's, and gives the screen inside `rememberScaffoldSnackbars()`.
 
 ---
 

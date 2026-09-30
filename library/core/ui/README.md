@@ -283,7 +283,9 @@ app bar, such as tabs, call `PageScaffold` themselves.
   drawing through `content`. A view model's `UiSnackbar` goes through `DefaultSnackbarHandler`,
   which uses the scaffold's host by default, takes the snackbar's `actionLabel` and sends
   `getActionEvent` when the action is performed. It draws a host of its own only when given a
-  different one, so a screen never shows two. `DefaultSnackbarHost` draws every snackbar with
+  different one, so a screen never shows two (`drawHost` overrides that). An app's own messages,
+  such as those of its activity's view model, go to the host it hands `ShellHost(snackbarHostState)`,
+  shown by the tabs' scaffold. `DefaultSnackbarHost` draws every snackbar with
   `ToolkitSnackbar`, the default look, unless its visuals carry their own `content`.
 - `ContentWidthBox` centres content no wider than the layout policy's maximum width, and
   `PanePlaceholder` and `ListPlaceholder` fill a detail pane nothing is open in.

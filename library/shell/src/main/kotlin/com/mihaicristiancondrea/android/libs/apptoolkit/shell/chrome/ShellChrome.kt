@@ -166,6 +166,9 @@ class ShellChromeController(
     val openNavigation: () -> Unit,
 )
 
+/** The host the tabs' scaffold draws snackbars in, set by `ShellHost`. */
+internal val LocalShellSnackbarHostState = staticCompositionLocalOf<SnackbarHostState?> { null }
+
 val LocalShellChrome = staticCompositionLocalOf { ShellChromeController(showsMenuButton = false, openNavigation = {}) }
 
 /**
@@ -437,8 +440,9 @@ private fun ShellBody(
     // Content and the floating action button keep clear of the docked player.
     val playerReserve by animateDpAsState(if (playerActive) MiniPlayerReserve else 0.dp, label = "PlayerReserve")
 
-    // The tabs' snackbars, drawn by this scaffold above the bars, the player and the buttons.
-    val snackbarHostState = remember { SnackbarHostState() }
+    // The tabs' snackbars, drawn by this scaffold above the bars, the player and the buttons. The
+    // host is the shell's, so the app can show its own messages here too.
+    val snackbarHostState = LocalShellSnackbarHostState.current ?: remember { SnackbarHostState() }
     val snackbarScope = rememberCoroutineScope()
     val snackbars = remember(snackbarHostState, snackbarScope) { ScaffoldSnackbars(snackbarHostState, snackbarScope) }
 

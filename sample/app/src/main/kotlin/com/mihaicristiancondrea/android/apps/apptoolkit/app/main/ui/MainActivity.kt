@@ -19,12 +19,8 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.states.MainUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.StartupRoute
@@ -62,9 +58,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
-/** Clears the bottom navigation bar, which is 80dp tall, for the activity's own snackbars. */
-private val SnackbarBottomOffset = 88.dp
 
 /**
  * The sample's only activity: [ShellHost] with the graph from `appGraph`, which draws every tab,
@@ -109,6 +102,16 @@ class MainActivity : AppCompatActivity() {
                     )
                 }
 
+                // Consent failures reported by MainViewModel, shown by the shell above its bottom
+                // bar, its buttons and the player, like every other snackbar.
+                val shellSnackbars = remember { SnackbarHostState() }
+                val mainState by viewModel.uiState.collectAsStateWithLifecycle()
+                DefaultSnackbarHandler<MainUiState, MainEvent>(
+                    screenState = mainState,
+                    snackbarHostState = shellSnackbars,
+                    drawHost = false,
+                )
+
                 Box(modifier = Modifier.fillMaxSize()) {
                     ShellHost(
                         graph = graph,
@@ -127,21 +130,8 @@ class MainActivity : AppCompatActivity() {
                             }
                         },
                         onReady = { keepSplashVisible = false },
+                        snackbarHostState = shellSnackbars,
                     )
-
-                    // Consent failures reported by MainViewModel, above the bottom navigation.
-                    val mainState by viewModel.uiState.collectAsStateWithLifecycle()
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .navigationBarsPadding()
-                            .padding(bottom = SnackbarBottomOffset),
-                    ) {
-                        DefaultSnackbarHandler<MainUiState, MainEvent>(
-                            screenState = mainState,
-                            snackbarHostState = remember { SnackbarHostState() },
-                        )
-                    }
                 }
 
                 if (showChangelog) {

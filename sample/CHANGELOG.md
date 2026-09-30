@@ -54,6 +54,7 @@
 - The compass tile no longer crashes on phones whose sensors report an invalid reading.
 - On tablets, moving between Components, Settings and the tabs now resizes the app bar title smoothly instead of swapping it.
 - Messages about ad consent failing now appear on the ads settings page.
+- Messages about ad consent failing when the app starts now appear above the bottom bar on phones and at the bottom of the screen on tablets, instead of at a fixed height.
 
 ---
 
