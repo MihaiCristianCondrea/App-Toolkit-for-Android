@@ -42,15 +42,16 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNav
  *
  * @param tinted Whether the navigation and the app bar share [frameColor]; the content then sits
  * in a card of [ContentCardShape].
- * @param frameColor The colour behind the navigation right now, which may be animating.
  * @param scrollTint Set while the shared colour follows scrolling: where the app bars beside the
  * navigation say how far to take it. Null while the colour is fixed.
+ * @param frameColor The colour behind the navigation right now, which may be animating. Last, so
+ * it can be passed as a trailing lambda.
  */
 @Stable
 class BesideNavigation(
     val tinted: Boolean,
-    val frameColor: () -> Color,
     val scrollTint: FrameScrollTint? = null,
+    val frameColor: () -> Color,
 )
 
 /**
