@@ -260,8 +260,9 @@ app bar, such as tabs, call `PageScaffold` themselves.
 - **The bar can hide on scroll.** With `LocalHideTopBarOnScroll`, which the shell sets from its
   settings, the bar slides away as content scrolls down and returns as soon as it scrolls up,
   whatever its style; a large bar collapses first. `HideOnScrollTopBar` lays the bar out less the
-  part `TopBarHideState` has slid away, keeping the status bar strip, and a scaffold of your own
-  attaches the state's `nestedScrollConnection` after the bar's own scroll behaviour.
+  part `TopBarHideState` has slid away, which reaches all of it, from under the status bar too,
+  and a scaffold of your own attaches the state's `nestedScrollConnection` after the bar's own
+  scroll behaviour.
 - **Beside a rail or permanent drawer, the page it opened is a tab.** When `isTopLevelPage` says
   the navigation opened this page, the frame draws a small bar without a back button and, over a
   tinted frame, the tab's content card. Back still closes it.

@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell
 
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -50,7 +49,7 @@ class TopBarHideState {
     var offset: Float by mutableFloatStateOf(0f)
         private set
 
-    /** The furthest the bar can move up: its height, less the status bar strip it keeps. */
+    /** The furthest the bar can move up: all of its height, the status bar's part included. */
     var limit: Float by mutableFloatStateOf(0f)
         internal set
 
@@ -74,22 +73,20 @@ fun rememberTopBarHideState(): TopBarHideState = remember { TopBarHideState() }
 
 /**
  * Lays out [bar] less the part of it that [state] has slid away, so the scaffold's content moves
- * up with it. [windowInsets] is what the bar keeps clear of; its top stays, so the status bar
- * keeps the bar's colour behind it. With [enabled] false the bar is laid out whole.
+ * up with it. The bar leaves entirely, the part behind the status bar too, and the content scrolls
+ * on under the status bar, edge to edge. With [enabled] false the bar is laid out whole.
  */
 @Composable
 fun HideOnScrollTopBar(
     state: TopBarHideState,
     enabled: Boolean,
-    windowInsets: WindowInsets,
     bar: @Composable () -> Unit,
 ) {
     Layout(content = bar, modifier = Modifier.clipToBounds()) { measurables, constraints ->
         val placeables = measurables.map { it.measure(constraints.copy(minHeight = 0)) }
         val width = placeables.maxOfOrNull { it.width } ?: constraints.minWidth
         val height = placeables.maxOfOrNull { it.height } ?: 0
-        val keep = windowInsets.getTop(this).coerceAtMost(height)
-        val limit = -(height - keep).toFloat()
+        val limit = -height.toFloat()
         if (state.limit != limit) state.limit = limit
         val offset = if (enabled) state.offset.coerceIn(limit, 0f).roundToInt() else 0
         layout(width, height + offset) {

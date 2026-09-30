@@ -125,7 +125,8 @@ data class ShellSettings(
     val navigationTint: NavigationTint = NavigationTint.Always,
     /**
      * Whether the app bar slides away as content scrolls down, whatever its style, and comes back
-     * as soon as it scrolls up. A large bar collapses first. The status bar keeps its strip.
+     * as soon as it scrolls up. A large bar collapses first, and the bar leaves entirely, from under
+     * the status bar too, so content scrolls on beneath it.
      */
     val hideTopBarOnScroll: Boolean = false,
 )

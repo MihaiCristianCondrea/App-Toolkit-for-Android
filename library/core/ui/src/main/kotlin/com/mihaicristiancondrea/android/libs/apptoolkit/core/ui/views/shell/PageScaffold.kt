@@ -111,7 +111,6 @@ fun PageScaffold(
     val scrollBehavior = rememberTopBarScrollBehavior(resolvedStyle)
     val hideTopBar = LocalHideTopBarOnScroll.current && pane == PaneRole.None
     val topHide = rememberTopBarHideState()
-    val barInsets = topBarInsets()
     val fabHost = remember { FabHost() }
     val fabScroll = rememberFabScrollBehavior()
     val contentInsets = when (pane) {
@@ -127,7 +126,7 @@ fun PageScaffold(
             .then(if (hideTopBar) Modifier.nestedScroll(topHide.nestedScrollConnection) else Modifier)
             .nestedScroll(fabScroll.nestedScrollConnection),
         topBar = {
-            HideOnScrollTopBar(topHide, enabled = hideTopBar, windowInsets = barInsets) {
+            HideOnScrollTopBar(topHide, enabled = hideTopBar) {
                 ShellTopAppBar(
                     style = resolvedStyle,
                     title = title,

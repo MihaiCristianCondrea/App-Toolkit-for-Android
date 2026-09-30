@@ -465,7 +465,7 @@ private fun ShellBody(
             .then(if (hideOnScroll) Modifier.nestedScroll(bottomScroll.nestedScrollConnection) else Modifier),
         topBar = {
             val barInsets = topBarInsets(reachesStart = !besideNavigation)
-            HideOnScrollTopBar(topHide, enabled = hideTopBar, windowInsets = barInsets) {
+            HideOnScrollTopBar(topHide, enabled = hideTopBar) {
                 ShellTopAppBar(
                     style = style,
                     title = title,
