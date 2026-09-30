@@ -59,6 +59,8 @@ data class UiStateScreen<T>(
  *                   This can be used for specific UI handling or logging. Defaults to `true`.
  * @property timeStamp A timestamp indicating when the snackbar was created. Can be used
  *                     to prevent showing the same message multiple times in quick succession.
+ * @property actionLabel The label of the snackbar's action, or null for none. The screen's
+ *                       `DefaultSnackbarHandler` sends its action event when it is performed.
  */
 @Immutable
 data class UiSnackbar(
@@ -66,6 +68,7 @@ data class UiSnackbar(
     val message: UiTextHelper = UiTextHelper.DynamicString(content = ""),
     val isError: Boolean = true,
     val timeStamp: Long = 0,
+    val actionLabel: UiTextHelper? = null,
 )
 
 

@@ -66,6 +66,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
@@ -112,6 +113,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.Navigatio
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.ContentWidthBox
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.HideOnScrollTopBar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalContentPadding
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalPageSnackbarHostState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalTopBarStyleOverride
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.ShellTopAppBar
@@ -122,6 +124,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.reme
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.resetTo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.topBarInsets
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.withoutBottom
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.LocalScaffoldSnackbars
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.ScaffoldSnackbars
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellSearch
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellNavDisplay
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellNavigator
@@ -134,6 +139,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarS
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ContentCardShape
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FollowScrollWithFrameTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalShellLayout
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.besideNavigationTitle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.LocalShellMotion
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.ScreenTransition
@@ -431,6 +437,11 @@ private fun ShellBody(
     // Content and the floating action button keep clear of the docked player.
     val playerReserve by animateDpAsState(if (playerActive) MiniPlayerReserve else 0.dp, label = "PlayerReserve")
 
+    // The tabs' snackbars, drawn by this scaffold above the bars, the player and the buttons.
+    val snackbarHostState = remember { SnackbarHostState() }
+    val snackbarScope = rememberCoroutineScope()
+    val snackbars = remember(snackbarHostState, snackbarScope) { ScaffoldSnackbars(snackbarHostState, snackbarScope) }
+
     Scaffold(
         modifier = Modifier
             .nestedScroll(topScroll.nestedScrollConnection)
@@ -464,6 +475,8 @@ private fun ShellBody(
                         OverflowMenu(graph.overflow, callbacks, visible = !isChild)
                     },
                     scrollBehavior = topScroll,
+                    // Beside the navigation, a page opened from it takes over this title in place.
+                    titleModifier = if (isChild) Modifier else besideNavigationTitle(),
                     windowInsets = barInsets,
                     search = search,
                     // Tinted, the frame behind draws the bar's colour for the bar and the rail together.
@@ -530,6 +543,16 @@ private fun ShellBody(
                 }
             }
         },
+        snackbarHost = {
+            DefaultSnackbarHost(
+                snackbarState = snackbarHostState,
+                // Clear of the player, and of the gesture bar once the bottom bar has hidden, as
+                // the floating action buttons are.
+                modifier = Modifier
+                    .padding(bottom = playerReserve)
+                    .offset { IntOffset(0, -(bottomInsets.getBottom(this) - bottomBarHeight).coerceAtLeast(0)) },
+            )
+        },
         contentWindowInsets = contentInsets,
         containerColor = if (tinted) Color.Transparent else MaterialTheme.colorScheme.background,
         // Explicit, since a transparent container would take its content colour from outside,
@@ -548,6 +571,8 @@ private fun ShellBody(
         ) {
             CompositionLocalProvider(
                 LocalContentPadding provides PaddingValues(bottom = padding.calculateBottomPadding() + playerReserve),
+                LocalPageSnackbarHostState provides snackbarHostState,
+                LocalScaffoldSnackbars provides snackbars,
             ) {
                 TabsNavDisplay(graph, navigator, searches, fabHosts)
             }

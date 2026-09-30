@@ -26,4 +26,7 @@ sealed interface AdsSettingsEvent : UiEvent {
     data class SetAdsEnabled(val enabled: Boolean) : AdsSettingsEvent
     data class SetReduceAds(val enabled: Boolean) : AdsSettingsEvent
     data class RequestConsent(val host: ConsentHost) : AdsSettingsEvent
+
+    /** The snackbar shown for a consent failure has left. */
+    data object DismissSnackbar : AdsSettingsEvent
 }

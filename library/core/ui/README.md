@@ -274,11 +274,17 @@ app bar, such as tabs, call `PageScaffold` themselves.
   above them.
 - **The back button is `AnimatedIconButtonDirection`,** the same button the shell's app bar uses,
   with its slide, press bounce, click sound and haptic.
-- **Snackbars sit above the bottom chrome.** `PageScaffold` provides its own `SnackbarHostState` as
-  `LocalPageSnackbarHostState`. A screen shows its messages with
-  `rememberPageSnackbarHostState()`, which returns the page's host inside the frame and a fresh one
-  outside it; `DefaultSnackbarHandler` draws a host of its own only when it was given a different
-  one, so a page never shows two.
+- **The scaffolds show the snackbars.** `PageScaffold` and the shell's tab scaffold each draw one
+  host above their bars, buttons and the system bars, and provide it to the screen inside as
+  `LocalScaffoldSnackbars` (a `ScaffoldSnackbars`) and `LocalPageSnackbarHostState`. A screen
+  shows a message with `rememberScaffoldSnackbars()`: `post(...)` from a click handler, or
+  `show(...)` from a coroutine, with the `ToolkitSnackbarStyle.Normal` or `Error` look, an action
+  (`actionLabel`, `onAction`), a close button, an icon, its own `ToolkitSnackbarColors`, or its own
+  drawing through `content`. A view model's `UiSnackbar` goes through `DefaultSnackbarHandler`,
+  which uses the scaffold's host by default, takes the snackbar's `actionLabel` and sends
+  `getActionEvent` when the action is performed. It draws a host of its own only when given a
+  different one, so a screen never shows two. `DefaultSnackbarHost` draws every snackbar with
+  `ToolkitSnackbar`, the default look, unless its visuals carry their own `content`.
 - `ContentWidthBox` centres content no wider than the layout policy's maximum width, and
   `PanePlaceholder` and `ListPlaceholder` fill a detail pane nothing is open in.
 

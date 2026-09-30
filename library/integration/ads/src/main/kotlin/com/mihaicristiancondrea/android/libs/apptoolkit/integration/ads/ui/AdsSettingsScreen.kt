@@ -55,6 +55,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.Tr
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.R
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -96,6 +97,13 @@ fun AdsSettingsScreen() {
 
     val activity = LocalActivity.current
     val consentHost = remember(activity) { activity?.let(::ConsentHost) }
+
+    // Consent failures, shown by the page's frame above the system bars.
+    DefaultSnackbarHandler(
+        screenState = screenState,
+        getDismissEvent = { AdsSettingsEvent.DismissSnackbar },
+        onEvent = viewModel::onEvent,
+    )
 
     val content: @Composable (PaddingValues) -> Unit = { paddingValues ->
         ScreenStateHandler(

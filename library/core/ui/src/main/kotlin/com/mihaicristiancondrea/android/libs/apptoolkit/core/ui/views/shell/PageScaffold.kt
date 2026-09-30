@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ContentCardShape
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalBesideNavigation
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.besideNavigationTitle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.isTopLevelPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.FabHost
@@ -53,7 +54,10 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.LocalScaffoldSnackbars
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.ScaffoldSnackbars
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -81,6 +85,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.LocalP
  *
  * Pages registered with a title get this frame from the shell; pages that need something under
  * their app bar, such as tabs, call it themselves.
+ *
+ * Snackbars shown through `rememberScaffoldSnackbars()`, `DefaultSnackbarHandler` or
+ * [LocalPageSnackbarHostState] appear above the system bars and the buttons, in the Toolkit's
+ * normal or error style or as the screen draws them.
  *
  * Floating action buttons come from [fabs], from what the screen inside declares with
  * `ScaffoldFabs`, and from [floatingActionButton] for a button drawn by hand; the frame stacks the
@@ -113,6 +121,8 @@ fun PageScaffold(
     val hideTopBar = LocalHideTopBarOnScroll.current && pane == PaneRole.None
     val topHide = rememberTopBarHideState()
     val fabHost = remember { FabHost() }
+    val snackbarScope = rememberCoroutineScope()
+    val snackbars = remember(snackbarHostState, snackbarScope) { ScaffoldSnackbars(snackbarHostState, snackbarScope) }
     val fabScroll = rememberFabScrollBehavior()
     // Beside the navigation, its shared colour follows this bar while the page is shown, as it
     // follows the tabs' bar, when the person has it follow scrolling.
@@ -147,6 +157,8 @@ fun PageScaffold(
                     },
                     actions = actions,
                     scrollBehavior = scrollBehavior,
+                    // Standing in for the tab, its title grows or shrinks from the one it replaces.
+                    titleModifier = if (topLevel) besideNavigationTitle() else Modifier,
                     // Over the shared frame colour, as the tabs' bar is.
                     colors = if (carded) {
                         TopAppBarDefaults.topAppBarColors(
@@ -180,6 +192,7 @@ fun PageScaffold(
             CompositionLocalProvider(
                 LocalContentPadding provides PaddingValues(bottom = padding.calculateBottomPadding()),
                 LocalPageSnackbarHostState provides snackbarHostState,
+                LocalScaffoldSnackbars provides snackbars,
                 LocalFabHost provides fabHost,
                 content = content,
             )

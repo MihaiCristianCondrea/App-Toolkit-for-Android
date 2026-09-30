@@ -19,7 +19,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar
 
 import android.content.Context
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
@@ -29,26 +28,32 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.Ui
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.CustomSnackbarVisuals
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiSnackbar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalPageSnackbarHostState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.rememberPageSnackbarHostState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 
 /**
- * Utility that shows snackbars described by [UiStateScreen.snackbar].
+ * Shows the snackbar described by [UiStateScreen.snackbar], in the error or normal style its
+ * [UiSnackbar.isError] picks, with its [UiSnackbar.actionLabel] as action.
  *
- * The snackbar is displayed using [snackbarHostState]. When it is dismissed,
- * [getDismissEvent] is invoked to build an event that is forwarded to
- * [onEvent]. This allows view models to react once the snackbar disappears.
+ * By default it shows through the Toolkit scaffold around the screen, a page's frame or the shell's
+ * tabs, which draws it above its bars and buttons. Given a host of its own, it draws that host
+ * here.
  *
  * @param screenState Screen state containing the snackbar information.
- * @param snackbarHostState Host state that renders the snackbar.
- * @param getDismissEvent Factory for an event triggered on dismissal.
- * @param onEvent Callback receiving the event created by [getDismissEvent].
+ * @param snackbarHostState Host state that renders the snackbar; the scaffold's by default.
+ * @param getDismissEvent Factory for an event sent once the snackbar leaves, whether dismissed or
+ * after its action.
+ * @param onEvent Callback receiving the events created by [getDismissEvent] and [getActionEvent].
+ * @param getActionEvent Factory for an event sent when the snackbar's action is performed, before
+ * the dismiss event.
  */
 @Composable
 fun <T, E : UiEvent> DefaultSnackbarHandler(
     screenState: UiStateScreen<T>,
-    snackbarHostState: SnackbarHostState,
+    snackbarHostState: SnackbarHostState = rememberPageSnackbarHostState(),
     getDismissEvent: (() -> E)? = null,
-    onEvent: ((E) -> Unit)? = null
+    onEvent: ((E) -> Unit)? = null,
+    getActionEvent: (() -> E)? = null,
 ) {
     val context: Context = LocalContext.current
 
@@ -58,22 +63,27 @@ fun <T, E : UiEvent> DefaultSnackbarHandler(
                 snackbarHostState.currentSnackbarData?.dismiss()
             }
 
+            val actionLabel: String? = snackbar.actionLabel?.asString(context)
             val result: SnackbarResult = snackbarHostState.showSnackbar(
                 visuals = CustomSnackbarVisuals(
                     message = snackbar.message.asString(context),
+                    actionLabel = actionLabel,
                     withDismissAction = true,
-                    duration = if (snackbar.isError) SnackbarDuration.Long else SnackbarDuration.Short,
+                    duration = if (snackbar.isError || actionLabel != null) SnackbarDuration.Long else SnackbarDuration.Short,
                     isError = snackbar.isError
                 )
             )
-            if ((result == SnackbarResult.Dismissed || result == SnackbarResult.ActionPerformed) && getDismissEvent != null && onEvent != null) {
-                onEvent(getDismissEvent())
+            if (onEvent != null) {
+                if (result == SnackbarResult.ActionPerformed && getActionEvent != null) {
+                    onEvent(getActionEvent())
+                }
+                if (getDismissEvent != null) onEvent(getDismissEvent())
             }
         }
     }
 
-    // A page frame already draws its own host; a second one here would show every message twice.
+    // A Toolkit scaffold already draws its own host; a second one here would show every message twice.
     if (snackbarHostState !== LocalPageSnackbarHostState.current) {
-        SnackbarHost(hostState = snackbarHostState)
+        DefaultSnackbarHost(snackbarState = snackbarHostState)
     }
 }

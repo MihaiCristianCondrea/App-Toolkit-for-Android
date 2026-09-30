@@ -78,6 +78,7 @@ class AdsSettingsViewModel(
             is AdsSettingsEvent.SetAdsEnabled -> persist(enabled = event.enabled)
             is AdsSettingsEvent.SetReduceAds -> persistReduceAds(enabled = event.enabled)
             is AdsSettingsEvent.RequestConsent -> requestConsent(host = event.host)
+            is AdsSettingsEvent.DismissSnackbar -> screenState.dismissSnackbar()
         }
     }
 

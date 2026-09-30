@@ -51,6 +51,9 @@
 - Tapping the tab you are already on no longer plays its icon backwards or shows it unselected.
 - On tablets, the side navigation now takes its colour as you scroll on Settings, Components and every other page, not only on the tabs, when set to change colour on scroll.
 - The Christmas theme brings its snow even if you picked rain, and the rain comes back after the holidays.
+- The compass tile no longer crashes on phones whose sensors report an invalid reading.
+- On tablets, moving between Components, Settings and the tabs now resizes the app bar title smoothly instead of swapping it.
+- Messages about ad consent failing now appear on the ads settings page.
 
 ---
 

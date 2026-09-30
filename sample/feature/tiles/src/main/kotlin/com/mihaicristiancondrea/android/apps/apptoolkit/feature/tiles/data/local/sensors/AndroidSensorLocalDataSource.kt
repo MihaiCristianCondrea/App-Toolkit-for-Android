@@ -31,7 +31,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlin.math.atan2
-import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
 /** Converts Android sensor callbacks into streams consumed by tile previews. */
@@ -71,15 +70,16 @@ class AndroidSensorLocalDataSource(
         val listener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent?) {
                 event ?: return
+                // A reading with NaN or infinity in it has no direction, and would spread NaN
+                // through every angle computed from it.
+                if (!event.values.isFiniteReading()) return
                 when (event.sensor.type) {
                     Sensor.TYPE_ROTATION_VECTOR,
                     Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR -> {
                         SensorManager.getRotationMatrixFromVector(rotationMatrix, event.values)
                         remapRotationMatrix(rotationMatrix, rotation, remappedMatrix)
                         SensorManager.getOrientation(remappedMatrix, orientation)
-                        val azimuth =
-                            (Math.toDegrees(orientation[0].toDouble()).roundToInt() + 360) % 360f
-                        trySend(azimuth)
+                        azimuthDegrees(orientation[0])?.let { trySend(it) }
                     }
 
                     Sensor.TYPE_ACCELEROMETER -> {
@@ -107,9 +107,7 @@ class AndroidSensorLocalDataSource(
                     ) {
                         remapRotationMatrix(rotationMatrix, rotation, remappedMatrix)
                         SensorManager.getOrientation(remappedMatrix, orientation)
-                        val azimuth =
-                            (Math.toDegrees(orientation[0].toDouble()).roundToInt() + 360) % 360f
-                        trySend(azimuth)
+                        azimuthDegrees(orientation[0])?.let { trySend(it) }
                     }
                 }
             }
@@ -157,15 +155,16 @@ class AndroidSensorLocalDataSource(
         val listener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent?) {
                 event ?: return
+                // A reading with NaN or infinity in it has no direction, and would spread NaN
+                // through every angle computed from it.
+                if (!event.values.isFiniteReading()) return
                 when (event.sensor.type) {
                     Sensor.TYPE_ROTATION_VECTOR,
                     Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR -> {
                         SensorManager.getRotationMatrixFromVector(rotationMatrix, event.values)
                         remapRotationMatrix(rotationMatrix, rotation, remappedMatrix)
                         SensorManager.getOrientation(remappedMatrix, orientation)
-                        val pitch = Math.toDegrees(orientation[1].toDouble()).toFloat()
-                        val roll = Math.toDegrees(orientation[2].toDouble()).toFloat()
-                        trySend(pitch to roll)
+                        tiltDegrees(orientation[1], orientation[2])?.let { trySend(it) }
                     }
 
                     Sensor.TYPE_ACCELEROMETER -> {
@@ -193,9 +192,7 @@ class AndroidSensorLocalDataSource(
                     ) {
                         remapRotationMatrix(rotationMatrix, rotation, remappedMatrix)
                         SensorManager.getOrientation(remappedMatrix, orientation)
-                        val pitch = Math.toDegrees(orientation[1].toDouble()).toFloat()
-                        val roll = Math.toDegrees(orientation[2].toDouble()).toFloat()
-                        trySend(pitch to roll)
+                        tiltDegrees(orientation[1], orientation[2])?.let { trySend(it) }
                     }
                 } else if (hasGravity && !hasGeomagnetic) {
                     // Fallback to accelerometer-only for pitch/roll if magnetometer is missing.

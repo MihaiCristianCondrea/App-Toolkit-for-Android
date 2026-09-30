@@ -129,6 +129,8 @@ fun topBarInsets(reachesStart: Boolean = true): WindowInsets = WindowInsets.safe
  *
  * @param colors The bar's colours; null keeps Material's, which tint the bar once content scrolls
  * under it.
+ * @param titleModifier Applied to the title text of a small or centred bar, such as
+ * `besideNavigationTitle()`. A large bar draws its title twice and ignores it.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -141,12 +143,14 @@ fun ShellTopAppBar(
     windowInsets: WindowInsets = topBarInsets(),
     search: TopBarSearch? = null,
     colors: TopAppBarColors? = null,
+    titleModifier: Modifier = Modifier,
 ) {
     // A large bar draws its title twice, once expanded and once collapsed; a field cannot be.
     val resolvedStyle = if (search != null && style != TopBarStyle.Hidden) TopBarStyle.Small else style
     // A centred bar centres whatever its title slot measures, so the slot wraps its title there;
     // elsewhere it spans the bar, so the search field can.
     val centred = resolvedStyle == TopBarStyle.CenterAligned
+    val textModifier = if (resolvedStyle.isLarge) Modifier else titleModifier
     val titleAlignment = if (centred) Alignment.Center else Alignment.CenterStart
     val titleContent: @Composable () -> Unit = {
         // One slot of one height for the title and the search field, so the bar, its navigation
@@ -181,7 +185,7 @@ fun ShellTopAppBar(
                         text = text,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.animateContentSize(),
+                        modifier = textModifier.animateContentSize(),
                     )
                 }
             }

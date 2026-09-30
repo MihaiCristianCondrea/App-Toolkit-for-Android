@@ -112,6 +112,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.Conten
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FollowScrollWithFrameTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FrameTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalBesideNavigation
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.besideNavigationTitle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.isTopLevelPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.LocalShellMotion
 import kotlinx.coroutines.launch
@@ -305,6 +306,8 @@ private fun <T : Any> ListDetailLayout(
                     listWidth = listWidth,
                     onCloseList = closeList,
                     showsBack = !topLevel,
+                    // Standing in for the tab, its title grows or shrinks from the one it replaces.
+                    listTitleModifier = if (topLevel) besideNavigationTitle() else Modifier,
                     // Over the shared frame colour, the bar draws no colour of its own.
                     containerColor = if (carded) Color.Transparent else MaterialTheme.colorScheme.surface,
                 )
@@ -413,6 +416,7 @@ private fun ListDetailTopBar(
     onCloseList: () -> Unit,
     showsBack: Boolean,
     containerColor: Color,
+    listTitleModifier: Modifier = Modifier,
 ) {
     val view = LocalView.current
     Row(
@@ -450,7 +454,9 @@ private fun ListDetailTopBar(
                 style = MaterialTheme.typography.titleLarge,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(start = if (showsBack) 4.dp else 16.dp, end = 16.dp),
+                modifier = Modifier
+                    .padding(start = if (showsBack) 4.dp else 16.dp, end = 16.dp)
+                    .then(listTitleModifier),
             )
         }
         Spacer(Modifier.width(SeparatorWidth))

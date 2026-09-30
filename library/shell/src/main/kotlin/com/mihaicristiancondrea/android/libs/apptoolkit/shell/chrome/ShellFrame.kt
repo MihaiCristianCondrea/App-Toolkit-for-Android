@@ -18,6 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -55,6 +57,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGr
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.BesideNavigation
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FrameScrollTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalBesideNavigation
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalBesideNavigationTransitions
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalShellLayout
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellSettings
@@ -121,6 +124,7 @@ internal val LocalShellFrame = staticCompositionLocalOf<ShellFrameState?> { null
  * and marked, and choosing another replaces it. Below that width, and on start screens, the frame
  * adds nothing: the chrome draws a bottom bar and a modal drawer, and pages cover them.
  */
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun ShellFrame(
     graph: ShellGraph,
@@ -235,12 +239,17 @@ internal fun ShellFrame(
                     // The navigation already keeps clear of the start edge's cutout and bars.
                     .then(if (framed) Modifier.consumeWindowInsets(WindowInsets.safeDrawing.only(WindowInsetsSides.Start)) else Modifier),
             ) {
-                CompositionLocalProvider(
-                    LocalShellFrame provides state,
-                    // Pages the navigation opens beside it are drawn like tabs.
-                    LocalBesideNavigation provides besideNavigation,
-                    content = content,
-                )
+                // Always there, whatever the layout, so a window crossing from one layout to
+                // another keeps what is shown; its titles only pair up beside the navigation.
+                SharedTransitionLayout(Modifier.fillMaxSize()) {
+                    CompositionLocalProvider(
+                        LocalShellFrame provides state,
+                        // Pages the navigation opens beside it are drawn like tabs.
+                        LocalBesideNavigation provides besideNavigation,
+                        LocalBesideNavigationTransitions provides this,
+                        content = content,
+                    )
+                }
             }
         }
         if (framed && layout.mode == ShellLayoutMode.Rail) {
