@@ -85,6 +85,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -209,6 +210,13 @@ internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
     ) { graph.tabs.map { ShellSearch() } }
     // Where each tab screen puts the floating action buttons it declares, by the screen's entry.
     val fabHosts = remember { mutableMapOf<String, FabHost>() }
+    // A host lives as long as its screen's entry: once a screen has left every tab's stack, its host
+    // goes too, rather than one staying behind for every child ever opened.
+    LaunchedEffect(navigator, graph) {
+        snapshotFlow {
+            graph.tabs.indices.flatMapTo(HashSet()) { tab -> navigator.tabStack(tab).map { tabEntryKey(tab, it) } }
+        }.collect { live -> fabHosts.keys.retainAll(live) }
+    }
 
     val player = graph.player?.takeIf { settings.accessoryMode.showsPlayer }
     val playerActive = player?.isActive?.invoke() == true
@@ -544,9 +552,10 @@ private fun ShellBody(
             ) { (index, key) ->
                 val shown = graph.destination(key)
                 val fab = shown.floatingActionButton
-                // The buttons the graph describes, then those the screen itself declares.
-                val described = shown.floatingActionButtons?.invoke(key).orEmpty() +
-                    fabHosts.getOrPut(tabEntryKey(index, key)) { FabHost() }.fabs
+                // The buttons the graph describes, then those the screen itself declares. The host
+                // is held here, so a screen's buttons still scale out after its entry has gone.
+                val host = remember(index, key) { fabHosts.getOrPut(tabEntryKey(index, key)) { FabHost() } }
+                val described = shown.floatingActionButtons?.invoke(key).orEmpty() + host.fabs
                 if (fab != null || described.isNotEmpty()) {
                     Column(
                         modifier = Modifier
