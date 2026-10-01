@@ -8,6 +8,11 @@ Android utility abstractions shared across the toolkit.
 ## Owns
 
 - Analytics and billing value models, and the application-facing theme preference model.
+- `ClipboardRepository` and its system-backed `DefaultClipboardRepository`, so a ViewModel copies
+  text without holding a `Context`. It also says whether the system confirms copies itself.
+- The failures the data layer throws: `NetworkException` and `StorageException`, each with a
+  `reason`. Translating into them belongs to `:library:core:network` and `:library:core:datastore`,
+  and the text a screen shows for them to `:library:core:ui`.
 - `FirebaseController`, `BillingCore`, dispatcher, build-info, app-info, permissions, and ad-SDK
   contracts.
 - Host DI configuration (`AppToolkitHostBuildConfig`, qualifiers, and constants).

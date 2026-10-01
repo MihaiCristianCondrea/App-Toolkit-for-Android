@@ -17,141 +17,98 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui
 
-import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.repositories.FaqRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.contracts.FaqAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.contracts.FaqEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.states.FaqUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewOutcome
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.usecases.ForceInAppReviewUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.asUiText
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onFailure
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.dismissSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setError
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoading
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setNoData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
+/**
+ * ViewModel for the help page: the questions, and the review request from the feedback sheet.
+ *
+ * Both the repository and the review use case are main-safe, so it needs no dispatcher.
+ */
 class FaqViewModel(
     private val faqRepository: FaqRepository,
     private val forceInAppReviewUseCase: ForceInAppReviewUseCase,
-    private val dispatchers: DispatcherProvider,
     firebaseController: FirebaseController,
-) : LoggedScreenViewModel<FaqUiState, FaqEvent, FaqAction>(
-    initialState = UiStateScreen(data = FaqUiState()),
+) : LoggedScreenViewModel<FaqUiState, FaqEvent>(
+    initialState = FaqUiState(),
     firebaseController = firebaseController,
     screenName = "Help",
     viewModelName = "FaqViewModel",
 ) {
-    private var observeJob: Job? = null
+    private var loadJob: Job? = null
     private var reviewJob: Job? = null
 
     init {
-        onEvent(event = FaqEvent.LoadFaq)
+        onEvent(FaqEvent.Load)
     }
 
     override fun handleEvent(event: FaqEvent) {
         when (event) {
-            is FaqEvent.LoadFaq -> loadFaq()
-            is FaqEvent.DismissSnackbar -> dismissSnackbar()
-            is FaqEvent.OpenFeatureRequestForm -> sendAction(FaqAction.OpenUrl(AppLinks.FEATURE_REQUESTS_FORM))
+            FaqEvent.Load -> loadFaq()
             is FaqEvent.RequestReview -> requestReview(host = event.host)
+            FaqEvent.StoreListingOpened -> setState { copy(openStoreListing = false) }
         }
     }
 
     private fun loadFaq() {
-        startOperation(action = "loadFaq")
-        observeJob = observeJob.restart {
-            faqRepository.fetchFaq()
-                .flowOn(context = dispatchers.io)
-                .onStart {
-                    firebaseController.logBreadcrumb(
-                        message = "FAQ fetch started",
-                        attributes = mapOf("source" to "FaqRepository")
+        loadJob = loadJob.restart {
+            launchReport(
+                action = Actions.LOAD_FAQ,
+                onError = { error -> setState { copy(questions = error.toFailed(fallback = LoadFailedText)) } },
+            ) {
+                firebaseController.logBreadcrumb(
+                    message = "FAQ fetch started",
+                    attributes = mapOf("source" to "FaqRepository"),
+                )
+                setState { copy(questions = Loadable.Loading) }
+                val questions = faqRepository.getFaq()
+                setState {
+                    copy(
+                        questions = if (questions.isEmpty()) {
+                            Loadable.Empty()
+                        } else {
+                            Loadable.Ready(questions.toImmutableList())
+                        },
                     )
-                    updateStateThreadSafe {
-                        screenState.setLoading()
-                    }
                 }
-                .onEach { result: DataState<List<FaqItem>, Errors> ->
-                    result
-                        .onSuccess { faqs ->
-                            updateStateThreadSafe {
-                                val data = FaqUiState(questions = faqs.toImmutableList())
-                                if (faqs.isEmpty()) {
-                                    screenState.setNoData(data = data)
-                                } else {
-                                    screenState.setSuccess(data = data)
-                                }
-                            }
-                        }
-                        .onFailure { error ->
-                            updateStateThreadSafe {
-                                screenState.setError(message = error.asUiText())
-                            }
-                        }
-                }
-                .catchReport(action = "loadFaq") {
-                    updateStateThreadSafe {
-                        screenState.setError(
-                            message = UiTextHelper.StringResource(R.string.error_failed_to_load_faq)
-                        )
-                    }
-                }
-                .launchIn(scope = viewModelScope)
-        }
-    }
-
-    private fun dismissSnackbar() {
-        viewModelScope.launch {
-            updateStateThreadSafe {
-                screenState.dismissSnackbar()
             }
         }
     }
 
+    // Any outcome but a shown review, a failure included, sends the user to the store listing, so
+    // the request they made always leads somewhere.
     private fun requestReview(host: ReviewHost) {
-        startOperation(action = Actions.REQUEST_REVIEW)
         reviewJob = reviewJob.restart {
             launchReport(
                 action = Actions.REQUEST_REVIEW,
-                block = {
-                    val outcome = withContext(dispatchers.io) {
-                        forceInAppReviewUseCase(host = host)
-                    }
-                    sendAction(action = FaqAction.ReviewOutcomeReported(outcome = outcome))
-                    if (outcome != ReviewOutcome.Launched) {
-                        sendAction(action = FaqAction.OpenPlayStoreReview)
-                    }
-                },
-                onError = {
-                    sendAction(action = FaqAction.OpenPlayStoreReview)
+                onError = { setState { copy(openStoreListing = true) } },
+            ) {
+                val outcome: ReviewOutcome = forceInAppReviewUseCase(host = host)
+                if (outcome != ReviewOutcome.Launched) {
+                    setState { copy(openStoreListing = true) }
                 }
-            )
+            }
         }
     }
 
     private object Actions {
-        const val REQUEST_REVIEW = "requestReview"
+        const val LOAD_FAQ: String = "loadFaq"
+        const val REQUEST_REVIEW: String = "requestReview"
+    }
+
+    private companion object {
+        val LoadFailedText = UiTextHelper.StringResource(R.string.error_failed_to_load_faq)
     }
 }

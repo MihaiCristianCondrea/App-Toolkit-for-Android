@@ -23,6 +23,8 @@ import android.database.sqlite.SQLiteDatabaseCorruptException
 import android.database.sqlite.SQLiteDatabaseLockedException
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteFullException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.HttpRequestTimeoutException
@@ -53,6 +55,10 @@ import io.ktor.client.network.sockets.ConnectTimeoutException as KtorConnectTime
  */
 fun Throwable.toError(default: Errors = Errors.Network.UNKNOWN): Errors {
     return when (this) {
+        // Already translated by networkCall or storageCall; both are IOExceptions, so check first.
+        is NetworkException -> reason.toError()
+        is StorageException -> reason.toError()
+
         is CancellationException -> Errors.UseCase.CANCELLED
 
         is HttpRequestTimeoutException,
@@ -93,4 +99,24 @@ fun Throwable.toError(default: Errors = Errors.Network.UNKNOWN): Errors {
 
         else -> default
     }
+}
+
+private fun NetworkException.Reason.toError(): Errors = when (this) {
+    NetworkException.Reason.NO_INTERNET -> Errors.Network.NO_INTERNET
+    NetworkException.Reason.CONNECTION -> Errors.Network.CONNECTION_ERROR
+    NetworkException.Reason.TIMEOUT -> Errors.Network.REQUEST_TIMEOUT
+    NetworkException.Reason.SSL -> Errors.Network.SSL_ERROR
+    NetworkException.Reason.CLIENT -> Errors.Network.HTTP_CLIENT_ERROR
+    NetworkException.Reason.RATE_LIMITED -> Errors.Network.RATE_LIMITED
+    NetworkException.Reason.SERVER -> Errors.Network.HTTP_SERVER_ERROR
+    NetworkException.Reason.UNEXPECTED_RESPONSE -> Errors.Network.UNKNOWN
+    NetworkException.Reason.SERIALIZATION -> Errors.Network.SERIALIZATION
+}
+
+private fun StorageException.Reason.toError(): Errors = when (this) {
+    StorageException.Reason.FULL -> Errors.Database.DATABASE_FULL
+    StorageException.Reason.BUSY -> Errors.Database.DATABASE_LOCKED
+    StorageException.Reason.CORRUPT -> Errors.Database.DATABASE_CORRUPT
+    StorageException.Reason.UNAVAILABLE -> Errors.Database.DATABASE_CANT_OPEN
+    StorageException.Reason.FAILED -> Errors.Database.DATABASE_OPERATION_FAILED
 }

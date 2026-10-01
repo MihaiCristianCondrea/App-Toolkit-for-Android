@@ -7,7 +7,11 @@ page frame, state handling, analytics hooks, and shared components.
 
 ## Owns
 
-- `ScreenViewModel`, `LoggedScreenViewModel`, event/action bases, and `UiStateScreen` handling.
+- The screen contracts, in `screen`: `ScreenViewModel`, `LoggedScreenViewModel`, `Loadable`,
+  `TrackedStatus`, `UiMessage`, `ScreenStateHandler`, `TrackScreenState` and `MessageHost`. See
+  [Screen state](#screen-state).
+- The previous screen contracts, in `base` and `states` (`BaseViewModel`, `UiStateScreen`,
+  `ScreenState`, `UiSnackbar` and their helpers), kept until every feature has moved to `screen`.
 - The shell's page frame, in `views/shell`: `PageScaffold`, `ShellTopAppBar` and
   `rememberTopBarScrollBehavior`, the app bar's search field, `LocalContentPadding` and
   `contentPadding`, `ContentWidthBox`, the pane placeholders, and the page's snackbar host
@@ -68,14 +72,14 @@ page frame, state handling, analytics hooks, and shared components.
 ```mermaid
 flowchart TD
     User[User interaction] --> Screen[Feature composable]
-    Screen --> Event[UiEvent]
+    Screen --> Event[Feature event]
     Event --> VM[ScreenViewModel]
-    VM -->|persistent render state| State[StateFlow of UiStateScreen]
-    VM -->|one-off effect| Action[ActionEvent flow]
-    State --> Handler[ScreenStateHandler]
-    Handler --> Loading[Loading / no-data / error / success]
+    VM -->|setState| State[StateFlow of the feature's state]
+    VM -->|showMessage| Messages[StateFlow of queued UiMessages]
+    State --> Handler[ScreenStateHandler per Loadable field]
+    Handler --> Loading[Loading / empty / failed / ready]
     Loading --> Screen
-    Action --> Host[Navigation, intent, or transient UI handler]
+    Messages --> Host[MessageHost: snackbars in order]
     Theme[AppTheme CompositionLocals] --> Components[Reusable components and ad slots]
     Components --> Screen
     Frame[PageScaffold page frame] --> Screen
@@ -83,12 +87,16 @@ flowchart TD
 
 ## Architectural decisions
 
-- Screen state and one-off actions use separate streams so recomposition cannot repeat navigation
-  or transient effects.
 - `ScreenViewModel` owns unidirectional event-to-state processing; feature composables render data
   and forward user intent rather than reaching repositories.
-- `ScreenStateHandler` centralizes loading/no-data/error/success rendering, while feature content
-  remains responsible for its successful state.
+- A screen's state is the feature's own type. The Toolkit puts the status on each piece of content
+  that loads (`Loadable`), not on the whole screen, so a screen that loads several things gives each
+  its own status and a screen that starts with its content has none. A screen whose cases differ
+  declares a sealed type of its own.
+- Messages are queued state, not one-off events, so a configuration change cannot lose one, and
+  every screen shows them the same way through `MessageHost`.
+- `ScreenStateHandler` gives every case but the content a design-system default, so a failure
+  always shows something.
 - Global UI preferences arrive through the design-system root. Reusable components must not start
   their own persistence collectors unless a documented adapter still requires it.
 
@@ -141,13 +149,16 @@ available; data-layer callers should use the lower-level API.
   is `wavyLineGeometry`, which is unit tested.
 
 
-- All new ViewModels must extend `ScreenViewModel`, or `LoggedScreenViewModel` when Firebase
-  breadcrumbs/error reporting are required.
-- ViewModels receive events through `onEvent`, expose immutable `UiStateScreen<T>`, and emit one-off
-  actions separately.
+- New ViewModels extend `core.ui.screen.ScreenViewModel`, or `core.ui.screen.LoggedScreenViewModel`
+  when Firebase breadcrumbs and error reporting are required. The `core.ui.base` classes are kept
+  only for the features not moved yet.
+- ViewModels receive events through `onEvent`, change their state only through `setState`, and
+  queue messages with `showMessage`. Operations run through `launchReport` (a suspend call),
+  `collectReport` (a flow whose values go into state) or `catchReport` (a flow that keeps going),
+  which report failures and pass cancellation through. ViewModels take repositories, use cases and
+  `FirebaseController`, never a `Context`.
 - Initialization is represented by an event sent from `init`; long-running work is owned and
-  cancelled by the ViewModel. Flow pipelines use `catch` and dispatcher selection rather than
-  `runCatching` in ViewModels.
+  cancelled by the ViewModel.
 - State/render models, reusable composables, lifecycle effects, and analytics APIs are intentional
   cross-module contracts.
 - Every button takes its icon as a single `ToolkitIcon`, so a button can carry a Compose icon, a
@@ -318,6 +329,66 @@ ScaffoldFabs(
   it scrolls back, and a new tab or page starts unfolded. A button's own `expanded` still applies.
   In a scaffold of your own, attach `rememberFabScrollBehavior().nestedScrollConnection` and pass
   its `expanded` to `ToolkitFabColumn`.
+
+## Screen state
+
+The `screen` package is how a screen holds and shows its state. `:library:feature:about` is the
+first feature on it and the reference for the rest.
+
+```kotlin
+data class AboutUiState(val items: Loadable<ImmutableList<AboutItem>> = Loadable.Loading)
+
+class AboutViewModel(/* ... */) : LoggedScreenViewModel<AboutUiState, AboutEvent>(
+    initialState = AboutUiState(), firebaseController = firebaseController,
+    screenName = "About", viewModelName = "AboutViewModel",
+) {
+    override fun handleEvent(event: AboutEvent) { /* ... */ }
+
+    private fun load() = launchReport(
+        action = "loadAboutInfo",
+        onError = { setState { copy(items = Loadable.Failed(failedText)) } },
+    ) {
+        setState { copy(items = Loadable.Ready(repository.getAboutInfo().toAboutItems())) }
+    }
+}
+
+// AboutScreen, stateful: ViewModel, tracking, messages, navigation.
+val state by viewModel.state.collectAsStateWithLifecycle()
+TrackScreenState(firebaseController, screenName = "About", state = state.items)
+AboutScreenContent(state, onEvent = viewModel::onEvent, onOpenLicenses = { navigator.navigate(LicensesRoute) })
+MessageHost(viewModel)
+
+// AboutScreenContent, stateless and previewable: renders the state, reports through callbacks.
+ScreenStateHandler(state.items, contentPadding = padding, onRetry = { onEvent(AboutEvent.Load) }) { ready ->
+    AboutList(ready.value)
+}
+```
+
+The full setup, with the file tree, templates and the migration steps, is the
+[`android-ui-layer` skill](../../../.agents/skills/architecture/android-ui-layer/SKILL.md).
+
+- **The state is the feature's own type.** Content that is there from the start needs no status.
+  Content that loads gets a `Loadable` field, and nothing makes it start at `Loading`: a screen that
+  shows nothing until its content arrives starts at `Empty` and goes straight to `Ready`.
+- **`Loadable.Ready` can be `refreshing` or `stale`,** for a newer copy loading behind the shown one
+  or a saved copy shown offline, without a case of its own.
+- **Other statuses** are a sealed type the feature declares. Implementing `TrackedStatus` has them
+  reported by `TrackScreenState` like `Loadable`'s `loading`, `success`, `no_data` and `error`.
+- **Messages** go through `showMessage(UiMessage(...))` and `MessageHost`, which shows them one at a
+  time and removes each once it has left. A screen needs no dismiss event.
+- **`LoggedScreenViewModel`** logs `vm_init` and `vm_event` itself; `launchReport` and
+  `collectReport` take the same arguments and log `vm_op_start` and, on failure, `vm_op_error` and
+  a Crashlytics report before calling `onError`. `catchReport` reports a failure of a flow that
+  keeps going, and hands it to a block that can emit a fallback. These are the same
+  messages, keys and events as the previous `core.ui.base.LoggedScreenViewModel`.
+- **Failures are mapped here.** The data layer throws `NetworkException`, `StorageException` or a
+  feature's own exception. In `onError`, `toFailed(fallback)` builds the `Loadable.Failed` and
+  `toErrorMessage(fallback)` the error `UiMessage`. Both use `toUiText`, which gives every screen
+  the same text for the failures a user can act on (offline, timeout, busy server, full storage)
+  and the screen's own `fallback` for the rest, bugs included. A screen with failures of its own
+  maps them first and passes the rest on.
+- **There is no action stream.** One-off effects such as navigation are added with the first screen
+  that needs them; messages, the common case, are state.
 
 ## Internal implementations
 

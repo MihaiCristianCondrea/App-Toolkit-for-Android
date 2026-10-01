@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="screen_error_no_internet">Sem conexão com a internet.</string>
+    <string name="screen_error_connection">Erro de rede. Tente novamente.</string>
+    <string name="screen_error_timeout">Tempo limite da solicitação excedido. Tente novamente.</string>
+    <string name="screen_error_rate_limited">Muitas solicitações. Tente novamente mais tarde.</string>
+    <string name="screen_error_server">Erro no servidor. Tente novamente mais tarde.</string>
+    <string name="screen_error_storage_full">O armazenamento está cheio.</string>
+    <string name="screen_error_storage_busy">O armazenamento está ocupado. Tente novamente.</string>
+    <string name="screen_error_generic">Ocorreu um erro desconhecido.</string>
+</resources>

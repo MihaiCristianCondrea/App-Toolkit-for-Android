@@ -39,7 +39,7 @@ class AboutMappersTest {
 
     @Test
     fun `maps full about info to ordered items`() {
-        val items = aboutInfo.toUiState().items
+        val items = aboutInfo.toAboutItems()
 
         assertThat(items.map { it.key }).containsExactly(
             AboutItemKey.HEADER_APP_INFO,
@@ -65,7 +65,7 @@ class AboutMappersTest {
 
     @Test
     fun `device info item carries the displayed report as its copy payload`() {
-        val deviceInfoItem = aboutInfo.toUiState().items.preference(AboutItemKey.DEVICE_INFO)
+        val deviceInfoItem = aboutInfo.toAboutItems().preference(AboutItemKey.DEVICE_INFO)
 
         assertThat((deviceInfoItem.summary as UiTextHelper.DynamicString).content)
             .isEqualTo("device-info")
@@ -81,7 +81,7 @@ class AboutMappersTest {
 
     @Test
     fun `version rows copy their own value without a custom confirmation`() {
-        val items = aboutInfo.toUiState().items
+        val items = aboutInfo.toAboutItems()
 
         assertThat(items.preference(AboutItemKey.APP_TOOLKIT_VERSION).action).isEqualTo(
             AboutItemAction.CopyToClipboard(
@@ -99,7 +99,7 @@ class AboutMappersTest {
 
     @Test
     fun `omits google play services when it is not installed`() {
-        val items = aboutInfo.copy(googlePlayServicesVersion = null).toUiState().items
+        val items = aboutInfo.copy(googlePlayServicesVersion = null).toAboutItems()
 
         assertThat(items.none { it.key == AboutItemKey.GOOGLE_PLAY_SERVICES_VERSION }).isTrue()
         assertThat(items.preference(AboutItemKey.OSS_LICENSES).position)
@@ -108,14 +108,14 @@ class AboutMappersTest {
 
     @Test
     fun `omits the toolkit version when it is blank`() {
-        val items = aboutInfo.copy(appToolkitVersion = "").toUiState().items
+        val items = aboutInfo.copy(appToolkitVersion = "").toAboutItems()
 
         assertThat(items.none { it.key == AboutItemKey.APP_TOOLKIT_VERSION }).isTrue()
     }
 
     @Test
     fun `omits the device info section when there is nothing to show`() {
-        val items = aboutInfo.copy(deviceInfo = "   ").toUiState().items
+        val items = aboutInfo.copy(deviceInfo = "   ").toAboutItems()
 
         assertThat(items.none { it.key == AboutItemKey.HEADER_DEVICE_INFO }).isTrue()
         assertThat(items.none { it.key == AboutItemKey.DEVICE_INFO }).isTrue()
@@ -124,7 +124,7 @@ class AboutMappersTest {
 
     @Test
     fun `every row that shows a value copies it, except licenses and the build version`() {
-        val items = aboutInfo.toUiState().items
+        val items = aboutInfo.toAboutItems()
         val preferences = items.filterIsInstance<AboutItem.Preference>()
 
         val notCopyable = preferences
@@ -140,7 +140,7 @@ class AboutMappersTest {
 
     @Test
     fun `the app name row copies the name itself`() {
-        val appName = aboutInfo.toUiState().items.preference(AboutItemKey.APP_NAME)
+        val appName = aboutInfo.toAboutItems().preference(AboutItemKey.APP_NAME)
 
         val action = appName.action as AboutItemAction.CopyToClipboard
         assertThat(action.text).isEqualTo(appName.title)
@@ -148,7 +148,7 @@ class AboutMappersTest {
 
     @Test
     fun `the build version row feeds the version tap counter and copies nothing`() {
-        val buildVersion = aboutInfo.toUiState().items.preference(AboutItemKey.APP_BUILD_VERSION)
+        val buildVersion = aboutInfo.toAboutItems().preference(AboutItemKey.APP_BUILD_VERSION)
 
         assertThat(buildVersion.countsVersionTap).isTrue()
         assertThat(buildVersion.summary).isEqualTo(UiTextHelper.DynamicString("1.0 (1)"))
@@ -157,7 +157,7 @@ class AboutMappersTest {
 
     @Test
     fun `no other row feeds the version tap counter`() {
-        val counting = aboutInfo.toUiState().items
+        val counting = aboutInfo.toAboutItems()
             .filterIsInstance<AboutItem.Preference>()
             .filter { it.countsVersionTap }
             .map { it.key }

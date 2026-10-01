@@ -1,0 +1,21 @@
+// Copy the license header from a sibling file.
+
+package <base>.feature.x.di
+
+import <base>.feature.x.data.repositories.DefaultXRepository
+import <base>.feature.x.data.repositories.XRepository
+import <base>.feature.x.ui.XViewModel
+import org.koin.core.module.Module
+import org.koin.core.module.dsl.viewModel
+import org.koin.dsl.module
+
+val xModule: Module = module {
+    single<XRepository> { DefaultXRepository(/* named arguments, each get() */) }
+
+    viewModel {
+        XViewModel(
+            repository = get(),
+            firebaseController = get(),
+        )
+    }
+}

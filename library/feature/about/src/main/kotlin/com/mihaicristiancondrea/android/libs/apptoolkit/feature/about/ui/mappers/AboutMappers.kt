@@ -25,10 +25,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.model
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItemKey
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.AboutUiState
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 /**
- * Maps the [AboutInfo] domain model to the [AboutUiState] rendered by the About screen.
+ * Maps the [AboutInfo] domain model to the rows the About screen renders.
  *
  * Entries that have nothing to show are dropped, so grouped card positions are assigned after
  * filtering and always describe the list the user actually sees.
@@ -38,9 +39,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.
  * over, and copying on every one of those taps put the version on the clipboard five times and
  * covered the konfetti with clipboard confirmations.
  */
-internal fun AboutInfo.toUiState(): AboutUiState = AboutUiState(items = toAboutItems())
-
-private fun AboutInfo.toAboutItems(): List<AboutItem> {
+internal fun AboutInfo.toAboutItems(): ImmutableList<AboutItem> {
     val appInfoPreferences = buildList {
         val appNameTitle = UiTextHelper.StringResource(CommonR.string.app_full_name)
         add(
@@ -138,7 +137,7 @@ private fun AboutInfo.toAboutItems(): List<AboutItem> {
             )
             addAll(deviceInfoPreferences)
         }
-    }
+    }.toImmutableList()
 }
 
 private fun List<AboutItem.Preference>.assignPositions(): List<AboutItem.Preference> =

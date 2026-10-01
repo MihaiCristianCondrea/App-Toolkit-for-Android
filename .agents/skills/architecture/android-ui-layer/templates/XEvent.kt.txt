@@ -1,0 +1,11 @@
+// Copy the license header from a sibling file.
+
+package <base>.feature.x.ui.contracts
+
+/**
+ * What the user can ask the X screen's ViewModel to do.
+ */
+sealed interface XEvent {
+    /** Loads the entries, on start and on retry. */
+    data object Load : XEvent
+}

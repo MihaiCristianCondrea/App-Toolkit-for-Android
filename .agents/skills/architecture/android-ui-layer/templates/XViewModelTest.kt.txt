@@ -1,0 +1,68 @@
+// Copy the license header from a sibling file.
+
+package <base>.feature.x.ui
+
+import com.google.common.truth.Truth.assertThat
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import <base>.feature.x.data.models.XData
+import <base>.feature.x.data.repositories.XRepository
+import <base>.feature.x.ui.contracts.XEvent
+import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
+
+class XViewModelTest {
+
+    companion object {
+        @JvmField
+        @RegisterExtension
+        val dispatcherExtension = UnconfinedDispatcherExtension()
+    }
+
+    private val firebaseController = FakeFirebaseController()
+
+    private fun createViewModel(repository: XRepository = FakeXRepository()): XViewModel =
+        XViewModel(repository = repository, firebaseController = firebaseController)
+
+    private fun advance() = dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+    @Test
+    fun `initial load shows the entries`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel()
+        advance()
+
+        assertThat(viewModel.state.value.items).isInstanceOf(Loadable.Ready::class.java)
+    }
+
+    @Test
+    fun `repository error shows the failure state with a retry`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel(repository = FakeXRepository(fails = true))
+        advance()
+
+        val items = viewModel.state.value.items
+        assertThat(items).isInstanceOf(Loadable.Failed::class.java)
+        assertThat((items as Loadable.Failed).retryable).isTrue()
+    }
+
+    @Test
+    fun `retrying after a failed load shows the entries`() = runTest(dispatcherExtension.testDispatcher) {
+        val repository = FakeXRepository(fails = true)
+        val viewModel = createViewModel(repository = repository)
+        advance()
+
+        repository.fails = false
+        viewModel.onEvent(XEvent.Load)
+        advance()
+
+        assertThat(viewModel.state.value.items).isInstanceOf(Loadable.Ready::class.java)
+    }
+
+    private class FakeXRepository(var fails: Boolean = false) : XRepository {
+        override suspend fun getItems(): List<XData> {
+            check(!fails) { "Failed to load" }
+            return listOf(XData(id = "first"))
+        }
+    }
+}

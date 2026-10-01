@@ -1,0 +1,54 @@
+// Copy the license header from a sibling file.
+
+package <base>.feature.x.ui
+
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
+// Pages a feature opens are keys in :library:navigation, such as routes.LicensesRoute.
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.XDetailsRoute
+import <base>.feature.x.ui.states.XUiState
+import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
+
+internal const val X_SCREEN_NAME = "X"
+private const val X_SCREEN_CLASS = "XScreen"
+
+/**
+ * The X screen. Owns the [XViewModel], tracking, messages and navigation, and hands the rendering
+ * to [XScreenContent].
+ */
+@Composable
+fun XScreen() {
+    val viewModel: XViewModel = koinViewModel()
+    val state: XUiState by viewModel.state.collectAsStateWithLifecycle()
+    val firebaseController: FirebaseController = koinInject()
+    val navigator = LocalShellNavigator.current
+
+    TrackScreenView(
+        firebaseController = firebaseController,
+        screenName = X_SCREEN_NAME,
+        screenClass = X_SCREEN_CLASS,
+    )
+
+    TrackScreenState(
+        firebaseController = firebaseController,
+        screenName = X_SCREEN_NAME,
+        state = state.items,
+    )
+
+    XScreenContent(
+        state = state,
+        onEvent = viewModel::onEvent,
+        onOpenDetails = { id -> navigator.navigate(XDetailsRoute(id)) },
+        contentPadding = contentPadding(),
+    )
+
+    MessageHost(viewModel = viewModel)
+}

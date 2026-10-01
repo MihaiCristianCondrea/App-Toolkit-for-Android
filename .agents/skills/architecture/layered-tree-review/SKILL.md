@@ -30,6 +30,7 @@ Use the sibling architecture skills when behavior matters:
 - `android-data-layer` for repositories, data sources, models, source of truth, threading,
   interfaces, caching, and data behavior.
 - `android-domain-layer` for optional domain/use-case decisions.
+- `android-ui-layer` for screens, ViewModels, UI state, events, and the files a screen needs.
 
 Do not duplicate or override those rules here.
 

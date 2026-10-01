@@ -57,7 +57,7 @@ flowchart TD
     AboutVM --> Mapper[AboutMappers to AboutItem list]
     AboutScreen --> CopyEvent[AboutEvent.CopyToClipboard]
     CopyEvent --> AboutVM
-    AboutVM --> Clipboard[Main-thread clipboard write]
+    AboutVM --> Clipboard[ClipboardRepository: main-thread clipboard write]
     Clipboard --> Snackbar[In-app confirmation]
     Page[aboutPages: AboutRoute] --> AboutScreen
     AboutScreen -->|licenses row| Licenses[navigate LicensesRoute]
@@ -69,13 +69,13 @@ flowchart TD
   and `ui/mappers` turns it into an ordered list of `AboutItem` models (headers and grouped
   preferences) with titles, summaries, actions, and card positions, so `AboutScreen` remains purely
   declarative and the data layer stays free of rendering concerns.
-- Copying is a presentation interaction, not a repository query, so `AboutViewModel` performs the
-  clipboard write itself, on the main dispatcher because writing the clipboard is a system UI
-  interaction.
-- A successful copy is confirmed in-app only below Android 13. From Android 13 the platform raises
-  its own clipboard preview, so an in-app snackbar would report the same copy twice. A failed copy
-  raises no system UI on any version, so it is always reported. The platform level is read through
-  an injected `sdkIntProvider`, which keeps both paths testable without a device.
+- The clipboard is a platform data source, so `AboutViewModel` writes it through
+  `ClipboardRepository` from `:library:core:common` and holds no `Context`. The write runs on the
+  main dispatcher, where `viewModelScope` already is, because it is a system UI interaction.
+- A successful copy is confirmed in-app only where the system does not confirm it itself
+  (`ClipboardRepository.confirmsCopies`, true from Android 13, which raises its own clipboard
+  preview). A failed copy raises no system UI on any version, so it is always reported. A fake
+  repository sets both cases in tests, without a device.
 - `AboutItemAction.CopyToClipboard` carries the label, the exact text, and an optional confirmation
   message, so any row becomes copyable without a new event, and the clipboard receives what the row
   displays rather than a second lookup resolved under a different configuration. Both texts are

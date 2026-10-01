@@ -139,6 +139,22 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   `CommonDataStore` is stale.
 - `Errors.asUiText()` lives in `core/network/data/remote/extensions/ErrorExtensions.kt:30`, a data
   package, and seven ViewModels import it.
+- `FirebaseController` (`library/core/common/.../data/repositories/FirebaseController.kt`) is the
+  Toolkit's telemetry contract: analytics events, breadcrumbs, error reports and the collection
+  switches. Three things are off about it:
+  - Its name is the vendor's, although the interface hides the vendor.
+  - It sits in `data/repositories` without being a repository, since it holds no app data.
+  - The name has spread to about 136 files.
+
+  Injecting it into ViewModels is fine, as cross-cutting telemetry. Rename it in a breaking
+  release:
+  - choose a vendor-neutral name such as `Telemetry`;
+  - move it to a `telemetry` package;
+  - rename `DefaultFirebaseController` to `FirebaseTelemetry`;
+  - keep `@Deprecated typealias FirebaseController` with a `ReplaceWith`, as `FirebaseControllerImpl`
+    was kept, and add a migration guide entry.
+
+  `FakeFirebaseController` and the `firebaseController` parameter names follow.
 - `:library:integration:ads` owns a full settings screen and ViewModel.
 - `:sample:integration:ads` depends on the whole `:library:apptoolkit` while it uses only
   `core:common` and `core:ui`. `:sample:widget` uses `api(project(":sample:feature:apps"))`.

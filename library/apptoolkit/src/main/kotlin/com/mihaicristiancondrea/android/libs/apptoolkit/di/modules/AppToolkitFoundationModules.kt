@@ -20,6 +20,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.di.modules
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.AdLoadReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.ClipboardRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.DefaultClipboardRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.api.ApiHost
@@ -61,6 +63,7 @@ private fun dispatchersModule(): Module = module {
 
 private fun corePlatformModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
     single<AdMobAppIdProvider> { ManifestAdMobAppIdProvider(context = get()) }
+    single<ClipboardRepository> { DefaultClipboardRepository(context = get()) }
     // Every toolkit ad surface resolves this, so it is bound here rather than left to the host:
     // an unbound reporter would turn a blank ad slot into a crash, which is the opposite of the
     // point.

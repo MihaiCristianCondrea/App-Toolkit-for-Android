@@ -27,6 +27,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model
  * the rest of the codebase can toggle analytics, Crashlytics, and related
  * features through dependency injection.
  */
+// TODO: Rename to a vendor-neutral telemetry name and move it out of data/repositories, keeping
+//  a deprecated typealias for consumers. See "Structure" in docs/audits/2026-10-01-code-audit.md.
 @Stable
 interface FirebaseController {
 

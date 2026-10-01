@@ -47,8 +47,7 @@ val aboutModule: Module = module {
     viewModel {
         AboutViewModel(
             aboutRepository = get(),
-            context = get(),
-            dispatchers = get(),
+            clipboardRepository = get(),
             firebaseController = get(),
             seasonalThemes = get(),
         )

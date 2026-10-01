@@ -1,0 +1,62 @@
+// Copy the license header from a sibling file.
+
+package <base>.feature.x.ui
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
+import <base>.feature.x.R
+import <base>.feature.x.data.repositories.XRepository
+import <base>.feature.x.ui.contracts.XEvent
+import <base>.feature.x.ui.mappers.toXItems
+import <base>.feature.x.ui.states.XUiState
+import kotlinx.coroutines.Job
+
+/**
+ * ViewModel for the X screen.
+ */
+class XViewModel(
+    private val repository: XRepository,
+    firebaseController: FirebaseController,
+) : LoggedScreenViewModel<XUiState, XEvent>(
+    initialState = XUiState(),
+    firebaseController = firebaseController,
+    screenName = "X",
+    viewModelName = "XViewModel",
+) {
+    private var loadJob: Job? = null
+
+    init {
+        onEvent(XEvent.Load)
+    }
+
+    override fun handleEvent(event: XEvent) {
+        when (event) {
+            XEvent.Load -> load()
+        }
+    }
+
+    private fun load() {
+        loadJob = loadJob.restart {
+            launchReport(
+                action = Actions.LOAD,
+                onError = { error -> setState { copy(items = error.toFailed(fallback = LoadFailedText)) } },
+            ) {
+                setState { copy(items = Loadable.Loading) }
+                val items = repository.getItems().toXItems()
+                setState { copy(items = if (items.isEmpty()) Loadable.Empty() else Loadable.Ready(items)) }
+            }
+        }
+    }
+
+    private object Actions {
+        const val LOAD: String = "load"
+    }
+
+    private companion object {
+        /** Shown for a failure with no text of its own; see `toUiText` for the ones that have one. */
+        val LoadFailedText = UiTextHelper.StringResource(R.string.x_load_failed)
+    }
+}

@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.di
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.utils.constants.FaqConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.utils.extensions.faqCatalogUrl
@@ -53,7 +52,6 @@ fun faqModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
         FaqViewModel(
             faqRepository = get(),
             forceInAppReviewUseCase = get<ForceInAppReviewUseCase>(),
-            dispatchers = get<DispatcherProvider>(),
             firebaseController = get(),
         )
     }

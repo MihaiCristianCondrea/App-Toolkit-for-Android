@@ -24,11 +24,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.toError
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.networkCall
 
 /**
  * Implementation of [FaqRepository] that manages the retrieval of FAQ items
@@ -41,6 +37,9 @@ import kotlinx.coroutines.flow.flow
  * and repeated ids collapse to their first occurrence. Normalizing here rather than downstream is
  * what makes the fallback correct, a remote catalog of nothing but blank rows now counts as empty
  * and falls through to the local questions instead of rendering blank rows.
+ *
+ * It needs no dispatcher: the remote calls suspend inside Ktor, and the local questions are string
+ * resources, which the system already holds in memory.
  *
  * @property localDataSource The local data source for accessing cached or bundled FAQ questions.
  * @property remoteDataSource The remote data source for fetching FAQ catalogs and questions via network.
@@ -55,7 +54,7 @@ class DefaultFaqRepository(
     private val firebaseController: FirebaseController,
 ) : FaqRepository {
 
-    override fun fetchFaq(): Flow<DataState<List<FaqItem>, Errors>> = flow {
+    override suspend fun getFaq(): List<FaqItem> {
         firebaseController.logBreadcrumb(
             message = "FAQ repositories fetch",
             attributes = mapOf(
@@ -68,33 +67,27 @@ class DefaultFaqRepository(
         }
 
         val remoteItems = remoteResult.getOrNull().orEmpty().normalize()
-        if (remoteItems.isNotEmpty()) {
-            emit(DataState.Success(remoteItems))
-            return@flow
-        }
+        if (remoteItems.isNotEmpty()) return remoteItems
 
         val localItems = localDataSource.loadLocalQuestions().normalize()
-        if (localItems.isNotEmpty()) {
-            emit(DataState.Success(localItems))
-            return@flow
-        }
+        if (localItems.isNotEmpty()) return localItems
 
-        val error =
-            remoteResult.exceptionOrNull()?.toError(default = Errors.UseCase.FAILED_TO_LOAD_FAQ)
-                ?: Errors.UseCase.FAILED_TO_LOAD_FAQ
-        emit(DataState.Error(error = error))
+        // Nothing to show: the remote failure is the reason, so it reaches the screen. A remote
+        // catalog that loaded but had nothing for this product is not a failure, only empty.
+        remoteResult.exceptionOrNull()?.let { failure -> throw failure }
+        return emptyList()
     }
 
+    // The catalog must load for there to be anything remote; a question source that fails only
+    // drops its own questions, so the rest still show.
     private suspend fun fetchRemoteFaqItems(): List<FaqItem> {
-        val product =
-            remoteDataSource.fetchCatalog(catalogUrl).products.firstOrNull { it.productId == productId || it.key == productId }
-                ?: return emptyList()
+        val catalog = networkCall { remoteDataSource.fetchCatalog(catalogUrl) }
+        val product = catalog.products.firstOrNull { it.productId == productId || it.key == productId }
+            ?: return emptyList()
 
         val questions: List<FaqQuestionDto> = product.questionSources.flatMap { source ->
             runSuspendCatching {
-                remoteDataSource.fetchQuestions(
-                    source.url
-                )
+                networkCall { remoteDataSource.fetchQuestions(source.url) }
             }.getOrDefault(emptyList())
         }
 

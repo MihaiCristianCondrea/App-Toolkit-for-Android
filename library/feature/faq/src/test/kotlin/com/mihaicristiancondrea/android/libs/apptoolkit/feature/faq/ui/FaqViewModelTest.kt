@@ -17,31 +17,28 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.repositories.FaqRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqId
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.contracts.FaqEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.usecases.ForceInAppReviewUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
+import android.app.Activity
+import com.google.common.truth.Truth.assertThat
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqId
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.repositories.FaqRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.contracts.FaqEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewOutcome
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.usecases.ForceInAppReviewUseCase
+import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class FaqViewModelTest {
 
     companion object {
@@ -51,75 +48,128 @@ class FaqViewModelTest {
     }
 
     private val firebaseController = FakeFirebaseController()
-    private lateinit var reviewUseCase: ForceInAppReviewUseCase
+    private val reviewUseCase: ForceInAppReviewUseCase = mockk()
+    private val reviewHost = object : ReviewHost {
+        override val activity: Activity = mockk()
+    }
 
-    @BeforeEach
-    fun setup() {
-        reviewUseCase = mockk(relaxed = true)
+    // Already normalized: trimming, blank-dropping and de-duplication are the repository's job,
+    // covered by DefaultFaqRepositoryTest.
+    private val question = FaqItem(id = FaqId("remote-1"), question = "Q", answer = "A")
+
+    private fun createViewModel(repository: FaqRepository = FakeFaqRepository()): FaqViewModel =
+        FaqViewModel(
+            faqRepository = repository,
+            forceInAppReviewUseCase = reviewUseCase,
+            firebaseController = firebaseController,
+        )
+
+    private fun advance() = dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+    private val Loadable.Failed.resourceId: Int
+        get() = (message as UiTextHelper.StringResource).resourceId
+
+    @Test
+    fun `the first load shows the questions`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel(FakeFaqRepository(questions = listOf(question)))
+        advance()
+
+        val questions = viewModel.state.value.questions as Loadable.Ready
+        assertThat(questions.value).containsExactly(question)
     }
 
     @Test
-    fun `loadFaq surfaces the questions the repository emits`() =
+    fun `no questions shows the empty state`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel(FakeFaqRepository(questions = emptyList()))
+        advance()
+
+        assertThat(viewModel.state.value.questions).isInstanceOf(Loadable.Empty::class.java)
+    }
+
+    @Test
+    fun `a failure with no text of its own shows the help page's text with a retry`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val repository = object : FaqRepository {
-                override fun fetchFaq(): Flow<DataState<List<FaqItem>, Errors>> =
-                    flowOf(
-                        DataState.Success(
-                            data = listOf(
-                                // Already normalized: trimming, blank-dropping and de-duplication
-                                // are the repository's job, covered by DefaultFaqRepositoryTest.
-                                FaqItem(
-                                    id = FaqId("remote-1"),
-                                    question = "Q",
-                                    answer = "A"
-                                )
-                            )
-                        )
-                    )
-            }
-            val viewModel = FaqViewModel(
-                faqRepository = repository,
-                forceInAppReviewUseCase = reviewUseCase,
-                dispatchers = testDispatcherProvider(),
-                firebaseController = firebaseController,
-            )
+            val viewModel = createViewModel(FakeFaqRepository(failure = IllegalStateException("bug")))
+            advance()
 
-            viewModel.onEvent(FaqEvent.LoadFaq)
-            advanceUntilIdle()
-
-            val state = viewModel.uiState.value
-            assertTrue(state.screenState is ScreenState.Success)
-            assertEquals(1, state.data?.questions?.size)
-            assertEquals("Q", state.data?.questions?.first()?.question)
-            assertEquals("A", state.data?.questions?.first()?.answer)
+            val questions = viewModel.state.value.questions as Loadable.Failed
+            assertThat(questions.resourceId).isEqualTo(R.string.error_failed_to_load_faq)
+            assertThat(questions.retryable).isTrue()
+            assertThat(firebaseController.loggedEvents.map { it.name }).contains("vm_op_error")
         }
 
     @Test
-    fun `loadFaq sets error state when repository throws`() =
+    fun `being offline shows the offline text`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel(
+            FakeFaqRepository(failure = NetworkException(NetworkException.Reason.NO_INTERNET))
+        )
+        advance()
+
+        val questions = viewModel.state.value.questions as Loadable.Failed
+        assertThat(questions.resourceId).isEqualTo(CoreUiR.string.screen_error_no_internet)
+    }
+
+    @Test
+    fun `retrying after a failure shows the questions`() = runTest(dispatcherExtension.testDispatcher) {
+        val repository = FakeFaqRepository(questions = listOf(question), failure = IllegalStateException("bug"))
+        val viewModel = createViewModel(repository)
+        advance()
+        assertThat(viewModel.state.value.questions).isInstanceOf(Loadable.Failed::class.java)
+
+        repository.failure = null
+        viewModel.onEvent(FaqEvent.Load)
+        advance()
+
+        assertThat(viewModel.state.value.questions).isInstanceOf(Loadable.Ready::class.java)
+    }
+
+    @Test
+    fun `a shown review asks for nothing else`() = runTest(dispatcherExtension.testDispatcher) {
+        coEvery { reviewUseCase(host = any()) } returns ReviewOutcome.Launched
+        val viewModel = createViewModel()
+        advance()
+
+        viewModel.onEvent(FaqEvent.RequestReview(host = reviewHost))
+        advance()
+
+        assertThat(viewModel.state.value.openStoreListing).isFalse()
+    }
+
+    @Test
+    fun `an unavailable review asks for the store listing once`() = runTest(dispatcherExtension.testDispatcher) {
+        coEvery { reviewUseCase(host = any()) } returns ReviewOutcome.Unavailable
+        val viewModel = createViewModel()
+        advance()
+
+        viewModel.onEvent(FaqEvent.RequestReview(host = reviewHost))
+        advance()
+        assertThat(viewModel.state.value.openStoreListing).isTrue()
+
+        viewModel.onEvent(FaqEvent.StoreListingOpened)
+        assertThat(viewModel.state.value.openStoreListing).isFalse()
+    }
+
+    @Test
+    fun `a failed review request still asks for the store listing`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val repository = object : FaqRepository {
-                override fun fetchFaq(): Flow<DataState<List<FaqItem>, Errors>> = flow {
-                    emit(DataState.Loading())
-                    throw IllegalStateException("error")
-                }
-            }
-            val viewModel = FaqViewModel(
-                faqRepository = repository,
-                forceInAppReviewUseCase = reviewUseCase,
-                dispatchers = testDispatcherProvider(),
-                firebaseController = firebaseController,
-            )
+            coEvery { reviewUseCase(host = any()) } throws IllegalStateException("review")
+            val viewModel = createViewModel()
+            advance()
 
-            viewModel.onEvent(FaqEvent.LoadFaq)
-            advanceUntilIdle()
+            viewModel.onEvent(FaqEvent.RequestReview(host = reviewHost))
+            advance()
 
-            assertTrue(viewModel.uiState.value.screenState is ScreenState.Error)
+            assertThat(viewModel.state.value.openStoreListing).isTrue()
+            assertThat(firebaseController.loggedEvents.map { it.name }).contains("vm_op_error")
         }
 
-    private fun testDispatcherProvider(): DispatcherProvider = object : DispatcherProvider {
-        override val main = dispatcherExtension.testDispatcher
-        override val io = dispatcherExtension.testDispatcher
-        override val default = dispatcherExtension.testDispatcher
-        override val unconfined = dispatcherExtension.testDispatcher
+    private class FakeFaqRepository(
+        private val questions: List<FaqItem> = emptyList(),
+        var failure: Throwable? = null,
+    ) : FaqRepository {
+        override suspend fun getFaq(): List<FaqItem> {
+            failure?.let { throw it }
+            return questions
+        }
     }
 }

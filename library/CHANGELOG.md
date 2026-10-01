@@ -44,6 +44,12 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Added `ThemePreferencesDataSource.storedPreferences`, every theme value read from one snapshot of storage, which `themePreferencesState()` now follows.
 - Added `UsageAndDiagnosticsPreferencesDataSource.saveAll(...)` and `UsageAndDiagnosticsRepository.setAll(settings)`, which store a whole consent answer in one write. Both have default implementations.
 - Added a `viewModelName` parameter to `LoggedScreenViewModel`, defaulting to `screenName`, which sets the name its breadcrumbs and `vm_op_*` events report.
+- Added the `core.ui.screen` package to `:library:core:ui`, the new way a screen holds and shows its state: `ScreenViewModel<S, E>` and `LoggedScreenViewModel<S, E>` over the feature's own state type, changed with `setState`; `Loadable` for each piece of content that loads (`Loading`, `Ready` with `refreshing` and `stale`, `Empty`, `Failed`); `TrackedStatus` for statuses a screen declares itself; queued `UiMessage`s shown by `MessageHost`; and `ScreenStateHandler` and `TrackScreenState` for a `Loadable`. `LoggedScreenViewModel` sends the same breadcrumbs, events and Crashlytics reports as before. The `core.ui.base` and `core.ui.states` classes stay until every feature has moved. See the [`:library:core:ui` README](core/ui/README.md#screen-state).
+- Added a `message` parameter to `NoDataScreen`, for a message that is not a string resource.
+- Added `NetworkException` and `StorageException` to `:library:core:common`, the failures a repository throws, each with a `reason`. `networkCall { }` in `:library:core:network` and `storageCall { }` in `:library:core:datastore` translate the HTTP client's and the storage library's exceptions into them, keeping the original as the `cause`. `toError()` recognizes both, so code that still reads `Errors` keeps working.
+- Added `collectReport(action, extra, onError) { value -> }` to `core.ui.screen.LoggedScreenViewModel`, the flow counterpart of `launchReport`: it logs the start once, passes every value on, and reports a failure before handing it to `onError`.
+- Added `ClipboardRepository` and `DefaultClipboardRepository` to `:library:core:common`, bound in the foundation modules: a ViewModel copies text through it instead of holding a `Context`, and reads `confirmsCopies` instead of checking the Android version. `copyText` throws when the clipboard rejects the write.
+- Added `toUiText(fallback)`, `toFailed(fallback)`, `toErrorMessage(fallback)` and `isRetryable` to `core.ui.screen`: the text a screen shows for a failure, with the same text everywhere for being offline, a timeout, a busy server, rate limiting and busy or full storage, and the screen's own fallback for anything else.
 
 ### Changed
 
@@ -75,6 +81,7 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - `DefaultUsageAndDiagnosticsRepository` takes a `ConsentRepository` and applies the stored choices to the consent SDKs after every write, and `UsageAndDiagnosticsViewModel` no longer takes one or applies consent itself. A change now reaches the SDKs whether or not the diagnostics screen is still open; opening the screen no longer re-applies consent, which the host applies at startup with `ConsentRepository.applyInitialConsent()`.
 - `DefaultAboutRepository` and `DefaultCacheRepository` take a `DispatcherProvider`, defaulting to `StandardDispatchers()`, and run their package manager lookup and cache delete on IO themselves, so both are safe to call from the main thread.
 - `SendIssueReportUseCase` no longer takes a `DispatcherProvider`: the repository it calls moves its own work off the main thread.
+- `:library:feature:about` is the first feature on `core.ui.screen`. `AboutViewModel` no longer takes a `DispatcherProvider`, a `Context` or an `sdkIntProvider`; it takes a `ClipboardRepository`, exposes `state` (an `AboutUiState` whose `items` is a `Loadable`) and queued `messages`, and `AboutEvent.DismissSnackbar` and `AboutAction` are removed. `AboutScreen` now only wires the ViewModel, tracking, messages and navigation, and the list renders in a stateless, previewable `AboutScreenContent`. Its load and copy failures go through `toFailed` and `toErrorMessage`, so a storage or network failure shows its own text and a failure that would repeat offers no Retry.
 
 ### Improved
 
@@ -133,6 +140,7 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Fixed `DefaultBillingRepository.getInstance` returning a closed repository after `close()`.
 - Fixed the settings illustration (`rememberPaletteImageVector`) keeping stale grass, leg and background tree colors when only those theme colors changed.
 - Fixed `BaseViewModel.updateSuccessState` possibly dropping a state change made at the same moment by another update: it now reads and writes the state in one atomic update.
+- Fixed the About screen going blank when its entries failed to load: it now shows the failure with a Retry button.
 
 ---
 

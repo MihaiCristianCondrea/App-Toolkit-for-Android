@@ -147,6 +147,7 @@ The following are common entry points. This list is not exhaustive.
 | Build validation, Gradle checks, SDK setup                      | `.agents/skills/android-build-validation/SKILL.md`          |
 | Repository, data source, model, threading and caching decisions | `.agents/skills/architecture/android-data-layer/SKILL.md`   |
 | Domain layer and use-case decisions                             | `.agents/skills/architecture/android-domain-layer/SKILL.md` |
+| Screens, ViewModels, UI state, events and messages              | `.agents/skills/architecture/android-ui-layer/SKILL.md`     |
 | Module and package placement                                    | `.agents/skills/architecture/layered-tree-review/SKILL.md`  |
 | Navigation 3                                                    | `.agents/skills/navigation/navigation-3/SKILL.md`           |
 | Navigation events                                               | `.agents/skills/navigation/navigation-event/SKILL.md`       |

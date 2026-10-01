@@ -17,67 +17,28 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 
-import android.content.Context
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.rememberPageSnackbarHostState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.AboutUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
-import kotlinx.coroutines.delay
-import nl.dionsegijn.konfetti.compose.KonfettiView
-import nl.dionsegijn.konfetti.core.Angle
-import nl.dionsegijn.konfetti.core.Party
-import nl.dionsegijn.konfetti.core.Position
-import nl.dionsegijn.konfetti.core.Spread
-import nl.dionsegijn.konfetti.core.emitter.Emitter
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
-import java.util.concurrent.TimeUnit
-import kotlin.time.Duration.Companion.milliseconds
 
-private const val ABOUT_SCREEN_NAME = "About"
+internal const val ABOUT_SCREEN_NAME = "About"
 private const val ABOUT_SCREEN_CLASS = "AboutScreen"
 
 /**
- * A Composable that displays the "About" screen's settings list.
+ * The "About" screen: information about the application and the device.
  *
- * This screen presents information about the application and the device. It handles its own state
- * via a [AboutViewModel] and displays different UI states (loading, empty, success).
+ * This is the stateful half. It owns the [AboutViewModel], collects its state, tracks the screen,
+ * shows the ViewModel's messages and navigates, then hands the rendering to [AboutScreenContent].
  *
  * The list includes:
  * - App information: full name, version, and a link to the open-source licenses screen.
@@ -91,14 +52,10 @@ private const val ABOUT_SCREEN_CLASS = "AboutScreen"
 fun AboutScreen(
     onVersionTap: (Int) -> Unit = {},
 ) {
-    val paddingValues = contentPadding()
-    val snackbarHostState: SnackbarHostState = rememberPageSnackbarHostState()
-    val navigator = LocalShellNavigator.current
-    val context: Context = LocalContext.current
     val viewModel: AboutViewModel = koinViewModel()
-    val screenState: UiStateScreen<AboutUiState> by viewModel.uiState.collectAsStateWithLifecycle()
-
+    val state: AboutUiState by viewModel.state.collectAsStateWithLifecycle()
     val firebaseController: FirebaseController = koinInject()
+    val navigator = LocalShellNavigator.current
 
     TrackScreenView(
         firebaseController = firebaseController,
@@ -109,132 +66,17 @@ fun AboutScreen(
     TrackScreenState(
         firebaseController = firebaseController,
         screenName = ABOUT_SCREEN_NAME,
-        screenState = screenState.screenState,
+        state = state.items,
     )
 
-    var showKonfettiAnimationForThisInstance: Boolean by rememberSaveable { mutableStateOf(false) }
-    var appVersionTapCount: Int by rememberSaveable { mutableIntStateOf(0) }
-    var appVersionTotalTapCount: Int by rememberSaveable { mutableIntStateOf(0) }
-
-    val party = Party(
-        speed = 0f,
-        maxSpeed = 30f,
-        damping = 0.9f,
-        spread = Spread.ROUND,
-        position = Position.Relative(0.5, 0.3),
-        emitter = Emitter(duration = 200, TimeUnit.MILLISECONDS).max(amount = 100)
-    )
-    val partyRain = Party(
-        emitter = Emitter(duration = 3, TimeUnit.SECONDS).perSecond(amount = 60),
-        angle = Angle.BOTTOM,
-        spread = Spread.SMALL,
-        speed = 5f,
-        maxSpeed = 15f,
-        timeToLive = 3000L,
-        position = Position.Relative(x = 0.0, y = 0.0)
-            .between(value = Position.Relative(x = 1.0, y = 0.0))
+    AboutScreenContent(
+        state = state,
+        onEvent = viewModel::onEvent,
+        onOpenLicenses = { navigator.navigate(LicensesRoute) },
+        contentPadding = contentPadding(),
+        onVersionTap = onVersionTap,
+        firebaseController = firebaseController,
     )
 
-    LaunchedEffect(showKonfettiAnimationForThisInstance) {
-        if (showKonfettiAnimationForThisInstance) {
-            delay(3000.milliseconds)
-            showKonfettiAnimationForThisInstance = false
-        }
-    }
-
-    Box(modifier = Modifier.fillMaxHeight()) {
-        ScreenStateHandler(
-            screenState = screenState,
-            onLoading = { LoadingScreen() },
-            onEmpty = { NoDataScreen(paddingValues = paddingValues) },
-            onSuccess = { data: AboutUiState ->
-                LazyColumn(
-                    modifier = Modifier.fillMaxHeight(),
-                    contentPadding = paddingValues,
-                    verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
-                ) {
-                    items(
-                        items = data.items,
-                        key = { it.key },
-                    ) { item ->
-                        when (item) {
-                            is AboutItem.Header -> {
-                                PreferenceCategoryItem(title = item.title.asString())
-                            }
-
-                            is AboutItem.Preference -> {
-                                SettingsPreferenceItem(
-                                    title = item.title.asString(),
-                                    summary = item.summary.asString(),
-                                    onClick = {
-                                        if (item.countsVersionTap) {
-                                            appVersionTotalTapCount += 1
-                                            onVersionTap(appVersionTotalTapCount)
-                                            appVersionTapCount += 1
-                                            if (appVersionTapCount >= 5) {
-                                                appVersionTapCount = 0
-                                                showKonfettiAnimationForThisInstance = true
-                                                // AboutViewModel reports the achievement, once,
-                                                // when this first unlocks the seasonal themes.
-                                                viewModel.onEvent(AboutEvent.EasterEggFound)
-                                            }
-                                        }
-                                        when (val action = item.action) {
-                                            is AboutItemAction.CopyToClipboard -> {
-                                                viewModel.onEvent(
-                                                    event = AboutEvent.CopyToClipboard(
-                                                        label = action.label.asString(context),
-                                                        text = action.text.asString(context),
-                                                        successMessage = action.successMessage,
-                                                    )
-                                                )
-                                            }
-
-                                            AboutItemAction.OpenLicenses -> navigator.navigate(LicensesRoute)
-
-                                            null -> Unit
-                                        }
-                                    },
-                                    firebaseController = firebaseController,
-                                    ga4Event = item.action?.let {
-                                        aboutPreferenceTapEvent(preferenceKey = item.key)
-                                    },
-                                    modifier = Modifier.groupedPreferenceItem(
-                                        position = item.position,
-                                        outerRadius = SizeConstants.LargeMediumSize,
-                                    )
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        )
-
-        if (showKonfettiAnimationForThisInstance) {
-            KonfettiView(
-                modifier = Modifier.fillMaxSize(),
-                parties = listOf(party, partyRain),
-            )
-        }
-    }
-
-    DefaultSnackbarHandler(
-        screenState = screenState,
-        snackbarHostState = snackbarHostState,
-        getDismissEvent = { AboutEvent.DismissSnackbar },
-        onEvent = { viewModel.onEvent(it) }
-    )
+    MessageHost(viewModel = viewModel)
 }
-
-
-private fun aboutPreferenceTapEvent(preferenceKey: String): Ga4EventData {
-    return Ga4EventData(
-        name = SettingsAnalytics.Events.PREFERENCE_VIEW,
-        params = mapOf(
-            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(ABOUT_SCREEN_NAME),
-            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
-        ),
-    )
-}
-

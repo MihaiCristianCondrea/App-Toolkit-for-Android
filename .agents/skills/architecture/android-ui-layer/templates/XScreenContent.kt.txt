@@ -1,0 +1,69 @@
+// Copy the license header from a sibling file.
+
+package <base>.feature.x.ui
+
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
+import <base>.feature.x.ui.contracts.XEvent
+import <base>.feature.x.ui.models.XItem
+import <base>.feature.x.ui.states.XUiState
+import <base>.feature.x.ui.views.XRow
+import kotlinx.collections.immutable.persistentListOf
+
+/**
+ * Renders [state] and reports what the user does through callbacks. Holds no ViewModel, injects
+ * nothing and does not navigate, so it renders in a preview or a test with plain values.
+ *
+ * @param onEvent Receives the events [XViewModel] handles.
+ * @param onOpenDetails Opens an entry's details. Navigation belongs to the caller.
+ * @param contentPadding Padding from the shell, applied inside the list and the state screens.
+ */
+@Composable
+internal fun XScreenContent(
+    state: XUiState,
+    onEvent: (XEvent) -> Unit,
+    onOpenDetails: (id: String) -> Unit,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
+) {
+    ScreenStateHandler(
+        state = state.items,
+        modifier = modifier,
+        contentPadding = contentPadding,
+        onRetry = { onEvent(XEvent.Load) },
+    ) { ready ->
+        LazyColumn(contentPadding = contentPadding) {
+            items(items = ready.value, key = { it.key }) { item ->
+                XRow(item = item, onClick = { onOpenDetails(item.key) })
+            }
+        }
+    }
+}
+
+// The default empty and failure screens inject Koin bindings, so only Ready and Loading preview.
+@Preview(showBackground = true)
+@Composable
+private fun XScreenContentPreview() {
+    MaterialTheme {
+        XScreenContent(
+            state = XUiState(
+                items = Loadable.Ready(
+                    persistentListOf(
+                        XItem(key = "first", title = UiTextHelper.DynamicString("First entry")),
+                        XItem(key = "second", title = UiTextHelper.DynamicString("Second entry")),
+                    )
+                ),
+            ),
+            onEvent = {},
+            onOpenDetails = {},
+        )
+    }
+}

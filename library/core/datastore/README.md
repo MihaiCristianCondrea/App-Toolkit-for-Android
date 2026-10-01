@@ -13,6 +13,8 @@ used by onboarding, consent, ads, diagnostics, review, and theming.
 - `CommonDataStore`, which owns one instance of each source, exposes them, and keeps the flat
   pre-split API delegating to them.
 - Persisted theme, review, display-ads, reduce-ads, and consent-related values.
+- Translating storage failures into `StorageException` (from `:library:core:common`):
+  `storageCall { }` and `Throwable.toStorageException()`, for DataStore and SQLite exceptions.
 - The Koin DataStore module at `core.datastore.di`, which is the single place `CommonDataStore` is registered;
   `appToolkitFoundationModules` includes it rather than defining its own copy.
 

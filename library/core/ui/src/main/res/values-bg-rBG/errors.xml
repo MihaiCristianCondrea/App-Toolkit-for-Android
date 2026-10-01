@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="screen_error_no_internet">Няма интернет връзка.</string>
+    <string name="screen_error_connection">Мрежова грешка. Моля, опитайте отново.</string>
+    <string name="screen_error_timeout">Времето за заявката изтече. Опитайте отново.</string>
+    <string name="screen_error_rate_limited">Твърде много заявки. Опитайте отново по-късно.</string>
+    <string name="screen_error_server">Грешка на сървъра. Моля, опитайте отново по-късно.</string>
+    <string name="screen_error_storage_full">Хранилището е пълно.</string>
+    <string name="screen_error_storage_busy">Хранилището е заето. Опитайте отново.</string>
+    <string name="screen_error_generic">Възникна неизвестна грешка.</string>
+</resources>

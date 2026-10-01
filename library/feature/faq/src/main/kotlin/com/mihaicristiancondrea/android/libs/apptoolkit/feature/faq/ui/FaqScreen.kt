@@ -17,59 +17,37 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ScaffoldFabs
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import androidx.activity.compose.LocalActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Lightbulb
-import androidx.compose.material.icons.outlined.RateReview
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetValue
-import androidx.compose.material3.Text
-import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.contracts.FaqAction
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.contracts.FaqEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.states.FaqUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.content.FaqScreenContent
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openPlayStoreForApp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.sendEmailToDeveloper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists.GroupedAction
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists.GroupedActionList
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
-import kotlinx.collections.immutable.persistentListOf
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.contracts.FaqEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.states.FaqUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewHost
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.qualifier.named
 
 // The analytics screen name stays "Help": the destination is still "Help & feedback" to the
 // user, and changing it would split this screen's history in GA4 at the module rename.
@@ -80,6 +58,9 @@ private object FaqPreferenceKeys {
     const val FEEDBACK: String = "feedback"
     const val REQUEST_FEATURE: String = "request_feature"
     const val LEAVE_REVIEW: String = "leave_review"
+    const val FAQ_ITEM: String = "faq_item"
+    const val SHOW_MORE_QUESTIONS: String = "show_more_questions"
+    const val CONTACT_US: String = "contact_us"
 }
 
 private object FaqActionNames {
@@ -90,23 +71,20 @@ private object FaqActionNames {
 /**
  * Help and feedback: the questions, a contact card and a button that opens the feedback sheet.
  *
- * The body of the help page, which `helpPage()` registers with [FaqMenuActions] in its app bar.
+ * The body of the help page, which `helpPage()` registers with `FaqMenuActions` in its app bar.
+ * This is the stateful half. It owns the [FaqViewModel], tracks the screen, logs each tap, opens
+ * links, mail and the store listing, and hands the rendering to [FaqScreenContent].
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FaqScreen() {
     val viewModel: FaqViewModel = koinViewModel()
+    val state: FaqUiState by viewModel.state.collectAsStateWithLifecycle()
     val firebaseController: FirebaseController = koinInject()
-
+    val adsConfig: AdsConfig = koinInject(qualifier = named(AdsQualifiers.HELP_NATIVE_AD))
+    val adsEnabled: Boolean = rememberAdsEnabled()
     val context = LocalContext.current
     val activity = LocalActivity.current
-    val reviewHost = remember(activity) { activity?.let(::ReviewHost) }
-    val paddingValues = contentPadding()
-
-    val showFeedbackBottomSheet = rememberSaveable { mutableStateOf(false) }
-    val feedbackBottomSheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
-
-    val screenState: UiStateScreen<FaqUiState> by viewModel.uiState.collectAsStateWithLifecycle()
+    val reviewHost: ReviewHost? = remember(activity) { activity?.let(::ReviewHost) }
 
     TrackScreenView(
         firebaseController = firebaseController,
@@ -117,118 +95,77 @@ fun FaqScreen() {
     TrackScreenState(
         firebaseController = firebaseController,
         screenName = FAQ_SCREEN_NAME,
-        screenState = screenState.screenState,
+        state = state.questions,
     )
 
-    LaunchedEffect(Unit) {
-        viewModel.actionEvent.collect { action ->
-            when (action) {
-                is FaqAction.OpenUrl -> context.openUrl(action.url)
-                is FaqAction.OpenPlayStoreReview -> context.openPlayStoreForApp(context.packageName)
-                is FaqAction.ReviewOutcomeReported -> Unit
-            }
+    LaunchedEffect(state.openStoreListing) {
+        if (state.openStoreListing) {
+            context.openPlayStoreForApp(context.packageName)
+            viewModel.onEvent(FaqEvent.StoreListingOpened)
         }
     }
 
-    // The page frame draws it at the bottom end, above the system bar.
-    ScaffoldFabs(
-        listOf(
-            ToolkitFab(
-                icon = ToolkitIcon.Vector(Icons.Outlined.RateReview),
-                label = stringResource(id = R.string.feedback),
-                onClick = {
-                    firebaseController.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.FEEDBACK))
-                    firebaseController.logEvent(faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_OPENED))
-                    showFeedbackBottomSheet.value = true
-                },
-            ),
-        ),
-    )
-
-    ScreenStateHandler(
-        screenState = screenState,
-        onLoading = { LoadingScreen() },
-        onEmpty = {
-            NoDataScreen(
-                showRetry = true,
-                onRetry = {
-                    firebaseController.logEvent(faqActionEvent(actionName = FaqActionNames.RETRY_LOAD))
-                    viewModel.onEvent(FaqEvent.LoadFaq)
-                },
-                paddingValues = paddingValues
+    FaqScreenContent(
+        state = state,
+        onRetry = {
+            firebaseController.logEvent(faqActionEvent(actionName = FaqActionNames.RETRY_LOAD))
+            viewModel.onEvent(FaqEvent.Load)
+        },
+        onFeedbackOpened = {
+            firebaseController.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.FEEDBACK))
+            firebaseController.logEvent(faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_OPENED))
+        },
+        onRequestFeature = {
+            firebaseController.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.REQUEST_FEATURE))
+            context.openUrl(AppLinks.FEATURE_REQUESTS_FORM)
+        },
+        onLeaveReview = {
+            firebaseController.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.LEAVE_REVIEW))
+            reviewHost?.let { host -> viewModel.onEvent(FaqEvent.RequestReview(host = host)) }
+        },
+        onQuestionToggled = { question, position, expanded ->
+            firebaseController.logGa4Event(
+                faqPreferenceTapEvent(
+                    preferenceKey = FaqPreferenceKeys.FAQ_ITEM,
+                    faqId = question.id.value,
+                    faqPosition = position,
+                    expanded = expanded,
+                )
             )
         },
-        onError = {
-            NoDataScreen(
-                isError = true,
-                showRetry = true,
-                onRetry = {
-                    firebaseController.logEvent(faqActionEvent(actionName = FaqActionNames.RETRY_LOAD))
-                    viewModel.onEvent(FaqEvent.LoadFaq)
-                },
-                paddingValues = paddingValues
+        onShowMoreQuestions = {
+            firebaseController.logGa4Event(
+                faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.SHOW_MORE_QUESTIONS)
             )
         },
-        onSuccess = { data: FaqUiState ->
-            FaqScreenContent(
-                questions = data.questions,
-                paddingValues = paddingValues,
+        onContactUs = {
+            firebaseController.logEvent(
+                faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.CONTACT_US).toAnalyticsEvent()
             )
-        }
+            context.sendEmailToDeveloper(applicationNameRes = CommonR.string.app_name)
+        },
+        contentPadding = contentPadding(),
+        adUnitId = adsConfig.bannerAdUnitId.takeIf { adsEnabled && it.isNotBlank() },
     )
 
-    if (showFeedbackBottomSheet.value) {
-        ModalBottomSheet(
-            onDismissRequest = { showFeedbackBottomSheet.value = false },
-            sheetState = feedbackBottomSheetState,
-        ) {
-            Text(
-                text = stringResource(id = R.string.help_feedback_sheet_title),
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.padding(horizontal = SizeConstants.ExtraLargeCompactSize)
-            )
-            Spacer(modifier = Modifier.height(SizeConstants.SmallSize))
-
-            GroupedActionList(
-                modifier = Modifier.padding(horizontal = SizeConstants.MediumSize),
-                actions = persistentListOf(
-                    GroupedAction(
-                        title = stringResource(id = R.string.help_feedback_sheet_feature_request_title),
-                        description = stringResource(id = R.string.help_feedback_sheet_feature_request_description),
-                        icon = Icons.Outlined.Lightbulb,
-                        onClick = {
-                            firebaseController.logGa4Event(faqPreferenceTapEvent(FaqPreferenceKeys.REQUEST_FEATURE))
-                            showFeedbackBottomSheet.value = false
-                            viewModel.onEvent(FaqEvent.OpenFeatureRequestForm)
-                        },
-                    ),
-                    GroupedAction(
-                        title = stringResource(id = R.string.help_feedback_sheet_review_title),
-                        description = stringResource(id = R.string.help_feedback_sheet_review_description),
-                        icon = Icons.Outlined.RateReview,
-                        onClick = {
-                            firebaseController.logGa4Event(faqPreferenceTapEvent(FaqPreferenceKeys.LEAVE_REVIEW))
-                            showFeedbackBottomSheet.value = false
-                            reviewHost?.let { host ->
-                                viewModel.onEvent(FaqEvent.RequestReview(host = host))
-                            }
-                        },
-                    ),
-                ),
-            )
-
-            Spacer(modifier = Modifier.height(SizeConstants.ExtraLargeCompactSize))
-        }
-    }
+    MessageHost(viewModel = viewModel)
 }
 
-private fun faqPreferenceTapEvent(preferenceKey: String): Ga4EventData {
+private fun faqPreferenceTapEvent(
+    preferenceKey: String,
+    faqId: String? = null,
+    faqPosition: Int? = null,
+    expanded: Boolean? = null,
+): Ga4EventData {
     return Ga4EventData(
         name = SettingsAnalytics.Events.PREFERENCE_VIEW,
-        params = mapOf(
-            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(FAQ_SCREEN_NAME),
-            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
-        ),
+        params = buildMap {
+            put(SettingsAnalytics.Params.SCREEN, AnalyticsValue.Str(FAQ_SCREEN_NAME))
+            put(SettingsAnalytics.Params.PREFERENCE_KEY, AnalyticsValue.Str(preferenceKey))
+            faqId?.let { put(SettingsAnalytics.Params.FAQ_ID, AnalyticsValue.Str(it)) }
+            faqPosition?.let { put(SettingsAnalytics.Params.FAQ_POSITION, AnalyticsValue.LongVal(it.toLong())) }
+            expanded?.let { put(SettingsAnalytics.Params.EXPANDED, AnalyticsValue.Bool(it)) }
+        },
     )
 }
 
