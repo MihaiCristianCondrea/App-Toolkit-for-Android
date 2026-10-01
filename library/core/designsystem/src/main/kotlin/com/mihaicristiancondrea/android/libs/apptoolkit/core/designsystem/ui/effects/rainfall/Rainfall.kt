@@ -17,19 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.effects.rainfall
 
-import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.drawscope.ContentDrawScope
-import androidx.compose.ui.node.DrawModifierNode
-import androidx.compose.ui.node.LayoutAwareModifierNode
 import androidx.compose.ui.node.ModifierNodeElement
-import androidx.compose.ui.node.invalidateDraw
-import androidx.compose.ui.node.requireDensity
 import androidx.compose.ui.platform.InspectorInfo
-import androidx.compose.ui.unit.IntSize
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.effects.ParticleEffectNode
 
 /**
  * Draws falling rain over this element's content, the way `snowfall` draws snow: streaks at
@@ -59,11 +50,12 @@ fun Modifier.rainfall(
 private data class RainfallElement(
     val style: RainfallStyle,
     val enabled: Boolean,
-) : ModifierNodeElement<RainfallNode>() {
+) : ModifierNodeElement<ParticleEffectNode<RainfallStyle>>() {
 
-    override fun create(): RainfallNode = RainfallNode(style = style, enabled = enabled)
+    override fun create(): ParticleEffectNode<RainfallStyle> =
+        ParticleEffectNode(style = style, enabled = enabled) { RainfallSimulation(style = it) }
 
-    override fun update(node: RainfallNode) {
+    override fun update(node: ParticleEffectNode<RainfallStyle>) {
         node.update(style = style, enabled = enabled)
     }
 
@@ -71,83 +63,5 @@ private data class RainfallElement(
         name = "rainfall"
         properties["style"] = style
         properties["enabled"] = enabled
-    }
-}
-
-private class RainfallNode(
-    private var style: RainfallStyle,
-    private var enabled: Boolean,
-) : Modifier.Node(), DrawModifierNode, LayoutAwareModifierNode {
-
-    private var simulation: RainfallSimulation = RainfallSimulation(style = style)
-    private var size: IntSize = IntSize.Zero
-    private var frameLoop: Job? = null
-
-    override val shouldAutoInvalidate: Boolean = false
-
-    override fun onAttach() {
-        startIfNeeded()
-    }
-
-    override fun onDetach() {
-        frameLoop = null
-    }
-
-    fun update(style: RainfallStyle, enabled: Boolean) {
-        if (style != this.style) {
-            this.style = style
-            simulation = RainfallSimulation(style = style)
-            resizeSimulation()
-        }
-        if (enabled != this.enabled) {
-            this.enabled = enabled
-            if (enabled) startIfNeeded() else stop()
-        }
-        invalidateDraw()
-    }
-
-    override fun onRemeasured(size: IntSize) {
-        if (size == this.size) return
-        this.size = size
-        resizeSimulation()
-    }
-
-    override fun ContentDrawScope.draw() {
-        drawContent()
-        if (enabled) simulation.draw(this)
-    }
-
-    private fun resizeSimulation() {
-        if (!isAttached) return
-        simulation.resize(
-            widthPx = size.width,
-            heightPx = size.height,
-            pxPerDp = requireDensity().density,
-        )
-    }
-
-    private fun startIfNeeded() {
-        if (!enabled || !isAttached || frameLoop?.isActive == true) return
-        frameLoop = coroutineScope.launch {
-            var lastFrameNanos = -1L
-            while (isActive) {
-                withFrameNanos { frameNanos ->
-                    if (lastFrameNanos >= 0) {
-                        simulation.advance((frameNanos - lastFrameNanos) / NANOS_PER_MILLI)
-                    }
-                    lastFrameNanos = frameNanos
-                }
-                invalidateDraw()
-            }
-        }
-    }
-
-    private fun stop() {
-        frameLoop?.cancel()
-        frameLoop = null
-    }
-
-    private companion object {
-        const val NANOS_PER_MILLI: Float = 1_000_000f
     }
 }

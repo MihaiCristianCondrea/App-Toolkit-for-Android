@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.effects.ParticleSimulation
 import kotlin.math.min
 import kotlin.math.roundToInt
 import kotlin.math.sin
@@ -50,7 +51,7 @@ import kotlin.random.Random
 internal class RainfallSimulation(
     private val style: RainfallStyle,
     private val random: Random = Random.Default,
-) {
+) : ParticleSimulation {
     private var width: Float = 0f
     private var height: Float = 0f
     private var pxPerDp: Float = 1f
@@ -99,6 +100,9 @@ internal class RainfallSimulation(
     val dropCount: Int
         get() = y.size
 
+    override val particleCount: Int
+        get() = dropCount
+
     /** Number of splashes currently spreading. */
     val splashCount: Int
         get() = splashAge.count { it >= 0f }
@@ -112,7 +116,7 @@ internal class RainfallSimulation(
      *
      * @param pxPerDp Screen density, so lengths and speeds are the same physical size everywhere.
      */
-    fun resize(widthPx: Int, heightPx: Int, pxPerDp: Float) {
+    override fun resize(widthPx: Int, heightPx: Int, pxPerDp: Float) {
         if (widthPx == width.toInt() && heightPx == height.toInt() && dropCount > 0) return
         width = widthPx.toFloat()
         height = heightPx.toFloat()
@@ -163,7 +167,7 @@ internal class RainfallSimulation(
      * Moves every drop on by [elapsedMillis], splashing those that land and bringing them back
      * above the surface, and moves the wind, the showers and the splashes on with them.
      */
-    fun advance(elapsedMillis: Float) {
+    override fun advance(elapsedMillis: Float) {
         val step = elapsedMillis.coerceIn(0f, MAX_STEP_MILLIS)
         if (step == 0f) return
         clockMillis = (clockMillis + step) % CLOCK_WRAP_MILLIS
@@ -187,7 +191,7 @@ internal class RainfallSimulation(
     }
 
     /** Draws every visible drop as a streak trailing up and against the wind, then the splashes. */
-    fun draw(scope: DrawScope) {
+    override fun draw(scope: DrawScope) {
         for (index in 0 until dropCount) {
             if (!visible[index]) continue
             val head = positionOf(index)
