@@ -17,12 +17,15 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.BuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.providers.GooglePlayServicesVersionProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.models.AboutInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.AboutSettingsProvider
+import kotlinx.coroutines.withContext
 
 /**
  * Provides the raw application and device metadata shown on the About screen.
@@ -34,6 +37,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.provide
  * @param buildInfoProvider Supplies the host application version name and code.
  * @param gmsVersionProvider Supplies the installed Google Play services runtime version, if present.
  * @param toolkitVersionProvider Supplies the App Toolkit library publishing version.
+ * @param dispatchers Runs the Google Play services lookup, a PackageManager binder call, on IO, so
+ * [getAboutInfo] is safe to call from the main thread.
  */
 class DefaultAboutRepository(
     private val deviceProvider: AboutSettingsProvider,
@@ -41,6 +46,7 @@ class DefaultAboutRepository(
     private val firebaseController: FirebaseController,
     private val gmsVersionProvider: GooglePlayServicesVersionProvider,
     private val toolkitVersionProvider: () -> String = { BuildConfig.APP_TOOLKIT_VERSION },
+    private val dispatchers: DispatcherProvider = StandardDispatchers(),
 ) : AboutRepository {
 
     override suspend fun getAboutInfo(): AboutInfo {
@@ -48,11 +54,13 @@ class DefaultAboutRepository(
             message = "About info load started",
             attributes = mapOf("source" to "AboutRepository"),
         )
+        val googlePlayServicesVersion: String? =
+            withContext(dispatchers.io) { gmsVersionProvider.getVersion() }
         return AboutInfo(
             appVersion = buildInfoProvider.appVersion,
             appVersionCode = buildInfoProvider.appVersionCode,
             appToolkitVersion = toolkitVersionProvider(),
-            googlePlayServicesVersion = gmsVersionProvider.getVersion(),
+            googlePlayServicesVersion = googlePlayServicesVersion,
             deviceInfo = deviceProvider.deviceInfo,
         )
     }

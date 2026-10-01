@@ -54,6 +54,9 @@ flowchart TD
   the widget boundary and protected by host graph tests.
 - Loading, empty, stale-success, and error states render independently; retry is a Glance action so
   it can run outside an activity.
+- An update draws the catalogue the apps screen saved (`DeveloperAppsRepository.savedDeveloperApps`)
+  straight away and replaces it once the network answers, so the widget does not wait on the
+  network. It shows its loading content only when nothing has been saved yet.
 - Icon work is bounded to the visible widget capacity to avoid unbounded network/bitmap work during
   an update.
 - Icons that are not installed load in parallel through the app's Coil image loader, the one the

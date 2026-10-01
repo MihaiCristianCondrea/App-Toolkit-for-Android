@@ -24,7 +24,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.do
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.ExtraInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import io.ktor.http.HttpStatusCode
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -40,7 +39,6 @@ import kotlin.test.assertFailsWith
 class SendIssueReportUseCaseTest {
 
     private val dispatcher = StandardTestDispatcher()
-    private val dispatchers = TestDispatchers(dispatcher)
 
     private val params = SendIssueReportUseCase.Params(
         report = Report("t", "d", mockk(), ExtraInfo(), null),
@@ -59,7 +57,7 @@ class SendIssueReportUseCaseTest {
             )
         } returns IssueReportResult.Success("url")
 
-        val useCase = SendIssueReportUseCase(repository, dispatchers, FakeFirebaseController())
+        val useCase = SendIssueReportUseCase(repository, FakeFirebaseController())
         val result = useCase(params).first()
 
         assertThat(result).isInstanceOf(IssueReportResult.Success::class.java)
@@ -71,7 +69,7 @@ class SendIssueReportUseCaseTest {
         val repository = mockk<IssueReporterRepository>()
         coEvery { repository.sendReport(any(), any(), any()) } throws IllegalStateException("boom")
 
-        val useCase = SendIssueReportUseCase(repository, dispatchers, FakeFirebaseController())
+        val useCase = SendIssueReportUseCase(repository, FakeFirebaseController())
         val result = useCase(params).first()
 
         assertThat(result).isInstanceOf(IssueReportResult.Error::class.java)
@@ -91,7 +89,7 @@ class SendIssueReportUseCaseTest {
             )
         } throws CancellationException("cancel")
 
-        val useCase = SendIssueReportUseCase(repository, dispatchers, FakeFirebaseController())
+        val useCase = SendIssueReportUseCase(repository, FakeFirebaseController())
 
         assertFailsWith<CancellationException> {
             useCase(params).first()

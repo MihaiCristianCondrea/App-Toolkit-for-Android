@@ -18,12 +18,15 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.data.repositories
 
 import android.content.Context
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import java.io.File
 
 /**
@@ -31,6 +34,8 @@ import java.io.File
  * This class handles the logic for clearing the application's cache directories.
  *
  * @property context The application context used to access cache directories.
+ * @property dispatchers Runs the recursive delete, blocking file IO, on IO, so [clearCache] can be
+ * collected from the main thread.
  */
 class DefaultCacheRepository(
     private val context: Context,
@@ -40,6 +45,7 @@ class DefaultCacheRepository(
      * empty temp directory always deletes cleanly, so the error path shipped uncovered.
      */
     private val deleteRecursively: (File) -> Boolean = File::deleteRecursively,
+    private val dispatchers: DispatcherProvider = StandardDispatchers(),
 ) : CacheRepository {
 
     override fun clearCache(): Flow<DataState<Unit, Errors.Database>> = flow {
@@ -86,6 +92,6 @@ class DefaultCacheRepository(
         )
 
         emit(state)
-    }
+    }.flowOn(dispatchers.io)
 }
 

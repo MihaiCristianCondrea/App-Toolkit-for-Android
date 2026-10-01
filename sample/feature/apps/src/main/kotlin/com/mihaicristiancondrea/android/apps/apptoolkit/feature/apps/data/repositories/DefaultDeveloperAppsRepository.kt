@@ -72,6 +72,9 @@ class DefaultDeveloperAppsRepository(
         emit(state)
     }
 
+    override suspend fun savedDeveloperApps(): List<AppSummary>? =
+        runSuspendCatching { localDataSource.read()?.distinctBy { it.packageName } }.getOrNull()
+
     override fun fetchAppDetails(
         packageName: String,
     ): Flow<DataState<AppDetails, AppErrors>> = flow {

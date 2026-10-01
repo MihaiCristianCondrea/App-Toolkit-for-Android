@@ -21,6 +21,7 @@ import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppErrors
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInfo
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInstallInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories.DeveloperAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories.FavoritesRepository
@@ -29,6 +30,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contract
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.HomeEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppListUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppsListFilter
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.isAvailable
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.utils.toErrorMessage
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.analytics.AppInteractionType
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.analytics.logAppInteraction
@@ -67,7 +69,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.withContext
 
 /**
  * ViewModel for the Apps List screen.
@@ -216,11 +217,9 @@ class AppsListViewModel(
 
     private suspend fun showApps(apps: List<AppInfo>) {
         val list = apps.toImmutableList()
-        val installedPackages = withContext(dispatchers.io) {
-            installedAppsRepository.getInstalledPackages(
-                packageNames = list.map { app -> app.packageName },
-            ).toImmutableSet()
-        }
+        val installedPackages = installedAppsRepository.getInstalledPackages(
+            packageNames = list.map { app -> app.packageName },
+        ).toImmutableSet()
         updateStateThreadSafe {
             val base = screenData ?: AppListUiState()
             val updated = base.copy(
@@ -252,18 +251,12 @@ class AppsListViewModel(
             state to favoritePackages
         }
             .onEach { (state, favoritePackages) ->
-                val allAppsCount = state.apps.size
-                val installedPackagesCount = state.installedPackages.size
-                val favoritesCount = favoritePackages.size
-
-                val isFilterValid = when (state.selectedFilter) {
-                    AppsListFilter.All -> true
-                    AppsListFilter.Installed -> installedPackagesCount > 0
-                    AppsListFilter.NotInstalled -> installedPackagesCount in 1..<allAppsCount
-                    AppsListFilter.Favorites -> favoritesCount > 0
-                }
-
-                if (!isFilterValid) {
+                val isAvailable = state.selectedFilter.isAvailable(
+                    appCount = state.apps.size,
+                    installedCount = state.installedPackages.size,
+                    favoritesCount = favoritePackages.size,
+                )
+                if (!isAvailable) {
                     selectFilter(AppsListFilter.All)
                 }
             }
@@ -369,10 +362,11 @@ class AppsListViewModel(
 
     private fun loadSelectedAppInstallInfo(packageName: String) {
         if (packageName.isBlank()) {
+            // Nothing to look up: an app without a package name cannot be installed.
             screenState.update { current ->
                 current.copy(
                     data = current.data?.copy(
-                        selectedAppInstallInfo = installedAppsRepository.getInstallInfo(packageName),
+                        selectedAppInstallInfo = AppInstallInfo(isInstalled = false, versionInfo = null),
                     ),
                 )
             }
@@ -383,9 +377,7 @@ class AppsListViewModel(
                 action = Actions.LOAD_APP_INSTALL_INFO,
                 extra = mapOf(ExtraKeys.PACKAGE_NAME to packageName),
                 block = {
-                    val installInfo = withContext(dispatchers.io) {
-                        installedAppsRepository.getInstallInfo(packageName)
-                    }
+                    val installInfo = installedAppsRepository.getInstallInfo(packageName)
                     screenState.update { current ->
                         val data = current.data ?: return@update current
                         if (data.selectedApp?.packageName != packageName) return@update current
@@ -431,9 +423,8 @@ class AppsListViewModel(
             launchReport(
                 action = Actions.TOGGLE_FAVORITE,
                 extra = mapOf(ExtraKeys.PACKAGE_NAME to packageName),
-                block = {
-                    withContext(dispatchers.io) { favoritesRepository.toggleFavorite(packageName) }
-                },
+                // DataStore is already main-safe, so no dispatcher switch is needed.
+                block = { favoritesRepository.toggleFavorite(packageName) },
                 onError = {
                     updateStateThreadSafe {
                         screenState.setError(

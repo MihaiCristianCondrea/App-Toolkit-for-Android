@@ -32,6 +32,7 @@ val diagnosticsSettingsModule: Module = module {
             configProvider = get(),
             dispatchers = get(),
             firebaseController = get(),
+            consentRepository = get(),
         )
     }
 
@@ -40,7 +41,6 @@ val diagnosticsSettingsModule: Module = module {
             repository = get(),
             firebaseController = get(),
             dispatchers = get(),
-            consentRepository = get(),
         )
     }
 }

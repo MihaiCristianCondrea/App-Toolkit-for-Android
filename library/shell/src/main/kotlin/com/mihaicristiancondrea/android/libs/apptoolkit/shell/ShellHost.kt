@@ -89,7 +89,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.ListDe
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.PageChrome
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.PageSceneStrategy
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.ShellEntryInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.topShellInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.transition
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.ScreenTransition
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import androidx.navigation3.scene.Scene
@@ -221,14 +221,14 @@ fun ShellHost(
                         if (swapsInPlace(initialState, targetState, layoutInfo.mode, navigator)) {
                             motion.tabs.inPlace()
                         } else {
-                            motion.screens.forward(targetState.pageTransition(graph, layoutInfo.mode))
+                            motion.screens.forward(targetState.transition(graph, layoutInfo.mode))
                         }
                     },
                     popTransitionSpec = {
                         if (swapsInPlace(initialState, targetState, layoutInfo.mode, navigator)) {
                             motion.tabs.inPlace(back = true)
                         } else {
-                            motion.screens.back(initialState.pageTransition(graph, layoutInfo.mode))
+                            motion.screens.back(initialState.transition(graph, layoutInfo.mode))
                         }
                     },
                     activityBack = {
@@ -236,7 +236,7 @@ fun ShellHost(
                     },
                     predictivePopTransitionSpec = { swipeEdge ->
                         motion.screens.back(
-                            initialState.pageTransition(graph, layoutInfo.mode),
+                            initialState.transition(graph, layoutInfo.mode),
                             mirrored = motion.followFingerFromRight && swipeEdge == NavigationEvent.EDGE_RIGHT,
                         )
                     },
@@ -295,11 +295,6 @@ private fun swapsInPlace(from: Scene<*>, to: Scene<*>, layout: ShellLayoutMode, 
  * list and its detail count as the list.
  */
 private val Scene<*>.depth: Int get() = previousEntries.size - (entries.size - 1)
-
-private fun Scene<*>.pageTransition(graph: ShellGraph, layout: ShellLayoutMode): ScreenTransition {
-    val info = topShellInfo ?: return graph.transitions.pages
-    return graph.transitions.resolve(info.kind, info.transition, layout)
-}
 
 private fun pageEntry(graph: ShellGraph, navigator: ShellNavigator, key: NavKey): NavEntry<NavKey> {
     if (key == ShellHomeRoute) {

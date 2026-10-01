@@ -22,22 +22,30 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extens
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInstallInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppVersionInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.packagemanager.isAppInstalled
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
+import kotlinx.coroutines.withContext
 
 class AndroidInstalledAppsLocalDataSource(
     private val context: Context,
+    private val dispatchers: DispatcherProvider,
 ) : InstalledAppsLocalDataSource {
-    override fun getInstalledPackages(packageNames: Collection<String>): Set<String> = packageNames
-        .asSequence()
-        .filter { packageName -> packageName.isNotBlank() && context.isAppInstalled(packageName) }
-        .toSet()
+    override suspend fun getInstalledPackages(packageNames: Collection<String>): Set<String> =
+        withContext(dispatchers.io) {
+            packageNames
+                .asSequence()
+                .filter { packageName -> packageName.isNotBlank() && context.isAppInstalled(packageName) }
+                .toSet()
+        }
 
-    override fun getInstallInfo(packageName: String): AppInstallInfo {
+    override suspend fun getInstallInfo(packageName: String): AppInstallInfo {
         if (packageName.isBlank()) return AppInstallInfo(isInstalled = false, versionInfo = null)
-        return AppInstallInfo(
-            isInstalled = context.isAppInstalled(packageName),
-            versionInfo = context.packageManager.getVersionMetadata(packageName)?.let { metadata ->
-                AppVersionInfo(metadata.versionName, metadata.versionCode)
-            },
-        )
+        return withContext(dispatchers.io) {
+            AppInstallInfo(
+                isInstalled = context.isAppInstalled(packageName),
+                versionInfo = context.packageManager.getVersionMetadata(packageName)?.let { metadata ->
+                    AppVersionInfo(metadata.versionName, metadata.versionCode)
+                },
+            )
+        }
     }
 }

@@ -42,7 +42,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoadin
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.showSnackbar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.updateData
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -128,94 +127,76 @@ class AdsSettingsViewModel(
     }
 
     private fun persist(enabled: Boolean) {
-        startOperation(
+        persistAdsEnabledJob = persistSwitch(
+            job = persistAdsEnabledJob,
             action = Actions.PERSIST_ADS_ENABLED,
-            extra = mapOf(ExtraKeys.ENABLED to enabled.toString())
-        )
-        persistAdsEnabledJob = persistAdsEnabledJob.restart {
-            var previousValue = repository.defaultAdsEnabled
-
-            persistAdsEnabled(enabled)
-                .flowOn(dispatchers.io)
-                .onStart {
-                    updateStateThreadSafe {
-                        previousValue =
-                            screenState.value.data?.adsEnabled ?: repository.defaultAdsEnabled
-                        screenState.dismissSnackbar()
-                        screenState.updateData(newState = ScreenState.Success()) { current ->
-                            current.copy(adsEnabled = enabled)
-                        }
-                    }
-                }
-                .onEach { result ->
-                    result
-                        .onFailure { error ->
-                            updateStateThreadSafe {
-                                screenState.updateData(newState = ScreenState.Error()) { current ->
-                                    current.copy(adsEnabled = previousValue)
-                                }
-                                screenState.setError(message = error.asUiText())
-                            }
-                        }
-
-                }
-                .catchReport(
-                    action = Actions.PERSIST_ADS_ENABLED,
-                    extra = mapOf(ExtraKeys.ENABLED to enabled.toString())
-                ) {
-                    updateStateThreadSafe {
-                        screenState.updateData(newState = ScreenState.Error()) { current ->
-                            current.copy(adsEnabled = previousValue)
-                        }
-                        screenState.setError(message = Errors.Database.DATABASE_OPERATION_FAILED.asUiText())
-                    }
-                }
-                .launchIn(viewModelScope)
-        }
+            enabled = enabled,
+            fallback = repository.defaultAdsEnabled,
+            read = { state -> state.adsEnabled },
+            set = { state, value -> state.copy(adsEnabled = value) },
+        ) { repository.setAdsEnabled(enabled) }
     }
 
     private fun persistReduceAds(enabled: Boolean) {
-        startOperation(
+        persistReduceAdsJob = persistSwitch(
+            job = persistReduceAdsJob,
             action = Actions.PERSIST_REDUCE_ADS,
-            extra = mapOf(ExtraKeys.ENABLED to enabled.toString()),
-        )
-        persistReduceAdsJob = persistReduceAdsJob.restart {
-            var previousValue = false
-            flow { emit(repository.setReduceAds(enabled)) }
+            enabled = enabled,
+            fallback = false,
+            read = { state -> state.reduceAds },
+            set = { state, value -> state.copy(reduceAds = value) },
+        ) { repository.setReduceAds(enabled) }
+    }
+
+    /**
+     * Writes one switch, showing [enabled] straight away and putting the previous value back,
+     * with an error snackbar, if [write] fails.
+     *
+     * @param fallback The value to restore when the screen has no state yet.
+     * @param read Reads this switch from the screen state.
+     * @param set Returns the screen state with this switch set to a value.
+     */
+    private fun persistSwitch(
+        job: Job?,
+        action: String,
+        enabled: Boolean,
+        fallback: Boolean,
+        read: (AdsSettingsUiState) -> Boolean,
+        set: (AdsSettingsUiState, Boolean) -> AdsSettingsUiState,
+        write: suspend () -> DataState<Unit, Errors>,
+    ): Job {
+        val extra = mapOf(ExtraKeys.ENABLED to enabled.toString())
+        startOperation(action = action, extra = extra)
+        return job.restart {
+            var previousValue = fallback
+
+            suspend fun revert(message: UiTextHelper) {
+                updateStateThreadSafe {
+                    screenState.updateData(newState = ScreenState.Error()) { current ->
+                        set(current, previousValue)
+                    }
+                    screenState.setError(message = message)
+                }
+            }
+
+            flow { emit(write()) }
                 .flowOn(dispatchers.io)
                 .onStart {
                     updateStateThreadSafe {
-                        previousValue = screenState.value.data?.reduceAds ?: false
+                        previousValue = screenState.value.data?.let(read) ?: fallback
                         screenState.dismissSnackbar()
                         screenState.updateData(newState = ScreenState.Success()) { current ->
-                            current.copy(reduceAds = enabled)
+                            set(current, enabled)
                         }
                     }
                 }
-                .onEach { result ->
-                    result.onFailure { error ->
-                        updateStateThreadSafe {
-                            screenState.updateData(newState = ScreenState.Error()) { current ->
-                                current.copy(reduceAds = previousValue)
-                            }
-                            screenState.setError(message = error.asUiText())
-                        }
-                    }
-                }
-                .catchReport(action = Actions.PERSIST_REDUCE_ADS) {
-                    updateStateThreadSafe {
-                        screenState.updateData(newState = ScreenState.Error()) { current ->
-                            current.copy(reduceAds = previousValue)
-                        }
-                        screenState.setError(message = Errors.Database.DATABASE_OPERATION_FAILED.asUiText())
-                    }
+                .onEach { result -> result.onFailure { error -> revert(error.asUiText()) } }
+                .catchReport(action = action, extra = extra) {
+                    revert(Errors.Database.DATABASE_OPERATION_FAILED.asUiText())
                 }
                 .launchIn(viewModelScope)
         }
     }
-
-    private fun persistAdsEnabled(enabled: Boolean): Flow<DataState<Unit, Errors>> =
-        flow { emit(repository.setAdsEnabled(enabled)) }
 
     private fun requestConsent(host: ConsentHost) {
         startOperation(

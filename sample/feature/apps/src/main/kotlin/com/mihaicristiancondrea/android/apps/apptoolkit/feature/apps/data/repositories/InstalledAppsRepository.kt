@@ -19,8 +19,8 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repos
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInstallInfo
 
-/** Reads installed-app metadata for catalog packages. */
+/** Reads installed-app metadata for catalog packages. Both calls are safe from the main thread. */
 interface InstalledAppsRepository {
-    fun getInstalledPackages(packageNames: Collection<String>): Set<String>
-    fun getInstallInfo(packageName: String): AppInstallInfo
+    suspend fun getInstalledPackages(packageNames: Collection<String>): Set<String>
+    suspend fun getInstallInfo(packageName: String): AppInstallInfo
 }

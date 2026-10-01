@@ -46,7 +46,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.startKeyF
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStoreInterface
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.data.repositories.ComponentsShowcaseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ToolkitTilesRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppTheme
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.activity.observeActions
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
@@ -55,7 +54,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.update.domai
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.views.dialogs.ChangelogDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.ShellHost
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -67,7 +65,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainActivity : AppCompatActivity() {
 
     private val dataStore: DataStoreInterface by inject()
-    private val dispatchers: DispatcherProvider by inject()
     private val componentsShowcaseRepository: ComponentsShowcaseRepository by inject()
     private val viewModel: MainViewModel by viewModel()
     private var updateResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
@@ -117,16 +114,15 @@ class MainActivity : AppCompatActivity() {
                         graph = graph,
                         // Read before the first frame: the first-launch start screens until
                         // onboarding is done, then the start page chosen in the display settings.
+                        // DataStore reads are main-safe, so no dispatcher switch is needed.
                         resolveStart = {
-                            withContext(context = dispatchers.io) {
-                                if (dataStore.startup.first()) {
-                                    StartupRoute
-                                } else {
-                                    dataStore.startupDestinationFlow(
-                                        defaultRoute = ToolkitTilesRoute.ROUTE_ID,
-                                        mapToKey = ::startKeyFor,
-                                    ).first()
-                                }
+                            if (dataStore.startup.first()) {
+                                StartupRoute
+                            } else {
+                                dataStore.startupDestinationFlow(
+                                    defaultRoute = ToolkitTilesRoute.ROUTE_ID,
+                                    mapToKey = ::startKeyFor,
+                                ).first()
                             }
                         },
                         onReady = { keepSplashVisible = false },

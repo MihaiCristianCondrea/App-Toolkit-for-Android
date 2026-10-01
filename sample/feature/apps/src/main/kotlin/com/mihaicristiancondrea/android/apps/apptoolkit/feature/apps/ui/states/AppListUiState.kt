@@ -46,3 +46,18 @@ enum class AppsListFilter {
     NotInstalled,
     Favorites,
 }
+
+/**
+ * Whether this filter would match anything, given how many apps, installed apps and favorites
+ * there are.
+ *
+ * The one rule for both places that need it: the chip row shows only these filters, and the
+ * ViewModel falls back to [AppsListFilter.All] when the selected one stops being one of them.
+ */
+fun AppsListFilter.isAvailable(appCount: Int, installedCount: Int, favoritesCount: Int): Boolean =
+    when (this) {
+        AppsListFilter.All -> true
+        AppsListFilter.Installed -> installedCount > 0
+        AppsListFilter.NotInstalled -> installedCount in 1..<appCount
+        AppsListFilter.Favorites -> favoritesCount > 0
+    }

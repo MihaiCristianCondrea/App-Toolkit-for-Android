@@ -22,9 +22,6 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
@@ -126,13 +123,9 @@ class ScreenTransitions internal constructor(
             }
         }
 
-        ScreenTransition.FadeThrough -> {
-            val enter = fadeIn(tween(duration(210), delayMillis = duration(90))) +
-                scaleIn(tween(duration(210), delayMillis = duration(90)), initialScale = 0.92f)
-            enter togetherWith fadeOut(tween(duration(90)))
-        }
+        ScreenTransition.FadeThrough -> fadeThrough(::duration)
 
-        ScreenTransition.Fade -> fadeIn(tween(duration(300))) togetherWith fadeOut(tween(duration(300)))
+        ScreenTransition.Fade -> crossFade(::duration)
 
         ScreenTransition.None -> EnterTransition.None togetherWith ExitTransition.None
     }

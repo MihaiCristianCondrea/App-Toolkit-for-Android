@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -102,9 +103,17 @@ abstract class BaseViewModel<S : UiState, E : UiEvent, A : ActionEvent>(initialS
         screenData: MutableStateFlow<UiStateScreen<T>>,
         updateData: (T) -> T,
     ) {
+        // The mutex orders this against other updateStateThreadSafe blocks, but the state helpers
+        // write without it, so the read and the write happen in one atomic update instead of a
+        // read followed by an assignment that could drop their change.
         stateMutex.withLock {
-            getSuccessData(screenData)?.let { data ->
-                screenData.value = screenData.value.copy(data = updateData(data))
+            screenData.update { current ->
+                val data = current.data
+                if (current.screenState is ScreenState.Success && data != null) {
+                    current.copy(data = updateData(data))
+                } else {
+                    current
+                }
             }
         }
     }

@@ -59,7 +59,9 @@ fun issueReporterModule(
     single<IssueReporterRemoteDataSource> { IssueReporterRemoteDataSource(client = get()) }
     single<DeviceInfoProvider> { DeviceInfoLocalDataSource(get(), get()) }
     single<IssueReporterRepository> { DefaultIssueReporterRepository(get(), get(), get(), get()) }
-    single<SendIssueReportUseCase> { SendIssueReportUseCase(get(), get(), get()) }
+    single<SendIssueReportUseCase> {
+        SendIssueReportUseCase(repository = get(), firebaseController = get())
+    }
     single<GithubTarget> {
         GithubTarget(
             username = GithubConstants.GITHUB_USER,

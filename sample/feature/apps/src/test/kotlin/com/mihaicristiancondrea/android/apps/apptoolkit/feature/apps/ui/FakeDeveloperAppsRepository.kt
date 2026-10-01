@@ -49,6 +49,8 @@ class FakeDeveloperAppsRepository(
         emit(DataState.Success(apps))
     }
 
+    override suspend fun savedDeveloperApps(): List<AppSummary>? = cachedApps
+
     override fun fetchAppDetails(
         packageName: String,
     ): Flow<DataState<AppDetails, AppErrors>> = flow {

@@ -49,6 +49,18 @@ A third pass fixed:
 - `FavoritesChangedReceiver`, the inline four-hour constant in `AdsCoreManager`, and the stale
   `INSTANCE` after `DefaultBillingRepository.close()`.
 
+A fourth pass fixed:
+
+- Main-thread safety moved into `DefaultAboutRepository`, `DefaultCacheRepository` and
+  `AndroidInstalledAppsLocalDataSource`, and the redundant dispatcher switches in the issue report
+  send, `AppsListViewModel` and `MainActivity` were dropped.
+- Diagnostics consent is applied to the SDKs by `DefaultUsageAndDiagnosticsRepository` after each
+  write instead of by the ViewModel while the screen is open.
+- The dead branch in `SettingsViewModel`, the non-atomic `BaseViewModel.updateSuccessState`, the
+  copied `updateX` functions and ads persist functions, the apps filter rule written twice, and the
+  duplicated scene transition and fade specs in `:library:shell` and `:library:navigation`.
+- The widget waiting on the network before drawing anything.
+
 Everything below is still open. Remove an item, or move it to the changelog, when it is fixed.
 
 Already clean at the time of the review: no Kotlin package is split across modules, every file's
@@ -59,8 +71,9 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
 
 - The consent repository's in-flight request still holds its host activity until UMP answers. A
   new host no longer joins it, but the activity is only released when that request ends.
-- `UsageAndDiagnosticsViewModel` still applies consent to the SDKs from the ViewModel, so it only
-  happens while that screen is open, and `observeSettings()` still combines one flow per key.
+- `DefaultUsageAndDiagnosticsRepository.observeSettings()` still combines one flow per key. It now
+  only feeds the screen, so a mixed state only shows for a frame, but one snapshot of storage would
+  remove it.
 - `library/consumer-rules.pro` files exist for `:library:apptoolkit` and `:library:navigation`, but
   no build file sets `consumerProguardFiles`, so consumer apps never receive those keep rules
   (including the `kotlinx.serialization` ones).
@@ -76,17 +89,14 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   The alignment and spacing it drives are composition parameters of `Column` and
   `PinnedFooterColumn`, so the fix needs a custom layout; left until it can be checked on a device.
 - `sample/feature/tiles/.../tools/DiceRollTool.kt` still builds the face lists with
-  `map`/`filter`/`sortedBy` on every frame of a roll.
-- The apps widget still fetches the whole catalogue from the network on each update, before it
-  falls back to the saved one.
+  `map`/`filter`/`sortedBy` on every frame of a roll: a few dozen small objects per frame for about
+  a second. Reusing arrays would mean rewriting the projection math, which is not worth it without
+  a profile showing a cost.
 - `library/feature/theme/.../ThemeSettingsScreen.kt:343-424` and
   `library/feature/onboarding/.../ThemeOnboardingPageTab.kt:290-339` build new page lambdas and lists
   on every recomposition.
-- Main-thread safety sits in ViewModels instead of the class doing the blocking work:
-  `DefaultAboutRepository` (PackageManager), `DefaultCacheRepository` (`deleteRecursively`) and
-  `AndroidInstalledAppsLocalDataSource` only stay off the main thread because their ViewModels add
-  `flowOn(io)`. The issue report send switches to IO four times. DataStore calls in
-  `AppsListViewModel` and `MainActivity.kt:121` are wrapped in `withContext(io)` without need.
+- `AboutViewModel` and `AdvancedSettingsViewModel` keep a `flowOn(io)` that their repositories no
+  longer need. Removing it leaves their `dispatchers` parameter unused, a constructor change.
 
 ## Structure
 
@@ -139,7 +149,6 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   `feature/theme/.../ThemeSettingsScreen.kt:163-264`, and the copies have drifted (onboarding
   ignores `seasonalThemesUnlocked`).
 - `PermissionsViewModel.kt:86-151` and `SettingsViewModel.kt:82-143` have the same load pipeline.
-  `SettingsViewModel.kt:132-136` is a dead branch.
 - The `persist` helper is still written out in `DisplaySettingsViewModel`, `ThemeSettingsViewModel`
   and `OnboardingThemeViewModel`; it could move into `ScreenViewModel` once that has a way to
   report.
@@ -151,21 +160,12 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   identical arguments.
 - Oversized composables: `ThemeSettingsScreen` (about 460 lines), `ListDetailLayout` (about 230),
   `ShellBody` (about 215), `ShellChrome` (about 170).
-- `ShellChrome.kt:670-673` duplicates `ShellHost.kt:299-302`, and `ScreenTransitions.kt:129-135`
-  duplicates `TabTransitions.kt:73-79`.
-- `BaseViewModel.kt:107` takes `stateMutex` for one writer while every other state helper writes
-  without it, so the mutex protects nothing.
 - Unused public API, kept because removing it breaks consumers: the deprecated
   `FirebaseControllerImpl` typealias and `AdsCoreManager.buildInfoProvider`. Remove both in a
   breaking release, with a migration guide entry.
 - `MainAction.ReviewOutcomeReported` and `InAppUpdateResultReported` (and
   `FaqAction.ReviewOutcomeReported`) are sent but mapped to `Unit`. They are the only actions of
   their ViewModels, so removing them means changing those ViewModels' action type.
-- The five `updateX` functions in `UsageAndDiagnosticsViewModel` are copies of one another.
-- `DefaultAdsSettingsRepository.kt:63-76` repeats `persistPreference`, and `AdsSettingsViewModel`'s
-  two persist functions are near-copies.
-- The apps filter chip rules exist twice, in `AppsListViewModel.observeFilterValidity` and
-  `sample/feature/apps/.../ui/views/screens/AppsList.kt:294-312`.
 - The comment above `core:datastore` in `library/core/ui/build.gradle.kts:52-53` says the module
   references `CommonDataStore` by type, which it no longer does.
 

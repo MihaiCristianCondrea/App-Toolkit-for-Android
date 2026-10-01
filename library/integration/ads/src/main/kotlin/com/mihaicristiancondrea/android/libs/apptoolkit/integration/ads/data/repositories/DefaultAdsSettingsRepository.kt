@@ -60,20 +60,11 @@ class DefaultAdsSettingsRepository(
 
     // Previously returned Success unconditionally, so a DataStore write failure reached the caller
     // as an uncaught exception rather than the error state the settings screen renders.
-    override suspend fun setAdsEnabled(enabled: Boolean): DataState<Unit, Errors.Database> {
-        firebaseController.logBreadcrumb(
-            message = "Ads settings updated",
-            attributes = mapOf("enabled" to enabled.toString()),
-        )
-        return runCatching { dataStore.saveAds(isChecked = enabled) }.fold(
-            onSuccess = { DataState.Success(Unit) },
-            onFailure = { throwable ->
-                if (throwable is CancellationException) throw throwable
-                firebaseController.recordNonFatal(throwable = throwable)
-                DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED)
-            },
-        )
-    }
+    override suspend fun setAdsEnabled(enabled: Boolean): DataState<Unit, Errors.Database> =
+        persistPreference(
+            breadcrumb = "Ads settings updated",
+            enabled = enabled,
+        ) { dataStore.saveAds(isChecked = enabled) }
 
     override suspend fun setReduceAds(enabled: Boolean): DataState<Unit, Errors.Database> =
         persistPreference(

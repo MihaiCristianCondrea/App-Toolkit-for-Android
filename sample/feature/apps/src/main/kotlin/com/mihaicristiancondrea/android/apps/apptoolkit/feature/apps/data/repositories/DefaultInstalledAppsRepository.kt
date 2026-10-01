@@ -24,9 +24,9 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.mode
 class DefaultInstalledAppsRepository(
     private val localDataSource: InstalledAppsLocalDataSource,
 ) : InstalledAppsRepository {
-    override fun getInstalledPackages(packageNames: Collection<String>): Set<String> =
+    override suspend fun getInstalledPackages(packageNames: Collection<String>): Set<String> =
         localDataSource.getInstalledPackages(packageNames)
 
-    override fun getInstallInfo(packageName: String): AppInstallInfo =
+    override suspend fun getInstallInfo(packageName: String): AppInstallInfo =
         localDataSource.getInstallInfo(packageName)
 }

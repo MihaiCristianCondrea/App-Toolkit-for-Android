@@ -24,6 +24,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.loca
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.domain.models.UsageAndDiagnosticsSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentSettings
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -83,6 +86,8 @@ class DefaultUsageAndDiagnosticsRepositoryTest {
         val dispatcherExtension = UnconfinedDispatcherExtension()
     }
 
+    private val consentRepository: ConsentRepository = mockk(relaxed = true)
+
     @Test
     fun `observeSettings reflects data source updates`() =
         runTest(dispatcherExtension.testDispatcher) {
@@ -92,6 +97,7 @@ class DefaultUsageAndDiagnosticsRepositoryTest {
                 configProvider = FakeBuildInfoProvider(),
                 dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
                 firebaseController = mockk<FirebaseController>(relaxed = true),
+                consentRepository = consentRepository,
             )
 
             assertThat(repository.observeSettings().first().usageAndDiagnostics).isTrue()
@@ -110,6 +116,7 @@ class DefaultUsageAndDiagnosticsRepositoryTest {
                 configProvider = FakeBuildInfoProvider(),
                 dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
                 firebaseController = mockk<FirebaseController>(relaxed = true),
+                consentRepository = consentRepository,
             )
             val essentialOnly = UsageAndDiagnosticsSettings(
                 usageAndDiagnostics = true,
@@ -123,6 +130,18 @@ class DefaultUsageAndDiagnosticsRepositoryTest {
             advanceUntilIdle()
 
             assertThat(repository.observeSettings().first()).isEqualTo(essentialOnly)
+            // The SDKs get the stored answer once, after the write, with no mix in between.
+            coVerify(exactly = 1) {
+                consentRepository.applyConsentSettings(
+                    ConsentSettings(
+                        usageAndDiagnostics = true,
+                        analyticsConsent = true,
+                        adStorageConsent = true,
+                        adUserDataConsent = false,
+                        adPersonalizationConsent = false,
+                    )
+                )
+            }
         }
 }
 

@@ -24,7 +24,6 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
@@ -70,13 +69,9 @@ class TabTransitions internal constructor(
             enter togetherWith exit
         }
 
-        TabTransitionStyle.FadeThrough -> {
-            val enter = fadeIn(tween(duration(210), delayMillis = duration(90))) +
-                scaleIn(tween(duration(210), delayMillis = duration(90)), initialScale = 0.92f)
-            enter togetherWith fadeOut(tween(duration(90)))
-        }
+        TabTransitionStyle.FadeThrough -> fadeThrough(::duration)
 
-        TabTransitionStyle.Fade -> fadeIn(tween(duration(300))) togetherWith fadeOut(tween(duration(300)))
+        TabTransitionStyle.Fade -> crossFade(::duration)
 
         TabTransitionStyle.None -> EnterTransition.None togetherWith ExitTransition.None
     }

@@ -29,6 +29,12 @@ interface DeveloperAppsRepository {
     /** Returns compact summaries for every public application. */
     fun fetchDeveloperApps(): Flow<DataState<List<AppSummary>, AppErrors>>
 
+    /**
+     * The catalogue saved by the last successful [fetchDeveloperApps], without touching the
+     * network, or null when nothing has been saved yet.
+     */
+    suspend fun savedDeveloperApps(): List<AppSummary>?
+
     /** Returns the full public metadata document for [packageName]. */
     fun fetchAppDetails(packageName: String): Flow<DataState<AppDetails, AppErrors>>
 }

@@ -40,6 +40,7 @@
 - The ad above the bottom navigation is back, and messages such as a consent form failing to load now appear above the navigation bar instead of not at all.
 - Rolling the dice does less work on each frame of the animation.
 - The apps widget loads its icons at the same time instead of one after another, and reuses the icons the app has already downloaded.
+- The apps widget shows the apps it loaded last time straight away and refreshes them once the network answers, instead of waiting on the network.
 - Starring an app no longer redraws every app card.
 - Opening the Quick Settings panel no longer saves the quick tools' tile state each time.
 

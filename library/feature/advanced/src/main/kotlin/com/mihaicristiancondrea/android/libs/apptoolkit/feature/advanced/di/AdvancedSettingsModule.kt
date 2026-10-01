@@ -38,6 +38,7 @@ val advancedSettingsModule: Module = module {
         DefaultCacheRepository(
             context = get(),
             firebaseController = get<FirebaseController>(),
+            dispatchers = get(),
         )
     }
 

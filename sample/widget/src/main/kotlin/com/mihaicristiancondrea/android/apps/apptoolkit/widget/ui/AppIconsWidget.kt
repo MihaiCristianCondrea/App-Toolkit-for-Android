@@ -25,6 +25,9 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.createBitmap
@@ -74,6 +77,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import org.koin.core.context.GlobalContext
 
@@ -92,12 +96,33 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
         sizes = setOf(SMALL_SIZE, MEDIUM_SIZE, LARGE_SIZE),
     )
 
+    /**
+     * Draws the catalogue saved by the last fetch straight away, then the fresh one once the
+     * network answers, so an update no longer leaves the widget waiting on the network. Without a
+     * saved catalogue it shows its loading content until then.
+     */
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val state = loadApps(context = context)
+        val savedState: AppIconsWidgetState? = loadSavedApps(context = context)
         provideContent {
+            val freshState = remember { flow { emit(loadApps(context = context)) } }
+            val state: AppIconsWidgetState by freshState.collectAsState(
+                initial = savedState ?: AppIconsWidgetState.Loading,
+            )
             AppIconsWidgetContent(state = state)
         }
     }
+
+    private suspend fun loadSavedApps(context: Context): AppIconsWidgetState? =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                GlobalContext.get().get<DeveloperAppsRepository>().savedDeveloperApps()
+                    ?.takeIf { it.isNotEmpty() }
+                    ?.let { apps -> AppIconsWidgetState.Content(createEntries(context, apps)) }
+            }.getOrElse { throwable ->
+                if (throwable is CancellationException) throw throwable
+                null
+            }
+        }
 
     private suspend fun loadApps(context: Context): AppIconsWidgetState =
         withContext(Dispatchers.IO) {

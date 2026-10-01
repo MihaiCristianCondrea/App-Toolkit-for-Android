@@ -45,6 +45,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.mode
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.models.AppListItem
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppListUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppsListFilter
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.isAvailable
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.AppCard
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.utils.buildAppListItems
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
@@ -292,21 +293,13 @@ private fun AppsListFilters(
     onFilterSelected: (AppsListFilter) -> Unit,
 ) {
     val filters = remember(allAppsCount, installedPackages, favorites) {
-        val list = mutableListOf<AppsFilterItem>()
-        list.add(AppsFilterItems[0]) // All
-
-        if (installedPackages.isNotEmpty()) {
-            list.add(AppsFilterItems[1]) // Installed
-        }
-
-        if (installedPackages.isNotEmpty() && installedPackages.size < allAppsCount) {
-            list.add(AppsFilterItems[2]) // Not Installed
-        }
-
-        if (favorites.isNotEmpty()) {
-            list.add(AppsFilterItems[3]) // Favorites
-        }
-        list.toImmutableList()
+        AppsFilterItems.filter { item ->
+            item.filter.isAvailable(
+                appCount = allAppsCount,
+                installedCount = installedPackages.size,
+                favoritesCount = favorites.size,
+            )
+        }.toImmutableList()
     }
 
     if (filters.size > 1) {

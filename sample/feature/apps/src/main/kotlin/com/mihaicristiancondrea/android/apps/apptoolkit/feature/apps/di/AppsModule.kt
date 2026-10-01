@@ -63,7 +63,7 @@ val appsModule: Module = module {
     }
 
     single<InstalledAppsLocalDataSource> {
-        AndroidInstalledAppsLocalDataSource(context = androidContext())
+        AndroidInstalledAppsLocalDataSource(context = androidContext(), dispatchers = get())
     }
     single<InstalledAppsRepository> { DefaultInstalledAppsRepository(localDataSource = get()) }
 

@@ -39,6 +39,7 @@ val aboutModule: Module = module {
             buildInfoProvider = get(),
             firebaseController = get(),
             gmsVersionProvider = get(),
+            dispatchers = get(),
         )
     }
     single<AboutRepository> { get<DefaultAboutRepository>() }

@@ -72,6 +72,9 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - `SupportEvent.QueryProductDetails` is a `data object` without the unused `BillingClient` parameter.
 - `Throwable.toError()` maps `IllegalStateException` to `Errors.UseCase.INVALID_STATE` instead of `NO_DATA`.
 - `KtorClient.createClient` builds a new client on every call instead of caching the first, whose logging setting later calls ignored. Debug logging prints headers with `Authorization` masked, and no longer prints bodies.
+- `DefaultUsageAndDiagnosticsRepository` takes a `ConsentRepository` and applies the stored choices to the consent SDKs after every write, and `UsageAndDiagnosticsViewModel` no longer takes one or applies consent itself. A change now reaches the SDKs whether or not the diagnostics screen is still open; opening the screen no longer re-applies consent, which the host applies at startup with `ConsentRepository.applyInitialConsent()`.
+- `DefaultAboutRepository` and `DefaultCacheRepository` take a `DispatcherProvider`, defaulting to `StandardDispatchers()`, and run their package manager lookup and cache delete on IO themselves, so both are safe to call from the main thread.
+- `SendIssueReportUseCase` no longer takes a `DispatcherProvider`: the repository it calls moves its own work off the main thread.
 
 ### Improved
 
@@ -129,6 +132,7 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Fixed the review flow asking Play twice per review: the request made to check availability is reused to launch the review. Review failures are logged instead of dropped, and cancellation is no longer swallowed.
 - Fixed `DefaultBillingRepository.getInstance` returning a closed repository after `close()`.
 - Fixed the settings illustration (`rememberPaletteImageVector`) keeping stale grass, leg and background tree colors when only those theme colors changed.
+- Fixed `BaseViewModel.updateSuccessState` possibly dropping a state change made at the same moment by another update: it now reads and writes the state in one atomic update.
 
 ---
 

@@ -31,13 +31,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.mode
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onFailure
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onSuccess
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiSnackbar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setErrors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoading
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setNoData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.updateData
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.updateState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flow
@@ -128,13 +129,7 @@ class SettingsViewModel(
                                     screenState.setNoData(data = fallback)
                                 } else {
                                     screenState.setErrors(listOf(UiSnackbar(message = error.asUiText())))
-                                    screenState.updateData(newState = com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState.Error()) { current ->
-                                        current
-                                    }.also {
-                                        if (screenState.value.data == null) {
-                                            screenState.setSuccess(data = fallback)
-                                        }
-                                    }
+                                    screenState.updateState(ScreenState.Error())
                                 }
                             }
                         }

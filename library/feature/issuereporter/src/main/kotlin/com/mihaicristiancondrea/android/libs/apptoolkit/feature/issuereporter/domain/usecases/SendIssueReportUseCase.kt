@@ -21,18 +21,19 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.da
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.Report
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 
+/**
+ * Sends an issue report. [IssueReporterRepository.sendReport] moves its own work off the main
+ * thread, so this flow needs no dispatcher of its own.
+ */
 class SendIssueReportUseCase(
     private val repository: IssueReporterRepository,
-    private val dispatchers: DispatcherProvider,
     private val firebaseController: FirebaseController,
 ) {
 
@@ -63,5 +64,4 @@ class SendIssueReportUseCase(
                     ),
                 )
             }
-            .flowOn(dispatchers.io)
 }

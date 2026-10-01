@@ -666,8 +666,12 @@ private fun TabsNavDisplay(
     )
 }
 
-/** The transition of the destination on top of [this] scene. */
-private fun Scene<*>.transition(graph: ShellGraph, layout: ShellLayoutMode): ScreenTransition {
+/**
+ * The transition of the destination on top of [this] scene, or the graph's page transition when
+ * the scene carries no shell entry. Shared by the tabs' display and the pages' display in
+ * `ShellHost`.
+ */
+internal fun Scene<*>.transition(graph: ShellGraph, layout: ShellLayoutMode): ScreenTransition {
     val info = topShellInfo ?: return graph.transitions.pages
     return graph.transitions.resolve(info.kind, info.transition, layout)
 }

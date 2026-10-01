@@ -19,9 +19,14 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInstallInfo
 
-/** Android platform source for installed package metadata. */
+/**
+ * Android platform source for installed package metadata.
+ *
+ * Both calls are package manager lookups, binder calls that can block, so implementations run them
+ * off the main thread and callers can use them from anywhere.
+ */
 interface InstalledAppsLocalDataSource {
-    fun getInstalledPackages(packageNames: Collection<String>): Set<String>
+    suspend fun getInstalledPackages(packageNames: Collection<String>): Set<String>
 
-    fun getInstallInfo(packageName: String): AppInstallInfo
+    suspend fun getInstallInfo(packageName: String): AppInstallInfo
 }

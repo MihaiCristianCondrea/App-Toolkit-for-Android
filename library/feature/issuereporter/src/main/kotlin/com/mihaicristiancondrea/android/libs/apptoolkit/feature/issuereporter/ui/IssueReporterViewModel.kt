@@ -52,7 +52,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -196,7 +195,6 @@ class IssueReporterViewModel(
                     )
 
                     sendIssueReport(params)
-                        .flowOn(dispatchers.io)
                         .map { it.asDataState() }
                         // Before onEach, so the error it emits is handled like any other result and
                         // the sheet leaves its sending state.
