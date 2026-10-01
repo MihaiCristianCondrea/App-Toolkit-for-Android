@@ -73,6 +73,8 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - A back swipe from the detail's own edge of a list and detail shrinks the detail in place, following the finger, instead of sliding the separator away from it.
 - Switching between two tabs that both search keeps the search field in place instead of fading it out and in.
 - The startup and onboarding pages keep to a 640dp column centred on tablets and wide windows instead of stretching across them.
+- Improved the shell's performance without changing how it looks or moves: the list-detail separator, its back gesture and the hiding bottom bar no longer recompose the panes or the mini player on each frame; the rail and the permanent drawer no longer recompose on every navigation; a screen's floating action buttons redraw only when they change, and their hosts leave with their screens; the settings search builds its index on the first search instead of when the settings open.
+- Improved snowfall and rainfall, which now share one frame node (`ParticleEffectNode`): the frame loop is cancelled on detach and requests no frames while there is nothing to move, and the rain's gusts and showers stay smooth however long it falls.
 
 ### Removed
 
@@ -97,7 +99,6 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Fixed the ads settings page never showing its consent failures.
 - Fixed `LargeTopAppBarWithScaffold` creating a new snackbar host on every recomposition, which dropped the snackbar showing, and drawing Material's plain snackbars: it keeps one host, draws the Toolkit's, and gives the screen inside `rememberScaffoldSnackbars()`.
 - Fixed a snackbar shown through `ShellHost(snackbarHostState)` waiting, unseen, while a start screen or a page covered the tabs: the shell now shows it at the bottom of the window until the tabs are back.
-- Improved the list-detail scene, the rail, the permanent drawer, the mini player and the floating action buttons to recompose less: the separator, the back gesture and the hiding bottom bar no longer recompose the panes or the player on each frame, and the rail and drawer no longer recompose on every navigation.
 
 ---
 
