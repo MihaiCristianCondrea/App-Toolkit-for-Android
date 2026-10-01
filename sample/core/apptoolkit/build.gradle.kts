@@ -15,23 +15,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.di
+plugins {
+    id("com.mihaicristiancondrea.android.apptoolkit.sample-module")
+}
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.data.repositories.ShowcaseUnlockRepository
-import org.koin.core.module.Module
-import org.koin.dsl.module
+android {
+    namespace = "com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit"
+}
 
-/**
- * The sample's own settings additions: the About page's hidden unlock of the components showcase.
- *
- * The toolkit's settings extension points are answered in `:sample:core:apptoolkit`, with the rest
- * of the App Toolkit setup.
- */
-val settingsModule: Module = module {
-    single {
-        ShowcaseUnlockRepository(
-            dataStore = get(),
-            firebaseController = get(),
-        )
-    }
+dependencies {
+    // The toolkit is this module's whole reason to exist, so it is exposed rather than hidden:
+    // the host has to name toolkit types (AppToolkitHostBuildConfig, Module) to call into it.
+    api(project(":library:apptoolkit"))
+    testImplementation(project(":library:core:testing"))
 }

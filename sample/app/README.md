@@ -17,10 +17,10 @@ libraries with the host's own feature modules.
   components page, the drawer, the overflow menu and the settings shortcut's deep link, on top of
   the Toolkit's pages from `toolkitGraph { }`. `startKeyFor` maps the stored start page to its tab.
 - The drawer header's `app_logo`.
-- The sample onboarding provider, the startup provider and the toolkit module ordering, owned by
-  [`:sample:feature:onboarding`](../feature/onboarding/README.md) and
-  [`:sample:feature:startup`](../feature/startup/README.md); the settings providers, owned by
-  [`:sample:feature:settings`](../feature/settings/README.md).
+- The sample onboarding provider, owned by
+  [`:sample:feature:onboarding`](../feature/onboarding/README.md), and the whole App Toolkit setup
+  (the toolkit module ordering, the startup and settings providers, the palette), owned by
+  [`:sample:core:apptoolkit`](../core/apptoolkit/README.md).
 - Application identity resources: launcher mipmaps and host-specific `xml/` configuration
   (shortcuts and widget provider info), including the shortcut target package generated from the
   released application ID.
@@ -49,7 +49,7 @@ libraries with the host's own feature modules.
 ## Depends on
 
 - Every `:sample:core:*`, `:sample:feature:*` and `:sample:widget` module, including
-  `:sample:feature:startup` for the toolkit's module graph.
+  `:sample:core:apptoolkit` for the toolkit's module graph.
 - [`:library:apptoolkit`](../../library/apptoolkit/README.md) for shared DI, `toolkitGraph { }` and
   `ShellHost`, plus the toolkit feature and integration modules it configures.
 
@@ -63,7 +63,7 @@ Nothing. This is the application entry point.
 flowchart TD
     Process[Android process] --> App[AppToolkit Application]
     App --> Koin[initializeKoin]
-    Koin --> Adapter[":sample:feature:startup host modules"]
+    Koin --> Adapter[":sample:core:apptoolkit host modules"]
     Adapter --> AppToolkit[AppToolkit module graph]
     Koin --> HostModules[App-specific data and feature bindings]
     App --> Lifecycle[Process/activity lifecycle]
@@ -87,7 +87,7 @@ flowchart TD
 
 - The application module is the only place that knows the complete runtime graph, final manifest,
   and destination set; feature modules remain unaware of their siblings.
-- Host-to-toolkit module ordering is isolated in `:sample:feature:startup`, while this module
+- Host-to-toolkit module ordering is isolated in `:sample:core:apptoolkit`, while this module
   retains final Koin startup and app-only configuration.
 - `ShellHost` decides the start in `resolveStart` before its first frame: the Toolkit's first-launch
   start screens while onboarding is not done, the stored start page after. The splash screen stays
@@ -97,8 +97,9 @@ flowchart TD
   built-in `PermissionUsageActivity`, so this manifest declares nothing for them.
 - The graph's banner slot shows the bottom navigation native ad, so it sits above the bottom bar on
   every tab.
-- `MainViewModel`'s messages (a consent form that fails to load) are shown by a
-  `DefaultSnackbarHandler` over the shell, raised above the bottom chrome.
+- `MainViewModel`'s messages (a consent form that fails to load) go to the snackbar host handed to
+  `ShellHost(snackbarHostState)`: the tabs' scaffold shows them above the bottom chrome, and the
+  shell at the bottom of the window while a start screen or a page covers the tabs.
 - The launcher shortcut's `OPEN_SETTINGS` action is a deep link in `appGraph`, so the shell opens
   the settings page for it at launch and while running, with no activity of its own.
 - Both tabs declare a `TabSearch`, so the app bar holds a search field that filters the quick
@@ -114,7 +115,7 @@ flowchart TD
 ## Public contracts
 
 Not a library. Its integration surface is the host configuration and app-specific modules passed
-through `appToolkitHostModules` in `:sample:feature:startup`, plus the final manifest/resource
+through `appToolkitHostModules` in `:sample:core:apptoolkit`, plus the final manifest/resource
 overrides.
 
 The host inherits common application attributes, backup/data-extraction rules, colors and themes

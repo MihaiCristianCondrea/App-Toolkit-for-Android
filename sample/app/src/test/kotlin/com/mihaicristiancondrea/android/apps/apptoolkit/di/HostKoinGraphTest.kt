@@ -21,13 +21,8 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import androidx.compose.material3.ColorScheme
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.startup.di.appToolkitHostModules
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.di.appToolkitHostModules
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ColorPalette
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.AboutSettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.providers.DisplaySettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.providers.PrivacySettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.SettingsProvider
 import io.ktor.client.engine.HttpClientEngine
 import org.junit.jupiter.api.Test
 import org.koin.core.module.Module
@@ -41,22 +36,6 @@ class HostKoinGraphTest {
 
     private val platformTypes = listOf(Context::class, Activity::class, Application::class)
     private val builtByFactoryFunction = listOf(HttpClientEngine::class, ColorScheme::class)
-    /**
-     * Contracts the toolkit declares but does not bind, so a host has to.
-     *
-     * The settings providers are bound by `:sample:feature:settings`, which owns the surfaces they
-     * configure, and the palette by the host composition root. Verifying the toolkit graph on its
-     * own therefore has to be told they arrive later; `every host definition can be resolved`
-     * covers the assembled graph where they are actually present.
-     */
-    private val hostExtensionPoints = listOf(
-        SettingsProvider::class,
-        AboutSettingsProvider::class,
-        DisplaySettingsProvider::class,
-        PrivacySettingsProvider::class,
-        ColorPalette::class,
-    )
-
     private val hostBuildConfig = AppToolkitHostBuildConfig(
         applicationId = "com.mihaicristiancondrea.android.apps.apptoolkit",
         isDebugBuild = true,
@@ -77,9 +56,13 @@ class HostKoinGraphTest {
             .verify(extraTypes = platformTypes + builtByFactoryFunction)
     }
 
+    /**
+     * `:sample:core:apptoolkit` answers every extension point the toolkit declares but does not
+     * bind (the settings providers and the palette), so its graph stands on its own.
+     */
     @Test
     fun `sample adapter satisfies constructor-visible toolkit dependencies`() {
         module { includes(toolkitModules()) }
-            .verify(extraTypes = platformTypes + builtByFactoryFunction + hostExtensionPoints)
+            .verify(extraTypes = platformTypes + builtByFactoryFunction)
     }
 }

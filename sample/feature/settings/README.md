@@ -2,25 +2,24 @@
 
 ## Purpose
 
-The settings this app adds on top of the toolkit: the rows of its settings list, its About content,
-and the hidden version-tap gesture that content hosts.
+The settings this app adds on top of the toolkit: its About content, and the hidden version-tap
+gesture that content hosts.
 
 ## Owns
 
 - `AboutSettingsContent`, the sample's About page content, which `:sample:app` registers with
   `aboutPages { AboutSettingsContent() }`.
-- `ShowcaseUnlockRepository`: the version-tap threshold and the write that persists the unlock.
-- The sample's answers to the toolkit's settings extension points: `AppSettingsProvider` (the rows
-  and the keys they open), `AppAboutSettingsProvider`, `AppDisplaySettingsProvider`, the default
-  `PrivacySettingsProvider` and `SettingsConstants`, bound by `settingsModule(hostBuildConfig)`.
+- `ShowcaseUnlockRepository`: the version-tap threshold and the write that persists the unlock,
+  bound by `settingsModule`.
 
 ## Does not own
 
 - The settings pages themselves, owned by
   [`:library:feature:settings`](../../../library/feature/settings/README.md) and the feature modules
   that register the keys the rows open.
-- The startup provider and the toolkit module ordering, owned by
-  [`:sample:feature:startup`](../startup/README.md).
+- The rows of the settings list and every other answer to the toolkit's extension points, owned
+  with the rest of the App Toolkit setup by
+  [`:sample:core:apptoolkit`](../../core/apptoolkit/README.md).
 - The showcase the gesture reveals, owned by
   [`:sample:feature:components`](../components/README.md), which only reads the same flag.
 - The startup-screen choices, composed by `:sample:app`, which is the only module that may name
@@ -28,8 +27,8 @@ and the hidden version-tap gesture that content hosts.
 
 ## Depends on
 
-- [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for the provider contracts and
-  the keys.
+- [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for the About page and its
+  extension.
 - [`:sample:core:datastore`](../../core/datastore/README.md) for the persisted unlock flag.
 
 ## Used by
@@ -41,9 +40,7 @@ and the hidden version-tap gesture that content hosts.
 ```mermaid
 flowchart TD
     App[":sample:app"] --> Module[settingsModule]
-    Module --> Rows[AppSettingsProvider]
-    Rows -->|destination keys| Pages[Display, privacy, advanced, about pages]
-    Rows -->|notifications action| System[System notification settings]
+    Module --> Unlock
     App -->|aboutPages| About[AboutSettingsContent]
     About -->|version taps| Unlock[ShowcaseUnlockRepository]
     Unlock --> Store[":sample:core:datastore" unlock flag]
@@ -53,8 +50,6 @@ flowchart TD
 
 - This sample adapter intentionally has no `domain` package. Its only app-owned operation is a
   single repository mutation, so adding a forwarding use case would not isolate reusable logic.
-- Each row names the Toolkit key it opens. Notifications first tries the system's notification
-  settings through its `action` and falls back to the privacy page only when that cannot open.
 - The About gesture lives with the settings that host it. It reaches the Components showcase
   through the shared flag in `:sample:core:datastore` rather than through the feature, so neither
   feature depends on its sibling and no registration contract is needed.
@@ -67,12 +62,9 @@ flowchart TD
 
 ## Internal implementations
 
-- Provider construction and the tap-threshold rule.
+- The tap-threshold rule.
 
 ## Current risks
-
-A row whose key no module registers opens nothing. `:sample:app`'s `AppGraphTest` checks that every
-key the rows use is registered.
 
 The unlock threshold and the reader of the flag sit in different modules. Changing the flag's
 meaning here without checking `:sample:feature:components` will silently change what that feature

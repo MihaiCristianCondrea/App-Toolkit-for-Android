@@ -15,23 +15,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.di
+package com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.ui.providers
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.data.repositories.ShowcaseUnlockRepository
-import org.koin.core.module.Module
-import org.koin.dsl.module
-
-/**
- * The sample's own settings additions: the About page's hidden unlock of the components showcase.
- *
- * The toolkit's settings extension points are answered in `:sample:core:apptoolkit`, with the rest
- * of the App Toolkit setup.
- */
-val settingsModule: Module = module {
-    single {
-        ShowcaseUnlockRepository(
-            dataStore = get(),
-            firebaseController = get(),
-        )
-    }
+/** The keys of the sample's settings rows, for analytics and as list item keys. */
+object SettingsConstants {
+    const val KEY_SETTINGS_NOTIFICATION: String = "notifications"
+    const val KEY_SETTINGS_DISPLAY: String = "display"
+    const val KEY_SETTINGS_SECURITY_AND_PRIVACY: String = "security_and_privacy"
+    const val KEY_SETTINGS_ADVANCED: String = "advanced"
+    const val KEY_SETTINGS_ABOUT: String = "about"
 }

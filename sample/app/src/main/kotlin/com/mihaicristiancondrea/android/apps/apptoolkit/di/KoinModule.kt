@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.di
 
 import android.content.Context
 import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.startup.di.appToolkitHostModules
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.di.appToolkitHostModules
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.faq.utils.constants.FaqConstants
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.di.dataStoreModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.di.appsModule
@@ -38,7 +38,7 @@ fun sampleAppModules(hostBuildConfig: AppToolkitHostBuildConfig): List<Module> =
     addAll(appToolkitHostModules(hostBuildConfig = hostBuildConfig))
     add(dataStoreModule)
     add(appModule)
-    add(settingsModule(hostBuildConfig = hostBuildConfig))
+    add(settingsModule)
     add(tilesModule)
     add(appsModule)
     add(componentsModule)
