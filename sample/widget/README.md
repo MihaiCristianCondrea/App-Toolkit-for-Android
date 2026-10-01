@@ -44,7 +44,6 @@ flowchart TD
     Grid --> Launch[Glance activity / store action]
     Error --> Retry[RefreshWidgetAction]
     Retry --> Repo
-    Favorites[FavoritesChangedReceiver] --> Receiver
 ```
 
 ## Architectural decisions
@@ -57,6 +56,9 @@ flowchart TD
   it can run outside an activity.
 - Icon work is bounded to the visible widget capacity to avoid unbounded network/bitmap work during
   an update.
+- Icons that are not installed load in parallel through the app's Coil image loader, the one the
+  apps screen uses, so an icon the app has already shown comes from its disk cache. They are decoded
+  as software bitmaps at the widget's size, as `RemoteViews` requires.
 
 ## Public contracts
 

@@ -32,6 +32,23 @@ A second pass fixed:
 - The pasted citation tag in `UsageAndDiagnosticsViewModel` and the unused `merged` map in
   `LoggedScreenViewModel.catchReport`.
 
+A third pass fixed:
+
+- Class names that R8 renames in `LoggedScreenViewModel` telemetry (now `viewModelName`, and the
+  event's source name), and its duplicated error-reporting block.
+- Crashlytics keys that stuck to later reports, and billing errors reported as `SupportViewModel`.
+- A cancelled in-app update request still starting the update flow.
+- Consent requests joining one whose host was destroyed.
+- The five separate writes behind "Allow all" and "Allow essential".
+- The support page's full-page error for a failed purchase, and its missing Retry
+  (`SupportEvent.QueryProductDetails` no longer carries a `BillingClient`).
+- The `palette.kt` remember keys, `IllegalStateException` mapping to `NO_DATA`, the double review
+  request, and the cached `KtorClient` with full-body logging.
+- `themePreferencesState()` emitting once per changed key, the favorite lambda recomposing every
+  card, the tile state written on every shade open, and the widget's serial uncached icon loads.
+- `FavoritesChangedReceiver`, the inline four-hour constant in `AdsCoreManager`, and the stale
+  `INSTANCE` after `DefaultBillingRepository.close()`.
+
 Everything below is still open. Remove an item, or move it to the changelog, when it is fixed.
 
 Already clean at the time of the review: no Kotlin package is split across modules, every file's
@@ -40,30 +57,13 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
 
 ## Bugs
 
-- `library/core/ui/.../base/LoggedScreenViewModel.kt:50,65,160` sends `this::class.java.simpleName`
-  and `event::class.java.simpleName` to Crashlytics breadcrumbs and the GA4 `view_model` parameter.
-  No `-keepnames` rule covers ViewModels or events, so release builds report obfuscated names.
-  Use explicit names (`screenName`) or ship keep rules. Its `?: "Unknown…"` fallbacks are dead.
-- `library/integration/billing/.../DefaultBillingRepository.kt` reports its own errors as
-  `viewModelName = "SupportViewModel"`. `DefaultFirebaseController.kt:146-152,165-169` stores
-  per-report values with `setCustomKey`, which then stick to every later crash.
-- `library/integration/consent/.../DefaultConsentRepository.kt:57-58,100-147`: the process-wide
-  request scope keeps `host.activity` alive with no timeout, and a later caller joins an in-flight
-  request regardless of its own host, so its form can show on a destroyed window.
-- `library/feature/diagnostics/.../UsageAndDiagnosticsViewModel.kt:112-161`: "Allow all" and "Allow
-  essential" make five separate DataStore writes, and the ViewModel pushes each intermediate
-  consent state into the Firebase SDK. Write the bundle in one `edit` and apply consent in the data
-  layer.
-- `library/feature/support/.../SupportViewModel.kt:159-166,259-263`: a failed or cancelled purchase
-  sets `ScreenState.Error`, which replaces the whole page with "failed to load SKU details" and no
-  retry. Show it as a snackbar and keep `Success`.
-- `library/integration/update/.../DefaultInAppUpdateRepository.kt:37-77`: Task listeners are not
-  removed in `awaitClose`, so a cancelled request can still start the update flow on a dead
-  activity's launcher.
-- `library/core/ui/.../views/drawable/palette.kt:52-54`: the `remember` keys leave out `legs`,
-  `grass` and `backgroundTrees`, so those colors go stale.
-- `library/core/network/.../ThrowableExtensions.kt:93` maps every `IllegalStateException` to
-  `NO_DATA` although `INVALID_STATE` exists.
+- The consent repository's in-flight request still holds its host activity until UMP answers. A
+  new host no longer joins it, but the activity is only released when that request ends.
+- `UsageAndDiagnosticsViewModel` still applies consent to the SDKs from the ViewModel, so it only
+  happens while that screen is open, and `observeSettings()` still combines one flow per key.
+- `library/consumer-rules.pro` files exist for `:library:apptoolkit` and `:library:navigation`, but
+  no build file sets `consumerProguardFiles`, so consumer apps never receive those keep rules
+  (including the `kotlinx.serialization` ones).
 
 ## Performance
 
@@ -72,18 +72,13 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   The repository also reconnects by hand in three places on top of `enableAutoServiceReconnection()`,
   and each retry runs another purchase query.
 - `library/shell/.../chrome/NavigationSurfaces.kt:199-247` reads the animated rail width in
-  composition, so the rail and all its items recompose on every frame.
-- `themePreferencesState()` combines one flow per theme key, so a single palette write can still
-  reach `AppTheme` as two emissions. Mapping `dataStore.data` once into the whole state would make
-  each write one emission.
+  composition, so the rail and all its items recompose on every frame of an expand or collapse.
+  The alignment and spacing it drives are composition parameters of `Column` and
+  `PinnedFooterColumn`, so the fix needs a custom layout; left until it can be checked on a device.
 - `sample/feature/tiles/.../tools/DiceRollTool.kt` still builds the face lists with
   `map`/`filter`/`sortedBy` on every frame of a roll.
-- `sample/feature/tiles/.../services/TrackedTileService.kt:91-94` writes SharedPreferences every time
-  the Quick Settings shade opens.
-- `sample/widget/.../AppIconsWidget.kt:97-156` downloads up to nine icons one after another over raw
-  `URLConnection` without a cache, up to about 90 seconds in the worst case.
-- `sample/feature/apps/.../AppsListScreen.kt:115-129`: the favorite lambda is keyed on `favorites`
-  and the app list, so one tap recomposes every visible card.
+- The apps widget still fetches the whole catalogue from the network on each update, before it
+  falls back to the saved one.
 - `library/feature/theme/.../ThemeSettingsScreen.kt:343-424` and
   `library/feature/onboarding/.../ThemeOnboardingPageTab.kt:290-339` build new page lambdas and lists
   on every recomposition.
@@ -92,10 +87,6 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   `AndroidInstalledAppsLocalDataSource` only stay off the main thread because their ViewModels add
   `flowOn(io)`. The issue report send switches to IO four times. DataStore calls in
   `AppsListViewModel` and `MainActivity.kt:121` are wrapped in `withContext(io)` without need.
-- `library/core/network/.../client/KtorClient.kt:45-79` caches the client in an unsynchronized
-  `var`, which can build two clients, and debug logging uses `LogLevel.ALL`, which prints headers.
-- `library/integration/review/.../DefaultReviewRepository.kt:61-75` requests the review flow twice
-  per review and swallows both failures.
 
 ## Structure
 
@@ -110,8 +101,7 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   (`DisplaySettingsScreen.kt:222`, `ShellDisplayRows.kt:61-81`, `DeveloperOptionsScreen.kt:78`),
   and `:library:feature:developer` and `:library:feature:display` depend on all of `:library:shell`
   just for `shell.settings`.
-- `BillingRepository` exposes `ProductDetails`, and `SupportEvent.kt:25` carries a `BillingClient`, so
-  Play Billing types reach the support UI.
+- `BillingRepository` exposes `ProductDetails`, so Play Billing types reach the support UI.
 - `library/core/datastore/.../CommonDataStore.kt:141-142,186-190,309-314` and
   `DefaultFavoritesPreferencesDataSource` hold favorites and `componentsShowcaseUnlocked`, which only
   the sample uses.
@@ -150,7 +140,6 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   ignores `seasonalThemesUnlocked`).
 - `PermissionsViewModel.kt:86-151` and `SettingsViewModel.kt:82-143` have the same load pipeline.
   `SettingsViewModel.kt:132-136` is a dead branch.
-- `LoggedScreenViewModel` repeats the error-reporting block in `catchReport` and `launchReport`.
 - The `persist` helper is still written out in `DisplaySettingsViewModel`, `ThemeSettingsViewModel`
   and `OnboardingThemeViewModel`; it could move into `ScreenViewModel` once that has a way to
   report.
@@ -166,17 +155,17 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   duplicates `TabTransitions.kt:73-79`.
 - `BaseViewModel.kt:107` takes `stateMutex` for one writer while every other state helper writes
   without it, so the mutex protects nothing.
-- Dead code: `FavoritesChangedReceiver` (nothing sends its action), the deprecated
-  `FirebaseControllerImpl` typealias, `AdsCoreManager.buildInfoProvider`, the `ReviewOutcomeReported`
-  and `InAppUpdateResultReported` actions that `MainActivity` maps to `Unit`, the widget's
-  unreachable `Loading` branch, and the hand-written `INSTANCE` in `DefaultBillingRepository`,
-  which `close()` leaves pointing at a closed client.
+- Unused public API, kept because removing it breaks consumers: the deprecated
+  `FirebaseControllerImpl` typealias and `AdsCoreManager.buildInfoProvider`. Remove both in a
+  breaking release, with a migration guide entry.
+- `MainAction.ReviewOutcomeReported` and `InAppUpdateResultReported` (and
+  `FaqAction.ReviewOutcomeReported`) are sent but mapped to `Unit`. They are the only actions of
+  their ViewModels, so removing them means changing those ViewModels' action type.
 - The five `updateX` functions in `UsageAndDiagnosticsViewModel` are copies of one another.
 - `DefaultAdsSettingsRepository.kt:63-76` repeats `persistPreference`, and `AdsSettingsViewModel`'s
   two persist functions are near-copies.
 - The apps filter chip rules exist twice, in `AppsListViewModel.observeFilterValidity` and
   `sample/feature/apps/.../ui/views/screens/AppsList.kt:294-312`.
-- `AdsCoreManager.kt:212-213` uses an inline `3600000 * 4`.
 - The comment above `core:datastore` in `library/core/ui/build.gradle.kts:52-53` says the module
   references `CommonDataStore` by type, which it no longer does.
 

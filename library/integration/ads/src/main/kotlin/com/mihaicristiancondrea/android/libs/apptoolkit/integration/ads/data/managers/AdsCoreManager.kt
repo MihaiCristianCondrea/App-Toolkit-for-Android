@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.managers
 
-// import com.mihaicristiancondrea.android.libs.apptoolkit.R
 import android.app.Activity
 import android.content.Context
 import android.util.Log
@@ -44,6 +43,11 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.util.Date
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.hours
+
+/** How long an app open ad stays valid after loading; Google expires them after four hours. */
+private val APP_OPEN_AD_LIFETIME: Duration = 4.hours
 
 /**
  * Manager responsible for configuring and displaying App Open ads.
@@ -207,10 +211,10 @@ open class AdsCoreManager(
                 })
         }
 
+        /** Whether the loaded ad is younger than [APP_OPEN_AD_LIFETIME], after which it expires. */
         private fun wasLoadTimeLessThanNHoursAgo(): Boolean {
             val dateDifference: Long = Date().time - loadTime
-            val numMilliSecondsPerHour: Long = 3600000
-            return dateDifference < numMilliSecondsPerHour * 4
+            return dateDifference < APP_OPEN_AD_LIFETIME.inWholeMilliseconds
         }
 
         /** Whether a valid ad is ready to be shown. */

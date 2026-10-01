@@ -46,6 +46,7 @@ class PrivacyViewModel(
     initialState = UiStateScreen(data = PrivacyUiState()),
     firebaseController = firebaseController,
     screenName = "Privacy",
+    viewModelName = "PrivacyViewModel",
 ) {
 
     init {

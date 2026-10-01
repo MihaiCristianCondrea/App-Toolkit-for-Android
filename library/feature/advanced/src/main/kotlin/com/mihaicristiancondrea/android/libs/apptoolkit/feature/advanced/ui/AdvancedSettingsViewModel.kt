@@ -64,6 +64,7 @@ class AdvancedSettingsViewModel(
     ),
     firebaseController = firebaseController,
     screenName = "AdvancedSettings",
+    viewModelName = "AdvancedSettingsViewModel",
 ) {
     private var observeJob: Job? = null
 

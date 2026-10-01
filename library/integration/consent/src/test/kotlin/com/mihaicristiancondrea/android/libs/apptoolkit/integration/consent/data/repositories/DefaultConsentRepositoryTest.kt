@@ -297,6 +297,40 @@ class DefaultConsentRepositoryTest {
         }
 
     @Test
+    fun `a request does not join one whose host was destroyed`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val remote = CountingConsentRemoteDataSource()
+            val repository = DefaultConsentRepository(
+                remote = remote,
+                local = FakeConsentPreferencesDataSource(),
+                configProvider = FakeBuildInfoProvider(isDebugBuild = false),
+                firebaseController = mockk(relaxed = true),
+                requestScope = backgroundScope,
+            )
+            val rotatedAway = FakeConsentHost()
+
+            val first = async {
+                repository.requestConsent(host = rotatedAway, showIfRequired = true).toList()
+            }
+            runCurrent()
+            rotatedAway.destroyed = true
+            val second = async {
+                repository.requestConsent(host = FakeConsentHost(), showIfRequired = true).toList()
+            }
+            runCurrent()
+            // The second caller waits for the first round trip instead of overlapping it, then
+            // starts its own instead of taking the answer meant for the destroyed host.
+            assertEquals(1, remote.requestCount)
+            remote.complete(DataState.Success(Unit))
+            first.await()
+            runCurrent()
+            remote.complete(DataState.Success(Unit))
+            second.await()
+
+            assertEquals(2, remote.requestCount)
+        }
+
+    @Test
     fun `requests from a finishing host never reach UMP`() =
         runTest(dispatcherExtension.testDispatcher) {
             val remote = CountingConsentRemoteDataSource()
@@ -404,9 +438,12 @@ private class CountingConsentRemoteDataSource : ConsentRemoteDataSource {
 }
 
 private class FakeConsentHost(isFinishing: Boolean = false) : ConsentHost {
+    /** Set to true to stand for the activity being destroyed while a request is in flight. */
+    var destroyed: Boolean = false
+
     override val activity = mockk<android.app.Activity>(relaxed = true).also {
         every { it.isFinishing } returns isFinishing
-        every { it.isDestroyed } returns false
+        every { it.isDestroyed } answers { destroyed }
     }
 }
 

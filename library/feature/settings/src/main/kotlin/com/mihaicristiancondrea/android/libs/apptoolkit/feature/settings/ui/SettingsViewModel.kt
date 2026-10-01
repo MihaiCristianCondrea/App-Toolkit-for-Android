@@ -70,6 +70,7 @@ class SettingsViewModel(
     initialState = UiStateScreen(data = SettingsConfig(title = "")),
     firebaseController = firebaseController,
     screenName = "Settings",
+    viewModelName = "SettingsViewModel",
 ) {
     private var observeJob: Job? = null
 

@@ -53,6 +53,7 @@ class OnboardingViewModel(
     initialState = UiStateScreen(data = OnboardingUiState()),
     firebaseController = firebaseController,
     screenName = "Onboarding",
+    viewModelName = "OnboardingViewModel",
 ) {
 
     private var observerJob: Job? = null

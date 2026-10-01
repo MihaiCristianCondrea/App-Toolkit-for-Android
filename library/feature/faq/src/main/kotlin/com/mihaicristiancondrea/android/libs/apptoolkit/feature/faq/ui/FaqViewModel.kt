@@ -61,6 +61,7 @@ class FaqViewModel(
     initialState = UiStateScreen(data = FaqUiState()),
     firebaseController = firebaseController,
     screenName = "Help",
+    viewModelName = "FaqViewModel",
 ) {
     private var observeJob: Job? = null
     private var reviewJob: Job? = null

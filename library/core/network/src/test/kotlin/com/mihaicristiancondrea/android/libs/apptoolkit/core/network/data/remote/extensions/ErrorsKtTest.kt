@@ -48,8 +48,13 @@ class ErrorsKtTest {
     }
 
     @Test
+    fun `maps illegal state to invalid state`() {
+        assertEquals(Errors.UseCase.INVALID_STATE, IllegalStateException().toError())
+    }
+
+    @Test
     fun `returns default error when not mapped`() {
         val default = Errors.UseCase.NO_DATA
-        assertEquals(default, IllegalStateException().toError(default))
+        assertEquals(default, RuntimeException().toError(default))
     }
 }

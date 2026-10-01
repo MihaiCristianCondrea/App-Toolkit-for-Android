@@ -79,6 +79,7 @@ open class AboutViewModel(
     initialState = UiStateScreen(data = AboutUiState()),
     firebaseController = firebaseController,
     screenName = "About",
+    viewModelName = "AboutViewModel",
 ) {
     private var observeJob: Job? = null
 

@@ -23,6 +23,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.provid
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.UsageAndDiagnosticsPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.domain.models.UsageAndDiagnosticsSettings
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -99,6 +100,29 @@ class DefaultUsageAndDiagnosticsRepositoryTest {
             advanceUntilIdle()
 
             assertThat(repository.observeSettings().first().usageAndDiagnostics).isFalse()
+        }
+
+    @Test
+    fun `setAll stores every value of the bundle`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val repository = DefaultUsageAndDiagnosticsRepository(
+                dataSource = FakeUsageAndDiagnosticsPreferencesDataSource(),
+                configProvider = FakeBuildInfoProvider(),
+                dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
+                firebaseController = mockk<FirebaseController>(relaxed = true),
+            )
+            val essentialOnly = UsageAndDiagnosticsSettings(
+                usageAndDiagnostics = true,
+                analyticsConsent = true,
+                adStorageConsent = true,
+                adUserDataConsent = false,
+                adPersonalizationConsent = false,
+            )
+
+            repository.setAll(essentialOnly)
+            advanceUntilIdle()
+
+            assertThat(repository.observeSettings().first()).isEqualTo(essentialOnly)
         }
 }
 

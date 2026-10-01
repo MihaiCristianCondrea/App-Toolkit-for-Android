@@ -36,6 +36,10 @@ class DefaultInAppUpdateRepository : InAppUpdateRepository {
 
         appUpdateManager.appUpdateInfo
             .addOnSuccessListener { appUpdateInfo ->
+                // Play Core has no way to remove these listeners. A collector that stopped waiting,
+                // for example because its screen went away, must not still get an update screen
+                // launched through the launcher of an activity that may be gone.
+                if (isClosedForSend) return@addOnSuccessListener
                 val updateAvailability = appUpdateInfo.updateAvailability()
                 val isImmediateAllowed =
                     appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
@@ -70,6 +74,7 @@ class DefaultInAppUpdateRepository : InAppUpdateRepository {
                 close()
             }
             .addOnFailureListener {
+                if (isClosedForSend) return@addOnFailureListener
                 trySend(InAppUpdateResult.Failed)
                 close()
             }

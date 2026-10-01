@@ -45,6 +45,7 @@ class StartupViewModel(
     initialState = UiStateScreen(data = StartupUiState()),
     firebaseController = firebaseController,
     screenName = "Startup",
+    viewModelName = "StartupViewModel",
 ) {
 
     override fun handleEvent(event: StartupEvent) {

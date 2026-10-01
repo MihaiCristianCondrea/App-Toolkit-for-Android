@@ -41,6 +41,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Implementation of [ConsentRepository] that delegates UMP work to a remote data source.
@@ -75,6 +77,12 @@ class DefaultConsentRepository(
      * another one; requests from a host that is finishing or destroyed are rejected outright. The
      * flight is keyed on [showIfRequired] so an explicit "show the form now" request is never
      * silently answered by an in-flight "show only if required" one.
+     *
+     * A caller only joins a request whose host is still alive. A request started by a host that has
+     * since gone (a rotation, say) would show its form on that dead window, so a new host waits for
+     * it to finish, at most [STALE_REQUEST_WAIT_MS], and then starts its own. Waiting keeps the two
+     * round trips from overlapping; the bound keeps a request the SDK never answers from blocking
+     * every later caller.
      */
     override fun requestConsent(
         host: ConsentHost,
@@ -97,9 +105,22 @@ class DefaultConsentRepository(
             return@flow
         }
 
+        val staleRequest: InFlightConsentRequest? = requestMutex.withLock {
+            inFlightRequest?.takeIf { !it.host.isAlive }
+        }
+        if (staleRequest != null) {
+            firebaseController.logBreadcrumb(
+                message = "Consent request waiting for a request from a finished host",
+                attributes = mapOf("host" to host.activity::class.java.name),
+            )
+            withTimeoutOrNull(STALE_REQUEST_WAIT_MS.milliseconds) {
+                staleRequest.state.first { dataState -> dataState !is DataState.Loading }
+            }
+        }
+
         val request: InFlightConsentRequest = requestMutex.withLock {
             inFlightRequest
-                ?.takeIf { it.showIfRequired == showIfRequired }
+                ?.takeIf { it.showIfRequired == showIfRequired && it.host.isAlive }
                 ?.also {
                     firebaseController.logBreadcrumb(
                         message = "Consent request joined an in-flight request",
@@ -123,7 +144,11 @@ class DefaultConsentRepository(
         showIfRequired: Boolean,
     ): InFlightConsentRequest {
         val state = MutableStateFlow<DataState<Unit, Errors.UseCase>>(value = DataState.Loading())
-        val request = InFlightConsentRequest(showIfRequired = showIfRequired, state = state)
+        val request = InFlightConsentRequest(
+            host = host,
+            showIfRequired = showIfRequired,
+            state = state,
+        )
         inFlightRequest = request
 
         requestScope.launch {
@@ -149,8 +174,9 @@ class DefaultConsentRepository(
         return request
     }
 
-    /** A consent round trip that later callers can attach to. */
+    /** A consent round trip that later callers can attach to while its [host] is alive. */
     private class InFlightConsentRequest(
+        val host: ConsentHost,
         val showIfRequired: Boolean,
         val state: MutableStateFlow<DataState<Unit, Errors.UseCase>>,
     )
@@ -210,5 +236,12 @@ class DefaultConsentRepository(
         )
     }
 }
+
+/**
+ * How long a new host waits for a consent request started by a host that has since gone. UMP
+ * answers a request whose host can no longer show a form within moments, so this only matters
+ * when it never answers.
+ */
+private const val STALE_REQUEST_WAIT_MS: Long = 5_000L
 
 

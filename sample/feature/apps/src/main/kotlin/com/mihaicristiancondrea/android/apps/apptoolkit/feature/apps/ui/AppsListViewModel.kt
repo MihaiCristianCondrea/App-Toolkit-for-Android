@@ -93,6 +93,7 @@ class AppsListViewModel(
     initialState = UiStateScreen(data = AppListUiState()),
     firebaseController = firebaseController,
     screenName = AppScreenTracking.Screens.APPS_LIST.name,
+    viewModelName = "AppsListViewModel",
 ) {
 
     private val fetchAppsTrigger = MutableSharedFlow<Unit>(replay = 1)

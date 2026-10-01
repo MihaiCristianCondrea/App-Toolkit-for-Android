@@ -73,6 +73,7 @@ class PermissionsViewModel(
     ),
     firebaseController = firebaseController,
     screenName = "Permissions",
+    viewModelName = "PermissionsViewModel",
 ) {
 
     private var observeJob: Job? = null

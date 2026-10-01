@@ -99,26 +99,20 @@ class DefaultThemePreferencesRepositoryTest {
      */
     @Test
     fun `the first state is the stored one, even when the store answers late`() = runTest {
+        val stored = ThemePreferencesState(
+            themeMode = DataStoreNamesConstants.THEME_MODE_DARK,
+            dynamicColors = false,
+            amoledMode = true,
+            dynamicPaletteVariant = 4,
+            staticPaletteId = "skin",
+        )
         val preferences: ThemePreferencesDataSource = mockk(relaxed = true) {
-            every { themeMode } returns flow { delay(50); emit(DataStoreNamesConstants.THEME_MODE_DARK) }
-            every { amoledMode } returns flow { delay(50); emit(true) }
-            every { dynamicColors } returns flow { delay(50); emit(false) }
-            every { dynamicPaletteVariant } returns flow { delay(50); emit(4) }
-            every { staticPaletteId } returns flow { delay(50); emit("skin") }
+            every { storedPreferences } returns flow { delay(50); emit(stored) }
         }
 
         val first = DefaultThemePreferencesRepository(preferences).preferencesState.first()
 
-        assertEquals(
-            ThemePreferencesState(
-                themeMode = DataStoreNamesConstants.THEME_MODE_DARK,
-                dynamicColors = false,
-                amoledMode = true,
-                dynamicPaletteVariant = 4,
-                staticPaletteId = "skin",
-            ),
-            first,
-        )
+        assertEquals(stored, first)
     }
 
     private fun preferences(amoledMode: Boolean = false): ThemePreferencesDataSource =

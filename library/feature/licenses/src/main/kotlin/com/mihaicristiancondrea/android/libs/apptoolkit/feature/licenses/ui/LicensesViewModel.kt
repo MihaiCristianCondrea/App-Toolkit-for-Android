@@ -41,6 +41,7 @@ class LicensesViewModel(
     initialState = UiStateScreen(data = LicensesUiState()),
     firebaseController = firebaseController,
     screenName = "Licenses",
+    viewModelName = "LicensesViewModel",
 ) {
 
     init {

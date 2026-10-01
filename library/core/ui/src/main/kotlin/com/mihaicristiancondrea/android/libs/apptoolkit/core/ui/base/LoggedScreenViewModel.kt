@@ -40,14 +40,17 @@ import kotlin.coroutines.cancellation.CancellationException
  * - provides helpers for "operation start" + "catch + report"
  *
  * Subclasses implement [handleEvent] instead of overriding [onEvent].
+ *
+ * @param viewModelName The name reported as the breadcrumb `view_model` key and the GA4
+ * `view_model` parameter. It is passed in rather than read from the class because R8 renames
+ * classes in release builds, which would make those values unreadable. Defaults to [screenName].
  */
 abstract class LoggedScreenViewModel<T, E : UiEvent, A : ActionEvent>(
     initialState: UiStateScreen<T>,
     protected val firebaseController: FirebaseController,
     private val screenName: String,
+    protected val viewModelName: String = screenName,
 ) : ScreenViewModel<T, E, A>(initialState) {
-
-    protected val viewModelName: String = this::class.java.simpleName ?: "UnknownViewModel"
 
     init {
         breadcrumb(
@@ -62,7 +65,7 @@ abstract class LoggedScreenViewModel<T, E : UiEvent, A : ActionEvent>(
         breadcrumb(
             message = Breadcrumb.Messages.VM_EVENT,
             attributes = mapOf(
-                Breadcrumb.Keys.EVENT to (event::class.java.simpleName ?: "UnknownEvent"),
+                Breadcrumb.Keys.EVENT to event.breadcrumbName(),
             ),
         )
         handleEvent(event)
@@ -154,33 +157,7 @@ abstract class LoggedScreenViewModel<T, E : UiEvent, A : ActionEvent>(
         return catch { throwable ->
             if (throwable is CancellationException) throw throwable
 
-            breadcrumb(
-                message = Breadcrumb.Messages.VM_OP_ERROR,
-                attributes = buildMap(extra.size + 3) {
-                    put(Breadcrumb.Keys.ACTION, action)
-                    put(Breadcrumb.Keys.STEP, "catch")
-                    put(Breadcrumb.Keys.ERROR, throwable::class.java.simpleName ?: "Throwable")
-                    putAll(extra)
-                },
-            )
-
-            firebaseController.logEvent(
-                AnalyticsEvent(
-                    name = "vm_op_error",
-                    params = buildMap {
-                        put("screen", AnalyticsValue.Str(screenName))
-                        put("view_model", AnalyticsValue.Str(viewModelName))
-                        put("action", AnalyticsValue.Str(action))
-                        put(
-                            "error_class",
-                            AnalyticsValue.Str(throwable::class.java.simpleName ?: "Throwable")
-                        )
-                        putAll(extra.toAnalyticsParams())
-                    },
-                ),
-            )
-
-            reportError(action = action, throwable = throwable)
+            reportOperationError(action = action, extra = extra, throwable = throwable)
             block(throwable)
         }
     }
@@ -207,41 +184,58 @@ abstract class LoggedScreenViewModel<T, E : UiEvent, A : ActionEvent>(
                 .onFailure { throwable ->
                     if (throwable is CancellationException) throw throwable
 
-                    breadcrumb(
-                        message = Breadcrumb.Messages.VM_OP_ERROR,
-                        attributes = buildMap(extra.size + 3) {
-                            put(Breadcrumb.Keys.ACTION, action)
-                            put(Breadcrumb.Keys.STEP, "catch")
-                            put(
-                                Breadcrumb.Keys.ERROR,
-                                throwable::class.java.simpleName ?: "Throwable"
-                            )
-                            putAll(extra)
-                        },
-                    )
-
-                    firebaseController.logEvent(
-                        AnalyticsEvent(
-                            name = "vm_op_error",
-                            params = buildMap {
-                                put("screen", AnalyticsValue.Str(screenName))
-                                put("view_model", AnalyticsValue.Str(viewModelName))
-                                put("action", AnalyticsValue.Str(action))
-                                put(
-                                    "error_class",
-                                    AnalyticsValue.Str(
-                                        throwable::class.java.simpleName ?: "Throwable"
-                                    )
-                                )
-                                putAll(extra.toAnalyticsParams())
-                            },
-                        ),
-                    )
-
-                    reportError(action = action, throwable = throwable)
+                    reportOperationError(action = action, extra = extra, throwable = throwable)
                     onError(throwable)
                 }
         }
+    }
+
+    /** Logs the error breadcrumb and the `vm_op_error` event, then reports [throwable]. */
+    private fun reportOperationError(
+        action: String,
+        extra: Map<String, String>,
+        throwable: Throwable,
+    ) {
+        val errorClass: String = throwable::class.java.simpleName
+        breadcrumb(
+            message = Breadcrumb.Messages.VM_OP_ERROR,
+            attributes = buildMap(extra.size + 3) {
+                put(Breadcrumb.Keys.ACTION, action)
+                put(Breadcrumb.Keys.STEP, "catch")
+                put(Breadcrumb.Keys.ERROR, errorClass)
+                putAll(extra)
+            },
+        )
+
+        firebaseController.logEvent(
+            AnalyticsEvent(
+                name = "vm_op_error",
+                params = buildMap {
+                    put("screen", AnalyticsValue.Str(screenName))
+                    put("view_model", AnalyticsValue.Str(viewModelName))
+                    put("action", AnalyticsValue.Str(action))
+                    put("error_class", AnalyticsValue.Str(errorClass))
+                    putAll(extra.toAnalyticsParams())
+                },
+            ),
+        )
+
+        reportError(action = action, throwable = throwable)
+    }
+
+    /**
+     * A name for this event that survives R8.
+     *
+     * A data class or data object's `toString()` starts with its source name, written into the
+     * bytecode as a string literal that R8 does not rename, unlike the class name. Only that prefix
+     * is kept, so a field value (which could be text the user typed) never reaches a breadcrumb.
+     * Any other event falls back to its class name.
+     */
+    private fun UiEvent.breadcrumbName(): String {
+        val name: String = toString().substringBefore('(')
+        val looksLikeSourceName: Boolean =
+            name.isNotEmpty() && name.none { it == '@' || it == '.' || it == '$' }
+        return if (looksLikeSourceName) name else this::class.java.simpleName
     }
 
     private fun Map<String, String>.toAnalyticsParams(): Map<String, AnalyticsValue> {

@@ -91,4 +91,20 @@ class DefaultUsageAndDiagnosticsPreferencesDataSource(
 
     override suspend fun saveAdPersonalizationConsent(isGranted: Boolean) =
         save(key = adPersonalizationConsentKey, value = isGranted)
+
+    override suspend fun saveAll(
+        usageAndDiagnostics: Boolean,
+        analyticsConsent: Boolean,
+        adStorageConsent: Boolean,
+        adUserDataConsent: Boolean,
+        adPersonalizationConsent: Boolean,
+    ) {
+        dataStore.edit { preferences: MutablePreferences ->
+            preferences[usageAndDiagnosticsKey] = usageAndDiagnostics
+            preferences[analyticsConsentKey] = analyticsConsent
+            preferences[adStorageConsentKey] = adStorageConsent
+            preferences[adUserDataConsentKey] = adUserDataConsent
+            preferences[adPersonalizationConsentKey] = adPersonalizationConsent
+        }
+    }
 }

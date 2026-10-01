@@ -141,6 +141,8 @@ fun SupportScreen() {
                 icon = Icons.Outlined.MoneyOff,
                 isError = true,
                 textMessage = R.string.error_failed_to_load_sku_details,
+                showRetry = true,
+                onRetry = { viewModel.onEvent(SupportEvent.QueryProductDetails) },
                 paddingValues = paddingValues
             )
         },

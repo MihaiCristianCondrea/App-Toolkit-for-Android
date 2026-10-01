@@ -75,6 +75,7 @@ class IssueReporterViewModel(
     ),
     firebaseController = firebaseController,
     screenName = "IssueReporter",
+    viewModelName = "IssueReporterViewModel",
 ) {
 
     private var sendJob: Job? = null

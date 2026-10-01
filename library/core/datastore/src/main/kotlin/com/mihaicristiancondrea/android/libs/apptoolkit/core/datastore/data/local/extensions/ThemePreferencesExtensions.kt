@@ -22,7 +22,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.ThemePreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.ThemePreferencesState
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 
 /**
  * Emits the stored theme preferences as one [ThemePreferencesState].
@@ -33,23 +33,17 @@ import kotlinx.coroutines.flow.combine
  * for a moment; anything acting on the first state, such as the theme page scrolling its palette
  * row to the selection, acted on the placeholder. [themeModeDefault] and [staticPaletteIdDefault]
  * replace blank stored values.
+ *
+ * It follows [ThemePreferencesDataSource.storedPreferences], so with the Toolkit's data source a
+ * write that changes several values, such as a palette choice, arrives as one state.
  */
 fun ThemePreferencesDataSource.themePreferencesState(
     themeModeDefault: String = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
     staticPaletteIdDefault: String = StaticPaletteIds.DEFAULT,
-): Flow<ThemePreferencesState> = combine(
-    themeMode,
-    dynamicColors,
-    amoledMode,
-    dynamicPaletteVariant,
-    staticPaletteId,
-) { themeModeValue, dynamicColorsValue, amoledModeValue, dynamicPaletteVariantValue, staticPaletteIdValue ->
-    ThemePreferencesState(
-        themeMode = themeModeValue.ifBlank { themeModeDefault },
-        dynamicColors = dynamicColorsValue,
-        amoledMode = amoledModeValue,
-        dynamicPaletteVariant = dynamicPaletteVariantValue,
-        staticPaletteId = StaticPaletteIds.sanitize(staticPaletteIdValue).ifBlank {
+): Flow<ThemePreferencesState> = storedPreferences.map { stored ->
+    stored.copy(
+        themeMode = stored.themeMode.ifBlank { themeModeDefault },
+        staticPaletteId = StaticPaletteIds.sanitize(stored.staticPaletteId).ifBlank {
             StaticPaletteIds.sanitize(staticPaletteIdDefault)
         },
     )

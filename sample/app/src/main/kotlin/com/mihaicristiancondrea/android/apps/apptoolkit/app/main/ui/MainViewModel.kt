@@ -57,6 +57,7 @@ class MainViewModel(
     initialState = UiStateScreen(data = MainUiState),
     firebaseController = firebaseController,
     screenName = AppScreenTracking.Screens.MAIN.name,
+    viewModelName = "MainViewModel",
 ) {
 
     private var initialConsentJob: Job? = null

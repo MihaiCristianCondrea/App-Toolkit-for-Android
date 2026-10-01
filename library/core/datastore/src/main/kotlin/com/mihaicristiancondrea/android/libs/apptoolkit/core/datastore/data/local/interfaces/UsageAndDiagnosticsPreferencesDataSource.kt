@@ -56,4 +56,26 @@ interface UsageAndDiagnosticsPreferencesDataSource {
 
     /** Persists ad personalization consent. */
     suspend fun saveAdPersonalizationConsent(isGranted: Boolean)
+
+    /**
+     * Persists every value at once, as a whole-bundle answer such as "Allow all" does.
+     *
+     * Separate writes would each reach observers as a mix of old and new choices, and those mixes
+     * would be applied to the consent SDKs. `DefaultUsageAndDiagnosticsPreferencesDataSource` writes
+     * everything in one transaction; this default writes the values one by one so other
+     * implementations keep compiling.
+     */
+    suspend fun saveAll(
+        usageAndDiagnostics: Boolean,
+        analyticsConsent: Boolean,
+        adStorageConsent: Boolean,
+        adUserDataConsent: Boolean,
+        adPersonalizationConsent: Boolean,
+    ) {
+        saveUsageAndDiagnostics(isChecked = usageAndDiagnostics)
+        saveAnalyticsConsent(isGranted = analyticsConsent)
+        saveAdStorageConsent(isGranted = adStorageConsent)
+        saveAdUserDataConsent(isGranted = adUserDataConsent)
+        saveAdPersonalizationConsent(isGranted = adPersonalizationConsent)
+    }
 }

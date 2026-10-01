@@ -49,8 +49,10 @@ fun rememberPaletteImageVector(): ImageVector {
     val grass = colorScheme.surfaceVariant
     val backgroundTrees = colorScheme.surfaceContainerLowest
 
+    // Keyed on every color passed to buildPalette, so a scheme that changes only some of them
+    // still rebuilds the illustration.
     return remember(
-        skin, leafDark, cloth, leafShadow, hair, sun, shoes, branch
+        skin, leafDark, cloth, leafShadow, hair, sun, shoes, branch, grass, legs, backgroundTrees
     ) {
         buildPalette(
             skin = skin,

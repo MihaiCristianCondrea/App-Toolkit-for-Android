@@ -22,7 +22,6 @@ The developer's app catalogue: listing, details, favorites, and install state.
   draws it; it scales out while there is no app to open.
 - Filtering the grid by the tab's search field (`LocalShellSearch`): an app matches by name,
   package or description, after the filter chips.
-- `FavoritesChangedReceiver`, which keeps the widget in step with favorites.
 
 ## Does not own
 
@@ -62,8 +61,6 @@ flowchart TD
     Items --> Screen
     Screen --> Actions[Launch app / store / details / favorite]
     Actions --> VM
-    Receiver[FavoritesChangedReceiver] --> Favorites
-    Receiver --> Widget[Request widget update]
 ```
 
 ## Architectural decisions

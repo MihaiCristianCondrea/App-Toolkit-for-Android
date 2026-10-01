@@ -55,6 +55,7 @@ class UsageAndDiagnosticsViewModel(
     initialState = UiStateScreen(data = UsageAndDiagnosticsUiState()),
     firebaseController = firebaseController,
     screenName = "UsageAndDiagnostics",
+    viewModelName = "UsageAndDiagnosticsViewModel",
 ) {
 
     private var observeConsentsJob: Job? = null
@@ -64,6 +65,7 @@ class UsageAndDiagnosticsViewModel(
     private var setAdStorageConsentJob: Job? = null
     private var setAdUserDataConsentJob: Job? = null
     private var setAdPersonalizationConsentJob: Job? = null
+    private var setConsentBundleJob: Job? = null
 
     init {
         onEvent(event = UsageAndDiagnosticsEvent.Initialize)
@@ -146,6 +148,9 @@ class UsageAndDiagnosticsViewModel(
      * Reporting is turned on with any of them: a person choosing what to share has said they are
      * sharing something, and leaving the master switch off would silently drop every choice they
      * just made.
+     *
+     * The whole bundle is stored in one write, so the consent SDKs are never handed a mix of the
+     * old and new answers, such as ad storage granted while analytics is still denied.
      */
     private fun applyConsentBundle(
         analytics: Boolean,
@@ -153,11 +158,38 @@ class UsageAndDiagnosticsViewModel(
         adUserData: Boolean,
         adPersonalization: Boolean,
     ) {
-        updateUsageAndDiagnostics(enabled = true)
-        updateAnalyticsConsent(granted = analytics)
-        updateAdStorageConsent(granted = adStorage)
-        updateAdUserDataConsent(granted = adUserData)
-        updateAdPersonalizationConsent(granted = adPersonalization)
+        val settings = UsageAndDiagnosticsSettings(
+            usageAndDiagnostics = true,
+            analyticsConsent = analytics,
+            adStorageConsent = adStorage,
+            adUserDataConsent = adUserData,
+            adPersonalizationConsent = adPersonalization,
+        )
+        // A bundle replaces every single choice, so single writes still in flight are dropped.
+        listOf(
+            setUsageAndDiagnosticsJob,
+            setAnalyticsConsentJob,
+            setAdStorageConsentJob,
+            setAdUserDataConsentJob,
+            setAdPersonalizationConsentJob,
+        ).forEach { job -> job?.cancel() }
+        setConsentBundleJob = setConsentBundleJob.restart {
+            launchReport(
+                action = Actions.SET_CONSENT_BUNDLE,
+                extra = mapOf(
+                    ExtraKeys.ANALYTICS to analytics.toString(),
+                    ExtraKeys.AD_PERSONALIZATION to adPersonalization.toString(),
+                ),
+                block = { repository.setAll(settings) },
+                onError = {
+                    updateStateThreadSafe {
+                        handleObservationError(
+                            message = UiTextHelper.StringResource(R.string.error_an_error_occurred)
+                        )
+                    }
+                },
+            )
+        }
     }
 
     private fun updateUsageAndDiagnostics(enabled: Boolean) {
@@ -255,10 +287,13 @@ class UsageAndDiagnosticsViewModel(
         const val SET_AD_STORAGE_CONSENT: String = "setAdStorageConsent"
         const val SET_AD_USER_DATA_CONSENT: String = "setAdUserDataConsent"
         const val SET_AD_PERSONALIZATION_CONSENT: String = "setAdPersonalizationConsent"
+        const val SET_CONSENT_BUNDLE: String = "setConsentBundle"
     }
 
     private object ExtraKeys {
         const val ENABLED: String = "enabled"
         const val GRANTED: String = "granted"
+        const val ANALYTICS: String = "analytics"
+        const val AD_PERSONALIZATION: String = "adPersonalization"
     }
 }

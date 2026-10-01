@@ -133,6 +133,12 @@ class DefaultBillingRepository private constructor(
                     .also { INSTANCE = it }
             }
         }
+
+        private fun clearInstance(closed: DefaultBillingRepository) {
+            synchronized(this) {
+                if (INSTANCE === closed) INSTANCE = null
+            }
+        }
     }
 
     init {
@@ -433,11 +439,10 @@ class DefaultBillingRepository private constructor(
                 scope.launch { _purchaseResult.emit(result) }
             }
         }.onFailure { throwable ->
-            firebaseController.reportViewModelError(
-                viewModelName = "SupportViewModel",
-                action = "launchBillingFlow",
+            firebaseController.recordNonFatal(
                 throwable = throwable,
-                extraKeys = mapOf(
+                attributes = mapOf(
+                    "operation" to "launchBillingFlow",
                     "product_id" to details.productId,
                     "product_type" to productType,
                 ),
@@ -453,6 +458,9 @@ class DefaultBillingRepository private constructor(
     override fun close() {
         scope.cancel()
         billingClient.endConnection()
+        // A closed client cannot reconnect, so the next getInstance must build a new repository
+        // rather than hand back this one.
+        clearInstance(this)
     }
 
     private suspend fun retryBillingConnection(maxAttempts: Int = 3) {
@@ -593,7 +601,7 @@ class DefaultBillingRepository private constructor(
         return PurchaseResult.Failed(message)
     }
 
-    // Helper extension to handle offer tokens (assumed to be available via imports in original file)
+    /** The offer token of the first subscription offer; one-time products need none. */
     private fun ProductDetails.primaryOfferToken(productType: String): String? {
         return when (productType) {
             BillingClient.ProductType.SUBS -> subscriptionOfferDetails?.firstOrNull()?.offerToken

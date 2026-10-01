@@ -39,6 +39,9 @@
 - The app bar can hide as you scroll too, in Display settings, so the whole screen makes room for the content.
 - The ad above the bottom navigation is back, and messages such as a consent form failing to load now appear above the navigation bar instead of not at all.
 - Rolling the dice does less work on each frame of the animation.
+- The apps widget loads its icons at the same time instead of one after another, and reuses the icons the app has already downloaded.
+- Starring an app no longer redraws every app card.
+- Opening the Quick Settings panel no longer saves the quick tools' tile state each time.
 
 ### Removed
 
@@ -62,6 +65,7 @@
 - Removing your last favourite no longer leaves the Apps tab on an empty Favourites filter with no chip to leave it: it goes back to All.
 - The Apps tab shows freshly loaded apps even when saving them for offline use fails.
 - The compass and the level stop using their sensors while the app is in the background, even with the tool open.
+- A declined or failed donation keeps the donation options on the Support page and shows the error in a message, and the page offers Retry when the donations cannot be loaded.
 
 ---
 

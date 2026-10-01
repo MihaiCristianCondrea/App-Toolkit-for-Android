@@ -36,6 +36,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -113,11 +114,15 @@ fun AppsListScreen(
         screenClass = AppScreenTracking.Screens.APPS_LIST.className,
     )
 
+    // Read at tap time rather than captured: keying the lambda on them handed every card a new
+    // lambda, and so recomposed every visible card, on each favorite tap.
+    val currentApps by rememberUpdatedState(screenState.data?.apps)
+    val currentFavorites by rememberUpdatedState(favorites)
     val onFavoriteToggle: (String) -> Unit =
-        remember(viewModel, firebaseController, screenState.data?.apps, favorites) {
+        remember(viewModel, firebaseController) {
             { pkg ->
-                val app = screenState.data?.apps?.firstOrNull { it.packageName == pkg }
-                val wasFavorite = favorites.contains(pkg)
+                val app = currentApps?.firstOrNull { it.packageName == pkg }
+                val wasFavorite = currentFavorites.contains(pkg)
                 if (app != null) {
                     firebaseController.logAppInteraction(
                         source = "apps_list",

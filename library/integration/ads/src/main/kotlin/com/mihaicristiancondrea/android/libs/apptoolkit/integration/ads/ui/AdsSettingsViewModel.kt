@@ -62,6 +62,7 @@ class AdsSettingsViewModel(
     initialState = UiStateScreen(data = AdsSettingsUiState()),
     firebaseController = firebaseController,
     screenName = "AdsSettings",
+    viewModelName = "AdsSettingsViewModel",
 ) {
 
     private var observeJob: Job? = null

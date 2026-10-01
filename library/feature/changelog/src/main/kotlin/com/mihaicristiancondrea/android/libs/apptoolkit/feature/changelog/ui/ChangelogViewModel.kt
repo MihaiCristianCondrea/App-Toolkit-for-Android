@@ -50,6 +50,7 @@ class ChangelogViewModel(
     initialState = UiStateScreen(data = ChangelogUiState()),
     firebaseController = firebaseController,
     screenName = "Changelog",
+    viewModelName = "ChangelogViewModel",
 ) {
     private var loadJob: Job? = null
 

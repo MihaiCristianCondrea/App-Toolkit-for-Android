@@ -78,6 +78,7 @@ class SupportViewModel(
     ),
     firebaseController = firebaseController,
     screenName = "Support",
+    viewModelName = "SupportViewModel",
 ) {
 
     private val donationProductIds = listOf(
@@ -157,12 +158,7 @@ class SupportViewModel(
                 onError = { throwable ->
                     reportDonationResult(outcome = SupportAnalytics.Outcomes.FAILED)
                     updateStateThreadSafe {
-                        setBillingInProgress(inProgress = false)
-                        screenState.setError(
-                            message = UiTextHelper.DynamicString(
-                                throwable.message ?: "Billing launch failed"
-                            )
-                        )
+                        showPurchaseFailure(error = throwable.message ?: "Billing launch failed")
                     }
                 },
             )
@@ -257,9 +253,7 @@ class SupportViewModel(
                         }
 
                         is PurchaseResult.Failed -> updateStateThreadSafe {
-                            setBillingInProgress(inProgress = false)
-                            screenState.copyData { copy(error = result.error) }
-                            screenState.setError(message = UiTextHelper.DynamicString(result.error))
+                            showPurchaseFailure(error = result.error)
                         }
 
                         PurchaseResult.UserCancelled -> updateStateThreadSafe {
@@ -281,8 +275,7 @@ class SupportViewModel(
                 }
                 .catchReport(action = Actions.OBSERVE_PURCHASE_RESULT) { throwable ->
                     updateStateThreadSafe {
-                        setBillingInProgress(inProgress = false)
-                        screenState.setError(message = UiTextHelper.DynamicString(throwable.message.orEmpty()))
+                        showPurchaseFailure(error = throwable.message.orEmpty())
                     }
                 }
                 .launchIn(viewModelScope)
@@ -378,6 +371,28 @@ class SupportViewModel(
 
     private fun clearError() {
         screenState.copyData { copy(error = null) }
+    }
+
+    /**
+     * Shows a purchase that failed or could not start.
+     *
+     * The donation options stay on screen and a snackbar says what went wrong, so the person can
+     * try again or pick another amount. Only when no options were ever loaded, which means the
+     * product query itself failed, does the page switch to its error state, which offers a retry.
+     */
+    private fun showPurchaseFailure(error: String) {
+        setBillingInProgress(inProgress = false)
+        screenState.copyData { copy(error = error) }
+        val hasOptions = screenData?.donationOptions?.isNotEmpty() == true
+        screenState.updateState(if (hasOptions) ScreenState.Success() else ScreenState.Error())
+        screenState.showSnackbar(
+            UiSnackbar(
+                message = UiTextHelper.DynamicString(error),
+                isError = true,
+                timeStamp = System.nanoTime(),
+                type = ScreenMessageType.SNACKBAR,
+            )
+        )
     }
 
     private fun restoreScreenStateFromData() {

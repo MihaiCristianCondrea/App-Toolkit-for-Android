@@ -21,6 +21,7 @@ import android.os.Bundle
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
+import com.google.firebase.crashlytics.CustomKeysAndValues
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.perf.FirebasePerformance
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
@@ -143,15 +144,14 @@ class DefaultFirebaseController(
         extraKeys: Map<String, String>,
     ) {
         val crashlytics = crashlyticsProvider()
-        crashlytics.setCustomKey("view_model", viewModelName)
-        crashlytics.setCustomKey("action", action)
-        crashlytics.setCustomKey("exception_type", throwable::class.java.name)
-        crashlytics.setCustomKey("exception_message", throwable.message ?: "unknown")
-        extraKeys.forEach { (key, value) ->
-            crashlytics.setCustomKey(key, value)
-        }
         crashlytics.log("ViewModel catch in $viewModelName during $action")
-        crashlytics.recordException(throwable)
+        crashlytics.recordException(
+            throwable,
+            reportKeys(
+                throwable = throwable,
+                keys = mapOf("view_model" to viewModelName, "action" to action) + extraKeys,
+            ),
+        )
     }
 
     /**
@@ -161,14 +161,22 @@ class DefaultFirebaseController(
      * @param attributes Additional key-value pairs to be attached as custom metadata in Crashlytics.
      */
     override fun recordNonFatal(throwable: Throwable, attributes: Map<String, String>) {
-        val crashlytics = crashlyticsProvider()
-        crashlytics.setCustomKey("exception_type", throwable::class.java.name)
-        crashlytics.setCustomKey("exception_message", throwable.message ?: "unknown")
-        attributes.forEach { (key, value) ->
-            crashlytics.setCustomKey(key, value)
-        }
-        crashlytics.recordException(throwable)
+        crashlyticsProvider().recordException(
+            throwable,
+            reportKeys(throwable = throwable, keys = attributes),
+        )
     }
+
+    /**
+     * Keys for one report only. `setCustomKey` would keep them on every later report too, so a
+     * crash would carry the `product_id` or `action` of an unrelated earlier failure.
+     */
+    private fun reportKeys(throwable: Throwable, keys: Map<String, String>): CustomKeysAndValues =
+        CustomKeysAndValues.Builder()
+            .putString("exception_type", throwable::class.java.name)
+            .putString("exception_message", throwable.message ?: "unknown")
+            .apply { keys.forEach { (key, value) -> putString(key, value) } }
+            .build()
 
     override fun logEvent(event: AnalyticsEvent) {
         val name = event.name

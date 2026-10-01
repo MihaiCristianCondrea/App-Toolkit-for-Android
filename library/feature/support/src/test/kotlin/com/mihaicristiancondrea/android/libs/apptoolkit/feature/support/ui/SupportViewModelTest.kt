@@ -153,9 +153,7 @@ class SupportViewModelTest {
             assertThat(viewModel.uiState.value.screenState)
                 .isInstanceOf(ScreenState.Error::class.java)
 
-            viewModel.onEvent(
-                SupportEvent.QueryProductDetails(billingClient = mockk(relaxed = true))
-            )
+            viewModel.onEvent(SupportEvent.QueryProductDetails)
 
             assertThat(viewModel.uiState.value.screenState)
                 .isInstanceOf(ScreenState.IsLoading::class.java)
@@ -208,6 +206,34 @@ class SupportViewModelTest {
                 assertThat(snackbar.isError).isTrue()
                 val msg = snackbar.message as UiTextHelper.DynamicString
                 assertThat(msg.content).isEqualTo(error)
+
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
+
+    @Test
+    fun `failed purchase keeps the loaded donation options and shows a snackbar`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = createViewModel(
+                mapOf(
+                    DonationProductIds.LOW_DONATION to
+                        mockProductDetails(DonationProductIds.LOW_DONATION),
+                )
+            )
+
+            viewModel.uiState.test {
+                var state = awaitItem()
+                while (state.screenState !is ScreenState.Success) {
+                    state = awaitItem()
+                }
+                purchaseResultFlow.emit(PurchaseResult.Failed("Card declined"))
+                while (state.snackbar == null) {
+                    state = awaitItem()
+                }
+
+                assertThat(state.screenState).isInstanceOf(ScreenState.Success::class.java)
+                assertThat(requireNotNull(state.data).donationOptions).isNotEmpty()
+                assertThat(checkNotNull(state.snackbar).isError).isTrue()
 
                 cancelAndIgnoreRemainingEvents()
             }

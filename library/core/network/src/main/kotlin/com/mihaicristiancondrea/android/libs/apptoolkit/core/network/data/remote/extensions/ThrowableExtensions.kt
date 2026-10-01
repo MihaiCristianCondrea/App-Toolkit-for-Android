@@ -21,7 +21,6 @@ import android.database.sqlite.SQLiteCantOpenDatabaseException
 import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteDatabaseCorruptException
 import android.database.sqlite.SQLiteDatabaseLockedException
-import android.database.sqlite.SQLiteDiskIOException
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteFullException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
@@ -77,7 +76,6 @@ fun Throwable.toError(default: Errors = Errors.Network.UNKNOWN): Errors {
         is SQLiteCantOpenDatabaseException -> Errors.Database.DATABASE_CANT_OPEN
         is SQLiteDatabaseCorruptException -> Errors.Database.DATABASE_CORRUPT
         is SQLiteFullException -> Errors.Database.DATABASE_FULL
-        is SQLiteDiskIOException,
         is SQLiteException -> Errors.Database.DATABASE_OPERATION_FAILED
 
         is SQLException -> Errors.Database.DATABASE_OPERATION_FAILED
@@ -90,7 +88,8 @@ fun Throwable.toError(default: Errors = Errors.Network.UNKNOWN): Errors {
 
         is IllegalArgumentException -> Errors.UseCase.ILLEGAL_ARGUMENT
         is UnsupportedOperationException -> Errors.UseCase.UNSUPPORTED_OPERATION
-        is IllegalStateException -> Errors.UseCase.NO_DATA
+        // A failed check() or error(): something went wrong, not "there is nothing to show".
+        is IllegalStateException -> Errors.UseCase.INVALID_STATE
 
         else -> default
     }

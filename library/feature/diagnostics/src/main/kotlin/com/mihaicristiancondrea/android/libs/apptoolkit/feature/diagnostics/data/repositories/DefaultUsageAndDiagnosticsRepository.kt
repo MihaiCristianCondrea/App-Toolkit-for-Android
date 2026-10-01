@@ -114,6 +114,27 @@ class DefaultUsageAndDiagnosticsRepository(
             )
             dataSource.saveAdPersonalizationConsent(isGranted = granted)
         }
+
+    override suspend fun setAll(settings: UsageAndDiagnosticsSettings) =
+        withContext(dispatchers.io) {
+            firebaseController.logBreadcrumb(
+                message = "Usage diagnostics bundle updated",
+                attributes = mapOf(
+                    "usageAndDiagnostics" to settings.usageAndDiagnostics.toString(),
+                    "analyticsConsent" to settings.analyticsConsent.toString(),
+                    "adStorageConsent" to settings.adStorageConsent.toString(),
+                    "adUserDataConsent" to settings.adUserDataConsent.toString(),
+                    "adPersonalizationConsent" to settings.adPersonalizationConsent.toString(),
+                ),
+            )
+            dataSource.saveAll(
+                usageAndDiagnostics = settings.usageAndDiagnostics,
+                analyticsConsent = settings.analyticsConsent,
+                adStorageConsent = settings.adStorageConsent,
+                adUserDataConsent = settings.adUserDataConsent,
+                adPersonalizationConsent = settings.adPersonalizationConsent,
+            )
+        }
 }
 
 

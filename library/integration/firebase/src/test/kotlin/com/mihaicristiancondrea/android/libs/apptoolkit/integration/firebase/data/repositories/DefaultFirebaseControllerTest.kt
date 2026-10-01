@@ -19,6 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.da
 
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.crashlytics.CustomKeysAndValues
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.perf.FirebasePerformance
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
@@ -195,10 +196,10 @@ class DefaultFirebaseControllerTest {
             extraKeys = mapOf("retry_count" to "3"),
         )
 
-        verify { crashlytics.setCustomKey("view_model", "MainViewModel") }
-        verify { crashlytics.setCustomKey("action", "fetchData") }
-        verify { crashlytics.setCustomKey("retry_count", "3") }
-        verify { crashlytics.recordException(exception) }
+        verify { crashlytics.log("ViewModel catch in MainViewModel during fetchData") }
+        verify { crashlytics.recordException(exception, any<CustomKeysAndValues>()) }
+        // The keys belong to this report only; persistent keys would follow every later crash.
+        verify(exactly = 0) { crashlytics.setCustomKey(any<String>(), any<String>()) }
     }
 
     @Test
@@ -210,7 +211,7 @@ class DefaultFirebaseControllerTest {
             attributes = mapOf("feature" to "billing"),
         )
 
-        verify { crashlytics.setCustomKey("feature", "billing") }
-        verify { crashlytics.recordException(exception) }
+        verify { crashlytics.recordException(exception, any<CustomKeysAndValues>()) }
+        verify(exactly = 0) { crashlytics.setCustomKey(any<String>(), any<String>()) }
     }
 }

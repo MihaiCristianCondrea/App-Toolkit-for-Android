@@ -17,11 +17,12 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.contracts
 
-import com.android.billingclient.api.BillingClient
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 
 sealed interface SupportEvent : UiEvent {
     data object SetUpBilling : SupportEvent
-    data class QueryProductDetails(val billingClient: BillingClient) : SupportEvent
+
+    /** Queries the donation products again, as the error screen's Retry does. */
+    data object QueryProductDetails : SupportEvent
     data object DismissSnackbar : SupportEvent
 }

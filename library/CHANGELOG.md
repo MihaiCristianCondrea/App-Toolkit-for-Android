@@ -41,6 +41,9 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Added `ShellHost(snackbarHostState)`: an app shows its own messages, such as its activity's view model's, in the tabs' scaffold with every other snackbar, above the bottom bar, its buttons and the player, on any window size.
 - Added `besideNavigationTitle()` and `LocalBesideNavigationTransitions` to `:library:navigation`, and `titleModifier` to `ShellTopAppBar`: beside a rail or drawer, the title of the tab's bar and of the page standing in for it grow or shrink into one another as one replaces the other in place.
 - Added `ThemePreferencesDataSource.savePalette(dynamicColors, dynamicPaletteVariant, staticPaletteId)`, which stores a palette choice in one write. It has a default implementation, so other implementations of the interface keep compiling.
+- Added `ThemePreferencesDataSource.storedPreferences`, every theme value read from one snapshot of storage, which `themePreferencesState()` now follows.
+- Added `UsageAndDiagnosticsPreferencesDataSource.saveAll(...)` and `UsageAndDiagnosticsRepository.setAll(settings)`, which store a whole consent answer in one write. Both have default implementations.
+- Added a `viewModelName` parameter to `LoggedScreenViewModel`, defaulting to `screenName`, which sets the name its breadcrumbs and `vm_op_*` events report.
 
 ### Changed
 
@@ -64,6 +67,11 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - A page beside a rail or a permanent drawer keeps square start corners (`rememberDeviceCornerShape(squareStart = true)`), so its app bar is no longer rounded next to the rail on phones with rounded screens, in landscape.
 - `PageSurface`, `PageScaffold`, the list-detail scene and the shell's tab scaffold now provide `LocalContentColor` for the colour they draw on, so text and icons outside a Material `Surface` follow the theme instead of defaulting to black in the dark theme.
 - `DisplaySettingsViewModel`, `ThemeSettingsViewModel` and `OnboardingThemeViewModel` take a `FirebaseController` and report a failed preference write as a non-fatal instead of dropping it. Their Koin modules pass it already; code that builds them directly must pass one.
+- `LoggedScreenViewModel` no longer reads names from classes, which R8 renames in release builds. The `view_model` breadcrumb key and GA4 parameter use `viewModelName`, which every Toolkit ViewModel sets to its class name, so the reported values stay the same. The event breadcrumb uses the event's source name.
+- `DefaultFirebaseController.reportViewModelError` and `recordNonFatal` attach their keys to that one report instead of setting them with `setCustomKey`, so a later, unrelated crash no longer carries them.
+- `SupportEvent.QueryProductDetails` is a `data object` without the unused `BillingClient` parameter.
+- `Throwable.toError()` maps `IllegalStateException` to `Errors.UseCase.INVALID_STATE` instead of `NO_DATA`.
+- `KtorClient.createClient` builds a new client on every call instead of caching the first, whose logging setting later calls ignored. Debug logging prints headers with `Authorization` masked, and no longer prints bodies.
 
 ### Improved
 
@@ -79,7 +87,7 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Improved snowfall and rainfall, which now share one frame node (`ParticleEffectNode`): the frame loop is cancelled on detach and requests no frames while there is nothing to move, and the rain's gusts and showers stay smooth however long it falls.
 - The shell's player no longer recomposes itself or the app's player content on each frame while it is dragged, expands or collapses: its size, corners and shadow follow the drag in layout and drawing.
 - Changing the bouncy buttons, bottom bar labels or ads setting now recomposes only the parts that read it (`LocalBouncyAnimationsEnabled`, `LocalShowBottomBarLabels`, `LocalAdsEnabled`), instead of everything under `AppTheme`.
-- Choosing a palette, and the holiday theme applying or restoring itself, now store dynamic colors and the palette in one write, so a process death in between can no longer keep only half the choice.
+- Choosing a palette, and the holiday theme applying or restoring itself, now store dynamic colors and the palette in one write, so a process death in between can no longer keep only half the choice. `AppTheme` also receives that write as one state, so the app no longer flashes the wrong palette in between.
 
 ### Removed
 
@@ -113,6 +121,14 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Fixed the issue reporter sheet staying in its sending state when sending threw: it returns to the form and shows the failure.
 - Fixed toggling one ads setting cancelling the other's save while both were in flight.
 - Fixed the seasonal theme overlay silently swallowing failures, including cancellation, while restoring the everyday theme or answering the holiday greeting: failures are now reported as non-fatals.
+- Fixed a failed or declined purchase on the support page replacing the whole page with "failed to load SKU details": the donation options stay and a snackbar shows the error. When the products themselves cannot be loaded, the error page now has a Retry button.
+- Fixed billing launch failures being reported to Crashlytics as `SupportViewModel` errors.
+- Fixed a cancelled in-app update request still opening the update screen when Play answered afterwards.
+- Fixed a consent request from a new screen, such as after a rotation, joining a request whose screen had been destroyed and whose form would show on that dead window. It now waits briefly for that request to end, then starts its own.
+- Fixed "Allow all" and "Allow essential" in the diagnostics settings handing the consent SDKs several mixed states while saving: the whole answer is stored in one write.
+- Fixed the review flow asking Play twice per review: the request made to check availability is reused to launch the review. Review failures are logged instead of dropped, and cancellation is no longer swallowed.
+- Fixed `DefaultBillingRepository.getInstance` returning a closed repository after `close()`.
+- Fixed the settings illustration (`rememberPaletteImageVector`) keeping stale grass, leg and background tree colors when only those theme colors changed.
 
 ---
 

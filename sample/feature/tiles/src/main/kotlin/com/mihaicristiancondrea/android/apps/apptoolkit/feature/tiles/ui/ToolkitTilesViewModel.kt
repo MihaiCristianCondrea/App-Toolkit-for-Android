@@ -57,6 +57,7 @@ class ToolkitTilesViewModel(
     initialState = UiStateScreen(data = ToolkitTilesUiState()),
     firebaseController = firebaseController,
     screenName = AppScreenTracking.Screens.TOOLKIT_TILES.name,
+    viewModelName = "ToolkitTilesViewModel",
 ) {
     private var loadJob: Job? = null
     private var hasLoggedCatalogueView: Boolean = false

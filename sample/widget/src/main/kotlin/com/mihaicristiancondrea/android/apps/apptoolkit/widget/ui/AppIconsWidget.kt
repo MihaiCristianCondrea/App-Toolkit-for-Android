@@ -20,7 +20,6 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.widget.ui
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -29,7 +28,6 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.createBitmap
-import androidx.core.graphics.scale
 import androidx.core.net.toUri
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
@@ -59,6 +57,11 @@ import androidx.glance.layout.size
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
+import coil3.SingletonImageLoader
+import coil3.request.ImageRequest
+import coil3.request.SuccessResult
+import coil3.request.allowHardware
+import coil3.toBitmap
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories.DeveloperAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.widget.R
@@ -67,10 +70,12 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import org.koin.core.context.GlobalContext
-import java.net.URL
 
 /**
  * A highly expressive, resizable 3x3 grid widget that focuses on fast app launching.
@@ -118,39 +123,49 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
             }
         }
 
-    private fun createEntries(
+    /** Builds the visible entries, resolving their icons in parallel. */
+    private suspend fun createEntries(
         context: Context,
         apps: List<AppInfo>
-    ): ImmutableList<WidgetAppEntry> =
+    ): ImmutableList<WidgetAppEntry> = coroutineScope {
         apps.take(MAX_GRID_ITEMS).map { app ->
-            val launchIntent = context.packageManager.getLaunchIntentForPackage(app.packageName)
-            WidgetAppEntry(
-                app = app,
-                icon = resolveAppIcon(context, app),
-                destination = launchIntent ?: Intent(
-                    Intent.ACTION_VIEW,
-                    "https://play.google.com/store/apps/details?id=${Uri.encode(app.packageName)}".toUri(),
-                ),
-            )
-        }.toImmutableList()
+            async {
+                val launchIntent = context.packageManager.getLaunchIntentForPackage(app.packageName)
+                WidgetAppEntry(
+                    app = app,
+                    icon = resolveAppIcon(context, app),
+                    destination = launchIntent ?: Intent(
+                        Intent.ACTION_VIEW,
+                        "https://play.google.com/store/apps/details?id=${Uri.encode(app.packageName)}".toUri(),
+                    ),
+                )
+            }
+        }.awaitAll().toImmutableList()
+    }
 
-    private fun resolveAppIcon(context: Context, app: AppInfo): Bitmap {
+    /**
+     * The installed app's own icon, else its catalogue icon, else this app's icon.
+     *
+     * Catalogue icons go through the app's Coil [ImageLoader][coil3.ImageLoader], the same one the
+     * Apps tab uses, so an icon the app has shown comes from its disk cache instead of the network.
+     * The bitmap is a software one at the size the widget draws, as `RemoteViews` needs.
+     */
+    private suspend fun resolveAppIcon(context: Context, app: AppInfo): Bitmap {
         val installedIcon = runCatching {
             context.packageManager.getApplicationIcon(app.packageName)
         }.getOrNull()
         if (installedIcon != null) return installedIcon.toBitmap(DEFAULT_ICON_BITMAP_SIZE_PX)
 
-        val remoteIcon = runCatching {
-            URL(app.iconUrl).openConnection().run {
-                connectTimeout = ICON_REQUEST_TIMEOUT_MILLIS
-                readTimeout = ICON_REQUEST_TIMEOUT_MILLIS
-                getInputStream().use(BitmapFactory::decodeStream)
-            }
-        }.getOrNull()
-        if (remoteIcon != null) {
-            return remoteIcon.scale(DEFAULT_ICON_BITMAP_SIZE_PX, DEFAULT_ICON_BITMAP_SIZE_PX)
-                .also { scaled -> if (scaled !== remoteIcon) remoteIcon.recycle() }
-        }
+        val request = ImageRequest.Builder(context)
+            .data(app.iconUrl)
+            .size(DEFAULT_ICON_BITMAP_SIZE_PX)
+            .allowHardware(false)
+            .build()
+        val remoteIcon = (SingletonImageLoader.get(context).execute(request) as? SuccessResult)
+            ?.image
+            ?.toBitmap(DEFAULT_ICON_BITMAP_SIZE_PX, DEFAULT_ICON_BITMAP_SIZE_PX)
+        if (remoteIcon != null) return remoteIcon
+
         return context.packageManager.getApplicationIcon(context.packageName)
             .toBitmap(DEFAULT_ICON_BITMAP_SIZE_PX)
     }
@@ -160,7 +175,6 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
         const val GRID_ROWS: Int = 3
         private const val MAX_GRID_ITEMS: Int = GRID_COLUMNS * GRID_ROWS
         private const val DEFAULT_ICON_BITMAP_SIZE_PX: Int = 72
-        private const val ICON_REQUEST_TIMEOUT_MILLIS: Int = 5_000
 
         val SMALL_SIZE: DpSize = DpSize(width = 120.dp, height = 120.dp)
         val MEDIUM_SIZE: DpSize = DpSize(width = 180.dp, height = 180.dp)
