@@ -55,6 +55,7 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellPlayer
@@ -80,7 +81,7 @@ internal val MiniPlayerReserve: Dp = MiniPlayerHeight + 16.dp
 internal fun ShellPlayerOverlay(
     player: ShellPlayer,
     active: Boolean,
-    expansion: Animatable<Float, AnimationVector1D>,
+    expansion: Animatable<Float, AnimationVector1D>, // FIXME: Parameter 'expansion' has runtime-determined stability
     dockBottom: () -> Dp,
     dockStart: Dp,
 ) {

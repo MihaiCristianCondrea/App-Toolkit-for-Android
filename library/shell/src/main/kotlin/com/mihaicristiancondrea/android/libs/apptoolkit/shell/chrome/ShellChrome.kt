@@ -166,7 +166,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.shell.R
 @Immutable
 class ShellChromeController(
     val showsMenuButton: Boolean,
-    val openNavigation: () -> Unit,
+    val openNavigation: () -> Unit, // FIXME: Property "openNavigation" is never used
 )
 
 /**
@@ -252,7 +252,7 @@ internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
     val openNavigation: () -> Unit = remember(wide, frame, layout.mode, drawerState, scope) {
         {
             when {
-                wide -> frame?.openNavigation(layout.mode)
+                wide -> frame?.openNavigation(layout.mode) // FIXME: Unnecessary safe call on a non-null receiver of type 'ShellFrameState'.
                 layout.mode == ShellLayoutMode.BottomBar || layout.mode == ShellLayoutMode.Auto -> scope.launch { drawerState.open() }
             }
         }
@@ -398,8 +398,8 @@ internal val DrawerContentInsets: WindowInsets
 private fun ShellBody(
     graph: ShellGraph,
     navigator: ShellNavigator,
-    searches: List<ShellSearch>,
-    fabHosts: MutableMap<String, FabHost>,
+    searches: List<ShellSearch>, // FIXME: Unstable parameter 'fabHosts' prevents composable from being skippable
+    fabHosts: MutableMap<String, FabHost>, // FIXME: Parameter 'searches' has runtime-determined stability
     callbacks: NavigationCallbacks,
     navigationNamesApp: Boolean,
     showMenuButton: Boolean,
@@ -623,8 +623,8 @@ private fun ShellBody(
 private fun TabsNavDisplay(
     graph: ShellGraph,
     navigator: ShellNavigator,
-    searches: List<ShellSearch>,
-    fabHosts: MutableMap<String, FabHost>,
+    searches: List<ShellSearch>, // FIXME: Parameter 'searches' has runtime-determined stability
+    fabHosts: MutableMap<String, FabHost>, // FIXME: Unstable parameter 'fabHosts' prevents composable from being skippable
 ) {
     val motion = LocalShellMotion.current
     val layout = LocalShellLayout.current
