@@ -19,18 +19,32 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings
 
 import android.content.Context
 import androidx.datastore.core.DataStore
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import java.io.IOException
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-private val Context.shellDataStore: DataStore<Preferences> by preferencesDataStore(name = "shell_settings")
+/**
+ * The shell's settings file.
+ *
+ * `ShellHost` collects it at the root of the app, so a read that throws would crash every launch.
+ * A file that can no longer be parsed is replaced with empty preferences, which puts every shell
+ * setting back to its default.
+ */
+private val Context.shellDataStore: DataStore<Preferences> by preferencesDataStore(
+    name = "shell_settings",
+    corruptionHandler = ReplaceFileCorruptionHandler { emptyPreferences() },
+)
 
 /**
  * [ShellPreferences] in a DataStore of the shell's own, `shell_settings`.
@@ -44,7 +58,12 @@ internal class DataStoreShellPreferences(context: Context) : ShellPreferences {
 
     private val dataStore = context.applicationContext.shellDataStore
 
-    override val settings: Flow<ShellSettings> = dataStore.data.map { it.read() }.onEach { lastRead = it }
+    // An unreadable file (as opposed to a corrupt one, which the corruption handler replaces) falls
+    // back to the defaults for this collection instead of crashing the root composable.
+    override val settings: Flow<ShellSettings> = dataStore.data
+        .catch { throwable -> if (throwable is IOException) emit(emptyPreferences()) else throw throwable }
+        .map { it.read() }
+        .onEach { lastRead = it }
 
     override val lastKnown: ShellSettings? get() = lastRead
 

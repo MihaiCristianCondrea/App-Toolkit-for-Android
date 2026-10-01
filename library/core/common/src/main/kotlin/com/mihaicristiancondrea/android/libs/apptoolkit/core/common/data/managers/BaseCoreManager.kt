@@ -58,7 +58,12 @@ open class BaseCoreManager : MultiDexApplication(), Application.ActivityLifecycl
     private val firebaseController: FirebaseController by inject()
     protected val dataStore: CommonDataStoreCore by inject()
     protected open val dispatchers: DispatcherProvider = StandardDispatchers()
-    private val applicationScope = CoroutineScope(SupervisorJob() + dispatchers.io)
+
+    // Lazy because [dispatchers] is open: read while this base constructor runs, a subclass
+    // override would still be null, as its initializer has not run yet.
+    private val applicationScope: CoroutineScope by lazy {
+        CoroutineScope(SupervisorJob() + dispatchers.io)
+    }
 
     /**
      * Whether [ConsentSdkCrashGuard] is installed for this app.
@@ -71,7 +76,12 @@ open class BaseCoreManager : MultiDexApplication(), Application.ActivityLifecycl
     protected open val installsConsentSdkCrashGuard: Boolean = true
 
     companion object {
-        /** Flag indicating whether the application finished its startup work. */
+        /**
+         * Flag indicating whether the application finished its startup work.
+         *
+         * Written from a background coroutine and read from the main thread, hence volatile.
+         */
+        @Volatile
         var isAppLoaded: Boolean = false
             private set
     }

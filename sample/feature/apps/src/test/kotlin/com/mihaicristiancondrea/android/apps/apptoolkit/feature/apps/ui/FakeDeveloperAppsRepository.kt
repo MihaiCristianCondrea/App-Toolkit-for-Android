@@ -27,16 +27,23 @@ import kotlinx.coroutines.flow.flow
 
 /**
  * Fake implementation of [DeveloperAppsRepository] that returns a predefined list.
- * It can optionally emit an error when [fetchDeveloperApps] is called.
+ * It can optionally emit an error when [fetchDeveloperApps] is called, carrying [cachedApps] as the
+ * saved catalogue, or throw [firstFetchThrowable] from the first fetch only.
  */
 class FakeDeveloperAppsRepository(
     private val apps: List<AppSummary>,
     private val fetchError: AppErrors? = null,
     private val detailsError: AppErrors? = null,
+    private val cachedApps: List<AppSummary>? = null,
+    private var firstFetchThrowable: Throwable? = null,
 ) : DeveloperAppsRepository {
     override fun fetchDeveloperApps(): Flow<DataState<List<AppSummary>, AppErrors>> = flow {
+        firstFetchThrowable?.let { throwable ->
+            firstFetchThrowable = null
+            throw throwable
+        }
         fetchError?.let {
-            emit(DataState.Error(error = it))
+            emit(DataState.Error(data = cachedApps, error = it))
             return@flow
         }
         emit(DataState.Success(apps))

@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppErrors
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories.DeveloperAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories.FavoritesRepository
@@ -33,19 +34,23 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.an
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.analytics.logAppInteraction
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logSelectContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItemList
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onFailure
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onSuccess
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiSnackbar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.dismissSnackbar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setError
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoading
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setNoData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.showSnackbar
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -130,6 +135,7 @@ class AppsListViewModel(
             is HomeEvent.AppSelected -> selectApp(event.packageName)
             HomeEvent.RetryAppDetails -> screenData?.selectedApp?.packageName?.let(::loadSelectedAppDetails)
             HomeEvent.AppDetailsDismissed -> clearSelectedAppInstallInfo()
+            HomeEvent.DismissSnackbar -> screenState.dismissSnackbar()
 
             HomeEvent.OpenRandomApp -> {
                 val randomApp = screenData?.apps?.randomOrNull() ?: return
@@ -146,6 +152,12 @@ class AppsListViewModel(
         }
     }
 
+    /**
+     * Loads the catalogue each time [fetchAppsTrigger] fires.
+     *
+     * A failure is handled inside each fetch rather than on the trigger: a `catch` on the outer
+     * flow would complete it, and every later Retry would then do nothing.
+     */
     private fun observeFetch() {
         startOperation(action = Actions.OBSERVE_FETCH)
         fetchJob = fetchJob.restart {
@@ -163,46 +175,66 @@ class AppsListViewModel(
                                 screenState.setLoading()
                             }
                         }
-                }
-                .catchReport(action = Actions.OBSERVE_FETCH) {
-                    updateStateThreadSafe {
-                        showLoadAppsError()
-                    }
-                }
-                .onEach { result ->
-                    result
-                        .onSuccess { apps ->
-                            val list = apps.toImmutableList()
-                            val installedPackages = withContext(dispatchers.io) {
-                                installedAppsRepository.getInstalledPackages(
-                                    packageNames = list.map { app -> app.packageName },
-                                ).toImmutableSet()
-                            }
-                            updateStateThreadSafe {
-                                val base = screenData ?: AppListUiState()
-                                val updated = base.copy(
-                                    apps = list,
-                                    installedPackages = installedPackages,
-                                )
-
-                                if (list.isEmpty()) {
-                                    screenState.setNoData(data = updated)
-                                } else {
-                                    firebaseController.logViewItemList(
-                                        itemListId = "all",
-                                        itemListName = "developer_apps_all",
-                                    )
-                                    screenState.setSuccess(data = updated)
+                        .onEach { result ->
+                            when (result) {
+                                is DataState.Success -> showApps(result.data)
+                                is DataState.Error -> {
+                                    val cachedApps = result.data
+                                    if (cachedApps.isNullOrEmpty()) {
+                                        updateStateThreadSafe { showLoadAppsError(result.error) }
+                                    } else {
+                                        // The catalogue saved by the last successful fetch is
+                                        // still worth showing; the snackbar says why it may be old.
+                                        showApps(cachedApps)
+                                        updateStateThreadSafe {
+                                            screenState.showSnackbar(
+                                                UiSnackbar(
+                                                    type = ScreenMessageType.SNACKBAR,
+                                                    message = result.error.toErrorMessage(),
+                                                    isError = true,
+                                                    timeStamp = System.nanoTime(),
+                                                ),
+                                            )
+                                        }
+                                    }
                                 }
+
+                                is DataState.Loading -> Unit
                             }
                         }
-                        .onFailure { error ->
+                        .catchReport(action = Actions.OBSERVE_FETCH) {
                             updateStateThreadSafe {
-                                showLoadAppsError(error)
+                                showLoadAppsError()
                             }
                         }
                 }
                 .launchIn(viewModelScope)
+        }
+    }
+
+    private suspend fun showApps(apps: List<AppInfo>) {
+        val list = apps.toImmutableList()
+        val installedPackages = withContext(dispatchers.io) {
+            installedAppsRepository.getInstalledPackages(
+                packageNames = list.map { app -> app.packageName },
+            ).toImmutableSet()
+        }
+        updateStateThreadSafe {
+            val base = screenData ?: AppListUiState()
+            val updated = base.copy(
+                apps = list,
+                installedPackages = installedPackages,
+            )
+
+            if (list.isEmpty()) {
+                screenState.setNoData(data = updated)
+            } else {
+                firebaseController.logViewItemList(
+                    itemListId = "all",
+                    itemListName = "developer_apps_all",
+                )
+                screenState.setSuccess(data = updated)
+            }
         }
     }
 

@@ -23,6 +23,9 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.utils
  * Exact heading matching avoids selecting a version mentioned in release notes or accidentally
  * matching `1.2.3` inside `11.2.30`. Common headings such as `# 1.2.3`,
  * `## Version 1.2.3`, and `## [1.2.3] - 2026-08-02` are supported.
+ *
+ * The section ends at the next heading of the same or a higher level, so sub-headings such as
+ * Keep a Changelog's `### Added` stay inside it.
  */
 fun String.extractChangesForVersion(version: String): String {
     if (isBlank() || version.isBlank()) return ""
@@ -30,19 +33,22 @@ fun String.extractChangesForVersion(version: String): String {
         pattern = """^#{1,6}\s*\[?(?:Version\s+|v)?${Regex.escape(version.trim())}]?(?:\s*[-:].*)?\s*$""",
         option = RegexOption.IGNORE_CASE,
     )
-    val versionLinesIterator = lineSequence()
-        .dropWhile { currentLine -> !versionHeading.matches(currentLine.trim()) }
-        .iterator()
-    if (!versionLinesIterator.hasNext()) return ""
-    val versionHeaderLine = versionLinesIterator.next()
-    val changelogSectionLines =
-        sequenceOf(versionHeaderLine) + generateSequence { if (versionLinesIterator.hasNext()) versionLinesIterator.next() else null }.takeWhile { currentLine ->
-            !currentLine.trimStart().startsWith("#")
-        }
-    return buildString {
-        changelogSectionLines.forEach { appendLine(it) }
-    }.trim()
+    val lines: List<String> = lines()
+    val start: Int = lines.indexOfFirst { line -> versionHeading.matches(line.trim()) }
+    if (start < 0) return ""
+    val versionLevel: Int = lines[start].trim().takeWhile { it == '#' }.length
+    val end: Int = (start + 1 until lines.size).firstOrNull { index ->
+        val level: Int? = lines[index].headingLevel()
+        level != null && level <= versionLevel
+    } ?: lines.size
+    return lines.subList(start, end).joinToString(separator = "\n").trim()
 }
+
+private val markdownHeading = Regex("""^(#{1,6})(?:\s|$)""")
+
+/** The ATX heading level of this line, or null when it is not a heading. */
+private fun String.headingLevel(): Int? =
+    markdownHeading.find(trimStart())?.groupValues?.get(1)?.length
 
 /**
  * Splits Markdown at its thematic breaks (`---`, `***` or `___` on a line of their own), so each

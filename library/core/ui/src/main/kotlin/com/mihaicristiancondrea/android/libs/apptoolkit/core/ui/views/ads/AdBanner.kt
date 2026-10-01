@@ -27,8 +27,10 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -54,8 +56,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsCo
  * visibility is animated, expanding when an ad is loaded and shrinking when it's hidden or fails
  * to load.
  *
- * The ad view's lifecycle (resume, pause, destroy) is automatically managed in sync with the
- * Composable's lifecycle.
+ * The `AdView` is created with the composition's context, which is normally the Activity. It is
+ * destroyed when it is replaced (the ad unit, size or SDK readiness changed) and when the banner
+ * leaves composition, so neither the view nor that Activity outlives the screen.
  *
  * @param modifier The [Modifier] to be applied to the ad container. The height is determined
  * by the `adsConfig.adSize`, but the width will fill the maximum available space.
@@ -88,6 +91,15 @@ fun AdBanner(
             runCatching { AdView(context) }
                 .onFailure { throwable -> Log.w(LOG_TAG, "Could not create an AdView.", throwable) }
                 .getOrNull()
+        }
+    }
+
+    DisposableEffect(adView) {
+        onDispose {
+            adView?.let { view ->
+                runCatching { view.destroy() }
+                    .onFailure { throwable -> Log.w(LOG_TAG, "Could not destroy an AdView.", throwable) }
+            }
         }
     }
 
@@ -130,12 +142,16 @@ fun AdBanner(
         enter = expandVertically(),
         exit = shrinkVertically()
     ) {
-        AndroidView(
-            modifier = modifier
-                .fillMaxWidth()
-                .height(adsConfig.adSize.height.dp),
-            factory = { requireNotNull(adView) }
-        )
+        // The factory runs once per AndroidView, so a replaced AdView needs a new AndroidView
+        // instead of keeping the destroyed one attached.
+        key(adView) {
+            AndroidView(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .height(adsConfig.adSize.height.dp),
+                factory = { requireNotNull(adView) }
+            )
+        }
     }
 }
 

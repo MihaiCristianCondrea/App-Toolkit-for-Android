@@ -46,11 +46,18 @@ open class AppsListViewModelBaseTest {
         favoritesFlow: Flow<Set<String>>? = null,
         toggleError: Throwable? = null,
         fetchError: AppErrors? = null,
+        cachedApps: List<AppInfo>? = null,
+        firstFetchThrowable: Throwable? = null,
         dispatchers: DispatcherProvider = TestDispatchers(),
     ) {
         println("\uD83E\uDDEA [SETUP] Initial favorites: $initialFavorites")
         viewModel = AppsListViewModel(
-            developerAppsRepository = FakeDeveloperAppsRepository(fetchApps, fetchError),
+            developerAppsRepository = FakeDeveloperAppsRepository(
+                apps = fetchApps,
+                fetchError = fetchError,
+                cachedApps = cachedApps,
+                firstFetchThrowable = firstFetchThrowable,
+            ),
             installedAppsRepository = FakeInstalledAppsRepository(installedPackages = installedPackages),
             favoritesRepository = FakeFavoritesRepository(
                 initialFavorites,

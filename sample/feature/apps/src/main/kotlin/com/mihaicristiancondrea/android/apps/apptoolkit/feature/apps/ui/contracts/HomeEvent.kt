@@ -27,4 +27,5 @@ sealed class HomeEvent : UiEvent {
     data class AppSelected(val packageName: String) : HomeEvent()
     data object RetryAppDetails : HomeEvent()
     data object AppDetailsDismissed : HomeEvent()
+    data object DismissSnackbar : HomeEvent()
 }

@@ -19,15 +19,18 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppErrors
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.HomeEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppsListFilter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.StandardDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertEquals
@@ -145,5 +148,51 @@ class AppsListViewModelTest : AppsListViewModelBaseTest() {
         assertEquals("Expanded description", state?.selectedAppDetails?.description)
         assertEquals(false, state?.isAppDetailsLoading)
         assertEquals(false, state?.hasAppDetailsError)
+    }
+
+    @Test
+    fun `failed fetch with a saved catalogue shows the saved apps and an error snackbar`() = runTest {
+        val cachedApp = AppInfo(
+            name = "Cached",
+            packageName = "cached.pkg",
+            iconUrl = "url",
+            shortDescription = "Saved earlier",
+        )
+        setup(
+            fetchApps = emptyList(),
+            fetchError = AppErrors.UseCase.FAILED_TO_LOAD_APPS,
+            cachedApps = listOf(cachedApp),
+            dispatchers = TestDispatchers(UnconfinedTestDispatcher()),
+        )
+        advanceUntilIdle()
+
+        val state = viewModel.uiState.value
+        assertTrue(state.screenState is ScreenState.Success) { "Expected Success but was ${state.screenState}" }
+        assertEquals(listOf(cachedApp), state.data?.apps)
+        assertEquals(true, state.snackbar?.isError)
+    }
+
+    @Test
+    fun `retry fetches again after a fetch throws`() = runTest {
+        val app = AppInfo(
+            name = "App",
+            packageName = "pkg",
+            iconUrl = "url",
+            shortDescription = "Description",
+        )
+        setup(
+            fetchApps = listOf(app),
+            firstFetchThrowable = IllegalStateException("Catalogue request failed"),
+            dispatchers = TestDispatchers(UnconfinedTestDispatcher()),
+        )
+        advanceUntilIdle()
+        assertTrue(viewModel.uiState.value.screenState is ScreenState.Error)
+
+        viewModel.onEvent(HomeEvent.FetchApps)
+        advanceUntilIdle()
+
+        val state = viewModel.uiState.value
+        assertTrue(state.screenState is ScreenState.Success) { "Expected Success but was ${state.screenState}" }
+        assertEquals(listOf(app), state.data?.apps)
     }
 }

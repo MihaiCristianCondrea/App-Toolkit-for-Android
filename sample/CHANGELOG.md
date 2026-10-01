@@ -56,6 +56,8 @@
 - On tablets, moving between Components, Settings and the tabs now resizes the app bar title smoothly instead of swapping it.
 - Messages about ad consent failing now appear on the ads settings page.
 - Messages about ad consent failing when the app starts now appear above the bottom bar on phones and at the bottom of the screen on tablets, instead of at a fixed height.
+- Without a connection, the Apps tab now shows the apps it loaded last time, with a message saying they could not be refreshed, instead of an error screen.
+- Retry on the Apps tab works again after a failed load.
 
 ---
 

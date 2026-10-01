@@ -62,6 +62,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememb
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.flow.collectLatest
@@ -255,5 +256,11 @@ fun AppsListScreen(
                 searchQuery = LocalShellSearch.current?.query.orEmpty(),
             )
         }
+    )
+
+    DefaultSnackbarHandler(
+        screenState = screenState,
+        getDismissEvent = { HomeEvent.DismissSnackbar },
+        onEvent = { viewModel.onEvent(it) },
     )
 }

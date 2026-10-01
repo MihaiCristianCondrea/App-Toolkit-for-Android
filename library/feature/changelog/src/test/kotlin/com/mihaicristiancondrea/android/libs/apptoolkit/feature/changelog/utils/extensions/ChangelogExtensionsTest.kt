@@ -97,6 +97,48 @@ class ChangelogExtensionsTest {
     }
 
     @Test
+    fun `extractChangesForVersion keeps sub-headings inside the version section`() {
+        val markdown = """
+            # Changelog
+            ## [2.0.0] - 2026-08-02
+            ### Added
+            - New screen
+            ### Fixed
+            - Crash on launch
+            ## [1.0.0] - 2025-01-01
+            ### Added
+            - First release
+        """.trimIndent()
+
+        val result = markdown.extractChangesForVersion("2.0.0")
+
+        assertEquals(
+            """
+            ## [2.0.0] - 2026-08-02
+            ### Added
+            - New screen
+            ### Fixed
+            - Crash on launch
+            """.trimIndent(),
+            result,
+        )
+    }
+
+    @Test
+    fun `extractChangesForVersion ends at a higher-level heading`() {
+        val markdown = """
+            ## 2.0.0
+            - Current release
+            # Older releases
+            - Archived
+        """.trimIndent()
+
+        val result = markdown.extractChangesForVersion("2.0.0")
+
+        assertEquals("## 2.0.0\n- Current release", result)
+    }
+
+    @Test
     fun `splitAtThematicBreaks splits at breaks after a blank line`() {
         val markdown = "# Unreleased\n- One\n\n---\n\n# 1.0.0\n- Two\n\n***\n\n# 0.9.0"
 

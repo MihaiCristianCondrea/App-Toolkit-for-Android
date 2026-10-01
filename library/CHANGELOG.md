@@ -99,6 +99,11 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Fixed the ads settings page never showing its consent failures.
 - Fixed `LargeTopAppBarWithScaffold` creating a new snackbar host on every recomposition, which dropped the snackbar showing, and drawing Material's plain snackbars: it keeps one host, draws the Toolkit's, and gives the screen inside `rememberScaffoldSnackbars()`.
 - Fixed a snackbar shown through `ShellHost(snackbarHostState)` waiting, unseen, while a start screen or a page covered the tabs: the shell now shows it at the bottom of the window until the tabs are back.
+- Fixed subscriptions bought through `BillingRepository.launchSubscriptionFlow` never being acknowledged, which made Play refund them after three days: subscriptions are now acknowledged instead of consumed, and `processPastPurchases` recovers unacknowledged subscriptions as well as unconsumed one-time purchases.
+- Fixed `AdBanner` leaking its `AdView`, and with it the activity, each time the banner left the screen or was rebuilt: the view is now destroyed when it is replaced or leaves composition.
+- Fixed a damaged shell settings file crashing the app on every launch: the shell now falls back to its default settings.
+- Fixed `extractChangesForVersion` returning only the version heading for Keep a Changelog style notes: the section now ends at the next heading of the same or a higher level, so `### Added` and similar sub-headings stay in it.
+- Fixed a `BaseCoreManager` subclass that overrides `dispatchers` crashing on start, and `BaseCoreManager.isAppLoaded` possibly staying `false` for readers on the main thread.
 
 ---
 

@@ -44,12 +44,15 @@ flowchart TD
     Repo --> Client
     Client --> Callback[PurchasesUpdatedListener]
     Callback --> State{Purchase state}
-    State -->|purchased| Consume[Consume one-time donation]
+    State -->|purchased one-time product| Consume[Consume one-time donation]
+    State -->|purchased subscription| Acknowledge[Acknowledge subscription]
     State -->|pending| Result[PurchaseResult Flow]
     State -->|cancelled or error| Result
     Consume --> Result
-    Repo -->|startup / reconnect| Past[Query past purchases]
+    Acknowledge --> Result
+    Repo -->|startup / reconnect| Past[Query past one-time and subscription purchases]
     Past --> Consume
+    Past --> Acknowledge
     Result --> Feature
 ```
 
@@ -57,8 +60,12 @@ flowchart TD
 
 - One process-scoped repository owns the single `BillingClient`, its callback listener, connection
   retries, and purchase recovery.
-- One-time support purchases are consumable donations. Completed unconsumed purchases are recovered
-  on setup/reconnect and consumed before success is emitted.
+- One-time support purchases are consumable donations. Subscriptions are acknowledged instead,
+  because a subscription token cannot be consumed and Play refunds one that is not acknowledged
+  within three days. `Purchase` does not carry its product type, so the repository remembers the
+  type of each product it launches, and past-purchase recovery queries one-time products and
+  subscriptions separately. Completed unsettled purchases are recovered on setup/reconnect and
+  settled before success is emitted.
 - Product details replay the latest query result; purchase outcomes do not replay because they are
   one-off events.
 - `BillingRepository` extends the narrow `BillingCore` teardown contract so common lifecycle code
@@ -73,7 +80,8 @@ flowchart TD
 ## Internal implementations
 
 - `DefaultBillingRepository`: BillingClient callbacks, connection management, product-detail
-  replay, retry policy, past-purchase queries, and donation consumption.
+  replay, retry policy, past-purchase queries, donation consumption, and subscription
+  acknowledgement.
 
 ## Current risks
 

@@ -54,7 +54,10 @@ interface BillingRepository : BillingCore {
     /** Loads details for [productIds] and publishes them through [productDetails]. */
     suspend fun queryProductDetails(productIds: List<String>)
 
-    /** Consumes purchases that completed while the app was not running. */
+    /**
+     * Settles purchases that completed while the app was not running: one-time products are
+     * consumed and subscriptions are acknowledged.
+     */
     suspend fun processPastPurchases()
 
     /** Starts the purchase flow for a one-time product such as a donation. */
