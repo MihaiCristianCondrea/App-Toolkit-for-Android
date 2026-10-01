@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.sea
 
 import android.content.res.Resources
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -27,15 +27,22 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsPreference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellGraph
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import java.text.Normalizer
 import org.koin.compose.getKoin
+import org.koin.core.Koin
 
 /**
  * Everything the settings search looks through, resolved to text once: the host's own rows, and
  * the rows every settings page registers as a [SettingsSearchProvider].
+ *
+ * The rows are built on the first real search, not when the settings open: most visits never
+ * search, and building means resolving and normalising every row of every settings page.
  */
-@Immutable
-internal class SettingsSearchIndex(private val rows: List<Row>) {
+@Stable
+internal class SettingsSearchIndex(buildRows: () -> List<Row>) {
+
+    private val rows: List<Row> by lazy(LazyThreadSafetyMode.NONE, buildRows)
 
     /** One searchable row, drawn as [preference], found by [text]. */
     class Row(val preference: SettingsPreference, val text: String)
@@ -59,29 +66,38 @@ internal fun rememberSettingsSearchIndex(config: SettingsConfig): SettingsSearch
     // Resolved again when the language changes.
     val configuration = LocalConfiguration.current
     return remember(config, graph, koin, configuration) {
-        val hostRows = config.categories.flatMap { it.preferences }.map { preference ->
-            SettingsSearchIndex.Row(preference, searchText(preference.title, preference.summary))
-        }
-        val pageRows = koin.getAll<SettingsSearchProvider>()
-            .flatMap { it.entries(graph) }
-            .distinctBy { it.title to it.destination }
-            .map { entry ->
-                val title = resources.getString(entry.title)
-                val section = resources.getString(entry.section)
-                val summary = entry.summary?.let(resources::safeString)
-                SettingsSearchIndex.Row(
-                    preference = SettingsPreference(
-                        key = "search_${entry.destination}_${entry.title}",
-                        title = title,
-                        // Where the setting lives, as its result's summary.
-                        summary = section,
-                        destination = entry.destination,
-                    ),
-                    text = searchText(title, summary, section),
-                )
-            }
-        SettingsSearchIndex(hostRows + pageRows)
+        SettingsSearchIndex { buildRows(config, graph, koin, resources) }
     }
+}
+
+private fun buildRows(
+    config: SettingsConfig,
+    graph: ShellGraph,
+    koin: Koin,
+    resources: Resources,
+): List<SettingsSearchIndex.Row> {
+    val hostRows = config.categories.flatMap { it.preferences }.map { preference ->
+        SettingsSearchIndex.Row(preference, searchText(preference.title, preference.summary))
+    }
+    val pageRows = koin.getAll<SettingsSearchProvider>()
+        .flatMap { it.entries(graph) }
+        .distinctBy { it.title to it.destination }
+        .map { entry ->
+            val title = resources.getString(entry.title)
+            val section = resources.getString(entry.section)
+            val summary = entry.summary?.let(resources::safeString)
+            SettingsSearchIndex.Row(
+                preference = SettingsPreference(
+                    key = "search_${entry.destination}_${entry.title}",
+                    title = title,
+                    // Where the setting lives, as its result's summary.
+                    summary = section,
+                    destination = entry.destination,
+                ),
+                text = searchText(title, summary, section),
+            )
+        }
+    return hostRows + pageRows
 }
 
 private fun Resources.safeString(id: Int): String? = runCatching { getString(id) }.getOrNull()
