@@ -57,6 +57,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -238,12 +239,21 @@ class AppsListViewModel(
         }
     }
 
+    /**
+     * Falls back to [AppsListFilter.All] when the selected filter stops matching anything.
+     *
+     * Favorites are combined in rather than read once, because removing the last favorite changes
+     * only [favorites], not the screen state, and would otherwise leave an empty Favorites filter
+     * selected with its chip gone.
+     */
     private fun observeFilterValidity() {
-        screenState.mapNotNull { it.data }
-            .onEach { state ->
+        combine(screenState.mapNotNull { it.data }, favorites) { state, favoritePackages ->
+            state to favoritePackages
+        }
+            .onEach { (state, favoritePackages) ->
                 val allAppsCount = state.apps.size
                 val installedPackagesCount = state.installedPackages.size
-                val favoritesCount = favorites.value.size
+                val favoritesCount = favoritePackages.size
 
                 val isFilterValid = when (state.selectedFilter) {
                     AppsListFilter.All -> true

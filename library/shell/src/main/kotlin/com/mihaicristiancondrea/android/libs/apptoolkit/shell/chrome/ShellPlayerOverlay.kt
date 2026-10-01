@@ -36,7 +36,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -50,13 +49,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
-import androidx.compose.ui.unit.offset
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellPlayer
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellBackHandler
 import kotlinx.coroutines.launch
@@ -107,23 +107,34 @@ internal fun ShellPlayerOverlay(
         exit = slideOutVertically(tween(280), travel) + fadeOut(tween(220, delayMillis = 40)),
     ) {
         BoxWithConstraints(Modifier.fillMaxSize()) {
-            val progress = expansion.value
-            val travelPx = { with(density) { (maxHeight - MiniPlayerHeight - dockBottom()).toPx().coerceAtLeast(1f) } }
+            val fullHeight: Dp = maxHeight
+            val travelPx = { with(density) { (fullHeight - MiniPlayerHeight - dockBottom()).toPx().coerceAtLeast(1f) } }
             val dragState = rememberDraggableState { delta ->
                 scope.launch { expansion.snapTo((expansion.value - delta / travelPx()).coerceIn(0f, 1f)) }
             }
+            // Composition reads only these thresholds. The frame, corners and shadow follow
+            // [expansion] in layout and drawing, so a drag or a settle re-lays out and redraws the
+            // player on each frame instead of recomposing it and the host's player content.
+            val collapsed by remember(expansion) { derivedStateOf { expansion.value == 0f } }
+            val showMini by remember(expansion) { derivedStateOf { expansion.value < 1f } }
+            val showExpanded by remember(expansion) { derivedStateOf { expansion.value > 0f } }
             Surface(
                 onClick = { if (expansion.value == 0f) settle(1f) },
-                enabled = progress == 0f,
+                enabled = collapsed,
                 modifier = Modifier
                     .align(Alignment.BottomStart)
-                    .padding(
-                        start = lerp(dockStart + 12.dp, 0.dp, progress),
-                        end = lerp(12.dp, 0.dp, progress),
+                    .playerFrame(
+                        progress = { expansion.value },
+                        dockStart = dockStart,
+                        dockBottom = dockBottom,
+                        fullHeight = fullHeight,
                     )
-                    .bottomPadding { lerp(dockBottom() + 8.dp, 0.dp, expansion.value) }
-                    .fillMaxWidth()
-                    .height(lerp(MiniPlayerHeight, maxHeight, progress))
+                    .graphicsLayer {
+                        val progress = expansion.value
+                        shape = RoundedCornerShape(lerp(20.dp, 0.dp, progress))
+                        clip = true
+                        shadowElevation = lerp(6.dp, 0.dp, progress).toPx()
+                    }
                     .draggable(
                         state = dragState,
                         orientation = Orientation.Vertical,
@@ -138,27 +149,27 @@ internal fun ShellPlayerOverlay(
                             )
                         },
                     ),
-                shape = RoundedCornerShape(lerp(20.dp, 0.dp, progress)),
+                // The graphics layer above draws the rounded corners and the shadow.
+                shape = RectangleShape,
                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                 tonalElevation = 3.dp,
-                shadowElevation = lerp(6.dp, 0.dp, progress),
             ) {
                 Box {
-                    if (progress < 1f) {
+                    if (showMini) {
                         Box(
                             Modifier
                                 .fillMaxWidth()
                                 .height(MiniPlayerHeight)
-                                .graphicsLayer { alpha = (1f - progress * 4f).coerceIn(0f, 1f) },
+                                .graphicsLayer { alpha = (1f - expansion.value * 4f).coerceIn(0f, 1f) },
                         ) {
                             player.mini()
                         }
                     }
-                    if (progress > 0f) {
+                    if (showExpanded) {
                         Box(
                             Modifier
                                 .fillMaxSize()
-                                .graphicsLayer { alpha = ((progress - 0.25f) / 0.75f).coerceIn(0f, 1f) }
+                                .graphicsLayer { alpha = ((expansion.value - 0.25f) / 0.75f).coerceIn(0f, 1f) }
                                 .windowInsetsPadding(WindowInsets.safeDrawing),
                         ) {
                             player.expanded { settle(0f) }
@@ -181,12 +192,28 @@ private val PlayerEntranceRise = 96.dp
 private const val FlingVelocity = 1200f
 
 /**
- * `padding(bottom = ...)` with the padding read while measuring, so a dock that moves on every
- * frame, as the bottom bar does while it hides, lays the player out again without recomposing it.
+ * Sizes and places the player between its docked pill and the full window, reading [progress] and
+ * [dockBottom] while measuring. A dock that moves on every frame, as the bottom bar does while it
+ * hides, and every frame of a drag or settle then lay the player out again without recomposing it.
+ *
+ * Docked, the pill is inset by [dockStart] plus a margin at the start, a margin at the end, and
+ * sits above [dockBottom]; expanded, it fills the width and [fullHeight].
  */
-private fun Modifier.bottomPadding(bottom: () -> Dp): Modifier = layout { measurable, constraints ->
-    val bottomPx = bottom().roundToPx().coerceAtLeast(0)
-    val placeable = measurable.measure(constraints.offset(vertical = -bottomPx))
-    val height = constraints.constrainHeight(placeable.height + bottomPx)
-    layout(constraints.constrainWidth(placeable.width), height) { placeable.place(0, 0) }
+private fun Modifier.playerFrame(
+    progress: () -> Float,
+    dockStart: Dp,
+    dockBottom: () -> Dp,
+    fullHeight: Dp,
+): Modifier = layout { measurable, constraints ->
+    val fraction = progress()
+    val startPx = lerp(dockStart + 12.dp, 0.dp, fraction).roundToPx().coerceAtLeast(0)
+    val endPx = lerp(12.dp, 0.dp, fraction).roundToPx().coerceAtLeast(0)
+    val bottomPx = lerp(dockBottom() + 8.dp, 0.dp, fraction).roundToPx().coerceAtLeast(0)
+    val width = (constraints.maxWidth - startPx - endPx).coerceAtLeast(0)
+    val height = lerp(MiniPlayerHeight, fullHeight, fraction).roundToPx()
+        .coerceIn(0, (constraints.maxHeight - bottomPx).coerceAtLeast(0))
+    val placeable = measurable.measure(Constraints.fixed(width, height))
+    layout(constraints.maxWidth, constraints.constrainHeight(height + bottomPx)) {
+        placeable.place(startPx, 0)
+    }
 }

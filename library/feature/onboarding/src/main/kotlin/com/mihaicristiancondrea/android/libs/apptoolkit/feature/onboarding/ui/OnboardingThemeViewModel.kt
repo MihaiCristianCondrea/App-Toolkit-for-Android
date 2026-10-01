@@ -18,6 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui
 
 import androidx.lifecycle.viewModelScope
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingThemeEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
@@ -36,6 +38,7 @@ import kotlinx.coroutines.launch
 /** Owns theme preference state used by the onboarding theme page. */
 class OnboardingThemeViewModel(
     private val preferences: ThemePreferencesRepository,
+    private val firebaseController: FirebaseController,
 ) : ScreenViewModel<ThemePreferencesState, OnboardingThemeEvent, ActionEvent>(
     initialState = UiStateScreen(
         screenState = ScreenState.Success(),
@@ -83,7 +86,16 @@ class OnboardingThemeViewModel(
         preferences.selectThemeMode(mode)
     }
 
+    /** Runs a preference write, reporting a failure instead of dropping it silently. */
     private fun persist(block: suspend () -> Unit) {
-        viewModelScope.launch { runCatching { block() } }
+        viewModelScope.launch {
+            runSuspendCatching { block() }
+                .onFailure { throwable ->
+                    firebaseController.recordNonFatal(
+                        throwable = throwable,
+                        attributes = mapOf("operation" to "persistOnboardingTheme"),
+                    )
+                }
+        }
     }
 }

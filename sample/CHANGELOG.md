@@ -38,6 +38,7 @@
 - Moving between Components, Settings and the tabs on a tablet or in landscape no longer flashes grey.
 - The app bar can hide as you scroll too, in Display settings, so the whole screen makes room for the content.
 - The ad above the bottom navigation is back, and messages such as a consent form failing to load now appear above the navigation bar instead of not at all.
+- Rolling the dice does less work on each frame of the animation.
 
 ### Removed
 
@@ -58,6 +59,9 @@
 - Messages about ad consent failing when the app starts now appear above the bottom bar on phones and at the bottom of the screen on tablets, instead of at a fixed height.
 - Without a connection, the Apps tab now shows the apps it loaded last time, with a message saying they could not be refreshed, instead of an error screen.
 - Retry on the Apps tab works again after a failed load.
+- Removing your last favourite no longer leaves the Apps tab on an empty Favourites filter with no chip to leave it: it goes back to All.
+- The Apps tab shows freshly loaded apps even when saving them for offline use fails.
+- The compass and the level stop using their sensors while the app is in the background, even with the tool open.
 
 ---
 

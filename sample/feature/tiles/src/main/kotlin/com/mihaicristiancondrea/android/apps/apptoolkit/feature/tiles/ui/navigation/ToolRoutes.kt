@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.BreathingToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.CoinFlipToolViewModel
@@ -77,6 +78,7 @@ internal fun CounterToolRoute(viewModel: CounterToolViewModel = koinViewModel())
 internal fun CompassToolRoute(viewModel: CompassToolViewModel = koinViewModel()) {
     val value by viewModel.state.collectAsStateWithLifecycle()
     StartStopTool(viewModel::open, viewModel::dismiss)
+    ForegroundSensor(viewModel::startSensor, viewModel::stopSensor)
     CompassTool(value)
 }
 
@@ -84,7 +86,20 @@ internal fun CompassToolRoute(viewModel: CompassToolViewModel = koinViewModel())
 internal fun LevelToolRoute(viewModel: LevelToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     StartStopTool(viewModel::open, viewModel::dismiss)
+    ForegroundSensor(viewModel::startSensor, viewModel::stopSensor)
     LevelTool(state.pitch, state.roll)
+}
+
+/**
+ * Keeps a sensor registered only while the app is started, so a tool sheet left open does not
+ * keep the sensor running in the background.
+ */
+@Composable
+private fun ForegroundSensor(start: () -> Unit, stop: () -> Unit) {
+    LifecycleStartEffect(Unit) {
+        start()
+        onStopOrDispose { stop() }
+    }
 }
 
 @Composable

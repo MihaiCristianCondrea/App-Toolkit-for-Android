@@ -18,6 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui
 
 import androidx.lifecycle.viewModelScope
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.contracts.ThemeSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
@@ -46,6 +48,7 @@ import kotlinx.coroutines.launch
 class ThemeSettingsViewModel(
     private val preferences: ThemePreferencesRepository,
     private val seasonal: SeasonalThemeRepository,
+    private val firebaseController: FirebaseController,
 ) : ScreenViewModel<ThemeSettingsUiState, ThemeSettingsEvent, ActionEvent>(
     initialState = UiStateScreen(screenState = ScreenState.IsLoading(), data = null),
 ) {
@@ -94,7 +97,16 @@ class ThemeSettingsViewModel(
         preferences.selectThemeMode(mode)
     }
 
+    /** Runs a preference write, reporting a failure instead of dropping it silently. */
     private fun persist(block: suspend () -> Unit) {
-        viewModelScope.launch { runCatching { block() } }
+        viewModelScope.launch {
+            runSuspendCatching { block() }
+                .onFailure { throwable ->
+                    firebaseController.recordNonFatal(
+                        throwable = throwable,
+                        attributes = mapOf("operation" to "persistThemeSetting"),
+                    )
+                }
+        }
     }
 }

@@ -144,11 +144,17 @@ class CompassToolViewModel(
     private val repository: SensorRepository,
     firebaseController: FirebaseController,
 ) : FlowToolViewModel<Float>(0f, ToolUsageTracker(firebaseController, ToolkitTileIds.COMPASS)) {
-    fun open() {
+    fun open() = reportUseOnceWatched()
+
+    /** Listens to the sensor; the route calls this only while the app is in the foreground. */
+    fun startSensor() {
         observation?.cancel(); observation =
             repository.getCompassAzimuth().onEach { mutableState.value = it }
                 .launchIn(viewModelScope)
-        reportUseOnceWatched()
+    }
+
+    fun stopSensor() {
+        observation?.cancel(); observation = null
     }
 }
 
@@ -159,11 +165,17 @@ class LevelToolViewModel(
     LevelToolState(),
     ToolUsageTracker(firebaseController, ToolkitTileIds.BUBBLE_LEVEL),
 ) {
-    fun open() {
+    fun open() = reportUseOnceWatched()
+
+    /** Listens to the sensor; the route calls this only while the app is in the foreground. */
+    fun startSensor() {
         observation?.cancel(); observation = repository.getLevelOrientation()
             .onEach { mutableState.value = LevelToolState(it.first, it.second) }
             .launchIn(viewModelScope)
-        reportUseOnceWatched()
+    }
+
+    fun stopSensor() {
+        observation?.cancel(); observation = null
     }
 }
 

@@ -104,8 +104,20 @@ class UmpConsentRemoteDataSource(
                                     return@loadConsentForm
                                 }
                                 runCatching {
-                                    consentForm.show(activity) {
-                                        trySend(DataState.Success(Unit))
+                                    consentForm.show(activity) { formError ->
+                                        if (formError != null) {
+                                            Log.e(
+                                                CONSENT_LOG_TAG,
+                                                "Consent form error: ${formError.message}"
+                                            )
+                                            trySend(
+                                                DataState.Error(
+                                                    error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO
+                                                )
+                                            )
+                                        } else {
+                                            trySend(DataState.Success(Unit))
+                                        }
                                         close()
                                     }
                                 }.onFailure { throwable ->

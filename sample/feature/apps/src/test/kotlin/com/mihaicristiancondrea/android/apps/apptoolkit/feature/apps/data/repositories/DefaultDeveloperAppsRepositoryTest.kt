@@ -113,6 +113,33 @@ class DefaultDeveloperAppsRepositoryTest {
     }
 
     @Test
+    fun `fetchDeveloperApps still succeeds when the cache cannot be written`() = runTest {
+        val response = AppsListResponseDto(
+            data = AppsListDataDto(
+                apps = listOf(
+                    AppSummaryDto(
+                        name = "App",
+                        packageName = "pkg",
+                        iconUrl = "https://example.com/icon.png",
+                    ),
+                ),
+            ),
+        )
+        val failingCache = object : DeveloperAppsLocalDataSource {
+            override suspend fun read(): List<AppSummary>? = null
+
+            override suspend fun write(value: List<AppSummary>) {
+                throw IllegalStateException("Disk full")
+            }
+        }
+        val repository = repositoryReturning(Json.encodeToString(response), local = failingCache)
+
+        val result = repository.fetchDeveloperApps().first() as DataState.Success
+
+        assertEquals(listOf("pkg"), result.data.map { it.packageName })
+    }
+
+    @Test
     fun `fetchDeveloperApps keeps one entry per package`() = runTest {
         val response = AppsListResponseDto(
             data = AppsListDataDto(

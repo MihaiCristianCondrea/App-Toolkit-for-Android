@@ -99,4 +99,19 @@ class DefaultThemePreferencesDataSource(
             preferences[staticPaletteIdKey] = safe
         }
     }
+
+    override suspend fun savePalette(
+        dynamicColors: Boolean,
+        dynamicPaletteVariant: Int?,
+        staticPaletteId: String?,
+    ) {
+        val safePaletteId: String? = staticPaletteId?.let(StaticPaletteIds::sanitize)
+        dataStore.edit { preferences: MutablePreferences ->
+            preferences[dynamicColorsKey] = dynamicColors
+            dynamicPaletteVariant?.let { variant ->
+                preferences[dynamicPaletteVariantKey] = DynamicPaletteVariant.clamp(variant)
+            }
+            safePaletteId?.let { id -> preferences[staticPaletteIdKey] = id }
+        }
+    }
 }

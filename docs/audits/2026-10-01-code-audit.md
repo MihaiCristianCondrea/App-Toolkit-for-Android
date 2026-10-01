@@ -15,6 +15,23 @@ The six most serious problems were fixed together with this record:
 - `BaseCoreManager` read its open `dispatchers` during construction, and `isAppLoaded` was not
   volatile.
 
+A second pass fixed:
+
+- The misplaced `catch` in `ToolkitTilesViewModel` and `IssueReporterViewModel`.
+- The consent form's dismiss callback ignoring its `FormError`.
+- The shared `persistJob` in `AdsSettingsViewModel`.
+- The Favorites filter staying selected after the last favorite was removed.
+- A failed cache write failing a successful catalogue fetch.
+- The `persist { runCatching {} }` helpers in `DisplaySettingsViewModel`, `ThemeSettingsViewModel`
+  and `OnboardingThemeViewModel`, and the `runCatching` calls in `SeasonalThemeOverlayViewModel`
+  and `AboutSettingsContent`.
+- The compass and level sensors running in the background.
+- `staticCompositionLocalOf` in `UiPreferences`.
+- The two-write palette changes in the theme and seasonal repositories.
+- Per-frame recomposition in `ShellPlayerOverlay` and `DiceRollTool`.
+- The pasted citation tag in `UsageAndDiagnosticsViewModel` and the unused `merged` map in
+  `LoggedScreenViewModel.catchReport`.
+
 Everything below is still open. Remove an item, or move it to the changelog, when it is fixed.
 
 Already clean at the time of the review: no Kotlin package is split across modules, every file's
@@ -30,8 +47,6 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
 - `library/integration/billing/.../DefaultBillingRepository.kt` reports its own errors as
   `viewModelName = "SupportViewModel"`. `DefaultFirebaseController.kt:146-152,165-169` stores
   per-report values with `setCustomKey`, which then stick to every later crash.
-- `library/integration/consent/.../UmpConsentRemoteDataSource.kt:107-110`: the `consentForm.show`
-  dismiss callback ignores its `FormError` and always reports success.
 - `library/integration/consent/.../DefaultConsentRepository.kt:57-58,100-147`: the process-wide
   request scope keeps `host.activity` alive with no timeout, and a later caller joins an in-flight
   request regardless of its own host, so its form can show on a destroyed window.
@@ -39,26 +54,12 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   essential" make five separate DataStore writes, and the ViewModel pushes each intermediate
   consent state into the Firebase SDK. Write the bundle in one `edit` and apply consent in the data
   layer.
-- `sample/feature/apps/.../AppsListViewModel.kt:209-227`: `observeFilterValidity` runs only when
-  `screenState` changes, so removing the last favorite leaves the Favorites filter selected on an
-  empty grid. The chip rules are duplicated in `ui/views/screens/AppsList.kt:294-312`. Combine
-  `screenState` and `favorites` in one place.
 - `library/feature/support/.../SupportViewModel.kt:159-166,259-263`: a failed or cancelled purchase
   sets `ScreenState.Error`, which replaces the whole page with "failed to load SKU details" and no
   retry. Show it as a snackbar and keep `Success`.
-- `library/feature/issuereporter/.../IssueReporterViewModel.kt:197-204`: `.catch { emit(...) }` sits
-  after `onEach(handleResult)`, so the error goes to an empty `collect {}` and the sheet stays in
-  its sending state.
-- `library/integration/ads/.../AdsSettingsViewModel.kt:126-211`: both settings share one
-  `persistJob`, so toggling one cancels the other's write. `DefaultAdsSettingsRepository.kt:63-76`
-  repeats `persistPreference`.
 - `library/integration/update/.../DefaultInAppUpdateRepository.kt:37-77`: Task listeners are not
   removed in `awaitClose`, so a cancelled request can still start the update flow on a dead
   activity's launcher.
-- `sample/feature/apps/.../DefaultDeveloperAppsRepository.kt:45-54`: a failed cache write turns a
-  successful network fetch into an error. Report the write failure on its own.
-- `sample/feature/tiles/.../ToolkitTilesViewModel.kt:103-125` has the same outer `catch` placement
-  that was fixed in `AppsListViewModel`, so its retry stops after one thrown error.
 - `library/core/ui/.../views/drawable/palette.kt:52-54`: the `remember` keys leave out `legs`,
   `grass` and `backgroundTrees`, so those colors go stale.
 - `library/core/network/.../ThrowableExtensions.kt:93` maps every `IllegalStateException` to
@@ -70,20 +71,13 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   `createdAtStart = true`, so every cold start binds the Play Billing service and queries purchases.
   The repository also reconnects by hand in three places on top of `enableAutoServiceReconnection()`,
   and each retry runs another purchase query.
-- `library/shell/.../chrome/ShellPlayerOverlay.kt:110` reads `expansion.value` in composition, so
-  the overlay and the host's player content recompose on every animation frame and drag.
 - `library/shell/.../chrome/NavigationSurfaces.kt:199-247` reads the animated rail width in
   composition, so the rail and all its items recompose on every frame.
-- `sample/feature/tiles/.../tools/DiceRollTool.kt:210-214,353,414` reads rotations in composition and
-  builds a new `Path` and `PathEffect` every frame.
-- `library/core/designsystem/.../style/UiPreferences.kt:23-29`: `staticCompositionLocalOf` with a
-  hard-coded `true` initial value invalidates the whole app tree on the first DataStore emission
-  and on every toggle. Use `compositionLocalOf`.
-- `library/core/datastore/.../DefaultThemePreferencesRepository.kt:56-63` and
-  `DefaultSeasonalThemeRepository.kt:75-76,92-93` write two keys in separate `edit` calls, so the
-  theme rebuilds twice and can flash the wrong palette.
-- `sample/feature/tiles/.../ToolViewModels.kt:147-167`: the compass and level sensors are collected
-  in `viewModelScope`, so they keep running while the app is in the background.
+- `themePreferencesState()` combines one flow per theme key, so a single palette write can still
+  reach `AppTheme` as two emissions. Mapping `dataStore.data` once into the whole state would make
+  each write one emission.
+- `sample/feature/tiles/.../tools/DiceRollTool.kt` still builds the face lists with
+  `map`/`filter`/`sortedBy` on every frame of a roll.
 - `sample/feature/tiles/.../services/TrackedTileService.kt:91-94` writes SharedPreferences every time
   the Quick Settings shade opens.
 - `sample/widget/.../AppIconsWidget.kt:97-156` downloads up to nine icons one after another over raw
@@ -156,12 +150,10 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   ignores `seasonalThemesUnlocked`).
 - `PermissionsViewModel.kt:86-151` and `SettingsViewModel.kt:82-143` have the same load pipeline.
   `SettingsViewModel.kt:132-136` is a dead branch.
-- `LoggedScreenViewModel.kt:154-191` and `:212-249` repeat the error-reporting block, and lines
-  157-161 build a `merged` map that is never used.
-- `persist { viewModelScope.launch { runCatching { block() } } }` is copied in
-  `DisplaySettingsViewModel`, `ThemeSettingsViewModel`, `OnboardingThemeViewModel` and
-  `SeasonalThemeOverlayViewModel`, and swallows every failure including cancellation.
-  `sample/feature/settings/.../AboutSettingsContent.kt:37-46` does the same.
+- `LoggedScreenViewModel` repeats the error-reporting block in `catchReport` and `launchReport`.
+- The `persist` helper is still written out in `DisplaySettingsViewModel`, `ThemeSettingsViewModel`
+  and `OnboardingThemeViewModel`; it could move into `ScreenViewModel` once that has a way to
+  report.
 - `DefaultUsageAndDiagnosticsRepository.kt:49-64` and `UsageAndDiagnosticsSettings` duplicate
   `DefaultConsentRepository.readPersistedSettings` and `ConsentSettings`.
 - `sample/feature/apps/.../ui/views/AppActions.kt:36-74` and `AppActionLauncher.kt:77-174` both open
@@ -179,15 +171,17 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   and `InAppUpdateResultReported` actions that `MainActivity` maps to `Unit`, the widget's
   unreachable `Loading` branch, and the hand-written `INSTANCE` in `DefaultBillingRepository`,
   which `close()` leaves pointing at a closed client.
-- `UsageAndDiagnosticsViewModel.kt:139` contains a pasted `:contentReference[oaicite:2]` tag, and
-  its five `updateX` functions are copies of one another.
+- The five `updateX` functions in `UsageAndDiagnosticsViewModel` are copies of one another.
+- `DefaultAdsSettingsRepository.kt:63-76` repeats `persistPreference`, and `AdsSettingsViewModel`'s
+  two persist functions are near-copies.
+- The apps filter chip rules exist twice, in `AppsListViewModel.observeFilterValidity` and
+  `sample/feature/apps/.../ui/views/screens/AppsList.kt:294-312`.
 - `AdsCoreManager.kt:212-213` uses an inline `3600000 * 4`.
+- The comment above `core:datastore` in `library/core/ui/build.gradle.kts:52-53` says the module
+  references `CommonDataStore` by type, which it no longer does.
 
-## Decisions for the maintainer
+## Decided
 
-- The GitHub issue-report token ships in `BuildConfig`, only base64-encoded
-  (`IssueReporterModule.kt:73`). Anyone can extract it, so it should be a fine-grained token limited
-  to creating issues on the one repository.
-- Every consent, including ad personalization, defaults to granted in release builds
-  (`!isDebugBuild`, `DefaultUsageAndDiagnosticsRepository.kt:51-55` and the consent integration).
-  That is a privacy policy choice made inside the library.
+- The GitHub issue-report token in `BuildConfig` (`IssueReporterModule.kt:73`) stays as it is.
+- Consent, including ad personalization, keeps defaulting to granted in release builds
+  (`!isDebugBuild`).

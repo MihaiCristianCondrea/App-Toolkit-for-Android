@@ -136,7 +136,7 @@ class UsageAndDiagnosticsViewModel(
                         )
                     }
                 }
-                .launchIn(viewModelScope) // returns Job :contentReference[oaicite:2]{index=2}
+                .launchIn(viewModelScope)
         }
     }
 

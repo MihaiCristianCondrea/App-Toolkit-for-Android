@@ -48,7 +48,7 @@ class DefaultDeveloperAppsRepository(
             val apps = remoteDataSource.fetchDeveloperApps()
                 .distinctBy { it.packageName }
                 .sortedBy { it.name.lowercase() }
-            localDataSource.write(apps)
+            writeCache(apps)
 
             DataState.Success(data = apps)
         }
@@ -99,6 +99,20 @@ class DefaultDeveloperAppsRepository(
             },
         )
         emit(result)
+    }
+
+    /**
+     * Saves [apps] for offline use. A failed write is reported but does not fail the fetch: the
+     * fresh catalogue is still shown, only the next offline start falls back to an older copy.
+     */
+    private suspend fun writeCache(apps: List<AppSummary>) {
+        runSuspendCatching { localDataSource.write(apps) }
+            .onFailure { throwable ->
+                firebaseController.recordNonFatal(
+                    throwable = throwable,
+                    attributes = mapOf("operation" to "writeDeveloperAppsCache"),
+                )
+            }
     }
 
     private fun mapThrowableToError(

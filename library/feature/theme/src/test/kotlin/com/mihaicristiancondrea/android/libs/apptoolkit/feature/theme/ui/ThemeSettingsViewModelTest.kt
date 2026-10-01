@@ -23,6 +23,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.WeatherEffect
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import io.mockk.coVerify
 import io.mockk.every
@@ -52,7 +53,7 @@ class ThemeSettingsViewModelTest {
     fun `initialize event observes theme preferences`() = runTest {
         val preferences = preferences()
 
-        val viewModel = ThemeSettingsViewModel(preferences, seasonal)
+        val viewModel = ThemeSettingsViewModel(preferences, seasonal, FakeFirebaseController())
 
         assertEquals("dark", viewModel.uiState.value.data?.preferences?.themeMode)
         assertEquals(2, viewModel.uiState.value.data?.preferences?.dynamicPaletteVariant)
@@ -61,7 +62,7 @@ class ThemeSettingsViewModelTest {
     @Test
     fun `selecting a static palette asks the repository for it`() = runTest {
         val preferences = preferences()
-        val viewModel = ThemeSettingsViewModel(preferences, seasonal)
+        val viewModel = ThemeSettingsViewModel(preferences, seasonal, FakeFirebaseController())
 
         viewModel.onEvent(ThemeSettingsEvent.SelectStaticPalette("rose"))
 
@@ -79,7 +80,7 @@ class ThemeSettingsViewModelTest {
             every { preferencesState } returns stored
         }
 
-        val viewModel = ThemeSettingsViewModel(preferences, seasonal)
+        val viewModel = ThemeSettingsViewModel(preferences, seasonal, FakeFirebaseController())
         assertNull(viewModel.uiState.value.data)
 
         stored.emit(
@@ -97,7 +98,7 @@ class ThemeSettingsViewModelTest {
     /** The easter egg keeps the holiday palettes in the row, so it is part of the first state. */
     @Test
     fun `the state follows the seasonal themes unlock`() = runTest {
-        val viewModel = ThemeSettingsViewModel(preferences(), seasonal)
+        val viewModel = ThemeSettingsViewModel(preferences(), seasonal, FakeFirebaseController())
         assertEquals(false, viewModel.uiState.value.data?.seasonalThemesUnlocked)
 
         seasonalState.value = SeasonalThemeState(unlocked = true)
@@ -107,7 +108,7 @@ class ThemeSettingsViewModelTest {
 
     @Test
     fun `the weather effect is shown and saved`() = runTest {
-        val viewModel = ThemeSettingsViewModel(preferences(), seasonal)
+        val viewModel = ThemeSettingsViewModel(preferences(), seasonal, FakeFirebaseController())
         assertEquals(WeatherEffect.Automatic, viewModel.uiState.value.data?.weatherEffect)
 
         seasonalState.value = SeasonalThemeState(unlocked = true, weatherEffect = WeatherEffect.Off)

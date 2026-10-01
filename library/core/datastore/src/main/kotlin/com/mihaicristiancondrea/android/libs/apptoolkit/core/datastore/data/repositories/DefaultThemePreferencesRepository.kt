@@ -54,12 +54,10 @@ class DefaultThemePreferencesRepository(
     }
 
     override suspend fun selectDynamicPalette(variant: Int) {
-        preferences.saveDynamicColors(true)
-        preferences.saveDynamicPaletteVariant(variant)
+        preferences.savePalette(dynamicColors = true, dynamicPaletteVariant = variant)
     }
 
     override suspend fun selectStaticPalette(id: String) {
-        preferences.saveDynamicColors(false)
-        preferences.saveStaticPaletteId(id)
+        preferences.savePalette(dynamicColors = false, staticPaletteId = id)
     }
 }

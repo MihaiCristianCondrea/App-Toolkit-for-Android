@@ -19,6 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.season
 
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.HolidaySeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.WeatherEffect
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
@@ -76,8 +77,11 @@ class SeasonalThemeOverlayViewModel(
     init {
         viewModelScope.launch {
             val date = today()
-            runCatching { seasonal.restoreThemeAfterHoliday(date) }
-            val due = runCatching { seasonal.pendingHolidayGreeting(date) }.getOrNull()
+            runSuspendCatching { seasonal.restoreThemeAfterHoliday(date) }
+                .onFailure { throwable -> report(throwable, operation = "restoreThemeAfterHoliday") }
+            val due = runSuspendCatching { seasonal.pendingHolidayGreeting(date) }
+                .onFailure { throwable -> report(throwable, operation = "pendingHolidayGreeting") }
+                .getOrNull()
             if (due != null && HolidayGreetingPresence.claim()) {
                 greetingClaimed = true
                 update { it.copy(greeting = due) }
@@ -118,15 +122,22 @@ class SeasonalThemeOverlayViewModel(
             firebaseController.logEvent(
                 holidayGreetingAnsweredEvent(season = season, useHolidayTheme = useHolidayTheme),
             )
-            runCatching {
+            runSuspendCatching {
                 seasonal.answerHolidayGreeting(
                     season = season,
                     today = today(),
                     useHolidayTheme = useHolidayTheme,
                 )
-            }
+            }.onFailure { throwable -> report(throwable, operation = "answerHolidayGreeting") }
             releaseGreeting()
         }
+    }
+
+    private fun report(throwable: Throwable, operation: String) {
+        firebaseController.recordNonFatal(
+            throwable = throwable,
+            attributes = mapOf("operation" to operation),
+        )
     }
 
     override fun onCleared() {

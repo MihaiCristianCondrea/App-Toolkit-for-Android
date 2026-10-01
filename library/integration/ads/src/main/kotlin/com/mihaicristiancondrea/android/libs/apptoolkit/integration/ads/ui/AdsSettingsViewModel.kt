@@ -65,7 +65,10 @@ class AdsSettingsViewModel(
 ) {
 
     private var observeJob: Job? = null
-    private var persistJob: Job? = null
+    // One job per setting: restarting a shared job would cancel the other setting's write after its
+    // switch had already moved.
+    private var persistAdsEnabledJob: Job? = null
+    private var persistReduceAdsJob: Job? = null
     private var consentJob: Job? = null
 
     init {
@@ -128,7 +131,7 @@ class AdsSettingsViewModel(
             action = Actions.PERSIST_ADS_ENABLED,
             extra = mapOf(ExtraKeys.ENABLED to enabled.toString())
         )
-        persistJob = persistJob.restart {
+        persistAdsEnabledJob = persistAdsEnabledJob.restart {
             var previousValue = repository.defaultAdsEnabled
 
             persistAdsEnabled(enabled)
@@ -175,7 +178,7 @@ class AdsSettingsViewModel(
             action = Actions.PERSIST_REDUCE_ADS,
             extra = mapOf(ExtraKeys.ENABLED to enabled.toString()),
         )
-        persistJob = persistJob.restart {
+        persistReduceAdsJob = persistReduceAdsJob.restart {
             var previousValue = false
             flow { emit(repository.setReduceAds(enabled)) }
                 .flowOn(dispatchers.io)

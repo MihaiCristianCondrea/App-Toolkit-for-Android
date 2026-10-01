@@ -45,7 +45,9 @@ import org.koin.dsl.module
 val themeSettingsModule: Module = module {
     // What the settings search finds on this page; the settings list collects every page's.
     single<SettingsSearchProvider>(named("theme")) { themeSettingsSearch }
-    viewModel { ThemeSettingsViewModel(preferences = get(), seasonal = get()) }
+    viewModel {
+        ThemeSettingsViewModel(preferences = get(), seasonal = get(), firebaseController = get())
+    }
     viewModel {
         SeasonalThemeOverlayViewModel(seasonal = get(), theme = get(), firebaseController = get())
     }

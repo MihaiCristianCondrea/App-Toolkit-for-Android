@@ -72,8 +72,10 @@ class DefaultSeasonalThemeRepository(
         if (today.holidaySeason == snapshot.season) return
 
         if (isWearing(snapshot.season)) {
-            theme.saveStaticPaletteId(snapshot.previousPaletteId)
-            theme.saveDynamicColors(snapshot.previousDynamicColors)
+            theme.savePalette(
+                dynamicColors = snapshot.previousDynamicColors,
+                staticPaletteId = snapshot.previousPaletteId,
+            )
         }
         seasonal.saveHolidayThemeSnapshot(null)
     }
@@ -89,8 +91,7 @@ class DefaultSeasonalThemeRepository(
                 previousDynamicColors = theme.dynamicColors.first(),
             )
         seasonal.saveHolidayThemeSnapshot(snapshot)
-        theme.saveDynamicColors(false)
-        theme.saveStaticPaletteId(season.paletteId)
+        theme.savePalette(dynamicColors = false, staticPaletteId = season.paletteId)
     }
 
     private suspend fun isWearing(season: HolidaySeason): Boolean =

@@ -77,9 +77,8 @@ class DefaultThemePreferencesRepositoryTest {
 
         DefaultThemePreferencesRepository(preferences).selectStaticPalette("rose")
 
-        coVerifyOrder {
-            preferences.saveDynamicColors(false)
-            preferences.saveStaticPaletteId("rose")
+        coVerify(exactly = 1) {
+            preferences.savePalette(dynamicColors = false, staticPaletteId = "rose")
         }
     }
 
@@ -89,9 +88,8 @@ class DefaultThemePreferencesRepositoryTest {
 
         DefaultThemePreferencesRepository(preferences).selectDynamicPalette(variant = 3)
 
-        coVerifyOrder {
-            preferences.saveDynamicColors(true)
-            preferences.saveDynamicPaletteVariant(3)
+        coVerify(exactly = 1) {
+            preferences.savePalette(dynamicColors = true, dynamicPaletteVariant = 3)
         }
     }
 

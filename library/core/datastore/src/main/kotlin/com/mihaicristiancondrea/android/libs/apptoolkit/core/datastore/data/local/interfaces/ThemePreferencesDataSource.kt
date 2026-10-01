@@ -54,4 +54,23 @@ interface ThemePreferencesDataSource {
 
     /** Persists the static palette id, sanitized to a known palette. */
     suspend fun saveStaticPaletteId(id: String)
+
+    /**
+     * Persists a palette choice: whether dynamic colors are on, plus the palette that goes with
+     * it. A null value is left unchanged.
+     *
+     * A palette choice always changes [dynamicColors] together with a palette, and two separate
+     * writes would let a process death keep only the first one. `DefaultThemePreferencesDataSource`
+     * writes everything in one transaction; this default writes the values one by one so other
+     * implementations keep compiling.
+     */
+    suspend fun savePalette(
+        dynamicColors: Boolean,
+        dynamicPaletteVariant: Int? = null,
+        staticPaletteId: String? = null,
+    ) {
+        saveDynamicColors(dynamicColors)
+        dynamicPaletteVariant?.let { variant -> saveDynamicPaletteVariant(variant) }
+        staticPaletteId?.let { id -> saveStaticPaletteId(id) }
+    }
 }

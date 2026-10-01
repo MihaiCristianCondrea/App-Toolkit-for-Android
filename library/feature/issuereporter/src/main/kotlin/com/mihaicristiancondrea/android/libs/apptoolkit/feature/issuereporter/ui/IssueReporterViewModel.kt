@@ -197,10 +197,12 @@ class IssueReporterViewModel(
                     sendIssueReport(params)
                         .flowOn(dispatchers.io)
                         .map { it.asDataState() }
-                        .onEach { result -> handleResult(result) }
+                        // Before onEach, so the error it emits is handled like any other result and
+                        // the sheet leaves its sending state.
                         .catch { throwable ->
                             emit(DataState.Error(error = IssueReporterError.Generic(message = throwable.message)))
                         }
+                        .onEach { result -> handleResult(result) }
                         .collect { /* handled in onEach */ }
                 },
                 onError = {

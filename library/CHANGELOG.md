@@ -40,6 +40,7 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Added `UiSnackbar.actionLabel` and `DefaultSnackbarHandler(getActionEvent, drawHost)`, and `DefaultSnackbarHandler` now uses the scaffold's host when given none.
 - Added `ShellHost(snackbarHostState)`: an app shows its own messages, such as its activity's view model's, in the tabs' scaffold with every other snackbar, above the bottom bar, its buttons and the player, on any window size.
 - Added `besideNavigationTitle()` and `LocalBesideNavigationTransitions` to `:library:navigation`, and `titleModifier` to `ShellTopAppBar`: beside a rail or drawer, the title of the tab's bar and of the page standing in for it grow or shrink into one another as one replaces the other in place.
+- Added `ThemePreferencesDataSource.savePalette(dynamicColors, dynamicPaletteVariant, staticPaletteId)`, which stores a palette choice in one write. It has a default implementation, so other implementations of the interface keep compiling.
 
 ### Changed
 
@@ -62,6 +63,7 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - The content width row shows only when the app's `ShellLayoutPolicy` sets a maximum width, and the developer options offer the player accessory only to an app with a player.
 - A page beside a rail or a permanent drawer keeps square start corners (`rememberDeviceCornerShape(squareStart = true)`), so its app bar is no longer rounded next to the rail on phones with rounded screens, in landscape.
 - `PageSurface`, `PageScaffold`, the list-detail scene and the shell's tab scaffold now provide `LocalContentColor` for the colour they draw on, so text and icons outside a Material `Surface` follow the theme instead of defaulting to black in the dark theme.
+- `DisplaySettingsViewModel`, `ThemeSettingsViewModel` and `OnboardingThemeViewModel` take a `FirebaseController` and report a failed preference write as a non-fatal instead of dropping it. Their Koin modules pass it already; code that builds them directly must pass one.
 
 ### Improved
 
@@ -75,6 +77,9 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - The startup and onboarding pages keep to a 640dp column centred on tablets and wide windows instead of stretching across them.
 - Improved the shell's performance without changing how it looks or moves: the list-detail separator, its back gesture and the hiding bottom bar no longer recompose the panes or the mini player on each frame; the rail and the permanent drawer no longer recompose on every navigation; a screen's floating action buttons redraw only when they change, and their hosts leave with their screens; the settings search builds its index on the first search instead of when the settings open.
 - Improved snowfall and rainfall, which now share one frame node (`ParticleEffectNode`): the frame loop is cancelled on detach and requests no frames while there is nothing to move, and the rain's gusts and showers stay smooth however long it falls.
+- The shell's player no longer recomposes itself or the app's player content on each frame while it is dragged, expands or collapses: its size, corners and shadow follow the drag in layout and drawing.
+- Changing the bouncy buttons, bottom bar labels or ads setting now recomposes only the parts that read it (`LocalBouncyAnimationsEnabled`, `LocalShowBottomBarLabels`, `LocalAdsEnabled`), instead of everything under `AppTheme`.
+- Choosing a palette, and the holiday theme applying or restoring itself, now store dynamic colors and the palette in one write, so a process death in between can no longer keep only half the choice.
 
 ### Removed
 
@@ -104,6 +109,10 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Fixed a damaged shell settings file crashing the app on every launch: the shell now falls back to its default settings.
 - Fixed `extractChangesForVersion` returning only the version heading for Keep a Changelog style notes: the section now ends at the next heading of the same or a higher level, so `### Added` and similar sub-headings stay in it.
 - Fixed a `BaseCoreManager` subclass that overrides `dispatchers` crashing on start, and `BaseCoreManager.isAppLoaded` possibly staying `false` for readers on the main thread.
+- Fixed the consent form reporting success when it closed with an error: the request now fails, as it does when the form cannot load.
+- Fixed the issue reporter sheet staying in its sending state when sending threw: it returns to the form and shows the failure.
+- Fixed toggling one ads setting cancelling the other's save while both were in flight.
+- Fixed the seasonal theme overlay silently swallowing failures, including cancellation, while restoring the everyday theme or answering the holiday greeting: failures are now reported as non-fatals.
 
 ---
 

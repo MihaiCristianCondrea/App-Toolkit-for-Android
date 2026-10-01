@@ -100,11 +100,6 @@ class ToolkitTilesViewModel(
             }
                 .flowOn(dispatchers.default)
                 .onStart { screenState.setLoading() }
-                .catchReport(action = Actions.LOAD_TILES) {
-                    screenState.setError(
-                        message = UiTextHelper.StringResource(R.string.tiles_error_failed_to_load),
-                    )
-                }
                 .onEach { (categories, expandedCategoryIds) ->
                     // The catalogue re-emits on every refresh and on every expand/collapse, so the
                     // list view is reported once rather than once per emission.
@@ -120,6 +115,13 @@ class ToolkitTilesViewModel(
                             categories = categories.toUiModels(),
                             expandedCategoryIds = expandedCategoryIds.toPersistentSet(),
                         )
+                    )
+                }
+                // After onEach, so a failure while building the UI models is reported too
+                // instead of reaching viewModelScope.
+                .catchReport(action = Actions.LOAD_TILES) {
+                    screenState.setError(
+                        message = UiTextHelper.StringResource(R.string.tiles_error_failed_to_load),
                     )
                 }
                 .launchIn(viewModelScope)

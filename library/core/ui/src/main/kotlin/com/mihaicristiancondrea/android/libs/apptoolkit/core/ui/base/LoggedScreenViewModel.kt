@@ -154,12 +154,6 @@ abstract class LoggedScreenViewModel<T, E : UiEvent, A : ActionEvent>(
         return catch { throwable ->
             if (throwable is CancellationException) throw throwable
 
-            val merged = HashMap<String, String>(extra.size + 3)
-            merged[Breadcrumb.Keys.ACTION] = action
-            merged[Breadcrumb.Keys.STEP] = "catch"
-            merged[Breadcrumb.Keys.ERROR] = throwable::class.java.simpleName ?: "Throwable"
-            merged.putAll(extra)
-
             breadcrumb(
                 message = Breadcrumb.Messages.VM_OP_ERROR,
                 attributes = buildMap(extra.size + 3) {
