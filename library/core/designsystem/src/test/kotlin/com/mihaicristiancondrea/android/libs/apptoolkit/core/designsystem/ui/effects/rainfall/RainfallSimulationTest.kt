@@ -116,6 +116,22 @@ class RainfallSimulationTest {
         assertFalse(showery.intensity > 1f)
     }
 
+    @Test
+    fun `the wind stays smooth however long the rain falls`() {
+        // No drops, so only the waves move: two hours of 50ms frames.
+        val rain = simulation(RainfallStyle(density = 0f, gusts = 1f))
+        var previous = rain.windSlant
+        var largestStep = 0f
+
+        repeat(times = 144_000) {
+            rain.advance(elapsedMillis = 50f)
+            largestStep = maxOf(largestStep, kotlin.math.abs(rain.windSlant - previous))
+            previous = rain.windSlant
+        }
+
+        assertTrue(largestStep < 0.05f, "the wind jumped by $largestStep in one frame")
+    }
+
     private fun simulation(style: RainfallStyle) = RainfallSimulation(style, Random(7)).apply {
         resize(widthPx = phoneWidthPx, heightPx = phoneHeightPx, pxPerDp = pxPerDp)
     }

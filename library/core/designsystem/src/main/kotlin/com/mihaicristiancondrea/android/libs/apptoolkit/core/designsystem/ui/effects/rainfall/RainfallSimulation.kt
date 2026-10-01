@@ -86,7 +86,12 @@ internal class RainfallSimulation(
     private var nextSplash: Int = 0
     private var splashStroke: Stroke = Stroke()
 
-    private var clockMillis: Float = 0f
+    /**
+     * Where each of the gusts' and the showers' two waves is in its cycle, as a share of a turn.
+     * Each wraps at its own full cycle, so the waves stay smooth however long the rain falls.
+     */
+    private val gustPhases = FloatArray(2)
+    private val showerPhases = FloatArray(2)
 
     /** Sideways pixels per pixel fallen, gusts included: the lean every streak shares right now. */
     var windSlant: Float = baseSlant()
@@ -170,9 +175,10 @@ internal class RainfallSimulation(
     override fun advance(elapsedMillis: Float) {
         val step = elapsedMillis.coerceIn(0f, MAX_STEP_MILLIS)
         if (step == 0f) return
-        clockMillis = (clockMillis + step) % CLOCK_WRAP_MILLIS
-        windSlant = baseSlant() + style.gusts * MAX_GUST_SLANT * wave(GUST_PERIODS)
-        intensity = 1f - style.showers * (HALF + HALF * wave(SHOWER_PERIODS))
+        advancePhases(gustPhases, GUST_PERIODS, step)
+        advancePhases(showerPhases, SHOWER_PERIODS, step)
+        windSlant = baseSlant() + style.gusts * MAX_GUST_SLANT * wave(gustPhases)
+        intensity = 1f - style.showers * (HALF + HALF * wave(showerPhases))
 
         for (index in splashAge.indices) {
             if (splashAge[index] < 0f) continue
@@ -248,14 +254,21 @@ internal class RainfallSimulation(
 
     private fun baseSlant(): Float = style.wind.coerceIn(-1f, 1f) * MAX_SLANT
 
+    /** Moves each wave of [phases] on by [step] milliseconds of its period in [periods]. */
+    private fun advancePhases(phases: FloatArray, periods: FloatArray, step: Float) {
+        for (index in phases.indices) {
+            phases[index] = (phases[index] + step / periods[index]) % 1f
+        }
+    }
+
     /**
      * Two sine waves of unrelated periods added and scaled to `-1..1`, so the motion never quite
      * repeats within a sitting.
      */
-    private fun wave(periods: FloatArray): Float {
-        val first = sin(TWO_PI * clockMillis / periods[0])
-        val second = sin(TWO_PI * clockMillis / periods[1] + PHASE)
-        return (first * FIRST_WEIGHT + second * (1f - FIRST_WEIGHT))
+    private fun wave(phases: FloatArray): Float {
+        val first = sin(TWO_PI * phases[0])
+        val second = sin(TWO_PI * phases[1] + PHASE)
+        return first * FIRST_WEIGHT + second * (1f - FIRST_WEIGHT)
     }
 
     private fun dropCountFor(widthPx: Int, heightPx: Int, pxPerDp: Float): Int {
@@ -291,9 +304,6 @@ internal class RainfallSimulation(
         const val TWO_PI: Float = 6.2831855f
         const val MAX_STEP_MILLIS: Float = 50f
         const val MILLIS_PER_SECOND: Float = 1000f
-
-        /** Keeps the clock's float precision; long past every period below. */
-        const val CLOCK_WRAP_MILLIS: Float = 3_600_000f
 
         val GUST_PERIODS: FloatArray = floatArrayOf(7_300f, 2_900f)
         val SHOWER_PERIODS: FloatArray = floatArrayOf(23_000f, 9_700f)
