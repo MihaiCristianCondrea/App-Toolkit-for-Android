@@ -70,10 +70,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -84,6 +86,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalView
@@ -216,23 +219,44 @@ private fun <T : Any> ListDetailLayout(
     // to the end with it. From the detail's own side the finger moves toward the list, where a
     // separator sliding the other way felt wrong, so the detail shrinks in place and leans after
     // the finger instead, as a window does under the system's gesture from that edge.
+    //
+    // Everything that moves with a frame (the gesture, the separator, the slide and the shrink) is
+    // read through these lambdas where it is laid out or drawn, never while composing, so a drag or
+    // a back gesture lays the panes out again on each frame without recomposing them.
     val backState = rememberNavigationEventState(NavigationEventInfo.None)
-    val gesture = backState.transitionState
-    val latestEvent = (gesture as? NavigationEventTransitionState.InProgress)?.latestEvent
-    val gestureProgress = latestEvent?.progress ?: 0f
     val detailEdge = if (direction > 0f) NavigationEvent.EDGE_RIGHT else NavigationEvent.EDGE_LEFT
-    val fromDetailSide = latestEvent?.swipeEdge == detailEdge
-    val shownFraction = if (fromDetailSide) fraction.value else lerp(fraction.value, 1f, gestureProgress)
+    val latestEvent: () -> NavigationEvent? = {
+        (backState.transitionState as? NavigationEventTransitionState.InProgress)?.latestEvent
+    }
+    // The separator under the finger, ahead of [fraction] until the drag ends.
+    var dragging by remember { mutableStateOf(false) }
+    val dragFraction = remember { mutableFloatStateOf(0f) }
+    val baseFraction: () -> Float = { if (dragging) dragFraction.floatValue else fraction.value }
+    val shownFraction: () -> Float = {
+        val event = latestEvent()
+        if (event != null && event.swipeEdge == detailEdge) {
+            baseFraction()
+        } else {
+            lerp(baseFraction(), 1f, event?.progress ?: 0f)
+        }
+    }
     // How far the detail has shrunk in place, and how visible it still is, once released.
     val inPlace = remember { Animatable(0f) }
     val inPlaceAlpha = remember { Animatable(1f) }
     // The gesture as last seen, for the moment back completes: the state may be idle by then.
     val lastGesture = remember { ListDetailGesture() }
-    if (latestEvent != null) {
-        lastGesture.fromDetailSide = fromDetailSide
-        lastGesture.progress = gestureProgress
+    LaunchedEffect(backState, detailEdge) {
+        snapshotFlow { latestEvent() }.collect { event ->
+            if (event != null) {
+                lastGesture.fromDetailSide = event.swipeEdge == detailEdge
+                lastGesture.progress = event.progress
+            }
+        }
     }
-    val detailShrink = if (fromDetailSide) gestureProgress else inPlace.value
+    val detailShrink: () -> Float = {
+        val event = latestEvent()
+        if (event != null && event.swipeEdge == detailEdge) event.progress else inPlace.value
+    }
     val slideToPop: suspend () -> Unit = {
         fraction.animateTo(1f, tween((200 * motion.durationScale).roundToInt()))
         closeDetail()
@@ -261,7 +285,7 @@ private fun <T : Any> ListDetailLayout(
                 if (fromDetail) {
                     shrinkToPop(progress)
                 } else {
-                    fraction.snapTo(shownFraction)
+                    fraction.snapTo(lerp(fraction.value, 1f, progress))
                     slideToPop()
                 }
             }
@@ -270,14 +294,20 @@ private fun <T : Any> ListDetailLayout(
 
     BoxWithConstraints(Modifier.fillMaxSize()) {
         val panesWidth = maxWidth - SeparatorWidth
-        val listWidth = panesWidth * shownFraction
+        val listWidth: () -> Dp = { panesWidth * shownFraction() }
         // The detail keeps the width it rests at while it slides out, rather than squeezing.
-        val detailWidth = panesWidth * (1f - minOf(shownFraction, restingFraction))
+        val detailWidth: () -> Dp = { panesWidth * (1f - minOf(shownFraction(), restingFraction)) }
         val widthPx = with(density) { panesWidth.toPx() }.coerceAtLeast(1f)
         val separatorInteractions = remember { MutableInteractionSource() }
         val dragState = rememberDraggableState { delta ->
+            if (!dragging) {
+                // The finger takes the separator from wherever it is, stopping any slide.
+                dragFraction.floatValue = fraction.value
+                dragging = true
+                scope.launch { fraction.stop() }
+            }
             val max = if (hasDetail) 1f else MaxRestingFraction
-            scope.launch { fraction.snapTo((fraction.value + direction * delta / widthPx).coerceIn(MinFraction, max)) }
+            dragFraction.floatValue = (dragFraction.floatValue + direction * delta / widthPx).coerceIn(MinFraction, max)
         }
 
         // The list the navigation beside it opened stands in for a tab, and is drawn like one.
@@ -317,7 +347,7 @@ private fun <T : Any> ListDetailLayout(
                     .weight(1f)
                     .then(if (carded) Modifier.clip(ContentCardShape).background(MaterialTheme.colorScheme.surface) else Modifier),
             ) {
-                Box(Modifier.width(listWidth).fillMaxHeight().nestedScroll(listScroll)) {
+                Box(Modifier.widthOf(listWidth).fillMaxHeight().nestedScroll(listScroll)) {
                     CompositionLocalProvider(
                         LocalPaneRole provides PaneRole.List,
                         LocalSelectedDetail provides detailEntry?.contentKey,
@@ -332,6 +362,10 @@ private fun <T : Any> ListDetailLayout(
                         orientation = Orientation.Horizontal,
                         interactionSource = separatorInteractions,
                         onDragStopped = {
+                            if (dragging) {
+                                fraction.snapTo(dragFraction.floatValue)
+                                dragging = false
+                            }
                             if (hasDetail && fraction.value > PopFraction) {
                                 slideToPop()
                             } else {
@@ -346,6 +380,7 @@ private fun <T : Any> ListDetailLayout(
                         .weight(1f)
                         .fillMaxHeight()
                         .graphicsLayer {
+                            val detailShrink = detailShrink()
                             if (detailShrink <= 0f) return@graphicsLayer
                             val scale = 1f - (1f - DetailBackScale) * detailShrink
                             scaleX = scale
@@ -361,7 +396,7 @@ private fun <T : Any> ListDetailLayout(
                     Box(
                         Modifier
                             .wrapContentWidth(Alignment.Start, unbounded = true)
-                            .requiredWidth(detailWidth)
+                            .requiredWidthOf(detailWidth)
                             .fillMaxHeight()
                             .nestedScroll(detailScroll),
                     ) {
@@ -391,6 +426,23 @@ private fun <T : Any> ListDetailLayout(
 }
 
 /**
+ * [Modifier.width] with a width read while measuring, so a width that moves every frame lays the
+ * element out again without recomposing it.
+ */
+private fun Modifier.widthOf(width: () -> Dp): Modifier = layout { measurable, constraints ->
+    val px = width().roundToPx().coerceIn(constraints.minWidth, constraints.maxWidth)
+    val placeable = measurable.measure(constraints.copy(minWidth = px, maxWidth = px))
+    layout(placeable.width, placeable.height) { placeable.place(0, 0) }
+}
+
+/** [Modifier.requiredWidth] with a width read while measuring, as [widthOf] is. */
+private fun Modifier.requiredWidthOf(width: () -> Dp): Modifier = layout { measurable, constraints ->
+    val px = width().roundToPx().coerceAtLeast(0)
+    val placeable = measurable.measure(constraints.copy(minWidth = px, maxWidth = px))
+    layout(placeable.width, placeable.height) { placeable.place(0, 0) }
+}
+
+/**
  * How far a pane's content has scrolled from its top, as Material's pinned app bar counts it: what
  * the content consumed, back to zero once it is pulled past its top.
  */
@@ -412,7 +464,7 @@ private class PaneScrollOffset : NestedScrollConnection {
 private fun ListDetailTopBar(
     listChrome: PageChrome?,
     detailChrome: PageChrome?,
-    listWidth: Dp,
+    listWidth: () -> Dp,
     onCloseList: () -> Unit,
     showsBack: Boolean,
     containerColor: Color,
@@ -429,7 +481,7 @@ private fun ListDetailTopBar(
     ) {
         Row(
             modifier = Modifier
-                .width(listWidth)
+                .widthOf(listWidth)
                 .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Start)),
             verticalAlignment = Alignment.CenterVertically,
         ) {
