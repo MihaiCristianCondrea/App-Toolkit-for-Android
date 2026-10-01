@@ -32,7 +32,6 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.animation.ContentTransform
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.expandVertically
@@ -152,6 +151,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.ShellE
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.topShellInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellBackHandler
 import androidx.navigationevent.NavigationEvent
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.LocalShowBottomBarLabels
@@ -166,8 +167,33 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.shell.R
 @Immutable
 class ShellChromeController(
     val showsMenuButton: Boolean,
-    val openNavigation: () -> Unit, // FIXME: Property "openNavigation" is never used
+    /**
+     * Opens the navigation drawer or rail. Nothing in the Toolkit calls it, since its own screens
+     * use the shell's app bar; it is the host-facing way for a screen that draws its own header
+     * to open the navigation, documented in the module README.
+     */
+    @Suppress("unused")
+    val openNavigation: () -> Unit,
 )
+
+/**
+ * The floating action button hosts of the tab screens, by screen entry.
+ *
+ * A stable holder, so the bodies it is passed to can skip; a plain mutable map is unstable. Its
+ * contents need no snapshot state: a screen takes its host once, in `remember`.
+ */
+@Stable
+internal class FabHosts {
+    private val hosts: MutableMap<String, FabHost> = mutableMapOf()
+
+    /** The host for [entryKey], created the first time it is asked for. */
+    fun hostFor(entryKey: String): FabHost = hosts.getOrPut(entryKey) { FabHost() }
+
+    /** Drops the hosts of every screen not in [liveEntryKeys]. */
+    fun retainOnly(liveEntryKeys: Set<String>) {
+        hosts.keys.retainAll(liveEntryKeys)
+    }
+}
 
 /**
  * The shell's snackbar host, set by `ShellHost`, and how many tab scaffolds draw it now. While none
@@ -200,22 +226,26 @@ internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val playerExpansion = remember { Animatable(0f) }
+    val playerExpansion = remember { PlayerExpansion() }
     // Read as a yes or no, so the chrome recomposes when the player starts or stops opening, not on
     // every frame of it.
     val playerCollapsed by remember { derivedStateOf { playerExpansion.value == 0f } }
     var bottomDock by remember { mutableStateOf(0.dp) }
-    val searches = rememberSaveable(
-        saver = listSaver(save = { list -> list.map { it.query } }, restore = { queries -> queries.map(::ShellSearch) }),
-    ) { graph.tabs.map { ShellSearch() } }
+    // An immutable list, so the bodies it is passed to can skip; each search is itself stable.
+    val searches: ImmutableList<ShellSearch> = rememberSaveable(
+        saver = listSaver(
+            save = { list -> list.map { it.query } },
+            restore = { queries -> queries.map(::ShellSearch).toImmutableList() },
+        ),
+    ) { graph.tabs.map { ShellSearch() }.toImmutableList() }
     // Where each tab screen puts the floating action buttons it declares, by the screen's entry.
-    val fabHosts = remember { mutableMapOf<String, FabHost>() }
+    val fabHosts = remember { FabHosts() }
     // A host lives as long as its screen's entry: once a screen has left every tab's stack, its host
     // goes too, rather than one staying behind for every child ever opened.
     LaunchedEffect(navigator, graph) {
         snapshotFlow {
             graph.tabs.indices.flatMapTo(HashSet()) { tab -> navigator.tabStack(tab).map { tabEntryKey(tab, it) } }
-        }.collect { live -> fabHosts.keys.retainAll(live) }
+        }.collect { live -> fabHosts.retainOnly(live) }
     }
 
     val player = graph.player?.takeIf { settings.accessoryMode.showsPlayer }
@@ -252,7 +282,7 @@ internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
     val openNavigation: () -> Unit = remember(wide, frame, layout.mode, drawerState, scope) {
         {
             when {
-                wide -> frame?.openNavigation(layout.mode) // FIXME: Unnecessary safe call on a non-null receiver of type 'ShellFrameState'.
+                wide -> frame.openNavigation(layout.mode)
                 layout.mode == ShellLayoutMode.BottomBar || layout.mode == ShellLayoutMode.Auto -> scope.launch { drawerState.open() }
             }
         }
@@ -398,8 +428,8 @@ internal val DrawerContentInsets: WindowInsets
 private fun ShellBody(
     graph: ShellGraph,
     navigator: ShellNavigator,
-    searches: List<ShellSearch>, // FIXME: Unstable parameter 'fabHosts' prevents composable from being skippable
-    fabHosts: MutableMap<String, FabHost>, // FIXME: Parameter 'searches' has runtime-determined stability
+    searches: ImmutableList<ShellSearch>,
+    fabHosts: FabHosts,
     callbacks: NavigationCallbacks,
     navigationNamesApp: Boolean,
     showMenuButton: Boolean,
@@ -554,7 +584,7 @@ private fun ShellBody(
                 val fab = shown.floatingActionButton
                 // The buttons the graph describes, then those the screen itself declares. The host
                 // is held here, so a screen's buttons still scale out after its entry has gone.
-                val host = remember(index, key) { fabHosts.getOrPut(tabEntryKey(index, key)) { FabHost() } }
+                val host = remember(index, key) { fabHosts.hostFor(tabEntryKey(index, key)) }
                 val described = shown.floatingActionButtons?.invoke(key).orEmpty() + host.fabs
                 if (fab != null || described.isNotEmpty()) {
                     Column(
@@ -623,8 +653,8 @@ private fun ShellBody(
 private fun TabsNavDisplay(
     graph: ShellGraph,
     navigator: ShellNavigator,
-    searches: List<ShellSearch>, // FIXME: Parameter 'searches' has runtime-determined stability
-    fabHosts: MutableMap<String, FabHost>, // FIXME: Unstable parameter 'fabHosts' prevents composable from being skippable
+    searches: ImmutableList<ShellSearch>,
+    fabHosts: FabHosts,
 ) {
     val motion = LocalShellMotion.current
     val layout = LocalShellLayout.current
@@ -636,7 +666,7 @@ private fun TabsNavDisplay(
                 rememberViewModelStoreNavEntryDecorator(),
             ),
             entryProvider = { key ->
-                tabEntry(graph, key, tabIndex, searches[tabIndex], fabHosts.getOrPut(tabEntryKey(tabIndex, key)) { FabHost() })
+                tabEntry(graph, key, tabIndex, searches[tabIndex], fabHosts.hostFor(tabEntryKey(tabIndex, key)))
             },
         )
     }

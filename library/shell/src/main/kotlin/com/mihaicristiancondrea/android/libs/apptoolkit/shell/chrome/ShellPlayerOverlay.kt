@@ -19,6 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -46,6 +47,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -69,6 +71,30 @@ val MiniPlayerHeight: Dp = 64.dp
 internal val MiniPlayerReserve: Dp = MiniPlayerHeight + 16.dp
 
 /**
+ * How far the player is open, from 0 (the docked pill) to 1 (the full window).
+ *
+ * A stable holder around an [Animatable], whose stability the Compose compiler can only decide at
+ * runtime because it comes from another module: passed around as is, it kept the overlay and the
+ * chrome from skipping. Reading [value] or [targetValue] is a snapshot read, as on the animatable.
+ */
+@Stable
+internal class PlayerExpansion {
+    private val animatable: Animatable<Float, AnimationVector1D> = Animatable(0f)
+
+    val value: Float get() = animatable.value
+
+    val targetValue: Float get() = animatable.targetValue
+
+    suspend fun snapTo(target: Float) {
+        animatable.snapTo(target)
+    }
+
+    suspend fun animateTo(target: Float, animationSpec: AnimationSpec<Float>) {
+        animatable.animateTo(target, animationSpec)
+    }
+}
+
+/**
  * Draws [player] over the shell.
  *
  * Collapsed, the player is a pill docked [dockBottom] above the window's bottom edge (the top of
@@ -81,7 +107,7 @@ internal val MiniPlayerReserve: Dp = MiniPlayerHeight + 16.dp
 internal fun ShellPlayerOverlay(
     player: ShellPlayer,
     active: Boolean,
-    expansion: Animatable<Float, AnimationVector1D>, // FIXME: Parameter 'expansion' has runtime-determined stability
+    expansion: PlayerExpansion,
     dockBottom: () -> Dp,
     dockStart: Dp,
 ) {
