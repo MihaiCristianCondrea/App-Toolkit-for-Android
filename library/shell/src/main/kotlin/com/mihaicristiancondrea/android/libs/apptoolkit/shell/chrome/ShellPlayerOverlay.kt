@@ -51,10 +51,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
+import androidx.compose.ui.unit.offset
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellPlayer
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellBackHandler
 import kotlinx.coroutines.launch
@@ -79,7 +81,7 @@ internal fun ShellPlayerOverlay(
     player: ShellPlayer,
     active: Boolean,
     expansion: Animatable<Float, AnimationVector1D>,
-    dockBottom: Dp,
+    dockBottom: () -> Dp,
     dockStart: Dp,
 ) {
     val scope = rememberCoroutineScope()
@@ -97,7 +99,7 @@ internal fun ShellPlayerOverlay(
         if (!active) expansion.snapTo(0f)
     }
 
-    val travel = { _: Int -> with(density) { (dockBottom + MiniPlayerHeight + PlayerEntranceRise).roundToPx() } }
+    val travel = { _: Int -> with(density) { (dockBottom() + MiniPlayerHeight + PlayerEntranceRise).roundToPx() } }
     AnimatedVisibility(
         visible = active,
         enter = slideInVertically(spring(dampingRatio = 0.85f, stiffness = Spring.StiffnessMediumLow), travel) +
@@ -106,9 +108,9 @@ internal fun ShellPlayerOverlay(
     ) {
         BoxWithConstraints(Modifier.fillMaxSize()) {
             val progress = expansion.value
-            val travelPx = with(density) { (maxHeight - MiniPlayerHeight - dockBottom).toPx().coerceAtLeast(1f) }
+            val travelPx = { with(density) { (maxHeight - MiniPlayerHeight - dockBottom()).toPx().coerceAtLeast(1f) } }
             val dragState = rememberDraggableState { delta ->
-                scope.launch { expansion.snapTo((expansion.value - delta / travelPx).coerceIn(0f, 1f)) }
+                scope.launch { expansion.snapTo((expansion.value - delta / travelPx()).coerceIn(0f, 1f)) }
             }
             Surface(
                 onClick = { if (expansion.value == 0f) settle(1f) },
@@ -118,8 +120,8 @@ internal fun ShellPlayerOverlay(
                     .padding(
                         start = lerp(dockStart + 12.dp, 0.dp, progress),
                         end = lerp(12.dp, 0.dp, progress),
-                        bottom = lerp(dockBottom + 8.dp, 0.dp, progress),
                     )
+                    .bottomPadding { lerp(dockBottom() + 8.dp, 0.dp, expansion.value) }
                     .fillMaxWidth()
                     .height(lerp(MiniPlayerHeight, maxHeight, progress))
                     .draggable(
@@ -177,3 +179,14 @@ internal fun ShellPlayerOverlay(
 
 private val PlayerEntranceRise = 96.dp
 private const val FlingVelocity = 1200f
+
+/**
+ * `padding(bottom = ...)` with the padding read while measuring, so a dock that moves on every
+ * frame, as the bottom bar does while it hides, lays the player out again without recomposing it.
+ */
+private fun Modifier.bottomPadding(bottom: () -> Dp): Modifier = layout { measurable, constraints ->
+    val bottomPx = bottom().roundToPx().coerceAtLeast(0)
+    val placeable = measurable.measure(constraints.offset(vertical = -bottomPx))
+    val height = constraints.constrainHeight(placeable.height + bottomPx)
+    layout(constraints.constrainWidth(placeable.width), height) { placeable.place(0, 0) }
+}

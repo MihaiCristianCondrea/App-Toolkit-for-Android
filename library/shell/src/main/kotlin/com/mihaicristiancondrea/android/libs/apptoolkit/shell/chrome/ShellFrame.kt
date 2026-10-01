@@ -176,25 +176,29 @@ internal fun ShellFrame(
     }
 
     // The navigation replaces what is beside it instead of stacking on it: a tab closes the open
-    // pages, and an entry swaps them for its own page.
-    val callbacks = NavigationCallbacks(
-        onTabClick = { index ->
-            state.railOverlayOpen = false
-            navigator.closePages()
-            navigator.selectTab(index)
-        },
-        onEntryClick = { entry ->
-            state.railOverlayOpen = false
-            when (entry) {
-                is DrawerEntry.Link -> if (navigator.pages != listOf(navigator.pages.first(), entry.key)) {
-                    navigator.closePages()
-                    navigator.navigate(entry.key)
+    // pages, and an entry swaps them for its own page. Kept across recompositions, as the chrome's
+    // are: this frame recomposes on every navigation, and new callbacks would recompose every rail
+    // and drawer item with it.
+    val callbacks = remember(navigator, state, context) {
+        NavigationCallbacks(
+            onTabClick = { index ->
+                state.railOverlayOpen = false
+                navigator.closePages()
+                navigator.selectTab(index)
+            },
+            onEntryClick = { entry ->
+                state.railOverlayOpen = false
+                when (entry) {
+                    is DrawerEntry.Link -> if (navigator.pages != listOf(navigator.pages.first(), entry.key)) {
+                        navigator.closePages()
+                        navigator.navigate(entry.key)
+                    }
+                    is DrawerEntry.Action -> entry.onClick(context)
+                    DrawerEntry.Spacer -> Unit
                 }
-                is DrawerEntry.Action -> entry.onClick(context)
-                DrawerEntry.Spacer -> Unit
-            }
-        },
-    )
+            },
+        )
+    }
     val highlightedTab = highlightedTab(graph, navigator, layout.listDetail, pagesReplaceTab = true)
     // The page the navigation opened, at the bottom of the pages, stays marked while pages opened
     // from it stack above.

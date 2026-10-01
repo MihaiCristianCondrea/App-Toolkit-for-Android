@@ -282,7 +282,8 @@ internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
                 player = player,
                 active = playerActive,
                 expansion = playerExpansion,
-                dockBottom = bottomDock,
+                // Read where the player lays out: the hiding bottom bar changes it on every frame.
+                dockBottom = { bottomDock },
                 // Beside the navigation the chrome already starts after it.
                 dockStart = 0.dp,
             )
