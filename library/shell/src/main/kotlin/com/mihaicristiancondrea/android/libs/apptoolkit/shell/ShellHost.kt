@@ -26,7 +26,12 @@ import androidx.activity.compose.LocalActivity
 import androidx.core.util.Consumer
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -41,6 +46,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -62,6 +68,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.List
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalTopBarStyleOverride
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalHideTopBarOnScroll
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.PageScaffold
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalPageKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
@@ -87,7 +94,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.Screen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import androidx.navigation3.scene.Scene
 import androidx.compose.material3.SnackbarHostState
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.LocalShellSnackbarHostState
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.LocalShellSnackbarHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.ShellSnackbarHost
 
 /**
  * The whole app below the activity: every tab, page, bar, rail, drawer and transition described
@@ -122,7 +130,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.LocalShellS
  * @param snackbarHostState Where the tabs' scaffold shows its snackbars. Pass one to show messages
  * that belong to the whole app, such as those of the activity's own view model, above the bottom
  * bar with the rest: `DefaultSnackbarHandler(state, snackbarHostState = it, drawHost = false)`.
- * The shell keeps a host of its own by default.
+ * While no tab is on screen, on a start screen or under a page, the shell shows them at the bottom
+ * of the window instead. The shell keeps a host of its own by default.
  */
 @Composable
 fun ShellHost(
@@ -138,6 +147,7 @@ fun ShellHost(
 ) {
     val context = LocalContext.current
     val shellSnackbars = snackbarHostState ?: remember { SnackbarHostState() }
+    val shellSnackbarHost = remember(shellSnackbars) { ShellSnackbarHost(shellSnackbars) }
     val store = preferences ?: remember(context) { ShellPreferences(context) }
     // A cold start waits a frame for the stored settings rather than drawing a layout it would
     // replace a frame later.
@@ -181,7 +191,7 @@ fun ShellHost(
         LocalShellMotion provides motion,
         LocalTopBarStyleOverride provides current.topBarOverride.style,
         LocalHideTopBarOnScroll provides current.hideTopBarOnScroll,
-        LocalShellSnackbarHostState provides shellSnackbars,
+        LocalShellSnackbarHost provides shellSnackbarHost,
         // Text drawn outside any Material surface takes the theme's colour instead of black.
         LocalContentColor provides MaterialTheme.colorScheme.onBackground,
     ) {
@@ -195,41 +205,54 @@ fun ShellHost(
         )
         // Beside a rail or a permanent drawer, the displays sit next to the navigation, so pages
         // open there; otherwise the frame adds nothing.
-        ShellFrame(graph, navigator, frameState) {
-            ShellNavDisplay(
-                entries = entries,
-                sceneStrategies = sceneStrategies,
-                onBack = { navigator.popPage() },
-                // Seen around the pages while the back gesture shrinks them, as behind closing windows.
-                modifier = modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.surfaceDim),
-                // Pages move as their destination declares, like activities by default; the
-                // predictive gesture on anything but the activity transition seeks it instead.
-                transitionSpec = {
-                    if (swapsInPlace(initialState, targetState, layoutInfo.mode, navigator)) {
-                        motion.tabs.inPlace()
-                    } else {
-                        motion.screens.forward(targetState.pageTransition(graph, layoutInfo.mode))
-                    }
-                },
-                popTransitionSpec = {
-                    if (swapsInPlace(initialState, targetState, layoutInfo.mode, navigator)) {
-                        motion.tabs.inPlace(back = true)
-                    } else {
-                        motion.screens.back(initialState.pageTransition(graph, layoutInfo.mode))
-                    }
-                },
-                activityBack = {
-                    graph.transitionOf(navigator.pages.last(), layoutInfo.mode) == ScreenTransition.Activity
-                },
-                predictivePopTransitionSpec = { swipeEdge ->
-                    motion.screens.back(
-                        initialState.pageTransition(graph, layoutInfo.mode),
-                        mirrored = motion.followFingerFromRight && swipeEdge == NavigationEvent.EDGE_RIGHT,
-                    )
-                },
-            )
+        Box(Modifier.fillMaxSize()) {
+            ShellFrame(graph, navigator, frameState) {
+                ShellNavDisplay(
+                    entries = entries,
+                    sceneStrategies = sceneStrategies,
+                    onBack = { navigator.popPage() },
+                    // Seen around the pages while the back gesture shrinks them, as behind closing windows.
+                    modifier = modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.surfaceDim),
+                    // Pages move as their destination declares, like activities by default; the
+                    // predictive gesture on anything but the activity transition seeks it instead.
+                    transitionSpec = {
+                        if (swapsInPlace(initialState, targetState, layoutInfo.mode, navigator)) {
+                            motion.tabs.inPlace()
+                        } else {
+                            motion.screens.forward(targetState.pageTransition(graph, layoutInfo.mode))
+                        }
+                    },
+                    popTransitionSpec = {
+                        if (swapsInPlace(initialState, targetState, layoutInfo.mode, navigator)) {
+                            motion.tabs.inPlace(back = true)
+                        } else {
+                            motion.screens.back(initialState.pageTransition(graph, layoutInfo.mode))
+                        }
+                    },
+                    activityBack = {
+                        graph.transitionOf(navigator.pages.last(), layoutInfo.mode) == ScreenTransition.Activity
+                    },
+                    predictivePopTransitionSpec = { swipeEdge ->
+                        motion.screens.back(
+                            initialState.pageTransition(graph, layoutInfo.mode),
+                            mirrored = motion.followFingerFromRight && swipeEdge == NavigationEvent.EDGE_RIGHT,
+                        )
+                    },
+                )
+            }
+            // The shell's snackbars show in the tabs' scaffold, above the bottom bar. On a start
+            // screen or under a page no tab scaffold is composed, so they show here instead, at
+            // the bottom of the window, rather than waiting for the tabs to come back.
+            if (shellSnackbarHost.drawnByTabs == 0) {
+                DefaultSnackbarHost(
+                    snackbarState = shellSnackbars,
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal)),
+                )
+            }
         }
     }
 }

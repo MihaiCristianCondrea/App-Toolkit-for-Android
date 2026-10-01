@@ -72,8 +72,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -166,8 +168,17 @@ class ShellChromeController(
     val openNavigation: () -> Unit,
 )
 
-/** The host the tabs' scaffold draws snackbars in, set by `ShellHost`. */
-internal val LocalShellSnackbarHostState = staticCompositionLocalOf<SnackbarHostState?> { null }
+/**
+ * The shell's snackbar host, set by `ShellHost`, and how many tab scaffolds draw it now. While none
+ * does, on a start screen or under a page, `ShellHost` draws it itself, so a message the app shows
+ * there is never left waiting on a host nobody draws.
+ */
+@Stable
+internal class ShellSnackbarHost(val hostState: SnackbarHostState) {
+    var drawnByTabs: Int by mutableIntStateOf(0)
+}
+
+internal val LocalShellSnackbarHost = staticCompositionLocalOf<ShellSnackbarHost?> { null }
 
 val LocalShellChrome = staticCompositionLocalOf { ShellChromeController(showsMenuButton = false, openNavigation = {}) }
 
@@ -442,7 +453,14 @@ private fun ShellBody(
 
     // The tabs' snackbars, drawn by this scaffold above the bars, the player and the buttons. The
     // host is the shell's, so the app can show its own messages here too.
-    val snackbarHostState = LocalShellSnackbarHostState.current ?: remember { SnackbarHostState() }
+    val shellSnackbarHost = LocalShellSnackbarHost.current
+    val snackbarHostState = shellSnackbarHost?.hostState ?: remember { SnackbarHostState() }
+    if (shellSnackbarHost != null) {
+        DisposableEffect(shellSnackbarHost) {
+            shellSnackbarHost.drawnByTabs++
+            onDispose { shellSnackbarHost.drawnByTabs-- }
+        }
+    }
     val snackbarScope = rememberCoroutineScope()
     val snackbars = remember(snackbarHostState, snackbarScope) { ScaffoldSnackbars(snackbarHostState, snackbarScope) }
 

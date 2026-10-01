@@ -96,6 +96,8 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Fixed `DefaultSnackbarHost` drawing nothing for snackbars without `CustomSnackbarVisuals` and never drawing an action: every snackbar now shows, with its action when it has one.
 - Fixed the ads settings page never showing its consent failures.
 - Fixed `LargeTopAppBarWithScaffold` creating a new snackbar host on every recomposition, which dropped the snackbar showing, and drawing Material's plain snackbars: it keeps one host, draws the Toolkit's, and gives the screen inside `rememberScaffoldSnackbars()`.
+- Fixed a snackbar shown through `ShellHost(snackbarHostState)` waiting, unseen, while a start screen or a page covered the tabs: the shell now shows it at the bottom of the window until the tabs are back.
+- Improved the list-detail scene, the rail, the permanent drawer, the mini player and the floating action buttons to recompose less: the separator, the back gesture and the hiding bottom bar no longer recompose the panes or the player on each frame, and the rail and drawer no longer recompose on every navigation.
 
 ---
 
