@@ -139,9 +139,7 @@ internal fun ShellPlayerOverlay(
             val dragState = rememberDraggableState { delta ->
                 scope.launch { expansion.snapTo((expansion.value - delta / travelPx()).coerceIn(0f, 1f)) }
             }
-            // Composition reads only these thresholds. The frame, corners and shadow follow
-            // [expansion] in layout and drawing, so a drag or a settle re-lays out and redraws the
-            // player on each frame instead of recomposing it and the host's player content.
+            // Observe thresholds in composition; read continuous expansion during layout and drawing to avoid recomposing player content on every frame.
             val collapsed by remember(expansion) { derivedStateOf { expansion.value == 0f } }
             val showMini by remember(expansion) { derivedStateOf { expansion.value < 1f } }
             val showExpanded by remember(expansion) { derivedStateOf { expansion.value > 0f } }

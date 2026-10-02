@@ -105,6 +105,10 @@ class ShellNavigator internal constructor(
     /** Whether the top of the shell, pages excluded, is a child rather than a tab root. */
     val isShowingChild: Boolean get() = currentTabStack.size > 1
 
+    /**
+     * Opens a registered destination according to its kind. Navigating to another detail
+     * replaces the current detail so one Back returns to the list.
+     */
     fun navigate(key: NavKey) {
         if (key == ShellHomeRoute) {
             enterShell()
@@ -127,8 +131,6 @@ class ShellNavigator internal constructor(
                 val top = pageStack.last()
                 when {
                     top == key -> Unit
-                    // A detail opened from its list replaces the detail already beside the list
-                    // rather than stacking on it, so back returns to the list in one step.
                     destination.paneRole == PaneRole.Detail && top.isDetail() -> pageStack[pageStack.lastIndex] = key
                     else -> pageStack += key
                 }
@@ -254,7 +256,6 @@ class ShellNavigator internal constructor(
  */
 @Composable
 fun rememberShellNavigator(graph: ShellGraph, onExit: () -> Unit, start: NavKey = graph.start): ShellNavigator {
-    // Only the first launch reads [start]; afterwards the saved stacks win.
     val startsOnTab = graph.tabIndexOf(start) >= 0
     val pageStack = rememberNavBackStack(if (startsOnTab) ShellHomeRoute else start)
     val tabStacks = graph.tabs.map { tab -> rememberNavBackStack(tab.key) }

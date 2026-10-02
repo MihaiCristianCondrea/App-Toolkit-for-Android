@@ -68,7 +68,6 @@ class AppsListViewModelTest : AppsListViewModelBaseTest() {
                 shortDescription = "Description",
             )
         )
-        // Setup with 1 app and initial favorites so Favorites filter is valid
         setup(
             fetchApps = apps,
             initialFavorites = setOf("pkg"),
@@ -76,7 +75,6 @@ class AppsListViewModelTest : AppsListViewModelBaseTest() {
             dispatchers = TestDispatchers(UnconfinedTestDispatcher())
         )
 
-        // Favorites is valid because we have one favorite
         viewModel.onEvent(HomeEvent.FilterSelected(AppsListFilter.Favorites))
 
         assertEquals(AppsListFilter.Favorites, viewModel.uiState.value.data?.selectedFilter)
@@ -99,11 +97,9 @@ class AppsListViewModelTest : AppsListViewModelBaseTest() {
             dispatchers = TestDispatchers(UnconfinedTestDispatcher())
         )
 
-        // Set to Favorites
         viewModel.onEvent(HomeEvent.FilterSelected(AppsListFilter.Favorites))
         assertEquals(AppsListFilter.Favorites, viewModel.uiState.value.data?.selectedFilter)
 
-        // Remove favorite
         viewModel.toggleFavorite("pkg")
         advanceUntilIdle() // Wait for toggleFavorite job
 

@@ -58,8 +58,10 @@ open class BaseCoreManager : MultiDexApplication(), Application.ActivityLifecycl
     protected val dataStore: CommonDataStoreCore by inject()
     protected open val dispatchers: DispatcherProvider = StandardDispatchers()
 
-    // Lazy because [dispatchers] is open: read while this base constructor runs, a subclass
-    // override would still be null, as its initializer has not run yet.
+    /**
+     * Defers reading the open [dispatchers] property until subclass initialization has
+     * completed.
+     */
     private val applicationScope: CoroutineScope by lazy {
         CoroutineScope(SupervisorJob() + dispatchers.io)
     }
@@ -105,15 +107,8 @@ open class BaseCoreManager : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     /**
-     * Installs the UMP crash guard for every app built on the toolkit.
-     *
-     * Change rationale: the guard used to live in a single consumer app, which left every other app
-     * exposed to the same process kill through the same library code path. It belongs here because
-     * every consumer already extends this class, so no per-app wiring is needed.
-     *
-     * It runs directly after [Firebase.initialize] returns, which is when Crashlytics has registered
-     * its uncaught-exception handler. Installing at that point makes this guard the outer handler:
-     * everything it does not recognise still reaches Crashlytics as a fatal, exactly as before.
+     * Installs the guard after Firebase initialization so unrecognized failures still reach
+     * Crashlytics through its existing uncaught-exception handler.
      */
     private fun installConsentSdkCrashGuard() {
         if (!installsConsentSdkCrashGuard) return
@@ -123,8 +118,9 @@ open class BaseCoreManager : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     /**
-     * Executes [onInitializeApp] inside a supervisor scope and marks the
-     * application as loaded once completed.
+     * Runs host initialization in a supervisor scope. Non-cancellation failures are reported
+     * and startup still completes, so callers waiting on [isAppLoaded] do not wait
+     * indefinitely.
      */
     private suspend fun initializeApp() = supervisorScope {
         val appComponentsInitialization: Deferred<Unit> = async { onInitializeApp() }
@@ -134,9 +130,6 @@ open class BaseCoreManager : MultiDexApplication(), Application.ActivityLifecycl
         } catch (cancellation: CancellationException) {
             throw cancellation
         } catch (throwable: Throwable) {
-            // A host that fails to set itself up is still a running app, and [isAppLoaded] is how
-            // anything else finds out startup is over. Leaving it false because an SDK could not
-            // reach the network would keep the app waiting on something that is never coming.
             telemetryRepository.recordNonFatal(
                 throwable = throwable,
                 attributes = mapOf("phase" to "onInitializeApp"),
@@ -153,7 +146,6 @@ open class BaseCoreManager : MultiDexApplication(), Application.ActivityLifecycl
      */
     protected open suspend fun onInitializeApp() {}
 
-    /** Marks the application as fully initialized. */
     private fun finalizeInitialization() {
         isAppLoaded = true
     }
@@ -166,9 +158,6 @@ open class BaseCoreManager : MultiDexApplication(), Application.ActivityLifecycl
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
     override fun onActivityDestroyed(activity: Activity) {}
 
-    /**
-     * Cleans up resources when the process is terminating.
-     */
     override fun onTerminate() {
         super.onTerminate()
         billingRepository.close()

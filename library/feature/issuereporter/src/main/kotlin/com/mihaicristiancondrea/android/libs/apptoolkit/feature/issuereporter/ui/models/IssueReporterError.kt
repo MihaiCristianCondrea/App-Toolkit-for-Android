@@ -21,10 +21,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.mode
 import io.ktor.http.HttpStatusCode
 
 /**
- * Why sending a report failed, in the terms the report screen renders.
- *
- * Was a private sealed interface nested inside the ViewModel, which is what kept `asDataState()`
- * there too: a mapper in `ui/mappers` could not name the type it produced.
+ * Submission failures expressed in terms the report UI can render.
  */
 internal sealed interface IssueReporterError : RootError {
     val message: String?

@@ -45,7 +45,6 @@ class LicensesViewModel(
         }
     }
 
-    // Nothing runs here: the parsing already happened in the screen, so this only reports it.
     private fun onLibrariesLoaded(libraryCount: Int) {
         startOperation(
             action = Actions.LOAD_LIBRARIES,

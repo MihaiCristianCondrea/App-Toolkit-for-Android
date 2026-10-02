@@ -24,22 +24,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.Native
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdSlot
 
 /**
- * Media-led native ad card used on the Support screen.
+ * Support-screen placement using the shared media-led [NativeAdSlot], which owns ad loading and
+ * disposal.
  *
- * Change rationale: this used to inflate `R.layout.native_ad_support_card` and bind it with
- * `findViewById`. It is now a thin wrapper over [NativeAdSlot], which builds the same
- * `NativeAdView` in Kotlin. Three behaviours change with it:
- * - the card is no longer drawn before an ad exists, so a failed load leaves no empty bordered card;
- * - one `DisposableEffect(adUnitId)` owns both the load and the destroy, so changing the ad unit no
- *   longer leaks the previous `NativeAd`;
- * - the "Sponsored" disclosure comes from a translated string instead of an English literal.
- *
- * It lives here rather than in the toolkit's shared UI because it is a Support screen placement, not
- * a reusable primitive: only this feature draws it.
- *
- * @param adUnitId AdMob native ad unit to request.
- * @param containerColor overrides the card container for hosts whose surfaces are their own.
- * @param onAdLoaded reports whether an ad is currently displayed, so hosts can collapse the slot.
+ * @param containerColor Optional host surface override.
+ * @param onAdLoaded Reports whether an ad is currently displayed so the host can collapse the
+ * slot.
  */
 @Composable
 fun SupportNativeAdCard(

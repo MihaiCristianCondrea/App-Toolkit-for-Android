@@ -21,14 +21,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 /**
- * Full-width native ad strip styled to sit in a bottom app bar.
+ * Native ad strip for a bottom app bar, using [NativeAdSlot] without a card container.
  *
- * Change rationale: this used to inflate `R.layout.native_ad_bottom_bar` and bind it with
- * `findViewById`. It is now a thin wrapper over [NativeAdSlot]; the behaviour changes that came
- * with the shared renderer are listed in the `:library:integration:ads` README. The strip paints its own surface, so it
- * renders without a card container.
- *
- * @param onAdLoaded reports whether an ad is currently displayed, so the bar can collapse.
+ * @param onAdLoaded Reports whether an ad is displayed so the host can collapse the bar.
  */
 @Composable
 fun BottomAppBarNativeAdBanner(

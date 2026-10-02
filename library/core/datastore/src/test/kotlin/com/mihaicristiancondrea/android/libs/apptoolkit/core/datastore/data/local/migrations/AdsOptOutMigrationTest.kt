@@ -36,8 +36,6 @@ class AdsOptOutMigrationTest {
 
     private val migration = AdsOptOutMigration()
 
-    // The install this exists for: stuck ad-free with no release control to undo it, and with the
-    // SDK never initialized, so nothing rendered anywhere.
     @Test
     fun `an opted-out install is released and keeps its intent as reduced ads`() = runTest {
         val before = mutablePreferencesOf(adsKey to false)
@@ -49,10 +47,7 @@ class AdsOptOutMigrationTest {
         assertEquals(true, after[reduceAdsKey])
     }
 
-    // A stored `true` is left alone. It reads as harmless to drop, on release the default is on,
-    // so the two are the same state, but the default is `false` on a debug build, where the switch that
-    // wrote the `true` is the one a developer uses. Dropping it turned ads off at the next launch,
-    // and since the switch rewrites the key, dropped it again on every launch after that.
+    // Preserve explicit opt-ins even when the caller supplies a disabled ads default.
     @Test
     fun `an opted-in install is left alone`() = runTest {
         val before = mutablePreferencesOf(adsKey to true)
@@ -75,7 +70,6 @@ class AdsOptOutMigrationTest {
         assertEquals(true, after[other])
     }
 
-    // An install that had already opted into reduced ads must not have that undone.
     @Test
     fun `an existing reduced-ads choice is left alone`() = runTest {
         val after = migration.migrate(
@@ -85,8 +79,6 @@ class AdsOptOutMigrationTest {
         assertEquals(true, after[reduceAdsKey])
     }
 
-    // The regression this guards: an explicit opt-in survives every restart, however many times the
-    // store is opened and the migration is offered the data again.
     @Test
     fun `an opt-in survives repeated launches`() = runTest {
         var data: Preferences = mutablePreferencesOf(adsKey to true)

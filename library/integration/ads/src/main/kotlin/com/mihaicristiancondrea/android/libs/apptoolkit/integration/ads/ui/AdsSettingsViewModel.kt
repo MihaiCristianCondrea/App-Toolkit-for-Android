@@ -50,7 +50,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
 /**
- * ViewModel for ads settings and consent interaction.
+ * Owns ad preferences and consent interaction. Each preference has an independent write job so
+ * changing one switch cannot cancel another pending write.
  */
 class AdsSettingsViewModel(
     private val repository: AdsSettingsRepository,
@@ -65,8 +66,6 @@ class AdsSettingsViewModel(
 ) {
 
     private var observeJob: Job? = null
-    // One job per setting: restarting a shared job would cancel the other setting's write after its
-    // switch had already moved.
     private var persistAdsEnabledJob: Job? = null
     private var persistReduceAdsJob: Job? = null
     private var consentJob: Job? = null

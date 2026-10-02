@@ -18,11 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.utils.interfaces
 
 /**
- * Interface definition for a callback to be invoked when an ad display is completed.
- *
- * This interface provides a single method, [onShowAdComplete], which is called after an ad has finished displaying,
- * regardless of whether the user interacted with it or not. This can be used to perform actions after the ad has been displayed,
- * such as resuming gameplay, updating UI elements, or other necessary cleanup.
+ * Signals completion so the caller can continue when an ad closes, fails to show, or is
+ * unavailable.
  */
 interface OnShowAdCompleteListener {
     fun onShowAdComplete()

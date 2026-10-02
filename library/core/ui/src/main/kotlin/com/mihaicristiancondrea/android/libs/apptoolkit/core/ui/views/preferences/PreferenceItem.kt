@@ -57,23 +57,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.La
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /**
- * Creates a clickable preference item for app preference screens.
+ * Stateless preference row with Toolkit click feedback and analytics. Supply display-ready
+ * text, with [title] meaningful on its own and [summary] adding context.
  *
- * This composable function displays a preference item with an optional icon, title, and summary. The entire row is clickable and triggers the provided `onClick` callback function when clicked.
- *
- * @param icon An optional icon to be displayed at the start of the preference item. If provided, it should be an `ImageVector` object.
- * @param title An optional main title text displayed for the preference item.
- * @param summary An optional secondary text displayed below the title for additional information about the preference.
- *
- * Accessibility:
- * - Keep [title] meaningful when read on its own.
- * - Use [summary] for supporting context, not duplicate wording.
- *
- * State ownership:
- * - This composable is stateless and should receive already-derived UI text.
- * @param onClick A callback function that is called when the entire preference item is clicked. If no action is needed on click, this can be left empty.
- * @param ga4Event Optional GA4 event data to log on click.
- * @param ga4EventProvider Optional provider for GA4 event data resolved at click time.
+ * @param ga4EventProvider Resolves analytics at click time, taking precedence over [ga4Event]
+ * when it returns an event.
  */
 @Composable
 fun PreferenceItem(
@@ -153,24 +141,7 @@ fun PreferenceItem(
 }
 
 /**
- * A composable function that creates a settings preference item card.
- *
- * This function wraps a [PreferenceItem] composable inside a [Card] to provide a visually
- * distinct and interactive element for settings screens. It allows customization of the icon,
- * title, summary, ripple effect, and the action to perform when clicked.
- *
- * @param icon The optional [ImageVector] to display as an icon in the preference item.
- *             If null, no icon will be displayed.
- * @param title The optional [String] to display as the title of the preference item.
- *              If null, no title will be displayed.
- * @param summary The optional [String] to display as the summary of the preference item.
- *               If null, no summary will be displayed.
- * @param rippleEffectDp The [Dp] value to control the size of the ripple effect when the item is clicked.
- *                      Defaults to [SizeConstants.ExtraTinySize].
- * @param onClick The lambda function to execute when the preference item is clicked.
- *                Defaults to an empty lambda, meaning no action will be performed by default.
- * @param ga4Event Optional GA4 event data to log on click.
- * @param ga4EventProvider Optional provider for GA4 event data resolved at click time.
+ * Card container for [PreferenceItem], with the same click feedback and analytics contract.
  */
 @Composable
 fun SettingsPreferenceItem(

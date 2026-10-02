@@ -83,14 +83,13 @@ private object SettingsActionNames {
 }
 
 /**
- * The settings list: the categories the host's `SettingsProvider` supplies.
+ * Host-supplied settings categories with search and navigation. A row's external action gets
+ * first chance to handle a click; otherwise its destination opens, beside the list on wide
+ * windows or over it on phones.
  *
- * The body of the settings page, a list page: on wide windows the page a row opens sits beside it
- * with a draggable separator, and on phones it opens over it. A row opens its `destination`, after
- * giving its `action` the chance to handle the click outside the app.
- *
- * This is the stateful half. It owns the [SettingsViewModel], the search query and the search
- * index, tracks the screen and navigates, then hands the rendering to [SettingsScreenContent].
+ * Owns [SettingsViewModel], tracking, and a saved search query. Loading on each composition
+ * entry refreshes row summaries. The query remains with the list while a result opens beside
+ * it; Back clears it before leaving the page.
  */
 @Composable
 fun SettingsScreen() {
@@ -108,21 +107,16 @@ fun SettingsScreen() {
         state = state.config,
     )
 
-    // Loaded each time the list is shown, so a row's summary follows a change made on its page.
     LaunchedEffect(Unit) {
         viewModel.onEvent(event = SettingsEvent.Load)
     }
 
-    // Searched above the rows, not from the app bar: the query stays with the list while a result
-    // opens beside it on a wide window.
     var query by rememberSaveable { mutableStateOf("") }
     val config: SettingsConfig? = (state.config as? Loadable.Ready)?.value
-    // Only a loaded list has rows to search.
     val results: List<SettingsPreference>? = config?.let { loaded ->
         val index = rememberSettingsSearchIndex(loaded)
         remember(index, query) { if (query.isBlank()) null else index.matching(query) }
     }
-    // Back clears the search before it leaves the page.
     ShellBackHandler(enabled = config != null && query.isNotEmpty()) { query = "" }
 
     SettingsScreenContent(

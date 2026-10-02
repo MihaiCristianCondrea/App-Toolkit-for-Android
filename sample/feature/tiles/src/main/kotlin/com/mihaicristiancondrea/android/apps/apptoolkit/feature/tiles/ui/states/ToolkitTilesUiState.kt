@@ -41,7 +41,8 @@ enum class ToolkitTilesFilter {
     NotAdded,
     Unsupported;
 
-    // Not redundant despite reading as an empty body: `ToolkitTilesFilterMappers.items()` is
-    // declared on ToolkitTilesFilter.Companion, and an enum has no implicit companion to extend.
+    /**
+     * The explicit companion owns the filter-mapping extension.
+     */
     companion object
 }

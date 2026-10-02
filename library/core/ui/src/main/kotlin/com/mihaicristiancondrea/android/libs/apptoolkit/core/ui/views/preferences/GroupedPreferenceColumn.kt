@@ -32,9 +32,6 @@ enum class GroupedItemPosition {
     FIRST, MIDDLE, LAST, SINGLE
 }
 
-/**
- * Returns the item position for an indexed list row.
- */
 fun groupedItemPosition(index: Int, size: Int): GroupedItemPosition {
     return when {
         size <= 1 -> GroupedItemPosition.SINGLE

@@ -35,7 +35,6 @@ class DefaultIssueReporterRepository(
     private val telemetryRepository: TelemetryRepository,
 ) : IssueReporterRepository {
 
-    // The data source already moves itself to IO, so no withContext here.
     override suspend fun captureDeviceInfo(): DeviceInfo = deviceInfoProvider.capture()
 
     override suspend fun sendReport(

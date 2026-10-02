@@ -38,26 +38,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.Bu
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 
 /**
- * A customizable small floating action button that animates its visibility.
+ * Small FAB shown only when both [isVisible] and [isExtended] are `true`. The caller owns
+ * visibility and actions. Supply [contentDescription] to name the icon for accessibility.
  *
- * This composable provides a small floating action button with animated visibility, scaling in and out.
- * It also includes a click sound effect and a bounce click animation.
- *
- * State ownership:
- * - [isVisible], [isExtended], and click side effects are controlled by the caller.
- * - This composable does not own business logic, navigation decisions, or persistence.
- *
- * Accessibility:
- * - Provide a meaningful [contentDescription] for assistive technologies.
- *
- * @param modifier Modifier to be applied to the button.
- * @param isVisible Controls the visibility of the button. The button is only visible if this is true.
- * @param isExtended Controls if the button is extended. The button is only visible if this is true.
- * @param icon The icon to be displayed inside the button.
- * @param contentDescription Optional description of the icon for accessibility.
- * @param onClick The action to be performed when the button is clicked.
- * @param feedback The feedback configuration for sound and haptics.
- * @param onLogClick Optional analytics hook invoked before [onClick].
+ * Click feedback and [onLogClick] run before [onClick].
  */
 @Composable
 fun SmallFloatingActionButton(

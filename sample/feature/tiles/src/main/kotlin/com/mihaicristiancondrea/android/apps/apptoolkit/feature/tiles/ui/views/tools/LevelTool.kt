@@ -54,7 +54,6 @@ fun LevelTool(pitch: Float, roll: Float) {
                 .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape),
             contentAlignment = Alignment.Center
         ) {
-            // Target center circle
             Box(
                 modifier = Modifier
                     .size(40.dp)
@@ -65,7 +64,6 @@ fun LevelTool(pitch: Float, roll: Float) {
                         CircleShape
                     )
             )
-            // Moving bubble
             Box(
                 modifier = Modifier
                     .size(30.dp)

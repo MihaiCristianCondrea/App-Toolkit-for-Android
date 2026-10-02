@@ -101,7 +101,6 @@ internal class RainfallSimulation(
     var intensity: Float = 1f
         private set
 
-    /** Number of drops currently simulated. */
     val dropCount: Int
         get() = y.size
 
@@ -190,7 +189,6 @@ internal class RainfallSimulation(
             val fall = fallSpeed[index] * step
             y[index] += fall
             x[index] += fall * windSlant
-            // Drops blown off one side come back in on the other.
             if (x[index] < 0f) x[index] += width else if (x[index] > width) x[index] -= width
             if (y[index] >= landingY[index]) land(index)
         }
@@ -254,7 +252,6 @@ internal class RainfallSimulation(
 
     private fun baseSlant(): Float = style.wind.coerceIn(-1f, 1f) * MAX_SLANT
 
-    /** Moves each wave of [phases] on by [step] milliseconds of its period in [periods]. */
     private fun advancePhases(phases: FloatArray, periods: FloatArray, step: Float) {
         for (index in phases.indices) {
             phases[index] = (phases[index] + step / periods[index]) % 1f

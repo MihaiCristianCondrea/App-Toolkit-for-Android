@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome
 
-import androidx.navigation3.runtime.NavKey
 import android.view.SoundEffectConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
@@ -54,8 +53,6 @@ import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -87,6 +84,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.AnimatedToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
@@ -99,7 +97,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGr
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellTab
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.R
 import kotlin.math.roundToInt
-
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 /** What a navigation surface does when one of its rows is chosen. */
@@ -124,7 +121,7 @@ internal fun List<DrawerEntry>.splitAtSpacer(): Pair<List<DrawerEntry>, List<Dra
  */
 @Composable
 internal fun ShellNavigationBar(
-    tabs: List<ShellTab>,
+    tabs: List<ShellTab>, // FIXME: Parameter 'tabs' has runtime-determined stability
     selectedIndex: Int,
     callbacks: NavigationCallbacks,
     short: Boolean,
@@ -132,7 +129,13 @@ internal fun ShellNavigationBar(
 ) {
     val feedback = rememberNavigationFeedback(haptic = true)
     val label: (ShellTab) -> @Composable () -> Unit = { tab ->
-        { Text(stringResource(tab.shortLabel ?: tab.label), maxLines = 1, overflow = TextOverflow.Ellipsis) }
+        {
+            Text(
+                stringResource(tab.shortLabel ?: tab.label),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
     }
     if (short) {
         ShortNavigationBar {
@@ -193,14 +196,18 @@ internal fun ShellRail(
     modifier: Modifier = Modifier,
     containerColor: Color = MaterialTheme.colorScheme.surface,
     /** The drawer entry whose page is open beside the rail, drawn as selected. */
-    selectedEntry: NavKey? = null,
+    selectedEntry: NavKey? = null, // FIXME: Parameter 'selectedEntry' has runtime-determined stability
 ) {
     val feedback = rememberNavigationFeedback(haptic = true)
-    val width by animateDpAsState(if (expanded) ExpandedRailWidth else CollapsedRailWidth, label = "RailWidth")
+    val width by animateDpAsState(
+        if (expanded) ExpandedRailWidth else CollapsedRailWidth,
+        label = "RailWidth"
+    )
     // How far the rail is between collapsed (0) and expanded (1), following its animated width.
     // Alignment and padding move with it; switching them at once made the menu button jump to
     // the middle of the still-wide rail and then slide back as the width caught up.
-    val openness = ((width - CollapsedRailWidth) / (ExpandedRailWidth - CollapsedRailWidth)).coerceIn(0f, 1f)
+    val openness =
+        ((width - CollapsedRailWidth) / (ExpandedRailWidth - CollapsedRailWidth)).coerceIn(0f, 1f)
     val alignment = BiasAlignment.Horizontal(-openness)
     val (top, footer) = remember(graph.drawer) { graph.drawer.splitAtSpacer() }
     // The rail's own width comes after the start inset, so a display cutout or a three-button
@@ -257,16 +264,36 @@ internal fun ShellRail(
                                 callbacks.onTabClick(index)
                             },
                             icon = { TabIcon(tab, selected, clicks) },
-                            label = { RailLabel(if (expanded) tab.label else tab.shortLabel ?: tab.label) },
+                            label = {
+                                RailLabel(
+                                    if (expanded) tab.label else tab.shortLabel ?: tab.label
+                                )
+                            },
                             railExpanded = expanded,
                             modifier = itemModifier,
                         )
                     }
                     if (top.isNotEmpty()) RailDivider(expanded)
-                    top.forEach { entry -> RailEntry(entry, expanded, itemModifier, callbacks, entry.opens(selectedEntry)) }
+                    top.forEach { entry ->
+                        RailEntry(
+                            entry,
+                            expanded,
+                            itemModifier,
+                            callbacks,
+                            entry.opens(selectedEntry)
+                        )
+                    }
                 },
                 footer = {
-                    footer.forEach { entry -> RailEntry(entry, expanded, itemModifier, callbacks, entry.opens(selectedEntry)) }
+                    footer.forEach { entry ->
+                        RailEntry(
+                            entry,
+                            expanded,
+                            itemModifier,
+                            callbacks,
+                            entry.opens(selectedEntry)
+                        )
+                    }
                     Spacer(Modifier.size(8.dp))
                 },
             )
@@ -285,7 +312,7 @@ internal fun ColumnScope.ShellDrawerContent(
     showTabs: Boolean,
     callbacks: NavigationCallbacks,
     /** The drawer entry whose page is open beside the drawer, drawn as selected. */
-    selectedEntry: NavKey? = null,
+    selectedEntry: NavKey? = null, // FIXME: Parameter 'selectedEntry' has runtime-determined stability
 ) {
     val (top, footer) = remember(graph.drawer) { graph.drawer.splitAtSpacer() }
     DrawerHeader(graph)
@@ -321,7 +348,6 @@ internal fun ColumnScope.ShellDrawerContent(
  * content scrolls down and back up as it scrolls up. The reported height shrinks with it, so the
  * content above grows into the space instead of leaving a gap.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun HideOnScrollBottomBar(
     scrollBehavior: BottomAppBarScrollBehavior?,
@@ -377,7 +403,12 @@ private fun RailLabel(label: Int) {
 
 @Composable
 private fun RailDivider(expanded: Boolean) {
-    HorizontalDivider(Modifier.padding(horizontal = if (expanded) 28.dp else 24.dp, vertical = 8.dp))
+    HorizontalDivider(
+        Modifier.padding(
+            horizontal = if (expanded) 28.dp else 24.dp,
+            vertical = 8.dp
+        )
+    )
 }
 
 @Composable
@@ -418,11 +449,16 @@ private fun RailEntry(
 @Composable
 private fun DrawerEntryRow(entry: DrawerEntry, callbacks: NavigationCallbacks, selected: Boolean) {
     val (label, icon) = entry.labelAndIcon() ?: return
-    DrawerRow(label = label, icon = icon, selected = selected, onClick = { callbacks.onEntryClick(entry) })
+    DrawerRow(
+        label = label,
+        icon = icon,
+        selected = selected,
+        onClick = { callbacks.onEntryClick(entry) })
 }
 
 /** Whether this entry opens [key], the page shown beside the navigation. */
-private fun DrawerEntry.opens(key: NavKey?): Boolean = key != null && this is DrawerEntry.Link && this.key == key
+private fun DrawerEntry.opens(key: NavKey?): Boolean =
+    key != null && this is DrawerEntry.Link && this.key == key
 
 /** One drawer row, as the Toolkit's drawers draw it: animated icon, click sound, press bounce. */
 @Composable
@@ -565,9 +601,12 @@ internal val PermanentDrawerWidth: Dp = 300.dp
  * in and out with the tab roots it belongs to, and turns a quarter while the menu is open, as the
  * Toolkit's Support menu does.
  */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-internal fun OverflowMenu(entries: List<DrawerEntry>, callbacks: NavigationCallbacks, visible: Boolean) {
+internal fun OverflowMenu(
+    entries: List<DrawerEntry>, // FIXME: Parameter 'entries' has runtime-determined stability
+    callbacks: NavigationCallbacks,
+    visible: Boolean
+) {
     if (entries.isEmpty()) return
     var open by remember { mutableStateOf(false) }
     val rotation by animateFloatAsState(if (open) 90f else 0f, label = "OverflowRotation")

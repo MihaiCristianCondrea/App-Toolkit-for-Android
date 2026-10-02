@@ -47,25 +47,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches.C
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /**
- * Creates a clickable preference item with a switch for app preference screens.
- *
- * This composable function combines an optional icon, title, optional summary, and a switch into a single row.
- * The entire row is clickable and toggles the switch when clicked, calling the provided `onCheckedChange` callback function with the new state.
- *
- * @param icon An optional icon to be displayed at the start of the preference item. If provided, it should be an `ImageVector` object.
- * @param title The main title text displayed for the preference item.
- * @param summary An optional secondary text displayed below the title for additional information about the preference.
- * @param checked The initial state of the switch. Set to true for on and false for off.
- * @param onCheckedChange A callback function that is called whenever the switch is toggled. This function receives the new state of the switch (boolean) as a parameter.
- *
- * State ownership:
- * - [checked] is source-of-truth from the caller (typically ViewModel state).
- * - This composable never persists values directly.
- *
- * Accessibility:
- * - [title] should be a concise action-oriented label.
- * - [summary] should clarify impact when the toggle changes behavior.
- * @param ga4Event Optional GA4 event data to log on click.
+ * Switch preference with caller-owned [checked] state. Row and switch taps emit
+ * [onCheckedChange]; callers handle persistence. Use [summary] to explain the setting's effect.
  */
 @Composable
 fun SwitchPreferenceItem(

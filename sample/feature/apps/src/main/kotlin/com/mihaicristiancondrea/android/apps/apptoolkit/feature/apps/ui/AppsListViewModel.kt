@@ -71,17 +71,9 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 
 /**
- * ViewModel for the Apps List screen.
- *
- * This ViewModel is responsible for fetching and managing the list of developer applications,
- * handling user interactions such as fetching apps, opening a random app, and toggling favorites.
- * It observes changes in favorite apps and updates the UI state accordingly.
- *
- * @param developerAppsRepository Source of the developer's app catalog and per-app details.
- * @param installedAppsRepository Resolves which catalog entries are installed and their metadata.
- * @param favoritesRepository Reads and updates the set of favorite app package names.
- * @param dispatchers Provides coroutine dispatchers for different contexts (IO, Main, etc.).
- * @param telemetryRepository Reports ViewModel flow failures to Firebase.
+ * Owns catalog loading, favorites and installed-state observation, and the selected-app
+ * details. Failed refreshes may retain the saved catalog with an error message; stale detail
+ * results must not replace a newer selection.
  */
 @OptIn(ExperimentalCoroutinesApi::class)
 class AppsListViewModel(
@@ -423,7 +415,6 @@ class AppsListViewModel(
             launchReport(
                 action = Actions.TOGGLE_FAVORITE,
                 extra = mapOf(ExtraKeys.PACKAGE_NAME to packageName),
-                // DataStore is already main-safe, so no dispatcher switch is needed.
                 block = { favoritesRepository.toggleFavorite(packageName) },
                 onError = {
                     updateStateThreadSafe {

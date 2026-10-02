@@ -30,20 +30,16 @@ import kotlinx.coroutines.flow.flowOn
 import java.io.File
 
 /**
- * Implementation of the [CacheRepository] interface.
- * This class handles the logic for clearing the application's cache directories.
+ * Clears application cache directories on the IO dispatcher. Directory lookup and deletion
+ * failures become [DataState.Error]; cancellation propagates. Incomplete deletion is reported
+ * here because callers cannot identify the failed directories.
  *
- * @property context The application context used to access cache directories.
- * @property dispatchers Runs the recursive delete, blocking file IO, on IO, so [clearCache] can be
- * collected from the main thread.
+ * @param deleteRecursively Returns `true` when the entire directory was deleted, or `false` for
+ * an incomplete deletion.
  */
 class DefaultCacheRepository(
     private val context: Context,
     private val telemetryRepository: TelemetryRepository,
-    /**
-     * Seam for the delete itself. Without it the failure branch is unreachable from a test: an
-     * empty temp directory always deletes cleanly, so the error path shipped uncovered.
-     */
     private val deleteRecursively: (File) -> Boolean = File::deleteRecursively,
     private val dispatchers: DispatcherProvider = StandardDispatchers(),
 ) : CacheRepository {
@@ -53,9 +49,6 @@ class DefaultCacheRepository(
             message = "Cache clear requested",
             attributes = mapOf("source" to "DefaultCacheRepository"),
         )
-        // Resolving and deleting cache directories can both throw, SecurityException from a
-        // restricted profile, IO failures mid-delete. Those have to surface as DataState.Error, or
-        // the exception escapes the flow and the caller reports nothing at all.
         val state: DataState<Unit, Errors.Database> = runCatching {
             val cacheDirs: List<File> = buildList {
                 add(context.cacheDir)
@@ -69,8 +62,6 @@ class DefaultCacheRepository(
                 if (failed.isEmpty()) {
                     DataState.Success(Unit)
                 } else {
-                    // Named here rather than by the ViewModel: which directory refused to go is
-                    // something only this class can see, and the caller cannot re-derive it.
                     telemetryRepository.logBreadcrumb(
                         message = "Cache clear incomplete",
                         attributes = mapOf("failedDirectories" to failed.size.toString()),

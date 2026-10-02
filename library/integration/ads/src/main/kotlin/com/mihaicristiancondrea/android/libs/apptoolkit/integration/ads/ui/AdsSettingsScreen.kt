@@ -96,7 +96,6 @@ fun AdsSettingsScreen() {
     val activity = LocalActivity.current
     val consentHost = remember(activity) { activity?.let(::ConsentHost) }
 
-    // Consent failures, shown by the page's frame above the system bars.
     DefaultSnackbarHandler(
         screenState = screenState,
         getDismissEvent = { AdsSettingsEvent.DismissSnackbar },

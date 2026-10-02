@@ -80,6 +80,5 @@ internal fun appToolkitSettingsModule(hostBuildConfig: AppToolkitHostBuildConfig
             AppAboutSettingsProvider(context = get(), hostBuildConfig = hostBuildConfig)
         }
         single<DisplaySettingsProvider> { AppDisplaySettingsProvider() }
-        // The Toolkit's own links; the privacy page opens permissions, ads and diagnostics by key.
         single<PrivacySettingsProvider> { object : PrivacySettingsProvider {} }
     }

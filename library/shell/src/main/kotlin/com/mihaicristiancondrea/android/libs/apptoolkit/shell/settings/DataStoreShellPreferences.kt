@@ -47,19 +47,17 @@ private val Context.shellDataStore: DataStore<Preferences> by preferencesDataSto
 )
 
 /**
- * [ShellPreferences] in a DataStore of the shell's own, `shell_settings`.
+ * Stores shell settings in the application-shared `shell_settings` DataStore. Default-valued
+ * choices are omitted so future defaults reach users who have not overridden them. Unknown enum
+ * names fall back to defaults.
  *
- * Every instance built from the same application shares the one DataStore, so screens can create
- * their own without coordinating. A setting at its default is not stored at all, so changing a
- * default in a later version reaches everyone who never chose otherwise. Enums are stored by name;
- * a name that no longer exists after an update falls back to the default instead of failing.
+ * Corruption replaces the file with empty preferences; IO read failures use defaults for that
+ * collection so the root composition can still start.
  */
 internal class DataStoreShellPreferences(context: Context) : ShellPreferences {
 
     private val dataStore = context.applicationContext.shellDataStore
 
-    // An unreadable file (as opposed to a corrupt one, which the corruption handler replaces) falls
-    // back to the defaults for this collection instead of crashing the root composable.
     override val settings: Flow<ShellSettings> = dataStore.data
         .catch { throwable -> if (throwable is IOException) emit(emptyPreferences()) else throw throwable }
         .map { it.read() }

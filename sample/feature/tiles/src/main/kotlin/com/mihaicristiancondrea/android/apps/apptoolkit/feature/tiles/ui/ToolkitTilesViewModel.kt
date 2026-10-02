@@ -130,11 +130,8 @@ class ToolkitTilesViewModel(
     }
 
     /**
-     * Re-reads Quick Settings membership.
-     *
-     * This goes through the catalogue flow rather than writing statuses into the state directly.
-     * Writing directly used to lose the refresh: the flow still held the statuses captured when the
-     * screen loaded, so the next expand or collapse put the stale ones back.
+     * Refreshes membership through the catalog flow so a later catalog emission cannot
+     * overwrite the refreshed status.
      */
     private fun refreshStatuses() {
         toolkitTilesRepository.refreshTileCategories()

@@ -78,7 +78,6 @@ class ToolkitTilesNativeAdViewFactory : NativeAdViewFactory {
             ).apply { topMargin = context.dp(SMALL_SPACING_DP) }
         }
 
-        // Custom Quick Tools style: 44dp circular icon with internal padding
         val iconFrame = iconFrameView(
             context = context,
             sizeDp = 44,

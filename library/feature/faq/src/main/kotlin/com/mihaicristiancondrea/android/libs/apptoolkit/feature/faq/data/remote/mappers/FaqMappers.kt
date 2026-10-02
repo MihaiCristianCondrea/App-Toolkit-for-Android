@@ -21,18 +21,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqId
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
 
-/**
- * Maps an [Iterable] of [FaqQuestionDto] to a [List] of [FaqItem] domain models.
- *
- * @return A list of FAQ items converted from DTOs.
- */
 internal fun Iterable<FaqQuestionDto>.toFaqItems(): List<FaqItem> = map(FaqQuestionDto::toDomain)
 
-/**
- * Maps a [FaqQuestionDto] data transfer object to a [FaqItem] domain model.
- *
- * @return A [FaqItem] containing the mapped ID, question, and answer.
- */
 internal fun FaqQuestionDto.toDomain(): FaqItem =
     FaqItem(
         id = FaqId(id),

@@ -47,6 +47,12 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 
+/**
+ * Runs consent, review, and update requests raised on activity resume. Guards live in this
+ * ViewModel so configuration changes do not repeat completed requests. Review and consent run
+ * once per ViewModel session; an interrupted immediate update remains eligible for a later
+ * resume.
+ */
 class MainViewModel(
     private val consentRepository: ConsentRepository,
     private val requestInAppReviewUseCase: RequestInAppReviewUseCase,
@@ -65,24 +71,10 @@ class MainViewModel(
     private var reviewJob: Job? = null
     private var updateJob: Job? = null
 
-    // The host sends its GMS events from onResume, so each one fires again on every return from
-    // another activity. What that costs differs per event, so each is guarded on its own terms and
-    // in the ViewModel, which survives configuration change.
-    //
-    // Review: the use case records a session per call and the prompt is a once-ever event, so it is
-    // answered once per ViewModel, which is one app session.
     private var hasRequestedReview: Boolean = false
 
-    // Consent: a completed round trip is not repeated. The repository already joins a request that
-    // is still in flight, but a resume after one finished starts a fresh UMP round trip, and
-    // overlapping UMP requests are what drives that SDK into its failure path.
     private var hasRequestedConsent: Boolean = false
 
-    // Update: NOT once per session. An immediate update the user interrupted by backgrounding the
-    // app is resumed by re-checking on the next onResume, which is what the repository's
-    // DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS branch exists for, so guarding that away would strand a
-    // half-applied update. So the check stops repeating only once Play gives an answer that cannot
-    // change this session; Started keeps it open, because that is the one that may need resuming.
     private var isUpdateSettledForSession: Boolean = false
 
     init {
@@ -138,8 +130,7 @@ class MainViewModel(
         )
         consentJob = consentJob.restart {
             consentRepository.requestConsent(host = host)
-                // Keep consent flow collection on ViewModel scope (main-safe for UI updates)
-                // and avoid forcing the whole upstream chain onto Main via flowOn(main).
+                // Collect UI results in viewModelScope without forcing upstream consent work onto Main.
                 .onEach { result: DataState<Unit, Errors> ->
                     when (result) {
                         is DataState.Loading -> {
@@ -249,8 +240,7 @@ class MainViewModel(
             inAppUpdateRepository.requestUpdate(host = host)
                 .flowOn(dispatchers.io)
                 .onEach { result ->
-                    // onEach collects on viewModelScope, so this is the same main thread the event
-                    // arrives on; flowOn applies upstream only.
+                    // flowOn affects upstream work; this result handler still runs on the ViewModel main thread.
                     isUpdateSettledForSession = result !is InAppUpdateResult.Started
                     sendAction(action = MainAction.InAppUpdateResultReported(result = result))
                 }

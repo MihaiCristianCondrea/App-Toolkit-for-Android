@@ -47,10 +47,8 @@ abstract class ScreenViewModel<S, E : Any>(initialState: S) : ViewModel() {
 
     private val mutableState: MutableStateFlow<S> = MutableStateFlow(initialState)
 
-    /** The screen's state. */
     val state: StateFlow<S> = mutableState.asStateFlow()
 
-    /** The state as it is now. */
     protected val currentState: S
         get() = mutableState.value
 
@@ -60,7 +58,6 @@ abstract class ScreenViewModel<S, E : Any>(initialState: S) : ViewModel() {
     /** Messages waiting to be shown, oldest first. */
     val messages: StateFlow<ImmutableList<UiMessage>> = mutableMessages.asStateFlow()
 
-    /** Handles an [event] from the UI. */
     fun onEvent(event: E) {
         onEventReceived(event)
         handleEvent(event)

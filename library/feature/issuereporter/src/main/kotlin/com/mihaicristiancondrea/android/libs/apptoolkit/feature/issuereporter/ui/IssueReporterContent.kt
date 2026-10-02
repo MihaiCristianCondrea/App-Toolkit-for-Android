@@ -122,9 +122,7 @@ fun IssueReporterContent(
 
     SubmissionSucceeded(submissionState = submissionState)
 
-    // navigationBarsPadding() comes first on purpose: it consumes the navigation bar inset, so the
-    // imePadding() after it adds only what the keyboard needs on top, instead of both insets
-    // stacking into a gap above the send button whenever the keyboard is open.
+    // Consume navigation bars before IME padding to avoid counting their inset twice.
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -137,8 +135,7 @@ fun IssueReporterContent(
             ),
     ) {
         AnimatedContent(
-            // Keyed on the kind of state, not the state itself, so a Submitted value carrying a
-            // different URL does not restart the transition.
+            // Key on state kind so changing a submitted URL does not restart the transition.
             targetState = submissionState is IssueSubmissionState.Submitted,
             transitionSpec = { fadeIn() togetherWith fadeOut() },
             label = "IssueReporterSubmission",
@@ -163,7 +160,10 @@ fun IssueReporterContent(
     }
 }
 
-/** The report being written: the form, what will be attached, and the action that files it. */
+/**
+ * Editor with a fixed send action. The form wraps content until the sheet fills the screen,
+ * then scrolls beneath the button.
+ */
 @Composable
 private fun IssueReportEditor(
     data: IssueReporterUiState,
@@ -184,8 +184,6 @@ private fun IssueReportEditor(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                // The sheet wraps its content while it fits and stops growing once it fills the
-                // screen, at which point the report scrolls under a send button that stays put.
                 .weight(weight = 1f, fill = false)
                 .verticalScroll(state = rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),

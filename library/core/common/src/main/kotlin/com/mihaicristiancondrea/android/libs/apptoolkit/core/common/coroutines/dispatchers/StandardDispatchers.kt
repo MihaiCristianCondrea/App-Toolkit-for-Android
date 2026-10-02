@@ -21,11 +21,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
 /**
- * Default implementation of [DispatcherProvider] that returns the standard
- * coroutine dispatchers from [Dispatchers].
- *
- * Use this provider in production code where the default dispatchers are
- * sufficient. Tests can supply a custom implementation to control threading.
+ * Production dispatcher provider backed by [Dispatchers].
  */
 class StandardDispatchers : DispatcherProvider {
     override val main: CoroutineDispatcher get() = Dispatchers.Main

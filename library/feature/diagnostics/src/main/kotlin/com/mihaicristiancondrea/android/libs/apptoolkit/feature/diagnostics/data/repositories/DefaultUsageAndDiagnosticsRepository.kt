@@ -32,18 +32,9 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
 /**
- * Implementation of [UsageAndDiagnosticsRepository] that manages user consent and diagnostic settings.
- *
- * This repositories coordinates the flow of data between the [UsageAndDiagnosticsPreferencesDataSource]
- * and the domain layer, ensuring that settings are persisted and retrieved correctly.
- * Default values for settings are determined based on the build type provided by [BuildInfoProvider].
- *
- * @property dataSource The local data source for persisting usage and diagnostics preferences.
- * @property configProvider Provider used to determine build-specific configurations like debug status.
- * @property dispatchers Provider for coroutine dispatchers to ensure operations run on the appropriate thread.
- * @property consentRepository Applies the stored choices to the consent SDKs after every write.
- * Doing it here, rather than in a screen observing the settings, applies a change whether or not
- * that screen is still open, and applies a whole-bundle answer once, after it is stored.
+ * Persists reporting and advertising consents, then applies the stored bundle to the consent
+ * SDKs. Applying after each write keeps SDK state current even when the settings screen is
+ * closed. Unset choices default to enabled in release builds and disabled in debug builds.
  */
 class DefaultUsageAndDiagnosticsRepository(
     private val dataSource: UsageAndDiagnosticsPreferencesDataSource,

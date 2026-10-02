@@ -81,10 +81,8 @@ class OnboardingViewModelTest {
     fun `current tab index mutates as expected`() = runTest(dispatcherExtension.testDispatcher) {
         val viewModel = createViewModel(FakeOnboardingRepository())
 
-        // Default value
         assertThat(viewModel.uiState.value.data?.currentTabIndex).isEqualTo(0)
 
-        // Changing the index updates the state
         viewModel.onEvent(OnboardingEvent.UpdateCurrentTab(1))
         assertThat(viewModel.uiState.value.data?.currentTabIndex).isEqualTo(1)
 
@@ -96,7 +94,6 @@ class OnboardingViewModelTest {
         viewModel.onEvent(OnboardingEvent.UpdateCurrentTab(Int.MAX_VALUE))
         assertThat(viewModel.uiState.value.data?.currentTabIndex).isEqualTo(Int.MAX_VALUE)
 
-        // Reset back to default
         viewModel.onEvent(OnboardingEvent.UpdateCurrentTab(0))
         assertThat(viewModel.uiState.value.data?.currentTabIndex).isEqualTo(0)
     }

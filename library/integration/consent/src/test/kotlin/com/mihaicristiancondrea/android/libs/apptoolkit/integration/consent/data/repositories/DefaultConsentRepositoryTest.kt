@@ -358,8 +358,7 @@ class DefaultConsentRepositoryTest {
         }
 
     /**
-     * The breadcrumbs used to be contributed by pass-through use cases. They are part of the
-     * repositories's observable behaviour now, and operations depends on them.
+     * Consent operations retain their diagnostic breadcrumbs at the repository boundary.
      */
     @Test
     fun `applyInitialConsent logs a breadcrumb`() =

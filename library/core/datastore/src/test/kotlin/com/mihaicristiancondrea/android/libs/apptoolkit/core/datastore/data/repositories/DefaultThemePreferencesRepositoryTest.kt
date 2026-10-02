@@ -35,8 +35,8 @@ import org.junit.jupiter.api.Test
 class DefaultThemePreferencesRepositoryTest {
 
     /**
-     * A true-black surface means nothing in the light theme, and both the settings screen and the
-     * onboarding page offer this choice: the rule belongs here, once, rather than in each of them.
+     * Selecting Light clears AMOLED in the repository, so onboarding and settings apply the
+     * same rule.
      */
     @Test
     fun `switching to the light theme turns amoled off`() = runTest {
@@ -94,8 +94,8 @@ class DefaultThemePreferencesRepositoryTest {
     }
 
     /**
-     * The theme page positions its palette rows on the first state it sees. A first state made of
-     * placeholder defaults (wallpaper colors on, default palette) left them on the wrong palette.
+     * The first emission must reflect storage so palette rows initialize to the selected
+     * palette.
      */
     @Test
     fun `the first state is the stored one, even when the store answers late`() = runTest {

@@ -19,7 +19,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.const
 
 object AppLinks {
 
-    // Play Store
     const val PLAY_STORE_MAIN: String = "https://play.google.com/"
     const val PLAY_STORE_APP: String = "${PLAY_STORE_MAIN}store/apps/details?id="
     const val PLAY_STORE_BETA: String = "${PLAY_STORE_MAIN}apps/testing/"
@@ -27,7 +26,6 @@ object AppLinks {
     const val PLAY_STORE_DEVELOPER: String = "${PLAY_STORE_MAIN}store/apps/dev?id="
     const val DEFAULT_DEVELOPER_ID: String = "5390214922640123642"
 
-    // Legal & Policy
     private const val AUTHOR_WEBSITE_BASE: String =
         "https://mihaicristiancondrea.github.io/profile/"
     const val ADS_HELP_CENTER: String = "${AUTHOR_WEBSITE_BASE}#ads-help-center"

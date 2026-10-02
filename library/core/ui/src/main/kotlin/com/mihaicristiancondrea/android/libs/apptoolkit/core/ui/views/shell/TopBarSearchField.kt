@@ -78,7 +78,6 @@ internal fun TopBarSearchField(search: TopBarSearch) {
             )
             Box(Modifier.weight(1f), contentAlignment = Alignment.CenterStart) {
                 if (state.query.isEmpty()) {
-                    // The field stays when another tab's search takes it over; its hint crossfades.
                     Crossfade(targetState = search.hint, label = "SearchHint") { hint ->
                         Text(
                             hint,

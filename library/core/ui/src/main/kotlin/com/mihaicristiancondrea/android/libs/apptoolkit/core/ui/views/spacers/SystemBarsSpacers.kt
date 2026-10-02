@@ -31,9 +31,6 @@ import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
-/**
- * Spacer equal to the height of the status bar.
- */
 @Composable
 fun StatusBarSpacer() {
     Spacer(
@@ -43,9 +40,6 @@ fun StatusBarSpacer() {
     )
 }
 
-/**
- * Spacer equal to the height of the navigation bar.
- */
 @Composable
 fun NavigationBarSpacer() {
     Spacer(
@@ -68,9 +62,6 @@ fun SystemBarsSpacer() {
     )
 }
 
-/**
- * Spacer equal to the height of the display cutout (notch / camera hole).
- */
 @Composable
 fun DisplayCutoutSpacer() {
     Spacer(
@@ -93,9 +84,6 @@ fun SystemGesturesSpacer() {
     )
 }
 
-/**
- * Spacer equal to the height of the on-screen keyboard (IME).
- */
 @Composable
 fun ImeSpacer() {
     Spacer(

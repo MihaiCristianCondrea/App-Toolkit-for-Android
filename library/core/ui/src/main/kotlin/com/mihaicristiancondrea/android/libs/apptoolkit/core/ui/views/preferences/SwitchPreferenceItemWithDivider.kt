@@ -53,27 +53,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches.C
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /**
- * Creates a clickable preference item with a switch and a divider for app preference screens.
- *
- * This composable function combines an optional icon, title, summary, switch, and a divider into a single row.
- * The entire row is clickable and triggers the provided `onClick` callback function when clicked.
- * The switch is toggled on or off based on the `checked` parameter, and any change in its state calls
- * the `onCheckedChange` callback with the new state.
- *
- * @param icon An optional icon to be displayed at the start of the preference item. If provided, it should be an `ImageVector` object.
- * @param title The main title text displayed for the preference item.
- * @param summary A secondary text displayed below the title for additional information about the preference.
- * @param checked The initial state of the switch. Set to true for on and false for off.
- * @param onCheckedChange A callback function that is called whenever the switch is toggled. This function receives the new state of the switch (boolean) as a parameter.
- * @param onClick A callback function that is called when the entire preference item is clicked. If no action is needed on click, this can be left empty.
- *
- * State ownership:
- * - [checked] is caller-owned state.
- * - This composable emits click/toggle intent only and does not persist settings.
- *
- * Accessibility:
- * - Keep [title] short and [summary] descriptive to clarify what the trailing switch controls.
- * @param ga4Event Optional GA4 event data to log on click.
+ * Preference row with a separately clickable switch. Row taps call [onClick]; switch changes
+ * call [onCheckedChange]. The caller owns [checked] and persistence. Use [summary] to explain
+ * what the switch controls.
  */
 @Composable
 fun SwitchPreferenceItemWithDivider(

@@ -73,20 +73,9 @@ import org.koin.core.qualifier.named
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /**
- * A route-level composable that orchestrates the display of the apps list screen.
- *
- * This function is responsible for:
- * - Observing state from the [AppsListViewModel].
- * - Handling UI state (loading, success, error, empty).
- * - Managing user interactions such as toggling favorites, clicking on an app to view details,
- *   sharing an app, and retrying data fetching.
- * - Displaying a modal bottom sheet for app details when an app is selected.
- * - Declaring the "open random app" floating action button, shown while there is an app to open.
- *
- * @param paddingValues The padding values to be applied to the screen content, typically from a
- *   [Scaffold].
- * @param windowWidthSizeClass The window width size class, used to adapt the layout for
- *   different screen sizes.
+ * Connects catalog state, screen tracking, and Android launch actions to the app grid and
+ * selected-app sheet. Owns favorite/share callbacks and a random-app FAB available only while
+ * the catalog has entries.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -98,7 +87,7 @@ fun AppsListScreen(
 
     val screenState: UiStateScreen<AppListUiState> by viewModel.uiState.collectAsStateWithLifecycle()
     val favoritesRaw: Set<String> by viewModel.favorites.collectAsStateWithLifecycle()
-    val favorites = remember(favoritesRaw) { favoritesRaw.toImmutableSet() } // ✅ stable
+    val favorites = remember(favoritesRaw) { favoritesRaw.toImmutableSet() }
     val canOpenRandomApp by viewModel.canOpenRandomApp.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
@@ -113,8 +102,7 @@ fun AppsListScreen(
         screenClass = AppScreenTracking.Screens.APPS_LIST.className,
     )
 
-    // Read at tap time rather than captured: keying the lambda on them handed every card a new
-    // lambda, and so recomposed every visible card, on each favorite tap.
+    // Read current values at tap time to keep the callback stable across favorite changes.
     val currentApps by rememberUpdatedState(screenState.data?.apps)
     val currentFavorites by rememberUpdatedState(favorites)
     val onFavoriteToggle: (String) -> Unit =
@@ -253,7 +241,6 @@ fun AppsListScreen(
                 adsEnabled = adsEnabled,
                 onFilterSelected = { filter -> viewModel.onEvent(HomeEvent.FilterSelected(filter)) },
                 onFavoriteToggle = onFavoriteToggle,
-                // AppsListViewModel reports the opened details once it has resolved the app.
                 onAppClick = { app -> viewModel.onEvent(HomeEvent.AppSelected(app.packageName)) },
                 onShareClick = onShareClick,
                 windowWidthSizeClass = windowWidthSizeClass,

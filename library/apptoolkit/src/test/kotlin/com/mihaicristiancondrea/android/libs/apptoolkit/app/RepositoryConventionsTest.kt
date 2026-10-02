@@ -98,10 +98,7 @@ class RepositoryConventionsTest {
         const val REPOSITORY_FILE_SUFFIX = "Repository.kt"
         const val REPOSITORY_IMPL = "RepositoryImpl"
 
-        // A regex, not the literal "class RepositoryImpl": that substring never appears in a real
-        // declaration, because the class name always carries a prefix, `class AboutRepositoryImpl`
-        // does not contain it. The check silently passed everything, leaving the file-name check as
-        // the only live rule and a mis-named class inside a correctly named file undetected.
+        // Match prefixed repository class names; a literal `class RepositoryImpl` would miss them.
         val REPOSITORY_IMPL_DECLARATION = Regex("""class\s+\w*RepositoryImpl\b""")
         const val SETTINGS_FILE = "settings.gradle.kts"
 

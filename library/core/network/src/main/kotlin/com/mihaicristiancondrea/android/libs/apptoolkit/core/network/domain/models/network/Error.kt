@@ -18,10 +18,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network
 
 /**
- * Base interface for representing errors within the application.
- *
- * This interface serves as a root for all error types. It allows for a uniform way of handling
- * errors throughout the application, especially when dealing with network or data-related
- * issues. All specific error types should implement this interface.
+ * Marker shared by Toolkit data-operation error types.
  */
 interface Error

@@ -36,11 +36,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 abstract class ScreenViewModel<T, E : UiEvent, A : ActionEvent>(
     initialState: UiStateScreen<T>
 ) : BaseViewModel<UiStateScreen<T>, E, A>(initialState) {
-    /** Mutable state backing the screen. */
     protected val screenState: MutableStateFlow<UiStateScreen<T>>
         get() = uiStateFlow
 
-    /** Convenience accessor for the current data stored in the state. */
     protected val screenData: T?
         get() = currentState.data
 }

@@ -96,7 +96,6 @@ fun LargeTopAppBarWithScaffold(
         snackbarHost = { DefaultSnackbarHost(snackbarState = snackbarHostState) },
         floatingActionButton = floatingActionButton ?: {},
     ) { paddingValues ->
-        // The screen inside shows its snackbars here, in the Toolkit's style, as in a page frame.
         val scope = rememberCoroutineScope()
         val snackbars = remember(snackbarHostState, scope) { ScaffoldSnackbars(snackbarHostState, scope) }
         CompositionLocalProvider(

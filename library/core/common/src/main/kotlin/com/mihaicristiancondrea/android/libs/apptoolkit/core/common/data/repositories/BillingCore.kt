@@ -18,10 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories
 
 /**
- * Interface for the billing system.
- *
- * This interface is defined in the core:common module to break the circular
- * dependency between the core manager and the billing implementation.
+ * Billing lifecycle contract used by the application without depending on the Billing SDK
+ * implementation.
  */
 interface BillingCore {
     /**

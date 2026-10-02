@@ -108,10 +108,9 @@ flowchart TD
 - Done is the primary action on the confirmation and opening the issue is the quiet one, because
   finishing is the normal next step. There is deliberately no "report another": it adds a decision
   to what should be the simplest state in the feature, and reopening the reporter covers it.
-- Messages are toasts, not snackbars. A snackbar belongs to the surface hosting it, and this one is
-  a sheet: it would land inside the sheet, over the send button that produced it, and go away with
-  the sheet if the author dismissed it on the way. A toast is the system's own window, so a report
-  that succeeded says so even when the sheet was dismissed while it was still sending.
+- Failure messages use toasts so they do not cover the sheet's send button. Success is represented
+  by the confirmation state, without a transient message. If the sheet is dismissed during a send,
+  the send finishes and the pending reset clears its state before the next opening.
 - Success takes the keyboard down, clears focus and fires a confirm haptic. The keyboard belongs to
   a form that is being replaced, and the sheet shrinking is easy to miss on a glance away.
 - Device capture is a local data-source responsibility. The domain model is a plain immutable value

@@ -109,6 +109,11 @@ fun isAppInDarkTheme(themeMode: String): Boolean = when (themeMode) {
     else -> isSystemInDarkTheme()
 }
 
+/**
+ * Applies the stored appearance and provides UI preferences through dynamic composition locals.
+ * Preference changes recompose their readers; the color scheme is rebuilt only when its inputs
+ * change. Configure [AppThemeConfig] before the first composition.
+ */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
@@ -126,7 +131,6 @@ fun AppTheme(content: @Composable () -> Unit) {
     val customLightScheme: ColorScheme? = AppThemeConfig.customLightScheme
     val customDarkScheme: ColorScheme? = AppThemeConfig.customDarkScheme
 
-    // Rebuilt only when an input changes, not on every recomposition of the root.
     val colorScheme: ColorScheme = remember(
         isDarkTheme,
         themePreferences,
@@ -149,8 +153,7 @@ fun AppTheme(content: @Composable () -> Unit) {
     val view: View = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
-            // A dialog's context, or any other wrapper, is unwrapped to its activity rather than
-            // cast. A context with no activity at all has no window to style.
+            // Wrapped contexts may have no Activity; only an Activity-backed view has a window to style.
             val window: Window = (view.context.findActivity() ?: return@SideEffect).window
             @Suppress("DEPRECATION")
             window.statusBarColor = Color.Transparent.toArgb()

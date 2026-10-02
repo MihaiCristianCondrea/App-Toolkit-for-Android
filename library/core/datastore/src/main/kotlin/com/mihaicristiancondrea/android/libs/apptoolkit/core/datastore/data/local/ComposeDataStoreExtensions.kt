@@ -21,7 +21,7 @@ import androidx.compose.runtime.Composable
 import org.koin.compose.koinInject
 
 /**
- * Remembers a [CommonDataStore] scoped to the current composition.
+ * Returns the process-wide [CommonDataStore], remembered by the current composition.
  */
 @Composable
 fun rememberCommonDataStore(): CommonDataStore {

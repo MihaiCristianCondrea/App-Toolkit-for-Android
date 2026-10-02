@@ -147,22 +147,16 @@ fun ShellTopAppBar(
 ) {
     // A large bar draws its title twice, once expanded and once collapsed; a field cannot be.
     val resolvedStyle = if (search != null && style != TopBarStyle.Hidden) TopBarStyle.Small else style
-    // A centred bar centres whatever its title slot measures, so the slot wraps its title there;
-    // elsewhere it spans the bar, so the search field can.
+    // Wrap centered titles; other styles fill the width available to search.
     val centred = resolvedStyle == TopBarStyle.CenterAligned
     val textModifier = if (resolvedStyle.isLarge) Modifier else titleModifier
     val titleAlignment = if (centred) Alignment.Center else Alignment.CenterStart
     val titleContent: @Composable () -> Unit = {
-        // One slot of one height for the title and the search field, so the bar, its navigation
-        // button and its actions stay put while one crossfades into the other.
+        // Fix the slot height so search transitions do not move the bar or its actions.
         AnimatedContent(
             targetState = search to title,
-            // Every search field shares one key: moving between two tabs that search keeps the
-            // field in place, and only its hint and query change, rather than fading one field
-            // out and another in, a flicker.
+            // Share a content key across searching tabs to retain the field and avoid flicker.
             contentKey = { (field, text) -> if (field != null) SearchFieldKey else text },
-            // A centred title grows and shrinks between titles instead of snapping, as App
-            // Toolkit's app bars do.
             modifier = Modifier
                 .then(if (centred) Modifier.animateContentSize() else Modifier.fillMaxWidth())
                 .height(SearchFieldHeight),

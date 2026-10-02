@@ -16,22 +16,10 @@
  */
 
 plugins {
-    // Applied by its full id with an explicit version rather than the `kotlin-dsl` accessor: JitPack
-    // resolves this build twice, once for the included build and once for the publication, and the
-    // accessor is not on its plugin classpath, so the build fails there without the coordinates
-    // spelled out.
-    //
-    // The version must match the one bundled with the Gradle release in gradle-wrapper.properties.
-    // Gradle warns ("expects version 'x' but version 'y' has been applied") on any mismatch, and the
-    // mismatched plugin also drags in a different Kotlin than the embedded one, which the Kotlin DSL
-    // does not support. When bumping Gradle, run any task and let the warning name the expected
-    // version, Gradle 9.7 pairs with kotlin-dsl 6.7.3.
-    //
-    // The IDE's "a newer version is available" hint is wrong here for that reason, and acting on it
-    // is not harmless: 6.7.9 resolves Kotlin 2.4.20-RC2 for the script compiler classpath, which is
-    // the "different Kotlin than the embedded one" failure described above. Bump this only when the
-    // Gradle wrapper moves and the warning names a new expected version.
-    //noinspection NewerVersionAvailable
+    // Use explicit plugin coordinates for JitPack's included-build and publication classpaths.
+// Keep the Kotlin DSL plugin aligned with the Gradle wrapper's embedded version;
+// an independent upgrade can select an incompatible script-compiler Kotlin version.
+//noinspection NewerVersionAvailable
     id("org.gradle.kotlin.kotlin-dsl") version "6.7.3"
 }
 

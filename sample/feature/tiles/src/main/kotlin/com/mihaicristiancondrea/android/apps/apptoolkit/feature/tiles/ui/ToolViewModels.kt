@@ -352,7 +352,6 @@ class ReactionTestToolViewModel(
             }
 
             else -> {
-                // Do nothing if tapped in Idle, Result, or FalseStart
             }
         }
     }

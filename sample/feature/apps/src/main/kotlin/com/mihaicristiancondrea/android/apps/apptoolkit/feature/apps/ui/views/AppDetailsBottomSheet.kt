@@ -119,8 +119,7 @@ fun AppDetailsBottomSheet(
             installedVersionInfo = installedVersionInfo,
         )
         LargeVerticalSpacer()
-        // The sheet's sponsored rows used to sit loose either side of this block. The quick-action
-        // grid carries one of its own, in the middle of its cells, so it is the only one here.
+        // The grouped quick-action grid owns the sheet's ad placement.
         AppDetailsQuickActions(
             appInfo = appInfo,
             isFavorite = isFavorite,

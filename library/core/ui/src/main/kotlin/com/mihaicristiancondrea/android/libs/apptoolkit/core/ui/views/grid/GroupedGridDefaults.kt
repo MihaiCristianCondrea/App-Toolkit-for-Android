@@ -71,7 +71,6 @@ object GroupedGridDefaults {
     /** Gap between neighbouring cells, horizontally and vertically. */
     val ItemSpacing: Dp = SizeConstants.ExtraTinySize
 
-    /** Size class cells are drawn at. */
     val Measurements: GroupedGridMeasurements = GroupedGridMeasurements.Medium
 
     /**

@@ -64,25 +64,12 @@ class DefaultConsentRepository(
     private var inFlightRequest: InFlightConsentRequest? = null
 
     /**
-     * Requests consent, sharing a single UMP round trip between concurrent callers.
+     * Shares an in-flight UMP request with callers using the same [showIfRequired] mode and a
+     * live host. Finishing or destroyed hosts are rejected.
      *
-     * Change rationale: consent used to be requested straight from the data source, once per
-     * caller. The startup and onboarding screens and each host's `MainActivity` can all ask within
-     * the same second, which produced overlapping UMP requests, including requests issued by an
-     * activity that was already finishing. Overlapping requests are what drives the SDK into
-     * its failure path, and a failing metrics ping with an empty error body crashes the process
-     * from the SDK's own executor where no caller-side `catch` can reach it.
-     *
-     * A second caller now attaches to the request that is already running instead of starting
-     * another one; requests from a host that is finishing or destroyed are rejected outright. The
-     * flight is keyed on [showIfRequired] so an explicit "show the form now" request is never
-     * silently answered by an in-flight "show only if required" one.
-     *
-     * A caller only joins a request whose host is still alive. A request started by a host that has
-     * since gone (a rotation, say) would show its form on that dead window, so a new host waits for
-     * it to finish, at most [STALE_REQUEST_WAIT_MS], and then starts its own. Waiting keeps the two
-     * round trips from overlapping; the bound keeps a request the SDK never answers from blocking
-     * every later caller.
+     * A replacement host waits up to [STALE_REQUEST_WAIT_MS] for a dead host's request to
+     * settle before starting its own, limiting overlap without letting an unanswered request
+     * block later callers indefinitely.
      */
     override fun requestConsent(
         host: ConsentHost,
@@ -238,9 +225,7 @@ class DefaultConsentRepository(
 }
 
 /**
- * How long a new host waits for a consent request started by a host that has since gone. UMP
- * answers a request whose host can no longer show a form within moments, so this only matters
- * when it never answers.
+ * Bounds waiting for an unanswered request whose host has disappeared.
  */
 private const val STALE_REQUEST_WAIT_MS: Long = 5_000L
 

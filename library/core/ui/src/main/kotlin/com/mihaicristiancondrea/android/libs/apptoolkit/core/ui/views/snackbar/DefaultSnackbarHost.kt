@@ -117,7 +117,6 @@ fun ToolkitSnackbar(data: SnackbarData, modifier: Modifier = Modifier) {
     }
 }
 
-/** The colours of the Toolkit's snackbar styles. */
 object ToolkitSnackbarDefaults {
 
     /** Material's inverse surface for [ToolkitSnackbarStyle.Normal], the error colours for the other. */

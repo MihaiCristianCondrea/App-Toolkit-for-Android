@@ -70,8 +70,10 @@ class ShellGraph internal constructor(
     private val destinations: Map<KClass<out NavKey>, Destination<*>>,
 ) {
     init {
-        // A graph without tabs is a single entry point, such as the screen the system opens from
-        // outside the app: it starts on a page and is left from it, never showing the shell.
+        /**
+         * A graph with no tabs starts and exits from its page entry point without entering the
+         * shell.
+         */
         require(tabs.isNotEmpty() || destinationOrNull(start)?.kind == DestinationKind.Page) {
             "A shell needs at least one tab, or a page to start on."
         }

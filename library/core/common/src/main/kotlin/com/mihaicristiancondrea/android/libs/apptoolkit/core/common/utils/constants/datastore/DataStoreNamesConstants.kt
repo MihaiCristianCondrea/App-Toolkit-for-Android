@@ -18,14 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore
 
 /**
- * Defines constants for the names of different DataStore files used in the application.
- *
- * This class provides a centralized location for accessing DataStore file names,
- * ensuring consistency and avoiding hardcoding these values throughout the codebase.
- *
- * Each constant represents the name of a specific DataStore file, used to persist
- * different types of application data such as settings, user preferences, and
- * other application states.
+ * Persisted preference identifiers and stored theme-mode values. Keep these values stable to
+ * preserve existing user settings.
  */
 open class DataStoreNamesConstants {
     companion object {
@@ -59,8 +53,10 @@ open class DataStoreNamesConstants {
         const val DATA_STORE_CACHED_CHANGELOG = "cached_changelog"
         const val DATA_STORE_COMPONENTS_SHOWCASE_UNLOCKED = "components_showcase_unlocked"
         const val DATA_STORE_SEASONAL_THEMES_UNLOCKED = "seasonal_themes_unlocked"
-        // A new key: the snowfall switch removed in 3.0.0-pre21 stored under another one, whose
-        // old values stay ignored.
+        /**
+         * Stores the weather-effect choice separately from the retired snowfall switch; legacy
+         * switch values are ignored.
+         */
         const val DATA_STORE_SEASONAL_WEATHER_EFFECT = "seasonal_weather_effect"
         const val DATA_STORE_LAST_HOLIDAY_GREETING = "seasonal_last_holiday_greeting"
         const val DATA_STORE_HOLIDAY_THEME_SEASON = "seasonal_holiday_theme_season"

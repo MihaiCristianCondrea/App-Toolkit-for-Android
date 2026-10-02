@@ -62,9 +62,7 @@ fun PageSurface(content: @Composable () -> Unit) {
             .clip(rememberDeviceCornerShape(squareStart = LocalBesideNavigation.current != null))
             .background(MaterialTheme.colorScheme.surface),
     ) {
-        // The surface's own content colour, as a Material surface sets it: text and icons drawn
-        // outside a Scaffold, such as a scene's shared app bar, would otherwise fall back to
-        // black, unreadable on the dark theme.
+        // Provide the surface content color for text outside Material surfaces, which otherwise defaults to black.
         CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface, content = content)
     }
 }

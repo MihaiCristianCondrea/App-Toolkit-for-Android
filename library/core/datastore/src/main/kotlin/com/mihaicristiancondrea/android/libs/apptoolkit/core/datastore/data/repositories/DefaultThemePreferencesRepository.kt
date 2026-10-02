@@ -37,9 +37,7 @@ class DefaultThemePreferencesRepository(
 
     override suspend fun selectThemeMode(mode: String) {
         preferences.saveThemeMode(mode)
-        // Read what is stored rather than what a screen happens to be showing: the same choice is
-        // offered during onboarding and in settings, and one of them used to decide from a copy of
-        // the state it had loaded.
+        // Use the persisted AMOLED preference because a screen may hold an older snapshot.
         if (mode == DataStoreNamesConstants.THEME_MODE_LIGHT && preferences.amoledMode.first()) {
             preferences.saveAmoledMode(false)
         }

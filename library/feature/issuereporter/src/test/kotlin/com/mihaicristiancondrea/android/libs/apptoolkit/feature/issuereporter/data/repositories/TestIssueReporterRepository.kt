@@ -58,7 +58,6 @@ class TestIssueReporterRepository {
         telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
     )
 
-    // ✅ Pure-JVM fixture: no Android calls
     private fun report(
         title: String = "t",
         desc: String = "d",

@@ -30,18 +30,16 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui
 import org.koin.compose.viewmodel.koinViewModel
 
 /**
- * The issue reporter as a modal bottom sheet.
+ * Shared report sheet for Compose hosts and
+ * [IssueReporterLauncher][com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.presentation.IssueReporterLauncher].
+ * It opens fully expanded so the editor remains usable above the keyboard.
  *
- * A host inside a composition shows this directly, the way the advanced settings row does. A caller
- * with no composition to attach to, the shake gesture, reaches the same composable through
- * [IssueReporterLauncher][com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.presentation.IssueReporterLauncher],
- * so there is one sheet implementation and not one per entry point.
+ * Presence is registered for the composition lifetime to prevent duplicate sheets across entry
+ * points. Dismissal resets the shared ViewModel so drafts and completed reports do not
+ * reappear; an in-flight submission finishes before its reset.
  *
- * It opens expanded rather than partially. The description field plus a keyboard needs most of the
- * screen, and a half-expanded sheet would put the author's own text behind the IME on first focus.
- *
- * [onDismissRequest] is called once the sheet has settled out of view, so a caller can drop it from
- * composition immediately without cutting the exit animation.
+ * [onDismissRequest] runs after the sheet settles out of view, allowing removal from
+ * composition without cutting the exit animation.
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -49,8 +47,7 @@ fun IssueReporterBottomSheet(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // Resolved here as well as in the content so dismissal can reach it. Both calls land on the
-    // same instance, because they share a store owner and a key.
+    // Shares the content ViewModel through the same store owner and key.
     val viewModel: IssueReporterViewModel = koinViewModel()
 
     val sheetState = rememberBottomSheetState(
@@ -58,18 +55,11 @@ fun IssueReporterBottomSheet(
         enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
     )
 
-    // Tells the launcher a sheet is up, so a shake landing on a screen that already shows one does
-    // not stack a second. Leaving composition is the only way a sheet ends, including when the
-    // activity is torn down under it, so the flag cannot be left set.
     DisposableEffect(Unit) {
         IssueReporterPresence.onShown()
         onDispose { IssueReporterPresence.onHidden() }
     }
 
-    // The report is composed in a ViewModel that outlives the sheet, so an abandoned draft would
-    // come back the next time the sheet opened, along with the confirmation of a report that was
-    // already filed. The reset belongs here, at the end of the interaction, and not to the network
-    // answering: the author's text stays on screen for as long as the sheet does.
     val dismiss: () -> Unit = {
         viewModel.onEvent(IssueReporterEvent.Reset)
         onDismissRequest()
@@ -80,8 +70,6 @@ fun IssueReporterBottomSheet(
         sheetState = sheetState,
         modifier = modifier,
     ) {
-        // Done on the confirmation is a dismissal like any other, so it goes through the same path
-        // and gets the same reset.
         IssueReporterContent(onDone = dismiss, viewModel = viewModel)
     }
 }

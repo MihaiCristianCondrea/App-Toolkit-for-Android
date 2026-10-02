@@ -31,7 +31,6 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val advancedSettingsModule: Module = module {
-    // What the settings search finds on this page; the settings list collects every page's.
     single<SettingsSearchProvider>(named("advanced")) { advancedSettingsSearch }
     single<CacheRepository> {
         DefaultCacheRepository(

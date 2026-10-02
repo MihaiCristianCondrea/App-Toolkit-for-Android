@@ -18,19 +18,16 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states
 
 /**
- * Where a report is in its one-way trip from draft to filed.
- *
- * This is stated rather than inferred. The sheet used to read submission off a non-null issue URL,
- * which made "submitted" a side effect of a field the form also displayed, and left the reporter
- * showing an editable form, a live send button and a confirmation of a report already filed at the
- * same time. Naming the three states is what lets the sheet show exactly one of them.
+ * Mutually exclusive editor, pending-submission, and confirmation states. Failed submissions
+ * return to editing with the draft intact.
  */
 sealed interface IssueSubmissionState {
 
-    /** The author is composing the report. */
     data object Editing : IssueSubmissionState
 
-    /** The report is with GitHub and the answer has not come back. */
+    /**
+     * A submission is in flight; a second send must wait for its result.
+     */
     data object Sending : IssueSubmissionState
 
     /**

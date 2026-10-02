@@ -58,7 +58,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
- * ViewModel for composing and sending issue reports.
+ * Owns the report draft and submission state. Form fields survive submission and are cleared on
+ * dismissal; a reset requested during sending is deferred until that send finishes. Success is
+ * rendered by the confirmation state rather than a transient message.
  */
 class IssueReporterViewModel(
     private val sendIssueReport: SendIssueReportUseCase,
@@ -196,13 +198,12 @@ class IssueReporterViewModel(
 
                     sendIssueReport(params)
                         .map { it.asDataState() }
-                        // Before onEach, so the error it emits is handled like any other result and
-                        // the sheet leaves its sending state.
+                        // Catch before onEach so failures follow the same result handling and leave the sending state.
                         .catch { throwable ->
                             emit(DataState.Error(error = IssueReporterError.Generic(message = throwable.message)))
                         }
                         .onEach { result -> handleResult(result) }
-                        .collect { /* handled in onEach */ }
+                        .collect {  }
                 },
                 onError = {
                     showFailureSnackbar()
@@ -251,12 +252,8 @@ class IssueReporterViewModel(
         outcome
             .onSuccess { url ->
                 updateStateThreadSafe {
-                    // The form fields are carried over untouched. The author is still in the same
-                    // interaction, and the reset belongs to dismissal, not to the network answering.
                     val updated = (screenData ?: IssueReporterUiState())
                         .copy(submissionState = IssueSubmissionState.Submitted(issueUrl = url))
-                    // No success message: the sheet swaps to its confirmation, and a report filed
-                    // after the sheet was dismissed has no composition left to show one in.
                     screenState.setSuccess(data = updated)
                 }
             }

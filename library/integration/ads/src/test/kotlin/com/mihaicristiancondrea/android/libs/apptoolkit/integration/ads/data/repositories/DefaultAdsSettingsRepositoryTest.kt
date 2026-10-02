@@ -134,10 +134,7 @@ class TestDefaultAdsSettingsRepository {
         assertThrows<CancellationException> { repository.setAdsEnabled(true) }
     }
 
-    // The default belongs to the store, which `dataStoreModule` builds with ads on in every build.
-    // These two only check that the repository reports what it was given rather than deciding for
-    // itself; the pair used to be named for debug and release, which read as a policy this class
-    // does not own.
+    // The store owns defaults; these cases verify delegation rather than build-type policy.
     @Test
     fun `defaultAdsEnabled mirrors an enabled store`() = runTest(dispatcherExtension.testDispatcher) {
         val repository = createRepository(dataStore = mockk(), storeDefaultAdsEnabled = true)

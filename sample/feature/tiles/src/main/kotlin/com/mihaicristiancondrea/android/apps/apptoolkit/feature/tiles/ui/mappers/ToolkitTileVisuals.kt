@@ -75,11 +75,7 @@ internal fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
 }
 
 /**
- * Decorative badge silhouette behind a tile icon.
- *
- * Change rationale: these were hand-authored vector drawables until Material 3 shipped the same
- * silhouettes as [MaterialShapes], so the badges now resolve against the framework shape set. The
- * eight-sided cookie has no Material equivalent and maps to the nearest one.
+ * Material shape behind a tile icon, resolved for the active theme and shape choice.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable

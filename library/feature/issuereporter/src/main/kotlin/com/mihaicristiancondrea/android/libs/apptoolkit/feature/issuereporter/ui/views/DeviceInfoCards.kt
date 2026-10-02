@@ -167,12 +167,7 @@ private fun DeviceInfoHeaderCard(
 }
 
 /**
- * Content of the device-info group.
- *
- * Vertical expansion only: growing horizontally as well made the card appear to unfold from its
- * centre, which read as a different component arriving rather than the header's own content opening
- * underneath it. [animateContentSize] covers the second growth, when the text itself arrives after
- * being captured lazily.
+ * Device details with vertical expansion, keeping the group aligned to the surrounding form.
  */
 @Composable
 private fun DeviceInfoContentCard(

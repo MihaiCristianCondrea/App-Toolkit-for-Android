@@ -110,28 +110,20 @@ class AndroidAppActionLauncher(
         return startFirstAvailable(notificationIntent, appInfoIntent(packageName))
     }
 
-    /*
-     * There is no stable public cross-OEM intent for:
-     * Settings > Apps > App > Permissions
-     *
-     * Some AOSP/private Settings fragments exist on some builds, but they are not API contracts.
-     * For many OEMs they either do nothing, open the wrong page, or throw.
+    /**
+     * Opens app info because the permission subpage has no stable public intent across OEMs.
      */
     override fun openPermissions(packageName: String): Boolean = openAppInfo(packageName)
 
-    /*
-     * There is no stable public cross-OEM intent for:
-     * Settings > Apps > App > Storage / Storage & cache
-     *
-     * ACTION_STORAGE_VOLUME_ACCESS_SETTINGS is not this screen and is deprecated.
+    /**
+     * Opens app info because the per-app storage subpage has no stable public intent.
+     * Storage-volume access targets a different screen.
      */
     override fun openStorage(packageName: String): Boolean = openAppInfo(packageName)
 
-    /*
-     * There is no stable public cross-OEM intent for:
-     * Settings > Apps > App > Battery / App battery usage
-     *
-     * Battery saver and battery optimization actions are different, broader system pages.
+    /**
+     * Opens app info because the per-app battery subpage has no stable public intent.
+     * Battery-saver and optimization actions target broader settings.
      */
     override fun openBattery(packageName: String): Boolean = openAppInfo(packageName)
 
@@ -316,11 +308,8 @@ class AndroidAppActionLauncher(
                 context.startActivity(preparedIntent)
                 return true
             } catch (_: ActivityNotFoundException) {
-                // Try next fallback.
             } catch (_: SecurityException) {
-                // Try next fallback.
             } catch (_: IllegalArgumentException) {
-                // Try next fallback.
             } catch (_: NullPointerException) {
                 // Some OEM Settings implementations are not very defensive.
             }

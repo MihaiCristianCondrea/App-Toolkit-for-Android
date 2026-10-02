@@ -103,13 +103,8 @@ open class AboutViewModel(
     }
 
     /**
-     * Copies [text] under [label], then confirms it where the platform will not.
-     *
-     * Each copy is its own job on purpose. An earlier version restarted a shared `copyJob`, which
-     * bought nothing, a clipboard write is instant and idempotent, and gave cancellation a way to
-     * drop a copy the user had already asked for. There is no `withContext` either: the write has
-     * to happen on the main thread and `viewModelScope` is already there, so hopping dispatchers
-     * only moved the write off the click's own frame.
+     * Copies on the main thread and confirms the write when the platform does not. Each request
+     * runs independently so a later click cannot cancel an earlier copy.
      */
     private fun copyToClipboard(
         label: String,
@@ -132,8 +127,10 @@ open class AboutViewModel(
         }
     }
 
-    // Konfetti already played; a failed write only means the unlock is offered next time, so the
-    // failure is reported and nothing is shown.
+    /**
+     * A failed unlock write is reported without interrupting the celebration; the unlock can be
+     * retried on a later visit.
+     */
     private fun unlockSeasonalThemes() {
         launchReport(action = Actions.UNLOCK_SEASONAL_THEMES) {
             if (seasonalThemes.unlockSeasonalThemes()) {

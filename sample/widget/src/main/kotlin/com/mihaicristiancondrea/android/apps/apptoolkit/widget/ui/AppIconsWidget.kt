@@ -82,13 +82,8 @@ import kotlinx.coroutines.withContext
 import org.koin.core.context.GlobalContext
 
 /**
- * A highly expressive, resizable 3x3 grid widget that focuses on fast app launching.
- *
- * Change rationale:
- * - Previously, the widget resolved package icons for the full app list even though only the first
- *   3x3 slots were rendered.
- * - Now, app loading is capped to the visible 9 entries before icon decoding, reducing background
- *   work and memory pressure for each update.
+ * Resizable app-launch grid. Icon decoding is bounded to the nine visible entries, avoiding
+ * work for catalog apps the widget cannot show.
  */
 class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons_error) {
 
@@ -97,9 +92,8 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
     )
 
     /**
-     * Draws the catalogue saved by the last fetch straight away, then the fresh one once the
-     * network answers, so an update no longer leaves the widget waiting on the network. Without a
-     * saved catalogue it shows its loading content until then.
+     * Displays the saved catalog while fetching its replacement. Loading content is used only
+     * when no saved catalog is available.
      */
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val savedState: AppIconsWidgetState? = loadSavedApps(context = context)

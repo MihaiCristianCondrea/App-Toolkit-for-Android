@@ -69,22 +69,12 @@ import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
 
 /**
- * A composable that displays a grid of applications.
- * This function is responsible for determining the grid layout based on the window size,
- * injecting ads into the list at a specified frequency, and passing the data to the
- * underlying `AppsGrid` composable for rendering.
+ * Adaptive app grid with host-controlled favorites, installed state, filtering, and actions.
+ * Ads are interleaved after filtering and search.
  *
- * @param uiHomeScreen The state object containing the list of apps to display.
- * @param favorites A set of package names for the apps marked as favorite.
- * @param installedPackages A set of package names detected as installed on the current device.
- * @param paddingValues Padding to be applied from the outside, typically from a Scaffold.
- * @param adsEnabled A boolean flag to determine if ads should be displayed in the list.
- * @param onFilterSelected A callback invoked when the user chooses an app filter chip.
- * @param onFavoriteToggle A lambda function to be invoked when the favorite icon on an app card is toggled. It receives the package name.
- * @param onAppClick A lambda function to be invoked when an app card is clicked. It receives the [AppInfo] of the clicked app.
- * @param onShareClick A lambda function to be invoked when the share icon on an app card is clicked. It receives the [AppInfo] of the app to be shared.
- * @param adFrequency The frequency at which ads are inserted into the list (e.g., an ad every `adFrequency` items).
- * @param windowWidthSizeClass The current window width size class, used to determine the number of columns in the grid.
+ * @param searchQuery Matches app names, packages, and short descriptions; blank shows every
+ * filtered app.
+ * @param adFrequency Number of apps between native ad slots.
  */
 @Composable
 fun AppsList(
@@ -99,7 +89,6 @@ fun AppsList(
     onShareClick: (AppInfo) -> Unit,
     adFrequency: Int = AdsConstants.APPS_LIST_AD_FREQUENCY,
     windowWidthSizeClass: AppWindowWidthSizeClass,
-    // What the tab's search field holds: narrows the grid to apps whose name or package match.
     searchQuery: String = "",
 ) {
     val apps: ImmutableList<AppInfo> = remember(
@@ -152,24 +141,8 @@ fun AppsList(
 }
 
 /**
- * A composable that displays a grid of applications and ads.
- * It uses a [LazyVerticalGrid] to efficiently display a potentially large list of items.
- *
- * This function is responsible for the layout and rendering of individual app cards and ad cards within the grid.
- *
- * @param items The list of [AppListItem]s to display, which can be either an app or an ad.
- * @param allAppsCount Total number of available apps.
- * @param favorites A set of package names for the apps that are marked as favorites.
- * @param installedPackages A set of package names for the apps that are installed.
- * @param selectedFilter The currently selected chip filter.
- * @param onFilterSelected A callback invoked when the user chooses an app filter chip.
- * @param paddingValues Padding to be applied from the parent composable, typically from a Scaffold.
- * @param columnCount The number of columns in the grid.
- * @param listState The state object to be used for the [LazyVerticalGrid], allowing for observation and control of the scroll position.
- * @param onFavoriteToggle A callback lambda that is invoked when the favorite icon on an app card is toggled. It receives the package name of the app.
- * @param onAppClick A callback lambda that is invoked when an app card is clicked. It receives the [AppInfo] of the clicked app.
- * @param onShareClick A callback lambda that is invoked when the share icon on an app card is clicked. It receives the [AppInfo] of the app to be shared.
- * @param adUnitId The ad unit ID for the native ads to be displayed in the grid.
+ * Owns the native-ad cache outside lazy cells so scrolling away and back reuses loaded ads.
+ * Cell identity includes the selected filter to isolate exiting cells from their replacements.
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -188,8 +161,6 @@ private fun AppsGrid(
     onShareClick: (AppInfo) -> Unit,
     adUnitId: String,
 ) {
-    // Outside the grid, so an ad cell that scrolls away leaves its ad here instead of destroying it
-    // and requesting another one when it scrolls back.
     val adCache: NativeAdCache = rememberNativeAdCache()
 
     val layoutDirection = LocalLayoutDirection.current
@@ -254,8 +225,6 @@ private fun AppsGrid(
                     AppsListNativeAdCard(
                         adUnitId = adUnitId,
                         cache = adCache,
-                        // The grid key includes the filter, so a cell fading out after a filter
-                        // change never shares its ad with the cell replacing it.
                         cacheKey = appListItemKey(
                             selectedFilter = selectedFilter,
                             index = index,
@@ -364,18 +333,6 @@ private fun ImmutableList<AppInfo>.filterFor(
     AppsListFilter.Favorites -> filter { app -> app.packageName in favorites }
 }
 
-/**
- * A composable that wraps the [AppCard] and provides it with the necessary data and callbacks.
- * This function acts as a bridge, extracting the [AppInfo] from the [AppListItem.App]
- * and passing it along with other parameters to the [AppCard].
- *
- * @param item The app item data, containing the [AppInfo].
- * @param isFavorite A boolean indicating whether the app is marked as a favorite.
- * @param modifier A [Modifier] for this composable.
- * @param onFavoriteToggle A lambda function to be invoked when the favorite icon is toggled. It receives the package name.
- * @param onAppClick A lambda function to be invoked when the app card is clicked. It receives the [AppInfo] of the clicked app.
- * @param onShareClick A lambda function to be invoked when the share icon is clicked. It receives the [AppInfo] of the app to be shared.
- */
 @Composable
 private fun AppCardItem(
     item: AppListItem.App,

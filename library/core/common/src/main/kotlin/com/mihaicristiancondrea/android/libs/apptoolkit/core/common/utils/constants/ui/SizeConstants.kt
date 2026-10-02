@@ -23,12 +23,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 object SizeConstants {
-    // Spacers
     val ButtonIcon: Dp = ButtonDefaults.IconSpacing
     val ButtonIconSize: Dp = ButtonDefaults.IconSize
     val SwitchIconSize: Dp = SwitchDefaults.IconSize
 
-    // Sizes
     val LauncherIconSize: Dp = 48.dp
     val ExtraLargeIncreasedSize: Dp = 32.dp
     val ExtraLargeSize: Dp = 28.dp

@@ -101,7 +101,6 @@ internal class SnowfallSimulation(
 
     private var windPxPerMs: Float = 0f
 
-    /** Number of flakes currently simulated. */
     val flakeCount: Int
         get() = y.size
 
@@ -197,7 +196,6 @@ internal class SnowfallSimulation(
         }
     }
 
-    /** Draws every flake into this scope. */
     override fun draw(scope: DrawScope) {
         for (index in 0 until flakeCount) {
             val color = color[index]

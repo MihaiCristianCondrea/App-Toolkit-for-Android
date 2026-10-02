@@ -40,20 +40,9 @@ import kotlinx.coroutines.supervisorScope
 import org.koin.android.ext.android.getKoin
 
 /**
- * Main application class for AppToolkit that handles core system initialization,
- * lifecycle management, and global configurations.
- *
- * This class extends [BaseCoreManager] and implements [DefaultLifecycleObserver] to:
- * - Initialize Dependency Injection via Koin.
- * - Manage global ad initialization and display (App Open ads).
- * - Handle dynamic color palette switching, including seasonal themes (Halloween, Christmas).
- * - Monitor activity lifecycles to track the current UI context.
- * - Install shake-to-report, which opens the toolkit's issue reporter from any screen.
- * - Install the seasonal overlay: the holiday greeting and snow with the Christmas theme.
- * - Process billing and purchases on application resume.
- *
- * @property currentActivity The currently active [Activity] instance, used for showing ads.
- * @property adsCoreManager Manager responsible for handling advertisement logic.
+ * Sample composition root for Koin and process-lifetime integrations: app-open ads, billing
+ * recovery, activity tracking, shake reporting, and the seasonal overlay. [BaseCoreManager]
+ * owns core startup and activity-callback registration.
  */
 class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
     private var currentActivity: Activity? = null
@@ -63,8 +52,7 @@ class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
     override fun onCreate() {
         initializeKoin(context = this)
         applyDefaultColorPalette()
-        // Also registers this instance for activity callbacks; registering it a second time here
-        // would deliver every callback twice.
+        // BaseCoreManager registers activity callbacks; registering here again would deliver them twice.
         super<BaseCoreManager>.onCreate()
         getKoin().get<IssueReporterShakeManager>().install()
         getKoin().get<SeasonalThemeManager>().install()

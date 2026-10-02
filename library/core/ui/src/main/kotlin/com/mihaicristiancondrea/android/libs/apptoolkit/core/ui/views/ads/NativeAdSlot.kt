@@ -105,9 +105,7 @@ fun NativeAdSlot(
     }
 
     if (nativeAd == null) {
-        // Release renders nothing, which is right for users and tells a developer nothing. On a
-        // debug build the slot says why it is empty instead, so no fill, a wrong unit id and an SDK
-        // that was not ready stop looking identical.
+        // Debug builds explain empty slots; release builds leave them collapsed.
         val failure: AdSlotFailure? = slotState.failure
         if (adsEnabled && failure != null && reporter.showsDebugPlaceholder) {
             AdSlotDebugPlaceholder(

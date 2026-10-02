@@ -52,7 +52,6 @@ abstract class BaseViewModel<S : UiState, E : UiEvent, A : ActionEvent>(initialS
 
     protected val uiStateFlow: MutableStateFlow<S> = MutableStateFlow(value = initialState)
 
-    /** Current state exposed to the UI as a [StateFlow]. */
     val uiState: StateFlow<S> = uiStateFlow.asStateFlow()
 
     private val actionChannel: Channel<A> = Channel(capacity = Channel.UNLIMITED)
@@ -71,7 +70,6 @@ abstract class BaseViewModel<S : UiState, E : UiEvent, A : ActionEvent>(initialS
     protected val currentState: S
         get() = uiState.value
 
-    /** Handles a new UI [event]. */
     abstract fun onEvent(event: E)
 
     /** Emits an [action] for the UI to handle. */

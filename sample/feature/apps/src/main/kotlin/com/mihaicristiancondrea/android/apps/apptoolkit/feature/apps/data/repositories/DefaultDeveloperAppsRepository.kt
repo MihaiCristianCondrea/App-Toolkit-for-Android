@@ -32,6 +32,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlin.coroutines.cancellation.CancellationException
 
+/**
+ * Loads and caches the catalog, retaining saved data on a failed refresh. Package names are
+ * unique identities, so normalization removes duplicates before keyed lazy layouts consume the
+ * result.
+ */
 class DefaultDeveloperAppsRepository(
     private val remoteDataSource: DeveloperAppsRemoteDataSource,
     private val telemetryRepository: TelemetryRepository,
@@ -43,8 +48,6 @@ class DefaultDeveloperAppsRepository(
             message = "Developer apps fetch",
         )
         val result: Result<DataState<List<AppSummary>, AppErrors>> = runSuspendCatching {
-            // The package name keys each app in the lazy grid, and a lazy layout throws on a
-            // repeated key, so a catalogue that lists one app twice must not reach the UI.
             val apps = remoteDataSource.fetchDeveloperApps()
                 .distinctBy { it.packageName }
                 .sortedBy { it.name.lowercase() }

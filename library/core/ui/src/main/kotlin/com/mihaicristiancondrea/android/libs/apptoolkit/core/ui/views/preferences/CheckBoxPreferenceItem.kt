@@ -47,25 +47,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.La
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /**
- * A composable function that creates a preference item with a checkbox.
- *
- * This item displays an optional icon, a title, an optional summary, and a checkbox.
- * Clicking the item toggles the checkbox state and triggers the provided [onCheckedChange] callback.
- *
- * @param icon The optional icon to display at the start of the item.
- * @param title The main title text for the preference item.
- * @param summary The optional summary text to display below the title.
- * @param checked The current checked state of the checkbox.
- * @param onCheckedChange A callback function that is invoked when the checkbox state changes.
- *                       It receives the new checked state as a boolean parameter.
- *
- * State ownership:
- * - [checked] is caller-owned state and should come from immutable UI state.
- * - This composable should not perform persistence or repositories calls.
- *
- * Accessibility:
- * - Keep [title] clear and [summary] short to preserve readability on smaller screens.
- * @param ga4Event Optional GA4 event data to log on click.
+ * Checkbox preference with caller-owned [checked] state. Row and checkbox taps emit
+ * [onCheckedChange]; callers handle persistence. Provide a clear [title] and supporting
+ * [summary].
  */
 @Composable
 fun CheckBoxPreferenceItem(

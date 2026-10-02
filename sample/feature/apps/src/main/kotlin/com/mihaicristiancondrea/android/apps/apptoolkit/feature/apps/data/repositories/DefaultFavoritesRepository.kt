@@ -23,10 +23,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onStart
 
 /**
- * Favorites source of truth backed directly by the app DataStore.
- *
- * `DataStoreInterface` already is the local data source for this feature, so the repository talks
- * to it without an extra per-feature data-source wrapper.
+ * Favorites source of truth backed by the app DataStore, which is the existing local source for
+ * this feature.
  */
 class DefaultFavoritesRepository(
     private val dataStore: DataStoreInterface,

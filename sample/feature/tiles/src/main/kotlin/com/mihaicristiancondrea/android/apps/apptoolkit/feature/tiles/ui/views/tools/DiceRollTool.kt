@@ -261,7 +261,6 @@ private fun MaterialProceduralDice3D(
         pipColor = colorScheme.onPrimaryContainer,
     )
 
-    // Using `remember` to hoist Paints out of DrawScope
     val fillPaint = remember {
         Paint().apply {
             style = PaintingStyle.Fill

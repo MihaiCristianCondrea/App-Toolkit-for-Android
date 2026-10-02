@@ -19,9 +19,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.st
 
 import androidx.compose.runtime.compositionLocalOf
 
-// These follow stored preferences and change at runtime, starting with the first DataStore read.
-// compositionLocalOf recomposes only the readers on a change; a static local would recompose the
-// whole tree under AppTheme.
 
 /** Enables bounce animations for the current UI subtree. */
 val LocalBouncyAnimationsEnabled = compositionLocalOf { true }

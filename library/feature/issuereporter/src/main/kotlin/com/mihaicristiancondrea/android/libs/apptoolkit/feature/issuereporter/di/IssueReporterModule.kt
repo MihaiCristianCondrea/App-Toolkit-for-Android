@@ -54,7 +54,6 @@ fun issueReporterModule(
     hostBuildConfig: AppToolkitHostBuildConfig,
     config: IssueReporterConfig = IssueReporterConfig(),
 ): Module = module {
-    // What screens outside this feature open, such as the advanced settings' bug report entry.
     single<IssueReporterSheet> { IssueReporterSheet { onDismissRequest -> IssueReporterBottomSheet(onDismissRequest) } }
     single<IssueReporterRemoteDataSource> { IssueReporterRemoteDataSource(client = get()) }
     single<DeviceInfoProvider> { DeviceInfoLocalDataSource(get(), get()) }

@@ -28,10 +28,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.intent.requireNewTask
 
 /**
- * Safely starts an activity.
- *
- * This is the “truthy” launcher: it tries to launch and catches failures.
- * This avoids false negatives from resolveActivity() under Android 11+ package visibility. :contentReference[oaicite:6]{index=6}
+ * Attempts the launch and catches failures instead of using `resolveActivity`, which can reject
+ * valid handlers under Android 11 package visibility rules.
  */
 fun Context.startActivitySafely(
     intent: Intent,
@@ -77,9 +75,8 @@ fun Context.openPlayStoreForApp(packageName: String): Boolean {
 }
 
 /**
- * Opens this app's notification settings.
- *
- * minSdk=26 => we can use ACTION_APP_NOTIFICATION_SETTINGS on all devices.
+ * Opens app notification settings, falling back to app details and then general settings when a
+ * launch fails.
  */
 fun Context.openAppNotificationSettings(): Boolean {
     val pkg = this.packageName

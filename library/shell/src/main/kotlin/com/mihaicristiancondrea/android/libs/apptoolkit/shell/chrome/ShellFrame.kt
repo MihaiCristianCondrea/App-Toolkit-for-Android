@@ -17,9 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -124,7 +123,6 @@ internal val LocalShellFrame = staticCompositionLocalOf<ShellFrameState?> { null
  * and marked, and choosing another replaces it. Below that width, and on start screens, the frame
  * adds nothing: the chrome draws a bottom bar and a modal drawer, and pages cover them.
  */
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun ShellFrame(
     graph: ShellGraph,

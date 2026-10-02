@@ -21,11 +21,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 
 /**
- * Whether the host activity can still be used as a context for a UMP round trip.
- *
- * Consent is requested from onboarding, startup, and each host's `MainActivity`, so a request can
- * easily be issued by an activity that is already on its way out. UMP keeps a reference to that
- * activity for the whole request, so starting one from a dead host is wasted work at best.
+ * Whether the activity can still serve as the context for a UMP request. Reject finishing or
+ * destroyed activities because UMP retains the host through its asynchronous work.
  */
 val ConsentHost.isAlive: Boolean
     get() = !activity.isFinishing && !activity.isDestroyed

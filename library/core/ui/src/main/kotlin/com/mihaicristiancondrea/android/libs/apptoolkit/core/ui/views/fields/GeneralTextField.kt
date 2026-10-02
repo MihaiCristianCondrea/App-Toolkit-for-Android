@@ -72,13 +72,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.getGroupedShape
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
-/** Visual treatment of a text field. */
 enum class GeneralTextFieldStyle {
 
     /** The Material filled field, the platform default. */
     Filled,
 
-    /** The Material outlined field. */
     Outlined,
 
     /**
@@ -255,8 +253,7 @@ fun GeneralTextField(
         return
     }
 
-    // The formatting bar has to place the caret, so an editor keeps a TextFieldValue of its own and
-    // reports only the text back. Everything else stays on the plain String field.
+    // The formatting bar owns caret placement; this overload exposes only text changes.
     if (markdown == GeneralTextFieldMarkdown.Editor) {
         var fieldValue: TextFieldValue by rememberSaveable(stateSaver = TextFieldValue.Saver) {
             mutableStateOf(
@@ -596,8 +593,6 @@ private fun rememberGeneralTextFieldSkin(
                 )
             }
 
-            // Fully rounded is what makes an outlined field read as a search box rather than as
-            // one more form field.
             GeneralTextFieldStyle.SearchOutlined -> GeneralTextFieldSkin(
                 fieldShape = shapeOverride ?: CircleShape,
                 formattingBarShape = RectangleShape,
@@ -606,14 +601,12 @@ private fun rememberGeneralTextFieldSkin(
 
             GeneralTextFieldStyle.Outlined -> GeneralTextFieldSkin(
                 fieldShape = shapeOverride ?: outlinedShape,
-                // An outlined field is closed by its own border, so the bar is left unfilled rather
-                // than boxed a second time under it.
+                // Leave the bar unfilled beneath the field's existing outline.
                 formattingBarShape = RectangleShape,
                 formattingBarColor = Color.Transparent,
             )
 
-            // A search field never carries a formatting bar, and draws through the Material search
-            // input rather than this skin; the shape is here so the whole style set stays covered.
+            // Search styles use the Material search input and have no formatting bar.
             GeneralTextFieldStyle.Search -> GeneralTextFieldSkin(
                 fieldShape = shapeOverride ?: CircleShape,
                 formattingBarShape = RectangleShape,
@@ -622,8 +615,7 @@ private fun rememberGeneralTextFieldSkin(
 
             GeneralTextFieldStyle.Filled -> GeneralTextFieldSkin(
                 fieldShape = shapeOverride ?: filledShape,
-                // The filled field rounds its top corners only, so the bar rounds the bottom ones
-                // and the two close the same box.
+                // Round the bar's lower corners to complete the filled field's container.
                 formattingBarShape = RoundedCornerShape(
                     bottomStart = SizeConstants.ExtraSmallSize,
                     bottomEnd = SizeConstants.ExtraSmallSize,

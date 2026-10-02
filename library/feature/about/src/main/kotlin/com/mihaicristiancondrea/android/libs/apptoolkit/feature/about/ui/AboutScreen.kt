@@ -182,8 +182,6 @@ internal fun AboutScreenContent(
             if (versionTapCount >= EASTER_EGG_TAPS) {
                 versionTapCount = 0
                 showKonfetti = true
-                // AboutViewModel reports the achievement, once, when this first unlocks the
-                // seasonal themes.
                 onEvent(AboutEvent.EasterEggFound)
             }
         }

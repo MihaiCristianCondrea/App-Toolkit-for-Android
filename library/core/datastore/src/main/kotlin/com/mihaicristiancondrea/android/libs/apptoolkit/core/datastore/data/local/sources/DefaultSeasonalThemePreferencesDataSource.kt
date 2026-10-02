@@ -33,7 +33,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
-/** Seasonal theme preferences stored in the shared `settings` Preferences DataStore. */
+/**
+ * Seasonal preferences in the shared `settings` DataStore. Unknown weather-effect names use
+ * [WeatherEffect.Automatic]; unknown season names produce no holiday snapshot. Snapshot fields
+ * are written or cleared in one transaction.
+ */
 class DefaultSeasonalThemePreferencesDataSource(
     private val dataStore: DataStore<Preferences>,
 ) : SeasonalThemePreferencesDataSource {
@@ -56,7 +60,6 @@ class DefaultSeasonalThemePreferencesDataSource(
     }.distinctUntilChanged()
 
     override val weatherEffect: Flow<WeatherEffect> = dataStore.data.map { preferences ->
-        // A name this build no longer knows reads as the default.
         preferences[weatherEffectKey]
             ?.let { name -> WeatherEffect.entries.firstOrNull { it.name == name } }
             ?: WeatherEffect.Automatic
@@ -68,7 +71,6 @@ class DefaultSeasonalThemePreferencesDataSource(
 
     override val holidayThemeSnapshot: Flow<HolidayThemeSnapshot?> =
         dataStore.data.map { preferences ->
-            // A season name this build no longer knows is treated as no holiday theme at all.
             val season = preferences[holidaySeasonKey]
                 ?.let { name -> HolidaySeason.entries.firstOrNull { it.name == name } }
                 ?: return@map null
@@ -96,7 +98,6 @@ class DefaultSeasonalThemePreferencesDataSource(
     }
 
     override suspend fun saveHolidayThemeSnapshot(snapshot: HolidayThemeSnapshot?) {
-        // One transaction, so a snapshot is never half written or half cleared.
         dataStore.edit { preferences: MutablePreferences ->
             if (snapshot == null) {
                 preferences.remove(holidaySeasonKey)

@@ -75,10 +75,6 @@ class IssueReporterViewModelTest {
 
     private val githubTarget = GithubTarget("user", "repo")
 
-    /**
-     * A real [DeviceInfo] rather than a mock: the model no longer needs a `Context` to exist, so a
-     * test can build one outright.
-     */
     private fun deviceInfo(): DeviceInfo = DeviceInfo(
         appVersionName = "1.0.0",
         appVersionCode = 1L,

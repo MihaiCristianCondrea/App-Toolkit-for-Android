@@ -101,7 +101,6 @@ fun appGraph(
     page<ComponentsRoute>(title = { stringResource(ComponentsR.string.components_title) }) {
         ComponentsScreen()
     }
-    // The Toolkit's About page, with the hidden version-tap unlock of the components showcase.
     aboutPages { AboutSettingsContent() }
     // A native ad docked on the bottom navigation bar, and only there; nothing while ads are off.
     banner {
@@ -117,7 +116,6 @@ fun appGraph(
                 icon = ToolkitIcon.Vector(Icons.Outlined.Widgets),
             )
         }
-        // Settings, Help, Updates and Share, always last and pinned to the bottom.
         toolkitFooter(onShowUpdates = onShowChangelog)
     }
     overflow { supportUs() }

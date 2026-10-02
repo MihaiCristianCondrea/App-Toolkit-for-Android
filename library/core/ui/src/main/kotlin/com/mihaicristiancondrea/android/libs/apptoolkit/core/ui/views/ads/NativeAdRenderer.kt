@@ -153,8 +153,7 @@ class NativeAdViewHolder(
 
     fun applyPalette(palette: NativeAdPalette, style: NativeAdStyle = NativeAdStyle()) {
         label.setTextColor(palette.primary)
-        // The disclosure badge sits in a rounded chip on every card presentation, as it did in the
-        // layouts this renderer replaced. The bar strip is too shallow for one.
+        // The shallow bar strip has no room for the disclosure chip used by card presentations.
         label.background = if (presentation is NativeAdPresentation.BarRow) {
             null
         } else {
@@ -181,9 +180,7 @@ class NativeAdViewHolder(
         advertiser.setTextColor(palette.onSurfaceVariant)
 
         iconFrame?.let { frame ->
-            // The badge is cut with the caller's silhouette when it gave one, otherwise a rounded
-            // square. This runs on every update, so a shape or colour the caller rebuilt repaints
-            // instead of recreating the ad view.
+            // Update the badge in place so shape and color changes do not recreate the ad view.
             val badgeColor: Int = style.badgeColor.orArgb(fallback = palette.surfaceVariant)
             val badgeShape: NativeAdBadgeShape? = style.badgeShape
 
@@ -225,8 +222,7 @@ class NativeAdViewHolder(
                 }
 
                 NativeAdCallToActionStyle.Text -> {
-                    // A text button carries no container, and sheds the pill's padding with it, so
-                    // it lines up with the text buttons the rest of the screen uses.
+                    // Remove pill padding with the background so the CTA aligns with host text buttons.
                     cta.background = null
                     cta.setTextColor(palette.primary)
                     cta.setPadding(
@@ -279,7 +275,6 @@ class NativeAdViewHolder(
     }
 }
 
-/** Resolves an optional style colour against the palette value it overrides. */
 private fun Color.orArgb(fallback: Int): Int = if (isSpecified) toArgb() else fallback
 
 private val NativeAdView.holder: NativeAdViewHolder?
@@ -298,7 +293,9 @@ const val ICON_CORNER_RADIUS_DP: Int = 12
 const val LABEL_CORNER_RADIUS_DP: Int = 8
 const val MEDIA_CORNER_RADIUS_DP: Int = 20
 
-/** Media aspect ratio for the Featured presentation, matching the layout it replaced. */
+/**
+ * Aspect ratio of media in the Featured presentation.
+ */
 const val MEDIA_ASPECT_RATIO: Float = 16f / 9f
 const val CTA_CORNER_RADIUS_DP: Int = 20
 
@@ -333,9 +330,7 @@ private fun createFeatured(context: Context): NativeAdViewHolder {
     val content = verticalContent(context = context, padding = context.dp(CARD_PADDING_DP))
     val label = sponsoredLabelView(context = context)
 
-    // The MediaView is sized by the creative, so on its own it renders at whatever height the asset
-    // happens to have, which is what made this card look arbitrary from one ad to the next. The
-    // 16:9 frame reproduces the constraint the XML layout used to impose.
+    // Constrain creative-dependent media height to the Featured presentation's 16:9 frame.
     val mediaFrame =
         AspectRatioFrameLayout(context = context, widthToHeightRatio = MEDIA_ASPECT_RATIO)
             .apply {
@@ -374,9 +369,7 @@ private fun createFeatured(context: Context): NativeAdViewHolder {
             ViewGroup.LayoutParams.WRAP_CONTENT,
         ).apply { marginStart = context.dp(SMALL_SPACING_DP) }
     }
-    // The spacer, not the advertiser, is what pushes the CTA to the trailing edge. Weighting the
-    // advertiser instead left the CTA next to the icon whenever the creative carried no advertiser
-    // line, because a gone view claims none of the row.
+    // Weight the spacer because an absent advertiser view occupies no space.
     val footerSpacer = Space(context).apply {
         layoutParams = LinearLayout.LayoutParams(0, 0, 1f)
     }
@@ -435,8 +428,7 @@ private fun createCompact(context: Context): NativeAdViewHolder {
                 marginEnd = context.dp(SMALL_SPACING_DP)
             }
     }
-    // One headline line and two body lines: Compact sits inline between question cards on the help
-    // screen, and a three-line body made the ad taller than the rows it is interleaved with.
+    // Limit text height so Compact ads fit between Help question rows.
     val headline = headlineView(context = context, maxLines = 1)
     val body = bodyView(context = context, maxLines = 2)
         .withTopMargin(context.dp(ICON_PADDING_DP))

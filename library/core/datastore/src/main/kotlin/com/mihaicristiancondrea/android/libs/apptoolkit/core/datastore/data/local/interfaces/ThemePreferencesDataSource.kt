@@ -30,10 +30,8 @@ interface ThemePreferencesDataSource {
     /** Emits the stored theme mode, defaulting to "follow system". */
     val themeMode: Flow<String>
 
-    /** Emits whether the AMOLED (true-black) variant is enabled. */
     val amoledMode: Flow<Boolean>
 
-    /** Emits whether Material You dynamic colors are enabled. */
     val dynamicColors: Flow<Boolean>
 
     /** Emits the selected dynamic palette variant, clamped to a supported index. */
@@ -67,13 +65,10 @@ interface ThemePreferencesDataSource {
             )
         }
 
-    /** Persists the theme mode. */
     suspend fun saveThemeMode(mode: String)
 
-    /** Persists the AMOLED preference. */
     suspend fun saveAmoledMode(isChecked: Boolean)
 
-    /** Persists the dynamic-colors preference. */
     suspend fun saveDynamicColors(isChecked: Boolean)
 
     /** Persists the dynamic palette variant, clamped to a supported index. */

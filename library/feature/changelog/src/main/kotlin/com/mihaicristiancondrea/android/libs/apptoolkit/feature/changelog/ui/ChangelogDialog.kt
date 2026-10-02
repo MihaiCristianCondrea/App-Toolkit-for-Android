@@ -141,7 +141,6 @@ internal fun ChangelogDialogContent(
         }
         GeneralButton(
             modifier = Modifier.fillMaxWidth(),
-            // The sheet's only action, and the one every reader ends on.
             measurements = ButtonMeasurements.Medium,
             onClick = if (canRetry) onRetry else onDismiss,
             label = if (canRetry) {
@@ -171,8 +170,7 @@ private fun ChangelogBody(markdown: Loadable<String>) {
         is Loadable.Empty -> Text(text = stringResource(id = R.string.no_new_updates_message))
 
         is Loadable.Ready -> {
-            // Each release on its own, with the Toolkit's wavy line where the Markdown has a rule:
-            // the renderer's own rule is a flat line.
+            // Use the Toolkit's wavy divider instead of the Markdown renderer's flat rule.
             val sections = remember(markdown.value) { markdown.value.splitAtThematicBreaks() }
             Column(
                 modifier = Modifier

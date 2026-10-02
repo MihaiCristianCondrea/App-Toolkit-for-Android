@@ -40,25 +40,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 
 /**
- * An animated button that slides in and out horizontally with a fade effect.
+ * Icon action button with slide, fade, and scale visibility transitions. Icon replacements
+ * crossfade in place without replaying the entrance. Click feedback, playback, and analytics
+ * follow [GeneralButton].
  *
- * This composable provides an animated button that appears and disappears with a slide and fade animation.
- * The animation direction (from the left or right) and duration can be customized.
- *
- * @param modifier Modifier to be applied to the button.
- * @param visible Controls the visibility of the button. If true, the button will be visible, otherwise it will be hidden.
- * @param icon The icon to display within the button. An animated icon plays on every click. A
- *   different icon crossfades in place, without replaying the button's entrance.
- * @param contentDescription The content description for the icon, used for accessibility.
- * @param onClick The callback that will be invoked when the button is clicked.
- * @param durationMillis The duration of the animation in milliseconds. Defaults to 500ms.
- * @param autoAnimate If true, the button will automatically animate in when `visible` is true.
- *                    If false, the animation will not be triggered automatically and will only occur when the visibility state changes. Defaults to true.
- * @param feedback The feedback configuration for sound and haptics.
- * @param fromRight If true, the button will slide in from the right and slide out to the right.
- *                  If false, the button will slide in from the left and slide out to the left. Defaults to false.
- * @param iconSize The icon size rendered inside the underlying icon-only button.
- * @param ga4Event Optional GA4 event data to log on click.
+ * @param autoAnimate Reveals a hidden button when [visible] becomes `true`. Disabling this
+ * leaves a hidden button hidden.
+ * @param fromRight Selects the physical right edge; `false` selects the left edge.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -108,8 +96,6 @@ fun AnimatedIconButtonDirection(
                     animationSpec = tween(durationMillis = durationMillis)
                 )
     ) {
-        // A new icon on the same button, such as a menu becoming a back arrow, crossfades in place
-        // with the timing of the app bar title instead of replaying the button's entrance.
         AnimatedContent(
             targetState = icon to contentDescription,
             transitionSpec = {

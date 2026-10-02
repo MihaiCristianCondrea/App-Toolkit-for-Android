@@ -17,31 +17,23 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome
 
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.foundation.layout.offset
-import androidx.compose.runtime.mutableIntStateOf
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.rememberFabScrollBehavior
-import androidx.compose.ui.Alignment
-import androidx.compose.foundation.layout.Arrangement
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ToolkitFabColumn
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.LocalFabHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.FabHost
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.animation.ContentTransform
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animate
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -51,6 +43,7 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -60,7 +53,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -77,6 +69,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -86,6 +79,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
@@ -100,6 +94,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
@@ -109,19 +104,24 @@ import androidx.navigation3.runtime.rememberDecoratedNavEntries
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.scene.Scene
 import androidx.navigation3.scene.SinglePaneSceneStrategy
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationBarStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationTint
+import androidx.navigationevent.NavigationEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.LocalShowBottomBarLabels
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonFeedback
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.FabHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.LocalFabHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ToolkitFabColumn
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.rememberFabScrollBehavior
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.ContentWidthBox
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.HideOnScrollTopBar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalContentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalPageSnackbarHostState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalTopBarStyleOverride
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.ShellTopAppBar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.TopBarSearch
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.rememberTopBarHideState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.frameTint
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.rememberTopBarHideState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.rememberTopBarScrollBehavior
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.resetTo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.topBarInsets
@@ -130,6 +130,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.D
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.LocalScaffoldSnackbars
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.ScaffoldSnackbars
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellSearch
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellBackHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellNavDisplay
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellNavigator
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellSearch
@@ -141,24 +142,22 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarS
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ContentCardShape
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FollowScrollWithFrameTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalShellLayout
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.besideNavigationTitle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.besideNavigationTitle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.LocalShellMotion
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.ScreenTransition
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.ShellMotion
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.ListDetailSceneStrategy
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.ShellEntryInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.topShellInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellBackHandler
-import androidx.navigationevent.NavigationEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationBarStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationTint
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.LocalShowBottomBarLabels
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonFeedback
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 /**
  * What a screen inside the shell can ask of the chrome around it: whether the navigation hides in
@@ -217,7 +216,6 @@ val LocalShellChrome = staticCompositionLocalOf { ShellChromeController(showsMen
  * The player sits under the drawer and the modal rail, so opening either covers it; on a permanent
  * drawer it docks beside the drawer and covers it only when expanded.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
     val settings = LocalShellSettings.current
@@ -423,7 +421,6 @@ internal const val NoTab = -1
 internal val DrawerContentInsets: WindowInsets
     @Composable get() = WindowInsets.safeDrawing.only(WindowInsetsSides.Start + WindowInsetsSides.Top)
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ShellBody(
     graph: ShellGraph,

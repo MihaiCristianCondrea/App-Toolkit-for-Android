@@ -74,26 +74,13 @@ open class AdsCoreManager(
     private var isSdkInitialized: Boolean = false
 
     /**
-     * Prepares the SDK and loads an [AppOpenAd] if ads are enabled.
+     * Initializes ads from the host-manifest [AdMobAppIdProvider] and observes the shared
+     * [CommonDataStore.adsEnabledFlow], so enabling ads later can initialize the SDK without a
+     * process restart. Missing or invalid app IDs skip initialization; no fallback publisher ID
+     * is supplied.
      *
-     * The AdMob application id is resolved from the host app's manifest through
-     * [AdMobAppIdProvider]. The toolkit previously initialized the SDK with Google's sample app id,
-     * which pointed every consumer app at a publisher account that was not its own. When the host
-     * declares no usable `com.google.android.gms.ads.APPLICATION_ID` meta-data, initialization is
-     * skipped instead of falling back to a foreign id.
-     *
-     * Hosts must not call [MobileAds.initialize] themselves; a second initialization with a
-     * different id re-introduces the mismatch this method exists to prevent. Use
-     * [disableNativeValidator] instead of a bespoke initialization when the host needs the SDK's
-     * native ad validator turned off.
-     *
-     * Change rationale: this used to sample the ads preference once at startup with its own default
-     * (`!isDebugBuild`), while the ad views read the preference through
-     * [CommonDataStore.adsEnabledFlow] with a different default. On a build where the two disagreed
-     * the views loaded ads that the SDK had never been initialized for, and the loader throws
-     * `IllegalStateException` for that. Both sides now read the same flow, and the preference is
-     * observed rather than sampled, so turning ads on at runtime initializes the SDK instead of
-     * waiting for the next process start.
+     * Hosts must use this manager rather than initializing [MobileAds] separately. Use
+     * [disableNativeValidator] to configure native-ad validation.
      */
     suspend fun initializeAds(appOpenUnitId: String, disableNativeValidator: Boolean = false) {
         val isAdsChecked: Boolean = withContext(dispatchers.io) {
@@ -133,14 +120,10 @@ open class AdsCoreManager(
     }
 
     /**
-     * Initializes the Mobile Ads SDK exactly once, and reports whether it is usable.
+     * Initializes the SDK once and publishes readiness. Ad loaders must wait for `true`;
+     * loading before initialization throws.
      *
-     * Nothing may load an ad before this returns `true`: the loader throws
-     * `IllegalStateException("MobileAds.initialize must be called before using the Google Mobile
-     * Ads SDK.")` otherwise.
-     *
-     * @return `false` when the host declares no valid AdMob application id, in which case no ad can
-     * be served at all.
+     * @return `false` when the host provides no valid AdMob application ID.
      */
     suspend fun ensureAdsSdkInitialized(disableNativeValidator: Boolean = false): Boolean {
         if (isSdkInitialized) return true
@@ -181,9 +164,6 @@ open class AdsCoreManager(
         }
     }
 
-    /**
-     * Helper that wraps loading and showing of the App Open ad.
-     */
     private inner class AppOpenAdManager(private val appOpenUnitId: String) {
         private var appOpenAd: AppOpenAd? = null
         private var isLoadingAd: Boolean = false
@@ -217,7 +197,6 @@ open class AdsCoreManager(
             return dateDifference < APP_OPEN_AD_LIFETIME.inWholeMilliseconds
         }
 
-        /** Whether a valid ad is ready to be shown. */
         private fun isAdAvailable(): Boolean {
             return appOpenAd != null && wasLoadTimeLessThanNHoursAgo()
         }

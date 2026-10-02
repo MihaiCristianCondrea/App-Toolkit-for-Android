@@ -29,7 +29,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.mode
  */
 fun Errors.asUiText(): UiTextHelper {
     return when (this) {
-        // Network
         Errors.Network.NO_INTERNET -> UiTextHelper.StringResource(R.string.no_internet_error)
         Errors.Network.CONNECTION_ERROR -> UiTextHelper.StringResource(R.string.connection_error)
         Errors.Network.CONNECTION_CLOSED -> UiTextHelper.StringResource(R.string.connection_closed_error)
@@ -44,14 +43,12 @@ fun Errors.asUiText(): UiTextHelper {
         Errors.Network.SERIALIZATION -> UiTextHelper.StringResource(R.string.serialization_error)
         Errors.Network.UNKNOWN -> UiTextHelper.StringResource(R.string.unknown_error)
 
-        // UseCase (generic)
         Errors.UseCase.NO_DATA -> UiTextHelper.StringResource(R.string.no_data_error)
         Errors.UseCase.ILLEGAL_ARGUMENT -> UiTextHelper.StringResource(R.string.illegal_argument_error)
         Errors.UseCase.INVALID_STATE -> UiTextHelper.StringResource(R.string.invalid_state_error)
         Errors.UseCase.UNSUPPORTED_OPERATION -> UiTextHelper.StringResource(R.string.unsupported_operation_error)
         Errors.UseCase.CANCELLED -> UiTextHelper.StringResource(R.string.cancelled_error)
 
-        // UseCase (toolkit features)
         Errors.UseCase.FAILED_TO_LAUNCH_REVIEW -> UiTextHelper.StringResource(R.string.error_failed_to_launch_review)
         Errors.UseCase.FAILED_TO_LOAD_FAQ -> UiTextHelper.StringResource(R.string.error_failed_to_load_faq)
         Errors.UseCase.FAILED_TO_REQUEST_REVIEW -> UiTextHelper.StringResource(R.string.error_failed_to_request_review)
@@ -59,7 +56,6 @@ fun Errors.asUiText(): UiTextHelper {
         Errors.UseCase.FAILED_TO_LOAD_SKU_DETAILS -> UiTextHelper.StringResource(R.string.error_failed_to_load_sku_details)
         Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO -> UiTextHelper.StringResource(R.string.error_failed_to_load_consent_info)
 
-        // Database
         Errors.Database.DATABASE_OPERATION_FAILED -> UiTextHelper.StringResource(R.string.database_error)
         Errors.Database.DATABASE_LOCKED -> UiTextHelper.StringResource(R.string.database_locked_error)
         Errors.Database.DATABASE_CONSTRAINT -> UiTextHelper.StringResource(R.string.database_constraint_error)

@@ -68,9 +68,7 @@ object IssueReporterLauncher {
 
         val host = ComposeView(activity).apply {
             tag = OVERLAY_TAG
-            // The activity's decor view normally carries these already, but only once it has set
-            // content. Naming them here means the sheet's ViewModel resolves the same way no matter
-            // what the host activity has done with its own window.
+            // Install owners before composition so ViewModel resolution does not depend on the host having set content.
             setViewTreeLifecycleOwner(activity)
             setViewTreeViewModelStoreOwner(activity)
             setViewTreeSavedStateRegistryOwner(activity)
@@ -78,12 +76,10 @@ object IssueReporterLauncher {
         }
 
         host.setContent {
-            // A composition of its own, outside ShellHost, so it provides the telemetry itself.
+            // This composition sits outside ShellHost and must provide telemetry itself.
             ProvideTelemetry {
                 AppTheme {
-                    // The sheet lives in its own window, so this view contributes no layout and is
-                    // left to wrap to nothing. A view that filled the activity would sit over the
-                    // screen behind the sheet with nothing to draw and touches to swallow.
+                    // The sheet has its own window; an empty full-screen host view would swallow touches behind it.
                     IssueReporterBottomSheet(onDismissRequest = { content.removeView(host) })
                 }
             }

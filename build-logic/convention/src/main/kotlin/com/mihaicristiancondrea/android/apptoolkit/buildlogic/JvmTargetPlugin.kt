@@ -27,17 +27,9 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 /**
- * Pins Java and Kotlin bytecode to the same JVM target across every module.
- *
- * Change rationale: only two modules declared a target after the toolkit was split up, so the other
- * twenty silently compiled to Java 11. Production code got away with it; test code did not, because
- * inlining a Java 17 `inline fun` from mockk or `kotlinx-coroutines-test` into an 11-target module
- * is a hard compile error. The fix belongs in one place, a module should not have to remember.
- *
- * Apply this *after* the Android application/library plugin in the `plugins {}` block: a plugins
- * block applies in source order, and the Android extension does not exist until its own plugin has
- * finished applying. Java has to go through `android.compileOptions` rather than the `JavaCompile`
- * tasks, because that DSL value is what AGP compares against Kotlin's when it checks the two agree.
+ * Aligns Java and Kotlin bytecode targets across modules, including test dependencies with
+ * inline functions. Apply after the Android plugin. Java targets use `android.compileOptions`
+ * because AGP compares those values with Kotlin's target.
  */
 class JvmTargetPlugin : Plugin<Project> {
 

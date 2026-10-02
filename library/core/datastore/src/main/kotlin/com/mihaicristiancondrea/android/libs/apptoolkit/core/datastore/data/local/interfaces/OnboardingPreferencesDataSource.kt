@@ -23,9 +23,7 @@ import kotlinx.coroutines.flow.Flow
  * Abstraction over onboarding-related preference operations used by the repositories.
  */
 interface OnboardingPreferencesDataSource {
-    /** Emits whether the app is being launched for the first time. */
     val startup: Flow<Boolean>
 
-    /** Persists whether the app is being launched for the first time. */
     suspend fun saveStartup(isFirstTime: Boolean)
 }

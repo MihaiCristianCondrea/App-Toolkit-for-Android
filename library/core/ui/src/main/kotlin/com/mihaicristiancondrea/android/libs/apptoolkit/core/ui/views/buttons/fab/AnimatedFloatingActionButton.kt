@@ -46,24 +46,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.sty
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /**
- * A Composable function that displays a Floating Action Button with an animated appearance.
- * The button animates in and out of view based on the `isVisible` parameter.
- * It also includes haptic feedback and a click sound effect on interaction.
- *
- * State ownership:
- * - Visibility and click behavior are controlled by the caller.
- * - This composable does not perform business logic; it only renders and dispatches events.
- *
- * Accessibility:
- * - Use a meaningful [contentDescription] for screen readers.
- *
- * @param modifier The [Modifier] to be applied to the button.
- * @param isVisible A boolean that controls the visibility of the FAB. If true, the button animates in; if false, it animates out.
- * @param icon The [ToolkitIcon] to be displayed inside the FAB.
- * @param contentDescription Text used by accessibility services to describe what the icon represents.
- * @param onClick A lambda function to be invoked when the button is clicked.
- * @param feedback The feedback configuration for sound and haptics.
- * @param ga4Event Optional GA4 event data to log on click.
+ * FAB with caller-owned visibility and action, plus local saved toggle state. Clicks perform
+ * feedback and optional GA4 logging before [onClick]. Supply [contentDescription] to name the
+ * icon for accessibility.
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable

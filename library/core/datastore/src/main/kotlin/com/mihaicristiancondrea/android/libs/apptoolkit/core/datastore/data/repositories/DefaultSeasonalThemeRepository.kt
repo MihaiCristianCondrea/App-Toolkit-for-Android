@@ -30,7 +30,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 
-/** Reads and writes the seasonal themes through the preference store. */
+/**
+ * Coordinates holiday palette changes and restoration. An existing snapshot retains the
+ * original appearance when switching between holiday themes.
+ */
 class DefaultSeasonalThemeRepository(
     private val seasonal: SeasonalThemePreferencesDataSource,
     private val theme: ThemePreferencesDataSource,
@@ -82,8 +85,6 @@ class DefaultSeasonalThemeRepository(
 
     private suspend fun applyHolidayTheme(season: HolidaySeason) {
         if (isWearing(season)) return
-        // Keep the oldest appearance. If a snapshot exists the person is already wearing a holiday
-        // theme, and the snapshot holds their everyday appearance, which is what they expect back.
         val snapshot = seasonal.holidayThemeSnapshot.first()?.copy(season = season)
             ?: HolidayThemeSnapshot(
                 season = season,

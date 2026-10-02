@@ -26,27 +26,17 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onStart
 
 /**
- * Concrete implementation of [AdsSettingsRepository].
- *
- * This class manages the persistence and retrieval of ad-related settings, specifically whether ads
- * are enabled or disabled. [CommonDataStore] owns both the persistence and the build-dependent
- * default, so this repositories never recomputes either.
- *
- * @param dataStore The data store used for persisting ad settings.
+ * Reads and writes persisted ad settings using the store-owned default shared by the manager
+ * and ad views. Observation uses the cold preference flow so read failures and cancellation
+ * reach the caller. Writes return errors as [DataState] values while preserving cancellation.
  */
 class DefaultAdsSettingsRepository(
     private val dataStore: CommonDataStore,
     private val telemetryRepository: TelemetryRepository,
 ) : AdsSettingsRepository {
 
-    // Deliberately delegated rather than recomputed. `AdsCoreManager` gates SDK initialization on
-    // the same preference and the ad views observe it; a repositories with its own default is how the
-    // two came to disagree before, which made ad views request ads for an uninitialized SDK.
     override val defaultAdsEnabled: Boolean = dataStore.defaultAdsEnabled
 
-    // The cold `ads(...)` flow rather than `adsEnabledFlow`: the settings screen needs IO errors and
-    // cancellation to reach it, and the eagerly-started StateFlow swallows both into its own scope.
-    // Only the default is shared, that is what used to diverge.
     override fun observeAdsEnabled(): Flow<Boolean> =
         dataStore.ads(default = defaultAdsEnabled)
             .onStart {
@@ -58,8 +48,6 @@ class DefaultAdsSettingsRepository(
 
     override fun observeReduceAds(): Flow<Boolean> = dataStore.reduceAds
 
-    // Previously returned Success unconditionally, so a DataStore write failure reached the caller
-    // as an uncaught exception rather than the error state the settings screen renders.
     override suspend fun setAdsEnabled(enabled: Boolean): DataState<Unit, Errors.Database> =
         persistPreference(
             breadcrumb = "Ads settings updated",

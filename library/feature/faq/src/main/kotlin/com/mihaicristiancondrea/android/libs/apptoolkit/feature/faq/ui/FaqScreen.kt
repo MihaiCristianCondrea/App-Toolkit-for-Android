@@ -106,8 +106,9 @@ import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
 
-// The analytics screen name stays "Help": the destination is still "Help & feedback" to the
-// user, and changing it would split this screen's history in GA4 at the module rename.
+/**
+ * Keeps the established `Help` analytics identity so the screen retains its GA4 history.
+ */
 private const val FAQ_SCREEN_NAME: String = "Help"
 private const val FAQ_SCREEN_CLASS: String = "FaqScreen"
 

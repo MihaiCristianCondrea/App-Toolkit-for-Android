@@ -26,17 +26,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 
 /**
- * Represents the comprehensive state of a UI screen.
- *
- * This data class encapsulates all the necessary information to render a screen at any given moment,
- * including the core data, loading/error status, and user-facing messages like snackbars.
- * It implements the [UiState] marker interface, integrating it into the app's state management pattern.
- *
- * @param T The type of the primary data held by the screen state.
- * @property screenState The current state of the screen (e.g., loading, success, error, no data). Defaults to [ScreenState.IsLoading].
- * @property errors A list of [UiSnackbar] objects representing errors that may need to be displayed to the user. Defaults to an empty list.
- * @property snackbar A single [UiSnackbar] to be shown immediately. This is nullable; a non-null value triggers the display. Defaults to null.
- * @property data The actual data of type [T] to be displayed on the screen. This is nullable and will typically be populated on a successful data fetch. Defaults to null.
+ * Legacy screen-wide state containing content, loading status, and snackbar requests. [errors]
+ * holds additional messages; [snackbar] requests immediate display.
  */
 @Immutable
 data class UiStateScreen<T>(
@@ -48,19 +39,11 @@ data class UiStateScreen<T>(
 ) : UiState
 
 /**
- * Represents a message to be displayed in a snackbar.
- * It encapsulates the content, type, and state of the message.
+ * Snackbar request with unresolved text and optional action.
  *
- * @property type The type of the message, typically used for styling (e.g., error, success, info).
- *              Defaults to [ScreenMessageType.NONE].
- * @property message The actual content of the message, wrapped in a [UiTextHelper]
- *                   to support both static and dynamic strings.
- * @property isError A boolean flag indicating if this snackbar message represents an error.
- *                   This can be used for specific UI handling or logging. Defaults to `true`.
- * @property timeStamp A timestamp indicating when the snackbar was created. Can be used
- *                     to prevent showing the same message multiple times in quick succession.
- * @property actionLabel The label of the snackbar's action, or null for none. The screen's
- *                       `DefaultSnackbarHandler` sends its action event when it is performed.
+ * @property timeStamp Identifies repeated messages so the handler can distinguish them.
+ * @property actionLabel Optional action label; `DefaultSnackbarHandler` emits the corresponding
+ * action event.
  */
 @Immutable
 data class UiSnackbar(
@@ -73,16 +56,8 @@ data class UiSnackbar(
 
 
 /**
- * Updates the state of a `MutableStateFlow<UiStateScreen<T>>` with a new `ScreenState`
- * and a transformed data object.
- *
- * This is an inline extension function that atomically updates the `UiStateScreen` value.
- * It takes a new `ScreenState` to set and a `transform` lambda to modify the existing `data`.
- * The transformation is only applied if the current `data` is not null.
- *
- * @param T The type of the data held by `UiStateScreen`.
- * @param newState The new [ScreenState] to be set (e.g., `ScreenState.Success()`, `ScreenState.IsLoading()`).
- * @param transform A lambda function that takes the current data of type `T` and returns the updated data of the same type.
+ * Atomically changes the screen status and transforms existing data. The transform is skipped
+ * when data is null.
  */
 inline fun <T> MutableStateFlow<UiStateScreen<T>>.updateData(
     newState: ScreenState, crossinline transform: (T) -> T
@@ -93,35 +68,7 @@ inline fun <T> MutableStateFlow<UiStateScreen<T>>.updateData(
 }
 
 /**
- * Updates the `data` field of the current [UiStateScreen] within a [MutableStateFlow].
- *
- * This is an inline extension function that provides a concise way to modify the `data`
- * part of the UI state without changing the `screenState` or other properties. It uses
- * the `update` function of [MutableStateFlow] to ensure atomic updates.
- *
- * The transformation is applied only if the current `data` is not null.
- *
- * @param T The type of the data held by the [UiStateScreen].
- * @param transform A lambda function with the current data (`T`) as its receiver,
- *                  which returns the modified data (`T`).
- *
- * @see updateData for updating both `screenState` and `data`.
- * @see successData for updating `data` and setting the `screenState` to [ScreenState.Success].
- *
- * @sample
- * ```kotlin
- * // Assuming a ViewModel with a state flow:
- * // val uiState = MutableStateFlow(UiStateScreen(data = UserProfile(name = "John")))
- *
- * fun updateUserName(newName: String) {
- *     uiState.copyData {
- *         // 'this' refers to the UserProfile object
- *         this.copy(name = newName)
- *     }
- *     // The new state will be: UiStateScreen(data = UserProfile(name = "New Name"))
- *     // The screenState remains unchanged.
- * }
- * ```
+ * Atomically transforms non-null data without changing the screen status or messages.
  */
 inline fun <T> MutableStateFlow<UiStateScreen<T>>.copyData(crossinline transform: T.() -> T) {
     update { current ->
@@ -130,41 +77,7 @@ inline fun <T> MutableStateFlow<UiStateScreen<T>>.copyData(crossinline transform
 }
 
 /**
- * Updates the `UiStateScreen` to a success state and transforms the existing data.
- *
- * This inline extension function simplifies updating a `MutableStateFlow<UiStateScreen<T>>`.
- * It sets the `screenState` to `ScreenState.Success()` and applies a transformation
- * to the `data` property within the current state.
- *
- * The transformation is provided as a lambda function (`transform`) which receives the
- * current data `T` as its receiver. This allows for concise updates using a `copy`-like syntax.
- * If the current data is `null`, it remains `null`.
- *
- * @param T The type of the data held by the `UiStateScreen`.
- * @param transform A lambda function with `T` as its receiver, which returns the transformed `T`.
- *
- * @see ScreenState.Success
- * @see UiStateScreen
- *
- * @sample
- * ```kotlin
- * // Assuming `uiState` is a MutableStateFlow<UiStateScreen<MyData>>
- * // and MyData is a data class: data class MyData(val name: String, val value: Int)
- *
- * // Initial state
- * // uiState.value = UiStateScreen(data = MyData("Initial", 0))
- *
- * // Update the name and set the state to Success
- * uiState.successData {
- *     copy(name = "Updated Name")
- * }
- *
- * // The new state will be:
- * // UiStateScreen(
- * //   screenState = ScreenState.Success(),
- * //   data = MyData("Updated Name", 0)
- * // )
- * ```
+ * Sets success status and atomically transforms existing data; null data remains null.
  */
 inline fun <T> MutableStateFlow<UiStateScreen<T>>.successData(crossinline transform: T.() -> T) {
     update { current ->
@@ -172,73 +85,30 @@ inline fun <T> MutableStateFlow<UiStateScreen<T>>.successData(crossinline transf
     }
 }
 
-/**
- * Updates the `screenState` of the current `UiStateScreen`.
- *
- * This is an extension function for `MutableStateFlow<UiStateScreen<T>>` that allows for
- * concisely changing the state of the screen (e.g., to loading, success, error, etc.)
- * without modifying other parts of the UI state like `data` or `errors`.
- *
- * @param newValues The new [ScreenState] to be set.
- */
 fun <T> MutableStateFlow<UiStateScreen<T>>.updateState(newValues: ScreenState) {
     update { current: UiStateScreen<T> ->
         current.copy(screenState = newValues)
     }
 }
 
-/**
- * Updates the `UiStateScreen` with a new list of errors.
- *
- * This extension function allows for updating the `errors` property of the current `UiStateScreen`
- * within a `MutableStateFlow`. It creates a new copy of the state with the provided list of `UiSnackbar`
- * errors, leaving other properties unchanged. This is typically used to display multiple, non-blocking
- * error messages or validation failures to the user.
- *
- * @param T The type of the data held by the `UiStateScreen`.
- * @param errors The new list of `UiSnackbar` objects to set as the current errors.
- */
 fun <T> MutableStateFlow<UiStateScreen<T>>.setErrors(errors: List<UiSnackbar>) {
     update { current: UiStateScreen<T> ->
         current.copy(errors = errors)
     }
 }
 
-/**
- * Updates the UI state to display a snackbar message.
- * This is an extension function for `MutableStateFlow<UiStateScreen<T>>`.
- *
- * @param snackbar The [UiSnackbar] object containing the message and other details to be displayed.
- */
 fun <T> MutableStateFlow<UiStateScreen<T>>.showSnackbar(snackbar: UiSnackbar) {
     update { current: UiStateScreen<T> ->
         current.copy(snackbar = snackbar)
     }
 }
 
-/**
- * Dismisses the current snackbar by setting it to null.
- *
- * This extension function updates the `UiStateScreen` within a `MutableStateFlow`
- * to remove the active snackbar, effectively hiding it from the UI.
- *
- * @param T The type of the data held within the `UiStateScreen`.
- */
 fun <T> MutableStateFlow<UiStateScreen<T>>.dismissSnackbar() {
     update { current: UiStateScreen<T> ->
         current.copy(snackbar = null)
     }
 }
 
-/**
- * Updates the screen state to a loading state.
- *
- * This extension function sets the `screenState` property of the `UiStateScreen` to `ScreenState.IsLoading`,
- * indicating that a data-loading operation is in progress. The rest of the state remains unchanged.
- *
- * @receiver `MutableStateFlow<UiStateScreen<T>>` The state flow to be updated.
- * @param T The type of the data held by the `UiStateScreen`.
- */
 fun <T> MutableStateFlow<UiStateScreen<T>>.setLoading() {
     update { current ->
         current.copy(screenState = ScreenState.IsLoading())
@@ -246,15 +116,7 @@ fun <T> MutableStateFlow<UiStateScreen<T>>.setLoading() {
 }
 
 /**
- * Sets the screen to a success state and replaces [UiStateScreen.data].
- *
- * Use this function when you have a new, complete data object and want to:
- * - set [UiStateScreen.screenState] to [ScreenState.Success]
- * - replace [UiStateScreen.data] with [data]
- *
- * This function does not show a snackbar.
- *
- * @param data The new data to set on the screen state.
+ * Sets success status and replaces data, preserving existing messages.
  */
 fun <T> MutableStateFlow<UiStateScreen<T>>.setSuccess(data: T) {
     update { current ->
@@ -266,7 +128,8 @@ fun <T> MutableStateFlow<UiStateScreen<T>>.setSuccess(data: T) {
 }
 
 /**
- * Sets the screen to a "no data" state and replaces [UiStateScreen.data].
+ * Sets no-data status and replaces data. Clears the current snackbar unless [clearSnackbar] is
+ * `false`.
  */
 fun <T> MutableStateFlow<UiStateScreen<T>>.setNoData(
     data: T,
@@ -282,20 +145,9 @@ fun <T> MutableStateFlow<UiStateScreen<T>>.setNoData(
 }
 
 /**
- * Sets the screen to an error state and shows a snackbar.
+ * Sets error status and an error snackbar while retaining current data.
  *
- * Use this function when a screen-level operation fails and you want to:
- * - mark the screen state as [ScreenState.Error]
- * - surface an error message through [UiSnackbar]
- *
- * This function does not modify [UiStateScreen.data]. It updates only:
- * - [UiStateScreen.screenState]
- * - [UiStateScreen.snackbar]
- *
- * @param message The message to show in the snackbar.
- * @param type The snackbar type. Defaults to [ScreenMessageType.SNACKBAR].
- * @param timeStamp A unique timestamp used to avoid duplicate snackbar rendering.
- *                  Defaults to [System.nanoTime].
+ * @param timeStamp Distinguishes this request from repeated messages.
  */
 fun <T> MutableStateFlow<UiStateScreen<T>>.setError(
     message: UiTextHelper,
@@ -316,13 +168,7 @@ fun <T> MutableStateFlow<UiStateScreen<T>>.setError(
 }
 
 /**
- * Represents the distinct states of a UI screen, particularly concerning data loading and display.
- *
- * This sealed class is used within [UiStateScreen] to define the current visual state of the screen.
- * Each state can optionally hold a `data` string, which defaults to a constant from [ScreenDataStatus],
- * allowing for potential differentiation or custom handling in the UI layer.
- *
- * @see UiStateScreen.screenState
+ * Legacy screen-wide loading status. Each case carries the label used for status reporting.
  */
 sealed class ScreenState {
     data class NoData(val data: String = ScreenDataStatus.NO_DATA) : ScreenState()

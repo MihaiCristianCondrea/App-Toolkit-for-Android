@@ -19,12 +19,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 
-/**
- * Sealed interface representing the UI events for the Usage and Diagnostics screen.
- *
- * These events capture user interactions related to enabling or disabling usage reporting
- * and managing granular consent for analytics and advertising preferences.
- */
 sealed interface UsageAndDiagnosticsEvent : UiEvent {
     data object Initialize : UsageAndDiagnosticsEvent
     data class SetUsageAndDiagnostics(val enabled: Boolean) : UsageAndDiagnosticsEvent

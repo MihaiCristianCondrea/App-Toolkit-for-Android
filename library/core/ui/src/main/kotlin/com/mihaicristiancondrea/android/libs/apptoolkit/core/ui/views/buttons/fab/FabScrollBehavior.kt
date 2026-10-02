@@ -28,11 +28,11 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 
 /**
- * Folds extended floating action buttons to their icon while content scrolls toward its end, and
- * unfolds them as soon as it scrolls back, so the label is there when the person is looking up and
- * out of the way while they read on. The Toolkit's scaffolds attach one to their content with
- * `Modifier.nestedScroll(behavior.nestedScrollConnection)` and pass [expanded] to
- * [ToolkitFabColumn].
+ * Collapses extended FAB labels when content scrolls forward and expands them on reverse
+ * scrolling. Only consumed motion counts, so overscroll at either end does not change
+ * [expanded].
+ *
+ * Attach [nestedScrollConnection] to content and pass [expanded] to [ToolkitFabColumn].
  */
 @Stable
 class FabScrollBehavior {
@@ -41,8 +41,6 @@ class FabScrollBehavior {
 
     val nestedScrollConnection: NestedScrollConnection = object : NestedScrollConnection {
         override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
-            // Only scrolling that moved the content counts, so pulling at either end changes
-            // nothing.
             when {
                 consumed.y < -ScrollThreshold -> expanded = false
                 consumed.y > ScrollThreshold -> expanded = true

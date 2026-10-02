@@ -25,7 +25,10 @@ import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
-/** Owns the ads manager and settings bindings; host ad placement configuration is supplied separately. */
+/**
+ * Binds ad settings and the manager to the same [CommonDataStore] instance. Hosts supply
+ * placement configuration separately.
+ */
 fun adsIntegrationModule(): Module = module {
     single<AdsCoreManager> {
         AdsCoreManager(
@@ -33,9 +36,6 @@ fun adsIntegrationModule(): Module = module {
             buildInfoProvider = get(),
             dispatchers = get(),
             adMobAppIdProvider = get(),
-            // Injected so the manager reads the same CommonDataStore the rest of the graph uses.
-            // Its default falls back to the static singleton, which is a second wrapper over the
-            // same preferences file with its own eagerly started adsEnabledFlow.
             dataStore = get(),
         )
     }

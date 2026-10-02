@@ -70,14 +70,12 @@ internal fun LottieToolkitIcon(
     if (looping) {
         LaunchedEffect(composition, icon) {
             val loaded = composition ?: return@LaunchedEffect
-            // A composition that reports no duration would finish every cycle at once and spin
-            // this loop, so it is floored to a single frame.
+            // Floor zero-duration cycles to one frame to prevent a busy loop.
             val cycle = tween<Float>(
                 durationMillis = loaded.duration.roundToInt().coerceAtLeast(minimumValue = 16),
                 easing = LinearEasing,
             )
-            // A loop that starts on an interaction inherits wherever the icon was resting, so a
-            // reversing cycle travels on from that frame instead of stalling against it.
+            // Start interaction-triggered loops from the resting frame so reverse playback can move.
             var forward = progress.value < 1f
             while (true) {
                 if (icon.replayMode == ToolkitIconReplayMode.Restart) {

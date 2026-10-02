@@ -18,9 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads
 
 /**
- *  This object holds constant values for debug ad unit IDs.
- *  These IDs should ONLY be used for testing purposes.
- *  Do NOT use these IDs in production builds.
+ * Google test ad unit IDs for debug builds. Production placements must use host-supplied IDs.
  */
 object DebugAdsConstants {
     const val BANNER_AD_UNIT_ID = "ca-app-pub-3940256099942544/6300978111"

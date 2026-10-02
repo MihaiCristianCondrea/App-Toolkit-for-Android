@@ -35,10 +35,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 /**
- * An object responsible for creating and configuring a Ktor [HttpClient].
- *
- * It provides a centralized way to create a pre-configured client instance with common settings
- * such as JSON content negotiation, request timeouts, and default request headers.
+ * Creates Toolkit HTTP clients with shared serialization, timeout, and request defaults.
  */
 object KtorClient {
 

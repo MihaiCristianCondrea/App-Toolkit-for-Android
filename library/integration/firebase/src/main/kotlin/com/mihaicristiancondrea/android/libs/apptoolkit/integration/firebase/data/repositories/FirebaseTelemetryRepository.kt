@@ -42,16 +42,8 @@ class FirebaseTelemetryRepository(
         get() = analyticsProvider()
 
     /**
-     * Updates the Firebase Analytics consent settings based on the provided permissions.
-     *
-     * This method maps boolean flags to [FirebaseAnalytics.ConsentStatus] and applies them
-     * to the Firebase SDK. This is essential for compliance with privacy regulations
-     * like GDPR and CCPA.
-     *
-     * @param analyticsGranted Whether to allow storage related to analytics (e.g., cookies).
-     * @param adStorageGranted Whether to allow storage related to advertising.
-     * @param adUserDataGranted Whether to allow sending user data to Google for advertising purposes.
-     * @param adPersonalizationGranted Whether to allow personalized advertising (retargeting).
+     * Applies the four stored consent choices to their corresponding Firebase Analytics consent
+     * types.
      */
     override fun updateConsent(
         analyticsGranted: Boolean,
@@ -75,44 +67,23 @@ class FirebaseTelemetryRepository(
         firebaseAnalytics.setConsent(consentSettings)
     }
 
-    /**
-     * Enables or disables Firebase Analytics data collection.
-     *
-     * @param enabled Whether analytics collection should be enabled or disabled.
-     */
     override fun setAnalyticsEnabled(enabled: Boolean) {
         analytics.setAnalyticsCollectionEnabled(enabled)
     }
 
     /**
-     * Enables or disables Firebase Crashlytics data collection.
-     *
-     * When disabled, no crash reports or logs will be sent to Firebase.
-     *
-     * @param enabled True to enable Crashlytics collection, false to disable it.
+     * Controls automatic Crashlytics collection through the SDK collection flag.
      */
     override fun setCrashlyticsEnabled(enabled: Boolean) {
         crashlyticsProvider().isCrashlyticsCollectionEnabled = enabled
     }
 
-    /**
-     * Enables or disables Firebase Performance Monitoring data collection.
-     *
-     * @param enabled True to enable performance collection, false to disable it.
-     */
     override fun setPerformanceEnabled(enabled: Boolean) {
         performanceProvider().isPerformanceCollectionEnabled = enabled
     }
 
     /**
-     * Logs a breadcrumb message to Firebase Crashlytics to provide context for potential crashes.
-     *
-     * This method formats the provided message and attributes into a single string
-     * and sends it to the Crashlytics log. Breadcrumbs help developers understand
-     * the sequence of events leading up to an error.
-     *
-     * @param message The primary descriptive message for the breadcrumb.
-     * @param attributes A map of key-value pairs providing additional context to the log.
+     * Appends attributes to the message and records it in the Crashlytics breadcrumb log.
      */
     override fun logBreadcrumb(message: String, attributes: Map<String, String>) {
         val crashlytics = crashlyticsProvider()
@@ -127,15 +98,8 @@ class FirebaseTelemetryRepository(
     }
 
     /**
-     * Reports an error occurring within a ViewModel to Firebase Crashlytics.
-     *
-     * This method logs the exception along with specific metadata including the ViewModel's name,
-     * the action being performed, and additional custom keys to facilitate debugging.
-     *
-     * @param viewModelName The name of the ViewModel where the error originated.
-     * @param action A description of the operation or user action that triggered the error.
-     * @param throwable The exception or error to be recorded.
-     * @param extraKeys Additional key-value pairs to be attached as custom metadata in Crashlytics.
+     * Records a ViewModel failure with operation and caller-supplied metadata scoped to this
+     * exception, without setting persistent Crashlytics keys.
      */
     override fun reportViewModelError(
         viewModelName: String,
@@ -155,10 +119,7 @@ class FirebaseTelemetryRepository(
     }
 
     /**
-     * Records a non-fatal throwable that did not originate in a ViewModel.
-     *
-     * @param throwable The exception or error to be recorded.
-     * @param attributes Additional key-value pairs to be attached as custom metadata in Crashlytics.
+     * Records a non-fatal failure with attributes scoped to this exception.
      */
     override fun recordNonFatal(throwable: Throwable, attributes: Map<String, String>) {
         crashlyticsProvider().recordException(
@@ -168,8 +129,8 @@ class FirebaseTelemetryRepository(
     }
 
     /**
-     * Keys for one report only. `setCustomKey` would keep them on every later report too, so a
-     * crash would carry the `product_id` or `action` of an unrelated earlier failure.
+     * Keeps metadata local to one exception; persistent custom keys would leak into unrelated
+     * later reports.
      */
     private fun reportKeys(throwable: Throwable, keys: Map<String, String>): CustomKeysAndValues =
         CustomKeysAndValues.Builder()
@@ -212,7 +173,7 @@ class FirebaseTelemetryRepository(
                 is AnalyticsValue.Bool -> bundle.putString(
                     key,
                     rawValue.value.toString()
-                ) // GA4 accepts boolean as string or int; keep consistent
+                ) // Encode booleans consistently as strings.
             }
             count++
         }

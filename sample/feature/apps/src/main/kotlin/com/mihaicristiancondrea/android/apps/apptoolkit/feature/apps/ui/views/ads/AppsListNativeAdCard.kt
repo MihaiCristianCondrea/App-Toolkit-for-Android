@@ -27,22 +27,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.Native
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdSlot
 
 /**
- * Square native ad cell that sits among app cards in a grid.
+ * Sample-owned square placement among app cards, using [NativeAdSlot] for rendering and
+ * lifecycle.
  *
- * Change rationale: this used to inflate `R.layout.native_ad_apps_list_card` through
- * `NativeAdViewHost` and bind it with `findViewById`, while duplicating the "render nothing until
- * loaded" logic locally. Both now come from [NativeAdSlot]; the behaviour changes that came with
- * the shared renderer are listed in the `:library:integration:ads` README.
- *
- * It lives in the sample rather than in the library because it is this screen's placement, not a
- * reusable primitive. The sample is where a host reads how the toolkit's ad APIs are meant to be
- * used, so a placement belongs beside the screen that makes it.
- *
- * @param cache keeps the ad while the cell is scrolled out of view, so returning to it shows the
- * same ad instead of an empty cell and a new request. Ignored without [cacheKey].
- * @param cacheKey the cell's identity in [cache], normally its lazy-grid key.
- * @param containerColor overrides the card container for hosts whose surfaces are their own.
- * @param onAdLoaded reports whether an ad is currently displayed, so the grid can drop the cell.
+ * @param cache Retains an ad while its cell is off screen. Ignored without [cacheKey].
+ * @param cacheKey Cell identity, normally its lazy-grid key.
+ * @param containerColor Optional host surface override.
+ * @param onAdLoaded Reports whether an ad is currently displayed.
  */
 @Composable
 fun AppsListNativeAdCard(

@@ -21,7 +21,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.reposit
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 
 /**
- * No-op Firebase controller for unit tests.
+ * Telemetry test double that discards events and reports.
  */
 class FakeTelemetryRepository : TelemetryRepository {
     val loggedEvents: MutableList<AnalyticsEvent> = mutableListOf()
@@ -33,23 +33,18 @@ class FakeTelemetryRepository : TelemetryRepository {
         adUserDataGranted: Boolean,
         adPersonalizationGranted: Boolean,
     ) {
-        // no-op
     }
 
     override fun setAnalyticsEnabled(enabled: Boolean) {
-        // no-op
     }
 
     override fun setCrashlyticsEnabled(enabled: Boolean) {
-        // no-op
     }
 
     override fun setPerformanceEnabled(enabled: Boolean) {
-        // no-op
     }
 
     override fun logBreadcrumb(message: String, attributes: Map<String, String>) {
-        // no-op
     }
 
     override fun reportViewModelError(
@@ -58,11 +53,9 @@ class FakeTelemetryRepository : TelemetryRepository {
         throwable: Throwable,
         extraKeys: Map<String, String>,
     ) {
-        // no-op
     }
 
     override fun recordNonFatal(throwable: Throwable, attributes: Map<String, String>) {
-        // no-op
     }
 
     override fun logEvent(event: AnalyticsEvent) {
@@ -74,6 +67,5 @@ class FakeTelemetryRepository : TelemetryRepository {
     }
 
     override fun setUserProperty(name: String, value: String?) {
-        // no-op
     }
 }

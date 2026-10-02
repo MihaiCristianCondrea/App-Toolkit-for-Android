@@ -22,10 +22,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 
 /**
- * Analytics plumbing shared by the report sheet and the views split out of it.
- *
- * These were private to the report's own file, which is why every card had to stay in that one
- * file: a composable in `ui/views` could not name the event helper it needed.
+ * Stable analytics identity shared by the report sheet and its component views.
  */
 internal const val ISSUE_REPORTER_SCREEN_NAME: String = "IssueReporter"
 

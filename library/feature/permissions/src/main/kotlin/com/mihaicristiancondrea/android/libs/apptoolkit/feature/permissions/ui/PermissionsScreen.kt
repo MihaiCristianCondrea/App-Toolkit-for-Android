@@ -53,11 +53,9 @@ private const val PERMISSIONS_SCREEN_NAME = "Permissions"
 private const val PERMISSIONS_SCREEN_CLASS = "PermissionsScreen"
 
 /**
- * The app's permissions and why it asks for each: the body of the permissions page, which
- * `permissionsPage()` registers, and what Android's permission manager opens for this app.
- *
- * This is the stateful half. It owns the [PermissionsViewModel] and tracks the screen, then hands
- * the rendering to [PermissionsScreenContent].
+ * Descriptive permission catalog registered by `permissionsPage()`. It explains why permissions
+ * are used rather than reporting their current grant state. Owns [PermissionsViewModel] and
+ * screen tracking; [PermissionsScreenContent] handles rendering.
  */
 @Composable
 fun PermissionsScreen() {

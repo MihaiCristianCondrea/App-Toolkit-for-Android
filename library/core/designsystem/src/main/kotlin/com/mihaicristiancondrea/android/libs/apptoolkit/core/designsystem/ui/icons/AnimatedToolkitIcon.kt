@@ -86,8 +86,7 @@ fun AnimatedToolkitIcon(
     )
     val looping: Boolean = resolveToolkitIconLoop(icon = displayedIcon, interacted = interacted)
 
-    // A running loop drives itself inside the shared renderer, so none of the click and selection
-    // bookkeeping below applies to it.
+    // Looping sources bypass interaction playback; the shared renderer drives their cycles.
     if (displayedIcon is ToolkitIcon.Animated && looping) {
         ToolkitIconContent(
             icon = displayedIcon,
@@ -125,8 +124,7 @@ fun AnimatedToolkitIcon(
 
     val restingAtEnd: Boolean = selected || displayedIcon.atEnd
 
-    // Restarting the animation means dropping the running painter: a new one is created on its first
-    // frame, which is why the click count keys the composition instead of only flipping a flag.
+    // Recreate the painter on click to restart from its first frame.
     val playbackKey: Int =
         if (displayedIcon.replayMode == ToolkitIconReplayMode.Restart) clickCount else 0
 
@@ -139,8 +137,7 @@ fun AnimatedToolkitIcon(
         }
 
         LaunchedEffect(selected, clickCount) {
-            // Let the painter draw the current frame once before flipping, otherwise the drawable is
-            // created already at its target state and jumps instead of animating.
+            // Draw the initial frame before changing the target to avoid creating the drawable at its final state.
             withFrameNanos { }
             atEnd = when {
                 selected != lastSelected -> {
@@ -151,8 +148,7 @@ fun AnimatedToolkitIcon(
                 displayedIcon.replayMode == ToolkitIconReplayMode.Restart ->
                     restingAtEnd || clickCount > 0
 
-                // A selected component rests on its selected frame: travelling back would draw it
-                // unselected while it is still selected.
+                // Keep the selected frame while the component remains selected.
                 selected -> restingAtEnd
 
                 clickCount > 0 -> !atEnd

@@ -58,12 +58,15 @@ internal class SettingsSearchIndex(buildRows: () -> List<Row>) {
     }
 }
 
+/**
+ * Caches an index for the current settings, graph, and resource configuration; a locale change
+ * rebuilds the resolved search text.
+ */
 @Composable
 internal fun rememberSettingsSearchIndex(config: SettingsConfig): SettingsSearchIndex {
     val graph = LocalShellGraph.current
     val koin = getKoin()
     val resources = LocalContext.current.resources
-    // Resolved again when the language changes.
     val configuration = LocalConfiguration.current
     return remember(config, graph, koin, configuration) {
         SettingsSearchIndex { buildRows(config, graph, koin, resources) }
@@ -90,7 +93,6 @@ private fun buildRows(
                 preference = SettingsPreference(
                     key = "search_${entry.destination}_${entry.title}",
                     title = title,
-                    // Where the setting lives, as its result's summary.
                     summary = section,
                     destination = entry.destination,
                 ),

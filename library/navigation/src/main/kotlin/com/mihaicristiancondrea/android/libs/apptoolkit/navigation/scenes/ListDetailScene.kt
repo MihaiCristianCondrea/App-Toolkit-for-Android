@@ -215,14 +215,8 @@ private fun <T : Any> ListDetailLayout(
         }
     }
 
-    // The back gesture on a detail follows the finger. From the list's side, the separator slides
-    // to the end with it. From the detail's own side the finger moves toward the list, where a
-    // separator sliding the other way felt wrong, so the detail shrinks in place and leans after
-    // the finger instead, as a window does under the system's gesture from that edge.
-    //
-    // Everything that moves with a frame (the gesture, the separator, the slide and the shrink) is
-    // read through these lambdas where it is laid out or drawn, never while composing, so a drag or
-    // a back gesture lays the panes out again on each frame without recomposing them.
+    // From the list edge, the separator follows Back; from the detail edge, the pane shrinks toward the list.
+    // Read frame-changing state during layout or drawing to avoid recomposing panes on every drag frame.
     val backState = rememberNavigationEventState(NavigationEventInfo.None)
     val detailEdge = if (direction > 0f) NavigationEvent.EDGE_RIGHT else NavigationEvent.EDGE_LEFT
     val latestEvent: () -> NavigationEvent? = {
@@ -338,7 +332,6 @@ private fun <T : Any> ListDetailLayout(
                     showsBack = !topLevel,
                     // Standing in for the tab, its title grows or shrinks from the one it replaces.
                     listTitleModifier = if (topLevel) besideNavigationTitle() else Modifier,
-                    // Over the shared frame colour, the bar draws no colour of its own.
                     containerColor = if (carded) Color.Transparent else MaterialTheme.colorScheme.surface,
                 )
             }
@@ -487,8 +480,7 @@ private fun ListDetailTopBar(
         ) {
             // A list standing in for a tab has no way back but the navigation beside it.
             if (showsBack) {
-                // The Toolkit's press feedback: this module sits below `:library:core:ui`, so it
-                // cannot use `AnimatedIconButtonDirection`, but it gives the same bounce and sound.
+                // This module cannot depend on core UI, so it supplies matching bounce and sound feedback locally.
                 IconButton(
                     onClick = {
                         view.playSoundEffect(SoundEffectConstants.CLICK)

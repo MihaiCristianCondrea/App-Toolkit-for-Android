@@ -109,9 +109,7 @@ fun PageScaffold(
     val navigator = LocalShellNavigator.current
     val pageKey = LocalPageKey.current
     val pane = LocalPaneRole.current
-    // Beside a rail or permanent drawer, the page the navigation opened stands in for a tab and is
-    // drawn like one: the tab's small bar with no back button, and the tab's card when the
-    // navigation and the app bar share a colour.
+    // A navigation page replaces the tab beside a rail or permanent drawer, so it uses tab chrome.
     val beside = LocalBesideNavigation.current
     val topLevel = pane == PaneRole.None && isTopLevelPage(pageKey)
     val carded = topLevel && beside?.tinted == true
@@ -124,8 +122,7 @@ fun PageScaffold(
     val snackbarScope = rememberCoroutineScope()
     val snackbars = remember(snackbarHostState, snackbarScope) { ScaffoldSnackbars(snackbarHostState, snackbarScope) }
     val fabScroll = rememberFabScrollBehavior()
-    // Beside the navigation, its shared colour follows this bar while the page is shown, as it
-    // follows the tabs' bar, when the person has it follow scrolling.
+    // Keep the shared navigation color synchronized with the active page's scroll state.
     if (beside != null && pane == PaneRole.None) {
         FollowScrollWithFrameTint { scrollBehavior.frameTint(resolvedStyle) }
     }
@@ -157,9 +154,7 @@ fun PageScaffold(
                     },
                     actions = actions,
                     scrollBehavior = scrollBehavior,
-                    // Standing in for the tab, its title grows or shrinks from the one it replaces.
                     titleModifier = if (topLevel) besideNavigationTitle() else Modifier,
-                    // Over the shared frame colour, as the tabs' bar is.
                     colors = if (carded) {
                         TopAppBarDefaults.topAppBarColors(
                             containerColor = Color.Transparent,

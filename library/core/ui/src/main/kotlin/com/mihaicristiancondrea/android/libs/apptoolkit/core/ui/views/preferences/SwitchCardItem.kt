@@ -47,25 +47,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches.C
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /**
- * Creates a clickable card with a title and a switch for app preference screens.
+ * Switch card with caller-owned [switchState]. Card and switch taps emit [onSwitchToggled];
+ * callers handle persistence. [title] supplies the primary label.
  *
- * This composable function displays a card with a title and a switch. The entire card is clickable, and clicking it toggles the switch and invokes the `onSwitchToggled` callback.
- * The switch visually indicates its 'on' state by displaying a check icon within the thumb.
- *
- * @param title The text displayed as the card's title.
- * @param switchState A [State] object holding the current on/off state of the switch. Use `true` for the 'on' state and `false` for the 'off' state.
- * @param onSwitchToggled A callback function invoked when the switch is toggled, either by clicking the card or the switch itself.  It receives the new state of the switch (a `Boolean` value) as a parameter.
- *
- * State ownership:
- * - [switchState] is provided by the caller and acts as single source-of-truth.
- * - This composable emits intent only; persistence/business logic belongs to higher layers.
- *
- * Accessibility:
- * - Keep [title] actionable because it doubles as the primary spoken label.
- *
- * The card has a rounded corner shape and provides a click sound effect upon interaction.
- * @param ga4Event Optional GA4 event data to log on click.
- * @param ga4EventProvider Optional provider for GA4 event data resolved using the toggled state.
+ * @param ga4EventProvider Resolves analytics from the toggled value at interaction time, taking
+ * precedence over [ga4Event] when it returns an event.
  */
 @Composable
 fun SwitchCardItem(

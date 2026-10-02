@@ -43,10 +43,8 @@ internal interface ParticleSimulation {
     /** Rebuilds the particles for a [widthPx] by [heightPx] surface at [pxPerDp]. */
     fun resize(widthPx: Int, heightPx: Int, pxPerDp: Float)
 
-    /** Moves everything on by [elapsedMillis]. */
     fun advance(elapsedMillis: Float)
 
-    /** Draws the particles over what is already drawn. */
     fun draw(scope: DrawScope)
 }
 

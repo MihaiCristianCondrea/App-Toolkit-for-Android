@@ -36,13 +36,10 @@ interface SeasonalThemePreferencesDataSource {
     /** Emits the appearance saved before a holiday theme was applied, or null if none is in use. */
     val holidayThemeSnapshot: Flow<HolidayThemeSnapshot?>
 
-    /** Persists the easter egg unlock. */
     suspend fun saveSeasonalThemesUnlocked(unlocked: Boolean)
 
-    /** Persists what falls over the app. */
     suspend fun saveWeatherEffect(effect: WeatherEffect)
 
-    /** Persists the occurrence key of the holiday greeting just answered. */
     suspend fun saveLastHolidayGreeting(occurrenceKey: String)
 
     /** Persists the appearance to restore after the holiday, or clears it when [snapshot] is null. */

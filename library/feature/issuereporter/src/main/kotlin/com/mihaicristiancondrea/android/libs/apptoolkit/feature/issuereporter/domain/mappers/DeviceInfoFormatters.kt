@@ -19,21 +19,10 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.d
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.DeviceInfo
 
-/**
- * Renders [DeviceInfo] for the two places a report shows it.
- *
- * These were `toMarkdown()` and an overridden `toString()` on the model itself. Making the model a
- * data class would have replaced that `toString()` with the generated one, so the device panel would
- * have started rendering `DeviceInfo(appVersionName=…)`, the formatting has to move out with it,
- * not just disappear.
- */
 
 /**
- * The Markdown table embedded in the GitHub issue body.
- *
- * A Markdown table rather than the HTML one this used to emit: GitHub renders both, but only the
- * Markdown form stays readable in the plain issue body, in notification emails, and in the API
- * payload. Headings and the surrounding `<details>` belong to the report, not here.
+ * Device table for the GitHub issue body. Markdown remains readable in plain-text payloads and
+ * notification emails. The report owns surrounding headings and details blocks.
  */
 fun DeviceInfo.toMarkdown(): String = buildString {
     append("| Item | Value |\n")
@@ -48,8 +37,7 @@ fun DeviceInfo.toPlainText(): String =
     rows().joinToString(separator = "\n") { (label, value) -> "$label: $value" }
 
 /**
- * Single source for the field order and labels, so the two renderings cannot drift apart, they
- * previously repeated the same fifteen fields in two hand-maintained lists.
+ * Shares field labels and ordering between the Markdown and plain-text renderings.
  */
 private fun DeviceInfo.rows(): List<Pair<String, String>> = listOf(
     "App version" to appVersionName.toString(),

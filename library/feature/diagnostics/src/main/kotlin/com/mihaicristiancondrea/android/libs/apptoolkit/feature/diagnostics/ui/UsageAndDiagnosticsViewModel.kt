@@ -122,6 +122,10 @@ class UsageAndDiagnosticsViewModel(
         }
     }
 
+    /**
+     * Observes persisted choices without applying them to SDKs; the repository applies each
+     * write.
+     */
     private fun observeConsents() {
         startOperation(action = Actions.OBSERVE_CONSENTS)
 
@@ -134,8 +138,6 @@ class UsageAndDiagnosticsViewModel(
                         screenState.setLoading()
                     }
                 }
-                // Only shows the stored choices; the repository applies them to the consent SDKs
-                // when they are written.
                 .onEach { settings: UsageAndDiagnosticsSettings ->
                     updateStateThreadSafe {
                         val updated = UsageAndDiagnosticsUiState(
@@ -184,7 +186,7 @@ class UsageAndDiagnosticsViewModel(
             adUserDataConsent = adUserData,
             adPersonalizationConsent = adPersonalization,
         )
-        // A bundle replaces every single choice, so single writes still in flight are dropped.
+        // Cancel pending single-choice writes so they cannot overwrite the replacement bundle.
         listOf(
             setUsageAndDiagnosticsJob,
             setAnalyticsConsentJob,

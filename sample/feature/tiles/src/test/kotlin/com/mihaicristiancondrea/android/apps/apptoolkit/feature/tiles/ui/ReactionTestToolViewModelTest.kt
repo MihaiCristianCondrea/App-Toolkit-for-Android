@@ -94,14 +94,12 @@ class ReactionTestToolViewModelTest {
         simulatedTimeMs = 1000L
         viewModel.startTest(delayMs = 2000L)
 
-        // Advance coroutine delay
         advanceTimeBy(2000L.milliseconds)
-        simulatedTimeMs = 3000L // Signal time recorded at 3000L
+        simulatedTimeMs = 3000L
         testScheduler.advanceUntilIdle()
 
         assertEquals(ReactionTestPhase.Signal, viewModel.state.value.phase)
 
-        // User taps 180 ms later
         simulatedTimeMs = 3180L
         viewModel.handleTap()
 

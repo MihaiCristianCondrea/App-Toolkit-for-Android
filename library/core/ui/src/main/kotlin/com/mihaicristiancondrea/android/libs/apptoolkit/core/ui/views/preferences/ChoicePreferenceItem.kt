@@ -32,8 +32,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.BasicAlertDialog
 
 /**
- * A settings row that shows the chosen one of [options] as its summary and, when clicked, opens a
- * dialog listing them all as radio buttons. Picking one calls [onSelect] and closes the dialog.
+ * Preference row showing the selected option as its summary. Tapping it opens a radio-choice
+ * dialog; selection calls [onSelect] and closes the dialog.
+ *
+ * @param dialogIcon Icon for the dialog, independent of the optional row [icon].
  */
 @Composable
 fun <T> ChoicePreferenceItem(
@@ -43,9 +45,7 @@ fun <T> ChoicePreferenceItem(
     optionLabel: @Composable (T) -> String,
     onSelect: (T) -> Unit,
     modifier: Modifier = Modifier,
-    /** Drawn before the title; settings rows go without one. */
     icon: ImageVector? = null,
-    /** Drawn atop the dialog, as every choice dialog has one, even where the row draws none. */
     dialogIcon: ImageVector? = icon,
 ) {
     var open by rememberSaveable { mutableStateOf(false) }

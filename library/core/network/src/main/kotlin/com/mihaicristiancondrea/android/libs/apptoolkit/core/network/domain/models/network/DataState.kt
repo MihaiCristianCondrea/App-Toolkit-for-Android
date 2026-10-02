@@ -20,12 +20,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.mod
 typealias RootError = Error
 
 /**
- * A sealed interface representing the different states of a data operation,
- * such as a network request or a database query. It helps manage UI states
- * based on the outcome of asynchronous operations.
- *
- * @param D The type of the successful data.
- * @param E The type of the error, which must be a subtype of [RootError].
+ * Outcome of a data operation. Loading can carry previously available data; error values remain
+ * typed for callers.
  */
 sealed interface DataState<out D, out E : RootError> {
     data class Success<out D, out E : RootError>(val data: D) : DataState<D, E>
@@ -34,11 +30,7 @@ sealed interface DataState<out D, out E : RootError> {
 }
 
 /**
- * Performs the given [action] if this [DataState] is [DataState.Success].
- * Returns the original [DataState] unchanged.
- *
- * @param action The action to be performed with the success data.
- * @return The original [DataState] instance.
+ * Invokes [action] for a successful result and returns this unchanged for chaining.
  */
 inline fun <D, E : RootError> DataState<D, E>.onSuccess(action: (D) -> Unit): DataState<D, E> {
     return when (this) {
@@ -52,12 +44,7 @@ inline fun <D, E : RootError> DataState<D, E>.onSuccess(action: (D) -> Unit): Da
 }
 
 /**
- * Executes the given [action] if the [DataState] is an [DataState.Error].
- * The action receives the error of type [E]. This function allows for handling
- * error cases in a chained manner.
- *
- * @param action The block of code to be executed with the error.
- * @return The original [DataState] instance, allowing for further chaining.
+ * Invokes [action] for an error result and returns this unchanged for chaining.
  */
 inline fun <D, E : RootError> DataState<D, E>.onFailure(action: (E) -> Unit): DataState<D, E> {
     return when (this) {
@@ -71,11 +58,7 @@ inline fun <D, E : RootError> DataState<D, E>.onFailure(action: (E) -> Unit): Da
 }
 
 /**
- * A chained function that is executed only when the [DataState] is [DataState.Loading].
- * It provides the nullable data that might be available during the loading state.
- *
- * @param action The block of code to be executed, receiving the optional data of type [D].
- * @return The original [DataState] instance, allowing for further chaining.
+ * Invokes [action] while loading, passing any available data, and returns this unchanged.
  */
 inline fun <D, E : RootError> DataState<D, E>.onLoading(action: (D?) -> Unit): DataState<D, E> {
     return when (this) {

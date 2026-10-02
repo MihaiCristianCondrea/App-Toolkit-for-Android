@@ -75,7 +75,6 @@ fun PreferenceShowcase(
         icon = Icons.Outlined.Category,
     )
 
-    // Group 1: Standard & Mixed Preferences
     val group1Size = 4
     ShowcaseSection {
         Text(
@@ -149,7 +148,6 @@ fun PreferenceShowcase(
 
     Spacer(modifier = Modifier.height(2.dp))
 
-    // Group 2: Switch Card
     ShowcaseSection {
         Text(
             text = "Modern Selection",
@@ -178,7 +176,6 @@ fun PreferenceShowcase(
 
     Spacer(modifier = Modifier.height(2.dp))
 
-    // Group 3: Radio Selections
     ShowcaseSection {
         Text(
             text = "Options",

@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local
 
 /**
- * Foundational interface for the common data store.
+ * Lifecycle contract for the host-owned preference store.
  */
 interface CommonDataStoreCore {
     /**

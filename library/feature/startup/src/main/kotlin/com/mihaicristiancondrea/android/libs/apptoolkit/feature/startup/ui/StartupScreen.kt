@@ -139,7 +139,6 @@ fun StartupScreenContent(
 
         LazyColumn(
             modifier = Modifier
-                // A readable width, centred, on a tablet or desktop window.
                 .align(Alignment.TopCenter)
                 .fillMaxHeight()
                 .widthIn(max = StartupContentMaxWidth)

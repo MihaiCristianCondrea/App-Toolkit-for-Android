@@ -85,9 +85,7 @@ fun HolidayGreetingDialog(
                     ),
                     style = MaterialTheme.typography.bodyMedium,
                 )
-                // Rounded and padded, so the press ripple has a shape of its own inside the dialog
-                // rather than filling the row edge to edge and being cut off, and the box keeps
-                // its distance from the label it no longer pads itself from.
+                // Clip the press ripple to the row's rounded shape and keep the checkbox clear of its label.
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -101,8 +99,7 @@ fun HolidayGreetingDialog(
                     horizontalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    // The row carries the toggle, so the box itself takes no clicks of its own and
-                    // screen readers announce the row once, with its label.
+                    // Let the row own toggling and semantics so screen readers announce the labeled control once.
                     Checkbox(checked = useHolidayTheme, onCheckedChange = null)
                     Text(
                         text = stringResource(id = R.string.holiday_greeting_use_theme),

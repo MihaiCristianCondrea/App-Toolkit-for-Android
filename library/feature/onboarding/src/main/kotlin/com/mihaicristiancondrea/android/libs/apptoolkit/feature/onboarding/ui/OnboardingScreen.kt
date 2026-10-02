@@ -182,8 +182,6 @@ fun OnboardingScreen() {
                 .hapticPagerSwipe(pagerState = pagerState)
                 .padding(paddingValues = paddingValues)
         ) { pageIndex: Int ->
-            // On a tablet or a desktop window each page keeps a readable width, centred, instead
-            // of stretching its cards and text across the whole window.
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
                 Box(
                     Modifier

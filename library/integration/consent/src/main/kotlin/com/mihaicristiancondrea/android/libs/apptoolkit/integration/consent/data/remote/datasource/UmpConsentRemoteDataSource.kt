@@ -58,10 +58,7 @@ class UmpConsentRemoteDataSource(
                 params,
                 {
                     if (!host.canShowConsentForm) {
-                        // The info update succeeded, but the host went away while it was in flight.
-                        // Showing a form on a finishing activity throws from the window manager, so
-                        // the request is reported as failed and the caller can retry from a live
-                        // host.
+                        // Recheck the host after the async update: a finishing activity cannot safely show a form.
                         Log.w(CONSENT_LOG_TAG, "Consent host is no longer able to show a form.")
                         trySend(
                             DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO)
@@ -172,18 +169,9 @@ class UmpConsentRemoteDataSource(
     }
 
     /**
-     * Builds the request parameters for UMP.
-     *
-     * Change rationale: the app id used to come from `R.string.ad_mob_app_id`, a *library* string
-     * resource holding the demo app's id. Consumer apps that declared their id under a different
-     * name never overrode it, so every consent request was scoped to the toolkit's own publisher
-     * app. The id is now resolved from the host app's manifest meta-data, the same value the
-     * Google Mobile Ads SDK reads, and `setAdMobAppId` is skipped entirely when no valid id is
-     * available, rather than falling back to a library constant.
-     *
-     * `setAdMobAppId` exists for UMP-without-GMA integrations; hosts that ship GMA already supply
-     * the id through the manifest. Passing the resolved value is therefore redundant but harmless,
-     * and it keeps the parameters explicit for hosts that initialize GMA lazily.
+     * Uses the same host-manifest AdMob ID as the ads SDK, omitting the explicit ID when none
+     * is valid. Supplying it also supports hosts that initialize the ads SDK lazily; no library
+     * publisher ID is used.
      */
     private fun buildRequestParameters(): ConsentRequestParameters {
         val builder = ConsentRequestParameters.Builder()

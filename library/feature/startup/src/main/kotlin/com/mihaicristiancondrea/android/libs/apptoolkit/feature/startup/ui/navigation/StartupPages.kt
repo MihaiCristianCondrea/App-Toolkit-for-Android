@@ -66,9 +66,9 @@ fun ShellGraphBuilder.startupPage() {
 }
 
 /**
- * The startup screen. On its first resume it asks for [StartupProvider.requiredPermissions], and
- * on every resume until consent has resolved it asks for consent; continuing hands over to
- * onboarding.
+ * Requests runtime permissions once, retaining that decision across rotation and
+ * permission-dialog resumes. Requests consent on resume until resolved, allowing a failed round
+ * trip to be retried without restarting loading. Continuing enters onboarding.
  */
 @Composable
 private fun StartupPage() {
@@ -83,8 +83,6 @@ private fun StartupPage() {
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
     ) { }
-    // Saved, so the resume that follows the system permission dialog does not ask again: a person
-    // who declined was otherwise asked again on the spot.
     var hasRequestedPermissions by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(viewModel) {
@@ -111,8 +109,6 @@ private fun StartupPage() {
             hasRequestedPermissions = true
             permissionLauncher.launch(provider.requiredPermissions)
         }
-        // Consent is asked for again on a later resume only while it has not resolved, which
-        // recovers a failed round trip without sending the screen back to its loading state.
         if (viewModel.uiState.value.data?.consentFormLoaded != true) {
             viewModel.onEvent(StartupEvent.RequestConsent)
         }

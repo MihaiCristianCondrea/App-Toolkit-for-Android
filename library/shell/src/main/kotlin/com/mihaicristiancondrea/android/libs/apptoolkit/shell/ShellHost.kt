@@ -17,13 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.rememberShellFrameState
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.ShellFrame
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.keepsNavigationBeside
 import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivity
-import androidx.core.util.Consumer
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -34,6 +30,7 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
@@ -45,11 +42,10 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
+import androidx.core.util.Consumer
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavEntry
@@ -57,31 +53,31 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.metadata
 import androidx.navigation3.runtime.rememberDecoratedNavEntries
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.ShellChrome
+import androidx.navigation3.scene.Scene
 import androidx.navigationevent.NavigationEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.BackEdgeStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellPreferences
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellPreferences
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.rememberTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.ContentWidthBox
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.ListPlaceholder
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalTopBarStyleOverride
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalHideTopBarOnScroll
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalTopBarStyleOverride
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.PageScaffold
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalPageKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellHomeRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellNavDisplay
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellNavigator
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellHomeRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.DestinationKind
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalShellLayout
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutPolicy
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.rememberShellLayoutInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.LocalShellMotion
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.ScreenTransition
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.rememberShellMotion
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.rememberShellNavigator
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.ListDetailScene
@@ -89,15 +85,18 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.ListDe
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.PageChrome
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.PageSceneStrategy
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.ShellEntryInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.transition
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.ScreenTransition
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
-import androidx.navigation3.scene.Scene
-import androidx.compose.material3.SnackbarHostState
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.LocalShellSnackbarHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.ShellChrome
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.ShellFrame
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.ShellSnackbarHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.rememberTelemetry
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.keepsNavigationBeside
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.rememberShellFrameState
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.transition
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.BackEdgeStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellPreferences
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellPreferences
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 /**
  * The whole app below the activity: every tab, page, bar, rail, drawer and transition described
@@ -140,8 +139,8 @@ fun ShellHost(
     graph: ShellGraph,
     modifier: Modifier = Modifier,
     start: NavKey? = null,
-    resolveStart: (suspend () -> NavKey?)? = null,
-    preferences: ShellPreferences? = null,
+    resolveStart: (suspend () -> NavKey?)? = null, // FIXME: Parameter 'start' has runtime-determined stability
+    preferences: ShellPreferences? = null, // FIXME: Parameter 'preferences' has runtime-determined stability
     onReady: () -> Unit = {},
     onDestinationChanged: (NavKey) -> Unit = {},
     layoutPolicy: ShellLayoutPolicy = ShellLayoutPolicy(),

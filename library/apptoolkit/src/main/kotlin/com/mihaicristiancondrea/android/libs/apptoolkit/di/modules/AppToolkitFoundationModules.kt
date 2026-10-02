@@ -38,17 +38,13 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 /**
- * AppToolkit foundation modules to be loaded by the host app.
- *
- * Composes dispatchers, datastore, host providers, networking, and the ads, consent, and update
- * integration modules, along with shared values such as the apps metadata API address.
+ * Assembles shared providers, networking, and ads, consent, and update integrations for the
+ * host graph. Preference bindings come once from `:library:core:datastore`, and shared ad
+ * reporting is supplied here rather than required from each host.
  */
 fun appToolkitFoundationModules(hostBuildConfig: AppToolkitHostBuildConfig): List<Module> =
     listOf(
         dispatchersModule(),
-        // :library:core:datastore owns the CommonDataStore definition and the preference
-        // data-source bindings that hang off it. Including it here keeps one registration for
-        // every host instead of a second copy in corePlatformModule.
         dataStoreModule(),
         corePlatformModule(hostBuildConfig = hostBuildConfig),
         consentModule(),
@@ -64,9 +60,6 @@ private fun dispatchersModule(): Module = module {
 private fun corePlatformModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
     single<AdMobAppIdProvider> { ManifestAdMobAppIdProvider(context = get()) }
     single<ClipboardRepository> { DefaultClipboardRepository(context = get()) }
-    // Every toolkit ad surface resolves this, so it is bound here rather than left to the host:
-    // an unbound reporter would turn a blank ad slot into a crash, which is the opposite of the
-    // point.
     single { AdLoadReporter(telemetryRepository = get(), buildInfoProvider = get()) }
     single { KtorClient.createClient(enableLogging = hostBuildConfig.isDebugBuild) }
     single<BuildInfoProvider> {

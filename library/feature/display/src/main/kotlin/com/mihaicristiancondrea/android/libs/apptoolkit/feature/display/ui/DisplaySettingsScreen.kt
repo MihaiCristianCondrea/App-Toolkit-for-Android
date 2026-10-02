@@ -95,18 +95,8 @@ private object DisplayActionNames {
 }
 
 /**
- * A composable function that displays a comprehensive list of display-related settings.
- *
- * This screen allows users to manage various UI preferences including:
- * - **Appearance:** Dark theme toggle (with system sync detection) and Dynamic Colors (Android 12+).
- * - **App Behavior:** Global settings like "Bouncy Buttons" animations.
- * - **Navigation:** Configuration for the startup page and visibility of bottom bar labels.
- * - **Language:** Access to per-app language settings via system settings (Android 13+) or an internal dialog.
- *
- * Persistence is owned by [DisplaySettingsViewModel]; [DisplaySettingsProvider] supplies host UI. The dark theme row opens `ThemeSettingsRoute`.
- *
- * @param paddingValues The padding to be applied to the [LazyColumn] container,
- * typically used to avoid overlap with system bars or scaffolds.
+ * Displays persisted appearance and interaction preferences, plus the shell options supported
+ * by the host graph.
  */
 @Composable
 fun DisplaySettingsScreen(

@@ -71,7 +71,6 @@ class GroupedGridLayoutTest {
     fun `an ad between rows of cells carries no outer corner`() {
         val rows = groupedGridRows(itemCount = 5, columns = 2, adRow = GroupedGridAdRow.Visible)
 
-        // Two rows of cells, the ad, then the leftover one.
         assertEquals(listOf(2, 2, 1, 1), rows.map { it.cells.size })
         assertEquals(GROUPED_GRID_AD_ROW_KEY, rows[2].key)
         assertEquals(
@@ -83,12 +82,10 @@ class GroupedGridLayoutTest {
 
     @Test
     fun `the ad splits the rows of cells in half`() {
-        // Four rows of cells: two above the ad, two below.
         val even = groupedGridRows(itemCount = 8, columns = 2, adRow = GroupedGridAdRow.Visible)
         assertEquals(2, even.indexOfFirst { it.key == GROUPED_GRID_AD_ROW_KEY })
         assertEquals(5, even.size)
 
-        // The quick-action case: seven cells over four rows, the ad in the middle of them.
         val quickActions =
             groupedGridRows(itemCount = 7, columns = 2, adRow = GroupedGridAdRow.Visible)
         assertEquals(listOf(2, 2, 1, 2, 1), quickActions.map { it.cells.size })
