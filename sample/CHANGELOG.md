@@ -50,6 +50,8 @@
 
 ### Fixed
 
+- The main screen uses the suspend consent API, keeping its once-per-session request and the error message when consent fails.
+- Copying an app's package name no longer shows a duplicate toast on Android 13 and newer. Older versions keep the copy confirmation.
 - The holiday greeting's checkbox no longer sits against its text, and its ripple is no longer cut off.
 - The favourite star in an app's details now fills and empties as you tap it, as it does on the app's card.
 - The display settings dialogs have their icons again.

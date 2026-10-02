@@ -19,8 +19,9 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.MainEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.asUiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.StandardDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
@@ -39,9 +40,8 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
@@ -50,6 +50,8 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class MainViewModelTest {
 
@@ -120,10 +122,7 @@ class MainViewModelTest {
         runTest(dispatcherExtension.testDispatcher) {
             val telemetryRepository = mockk<TelemetryRepository>(relaxed = true)
             val consentRepository = CountingConsentRepository(
-                upstream = flow {
-                    emit(DataState.Loading())
-                    awaitCancellation()
-                }
+                request = { awaitCancellation() }
             )
 
             val viewModel = MainViewModel(
@@ -152,7 +151,7 @@ class MainViewModelTest {
             // The in-flight guard does not cover this: the host resumes, the previous round trip has
             // already finished, and without a session guard a fresh UMP request starts every time.
             val consentRepository = CountingConsentRepository(
-                upstream = flowOf(DataState.Success<Unit, Errors.UseCase>(Unit))
+                request = { }
             )
 
             val viewModel = MainViewModel(
@@ -174,6 +173,56 @@ class MainViewModelTest {
             }
 
             assertEquals(1, consentRepository.callCount)
+        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `a failed consent request shows the existing error message and is reported`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val telemetryRepository = FakeTelemetryRepository()
+            val viewModel = MainViewModel(
+                consentRepository = CountingConsentRepository { throw IllegalStateException("consent") },
+                requestInAppReviewUseCase = mockk(relaxed = true),
+                inAppUpdateRepository = mockk(relaxed = true),
+                telemetryRepository = telemetryRepository,
+                dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
+            )
+            val host = object : ConsentHost {
+                override val activity = mockk<android.app.Activity>(relaxed = true)
+            }
+
+            viewModel.onEvent(MainEvent.RequestConsent(host = host))
+            runCurrent()
+            advanceUntilIdle()
+
+            val message = viewModel.uiState.value.snackbar
+            assertEquals(Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO.asUiText(), message?.message)
+            assertEquals(true, message?.isError)
+            assertTrue(telemetryRepository.loggedEvents.any { it.name == "vm_op_error" })
+        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `a cancelled consent request does not show or report an error`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val telemetryRepository = FakeTelemetryRepository()
+            val viewModel = MainViewModel(
+                consentRepository = CountingConsentRepository { throw CancellationException("cancelled") },
+                requestInAppReviewUseCase = mockk(relaxed = true),
+                inAppUpdateRepository = mockk(relaxed = true),
+                telemetryRepository = telemetryRepository,
+                dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
+            )
+            val host = object : ConsentHost {
+                override val activity = mockk<android.app.Activity>(relaxed = true)
+            }
+
+            viewModel.onEvent(MainEvent.RequestConsent(host = host))
+            runCurrent()
+            advanceUntilIdle()
+
+            assertNull(viewModel.uiState.value.snackbar)
+            assertTrue(telemetryRepository.loggedEvents.none { it.name == "vm_op_error" })
         }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -241,10 +290,10 @@ class MainViewModelTest {
 }
 
 private class FakeConsentRepository : ConsentRepository {
-    override fun requestConsent(
+    override suspend fun requestConsent(
         host: ConsentHost,
         showIfRequired: Boolean,
-    ) = flowOf(DataState.Success<Unit, Errors.UseCase>(Unit))
+    ) = Unit
 
     override suspend fun applyInitialConsent() = Unit
 
@@ -252,17 +301,17 @@ private class FakeConsentRepository : ConsentRepository {
 }
 
 private class CountingConsentRepository(
-    private val upstream: Flow<DataState<Unit, Errors.UseCase>>,
+    private val request: suspend () -> Unit,
 ) : ConsentRepository {
     var callCount: Int = 0
         private set
 
-    override fun requestConsent(
+    override suspend fun requestConsent(
         host: ConsentHost,
         showIfRequired: Boolean,
-    ): Flow<DataState<Unit, Errors.UseCase>> {
+    ) {
         callCount++
-        return upstream
+        request()
     }
 
     override suspend fun applyInitialConsent() = Unit

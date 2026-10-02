@@ -90,7 +90,9 @@ class OnboardingViewModel(
      */
     private fun requestConsent(host: ConsentHost) {
         consentJob = consentJob.restart {
-            consentRepository.requestConsent(host = host).collectReport(action = Actions.REQUEST_CONSENT) { }
+            launchReport(action = Actions.REQUEST_CONSENT) {
+                consentRepository.requestConsent(host = host)
+            }
         }
     }
 

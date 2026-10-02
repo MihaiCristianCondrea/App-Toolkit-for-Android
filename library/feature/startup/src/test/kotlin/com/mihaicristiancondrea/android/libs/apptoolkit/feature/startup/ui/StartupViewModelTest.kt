@@ -18,21 +18,18 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui
 
 import android.app.Activity
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.contracts.StartupEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.states.ConsentRequestStatus
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.exceptions.ConsentException
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentSettings
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -62,7 +59,7 @@ class StartupViewModelTest {
 
     @Test
     fun `consent is pending before the first resume`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = createViewModel(FakeConsentRepository { answered(DataState.Success(Unit)) })
+        val viewModel = createViewModel(FakeConsentRepository { })
         advance()
 
         assertEquals(ConsentRequestStatus.Pending, viewModel.state.value.consent)
@@ -70,7 +67,7 @@ class StartupViewModelTest {
 
     @Test
     fun `a consent answer settles consent`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = createViewModel(FakeConsentRepository { answered(DataState.Success(Unit)) })
+        val viewModel = createViewModel(FakeConsentRepository { })
 
         viewModel.onEvent(StartupEvent.RequestConsent(host = host))
         advance()
@@ -81,7 +78,9 @@ class StartupViewModelTest {
     @Test
     fun `a failed consent form still settles consent`() = runTest(dispatcherExtension.testDispatcher) {
         val viewModel = createViewModel(
-            FakeConsentRepository { answered(DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO)) }
+            FakeConsentRepository {
+                throw ConsentException(ConsentException.Reason.REQUEST_FAILED, "ump")
+            }
         )
 
         viewModel.onEvent(StartupEvent.RequestConsent(host = host))
@@ -94,7 +93,7 @@ class StartupViewModelTest {
     fun `a consent request that throws is reported and settles consent`() =
         runTest(dispatcherExtension.testDispatcher) {
             val viewModel = createViewModel(
-                FakeConsentRepository { flow<DataState<Unit, Errors.UseCase>> { throw IllegalStateException("ump") } }
+                FakeConsentRepository { throw IllegalStateException("ump") }
             )
 
             viewModel.onEvent(StartupEvent.RequestConsent(host = host))
@@ -110,26 +109,45 @@ class StartupViewModelTest {
      */
     @Test
     fun `consent settles when the request never reports back`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = createViewModel(FakeConsentRepository { neverAnswered() })
+        val viewModel = createViewModel(FakeConsentRepository { awaitCancellation() })
 
         viewModel.onEvent(StartupEvent.RequestConsent(host = host))
-        advanceTimeBy(1.seconds)
+        advanceTimeBy(14_999)
 
         assertEquals(ConsentRequestStatus.Pending, viewModel.state.value.consent)
 
-        advance()
+        advanceTimeBy(1)
+        runCurrent()
 
         assertEquals(ConsentRequestStatus.Settled, viewModel.state.value.consent)
+        assertTrue(telemetryRepository.loggedEvents.none { it.name == "vm_op_error" })
     }
 
     @Test
+    fun `replacing a pending request does not settle consent or report cancellation`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val repository = FakeConsentRepository { awaitCancellation() }
+            val viewModel = createViewModel(repository)
+
+            viewModel.onEvent(StartupEvent.RequestConsent(host = host))
+            advanceTimeBy(1.seconds)
+            viewModel.onEvent(StartupEvent.RequestConsent(host = host))
+            advanceTimeBy(1.seconds)
+
+            assertEquals(2, repository.requests)
+            assertEquals(ConsentRequestStatus.Pending, viewModel.state.value.consent)
+            assertTrue(telemetryRepository.loggedEvents.none { it.name == "vm_op_error" })
+            advance()
+        }
+
+    @Test
     fun `a resume while waiting asks again`() = runTest(dispatcherExtension.testDispatcher) {
-        val repository = FakeConsentRepository { neverAnswered() }
+        val repository = FakeConsentRepository { awaitCancellation() }
         val viewModel = createViewModel(repository)
 
         viewModel.onEvent(StartupEvent.RequestConsent(host = host))
         advanceTimeBy(1.seconds)
-        repository.answer = { answered(DataState.Success(Unit)) }
+        repository.answer = { }
         viewModel.onEvent(StartupEvent.RequestConsent(host = host))
         advanceTimeBy(1.seconds)
 
@@ -139,7 +157,7 @@ class StartupViewModelTest {
 
     @Test
     fun `a resume after consent settled asks for nothing`() = runTest(dispatcherExtension.testDispatcher) {
-        val repository = FakeConsentRepository { answered(DataState.Success(Unit)) }
+        val repository = FakeConsentRepository { }
         val viewModel = createViewModel(repository)
         viewModel.onEvent(StartupEvent.RequestConsent(host = host))
         advance()
@@ -153,7 +171,7 @@ class StartupViewModelTest {
 
     @Test
     fun `without an activity consent settles at once`() = runTest(dispatcherExtension.testDispatcher) {
-        val repository = FakeConsentRepository { neverAnswered() }
+        val repository = FakeConsentRepository { awaitCancellation() }
         val viewModel = createViewModel(repository)
 
         viewModel.onEvent(StartupEvent.RequestConsent(host = null))
@@ -162,25 +180,17 @@ class StartupViewModelTest {
         assertEquals(ConsentRequestStatus.Settled, viewModel.state.value.consent)
     }
 
-    private fun answered(result: DataState<Unit, Errors.UseCase>): Flow<DataState<Unit, Errors.UseCase>> =
-        flowOf<DataState<Unit, Errors.UseCase>>(DataState.Loading(), result)
-
-    private fun neverAnswered(): Flow<DataState<Unit, Errors.UseCase>> = flow<DataState<Unit, Errors.UseCase>> {
-        emit(DataState.Loading())
-        awaitCancellation()
-    }
-
     private class FakeConsentRepository(
-        var answer: () -> Flow<DataState<Unit, Errors.UseCase>>,
+        var answer: suspend () -> Unit,
     ) : ConsentRepository {
         var requests: Int = 0
 
-        override fun requestConsent(
+        override suspend fun requestConsent(
             host: ConsentHost,
             showIfRequired: Boolean,
-        ): Flow<DataState<Unit, Errors.UseCase>> {
+        ) {
             requests += 1
-            return answer()
+            answer()
         }
 
         override suspend fun applyInitialConsent() = Unit

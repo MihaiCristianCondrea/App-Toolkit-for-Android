@@ -164,7 +164,7 @@ class AppsListViewModelTest : AppsListViewModelBaseTest() {
 
         val state = viewModel.uiState.value
         assertTrue(state.screenState is ScreenState.Success) { "Expected Success but was ${state.screenState}" }
-        assertEquals(listOf(cachedApp), state.data?.apps)
+        assertEquals<List<AppInfo>?>(listOf(cachedApp), state.data?.apps)
         assertEquals(true, state.snackbar?.isError)
     }
 
@@ -189,6 +189,6 @@ class AppsListViewModelTest : AppsListViewModelBaseTest() {
 
         val state = viewModel.uiState.value
         assertTrue(state.screenState is ScreenState.Success) { "Expected Success but was ${state.screenState}" }
-        assertEquals(listOf(app), state.data?.apps)
+        assertEquals<List<AppInfo>?>(listOf(app), state.data?.apps)
     }
 }

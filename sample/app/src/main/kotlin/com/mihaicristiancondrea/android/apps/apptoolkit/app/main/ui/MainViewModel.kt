@@ -26,9 +26,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.d
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.asUiText
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onFailure
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiSnackbar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
@@ -124,63 +122,30 @@ class MainViewModel(
         }
         hasRequestedConsent = true
 
-        startOperation(
-            action = Actions.REQUEST_CONSENT,
-            extra = mapOf(ExtraKeys.HOST to host.activity::class.java.name)
-        )
+        val hostAttributes = mapOf(ExtraKeys.HOST to host.activity::class.java.name)
         consentJob = consentJob.restart {
-            consentRepository.requestConsent(host = host)
-                // Collect UI results in viewModelScope without forcing upstream consent work onto Main.
-                .onEach { result: DataState<Unit, Errors> ->
-                    when (result) {
-                        is DataState.Loading -> {
-                            breadcrumb(
-                                message = "consent_request_state",
-                                attributes = mapOf(
-                                    ExtraKeys.HOST to host.activity::class.java.name,
-                                    ExtraKeys.STAGE to "loading"
-                                )
-                            )
-                        }
-
-                        is DataState.Success -> {
-                            breadcrumb(
-                                message = "consent_request_state",
-                                attributes = mapOf(
-                                    ExtraKeys.HOST to host.activity::class.java.name,
-                                    ExtraKeys.STAGE to "success"
-                                )
-                            )
-                        }
-
-                        is DataState.Error -> {
-                            breadcrumb(
-                                message = "consent_request_state",
-                                attributes = mapOf(
-                                    ExtraKeys.HOST to host.activity::class.java.name,
-                                    ExtraKeys.STAGE to "error",
-                                    ExtraKeys.ERROR to result.error.toString()
-                                )
-                            )
-                            result.onFailure { error ->
-                                updateStateThreadSafe {
-                                    screenState.showSnackbar(
-                                        UiSnackbar(
-                                            type = ScreenMessageType.SNACKBAR,
-                                            message = error.asUiText(),
-                                            isError = true,
-                                            timeStamp = System.nanoTime(),
-                                        )
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-                .catchReport(
-                    action = Actions.REQUEST_CONSENT,
-                    extra = mapOf(ExtraKeys.HOST to host.activity::class.java.name)
-                ) {
+            launchReport(
+                action = Actions.REQUEST_CONSENT,
+                extra = hostAttributes,
+                block = {
+                    breadcrumb(
+                        message = "consent_request_state",
+                        attributes = hostAttributes + (ExtraKeys.STAGE to "loading"),
+                    )
+                    consentRepository.requestConsent(host = host)
+                    breadcrumb(
+                        message = "consent_request_state",
+                        attributes = hostAttributes + (ExtraKeys.STAGE to "success"),
+                    )
+                },
+                onError = { error ->
+                    breadcrumb(
+                        message = "consent_request_state",
+                        attributes = hostAttributes + mapOf(
+                            ExtraKeys.STAGE to "error",
+                            ExtraKeys.ERROR to error::class.java.simpleName,
+                        ),
+                    )
                     updateStateThreadSafe {
                         screenState.showSnackbar(
                             UiSnackbar(
@@ -191,8 +156,8 @@ class MainViewModel(
                             )
                         )
                     }
-                }
-                .launchIn(viewModelScope)
+                },
+            )
         }
     }
 

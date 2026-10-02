@@ -151,4 +151,6 @@ flowchart TD
   shows onboarding, and one that never clears its startup flag shows it on every launch.
 - The module coordinates consent, persisted theme state and the host's pages; changes require
   checking several module contracts together.
-- `ConsentRepository` still returns `DataState`; the ViewModel only waits for its flow to end.
+- `ConsentRepository.requestConsent()` is a suspend call that completes or throws. The ViewModel
+  reports a failure without blocking onboarding, and cancelling its wait does not cancel the
+  shared UMP round trip owned by the repository.

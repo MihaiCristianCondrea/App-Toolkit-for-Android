@@ -365,6 +365,7 @@ class DefaultConsentRepositoryTest {
 /**
  * A remote source whose round trips stay open until [complete] or [fail] answers them, so tests
  * can count how many UMP requests the repository starts while one is in flight.
+ * Answers use a snapshot because resuming a caller can immediately append another request.
  */
 private class CountingConsentRemoteDataSource : ConsentRemoteDataSource {
     private val answers: MutableList<CompletableDeferred<Unit>> = mutableListOf()
@@ -383,12 +384,12 @@ private class CountingConsentRemoteDataSource : ConsentRemoteDataSource {
 
     /** Answers every open round trip with success. */
     fun complete() {
-        answers.forEach { answer -> answer.complete(Unit) }
+        answers.toList().forEach { answer -> answer.complete(Unit) }
     }
 
     /** Answers every open round trip with [failure]. */
     fun fail(failure: ConsentException) {
-        answers.forEach { answer -> answer.completeExceptionally(failure) }
+        answers.toList().forEach { answer -> answer.completeExceptionally(failure) }
     }
 }
 

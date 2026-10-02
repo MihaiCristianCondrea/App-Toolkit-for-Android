@@ -20,8 +20,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui
 import android.app.Activity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
@@ -36,7 +34,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.doma
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -238,16 +235,12 @@ class OnboardingViewModelTest {
     private class FakeConsentRepository(private val fails: Boolean = false) : ConsentRepository {
         val requestedHosts = mutableListOf<ConsentHost>()
 
-        override fun requestConsent(
+        override suspend fun requestConsent(
             host: ConsentHost,
             showIfRequired: Boolean,
-        ): Flow<DataState<Unit, Errors.UseCase>> {
+        ) {
             requestedHosts += host
-            return if (fails) {
-                flow<DataState<Unit, Errors.UseCase>> { throw IllegalStateException("consent") }
-            } else {
-                flowOf<DataState<Unit, Errors.UseCase>>(DataState.Loading(), DataState.Success(Unit))
-            }
+            if (fails) throw IllegalStateException("consent")
         }
 
         override suspend fun applyInitialConsent() = Unit

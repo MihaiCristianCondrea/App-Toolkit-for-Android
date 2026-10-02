@@ -30,7 +30,7 @@ shell, drawn before its tabs.
 ## Depends on
 
 - `:library:core:common`, `:library:core:network` and `:library:core:ui` for shared contracts,
-  the consent result type and UI.
+  error handling and UI.
 - [`:library:navigation`](../../navigation/README.md) for the keys, the graph builder and the
   shell navigator.
 - [`:library:integration:consent`](../../integration/consent/README.md) for `ConsentRepository`,
@@ -108,5 +108,6 @@ flowchart TD
   shows startup, and one that never clears its startup flag shows it on every launch.
 - Handing over by key means an app that registers `StartupRoute` without `OnboardingRoute` sends
   the person to a key the graph does not know.
-- `ConsentRepository` still returns `DataState`; the ViewModel waits for its first value that is
-  not `Loading`.
+- The ViewModel waits for the suspend `ConsentRepository.requestConsent()` call, which completes
+  or throws. Its 15-second limit bounds this screen's wait, not the shared UMP round trip owned by
+  the repository.

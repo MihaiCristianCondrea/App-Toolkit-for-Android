@@ -73,6 +73,9 @@ flowchart TD
   are independent sources with different lifetimes.
 - Ad interleaving and action/chip models are presentation transformations and remain outside the
   source-neutral repositories.
+- Package-name copying uses the Toolkit's `ClipboardRepository`, as About does. The Apps toast is
+  shown only when the system does not confirm copies itself, on Android 12L and earlier. Android
+  13 and later use only the system confirmation.
 
 ## Installed-package metadata
 
