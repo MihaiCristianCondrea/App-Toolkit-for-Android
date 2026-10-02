@@ -15,8 +15,6 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@file:OptIn(ExperimentalCoroutinesApi::class)
-
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.contracts.AppGa4Contract
@@ -27,9 +25,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contract
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppsListFilter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.StandardDispatcherExtension
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.advanceUntilIdle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -43,12 +40,12 @@ import kotlin.test.assertTrue
  * as literals; `AppGa4Contract` is the app-owned vocabulary for the same keys. Without this test
  * the two can drift silently, because a wrong parameter name still produces a valid GA4 call.
  */
-class AppsListAnalyticsContractTest : AppsListViewModelBaseTest() {
+class AppsListAnalyticsContractTest {
 
     companion object {
         @JvmField
         @RegisterExtension
-        val dispatcherExtension = StandardDispatcherExtension()
+        val dispatcherExtension = UnconfinedDispatcherExtension()
 
         private val APPS = listOf(
             AppInfo(
@@ -59,6 +56,17 @@ class AppsListAnalyticsContractTest : AppsListViewModelBaseTest() {
             ),
         )
     }
+
+    private val telemetryRepository = FakeTelemetryRepository()
+
+    private fun createViewModel(): AppsListViewModel = AppsListViewModel(
+        developerAppsRepository = FakeDeveloperAppsRepository(apps = APPS),
+        installedAppsRepository = FakeInstalledAppsRepository(),
+        favoritesRepository = FakeFavoritesRepository(),
+        telemetryRepository = telemetryRepository,
+    )
+
+    private fun advance() = dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
     private fun AnalyticsEvent.assertSatisfiesContract() {
         assertTrue(
@@ -78,25 +86,26 @@ class AppsListAnalyticsContractTest : AppsListViewModelBaseTest() {
     }
 
     @Test
-    fun `every logged event satisfies the app GA4 contract`() =
-        runTest(dispatcherExtension.testDispatcher) {
-            setup(fetchApps = APPS)
-            advanceUntilIdle()
-            viewModel.onEvent(HomeEvent.FilterSelected(AppsListFilter.Installed))
-            viewModel.onEvent(HomeEvent.AppSelected(APPS.first().packageName))
-            advanceUntilIdle()
+    fun `every logged event satisfies the app GA4 contract`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel()
+        advance()
+        viewModel.onEvent(HomeEvent.FilterSelected(AppsListFilter.Installed))
+        viewModel.onEvent(HomeEvent.AppSelected(APPS.first().packageName))
+        viewModel.onEvent(HomeEvent.FavoriteToggled(APPS.first().packageName))
+        viewModel.onEvent(HomeEvent.OpenRandomApp)
+        advance()
 
-            assertTrue(telemetryRepository.loggedEvents.isNotEmpty(), "No events were logged")
-            telemetryRepository.loggedEvents.forEach { it.assertSatisfiesContract() }
-        }
+        assertTrue(telemetryRepository.loggedEvents.isNotEmpty(), "No events were logged")
+        telemetryRepository.loggedEvents.forEach { it.assertSatisfiesContract() }
+    }
 
     @Test
     fun `view_item and view_item_list use the declared parameter names`() =
         runTest(dispatcherExtension.testDispatcher) {
-            setup(fetchApps = APPS)
-            advanceUntilIdle()
+            val viewModel = createViewModel()
+            advance()
             viewModel.onEvent(HomeEvent.AppSelected(APPS.first().packageName))
-            advanceUntilIdle()
+            advance()
 
             val viewItem = telemetryRepository.loggedEvents
                 .single { it.name == AppGa4Contract.EventName.VIEW_ITEM }
@@ -109,37 +118,36 @@ class AppsListAnalyticsContractTest : AppsListViewModelBaseTest() {
         }
 
     @Test
-    fun `opening an app's details is reported once`() =
-        runTest(dispatcherExtension.testDispatcher) {
-            setup(fetchApps = APPS)
-            advanceUntilIdle()
-            telemetryRepository.loggedEvents.clear()
+    fun `opening an app's details is reported once`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel()
+        advance()
+        telemetryRepository.loggedEvents.clear()
 
-            viewModel.onEvent(HomeEvent.AppSelected(APPS.first().packageName))
-            advanceUntilIdle()
+        viewModel.onEvent(HomeEvent.AppSelected(APPS.first().packageName))
+        advance()
 
-            val names = telemetryRepository.loggedEvents.map { it.name }
-            assertEquals(1, names.count { it == AppGa4Contract.EventName.VIEW_ITEM })
-            val interaction = telemetryRepository.loggedEvents
-                .single { it.name == AppGa4Contract.EventName.APP_CARD_INTERACTION }
-            assertEquals(
-                AnalyticsValue.Str("apps_list"),
-                interaction.params[AppGa4Contract.Param.SOURCE],
-            )
-        }
+        val names = telemetryRepository.loggedEvents.map { it.name }
+        assertEquals(1, names.count { it == AppGa4Contract.EventName.VIEW_ITEM })
+        val interaction = telemetryRepository.loggedEvents
+            .single { it.name == AppGa4Contract.EventName.APP_CARD_INTERACTION }
+        assertEquals(
+            AnalyticsValue.Str("apps_list"),
+            interaction.params[AppGa4Contract.Param.SOURCE],
+        )
+    }
 
+    /** Nothing is installed, so Installed matches nothing and falls back to All by itself. */
     @Test
     fun `a filter tap is reported once and its automatic fallback is not`() =
         runTest(dispatcherExtension.testDispatcher) {
-            // Nothing is installed, so Installed matches nothing and falls back to All by itself.
-            setup(fetchApps = APPS)
-            advanceUntilIdle()
+            val viewModel = createViewModel()
+            advance()
             telemetryRepository.loggedEvents.clear()
 
             viewModel.onEvent(HomeEvent.FilterSelected(AppsListFilter.Installed))
-            advanceUntilIdle()
+            advance()
 
-            assertEquals(AppsListFilter.All, viewModel.uiState.value.data?.selectedFilter)
+            assertEquals(AppsListFilter.All, viewModel.state.value.selectedFilter)
             val lists = telemetryRepository.loggedEvents
                 .filter { it.name == AppGa4Contract.EventName.VIEW_ITEM_LIST }
             assertEquals(

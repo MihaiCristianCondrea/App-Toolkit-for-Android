@@ -41,8 +41,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.t
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.toolkitGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIconReplayMode
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.rememberWindowWidthSizeClass
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R as AppsR
@@ -82,7 +80,7 @@ fun appGraph(
         // The app bar holds a search field for the tools; the screen filters by its query.
         search = TabSearch(hint = TilesR.string.tiles_search_hint),
     ) {
-        ToolkitTilesScreen(paddingValues = contentPadding())
+        ToolkitTilesScreen()
     }
     tab(
         key = AppsListRoute,
@@ -93,10 +91,7 @@ fun appGraph(
         selectedIcon = ToolkitIcon.Resource(R.drawable.ic_apps_dots),
         search = TabSearch(hint = AppsR.string.apps_search_hint),
     ) {
-        AppsListScreen(
-            paddingValues = contentPadding(),
-            windowWidthSizeClass = rememberWindowWidthSizeClass(),
-        )
+        AppsListScreen()
     }
     page<ComponentsRoute>(title = { stringResource(ComponentsR.string.components_title) }) {
         ComponentsScreen()

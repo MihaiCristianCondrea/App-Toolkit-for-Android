@@ -17,31 +17,33 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui
 
-import com.google.common.truth.Truth.assertThat
+import android.app.Activity
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.repositories.AdsSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.contracts.AdsSettingsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.models.AdsPreferences
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.exceptions.ConsentException
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import io.mockk.mockk
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
-import java.io.IOException
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class AdsSettingsViewModelTest {
 
     companion object {
@@ -50,116 +52,198 @@ class AdsSettingsViewModelTest {
         val dispatcherExtension = UnconfinedDispatcherExtension()
     }
 
-    private fun testDispatchers(): DispatcherProvider =
-        TestDispatchers(dispatcherExtension.testDispatcher)
-
     private val telemetryRepository = FakeTelemetryRepository()
 
-    private class FakeAdsSettingsRepository(
-        override val defaultAdsEnabled: Boolean = true,
-        var shouldFail: Boolean = false
-    ) : AdsSettingsRepository {
+    private val host = ConsentHost(activity = mockk<Activity>(relaxed = true))
 
-        private val state = MutableStateFlow(defaultAdsEnabled)
-        private val reduceAdsState = MutableStateFlow(false)
+    private fun createViewModel(
+        repository: AdsSettingsRepository,
+        consentRepository: ConsentRepository = FakeConsentRepository(),
+    ): AdsSettingsViewModel = AdsSettingsViewModel(
+        repository = repository,
+        consentRepository = consentRepository,
+        telemetryRepository = telemetryRepository,
+    )
 
-        override fun observeAdsEnabled(): Flow<Boolean> = state
+    private fun advance() = dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
-        override fun observeReduceAds(): Flow<Boolean> = reduceAdsState
+    private val UiTextHelper.resourceId: Int
+        get() = (this as UiTextHelper.StringResource).resourceId
 
-        override suspend fun setAdsEnabled(enabled: Boolean): DataState<Unit, Errors.Database> {
-            if (shouldFail) throw IOException("fail")
-            state.value = enabled
-            return DataState.Success(Unit)
-        }
+    @Test
+    fun `the first load shows the stored preferences`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel(FakeAdsSettingsRepository(adsEnabled = true, reduceAds = true))
+        advance()
 
-        override suspend fun setReduceAds(enabled: Boolean): DataState<Unit, Errors.Database> {
-            if (shouldFail) throw IOException("fail")
-            reduceAdsState.value = enabled
-            return DataState.Success(Unit)
-        }
-    }
-
-    private fun createViewModel(repository: AdsSettingsRepository): AdsSettingsViewModel {
-        return AdsSettingsViewModel(
-            repository = repository,
-            consentRepository = FakeConsentRepository(),
-            dispatchers = testDispatchers(),
-            telemetryRepository = telemetryRepository,
+        assertEquals(
+            Loadable.Ready(AdsPreferences(adsEnabled = true, reduceAds = true)),
+            viewModel.state.value.preferences,
         )
     }
 
     @Test
-    fun `initial state reflects repository value`() = runTest(dispatcherExtension.testDispatcher) {
-        val repo = FakeAdsSettingsRepository(defaultAdsEnabled = true)
-        val viewModel = createViewModel(repo)
-
-        advanceUntilIdle()
-
-        val state = viewModel.uiState.value
-        assertThat(state.screenState).isInstanceOf(ScreenState.Success::class.java)
-        assertThat(state.data?.adsEnabled).isTrue()
-    }
-
-    @Test
-    fun `emission error sets default and error state`() =
+    fun `a failed read shows a retryable failure with the storage text`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val repo = object : AdsSettingsRepository {
-                override val defaultAdsEnabled: Boolean = false
-                override fun observeAdsEnabled(): Flow<Boolean> = flow { throw IOException("boom") }
-                override fun observeReduceAds(): Flow<Boolean> = flowOf(false)
-                override suspend fun setAdsEnabled(enabled: Boolean): DataState<Unit, Errors.Database> =
-                    DataState.Success(Unit)
-                override suspend fun setReduceAds(enabled: Boolean): DataState<Unit, Errors.Database> =
-                    DataState.Success(Unit)
-            }
+            val repository = FakeAdsSettingsRepository(
+                readFailure = StorageException(StorageException.Reason.FAILED),
+            )
+            val viewModel = createViewModel(repository)
+            advance()
 
-            val viewModel = createViewModel(repo)
-
-            advanceUntilIdle()
-
-            val state = viewModel.uiState.value
-            assertThat(state.screenState).isInstanceOf(ScreenState.Error::class.java)
-            assertThat(state.data?.adsEnabled).isFalse()
+            val preferences = assertIs<Loadable.Failed>(viewModel.state.value.preferences)
+            assertEquals(R.string.error_ads_settings_storage, preferences.message.resourceId)
+            assertTrue(preferences.retryable)
+            assertTrue(telemetryRepository.loggedEvents.any { it.name == "vm_op_error" })
         }
 
     @Test
-    fun `setAdsEnabled success updates state`() = runTest(dispatcherExtension.testDispatcher) {
-        val repo = FakeAdsSettingsRepository(defaultAdsEnabled = true)
-        val viewModel = createViewModel(repo)
-        advanceUntilIdle()
+    fun `retrying after a failed read shows the preferences`() = runTest(dispatcherExtension.testDispatcher) {
+        val repository = FakeAdsSettingsRepository(
+            adsEnabled = false,
+            readFailure = StorageException(StorageException.Reason.FAILED),
+        )
+        val viewModel = createViewModel(repository)
+        advance()
+        assertIs<Loadable.Failed>(viewModel.state.value.preferences)
 
-        viewModel.onEvent(AdsSettingsEvent.SetAdsEnabled(false))
-        advanceUntilIdle()
+        repository.readFailure = null
+        viewModel.onEvent(AdsSettingsEvent.Load)
+        advance()
 
-        val state = viewModel.uiState.value
-        assertThat(state.screenState).isInstanceOf(ScreenState.Success::class.java)
-        assertThat(state.data?.adsEnabled).isFalse()
+        assertEquals(
+            Loadable.Ready(AdsPreferences(adsEnabled = false, reduceAds = false)),
+            viewModel.state.value.preferences,
+        )
     }
 
     @Test
-    fun `setAdsEnabled error reverts state`() = runTest(dispatcherExtension.testDispatcher) {
-        val repo = FakeAdsSettingsRepository(defaultAdsEnabled = true, shouldFail = true)
+    fun `turning ads off stores it and the switch follows`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel(FakeAdsSettingsRepository(adsEnabled = true))
+        advance()
 
-        val viewModel = createViewModel(repo)
-        advanceUntilIdle()
+        viewModel.onEvent(AdsSettingsEvent.SetAdsEnabled(enabled = false))
+        advance()
 
-        viewModel.onEvent(AdsSettingsEvent.SetAdsEnabled(false))
-        advanceUntilIdle()
-
-        val state = viewModel.uiState.value
-        assertThat(state.screenState).isInstanceOf(ScreenState.Error::class.java)
-        assertThat(state.data?.adsEnabled).isTrue()
+        val preferences = assertIs<Loadable.Ready<AdsPreferences>>(viewModel.state.value.preferences)
+        assertFalse(preferences.value.adsEnabled)
+        assertTrue(viewModel.messages.value.isEmpty())
     }
-}
 
-private class FakeConsentRepository : ConsentRepository {
-    override fun requestConsent(
-        host: ConsentHost,
-        showIfRequired: Boolean,
-    ): Flow<DataState<Unit, Errors.UseCase>> = flowOf(DataState.Success(Unit))
+    @Test
+    fun `reducing ads stores it and the switch follows`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel(FakeAdsSettingsRepository(reduceAds = false))
+        advance()
 
-    override suspend fun applyInitialConsent() = Unit
+        viewModel.onEvent(AdsSettingsEvent.SetReduceAds(enabled = true))
+        advance()
 
-    override suspend fun applyConsentSettings(settings: ConsentSettings) = Unit
+        val preferences = assertIs<Loadable.Ready<AdsPreferences>>(viewModel.state.value.preferences)
+        assertTrue(preferences.value.reduceAds)
+    }
+
+    @Test
+    fun `a failed write keeps the switch and shows an error message`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val repository = FakeAdsSettingsRepository(
+                adsEnabled = true,
+                writeFailure = StorageException(StorageException.Reason.FAILED),
+            )
+            val viewModel = createViewModel(repository)
+            advance()
+
+            viewModel.onEvent(AdsSettingsEvent.SetAdsEnabled(enabled = false))
+            advance()
+
+            val preferences = assertIs<Loadable.Ready<AdsPreferences>>(viewModel.state.value.preferences)
+            assertTrue(preferences.value.adsEnabled)
+            val message = viewModel.messages.value.single()
+            assertTrue(message.isError)
+            assertEquals(R.string.error_ads_settings_storage, message.text.resourceId)
+        }
+
+    @Test
+    fun `a full disk shows its own text`() = runTest(dispatcherExtension.testDispatcher) {
+        val repository = FakeAdsSettingsRepository(writeFailure = StorageException(StorageException.Reason.FULL))
+        val viewModel = createViewModel(repository)
+        advance()
+
+        viewModel.onEvent(AdsSettingsEvent.SetReduceAds(enabled = true))
+        advance()
+
+        val message = viewModel.messages.value.single()
+        assertEquals(CoreUiR.string.screen_error_storage_full, message.text.resourceId)
+    }
+
+    @Test
+    fun `opening the privacy form always shows it`() = runTest(dispatcherExtension.testDispatcher) {
+        val consentRepository = FakeConsentRepository()
+        val viewModel = createViewModel(FakeAdsSettingsRepository(), consentRepository)
+        advance()
+
+        viewModel.onEvent(AdsSettingsEvent.RequestConsent(host))
+        advance()
+
+        assertEquals(listOf(false), consentRepository.showIfRequiredCalls)
+        assertTrue(viewModel.messages.value.isEmpty())
+    }
+
+    @Test
+    fun `a failed consent request shows the consent error`() = runTest(dispatcherExtension.testDispatcher) {
+        val consentRepository = FakeConsentRepository(
+            failure = ConsentException(ConsentException.Reason.FORM_FAILED, message = "form"),
+        )
+        val viewModel = createViewModel(FakeAdsSettingsRepository(), consentRepository)
+        advance()
+
+        viewModel.onEvent(AdsSettingsEvent.RequestConsent(host))
+        advance()
+
+        val message = viewModel.messages.value.single()
+        assertTrue(message.isError)
+        assertEquals(R.string.error_ads_consent_failed, message.text.resourceId)
+    }
+
+    private class FakeAdsSettingsRepository(
+        adsEnabled: Boolean = true,
+        reduceAds: Boolean = false,
+        var readFailure: Throwable? = null,
+        private val writeFailure: Throwable? = null,
+    ) : AdsSettingsRepository {
+        private val adsEnabled = MutableStateFlow(adsEnabled)
+        private val reduceAds = MutableStateFlow(reduceAds)
+
+        override fun observeAdsEnabled(): Flow<Boolean> = observe(adsEnabled)
+
+        override fun observeReduceAds(): Flow<Boolean> = observe(reduceAds)
+
+        override suspend fun setAdsEnabled(enabled: Boolean) {
+            writeFailure?.let { throw it }
+            adsEnabled.value = enabled
+        }
+
+        override suspend fun setReduceAds(enabled: Boolean) {
+            writeFailure?.let { throw it }
+            reduceAds.value = enabled
+        }
+
+        private fun observe(source: MutableStateFlow<Boolean>): Flow<Boolean> = flow {
+            readFailure?.let { throw it }
+            source.collect { emit(it) }
+        }
+    }
+
+    private class FakeConsentRepository(
+        private val failure: Throwable? = null,
+    ) : ConsentRepository {
+        val showIfRequiredCalls = mutableListOf<Boolean>()
+
+        override suspend fun requestConsent(host: ConsentHost, showIfRequired: Boolean) {
+            showIfRequiredCalls += showIfRequired
+            failure?.let { throw it }
+        }
+
+        override suspend fun applyInitialConsent() = Unit
+
+        override suspend fun applyConsentSettings(settings: ConsentSettings) = Unit
+    }
 }

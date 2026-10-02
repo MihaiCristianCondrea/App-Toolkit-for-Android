@@ -18,14 +18,29 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppsListFilter
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 
-sealed class HomeEvent : UiEvent {
-    data object FetchApps : HomeEvent()
-    data object OpenRandomApp : HomeEvent()
-    data class FilterSelected(val filter: AppsListFilter) : HomeEvent()
-    data class AppSelected(val packageName: String) : HomeEvent()
-    data object RetryAppDetails : HomeEvent()
-    data object AppDetailsDismissed : HomeEvent()
-    data object DismissSnackbar : HomeEvent()
+/**
+ * What the user can ask the Apps List screen's ViewModel to do.
+ */
+sealed interface HomeEvent {
+    /** Loads the catalogue, on start, on retry and from the stale catalogue's Try again action. */
+    data object Load : HomeEvent
+
+    /** Picks a random app from the catalogue for the screen to open. */
+    data object OpenRandomApp : HomeEvent
+
+    /** The screen opened the app that `AppListUiState.randomAppToOpen` asked for. */
+    data object RandomAppOpened : HomeEvent
+
+    data class FilterSelected(val filter: AppsListFilter) : HomeEvent
+
+    /** Adds the app to the favorites, or removes it when it is one already. */
+    data class FavoriteToggled(val packageName: String) : HomeEvent
+
+    /** Opens the details sheet for the app. */
+    data class AppSelected(val packageName: String) : HomeEvent
+
+    data object RetryAppDetails : HomeEvent
+
+    data object AppDetailsDismissed : HomeEvent
 }

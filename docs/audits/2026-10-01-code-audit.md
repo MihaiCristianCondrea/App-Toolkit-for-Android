@@ -94,8 +94,6 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   a profile showing a cost.
 - `library/feature/onboarding/.../ThemeOnboardingPageTab.kt` builds new page lambdas and lists on
   every recomposition. (`ThemeSettingsScreen` no longer does.)
-- `DefaultUsageAndDiagnosticsRepository` still wraps its DataStore calls in
-  `withContext(dispatchers.io)` and `flowOn(io)`, which DataStore does not need.
 
 ## Structure
 
@@ -148,7 +146,9 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   `integration/update` and `navigation`. The comment in `core/ui/build.gradle.kts:52-53` about
   `CommonDataStore` is stale.
 - `Errors.asUiText()` lives in `core/network/data/remote/extensions/ErrorExtensions.kt:30`, a data
-  package, and seven ViewModels import it.
+  package. Nothing outside `:library:core` uses `Errors`, `DataState`, `asUiText`, `core.ui.base` or
+  `core.ui.states` any more, so they and their extensions can be deleted. `MainViewModel` still
+  reads `core:network`'s `error_failed_to_load_consent_info`, so that string stays.
 - `FirebaseController`, `DefaultFirebaseController` and `FirebaseControllerImpl` are deprecated
   aliases of `TelemetryRepository` and `FirebaseTelemetryRepository`, kept for one release. Remove them in the release
   after this one. (Components now read `LocalTelemetry` instead of taking a parameter.)
@@ -182,9 +182,6 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   `ShellBody` (about 215), `ShellChrome` (about 170).
 - Unused public API, kept because removing it breaks consumers: `AdsCoreManager.buildInfoProvider`.
   Remove it in a breaking release, with a migration guide entry.
-- `MainAction.ReviewOutcomeReported` and `InAppUpdateResultReported` are sent but mapped to `Unit`.
-  They are the only actions of their ViewModels, so removing them means changing those ViewModels'
-  action type. (`FaqAction` went with the FAQ's move to `core.ui.screen`.)
 - The comment above `core:datastore` in `library/core/ui/build.gradle.kts:52-53` says the module
   references `CommonDataStore` by type, which it no longer does.
 

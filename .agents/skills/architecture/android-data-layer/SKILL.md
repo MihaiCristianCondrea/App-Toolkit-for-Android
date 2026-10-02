@@ -227,6 +227,24 @@ class that owns that work.
 
 Prefer injecting dispatchers when doing so improves testability.
 
+| API                                                        | Switch?                   |
+|------------------------------------------------------------|---------------------------|
+| DataStore, Room suspend and `Flow` APIs                    | no                        |
+| Ktor and Retrofit suspend calls                            | no                        |
+| Play Core, Play Billing, UMP callbacks and `Task`s         | no                        |
+| `PackageManager`, `ContentResolver`, `File`                | `dispatchers.io`          |
+| Mobile Ads SDK initialization                              | `dispatchers.io`          |
+| bitmap decoding and drawing, large sorts and mappings      | `dispatchers.default`     |
+
+- Take the dispatcher from the injected `DispatcherProvider`, never a hardcoded `Dispatchers.X`.
+- Wrap only the blocking call, so the rest of the function stays on the caller's thread.
+- Wrap DataStore failures with `storageCall { }`, and a DataStore flow with
+  `catch { throw it.toStorageException() ?: it }`; that is the data layer's job, not a dispatcher
+  switch.
+- `DefaultCacheRepository` (file deletes), `DefaultAboutRepository` (a `PackageManager` lookup) and
+  `AdsCoreManager.ensureAdsSdkInitialized` are the reference switches;
+  `DefaultAdsSettingsRepository` and `DefaultBillingRepository` are the reference non-switches.
+
 ## Long-running work
 
 Distinguish operation lifetime from implementation convenience.

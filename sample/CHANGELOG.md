@@ -53,6 +53,11 @@
 
 - The native ad on Help shows its icon inside the shaped badge.
 - The main screen uses the suspend consent API, keeping its once-per-session request and the error message when consent fails.
+- If the quick tools cannot load, the tab says why and offers Retry.
+- Offline, the apps list shows the apps it saved last time, with a message and a Try again button.
+- A favorite that cannot be saved now shows a message instead of hiding the apps list.
+- Tapping favorites on two apps quickly now saves both.
+- The review prompt is counted once per request in the app's analytics, not twice.
 - Copying an app's package name no longer shows a duplicate toast on Android 13 and newer. Older versions keep the copy confirmation.
 - The holiday greeting's checkbox no longer sits against its text, and its ripple is no longer cut off.
 - The favourite star in an app's details now fills and empties as you tap it, as it does on the app's card.

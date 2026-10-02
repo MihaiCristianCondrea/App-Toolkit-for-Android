@@ -20,26 +20,14 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remot
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppDetails
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppSummary
 
-/** Network source for the developer-app catalogue and package details. */
+/**
+ * Network source for the developer-app catalogue and package details.
+ *
+ * A response with an error status throws its `NetworkException`. Other failures are the HTTP
+ * client's own, which the repository translates with `networkCall`.
+ */
 interface DeveloperAppsRemoteDataSource {
     suspend fun fetchDeveloperApps(): List<AppSummary>
 
     suspend fun fetchAppDetails(packageName: String): AppDetails
 }
-
-enum class DeveloperAppsRemoteError {
-    RequestTimeout,
-    RateLimited,
-    Redirect,
-    Client,
-    Server,
-    NoInternet,
-    Connection,
-    Serialization,
-    Unknown,
-}
-
-class DeveloperAppsRemoteException(
-    val error: DeveloperAppsRemoteError,
-    cause: Throwable? = null,
-) : Exception(error.name, cause)

@@ -44,7 +44,6 @@ val appModule: Module = module {
             requestInAppReviewUseCase = get<RequestInAppReviewUseCase>(),
             inAppUpdateRepository = get(),
             telemetryRepository = get(),
-            dispatchers = get(),
         )
     }
 

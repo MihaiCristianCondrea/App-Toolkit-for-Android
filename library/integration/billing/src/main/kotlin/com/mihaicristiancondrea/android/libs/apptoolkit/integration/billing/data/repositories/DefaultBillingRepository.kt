@@ -44,7 +44,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -282,11 +281,10 @@ class DefaultBillingRepository private constructor(
         }
     }
 
+    /** Play Billing answers through its own callbacks, so the queries need no dispatcher switch. */
     override suspend fun processPastPurchases() {
-        withContext(dispatchers.io) {
-            processPastPurchases(BillingClient.ProductType.INAPP)
-            processPastPurchases(BillingClient.ProductType.SUBS)
-        }
+        processPastPurchases(BillingClient.ProductType.INAPP)
+        processPastPurchases(BillingClient.ProductType.SUBS)
     }
 
     private suspend fun processPastPurchases(productType: String) {
@@ -315,32 +313,31 @@ class DefaultBillingRepository private constructor(
         }
     }
 
+    /** Play Billing answers through its own callbacks, so the query needs no dispatcher switch. */
     override suspend fun queryProductDetails(productIds: List<String>) {
-        withContext(dispatchers.io) {
-            val products = productIds.map {
-                QueryProductDetailsParams.Product.newBuilder()
-                    .setProductId(it)
-                    .setProductType(BillingClient.ProductType.INAPP)
-                    .build()
-            }
-            val params = QueryProductDetailsParams.newBuilder()
-                .setProductList(products)
+        val products = productIds.map {
+            QueryProductDetailsParams.Product.newBuilder()
+                .setProductId(it)
+                .setProductType(BillingClient.ProductType.INAPP)
                 .build()
-            val callResult = retryBillingCall(RetryStrategy.Simple()) {
-                awaitBillingCallback { complete ->
-                    billingClient.queryProductDetailsAsync(params) { billingResult, result ->
-                        complete(BillingCallResult(billingResult, result))
-                    }
+        }
+        val params = QueryProductDetailsParams.newBuilder()
+            .setProductList(products)
+            .build()
+        val callResult = retryBillingCall(RetryStrategy.Simple()) {
+            awaitBillingCallback { complete ->
+                billingClient.queryProductDetailsAsync(params) { billingResult, result ->
+                    complete(BillingCallResult(billingResult, result))
                 }
             }
+        }
 
-            if (callResult.billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                val map =
-                    callResult.data?.productDetailsList?.associateBy { it.productId }.orEmpty()
-                _productDetails.emit(map)
-            } else {
-                scope.launch { _purchaseResult.emit(callResult.billingResult.toFailureResult()) }
-            }
+        if (callResult.billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+            val map =
+                callResult.data?.productDetailsList?.associateBy { it.productId }.orEmpty()
+            _productDetails.emit(map)
+        } else {
+            scope.launch { _purchaseResult.emit(callResult.billingResult.toFailureResult()) }
         }
     }
 

@@ -376,6 +376,31 @@ work.
 
 Inject dispatchers when doing so improves testability or follows the existing project pattern.
 
+Already main-safe, so never wrapped in `withContext` or `flowOn`:
+
+* DataStore reads, writes and flows
+* Room suspend and `Flow` APIs
+* Ktor and Retrofit suspend calls
+* Play Core, Play Billing, UMP and other callback or `Task` APIs, awaited with `await` or a
+  `suspendCancellableCoroutine`; their callbacks already arrive on the main thread
+
+Blocking or CPU-heavy, so switched in the class that does it:
+
+* `PackageManager` lookups, `ContentResolver` queries and file I/O (`dispatchers.io`)
+* Mobile Ads SDK initialization, which Google asks to run off the main thread (`dispatchers.io`)
+* decoding or drawing bitmaps, sorting or mapping large lists (`dispatchers.default`)
+
+Rules that follow from this:
+
+* Take dispatchers from the injected `DispatcherProvider`; never hardcode `Dispatchers.IO`,
+  `Dispatchers.Default` or `Dispatchers.Main` in production code. A default value on a constructor
+  parameter that tests replace is acceptable.
+* Switch around the blocking call only, not around a whole function that also calls main-safe APIs.
+* A ViewModel takes a `DispatcherProvider` only for CPU work it does itself, never to move
+  repository calls.
+* When a call blocks the main thread, a switch in its caller is never the fix; make the owning
+  repository or data source main-safe instead.
+
 ## App Toolkit usage
 
 Consumer applications should use App Toolkit as the shared foundation rather than reimplementing it.

@@ -83,9 +83,7 @@ open class AdsCoreManager(
      * [disableNativeValidator] to configure native-ad validation.
      */
     suspend fun initializeAds(appOpenUnitId: String, disableNativeValidator: Boolean = false) {
-        val isAdsChecked: Boolean = withContext(dispatchers.io) {
-            dataStore.adsEnabledFlow.first()
-        }
+        val isAdsChecked: Boolean = dataStore.adsEnabledFlow.first()
         if (isAdsChecked) {
             startAds(appOpenUnitId = appOpenUnitId, disableNativeValidator = disableNativeValidator)
         }
@@ -121,7 +119,8 @@ open class AdsCoreManager(
 
     /**
      * Initializes the SDK once and publishes readiness. Ad loaders must wait for `true`;
-     * loading before initialization throws.
+     * loading before initialization throws. The SDK initializes on IO, as Google asks for it to
+     * run off the main thread; the preference reads need no switch, since DataStore is main-safe.
      *
      * @return `false` when the host provides no valid AdMob application ID.
      */
@@ -214,12 +213,8 @@ open class AdsCoreManager(
         suspend fun showAdIfAvailable(
             activity: Activity, onShowAdCompleteListener: OnShowAdCompleteListener
         ) {
-            val isAdsChecked: Boolean = withContext(dispatchers.io) {
-                dataStore.adsEnabledFlow.first()
-            }
-            val shouldReduceAds: Boolean = withContext(dispatchers.io) {
-                dataStore.reduceAds.first()
-            }
+            val isAdsChecked: Boolean = dataStore.adsEnabledFlow.first()
+            val shouldReduceAds: Boolean = dataStore.reduceAds.first()
 
             if (isShowingAd || !isAdsChecked || shouldReduceAds) {
                 return

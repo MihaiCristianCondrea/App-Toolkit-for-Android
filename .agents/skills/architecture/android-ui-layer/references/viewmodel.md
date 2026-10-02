@@ -145,3 +145,27 @@ source directly. In practice:
   `ClipboardRepository.confirmsCopies` does, not in a `Build.VERSION` check in the ViewModel.
 - Repositories and use cases return data or throw; neither returns a status wrapper.
 - Do not take a `DispatcherProvider` only to move repository calls; repositories are main-safe.
+
+## Threading
+
+Google's rule: the data layer is main-safe, so a ViewModel calls it from `viewModelScope`, which
+runs on the main thread, without switching. The ViewModel switches only for CPU work it does
+itself, and only around that work:
+
+```kotlin
+combine(repository.tileCategories(), repository.expandedCategoryIds) { categories, expanded ->
+    categories.toUiModels() to expanded.toPersistentSet()
+}
+    .flowOn(dispatchers.default)
+    .collectReport(action = Actions.LOAD_TILES, onError = { /* ... */ }) { (categories, expanded) ->
+        setState { copy(categories = Loadable.Ready(categories), expandedCategoryIds = expanded) }
+    }
+```
+
+- `flowOn` moves only what is upstream of it, here the mapping; `collectReport` and `setState`
+  stay on the main thread.
+- Never `withContext(dispatchers.io)` around a repository call, and never a hardcoded
+  `Dispatchers.X`. If a repository call blocks, fix the repository (`android-data-layer`).
+- A composable or widget follows the same rule: it calls main-safe repositories directly, and
+  switches with an injected `DispatcherProvider` only around its own blocking work, as
+  `AppIconsWidget` does for its package manager lookups.

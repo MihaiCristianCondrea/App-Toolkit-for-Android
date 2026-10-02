@@ -75,6 +75,12 @@ flowchart TD
   One Morse playback job serializes patterned output, and SOS delegates to it.
 - Only stateful/platform-backed tools receive dedicated ViewModels; stateless decision tools remain
   local UI behavior rather than creating pass-through layers.
+- The catalogue screen is on `core.ui.screen`. `ToolkitTilesViewModel` exposes `state`, whose
+  `categories` is a `Loadable`, and builds the UI models on the default dispatcher, its own CPU work.
+  Adding a tile is a state flag, `pendingTileRequest`, that `ToolkitTilesScreen` turns into the
+  Quick Settings request and clears with `TileRequestLaunched`. The no-tile message is a queued
+  message shown as a toast, because it comes while a tool's bottom sheet would cover a snackbar.
+  `ToolkitTilesScreen` and the stateless `ToolkitTilesScreenContent` share `ToolkitTilesScreen.kt`.
 
 ## Public contracts
 

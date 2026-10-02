@@ -17,9 +17,18 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import kotlinx.coroutines.flow.Flow
 
+/** The packages the user marked as favorites. Both calls are safe from the main thread. */
 interface FavoritesRepository {
+    /** The favorite package names, again after each change. Fails with [StorageException]. */
     fun observeFavorites(): Flow<Set<String>>
+
+    /**
+     * Adds [packageName] to the favorites, or removes it when it is one already.
+     *
+     * @throws StorageException when the change could not be saved.
+     */
     suspend fun toggleFavorite(packageName: String)
 }

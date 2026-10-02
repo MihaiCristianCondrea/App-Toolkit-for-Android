@@ -21,9 +21,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.ui.Modifier
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.states.MainUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.ProvideTelemetry
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.StartupRoute
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -40,7 +39,6 @@ import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.MainAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.MainEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.appGraph
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.startKeyFor
@@ -48,7 +46,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.loca
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.data.repositories.ComponentsShowcaseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ToolkitTilesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppTheme
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.activity.observeActions
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.update.domain.models.InAppUpdateHost
@@ -78,7 +75,6 @@ class MainActivity : AppCompatActivity() {
         splashScreen.setKeepOnScreenCondition { keepSplashVisible }
         enableEdgeToEdge()
         setShellContent()
-        initObservers()
     }
 
     override fun onResume() {
@@ -102,12 +98,9 @@ class MainActivity : AppCompatActivity() {
                         )
                     }
 
-                    // Consent failures reported by MainViewModel, shown by the shell above its bottom
-                    // bar, its buttons and the player, like every other snackbar.
                     val shellSnackbars = remember { SnackbarHostState() }
-                    val mainState by viewModel.uiState.collectAsStateWithLifecycle()
-                    DefaultSnackbarHandler<MainUiState, MainEvent>(
-                        screenState = mainState,
+                    MessageHost(
+                        viewModel = viewModel,
                         snackbarHostState = shellSnackbars,
                         drawHost = false,
                     )
@@ -137,15 +130,6 @@ class MainActivity : AppCompatActivity() {
                         ChangelogDialog(onDismiss = { showChangelog = false })
                     }
                 }
-            }
-        }
-    }
-
-    private fun initObservers() {
-        observeActions(viewModel = viewModel) { action ->
-            when (action) {
-                is MainAction.ReviewOutcomeReported -> Unit
-                is MainAction.InAppUpdateResultReported -> Unit
             }
         }
     }

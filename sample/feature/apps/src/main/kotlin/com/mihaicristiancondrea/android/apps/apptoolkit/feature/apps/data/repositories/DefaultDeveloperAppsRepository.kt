@@ -17,25 +17,22 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppErrors
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.DeveloperAppsLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.DeveloperAppsRemoteDataSource
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.DeveloperAppsRemoteError
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.DeveloperAppsRemoteException
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppDetails
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppSummary
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlin.coroutines.cancellation.CancellationException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.networkCall
 
 /**
- * Loads and caches the catalog, retaining saved data on a failed refresh. Package names are
- * unique identities, so normalization removes duplicates before keyed lazy layouts consume the
- * result.
+ * Downloads the catalogue and keeps the last successful copy for offline use. Package names are
+ * unique identities, so both copies keep one entry per package before keyed lazy layouts read
+ * them.
+ *
+ * It needs no dispatcher: the remote calls suspend inside Ktor, and the local data source moves
+ * its file work off the main thread itself.
  */
 class DefaultDeveloperAppsRepository(
     private val remoteDataSource: DeveloperAppsRemoteDataSource,
@@ -43,68 +40,27 @@ class DefaultDeveloperAppsRepository(
     private val localDataSource: DeveloperAppsLocalDataSource,
 ) : DeveloperAppsRepository {
 
-    override fun fetchDeveloperApps(): Flow<DataState<List<AppSummary>, AppErrors>> = flow {
+    override suspend fun fetchDeveloperApps(): List<AppSummary> {
         telemetryRepository.logBreadcrumb(
             message = "Developer apps fetch",
         )
-        val result: Result<DataState<List<AppSummary>, AppErrors>> = runSuspendCatching {
-            val apps = remoteDataSource.fetchDeveloperApps()
-                .distinctBy { it.packageName }
-                .sortedBy { it.name.lowercase() }
-            writeCache(apps)
-
-            DataState.Success(data = apps)
-        }
-        val cachedApps = if (result.isFailure) {
-            localDataSource.read()?.distinctBy { it.packageName }
-        } else {
-            null
-        }
-        val state: DataState<List<AppSummary>, AppErrors> = result.fold(
-            onSuccess = { state -> state },
-            onFailure = { throwable ->
-                DataState.Error(
-                    data = cachedApps,
-                    error = mapThrowableToError(
-                        throwable = throwable,
-                        default = AppErrors.UseCase.FAILED_TO_LOAD_APPS,
-                    ),
-                )
-            },
-        )
-        emit(state)
+        val apps = networkCall { remoteDataSource.fetchDeveloperApps() }
+            .distinctBy { it.packageName }
+            .sortedBy { it.name.lowercase() }
+        writeCache(apps)
+        return apps
     }
 
     override suspend fun savedDeveloperApps(): List<AppSummary>? =
-        runSuspendCatching { localDataSource.read()?.distinctBy { it.packageName } }.getOrNull()
+        storageCall { localDataSource.read() }?.distinctBy { it.packageName }
 
-    override fun fetchAppDetails(
-        packageName: String,
-    ): Flow<DataState<AppDetails, AppErrors>> = flow {
-        if (packageName.isBlank()) {
-            emit(DataState.Error(error = AppErrors.UseCase.FAILED_TO_LOAD_APP_DETAILS))
-            return@flow
-        }
+    override suspend fun fetchAppDetails(packageName: String): AppDetails {
+        require(packageName.isNotBlank()) { "An app's details need its package name" }
         telemetryRepository.logBreadcrumb(
             message = "Developer app details fetch",
             attributes = mapOf("packageName" to packageName),
         )
-        val result: DataState<AppDetails, AppErrors> = runSuspendCatching {
-            DataState.Success<AppDetails, AppErrors>(
-                data = remoteDataSource.fetchAppDetails(packageName),
-            )
-        }.fold(
-            onSuccess = { state -> state },
-            onFailure = { throwable ->
-                DataState.Error(
-                    error = mapThrowableToError(
-                        throwable = throwable,
-                        default = AppErrors.UseCase.FAILED_TO_LOAD_APP_DETAILS,
-                    ),
-                )
-            },
-        )
-        emit(result)
+        return networkCall { remoteDataSource.fetchAppDetails(packageName) }
     }
 
     /**
@@ -120,29 +76,4 @@ class DefaultDeveloperAppsRepository(
                 )
             }
     }
-
-    private fun mapThrowableToError(
-        throwable: Throwable,
-        default: AppErrors.UseCase,
-    ): AppErrors {
-        return when (throwable) {
-            is CancellationException -> throw throwable
-            is DeveloperAppsRemoteException -> throwable.error.toAppError()
-            else -> default
-        }
-    }
-
-    private fun DeveloperAppsRemoteError.toAppError(): AppErrors.Common = AppErrors.Common(
-        when (this) {
-            DeveloperAppsRemoteError.RequestTimeout -> Errors.Network.REQUEST_TIMEOUT
-            DeveloperAppsRemoteError.RateLimited -> Errors.Network.RATE_LIMITED
-            DeveloperAppsRemoteError.Redirect -> Errors.Network.HTTP_REDIRECT
-            DeveloperAppsRemoteError.Client -> Errors.Network.HTTP_CLIENT_ERROR
-            DeveloperAppsRemoteError.Server -> Errors.Network.HTTP_SERVER_ERROR
-            DeveloperAppsRemoteError.NoInternet -> Errors.Network.NO_INTERNET
-            DeveloperAppsRemoteError.Connection -> Errors.Network.CONNECTION_ERROR
-            DeveloperAppsRemoteError.Serialization -> Errors.Network.SERIALIZATION
-            DeveloperAppsRemoteError.Unknown -> Errors.Network.UNKNOWN
-        }
-    )
 }

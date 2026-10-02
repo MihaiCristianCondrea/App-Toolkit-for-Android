@@ -20,8 +20,8 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.states
 import androidx.compose.runtime.Immutable
 
 /**
- * The main screen holds no data of its own: its state carries only the snackbars the consent,
- * review and update flows report.
+ * The main activity renders nothing of its own; the consent, review and update flows only queue
+ * messages.
  */
 @Immutable
 data object MainUiState

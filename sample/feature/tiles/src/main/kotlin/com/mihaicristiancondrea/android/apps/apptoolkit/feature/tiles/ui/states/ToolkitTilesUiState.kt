@@ -19,18 +19,25 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states
 
 import androidx.compose.runtime.Immutable
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileCategory
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentSet
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 
-/** State rendered by the Toolkit Tiles screen. */
+/**
+ * State rendered by the Toolkit Tiles screen.
+ *
+ * @property categories The tile catalogue, with each tile's Quick Settings status.
+ * @property pendingTileRequest A tile the screen should ask Android to add, until it reports the
+ * request launched.
+ */
 @Immutable
 data class ToolkitTilesUiState(
-    val categories: ImmutableList<ToolkitTileCategory> = persistentListOf(),
+    val categories: Loadable<ImmutableList<ToolkitTileCategory>> = Loadable.Loading,
     val selectedFilter: ToolkitTilesFilter = ToolkitTilesFilter.All,
     val expandedCategoryIds: PersistentSet<String> = persistentSetOf(),
     val loadedAdIds: PersistentSet<String> = persistentSetOf(),
+    val pendingTileRequest: String? = null,
 )
 
 enum class ToolkitTilesFilter {

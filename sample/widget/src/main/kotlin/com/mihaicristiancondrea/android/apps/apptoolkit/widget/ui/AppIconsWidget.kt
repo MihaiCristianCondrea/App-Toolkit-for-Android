@@ -1,5 +1,5 @@
 /*
- * Copyright (©) 2026 Mihai-Cristian Condrea
+ * Copyright (Â©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,15 +68,12 @@ import coil3.toBitmap
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories.DeveloperAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.widget.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Dispatchers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import org.koin.core.context.GlobalContext
@@ -93,12 +90,12 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
 
     /**
      * Displays the saved catalog while fetching its replacement. Loading content is used only
-     * when no saved catalog is available.
+     * when no saved catalog is available, and a failed fetch keeps the saved catalog on screen.
      */
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val savedState: AppIconsWidgetState? = loadSavedApps(context = context)
         provideContent {
-            val freshState = remember { flow { emit(loadApps(context = context)) } }
+            val freshState = remember { flow { emit(loadApps(context = context, savedState = savedState)) } }
             val state: AppIconsWidgetState by freshState.collectAsState(
                 initial = savedState ?: AppIconsWidgetState.Loading,
             )
@@ -106,47 +103,56 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
         }
     }
 
+    /**
+     * The catalogue the apps screen saved, read without the network, or null when there is none or
+     * it cannot be read. The widget has no failure of its own to show here: the fetch that follows
+     * decides between the grid and the error content.
+     */
     private suspend fun loadSavedApps(context: Context): AppIconsWidgetState? =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                GlobalContext.get().get<DeveloperAppsRepository>().savedDeveloperApps()
-                    ?.takeIf { it.isNotEmpty() }
-                    ?.let { apps -> AppIconsWidgetState.Content(createEntries(context, apps)) }
-            }.getOrElse { throwable ->
-                if (throwable is CancellationException) throw throwable
-                null
-            }
+        try {
+            developerAppsRepository().savedDeveloperApps()
+                ?.takeIf { it.isNotEmpty() }
+                ?.let { apps -> AppIconsWidgetState.Content(createEntries(context, apps)) }
+        } catch (cancellation: CancellationException) {
+            throw cancellation
+        } catch (failure: Exception) {
+            null
         }
 
-    private suspend fun loadApps(context: Context): AppIconsWidgetState =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val developerAppsRepository = GlobalContext.get().get<DeveloperAppsRepository>()
-                val state =
-                    developerAppsRepository.fetchDeveloperApps().first { it !is DataState.Loading }
-                val apps = when (state) {
-                    is DataState.Success -> state.data
-                    is DataState.Error -> return@withContext state.data
-                        ?.takeIf { it.isNotEmpty() }
-                        ?.let { AppIconsWidgetState.Content(createEntries(context, it)) }
-                        ?: AppIconsWidgetState.Error
-
-                    is DataState.Loading -> return@withContext AppIconsWidgetState.Loading
-                }
-
-                if (apps.isEmpty()) AppIconsWidgetState.Empty
-                else AppIconsWidgetState.Content(createEntries(context, apps))
-            }.getOrElse { throwable ->
-                if (throwable is CancellationException) throw throwable
-                AppIconsWidgetState.Error
+    /**
+     * Downloads the catalogue. A failed download falls back to [savedState], and shows the error
+     * content with its retry action only when nothing was saved.
+     */
+    private suspend fun loadApps(
+        context: Context,
+        savedState: AppIconsWidgetState?,
+    ): AppIconsWidgetState =
+        try {
+            val apps = developerAppsRepository().fetchDeveloperApps()
+            if (apps.isEmpty()) {
+                AppIconsWidgetState.Empty
+            } else {
+                AppIconsWidgetState.Content(createEntries(context, apps))
             }
+        } catch (cancellation: CancellationException) {
+            throw cancellation
+        } catch (failure: Exception) {
+            savedState ?: AppIconsWidgetState.Error
         }
 
-    /** Builds the visible entries, resolving their icons in parallel. */
+    private fun developerAppsRepository(): DeveloperAppsRepository =
+        GlobalContext.get().get<DeveloperAppsRepository>()
+
+    private fun dispatchers(): DispatcherProvider = GlobalContext.get().get<DispatcherProvider>()
+
+    /**
+     * Builds the visible entries, resolving their icons in parallel. The package manager lookups
+     * and bitmap drawing block, so they run on IO; the repository calls before them are main-safe.
+     */
     private suspend fun createEntries(
         context: Context,
         apps: List<AppInfo>
-    ): ImmutableList<WidgetAppEntry> = coroutineScope {
+    ): ImmutableList<WidgetAppEntry> = withContext(dispatchers().io) {
         apps.take(MAX_GRID_ITEMS).map { app ->
             async {
                 val launchIntent = context.packageManager.getLaunchIntentForPackage(app.packageName)

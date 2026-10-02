@@ -30,7 +30,6 @@ val diagnosticsSettingsModule: Module = module {
         DefaultUsageAndDiagnosticsRepository(
             dataSource = get<CommonDataStore>(),
             configProvider = get(),
-            dispatchers = get(),
             telemetryRepository = get(),
             consentRepository = get(),
         )

@@ -18,28 +18,31 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.repositories
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.domain.models.UsageAndDiagnosticsSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.toStorageException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.UsageAndDiagnosticsPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentSettings
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.withContext
 
 /**
  * Persists reporting and advertising consents, then applies the stored bundle to the consent
  * SDKs. Applying after each write keeps SDK state current even when the settings screen is
  * closed. Unset choices default to enabled in release builds and disabled in debug builds.
+ *
+ * DataStore is main-safe, so this needs no dispatcher. A read or write that fails fails with a
+ * [StorageException].
  */
 class DefaultUsageAndDiagnosticsRepository(
     private val dataSource: UsageAndDiagnosticsPreferencesDataSource,
     private val configProvider: BuildInfoProvider,
-    private val dispatchers: DispatcherProvider,
     private val telemetryRepository: TelemetryRepository,
     private val consentRepository: ConsentRepository,
 ) : UsageAndDiagnosticsRepository {
@@ -66,7 +69,7 @@ class DefaultUsageAndDiagnosticsRepository(
                     attributes = mapOf("defaultEnabled" to (!configProvider.isDebugBuild).toString()),
                 )
             }
-            .flowOn(dispatchers.io)
+            .catch { failure -> throw failure.toStorageException() ?: failure }
 
     override suspend fun setUsageAndDiagnostics(enabled: Boolean) =
         save(
@@ -121,10 +124,8 @@ class DefaultUsageAndDiagnosticsRepository(
         attributes: Map<String, String>,
         write: suspend () -> Unit,
     ) {
-        withContext(dispatchers.io) {
-            telemetryRepository.logBreadcrumb(message = message, attributes = attributes)
-            write()
-        }
+        telemetryRepository.logBreadcrumb(message = message, attributes = attributes)
+        storageCall { write() }
         val stored: UsageAndDiagnosticsSettings = observeSettings().first()
         consentRepository.applyConsentSettings(
             ConsentSettings(

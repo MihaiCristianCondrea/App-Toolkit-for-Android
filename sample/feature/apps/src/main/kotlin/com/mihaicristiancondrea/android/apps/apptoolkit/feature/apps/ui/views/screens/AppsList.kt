@@ -43,16 +43,13 @@ import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.models.AppListItem
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppListUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppsListFilter
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.isAvailable
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.AppCard
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.utils.buildAppListItems
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
-import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AppAdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdCache
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberNativeAdCache
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.ads.AppsListNativeAdCard
@@ -65,45 +62,47 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import org.koin.compose.koinInject
-import org.koin.core.qualifier.named
 
 /**
  * Adaptive app grid with host-controlled favorites, installed state, filtering, and actions.
  * Ads are interleaved after filtering and search.
  *
+ * @param contentPadding Padding from the shell, added inside the grid's own spacing.
+ * @param adUnitId The native ad slots' unit, or null when no ad should show.
  * @param searchQuery Matches app names, packages, and short descriptions; blank shows every
  * filtered app.
  * @param adFrequency Number of apps between native ad slots.
  */
 @Composable
 fun AppsList(
-    uiHomeScreen: AppListUiState,
+    allApps: ImmutableList<AppInfo>,
+    selectedFilter: AppsListFilter,
     favorites: ImmutableSet<String>,
     installedPackages: ImmutableSet<String>,
-    paddingValues: PaddingValues,
-    adsEnabled: Boolean,
+    contentPadding: PaddingValues,
+    adUnitId: String?,
     onFilterSelected: (AppsListFilter) -> Unit,
     onFavoriteToggle: (String) -> Unit,
     onAppClick: (AppInfo) -> Unit,
     onShareClick: (AppInfo) -> Unit,
-    adFrequency: Int = AdsConstants.APPS_LIST_AD_FREQUENCY,
     windowWidthSizeClass: AppWindowWidthSizeClass,
+    adFrequency: Int = AdsConstants.APPS_LIST_AD_FREQUENCY,
     searchQuery: String = "",
 ) {
     val apps: ImmutableList<AppInfo> = remember(
-        uiHomeScreen.apps,
-        uiHomeScreen.selectedFilter,
+        allApps,
+        selectedFilter,
         installedPackages,
         favorites,
         searchQuery,
     ) {
-        uiHomeScreen.apps.filterFor(
-            filter = uiHomeScreen.selectedFilter,
+        allApps.filterFor(
+            filter = selectedFilter,
             installedPackages = installedPackages,
             favorites = favorites,
         ).search(searchQuery).toImmutableList()
     }
+    val adsEnabled = adUnitId != null
 
     val columnCount = remember(windowWidthSizeClass) {
         when (windowWidthSizeClass) {
@@ -121,22 +120,20 @@ fun AppsList(
         buildAppListItems(apps, adsEnabled, adFrequency)
     }
 
-    val adsConfig: AdsConfig = koinInject(qualifier = named(AppAdsQualifiers.APPS_LIST_NATIVE_AD))
-
     AppsGrid(
         items = items,
-        allAppsCount = uiHomeScreen.apps.size,
+        allAppsCount = allApps.size,
         favorites = favorites,
         installedPackages = installedPackages,
-        selectedFilter = uiHomeScreen.selectedFilter,
+        selectedFilter = selectedFilter,
         onFilterSelected = onFilterSelected,
-        paddingValues = paddingValues,
+        paddingValues = contentPadding,
         columnCount = columnCount,
         listState = listState,
         onFavoriteToggle = onFavoriteToggle,
         onAppClick = onAppClick,
         onShareClick = onShareClick,
-        adUnitId = adsConfig.bannerAdUnitId,
+        adUnitId = adUnitId.orEmpty(),
     )
 }
 

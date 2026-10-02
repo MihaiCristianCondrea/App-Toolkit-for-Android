@@ -21,7 +21,6 @@ import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.UsageAndDiagnosticsPreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.domain.models.UsageAndDiagnosticsSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
@@ -95,7 +94,6 @@ class DefaultUsageAndDiagnosticsRepositoryTest {
             val repository = DefaultUsageAndDiagnosticsRepository(
                 dataSource = dataSource,
                 configProvider = FakeBuildInfoProvider(),
-                dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
                 telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
                 consentRepository = consentRepository,
             )
@@ -114,7 +112,6 @@ class DefaultUsageAndDiagnosticsRepositoryTest {
             val repository = DefaultUsageAndDiagnosticsRepository(
                 dataSource = FakeUsageAndDiagnosticsPreferencesDataSource(),
                 configProvider = FakeBuildInfoProvider(),
-                dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
                 telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
                 consentRepository = consentRepository,
             )

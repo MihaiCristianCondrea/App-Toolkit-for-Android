@@ -17,63 +17,48 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppErrors
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories.DeveloperAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppDetails
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppSummary
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 /**
- * Fake implementation of [DeveloperAppsRepository] that returns a predefined list.
- * It can optionally emit an error when [fetchDeveloperApps] is called, carrying [cachedApps] as the
- * saved catalogue, or throw [firstFetchThrowable] from the first fetch only.
+ * In-memory [DeveloperAppsRepository]. Each call throws its failure when one is set, so a test can
+ * fail the download, the saved catalogue or the details, and clear the failure to retry.
  */
 class FakeDeveloperAppsRepository(
-    private val apps: List<AppSummary>,
-    private val fetchError: AppErrors? = null,
-    private val detailsError: AppErrors? = null,
-    private val cachedApps: List<AppSummary>? = null,
-    private var firstFetchThrowable: Throwable? = null,
+    var apps: List<AppSummary> = emptyList(),
+    var fetchFailure: Throwable? = null,
+    var savedApps: List<AppSummary>? = null,
+    var savedAppsFailure: Throwable? = null,
+    var detailsFailure: Throwable? = null,
 ) : DeveloperAppsRepository {
-    override fun fetchDeveloperApps(): Flow<DataState<List<AppSummary>, AppErrors>> = flow {
-        firstFetchThrowable?.let { throwable ->
-            firstFetchThrowable = null
-            throw throwable
-        }
-        fetchError?.let {
-            emit(DataState.Error(data = cachedApps, error = it))
-            return@flow
-        }
-        emit(DataState.Success(apps))
+
+    var fetchCount: Int = 0
+        private set
+
+    override suspend fun fetchDeveloperApps(): List<AppSummary> {
+        fetchCount++
+        fetchFailure?.let { failure -> throw failure }
+        return apps
     }
 
-    override suspend fun savedDeveloperApps(): List<AppSummary>? = cachedApps
+    override suspend fun savedDeveloperApps(): List<AppSummary>? {
+        savedAppsFailure?.let { failure -> throw failure }
+        return savedApps
+    }
 
-    override fun fetchAppDetails(
-        packageName: String,
-    ): Flow<DataState<AppDetails, AppErrors>> = flow {
-        detailsError?.let { error ->
-            emit(DataState.Error(error = error))
-            return@flow
+    override suspend fun fetchAppDetails(packageName: String): AppDetails {
+        detailsFailure?.let { failure -> throw failure }
+        val app = requireNotNull(apps.firstOrNull { it.packageName == packageName }) {
+            "No app with package $packageName"
         }
-        val app = apps.firstOrNull { it.packageName == packageName }
-        if (app == null) {
-            emit(DataState.Error(error = AppErrors.UseCase.FAILED_TO_LOAD_APP_DETAILS))
-            return@flow
-        }
-        emit(
-            DataState.Success(
-                data = AppDetails(
-                    name = app.name,
-                    packageName = app.packageName,
-                    iconUrl = app.iconUrl,
-                    description = app.shortDescription,
-                    shortDescription = app.shortDescription,
-                    category = app.category,
-                ),
-            ),
+        return AppDetails(
+            name = app.name,
+            packageName = app.packageName,
+            iconUrl = app.iconUrl,
+            description = app.shortDescription,
+            shortDescription = app.shortDescription,
+            category = app.category,
         )
     }
 }

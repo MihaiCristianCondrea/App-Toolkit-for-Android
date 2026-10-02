@@ -72,7 +72,6 @@ val appsModule: Module = module {
             developerAppsRepository = get(),
             installedAppsRepository = get(),
             favoritesRepository = get(),
-            dispatchers = get(),
             telemetryRepository = get(),
         )
     }

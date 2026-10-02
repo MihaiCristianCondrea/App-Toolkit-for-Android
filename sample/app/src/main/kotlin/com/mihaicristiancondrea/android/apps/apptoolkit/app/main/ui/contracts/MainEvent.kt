@@ -17,12 +17,12 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.update.domain.models.InAppUpdateHost
 
-sealed interface MainEvent : UiEvent {
+/** What the main activity asks its ViewModel to do. */
+sealed interface MainEvent {
     data object ApplyInitialConsent : MainEvent
     data class RequestConsent(val host: ConsentHost) : MainEvent
     data class RequestReview(val host: ReviewHost) : MainEvent

@@ -19,7 +19,7 @@ The home-screen app-icons widget.
 ## Depends on
 
 - `:sample:feature:apps` for `DeveloperAppsRepository` and `AppInfo`.
-- [`:library:apptoolkit`](../../library/apptoolkit/README.md) for Glance and `DataState`.
+- [`:library:apptoolkit`](../../library/apptoolkit/README.md) for Glance.
 
 ## Used by
 
@@ -32,14 +32,14 @@ flowchart TD
     System[AppWidgetManager / Glance] --> Receiver[AppIconsWidgetReceiver]
     Receiver --> Widget[AppIconsWidget]
     Widget -->|Koin GlobalContext lookup| Repo[DeveloperAppsRepository]
-    Repo --> Remote[Apps metadata API]
-    Repo --> Cache[Persistent catalog snapshot]
-    Remote --> State{DataState}
-    Cache --> State
-    State -->|loading| Loading[Loading content]
-    State -->|success or stale data| Grid[Bounded app-icon grid]
-    State -->|empty| Empty[Empty content]
-    State -->|error without data| Error[Error and retry content]
+    Repo -->|savedDeveloperApps| Cache[Persistent catalog snapshot]
+    Repo -->|fetchDeveloperApps| Remote[Apps metadata API]
+    Cache -->|nothing saved| Loading[Loading content]
+    Cache -->|saved apps| Grid[Bounded app-icon grid]
+    Remote -->|apps| Grid
+    Remote -->|no apps| Empty[Empty content]
+    Remote -->|throws, saved apps shown| Grid
+    Remote -->|throws, nothing saved| Error[Error and retry content]
     Grid --> Launch[Glance activity / store action]
     Error --> Retry[RefreshWidgetAction]
     Retry --> Repo
@@ -55,7 +55,9 @@ flowchart TD
   it can run outside an activity.
 - An update draws the catalogue the apps screen saved (`DeveloperAppsRepository.savedDeveloperApps`)
   straight away and replaces it once the network answers, so the widget does not wait on the
-  network. It shows its loading content only when nothing has been saved yet.
+  network. It shows its loading content only when nothing has been saved yet. When
+  `fetchDeveloperApps` throws, the saved catalogue stays; the error content shows only when there
+  is none. An unreadable snapshot counts as nothing saved.
 - Icon work is bounded to the visible widget capacity to avoid unbounded network/bitmap work during
   an update.
 - Icons that are not installed load in parallel through the app's Coil image loader, the one the

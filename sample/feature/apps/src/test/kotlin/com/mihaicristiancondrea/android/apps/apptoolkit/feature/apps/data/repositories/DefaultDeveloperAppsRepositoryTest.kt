@@ -15,18 +15,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/*
- * Copyright (C) 2026 Mihai-Cristian Condrea
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- */
-
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppErrors
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.DeveloperAppsLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.DefaultDeveloperAppsRemoteDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.models.AppCategoryDto
@@ -42,11 +32,12 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppCategory
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppDeviceType
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppSummary
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
+import io.ktor.client.engine.mock.MockRequestHandleScope
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.http.ContentType
@@ -55,13 +46,19 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
 import io.mockk.mockk
-import kotlinx.coroutines.flow.first
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Test
+import java.io.IOException
+import java.net.UnknownHostException
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertNull
 
 class DefaultDeveloperAppsRepositoryTest {
+
+    private val telemetryRepository: TelemetryRepository = mockk(relaxed = true)
 
     @Test
     fun `fetchDeveloperApps maps compact list data and category`() = runTest {
@@ -83,8 +80,7 @@ class DefaultDeveloperAppsRepositoryTest {
         )
         val repository = repositoryReturning(Json.encodeToString(response))
 
-        val result = repository.fetchDeveloperApps().first() as DataState.Success
-        val app = result.data.single()
+        val app = repository.fetchDeveloperApps().single()
 
         assertEquals("App", app.name)
         assertEquals("pkg", app.packageName)
@@ -107,36 +103,9 @@ class DefaultDeveloperAppsRepositoryTest {
         )
         val repository = repositoryReturning(Json.encodeToString(response))
 
-        val result = repository.fetchDeveloperApps().first() as DataState.Success
+        val apps = repository.fetchDeveloperApps()
 
-        assertEquals(listOf("Alpha", "beta", "zeta"), result.data.map { it.name })
-    }
-
-    @Test
-    fun `fetchDeveloperApps still succeeds when the cache cannot be written`() = runTest {
-        val response = AppsListResponseDto(
-            data = AppsListDataDto(
-                apps = listOf(
-                    AppSummaryDto(
-                        name = "App",
-                        packageName = "pkg",
-                        iconUrl = "https://example.com/icon.png",
-                    ),
-                ),
-            ),
-        )
-        val failingCache = object : DeveloperAppsLocalDataSource {
-            override suspend fun read(): List<AppSummary>? = null
-
-            override suspend fun write(value: List<AppSummary>) {
-                throw IllegalStateException("Disk full")
-            }
-        }
-        val repository = repositoryReturning(Json.encodeToString(response), local = failingCache)
-
-        val result = repository.fetchDeveloperApps().first() as DataState.Success
-
-        assertEquals(listOf("pkg"), result.data.map { it.packageName })
+        assertEquals(listOf("Alpha", "beta", "zeta"), apps.map { it.name })
     }
 
     @Test
@@ -154,19 +123,105 @@ class DefaultDeveloperAppsRepositoryTest {
         )
         val repository = repositoryReturning(Json.encodeToString(response))
 
-        val result = repository.fetchDeveloperApps().first() as DataState.Success
+        val apps = repository.fetchDeveloperApps()
 
-        assertEquals(listOf("First"), result.data.map { it.name })
+        assertEquals(listOf("First"), apps.map { it.name })
     }
 
     @Test
-    fun `fetchDeveloperApps keeps one cached entry per package`() = runTest {
-        val local = FakeDeveloperAppsLocalDataSource(cachedApps("Cached") + cachedApps("Cached"))
+    fun `fetchDeveloperApps saves a successful response`() = runTest {
+        val local = FakeDeveloperAppsLocalDataSource()
+        val repository = repositoryReturning(Json.encodeToString(catalogueResponse("Online")), local)
+
+        repository.fetchDeveloperApps()
+
+        assertEquals(listOf("Online"), local.value?.map { it.name })
+    }
+
+    @Test
+    fun `fetchDeveloperApps still succeeds and reports when the cache cannot be written`() = runTest {
+        val failingCache = object : DeveloperAppsLocalDataSource {
+            override suspend fun read(): List<AppSummary>? = null
+
+            override suspend fun write(value: List<AppSummary>) {
+                throw IOException("Disk full")
+            }
+        }
+        val repository = repositoryReturning(Json.encodeToString(catalogueResponse("App")), local = failingCache)
+
+        val apps = repository.fetchDeveloperApps()
+
+        assertEquals(listOf("App"), apps.map { it.name })
+        verify { telemetryRepository.recordNonFatal(throwable = any(), attributes = any()) }
+    }
+
+    @Test
+    fun `fetchDeveloperApps throws a timeout for a timeout status`() = runTest {
+        val repository = repositoryWithStatus(HttpStatusCode.RequestTimeout)
+
+        val failure = assertFailsWith<NetworkException> { repository.fetchDeveloperApps() }
+
+        assertEquals(NetworkException.Reason.TIMEOUT, failure.reason)
+    }
+
+    @Test
+    fun `fetchDeveloperApps throws a server failure for a server status`() = runTest {
+        val repository = repositoryWithStatus(HttpStatusCode.InternalServerError)
+
+        val failure = assertFailsWith<NetworkException> { repository.fetchDeveloperApps() }
+
+        assertEquals(NetworkException.Reason.SERVER, failure.reason)
+    }
+
+    @Test
+    fun `fetchDeveloperApps throws no internet when the host cannot be resolved`() = runTest {
+        val client = HttpClient(MockEngine { throw UnknownHostException("example.com") }) {
+            install(ContentNegotiation) { json() }
+        }
+        val repository = createRepository(client)
+
+        val failure = assertFailsWith<NetworkException> { repository.fetchDeveloperApps() }
+
+        assertEquals(NetworkException.Reason.NO_INTERNET, failure.reason)
+    }
+
+    @Test
+    fun `a failed fetch keeps the saved catalogue`() = runTest {
+        val local = FakeDeveloperAppsLocalDataSource(cachedApps("Cached"))
         val repository = repositoryWithStatus(HttpStatusCode.InternalServerError, local)
 
-        val result = repository.fetchDeveloperApps().first() as DataState.Error
+        assertFailsWith<NetworkException> { repository.fetchDeveloperApps() }
 
-        assertEquals(listOf("Cached"), result.data?.map { it.name })
+        assertEquals(listOf("Cached"), repository.savedDeveloperApps()?.map { it.name })
+    }
+
+    @Test
+    fun `savedDeveloperApps keeps one entry per package`() = runTest {
+        val local = FakeDeveloperAppsLocalDataSource(cachedApps("Cached") + cachedApps("Cached"))
+        val repository = repositoryReturning("{}", local)
+
+        assertEquals(listOf("Cached"), repository.savedDeveloperApps()?.map { it.name })
+    }
+
+    @Test
+    fun `savedDeveloperApps is null before anything was saved`() = runTest {
+        val repository = repositoryReturning("{}")
+
+        assertNull(repository.savedDeveloperApps())
+    }
+
+    @Test
+    fun `savedDeveloperApps throws a storage failure when the file cannot be read`() = runTest {
+        val unreadableCache = object : DeveloperAppsLocalDataSource {
+            override suspend fun read(): List<AppSummary>? = throw IOException("Read failed")
+
+            override suspend fun write(value: List<AppSummary>) = Unit
+        }
+        val repository = repositoryReturning("{}", local = unreadableCache)
+
+        val failure = assertFailsWith<StorageException> { repository.savedDeveloperApps() }
+
+        assertEquals(StorageException.Reason.FAILED, failure.reason)
     }
 
     @Test
@@ -209,8 +264,7 @@ class DefaultDeveloperAppsRepositoryTest {
         }
         val repository = createRepository(client)
 
-        val result = repository.fetchAppDetails("com.example.app").first() as DataState.Success
-        val details = result.data
+        val details = repository.fetchAppDetails("com.example.app")
 
         assertEquals("Full description", details.description)
         assertEquals(AppDeviceType.Phone, details.screenshots.single().deviceType)
@@ -219,43 +273,19 @@ class DefaultDeveloperAppsRepositoryTest {
     }
 
     @Test
-    fun `fetchDeveloperApps maps timeout status`() = runTest {
-        val repository = repositoryWithStatus(HttpStatusCode.RequestTimeout)
+    fun `fetchAppDetails throws the status failure`() = runTest {
+        val repository = repositoryWithStatus(HttpStatusCode.NotFound)
 
-        val result = repository.fetchDeveloperApps().first() as DataState.Error
+        val failure = assertFailsWith<NetworkException> { repository.fetchAppDetails("com.example.app") }
 
-        assertEquals(AppErrors.Common(Errors.Network.REQUEST_TIMEOUT), result.error)
-    }
-
-    @Test
-    fun `fetchDeveloperApps persists a successful response`() = runTest {
-        val response = catalogueResponse("Online")
-        val local = FakeDeveloperAppsLocalDataSource()
-        val repository = repositoryReturning(Json.encodeToString(response), local)
-
-        repository.fetchDeveloperApps().first()
-
-        assertEquals(listOf("Online"), local.value?.map { it.name })
-    }
-
-    @Test
-    fun `fetchDeveloperApps exposes cached data with a network error`() = runTest {
-        val local = FakeDeveloperAppsLocalDataSource(cachedApps("Cached"))
-        val repository = repositoryWithStatus(HttpStatusCode.InternalServerError, local)
-
-        val result = repository.fetchDeveloperApps().first() as DataState.Error
-
-        assertEquals(listOf("Cached"), result.data?.map { it.name })
-        assertEquals(AppErrors.Common(Errors.Network.HTTP_SERVER_ERROR), result.error)
+        assertEquals(NetworkException.Reason.CLIENT, failure.reason)
     }
 
     @Test
     fun `fetchAppDetails rejects a blank package`() = runTest {
         val repository = repositoryReturning("{}")
 
-        val result = repository.fetchAppDetails(" ").first() as DataState.Error
-
-        assertEquals(AppErrors.UseCase.FAILED_TO_LOAD_APP_DETAILS, result.error)
+        assertFailsWith<IllegalArgumentException> { repository.fetchAppDetails(" ") }
     }
 
     private fun repositoryReturning(
@@ -298,7 +328,7 @@ class DefaultDeveloperAppsRepositoryTest {
                 client = client,
                 baseUrl = "https://example.com",
             ),
-            telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
+            telemetryRepository = telemetryRepository,
             localDataSource = local,
         )
 
@@ -333,7 +363,7 @@ private class FakeDeveloperAppsLocalDataSource(
     }
 }
 
-private fun io.ktor.client.engine.mock.MockRequestHandleScope.respondJson(
+private fun MockRequestHandleScope.respondJson(
     json: String,
 ) = respond(
     content = json,
