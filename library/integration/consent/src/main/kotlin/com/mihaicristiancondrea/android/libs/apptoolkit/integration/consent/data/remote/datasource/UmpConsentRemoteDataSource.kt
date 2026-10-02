@@ -20,19 +20,22 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.dat
 import android.util.Log
 import com.google.android.ump.ConsentForm
 import com.google.android.ump.ConsentRequestParameters
+import com.google.android.ump.FormError
 import com.google.android.ump.UserMessagingPlatform
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.canShowConsentForm
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.CONSENT_LOG_TAG
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.AdMobAppIdProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.exceptions.ConsentException
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.canShowConsentForm
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 /**
  * UMP-backed implementation of [ConsentRemoteDataSource].
+ *
+ * Every UMP callback ends the round trip once: with success, or with a [ConsentException] whose
+ * reason says which step failed. A form dismissed with a [FormError] is a failure, not a success.
  *
  * @param adMobAppIdProvider resolves the *host* app's AdMob application id. Passing a foreign id to
  * UMP produces consent requests against a publisher account that does not own the running app,
@@ -42,136 +45,133 @@ class UmpConsentRemoteDataSource(
     private val adMobAppIdProvider: AdMobAppIdProvider,
 ) : ConsentRemoteDataSource {
 
-    override fun requestConsent(
+    override suspend fun requestConsent(
         host: ConsentHost,
         showIfRequired: Boolean,
-    ): Flow<DataState<Unit, Errors.UseCase>> = callbackFlow {
-        trySend(DataState.Loading())
-
-        val activity = host.activity
-        val params = buildRequestParameters()
-        val consentInfo = UserMessagingPlatform.getConsentInformation(activity)
-
-        runCatching {
-            consentInfo.requestConsentInfoUpdate(
-                activity,
-                params,
-                {
-                    if (!host.canShowConsentForm) {
-                        // Recheck the host after the async update: a finishing activity cannot safely show a form.
-                        Log.w(CONSENT_LOG_TAG, "Consent host is no longer able to show a form.")
-                        trySend(
-                            DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO)
-                        )
-                        close()
-                        return@requestConsentInfoUpdate
-                    }
-                    if (showIfRequired) {
-                        UserMessagingPlatform.loadAndShowConsentFormIfRequired(activity) { formError ->
-                            if (formError != null) {
-                                Log.e(
-                                    CONSENT_LOG_TAG,
-                                    "Consent form error: ${formError.message}"
-                                )
-                                trySend(
-                                    DataState.Error(
-                                        error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO
-                                    )
-                                )
-                            } else {
-                                trySend(DataState.Success(Unit))
-                            }
-                            close()
-                        }
-                    } else {
-                        UserMessagingPlatform.loadConsentForm(
-                            activity,
-                            { consentForm: ConsentForm ->
-                                if (!host.canShowConsentForm) {
-                                    Log.w(
-                                        CONSENT_LOG_TAG,
-                                        "Consent form loaded after the host stopped; not showing."
-                                    )
-                                    trySend(
-                                        DataState.Error(
-                                            error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO
-                                        )
-                                    )
-                                    close()
-                                    return@loadConsentForm
-                                }
-                                runCatching {
-                                    consentForm.show(activity) { formError ->
-                                        if (formError != null) {
-                                            Log.e(
-                                                CONSENT_LOG_TAG,
-                                                "Consent form error: ${formError.message}"
-                                            )
-                                            trySend(
-                                                DataState.Error(
-                                                    error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO
-                                                )
-                                            )
-                                        } else {
-                                            trySend(DataState.Success(Unit))
-                                        }
-                                        close()
-                                    }
-                                }.onFailure { throwable ->
-                                    Log.e(
-                                        CONSENT_LOG_TAG,
-                                        "Failed to show consent form.",
-                                        throwable
-                                    )
-                                    trySend(
-                                        DataState.Error(
-                                            error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO
-                                        )
-                                    )
-                                    close()
-                                }
-                            },
-                            { formError ->
-                                Log.e(
-                                    CONSENT_LOG_TAG,
-                                    "Failed to load consent form: ${formError.message}"
-                                )
-                                trySend(
-                                    DataState.Error(
-                                        error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO
-                                    )
-                                )
-                                close()
-                            }
-                        )
-                    }
-                },
-                { requestError ->
-                    Log.e(
-                        CONSENT_LOG_TAG,
-                        "Failed to request consent info: ${requestError.message}"
-                    )
-                    trySend(
-                        DataState.Error(
-                            error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO
-                        )
-                    )
-                    close()
-                }
-            )
-        }.onFailure { throwable ->
-            Log.e(CONSENT_LOG_TAG, "Failed to request consent info.", throwable)
-            trySend(DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO))
-            close()
+    ): Unit = suspendCancellableCoroutine { continuation ->
+        val finish: (ConsentException?) -> Unit = { failure ->
+            if (continuation.isActive) {
+                if (failure == null) continuation.resume(Unit) else continuation.resumeWithException(failure)
+            }
         }
 
-        awaitClose { }
+        try {
+            val consentInfo = UserMessagingPlatform.getConsentInformation(host.activity)
+            consentInfo.requestConsentInfoUpdate(
+                host.activity,
+                buildRequestParameters(),
+                { showForm(host = host, showIfRequired = showIfRequired, finish = finish) },
+                { requestError: FormError ->
+                    finish(
+                        consentFailure(
+                            reason = ConsentException.Reason.REQUEST_FAILED,
+                            message = "Failed to request consent info: ${requestError.message}",
+                        )
+                    )
+                },
+            )
+        } catch (exception: Exception) {
+            finish(
+                consentFailure(
+                    reason = ConsentException.Reason.REQUEST_FAILED,
+                    message = "Failed to request consent info.",
+                    cause = exception,
+                )
+            )
+        }
     }
 
     /**
-     * Uses the same host-manifest AdMob ID as the ads SDK, omitting the explicit ID when none
-     * is valid. Supplying it also supports hosts that initialize the ads SDK lazily; no library
-     * publisher ID is used.
+     * Shows the form once the consent information is up to date. The host is checked again first,
+     * because it can go away while the update is in flight, and showing a form on a finishing
+     * activity throws from the window manager.
+     */
+    private fun showForm(
+        host: ConsentHost,
+        showIfRequired: Boolean,
+        finish: (ConsentException?) -> Unit,
+    ) {
+        if (!host.canShowConsentForm) {
+            finish(
+                consentFailure(
+                    reason = ConsentException.Reason.HOST_UNAVAILABLE,
+                    message = "Consent host is no longer able to show a form.",
+                )
+            )
+            return
+        }
+        if (showIfRequired) {
+            UserMessagingPlatform.loadAndShowConsentFormIfRequired(host.activity) { formError: FormError? ->
+                finish(formError?.toFormFailure())
+            }
+        } else {
+            UserMessagingPlatform.loadConsentForm(
+                host.activity,
+                { consentForm: ConsentForm -> showLoadedForm(host = host, consentForm = consentForm, finish = finish) },
+                { formError: FormError ->
+                    finish(
+                        consentFailure(
+                            reason = ConsentException.Reason.FORM_FAILED,
+                            message = "Failed to load consent form: ${formError.message}",
+                        )
+                    )
+                },
+            )
+        }
+    }
+
+    /** Shows a form loaded on request, unless the host stopped while it was loading. */
+    private fun showLoadedForm(
+        host: ConsentHost,
+        consentForm: ConsentForm,
+        finish: (ConsentException?) -> Unit,
+    ) {
+        if (!host.canShowConsentForm) {
+            finish(
+                consentFailure(
+                    reason = ConsentException.Reason.HOST_UNAVAILABLE,
+                    message = "Consent form loaded after the host stopped; not showing.",
+                )
+            )
+            return
+        }
+        try {
+            consentForm.show(host.activity) { formError: FormError? -> finish(formError?.toFormFailure()) }
+        } catch (exception: Exception) {
+            finish(
+                consentFailure(
+                    reason = ConsentException.Reason.FORM_FAILED,
+                    message = "Failed to show consent form.",
+                    cause = exception,
+                )
+            )
+        }
+    }
+
+    private fun FormError.toFormFailure(): ConsentException =
+        consentFailure(
+            reason = ConsentException.Reason.FORM_FAILED,
+            message = "Consent form error: $message",
+        )
+
+    /** Logs [message] and returns it as a [ConsentException]. */
+    private fun consentFailure(
+        reason: ConsentException.Reason,
+        message: String,
+        cause: Throwable? = null,
+    ): ConsentException {
+        if (reason == ConsentException.Reason.HOST_UNAVAILABLE) {
+            Log.w(CONSENT_LOG_TAG, message, cause)
+        } else {
+            Log.e(CONSENT_LOG_TAG, message, cause)
+        }
+        return ConsentException(reason = reason, message = message, cause = cause)
+    }
+
+    /**
+     * Builds the request parameters for UMP with the host app's AdMob id from its manifest, the
+     * value the Google Mobile Ads SDK reads. Without a valid id, `setAdMobAppId` is skipped rather
+     * than falling back to a library constant.
      */
     private fun buildRequestParameters(): ConsentRequestParameters {
         val builder = ConsentRequestParameters.Builder()

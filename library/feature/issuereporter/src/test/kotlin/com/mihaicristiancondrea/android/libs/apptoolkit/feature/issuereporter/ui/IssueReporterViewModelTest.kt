@@ -17,45 +17,32 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui
 
-import com.google.common.truth.Truth.assertThat
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReporterRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.DeviceInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportResult
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.Report
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.usecases.SendIssueReportUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.contracts.IssueReporterEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueSubmissionState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.GenericErrorText
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
-import io.ktor.http.HttpStatusCode
-import io.mockk.confirmVerified
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.slot
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.resetMain
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.exceptions.IssueReportRejectedException
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReporterRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.mappers.toPlainText
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.DeviceInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.Report
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.contracts.IssueReporterEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueReporterUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueSubmissionState
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.Arguments
-import org.junit.jupiter.params.provider.MethodSource
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class IssueReporterViewModelTest {
 
     companion object {
@@ -63,17 +50,331 @@ class IssueReporterViewModelTest {
         @RegisterExtension
         val dispatcherExtension = UnconfinedDispatcherExtension()
 
-        @JvmStatic
-        fun errorCases() = listOf(
-            Arguments.of(HttpStatusCode.Unauthorized, R.string.error_unauthorized),
-            Arguments.of(HttpStatusCode.Forbidden, R.string.error_forbidden),
-            Arguments.of(HttpStatusCode.Gone, R.string.error_gone),
-            Arguments.of(HttpStatusCode.UnprocessableEntity, R.string.error_unprocessable),
-            Arguments.of(HttpStatusCode.InternalServerError, R.string.snack_report_failed),
-        )
+        private const val ISSUE_URL = "https://github.com/user/repo/issues/1"
     }
 
-    private val githubTarget = GithubTarget("user", "repo")
+    private val telemetryRepository = FakeTelemetryRepository()
+
+    private fun createViewModel(
+        repository: IssueReporterRepository = FakeIssueReporterRepository(),
+        githubToken: String = "token",
+    ): IssueReporterViewModel = IssueReporterViewModel(
+        repository = repository,
+        githubTarget = GithubTarget(username = "user", repository = "repo"),
+        githubToken = githubToken,
+        telemetryRepository = telemetryRepository,
+    )
+
+    private fun advance() = dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+    private fun IssueReporterViewModel.writeDraft(email: String = "") {
+        onEvent(IssueReporterEvent.UpdateTitle("Bug"))
+        onEvent(IssueReporterEvent.UpdateDescription("Desc"))
+        onEvent(IssueReporterEvent.UpdateEmail(email))
+    }
+
+    private fun IssueReporterViewModel.onlyMessage(): UiMessage = messages.value.single()
+
+    private val UiMessage.resourceId: Int
+        get() = (text as UiTextHelper.StringResource).resourceId
+
+    @Test
+    fun `the sheet opens with an empty draft and no message`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel()
+        advance()
+
+        assertEquals(IssueReporterUiState(), viewModel.state.value)
+        assertTrue(viewModel.messages.value.isEmpty())
+    }
+
+    @Test
+    fun `typing updates the draft`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel()
+
+        viewModel.onEvent(IssueReporterEvent.UpdateTitle("T"))
+        viewModel.onEvent(IssueReporterEvent.UpdateDescription("D"))
+        viewModel.onEvent(IssueReporterEvent.UpdateEmail("E"))
+        advance()
+
+        val state = viewModel.state.value
+        assertEquals("T", state.title)
+        assertEquals("D", state.description)
+        assertEquals("E", state.email)
+    }
+
+    @Test
+    fun `a blank report is refused with a message and nothing is sent`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val repository = FakeIssueReporterRepository()
+            val viewModel = createViewModel(repository = repository)
+
+            viewModel.onEvent(IssueReporterEvent.Send)
+            advance()
+
+            val message = viewModel.onlyMessage()
+            assertEquals(R.string.error_invalid_report, message.resourceId)
+            assertTrue(message.isError)
+            assertTrue(repository.sentReports.isEmpty())
+            assertEquals(IssueSubmissionState.Editing, viewModel.state.value.submissionState)
+        }
+
+    @Test
+    fun `sending files the draft and shows the confirmation`() = runTest(dispatcherExtension.testDispatcher) {
+        val repository = FakeIssueReporterRepository()
+        val viewModel = createViewModel(repository = repository)
+        viewModel.writeDraft(email = "me@example.com")
+
+        viewModel.onEvent(IssueReporterEvent.Send)
+        advance()
+
+        val state = viewModel.state.value
+        assertEquals(IssueSubmissionState.Submitted(issueUrl = ISSUE_URL), state.submissionState)
+        assertEquals("Bug", state.title)
+        assertEquals("Desc", state.description)
+        assertTrue(viewModel.messages.value.isEmpty())
+        val report = repository.sentReports.single()
+        assertEquals("Bug", report.title)
+        assertTrue(report.getDescription().contains("Desc"))
+        assertTrue(report.getDescription().contains("me@example.com"))
+        assertEquals(listOf<String?>("token"), repository.sentTokens)
+    }
+
+    @Test
+    fun `a blank token is sent as none`() = runTest(dispatcherExtension.testDispatcher) {
+        val repository = FakeIssueReporterRepository()
+        val viewModel = createViewModel(repository = repository, githubToken = "")
+        viewModel.writeDraft()
+
+        viewModel.onEvent(IssueReporterEvent.Send)
+        advance()
+
+        assertEquals(listOf<String?>(null), repository.sentTokens)
+    }
+
+    @Test
+    fun `the sheet shows sending until the answer arrives`() = runTest(dispatcherExtension.testDispatcher) {
+        val gate = CompletableDeferred<Unit>()
+        val viewModel = createViewModel(repository = FakeIssueReporterRepository(sendGate = gate))
+        viewModel.writeDraft()
+
+        viewModel.onEvent(IssueReporterEvent.Send)
+        advance()
+        assertEquals(IssueSubmissionState.Sending, viewModel.state.value.submissionState)
+
+        gate.complete(Unit)
+        advance()
+        assertEquals(IssueSubmissionState.Submitted(issueUrl = ISSUE_URL), viewModel.state.value.submissionState)
+    }
+
+    @Test
+    fun `a second send while one is in flight is ignored`() = runTest(dispatcherExtension.testDispatcher) {
+        val gate = CompletableDeferred<Unit>()
+        val repository = FakeIssueReporterRepository(sendGate = gate)
+        val viewModel = createViewModel(repository = repository)
+        viewModel.writeDraft()
+
+        viewModel.onEvent(IssueReporterEvent.Send)
+        viewModel.onEvent(IssueReporterEvent.Send)
+        gate.complete(Unit)
+        advance()
+
+        assertEquals(1, repository.sentReports.size)
+    }
+
+    @Test
+    fun `a rejected token shows its own text and keeps the draft`() = runTest(dispatcherExtension.testDispatcher) {
+        val repository = FakeIssueReporterRepository(
+            sendFailure = IssueReportRejectedException(IssueReportRejectedException.Reason.UNAUTHORIZED),
+        )
+        val viewModel = createViewModel(repository = repository)
+        viewModel.writeDraft()
+
+        viewModel.onEvent(IssueReporterEvent.Send)
+        advance()
+
+        val state = viewModel.state.value
+        assertEquals(IssueSubmissionState.Failed, state.submissionState)
+        assertEquals("Bug", state.title)
+        val message = viewModel.onlyMessage()
+        assertEquals(R.string.error_unauthorized, message.resourceId)
+        assertTrue(message.isError)
+    }
+
+    @Test
+    fun `a timeout shows the shared timeout text`() = runTest(dispatcherExtension.testDispatcher) {
+        val repository = FakeIssueReporterRepository(
+            sendFailure = NetworkException(reason = NetworkException.Reason.TIMEOUT),
+        )
+        val viewModel = createViewModel(repository = repository)
+        viewModel.writeDraft()
+
+        viewModel.onEvent(IssueReporterEvent.Send)
+        advance()
+
+        assertEquals(CoreUiR.string.screen_error_timeout, viewModel.onlyMessage().resourceId)
+    }
+
+    @Test
+    fun `a failure with no text of its own shows the reporter's text and is reported`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val repository = FakeIssueReporterRepository(
+                sendFailure = NetworkException(reason = NetworkException.Reason.CLIENT),
+            )
+            val viewModel = createViewModel(repository = repository)
+            viewModel.writeDraft()
+
+            viewModel.onEvent(IssueReporterEvent.Send)
+            advance()
+
+            assertEquals(R.string.snack_report_failed, viewModel.onlyMessage().resourceId)
+            assertTrue(telemetryRepository.loggedEvents.any { it.name == "vm_op_error" })
+        }
+
+    @Test
+    fun `a failed device capture fails the send without sending`() = runTest(dispatcherExtension.testDispatcher) {
+        val repository = FakeIssueReporterRepository(captureFailure = IllegalStateException("boom"))
+        val viewModel = createViewModel(repository = repository)
+        viewModel.writeDraft()
+
+        viewModel.onEvent(IssueReporterEvent.Send)
+        advance()
+
+        assertEquals(IssueSubmissionState.Failed, viewModel.state.value.submissionState)
+        assertEquals(R.string.snack_report_failed, viewModel.onlyMessage().resourceId)
+        assertTrue(repository.sentReports.isEmpty())
+    }
+
+    @Test
+    fun `sending again after a failure shows the confirmation`() = runTest(dispatcherExtension.testDispatcher) {
+        val repository = FakeIssueReporterRepository(
+            sendFailure = NetworkException(reason = NetworkException.Reason.NO_INTERNET),
+        )
+        val viewModel = createViewModel(repository = repository)
+        viewModel.writeDraft()
+        viewModel.onEvent(IssueReporterEvent.Send)
+        advance()
+        viewModel.messageShown(viewModel.onlyMessage().id)
+
+        repository.sendFailure = null
+        viewModel.onEvent(IssueReporterEvent.Send)
+        advance()
+
+        assertEquals(IssueSubmissionState.Submitted(issueUrl = ISSUE_URL), viewModel.state.value.submissionState)
+        assertTrue(viewModel.messages.value.isEmpty())
+    }
+
+    @Test
+    fun `opening the device panel captures the details once`() = runTest(dispatcherExtension.testDispatcher) {
+        val repository = FakeIssueReporterRepository()
+        val viewModel = createViewModel(repository = repository)
+
+        viewModel.onEvent(IssueReporterEvent.RequestDeviceInfo)
+        viewModel.onEvent(IssueReporterEvent.RequestDeviceInfo)
+        advance()
+
+        assertEquals(Loadable.Ready(deviceInfo().toPlainText()), viewModel.state.value.deviceInfo)
+        assertEquals(1, repository.captures)
+    }
+
+    @Test
+    fun `a failed device capture shows in the panel and runs again on the next opening`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val repository = FakeIssueReporterRepository(captureFailure = IllegalStateException("boom"))
+            val viewModel = createViewModel(repository = repository)
+
+            viewModel.onEvent(IssueReporterEvent.RequestDeviceInfo)
+            advance()
+            assertEquals(Loadable.Failed(message = GenericErrorText), viewModel.state.value.deviceInfo)
+
+            repository.captureFailure = null
+            viewModel.onEvent(IssueReporterEvent.RequestDeviceInfo)
+            advance()
+            assertEquals(Loadable.Ready(deviceInfo().toPlainText()), viewModel.state.value.deviceInfo)
+        }
+
+    @Test
+    fun `reset clears a submitted report`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel()
+        viewModel.writeDraft()
+        viewModel.onEvent(IssueReporterEvent.RequestDeviceInfo)
+        viewModel.onEvent(IssueReporterEvent.Send)
+        advance()
+
+        viewModel.onEvent(IssueReporterEvent.Reset)
+        advance()
+
+        assertEquals(IssueReporterUiState(), viewModel.state.value)
+    }
+
+    @Test
+    fun `reset clears a message still waiting`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel()
+        viewModel.onEvent(IssueReporterEvent.Send)
+        advance()
+
+        viewModel.onEvent(IssueReporterEvent.Reset)
+        advance()
+
+        assertTrue(viewModel.messages.value.isEmpty())
+    }
+
+    @Test
+    fun `reset asked for during a send is applied once the report lands`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val gate = CompletableDeferred<Unit>()
+            val repository = FakeIssueReporterRepository(sendGate = gate)
+            val viewModel = createViewModel(repository = repository)
+            viewModel.writeDraft()
+
+            viewModel.onEvent(IssueReporterEvent.Send)
+            viewModel.onEvent(IssueReporterEvent.Reset)
+            advance()
+            assertEquals(IssueSubmissionState.Sending, viewModel.state.value.submissionState)
+
+            gate.complete(Unit)
+            advance()
+            assertEquals(1, repository.sentReports.size)
+            assertEquals(IssueReporterUiState(), viewModel.state.value)
+        }
+
+    @Test
+    fun `reset asked for during a failing send also drops its message`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val gate = CompletableDeferred<Unit>()
+            val repository = FakeIssueReporterRepository(
+                sendGate = gate,
+                sendFailure = NetworkException(reason = NetworkException.Reason.SERVER),
+            )
+            val viewModel = createViewModel(repository = repository)
+            viewModel.writeDraft()
+
+            viewModel.onEvent(IssueReporterEvent.Send)
+            viewModel.onEvent(IssueReporterEvent.Reset)
+            gate.complete(Unit)
+            advance()
+
+            assertEquals(IssueReporterUiState(), viewModel.state.value)
+            assertTrue(viewModel.messages.value.isEmpty())
+        }
+
+    @Test
+    fun `submission states keep the screen_state labels`() {
+        assertEquals("success", IssueSubmissionState.Editing.trackingLabel)
+        assertEquals("loading", IssueSubmissionState.Sending.trackingLabel)
+        assertEquals("error", IssueSubmissionState.Failed.trackingLabel)
+        assertEquals("success", IssueSubmissionState.Submitted(issueUrl = ISSUE_URL).trackingLabel)
+    }
+
+    @Test
+    fun `a shown message leaves the queue`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel()
+        viewModel.onEvent(IssueReporterEvent.Send)
+        advance()
+
+        viewModel.messageShown(viewModel.onlyMessage().id)
+
+        assertNull(viewModel.messages.value.firstOrNull())
+    }
 
     private fun deviceInfo(): DeviceInfo = DeviceInfo(
         appVersionName = "1.0.0",
@@ -93,265 +394,27 @@ class IssueReporterViewModelTest {
         abis64Bit = listOf("arm64-v8a"),
     )
 
-    /** Only `captureDeviceInfo` is exercised here; sending goes through the use case. */
-    private fun fakeRepository(
-        capture: suspend () -> DeviceInfo = { deviceInfo() },
-    ): IssueReporterRepository = object : IssueReporterRepository {
-        override suspend fun captureDeviceInfo(): DeviceInfo = capture()
-        override suspend fun sendReport(
-            report: Report,
-            target: GithubTarget,
-            token: String?,
-        ): IssueReportResult = error("not used")
-    }
+    private inner class FakeIssueReporterRepository(
+        var sendFailure: Throwable? = null,
+        var captureFailure: Throwable? = null,
+        private val sendGate: CompletableDeferred<Unit>? = null,
+    ) : IssueReporterRepository {
+        val sentReports: MutableList<Report> = mutableListOf()
+        val sentTokens: MutableList<String?> = mutableListOf()
+        var captures: Int = 0
 
-    private val repository: IssueReporterRepository = fakeRepository()
-    private val telemetryRepository = FakeTelemetryRepository()
-
-    private inline fun <T> withMainDispatcher(
-        dispatcher: CoroutineDispatcher,
-        block: () -> T
-    ): T {
-        Dispatchers.setMain(dispatcher)
-        return runCatching { block() }
-            .also {
-                runCatching { Dispatchers.resetMain() }
-            }
-            .getOrThrow()
-    }
-
-    @Test
-    fun `invalid input shows error and does not call use case`() = runTest {
-        val dispatcher = StandardTestDispatcher(testScheduler)
-
-        withMainDispatcher(dispatcher) {
-            val useCase = mockk<SendIssueReportUseCase>()
-            val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
-            val viewModel = IssueReporterViewModel(
-                sendIssueReport = useCase,
-                githubTarget = githubTarget,
-                githubToken = "",
-                repository = repository,
-                telemetryRepository = telemetryRepository,
-                dispatchers = dispatchers,
-            )
-            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
-
-            viewModel.onEvent(IssueReporterEvent.Send)
-            advanceUntilIdle()
-
-            val snackbar = viewModel.uiState.value.snackbar!!
-            val msg = snackbar.message as UiTextHelper.StringResource
-            assertThat(msg.resourceId).isEqualTo(R.string.error_invalid_report)
-            confirmVerified(useCase)
+        override suspend fun captureDeviceInfo(): DeviceInfo {
+            captures++
+            captureFailure?.let { throw it }
+            return deviceInfo()
         }
-    }
 
-    @Test
-    fun `send report success updates state`() = runTest {
-        val dispatcher = StandardTestDispatcher(testScheduler)
-
-        withMainDispatcher(dispatcher) {
-            val useCase = mockk<SendIssueReportUseCase>()
-            val captured = slot<SendIssueReportUseCase.Params>()
-            every { useCase.invoke(capture(captured)) } returns flowOf(IssueReportResult.Success("url"))
-            val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
-            val viewModel = IssueReporterViewModel(
-                sendIssueReport = useCase,
-                githubTarget = githubTarget,
-                githubToken = "token",
-                repository = repository,
-                telemetryRepository = telemetryRepository,
-                dispatchers = dispatchers,
-            )
-            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
-
-            viewModel.onEvent(IssueReporterEvent.UpdateTitle("Bug"))
-            viewModel.onEvent(IssueReporterEvent.UpdateDescription("Desc"))
-            advanceUntilIdle()
-            viewModel.onEvent(IssueReporterEvent.Send)
-            advanceUntilIdle()
-
-            val state = viewModel.uiState.value
-            assertThat(state.screenState).isInstanceOf(ScreenState.Success::class.java)
-            assertThat(state.data?.submissionState)
-                .isEqualTo(IssueSubmissionState.Submitted(issueUrl = "url"))
-            // The author's text survives submission; clearing it belongs to dismissal.
-            assertThat(state.data?.title).isEqualTo("Bug")
-            assertThat(state.data?.description).isEqualTo("Desc")
-            // No message on success: the sheet's own confirmation is what says so.
-            assertThat(state.snackbar).isNull()
-            assertThat(captured.captured.token).isEqualTo("token")
-        }
-    }
-
-    @Test
-    fun `update events modify state`() = runTest {
-        val dispatcher = StandardTestDispatcher(testScheduler)
-
-        withMainDispatcher(dispatcher) {
-            val useCase = mockk<SendIssueReportUseCase>()
-            val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
-            val viewModel = IssueReporterViewModel(
-                sendIssueReport = useCase,
-                githubTarget = githubTarget,
-                githubToken = "",
-                repository = repository,
-                telemetryRepository = telemetryRepository,
-                dispatchers = dispatchers,
-            )
-            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
-
-            viewModel.onEvent(IssueReporterEvent.UpdateTitle("T"))
-            viewModel.onEvent(IssueReporterEvent.UpdateDescription("D"))
-            viewModel.onEvent(IssueReporterEvent.UpdateEmail("E"))
-            advanceUntilIdle()
-
-            val data = viewModel.uiState.value.data!!
-            assertThat(data.title).isEqualTo("T")
-            assertThat(data.description).isEqualTo("D")
-            assertThat(data.email).isEqualTo("E")
-        }
-    }
-
-    @Test
-    fun `device info failure shows error and skips use case`() = runTest {
-        val dispatcher = StandardTestDispatcher(testScheduler)
-
-        val failingRepository = fakeRepository { throw IllegalStateException("boom") }
-
-        withMainDispatcher(dispatcher) {
-            val useCase = mockk<SendIssueReportUseCase>()
-            val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
-            val viewModel = IssueReporterViewModel(
-                sendIssueReport = useCase,
-                githubTarget = githubTarget,
-                githubToken = "",
-                repository = failingRepository,
-                telemetryRepository = telemetryRepository,
-                dispatchers = dispatchers,
-            )
-            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
-
-            viewModel.onEvent(IssueReporterEvent.UpdateTitle("Bug"))
-            viewModel.onEvent(IssueReporterEvent.UpdateDescription("Desc"))
-            advanceUntilIdle()
-            viewModel.onEvent(IssueReporterEvent.Send)
-            advanceUntilIdle()
-
-            val state = viewModel.uiState.value
-            val snackbar = state.snackbar!!
-            assertThat(state.screenState).isInstanceOf(ScreenState.Error::class.java)
-            assertThat((snackbar.message as UiTextHelper.StringResource).resourceId)
-                .isEqualTo(R.string.snack_report_failed)
-            confirmVerified(useCase)
-        }
-    }
-
-    @ParameterizedTest
-    @MethodSource("errorCases")
-    fun `send report error maps message`(status: HttpStatusCode, expected: Int) = runTest {
-        val dispatcher = StandardTestDispatcher(testScheduler)
-
-        withMainDispatcher(dispatcher) {
-            val useCase = mockk<SendIssueReportUseCase>()
-            every { useCase.invoke(any()) } returns flowOf(IssueReportResult.Error(status, ""))
-
-            val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
-            val viewModel = IssueReporterViewModel(
-                sendIssueReport = useCase,
-                githubTarget = githubTarget,
-                githubToken = "tok",
-                repository = repository,
-                telemetryRepository = telemetryRepository,
-                dispatchers = dispatchers,
-            )
-            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
-
-            viewModel.onEvent(IssueReporterEvent.UpdateTitle("Bug"))
-            viewModel.onEvent(IssueReporterEvent.UpdateDescription("Desc"))
-            advanceUntilIdle()
-            viewModel.onEvent(IssueReporterEvent.Send)
-            advanceUntilIdle()
-
-            val state = viewModel.uiState.value
-            val snackbar = state.snackbar!!
-            assertThat(state.screenState).isInstanceOf(ScreenState.Error::class.java)
-            // Back to editing, with the report intact, so the author can fix it and try again.
-            assertThat(state.data?.submissionState).isEqualTo(IssueSubmissionState.Editing)
-            assertThat(state.data?.title).isEqualTo("Bug")
-            assertThat((snackbar.message as UiTextHelper.StringResource).resourceId).isEqualTo(
-                expected
-            )
-        }
-    }
-
-    @Test
-    fun `reset asked for during a send is applied once the report lands`() = runTest {
-        val dispatcher = StandardTestDispatcher(testScheduler)
-
-        withMainDispatcher(dispatcher) {
-            val useCase = mockk<SendIssueReportUseCase>()
-            every { useCase.invoke(any()) } returns flowOf(IssueReportResult.Success("url"))
-            val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
-            val viewModel = IssueReporterViewModel(
-                sendIssueReport = useCase,
-                githubTarget = githubTarget,
-                githubToken = "token",
-                repository = repository,
-                telemetryRepository = telemetryRepository,
-                dispatchers = dispatchers,
-            )
-            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
-
-            viewModel.onEvent(IssueReporterEvent.UpdateTitle("Bug"))
-            viewModel.onEvent(IssueReporterEvent.UpdateDescription("Desc"))
-            advanceUntilIdle()
-
-            // The sheet is dismissed on a report still in flight: the reset cannot run yet, and
-            // dropping it would leave the next opening showing this report's confirmation.
-            viewModel.onEvent(IssueReporterEvent.Send)
-            viewModel.onEvent(IssueReporterEvent.Reset)
-            advanceUntilIdle()
-
-            val data = viewModel.uiState.value.data
-            assertThat(data?.submissionState).isEqualTo(IssueSubmissionState.Editing)
-            assertThat(data?.title).isEmpty()
-        }
-    }
-
-    @Test
-    fun `reset clears the report after it has been submitted`() = runTest {
-        val dispatcher = StandardTestDispatcher(testScheduler)
-
-        withMainDispatcher(dispatcher) {
-            val useCase = mockk<SendIssueReportUseCase>()
-            every { useCase.invoke(any()) } returns flowOf(IssueReportResult.Success("url"))
-            val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
-            val viewModel = IssueReporterViewModel(
-                sendIssueReport = useCase,
-                githubTarget = githubTarget,
-                githubToken = "token",
-                repository = repository,
-                telemetryRepository = telemetryRepository,
-                dispatchers = dispatchers,
-            )
-            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
-
-            viewModel.onEvent(IssueReporterEvent.UpdateTitle("Bug"))
-            viewModel.onEvent(IssueReporterEvent.UpdateDescription("Desc"))
-            advanceUntilIdle()
-            viewModel.onEvent(IssueReporterEvent.Send)
-            advanceUntilIdle()
-            viewModel.onEvent(IssueReporterEvent.Reset)
-            advanceUntilIdle()
-
-            // What the next opening of the sheet starts from: an empty form, not a filed report.
-            val data = viewModel.uiState.value.data
-            assertThat(data?.submissionState).isEqualTo(IssueSubmissionState.Editing)
-            assertThat(data?.title).isEmpty()
-            assertThat(data?.description).isEmpty()
-            assertThat(viewModel.uiState.value.snackbar).isNull()
+        override suspend fun sendReport(report: Report, target: GithubTarget, token: String?): String {
+            sendGate?.await()
+            sendFailure?.let { throw it }
+            sentReports += report
+            sentTokens += token
+            return ISSUE_URL
         }
     }
 }

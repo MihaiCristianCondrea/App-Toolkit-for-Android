@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,20 +18,21 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.states
 
 import androidx.compose.runtime.Immutable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.models.DonationOption
 import kotlinx.collections.immutable.ImmutableMap
-import kotlinx.collections.immutable.persistentMapOf
 
+/**
+ * Everything the support page renders.
+ *
+ * @property donationOptions Every donation tier keyed by product id, including tiers Play did not
+ * return, which show as unavailable. Stays [Loadable.Loading] until the first product query
+ * answers, and is [Loadable.Empty] when Play returned no products.
+ * @property isBillingInProgress A purchase this page started is waiting for Play's result, so the
+ * donation buttons are disabled.
+ */
 @Immutable
-data class SupportScreenUiState(
-    val error: String? = null,
-    val donationOptions: ImmutableMap<String, DonationOptionUiState> = persistentMapOf(),
+data class SupportUiState(
+    val donationOptions: Loadable<ImmutableMap<String, DonationOption>> = Loadable.Loading,
     val isBillingInProgress: Boolean = false,
 )
-
-@Immutable
-data class DonationOptionUiState(
-    val productId: String,
-    val formattedPrice: String?,
-    val isEligible: Boolean,
-)
-

@@ -50,7 +50,6 @@ fun adsIntegrationModule(): Module = module {
         AdsSettingsViewModel(
             repository = get(),
             consentRepository = get(),
-            dispatchers = get(),
             telemetryRepository = get(),
         )
     }

@@ -30,6 +30,10 @@ import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
+/**
+ * Binds the advanced settings page. The developer options row follows the seasonal themes unlock,
+ * which the About screen's version easter egg records.
+ */
 val advancedSettingsModule: Module = module {
     single<SettingsSearchProvider>(named("advanced")) { advancedSettingsSearch }
     single<CacheRepository> {
@@ -43,9 +47,7 @@ val advancedSettingsModule: Module = module {
     viewModel {
         AdvancedSettingsViewModel(
             repository = get(),
-            dispatchers = get(),
             telemetryRepository = get(),
-            // The About screen's version easter egg unlocks the developer options.
             developerOptionsUnlocked = get<SeasonalThemeRepository>().state.map { it.unlocked },
         )
     }

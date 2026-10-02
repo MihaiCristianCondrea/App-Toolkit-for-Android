@@ -47,6 +47,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.Me
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.ThemeSettingsViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.contracts.ThemeSettingsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.states.ThemeSettingsUiState
 import org.koin.compose.viewmodel.koinViewModel
 
 /**
@@ -54,13 +55,13 @@ import org.koin.compose.viewmodel.koinViewModel
  * the weather effect in use, which opens a dialog to choose another.
  *
  * It shares the page's [ThemeSettingsViewModel], so it appears once the page has loaded and
- * disappears for anyone who has not found the easter egg.
+ * disappears for anyone who has not found the easter egg. A failed save shows through the page's
+ * messages.
  */
 @Composable
 internal fun WeatherEffectAction() {
     val viewModel: ThemeSettingsViewModel = koinViewModel()
-    val screenState by viewModel.uiState.collectAsStateWithLifecycle()
-    val state = screenState.data ?: return
+    val state: ThemeSettingsUiState by viewModel.state.collectAsStateWithLifecycle()
     if (!state.seasonalThemesUnlocked) return
     var open by rememberSaveable { mutableStateOf(false) }
 

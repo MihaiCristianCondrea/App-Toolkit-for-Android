@@ -17,29 +17,20 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal
 
-import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.HolidaySeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.WeatherEffect
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.isChristmasSeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.ScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.updateData
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.contracts.SeasonalThemeOverlayEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.states.SeasonalThemeOverlayUiState
 import java.time.LocalDate
 import java.time.ZoneId
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 /**
  * Decides what the app-wide seasonal overlay shows in one activity: snow or rain, and the holiday
@@ -58,36 +49,60 @@ import kotlinx.coroutines.launch
  * opens, so snow and rain on any palette need it too. Rain gives way to snow while the Christmas
  * palette is worn during the Christmas season, and comes back once the season is over.
  *
- * @param telemetryRepository Reports how the holiday greeting was answered.
+ * Failures are reported and never shown: the overlay has nothing to show them on, and each one
+ * only means a greeting or a theme change waits for the next activity.
+ *
+ * @param telemetryRepository Reports how the holiday greeting was answered, and every failure.
  * @param today Supplies the local date, so tests can pick the season.
  */
 class SeasonalThemeOverlayViewModel(
     private val seasonal: SeasonalThemeRepository,
-    theme: ThemePreferencesRepository,
-    private val telemetryRepository: TelemetryRepository,
+    private val theme: ThemePreferencesRepository,
+    telemetryRepository: TelemetryRepository,
     private val today: () -> LocalDate = { LocalDate.now(ZoneId.systemDefault()) },
-) : ScreenViewModel<SeasonalThemeOverlayUiState, SeasonalThemeOverlayEvent, ActionEvent>(
-    initialState = UiStateScreen(
-        screenState = ScreenState.Success(),
-        data = SeasonalThemeOverlayUiState(),
-    ),
+) : LoggedScreenViewModel<SeasonalThemeOverlayUiState, SeasonalThemeOverlayEvent>(
+    initialState = SeasonalThemeOverlayUiState(),
+    telemetryRepository = telemetryRepository,
+    screenName = "SeasonalThemeOverlay",
+    viewModelName = "SeasonalThemeOverlayViewModel",
 ) {
     private var greetingClaimed: Boolean = false
 
     init {
-        viewModelScope.launch {
-            val date = today()
-            runSuspendCatching { seasonal.restoreThemeAfterHoliday(date) }
-                .onFailure { throwable -> report(throwable, operation = "restoreThemeAfterHoliday") }
-            val due = runSuspendCatching { seasonal.pendingHolidayGreeting(date) }
-                .onFailure { throwable -> report(throwable, operation = "pendingHolidayGreeting") }
-                .getOrNull()
+        restoreThemeAfterHoliday(date = today())
+        observeWeather()
+    }
+
+    override fun handleEvent(event: SeasonalThemeOverlayEvent) {
+        when (event) {
+            is SeasonalThemeOverlayEvent.AnswerGreeting -> answerGreeting(event.useHolidayTheme)
+        }
+    }
+
+    /** Looks up the greeting once the restore is done, and also after it failed. */
+    private fun restoreThemeAfterHoliday(date: LocalDate) {
+        launchReport(
+            action = Actions.RESTORE_THEME_AFTER_HOLIDAY,
+            onError = { lookUpGreeting(date = date) },
+        ) {
+            seasonal.restoreThemeAfterHoliday(date)
+            lookUpGreeting(date = date)
+        }
+    }
+
+    /** Shows a due greeting unless another activity's overlay already shows one. */
+    private fun lookUpGreeting(date: LocalDate) {
+        launchReport(action = Actions.PENDING_HOLIDAY_GREETING) {
+            val due: HolidaySeason? = seasonal.pendingHolidayGreeting(date)
             if (due != null && HolidayGreetingPresence.claim()) {
                 greetingClaimed = true
-                update { it.copy(greeting = due) }
+                setState { copy(greeting = due) }
             }
         }
+    }
 
+    /** The Christmas theme brings its snow in season even to someone who picked rain. */
+    private fun observeWeather() {
         combine(seasonal.state, theme.preferencesState) { seasonalState, themeState ->
             val unlocked = seasonalState.unlocked
             val christmasOnScreen = !themeState.dynamicColors &&
@@ -96,48 +111,35 @@ class SeasonalThemeOverlayViewModel(
             val showSnowfall = when (seasonalState.weatherEffect) {
                 WeatherEffect.Automatic -> holidaySnow || (christmasOnScreen && unlocked)
                 WeatherEffect.Snow -> unlocked
-                // The Christmas theme brings its snow even to someone who picked rain.
                 WeatherEffect.Rain -> holidaySnow
                 WeatherEffect.Off -> false
             }
             val showRain = seasonalState.weatherEffect == WeatherEffect.Rain && unlocked && !holidaySnow
             Triple(showSnowfall, showRain, themeState.themeMode)
-        }.distinctUntilChanged().onEach { (showSnowfall, showRain, themeMode) ->
-            update {
-                it.copy(showSnowfall = showSnowfall, showRain = showRain, themeMode = themeMode)
+        }.distinctUntilChanged()
+            .collectReport(action = Actions.OBSERVE_WEATHER) { (showSnowfall, showRain, themeMode) ->
+                setState { copy(showSnowfall = showSnowfall, showRain = showRain, themeMode = themeMode) }
             }
-        }.launchIn(viewModelScope)
     }
 
-    override fun onEvent(event: SeasonalThemeOverlayEvent) {
-        when (event) {
-            is SeasonalThemeOverlayEvent.AnswerGreeting -> answerGreeting(event.useHolidayTheme)
-        }
-    }
-
+    /** Frees the greeting slot once the answer is saved, or failed to save. */
     private fun answerGreeting(useHolidayTheme: Boolean) {
-        val season: HolidaySeason = screenData?.greeting ?: return
-        viewModelScope.launch {
-            update { it.copy(greeting = null) }
-            telemetryRepository.logEvent(
-                holidayGreetingAnsweredEvent(season = season, useHolidayTheme = useHolidayTheme),
+        val season: HolidaySeason = currentState.greeting ?: return
+        setState { copy(greeting = null) }
+        telemetryRepository.logEvent(
+            holidayGreetingAnsweredEvent(season = season, useHolidayTheme = useHolidayTheme),
+        )
+        launchReport(
+            action = Actions.ANSWER_HOLIDAY_GREETING,
+            onError = { releaseGreeting() },
+        ) {
+            seasonal.answerHolidayGreeting(
+                season = season,
+                today = today(),
+                useHolidayTheme = useHolidayTheme,
             )
-            runSuspendCatching {
-                seasonal.answerHolidayGreeting(
-                    season = season,
-                    today = today(),
-                    useHolidayTheme = useHolidayTheme,
-                )
-            }.onFailure { throwable -> report(throwable, operation = "answerHolidayGreeting") }
             releaseGreeting()
         }
-    }
-
-    private fun report(throwable: Throwable, operation: String) {
-        telemetryRepository.recordNonFatal(
-            throwable = throwable,
-            attributes = mapOf("operation" to operation),
-        )
     }
 
     override fun onCleared() {
@@ -152,9 +154,10 @@ class SeasonalThemeOverlayViewModel(
         }
     }
 
-    private suspend fun update(transform: (SeasonalThemeOverlayUiState) -> SeasonalThemeOverlayUiState) {
-        updateStateThreadSafe {
-            screenState.updateData(newState = ScreenState.Success()) { transform(it) }
-        }
+    private object Actions {
+        const val RESTORE_THEME_AFTER_HOLIDAY: String = "restoreThemeAfterHoliday"
+        const val PENDING_HOLIDAY_GREETING: String = "pendingHolidayGreeting"
+        const val OBSERVE_WEATHER: String = "observeWeather"
+        const val ANSWER_HOLIDAY_GREETING: String = "answerHolidayGreeting"
     }
 }

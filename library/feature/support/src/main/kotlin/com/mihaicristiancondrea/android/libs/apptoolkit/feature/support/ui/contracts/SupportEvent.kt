@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,12 +17,22 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.contracts
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
+import android.app.Activity
 
-sealed interface SupportEvent : UiEvent {
-    data object SetUpBilling : SupportEvent
-
-    /** Queries the donation products again, as the error screen's Retry does. */
+/**
+ * What the user can ask the support page's ViewModel to do.
+ */
+sealed interface SupportEvent {
+    /** Queries the donation products, on start and from the failure state's retry. */
     data object QueryProductDetails : SupportEvent
-    data object DismissSnackbar : SupportEvent
+
+    /**
+     * Starts the purchase of the donation [productId].
+     *
+     * @property activity The activity Play's purchase sheet shows over, used only to launch it.
+     */
+    data class Donate(
+        val productId: String,
+        val activity: Activity,
+    ) : SupportEvent
 }

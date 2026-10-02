@@ -17,34 +17,11 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.navigation
 
-import androidx.activity.compose.LocalActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.compose.LifecycleResumeEffect
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.StartupScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.StartupViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.contracts.StartupAction
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.contracts.StartupEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.providers.StartupProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.OnboardingRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.StartupRoute
-import kotlinx.coroutines.launch
-import org.koin.compose.koinInject
-import org.koin.compose.viewmodel.koinViewModel
 
 /**
  * Registers [StartupRoute], the first-launch start screen (consent and runtime permissions),
@@ -61,62 +38,6 @@ import org.koin.compose.viewmodel.koinViewModel
  * It is also offered as a start screen in the developer options, to try it again.
  */
 fun ShellGraphBuilder.startupPage() {
-    pageIfAbsent<StartupRoute>(paneRole = PaneRole.None, title = null) { StartupPage() }
+    pageIfAbsent<StartupRoute>(paneRole = PaneRole.None, title = null) { StartupScreen() }
     startScreens(StartupRoute)
-}
-
-/**
- * Requests runtime permissions once, retaining that decision across rotation and
- * permission-dialog resumes. Requests consent on resume until resolved, allowing a failed round
- * trip to be retried without restarting loading. Continuing enters onboarding.
- */
-@Composable
-private fun StartupPage() {
-    val viewModel: StartupViewModel = koinViewModel()
-    val provider: StartupProvider = koinInject()
-    val consentRepository: ConsentRepository = koinInject()
-    val navigator = LocalShellNavigator.current
-    val activity = LocalActivity.current
-    val scope = rememberCoroutineScope()
-    val screenState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestMultiplePermissions(),
-    ) { }
-    var hasRequestedPermissions by rememberSaveable { mutableStateOf(false) }
-
-    LaunchedEffect(viewModel) {
-        viewModel.actionEvent.collect { action ->
-            when (action) {
-                StartupAction.RequestConsentUi -> {
-                    val host = activity?.let(::ConsentHost) ?: return@collect
-                    scope.launch {
-                        consentRepository.requestConsent(host = host).collect { result ->
-                            if (result !is DataState.Loading) {
-                                viewModel.onEvent(StartupEvent.ConsentFormLoaded)
-                            }
-                        }
-                    }
-                }
-
-                StartupAction.NavigateNext -> navigator.continueStart(OnboardingRoute)
-            }
-        }
-    }
-
-    LifecycleResumeEffect(Unit) {
-        if (!hasRequestedPermissions && provider.requiredPermissions.isNotEmpty()) {
-            hasRequestedPermissions = true
-            permissionLauncher.launch(provider.requiredPermissions)
-        }
-        if (viewModel.uiState.value.data?.consentFormLoaded != true) {
-            viewModel.onEvent(StartupEvent.RequestConsent)
-        }
-        onPauseOrDispose { }
-    }
-
-    StartupScreen(
-        screenState = screenState,
-        onContinueClick = { viewModel.onEvent(StartupEvent.Continue) },
-    )
 }

@@ -92,11 +92,10 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   `map`/`filter`/`sortedBy` on every frame of a roll: a few dozen small objects per frame for about
   a second. Reusing arrays would mean rewriting the projection math, which is not worth it without
   a profile showing a cost.
-- `library/feature/theme/.../ThemeSettingsScreen.kt:343-424` and
-  `library/feature/onboarding/.../ThemeOnboardingPageTab.kt:290-339` build new page lambdas and lists
-  on every recomposition.
-- `AboutViewModel` and `AdvancedSettingsViewModel` keep a `flowOn(io)` that their repositories no
-  longer need. Removing it leaves their `dispatchers` parameter unused, a constructor change.
+- `library/feature/onboarding/.../ThemeOnboardingPageTab.kt` builds new page lambdas and lists on
+  every recomposition. (`ThemeSettingsScreen` no longer does.)
+- `DefaultUsageAndDiagnosticsRepository` still wraps its DataStore calls in
+  `withContext(dispatchers.io)` and `flowOn(io)`, which DataStore does not need.
 
 ## Structure
 
@@ -111,7 +110,17 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   (`DisplaySettingsScreen.kt:222`, `ShellDisplayRows.kt:61-81`, `DeveloperOptionsScreen.kt:78`),
   and `:library:feature:developer` and `:library:feature:display` depend on all of `:library:shell`
   just for `shell.settings`.
-- `BillingRepository` exposes `ProductDetails`, so Play Billing types reach the support UI.
+- `BillingRepository` exposes `ProductDetails`. The support screen and state no longer see it, but
+  `SupportViewModel` keeps it privately to launch a donation. Billing should:
+  - throw from `queryProductDetails` on a non-OK response instead of emitting
+    `PurchaseResult.Failed`, which `SupportViewModel` now has to treat as the query's failure while
+    it loads;
+  - give `PurchaseResult.Failed` a typed reason instead of Play's English debug message, which the
+    page shows as it is;
+  - launch a donation by product id, so features never hold Play types;
+  - take a `BillingHost`, like `ReviewHost`, so `SupportEvent.Donate` no longer carries an
+    `Activity`.
+  `ProductDetails.primaryOfferToken` in `feature/support/.../ProductDetailsExtensions.kt` is unused.
 - `library/core/datastore/.../CommonDataStore.kt:141-142,186-190,309-314` and
   `DefaultFavoritesPreferencesDataSource` hold favorites and `componentsShowcaseUnlocked`, which only
   the sample uses.
@@ -124,19 +133,18 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   `feature/support/domain`, `integration/billing/domain`, `integration/consent/domain`,
   `integration/update/domain`, and in the sample `feature/apps/domain`, `feature/onboarding/domain`,
   `feature/tiles/domain` and `core/analytics/domain`.
-- A use case that only forwards one repository call: `SendIssueReportUseCase`, which also repeats
-  the repository's breadcrumb and dispatcher switch. (`GetChangelogUseCase` stays: it picks the
-  current version's section of the changelog.)
 - UI creating data sources directly: `TrackedTileService.kt:92` and `QuickSettingsTileRequests.kt:71`
   build `AndroidQuickSettingsTilesLocalDataSource`. `sample/feature/tiles/.../di/TilesModule.kt:68-72`
   writes into the raw `CommonDataStore`, bypassing `:sample:core:datastore`.
 - Modules import modules they never declare and rely on `api` leaking through. For example,
   `:library:feature:developer` declares only `:library:shell` but imports `core:ui`, `navigation`
   and `core:common`. `onboarding`, `faq`, `issuereporter`, `settings`, `startup`, `support` and
-  `shell` import `designsystem` without declaring it.
+  `shell` import `designsystem` without declaring it, and `feature/advanced` imports
+  `core:datastore` (`storageCall`, `SeasonalThemeRepository`) without declaring it.
 - Declared dependencies with no imports: `core:datastore` in `core/ui`, `feature/changelog`,
-  `feature/faq` and `feature/settings`; `core:network` in `feature/onboarding`, `feature/settings`
-  and `feature/permissions` (since their move to `core.ui.screen`); `core:common` in
+  `feature/faq` and `feature/settings`; `core:network` in `feature/onboarding`, `feature/settings`,
+  `feature/permissions`, `feature/advanced` and `feature/support` (since their move to
+  `core.ui.screen`); `core:common` in
   `integration/update` and `navigation`. The comment in `core/ui/build.gradle.kts:52-53` about
   `CommonDataStore` is stale.
 - `Errors.asUiText()` lives in `core/network/data/remote/extensions/ErrorExtensions.kt:30`, a data
@@ -153,16 +161,24 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
 - The theme picker exists twice, in `feature/onboarding/.../ThemeOnboardingPageTab.kt:104-201` and
   `feature/theme/.../ThemeSettingsScreen.kt:163-264`, and the copies have drifted (onboarding
   ignores `seasonalThemesUnlocked`).
-- The `persist` helper is still written out in `DisplaySettingsViewModel`, `ThemeSettingsViewModel`
-  and `OnboardingThemeViewModel`; it could move into `ScreenViewModel` once that has a way to
-  report.
+- Gaps in `core.ui.screen` that the migrations worked around locally:
+  - `MessageHost` has no `modifier`, so `FirebaseOnboardingPage` draws its own host, and no toast
+    mode, so the issue reporter sheet has a private `MessageToasts`.
+  - `ScreenViewModel` has no `clearMessages()`; the issue reporter's reset calls `messageShown` for
+    each queued message.
+  - There is no `Loadable<T>.valueOrNull()`, so screens unwrap `Loadable.Ready` with a `when` or a
+    cast.
+  - There is no in-coroutine form of `launchReport` to run two reported steps in order, so
+    `SeasonalThemeOverlayViewModel` starts its greeting lookup from both the block and `onError`.
+- `ThemeSettingsScreen` resolves its labels from `core.ui.R` while `:library:feature:theme` keeps
+  its own copies of the same strings, most of them unused.
 - `DefaultUsageAndDiagnosticsRepository.kt:49-64` and `UsageAndDiagnosticsSettings` duplicate
   `DefaultConsentRepository.readPersistedSettings` and `ConsentSettings`.
 - `sample/feature/apps/.../ui/views/AppActions.kt:36-74` and `AppActionLauncher.kt:77-174` both open
   and share apps, with different share text.
 - `GeneralTextField.kt` calls `OutlinedTextField` and `TextField` four times with about 20
   identical arguments.
-- Oversized composables: `ThemeSettingsScreen` (about 460 lines), `ListDetailLayout` (about 230),
+- Oversized composables: `ListDetailLayout` (about 230),
   `ShellBody` (about 215), `ShellChrome` (about 170).
 - Unused public API, kept because removing it breaks consumers: `AdsCoreManager.buildInfoProvider`.
   Remove it in a breaking release, with a migration guide entry.

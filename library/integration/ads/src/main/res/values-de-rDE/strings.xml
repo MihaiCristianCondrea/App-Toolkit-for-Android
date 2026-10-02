@@ -22,4 +22,6 @@
     <string name="personalized_ads">Personalisierte Werbung</string>
     <string name="summary_ads">Sehen Sie relevante Anzeigen. Verwalten Sie, welche Informationen verwendet werden, um personalisierte Anzeigen basierend auf Ihrer App-Nutzung anzuzeigen.</string>
     <string name="summary_ads_personalized_ads">Wählen Sie, wie Werbung für Sie personalisiert wird</string>
+    <string name="error_ads_settings_storage">Speicherfehler.</string>
+    <string name="error_ads_consent_failed">Fehler beim Laden der Einwilligungsinformationen</string>
 </resources>

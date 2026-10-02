@@ -17,31 +17,36 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.remote.datasource.ConsentRemoteDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.ConsentPreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.exceptions.ConsentException
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.remote.datasource.ConsentRemoteDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentSettings
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import java.io.IOException
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class DefaultConsentRepositoryTest {
@@ -52,80 +57,163 @@ class DefaultConsentRepositoryTest {
         val dispatcherExtension = UnconfinedDispatcherExtension()
     }
 
+    private fun createRepository(
+        remote: ConsentRemoteDataSource = CountingConsentRemoteDataSource(),
+        local: ConsentPreferencesDataSource = FakeConsentPreferencesDataSource(),
+        isDebugBuild: Boolean = false,
+        telemetryRepository: TelemetryRepository = mockk(relaxed = true),
+        requestScope: CoroutineScope = CoroutineScope(dispatcherExtension.testDispatcher),
+    ): DefaultConsentRepository = DefaultConsentRepository(
+        remote = remote,
+        local = local,
+        configProvider = FakeBuildInfoProvider(isDebugBuild = isDebugBuild),
+        telemetryRepository = telemetryRepository,
+        requestScope = requestScope,
+    )
+
+    /** Starts a consent request that records its outcome instead of failing the test scope. */
+    private fun TestScope.requestAsync(
+        repository: ConsentRepository,
+        host: ConsentHost = FakeConsentHost(),
+        showIfRequired: Boolean = true,
+    ): Deferred<Result<Unit>> = async {
+        runCatching { repository.requestConsent(host = host, showIfRequired = showIfRequired) }
+    }
+
     @Test
-    fun `requestConsent emits success when remote succeeds`() =
+    fun `requestConsent returns once the round trip succeeds`() = runTest(dispatcherExtension.testDispatcher) {
+        val remote = CountingConsentRemoteDataSource()
+        val repository = createRepository(remote = remote, requestScope = backgroundScope)
+
+        val request = requestAsync(repository)
+        runCurrent()
+        remote.complete()
+
+        assertTrue(request.await().isSuccess)
+        assertEquals(1, remote.requestCount)
+    }
+
+    @Test
+    fun `requestConsent throws the round trip's consent exception`() = runTest(dispatcherExtension.testDispatcher) {
+        val remote = CountingConsentRemoteDataSource()
+        val repository = createRepository(remote = remote, requestScope = backgroundScope)
+
+        val request = requestAsync(repository, showIfRequired = false)
+        runCurrent()
+        remote.fail(ConsentException(reason = ConsentException.Reason.FORM_FAILED, message = "form"))
+
+        val failure = assertIs<ConsentException>(request.await().exceptionOrNull())
+        assertEquals(ConsentException.Reason.FORM_FAILED, failure.reason)
+    }
+
+    @Test
+    fun `concurrent requests share a single UMP round trip`() = runTest(dispatcherExtension.testDispatcher) {
+        val remote = CountingConsentRemoteDataSource()
+        val repository = createRepository(remote = remote, requestScope = backgroundScope)
+
+        val first = requestAsync(repository)
+        val second = requestAsync(repository)
+        runCurrent()
+        remote.complete()
+
+        assertTrue(first.await().isSuccess)
+        assertTrue(second.await().isSuccess)
+        assertEquals(1, remote.requestCount)
+    }
+
+    @Test
+    fun `a failed shared round trip fails every caller`() = runTest(dispatcherExtension.testDispatcher) {
+        val remote = CountingConsentRemoteDataSource()
+        val repository = createRepository(remote = remote, requestScope = backgroundScope)
+
+        val first = requestAsync(repository)
+        val second = requestAsync(repository)
+        runCurrent()
+        remote.fail(ConsentException(reason = ConsentException.Reason.REQUEST_FAILED, message = "update"))
+
+        assertIs<ConsentException>(first.await().exceptionOrNull())
+        assertIs<ConsentException>(second.await().exceptionOrNull())
+        assertEquals(1, remote.requestCount)
+    }
+
+    @Test
+    fun `a request that forces the form does not attach to an implicit one`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val remote = object : ConsentRemoteDataSource {
-                override fun requestConsent(
-                    host: ConsentHost,
-                    showIfRequired: Boolean,
-                ): Flow<DataState<Unit, Errors.UseCase>> =
-                    flowOf(
-                        DataState.Loading(),
-                        DataState.Success(Unit),
-                    )
-            }
-            val repository = DefaultConsentRepository(
-                remote = remote,
-                local = FakeConsentPreferencesDataSource(),
-                configProvider = FakeBuildInfoProvider(isDebugBuild = false),
-                telemetryRepository = mockk(relaxed = true),
-            )
+            val remote = CountingConsentRemoteDataSource()
+            val repository = createRepository(remote = remote, requestScope = backgroundScope)
 
-            val states = repository.requestConsent(
-                host = FakeConsentHost(),
-                showIfRequired = true,
-            ).toList()
+            val implicit = requestAsync(repository)
+            val explicit = requestAsync(repository, showIfRequired = false)
+            runCurrent()
+            remote.complete()
 
-            assertEquals(
-                listOf<DataState<Unit, Errors.UseCase>>(
-                    DataState.Loading(),
-                    DataState.Success(Unit),
-                ),
-                states
-            )
+            implicit.await()
+            explicit.await()
+            assertEquals(2, remote.requestCount)
         }
 
     @Test
-    fun `requestConsent emits error when remote fails`() =
-        runTest(dispatcherExtension.testDispatcher) {
-            val remote = object : ConsentRemoteDataSource {
-                override fun requestConsent(
-                    host: ConsentHost,
-                    showIfRequired: Boolean,
-                ): Flow<DataState<Unit, Errors.UseCase>> =
-                    flowOf(
-                        DataState.Loading(),
-                        DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO),
-                    )
-            }
-            val repository = DefaultConsentRepository(
-                remote = remote,
-                local = FakeConsentPreferencesDataSource(),
-                configProvider = FakeBuildInfoProvider(isDebugBuild = false),
-                telemetryRepository = mockk(relaxed = true),
-            )
+    fun `a later request starts a fresh round trip`() = runTest(dispatcherExtension.testDispatcher) {
+        val remote = CountingConsentRemoteDataSource()
+        val repository = createRepository(remote = remote, requestScope = backgroundScope)
 
-            val states = repository.requestConsent(
-                host = FakeConsentHost(),
-                showIfRequired = false,
-            ).toList()
+        val first = requestAsync(repository)
+        runCurrent()
+        remote.complete()
+        first.await()
 
-            assertEquals(
-                listOf<DataState<Unit, Errors.UseCase>>(
-                    DataState.Loading(),
-                    DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO),
-                ),
-                states
-            )
+        val second = requestAsync(repository)
+        runCurrent()
+        remote.complete()
+        second.await()
+
+        assertEquals(2, remote.requestCount)
+    }
+
+    /**
+     * The second caller waits for the first round trip instead of overlapping it, then starts its
+     * own instead of taking the answer meant for the destroyed host.
+     */
+    @Test
+    fun `a request does not join one whose host was destroyed`() = runTest(dispatcherExtension.testDispatcher) {
+        val remote = CountingConsentRemoteDataSource()
+        val repository = createRepository(remote = remote, requestScope = backgroundScope)
+        val rotatedAway = FakeConsentHost()
+
+        val first = requestAsync(repository, host = rotatedAway)
+        runCurrent()
+        rotatedAway.destroyed = true
+        val second = requestAsync(repository)
+        runCurrent()
+        assertEquals(1, remote.requestCount)
+
+        remote.complete()
+        first.await()
+        runCurrent()
+        remote.complete()
+
+        assertTrue(second.await().isSuccess)
+        assertEquals(2, remote.requestCount)
+    }
+
+    @Test
+    fun `requests from a finishing host never reach UMP`() = runTest(dispatcherExtension.testDispatcher) {
+        val remote = CountingConsentRemoteDataSource()
+        val repository = createRepository(remote = remote, requestScope = backgroundScope)
+
+        val failure = assertFailsWith<ConsentException> {
+            repository.requestConsent(host = FakeConsentHost(isFinishing = true), showIfRequired = true)
         }
+
+        assertEquals(ConsentException.Reason.HOST_UNAVAILABLE, failure.reason)
+        assertEquals(0, remote.requestCount)
+    }
 
     @Test
     fun `applyInitialConsent reads persisted values and updates Firebase`() =
         runTest(dispatcherExtension.testDispatcher) {
             val telemetryRepository = mockk<TelemetryRepository>(relaxed = true)
-            val repository = DefaultConsentRepository(
-                remote = mockk(relaxed = true),
+            val repository = createRepository(
                 local = FakeConsentPreferencesDataSource(
                     usageAndDiagnostics = true,
                     analyticsConsent = false,
@@ -133,7 +221,6 @@ class DefaultConsentRepositoryTest {
                     adUserDataConsent = false,
                     adPersonalizationConsent = true,
                 ),
-                configProvider = FakeBuildInfoProvider(isDebugBuild = false),
                 telemetryRepository = telemetryRepository,
             )
 
@@ -153,24 +240,73 @@ class DefaultConsentRepositoryTest {
         }
 
     @Test
+    fun `applyInitialConsent grants unset choices in release builds`() = runTest(dispatcherExtension.testDispatcher) {
+        val telemetryRepository = mockk<TelemetryRepository>(relaxed = true)
+        val repository = createRepository(isDebugBuild = false, telemetryRepository = telemetryRepository)
+
+        repository.applyInitialConsent()
+
+        verify {
+            telemetryRepository.updateConsent(
+                analyticsGranted = true,
+                adStorageGranted = true,
+                adUserDataGranted = true,
+                adPersonalizationGranted = true,
+            )
+            telemetryRepository.setAnalyticsEnabled(true)
+        }
+    }
+
+    @Test
+    fun `applyInitialConsent refuses unset choices in debug builds`() = runTest(dispatcherExtension.testDispatcher) {
+        val telemetryRepository = mockk<TelemetryRepository>(relaxed = true)
+        val repository = createRepository(isDebugBuild = true, telemetryRepository = telemetryRepository)
+
+        repository.applyInitialConsent()
+
+        verify {
+            telemetryRepository.updateConsent(
+                analyticsGranted = false,
+                adStorageGranted = false,
+                adUserDataGranted = false,
+                adPersonalizationGranted = false,
+            )
+            telemetryRepository.setAnalyticsEnabled(false)
+            telemetryRepository.setCrashlyticsEnabled(false)
+            telemetryRepository.setPerformanceEnabled(false)
+        }
+    }
+
+    @Test
+    fun `applyInitialConsent throws a storage exception when the choices cannot be read`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val telemetryRepository = mockk<TelemetryRepository>(relaxed = true)
+            val repository = createRepository(
+                local = FakeConsentPreferencesDataSource(readFailure = IOException("disk")),
+                telemetryRepository = telemetryRepository,
+            )
+
+            val failure = assertFailsWith<StorageException> { repository.applyInitialConsent() }
+
+            assertEquals(StorageException.Reason.FAILED, failure.reason)
+            verify(exactly = 0) { telemetryRepository.updateConsent(any(), any(), any(), any()) }
+        }
+
+    @Test
     fun `applyConsentSettings updates Firebase with provided settings`() =
         runTest(dispatcherExtension.testDispatcher) {
             val telemetryRepository = mockk<TelemetryRepository>(relaxed = true)
-            val repository = DefaultConsentRepository(
-                remote = mockk(relaxed = true),
-                local = FakeConsentPreferencesDataSource(),
-                configProvider = FakeBuildInfoProvider(isDebugBuild = true),
-                telemetryRepository = telemetryRepository,
-            )
-            val settings = ConsentSettings(
-                usageAndDiagnostics = false,
-                analyticsConsent = false,
-                adStorageConsent = true,
-                adUserDataConsent = true,
-                adPersonalizationConsent = false,
-            )
+            val repository = createRepository(isDebugBuild = true, telemetryRepository = telemetryRepository)
 
-            repository.applyConsentSettings(settings)
+            repository.applyConsentSettings(
+                ConsentSettings(
+                    usageAndDiagnostics = false,
+                    analyticsConsent = false,
+                    adStorageConsent = true,
+                    adUserDataConsent = true,
+                    adPersonalizationConsent = false,
+                )
+            )
 
             verify {
                 telemetryRepository.updateConsent(
@@ -186,206 +322,20 @@ class DefaultConsentRepositoryTest {
         }
 
     @Test
-    fun `applyInitialConsent falls back to defaults for debug builds`() =
-        runTest(dispatcherExtension.testDispatcher) {
-            val telemetryRepository = mockk<TelemetryRepository>(relaxed = true)
-            val repository = DefaultConsentRepository(
-                remote = mockk(relaxed = true),
-                local = FakeConsentPreferencesDataSource(),
-                configProvider = FakeBuildInfoProvider(isDebugBuild = true),
-                telemetryRepository = telemetryRepository,
-            )
+    fun `applyInitialConsent logs a breadcrumb`() = runTest(dispatcherExtension.testDispatcher) {
+        val telemetryRepository = mockk<TelemetryRepository>(relaxed = true)
+        val repository = createRepository(telemetryRepository = telemetryRepository)
 
-            repository.applyInitialConsent()
+        repository.applyInitialConsent()
 
-            verify {
-                telemetryRepository.updateConsent(
-                    analyticsGranted = false,
-                    adStorageGranted = false,
-                    adUserDataGranted = false,
-                    adPersonalizationGranted = false,
-                )
-                telemetryRepository.setAnalyticsEnabled(false)
-                telemetryRepository.setCrashlyticsEnabled(false)
-                telemetryRepository.setPerformanceEnabled(false)
-            }
-        }
-
-    @Test
-    fun `concurrent requests share a single UMP round trip`() =
-        runTest(dispatcherExtension.testDispatcher) {
-            val remote = CountingConsentRemoteDataSource()
-            val repository = DefaultConsentRepository(
-                remote = remote,
-                local = FakeConsentPreferencesDataSource(),
-                configProvider = FakeBuildInfoProvider(isDebugBuild = false),
-                telemetryRepository = mockk(relaxed = true),
-                requestScope = backgroundScope,
-            )
-
-            val first = async {
-                repository.requestConsent(host = FakeConsentHost(), showIfRequired = true).toList()
-            }
-            val second = async {
-                repository.requestConsent(host = FakeConsentHost(), showIfRequired = true).toList()
-            }
-            runCurrent()
-            remote.complete(DataState.Success(Unit))
-
-            val expected = listOf<DataState<Unit, Errors.UseCase>>(
-                DataState.Loading(),
-                DataState.Success(Unit),
-            )
-            assertEquals(expected, first.await())
-            assertEquals(expected, second.await())
-            assertEquals(1, remote.requestCount)
-        }
-
-    @Test
-    fun `a request that forces the form does not attach to an implicit one`() =
-        runTest(dispatcherExtension.testDispatcher) {
-            val remote = CountingConsentRemoteDataSource()
-            val repository = DefaultConsentRepository(
-                remote = remote,
-                local = FakeConsentPreferencesDataSource(),
-                configProvider = FakeBuildInfoProvider(isDebugBuild = false),
-                telemetryRepository = mockk(relaxed = true),
-                requestScope = backgroundScope,
-            )
-
-            val implicit = async {
-                repository.requestConsent(host = FakeConsentHost(), showIfRequired = true).toList()
-            }
-            val explicit = async {
-                repository.requestConsent(host = FakeConsentHost(), showIfRequired = false).toList()
-            }
-            runCurrent()
-            remote.complete(DataState.Success(Unit))
-
-            implicit.await()
-            explicit.await()
-            assertEquals(2, remote.requestCount)
-        }
-
-    @Test
-    fun `a later request starts a fresh round trip`() =
-        runTest(dispatcherExtension.testDispatcher) {
-            val remote = CountingConsentRemoteDataSource()
-            val repository = DefaultConsentRepository(
-                remote = remote,
-                local = FakeConsentPreferencesDataSource(),
-                configProvider = FakeBuildInfoProvider(isDebugBuild = false),
-                telemetryRepository = mockk(relaxed = true),
-                requestScope = backgroundScope,
-            )
-
-            val first = async {
-                repository.requestConsent(host = FakeConsentHost(), showIfRequired = true).toList()
-            }
-            runCurrent()
-            remote.complete(DataState.Success(Unit))
-            first.await()
-
-            val second = async {
-                repository.requestConsent(host = FakeConsentHost(), showIfRequired = true).toList()
-            }
-            runCurrent()
-            remote.complete(DataState.Success(Unit))
-            second.await()
-
-            assertEquals(2, remote.requestCount)
-        }
-
-    @Test
-    fun `a request does not join one whose host was destroyed`() =
-        runTest(dispatcherExtension.testDispatcher) {
-            val remote = CountingConsentRemoteDataSource()
-            val repository = DefaultConsentRepository(
-                remote = remote,
-                local = FakeConsentPreferencesDataSource(),
-                configProvider = FakeBuildInfoProvider(isDebugBuild = false),
-                telemetryRepository = mockk(relaxed = true),
-                requestScope = backgroundScope,
-            )
-            val rotatedAway = FakeConsentHost()
-
-            val first = async {
-                repository.requestConsent(host = rotatedAway, showIfRequired = true).toList()
-            }
-            runCurrent()
-            rotatedAway.destroyed = true
-            val second = async {
-                repository.requestConsent(host = FakeConsentHost(), showIfRequired = true).toList()
-            }
-            runCurrent()
-            // The second caller waits for the first round trip instead of overlapping it, then
-            // starts its own instead of taking the answer meant for the destroyed host.
-            assertEquals(1, remote.requestCount)
-            remote.complete(DataState.Success(Unit))
-            first.await()
-            runCurrent()
-            remote.complete(DataState.Success(Unit))
-            second.await()
-
-            assertEquals(2, remote.requestCount)
-        }
-
-    @Test
-    fun `requests from a finishing host never reach UMP`() =
-        runTest(dispatcherExtension.testDispatcher) {
-            val remote = CountingConsentRemoteDataSource()
-            val repository = DefaultConsentRepository(
-                remote = remote,
-                local = FakeConsentPreferencesDataSource(),
-                configProvider = FakeBuildInfoProvider(isDebugBuild = false),
-                telemetryRepository = mockk(relaxed = true),
-                requestScope = backgroundScope,
-            )
-
-            val states = repository.requestConsent(
-                host = FakeConsentHost(isFinishing = true),
-                showIfRequired = true,
-            ).toList()
-
-            assertEquals(
-                listOf<DataState<Unit, Errors.UseCase>>(
-                    DataState.Loading(),
-                    DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO),
-                ),
-                states,
-            )
-            assertEquals(0, remote.requestCount)
-        }
-
-    /**
-     * Consent operations retain their diagnostic breadcrumbs at the repository boundary.
-     */
-    @Test
-    fun `applyInitialConsent logs a breadcrumb`() =
-        runTest(dispatcherExtension.testDispatcher) {
-            val telemetryRepository = mockk<TelemetryRepository>(relaxed = true)
-            val repository = DefaultConsentRepository(
-                remote = mockk(relaxed = true),
-                local = FakeConsentPreferencesDataSource(),
-                configProvider = FakeBuildInfoProvider(isDebugBuild = false),
-                telemetryRepository = telemetryRepository,
-            )
-
-            repository.applyInitialConsent()
-
-            verify { telemetryRepository.logBreadcrumb(message = "Applying initial consent") }
-        }
+        verify { telemetryRepository.logBreadcrumb(message = "Applying initial consent") }
+    }
 
     @Test
     fun `applyConsentSettings logs a breadcrumb with the applied values`() =
         runTest(dispatcherExtension.testDispatcher) {
             val telemetryRepository = mockk<TelemetryRepository>(relaxed = true)
-            val repository = DefaultConsentRepository(
-                remote = mockk(relaxed = true),
-                local = FakeConsentPreferencesDataSource(),
-                configProvider = FakeBuildInfoProvider(isDebugBuild = false),
-                telemetryRepository = telemetryRepository,
-            )
+            val repository = createRepository(telemetryRepository = telemetryRepository)
 
             repository.applyConsentSettings(
                 ConsentSettings(
@@ -413,26 +363,32 @@ class DefaultConsentRepositoryTest {
 }
 
 /**
- * A remote source whose round trip stays open until [complete] is called, so tests can observe how
- * many UMP requests the repositories actually starts while one is in flight.
+ * A remote source whose round trips stay open until [complete] or [fail] answers them, so tests
+ * can count how many UMP requests the repository starts while one is in flight.
  */
 private class CountingConsentRemoteDataSource : ConsentRemoteDataSource {
-    private val results = MutableSharedFlow<DataState<Unit, Errors.UseCase>>(replay = 1)
+    private val answers: MutableList<CompletableDeferred<Unit>> = mutableListOf()
 
-    var requestCount: Int = 0
-        private set
+    val requestCount: Int
+        get() = answers.size
 
-    override fun requestConsent(
+    override suspend fun requestConsent(
         host: ConsentHost,
         showIfRequired: Boolean,
-    ): Flow<DataState<Unit, Errors.UseCase>> = flow {
-        requestCount++
-        emit(DataState.Loading())
-        emit(results.first())
+    ) {
+        val answer = CompletableDeferred<Unit>()
+        answers += answer
+        answer.await()
     }
 
-    suspend fun complete(state: DataState<Unit, Errors.UseCase>) {
-        results.emit(state)
+    /** Answers every open round trip with success. */
+    fun complete() {
+        answers.forEach { answer -> answer.complete(Unit) }
+    }
+
+    /** Answers every open round trip with [failure]. */
+    fun fail(failure: ConsentException) {
+        answers.forEach { answer -> answer.completeExceptionally(failure) }
     }
 }
 
@@ -446,27 +402,27 @@ private class FakeConsentHost(isFinishing: Boolean = false) : ConsentHost {
     }
 }
 
+/** Stored choices, or [readFailure] thrown from every read when set. */
 private class FakeConsentPreferencesDataSource(
     private val usageAndDiagnostics: Boolean? = null,
     private val analyticsConsent: Boolean? = null,
     private val adStorageConsent: Boolean? = null,
     private val adUserDataConsent: Boolean? = null,
     private val adPersonalizationConsent: Boolean? = null,
+    private val readFailure: Throwable? = null,
 ) : ConsentPreferencesDataSource {
-    override fun usageAndDiagnostics(default: Boolean) =
-        flowOf(usageAndDiagnostics ?: default)
+    override fun usageAndDiagnostics(default: Boolean): Flow<Boolean> = read(usageAndDiagnostics ?: default)
 
-    override fun analyticsConsent(default: Boolean) =
-        flowOf(analyticsConsent ?: default)
+    override fun analyticsConsent(default: Boolean): Flow<Boolean> = read(analyticsConsent ?: default)
 
-    override fun adStorageConsent(default: Boolean) =
-        flowOf(adStorageConsent ?: default)
+    override fun adStorageConsent(default: Boolean): Flow<Boolean> = read(adStorageConsent ?: default)
 
-    override fun adUserDataConsent(default: Boolean) =
-        flowOf(adUserDataConsent ?: default)
+    override fun adUserDataConsent(default: Boolean): Flow<Boolean> = read(adUserDataConsent ?: default)
 
-    override fun adPersonalizationConsent(default: Boolean) =
-        flowOf(adPersonalizationConsent ?: default)
+    override fun adPersonalizationConsent(default: Boolean): Flow<Boolean> = read(adPersonalizationConsent ?: default)
+
+    private fun read(value: Boolean): Flow<Boolean> =
+        readFailure?.let { failure -> flow { throw failure } } ?: flowOf(value)
 }
 
 private class FakeBuildInfoProvider(

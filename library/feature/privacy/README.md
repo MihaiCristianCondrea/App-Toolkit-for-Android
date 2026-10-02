@@ -7,10 +7,12 @@ and the strings that name them.
 
 ## Owns
 
-- `PrivacyScreen`, the data-driven privacy and legal preference list.
+- `PrivacyScreen`, the data-driven privacy and legal preference list, which opens each row's link
+  or page, and `PrivacyScreenContent`, the stateless list with its loading and failure states.
 - Its rows in the settings search (`SettingsSearchProvider`): permissions, ads and usage and
   diagnostics, each opening its own page.
-- `PrivacyViewModel`, `PrivacyUiState`, `PrivacyItem`, and the click routing between them.
+- `PrivacyViewModel`, `PrivacyUiState` (whose `items` is a `Loadable`), `PrivacyEvent` and
+  `PrivacyItem`.
 - `PrivacySettingsProvider`, the host contract supplying the legal URLs.
 - `privacySettingsPage()`, the registration of `PrivacySettingsRoute` as a detail of the settings
   list.
@@ -43,15 +45,16 @@ and the strings that name them.
 
 ```mermaid
 flowchart TD
-    Screen[PrivacyScreen] --> VM[PrivacyViewModel]
+    Page[privacySettingsPage: PrivacySettingsRoute] --> Screen[PrivacyScreen]
+    Screen --> VM[PrivacyViewModel]
     VM --> Provider[PrivacySettingsProvider]
     VM --> Mapper[PrivacyMappers to PrivacyItem list]
-    List --> Click[PrivacyEvent.ItemClicked]
+    Mapper --> State[Loadable: Loading / Ready / Failed]
+    State --> Content[PrivacyScreenContent]
+    Content -->|row tapped| Click[PrivacyEvent.ItemClicked, reported]
     Click --> VM
-    VM --> Navigate[PrivacyAction.Navigate: key]
-    Navigate --> Pages[Permissions / ads / diagnostics pages]
-    VM --> OpenUrl[PrivacyAction.OpenUrl]
-    OpenUrl --> Browser[Device browser]
+    Content -->|link row| OpenUrl[onOpenUrl: device browser]
+    Content -->|page row| Navigate[navigator.navigate: Permissions / ads / diagnostics keys]
 ```
 
 ## Architectural decisions
@@ -59,18 +62,24 @@ flowchart TD
 - The list is data-driven: `PrivacyViewModel` maps the host-supplied `PrivacySettingsProvider` into
   an ordered list of `PrivacyItem` models with pre-computed card positions, so the composable stays
   declarative and the entries are testable without Compose.
-- Opening a URL needs a `Context`, and opening a page needs the shell's navigator, so both leave
-  the ViewModel as a `PrivacyAction` the screen performs: `OpenUrl` or `Navigate(key)`. The
-  permissions, ads and diagnostics rows carry their Toolkit keys, so the provider no longer supplies
-  a callback for each, and an app replaces one of those pages by registering its key.
+- The page is on `core.ui.screen`. `PrivacyUiState.items` is a `Loadable`: the rows are `Ready`
+  once built, and a provider that throws is `Loadable.Failed`, reported to telemetry, with a retry.
+  The provider only returns URLs, so the ViewModel takes no dispatcher.
+- Opening a URL needs a `Context`, and opening a page needs the shell's navigator, so
+  `PrivacyScreen` does both from callbacks of the stateless `PrivacyScreenContent`: `onOpenUrl`,
+  `onOpenPermissions`, `onOpenAds` and `onOpenUsageAndDiagnostics`. The ViewModel does not navigate.
+  A tap still reaches it as `PrivacyEvent.ItemClicked`, which it reports as the `openPrivacyItem`
+  operation the dashboards already count.
+- The permissions, ads and diagnostics rows open their Toolkit keys, so the provider supplies no
+  callback for each, and an app replaces one of those pages by registering its key.
 - Provider URLs keep interface defaults from `AppLinks`, so a host overrides only the links it
   actually changes.
 
 ## Public contracts
 
 - `PrivacySettingsProvider`, `PrivacyScreen`, `PrivacyViewModel`, `PrivacyUiState`,
-  `PrivacyItem`, `PrivacyItemAction`, `PrivacyEvent`, `PrivacyAction`, `privacySettingsPage()`
-  and `privacyModule`.
+  `PrivacyItem`, `PrivacyItemAction`, `PrivacyEvent`, `privacySettingsPage()` and `privacyModule`.
+  `PrivacyScreenContent` is internal.
 
 ## Internal implementations
 

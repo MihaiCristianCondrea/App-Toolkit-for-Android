@@ -22,4 +22,6 @@
     <string name="personalized_ads">パーソナライズ広告</string>
     <string name="summary_ads">あなたに関連する広告を表示します。アプリのアクティビティに基づいた広告のパーソナライズを管理できます。ここでパーソナライズをいつでも無効にすることができます。</string>
     <string name="summary_ads_personalized_ads">興味に基づいて広告をパーソナライズする方法を選択する</string>
+    <string name="error_ads_settings_storage">ストレージエラーが発生しました。</string>
+    <string name="error_ads_consent_failed">同意情報の読み込みに失敗しました</string>
 </resources>

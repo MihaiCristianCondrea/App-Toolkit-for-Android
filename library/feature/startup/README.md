@@ -10,9 +10,9 @@ shell, drawn before its tabs.
 
 - `startupPage()`, which registers `StartupRoute` as a page without a title and offers it as a
   start screen (`startScreens`).
-- `StartupScreen`, `StartupViewModel`, their state, event and action contracts, and the page glue
-  that performs their actions: the permission request, the consent form, and handing over with
-  `continueStart(OnboardingRoute)`.
+- `StartupScreen`, with `StartupScreenContent` in the same file, `StartupViewModel`, its state
+  (`StartupUiState`, `ConsentRequestStatus`) and `StartupEvent`. The screen asks for the
+  permissions and consent on resume and hands over with `continueStart(OnboardingRoute)`.
 - `StartupProvider`, the host extension contract: the runtime permissions to ask for.
 - `startupModule(startupProviderFactory)`, which binds the host's provider and the ViewModel.
 - The startup illustration and animation, and the welcome, agree, learn more and terms strings, in
@@ -30,11 +30,11 @@ shell, drawn before its tabs.
 ## Depends on
 
 - `:library:core:common`, `:library:core:network` and `:library:core:ui` for shared contracts,
-  data states and UI.
+  the consent result type and UI.
 - [`:library:navigation`](../../navigation/README.md) for the keys, the graph builder and the
   shell navigator.
-- [`:library:integration:consent`](../../integration/consent/README.md) for the consent form, run
-  through `ConsentHost(activity)`.
+- [`:library:integration:consent`](../../integration/consent/README.md) for `ConsentRepository`,
+  which the ViewModel asks with a `ConsentHost` built from the activity.
 - Lottie, for the welcome animation.
 - No other feature module.
 
@@ -62,12 +62,14 @@ The screen has no shell under it, so back leaves the app. Continuing replaces it
 
 ```mermaid
 flowchart TD
-    Host[ShellHost resolveStart] -->|startup flag set| Startup[StartupRoute page]
+    Host[ShellHost resolveStart] -->|startup flag set| Startup[StartupScreen]
     Host -->|otherwise| Tabs[Shell tabs]
     Startup --> Permissions[StartupProvider.requiredPermissions, once]
-    Startup --> ConsentForm[ConsentHost: consent form]
-    Startup -->|continue| Continue[continueStart: OnboardingRoute]
-    Continue --> Onboarding[":library:feature:onboarding"]
+    Startup -->|each resume: RequestConsent host| VM[StartupViewModel]
+    VM --> Consent[ConsentRepository: consent form]
+    Consent -->|answer, failure or 15 s timeout| Settled[ConsentRequestStatus.Settled]
+    Settled -->|Agree shown| Startup
+    Startup -->|Agree: continueStart| Onboarding[OnboardingRoute, feature:onboarding]
 ```
 
 ## Architectural decisions
@@ -78,20 +80,27 @@ flowchart TD
 - A start screen, not an activity: consent and permission requests go through
   `LocalActivity.current`.
 - Permissions are requested once per screen instance, saved across the resume the system dialog
-  causes, so a person who declined is not asked again on the spot. Consent is asked for on each
-  resume until it has resolved.
-- Each action reaches a single collector, the page glue in `StartupPages.kt`; the screen only
-  sends events.
+  causes, so a person who declined is not asked again on the spot. The screen owns this, since the
+  launcher is tied to the composition.
+- Consent is asked for on each resume until it has settled. The ViewModel runs the request with
+  the `ConsentHost` the screen sends, for that request only, and ignores later requests once
+  consent has settled.
+- Consent settles on any answer, on a failure, and after 15 seconds without one. This is the app's
+  first screen and Agree is its only way forward, so a round trip that never reports back must not
+  keep the person on a spinner. `screen_state` reports `loading` until then and `success` after.
+- Agree is a callback from the content; the screen navigates with `continueStart(OnboardingRoute)`.
 - On large screens the content keeps to a column at most 640dp wide, centred, as onboarding's
   pages do.
 
 ## Public contracts
 
-- `startupPage()`, `startupModule`, `StartupProvider`, and the presentation entry points.
+- `startupPage()`, `startupModule`, `StartupProvider`, and `StartupScreen()`.
+- `StartupViewModel(consentRepository, telemetryRepository)`, with `StartupUiState`,
+  `ConsentRequestStatus` and `StartupEvent`.
 
 ## Internal implementations
 
-- The page glue and the screen's layout.
+- `StartupScreenContent` and the welcome layout.
 
 ## Current risks
 
@@ -99,3 +108,5 @@ flowchart TD
   shows startup, and one that never clears its startup flag shows it on every launch.
 - Handing over by key means an app that registers `StartupRoute` without `OnboardingRoute` sends
   the person to a key the graph does not know.
+- `ConsentRepository` still returns `DataState`; the ViewModel waits for its first value that is
+  not `Loading`.

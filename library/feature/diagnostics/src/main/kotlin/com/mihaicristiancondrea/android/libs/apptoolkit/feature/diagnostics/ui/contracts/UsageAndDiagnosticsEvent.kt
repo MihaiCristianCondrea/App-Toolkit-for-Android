@@ -17,10 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.contracts
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
-
-sealed interface UsageAndDiagnosticsEvent : UiEvent {
-    data object Initialize : UsageAndDiagnosticsEvent
+/** What the usage and diagnostics screen and the onboarding page ask their ViewModel to do. */
+sealed interface UsageAndDiagnosticsEvent {
+    /** Follows the stored choices, on start and on retry. */
+    data object Load : UsageAndDiagnosticsEvent
     data class SetUsageAndDiagnostics(val enabled: Boolean) : UsageAndDiagnosticsEvent
     data class SetAnalyticsConsent(val granted: Boolean) : UsageAndDiagnosticsEvent
     data class SetAdStorageConsent(val granted: Boolean) : UsageAndDiagnosticsEvent

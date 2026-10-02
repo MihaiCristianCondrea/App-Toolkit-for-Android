@@ -22,4 +22,6 @@
     <string name="personalized_ads">Reclame personalizate</string>
     <string name="summary_ads">Vezi reclame relevante pentru tine. Gestionează informațiile utilizate pentru a afișa reclame personalizate bazate pe activitatea ta în aplicație. Poți dezactiva personalizarea aici oricând.</string>
     <string name="summary_ads_personalized_ads">Alege cum personalizăm reclamele pentru tine în funcție de interesele tale</string>
+    <string name="error_ads_settings_storage">Eroare de stocare.</string>
+    <string name="error_ads_consent_failed">Nu s-au putut încărca informațiile de consimțământ</string>
 </resources>

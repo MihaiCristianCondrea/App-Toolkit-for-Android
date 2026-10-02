@@ -17,13 +17,17 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.states
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
+import androidx.compose.runtime.Immutable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.models.DisplaySettings
 
-/** Persisted values rendered by the display settings screen. */
+/**
+ * What the display settings screen renders.
+ *
+ * @property settings The stored display preferences, followed while the screen is open. The
+ * shell's layout choices are not here: the screen reads them from the shell.
+ */
+@Immutable
 data class DisplaySettingsUiState(
-    val themeMode: String = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
-    val dynamicColors: Boolean = true,
-    val bouncyButtons: Boolean = true,
-    val showBottomBarLabels: Boolean = true,
-    val language: String = "",
+    val settings: Loadable<DisplaySettings> = Loadable.Loading,
 )

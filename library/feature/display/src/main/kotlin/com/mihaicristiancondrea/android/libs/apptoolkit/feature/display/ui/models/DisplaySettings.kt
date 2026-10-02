@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,9 +15,23 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.contracts
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.models
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
+import androidx.compose.runtime.Immutable
 
-sealed interface SupportAction : ActionEvent
-
+/**
+ * The stored display preferences the display settings screen shows.
+ *
+ * @property themeMode One of the `DataStoreNamesConstants.THEME_MODE_*` keys.
+ * @property language The stored language tag, empty when the app follows the system.
+ * @property startupRoute The route the app opens on, empty while none was chosen.
+ */
+@Immutable
+data class DisplaySettings(
+    val themeMode: String,
+    val dynamicColors: Boolean,
+    val bouncyButtons: Boolean,
+    val showBottomBarLabels: Boolean,
+    val language: String,
+    val startupRoute: String,
+)

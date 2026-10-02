@@ -17,39 +17,30 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui
 
-import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.repositories.UsageAndDiagnosticsRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.domain.models.UsageAndDiagnosticsSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.contracts.UsageAndDiagnosticsAction
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.contracts.UsageAndDiagnosticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.states.UsageAndDiagnosticsUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.asUiText
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.dismissSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setErrors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoading
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.updateState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.repositories.UsageAndDiagnosticsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.domain.models.UsageAndDiagnosticsSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.contracts.UsageAndDiagnosticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.states.UsageAndDiagnosticsUiState
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 
+/**
+ * Shows and stores the reporting and consent choices for the usage and diagnostics screen and the
+ * onboarding page. The repository applies each stored choice to the consent SDKs, so this only
+ * follows and writes them. A failed read replaces the choices with a retryable failure; a failed
+ * write keeps them on screen and shows an error message.
+ */
 class UsageAndDiagnosticsViewModel(
     private val repository: UsageAndDiagnosticsRepository,
-    private val dispatchers: DispatcherProvider,
     telemetryRepository: TelemetryRepository,
-) : LoggedScreenViewModel<UsageAndDiagnosticsUiState, UsageAndDiagnosticsEvent, UsageAndDiagnosticsAction>(
-    initialState = UiStateScreen(data = UsageAndDiagnosticsUiState()),
+) : LoggedScreenViewModel<UsageAndDiagnosticsUiState, UsageAndDiagnosticsEvent>(
+    initialState = UsageAndDiagnosticsUiState(),
     telemetryRepository = telemetryRepository,
     screenName = "UsageAndDiagnostics",
     viewModelName = "UsageAndDiagnosticsViewModel",
@@ -65,12 +56,13 @@ class UsageAndDiagnosticsViewModel(
     private var setConsentBundleJob: Job? = null
 
     init {
-        onEvent(event = UsageAndDiagnosticsEvent.Initialize)
+        onEvent(event = UsageAndDiagnosticsEvent.Load)
     }
 
     override fun handleEvent(event: UsageAndDiagnosticsEvent) {
         when (event) {
-            is UsageAndDiagnosticsEvent.Initialize -> observeConsents()
+            UsageAndDiagnosticsEvent.Load -> observeConsents()
+
             is UsageAndDiagnosticsEvent.SetUsageAndDiagnostics ->
                 setUsageAndDiagnosticsJob = persistChoice(
                     job = setUsageAndDiagnosticsJob,
@@ -106,14 +98,14 @@ class UsageAndDiagnosticsViewModel(
                     extra = mapOf(ExtraKeys.GRANTED to event.granted.toString()),
                 ) { repository.setAdPersonalizationConsent(event.granted) }
 
-            is UsageAndDiagnosticsEvent.AllowAllConsent -> applyConsentBundle(
+            UsageAndDiagnosticsEvent.AllowAllConsent -> applyConsentBundle(
                 analytics = true,
                 adStorage = true,
                 adUserData = true,
                 adPersonalization = true,
             )
 
-            is UsageAndDiagnosticsEvent.AllowEssentialConsent -> applyConsentBundle(
+            UsageAndDiagnosticsEvent.AllowEssentialConsent -> applyConsentBundle(
                 analytics = true,
                 adStorage = true,
                 adUserData = false,
@@ -122,56 +114,23 @@ class UsageAndDiagnosticsViewModel(
         }
     }
 
-    /**
-     * Observes persisted choices without applying them to SDKs; the repository applies each
-     * write.
-     */
+    /** Follows the stored choices. A retry restarts the collection that failed. */
     private fun observeConsents() {
-        startOperation(action = Actions.OBSERVE_CONSENTS)
-
         observeConsentsJob = observeConsentsJob.restart {
-            repository.observeSettings()
-                .flowOn(dispatchers.io)
-                .onStart {
-                    updateStateThreadSafe {
-                        screenState.dismissSnackbar()
-                        screenState.setLoading()
-                    }
-                }
-                .onEach { settings: UsageAndDiagnosticsSettings ->
-                    updateStateThreadSafe {
-                        val updated = UsageAndDiagnosticsUiState(
-                            usageAndDiagnostics = settings.usageAndDiagnostics,
-                            analyticsConsent = settings.analyticsConsent,
-                            adStorageConsent = settings.adStorageConsent,
-                            adUserDataConsent = settings.adUserDataConsent,
-                            adPersonalizationConsent = settings.adPersonalizationConsent,
-                        )
-
-                        screenState.setSuccess(data = updated)
-                    }
-                }
-                .catchReport(action = Actions.OBSERVE_CONSENTS) {
-                    updateStateThreadSafe {
-                        handleObservationError(
-                            message = Errors.Database.DATABASE_OPERATION_FAILED.asUiText()
-                        )
-                    }
-                }
-                .launchIn(viewModelScope)
+            setState { copy(settings = Loadable.Loading) }
+            repository.observeSettings().collectReport(
+                action = Actions.OBSERVE_CONSENTS,
+                onError = { error -> setState { copy(settings = error.toFailed(fallback = ErrorText)) } },
+            ) { settings ->
+                setState { copy(settings = Loadable.Ready(settings)) }
+            }
         }
     }
 
     /**
-     * Applies one of the dialog's whole-bundle answers.
-     *
-     * Reporting is turned on with any of them: a person choosing what to share has said they are
-     * sharing something, and leaving the master switch off would silently drop every choice they
-     * just made.
-     *
-     * The whole bundle is stored in one write, and the repository applies it to the consent SDKs
-     * after that write, so they are never handed a mix of the old and new answers, such as ad
-     * storage granted while analytics is still denied.
+     * Stores one of the dialog's whole-bundle answers in one write, after cancelling single-choice
+     * writes still in flight so they cannot overwrite it. Reporting is turned on with either
+     * answer, since leaving it off would drop every choice just made.
      */
     private fun applyConsentBundle(
         analytics: Boolean,
@@ -186,7 +145,6 @@ class UsageAndDiagnosticsViewModel(
             adUserDataConsent = adUserData,
             adPersonalizationConsent = adPersonalization,
         )
-        // Cancel pending single-choice writes so they cannot overwrite the replacement bundle.
         listOf(
             setUsageAndDiagnosticsJob,
             setAnalyticsConsentJob,
@@ -201,15 +159,16 @@ class UsageAndDiagnosticsViewModel(
                     ExtraKeys.ANALYTICS to analytics.toString(),
                     ExtraKeys.AD_PERSONALIZATION to adPersonalization.toString(),
                 ),
-                block = { repository.setAll(settings) },
-                onError = { updateStateThreadSafe { handleObservationError() } },
-            )
+                onError = { error -> showMessage(error.toErrorMessage(fallback = ErrorText)) },
+            ) {
+                repository.setAll(settings)
+            }
         }
     }
 
     /**
-     * Restarts [job] with a reported [write] of one choice, showing the error state if it fails.
-     * Each choice keeps its own job, so changing one never cancels another's write.
+     * Restarts [job] with a reported [write] of one choice. Each choice keeps its own job, so
+     * changing one never cancels another's write.
      */
     private fun persistChoice(
         job: Job?,
@@ -220,14 +179,9 @@ class UsageAndDiagnosticsViewModel(
         launchReport(
             action = action,
             extra = extra,
+            onError = { error -> showMessage(error.toErrorMessage(fallback = ErrorText)) },
             block = write,
-            onError = { updateStateThreadSafe { handleObservationError() } },
         )
-    }
-
-    private fun handleObservationError(message: UiTextHelper = UiTextHelper.StringResource(R.string.error_an_error_occurred)) {
-        screenState.setErrors(errors = listOf(UiSnackbar(message = message, isError = true)))
-        screenState.updateState(ScreenState.Error())
     }
 
     private object Actions {
@@ -245,5 +199,9 @@ class UsageAndDiagnosticsViewModel(
         const val GRANTED: String = "granted"
         const val ANALYTICS: String = "analytics"
         const val AD_PERSONALIZATION: String = "adPersonalization"
+    }
+
+    private companion object {
+        val ErrorText = UiTextHelper.StringResource(R.string.error_an_error_occurred)
     }
 }

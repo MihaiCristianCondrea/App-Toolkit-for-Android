@@ -24,7 +24,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.model
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItemKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.providers.PrivacySettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.states.PrivacyUiState
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 /**
  * Builds the ordered privacy entries from the host-supplied [PrivacySettingsProvider].
@@ -32,10 +33,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.state
  * Card positions are assigned after the list is assembled, so they always describe the grouping the
  * user actually sees.
  */
-internal fun PrivacySettingsProvider.toUiState(): PrivacyUiState =
-    PrivacyUiState(items = toPrivacyItems())
-
-private fun PrivacySettingsProvider.toPrivacyItems(): List<PrivacyItem> {
+internal fun PrivacySettingsProvider.toPrivacyItems(): ImmutableList<PrivacyItem> {
     val privacyPreferences = listOf(
         PrivacyItem.Preference(
             key = PrivacyItemKey.PRIVACY_POLICY,
@@ -90,7 +88,7 @@ private fun PrivacySettingsProvider.toPrivacyItems(): List<PrivacyItem> {
         ),
     ).assignPositions()
 
-    return buildList {
+    return buildList<PrivacyItem> {
         add(
             PrivacyItem.Header(
                 key = PrivacyItemKey.HEADER_PRIVACY,
@@ -105,7 +103,7 @@ private fun PrivacySettingsProvider.toPrivacyItems(): List<PrivacyItem> {
             )
         )
         addAll(legalPreferences)
-    }
+    }.toImmutableList()
 }
 
 private fun List<PrivacyItem.Preference>.assignPositions(): List<PrivacyItem.Preference> =

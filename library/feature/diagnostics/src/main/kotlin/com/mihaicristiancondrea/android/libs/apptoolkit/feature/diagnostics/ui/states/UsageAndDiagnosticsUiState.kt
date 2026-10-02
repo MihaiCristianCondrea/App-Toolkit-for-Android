@@ -18,21 +18,15 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.states
 
 import androidx.compose.runtime.Immutable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.domain.models.UsageAndDiagnosticsSettings
 
 /**
- * Represents the state for [com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.UsageAndDiagnosticsViewModel].
+ * What the usage and diagnostics screen and the onboarding page render.
  *
- * @param usageAndDiagnostics whether usage and diagnostics collection is enabled
- * @param analyticsConsent user consent for analytics
- * @param adStorageConsent user consent for ad storage
- * @param adUserDataConsent user consent for ad user data
- * @param adPersonalizationConsent user consent for ad personalization
+ * @property settings The stored reporting and consent choices, followed while the screen is open.
  */
 @Immutable
 data class UsageAndDiagnosticsUiState(
-    val usageAndDiagnostics: Boolean = false,
-    val analyticsConsent: Boolean = false,
-    val adStorageConsent: Boolean = false,
-    val adUserDataConsent: Boolean = false,
-    val adPersonalizationConsent: Boolean = false,
+    val settings: Loadable<UsageAndDiagnosticsSettings> = Loadable.Loading,
 )

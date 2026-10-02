@@ -17,96 +17,117 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui
 
-import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.contracts.ThemeSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.ScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.contracts.ThemeSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.states.ThemeSettingsUiState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 /**
  * Owns theme-settings preference observation and mutations.
  *
- * The state holds no data until both the stored preferences and the seasonal themes unlock arrive.
- * Starting from made-up defaults drew the page with the wrong palette selected for a frame, and
- * anything keyed to the first selection, such as scrolling the palette row to it, acted on that
- * wrong one. The unlock can add palettes to the row, so it is part of the same first state.
+ * [ThemeSettingsUiState.preferences] stays [Loadable.Loading] until both the stored preferences and
+ * the seasonal themes unlock arrive, because the palette rows scroll to the first selection they
+ * see and the unlock can add palettes to them. A failed write shows an error message.
  */
 class ThemeSettingsViewModel(
     private val preferences: ThemePreferencesRepository,
     private val seasonal: SeasonalThemeRepository,
-    private val telemetryRepository: TelemetryRepository,
-) : ScreenViewModel<ThemeSettingsUiState, ThemeSettingsEvent, ActionEvent>(
-    initialState = UiStateScreen(screenState = ScreenState.IsLoading(), data = null),
+    telemetryRepository: TelemetryRepository,
+) : LoggedScreenViewModel<ThemeSettingsUiState, ThemeSettingsEvent>(
+    initialState = ThemeSettingsUiState(),
+    telemetryRepository = telemetryRepository,
+    screenName = "Theme",
+    viewModelName = "ThemeSettingsViewModel",
 ) {
-    private var observationJob: Job? = null
+    private var observeJob: Job? = null
 
     init {
-        onEvent(ThemeSettingsEvent.Initialize)
+        onEvent(ThemeSettingsEvent.Load)
     }
 
-    override fun onEvent(event: ThemeSettingsEvent) {
+    override fun handleEvent(event: ThemeSettingsEvent) {
         when (event) {
-            ThemeSettingsEvent.Initialize -> observePreferences()
-            is ThemeSettingsEvent.SelectThemeMode -> selectThemeMode(event.mode)
-            is ThemeSettingsEvent.SetAmoledMode -> persist {
+            ThemeSettingsEvent.Load -> observePreferences()
+
+            is ThemeSettingsEvent.SelectThemeMode -> persist(setting = Settings.THEME_MODE) {
+                preferences.selectThemeMode(event.mode)
+            }
+
+            is ThemeSettingsEvent.SetAmoledMode -> persist(setting = Settings.AMOLED_MODE) {
                 preferences.setAmoledMode(event.enabled)
             }
-            is ThemeSettingsEvent.SetWeatherEffect -> persist {
+
+            is ThemeSettingsEvent.SetWeatherEffect -> persist(setting = Settings.WEATHER_EFFECT) {
                 seasonal.setWeatherEffect(event.effect)
             }
-            is ThemeSettingsEvent.SelectDynamicPalette -> persist {
+
+            is ThemeSettingsEvent.SelectDynamicPalette -> persist(setting = Settings.DYNAMIC_PALETTE) {
                 preferences.selectDynamicPalette(event.variant)
             }
-            is ThemeSettingsEvent.SelectStaticPalette -> persist {
+
+            is ThemeSettingsEvent.SelectStaticPalette -> persist(setting = Settings.STATIC_PALETTE) {
                 preferences.selectStaticPalette(event.id)
             }
         }
     }
 
     private fun observePreferences() {
-        observationJob?.cancel()
-        observationJob = combine(
-            preferences.preferencesState,
-            seasonal.state.map { it.unlocked to it.weatherEffect }.distinctUntilChanged(),
-        ) { preferencesState, (unlocked, weatherEffect) ->
-            ThemeSettingsUiState(
-                preferences = preferencesState,
-                seasonalThemesUnlocked = unlocked,
-                weatherEffect = weatherEffect,
-            )
-        }.onEach { state ->
-            updateStateThreadSafe { screenState.setSuccess(data = state) }
-        }.launchIn(viewModelScope)
-    }
-
-    private fun selectThemeMode(mode: String) = persist {
-        preferences.selectThemeMode(mode)
-    }
-
-    /** Runs a preference write, reporting a failure instead of dropping it silently. */
-    private fun persist(block: suspend () -> Unit) {
-        viewModelScope.launch {
-            runSuspendCatching { block() }
-                .onFailure { throwable ->
-                    telemetryRepository.recordNonFatal(
-                        throwable = throwable,
-                        attributes = mapOf("operation" to "persistThemeSetting"),
-                    )
-                }
+        setState { copy(preferences = Loadable.Loading) }
+        observeJob = observeJob.restart {
+            combine(
+                preferences.preferencesState,
+                seasonal.state.map { it.unlocked to it.weatherEffect }.distinctUntilChanged(),
+            ) { preferencesState, (unlocked, weatherEffect) ->
+                ThemeSettingsUiState(
+                    preferences = Loadable.Ready(preferencesState),
+                    seasonalThemesUnlocked = unlocked,
+                    weatherEffect = weatherEffect,
+                )
+            }.collectReport(
+                action = Actions.OBSERVE_PREFERENCES,
+                onError = { error -> setState { copy(preferences = error.toFailed()) } },
+            ) { loaded ->
+                setState { loaded }
+            }
         }
+    }
+
+    /**
+     * Saves one theme setting as the [Actions.PERSIST_THEME_SETTING] operation. Every write runs to
+     * completion, so a quick second tap never cancels the first.
+     */
+    private fun persist(setting: String, write: suspend () -> Unit) {
+        launchReport(
+            action = Actions.PERSIST_THEME_SETTING,
+            extra = mapOf(ExtraKeys.SETTING to setting),
+            onError = { error -> showMessage(error.toErrorMessage()) },
+            block = write,
+        )
+    }
+
+    private object Actions {
+        const val OBSERVE_PREFERENCES: String = "observePreferences"
+        const val PERSIST_THEME_SETTING: String = "persistThemeSetting"
+    }
+
+    private object ExtraKeys {
+        const val SETTING: String = "setting"
+    }
+
+    private object Settings {
+        const val THEME_MODE: String = "theme_mode"
+        const val AMOLED_MODE: String = "amoled_mode"
+        const val WEATHER_EFFECT: String = "weather_effect"
+        const val DYNAMIC_PALETTE: String = "dynamic_palette"
+        const val STATIC_PALETTE: String = "static_palette"
     }
 }

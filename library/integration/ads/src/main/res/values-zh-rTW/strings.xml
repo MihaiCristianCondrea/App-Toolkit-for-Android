@@ -22,4 +22,6 @@
     <string name="personalized_ads">個性化廣告</string>
     <string name="summary_ads">查看與您相關的廣告。管理應用程式活動所用資訊。</string>
     <string name="summary_ads_personalized_ads">選擇我們如何根據您的興趣個性化廣告</string>
+    <string name="error_ads_settings_storage">儲存空間錯誤。</string>
+    <string name="error_ads_consent_failed">無法載入同意資訊</string>
 </resources>

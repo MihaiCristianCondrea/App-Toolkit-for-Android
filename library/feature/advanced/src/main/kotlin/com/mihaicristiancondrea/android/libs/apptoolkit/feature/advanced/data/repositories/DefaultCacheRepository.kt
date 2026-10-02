@@ -20,19 +20,15 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.data.r
 import android.content.Context
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
+import kotlinx.coroutines.withContext
 import java.io.File
 
 /**
- * Clears application cache directories on the IO dispatcher. Directory lookup and deletion
- * failures become [DataState.Error]; cancellation propagates. Incomplete deletion is reported
- * here because callers cannot identify the failed directories.
+ * Clears application cache directories on the IO dispatcher, since the recursive delete blocks.
+ * An incomplete deletion is logged here because callers cannot identify the failed directories.
  *
  * @param deleteRecursively Returns `true` when the entire directory was deleted, or `false` for
  * an incomplete deletion.
@@ -44,45 +40,34 @@ class DefaultCacheRepository(
     private val dispatchers: DispatcherProvider = StandardDispatchers(),
 ) : CacheRepository {
 
-    override fun clearCache(): Flow<DataState<Unit, Errors.Database>> = flow {
+    override suspend fun clearCache() {
         telemetryRepository.logBreadcrumb(
             message = "Cache clear requested",
             attributes = mapOf("source" to "DefaultCacheRepository"),
         )
-        val state: DataState<Unit, Errors.Database> = runCatching {
-            val cacheDirs: List<File> = buildList {
-                add(context.cacheDir)
-                add(context.codeCacheDir)
-                context.externalCacheDir?.let(::add)
-            }.distinct()
+        val failed: List<File> = withContext(dispatchers.io) {
+            storageCall { deleteCacheDirectories() }
+        }
+        if (failed.isNotEmpty()) {
+            telemetryRepository.logBreadcrumb(
+                message = "Cache clear incomplete",
+                attributes = mapOf("failedDirectories" to failed.size.toString()),
+            )
+            throw StorageException(reason = StorageException.Reason.FAILED)
+        }
+    }
 
-            cacheDirs.filterNot(deleteRecursively)
-        }.fold(
-            onSuccess = { failed ->
-                if (failed.isEmpty()) {
-                    DataState.Success(Unit)
-                } else {
-                    telemetryRepository.logBreadcrumb(
-                        message = "Cache clear incomplete",
-                        attributes = mapOf("failedDirectories" to failed.size.toString()),
-                    )
-                    DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED)
-                }
-            },
-            onFailure = { throwable ->
-                if (throwable is CancellationException) throw throwable
-                telemetryRepository.recordNonFatal(throwable = throwable)
-                DataState.Error(
-                    error = if (throwable is SecurityException) {
-                        Errors.Database.DATABASE_CANT_OPEN
-                    } else {
-                        Errors.Database.DATABASE_OPERATION_FAILED
-                    },
-                )
-            },
-        )
-
-        emit(state)
-    }.flowOn(dispatchers.io)
+    /**
+     * Deletes each cache directory and returns the ones that were not fully deleted. A restricted
+     * profile can refuse access to a directory, which is reported as [StorageException.Reason.UNAVAILABLE].
+     */
+    private fun deleteCacheDirectories(): List<File> = try {
+        buildList {
+            add(context.cacheDir)
+            add(context.codeCacheDir)
+            context.externalCacheDir?.let(::add)
+        }.distinct().filterNot(deleteRecursively)
+    } catch (security: SecurityException) {
+        throw StorageException(reason = StorageException.Reason.UNAVAILABLE, cause = security)
+    }
 }
-

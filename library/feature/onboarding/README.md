@@ -10,13 +10,16 @@ screen of [`:library:feature:startup`](../startup/README.md).
 
 - `onboardingPages()`, which registers `OnboardingRoute` as a page without a title and offers it
   as a start screen (`startScreens`).
-- The onboarding screen, its ViewModel and state, event and action contracts, and the page glue
-  that performs their actions: the consent check and `enterShell()` on completion.
+- `OnboardingScreen`, with `OnboardingScreenContent` in the same file, `OnboardingViewModel`, its
+  state (`OnboardingUiState`, `OnboardingCompletion`) and `OnboardingEvent`. The screen asks for
+  consent on each resume and calls `enterShell()` once completion is saved.
 - `onboardingModule`, which binds `OnboardingThemeViewModel`.
-- `OnboardingThemeViewModel`, which keeps the theme onboarding page independent from DataStore and
-  exposes the shared immutable theme-preferences model.
+- `ThemeOnboardingPageTab`, `OnboardingThemeViewModel`, `OnboardingThemeUiState` and
+  `OnboardingThemeEvent`: the theme page reads the stored theme preferences and saves each choice
+  through `ThemePreferencesRepository`.
 - The `OnboardingProvider` host extension contract.
-- Onboarding repository, page models, controls, and the theme and finish pages.
+- `OnboardingRepository` and `DefaultOnboardingRepository`, page models, controls, and the default
+  and finish pages.
 
 ## Does not own
 
@@ -37,14 +40,15 @@ screen of [`:library:feature:startup`](../startup/README.md).
   for shared contracts, completion persistence, errors, and UI.
 - [`:library:navigation`](../../navigation/README.md) for the keys, the graph builder and the
   shell navigator.
-- [`:library:integration:consent`](../../integration/consent/README.md) for the consent form, run
-  through `ConsentHost(activity)`.
+- [`:library:integration:consent`](../../integration/consent/README.md) for `ConsentRepository`,
+  which the ViewModel asks with a `ConsentHost` built from the activity.
 - No other feature module.
 
 ## Used by
 
 - [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `onboardingPages()` from
-  `toolkitPages()`, and `:sample:feature:onboarding`, which provides the pages and permissions.
+  `toolkitPages()`, and `:sample:feature:onboarding`, which provides the pages and binds the
+  ViewModel.
 
 ## Using it
 
@@ -57,9 +61,23 @@ ShellHost(
 ```
 
 The startup screen hands over to onboarding. Neither has the shell under it, so back from either
-leaves the app. Finishing onboarding
-writes completion and enters the shell on its start tab; the next launch then resolves past
-`StartupRoute`.
+leaves the app. Finishing onboarding writes completion and enters the shell on its start tab; the
+next launch then resolves past `StartupRoute`.
+
+The host binds the provider, the repository and the onboarding ViewModel, as
+`:sample:feature:onboarding` does:
+
+```kotlin
+single<OnboardingProvider> { AppOnboardingProvider() }
+single<OnboardingRepository> { DefaultOnboardingRepository(dataStore = get()) }
+viewModel {
+    OnboardingViewModel(
+        onboardingRepository = get(),
+        consentRepository = get(),
+        telemetryRepository = get(),
+    )
+}
+```
 
 ## Flow chart
 
@@ -67,17 +85,19 @@ writes completion and enters the shell on its start tab; the next launch then re
 flowchart TD
     Host[ShellHost resolveStart] -->|startup flag set| Startup[StartupRoute page, feature:startup]
     Host -->|otherwise| Tabs[Shell tabs]
-    Startup -->|continueStart| Onboarding[OnboardingRoute page]
-    Onboarding --> ConsentCheck[Consent check on each resume]
-    Onboarding --> Pages[Provider-defined ordered pages]
-    Pages --> Theme[OnboardingThemeViewModel]
+    Startup -->|continueStart| Screen[OnboardingScreen]
+    Screen -->|each resume: RequestConsent host| VM[OnboardingViewModel]
+    VM --> Consent[ConsentRepository]
+    Screen --> Pages[Provider-defined ordered pages]
+    Pages --> Theme[ThemeOnboardingPageTab: OnboardingThemeViewModel]
     Theme --> ThemeRepo[ThemePreferencesRepository]
     Pages --> Diagnostics[FirebaseOnboardingPage from feature:diagnostics]
-    Onboarding --> VM[OnboardingViewModel]
-    VM -->|final confirmation| Completion[OnboardingRepository]
+    Screen -->|Skip or Finish: CompleteOnboarding| VM
+    VM --> Completion[OnboardingRepository]
     Completion --> Store[Preferences DataStore]
-    VM -->|completed| Enter[enterShell]
-    Enter --> Tabs
+    VM -->|completion Saved| Screen
+    VM -->|save failed| Message[Error message, completion Failed]
+    Screen -->|enterShell| Tabs
 ```
 
 ## Architectural decisions
@@ -88,25 +108,42 @@ flowchart TD
 - Startup and onboarding are separate modules: startup asks for permissions and consent, while
   onboarding owns page progress and completion. They meet only at `OnboardingRoute`, a key in
   `:library:navigation`.
-- Each action reaches a single collector, the page glue in `OnboardingPages.kt`; the screens only
-  send events.
+- `OnboardingScreen` owns the ViewModel, tracking, the consent host, navigation and the snackbar
+  host. `OnboardingScreenContent` renders the pager and reports through `OnboardingEvent`.
+- The ViewModel runs the consent request with the `ConsentHost` the screen sends, for that request
+  only, so it keeps no activity once the request ends. A resume restarts a request still waiting.
+- Completion is written only after Skip or Finish. The ViewModel marks it
+  `OnboardingCompletion.Saved` in state and the screen enters the shell when it sees that, so a
+  save that ends during a rotation still leaves. The stored flag, `isOnboardingCompleted`, is not
+  used to navigate: it is already true when onboarding is opened again from the developer options.
+- A failed completion write shows an error message and leaves the pages on screen, since finishing
+  is the only way out. `screen_state` reports `success` while the pages show, `loading` while
+  saving and `error` after a failed save.
+- The screen provides its snackbar host as `LocalPageSnackbarHostState`, so a page's own ViewModel
+  (the theme page, the diagnostics page) shows its messages above the footer.
 - The host supplies page/routing extension points, but toolkit state holders persist confirmed
   choices. Presentation callbacks do not write DataStore directly.
 - Theme and consent pages use their owning repositories/ViewModels so onboarding does not become a
-  second implementation of settings behavior.
+  second implementation of settings behavior. The theme page shows the Toolkit's default theme
+  until the stored preferences arrive, and a failed write shows an error message.
 - On large screens the pages keep to a column at most 640dp wide, centred, so a tablet shows them
   at a readable width instead of stretched across the window.
-- Completion is written only after the final confirmed action; navigation is emitted separately as
-  a one-off effect.
 
 ## Public contracts
 
-- `onboardingPages()`, `onboardingModule`, the onboarding provider contract, repository and
-  models, and the presentation entry points.
+- `onboardingPages()` and `onboardingModule`.
+- `OnboardingScreen()` and `ThemeOnboardingPageTab()`, `DefaultOnboardingPage`,
+  `FinishOnboardingPage`.
+- `OnboardingViewModel(onboardingRepository, consentRepository, telemetryRepository)`, which the
+  host binds, with `OnboardingUiState`, `OnboardingCompletion` and `OnboardingEvent`.
+- `OnboardingThemeViewModel`, `OnboardingThemeUiState` and `OnboardingThemeEvent`.
+- `OnboardingProvider`, `OnboardingPage`, `OnboardingRepository` and `DefaultOnboardingRepository`,
+  whose `setOnboardingCompleted()` throws `StorageException` when the write fails.
 
 ## Internal implementations
 
-- Page ordering/rendering, completion persistence adapter, and celebration state.
+- `OnboardingScreenContent` and `ThemeOnboardingPageTabContent`, page ordering and rendering, and
+  celebration state.
 
 ## Current risks
 
@@ -114,3 +151,4 @@ flowchart TD
   shows onboarding, and one that never clears its startup flag shows it on every launch.
 - The module coordinates consent, persisted theme state and the host's pages; changes require
   checking several module contracts together.
+- `ConsentRepository` still returns `DataState`; the ViewModel only waits for its flow to end.

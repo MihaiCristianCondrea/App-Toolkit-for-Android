@@ -22,4 +22,6 @@
     <string name="personalized_ads">โฆษณาเฉพาะบุคคล</string>
     <string name="summary_ads">ดูโฆษณาที่ตรงกับความสนใจของคุณ จัดการข้อมูลสำหรับโฆษณาที่ปรับแต่งได้</string>
     <string name="summary_ads_personalized_ads">เลือกวิธีที่เราใช้ข้อมูลส่วนตัวในการปรับแต่งโฆษณา</string>
+    <string name="error_ads_settings_storage">เกิดข้อผิดพลาดในการจัดเก็บข้อมูล</string>
+    <string name="error_ads_consent_failed">ไม่สามารถโหลดข้อมูลความยินยอมได้</string>
 </resources>

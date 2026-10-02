@@ -17,6 +17,15 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.states
 
+import androidx.compose.runtime.Immutable
+
+/**
+ * Everything the startup screen renders.
+ *
+ * @property consent Where the consent request stands. The welcome page and its Agree button show
+ * once it is [ConsentRequestStatus.Settled].
+ */
+@Immutable
 data class StartupUiState(
-    val consentFormLoaded: Boolean = false
+    val consent: ConsentRequestStatus = ConsentRequestStatus.Pending,
 )

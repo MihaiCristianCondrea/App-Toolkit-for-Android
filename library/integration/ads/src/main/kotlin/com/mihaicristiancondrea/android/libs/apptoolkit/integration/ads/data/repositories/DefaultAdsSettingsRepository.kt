@@ -17,65 +17,63 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.repositories
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
-import kotlinx.coroutines.CancellationException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.toStorageException
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 
 /**
- * Reads and writes persisted ad settings using the store-owned default shared by the manager
- * and ad views. Observation uses the cold preference flow so read failures and cancellation
- * reach the caller. Writes return errors as [DataState] values while preserving cancellation.
+ * Reads and writes the ad preferences in [CommonDataStore], with the store's own default, which
+ * the ads manager and the ad views share. It reads the cold preference flows rather than the
+ * eagerly started `adsEnabledFlow`, so a read failure reaches the caller as a [StorageException].
  */
 class DefaultAdsSettingsRepository(
     private val dataStore: CommonDataStore,
     private val telemetryRepository: TelemetryRepository,
 ) : AdsSettingsRepository {
 
-    override val defaultAdsEnabled: Boolean = dataStore.defaultAdsEnabled
-
     override fun observeAdsEnabled(): Flow<Boolean> =
-        dataStore.ads(default = defaultAdsEnabled)
+        dataStore.ads(default = dataStore.defaultAdsEnabled)
             .onStart {
                 telemetryRepository.logBreadcrumb(
                     message = "Ads settings observe",
-                    attributes = mapOf("defaultAdsEnabled" to defaultAdsEnabled.toString()),
+                    attributes = mapOf("defaultAdsEnabled" to dataStore.defaultAdsEnabled.toString()),
                 )
             }
+            .asStorageFlow()
 
-    override fun observeReduceAds(): Flow<Boolean> = dataStore.reduceAds
+    override fun observeReduceAds(): Flow<Boolean> = dataStore.reduceAds.asStorageFlow()
 
-    override suspend fun setAdsEnabled(enabled: Boolean): DataState<Unit, Errors.Database> =
-        persistPreference(
-            breadcrumb = "Ads settings updated",
-            enabled = enabled,
-        ) { dataStore.saveAds(isChecked = enabled) }
+    override suspend fun setAdsEnabled(enabled: Boolean) =
+        persistPreference(breadcrumb = "Ads settings updated", enabled = enabled) {
+            dataStore.saveAds(isChecked = enabled)
+        }
 
-    override suspend fun setReduceAds(enabled: Boolean): DataState<Unit, Errors.Database> =
-        persistPreference(
-            breadcrumb = "Reduce ads setting updated",
-            enabled = enabled,
-        ) { dataStore.saveReduceAds(isChecked = enabled) }
+    override suspend fun setReduceAds(enabled: Boolean) =
+        persistPreference(breadcrumb = "Reduce ads setting updated", enabled = enabled) {
+            dataStore.saveReduceAds(isChecked = enabled)
+        }
 
     private suspend fun persistPreference(
         breadcrumb: String,
         enabled: Boolean,
         save: suspend () -> Unit,
-    ): DataState<Unit, Errors.Database> {
+    ) {
         telemetryRepository.logBreadcrumb(
             message = breadcrumb,
             attributes = mapOf("enabled" to enabled.toString()),
         )
-        return runCatching { save() }.fold(
-            onSuccess = { DataState.Success(Unit) },
-            onFailure = { throwable ->
-                if (throwable is CancellationException) throw throwable
-                telemetryRepository.recordNonFatal(throwable = throwable)
-                DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED)
-            },
-        )
+        storageCall { save() }
     }
+
+    /**
+     * Rethrows a storage failure of this flow as a [StorageException], the flow counterpart of
+     * [storageCall]. Cancellation and other failures pass through unchanged.
+     */
+    private fun Flow<Boolean>.asStorageFlow(): Flow<Boolean> =
+        catch { failure -> throw failure.toStorageException() ?: failure }
 }

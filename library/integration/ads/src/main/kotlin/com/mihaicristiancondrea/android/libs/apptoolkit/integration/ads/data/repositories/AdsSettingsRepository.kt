@@ -17,20 +17,26 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Repository interface for managing advertisement settings.
+ * The stored ad preferences: whether ads show at all, and whether App Open ads are reduced.
  *
- * This interface defines the contract for accessing and modifying
- * user preferences related to advertisements within the application.
+ * Reads fail with a [StorageException] from the flow, and writes throw one, when the preferences
+ * cannot be read or written. Every function is safe to call from the main thread.
  */
 interface AdsSettingsRepository {
-    val defaultAdsEnabled: Boolean
+
+    /** Whether ads show, with the store's default until the person changes it. */
     fun observeAdsEnabled(): Flow<Boolean>
+
+    /** Whether App Open ads are suppressed. */
     fun observeReduceAds(): Flow<Boolean>
-    suspend fun setAdsEnabled(enabled: Boolean): DataState<Unit, Errors.Database>
-    suspend fun setReduceAds(enabled: Boolean): DataState<Unit, Errors.Database>
+
+    /** @throws StorageException when the preference cannot be written. */
+    suspend fun setAdsEnabled(enabled: Boolean)
+
+    /** @throws StorageException when the preference cannot be written. */
+    suspend fun setReduceAds(enabled: Boolean)
 }

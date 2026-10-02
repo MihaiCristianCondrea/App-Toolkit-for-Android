@@ -24,5 +24,7 @@ import kotlinx.coroutines.flow.Flow
  */
 interface OnboardingRepository {
     fun observeOnboardingCompletion(): Flow<Boolean>
+
+    /** Stores that onboarding is done. A failed write throws `StorageException`. */
     suspend fun setOnboardingCompleted()
 }

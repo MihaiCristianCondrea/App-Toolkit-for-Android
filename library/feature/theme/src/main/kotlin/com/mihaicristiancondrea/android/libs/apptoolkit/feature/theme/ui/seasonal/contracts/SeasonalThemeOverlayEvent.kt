@@ -17,9 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.contracts
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
-
-sealed interface SeasonalThemeOverlayEvent : UiEvent {
+/**
+ * What the person can ask the seasonal overlay's ViewModel to do.
+ */
+sealed interface SeasonalThemeOverlayEvent {
     /** The holiday greeting was closed, with [useHolidayTheme] as the checkbox stood. */
     data class AnswerGreeting(val useHolidayTheme: Boolean) : SeasonalThemeOverlayEvent
 }

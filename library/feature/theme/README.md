@@ -1,32 +1,96 @@
-# :library:feature:theme
+# `:library:feature:theme` Logic Graph
 
-## Responsibility and consumers
+## Purpose
 
-Owns ThemeSettingsScreen, ThemeSettingsViewModel, themeSettingsModule, theme-selection presentation,
-the seasonal themes (holiday greeting, holiday snowfall, the weather effect, and what the easter
-egg unlocks), and
-localized resources. `themeSettingsPage()` registers the screen for `ThemeSettingsRoute`, and the
-main toolkit module calls it and assembles DI. The display settings' dark theme row opens it by key.
-The page is `PaneRole.None`: display is itself a detail beside the settings list, and a detail
-opened from a detail would replace it instead of stacking on it. It also registers its theme mode, AMOLED, wallpaper colours and palette rows with the settings search, as a `SettingsSearchProvider`.
+Owns the theme settings page and the seasonal themes: the color palette, theme mode and AMOLED
+choices, the holiday greeting, the holiday snowfall, the weather effect, and what the About
+screen's easter egg unlocks.
 
-## Dependencies and flow
+## Owns
 
-Depends on core common, DataStore, UI, and design system. The ViewModels consume the shared
-`ThemePreferencesRepository` and `SeasonalThemeRepository` directly. `ThemeSettingsViewModel`
-emits nothing until both the stored preferences and the easter egg unlock have loaded, so the
-palette rows open positioned on the stored selection rather than on a placeholder. Core DataStore persists values
-and owns the holiday rules; the design system renders the application theme, the snow and the rain. The
-same preferences also serve onboarding appearance selection.
+- `ThemeSettingsScreen`, `ThemeSettingsViewModel`, `ThemeSettingsUiState` (whose `preferences` is a
+  `Loadable`) and `ThemeSettingsEvent`.
+- `ThemeSettingsScreenContent`, the stateless page with its loading and failure states, in
+  `ThemeSettingsScreen.kt`.
+- `WeatherEffectAction`, the weather effect button in the page's app bar, and its dialog.
+- `themeSettingsPage()`, the registration of `ThemeSettingsRoute`. The display settings' dark theme
+  row opens it by key. The page is `PaneRole.None`: display is itself a detail beside the settings
+  list, and a detail opened from a detail would replace it instead of stacking on it.
+- Its rows in the settings search (`SettingsSearchProvider`): theme mode, AMOLED, wallpaper colors
+  and palette.
+- `SeasonalThemeManager`, `SeasonalThemeOverlay`, `SeasonalThemeOverlayViewModel`, its state and
+  event, and `HolidayGreetingDialog`.
+- `themeSettingsModule`, which registers the built-in qualified palettes and resolves the host's
+  default palette override, falling back to blue.
+- Localized resources for the page and the seasonal themes.
 
-## Contracts and boundaries
+## Does not own
 
-Public entry points include ThemeSettingsScreen, `themeSettingsPage()`, ThemeSettingsViewModel,
-its state/events, and themeSettingsModule. The DI module registers the built-in qualified palettes and resolves the
-host's default palette override, falling back to blue. Palette definitions remain in the design system.
-The purple and orange palettes are available through the `purple` and `orange` static IDs and the
-`purplePalette` and `orangePalette` qualifiers. Android and Halloween have qualifiers too.
-No other feature module is a dependency. Only ui and di layers are needed; there is no duplicate data layer or pass-through domain layer.
+- The stored appearance and the holiday rules, owned by
+  [`:library:core:datastore`](../../core/datastore/README.md) through `ThemePreferencesRepository`
+  and `SeasonalThemeRepository`.
+- Palette definitions, the application theme, the snow and the rain, owned by
+  `:library:core:designsystem`.
+- The easter egg gesture, owned by [`:library:feature:about`](../about/README.md), which records
+  the unlock.
+- The onboarding appearance step, owned by `:library:feature:onboarding`, which uses the same
+  preferences.
+
+## Depends on
+
+- `:library:core:common`, `:library:core:datastore`, `:library:core:ui` and
+  `:library:core:designsystem`.
+- No other feature module. Only the ui and di layers are needed; there is no duplicate data layer
+  or pass-through domain layer.
+
+## Used by
+
+- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `themeSettingsPage()` from the
+  Toolkit graph and assembles `themeSettingsModule`.
+- `:sample:app`, which installs `SeasonalThemeManager`.
+
+## Flow chart
+
+```mermaid
+flowchart TD
+    Page[themeSettingsPage: ThemeSettingsRoute] --> Screen[ThemeSettingsScreen]
+    Page --> Action[WeatherEffectAction]
+    Screen --> Content[ThemeSettingsScreenContent]
+    Screen -->|tap, logged to GA4| VM[ThemeSettingsViewModel]
+    Action --> VM
+    VM --> Prefs[ThemePreferencesRepository]
+    VM --> Seasonal[SeasonalThemeRepository]
+    VM -->|failed write| Message[MessageHost snackbar]
+    Manager[SeasonalThemeManager] --> Overlay[SeasonalThemeOverlay per activity]
+    Overlay --> OverlayVM[SeasonalThemeOverlayViewModel]
+    OverlayVM --> Seasonal
+    OverlayVM --> Prefs
+    OverlayVM --> Greeting[HolidayGreetingDialog]
+```
+
+## Architectural decisions
+
+- **On `core.ui.screen`.** Both ViewModels extend `LoggedScreenViewModel`, so every operation logs
+  its start and every failure is reported with its action name. `ThemeSettingsViewModel` reports as
+  screen `Theme`; a write is the `persistThemeSetting` action, with the setting in its `setting`
+  parameter.
+- **The page opens on the stored selection.** `ThemeSettingsUiState.preferences` stays
+  `Loadable.Loading` until both the stored preferences and the easter egg unlock have arrived, and
+  becomes `Ready` in the same update that sets them. The palette rows scroll to the first selection
+  they see, and the unlock can add palettes to them, so a placeholder would scroll to the wrong one.
+- **Failures are shown.** A failed read shows the failure screen with Retry, which sends
+  `ThemeSettingsEvent.Load`. A failed write shows an error snackbar and leaves the page as it was.
+- **The screen logs, the content renders.** Each tap is a named callback of
+  `ThemeSettingsScreenContent`. `ThemeSettingsScreen` logs its GA4 event (`theme_tab_select`,
+  `theme_palette_select`, `settings_theme_switch`, `theme_toggle_amoled`,
+  `theme_open_display_settings`) and then sends the event, so the content needs no telemetry or
+  `Context` and renders in a preview.
+- **No per-frame allocation in the content.** The theme mode and tab lists are constants, and the
+  palette pager's pages are remembered with the values they show as keys.
+- **The overlay shows no failures.** It has nothing to show them on, and a failure only means a
+  greeting or a restore waits for the next activity, so `SeasonalThemeOverlayViewModel` reports
+  them and carries on. A failed restore still looks up the greeting, and a failed answer still
+  frees the greeting slot.
 
 ## Seasonal themes
 
@@ -45,8 +109,9 @@ the overlay without its navigation owners. Such activities get the overlay after
 first layout. It only draws, so touches reach the screen underneath, and it is hidden from
 accessibility services and focus. Activities from Google Play services, Play Billing and Firebase
 are skipped. The overlay composes no app theme of its own until a greeting is due, so outside
-Christmas it costs one small composition per activity. A host that prefers to place the overlay itself can compose `SeasonalThemeOverlay()`
-last in its root `Box` instead of installing the manager.
+Christmas it costs one small composition per activity. A host that prefers to place the overlay
+itself can compose `SeasonalThemeOverlay()` last in its root `Box` instead of installing the
+manager.
 
 What people see:
 
@@ -72,9 +137,20 @@ What people see:
   The choice is stored with `SeasonalThemeRepository.setWeatherEffect` as a `WeatherEffect`. The
   action is `WeatherEffectAction`, which shares the page's `ThemeSettingsViewModel`.
 
+## Public contracts
+
+- `ThemeSettingsScreen`, `themeSettingsPage()`, `ThemeSettingsViewModel`, `ThemeSettingsUiState`,
+  `ThemeSettingsEvent` and `themeSettingsModule`. `ThemeSettingsScreenContent` is internal.
+- `SeasonalThemeManager`, `SeasonalThemeOverlay`, `SeasonalThemeOverlayViewModel`,
+  `SeasonalThemeOverlayUiState`, `SeasonalThemeOverlayEvent` and `HolidayGreetingDialog`.
+- The palette qualifiers. The purple and orange palettes are available through the `purple` and
+  `orange` static IDs and the `purplePalette` and `orangePalette` qualifiers. Android and Halloween
+  have qualifiers too.
+
 ## Validation and risks
 
-ThemeSettingsViewModelTest covers preference changes, the easter egg unlock, and the weather effect.
-SeasonalThemeOverlayViewModelTest covers when snow or rain falls, the greeting flow, and that two
-activities never stack two greetings. Keep palette qualifiers, stored identifiers, and default
-selection compatible with host overrides and existing preferences.
+`ThemeSettingsViewModelTest` covers the first load, waiting for the stored preferences, a failed
+read and its retry, each event, and failed writes. `SeasonalThemeOverlayViewModelTest` covers when
+snow or rain falls, the greeting flow, failed restores and answers, and that two activities never
+stack two greetings. Both use hand-written fakes of the two repositories. Keep palette qualifiers,
+stored identifiers, and default selection compatible with host overrides and existing preferences.

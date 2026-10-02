@@ -17,10 +17,18 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.contracts
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
 
-sealed interface StartupEvent : UiEvent {
-    data object RequestConsent : StartupEvent
-    data object ConsentFormLoaded : StartupEvent
-    data object Continue : StartupEvent
+/**
+ * What the user can ask the startup screen's ViewModel to do.
+ */
+sealed interface StartupEvent {
+    /**
+     * Asks for consent, showing the form when the consent SDK requires it. The screen sends it on
+     * every resume; once consent has settled it does nothing.
+     *
+     * @property host The activity the form shows over, used only for this request, or null when
+     * the screen has none, which settles consent at once.
+     */
+    data class RequestConsent(val host: ConsentHost?) : StartupEvent
 }

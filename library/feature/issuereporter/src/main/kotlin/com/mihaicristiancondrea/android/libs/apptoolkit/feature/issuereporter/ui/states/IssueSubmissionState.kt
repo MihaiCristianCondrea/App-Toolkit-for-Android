@@ -17,23 +17,40 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states
 
-/**
- * Mutually exclusive editor, pending-submission, and confirmation states. Failed submissions
- * return to editing with the draft intact.
- */
-sealed interface IssueSubmissionState {
+import androidx.compose.runtime.Immutable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackedStatus
 
-    data object Editing : IssueSubmissionState
+/**
+ * Mutually exclusive editor, pending-submission, and confirmation states. A failed submission
+ * returns to the editor with the draft intact. The labels are the ones the reporter has always
+ * reported in `screen_state`.
+ */
+@Immutable
+sealed interface IssueSubmissionState : TrackedStatus {
+
+    /** The author is writing the report. */
+    data object Editing : IssueSubmissionState {
+        override val trackingLabel: String get() = "success"
+    }
 
     /**
      * A submission is in flight; a second send must wait for its result.
      */
-    data object Sending : IssueSubmissionState
+    data object Sending : IssueSubmissionState {
+        override val trackingLabel: String get() = "loading"
+    }
+
+    /** The last send failed. The editor stays open with the draft, so the author can send again. */
+    data object Failed : IssueSubmissionState {
+        override val trackingLabel: String get() = "error"
+    }
 
     /**
      * The report was filed.
      *
      * @property issueUrl The created issue, which the confirmation offers to open.
      */
-    data class Submitted(val issueUrl: String) : IssueSubmissionState
+    data class Submitted(val issueUrl: String) : IssueSubmissionState {
+        override val trackingLabel: String get() = "success"
+    }
 }

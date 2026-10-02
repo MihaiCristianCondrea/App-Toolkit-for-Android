@@ -22,4 +22,6 @@
     <string name="personalized_ads">ব্যক্তিগতকৃত বিজ্ঞাপন</string>
     <string name="summary_ads">আপনার জন্য প্রাসঙ্গিক বিজ্ঞাপন দেখুন। আপনার অ্যাপ কার্যকলাপের উপর ভিত্তি করে ব্যক্তিগতকৃত বিজ্ঞাপন দেখানোর জন্য ব্যবহৃত তথ্য পরিচালনা করুন। আপনি সর্বদা এখানে ব্যক্তিগতকরণ বন্ধ করতে পারেন।\n</string>
     <string name="summary_ads_personalized_ads">আপনার আগ্রহের ভিত্তিতে আমরা কীভাবে আপনার জন্য বিজ্ঞাপন ব্যক্তিগতকৃত করি তা পছন্দ করুন</string>
+    <string name="error_ads_settings_storage">স্টোরেজ ত্রুটি।</string>
+    <string name="error_ads_consent_failed">সম্মতির তথ্য লোড করতে ব্যর্থ হয়েছে</string>
 </resources>

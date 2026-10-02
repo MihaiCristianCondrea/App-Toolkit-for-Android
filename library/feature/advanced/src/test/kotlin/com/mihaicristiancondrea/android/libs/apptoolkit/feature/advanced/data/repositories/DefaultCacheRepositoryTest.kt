@@ -18,149 +18,136 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.data.repositories
 
 import android.content.Context
-import app.cash.turbine.test
-import com.google.common.truth.Truth.assertThat
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.io.File
+import java.io.IOException
 import kotlin.io.path.createTempDirectory
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
+import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
-@OptIn(ExperimentalCoroutinesApi::class)
-class TestDefaultCacheRepository {
+class DefaultCacheRepositoryTest {
+
+    private fun tempDirectory(): File = createTempDirectory().toFile()
+
+    private fun context(cacheDir: File, codeCacheDir: File, externalCacheDir: File?): Context {
+        val context = mockk<Context>()
+        every { context.cacheDir } returns cacheDir
+        every { context.codeCacheDir } returns codeCacheDir
+        every { context.externalCacheDir } returns externalCacheDir
+        return context
+    }
 
     @Test
-    fun `clearCache deletes cache directories`() = runTest {
-        val dir1 = createTempDirectory().toFile()
-        val dir2 = createTempDirectory().toFile()
-        val dir3 = createTempDirectory().toFile()
-
-        File(dir1, "a.txt").writeText("x")
-        File(dir2, "b.txt").writeText("x")
-        File(dir3, "c.txt").writeText("x")
-
-        val context = mockk<Context>()
-        every { context.cacheDir } returns dir1
-        every { context.codeCacheDir } returns dir2
-        every { context.externalCacheDir } returns dir3
-
+    fun `clearCache deletes every cache directory`() = runTest {
+        val dir1 = tempDirectory().also { File(it, "a.txt").writeText("x") }
+        val dir2 = tempDirectory().also { File(it, "b.txt").writeText("x") }
+        val dir3 = tempDirectory().also { File(it, "c.txt").writeText("x") }
         val repository = DefaultCacheRepository(
-            context = context,
-            telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
+            context = context(cacheDir = dir1, codeCacheDir = dir2, externalCacheDir = dir3),
+            telemetryRepository = FakeTelemetryRepository(),
         )
-        val result = repository.clearCache().single()
 
-        assertThat(result).isInstanceOf(DataState.Success::class.java)
+        repository.clearCache()
+
         assertFalse(dir1.exists())
         assertFalse(dir2.exists())
         assertFalse(dir3.exists())
     }
 
     @Test
-    fun `clearCache emits error when one directory fails deletion`() = runTest {
-        val dir1 = createTempDirectory().toFile()
-        val failing = createTempDirectory().toFile()
-        val dir3 = createTempDirectory().toFile()
-
-        val context = mockk<Context>()
-        every { context.cacheDir } returns dir1
-        every { context.codeCacheDir } returns failing
-        every { context.externalCacheDir } returns dir3
-
+    fun `clearCache succeeds without an external cache directory`() = runTest {
+        val dir1 = tempDirectory()
+        val dir2 = tempDirectory()
         val repository = DefaultCacheRepository(
-            context = context,
-            telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
+            context = context(cacheDir = dir1, codeCacheDir = dir2, externalCacheDir = null),
+            telemetryRepository = FakeTelemetryRepository(),
+        )
+
+        repository.clearCache()
+
+        assertFalse(dir1.exists())
+        assertFalse(dir2.exists())
+    }
+
+    @Test
+    fun `clearCache treats missing directories as cleared`() = runTest {
+        val repository = DefaultCacheRepository(
+            context = context(
+                cacheDir = tempDirectory().also { it.deleteRecursively() },
+                codeCacheDir = tempDirectory().also { it.deleteRecursively() },
+                externalCacheDir = tempDirectory().also { it.deleteRecursively() },
+            ),
+            telemetryRepository = FakeTelemetryRepository(),
+        )
+
+        repository.clearCache()
+    }
+
+    @Test
+    fun `an incomplete deletion throws and still deletes the other directories`() = runTest {
+        val dir1 = tempDirectory()
+        val failing = tempDirectory()
+        val dir3 = tempDirectory()
+        val repository = DefaultCacheRepository(
+            context = context(cacheDir = dir1, codeCacheDir = failing, externalCacheDir = dir3),
+            telemetryRepository = FakeTelemetryRepository(),
             deleteRecursively = { file -> if (file == failing) false else file.deleteRecursively() },
         )
-        val result = repository.clearCache().single()
 
-        assertThat(result).isInstanceOf(DataState.Error::class.java)
+        val error = assertFailsWith<StorageException> { repository.clearCache() }
+
+        assertEquals(StorageException.Reason.FAILED, error.reason)
         assertFalse(dir1.exists())
         assertTrue(failing.exists())
         assertFalse(dir3.exists())
     }
 
     @Test
-    fun `clearCache emits error when context access throws`() = runTest {
+    fun `a refused cache directory throws an unavailable storage failure`() = runTest {
         val context = mockk<Context>()
         every { context.cacheDir } throws SecurityException("denied")
-
         val repository = DefaultCacheRepository(
             context = context,
-            telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
+            telemetryRepository = FakeTelemetryRepository(),
+        )
+
+        val error = assertFailsWith<StorageException> { repository.clearCache() }
+
+        assertEquals(StorageException.Reason.UNAVAILABLE, error.reason)
+        assertIs<SecurityException>(error.cause)
+    }
+
+    @Test
+    fun `a delete that throws a security failure throws an unavailable storage failure`() = runTest {
+        val repository = DefaultCacheRepository(
+            context = context(cacheDir = tempDirectory(), codeCacheDir = tempDirectory(), externalCacheDir = null),
+            telemetryRepository = FakeTelemetryRepository(),
             deleteRecursively = { throw SecurityException("denied") },
         )
-        val result = repository.clearCache().single()
 
-        assertThat(result).isInstanceOf(DataState.Error::class.java)
+        val error = assertFailsWith<StorageException> { repository.clearCache() }
+
+        assertEquals(StorageException.Reason.UNAVAILABLE, error.reason)
     }
 
     @Test
-    fun `clearCache handles missing directories as success`() = runTest {
-        val dir1 = createTempDirectory().toFile().also { it.deleteRecursively() }
-        val dir2 = createTempDirectory().toFile().also { it.deleteRecursively() }
-        val dir3 = createTempDirectory().toFile().also { it.deleteRecursively() }
-
-        val context = mockk<Context>()
-        every { context.cacheDir } returns dir1
-        every { context.codeCacheDir } returns dir2
-        every { context.externalCacheDir } returns dir3
-
+    fun `a delete that throws an IO failure throws a failed storage failure`() = runTest {
         val repository = DefaultCacheRepository(
-            context = context,
-            telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
-        )
-        val result = repository.clearCache().single()
-
-        assertThat(result).isInstanceOf(DataState.Success::class.java)
-    }
-
-    @Test
-    fun `clearCache emits error when deleter throws`() = runTest {
-        val dir1 = createTempDirectory().toFile()
-        val dir2 = createTempDirectory().toFile()
-        val dir3 = createTempDirectory().toFile()
-
-        val context = mockk<Context>()
-        every { context.cacheDir } returns dir1
-        every { context.codeCacheDir } returns dir2
-        every { context.externalCacheDir } returns dir3
-
-        val repository = DefaultCacheRepository(
-            context = context,
-            telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
-            deleteRecursively = { throw SecurityException("denied") },
-        )
-        val result = repository.clearCache().single()
-
-        assertThat(result).isInstanceOf(DataState.Error::class.java)
-    }
-
-    @Test
-    fun `clearCache emits once and completes`() = runTest {
-        val dir1 = createTempDirectory().toFile()
-        val dir2 = createTempDirectory().toFile()
-
-        val context = mockk<Context>()
-        every { context.cacheDir } returns dir1
-        every { context.codeCacheDir } returns dir2
-        every { context.externalCacheDir } returns null
-
-        val repository = DefaultCacheRepository(
-            context = context,
-            telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
+            context = context(cacheDir = tempDirectory(), codeCacheDir = tempDirectory(), externalCacheDir = null),
+            telemetryRepository = FakeTelemetryRepository(),
+            deleteRecursively = { throw IOException("disk") },
         )
 
-        repository.clearCache().test {
-            assertThat(awaitItem()).isInstanceOf(DataState.Success::class.java)
-            awaitComplete()
-        }
+        val error = assertFailsWith<StorageException> { repository.clearCache() }
+
+        assertEquals(StorageException.Reason.FAILED, error.reason)
     }
 }

@@ -17,293 +17,149 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui
 
-import androidx.lifecycle.viewModelScope
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReporterRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.di.GithubToken
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.mappers.toPlainText
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.Report
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.ExtraInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.usecases.SendIssueReportUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.contracts.IssueReporterAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.contracts.IssueReporterEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers.asDataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.models.IssueReporterError
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers.toReport
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers.toSendFailedMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueReporterUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueSubmissionState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.di.GithubToken
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onFailure
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.copyData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.dismissSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setError
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoading
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.showSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
-import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * Owns the report draft and submission state. Form fields survive submission and are cleared on
  * dismissal; a reset requested during sending is deferred until that send finishes. Success is
  * rendered by the confirmation state rather than a transient message.
+ *
+ * [IssueReporterRepository] is main-safe, so this needs no dispatcher.
  */
 class IssueReporterViewModel(
-    private val sendIssueReport: SendIssueReportUseCase,
+    private val repository: IssueReporterRepository,
     private val githubTarget: GithubTarget,
     @param:GithubToken private val githubToken: String,
-    private val repository: IssueReporterRepository,
-    private val dispatchers: DispatcherProvider,
     telemetryRepository: TelemetryRepository,
-) : LoggedScreenViewModel<IssueReporterUiState, IssueReporterEvent, IssueReporterAction>(
-    initialState = UiStateScreen(
-        screenState = ScreenState.Success(),
-        data = IssueReporterUiState(),
-    ),
+) : LoggedScreenViewModel<IssueReporterUiState, IssueReporterEvent>(
+    initialState = IssueReporterUiState(),
     telemetryRepository = telemetryRepository,
     screenName = "IssueReporter",
     viewModelName = "IssueReporterViewModel",
 ) {
-
     private var sendJob: Job? = null
+    private var deviceInfoJob: Job? = null
     private var resetAfterSend: Boolean = false
 
     override fun handleEvent(event: IssueReporterEvent) {
         when (event) {
-            is IssueReporterEvent.UpdateTitle -> updateTitle(event.value)
-            is IssueReporterEvent.UpdateDescription -> updateDescription(event.value)
-            is IssueReporterEvent.UpdateEmail -> updateEmail(event.value)
-            is IssueReporterEvent.RequestDeviceInfo -> loadDeviceInfoIfNeeded()
-            is IssueReporterEvent.Send -> sendReport()
-            is IssueReporterEvent.Reset -> resetReport()
-            is IssueReporterEvent.DismissSnackbar -> dismissSnackbar()
+            is IssueReporterEvent.UpdateTitle -> setState { copy(title = event.value) }
+            is IssueReporterEvent.UpdateDescription -> setState { copy(description = event.value) }
+            is IssueReporterEvent.UpdateEmail -> setState { copy(email = event.value) }
+            IssueReporterEvent.RequestDeviceInfo -> loadDeviceInfo()
+            IssueReporterEvent.Send -> sendReport()
+            IssueReporterEvent.Reset -> resetReport()
         }
     }
 
-    private fun updateTitle(value: String) {
-        updateForm { copy(title = value) }
-    }
+    /**
+     * Captures the panel's device details once per report. A failed capture shows in the panel and
+     * runs again the next time the panel opens.
+     */
+    private fun loadDeviceInfo() {
+        val deviceInfo: Loadable<String> = currentState.deviceInfo
+        if (deviceInfo is Loadable.Ready || deviceInfo is Loadable.Loading) return
 
-    private fun updateDescription(value: String) {
-        updateForm { copy(description = value) }
-    }
-
-    private fun updateEmail(value: String) {
-        updateForm { copy(email = value) }
+        deviceInfoJob = deviceInfoJob.restart {
+            launchReport(
+                action = Actions.LOAD_DEVICE_INFO,
+                onError = { error -> setState { copy(deviceInfo = error.toFailed()) } },
+            ) {
+                setState { copy(deviceInfo = Loadable.Loading) }
+                val text: String = repository.captureDeviceInfo().toPlainText()
+                setState { copy(deviceInfo = Loadable.Ready(text)) }
+            }
+        }
     }
 
     /**
-     * Clears the report and any message waiting to be shown.
-     *
-     * A send already in flight is left to finish rather than cancelled. The author asked for that
-     * report to be filed, and closing the sheet is not taking it back. The reset is held until the
-     * answer lands, because dropping it would leave the reporter holding a submitted state that the
-     * next opening of the sheet would show as a fresh confirmation.
+     * Files the draft as it stands when sent. A blank title or description is refused with a
+     * message, and a send already in flight makes this a no-op. A failure returns to the editor
+     * with the draft intact.
+     */
+    private fun sendReport() {
+        if (sendJob?.isActive == true) return
+
+        val draft: IssueReporterUiState = currentState
+        if (draft.title.isBlank() || draft.description.isBlank()) {
+            showMessage(UiMessage(text = InvalidReportText, isError = true))
+            return
+        }
+
+        sendJob = launchReport(
+            action = Actions.SEND_REPORT,
+            extra = mapOf(
+                ExtraKeys.HAS_TITLE to draft.title.isNotBlank().toString(),
+                ExtraKeys.HAS_DESCRIPTION to draft.description.isNotBlank().toString(),
+            ),
+            onError = { error ->
+                setState { copy(submissionState = IssueSubmissionState.Failed) }
+                showMessage(error.toSendFailedMessage())
+                applyPendingReset()
+            },
+        ) {
+            setState { copy(submissionState = IssueSubmissionState.Sending) }
+            val issueUrl: String = repository.sendReport(
+                report = draft.toReport(deviceInfo = repository.captureDeviceInfo()),
+                target = githubTarget,
+                token = githubToken.takeIf { it.isNotBlank() },
+            )
+            setState { copy(submissionState = IssueSubmissionState.Submitted(issueUrl = issueUrl)) }
+            applyPendingReset()
+        }
+    }
+
+    /**
+     * Clears the report and any message still waiting. A send in flight is left to finish, since
+     * closing the sheet does not take the report back, and the reset runs once it lands.
      */
     private fun resetReport() {
         if (sendJob?.isActive == true) {
             resetAfterSend = true
             return
         }
-
-        viewModelScope.launch { applyReset() }
+        applyReset()
     }
 
-    private suspend fun applyReset() {
-        updateStateThreadSafe {
-            screenState.setSuccess(data = IssueReporterUiState())
-            screenState.dismissSnackbar()
-        }
-    }
-
-    /** Runs a reset the author asked for while the report was still on its way. */
-    private suspend fun applyPendingReset() {
+    private fun applyPendingReset() {
         if (!resetAfterSend) return
         resetAfterSend = false
         applyReset()
     }
 
-    private fun dismissSnackbar() {
-        viewModelScope.launch {
-            updateStateThreadSafe {
-                screenState.dismissSnackbar()
-            }
-        }
+    private fun applyReset() {
+        deviceInfoJob?.cancel()
+        setState { IssueReporterUiState() }
+        messages.value.forEach { message -> messageShown(message.id) }
     }
-
-    private fun updateForm(transform: IssueReporterUiState.() -> IssueReporterUiState) {
-        viewModelScope.launch {
-            updateStateThreadSafe {
-                screenState.copyData { transform() }
-            }
-        }
-    }
-
-    private fun sendReport() {
-        val data = screenData ?: return
-
-        if (sendJob?.isActive == true) return
-
-        if (data.title.isBlank() || data.description.isBlank()) {
-            viewModelScope.launch {
-                updateStateThreadSafe {
-                    screenState.showSnackbar(
-                        UiSnackbar(
-                            message = UiTextHelper.StringResource(R.string.error_invalid_report),
-                            timeStamp = System.nanoTime(),
-                            isError = true,
-                            type = ScreenMessageType.SNACKBAR,
-                        )
-                    )
-                }
-            }
-            return
-        }
-
-        sendJob = sendJob.restart {
-            launchReport(
-                action = Actions.SEND_REPORT,
-                extra = mapOf(
-                    ExtraKeys.HAS_TITLE to data.title.isNotBlank().toString(),
-                    ExtraKeys.HAS_DESCRIPTION to data.description.isNotBlank().toString(),
-                ),
-                block = {
-                    updateStateThreadSafe {
-                        screenState.dismissSnackbar()
-                        screenState.copyData { copy(submissionState = IssueSubmissionState.Sending) }
-                        screenState.setLoading()
-                    }
-
-                    val preparedReport = prepareReport(data)
-
-                    val params = SendIssueReportUseCase.Params(
-                        report = preparedReport,
-                        target = githubTarget,
-                        token = githubToken.takeIf { it.isNotBlank() },
-                    )
-
-                    sendIssueReport(params)
-                        .map { it.asDataState() }
-                        // Catch before onEach so failures follow the same result handling and leave the sending state.
-                        .catch { throwable ->
-                            emit(DataState.Error(error = IssueReporterError.Generic(message = throwable.message)))
-                        }
-                        .onEach { result -> handleResult(result) }
-                        .collect {  }
-                },
-                onError = {
-                    showFailureSnackbar()
-                },
-            )
-        }
-    }
-
-    /**
-     * Loads device information lazily the first time the UI expands the section.
-     *
-     * Threading rationale:
-     * - Device-info capture and string formatting are done off-main via [dispatchers.default]
-     *   to avoid blocking Compose recompositions.
-     */
-    private fun loadDeviceInfoIfNeeded() {
-        val currentDeviceInfo = screenData?.deviceInfoText
-        if (currentDeviceInfo != null) return
-
-        viewModelScope.launch {
-            val captured = withContext(dispatchers.default) {
-                repository.captureDeviceInfo().toPlainText()
-            }
-            updateStateThreadSafe {
-                screenState.copyData {
-                    if (deviceInfoText != null) this else copy(deviceInfoText = captured)
-                }
-            }
-        }
-    }
-
-    private suspend fun prepareReport(data: IssueReporterUiState): Report {
-        val deviceInfo = repository.captureDeviceInfo()
-        val extraInfo = ExtraInfo()
-
-        return Report(
-            title = data.title,
-            description = data.description,
-            deviceInfo = deviceInfo,
-            extraInfo = extraInfo,
-            email = data.email.ifBlank { null },
-        )
-    }
-
-    private suspend fun handleResult(outcome: DataState<String, IssueReporterError>) {
-        outcome
-            .onSuccess { url ->
-                updateStateThreadSafe {
-                    val updated = (screenData ?: IssueReporterUiState())
-                        .copy(submissionState = IssueSubmissionState.Submitted(issueUrl = url))
-                    screenState.setSuccess(data = updated)
-                }
-            }
-            .onFailure { error ->
-                val message = error.toUiText()
-                updateStateThreadSafe {
-                    screenState.copyData { copy(submissionState = IssueSubmissionState.Editing) }
-                    screenState.setError(message = message)
-                }
-            }
-
-        applyPendingReset()
-    }
-
-    private suspend fun showFailureSnackbar(
-        message: UiTextHelper = UiTextHelper.StringResource(R.string.snack_report_failed),
-    ) {
-        updateStateThreadSafe {
-            screenState.copyData { copy(submissionState = IssueSubmissionState.Editing) }
-            screenState.setError(message = message)
-        }
-
-        applyPendingReset()
-    }
-
-    private fun IssueReporterError.toUiText(): UiTextHelper =
-        when (this) {
-            is IssueReporterError.Http -> when (status) {
-                HttpStatusCode.Unauthorized -> UiTextHelper.StringResource(R.string.error_unauthorized)
-                HttpStatusCode.Forbidden -> UiTextHelper.StringResource(R.string.error_forbidden)
-                HttpStatusCode.Gone -> UiTextHelper.StringResource(R.string.error_gone)
-                HttpStatusCode.UnprocessableEntity -> UiTextHelper.StringResource(R.string.error_unprocessable)
-                else -> if (message.isNullOrBlank()) {
-                    UiTextHelper.StringResource(R.string.snack_report_failed)
-                } else {
-                    UiTextHelper.DynamicString(message)
-                }
-            }
-
-            is IssueReporterError.Generic -> message?.let { UiTextHelper.DynamicString(it) }
-                ?: UiTextHelper.StringResource(R.string.snack_report_failed)
-        }
 
     private object Actions {
         const val SEND_REPORT: String = "sendReport"
+        const val LOAD_DEVICE_INFO: String = "loadDeviceInfo"
     }
 
     private object ExtraKeys {
         const val HAS_TITLE: String = "hasTitle"
         const val HAS_DESCRIPTION: String = "hasDescription"
     }
-}
 
+    private companion object {
+        val InvalidReportText = UiTextHelper.StringResource(R.string.error_invalid_report)
+    }
+}

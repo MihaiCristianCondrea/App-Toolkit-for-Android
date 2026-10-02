@@ -49,35 +49,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.getGroupedShape
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.IssueReporterActionNames
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.issueReporterActionEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /**
  * What will be attached to the report, as two grouped components: a header and its content.
+ * Expansion is saved per instance with [rememberSaveable].
  *
- * Expansion state lives here, not in a file-level property: a top-level `mutableStateOf` is shared
- * by every instance and by every screen the process ever shows, so it survives navigation, leaks
- * between callers, and is not part of saved instance state. [rememberSaveable] keeps it per
- * instance and across configuration changes and process death instead.
- *
- * [onExpandRequested] tells the caller to load the text lazily the first time.
+ * @param onExpandedChange Called with the new expansion after each toggle, so the caller can load
+ * the details the first time and report the toggle.
  */
 @Composable
 internal fun DeviceInfoSection(
-    deviceInfoText: String?,
-    onExpandRequested: () -> Unit,
+    deviceInfo: Loadable<String>,
+    onExpandedChange: (expanded: Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val telemetryRepository = LocalTelemetry.current
     var expanded: Boolean by rememberSaveable { mutableStateOf(value = false) }
 
     Column(
@@ -88,18 +81,11 @@ internal fun DeviceInfoSection(
             expanded = expanded,
             onToggle = {
                 expanded = !expanded
-                if (expanded) onExpandRequested()
-
-                telemetryRepository.logEvent(
-                    issueReporterActionEvent(
-                        actionName = IssueReporterActionNames.TOGGLE_DEVICE_INFO,
-                        params = mapOf("expanded" to AnalyticsValue.Bool(expanded)),
-                    )
-                )
+                onExpandedChange(expanded)
             },
         )
 
-        DeviceInfoContentCard(expanded = expanded, deviceInfoText = deviceInfoText)
+        DeviceInfoContentCard(expanded = expanded, deviceInfo = deviceInfo)
     }
 }
 
@@ -167,12 +153,13 @@ private fun DeviceInfoHeaderCard(
 }
 
 /**
- * Device details with vertical expansion, keeping the group aligned to the surrounding form.
+ * Device details with vertical expansion, keeping the group aligned to the surrounding form. A
+ * failed capture shows its message in place of the details.
  */
 @Composable
 private fun DeviceInfoContentCard(
     expanded: Boolean,
-    deviceInfoText: String?,
+    deviceInfo: Loadable<String>,
     modifier: Modifier = Modifier,
 ) {
     AnimatedVisibility(
@@ -196,7 +183,11 @@ private fun DeviceInfoContentCard(
                     .padding(all = SizeConstants.LargeSize),
             ) {
                 Text(
-                    text = deviceInfoText.orEmpty(),
+                    text = when (deviceInfo) {
+                        is Loadable.Ready -> deviceInfo.value
+                        is Loadable.Failed -> deviceInfo.message.asString()
+                        Loadable.Loading, is Loadable.Empty -> ""
+                    },
                     style = MaterialTheme.typography.bodySmall,
                 )
             }

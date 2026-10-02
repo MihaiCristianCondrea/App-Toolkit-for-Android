@@ -22,4 +22,6 @@
     <string name="personalized_ads">Персонализирани реклами</string>
     <string name="summary_ads">Вижте реклами, които са подходящи за вас. Управлявайте информацията, използвана за персонализирани реклами. Можете да изключите персонализацията тук.</string>
     <string name="summary_ads_personalized_ads">Изберете как да се персонализират рекламите въз основа на вашите интереси</string>
+    <string name="error_ads_settings_storage">Грешка в хранилището.</string>
+    <string name="error_ads_consent_failed">Неуспешно зареждане на информацията за съгласие</string>
 </resources>

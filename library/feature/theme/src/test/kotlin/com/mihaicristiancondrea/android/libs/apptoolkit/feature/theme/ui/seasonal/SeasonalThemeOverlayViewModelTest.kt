@@ -23,18 +23,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.ThemePreferencesState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.WeatherEffect
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.FakeSeasonalThemeRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.FakeThemePreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.contracts.SeasonalThemeOverlayEvent
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.coVerifyOrder
-import io.mockk.every
-import io.mockk.mockk
 import java.time.LocalDate
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
@@ -55,15 +49,8 @@ class SeasonalThemeOverlayViewModelTest {
     private val christmas = LocalDate.parse("2026-12-25")
     private val july = LocalDate.parse("2026-07-14")
 
-    private val seasonalState = MutableStateFlow(SeasonalThemeState())
-    private val themeState = MutableStateFlow(themeWith(StaticPaletteIds.CHRISTMAS, dynamic = false))
-
-    private val seasonal: SeasonalThemeRepository = mockk(relaxed = true) {
-        every { state } returns seasonalState
-    }
-    private val theme: ThemePreferencesRepository = mockk(relaxed = true) {
-        every { preferencesState } returns themeState
-    }
+    private val seasonal = FakeSeasonalThemeRepository()
+    private val theme = FakeThemePreferencesRepository(initial = themeWith(StaticPaletteIds.CHRISTMAS, dynamic = false))
     private val telemetryRepository = FakeTelemetryRepository()
 
     @AfterEach
@@ -71,150 +58,217 @@ class SeasonalThemeOverlayViewModelTest {
         HolidayGreetingPresence.release()
     }
 
-    @Test
-    fun `snow falls with the christmas palette during christmas`() = runTest {
-        val viewModel = viewModel(today = christmas)
+    private fun advance() = dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
-        assertTrue(viewModel.uiState.value.data!!.showSnowfall)
+    private fun viewModel(today: LocalDate): SeasonalThemeOverlayViewModel {
+        val viewModel = SeasonalThemeOverlayViewModel(
+            seasonal = seasonal,
+            theme = theme,
+            telemetryRepository = telemetryRepository,
+            today = { today },
+        )
+        advance()
+        return viewModel
+    }
+
+    private fun wear(paletteId: String, dynamic: Boolean) {
+        theme.stored.value = themeWith(paletteId, dynamic)
+        advance()
+    }
+
+    private fun setSeasonal(state: SeasonalThemeState) {
+        seasonal.stored.value = state
+        advance()
     }
 
     @Test
-    fun `snow stops when another palette is worn`() = runTest {
+    fun `snow falls with the christmas palette during christmas`() = runTest(dispatcherExtension.testDispatcher) {
         val viewModel = viewModel(today = christmas)
 
-        themeState.value = themeWith(StaticPaletteIds.GOOGLE_BLUE, dynamic = false)
-        assertFalse(viewModel.uiState.value.data!!.showSnowfall)
-
-        themeState.value = themeWith(StaticPaletteIds.CHRISTMAS, dynamic = true)
-        assertFalse(viewModel.uiState.value.data!!.showSnowfall, "wallpaper colors are on screen")
+        assertTrue(viewModel.state.value.showSnowfall)
     }
 
     @Test
-    fun `outside christmas only the easter egg keeps the snow`() = runTest {
+    fun `snow stops when another palette is worn`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = viewModel(today = christmas)
+
+        wear(StaticPaletteIds.GOOGLE_BLUE, dynamic = false)
+        assertFalse(viewModel.state.value.showSnowfall)
+
+        wear(StaticPaletteIds.CHRISTMAS, dynamic = true)
+        assertFalse(viewModel.state.value.showSnowfall, "wallpaper colors are on screen")
+    }
+
+    @Test
+    fun `outside christmas only the easter egg keeps the snow`() = runTest(dispatcherExtension.testDispatcher) {
         val viewModel = viewModel(today = july)
-        assertFalse(viewModel.uiState.value.data!!.showSnowfall)
+        assertFalse(viewModel.state.value.showSnowfall)
 
-        seasonalState.value = SeasonalThemeState(unlocked = true)
-        assertTrue(viewModel.uiState.value.data!!.showSnowfall)
+        setSeasonal(SeasonalThemeState(unlocked = true))
+
+        assertTrue(viewModel.state.value.showSnowfall)
     }
 
     @Test
-    fun `the off weather effect keeps the christmas palette without snow`() = runTest {
-        val viewModel = viewModel(today = christmas)
+    fun `the off weather effect keeps the christmas palette without snow`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = viewModel(today = christmas)
 
-        seasonalState.value = SeasonalThemeState(unlocked = true, weatherEffect = WeatherEffect.Off)
+            setSeasonal(SeasonalThemeState(unlocked = true, weatherEffect = WeatherEffect.Off))
 
-        assertFalse(viewModel.uiState.value.data!!.showSnowfall)
-        assertFalse(viewModel.uiState.value.data!!.showRain)
-    }
-
-    @Test
-    fun `the rain weather effect rains over any palette instead of snowing`() = runTest {
-        val viewModel = viewModel(today = july)
-
-        seasonalState.value = SeasonalThemeState(unlocked = true, weatherEffect = WeatherEffect.Rain)
-        assertTrue(viewModel.uiState.value.data!!.showRain)
-        assertFalse(viewModel.uiState.value.data!!.showSnowfall)
-
-        themeState.value = themeWith(StaticPaletteIds.GOOGLE_BLUE, dynamic = true)
-        assertTrue(viewModel.uiState.value.data!!.showRain)
-    }
+            assertFalse(viewModel.state.value.showSnowfall)
+            assertFalse(viewModel.state.value.showRain)
+        }
 
     @Test
-    fun `the christmas theme turns rain into snow for the season`() = runTest {
-        seasonalState.value = SeasonalThemeState(unlocked = true, weatherEffect = WeatherEffect.Rain)
+    fun `the rain weather effect rains over any palette instead of snowing`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = viewModel(today = july)
+
+            setSeasonal(SeasonalThemeState(unlocked = true, weatherEffect = WeatherEffect.Rain))
+            assertTrue(viewModel.state.value.showRain)
+            assertFalse(viewModel.state.value.showSnowfall)
+
+            wear(StaticPaletteIds.GOOGLE_BLUE, dynamic = true)
+            assertTrue(viewModel.state.value.showRain)
+        }
+
+    @Test
+    fun `the christmas theme turns rain into snow for the season`() = runTest(dispatcherExtension.testDispatcher) {
+        seasonal.stored.value = SeasonalThemeState(unlocked = true, weatherEffect = WeatherEffect.Rain)
 
         val holidays = viewModel(today = christmas)
-        assertTrue(holidays.uiState.value.data!!.showSnowfall)
-        assertFalse(holidays.uiState.value.data!!.showRain)
+        assertTrue(holidays.state.value.showSnowfall)
+        assertFalse(holidays.state.value.showRain)
 
-        themeState.value = themeWith(StaticPaletteIds.GOOGLE_BLUE, dynamic = false)
-        assertTrue(holidays.uiState.value.data!!.showRain, "another palette keeps the rain")
-        assertFalse(holidays.uiState.value.data!!.showSnowfall)
+        wear(StaticPaletteIds.GOOGLE_BLUE, dynamic = false)
+        assertTrue(holidays.state.value.showRain, "another palette keeps the rain")
+        assertFalse(holidays.state.value.showSnowfall)
 
-        themeState.value = themeWith(StaticPaletteIds.CHRISTMAS, dynamic = false)
+        wear(StaticPaletteIds.CHRISTMAS, dynamic = false)
         val afterwards = viewModel(today = july)
-        assertTrue(afterwards.uiState.value.data!!.showRain, "the season is over")
-        assertFalse(afterwards.uiState.value.data!!.showSnowfall)
+        assertTrue(afterwards.state.value.showRain, "the season is over")
+        assertFalse(afterwards.state.value.showSnowfall)
     }
 
     @Test
-    fun `the snow weather effect snows over any palette all year`() = runTest {
+    fun `the snow weather effect snows over any palette all year`() = runTest(dispatcherExtension.testDispatcher) {
         val viewModel = viewModel(today = july)
-        themeState.value = themeWith(StaticPaletteIds.GOOGLE_BLUE, dynamic = true)
+        wear(StaticPaletteIds.GOOGLE_BLUE, dynamic = true)
 
-        seasonalState.value = SeasonalThemeState(unlocked = true, weatherEffect = WeatherEffect.Snow)
+        setSeasonal(SeasonalThemeState(unlocked = true, weatherEffect = WeatherEffect.Snow))
 
-        assertTrue(viewModel.uiState.value.data!!.showSnowfall)
-        assertFalse(viewModel.uiState.value.data!!.showRain)
+        assertTrue(viewModel.state.value.showSnowfall)
+        assertFalse(viewModel.state.value.showRain)
     }
 
     @Test
-    fun `snow on any palette needs the easter egg`() = runTest {
+    fun `snow on any palette needs the easter egg`() = runTest(dispatcherExtension.testDispatcher) {
         val viewModel = viewModel(today = july)
-        themeState.value = themeWith(StaticPaletteIds.GOOGLE_BLUE, dynamic = false)
+        wear(StaticPaletteIds.GOOGLE_BLUE, dynamic = false)
 
-        seasonalState.value = SeasonalThemeState(weatherEffect = WeatherEffect.Snow)
+        setSeasonal(SeasonalThemeState(weatherEffect = WeatherEffect.Snow))
 
-        assertFalse(viewModel.uiState.value.data!!.showSnowfall)
+        assertFalse(viewModel.state.value.showSnowfall)
     }
 
     @Test
-    fun `rain needs the easter egg`() = runTest {
+    fun `rain needs the easter egg`() = runTest(dispatcherExtension.testDispatcher) {
         val viewModel = viewModel(today = july)
 
-        seasonalState.value = SeasonalThemeState(weatherEffect = WeatherEffect.Rain)
+        setSeasonal(SeasonalThemeState(weatherEffect = WeatherEffect.Rain))
 
-        assertFalse(viewModel.uiState.value.data!!.showRain)
+        assertFalse(viewModel.state.value.showRain)
     }
 
     @Test
-    fun `an ended holiday theme is taken off before a greeting is looked up`() = runTest {
-        viewModel(today = july)
+    fun `the overlay follows the stored theme mode`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = viewModel(today = july)
 
-        coVerifyOrder {
-            seasonal.restoreThemeAfterHoliday(july)
-            seasonal.pendingHolidayGreeting(july)
+        theme.stored.value = themeWith(StaticPaletteIds.CHRISTMAS, dynamic = false).copy(themeMode = "dark_mode")
+        advance()
+
+        assertEquals("dark_mode", viewModel.state.value.themeMode)
+    }
+
+    @Test
+    fun `an ended holiday theme is taken off before a greeting is looked up`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            viewModel(today = july)
+
+            assertEquals(
+                listOf("restoreThemeAfterHoliday($july)", "pendingHolidayGreeting($july)"),
+                seasonal.calls,
+            )
         }
-    }
 
     @Test
-    fun `a due greeting is shown and its answer is recorded`() = runTest {
-        coEvery { seasonal.pendingHolidayGreeting(christmas) } returns HolidaySeason.CHRISTMAS
+    fun `a failed restore still looks up the greeting and is reported`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            seasonal.failure = IllegalStateException("store unavailable")
+
+            val viewModel = viewModel(today = july)
+
+            assertEquals(
+                listOf("restoreThemeAfterHoliday($july)", "pendingHolidayGreeting($july)"),
+                seasonal.calls,
+            )
+            assertNull(viewModel.state.value.greeting)
+            val failedActions = telemetryRepository.loggedEvents
+                .filter { it.name == "vm_op_error" }
+                .map { it.params["action"] }
+            assertEquals(
+                listOf(AnalyticsValue.Str("restoreThemeAfterHoliday"), AnalyticsValue.Str("pendingHolidayGreeting")),
+                failedActions,
+            )
+        }
+
+    @Test
+    fun `a due greeting is shown and its answer is recorded`() = runTest(dispatcherExtension.testDispatcher) {
+        seasonal.pendingGreeting = HolidaySeason.CHRISTMAS
         val viewModel = viewModel(today = christmas)
-        assertEquals(HolidaySeason.CHRISTMAS, viewModel.uiState.value.data!!.greeting)
+        assertEquals(HolidaySeason.CHRISTMAS, viewModel.state.value.greeting)
 
         viewModel.onEvent(SeasonalThemeOverlayEvent.AnswerGreeting(useHolidayTheme = true))
+        advance()
 
-        assertNull(viewModel.uiState.value.data!!.greeting)
-        coVerify {
-            seasonal.answerHolidayGreeting(HolidaySeason.CHRISTMAS, christmas, useHolidayTheme = true)
-        }
-        val answered = telemetryRepository.loggedEvents.single()
-        assertEquals("holiday_greeting_answered", answered.name)
+        assertNull(viewModel.state.value.greeting)
+        assertEquals(listOf(Triple(HolidaySeason.CHRISTMAS, christmas, true)), seasonal.answers)
+        val answered = telemetryRepository.loggedEvents.single { it.name == "holiday_greeting_answered" }
         assertEquals(AnalyticsValue.Str("christmas"), answered.params["season"])
         assertEquals(AnalyticsValue.Str("use_holiday_theme"), answered.params["choice"])
     }
 
     @Test
-    fun `a second activity does not stack another greeting on the first`() = runTest {
-        coEvery { seasonal.pendingHolidayGreeting(christmas) } returns HolidaySeason.CHRISTMAS
-        val first = viewModel(today = christmas)
-        val second = viewModel(today = christmas)
+    fun `a second activity does not stack another greeting on the first`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            seasonal.pendingGreeting = HolidaySeason.CHRISTMAS
+            val first = viewModel(today = christmas)
+            val second = viewModel(today = christmas)
 
-        assertEquals(HolidaySeason.CHRISTMAS, first.uiState.value.data!!.greeting)
-        assertNull(second.uiState.value.data!!.greeting)
+            assertEquals(HolidaySeason.CHRISTMAS, first.state.value.greeting)
+            assertNull(second.state.value.greeting)
 
-        first.onEvent(SeasonalThemeOverlayEvent.AnswerGreeting(useHolidayTheme = false))
-        assertTrue(HolidayGreetingPresence.claim(), "answering frees the slot")
+            first.onEvent(SeasonalThemeOverlayEvent.AnswerGreeting(useHolidayTheme = false))
+            advance()
+
+            assertTrue(HolidayGreetingPresence.claim(), "answering frees the slot")
+        }
+
+    @Test
+    fun `a failed answer still frees the greeting slot`() = runTest(dispatcherExtension.testDispatcher) {
+        seasonal.pendingGreeting = HolidaySeason.CHRISTMAS
+        val viewModel = viewModel(today = christmas)
+        seasonal.failure = IllegalStateException("store unavailable")
+
+        viewModel.onEvent(SeasonalThemeOverlayEvent.AnswerGreeting(useHolidayTheme = true))
+        advance()
+
+        assertNull(viewModel.state.value.greeting)
+        assertTrue(HolidayGreetingPresence.claim(), "a failed save frees the slot")
+        val error = telemetryRepository.loggedEvents.single { it.name == "vm_op_error" }
+        assertEquals(AnalyticsValue.Str("answerHolidayGreeting"), error.params["action"])
     }
-
-    private fun viewModel(today: LocalDate) = SeasonalThemeOverlayViewModel(
-        seasonal = seasonal,
-        theme = theme,
-        telemetryRepository = telemetryRepository,
-        today = { today },
-    )
 
     private fun themeWith(paletteId: String, dynamic: Boolean) = ThemePreferencesState(
         themeMode = "follow_system",

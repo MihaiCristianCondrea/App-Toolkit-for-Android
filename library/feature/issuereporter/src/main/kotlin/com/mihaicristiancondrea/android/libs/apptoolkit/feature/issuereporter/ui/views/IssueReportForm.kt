@@ -34,6 +34,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextField
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextFieldStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.markdown.MarkdownFormatAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.contracts.IssueReporterEvent
@@ -52,11 +53,14 @@ internal val ISSUE_GROUP_OUTER_RADIUS = SizeConstants.LargeMediumSize
  *
  * The leading icon is also what names each field for screen readers: the placeholder is gone as soon
  * as there is content.
+ *
+ * @param onMarkdownFormat Called with each formatting action used in the description.
  */
 @Composable
 internal fun IssueReportForm(
     data: IssueReporterUiState,
     onEvent: (IssueReporterEvent) -> Unit,
+    onMarkdownFormat: (MarkdownFormatAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -82,6 +86,7 @@ internal fun IssueReportForm(
         IssueDescriptionField(
             description = data.description,
             onDescriptionChange = { onEvent(IssueReporterEvent.UpdateDescription(it)) },
+            onMarkdownFormat = onMarkdownFormat,
         )
 
         GeneralTextField(

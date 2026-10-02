@@ -31,7 +31,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.da
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReporterConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.providers.DeviceInfoProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.usecases.SendIssueReportUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.shake.IssueReporterShakeManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterViewModel
 import org.koin.android.ext.koin.androidApplication
@@ -54,12 +53,17 @@ fun issueReporterModule(
     hostBuildConfig: AppToolkitHostBuildConfig,
     config: IssueReporterConfig = IssueReporterConfig(),
 ): Module = module {
-    single<IssueReporterSheet> { IssueReporterSheet { onDismissRequest -> IssueReporterBottomSheet(onDismissRequest) } }
+    single<IssueReporterSheet> {
+        IssueReporterSheet { onDismissRequest -> IssueReporterBottomSheet(onDismissRequest = onDismissRequest) }
+    }
     single<IssueReporterRemoteDataSource> { IssueReporterRemoteDataSource(client = get()) }
-    single<DeviceInfoProvider> { DeviceInfoLocalDataSource(get(), get()) }
-    single<IssueReporterRepository> { DefaultIssueReporterRepository(get(), get(), get(), get()) }
-    single<SendIssueReportUseCase> {
-        SendIssueReportUseCase(repository = get(), telemetryRepository = get())
+    single<DeviceInfoProvider> { DeviceInfoLocalDataSource(app = get(), dispatchers = get()) }
+    single<IssueReporterRepository> {
+        DefaultIssueReporterRepository(
+            remoteDataSource = get(),
+            deviceInfoProvider = get(),
+            telemetryRepository = get(),
+        )
     }
     single<GithubTarget> {
         GithubTarget(
@@ -75,12 +79,10 @@ fun issueReporterModule(
 
     viewModel {
         IssueReporterViewModel(
-            sendIssueReport = get(),
-            githubTarget = get(),
-            githubToken = get(githubTokenQualifier),
             repository = get(),
+            githubTarget = get(),
+            githubToken = get(qualifier = githubTokenQualifier),
             telemetryRepository = get(),
-            dispatchers = get(),
         )
     }
 }

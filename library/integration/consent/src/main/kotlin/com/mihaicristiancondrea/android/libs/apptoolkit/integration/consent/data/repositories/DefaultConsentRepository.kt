@@ -17,26 +17,24 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.ConsentPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.exceptions.ConsentException
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.remote.datasource.ConsentRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.isAlive
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.ConsentPreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -47,9 +45,9 @@ import kotlin.time.Duration.Companion.milliseconds
 /**
  * Implementation of [ConsentRepository] that delegates UMP work to a remote data source.
  *
- * @param requestScope scope that owns the shared, process-wide consent round trip. It deliberately
- * defaults to the immediate main dispatcher because UMP requires its entry points to be called from
- * the main thread.
+ * @param requestScope scope that owns the shared, process-wide consent round trip. It defaults to
+ * the immediate main dispatcher because UMP requires its entry points to be called from the main
+ * thread.
  */
 class DefaultConsentRepository(
     private val remote: ConsentRemoteDataSource,
@@ -64,32 +62,36 @@ class DefaultConsentRepository(
     private var inFlightRequest: InFlightConsentRequest? = null
 
     /**
-     * Shares an in-flight UMP request with callers using the same [showIfRequired] mode and a
-     * live host. Finishing or destroyed hosts are rejected.
+     * Requests consent, sharing one UMP round trip between callers that ask at the same time, since
+     * overlapping requests drive the SDK into the failure path that crashes the process from its
+     * own executor. A host that is finishing or destroyed is rejected before UMP is called.
      *
-     * A replacement host waits up to [STALE_REQUEST_WAIT_MS] for a dead host's request to
-     * settle before starting its own, limiting overlap without letting an unanswered request
-     * block later callers indefinitely.
+     * The flight is keyed on [showIfRequired], so an explicit request for the form never takes the
+     * answer of one that shows it only when required. A caller joins only a request whose host is
+     * still alive; a request from a host that has gone is waited for, at most
+     * [STALE_REQUEST_WAIT_MS], and then a new one starts.
      */
-    override fun requestConsent(
+    override suspend fun requestConsent(
         host: ConsentHost,
         showIfRequired: Boolean,
-    ): Flow<DataState<Unit, Errors.UseCase>> = flow {
+    ) {
+        val hostName: String = host.activity::class.java.name
         telemetryRepository.logBreadcrumb(
             message = "Consent request started",
             attributes = mapOf(
-                "host" to host.activity::class.java.name,
+                "host" to hostName,
                 "showIfRequired" to showIfRequired.toString(),
             ),
         )
         if (!host.isAlive) {
             telemetryRepository.logBreadcrumb(
                 message = "Consent request skipped for a finishing host",
-                attributes = mapOf("host" to host.activity::class.java.name),
+                attributes = mapOf("host" to hostName),
             )
-            emit(DataState.Loading())
-            emit(DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO))
-            return@flow
+            throw ConsentException(
+                reason = ConsentException.Reason.HOST_UNAVAILABLE,
+                message = "Consent host is finishing or destroyed.",
+            )
         }
 
         val staleRequest: InFlightConsentRequest? = requestMutex.withLock {
@@ -98,11 +100,9 @@ class DefaultConsentRepository(
         if (staleRequest != null) {
             telemetryRepository.logBreadcrumb(
                 message = "Consent request waiting for a request from a finished host",
-                attributes = mapOf("host" to host.activity::class.java.name),
+                attributes = mapOf("host" to hostName),
             )
-            withTimeoutOrNull(STALE_REQUEST_WAIT_MS.milliseconds) {
-                staleRequest.state.first { dataState -> dataState !is DataState.Loading }
-            }
+            withTimeoutOrNull(STALE_REQUEST_WAIT_MS.milliseconds) { staleRequest.result.join() }
         }
 
         val request: InFlightConsentRequest = requestMutex.withLock {
@@ -111,18 +111,19 @@ class DefaultConsentRepository(
                 ?.also {
                     telemetryRepository.logBreadcrumb(
                         message = "Consent request joined an in-flight request",
-                        attributes = mapOf("host" to host.activity::class.java.name),
+                        attributes = mapOf("host" to hostName),
                     )
                 }
                 ?: startRequest(host = host, showIfRequired = showIfRequired)
         }
 
-        emit(DataState.Loading())
-        emit(request.state.first { dataState -> dataState !is DataState.Loading })
+        request.result.await()
     }
 
     /**
-     * Starts a shared UMP round trip and publishes its states through a replaying [StateFlow].
+     * Starts a shared UMP round trip in [requestScope] and publishes its outcome through
+     * [InFlightConsentRequest.result], so a caller that stops waiting never cancels it for the
+     * others. A round trip cancelled with its scope ends as [ConsentException.Reason.REQUEST_FAILED].
      *
      * The caller must hold [requestMutex].
      */
@@ -130,23 +131,28 @@ class DefaultConsentRepository(
         host: ConsentHost,
         showIfRequired: Boolean,
     ): InFlightConsentRequest {
-        val state = MutableStateFlow<DataState<Unit, Errors.UseCase>>(value = DataState.Loading())
         val request = InFlightConsentRequest(
             host = host,
             showIfRequired = showIfRequired,
-            state = state,
+            result = CompletableDeferred(),
         )
         inFlightRequest = request
 
         requestScope.launch {
             try {
                 remote.requestConsent(host = host, showIfRequired = showIfRequired)
-                    .collect { dataState -> state.value = dataState }
-                if (state.value is DataState.Loading) {
-                    state.value = DataState.Error(
-                        error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO,
+                request.result.complete(Unit)
+            } catch (cancellation: CancellationException) {
+                request.result.completeExceptionally(
+                    ConsentException(
+                        reason = ConsentException.Reason.REQUEST_FAILED,
+                        message = "Consent round trip was cancelled before UMP answered.",
+                        cause = cancellation,
                     )
-                }
+                )
+                throw cancellation
+            } catch (throwable: Throwable) {
+                request.result.completeExceptionally(throwable)
             } finally {
                 withContext(NonCancellable) {
                     requestMutex.withLock {
@@ -165,7 +171,7 @@ class DefaultConsentRepository(
     private class InFlightConsentRequest(
         val host: ConsentHost,
         val showIfRequired: Boolean,
-        val state: MutableStateFlow<DataState<Unit, Errors.UseCase>>,
+        val result: CompletableDeferred<Unit>,
     )
 
     override suspend fun applyInitialConsent() {
@@ -196,37 +202,32 @@ class DefaultConsentRepository(
         telemetryRepository.setPerformanceEnabled(settings.usageAndDiagnostics)
     }
 
-    private suspend fun readPersistedSettings(): ConsentSettings = coroutineScope {
-        val defaultGranted = !configProvider.isDebugBuild
-        val usageDeferred = async {
-            local.usageAndDiagnostics(default = defaultGranted).first()
-        }
-        val analyticsDeferred = async {
-            local.analyticsConsent(default = defaultGranted).first()
-        }
-        val adStorageDeferred = async {
-            local.adStorageConsent(default = defaultGranted).first()
-        }
-        val adUserDataDeferred = async {
-            local.adUserDataConsent(default = defaultGranted).first()
-        }
-        val adPersonalizationDeferred = async {
-            local.adPersonalizationConsent(default = defaultGranted).first()
-        }
+    /** Reads every stored choice at once. Unset choices are granted in release builds only. */
+    private suspend fun readPersistedSettings(): ConsentSettings = storageCall {
+        coroutineScope {
+            val defaultGranted = !configProvider.isDebugBuild
+            val usageDeferred = async { local.usageAndDiagnostics(default = defaultGranted).first() }
+            val analyticsDeferred = async { local.analyticsConsent(default = defaultGranted).first() }
+            val adStorageDeferred = async { local.adStorageConsent(default = defaultGranted).first() }
+            val adUserDataDeferred = async { local.adUserDataConsent(default = defaultGranted).first() }
+            val adPersonalizationDeferred = async {
+                local.adPersonalizationConsent(default = defaultGranted).first()
+            }
 
-        ConsentSettings(
-            usageAndDiagnostics = usageDeferred.await(),
-            analyticsConsent = analyticsDeferred.await(),
-            adStorageConsent = adStorageDeferred.await(),
-            adUserDataConsent = adUserDataDeferred.await(),
-            adPersonalizationConsent = adPersonalizationDeferred.await(),
-        )
+            ConsentSettings(
+                usageAndDiagnostics = usageDeferred.await(),
+                analyticsConsent = analyticsDeferred.await(),
+                adStorageConsent = adStorageDeferred.await(),
+                adUserDataConsent = adUserDataDeferred.await(),
+                adPersonalizationConsent = adPersonalizationDeferred.await(),
+            )
+        }
     }
 }
 
 /**
- * Bounds waiting for an unanswered request whose host has disappeared.
+ * How long a new host waits for a consent request started by a host that has since gone. UMP
+ * answers a request whose host can no longer show a form within moments, so this only matters
+ * when it never answers.
  */
 private const val STALE_REQUEST_WAIT_MS: Long = 5_000L
-
-

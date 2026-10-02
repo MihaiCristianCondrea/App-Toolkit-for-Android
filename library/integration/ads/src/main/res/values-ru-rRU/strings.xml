@@ -22,4 +22,6 @@
     <string name="personalized_ads">Персонализированная реклама</string>
     <string name="summary_ads">Смотрите рекламу, которая вам подходит. Управляйте информацией, используемой для персонализации рекламы. Вы можете отключить её в любое время.</string>
     <string name="summary_ads_personalized_ads">Выберите, как мы персонализируем рекламу на основе ваших интересов</string>
+    <string name="error_ads_settings_storage">Ошибка хранилища.</string>
+    <string name="error_ads_consent_failed">Не удалось загрузить информацию о согласии</string>
 </resources>

@@ -22,4 +22,6 @@
     <string name="personalized_ads">Publicités personnalisées</string>
     <string name="summary_ads">Voir des publicités pertinentes pour vous. Gérez les informations utilisées pour afficher des publicités personnalisées basées sur votre activité dans l\'application.</string>
     <string name="summary_ads_personalized_ads">Choisissez comment nous personnalisons les publicités en fonction de vos intérêts</string>
+    <string name="error_ads_settings_storage">Erreur de stockage.</string>
+    <string name="error_ads_consent_failed">Échec du chargement des informations de consentement</string>
 </resources>

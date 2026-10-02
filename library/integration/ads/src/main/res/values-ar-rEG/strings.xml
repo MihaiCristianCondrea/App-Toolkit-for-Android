@@ -22,4 +22,6 @@
     <string name="personalized_ads">الإعلانات المخصصة</string>
     <string name="summary_ads">شاهد الإعلانات ذات الصلة بك. قم بإدارة المعلومات المستخدمة لعرض الإعلانات المخصصة بناءً على نشاطك في التطبيق. يمكنك دائمًا إيقاف التخصيص هنا.\n</string>
     <string name="summary_ads_personalized_ads">اختر كيف نخصص الإعلانات لك بناءً على اهتماماتك</string>
+    <string name="error_ads_settings_storage">خطأ في التخزين.</string>
+    <string name="error_ads_consent_failed">فشل في تحميل معلومات الموافقة</string>
 </resources>

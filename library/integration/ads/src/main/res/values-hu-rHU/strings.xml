@@ -22,4 +22,6 @@
     <string name="personalized_ads">Személyre szabott hirdetések</string>
     <string name="summary_ads">Nézz meg számodra releváns hirdetéseket. A személyre szabást bármikor kikapcsolhatod itt.</string>
     <string name="summary_ads_personalized_ads">Válaszd ki, hogyan személyre szabjuk a hirdetéseket az érdeklődési köreid alapján</string>
+    <string name="error_ads_settings_storage">Tárhelyhiba.</string>
+    <string name="error_ads_consent_failed">Nem sikerült betölteni a hozzájárulási információkat</string>
 </resources>

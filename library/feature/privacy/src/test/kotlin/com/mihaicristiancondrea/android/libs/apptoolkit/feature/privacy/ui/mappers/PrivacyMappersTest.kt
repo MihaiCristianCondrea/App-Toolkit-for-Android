@@ -37,7 +37,7 @@ class PrivacyMappersTest {
 
     @Test
     fun `maps the provider into two ordered groups`() {
-        val items = provider.toUiState().items
+        val items = provider.toPrivacyItems()
 
         assertThat(items.map { it.key }).containsExactly(
             PrivacyItemKey.HEADER_PRIVACY,
@@ -55,7 +55,7 @@ class PrivacyMappersTest {
 
     @Test
     fun `assigns card positions per group rather than across the whole list`() {
-        val items = provider.toUiState().items
+        val items = provider.toPrivacyItems()
 
         assertThat(items.preference(PrivacyItemKey.PRIVACY_POLICY).position)
             .isEqualTo(GroupedItemPosition.FIRST)
@@ -71,7 +71,7 @@ class PrivacyMappersTest {
 
     @Test
     fun `link rows carry the provider's urls and host rows carry their destination`() {
-        val items = provider.toUiState().items
+        val items = provider.toPrivacyItems()
 
         assertThat(items.preference(PrivacyItemKey.PRIVACY_POLICY).action)
             .isEqualTo(PrivacyItemAction.OpenUrl(url = "https://example.test/privacy"))

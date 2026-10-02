@@ -40,7 +40,6 @@ val diagnosticsSettingsModule: Module = module {
         UsageAndDiagnosticsViewModel(
             repository = get(),
             telemetryRepository = get(),
-            dispatchers = get(),
         )
     }
 }

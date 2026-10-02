@@ -15,16 +15,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.contracts
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.models
 
-import androidx.navigation3.runtime.NavKey
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
+import androidx.compose.runtime.Immutable
 
-/** One-off outputs raised by the privacy screen. */
-sealed interface PrivacyAction : ActionEvent {
-    /** Asks the host surface to open [url] in the browser. */
-    data class OpenUrl(val url: String) : PrivacyAction
-
-    /** Asks the screen to open the Toolkit page [key]: permissions, ads or usage and diagnostics. */
-    data class Navigate(val key: NavKey) : PrivacyAction
-}
+/**
+ * One donation tier as the support page shows it, so the page renders without Play Billing types.
+ *
+ * @property formattedPrice The price Play formatted for the user's store, or null when it has none.
+ * @property isEligible Whether Play offers a one-time purchase for this product, which enables its
+ * button.
+ */
+@Immutable
+data class DonationOption(
+    val productId: String,
+    val formattedPrice: String?,
+    val isEligible: Boolean,
+)

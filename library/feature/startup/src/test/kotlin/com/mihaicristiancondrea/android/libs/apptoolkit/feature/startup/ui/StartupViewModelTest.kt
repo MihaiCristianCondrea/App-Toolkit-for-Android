@@ -17,19 +17,27 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui
 
-import com.google.common.truth.Truth.assertThat
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.contracts.StartupAction
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.contracts.StartupEvent
+import android.app.Activity
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.contracts.StartupEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.states.ConsentRequestStatus
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentSettings
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceTimeBy
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -41,64 +49,142 @@ class StartupViewModelTest {
         val dispatcherExtension = UnconfinedDispatcherExtension()
     }
 
+    private val telemetryRepository = FakeTelemetryRepository()
+
+    private val host = object : ConsentHost {
+        override val activity: Activity get() = error("The fake consent repository never reads the activity")
+    }
+
+    private fun createViewModel(consentRepository: ConsentRepository): StartupViewModel =
+        StartupViewModel(consentRepository = consentRepository, telemetryRepository = telemetryRepository)
+
+    private fun advance() = dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
     @Test
-    fun `consent event updates state`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = StartupViewModel(telemetryRepository = FakeTelemetryRepository())
+    fun `consent is pending before the first resume`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel(FakeConsentRepository { answered(DataState.Success(Unit)) })
+        advance()
 
-        viewModel.onEvent(StartupEvent.ConsentFormLoaded)
-
-        val state = viewModel.uiState.value
-        assertThat(state.screenState).isInstanceOf(ScreenState.Success::class.java)
-        assertThat(state.data?.consentFormLoaded).isTrue()
+        assertEquals(ConsentRequestStatus.Pending, viewModel.state.value.consent)
     }
 
     @Test
-    fun `continue event emits navigation action`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = StartupViewModel(telemetryRepository = FakeTelemetryRepository())
-        val actions = mutableListOf<StartupAction>()
-        val job = launch { viewModel.actionEvent.collect { actions.add(it) } }
+    fun `a consent answer settles consent`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel(FakeConsentRepository { answered(DataState.Success(Unit)) })
 
-        viewModel.onEvent(StartupEvent.Continue)
-        advanceUntilIdle()
+        viewModel.onEvent(StartupEvent.RequestConsent(host = host))
+        advance()
 
-        assertThat(actions).containsExactly(StartupAction.NavigateNext)
-        job.cancel()
+        assertEquals(ConsentRequestStatus.Settled, viewModel.state.value.consent)
     }
 
-    /**
-     * The startup screen hides its only button while loading, so a consent round trip that never
-     * reports back has to stop mattering at some point.
-     */
     @Test
-    fun `screen stops loading when consent never reports back`() =
+    fun `a failed consent form still settles consent`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel(
+            FakeConsentRepository { answered(DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO)) }
+        )
+
+        viewModel.onEvent(StartupEvent.RequestConsent(host = host))
+        advance()
+
+        assertEquals(ConsentRequestStatus.Settled, viewModel.state.value.consent)
+    }
+
+    @Test
+    fun `a consent request that throws is reported and settles consent`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val viewModel = StartupViewModel(telemetryRepository = FakeTelemetryRepository())
-            val job = launch { viewModel.actionEvent.collect { } }
+            val viewModel = createViewModel(
+                FakeConsentRepository { flow<DataState<Unit, Errors.UseCase>> { throw IllegalStateException("ump") } }
+            )
 
-            viewModel.onEvent(StartupEvent.RequestConsent)
-            advanceTimeBy(1.seconds)
+            viewModel.onEvent(StartupEvent.RequestConsent(host = host))
+            advance()
 
-            assertThat(viewModel.uiState.value.screenState)
-                .isInstanceOf(ScreenState.IsLoading::class.java)
-
-            advanceUntilIdle()
-
-            assertThat(viewModel.uiState.value.screenState)
-                .isInstanceOf(ScreenState.Success::class.java)
-            assertThat(viewModel.uiState.value.data?.consentFormLoaded).isTrue()
-            job.cancel()
+            assertEquals(ConsentRequestStatus.Settled, viewModel.state.value.consent)
+            assertTrue(telemetryRepository.loggedEvents.any { it.name == "vm_op_error" })
         }
 
+    /**
+     * The startup screen hides its only button until consent settles, so a consent round trip that
+     * never reports back has to stop mattering at some point.
+     */
     @Test
-    fun `request consent emits ui action`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = StartupViewModel(telemetryRepository = FakeTelemetryRepository())
-        val actions = mutableListOf<StartupAction>()
-        val job = launch { viewModel.actionEvent.collect { actions.add(it) } }
+    fun `consent settles when the request never reports back`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel(FakeConsentRepository { neverAnswered() })
 
-        viewModel.onEvent(StartupEvent.RequestConsent)
-        advanceUntilIdle()
+        viewModel.onEvent(StartupEvent.RequestConsent(host = host))
+        advanceTimeBy(1.seconds)
 
-        assertThat(actions).containsExactly(StartupAction.RequestConsentUi)
-        job.cancel()
+        assertEquals(ConsentRequestStatus.Pending, viewModel.state.value.consent)
+
+        advance()
+
+        assertEquals(ConsentRequestStatus.Settled, viewModel.state.value.consent)
+    }
+
+    @Test
+    fun `a resume while waiting asks again`() = runTest(dispatcherExtension.testDispatcher) {
+        val repository = FakeConsentRepository { neverAnswered() }
+        val viewModel = createViewModel(repository)
+
+        viewModel.onEvent(StartupEvent.RequestConsent(host = host))
+        advanceTimeBy(1.seconds)
+        repository.answer = { answered(DataState.Success(Unit)) }
+        viewModel.onEvent(StartupEvent.RequestConsent(host = host))
+        advanceTimeBy(1.seconds)
+
+        assertEquals(2, repository.requests)
+        assertEquals(ConsentRequestStatus.Settled, viewModel.state.value.consent)
+    }
+
+    @Test
+    fun `a resume after consent settled asks for nothing`() = runTest(dispatcherExtension.testDispatcher) {
+        val repository = FakeConsentRepository { answered(DataState.Success(Unit)) }
+        val viewModel = createViewModel(repository)
+        viewModel.onEvent(StartupEvent.RequestConsent(host = host))
+        advance()
+
+        viewModel.onEvent(StartupEvent.RequestConsent(host = host))
+        advance()
+
+        assertEquals(1, repository.requests)
+        assertEquals(ConsentRequestStatus.Settled, viewModel.state.value.consent)
+    }
+
+    @Test
+    fun `without an activity consent settles at once`() = runTest(dispatcherExtension.testDispatcher) {
+        val repository = FakeConsentRepository { neverAnswered() }
+        val viewModel = createViewModel(repository)
+
+        viewModel.onEvent(StartupEvent.RequestConsent(host = null))
+
+        assertEquals(0, repository.requests)
+        assertEquals(ConsentRequestStatus.Settled, viewModel.state.value.consent)
+    }
+
+    private fun answered(result: DataState<Unit, Errors.UseCase>): Flow<DataState<Unit, Errors.UseCase>> =
+        flowOf<DataState<Unit, Errors.UseCase>>(DataState.Loading(), result)
+
+    private fun neverAnswered(): Flow<DataState<Unit, Errors.UseCase>> = flow<DataState<Unit, Errors.UseCase>> {
+        emit(DataState.Loading())
+        awaitCancellation()
+    }
+
+    private class FakeConsentRepository(
+        var answer: () -> Flow<DataState<Unit, Errors.UseCase>>,
+    ) : ConsentRepository {
+        var requests: Int = 0
+
+        override fun requestConsent(
+            host: ConsentHost,
+            showIfRequired: Boolean,
+        ): Flow<DataState<Unit, Errors.UseCase>> {
+            requests += 1
+            return answer()
+        }
+
+        override suspend fun applyInitialConsent() = Unit
+
+        override suspend fun applyConsentSettings(settings: ConsentSettings) = Unit
     }
 }

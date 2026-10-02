@@ -17,29 +17,33 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.exceptions.IssueReportRejectedException
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.DeviceInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.Report
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
 
 /**
- * Repository contract for sending issue reports.
+ * The data layer's entry point for issue reports. Both calls are safe from the main thread.
  */
 interface IssueReporterRepository {
 
     /**
-     * Captures the device details attached to a report, and shown in the report screen's device
-     * panel.
-     *
-     * Exposed here rather than letting callers hold `DeviceInfoProvider`: that interface is
-     * implemented by a data source, and the UI reached it directly. The repository is the data
-     * layer's entry point.
+     * Captures the device details attached to a report and shown in the sheet's device panel.
      */
     suspend fun captureDeviceInfo(): DeviceInfo
 
+    /**
+     * Files [report] as an issue in [target], authenticated with [token] when there is one, and
+     * returns the created issue's web URL.
+     *
+     * @throws IssueReportRejectedException when GitHub refuses the token, the repository or the
+     * issue's fields.
+     * @throws NetworkException when the request fails for any other reason.
+     */
     suspend fun sendReport(
         report: Report,
         target: GithubTarget,
         token: String? = null,
-    ): IssueReportResult
+    ): String
 }

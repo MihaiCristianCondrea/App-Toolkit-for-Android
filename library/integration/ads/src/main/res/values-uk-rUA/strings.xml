@@ -22,4 +22,6 @@
     <string name="personalized_ads">Персоналізована реклама</string>
     <string name="summary_ads">Переглядайте релевантну рекламу та керуйте налаштуваннями</string>
     <string name="summary_ads_personalized_ads">Виберіть, як персоналізувати рекламу відповідно до ваших інтересів</string>
+    <string name="error_ads_settings_storage">Помилка сховища.</string>
+    <string name="error_ads_consent_failed">Не вдалося завантажити інформацію про згоду</string>
 </resources>

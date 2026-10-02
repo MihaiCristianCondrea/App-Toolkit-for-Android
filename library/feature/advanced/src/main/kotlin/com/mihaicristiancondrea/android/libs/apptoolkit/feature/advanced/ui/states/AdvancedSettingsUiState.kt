@@ -17,11 +17,18 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.states
 
+import androidx.compose.runtime.Immutable
+
 /**
- * Represents the state for [AdvancedSettingsViewModel].
+ * Everything the advanced settings page renders. Its rows are there from the start, so nothing
+ * here loads.
  *
- * @param cacheClearMessage optional string resource id to show after clearing cache
+ * @property cacheClear Where the last cache clear stands, reported as the page's `screen_state`.
+ * @property developerOptionsUnlocked Whether the About screen's version easter egg has been found,
+ * which offers the developer options row.
  */
+@Immutable
 data class AdvancedSettingsUiState(
-    val cacheClearMessage: Int? = null,
+    val cacheClear: CacheClearStatus = CacheClearStatus.Idle,
+    val developerOptionsUnlocked: Boolean = false,
 )

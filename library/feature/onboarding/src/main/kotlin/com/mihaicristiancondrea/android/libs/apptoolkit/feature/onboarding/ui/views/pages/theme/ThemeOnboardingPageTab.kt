@@ -53,11 +53,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.domain.models.OnboardingThemeChoice
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.OnboardingThemeViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingThemeEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingThemeUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.theme.cards.AmoledModeToggleCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.filterSeasonalStaticPalettes
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.WallpaperSwatchColors
@@ -72,6 +74,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extens
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.isChristmasSeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.isHalloweenSeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.ThemePreferencesState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.cards.ThemeChoicePreviewCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.ThemePalettePager
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.dedupeStaticPaletteIds
@@ -87,18 +90,39 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
+/**
+ * The theme page of onboarding: the theme mode, AMOLED, and a wallpaper or static palette. An app
+ * adds it as an `OnboardingPage.CustomPage` from its `OnboardingProvider`. A failed write shows
+ * through the onboarding screen's snackbar host.
+ */
 @Composable
 fun ThemeOnboardingPageTab() {
-    val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val viewModel: OnboardingThemeViewModel = koinViewModel()
-    val screenState by viewModel.uiState.collectAsStateWithLifecycle()
-    val themePreferences = screenState.data ?: ThemePreferencesState(
-        themeMode = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
-        dynamicColors = true,
-        amoledMode = false,
-        dynamicPaletteVariant = 0,
-        staticPaletteId = StaticPaletteIds.DEFAULT,
+    val state: OnboardingThemeUiState by viewModel.state.collectAsStateWithLifecycle()
+
+    ThemeOnboardingPageTabContent(
+        state = state,
+        onEvent = viewModel::onEvent,
     )
+
+    MessageHost(viewModel = viewModel)
+}
+
+/**
+ * Renders the theme choices for [state]. The swatches follow the theme the app is drawn in, which
+ * can differ from the system's, and the seasonal palettes show only in their season or while one
+ * is selected.
+ *
+ * @param onEvent Receives the events [OnboardingThemeViewModel] handles.
+ */
+@Composable
+internal fun ThemeOnboardingPageTabContent(
+    state: OnboardingThemeUiState,
+    onEvent: (OnboardingThemeEvent) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val coroutineScope: CoroutineScope = rememberCoroutineScope()
+    val themePreferences: ThemePreferencesState = state.preferences
     val context = LocalContext.current
 
     val defaultThemeModeKey: String = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM
@@ -133,7 +157,6 @@ fun ThemeOnboardingPageTab() {
         )
     )
 
-    // Swatches follow the theme the app is drawn in, which can differ from the system's.
     val isAppInDarkTheme: Boolean =
         MaterialTheme.colorScheme.surface.luminance() < DARK_SURFACE_LUMINANCE
 
@@ -201,7 +224,7 @@ fun ThemeOnboardingPageTab() {
     }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(horizontal = SizeConstants.LargeSize),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -236,7 +259,7 @@ fun ThemeOnboardingPageTab() {
                     icon = choice.icon,
                     isSelected = currentThemeMode == choice.key,
                     onClick = {
-                        viewModel.onEvent(OnboardingThemeEvent.SelectThemeMode(choice.key))
+                        onEvent(OnboardingThemeEvent.SelectThemeMode(choice.key))
                     },
                     modifier = Modifier.weight(1f),
                     preview = {
@@ -255,7 +278,7 @@ fun ThemeOnboardingPageTab() {
             enabled = amoledAllowed,
             onCheckedChange = { isChecked ->
                 if (!amoledAllowed) return@AmoledModeToggleCard
-                viewModel.onEvent(OnboardingThemeEvent.SetAmoledMode(isChecked))
+                onEvent(OnboardingThemeEvent.SetAmoledMode(isChecked))
             }
         )
 
@@ -304,7 +327,7 @@ fun ThemeOnboardingPageTab() {
                                     colors = palette,
                                     selected = isDynamicColors && index == dynamicVariantIndex,
                                     onClick = {
-                                        viewModel.onEvent(
+                                        onEvent(
                                             OnboardingThemeEvent.SelectDynamicPalette(index)
                                         )
                                     }
@@ -326,9 +349,10 @@ fun ThemeOnboardingPageTab() {
                                 WallpaperColorOptionCard(
                                     colors = staticSwatches[index],
                                     selected = !isDynamicColors && id == staticPaletteId,
-                                    showSeasonalBadge = (isChristmasSeason && id == StaticPaletteIds.CHRISTMAS) || (isHalloweenSeason && id == StaticPaletteIds.HALLOWEEN),
+                                    showSeasonalBadge = (isChristmasSeason && id == StaticPaletteIds.CHRISTMAS) ||
+                                            (isHalloweenSeason && id == StaticPaletteIds.HALLOWEEN),
                                     onClick = {
-                                        viewModel.onEvent(
+                                        onEvent(
                                             OnboardingThemeEvent.SelectStaticPalette(id)
                                         )
                                     }
@@ -357,7 +381,7 @@ fun ThemeOnboardingPageTab() {
                         showSeasonalBadge = (isChristmasSeason && id == StaticPaletteIds.CHRISTMAS) ||
                                 (isHalloweenSeason && id == StaticPaletteIds.HALLOWEEN),
                         onClick = {
-                            viewModel.onEvent(OnboardingThemeEvent.SelectStaticPalette(id))
+                            onEvent(OnboardingThemeEvent.SelectStaticPalette(id))
                         }
                     )
                 }
@@ -367,3 +391,14 @@ fun ThemeOnboardingPageTab() {
 }
 
 private const val DARK_SURFACE_LUMINANCE: Float = 0.5f
+
+@Preview(showBackground = true)
+@Composable
+private fun ThemeOnboardingPageTabContentPreview() {
+    MaterialTheme {
+        ThemeOnboardingPageTabContent(
+            state = OnboardingThemeUiState(),
+            onEvent = {},
+        )
+    }
+}

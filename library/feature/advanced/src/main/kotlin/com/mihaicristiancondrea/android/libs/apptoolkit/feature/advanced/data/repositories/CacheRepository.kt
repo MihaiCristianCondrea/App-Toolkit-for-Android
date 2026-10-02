@@ -17,20 +17,16 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
-import kotlinx.coroutines.flow.Flow
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 
 /**
- * Repository abstraction for cache-related operations.
+ * The application's cache directories.
  */
 interface CacheRepository {
     /**
-     * Clears the application's cache directories.
+     * Deletes the application's cache directories. Main-safe.
      *
-     * @return A [Flow] emitting [DataState.Success] once every directory is gone, or
-     * [DataState.Error] naming why the clear failed.
+     * @throws StorageException when a directory could not be opened or was not fully deleted.
      */
-    fun clearCache(): Flow<DataState<Unit, Errors.Database>>
+    suspend fun clearCache()
 }
-

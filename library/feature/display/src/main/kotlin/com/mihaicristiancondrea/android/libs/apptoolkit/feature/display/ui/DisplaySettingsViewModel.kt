@@ -17,96 +17,123 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui
 
-import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.contracts.DisplaySettingsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.states.DisplaySettingsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DisplayPreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.ScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.updateData
-import kotlinx.coroutines.flow.Flow
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.contracts.DisplaySettingsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.models.DisplaySettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.states.DisplaySettingsUiState
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
-/** Owns display-preference observation and persistence for [DisplaySettingsScreen]. */
+/**
+ * Follows and stores the display preferences the display settings screen shows. A failed read
+ * replaces them with a retryable failure; a failed write keeps them on screen and shows an error
+ * message. The shell's layout choices are written by the screen itself, not here.
+ */
 class DisplaySettingsViewModel(
     private val displayPreferences: DisplayPreferencesRepository,
     private val themePreferences: ThemePreferencesRepository,
-    private val telemetryRepository: TelemetryRepository,
-) : ScreenViewModel<DisplaySettingsUiState, DisplaySettingsEvent, ActionEvent>(
-    initialState = UiStateScreen(
-        screenState = ScreenState.Success(),
-        data = DisplaySettingsUiState(),
-    ),
+    telemetryRepository: TelemetryRepository,
+) : LoggedScreenViewModel<DisplaySettingsUiState, DisplaySettingsEvent>(
+    initialState = DisplaySettingsUiState(),
+    telemetryRepository = telemetryRepository,
+    screenName = "DisplaySettings",
+    viewModelName = "DisplaySettingsViewModel",
 ) {
-    private var observationJob: Job? = null
+    private var observeJob: Job? = null
 
     init {
-        onEvent(DisplaySettingsEvent.Initialize)
+        onEvent(DisplaySettingsEvent.Load)
     }
 
-    private fun observePreferences() {
-        observationJob?.cancel()
-        observationJob = combine(
-            themePreferences.themeMode,
-            themePreferences.dynamicColors,
-            displayPreferences.bouncyButtons,
-            displayPreferences.showBottomBarLabels,
-            displayPreferences.language,
-        ) { themeMode, dynamicColors, bouncyButtons, showBottomBarLabels, language ->
-            DisplaySettingsUiState(
-                themeMode = themeMode,
-                dynamicColors = dynamicColors,
-                bouncyButtons = bouncyButtons,
-                showBottomBarLabels = showBottomBarLabels,
-                language = language,
-            )
-        }.onEach { state ->
-            updateStateThreadSafe {
-                screenState.updateData(newState = ScreenState.Success()) { state }
-            }
-        }.launchIn(viewModelScope)
-    }
-
-    fun startupRoute(defaultRoute: String): Flow<String> =
-        displayPreferences.startupPage(default = defaultRoute)
-
-    override fun onEvent(event: DisplaySettingsEvent) {
+    override fun handleEvent(event: DisplaySettingsEvent) {
         when (event) {
-            DisplaySettingsEvent.Initialize -> observePreferences()
+            DisplaySettingsEvent.Load -> observePreferences()
+
             is DisplaySettingsEvent.ThemeModeChanged ->
-                persist { themePreferences.selectThemeMode(event.mode) }
+                persist(action = Actions.SET_THEME_MODE) { themePreferences.selectThemeMode(event.mode) }
+
             is DisplaySettingsEvent.DynamicColorsChanged ->
-                persist { themePreferences.setDynamicColors(event.enabled) }
+                persist(action = Actions.SET_DYNAMIC_COLORS) { themePreferences.setDynamicColors(event.enabled) }
+
             is DisplaySettingsEvent.BouncyButtonsChanged ->
-                persist { displayPreferences.setBouncyButtons(event.enabled) }
+                persist(action = Actions.SET_BOUNCY_BUTTONS) { displayPreferences.setBouncyButtons(event.enabled) }
+
             is DisplaySettingsEvent.BottomBarLabelsChanged ->
-                persist { displayPreferences.setShowBottomBarLabels(event.show) }
+                persist(action = Actions.SET_SHOW_BOTTOM_BAR_LABELS) {
+                    displayPreferences.setShowBottomBarLabels(event.show)
+                }
+
             is DisplaySettingsEvent.LanguageChanged ->
-                persist { displayPreferences.setLanguage(event.language) }
+                persist(action = Actions.SET_LANGUAGE) { displayPreferences.setLanguage(event.language) }
+
             is DisplaySettingsEvent.StartupRouteChanged ->
-                persist { displayPreferences.setStartupPage(event.route) }
+                persist(action = Actions.SET_STARTUP_PAGE) { displayPreferences.setStartupPage(event.route) }
         }
     }
 
-    /** Runs a preference write, reporting a failure instead of dropping it silently. */
-    private fun persist(block: suspend () -> Unit) {
-        viewModelScope.launch {
-            runSuspendCatching { block() }
-                .onFailure { throwable ->
-                    telemetryRepository.recordNonFatal(
-                        throwable = throwable,
-                        attributes = mapOf("operation" to "persistDisplaySetting"),
-                    )
-                }
+    /** Follows the stored preferences. A retry restarts the collection that failed. */
+    private fun observePreferences() {
+        observeJob = observeJob.restart {
+            setState { copy(settings = Loadable.Loading) }
+            storedSettings().collectReport(
+                action = Actions.OBSERVE_PREFERENCES,
+                onError = { error -> setState { copy(settings = error.toFailed()) } },
+            ) { settings ->
+                setState { copy(settings = Loadable.Ready(settings)) }
+            }
         }
+    }
+
+    private fun storedSettings(): Flow<DisplaySettings> = combine(
+        themePreferences.themeMode,
+        themePreferences.dynamicColors,
+        displayPreferences.bouncyButtons,
+        displayPreferences.showBottomBarLabels,
+        combine(
+            displayPreferences.language,
+            displayPreferences.startupPage(default = NO_STARTUP_ROUTE),
+        ) { language, startupRoute -> language to startupRoute },
+    ) { themeMode, dynamicColors, bouncyButtons, showBottomBarLabels, (language, startupRoute) ->
+        DisplaySettings(
+            themeMode = themeMode,
+            dynamicColors = dynamicColors,
+            bouncyButtons = bouncyButtons,
+            showBottomBarLabels = showBottomBarLabels,
+            language = language,
+            startupRoute = startupRoute,
+        )
+    }
+
+    /**
+     * Runs one preference write as [action]. Every write completes on its own, since each one is
+     * a separate choice; a failure shows an error message and the stored value stays on screen.
+     */
+    private fun persist(action: String, write: suspend () -> Unit) {
+        launchReport(
+            action = action,
+            onError = { error -> showMessage(error.toErrorMessage()) },
+            block = write,
+        )
+    }
+
+    private object Actions {
+        const val OBSERVE_PREFERENCES: String = "observePreferences"
+        const val SET_THEME_MODE: String = "setThemeMode"
+        const val SET_DYNAMIC_COLORS: String = "setDynamicColors"
+        const val SET_BOUNCY_BUTTONS: String = "setBouncyButtons"
+        const val SET_SHOW_BOTTOM_BAR_LABELS: String = "setShowBottomBarLabels"
+        const val SET_LANGUAGE: String = "setLanguage"
+        const val SET_STARTUP_PAGE: String = "setStartupPage"
+    }
+
+    private companion object {
+        const val NO_STARTUP_ROUTE: String = ""
     }
 }

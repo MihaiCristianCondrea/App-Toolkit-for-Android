@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,19 +17,22 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states
 
+import androidx.compose.runtime.Immutable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+
 /**
- * UI state holder for the issue reporter.
+ * Everything the issue reporter sheet renders. The form fields survive submission and are cleared
+ * when the sheet is dismissed.
  *
- * The form fields survive submission on purpose. They are what the author wrote, and the
- * confirmation is still part of the same interaction; clearing them the moment the network answered
- * would destroy that input while the author is still looking at the sheet. [IssueSubmissionState]
- * decides what is shown, and the reset happens when the sheet is dismissed.
+ * @property submissionState Which of the editor and the confirmation shows.
+ * @property deviceInfo The device details as plain text. Stays [Loadable.Empty] until the device
+ * panel is first opened.
  */
+@Immutable
 data class IssueReporterUiState(
     val title: String = "",
     val description: String = "",
     val email: String = "",
     val submissionState: IssueSubmissionState = IssueSubmissionState.Editing,
-    val deviceInfoText: String? = null,
+    val deviceInfo: Loadable<String> = Loadable.Empty(),
 )
-

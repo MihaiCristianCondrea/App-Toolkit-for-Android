@@ -17,82 +17,68 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui
 
-import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.contracts.StartupAction
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.contracts.StartupEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.states.StartupUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoading
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.successData
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.contracts.StartupEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.states.ConsentRequestStatus
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.states.StartupUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 /**
- * ViewModel for the startup screen.
+ * ViewModel for the startup screen: the consent request that has to settle before the person can
+ * continue.
  *
- * Consent is requested by the UI layer after receiving [StartupAction.RequestConsentUi], so this
- * ViewModel does not keep Activity-bound host references.
+ * [ConsentRepository] is main-safe, so it needs no dispatcher. Consent settles whatever the
+ * outcome, so the screen never waits on a form that failed.
  */
 class StartupViewModel(
+    private val consentRepository: ConsentRepository,
     telemetryRepository: TelemetryRepository,
-) : LoggedScreenViewModel<StartupUiState, StartupEvent, StartupAction>(
-    initialState = UiStateScreen(data = StartupUiState()),
+) : LoggedScreenViewModel<StartupUiState, StartupEvent>(
+    initialState = StartupUiState(),
     telemetryRepository = telemetryRepository,
     screenName = "Startup",
     viewModelName = "StartupViewModel",
 ) {
+    private var consentJob: Job? = null
 
     override fun handleEvent(event: StartupEvent) {
         when (event) {
-            StartupEvent.RequestConsent -> requestConsent()
-            StartupEvent.ConsentFormLoaded -> markConsentFormLoaded()
-            StartupEvent.Continue -> sendAction(action = StartupAction.NavigateNext)
-        }
-    }
-
-    private var consentWatchdogJob: Job? = null
-
-    private fun requestConsent() {
-        startOperation(action = Actions.REQUEST_CONSENT)
-        viewModelScope.launch {
-            updateStateThreadSafe {
-                screenState.setLoading()
-            }
-            sendAction(StartupAction.RequestConsentUi)
-            startConsentWatchdog()
+            is StartupEvent.RequestConsent -> requestConsent(host = event.host)
         }
     }
 
     /**
-     * Guarantees the screen stops loading.
-     *
-     * This is the app's first screen and the only way off it is the button the loading state hides,
-     * so a consent round trip that never reports back leaves the user with nowhere to go. Waiting
-     * has a limit, after which the screen settles exactly as it does when consent fails.
+     * Waits at most [CONSENT_TIMEOUT] for consent. This is the app's first screen and its only way
+     * forward is the button shown once consent settles, so a round trip that never reports back
+     * must not keep the person here. A later resume restarts a request that is still waiting.
      */
-    private fun startConsentWatchdog() {
-        consentWatchdogJob?.cancel()
-        consentWatchdogJob = viewModelScope.launch {
-            delay(CONSENT_TIMEOUT)
-            if (screenState.value.screenState is ScreenState.IsLoading) {
-                markConsentFormLoaded()
+    private fun requestConsent(host: ConsentHost?) {
+        if (currentState.consent == ConsentRequestStatus.Settled) return
+        consentJob = consentJob.restart {
+            launchReport(
+                action = Actions.REQUEST_CONSENT,
+                onError = { settleConsent() },
+            ) {
+                if (host != null) {
+                    withTimeoutOrNull(CONSENT_TIMEOUT) {
+                        consentRepository.requestConsent(host = host).first { result -> result !is DataState.Loading }
+                    }
+                }
+                settleConsent()
             }
         }
     }
 
-    private fun markConsentFormLoaded() {
-        consentWatchdogJob?.cancel()
-        viewModelScope.launch {
-            updateStateThreadSafe {
-                screenState.successData { copy(consentFormLoaded = true) }
-            }
-        }
+    private fun settleConsent() {
+        setState { copy(consent = ConsentRequestStatus.Settled) }
     }
 
     private object Actions {
@@ -100,8 +86,7 @@ class StartupViewModel(
     }
 
     private companion object {
-        /** How long the startup screen waits for consent before letting the user carry on. */
+        /** How long the startup screen waits for consent before letting the person carry on. */
         val CONSENT_TIMEOUT: Duration = 15.seconds
     }
 }
-

@@ -17,66 +17,55 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
-import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.contracts.PrivacyAction
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.contracts.PrivacyEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.mappers.toUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItemAction
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.mappers.toPrivacyItems
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.providers.PrivacySettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.states.PrivacyUiState
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
 
 /**
- * Owns the privacy screen entries and routes their clicks.
+ * ViewModel for the privacy page: the rows built from [PrivacySettingsProvider].
  *
- * The rows come from [PrivacySettingsProvider]. Opening a URL needs a `Context` and opening a page
- * needs the navigator, so both leave as a [PrivacyAction] for the screen to perform.
+ * The provider only returns URLs, so this needs no dispatcher. A provider that throws is
+ * [Loadable.Failed], reported to telemetry, with a retry. Opening a row's link or page needs a
+ * `Context` or the navigator, so the screen does it.
  */
 class PrivacyViewModel(
     private val provider: PrivacySettingsProvider,
     telemetryRepository: TelemetryRepository,
-) : LoggedScreenViewModel<PrivacyUiState, PrivacyEvent, PrivacyAction>(
-    initialState = UiStateScreen(data = PrivacyUiState()),
+) : LoggedScreenViewModel<PrivacyUiState, PrivacyEvent>(
+    initialState = PrivacyUiState(),
     telemetryRepository = telemetryRepository,
     screenName = "Privacy",
     viewModelName = "PrivacyViewModel",
 ) {
+    private var loadJob: Job? = null
 
     init {
-        onEvent(event = PrivacyEvent.Load)
+        onEvent(PrivacyEvent.Load)
     }
 
     override fun handleEvent(event: PrivacyEvent) {
         when (event) {
-            is PrivacyEvent.Load -> loadItems()
-            is PrivacyEvent.ItemClicked -> onItemClicked(action = event.action)
+            PrivacyEvent.Load -> loadItems()
+            is PrivacyEvent.ItemClicked -> startOperation(action = Actions.OPEN_PRIVACY_ITEM)
         }
     }
 
     private fun loadItems() {
-        startOperation(action = Actions.LOAD_PRIVACY_ITEMS)
-        viewModelScope.launch {
-            updateStateThreadSafe {
-                screenState.setSuccess(data = provider.toUiState())
+        loadJob = loadJob.restart {
+            launchReport(
+                action = Actions.LOAD_PRIVACY_ITEMS,
+                onError = { error -> setState { copy(items = error.toFailed()) } },
+            ) {
+                setState { copy(items = Loadable.Loading) }
+                val items = provider.toPrivacyItems()
+                setState { copy(items = Loadable.Ready(items)) }
             }
-        }
-    }
-
-    private fun onItemClicked(action: PrivacyItemAction) {
-        startOperation(action = Actions.OPEN_PRIVACY_ITEM)
-        when (action) {
-            is PrivacyItemAction.OpenUrl -> sendAction(PrivacyAction.OpenUrl(url = action.url))
-            is PrivacyItemAction.OpenPermissions -> sendAction(PrivacyAction.Navigate(key = PermissionsRoute))
-            is PrivacyItemAction.OpenAds -> sendAction(PrivacyAction.Navigate(key = AdsSettingsRoute))
-            is PrivacyItemAction.OpenUsageAndDiagnostics ->
-                sendAction(PrivacyAction.Navigate(key = DiagnosticsSettingsRoute))
         }
     }
 

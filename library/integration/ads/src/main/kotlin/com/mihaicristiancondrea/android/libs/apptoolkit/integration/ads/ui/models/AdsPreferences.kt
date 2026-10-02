@@ -15,11 +15,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.contracts
+package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.models
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
+import androidx.compose.runtime.Immutable
 
-sealed interface StartupAction : ActionEvent {
-    data object RequestConsentUi : StartupAction
-    data object NavigateNext : StartupAction
-}
+/**
+ * The stored ad preferences the ads settings screen renders.
+ *
+ * @property adsEnabled Whether ads show at all. Debug builds expose it as the display ads switch.
+ * @property reduceAds Whether App Open ads are suppressed. Release builds expose it as the reduce
+ * ads switch.
+ */
+@Immutable
+data class AdsPreferences(
+    val adsEnabled: Boolean,
+    val reduceAds: Boolean,
+)

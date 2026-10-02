@@ -17,8 +17,16 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.states
 
-/** UI model for [AdsSettingsScreen]. */
+import androidx.compose.runtime.Immutable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.models.AdsPreferences
+
+/**
+ * Everything the ads settings screen renders.
+ *
+ * @property preferences The stored ad preferences, followed while the screen is open.
+ */
+@Immutable
 data class AdsSettingsUiState(
-    val adsEnabled: Boolean = false,
-    val reduceAds: Boolean = false,
+    val preferences: Loadable<AdsPreferences> = Loadable.Loading,
 )

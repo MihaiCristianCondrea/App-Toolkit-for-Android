@@ -17,30 +17,36 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.exceptions.ConsentException
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
-import kotlinx.coroutines.flow.Flow
 
 /**
- * Repository responsible for requesting and displaying consent forms via UMP.
+ * Requests consent through UMP and applies consent choices to Firebase. Every function is safe to
+ * call from the main thread.
  */
 interface ConsentRepository {
 
     /**
-     * Requests consent information and optionally shows the consent form.
+     * Updates the consent information and shows the consent form: only when UMP requires it when
+     * [showIfRequired] is true, always otherwise. Returns once the round trip has ended. A caller
+     * that asks while a matching round trip is running waits for that one instead of starting
+     * another.
      *
      * @param host The UI host needed by the UMP SDK.
-     * @param showIfRequired When true, the form is shown only when required by UMP.
+     * @throws ConsentException when UMP fails or [host] is finishing, destroyed or off screen.
      */
-    fun requestConsent(
+    suspend fun requestConsent(
         host: ConsentHost,
         showIfRequired: Boolean = true,
-    ): Flow<DataState<Unit, Errors.UseCase>>
+    )
 
     /**
-     * Reads persisted consent values and applies them to Firebase services.
+     * Reads the stored consent choices and applies them to Firebase services. Unset choices are
+     * granted in release builds and refused in debug builds.
+     *
+     * @throws com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
+     * when the stored choices cannot be read.
      */
     suspend fun applyInitialConsent()
 

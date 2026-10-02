@@ -34,6 +34,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.eff
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppTheme
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.isAppInDarkTheme
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.contracts.SeasonalThemeOverlayEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.states.SeasonalThemeOverlayUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.views.HolidayGreetingDialog
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -55,8 +56,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun SeasonalThemeOverlay(modifier: Modifier = Modifier) {
     val viewModel: SeasonalThemeOverlayViewModel = koinViewModel()
-    val screenState by viewModel.uiState.collectAsStateWithLifecycle()
-    val state = screenState.data ?: return
+    val state: SeasonalThemeOverlayUiState by viewModel.state.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
     val animationsDisabled: Boolean = remember(context) { context.isSystemAnimationDisabled() }

@@ -22,4 +22,6 @@
     <string name="personalized_ads">Personliga annonser</string>
     <string name="summary_ads">Se annonser som är relevanta för dig. Hantera informationen som används för personaliserade annonser.</string>
     <string name="summary_ads_personalized_ads">Välj hur vi personaliserar annonser baserat på dina intressen</string>
+    <string name="error_ads_settings_storage">Lagringsfel.</string>
+    <string name="error_ads_consent_failed">Det gick inte att läsa in samtyckesinformation</string>
 </resources>

@@ -22,4 +22,6 @@
     <string name="personalized_ads">Annunci personalizzati</string>
     <string name="summary_ads">Visualizza annunci pertinenti. Gestisci le informazioni utilizzate per mostrare annunci personalizzati in base alla tua attività nell\'app. Puoi sempre disattivare la personalizzazione qui.</string>
     <string name="summary_ads_personalized_ads">Scegli come personalizziamo gli annunci per te in base ai tuoi interessi</string>
+    <string name="error_ads_settings_storage">Errore di archiviazione.</string>
+    <string name="error_ads_consent_failed">Impossibile caricare le informazioni sul consenso</string>
 </resources>

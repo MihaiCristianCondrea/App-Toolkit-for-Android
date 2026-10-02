@@ -22,4 +22,6 @@
     <string name="personalized_ads">Mga personalized na ad</string>
     <string name="summary_ads">Tingnan ang mga ad na nauugnay sa iyo. Pamahalaan ang impormasyong ginagamit para ipakita ang mga personalized na ad batay sa iyong aktibidad sa app. Maaari mong palaging i-off ang personalization dito.\n</string>
     <string name="summary_ads_personalized_ads">Piliin kung paano namin pini-personalize ang mga ad para sa iyo batay sa iyong mga interes</string>
+    <string name="error_ads_settings_storage">Error sa storage.</string>
+    <string name="error_ads_consent_failed">Hindi ma-load ang impormasyon ng pahintulot</string>
 </resources>
