@@ -47,7 +47,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -71,6 +70,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.models.A
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
@@ -79,7 +79,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.La
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumHorizontalSpacer
 
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AppDetailsBottomSheet(
     appInfo: AppInfo,
@@ -149,7 +148,7 @@ fun AppDetailsBottomSheet(
                 Text(text = stringResource(id = R.string.error_failed_to_load_apps))
                 GeneralButton(
                     onClick = onRetryDetails,
-                    label = stringResource(id = com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.try_again),
+                    label = stringResource(id = CoreUiR.string.try_again),
                 )
             }
         }
