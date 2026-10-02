@@ -151,8 +151,10 @@ available; data-layer callers should use the lower-level API.
   when Firebase breadcrumbs and error reporting are required.
 - ViewModels receive events through `onEvent`, change their state only through `setState`, and
   queue messages with `showMessage`. Operations run through `launchReport` (a suspend call),
-  `collectReport` (a flow whose values go into state) or `catchReport` (a flow that keeps going),
-  which report failures and pass cancellation through. ViewModels take repositories, use cases and
+  `collectReport` (a flow whose values go into state, for the ViewModel's lifetime),
+  `observeReport` (an expensive stream, collected only while the screen collects `state`, as
+  `WhileSubscribed(5_000)` does) or `catchReport` (a flow that keeps going), which report failures
+  and pass cancellation through. ViewModels take repositories, use cases and
   `TelemetryRepository`, never a `Context`.
 - Composables report through `LocalTelemetry` (`core.ui.views.analytics`), never a `TelemetryRepository`
   parameter. `TrackScreenView`, `TrackScreenState` and every component with a `ga4Event` read it
@@ -379,9 +381,11 @@ The full setup, with the file tree, templates and the migration steps, is the
   reported by `TrackScreenState` like `Loadable`'s `loading`, `success`, `no_data` and `error`.
 - **Messages** go through `showMessage(UiMessage(...))` and `MessageHost`, which shows them one at a
   time and removes each once it has left. A screen needs no dismiss event.
-- **`LoggedScreenViewModel`** logs `vm_init` and `vm_event` itself; `launchReport` and
-  `collectReport` take the same arguments and log `vm_op_start` and, on failure, `vm_op_error` and
-  a Crashlytics report before calling `onError`. `catchReport` reports a failure of a flow that
+- **`LoggedScreenViewModel`** logs `vm_init` and `vm_event` itself; `launchReport`,
+  `collectReport` and `observeReport` take the same arguments and log `vm_op_start` and, on
+  failure, `vm_op_error` and a Crashlytics report before calling `onError`. `observeReport` logs a
+  start each time the screen comes back after five seconds away, and its tests subscribe first
+  with `collectInBackground(viewModel.state)` from `:library:core:testing`. `catchReport` reports a failure of a flow that
   keeps going, and hands it to a block that can emit a fallback. The
   messages, keys and events are fixed, because dashboards and Crashlytics filters read them.
 - **Failures are mapped here.** The data layer throws `NetworkException`, `StorageException` or a

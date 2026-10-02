@@ -124,10 +124,8 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   the sample uses.
 - `library/feature/permissions/.../DefaultPermissionsRepository.kt:41-89` hard-codes the permission
   list instead of reading the host manifest, and returns the UI model `SettingsConfig`.
-- `library/core/network/.../Errors.kt:45-60` contains feature-specific errors (FAQ, SKU details,
-  consent, review) and a `Database` group.
 - `domain/` packages that hold only models or constants, against `AGENTS.md`: `core/common/domain`,
-  `core/network/domain`, `feature/diagnostics/domain`, `feature/onboarding/domain`,
+  `feature/diagnostics/domain`, `feature/onboarding/domain`,
   `feature/support/domain`, `integration/billing/domain`, `integration/consent/domain`,
   `integration/update/domain`, and in the sample `feature/apps/domain`, `feature/onboarding/domain`,
   `feature/tiles/domain` and `core/analytics/domain`.
@@ -145,10 +143,6 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   `core.ui.screen`); `core:common` in
   `integration/update` and `navigation`. The comment in `core/ui/build.gradle.kts:52-53` about
   `CommonDataStore` is stale.
-- `Errors.asUiText()` lives in `core/network/data/remote/extensions/ErrorExtensions.kt:30`, a data
-  package. Nothing outside `:library:core` uses `Errors`, `DataState`, `asUiText`, `core.ui.base` or
-  `core.ui.states` any more, so they and their extensions can be deleted. `MainViewModel` still
-  reads `core:network`'s `error_failed_to_load_consent_info`, so that string stays.
 - `FirebaseController`, `DefaultFirebaseController` and `FirebaseControllerImpl` are deprecated
   aliases of `TelemetryRepository` and `FirebaseTelemetryRepository`, kept for one release. Remove them in the release
   after this one. (Components now read `LocalTelemetry` instead of taking a parameter.)

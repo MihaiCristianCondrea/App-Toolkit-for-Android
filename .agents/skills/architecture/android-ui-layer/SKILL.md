@@ -82,7 +82,9 @@ their own queue.
 - Run work through one of three shapes, never a bare `viewModelScope.launch` or `launchIn`, so
   every operation is logged, every failure reported, and cancellation never mistaken for one:
   `launchReport { }` for a suspend call, `flow.collectReport { }` for a flow whose values go into
-  state, and `flow.catchReport { }` only for a flow that has to keep going after a failure.
+  state, and `flow.catchReport { }` only for a flow that has to keep going after a failure. A
+  stream that is expensive to keep running while nobody looks opts into `flow.observeReport { }`,
+  Google's `WhileSubscribed(5_000)` policy; never use it for a flow that must not miss a value.
 - Take repositories, use cases where they earn their place, `TelemetryRepository`, and a
   `DispatcherProvider` only for the ViewModel's own CPU work. Never a `Context`, a data source or a
   bare platform wrapper: the platform is reached through a repository, as `ClipboardRepository`.
@@ -127,7 +129,8 @@ their own queue.
 - A screen's own failures go in a mapper in `ui/mappers/` that handles them first and passes the
   rest to `toFailed` or `toUiText`. Text for a shared `reason` goes into `toUiText`, for every
   screen.
-- New repositories do not return `DataState`, and never emit a loading value.
+- Repositories never return a status wrapper (`DataState` and `Result` are gone), and never emit a
+  loading value.
 
 ### Screen and ScreenContent
 

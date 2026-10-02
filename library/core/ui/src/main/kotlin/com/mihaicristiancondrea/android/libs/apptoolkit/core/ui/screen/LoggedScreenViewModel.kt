@@ -104,8 +104,9 @@ abstract class LoggedScreenViewModel<S, E : Any>(
     }
 
     /**
-     * Runs [block] as the operation [action]: logs its start, and if it throws, reports the
-     * failure and calls [onError]. Cancellation is passed through, never reported.
+     * Shape A: runs [block] as the operation [action], now, in `viewModelScope`. Logs its start,
+     * and if it throws, reports the failure and calls [onError]. Cancellation is passed through,
+     * never reported. Use it for one-shot work: a load, a save, a request.
      *
      * @param extra Attributes added to the operation's breadcrumbs and events.
      */
@@ -117,22 +118,45 @@ abstract class LoggedScreenViewModel<S, E : Any>(
     ): Job {
         startOperation(action = action, extra = extra)
         return viewModelScope.launch {
-            try {
-                block()
-            } catch (cancellation: CancellationException) {
-                throw cancellation
-            } catch (throwable: Throwable) {
-                reportOperationError(action = action, extra = extra, throwable = throwable)
-                onError(throwable)
-            }
+            runReporting(action = action, extra = extra, onError = onError, block = block)
         }
     }
 
     /**
-     * Collects this flow as the operation [action], the flow counterpart of [launchReport]: logs its
-     * start, passes every value to [onEach], and if the flow throws, reports the failure and calls
-     * [onError]. Collection ends with the failure, so restart the returned [Job] to try again.
-     * Cancellation is passed through, never reported.
+     * Shape B for an expensive stream: follows this flow into state only while the screen collects
+     * [state], the way `stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initial)`
+     * does. Collection starts when the screen starts collecting, stops [STOP_TIMEOUT_MILLIS] after it
+     * stops, and starts over when it returns, logging `vm_op_start` each time. A failure is reported
+     * and handed to [onError]; the next return, or a restart of the returned [Job], collects again.
+     *
+     * Opt in for a stream that costs something while nobody looks: location, sensors, a socket,
+     * polling. Nothing runs while no screen collects [state], so it never suits a flow that must
+     * not miss a value; tests subscribe first, with `collectInBackground(viewModel.state)` from
+     * `:library:core:testing`. A cheap stream, such as a DataStore preference, uses [collectReport].
+     *
+     * @param extra Attributes added to the operation's breadcrumbs and events.
+     */
+    protected fun <V> Flow<V>.observeReport(
+        action: String,
+        extra: Map<String, String> = emptyMap(),
+        onError: suspend (Throwable) -> Unit = {},
+        onEach: suspend (V) -> Unit,
+    ): Job = launchWhileSubscribed {
+        startOperation(action = action, extra = extra)
+        runReporting(action = action, extra = extra, onError = onError) {
+            collect { value -> onEach(value) }
+        }
+    }
+
+    /**
+     * Shape B: collects this flow in `viewModelScope` for the ViewModel's lifetime, as the operation
+     * [action]: logs its start, passes every value to [onEach], and if the flow throws, reports the
+     * failure and calls [onError]. Collection ends with the failure, so restart the returned [Job]
+     * to try again.
+     *
+     * The default for a stream: stored preferences, a catalogue, a repository's results, and any
+     * flow that must not miss a value while the screen is in the background, such as a purchase's
+     * results. A stream that is expensive to keep running opts into [observeReport].
      *
      * @param extra Attributes added to the operation's breadcrumbs and events.
      */
@@ -160,6 +184,23 @@ abstract class LoggedScreenViewModel<S, E : Any>(
         if (throwable is CancellationException) throw throwable
         reportOperationError(action = action, extra = extra, throwable = throwable)
         block(throwable)
+    }
+
+    /** Runs [block]; a failure other than cancellation is reported, then handed to [onError]. */
+    private suspend fun runReporting(
+        action: String,
+        extra: Map<String, String>,
+        onError: suspend (Throwable) -> Unit,
+        block: suspend () -> Unit,
+    ) {
+        try {
+            block()
+        } catch (cancellation: CancellationException) {
+            throw cancellation
+        } catch (throwable: Throwable) {
+            reportOperationError(action = action, extra = extra, throwable = throwable)
+            onError(throwable)
+        }
     }
 
     /** Logs the error breadcrumb and the `vm_op_error` event, then reports [throwable]. */

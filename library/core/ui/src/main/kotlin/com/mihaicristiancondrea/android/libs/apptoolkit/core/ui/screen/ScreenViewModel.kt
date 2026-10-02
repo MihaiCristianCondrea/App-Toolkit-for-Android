@@ -18,14 +18,20 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingCommand
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 /**
  * Base ViewModel for a screen: owns its state [S], handles its events [E], and queues the messages
@@ -91,5 +97,28 @@ abstract class ScreenViewModel<S, E : Any>(initialState: S) : ViewModel() {
     protected fun Job?.restart(start: () -> Job): Job {
         this?.cancel()
         return start()
+    }
+
+    /**
+     * Runs [block] while the screen collects [state], with the policy of
+     * `SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS)`: it starts when the first collector
+     * arrives, is cancelled [STOP_TIMEOUT_MILLIS] after the last one leaves, so a rotation does not
+     * restart it, and runs again when a collector returns. Restart the returned [Job] to run
+     * [block] again at once.
+     */
+    protected fun launchWhileSubscribed(block: suspend () -> Unit): Job = viewModelScope.launch {
+        WhileScreenSubscribed.command(mutableState.subscriptionCount)
+            .distinctUntilChanged()
+            .collectLatest { command ->
+                if (command == SharingCommand.START) block()
+            }
+    }
+
+    companion object {
+        /** How long a stream outlives the screen that stopped collecting it, as Google recommends. */
+        const val STOP_TIMEOUT_MILLIS: Long = 5_000
+
+        private val WhileScreenSubscribed: SharingStarted =
+            SharingStarted.WhileSubscribed(stopTimeoutMillis = STOP_TIMEOUT_MILLIS)
     }
 }

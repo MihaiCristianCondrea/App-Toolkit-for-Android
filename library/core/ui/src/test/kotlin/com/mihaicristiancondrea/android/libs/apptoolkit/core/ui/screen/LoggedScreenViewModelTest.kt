@@ -21,11 +21,14 @@ import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.collectInBackground
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -114,6 +117,101 @@ class LoggedScreenViewModelTest {
             assertThat(eventNames()).contains("vm_op_error")
         }
 
+    @Test
+    fun `an observed stream waits for the screen to collect state`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = TestViewModel(telemetryRepository)
+        val stream = CountingStream()
+
+        viewModel.follow(stream.flow)
+        advance()
+        assertThat(stream.collections).isEqualTo(0)
+
+        collectInBackground(viewModel.state)
+        advance()
+
+        assertThat(stream.collections).isEqualTo(1)
+        assertThat(viewModel.state.value).isEqualTo("value 1")
+    }
+
+    @Test
+    fun `an observed stream keeps running through a short absence such as a rotation`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = TestViewModel(telemetryRepository)
+            val stream = CountingStream()
+            viewModel.follow(stream.flow)
+
+            val first = collectInBackground(viewModel.state)
+            advance()
+            first.cancel()
+            advanceTimeBy(ScreenViewModel.STOP_TIMEOUT_MILLIS - 1)
+            collectInBackground(viewModel.state)
+            advance()
+
+            assertThat(stream.collections).isEqualTo(1)
+            assertThat(stream.stopped).isEqualTo(0)
+        }
+
+    @Test
+    fun `an observed stream stops once the screen has been gone for the timeout`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = TestViewModel(telemetryRepository)
+            val stream = CountingStream()
+            viewModel.follow(stream.flow)
+
+            val first = collectInBackground(viewModel.state)
+            advance()
+            first.cancel()
+            advanceTimeBy(ScreenViewModel.STOP_TIMEOUT_MILLIS + 1)
+
+            assertThat(stream.stopped).isEqualTo(1)
+
+            collectInBackground(viewModel.state)
+            advance()
+
+            assertThat(stream.collections).isEqualTo(2)
+            assertThat(eventNames().count { it == "vm_op_start" }).isEqualTo(2)
+        }
+
+    @Test
+    fun `a failed observed stream is reported, and a restart collects it again`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = TestViewModel(telemetryRepository)
+            val failure = IllegalStateException("fail")
+            var attempts = 0
+            val stream = flow {
+                attempts++
+                if (attempts == 1) throw failure
+                emit("recovered")
+            }
+            collectInBackground(viewModel.state)
+
+            viewModel.follow(stream)
+            advance()
+            assertThat(viewModel.handledError).isSameInstanceAs(failure)
+            assertThat(eventNames()).contains("vm_op_error")
+
+            viewModel.follow(stream)
+            advance()
+            assertThat(viewModel.state.value).isEqualTo("recovered")
+        }
+
+    private class CountingStream {
+        var collections: Int = 0
+            private set
+        var stopped: Int = 0
+            private set
+
+        val flow: Flow<String> = flow {
+            collections++
+            try {
+                emit("value $collections")
+                awaitCancellation()
+            } finally {
+                stopped++
+            }
+        }
+    }
+
     private class TestViewModel(telemetryRepository: FakeTelemetryRepository) :
         LoggedScreenViewModel<String, Unit>(
             initialState = "",
@@ -134,5 +232,15 @@ class LoggedScreenViewModelTest {
             values.collectReport(action = "observe", onError = { handledError = it }) { value ->
                 setState { value }
             }
+
+        private var followJob: Job? = null
+
+        fun follow(values: Flow<String>) {
+            followJob = followJob.restart {
+                values.observeReport(action = "follow", onError = { handledError = it }) { value ->
+                    setState { value }
+                }
+            }
+        }
     }
 }

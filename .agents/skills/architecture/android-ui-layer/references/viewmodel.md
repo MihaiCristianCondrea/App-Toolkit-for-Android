@@ -19,13 +19,24 @@ cancellation is never mistaken for a failure:
 
 | Work                                              | Shape                                                    |
 |---------------------------------------------------|----------------------------------------------------------|
-| a suspend call: load, save, copy                  | `launchReport(action, onError = { }) { ... }`            |
-| a flow whose values go into state                 | `flow.collectReport(action, onError = { }) { value -> }` |
+| A: a suspend call: load, save, copy               | `launchReport(action, onError = { }) { ... }`            |
+| B: a flow whose values go into state              | `flow.collectReport(action, onError = { }) { value -> }` |
+| B, opt-in: a stream expensive to keep running     | `flow.observeReport(action, onError = { }) { value -> }` |
 | a flow that goes on: combined, shared, a fallback | `flow.catchReport(action) { error -> emit(...) }`        |
 
-`launchReport` and `collectReport` take the same arguments, return the `Job`, and end the same
-way: the block or the collection stops at the first failure, which is reported and handed to
-`onError`. `catchReport` is the operator under them, for a flow that has to keep going.
+`launchReport`, `collectReport` and `observeReport` take the same arguments, return the `Job`, and
+end the same way: the block or the collection stops at the first failure, which is reported and
+handed to `onError`. `catchReport` is the operator under them, for a flow that has to keep going.
+
+These match Google's guidance: work runs in `viewModelScope`, on the main thread, against a
+main-safe data layer, into one immutable state. Collecting a stream for the ViewModel's lifetime
+(`collectReport`) is the default, because the Toolkit's streams are cheap: DataStore preferences
+and catalogues that emit only on change. `observeReport` is Google's
+`stateIn(WhileSubscribed(5_000))` policy for a stream that costs something while nobody looks,
+such as location, sensors, a socket or polling: it collects only while the screen collects `state`,
+stops five seconds after it leaves, and starts over when it returns. Because nothing runs without a
+collector, it never suits a flow that must not miss a value, and its tests subscribe first with
+`collectInBackground(viewModel.state)` from `:library:core:testing`.
 
 ## One-shot operations
 

@@ -1,21 +1,23 @@
 # Migrating from core.ui.base and core.ui.states
 
-The old types stay until no feature uses them. This file maps each one to its replacement and
-lists the steps for one feature. Reference: the About migration in `:library:feature:about`.
+The old types were removed in 3.0.0; every Toolkit feature and the sample are on `core.ui.screen`.
+This file is for an app built on an older Toolkit: it maps each old type to its replacement and
+lists the steps for one screen. Reference: the About migration in `:library:feature:about`.
 
 ## Finding what is left
 
-Search the sources for the old packages:
+Search the app's sources for the old names; each match is a screen still to migrate, and none of
+them compiles against 3.0.0:
 
 ```text
 core.ui.base
 core.ui.states
 DefaultSnackbarHandler
+observeActions
 DataState
 asUiText
+toError(
 ```
-
-Every match outside `:library:core:ui` itself is a feature still to migrate.
 
 ## Old to new
 
@@ -34,8 +36,9 @@ Every match outside `:library:core:ui` itself is a feature still to migrate.
 
 ## DataState and Errors
 
-`DataState` and `Errors` in `:library:core:network` stay until no repository returns them. A
-repository moves off them with its screen:
+`DataState`, `Errors`, `toError()` and `asUiText()` were removed from `:library:core:network` in
+3.0.0, with `core.ui.base` and `core.ui.states`. An app that still has them moves each repository
+off them with its screen:
 
 | Old                                          | New                                                    |
 |----------------------------------------------|--------------------------------------------------------|
@@ -50,9 +53,6 @@ repository moves off them with its screen:
 | `Errors.UseCase.FAILED_TO_*`                 | the screen's fallback string, in the feature           |
 | `error.asUiText()`                           | `error.toUiText(fallback)`, `toFailed`, `toErrorMessage` |
 | a feature's own `Error` sealed type          | the feature's exceptions and an `XErrorMappers.kt`     |
-
-`toError()` understands `NetworkException` and `StorageException`, so a repository that already
-throws them still works with a ViewModel that has not moved yet.
 
 ## Steps for one feature
 

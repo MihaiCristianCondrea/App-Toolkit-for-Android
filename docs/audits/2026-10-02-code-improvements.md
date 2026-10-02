@@ -44,21 +44,16 @@ below still need device or profiler evidence where stated.
   the only Continue path remains available. Onboarding reports a consent failure without blocking
   its pages.
 
-## P1: finish updating tests alongside the UI migration
+## Done: tests updated alongside the UI migration
 
-**Evidence:**
-[AdsSettingsViewModelTest](../../library/integration/ads/src/test/kotlin/com/mihaicristiancondrea/android/libs/apptoolkit/integration/ads/ui/AdsSettingsViewModelTest.kt)
-still passes `dispatchers`, reads `uiState` and `ScreenState`, returns `DataState` from preference
-writes, and implements consent as a flow. Its production ViewModel already uses `state`, `Loadable`,
-messages, and suspend writes.
-`DefaultAdsSettingsRepositoryTest` also expects result wrappers from the repository's suspend
-writes. Both test files fail compilation in the aggregate run.
-
-Update remaining tests to the contracts their production classes now expose. Preserve the assertions
-about failed writes, retry, and keeping existing content. Add failure-message assertions rather than
-only renaming properties until compilation succeeds. Require the aggregate `testDebugUnitTest` to
-pass alongside `checkModuleBoundaries` before releasing a migrated API. Assembly alone misses test
-source compilation errors.
+`AdsSettingsViewModelTest` and `DefaultAdsSettingsRepositoryTest` now target `state`, `Loadable`,
+messages, the throwing repository and the suspend consent contract. They cover the first load, a
+failed read and its retry, both switches, a failed write that keeps the switch and shows its
+message, the full-disk text, and consent success and failure. The old base (`core.ui.base`,
+`core.ui.states`, `DataState`, `Errors`) is deleted, so a test still written against it no longer
+compiles at all. Keep requiring the aggregate `testDebugUnitTest` to pass alongside
+`checkModuleBoundaries` before a release; assembly alone misses test source compilation errors.
+This has not been re-run since the change.
 
 ## P1: serialize consent requests with different form modes
 
@@ -111,8 +106,9 @@ snapshot.
 
 Expose a bundle from one DataStore preferences emission and use it for observation and initial SDK
 application. Keep the existing debug/release defaults and stored key names. Test changing all five
-choices together without observing a mixture of old and new values. Remove redundant dispatcher
-switches only after the owning data-source APIs are confirmed main-safe.
+choices together without observing a mixture of old and new values. The redundant dispatcher
+switches are already gone: DataStore is main-safe, and the repository now wraps its reads and
+writes in `StorageException` instead.
 
 ## P2: distinguish reusable test fixtures in repository-placement checks
 
