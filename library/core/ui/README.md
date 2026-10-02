@@ -429,6 +429,11 @@ with `NativeAdLoader.load` under `DisposableEffectImpl.onRemembered`. Preserve t
   `NoDataScreen` injects `NO_DATA_NATIVE_AD` without a fallback, a host that has not bound it
   crashes on the empty state rather than rendering without an ad. The host checklist lives in
   [`:library:integration:ads`](../../integration/ads/README.md).
+- `BottomAppBarNativeAdBanner` defaults to `enabled = false`, with no rendering or ad request, and
+  reports `onAdLoaded(false)`. A host must explicitly opt in. Native ads next to navigation can
+  cause accidental clicks; review the
+  [placement warning and Google links](../../integration/ads/README.md#placement-warning-and-explicit-opt-in)
+  before enabling this placement. The sample keeps the bottom-bar placement configured but disabled.
 - `rememberNativeAd` and `AdBanner` wait for `AdsSdkState`, retry when readiness changes, and treat
   a
   synchronous SDK exception as a failed/empty ad slot rather than a fatal UI error.

@@ -55,6 +55,7 @@ fun FaqNativeAdCard(
             size = SizeConstants.LauncherIconSize,
         ),
         badgeColor = MaterialTheme.colorScheme.primaryContainer,
+        iconInsetDp = 12,
         headlineTextSizeSp = MaterialTheme.typography.titleMedium.fontSize.value,
         headlineBold = false,
         bodyTextSizeSp = MaterialTheme.typography.bodyMedium.fontSize.value,

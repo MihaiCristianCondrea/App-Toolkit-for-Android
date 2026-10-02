@@ -305,7 +305,14 @@ class ShellGraphBuilder(
         overflowEntries += overflow.entries + overflow.footer
     }
 
-    /** Shown above the navigation bar, such as an ad. Steps aside while the player is showing. */
+    /**
+     * Optional host content above the navigation bar. Absent unless explicitly registered, and
+     * steps aside while the player is showing.
+     *
+     * Warning: placing native ads next to navigation can cause accidental clicks. Prefer placing
+     * them within scrolling content and review
+     * [Google's placement guidance](https://support.google.com/admob/answer/10094971) before opting in.
+     */
     fun banner(content: @Composable () -> Unit) {
         banner = content
     }

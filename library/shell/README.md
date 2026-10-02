@@ -198,7 +198,11 @@ JUnit 5. They start Koin with a `CommonDataStore`, which `AppTheme` reads.
   `FollowScrollWithFrameTint` in `:library:navigation`, and the tab's bar takes over again when the
   page leaves.
 - **The banner shows on the bottom navigation bar only.** It docks there as a strip joined to the
-  bar. Beside a rail or a drawer there is no bar to dock on, so the app shows no banner.
+  bar, and is absent unless the host registers `banner { }` in its graph. Beside a rail or a drawer
+  there is no bar to dock on, so the app shows no banner. Native ads next to navigation can cause
+  accidental clicks. The sample keeps its native ad in this slot disabled; hosts should review the
+  [native ad placement warning and Google links](../integration/ads/README.md#placement-warning-and-explicit-opt-in)
+  before placing an ad here.
 - **Navigating recomposes what changed.** The chrome keeps its callbacks and the
   `LocalShellChrome` controller across recompositions: that local is static, so a new controller
   would recompose every tab screen under it on each navigation. Animated values (the frame tint, the

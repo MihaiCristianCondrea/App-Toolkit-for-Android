@@ -61,6 +61,8 @@ enum class NativeAdCallToActionStyle {
  *   description would make the ad taller than the rows beside it.
  * @property bodyColor Body color. [Color.Unspecified] keeps the palette's `onSurfaceVariant`.
  * @property callToAction Whether the call to action is a filled pill or a text button.
+ * @property iconInsetDp Padding inside the icon badge. A non-null value centres the full advertiser
+ *   icon without cropping it, leaving the badge shape visible. `null` keeps the presentation's inset.
  */
 @Immutable
 data class NativeAdStyle(
@@ -74,4 +76,5 @@ data class NativeAdStyle(
     val bodyMaxLines: Int? = null,
     val bodyColor: Color = Color.Unspecified,
     val callToAction: NativeAdCallToActionStyle = NativeAdCallToActionStyle.Filled,
+    val iconInsetDp: Int? = null,
 )

@@ -53,6 +53,7 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 
 ### Changed
 
+- `BottomAppBarNativeAdBanner` is disabled by default. Hosts must explicitly pass `enabled = true`; `NoDataScreen` keeps its existing ad default. Review the placement warning and Google guidance in the [ads documentation](integration/ads/README.md#placement-warning-and-explicit-opt-in) before opting in.
 - `ConsentRepository.requestConsent(host, showIfRequired)` suspends until completion and throws `ConsentException` on failure. Replace result-flow collection with a direct suspend call; loading belongs to the caller's UI state.
 - Composables report through the new `LocalTelemetry` instead of a `firebaseController` parameter. `TrackScreenView`, `TrackScreenState`, the buttons, chips, text fields, dropdown items, FABs and every preference row read it themselves, so their `firebaseController` parameter is removed; pass only the `ga4Event`. `ShellHost` provides it, and `ProvideTelemetry { }` provides it to a composition outside `ShellHost`. Where nothing does, as in a preview, it is the new `NoOpTelemetryRepository`, so previews need no fake.
 - Renamed `FirebaseController` to `TelemetryRepository`, in the same package, so the contract names no vendor; the SDKs behind it are its data sources. Its implementation `DefaultFirebaseController` is now `FirebaseTelemetryRepository`, and the test fake `FakeFirebaseController` is `FakeTelemetryRepository`. Every `firebaseController` parameter of a ViewModel, repository or other class is now `telemetryRepository`, so named arguments need the new name. `FirebaseController`, `DefaultFirebaseController` and `FirebaseControllerImpl` remain in their old packages as deprecated aliases. The [3.0.0 migration guide](../docs/migration/3.0.0.md#telemetry) has the mapping.
@@ -130,6 +131,7 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 
 ### Fixed
 
+- The Help native ad keeps its advertiser icon centred inside the shaped badge instead of covering the shape. `NativeAdStyle.iconInsetDp` lets a host set the same inset on its own placement without cropping the icon.
 - Startup and onboarding use the suspend consent API again. Startup still allows continuing after success, failure, or 15 seconds without an answer.
 - Fixed a failed cache clear replacing the advanced settings page with an error screen it could not leave: the rows stay, and a snackbar shows the failure, with its own text when storage is full or busy.
 - Fixed the privacy page staying blank when its provider threw: it shows the failure with Retry.

@@ -12,6 +12,7 @@
 
 ### Changed
 
+- The ad above bottom navigation is now gone.
 - Settings, Help, Support and the components showcase now open as pages of the main screen, with the same back swipe animation as before, and the Settings shortcut opens Settings directly.
 - Every settings page, About, the licenses, permissions and ads settings now open inside the app too. On tablets and wide windows the settings categories open beside the list.
 - The first-launch screens now run inside the app, so finishing onboarding takes you straight to your start page.
@@ -37,7 +38,7 @@
 - Search the settings from the top of the settings list, down to single options such as dark theme or the app bar.
 - Moving between Components, Settings and the tabs on a tablet or in landscape no longer flashes grey.
 - The app bar can hide as you scroll too, in Display settings, so the whole screen makes room for the content.
-- The ad above the bottom navigation is back, and messages such as a consent form failing to load now appear above the navigation bar instead of not at all.
+- Messages such as a consent form failing to load now appear above the navigation bar instead of not at all.
 - Rolling the dice does less work on each frame of the animation.
 - The apps widget loads its icons at the same time instead of one after another, and reuses the icons the app has already downloaded.
 - The apps widget shows the apps it loaded last time straight away and refreshes them once the network answers, instead of waiting on the network.
@@ -46,10 +47,11 @@
 
 ### Removed
 
-- The banner setting is gone: the ad shows only above the bottom navigation bar, and not at all next to the side navigation on tablets.
+- The banner setting is gone.
 
 ### Fixed
 
+- The native ad on Help shows its icon inside the shaped badge.
 - The main screen uses the suspend consent API, keeping its once-per-session request and the error message when consent fails.
 - Copying an app's package name no longer shows a duplicate toast on Android 13 and newer. Older versions keep the copy confirmation.
 - The holiday greeting's checkbox no longer sits against its text, and its ripple is no longer cut off.

@@ -95,8 +95,9 @@ flowchart TD
   longer leaves for a second activity.
 - Android's permission manager and privacy dashboard open the privacy page through the Toolkit's
   built-in `PermissionUsageActivity`, so this manifest declares nothing for them.
-- The graph's banner slot shows the bottom navigation native ad, so it sits above the bottom bar on
-  every tab.
+- The graph keeps the bottom-bar native ad and its configuration, with `enabled = false` to avoid
+  a persistent ad beside navigation. Ads within feature content and the default empty/error screens
+  remain available.
 - `MainViewModel`'s messages (a consent form that fails to load) go to the snackbar host handed to
   `ShellHost(snackbarHostState)`: the tabs' scaffold shows them above the bottom chrome, and the
   shell at the bottom of the window while a start screen or a page covers the tabs.

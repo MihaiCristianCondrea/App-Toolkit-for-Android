@@ -55,7 +55,7 @@ const val ACTION_OPEN_SETTINGS: String = "com.d4rk.android.apps.apptoolkit.actio
 
 /**
  * The sample's whole navigation: two tabs, the drawer, the overflow menu, the components page, the
- * bottom banner and the intents it answers. `toolkitGraph` adds the Toolkit's own pages (settings,
+ * optional bottom banner and the intents it answers. `toolkitGraph` adds the Toolkit's own pages (settings,
  * help, support, the first-launch start screens and the rest).
  *
  * This is the one place that knows the full feature set, which is why it stays in `:sample:app`:
@@ -102,10 +102,13 @@ fun appGraph(
         ComponentsScreen()
     }
     aboutPages { AboutSettingsContent() }
-    // A native ad docked on the bottom navigation bar, and only there; nothing while ads are off.
     banner {
         val config: AdsConfig = koinInject(qualifier = named(AdsQualifiers.BOTTOM_NAV_BAR_NATIVE_AD))
-        BottomAppBarNativeAdBanner(adUnitId = config.bannerAdUnitId)
+        BottomAppBarNativeAdBanner(
+            adUnitId = config.bannerAdUnitId,
+            // Retained for host integration; keep it off near navigation (accidental-click risk).
+            enabled = false,
+        )
     }
 
     drawer {

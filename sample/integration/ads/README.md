@@ -57,6 +57,7 @@ pair here places all of the sample's advertising configuration in one module; th
 
 The module binds seven placements: general native, no-data, bottom navigation, Help, Support, Apps
 List, and App Details. `AdsIntegrationModuleTest` resolves every qualifier and rejects blank unit
-IDs, while the app graph test verifies this module is part of runtime composition. No screen places
-the bottom navigation ad yet; the shell's `banner { }` slot in `:sample:app`'s `appGraph` is where it
-goes.
+IDs, while the app graph test verifies this module is part of runtime composition. The sample keeps
+the bottom navigation ad configuration and the shell's banner registration, with `enabled = false`
+at the call site. The Toolkit's bottom-bar native ad requires explicit host opt-in; see the
+[placement warning and Google links](../../../library/integration/ads/README.md#placement-warning-and-explicit-opt-in).

@@ -21,6 +21,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Outline
 import android.graphics.Path
+import android.graphics.Rect
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.ShapeDrawable
@@ -147,6 +148,12 @@ class NativeAdViewHolder(
     val advertiser: TextView,
     val callToAction: TextView?,
 ) {
+    private val initialIconPadding = iconFrame?.let {
+        Rect(it.paddingLeft, it.paddingTop, it.paddingRight, it.paddingBottom)
+    }
+    private val initialIconScaleType = icon?.scaleType
+    private val initialIconClipToOutline = iconFrame?.clipToOutline ?: false
+
     init {
         root.tag = this
     }
@@ -183,6 +190,18 @@ class NativeAdViewHolder(
             // Update the badge in place so shape and color changes do not recreate the ad view.
             val badgeColor: Int = style.badgeColor.orArgb(fallback = palette.surfaceVariant)
             val badgeShape: NativeAdBadgeShape? = style.badgeShape
+            val iconInset: Int? = style.iconInsetDp?.let { frame.context.dp(it.coerceAtLeast(0)) }
+            if (iconInset != null) {
+                frame.setPadding(iconInset, iconInset, iconInset, iconInset)
+                icon?.scaleType = ImageView.ScaleType.FIT_CENTER
+            } else {
+                initialIconPadding?.let { padding ->
+                    frame.setPadding(padding.left, padding.top, padding.right, padding.bottom)
+                }
+                icon?.scaleType = initialIconScaleType
+            }
+            // A rounded outline would cut off parts of an arbitrary badge silhouette.
+            frame.clipToOutline = badgeShape == null && initialIconClipToOutline
 
             frame.background = if (badgeShape != null) {
                 pathDrawable(

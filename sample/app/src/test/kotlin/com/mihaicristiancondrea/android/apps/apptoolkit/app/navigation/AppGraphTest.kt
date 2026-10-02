@@ -51,6 +51,7 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R as AboutR
 
@@ -65,6 +66,12 @@ class AppGraphTest {
     )
 
     private fun ShellGraph.drawerLinks() = drawer.filterIsInstance<DrawerEntry.Link>().map { it.key }
+
+    @Test
+    fun `the sample retains the optional bottom banner slot`() {
+        assertNotNull(graph().banner)
+        assertNotNull(graph(showComponents = true).banner)
+    }
 
     @Test
     fun `the tabs are tiles then apps, and a launch opens on tiles`() {
