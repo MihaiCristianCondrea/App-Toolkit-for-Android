@@ -49,12 +49,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.colorscheme.darken
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /**
  * Creates a clickable preference item for app preference screens.
@@ -72,7 +72,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.La
  * State ownership:
  * - This composable is stateless and should receive already-derived UI text.
  * @param onClick A callback function that is called when the entire preference item is clicked. If no action is needed on click, this can be left empty.
- * @param firebaseController Optional Firebase controller used to log GA4 events.
  * @param ga4Event Optional GA4 event data to log on click.
  * @param ga4EventProvider Optional provider for GA4 event data resolved at click time.
  */
@@ -87,10 +86,10 @@ fun PreferenceItem(
     enabled: Boolean = true,
     rippleEffectDp: Dp = SizeConstants.LargeSize,
     onClick: () -> Unit = {},
-    firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
     ga4EventProvider: (() -> Ga4EventData?)? = null,
 ) {
+    val telemetryRepository = LocalTelemetry.current
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
     Row(
@@ -100,7 +99,7 @@ fun PreferenceItem(
             .clickable(enabled = enabled, onClick = {
                 view.playSoundEffect(SoundEffectConstants.CLICK)
                 hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                firebaseController.logGa4Event(ga4EventProvider?.invoke() ?: ga4Event)
+                telemetryRepository.logGa4Event(ga4EventProvider?.invoke() ?: ga4Event)
                 onClick()
             }), verticalAlignment = Alignment.CenterVertically
     ) {
@@ -170,7 +169,6 @@ fun PreferenceItem(
  *                      Defaults to [SizeConstants.ExtraTinySize].
  * @param onClick The lambda function to execute when the preference item is clicked.
  *                Defaults to an empty lambda, meaning no action will be performed by default.
- * @param firebaseController Optional Firebase controller used to log GA4 events.
  * @param ga4Event Optional GA4 event data to log on click.
  * @param ga4EventProvider Optional provider for GA4 event data resolved at click time.
  */
@@ -185,7 +183,6 @@ fun SettingsPreferenceItem(
     iconContainerColor: Color? = null,
     rippleEffectDp: Dp = SizeConstants.ExtraTinySize,
     onClick: () -> Unit = {},
-    firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
     ga4EventProvider: (() -> Ga4EventData?)? = null,
 ) {
@@ -205,7 +202,6 @@ fun SettingsPreferenceItem(
             onClick = {
                 onClick()
             },
-            firebaseController = firebaseController,
             ga4Event = ga4Event,
             ga4EventProvider = ga4EventProvider,
         )

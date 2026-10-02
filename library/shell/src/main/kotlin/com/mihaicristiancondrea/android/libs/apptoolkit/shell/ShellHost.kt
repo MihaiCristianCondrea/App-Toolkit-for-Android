@@ -96,6 +96,8 @@ import androidx.navigation3.scene.Scene
 import androidx.compose.material3.SnackbarHostState
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.LocalShellSnackbarHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.ShellSnackbarHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.rememberTelemetry
 
 /**
  * The whole app below the activity: every tab, page, bar, rail, drawer and transition described
@@ -183,6 +185,8 @@ fun ShellHost(
     }
 
     CompositionLocalProvider(
+        // Every page and the chrome report through it; an app's own provider, if any, is kept.
+        LocalTelemetry provides rememberTelemetry(),
         LocalShellGraph provides graph,
         LocalShellNavigator provides navigator,
         LocalShellPreferences provides store,

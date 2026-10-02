@@ -32,7 +32,7 @@ import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchasesParams
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.domain.models.PurchaseResult
 import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.CoroutineScope
@@ -65,7 +65,7 @@ private const val RETRY_MAX_DELAY_MS = 16_000L
 class DefaultBillingRepository private constructor(
     context: Context,
     private val dispatchers: DispatcherProvider,
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
     externalScope: CoroutineScope,
 ) : PurchasesUpdatedListener, BillingRepository {
 
@@ -120,14 +120,14 @@ class DefaultBillingRepository private constructor(
         fun getInstance(
             context: Context,
             dispatchers: DispatcherProvider,
-            firebaseController: FirebaseController,
+            telemetryRepository: TelemetryRepository,
             externalScope: CoroutineScope,
         ): DefaultBillingRepository {
             return INSTANCE ?: synchronized(this) {
                 INSTANCE ?: DefaultBillingRepository(
                     context.applicationContext,
                     dispatchers,
-                    firebaseController,
+                    telemetryRepository,
                     externalScope
                 )
                     .also { INSTANCE = it }
@@ -395,7 +395,7 @@ class DefaultBillingRepository private constructor(
 
         launchedProductTypes[details.productId] = productType
 
-        firebaseController.logBreadcrumb(
+        telemetryRepository.logBreadcrumb(
             message = "Billing flow launch",
             attributes = mapOf(
                 "productId" to details.productId,
@@ -423,7 +423,7 @@ class DefaultBillingRepository private constructor(
 
             billingClient.launchBillingFlow(activity, params)
         }.onSuccess { billingResult ->
-            firebaseController.logBreadcrumb(
+            telemetryRepository.logBreadcrumb(
                 message = "Billing flow result",
                 attributes = mapOf(
                     "responseCode" to billingResult.responseCode.toString(),
@@ -439,7 +439,7 @@ class DefaultBillingRepository private constructor(
                 scope.launch { _purchaseResult.emit(result) }
             }
         }.onFailure { throwable ->
-            firebaseController.recordNonFatal(
+            telemetryRepository.recordNonFatal(
                 throwable = throwable,
                 attributes = mapOf(
                     "operation" to "launchBillingFlow",

@@ -48,7 +48,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
@@ -119,15 +118,12 @@ fun SupportScreen() {
             }
         }
 
-    val firebaseController: FirebaseController = koinInject()
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = SUPPORT_SCREEN_NAME,
         screenClass = SUPPORT_SCREEN_CLASS,
     )
 
     TrackScreenState(
-        firebaseController = firebaseController,
         screenName = SUPPORT_SCREEN_NAME,
         screenState = screenState.screenState,
     )
@@ -151,7 +147,6 @@ fun SupportScreen() {
                 paddingValues = paddingValues,
                 donationOptions = data.donationOptions,
                 isBillingInProgress = data.isBillingInProgress,
-                firebaseController = firebaseController,
                 onDonateClick = { productId ->
                     activity?.let { hostActivity ->
                         onDonateClick(hostActivity, productId)
@@ -172,7 +167,6 @@ fun SupportScreenContent(
     paddingValues: PaddingValues,
     donationOptions: ImmutableMap<String, DonationOptionUiState>,
     isBillingInProgress: Boolean,
-    firebaseController: FirebaseController,
     onDonateClick: (String) -> Unit,
 ) {
     val context: Context = LocalContext.current
@@ -216,7 +210,6 @@ fun SupportScreenContent(
                             style = GeneralButtonStyle.Tonal,
                             modifier = Modifier.weight(1f),
                             onClick = { onDonateClick(DonationProductIds.LOW_DONATION) },
-                            firebaseController = firebaseController,
                             ga4Event = supportPreferenceTapEvent(
                                 preferenceKey = SupportPreferenceKeys.DONATE_LOW,
                                 productId = DonationProductIds.LOW_DONATION,
@@ -234,7 +227,6 @@ fun SupportScreenContent(
                             style = GeneralButtonStyle.Tonal,
                             modifier = Modifier.weight(1f),
                             onClick = { onDonateClick(DonationProductIds.NORMAL_DONATION) },
-                            firebaseController = firebaseController,
                             ga4Event = supportPreferenceTapEvent(
                                 preferenceKey = SupportPreferenceKeys.DONATE_NORMAL,
                                 productId = DonationProductIds.NORMAL_DONATION,
@@ -260,7 +252,6 @@ fun SupportScreenContent(
                             style = GeneralButtonStyle.Tonal,
                             modifier = Modifier.weight(1f),
                             onClick = { onDonateClick(DonationProductIds.HIGH_DONATION) },
-                            firebaseController = firebaseController,
                             ga4Event = supportPreferenceTapEvent(
                                 preferenceKey = SupportPreferenceKeys.DONATE_HIGH,
                                 productId = DonationProductIds.HIGH_DONATION,
@@ -278,7 +269,6 @@ fun SupportScreenContent(
                             style = GeneralButtonStyle.Tonal,
                             modifier = Modifier.weight(1f),
                             onClick = { onDonateClick(DonationProductIds.EXTREME_DONATION) },
-                            firebaseController = firebaseController,
                             ga4Event = supportPreferenceTapEvent(
                                 preferenceKey = SupportPreferenceKeys.DONATE_EXTREME,
                                 productId = DonationProductIds.EXTREME_DONATION,
@@ -311,7 +301,6 @@ fun SupportScreenContent(
                 onClick = {
                     context.openUrl(ShortenLinkConstants.LINKVERTISE_APP_DIRECT_LINK)
                 },
-                firebaseController = firebaseController,
                 ga4Event = supportPreferenceTapEvent(
                     preferenceKey = SupportPreferenceKeys.WEB_AD,
                     destination = ShortenLinkConstants.LINKVERTISE_APP_DIRECT_LINK,
@@ -330,7 +319,6 @@ fun SupportScreenContent(
         }
     }
 }
-
 
 private fun supportPreferenceTapEvent(
     preferenceKey: String,

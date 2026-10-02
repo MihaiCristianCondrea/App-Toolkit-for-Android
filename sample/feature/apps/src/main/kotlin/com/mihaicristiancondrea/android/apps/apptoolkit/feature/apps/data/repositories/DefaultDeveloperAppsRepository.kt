@@ -24,7 +24,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.DeveloperAppsRemoteException
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppDetails
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppSummary
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
@@ -34,12 +34,12 @@ import kotlin.coroutines.cancellation.CancellationException
 
 class DefaultDeveloperAppsRepository(
     private val remoteDataSource: DeveloperAppsRemoteDataSource,
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
     private val localDataSource: DeveloperAppsLocalDataSource,
 ) : DeveloperAppsRepository {
 
     override fun fetchDeveloperApps(): Flow<DataState<List<AppSummary>, AppErrors>> = flow {
-        firebaseController.logBreadcrumb(
+        telemetryRepository.logBreadcrumb(
             message = "Developer apps fetch",
         )
         val result: Result<DataState<List<AppSummary>, AppErrors>> = runSuspendCatching {
@@ -82,7 +82,7 @@ class DefaultDeveloperAppsRepository(
             emit(DataState.Error(error = AppErrors.UseCase.FAILED_TO_LOAD_APP_DETAILS))
             return@flow
         }
-        firebaseController.logBreadcrumb(
+        telemetryRepository.logBreadcrumb(
             message = "Developer app details fetch",
             attributes = mapOf("packageName" to packageName),
         )
@@ -111,7 +111,7 @@ class DefaultDeveloperAppsRepository(
     private suspend fun writeCache(apps: List<AppSummary>) {
         runSuspendCatching { localDataSource.write(apps) }
             .onFailure { throwable ->
-                firebaseController.recordNonFatal(
+                telemetryRepository.recordNonFatal(
                     throwable = throwable,
                     attributes = mapOf("operation" to "writeDeveloperAppsCache"),
                 )

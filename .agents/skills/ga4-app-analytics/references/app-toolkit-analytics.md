@@ -14,14 +14,14 @@ Host feature or reusable Toolkit UI
         ↓
 AnalyticsEvent or Ga4EventData
         ↓
-FirebaseController
+TelemetryRepository
         ↓
-FirebaseControllerImpl
+FirebaseTelemetryRepository
         ↓
 Firebase Analytics
 ```
 
-`FirebaseController` lives in App Toolkit core common code. Host features depend on this contract
+`TelemetryRepository` lives in App Toolkit core common code. Host features depend on this contract
 instead of importing the Firebase Analytics SDK directly.
 
 The Firebase integration provides the concrete implementation through dependency injection.
@@ -46,9 +46,9 @@ data class AnalyticsEvent(
 
 Host applications can define their own event contracts using these types.
 
-## FirebaseController responsibilities
+## Telemetry responsibilities
 
-`FirebaseController` provides the common path for:
+`TelemetryRepository` provides the common path for:
 
 - Analytics events.
 - Screen views.
@@ -62,7 +62,7 @@ Host applications can define their own event contracts using these types.
 
 Feature code should normally call the controller instead of directly accessing Firebase SDK classes.
 
-## FirebaseControllerImpl behavior
+## FirebaseTelemetryRepository behavior
 
 The Firebase implementation validates and converts Toolkit events before sending them to Firebase
 Analytics.
@@ -100,7 +100,7 @@ when that behavior matters to the host app.
 
 `TrackScreenView` is the normal App Toolkit helper for explicit Compose screen tracking.
 
-It sends a screen view through `FirebaseController.logScreenView()` when the stable screen name
+It sends a screen view through `TelemetryRepository.logScreenView()` when the stable screen name
 changes.
 
 Use it at meaningful top-level destinations.
@@ -121,14 +121,8 @@ mechanically to every small component.
 
 App Toolkit supports `Ga4EventData` for reusable UI components.
 
-A reusable component can receive:
-
-```text
-firebaseController
-ga4Event
-```
-
-and log the event at the exact interaction point.
+A reusable component receives a `ga4Event` and logs it at the exact interaction point, through
+`LocalTelemetry`, which `ShellHost` provides. It takes no telemetry parameter.
 
 Before adding a manual event around a Toolkit button, preference, chip, field, or FAB, inspect
 whether the component already supports GA4 logging. Duplicate click events can otherwise be emitted

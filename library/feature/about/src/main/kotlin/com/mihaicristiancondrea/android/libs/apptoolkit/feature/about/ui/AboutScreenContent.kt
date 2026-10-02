@@ -36,7 +36,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
@@ -99,7 +98,6 @@ private val konfettiRain: Party = Party(
  * @param onOpenLicenses Invoked by the licenses row. Navigation belongs to the caller.
  * @param contentPadding Padding from the shell, applied inside the list and the state screens.
  * @param onVersionTap Invoked with the cumulative number of taps on the app version row.
- * @param firebaseController Logs the preference tap events. `null` in previews.
  */
 @Composable
 internal fun AboutScreenContent(
@@ -109,7 +107,6 @@ internal fun AboutScreenContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
     onVersionTap: (Int) -> Unit = {},
-    firebaseController: FirebaseController? = null,
 ) {
     val context: Context = LocalContext.current
     var showKonfetti: Boolean by rememberSaveable { mutableStateOf(false) }
@@ -173,7 +170,6 @@ internal fun AboutScreenContent(
                                 title = item.title.asString(),
                                 summary = item.summary.asString(),
                                 onClick = { onPreferenceClick(item) },
-                                firebaseController = firebaseController,
                                 ga4Event = item.action?.let {
                                     aboutPreferenceTapEvent(preferenceKey = item.key)
                                 },

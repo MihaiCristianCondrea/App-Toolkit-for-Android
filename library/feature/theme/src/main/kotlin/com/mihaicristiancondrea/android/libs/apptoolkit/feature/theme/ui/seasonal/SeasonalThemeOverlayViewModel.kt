@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal
 
 import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.HolidaySeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.WeatherEffect
@@ -58,13 +58,13 @@ import kotlinx.coroutines.launch
  * opens, so snow and rain on any palette need it too. Rain gives way to snow while the Christmas
  * palette is worn during the Christmas season, and comes back once the season is over.
  *
- * @param firebaseController Reports how the holiday greeting was answered.
+ * @param telemetryRepository Reports how the holiday greeting was answered.
  * @param today Supplies the local date, so tests can pick the season.
  */
 class SeasonalThemeOverlayViewModel(
     private val seasonal: SeasonalThemeRepository,
     theme: ThemePreferencesRepository,
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
     private val today: () -> LocalDate = { LocalDate.now(ZoneId.systemDefault()) },
 ) : ScreenViewModel<SeasonalThemeOverlayUiState, SeasonalThemeOverlayEvent, ActionEvent>(
     initialState = UiStateScreen(
@@ -119,7 +119,7 @@ class SeasonalThemeOverlayViewModel(
         val season: HolidaySeason = screenData?.greeting ?: return
         viewModelScope.launch {
             update { it.copy(greeting = null) }
-            firebaseController.logEvent(
+            telemetryRepository.logEvent(
                 holidayGreetingAnsweredEvent(season = season, useHolidayTheme = useHolidayTheme),
             )
             runSuspendCatching {
@@ -134,7 +134,7 @@ class SeasonalThemeOverlayViewModel(
     }
 
     private fun report(throwable: Throwable, operation: String) {
-        firebaseController.recordNonFatal(
+        telemetryRepository.recordNonFatal(
             throwable = throwable,
             attributes = mapOf("operation" to operation),
         )

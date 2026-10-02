@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextField
@@ -35,6 +34,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.IssueReporterActionNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.issueReporterActionEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /** Rows the description field grows to before it starts scrolling its own content. */
 private const val DESCRIPTION_MIN_LINES: Int = 5
@@ -60,10 +60,10 @@ private const val FORMAT_PARAM: String = "format"
 @Composable
 internal fun IssueDescriptionField(
     description: String,
-    firebaseController: FirebaseController,
     onDescriptionChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val telemetryRepository = LocalTelemetry.current
     GeneralTextField(
         value = description,
         onValueChange = onDescriptionChange,
@@ -82,7 +82,7 @@ internal fun IssueDescriptionField(
         ),
         markdown = GeneralTextFieldMarkdown.Editor,
         onMarkdownFormat = { action ->
-            firebaseController.logEvent(
+            telemetryRepository.logEvent(
                 issueReporterActionEvent(
                     actionName = IssueReporterActionNames.FORMAT_DESCRIPTION,
                     params = mapOf(FORMAT_PARAM to AnalyticsValue.Str(action.analyticsName)),

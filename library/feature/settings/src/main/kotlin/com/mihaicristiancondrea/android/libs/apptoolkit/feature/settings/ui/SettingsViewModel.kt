@@ -17,124 +17,56 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui
 
-import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.contracts.SettingsAction
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.contracts.SettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.SettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.asUiText
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onFailure
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setErrors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoading
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setNoData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.updateState
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.states.SettingsUiState
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 
 /**
- * ViewModel responsible for managing the state and logic of the settings screen.
+ * Loads the host's settings for the settings list.
  *
- * This ViewModel handles loading settings configurations and updating the UI state accordingly.
- * It communicates with a [SettingsProvider] to fetch the settings data.
- *
- * @param settingsProvider An implementation of [SettingsProvider] that supplies the settings configuration.
- * @param dispatchers A provider for coroutine dispatchers, used for managing background tasks.
- * @param firebaseController Reports ViewModel flow failures to Firebase.
- *
- * @see LoggedScreenViewModel
- * @see SettingsConfig
- * @see SettingsEvent
- * @see SettingsAction
+ * The [SettingsProvider] builds its config from resources, which is main-safe, so it needs no
+ * dispatcher. A config with no category is [Loadable.Empty]; a provider that throws is
+ * [Loadable.Failed], reported to telemetry.
  */
 class SettingsViewModel(
     private val settingsProvider: SettingsProvider,
-    private val dispatchers: DispatcherProvider,
-    firebaseController: FirebaseController,
-) : LoggedScreenViewModel<SettingsConfig, SettingsEvent, SettingsAction>(
-    initialState = UiStateScreen(data = SettingsConfig(title = "")),
-    firebaseController = firebaseController,
+    telemetryRepository: TelemetryRepository,
+) : LoggedScreenViewModel<SettingsUiState, SettingsEvent>(
+    initialState = SettingsUiState(),
+    telemetryRepository = telemetryRepository,
     screenName = "Settings",
     viewModelName = "SettingsViewModel",
 ) {
-    private var observeJob: Job? = null
+    private var loadJob: Job? = null
 
     override fun handleEvent(event: SettingsEvent) {
         when (event) {
-            is SettingsEvent.Load -> loadSettings()
+            SettingsEvent.Load -> loadSettings()
         }
     }
 
     private fun loadSettings() {
-        startOperation(action = Actions.LOAD_SETTINGS)
-        observeJob = observeJob.restart {
-            flow { emit(settingsProvider.provideSettingsConfig()) }
-                .flowOn(dispatchers.io)
-                .map<SettingsConfig, DataState<SettingsConfig, Errors>> { config ->
-                    if (config.categories.isEmpty()) {
-                        DataState.Error(data = config, error = Errors.UseCase.NO_DATA)
-                    } else {
-                        DataState.Success(config)
-                    }
+        loadJob = loadJob.restart {
+            launchReport(
+                action = Actions.LOAD_SETTINGS,
+                onError = { error -> setState { copy(config = error.toFailed()) } },
+            ) {
+                setState { copy(config = Loadable.Loading) }
+                val loaded = settingsProvider.provideSettingsConfig()
+                val content = if (loaded.categories.isEmpty()) {
+                    Loadable.Empty(NoSettingsText)
+                } else {
+                    Loadable.Ready(loaded)
                 }
-                .onStart {
-                    updateStateThreadSafe {
-                        screenState.setErrors(emptyList())
-                        screenState.setLoading()
-                    }
-                }
-                .catchReport(action = Actions.LOAD_SETTINGS) {
-                    emit(DataState.Error(error = Errors.UseCase.INVALID_STATE))
-                }
-                .onEach { result ->
-                    result
-                        .onSuccess { config ->
-                            updateStateThreadSafe {
-                                screenState.setErrors(emptyList())
-                                screenState.setSuccess(data = config)
-                            }
-                        }
-                        .onFailure { error ->
-                            updateStateThreadSafe {
-                                val fallback = (result as? DataState.Error)?.data ?: SettingsConfig(
-                                    title = "",
-                                    categories = emptyList()
-                                )
-                                if (error == Errors.UseCase.NO_DATA) {
-                                    screenState.setErrors(
-                                        listOf(
-                                            UiSnackbar(
-                                                message = UiTextHelper.StringResource(
-                                                    R.string.error_no_settings_found
-                                                )
-                                            )
-                                        )
-                                    )
-                                    screenState.setNoData(data = fallback)
-                                } else {
-                                    screenState.setErrors(listOf(UiSnackbar(message = error.asUiText())))
-                                    screenState.updateState(ScreenState.Error())
-                                }
-                            }
-                        }
-                }
-                .launchIn(viewModelScope)
+                setState { copy(config = content) }
+            }
         }
     }
 
@@ -142,5 +74,7 @@ class SettingsViewModel(
         const val LOAD_SETTINGS: String = "loadSettings"
     }
 
+    private companion object {
+        val NoSettingsText = UiTextHelper.StringResource(R.string.error_no_settings_found)
+    }
 }
-

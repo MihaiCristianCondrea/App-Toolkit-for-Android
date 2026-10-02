@@ -38,11 +38,11 @@ import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dropdown.CommonDropdownMenuItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import kotlinx.collections.immutable.ImmutableList
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -51,9 +51,9 @@ fun DropdownMenuBox(
     options: ImmutableList<String>,
     onOptionSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
-    firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
 ) {
+    val telemetryRepository = LocalTelemetry.current
     var expanded: Boolean by rememberSaveable { mutableStateOf(false) }
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
@@ -63,7 +63,7 @@ fun DropdownMenuBox(
         onExpandedChange = { next ->
             view.playSoundEffect(SoundEffectConstants.CLICK)
             hapticFeedback.performHapticFeedback(HapticFeedbackType.VirtualKey)
-            firebaseController.logGa4Event(ga4Event)
+            telemetryRepository.logGa4Event(ga4Event)
             expanded = next
         },
         modifier = modifier.fillMaxWidth(),
@@ -97,7 +97,6 @@ fun DropdownMenuBox(
                         onOptionSelected(option)
                         expanded = false
                     },
-                    firebaseController = firebaseController,
                     ga4Event = ga4Event,
                 )
             }

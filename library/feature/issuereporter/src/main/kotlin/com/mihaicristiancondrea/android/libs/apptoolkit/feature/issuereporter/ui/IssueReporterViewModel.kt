@@ -31,7 +31,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueReporterUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueSubmissionState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.di.GithubToken
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
@@ -66,13 +66,13 @@ class IssueReporterViewModel(
     @param:GithubToken private val githubToken: String,
     private val repository: IssueReporterRepository,
     private val dispatchers: DispatcherProvider,
-    firebaseController: FirebaseController,
+    telemetryRepository: TelemetryRepository,
 ) : LoggedScreenViewModel<IssueReporterUiState, IssueReporterEvent, IssueReporterAction>(
     initialState = UiStateScreen(
         screenState = ScreenState.Success(),
         data = IssueReporterUiState(),
     ),
-    firebaseController = firebaseController,
+    telemetryRepository = telemetryRepository,
     screenName = "IssueReporter",
     viewModelName = "IssueReporterViewModel",
 ) {

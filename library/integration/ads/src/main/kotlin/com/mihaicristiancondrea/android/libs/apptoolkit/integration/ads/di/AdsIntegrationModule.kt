@@ -42,7 +42,7 @@ fun adsIntegrationModule(): Module = module {
     single<AdsSettingsRepository> {
         DefaultAdsSettingsRepository(
             dataStore = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
         )
     }
 
@@ -51,7 +51,7 @@ fun adsIntegrationModule(): Module = module {
             repository = get(),
             consentRepository = get(),
             dispatchers = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
         )
     }
 }

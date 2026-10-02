@@ -26,7 +26,7 @@ import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.di.privacyModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.providers.PrivacySettingsProvider
@@ -64,7 +64,7 @@ class PermissionUsageActivityTest {
             modules(
                 module {
                     single { CommonDataStore(context) }
-                    single<FirebaseController> { mockk(relaxed = true) }
+                    single<TelemetryRepository> { mockk(relaxed = true) }
                     single<PrivacySettingsProvider> { object : PrivacySettingsProvider {} }
                 },
                 privacyModule,

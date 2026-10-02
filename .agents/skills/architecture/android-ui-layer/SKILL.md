@@ -82,7 +82,7 @@ their own queue.
   every operation is logged, every failure reported, and cancellation never mistaken for one:
   `launchReport { }` for a suspend call, `flow.collectReport { }` for a flow whose values go into
   state, and `flow.catchReport { }` only for a flow that has to keep going after a failure.
-- Take repositories, use cases where they earn their place, `FirebaseController`, and a
+- Take repositories, use cases where they earn their place, `TelemetryRepository`, and a
   `DispatcherProvider` only for the ViewModel's own CPU work. Never a `Context`, a data source or a
   bare platform wrapper: the platform is reached through a repository, as `ClipboardRepository`.
 - Keep action names in a `private object Actions` of `const val`s. They are the `action` values on

@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui
 import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.contracts.StartupAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.contracts.StartupEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -43,7 +43,7 @@ class StartupViewModelTest {
 
     @Test
     fun `consent event updates state`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = StartupViewModel(firebaseController = FakeFirebaseController())
+        val viewModel = StartupViewModel(telemetryRepository = FakeTelemetryRepository())
 
         viewModel.onEvent(StartupEvent.ConsentFormLoaded)
 
@@ -54,7 +54,7 @@ class StartupViewModelTest {
 
     @Test
     fun `continue event emits navigation action`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = StartupViewModel(firebaseController = FakeFirebaseController())
+        val viewModel = StartupViewModel(telemetryRepository = FakeTelemetryRepository())
         val actions = mutableListOf<StartupAction>()
         val job = launch { viewModel.actionEvent.collect { actions.add(it) } }
 
@@ -72,7 +72,7 @@ class StartupViewModelTest {
     @Test
     fun `screen stops loading when consent never reports back`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val viewModel = StartupViewModel(firebaseController = FakeFirebaseController())
+            val viewModel = StartupViewModel(telemetryRepository = FakeTelemetryRepository())
             val job = launch { viewModel.actionEvent.collect { } }
 
             viewModel.onEvent(StartupEvent.RequestConsent)
@@ -91,7 +91,7 @@ class StartupViewModelTest {
 
     @Test
     fun `request consent emits ui action`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = StartupViewModel(firebaseController = FakeFirebaseController())
+        val viewModel = StartupViewModel(telemetryRepository = FakeTelemetryRepository())
         val actions = mutableListOf<StartupAction>()
         val job = launch { viewModel.actionEvent.collect { actions.add(it) } }
 

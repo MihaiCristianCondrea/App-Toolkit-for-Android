@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.ClipboardRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logUnlockAchievement
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
@@ -55,11 +55,11 @@ private const val SEASONAL_THEMES_ACHIEVEMENT: String = "seasonal_themes"
 open class AboutViewModel(
     private val aboutRepository: AboutRepository,
     private val clipboardRepository: ClipboardRepository,
-    firebaseController: FirebaseController,
+    telemetryRepository: TelemetryRepository,
     private val seasonalThemes: SeasonalThemeRepository,
 ) : LoggedScreenViewModel<AboutUiState, AboutEvent>(
     initialState = AboutUiState(),
-    firebaseController = firebaseController,
+    telemetryRepository = telemetryRepository,
     screenName = "About",
     viewModelName = "AboutViewModel",
 ) {
@@ -137,7 +137,7 @@ open class AboutViewModel(
     private fun unlockSeasonalThemes() {
         launchReport(action = Actions.UNLOCK_SEASONAL_THEMES) {
             if (seasonalThemes.unlockSeasonalThemes()) {
-                firebaseController.logUnlockAchievement(achievementId = SEASONAL_THEMES_ACHIEVEMENT)
+                telemetryRepository.logUnlockAchievement(achievementId = SEASONAL_THEMES_ACHIEVEMENT)
                 showMessage(UiMessage(UiTextHelper.StringResource(R.string.snack_seasonal_themes_unlocked)))
             }
         }

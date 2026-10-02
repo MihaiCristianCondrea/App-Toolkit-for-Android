@@ -99,23 +99,23 @@ val tilesModule: Module = module {
         ToolkitTilesViewModel(
             toolkitTilesRepository = get(),
             dispatchers = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
         )
     }
-    viewModel { CoinFlipToolViewModel(firebaseController = get()) }
-    viewModel { DiceRollToolViewModel(firebaseController = get()) }
-    viewModel { CounterToolViewModel(repository = get(), firebaseController = get()) }
-    viewModel { CompassToolViewModel(repository = get(), firebaseController = get()) }
-    viewModel { LevelToolViewModel(repository = get(), firebaseController = get()) }
-    viewModel { BreathingToolViewModel(repository = get(), firebaseController = get()) }
-    viewModel { SosToolViewModel(repository = get(), firebaseController = get()) }
-    viewModel { MorseToolViewModel(repository = get(), firebaseController = get()) }
+    viewModel { CoinFlipToolViewModel(telemetryRepository = get()) }
+    viewModel { DiceRollToolViewModel(telemetryRepository = get()) }
+    viewModel { CounterToolViewModel(repository = get(), telemetryRepository = get()) }
+    viewModel { CompassToolViewModel(repository = get(), telemetryRepository = get()) }
+    viewModel { LevelToolViewModel(repository = get(), telemetryRepository = get()) }
+    viewModel { BreathingToolViewModel(repository = get(), telemetryRepository = get()) }
+    viewModel { SosToolViewModel(repository = get(), telemetryRepository = get()) }
+    viewModel { MorseToolViewModel(repository = get(), telemetryRepository = get()) }
     viewModel {
         FlashDimmerToolViewModel(
             torchRepository = get(),
             morseRepository = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
         )
     }
-    viewModel { ReactionTestToolViewModel(firebaseController = get()) }
+    viewModel { ReactionTestToolViewModel(telemetryRepository = get()) }
 }

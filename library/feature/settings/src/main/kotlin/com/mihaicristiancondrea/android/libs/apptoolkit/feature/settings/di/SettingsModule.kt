@@ -27,8 +27,7 @@ val settingsModule: Module = module {
     viewModel {
         SettingsViewModel(
             settingsProvider = get<SettingsProvider>(),
-            dispatchers = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
         )
     }
 }

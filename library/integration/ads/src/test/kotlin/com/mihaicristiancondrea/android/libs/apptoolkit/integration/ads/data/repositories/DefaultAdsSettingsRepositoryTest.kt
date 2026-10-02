@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.re
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
@@ -53,7 +53,7 @@ class TestDefaultAdsSettingsRepository {
         every { dataStore.defaultAdsEnabled } returns storeDefaultAdsEnabled
         return DefaultAdsSettingsRepository(
             dataStore = dataStore,
-            firebaseController = mockk<FirebaseController>(relaxed = true),
+            telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
         )
     }
 

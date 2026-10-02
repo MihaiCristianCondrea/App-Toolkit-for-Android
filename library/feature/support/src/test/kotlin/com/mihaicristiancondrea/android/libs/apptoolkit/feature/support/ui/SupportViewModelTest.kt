@@ -26,7 +26,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.contr
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.domain.models.DonationProductIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.domain.models.PurchaseResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.R
@@ -61,13 +61,13 @@ class SupportViewModelTest {
         }
         every { launchInAppDonationFlow(any(), any()) } returns Unit
     }
-    private val firebaseController = FakeFirebaseController()
+    private val telemetryRepository = FakeTelemetryRepository()
 
     private fun createViewModel(
         initialProducts: Map<String, ProductDetails> = emptyMap(),
     ): SupportViewModel {
         queriedProducts = initialProducts
-        return SupportViewModel(billingRepository, firebaseController)
+        return SupportViewModel(billingRepository, telemetryRepository)
     }
 
     private fun mockOneTimeOfferDetails(
@@ -350,20 +350,20 @@ class SupportViewModelTest {
     }
 
     private fun donationResults() =
-        firebaseController.loggedEvents.filter { it.name == "donation_result" }
+        telemetryRepository.loggedEvents.filter { it.name == "donation_result" }
 
     @Test
     fun `starting a donation reports begin_checkout with its price`() =
         runTest(dispatcherExtension.testDispatcher) {
             startedDonationViewModel()
 
-            val checkout = firebaseController.loggedEvents.single { it.name == "begin_checkout" }
+            val checkout = telemetryRepository.loggedEvents.single { it.name == "begin_checkout" }
             assertThat(checkout.params["product_id"])
                 .isEqualTo(AnalyticsValue.Str(DonationProductIds.LOW_DONATION))
             assertThat(checkout.params["value"]).isEqualTo(AnalyticsValue.DoubleVal(0.99))
             assertThat(checkout.params["currency"]).isEqualTo(AnalyticsValue.Str("EUR"))
             // Firebase records revenue itself as in_app_purchase, so a purchase would double it.
-            assertThat(firebaseController.loggedEvents.none { it.name == "purchase" }).isTrue()
+            assertThat(telemetryRepository.loggedEvents.none { it.name == "purchase" }).isTrue()
         }
 
     @Test

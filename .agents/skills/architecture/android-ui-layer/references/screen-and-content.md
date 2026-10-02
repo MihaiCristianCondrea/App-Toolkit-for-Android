@@ -2,13 +2,15 @@
 
 The two composables every screen has. Templates: `templates/XScreen.kt.txt` and
 `templates/XScreenContent.kt.txt`. Reference: `AboutScreen.kt` and `AboutScreenContent.kt` in
-`:library:feature:about`.
+`:library:feature:about`, and `FaqScreen.kt` and `FaqScreenContent.kt` in `:library:feature:faq`
+for a screen with analytics on every tap, an ad slot and a bottom sheet.
 
 ## Who owns what
 
 | Concern                                          | `XScreen` | `XScreenContent` |
 |--------------------------------------------------|:---------:|:----------------:|
 | `koinViewModel`, `koinInject`                    | yes       | no               |
+| `LocalTelemetry.current` for its own events      | yes       | no               |
 | collecting flows                                 | yes       | no               |
 | `TrackScreenView`, `TrackScreenState`            | yes       | no               |
 | `MessageHost`                                    | yes       | no               |
@@ -26,11 +28,10 @@ The two composables every screen has. Templates: `templates/XScreen.kt.txt` and
 fun XScreen() {
     val viewModel: XViewModel = koinViewModel()
     val state: XUiState by viewModel.state.collectAsStateWithLifecycle()
-    val firebaseController: FirebaseController = koinInject()
     val navigator = LocalShellNavigator.current
 
-    TrackScreenView(firebaseController = firebaseController, screenName = X_SCREEN_NAME, screenClass = X_SCREEN_CLASS)
-    TrackScreenState(firebaseController = firebaseController, screenName = X_SCREEN_NAME, state = state.items)
+    TrackScreenView(screenName = X_SCREEN_NAME, screenClass = X_SCREEN_CLASS)
+    TrackScreenState(screenName = X_SCREEN_NAME, state = state.items)
 
     XScreenContent(
         state = state,
@@ -46,6 +47,13 @@ fun XScreen() {
 - Its parameters are what the host passes in, such as `onVersionTap` on `AboutScreen`. It takes no
   state.
 - `TrackScreenState` gets the field that decides whether the screen worked; see `state.md`.
+- Telemetry comes from `LocalTelemetry`, which `ShellHost` provides. `TrackScreenView`,
+  `TrackScreenState` and the design-system components read it themselves. A screen that logs an
+  event of its own reads it once, `val telemetryRepository = LocalTelemetry.current`, and calls it in its
+  callbacks; it never injects `TelemetryRepository` with `koinInject`.
+- `TelemetryRepository` is the only repository composables use directly. A screen view or a tap is
+  a UI event, so routing it through the ViewModel would add an event per tap and change nothing
+  reported. Every other repository is reached through the ViewModel.
 - Keep it this short. Logic that grows here belongs in the ViewModel, and layout in the content.
 
 ## XScreenContent
@@ -78,9 +86,15 @@ internal fun XScreenContent(
 - `onEvent` carries everything the ViewModel handles; navigation targets get their own callbacks,
   since the ViewModel does not navigate.
 - Give list items a stable `key`, so rows keep their state when the list changes.
-- A component that logs its own GA4 tap events, such as `SettingsPreferenceItem`, may take a
-  nullable `FirebaseController` parameter. The screen passes the injected one; previews pass
-  nothing.
+- A tap that also has to be logged, or needs a `Context` (open a link, send mail), is a named
+  callback the screen implements: `onContactUs`, not `onEvent`. The content stays free of
+  telemetry and platform calls, and the screen logs exactly what it logged before.
+  `FaqScreenContent` takes seven such callbacks.
+- A design-system component that logs its own GA4 tap events, such as `SettingsPreferenceItem`,
+  takes only the `ga4Event` and logs it through `LocalTelemetry`. In a preview `LocalTelemetry` is
+  a no-op, so nothing has to be passed.
+- Resolve Koin values the content needs, such as an ad unit, in the screen and pass the plain value
+  (`adUnitId: String?`), so the content renders without Koin.
 - Visual state that belongs to one interaction, such as About's version-tap counter and konfetti,
   stays here with `rememberSaveable`. It moves to the ViewModel once it has to survive the screen
   or be reported.

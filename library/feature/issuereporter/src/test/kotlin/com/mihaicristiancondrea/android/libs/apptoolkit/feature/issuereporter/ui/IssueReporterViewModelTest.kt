@@ -27,7 +27,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.do
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.contracts.IssueReporterEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueSubmissionState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
@@ -110,7 +110,7 @@ class IssueReporterViewModelTest {
     }
 
     private val repository: IssueReporterRepository = fakeRepository()
-    private val firebaseController = FakeFirebaseController()
+    private val telemetryRepository = FakeTelemetryRepository()
 
     private inline fun <T> withMainDispatcher(
         dispatcher: CoroutineDispatcher,
@@ -136,7 +136,7 @@ class IssueReporterViewModelTest {
                 githubTarget = githubTarget,
                 githubToken = "",
                 repository = repository,
-                firebaseController = firebaseController,
+                telemetryRepository = telemetryRepository,
                 dispatchers = dispatchers,
             )
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
@@ -165,7 +165,7 @@ class IssueReporterViewModelTest {
                 githubTarget = githubTarget,
                 githubToken = "token",
                 repository = repository,
-                firebaseController = firebaseController,
+                telemetryRepository = telemetryRepository,
                 dispatchers = dispatchers,
             )
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
@@ -201,7 +201,7 @@ class IssueReporterViewModelTest {
                 githubTarget = githubTarget,
                 githubToken = "",
                 repository = repository,
-                firebaseController = firebaseController,
+                telemetryRepository = telemetryRepository,
                 dispatchers = dispatchers,
             )
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
@@ -232,7 +232,7 @@ class IssueReporterViewModelTest {
                 githubTarget = githubTarget,
                 githubToken = "",
                 repository = failingRepository,
-                firebaseController = firebaseController,
+                telemetryRepository = telemetryRepository,
                 dispatchers = dispatchers,
             )
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
@@ -267,7 +267,7 @@ class IssueReporterViewModelTest {
                 githubTarget = githubTarget,
                 githubToken = "tok",
                 repository = repository,
-                firebaseController = firebaseController,
+                telemetryRepository = telemetryRepository,
                 dispatchers = dispatchers,
             )
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
@@ -303,7 +303,7 @@ class IssueReporterViewModelTest {
                 githubTarget = githubTarget,
                 githubToken = "token",
                 repository = repository,
-                firebaseController = firebaseController,
+                telemetryRepository = telemetryRepository,
                 dispatchers = dispatchers,
             )
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
@@ -337,7 +337,7 @@ class IssueReporterViewModelTest {
                 githubTarget = githubTarget,
                 githubToken = "token",
                 repository = repository,
-                firebaseController = firebaseController,
+                telemetryRepository = telemetryRepository,
                 dispatchers = dispatchers,
             )
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }

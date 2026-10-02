@@ -35,7 +35,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.utils.to
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.analytics.AppInteractionType
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.analytics.logAppInteraction
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logSelectContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItem
@@ -81,7 +81,7 @@ import kotlinx.coroutines.flow.update
  * @param installedAppsRepository Resolves which catalog entries are installed and their metadata.
  * @param favoritesRepository Reads and updates the set of favorite app package names.
  * @param dispatchers Provides coroutine dispatchers for different contexts (IO, Main, etc.).
- * @param firebaseController Reports ViewModel flow failures to Firebase.
+ * @param telemetryRepository Reports ViewModel flow failures to Firebase.
  */
 @OptIn(ExperimentalCoroutinesApi::class)
 class AppsListViewModel(
@@ -89,10 +89,10 @@ class AppsListViewModel(
     private val installedAppsRepository: InstalledAppsRepository,
     private val favoritesRepository: FavoritesRepository,
     private val dispatchers: DispatcherProvider,
-    firebaseController: FirebaseController,
+    telemetryRepository: TelemetryRepository,
 ) : LoggedScreenViewModel<AppListUiState, HomeEvent, HomeAction>(
     initialState = UiStateScreen(data = AppListUiState()),
-    firebaseController = firebaseController,
+    telemetryRepository = telemetryRepository,
     screenName = AppScreenTracking.Screens.APPS_LIST.name,
     viewModelName = "AppsListViewModel",
 ) {
@@ -129,7 +129,7 @@ class AppsListViewModel(
             HomeEvent.FetchApps -> fetchAppsTrigger.tryEmit(Unit)
 
             is HomeEvent.FilterSelected -> {
-                firebaseController.logViewItemList(
+                telemetryRepository.logViewItemList(
                     itemListId = event.filter.name.lowercase(),
                     itemListName = "developer_apps_${event.filter.name.lowercase()}",
                 )
@@ -142,7 +142,7 @@ class AppsListViewModel(
 
             HomeEvent.OpenRandomApp -> {
                 val randomApp = screenData?.apps?.randomOrNull() ?: return
-                firebaseController.logSelectContent(
+                telemetryRepository.logSelectContent(
                     contentType = "random_app",
                     itemId = randomApp.packageName,
                 )
@@ -230,7 +230,7 @@ class AppsListViewModel(
             if (list.isEmpty()) {
                 screenState.setNoData(data = updated)
             } else {
-                firebaseController.logViewItemList(
+                telemetryRepository.logViewItemList(
                     itemListId = "all",
                     itemListName = "developer_apps_all",
                 )
@@ -275,12 +275,12 @@ class AppsListViewModel(
 
     private fun selectApp(packageName: String) {
         val selectedApp = screenData?.apps?.firstOrNull { it.packageName == packageName } ?: return
-        firebaseController.logViewItem(
+        telemetryRepository.logViewItem(
             itemId = selectedApp.packageName,
             itemName = selectedApp.name,
             itemCategory = selectedApp.category?.label,
         )
-        firebaseController.logAppInteraction(
+        telemetryRepository.logAppInteraction(
             source = "apps_list",
             appInfo = selectedApp,
             interaction = AppInteractionType.OpenDetailsBottomSheet,

@@ -37,7 +37,7 @@ val changelogModule: Module = module {
             legacyChangelogUrl = get(
                 qualifier = named(AppToolkitDiConstants.GITHUB_CHANGELOG),
             ),
-            firebaseController = get(),
+            telemetryRepository = get(),
         )
     }
     single<ChangelogRepository> { get<DefaultChangelogRepository>() }
@@ -52,8 +52,7 @@ val changelogModule: Module = module {
     viewModel {
         ChangelogViewModel(
             getChangelogUseCase = get(),
-            dispatchers = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
         )
     }
 }

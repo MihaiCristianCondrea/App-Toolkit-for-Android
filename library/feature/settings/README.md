@@ -7,8 +7,11 @@ each row opening its destination in the shell.
 
 ## Owns
 
-- `SettingsScreen`, `SettingsViewModel`, their action and event contracts, and the list's overflow
-  menu (`SettingsMenuActions`, which opens Help and feedback).
+- `SettingsScreen`, `SettingsViewModel`, `SettingsUiState` (whose `config` is a `Loadable`),
+  `SettingsEvent.Load`, and the list's overflow menu (`SettingsMenuActions`, which opens Help and
+  feedback).
+- `SettingsScreenContent`, the stateless list with its loading, empty and failure states, and
+  `SettingsList`, the rows themselves.
 - `SettingsProvider`, the contract an app implements to describe its settings.
 - `settingsPage()`, the registration of `SettingsRoute` as a list page.
 - The settings search: a field above the rows, not in the app bar, that searches the host's rows
@@ -46,6 +49,8 @@ each row opening its destination in the shell.
 flowchart TD
     Host[App's SettingsProvider] --> VM[SettingsViewModel]
     VM --> Screen[SettingsScreen]
+    Screen --> Content[SettingsScreenContent]
+    Screen -->|retry, logged as retry_load| VM
     Screen -->|row clicked| Action{preference.action handled?}
     Action -->|yes| Done[App's own action]
     Action -->|no| Navigate[navigator.navigate: preference.destination]
@@ -93,12 +98,20 @@ class AppSettingsProvider(private val context: Context) : SettingsProvider {
   category pages, registered as `PaneRole.Detail`, open beside it. Until one is, the detail side
   shows `SettingsDetailPlaceholder`: the settings illustration, the app's name and a Get help
   button that opens `HelpRoute`.
+- **On `core.ui.screen`.** `SettingsViewModel` loads the provider's config on each `Load`, which
+  the screen sends each time the list is shown so a row's summary follows a change made on its
+  page. A config with no category is `Loadable.Empty` with "No settings found"; a provider that
+  throws is `Loadable.Failed`, reported to telemetry. The provider builds from resources, which is
+  main-safe, so the ViewModel takes no dispatcher.
+- **The screen owns the search.** The query and the search index live in `SettingsScreen`, because
+  the index reads the shell graph and Koin; `SettingsScreenContent` receives the query and the
+  results and stays previewable.
 - Layers follow ownership, as described in [the architecture rules](../../../.agents/skills/architecture/layered-tree-review/references/android-tree-rules.md).
 
 ## Public contracts
 
-- `SettingsProvider`, `SettingsScreen`, `SettingsViewModel`, `SettingsAction`, `SettingsEvent`,
-  `SettingsMenuActions` and `settingsPage()`.
+- `SettingsProvider`, `SettingsScreen`, `SettingsList`, `SettingsViewModel`, `SettingsUiState`,
+  `SettingsEvent`, `SettingsMenuActions` and `settingsPage()`. `SettingsScreenContent` is internal.
 - The label and summary strings listed under Owns.
 
 ## Current risks

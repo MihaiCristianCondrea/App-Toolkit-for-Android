@@ -17,13 +17,13 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.testing
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 
 /**
  * No-op Firebase controller for unit tests.
  */
-class FakeFirebaseController : FirebaseController {
+class FakeTelemetryRepository : TelemetryRepository {
     val loggedEvents: MutableList<AnalyticsEvent> = mutableListOf()
     val loggedScreenViews: MutableList<Pair<String, String?>> = mutableListOf()
 

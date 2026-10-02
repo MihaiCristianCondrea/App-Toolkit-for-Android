@@ -81,7 +81,7 @@ class DefaultFaqRepositoryTest {
             remoteDataSource = remote,
             catalogUrl = CATALOG_URL,
             productId = PRODUCT_ID,
-            firebaseController = mockk(relaxed = true),
+            telemetryRepository = mockk(relaxed = true),
         )
     }
 

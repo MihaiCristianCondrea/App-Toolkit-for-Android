@@ -32,7 +32,7 @@ val displaySettingsModule: Module = module {
         DisplaySettingsViewModel(
             displayPreferences = get(),
             themePreferences = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
         )
     }
 }

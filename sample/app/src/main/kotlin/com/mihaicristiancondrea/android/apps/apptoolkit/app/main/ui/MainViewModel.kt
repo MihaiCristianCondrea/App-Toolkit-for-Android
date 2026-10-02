@@ -23,7 +23,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.Ma
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.MainEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.states.MainUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.asUiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
@@ -52,10 +52,10 @@ class MainViewModel(
     private val requestInAppReviewUseCase: RequestInAppReviewUseCase,
     private val inAppUpdateRepository: InAppUpdateRepository,
     private val dispatchers: DispatcherProvider,
-    firebaseController: FirebaseController,
+    telemetryRepository: TelemetryRepository,
 ) : LoggedScreenViewModel<MainUiState, MainEvent, MainAction>(
     initialState = UiStateScreen(data = MainUiState),
-    firebaseController = firebaseController,
+    telemetryRepository = telemetryRepository,
     screenName = AppScreenTracking.Screens.MAIN.name,
     viewModelName = "MainViewModel",
 ) {

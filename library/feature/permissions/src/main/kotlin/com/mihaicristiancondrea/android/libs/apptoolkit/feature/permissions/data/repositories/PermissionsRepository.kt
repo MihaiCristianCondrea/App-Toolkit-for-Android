@@ -18,18 +18,13 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.data.repositories
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
-import kotlinx.coroutines.flow.Flow
 
 /**
- * Repository that exposes the permissions configuration.
+ * The permissions the app explains on its permissions page.
  *
- * Implementations should be free of Android framework dependencies so that
- * the UI layer can obtain the configuration without requiring a [Context].
+ * Main-safe: callers need no dispatcher.
  */
 interface PermissionsRepository {
-    /**
-     * Returns a stream of the permissions configuration to be displayed by the UI.
-     */
-    fun getPermissionsConfig(): Flow<SettingsConfig>
+    /** The permission catalog, grouped into categories. */
+    fun getPermissionsConfig(): SettingsConfig
 }
-

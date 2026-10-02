@@ -41,7 +41,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.cont
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.states.AdvancedSettingsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.sheets.IssueReporterSheet
 import org.koin.compose.getKoin
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
@@ -57,7 +56,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.R
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 private const val ADVANCED_SETTINGS_SCREEN_NAME = "AdvancedSettings"
@@ -90,16 +88,12 @@ fun AdvancedSettingsScreen(
     val viewModel: AdvancedSettingsViewModel = koinViewModel()
     val screenState: UiStateScreen<AdvancedSettingsUiState> by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val firebaseController: FirebaseController = koinInject()
-
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = ADVANCED_SETTINGS_SCREEN_NAME,
         screenClass = ADVANCED_SETTINGS_SCREEN_CLASS,
     )
 
     TrackScreenState(
-        firebaseController = firebaseController,
         screenName = ADVANCED_SETTINGS_SCREEN_NAME,
         screenState = screenState.screenState,
     )
@@ -152,7 +146,6 @@ fun AdvancedSettingsScreen(
                         title = stringResource(id = R.string.bug_report),
                         summary = stringResource(id = R.string.summary_preference_settings_bug_report),
                         onClick = { showIssueReporter = true },
-                        firebaseController = firebaseController,
                         ga4Event = advancedPreferenceTapEvent(preferenceKey = AdvancedPreferenceKeys.BUG_REPORT),
                         modifier = Modifier.groupedPreferenceItem(
                             position = GroupedItemPosition.SINGLE,
@@ -170,7 +163,6 @@ fun AdvancedSettingsScreen(
                         title = stringResource(id = R.string.clear_cache),
                         summary = stringResource(id = R.string.summary_preference_settings_clear_cache),
                         onClick = { viewModel.onEvent(AdvancedSettingsEvent.ClearCache) },
-                        firebaseController = firebaseController,
                         ga4Event = advancedPreferenceTapEvent(preferenceKey = AdvancedPreferenceKeys.CLEAR_CACHE),
                         modifier = Modifier.groupedPreferenceItem(
                             position = GroupedItemPosition.SINGLE,
@@ -185,7 +177,6 @@ fun AdvancedSettingsScreen(
                             title = stringResource(id = R.string.developer_options),
                             summary = stringResource(id = R.string.summary_preference_settings_developer_options),
                             onClick = { navigator.navigate(DeveloperOptionsRoute) },
-                            firebaseController = firebaseController,
                             ga4Event = advancedPreferenceTapEvent(preferenceKey = AdvancedPreferenceKeys.DEVELOPER_OPTIONS),
                             modifier = Modifier
                                 .padding(top = SizeConstants.LargeSize)

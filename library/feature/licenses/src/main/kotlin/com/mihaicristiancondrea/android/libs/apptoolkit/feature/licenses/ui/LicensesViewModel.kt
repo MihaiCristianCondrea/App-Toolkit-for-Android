@@ -17,40 +17,27 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui
 
-import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoading
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.contracts.LicensesAction
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.contracts.LicensesEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.states.LicensesUiState
-import kotlinx.coroutines.launch
 
 /**
  * Owns the licenses screen state.
  *
  * The bundled library metadata is parsed by a Compose producer, so the screen reports when that
- * finishes and this state holder turns it into the loading and success states the rest of the
- * toolkit renders and tracks.
+ * finishes, and this ViewModel turns it into the state the screen tracks and the `loadLibraries`
+ * report. Until then the count is loading.
  */
 class LicensesViewModel(
-    firebaseController: FirebaseController,
-) : LoggedScreenViewModel<LicensesUiState, LicensesEvent, LicensesAction>(
-    initialState = UiStateScreen(data = LicensesUiState()),
-    firebaseController = firebaseController,
+    telemetryRepository: TelemetryRepository,
+) : LoggedScreenViewModel<LicensesUiState, LicensesEvent>(
+    initialState = LicensesUiState(),
+    telemetryRepository = telemetryRepository,
     screenName = "Licenses",
     viewModelName = "LicensesViewModel",
 ) {
-
-    init {
-        viewModelScope.launch {
-            updateStateThreadSafe {
-                screenState.setLoading()
-            }
-        }
-    }
 
     override fun handleEvent(event: LicensesEvent) {
         when (event) {
@@ -58,16 +45,13 @@ class LicensesViewModel(
         }
     }
 
+    // Nothing runs here: the parsing already happened in the screen, so this only reports it.
     private fun onLibrariesLoaded(libraryCount: Int) {
         startOperation(
             action = Actions.LOAD_LIBRARIES,
             extra = mapOf(ExtraKeys.LIBRARY_COUNT to libraryCount.toString()),
         )
-        viewModelScope.launch {
-            updateStateThreadSafe {
-                screenState.setSuccess(data = LicensesUiState(libraryCount = libraryCount))
-            }
-        }
+        setState { copy(libraryCount = Loadable.Ready(libraryCount)) }
     }
 
     private object Actions {

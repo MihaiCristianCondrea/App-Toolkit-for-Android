@@ -21,7 +21,7 @@ import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.contracts.StartupAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.contracts.StartupEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.states.StartupUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
@@ -40,10 +40,10 @@ import kotlin.time.Duration.Companion.seconds
  * ViewModel does not keep Activity-bound host references.
  */
 class StartupViewModel(
-    firebaseController: FirebaseController,
+    telemetryRepository: TelemetryRepository,
 ) : LoggedScreenViewModel<StartupUiState, StartupEvent, StartupAction>(
     initialState = UiStateScreen(data = StartupUiState()),
-    firebaseController = firebaseController,
+    telemetryRepository = telemetryRepository,
     screenName = "Startup",
     viewModelName = "StartupViewModel",
 ) {

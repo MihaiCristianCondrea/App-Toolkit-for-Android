@@ -34,7 +34,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
@@ -51,7 +50,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.contracts.UsageAndDiagnosticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.states.UsageAndDiagnosticsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs.FirebaseConsentDialog
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 private const val USAGE_DIAGNOSTICS_SCREEN_NAME = "UsageAndDiagnostics"
@@ -85,16 +83,12 @@ fun UsageAndDiagnosticsScreen(
     val screenState: UiStateScreen<UsageAndDiagnosticsUiState> by viewModel.uiState.collectAsStateWithLifecycle()
     val uiState: UsageAndDiagnosticsUiState = screenState.data ?: UsageAndDiagnosticsUiState()
 
-    val firebaseController: FirebaseController = koinInject()
-
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = USAGE_DIAGNOSTICS_SCREEN_NAME,
         screenClass = USAGE_DIAGNOSTICS_SCREEN_CLASS,
     )
 
     TrackScreenState(
-        firebaseController = firebaseController,
         screenName = USAGE_DIAGNOSTICS_SCREEN_NAME,
         screenState = screenState.screenState,
     )
@@ -120,7 +114,6 @@ fun UsageAndDiagnosticsScreen(
                 onSwitchToggled = { isChecked ->
                     viewModel.onEvent(UsageAndDiagnosticsEvent.SetUsageAndDiagnostics(isChecked))
                 },
-                firebaseController = firebaseController,
                 ga4EventProvider = { isChecked ->
                     Ga4EventData(
                         name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
@@ -144,7 +137,6 @@ fun UsageAndDiagnosticsScreen(
                     title = stringResource(id = R.string.advanced_privacy_settings),
                     summary = stringResource(id = R.string.summary_advanced_privacy_settings),
                     onClick = { privacyChoicesVisible = true },
-                    firebaseController = firebaseController,
                     ga4Event = Ga4EventData(
                         name = SettingsAnalytics.Events.PREFERENCE_VIEW,
                         params = mapOf(

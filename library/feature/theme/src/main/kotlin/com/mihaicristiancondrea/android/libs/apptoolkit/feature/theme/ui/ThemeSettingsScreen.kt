@@ -79,7 +79,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.mod
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.toSwatchColors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ThemePaletteProvider.paletteById
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.views.WallpaperColorOptionCard
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
@@ -112,9 +111,9 @@ import java.time.ZoneId
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.koin.compose.koinInject
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.states.ThemeSettingsUiState
 import org.koin.compose.viewmodel.koinViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 internal const val THEME_SCREEN_NAME = "Theme"
 private const val THEME_SCREEN_CLASS = "ThemeSettingsScreen"
@@ -133,19 +132,17 @@ private const val THEME_SCREEN_CLASS = "ThemeSettingsScreen"
  */
 @Composable
 fun ThemeSettingsScreen(paddingValues: PaddingValues = contentPadding()) {
-    val firebaseController: FirebaseController = koinInject()
-    val firebase = rememberUpdatedState(firebaseController)
+    val telemetryRepository = LocalTelemetry.current
+    val firebase = rememberUpdatedState(telemetryRepository)
     val viewModel: ThemeSettingsViewModel = koinViewModel()
     val screenState: UiStateScreen<ThemeSettingsUiState> by
         viewModel.uiState.collectAsStateWithLifecycle()
 
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = THEME_SCREEN_NAME,
         screenClass = THEME_SCREEN_CLASS,
     )
     TrackScreenState(
-        firebaseController = firebaseController,
         screenName = THEME_SCREEN_NAME,
         screenState = screenState.screenState,
     )

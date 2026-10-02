@@ -48,7 +48,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseHeader
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSection
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSurface
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ToolkitSnackbarColors
@@ -67,7 +66,6 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun ButtonShowcase(
-    firebaseController: FirebaseController,
     onLogEvent: (String, String?) -> Ga4EventData,
 ) {
     val iconContentDescription = stringResource(id = R.string.components_icon_content_description)
@@ -142,7 +140,6 @@ fun ButtonShowcase(
                 GeneralButton(
                     label = stringResource(id = R.string.components_button_primary),
                     onClick = showPlain,
-                    firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "primary"),
                 )
                 GeneralButton(
@@ -150,21 +147,18 @@ fun ButtonShowcase(
                     icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.StarOutline),
                     contentDescription = iconContentDescription,
                     onClick = showPlain,
-                    firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "primary_icon"),
                 )
                 GeneralButton(
                     label = stringResource(id = R.string.components_button_primary),
                     icon = ToolkitIcon.Bitmap(imageBitmap = runtimeBitmapIcon),
                     onClick = showPlain,
-                    firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "primary_bitmap_icon"),
                 )
                 GeneralButton(
                     icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.StarOutline),
                     contentDescription = iconContentDescription,
                     onClick = showPlain,
-                    firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "primary_icon_only"),
                 )
             }
@@ -186,7 +180,6 @@ fun ButtonShowcase(
                     style = GeneralButtonStyle.Tonal,
                     label = stringResource(id = R.string.components_button_tonal),
                     onClick = showWithAction,
-                    firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "tonal"),
                 )
                 GeneralButton(
@@ -195,7 +188,6 @@ fun ButtonShowcase(
                     icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Favorite),
                     contentDescription = iconContentDescription,
                     onClick = showWithAction,
-                    firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "tonal_icon"),
                 )
                 GeneralButton(
@@ -203,7 +195,6 @@ fun ButtonShowcase(
                     icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Favorite),
                     contentDescription = iconContentDescription,
                     onClick = showWithAction,
-                    firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "tonal_icon_only"),
                 )
             }
@@ -225,7 +216,6 @@ fun ButtonShowcase(
                     style = GeneralButtonStyle.Outlined,
                     label = stringResource(id = R.string.components_button_outlined),
                     onClick = showError,
-                    firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "outlined"),
                 )
                 GeneralButton(
@@ -234,7 +224,6 @@ fun ButtonShowcase(
                     icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.StarOutline),
                     contentDescription = iconContentDescription,
                     onClick = showError,
-                    firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "outlined_icon"),
                 )
                 GeneralButton(
@@ -242,7 +231,6 @@ fun ButtonShowcase(
                     icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.StarOutline),
                     contentDescription = iconContentDescription,
                     onClick = showError,
-                    firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "outlined_icon_only"),
                 )
             }
@@ -264,7 +252,6 @@ fun ButtonShowcase(
                     style = GeneralButtonStyle.Text,
                     label = stringResource(id = R.string.components_button_text),
                     onClick = showWithIcon,
-                    firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "text"),
                 )
                 GeneralButton(
@@ -273,7 +260,6 @@ fun ButtonShowcase(
                     icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Favorite),
                     contentDescription = iconContentDescription,
                     onClick = showWithIcon,
-                    firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "text_icon"),
                 )
                 GeneralButton(
@@ -281,7 +267,6 @@ fun ButtonShowcase(
                     icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Favorite),
                     contentDescription = iconContentDescription,
                     onClick = showWithIcon,
-                    firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "text_icon_only"),
                 )
                 AnimatedIconButtonDirection(
@@ -289,7 +274,6 @@ fun ButtonShowcase(
                     contentDescription = iconContentDescription,
                     onClick = showWithIcon,
                     fromRight = true,
-                    firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "animated_direction"),
                 )
             }
@@ -307,7 +291,6 @@ fun ButtonShowcase(
                 contentDescription = sizeLabel,
                 measurements = measurements,
                 onClick = { showCustom(customMessage) },
-                firebaseController = firebaseController,
                 ga4Event = onLogEvent("button", "icon_size_${measurements.sizeVariant()}"),
             )
         }
@@ -322,7 +305,6 @@ fun ButtonShowcase(
                 label = sizeLabel,
                 measurements = measurements,
                 onClick = { showCustom(customMessage) },
-                firebaseController = firebaseController,
                 ga4Event = onLogEvent("button", "text_size_${measurements.sizeVariant()}"),
             )
         }
@@ -338,7 +320,6 @@ fun ButtonShowcase(
                 icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Favorite),
                 measurements = measurements,
                 onClick = { showCustom(customMessage) },
-                firebaseController = firebaseController,
                 ga4Event = onLogEvent("button", "text_icon_size_${measurements.sizeVariant()}"),
             )
         }
@@ -355,7 +336,6 @@ fun ButtonShowcase(
                 iconPosition = ButtonIconPosition.End,
                 measurements = measurements,
                 onClick = { showCustom(customMessage) },
-                firebaseController = firebaseController,
                 ga4Event = onLogEvent("button", "trailing_icon_size_${measurements.sizeVariant()}"),
             )
         }

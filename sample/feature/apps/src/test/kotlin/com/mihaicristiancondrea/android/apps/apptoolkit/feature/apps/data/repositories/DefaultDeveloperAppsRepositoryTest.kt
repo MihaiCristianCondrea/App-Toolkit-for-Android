@@ -42,7 +42,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppCategory
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppDeviceType
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppSummary
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
 import io.ktor.client.HttpClient
@@ -298,7 +298,7 @@ class DefaultDeveloperAppsRepositoryTest {
                 client = client,
                 baseUrl = "https://example.com",
             ),
-            firebaseController = mockk<FirebaseController>(relaxed = true),
+            telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
             localDataSource = local,
         )
 

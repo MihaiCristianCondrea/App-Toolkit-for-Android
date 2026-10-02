@@ -400,7 +400,7 @@ slot and existing `Restart` / `Reverse` replay contract described above, includi
 `loop` for animated sources.
 
 Every enabled click replays the icon, performs `ButtonFeedback`, logs the optional `ga4Event`
-through `firebaseController`, then invokes `onClick`. Disabled buttons do none of these.
+through `LocalTelemetry`, then invokes `onClick`. Disabled buttons do none of these.
 Do not add `bounceClick()`, manual sounds, haptics, or duplicate analytics at call sites.
 
 ```kotlin

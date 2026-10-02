@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.dat
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.remote.datasource.ConsentRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.ConsentPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
@@ -69,7 +69,7 @@ class DefaultConsentRepositoryTest {
                 remote = remote,
                 local = FakeConsentPreferencesDataSource(),
                 configProvider = FakeBuildInfoProvider(isDebugBuild = false),
-                firebaseController = mockk(relaxed = true),
+                telemetryRepository = mockk(relaxed = true),
             )
 
             val states = repository.requestConsent(
@@ -103,7 +103,7 @@ class DefaultConsentRepositoryTest {
                 remote = remote,
                 local = FakeConsentPreferencesDataSource(),
                 configProvider = FakeBuildInfoProvider(isDebugBuild = false),
-                firebaseController = mockk(relaxed = true),
+                telemetryRepository = mockk(relaxed = true),
             )
 
             val states = repository.requestConsent(
@@ -123,7 +123,7 @@ class DefaultConsentRepositoryTest {
     @Test
     fun `applyInitialConsent reads persisted values and updates Firebase`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val firebaseController = mockk<FirebaseController>(relaxed = true)
+            val telemetryRepository = mockk<TelemetryRepository>(relaxed = true)
             val repository = DefaultConsentRepository(
                 remote = mockk(relaxed = true),
                 local = FakeConsentPreferencesDataSource(
@@ -134,33 +134,33 @@ class DefaultConsentRepositoryTest {
                     adPersonalizationConsent = true,
                 ),
                 configProvider = FakeBuildInfoProvider(isDebugBuild = false),
-                firebaseController = firebaseController,
+                telemetryRepository = telemetryRepository,
             )
 
             repository.applyInitialConsent()
 
             verify {
-                firebaseController.updateConsent(
+                telemetryRepository.updateConsent(
                     analyticsGranted = false,
                     adStorageGranted = true,
                     adUserDataGranted = false,
                     adPersonalizationGranted = true,
                 )
-                firebaseController.setAnalyticsEnabled(true)
-                firebaseController.setCrashlyticsEnabled(true)
-                firebaseController.setPerformanceEnabled(true)
+                telemetryRepository.setAnalyticsEnabled(true)
+                telemetryRepository.setCrashlyticsEnabled(true)
+                telemetryRepository.setPerformanceEnabled(true)
             }
         }
 
     @Test
     fun `applyConsentSettings updates Firebase with provided settings`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val firebaseController = mockk<FirebaseController>(relaxed = true)
+            val telemetryRepository = mockk<TelemetryRepository>(relaxed = true)
             val repository = DefaultConsentRepository(
                 remote = mockk(relaxed = true),
                 local = FakeConsentPreferencesDataSource(),
                 configProvider = FakeBuildInfoProvider(isDebugBuild = true),
-                firebaseController = firebaseController,
+                telemetryRepository = telemetryRepository,
             )
             val settings = ConsentSettings(
                 usageAndDiagnostics = false,
@@ -173,41 +173,41 @@ class DefaultConsentRepositoryTest {
             repository.applyConsentSettings(settings)
 
             verify {
-                firebaseController.updateConsent(
+                telemetryRepository.updateConsent(
                     analyticsGranted = false,
                     adStorageGranted = true,
                     adUserDataGranted = true,
                     adPersonalizationGranted = false,
                 )
-                firebaseController.setAnalyticsEnabled(false)
-                firebaseController.setCrashlyticsEnabled(false)
-                firebaseController.setPerformanceEnabled(false)
+                telemetryRepository.setAnalyticsEnabled(false)
+                telemetryRepository.setCrashlyticsEnabled(false)
+                telemetryRepository.setPerformanceEnabled(false)
             }
         }
 
     @Test
     fun `applyInitialConsent falls back to defaults for debug builds`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val firebaseController = mockk<FirebaseController>(relaxed = true)
+            val telemetryRepository = mockk<TelemetryRepository>(relaxed = true)
             val repository = DefaultConsentRepository(
                 remote = mockk(relaxed = true),
                 local = FakeConsentPreferencesDataSource(),
                 configProvider = FakeBuildInfoProvider(isDebugBuild = true),
-                firebaseController = firebaseController,
+                telemetryRepository = telemetryRepository,
             )
 
             repository.applyInitialConsent()
 
             verify {
-                firebaseController.updateConsent(
+                telemetryRepository.updateConsent(
                     analyticsGranted = false,
                     adStorageGranted = false,
                     adUserDataGranted = false,
                     adPersonalizationGranted = false,
                 )
-                firebaseController.setAnalyticsEnabled(false)
-                firebaseController.setCrashlyticsEnabled(false)
-                firebaseController.setPerformanceEnabled(false)
+                telemetryRepository.setAnalyticsEnabled(false)
+                telemetryRepository.setCrashlyticsEnabled(false)
+                telemetryRepository.setPerformanceEnabled(false)
             }
         }
 
@@ -219,7 +219,7 @@ class DefaultConsentRepositoryTest {
                 remote = remote,
                 local = FakeConsentPreferencesDataSource(),
                 configProvider = FakeBuildInfoProvider(isDebugBuild = false),
-                firebaseController = mockk(relaxed = true),
+                telemetryRepository = mockk(relaxed = true),
                 requestScope = backgroundScope,
             )
 
@@ -249,7 +249,7 @@ class DefaultConsentRepositoryTest {
                 remote = remote,
                 local = FakeConsentPreferencesDataSource(),
                 configProvider = FakeBuildInfoProvider(isDebugBuild = false),
-                firebaseController = mockk(relaxed = true),
+                telemetryRepository = mockk(relaxed = true),
                 requestScope = backgroundScope,
             )
 
@@ -275,7 +275,7 @@ class DefaultConsentRepositoryTest {
                 remote = remote,
                 local = FakeConsentPreferencesDataSource(),
                 configProvider = FakeBuildInfoProvider(isDebugBuild = false),
-                firebaseController = mockk(relaxed = true),
+                telemetryRepository = mockk(relaxed = true),
                 requestScope = backgroundScope,
             )
 
@@ -304,7 +304,7 @@ class DefaultConsentRepositoryTest {
                 remote = remote,
                 local = FakeConsentPreferencesDataSource(),
                 configProvider = FakeBuildInfoProvider(isDebugBuild = false),
-                firebaseController = mockk(relaxed = true),
+                telemetryRepository = mockk(relaxed = true),
                 requestScope = backgroundScope,
             )
             val rotatedAway = FakeConsentHost()
@@ -338,7 +338,7 @@ class DefaultConsentRepositoryTest {
                 remote = remote,
                 local = FakeConsentPreferencesDataSource(),
                 configProvider = FakeBuildInfoProvider(isDebugBuild = false),
-                firebaseController = mockk(relaxed = true),
+                telemetryRepository = mockk(relaxed = true),
                 requestScope = backgroundScope,
             )
 
@@ -364,28 +364,28 @@ class DefaultConsentRepositoryTest {
     @Test
     fun `applyInitialConsent logs a breadcrumb`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val firebaseController = mockk<FirebaseController>(relaxed = true)
+            val telemetryRepository = mockk<TelemetryRepository>(relaxed = true)
             val repository = DefaultConsentRepository(
                 remote = mockk(relaxed = true),
                 local = FakeConsentPreferencesDataSource(),
                 configProvider = FakeBuildInfoProvider(isDebugBuild = false),
-                firebaseController = firebaseController,
+                telemetryRepository = telemetryRepository,
             )
 
             repository.applyInitialConsent()
 
-            verify { firebaseController.logBreadcrumb(message = "Applying initial consent") }
+            verify { telemetryRepository.logBreadcrumb(message = "Applying initial consent") }
         }
 
     @Test
     fun `applyConsentSettings logs a breadcrumb with the applied values`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val firebaseController = mockk<FirebaseController>(relaxed = true)
+            val telemetryRepository = mockk<TelemetryRepository>(relaxed = true)
             val repository = DefaultConsentRepository(
                 remote = mockk(relaxed = true),
                 local = FakeConsentPreferencesDataSource(),
                 configProvider = FakeBuildInfoProvider(isDebugBuild = false),
-                firebaseController = firebaseController,
+                telemetryRepository = telemetryRepository,
             )
 
             repository.applyConsentSettings(
@@ -399,7 +399,7 @@ class DefaultConsentRepositoryTest {
             )
 
             verify {
-                firebaseController.logBreadcrumb(
+                telemetryRepository.logBreadcrumb(
                     message = "Consent settings applied",
                     attributes = mapOf(
                         "usageAndDiagnostics" to "true",

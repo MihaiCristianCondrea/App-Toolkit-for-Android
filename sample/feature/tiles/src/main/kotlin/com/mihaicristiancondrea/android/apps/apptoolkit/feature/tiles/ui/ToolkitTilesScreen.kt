@@ -15,7 +15,6 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellSearch
@@ -66,7 +65,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.c
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.TileCategorySection
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.TilesFilters
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
@@ -81,8 +79,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /** Route-level composable for the Toolkit Tiles catalog. */
 @Composable
@@ -92,10 +90,8 @@ fun ToolkitTilesScreen(
     val viewModel: ToolkitTilesViewModel = koinViewModel()
     val screenState: UiStateScreen<ToolkitTilesUiState> by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val firebaseController: FirebaseController = koinInject()
 
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = AppScreenTracking.Screens.TOOLKIT_TILES.name,
         screenClass = AppScreenTracking.Screens.TOOLKIT_TILES.className,
     )
@@ -168,7 +164,7 @@ fun ToolkitTilesScreen(
     searchQuery: String = "",
 ) {
     val showAds = rememberAdsEnabled()
-    val firebaseController: FirebaseController = koinInject()
+    val telemetryRepository = LocalTelemetry.current
     var selectedTile by remember { mutableStateOf<ToolkitTile?>(null) }
     var quickToolDialog by remember { mutableStateOf<ToolkitQuickTool?>(null) }
     val resources = LocalContext.current.resources
@@ -267,7 +263,7 @@ fun ToolkitTilesScreen(
                                 selectedFilter = state.selectedFilter,
                                 onToggle = { onEvent(ToolkitTilesEvent.CategoryToggled(category.id)) },
                                 onPreviewTile = { tile ->
-                                    firebaseController.logViewItem(
+                                    telemetryRepository.logViewItem(
                                         itemId = tile.id,
                                         itemName = tile.id,
                                         itemCategory = category.id,

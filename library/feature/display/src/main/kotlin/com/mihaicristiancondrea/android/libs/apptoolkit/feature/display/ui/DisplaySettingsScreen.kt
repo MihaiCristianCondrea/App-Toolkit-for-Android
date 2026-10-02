@@ -55,7 +55,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.contr
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.states.DisplaySettingsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.views.dialogs.SelectLanguageAlertDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.providers.DisplaySettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
@@ -75,7 +74,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.R
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
-
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 private const val DISPLAY_SETTINGS_SCREEN_NAME = "DisplaySettings"
 private const val DISPLAY_SETTINGS_SCREEN_CLASS = "DisplaySettingsScreen"
@@ -115,7 +114,7 @@ fun DisplaySettingsScreen(
 ) {
     val provider: DisplaySettingsProvider = koinInject()
     val navigator = LocalShellNavigator.current
-    val firebaseController: FirebaseController = koinInject()
+    val telemetryRepository = LocalTelemetry.current
     val viewModel: DisplaySettingsViewModel = koinViewModel()
     val screenState: UiStateScreen<DisplaySettingsUiState> by
         viewModel.uiState.collectAsStateWithLifecycle()
@@ -124,13 +123,11 @@ fun DisplaySettingsScreen(
         .collectAsStateWithLifecycle(initialValue = "")
 
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = DISPLAY_SETTINGS_SCREEN_NAME,
         screenClass = DISPLAY_SETTINGS_SCREEN_CLASS,
     )
 
     TrackScreenState(
-        firebaseController = firebaseController,
         screenName = DISPLAY_SETTINGS_SCREEN_NAME,
         screenState = screenState.screenState,
     )
@@ -158,12 +155,12 @@ fun DisplaySettingsScreen(
         else -> stringResource(id = R.string.will_turn_on_automatically_by_system)
     }
 
-    val onDarkThemeChanged: (Boolean) -> Unit = remember(viewModel, firebaseController) {
+    val onDarkThemeChanged: (Boolean) -> Unit = remember(viewModel, telemetryRepository) {
         { isChecked: Boolean ->
             val targetMode =
                 if (isChecked) DataStoreNamesConstants.THEME_MODE_DARK
                 else DataStoreNamesConstants.THEME_MODE_LIGHT
-            firebaseController.logEvent(
+            telemetryRepository.logEvent(
                 AnalyticsEvent(
                     name = SettingsAnalytics.Events.THEME_SWITCH,
                     params = mapOf(
@@ -184,7 +181,7 @@ fun DisplaySettingsScreen(
             onDismiss = { showStartupDialog.value = false }
         ) { selectedDestination: String ->
             viewModel.onEvent(DisplaySettingsEvent.StartupRouteChanged(selectedDestination))
-            firebaseController.logEvent(
+            telemetryRepository.logEvent(
                 displayActionEvent(
                     actionName = DisplayActionNames.CHANGE_STARTUP_DESTINATION,
                     preferenceKey = DisplayPreferenceKeys.STARTUP_PAGE,
@@ -201,7 +198,7 @@ fun DisplaySettingsScreen(
             onLanguageSelected = { newLanguageCode: String ->
                 viewModel.onEvent(DisplaySettingsEvent.LanguageChanged(newLanguageCode))
                 showLanguageDialog.value = false
-                firebaseController.logEvent(
+                telemetryRepository.logEvent(
                     displayActionEvent(
                         actionName = DisplayActionNames.CHANGE_LANGUAGE,
                         preferenceKey = DisplayPreferenceKeys.LANGUAGE,
@@ -234,7 +231,7 @@ fun DisplaySettingsScreen(
                 onCheckedChange = onDarkThemeChanged,
                 onSwitchClick = onDarkThemeChanged,
                 onClick = {
-                    firebaseController.logEvent(
+                    telemetryRepository.logEvent(
                         displayActionEvent(
                             actionName = DisplayActionNames.OPEN_THEME_SETTINGS,
                             preferenceKey = DisplayPreferenceKeys.THEME_SETTINGS,
@@ -273,7 +270,6 @@ fun DisplaySettingsScreen(
                     title = stringResource(id = R.string.startup_page),
                     summary = stringResource(id = R.string.summary_preference_settings_startup_page),
                     onClick = { showStartupDialog.value = true },
-                    firebaseController = firebaseController,
                     ga4Event = displayActionGa4Event(
                         actionName = DisplayActionNames.OPEN_STARTUP_DIALOG,
                         preferenceKey = DisplayPreferenceKeys.STARTUP_PAGE,
@@ -359,7 +355,7 @@ fun DisplaySettingsScreen(
                         } else {
                             false
                         }
-                        firebaseController.logEvent(
+                        telemetryRepository.logEvent(
                             displayActionEvent(
                                 actionName = DisplayActionNames.OPEN_LANGUAGE_SETTINGS,
                                 preferenceKey = DisplayPreferenceKeys.LANGUAGE,
@@ -374,7 +370,7 @@ fun DisplaySettingsScreen(
                             showLanguageDialog.value = true
                         }
                     } else {
-                        firebaseController.logEvent(
+                        telemetryRepository.logEvent(
                             displayActionEvent(
                                 actionName = DisplayActionNames.OPEN_LANGUAGE_SETTINGS,
                                 preferenceKey = DisplayPreferenceKeys.LANGUAGE,

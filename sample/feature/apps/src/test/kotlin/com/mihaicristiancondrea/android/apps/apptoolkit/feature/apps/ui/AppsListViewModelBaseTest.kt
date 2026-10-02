@@ -24,7 +24,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.mode
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppListUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 open class AppsListViewModelBaseTest {
 
     protected lateinit var viewModel: AppsListViewModel
-    protected val firebaseController = FakeFirebaseController()
+    protected val telemetryRepository = FakeTelemetryRepository()
     protected fun setup(
         fetchApps: List<AppInfo>,
         initialFavorites: Set<String> = emptySet(),
@@ -65,7 +65,7 @@ open class AppsListViewModelBaseTest {
                 toggleError,
             ),
             dispatchers = dispatchers,
-            firebaseController = firebaseController
+            telemetryRepository = telemetryRepository
         )
         println("\u2705 [SETUP] ViewModel initialized")
     }

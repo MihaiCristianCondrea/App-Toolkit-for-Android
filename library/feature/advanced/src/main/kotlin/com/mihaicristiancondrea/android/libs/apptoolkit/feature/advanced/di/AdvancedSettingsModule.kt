@@ -22,8 +22,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.sear
 import org.koin.core.qualifier.named
 import kotlinx.coroutines.flow.map
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.data.repositories.CacheRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.data.repositories.DefaultCacheRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.AdvancedSettingsViewModel
@@ -37,7 +36,7 @@ val advancedSettingsModule: Module = module {
     single<CacheRepository> {
         DefaultCacheRepository(
             context = get(),
-            firebaseController = get<FirebaseController>(),
+            telemetryRepository = get<TelemetryRepository>(),
             dispatchers = get(),
         )
     }
@@ -46,7 +45,7 @@ val advancedSettingsModule: Module = module {
         AdvancedSettingsViewModel(
             repository = get(),
             dispatchers = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
             // The About screen's version easter egg unlocks the developer options.
             developerOptionsUnlocked = get<SeasonalThemeRepository>().state.map { it.unlocked },
         )

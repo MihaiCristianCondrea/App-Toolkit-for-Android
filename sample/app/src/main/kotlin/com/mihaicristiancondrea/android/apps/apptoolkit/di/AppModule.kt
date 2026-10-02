@@ -43,7 +43,7 @@ val appModule: Module = module {
             consentRepository = get(),
             requestInAppReviewUseCase = get<RequestInAppReviewUseCase>(),
             inAppUpdateRepository = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
             dispatchers = get(),
         )
     }

@@ -17,15 +17,11 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.R
@@ -33,9 +29,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.cont
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.states.LicensesUiState
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
-import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
-import com.mikepenz.aboutlibraries.ui.compose.variant.LibraryBadges
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 private const val LICENSES_SCREEN_NAME = "Licenses"
@@ -45,43 +38,34 @@ private const val LICENSES_SCREEN_CLASS = "LicensesScreen"
  * Lists the open-source libraries bundled with the host application.
  *
  * The body of the licenses page, which `licensesPage()` registers; the page frame draws the app bar.
+ * This is the stateful half. It parses the bundled metadata with the library's own producer, tells
+ * the [LicensesViewModel] when that is done, tracks the screen, and hands the list to
+ * [LicensesScreenContent].
  */
 @Composable
 fun LicensesScreen() {
-    val firebaseController: FirebaseController = koinInject()
     val viewModel: LicensesViewModel = koinViewModel()
-    val screenState: UiStateScreen<LicensesUiState> by
-    viewModel.uiState.collectAsStateWithLifecycle()
+    val state: LicensesUiState by viewModel.state.collectAsStateWithLifecycle()
+    val libraries: Libs? by produceLibraries(resId = R.raw.aboutlibraries)
 
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = LICENSES_SCREEN_NAME,
         screenClass = LICENSES_SCREEN_CLASS,
     )
 
     TrackScreenState(
-        firebaseController = firebaseController,
         screenName = LICENSES_SCREEN_NAME,
-        screenState = screenState.screenState,
+        state = state.libraryCount,
     )
-
-    val libraries: Libs? by produceLibraries(resId = R.raw.aboutlibraries)
 
     LaunchedEffect(libraries) {
         libraries?.let { loaded ->
-            viewModel.onEvent(
-                event = LicensesEvent.LibrariesLoaded(libraryCount = loaded.libraries.size),
-            )
+            viewModel.onEvent(LicensesEvent.LibrariesLoaded(libraryCount = loaded.libraries.size))
         }
     }
 
-    LibrariesContainer(
+    LicensesScreenContent(
         libraries = libraries,
-        modifier = Modifier.fillMaxSize(),
         contentPadding = contentPadding(),
-        badges = LibraryBadges(
-            description = true,
-            funding = true,
-        ),
     )
 }

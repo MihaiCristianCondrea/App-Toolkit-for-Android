@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
@@ -40,10 +40,10 @@ import kotlinx.coroutines.Job
 class FaqViewModel(
     private val faqRepository: FaqRepository,
     private val forceInAppReviewUseCase: ForceInAppReviewUseCase,
-    firebaseController: FirebaseController,
+    telemetryRepository: TelemetryRepository,
 ) : LoggedScreenViewModel<FaqUiState, FaqEvent>(
     initialState = FaqUiState(),
-    firebaseController = firebaseController,
+    telemetryRepository = telemetryRepository,
     screenName = "Help",
     viewModelName = "FaqViewModel",
 ) {
@@ -68,7 +68,7 @@ class FaqViewModel(
                 action = Actions.LOAD_FAQ,
                 onError = { error -> setState { copy(questions = error.toFailed(fallback = LoadFailedText)) } },
             ) {
-                firebaseController.logBreadcrumb(
+                telemetryRepository.logBreadcrumb(
                     message = "FAQ fetch started",
                     attributes = mapOf("source" to "FaqRepository"),
                 )

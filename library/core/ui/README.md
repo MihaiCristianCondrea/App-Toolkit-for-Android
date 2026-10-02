@@ -156,7 +156,13 @@ available; data-layer callers should use the lower-level API.
   queue messages with `showMessage`. Operations run through `launchReport` (a suspend call),
   `collectReport` (a flow whose values go into state) or `catchReport` (a flow that keeps going),
   which report failures and pass cancellation through. ViewModels take repositories, use cases and
-  `FirebaseController`, never a `Context`.
+  `TelemetryRepository`, never a `Context`.
+- Composables report through `LocalTelemetry` (`core.ui.views.analytics`), never a `TelemetryRepository`
+  parameter. `TrackScreenView`, `TrackScreenState` and every component with a `ga4Event` read it
+  themselves; a screen that logs its own events reads it once with `LocalTelemetry.current`.
+  `ShellHost` provides it. A composition started outside `ShellHost`, such as a sheet in its own
+  window, wraps itself in `ProvideTelemetry { }`. Where nothing provides it, as in a preview, it is
+  `NoOpTelemetryRepository` and events are dropped.
 - Initialization is represented by an event sent from `init`; long-running work is owned and
   cancelled by the ViewModel.
 - State/render models, reusable composables, lifecycle effects, and analytics APIs are intentional
@@ -339,7 +345,7 @@ first feature on it and the reference for the rest.
 data class AboutUiState(val items: Loadable<ImmutableList<AboutItem>> = Loadable.Loading)
 
 class AboutViewModel(/* ... */) : LoggedScreenViewModel<AboutUiState, AboutEvent>(
-    initialState = AboutUiState(), firebaseController = firebaseController,
+    initialState = AboutUiState(), telemetryRepository = telemetryRepository,
     screenName = "About", viewModelName = "AboutViewModel",
 ) {
     override fun handleEvent(event: AboutEvent) { /* ... */ }
@@ -354,7 +360,7 @@ class AboutViewModel(/* ... */) : LoggedScreenViewModel<AboutUiState, AboutEvent
 
 // AboutScreen, stateful: ViewModel, tracking, messages, navigation.
 val state by viewModel.state.collectAsStateWithLifecycle()
-TrackScreenState(firebaseController, screenName = "About", state = state.items)
+TrackScreenState(screenName = "About", state = state.items)
 AboutScreenContent(state, onEvent = viewModel::onEvent, onOpenLicenses = { navigator.navigate(LicensesRoute) })
 MessageHost(viewModel)
 

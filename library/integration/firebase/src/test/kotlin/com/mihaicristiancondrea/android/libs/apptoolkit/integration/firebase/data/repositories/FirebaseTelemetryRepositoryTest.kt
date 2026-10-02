@@ -35,12 +35,12 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class DefaultFirebaseControllerTest {
+class FirebaseTelemetryRepositoryTest {
 
     private lateinit var analytics: FirebaseAnalytics
     private lateinit var crashlytics: FirebaseCrashlytics
     private lateinit var performance: FirebasePerformance
-    private lateinit var controller: DefaultFirebaseController
+    private lateinit var controller: FirebaseTelemetryRepository
 
     @BeforeEach
     fun setUp() {
@@ -52,7 +52,7 @@ class DefaultFirebaseControllerTest {
         analytics = mockk(relaxed = true)
         crashlytics = mockk(relaxed = true)
         performance = mockk(relaxed = true)
-        controller = DefaultFirebaseController(
+        controller = FirebaseTelemetryRepository(
             analyticsProvider = { analytics },
             crashlyticsProvider = { crashlytics },
             performanceProvider = { performance },

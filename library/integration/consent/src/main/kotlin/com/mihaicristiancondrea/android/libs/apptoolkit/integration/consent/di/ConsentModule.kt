@@ -32,7 +32,7 @@ fun consentModule(): Module = module {
             remote = get(),
             local = get(),
             configProvider = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
         )
     }
 }

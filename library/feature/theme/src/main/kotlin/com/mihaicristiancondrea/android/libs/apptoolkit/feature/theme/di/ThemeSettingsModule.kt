@@ -46,10 +46,10 @@ val themeSettingsModule: Module = module {
     // What the settings search finds on this page; the settings list collects every page's.
     single<SettingsSearchProvider>(named("theme")) { themeSettingsSearch }
     viewModel {
-        ThemeSettingsViewModel(preferences = get(), seasonal = get(), firebaseController = get())
+        ThemeSettingsViewModel(preferences = get(), seasonal = get(), telemetryRepository = get())
     }
     viewModel {
-        SeasonalThemeOverlayViewModel(seasonal = get(), theme = get(), firebaseController = get())
+        SeasonalThemeOverlayViewModel(seasonal = get(), theme = get(), telemetryRepository = get())
     }
     single<SeasonalThemeManager> { SeasonalThemeManager(application = androidApplication()) }
 

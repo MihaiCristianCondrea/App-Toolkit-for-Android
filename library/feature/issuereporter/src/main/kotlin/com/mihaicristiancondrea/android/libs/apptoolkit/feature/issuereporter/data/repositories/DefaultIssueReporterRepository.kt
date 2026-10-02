@@ -25,14 +25,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.do
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.providers.DeviceInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import kotlinx.coroutines.withContext
 
 class DefaultIssueReporterRepository(
     private val remoteDataSource: IssueReporterRemoteDataSource,
     private val deviceInfoProvider: DeviceInfoProvider,
     private val dispatchers: DispatcherProvider,
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
 ) : IssueReporterRepository {
 
     // The data source already moves itself to IO, so no withContext here.
@@ -43,7 +43,7 @@ class DefaultIssueReporterRepository(
         target: GithubTarget,
         token: String?,
     ): IssueReportResult = withContext(dispatchers.io) {
-        firebaseController.logBreadcrumb(
+        telemetryRepository.logBreadcrumb(
             message = "Issue report sending",
             attributes = mapOf(
                 "targetRepo" to target.repository,

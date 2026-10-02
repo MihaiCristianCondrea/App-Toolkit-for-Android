@@ -31,7 +31,7 @@ val settingsModule: Module = module {
     single {
         ShowcaseUnlockRepository(
             dataStore = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
         )
     }
 }

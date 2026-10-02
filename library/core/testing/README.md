@@ -9,7 +9,7 @@ on production runtime classpaths.
 
 - `TestDispatchers`, which maps every `DispatcherProvider` lane to one test dispatcher.
 - JUnit 5 extensions for installing standard or unconfined test dispatchers as `Dispatchers.Main`.
-- `FakeFirebaseController`, a no-op implementation for tests that exercise logged ViewModels.
+- `FakeTelemetryRepository`, a no-op implementation for tests that exercise logged ViewModels.
 
 ## Does not own
 
@@ -20,7 +20,7 @@ on production runtime classpaths.
 ## Depends on
 
 - [`:library:core:common`](../common/README.md) for `DispatcherProvider` and
-  `FirebaseController`.
+  `TelemetryRepository`.
 - Coroutine-test and JUnit 5 APIs, exposed because consumers compile against these fixtures.
 
 ## Used by
@@ -36,8 +36,8 @@ flowchart LR
     Extension -->|beforeEach| Main["Dispatchers.Main = test dispatcher"]
     Test --> Dispatchers[TestDispatchers]
     Dispatchers --> Contract[DispatcherProvider]
-    Test --> Firebase[FakeFirebaseController]
-    Firebase --> FirebaseContract[FirebaseController]
+    Test --> Firebase[FakeTelemetryRepository]
+    Firebase --> FirebaseContract[TelemetryRepository]
     Extension -->|afterEach| Reset[Dispatchers.resetMain]
 ```
 
@@ -53,7 +53,7 @@ flowchart LR
 ## Public contracts
 
 - `TestDispatchers`, `StandardDispatcherExtension`, `UnconfinedDispatcherExtension`, and
-  `FakeFirebaseController`.
+  `FakeTelemetryRepository`.
 
 ## Internal implementations
 

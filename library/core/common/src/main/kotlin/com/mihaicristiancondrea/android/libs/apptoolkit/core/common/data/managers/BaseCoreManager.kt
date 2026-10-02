@@ -26,12 +26,11 @@ import com.google.firebase.Firebase
 import com.google.firebase.appcheck.appCheck
 import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
 import com.google.firebase.initialize
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.managers.BaseCoreManager.Companion.isAppLoaded
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.CommonDataStoreCore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BillingCore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.crash.ConsentSdkCrashGuard
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -55,7 +54,7 @@ open class BaseCoreManager : MultiDexApplication(), Application.ActivityLifecycl
     LifecycleObserver {
 
     protected val billingRepository: BillingCore by inject()
-    private val firebaseController: FirebaseController by inject()
+    private val telemetryRepository: TelemetryRepository by inject()
     protected val dataStore: CommonDataStoreCore by inject()
     protected open val dispatchers: DispatcherProvider = StandardDispatchers()
 
@@ -119,7 +118,7 @@ open class BaseCoreManager : MultiDexApplication(), Application.ActivityLifecycl
     private fun installConsentSdkCrashGuard() {
         if (!installsConsentSdkCrashGuard) return
         ConsentSdkCrashGuard.install { throwable, attributes ->
-            firebaseController.recordNonFatal(throwable = throwable, attributes = attributes)
+            telemetryRepository.recordNonFatal(throwable = throwable, attributes = attributes)
         }
     }
 
@@ -138,7 +137,7 @@ open class BaseCoreManager : MultiDexApplication(), Application.ActivityLifecycl
             // A host that fails to set itself up is still a running app, and [isAppLoaded] is how
             // anything else finds out startup is over. Leaving it false because an SDK could not
             // reach the network would keep the app waiting on something that is never coming.
-            firebaseController.recordNonFatal(
+            telemetryRepository.recordNonFatal(
                 throwable = throwable,
                 attributes = mapOf("phase" to "onInitializeApp"),
             )

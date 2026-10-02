@@ -37,7 +37,7 @@ val aboutModule: Module = module {
         DefaultAboutRepository(
             deviceProvider = get(),
             buildInfoProvider = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
             gmsVersionProvider = get(),
             dispatchers = get(),
         )
@@ -48,7 +48,7 @@ val aboutModule: Module = module {
         AboutViewModel(
             aboutRepository = get(),
             clipboardRepository = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
             seasonalThemes = get(),
         )
     }

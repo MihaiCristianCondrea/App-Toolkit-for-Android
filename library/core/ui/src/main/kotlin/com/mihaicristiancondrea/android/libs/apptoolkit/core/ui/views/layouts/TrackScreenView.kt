@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /**
  * Emits a screen-view analytics event when [screenName] changes.
@@ -31,12 +31,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.reposit
  */
 @Composable
 fun TrackScreenView(
-    firebaseController: FirebaseController,
     screenName: String,
     screenClass: String? = null,
 ) {
+    val telemetryRepository = LocalTelemetry.current
     LaunchedEffect(screenName) {
-        firebaseController.logScreenView(
+        telemetryRepository.logScreenView(
             screenName = screenName,
             screenClass = screenClass,
         )

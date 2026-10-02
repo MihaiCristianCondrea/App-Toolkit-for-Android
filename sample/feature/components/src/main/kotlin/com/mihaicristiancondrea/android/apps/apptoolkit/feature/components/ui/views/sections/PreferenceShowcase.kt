@@ -41,7 +41,6 @@ import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseHeader
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSection
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.CheckBoxPreferenceItem
@@ -58,7 +57,6 @@ import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun PreferenceShowcase(
-    firebaseController: FirebaseController,
     onLogEvent: (String, String?) -> Ga4EventData,
     switchEnabled: Boolean,
     onSwitchEnabledChanged: (Boolean) -> Unit,
@@ -107,7 +105,6 @@ fun PreferenceShowcase(
                         ),
                         title = stringResource(id = R.string.components_preference_title),
                         summary = stringResource(id = R.string.components_preference_summary),
-                        firebaseController = firebaseController,
                         ga4Event = onLogEvent("preference", "settings_primary"),
                     )
                     SwitchPreferenceItem(
@@ -119,7 +116,6 @@ fun PreferenceShowcase(
                         summary = stringResource(id = R.string.components_switch_summary),
                         checked = switchEnabled,
                         onCheckedChange = onSwitchEnabledChanged,
-                        firebaseController = firebaseController,
                         ga4Event = onLogEvent("preference", "switch"),
                     )
                     SwitchPreferenceItemWithDivider(
@@ -133,7 +129,6 @@ fun PreferenceShowcase(
                         onCheckedChange = onSwitchWithDividerChanged,
                         onClick = {},
                         onSwitchClick = {},
-                        firebaseController = firebaseController,
                         ga4Event = onLogEvent("preference", "switch_divider"),
                     )
                     CheckBoxPreferenceItem(
@@ -145,7 +140,6 @@ fun PreferenceShowcase(
                         summary = stringResource(id = R.string.components_checkbox_summary),
                         checked = checkboxChecked,
                         onCheckedChange = onCheckboxChanged,
-                        firebaseController = firebaseController,
                         ga4Event = onLogEvent("preference", "checkbox"),
                     )
                 }
@@ -177,7 +171,6 @@ fun PreferenceShowcase(
                 title = stringResource(id = R.string.components_switch_card_title),
                 switchState = switchCardState,
                 onSwitchToggled = onSwitchCardChanged,
-                firebaseController = firebaseController,
                 ga4Event = onLogEvent("preference", "switch_card"),
             )
         }
@@ -221,7 +214,6 @@ fun PreferenceShowcase(
                             text = option,
                             isChecked = selectedRadioOption == option,
                             onCheckedChange = { onRadioOptionSelected(option) },
-                            firebaseController = firebaseController,
                             ga4Event = onLogEvent("preference", "radio_$option"),
                         )
                     }

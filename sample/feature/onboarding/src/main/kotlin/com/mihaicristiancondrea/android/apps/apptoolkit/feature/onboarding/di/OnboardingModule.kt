@@ -37,7 +37,7 @@ val onboardingModule: Module = module {
         OnboardingViewModel(
             onboardingRepository = get(),
             dispatchers = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
         )
     }
 }

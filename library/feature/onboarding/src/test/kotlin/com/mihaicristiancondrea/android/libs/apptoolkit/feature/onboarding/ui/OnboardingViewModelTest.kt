@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui
 import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.repositories.OnboardingRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -68,7 +68,7 @@ class OnboardingViewModelTest {
         val dispatcherExtension = UnconfinedDispatcherExtension()
     }
 
-    private val firebaseController = FakeFirebaseController()
+    private val telemetryRepository = FakeTelemetryRepository()
 
     @Test
     fun `initial state is not completed`() = runTest(dispatcherExtension.testDispatcher) {
@@ -141,14 +141,14 @@ class OnboardingViewModelTest {
         val repository = FakeOnboardingRepository()
         val viewModel = createViewModel(repository)
 
-        assertThat(firebaseController.loggedEvents.map { it.name }).contains("tutorial_begin")
+        assertThat(telemetryRepository.loggedEvents.map { it.name }).contains("tutorial_begin")
 
         viewModel.onEvent(OnboardingEvent.CompleteOnboarding)
         advanceUntilIdle()
 
         assertThat(repository.completed).isTrue()
         assertThat(viewModel.uiState.value.data?.isOnboardingCompleted).isTrue()
-        assertThat(firebaseController.loggedEvents.map { it.name }).contains("tutorial_complete")
+        assertThat(telemetryRepository.loggedEvents.map { it.name }).contains("tutorial_complete")
     }
 
     /** Finishing is the only way out of onboarding, so a failure has to say something. */
@@ -188,6 +188,6 @@ class OnboardingViewModelTest {
         OnboardingViewModel(
             onboardingRepository = repository,
             dispatchers = TestDispatchers(testDispatcher = dispatcherExtension.testDispatcher),
-            firebaseController = firebaseController,
+            telemetryRepository = telemetryRepository,
         )
 }

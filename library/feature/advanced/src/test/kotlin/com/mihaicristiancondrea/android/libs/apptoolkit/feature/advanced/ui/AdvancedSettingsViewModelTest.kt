@@ -24,7 +24,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.cont
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.StandardDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.R
@@ -68,14 +68,14 @@ class AdvancedSettingsViewModelTest {
     // every coroutine the ViewModel starts.
     private val testDispatchers: DispatcherProvider =
         TestDispatchers(dispatcherExtension.testDispatcher)
-    private val firebaseController = FakeFirebaseController()
+    private val telemetryRepository = FakeTelemetryRepository()
 
     @Test
     fun `onClearCache emits success message`() = runTest(dispatcherExtension.testDispatcher) {
         val viewModel = AdvancedSettingsViewModel(
             repository = FakeCacheRepository(DataState.Success(Unit)),
             dispatchers = testDispatchers,
-            firebaseController = firebaseController,
+            telemetryRepository = telemetryRepository,
         )
 
         viewModel.onEvent(AdvancedSettingsEvent.ClearCache)
@@ -96,7 +96,7 @@ class AdvancedSettingsViewModelTest {
             val viewModel = AdvancedSettingsViewModel(
                 repository = FakeCacheRepository(DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED)),
                 dispatchers = testDispatchers,
-                firebaseController = firebaseController,
+                telemetryRepository = telemetryRepository,
             )
 
             viewModel.onEvent(AdvancedSettingsEvent.ClearCache)
@@ -113,7 +113,7 @@ class AdvancedSettingsViewModelTest {
             val viewModel = AdvancedSettingsViewModel(
                 repository = repository,
                 dispatchers = testDispatchers,
-                firebaseController = firebaseController,
+                telemetryRepository = telemetryRepository,
             )
 
             // `expectMostRecentItem()` rather than `awaitItem()`: clearing the cache first flips the
@@ -150,7 +150,7 @@ class AdvancedSettingsViewModelTest {
         val viewModel = AdvancedSettingsViewModel(
             repository = FakeCacheRepository(DataState.Success(Unit)),
             dispatchers = testDispatchers,
-            firebaseController = firebaseController,
+            telemetryRepository = telemetryRepository,
             developerOptionsUnlocked = unlocked,
         )
 

@@ -20,17 +20,17 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.vie
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.data.repositories.ShowcaseUnlockRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.AboutScreen
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /** The About surface for this app: the toolkit screen plus the hidden version-tap unlock. */
 @Composable
 fun AboutSettingsContent() {
     val showcaseUnlockRepository: ShowcaseUnlockRepository = koinInject()
-    val firebaseController: FirebaseController = koinInject()
+    val telemetryRepository = LocalTelemetry.current
     val coroutineScope = rememberCoroutineScope()
 
     AboutScreen(
@@ -41,7 +41,7 @@ fun AboutSettingsContent() {
                 runSuspendCatching {
                     showcaseUnlockRepository.unlockAfterVersionTaps(tapCount = tapCount)
                 }.onFailure { throwable ->
-                    firebaseController.recordNonFatal(
+                    telemetryRepository.recordNonFatal(
                         throwable = throwable,
                         attributes = mapOf("operation" to "unlock_components_showcase"),
                     )

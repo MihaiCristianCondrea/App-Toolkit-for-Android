@@ -21,7 +21,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.CounterRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.CoinFlipToolState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.DiceRollToolState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import org.junit.jupiter.api.Test
@@ -37,7 +37,7 @@ class DecisionToolViewModelsTest {
 
     @Test
     fun `coin flip publishes a new request and resets on dismiss`() {
-        val viewModel = CoinFlipToolViewModel(FakeFirebaseController())
+        val viewModel = CoinFlipToolViewModel(FakeTelemetryRepository())
 
         viewModel.flip()
         assertEquals(1, viewModel.state.value.request)
@@ -48,7 +48,7 @@ class DecisionToolViewModelsTest {
 
     @Test
     fun `dice roll stays in range and resets on dismiss`() {
-        val viewModel = DiceRollToolViewModel(FakeFirebaseController())
+        val viewModel = DiceRollToolViewModel(FakeTelemetryRepository())
 
         viewModel.roll()
         assertTrue(viewModel.state.value.result in 1..6)
@@ -64,13 +64,13 @@ class DecisionToolViewModelsTest {
             preferencesDataSource = FakeToolkitTilesPreferencesDataSource(),
             dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
         )
-        val firstSheet = CounterToolViewModel(repository, FakeFirebaseController())
+        val firstSheet = CounterToolViewModel(repository, FakeTelemetryRepository())
 
         firstSheet.increment()
         firstSheet.increment()
         assertEquals(2, firstSheet.count.value)
 
-        val reopenedSheet = CounterToolViewModel(repository, FakeFirebaseController())
+        val reopenedSheet = CounterToolViewModel(repository, FakeTelemetryRepository())
         assertEquals(2, reopenedSheet.count.value)
 
         reopenedSheet.reset()

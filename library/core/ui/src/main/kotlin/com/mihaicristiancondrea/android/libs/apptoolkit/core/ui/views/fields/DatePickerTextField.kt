@@ -46,13 +46,13 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.DatePickerDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import java.text.SimpleDateFormat
 import java.util.Date
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,9 +63,9 @@ fun DatePickerTextField(
     textFieldIcon: ImageVector = Icons.Default.CalendarToday,
     textFieldReadOnly: Boolean = true,
     textFieldEnabled: Boolean = false,
-    firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
 ) {
+    val telemetryRepository = LocalTelemetry.current
     val configuration = LocalConfiguration.current
     val locale = remember(configuration) { configuration.locales[0] }
     val formatter = remember(locale) { SimpleDateFormat("dd.MM.yyyy", locale) }
@@ -106,7 +106,7 @@ fun DatePickerTextField(
             ) {
                 view.playSoundEffect(SoundEffectConstants.CLICK)
                 hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
-                firebaseController.logGa4Event(ga4Event)
+                telemetryRepository.logGa4Event(ga4Event)
                 showDialog = true
             }
     ) {

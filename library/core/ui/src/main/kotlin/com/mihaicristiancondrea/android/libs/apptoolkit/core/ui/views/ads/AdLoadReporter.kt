@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads
 
 import android.util.Log
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 
 /** Why an ad slot has nothing to show. */
@@ -43,11 +43,11 @@ enum class AdSlotFailure {
  * a non-fatal only for the failures a developer can act on, so a device with no fill does not report
  * an issue on every scroll.
  *
- * @property firebaseController where breadcrumbs and non-fatals go.
+ * @property telemetry where breadcrumbs and non-fatals go.
  * @property buildInfoProvider used to decide how loudly to report; debug builds get more.
  */
 class AdLoadReporter(
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
     private val buildInfoProvider: BuildInfoProvider,
 ) {
 
@@ -70,7 +70,7 @@ class AdLoadReporter(
             "Ad slot '$slotName' got no ad for unit '$adUnitId'. code=$errorCode ($errorMessage)",
         )
 
-        firebaseController.logBreadcrumb(
+        telemetryRepository.logBreadcrumb(
             message = "Ad slot failed to load",
             attributes = mapOf(
                 "slot" to slotName,
@@ -82,7 +82,7 @@ class AdLoadReporter(
         )
 
         if (!isNoFill) {
-            firebaseController.recordNonFatal(
+            telemetryRepository.recordNonFatal(
                 throwable = AdSlotLoadException(
                     slotName = slotName,
                     adUnitId = adUnitId,
@@ -106,7 +106,7 @@ class AdLoadReporter(
     ) {
         Log.w(LOG_TAG, "Ad slot '$slotName' could not request unit '$adUnitId'.", throwable)
 
-        firebaseController.recordNonFatal(
+        telemetryRepository.recordNonFatal(
             throwable = throwable ?: AdSlotNotRequestedException(
                 slotName = slotName,
                 adUnitId = adUnitId,

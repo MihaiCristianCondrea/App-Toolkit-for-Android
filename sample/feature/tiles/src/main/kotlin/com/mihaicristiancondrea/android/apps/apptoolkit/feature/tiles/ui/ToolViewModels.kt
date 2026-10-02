@@ -41,7 +41,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ReactionRating
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ReactionTestPhase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ReactionTestToolState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -57,8 +57,8 @@ import java.util.Locale
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.milliseconds
 
-class CoinFlipToolViewModel(firebaseController: FirebaseController) : ViewModel() {
-    private val usage = ToolUsageTracker(firebaseController, ToolkitTileIds.COIN_FLIP)
+class CoinFlipToolViewModel(telemetryRepository: TelemetryRepository) : ViewModel() {
+    private val usage = ToolUsageTracker(telemetryRepository, ToolkitTileIds.COIN_FLIP)
     private val mutableState = MutableStateFlow(CoinFlipToolState())
     val state: StateFlow<CoinFlipToolState> = mutableState.asStateFlow()
     fun flip() {
@@ -72,8 +72,8 @@ class CoinFlipToolViewModel(firebaseController: FirebaseController) : ViewModel(
     }
 }
 
-class DiceRollToolViewModel(firebaseController: FirebaseController) : ViewModel() {
-    private val usage = ToolUsageTracker(firebaseController, ToolkitTileIds.DICE_ROLL)
+class DiceRollToolViewModel(telemetryRepository: TelemetryRepository) : ViewModel() {
+    private val usage = ToolUsageTracker(telemetryRepository, ToolkitTileIds.DICE_ROLL)
     private val mutableState = MutableStateFlow(DiceRollToolState())
     val state: StateFlow<DiceRollToolState> = mutableState.asStateFlow()
     fun roll() {
@@ -90,9 +90,9 @@ class DiceRollToolViewModel(firebaseController: FirebaseController) : ViewModel(
 /** Shows the count shared with the Counter Quick Settings tile, so closing the sheet keeps it. */
 class CounterToolViewModel(
     private val repository: CounterRepository,
-    firebaseController: FirebaseController,
+    telemetryRepository: TelemetryRepository,
 ) : ViewModel() {
-    private val usage = ToolUsageTracker(firebaseController, ToolkitTileIds.COUNTER)
+    private val usage = ToolUsageTracker(telemetryRepository, ToolkitTileIds.COUNTER)
 
     val count: StateFlow<Int> = repository.count.stateIn(
         scope = viewModelScope,
@@ -142,8 +142,8 @@ abstract class FlowToolViewModel<T>(initial: T, protected val usage: ToolUsageTr
 
 class CompassToolViewModel(
     private val repository: SensorRepository,
-    firebaseController: FirebaseController,
-) : FlowToolViewModel<Float>(0f, ToolUsageTracker(firebaseController, ToolkitTileIds.COMPASS)) {
+    telemetryRepository: TelemetryRepository,
+) : FlowToolViewModel<Float>(0f, ToolUsageTracker(telemetryRepository, ToolkitTileIds.COMPASS)) {
     fun open() = reportUseOnceWatched()
 
     /** Listens to the sensor; the route calls this only while the app is in the foreground. */
@@ -160,10 +160,10 @@ class CompassToolViewModel(
 
 class LevelToolViewModel(
     private val repository: SensorRepository,
-    firebaseController: FirebaseController,
+    telemetryRepository: TelemetryRepository,
 ) : FlowToolViewModel<LevelToolState>(
     LevelToolState(),
-    ToolUsageTracker(firebaseController, ToolkitTileIds.BUBBLE_LEVEL),
+    ToolUsageTracker(telemetryRepository, ToolkitTileIds.BUBBLE_LEVEL),
 ) {
     fun open() = reportUseOnceWatched()
 
@@ -181,10 +181,10 @@ class LevelToolViewModel(
 
 class BreathingToolViewModel(
     private val repository: BreathingRepository,
-    firebaseController: FirebaseController,
+    telemetryRepository: TelemetryRepository,
 ) : FlowToolViewModel<BreathingState>(
     BreathingState(),
-    ToolUsageTracker(firebaseController, ToolkitTileIds.BREATHING),
+    ToolUsageTracker(telemetryRepository, ToolkitTileIds.BREATHING),
 ) {
     fun open() {
         observation?.cancel()
@@ -203,9 +203,9 @@ class BreathingToolViewModel(
 
 class SosToolViewModel(
     private val repository: SosRepository,
-    firebaseController: FirebaseController,
+    telemetryRepository: TelemetryRepository,
 ) : ViewModel() {
-    private val usage = ToolUsageTracker(firebaseController, ToolkitTileIds.SOS)
+    private val usage = ToolUsageTracker(telemetryRepository, ToolkitTileIds.SOS)
     val state = repository.state
     fun toggle() {
         val starting: Boolean = !repository.isActive
@@ -221,9 +221,9 @@ class SosToolViewModel(
 
 class MorseToolViewModel(
     private val repository: MorseRepository,
-    firebaseController: FirebaseController,
+    telemetryRepository: TelemetryRepository,
 ) : ViewModel() {
-    private val usage = ToolUsageTracker(firebaseController, ToolkitTileIds.MORSE)
+    private val usage = ToolUsageTracker(telemetryRepository, ToolkitTileIds.MORSE)
     private val mutableState = MutableStateFlow(MorseToolState(playback = repository.state.value))
     val state: StateFlow<MorseToolState> = mutableState.asStateFlow()
 
@@ -270,9 +270,9 @@ class MorseToolViewModel(
 class FlashDimmerToolViewModel(
     private val torchRepository: TorchRepository,
     private val morseRepository: MorseRepository,
-    firebaseController: FirebaseController,
+    telemetryRepository: TelemetryRepository,
 ) : ViewModel() {
-    private val usage = ToolUsageTracker(firebaseController, ToolkitTileIds.FLASH_DIMMER)
+    private val usage = ToolUsageTracker(telemetryRepository, ToolkitTileIds.FLASH_DIMMER)
     val state: StateFlow<TorchState> = torchRepository.state
     fun setLevel(level: Int) {
         morseRepository.stop(); torchRepository.setLevel(level)
@@ -291,10 +291,10 @@ class FlashDimmerToolViewModel(
 }
 
 class ReactionTestToolViewModel(
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
     private val timeProvider: () -> Long = SystemClock::elapsedRealtime,
 ) : ViewModel() {
-    private val usage = ToolUsageTracker(firebaseController, ToolkitTileIds.REACTION_TEST)
+    private val usage = ToolUsageTracker(telemetryRepository, ToolkitTileIds.REACTION_TEST)
     private val mutableState = MutableStateFlow(ReactionTestToolState())
     val state: StateFlow<ReactionTestToolState> = mutableState.asStateFlow()
 
@@ -347,7 +347,7 @@ class ReactionTestToolViewModel(
                     roundCount = nextRound,
                     rating = rating,
                 )
-                firebaseController.logReactionScore(reactionTimeMs = reactionTime)
+                telemetryRepository.logReactionScore(reactionTimeMs = reactionTime)
                 usage.markUsed()
             }
 

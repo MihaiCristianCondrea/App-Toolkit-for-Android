@@ -31,7 +31,7 @@ val privacyModule: Module = module {
     viewModel {
         PrivacyViewModel(
             provider = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
         )
     }
 }

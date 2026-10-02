@@ -21,7 +21,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.isAlive
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.ConsentPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
@@ -55,7 +55,7 @@ class DefaultConsentRepository(
     private val remote: ConsentRemoteDataSource,
     private val local: ConsentPreferencesDataSource,
     private val configProvider: BuildInfoProvider,
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
     private val requestScope: CoroutineScope =
         CoroutineScope(context = SupervisorJob() + Dispatchers.Main.immediate),
 ) : ConsentRepository {
@@ -88,7 +88,7 @@ class DefaultConsentRepository(
         host: ConsentHost,
         showIfRequired: Boolean,
     ): Flow<DataState<Unit, Errors.UseCase>> = flow {
-        firebaseController.logBreadcrumb(
+        telemetryRepository.logBreadcrumb(
             message = "Consent request started",
             attributes = mapOf(
                 "host" to host.activity::class.java.name,
@@ -96,7 +96,7 @@ class DefaultConsentRepository(
             ),
         )
         if (!host.isAlive) {
-            firebaseController.logBreadcrumb(
+            telemetryRepository.logBreadcrumb(
                 message = "Consent request skipped for a finishing host",
                 attributes = mapOf("host" to host.activity::class.java.name),
             )
@@ -109,7 +109,7 @@ class DefaultConsentRepository(
             inFlightRequest?.takeIf { !it.host.isAlive }
         }
         if (staleRequest != null) {
-            firebaseController.logBreadcrumb(
+            telemetryRepository.logBreadcrumb(
                 message = "Consent request waiting for a request from a finished host",
                 attributes = mapOf("host" to host.activity::class.java.name),
             )
@@ -122,7 +122,7 @@ class DefaultConsentRepository(
             inFlightRequest
                 ?.takeIf { it.showIfRequired == showIfRequired && it.host.isAlive }
                 ?.also {
-                    firebaseController.logBreadcrumb(
+                    telemetryRepository.logBreadcrumb(
                         message = "Consent request joined an in-flight request",
                         attributes = mapOf("host" to host.activity::class.java.name),
                     )
@@ -182,13 +182,13 @@ class DefaultConsentRepository(
     )
 
     override suspend fun applyInitialConsent() {
-        firebaseController.logBreadcrumb(message = "Applying initial consent")
+        telemetryRepository.logBreadcrumb(message = "Applying initial consent")
         val settings = readPersistedSettings()
         applyConsentSettings(settings)
     }
 
     override suspend fun applyConsentSettings(settings: ConsentSettings) {
-        firebaseController.logBreadcrumb(
+        telemetryRepository.logBreadcrumb(
             message = "Consent settings applied",
             attributes = mapOf(
                 "usageAndDiagnostics" to settings.usageAndDiagnostics.toString(),
@@ -198,15 +198,15 @@ class DefaultConsentRepository(
                 "adPersonalizationConsent" to settings.adPersonalizationConsent.toString(),
             ),
         )
-        firebaseController.updateConsent(
+        telemetryRepository.updateConsent(
             analyticsGranted = settings.analyticsConsent,
             adStorageGranted = settings.adStorageConsent,
             adUserDataGranted = settings.adUserDataConsent,
             adPersonalizationGranted = settings.adPersonalizationConsent,
         )
-        firebaseController.setAnalyticsEnabled(settings.usageAndDiagnostics)
-        firebaseController.setCrashlyticsEnabled(settings.usageAndDiagnostics)
-        firebaseController.setPerformanceEnabled(settings.usageAndDiagnostics)
+        telemetryRepository.setAnalyticsEnabled(settings.usageAndDiagnostics)
+        telemetryRepository.setCrashlyticsEnabled(settings.usageAndDiagnostics)
+        telemetryRepository.setPerformanceEnabled(settings.usageAndDiagnostics)
     }
 
     private suspend fun readPersistedSettings(): ConsentSettings = coroutineScope {

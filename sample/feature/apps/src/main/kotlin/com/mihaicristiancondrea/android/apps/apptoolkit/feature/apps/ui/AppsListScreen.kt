@@ -55,7 +55,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.bu
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.screens.AppsList
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.screens.loading.HomeLoadingScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AppAdsQualifiers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logShare
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
@@ -71,6 +70,7 @@ import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /**
  * A route-level composable that orchestrates the display of the apps list screen.
@@ -106,10 +106,9 @@ fun AppsListScreen(
 
     val appDetailsAdsConfig: AdsConfig =
         koinInject(qualifier = named(AppAdsQualifiers.APP_DETAILS_NATIVE_AD))
-    val firebaseController: FirebaseController = koinInject()
+    val telemetryRepository = LocalTelemetry.current
 
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = AppScreenTracking.Screens.APPS_LIST.name,
         screenClass = AppScreenTracking.Screens.APPS_LIST.className,
     )
@@ -119,12 +118,12 @@ fun AppsListScreen(
     val currentApps by rememberUpdatedState(screenState.data?.apps)
     val currentFavorites by rememberUpdatedState(favorites)
     val onFavoriteToggle: (String) -> Unit =
-        remember(viewModel, firebaseController) {
+        remember(viewModel, telemetryRepository) {
             { pkg ->
                 val app = currentApps?.firstOrNull { it.packageName == pkg }
                 val wasFavorite = currentFavorites.contains(pkg)
                 if (app != null) {
-                    firebaseController.logAppInteraction(
+                    telemetryRepository.logAppInteraction(
                         source = "apps_list",
                         appInfo = app,
                         interaction = if (wasFavorite) AppInteractionType.RemoveFavorite else AppInteractionType.AddFavorite,
@@ -138,11 +137,11 @@ fun AppsListScreen(
     val buildAppClick = buildOnAppClick()
     val buildShareClick = buildOnShareClick()
     val openApp: (AppInfo) -> Unit = remember { buildAppClick }
-    val onShareClick: (AppInfo) -> Unit = remember(buildShareClick, firebaseController) {
+    val onShareClick: (AppInfo) -> Unit = remember(buildShareClick, telemetryRepository) {
         { app ->
             // The recommended share event covers this tap; a second app_card_interaction for it
             // would count every share twice.
-            firebaseController.logShare(
+            telemetryRepository.logShare(
                 method = "system_share",
                 contentType = "app",
                 itemId = app.packageName,
@@ -162,10 +161,10 @@ fun AppsListScreen(
     val coroutineScope = rememberCoroutineScope()
 
     selectedApp?.let { app ->
-        val detailsActionLauncher = remember(appActionLauncher, firebaseController, app) {
+        val detailsActionLauncher = remember(appActionLauncher, telemetryRepository, app) {
             AnalyticsAppActionLauncher(
                 delegate = appActionLauncher,
-                firebaseController = firebaseController,
+                telemetryRepository = telemetryRepository,
                 appInfo = app,
                 source = "app_details",
             )
@@ -174,7 +173,7 @@ fun AppsListScreen(
             modifier = Modifier.fillMaxHeight(),
             sheetState = sheetState,
             onDismissRequest = {
-                firebaseController.logAppInteraction(
+                telemetryRepository.logAppInteraction(
                     source = "apps_list",
                     appInfo = app,
                     interaction = AppInteractionType.CloseDetailsBottomSheet

@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.repositories
 
 import com.google.common.truth.Truth.assertThat
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.UsageAndDiagnosticsPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
@@ -96,7 +96,7 @@ class DefaultUsageAndDiagnosticsRepositoryTest {
                 dataSource = dataSource,
                 configProvider = FakeBuildInfoProvider(),
                 dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
-                firebaseController = mockk<FirebaseController>(relaxed = true),
+                telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
                 consentRepository = consentRepository,
             )
 
@@ -115,7 +115,7 @@ class DefaultUsageAndDiagnosticsRepositoryTest {
                 dataSource = FakeUsageAndDiagnosticsPreferencesDataSource(),
                 configProvider = FakeBuildInfoProvider(),
                 dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
-                firebaseController = mockk<FirebaseController>(relaxed = true),
+                telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
                 consentRepository = consentRepository,
             )
             val essentialOnly = UsageAndDiagnosticsSettings(

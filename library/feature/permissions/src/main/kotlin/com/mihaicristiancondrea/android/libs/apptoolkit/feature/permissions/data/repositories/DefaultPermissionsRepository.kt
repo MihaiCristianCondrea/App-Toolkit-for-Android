@@ -18,81 +18,74 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.data.repositories
 
 import android.content.Context
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsCategory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsPreference
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.R
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 
 /**
  * Default implementation of [PermissionsRepository] that builds the permissions
  * configuration using string resources from the provided [Context].
+ *
+ * Reading string resources is main-safe, so it needs no dispatcher.
  */
 class DefaultPermissionsRepository(
     private val context: Context,
-    private val dispatchers: DispatcherProvider,
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
 ) : PermissionsRepository {
 
-    override fun getPermissionsConfig(): Flow<SettingsConfig> =
-        flow {
-            firebaseController.logBreadcrumb(
-                message = "Permissions config requested",
-                attributes = mapOf("source" to "DefaultPermissionsRepository"),
-            )
-            emit(
-                SettingsConfig(
-                    title = context.getString(R.string.permissions),
-                    categories = listOf(
-                        SettingsCategory(
-                            title = context.getString(R.string.normal),
-                            preferences = listOf(
-                                SettingsPreference(
-                                    title = context.getString(R.string.access_network_state),
-                                    summary = context.getString(R.string.summary_preference_permissions_access_network_state),
-                                ),
-                                SettingsPreference(
-                                    title = context.getString(R.string.ad_id),
-                                    summary = context.getString(R.string.summary_preference_permissions_ad_id),
-                                ),
-                                SettingsPreference(
-                                    title = context.getString(R.string.billing),
-                                    summary = context.getString(R.string.summary_preference_permissions_billing),
-                                ),
-                                SettingsPreference(
-                                    title = context.getString(R.string.check_license),
-                                    summary = context.getString(R.string.summary_preference_permissions_check_license),
-                                ),
-                                SettingsPreference(
-                                    title = context.getString(R.string.foreground_service),
-                                    summary = context.getString(R.string.summary_preference_permissions_foreground_service),
-                                ),
-                                SettingsPreference(
-                                    title = context.getString(R.string.internet),
-                                    summary = context.getString(R.string.summary_preference_permissions_internet),
-                                ),
-                                SettingsPreference(
-                                    title = context.getString(R.string.wake_lock),
-                                    summary = context.getString(R.string.summary_preference_permissions_wake_lock),
-                                ),
-                            ),
+    override fun getPermissionsConfig(): SettingsConfig {
+        telemetryRepository.logBreadcrumb(
+            message = "Permissions config requested",
+            attributes = mapOf("source" to "DefaultPermissionsRepository"),
+        )
+        return SettingsConfig(
+            title = context.getString(R.string.permissions),
+            categories = listOf(
+                SettingsCategory(
+                    title = context.getString(R.string.normal),
+                    preferences = listOf(
+                        SettingsPreference(
+                            title = context.getString(R.string.access_network_state),
+                            summary = context.getString(R.string.summary_preference_permissions_access_network_state),
                         ),
-                        SettingsCategory(
-                            title = context.getString(R.string.runtime),
-                            preferences = listOf(
-                                SettingsPreference(
-                                    title = context.getString(R.string.post_notifications),
-                                    summary = context.getString(R.string.summary_preference_permissions_post_notifications),
-                                ),
-                            ),
+                        SettingsPreference(
+                            title = context.getString(R.string.ad_id),
+                            summary = context.getString(R.string.summary_preference_permissions_ad_id),
+                        ),
+                        SettingsPreference(
+                            title = context.getString(R.string.billing),
+                            summary = context.getString(R.string.summary_preference_permissions_billing),
+                        ),
+                        SettingsPreference(
+                            title = context.getString(R.string.check_license),
+                            summary = context.getString(R.string.summary_preference_permissions_check_license),
+                        ),
+                        SettingsPreference(
+                            title = context.getString(R.string.foreground_service),
+                            summary = context.getString(R.string.summary_preference_permissions_foreground_service),
+                        ),
+                        SettingsPreference(
+                            title = context.getString(R.string.internet),
+                            summary = context.getString(R.string.summary_preference_permissions_internet),
+                        ),
+                        SettingsPreference(
+                            title = context.getString(R.string.wake_lock),
+                            summary = context.getString(R.string.summary_preference_permissions_wake_lock),
                         ),
                     ),
                 ),
-            )
-        }.flowOn(dispatchers.io)
+                SettingsCategory(
+                    title = context.getString(R.string.runtime),
+                    preferences = listOf(
+                        SettingsPreference(
+                            title = context.getString(R.string.post_notifications),
+                            summary = context.getString(R.string.summary_preference_permissions_post_notifications),
+                        ),
+                    ),
+                ),
+            ),
+        )
+    }
 }
-

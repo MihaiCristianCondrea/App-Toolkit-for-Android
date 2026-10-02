@@ -129,7 +129,7 @@ source directly. In practice:
 |--------------------------------------------------------|--------------------------------------------------|
 | repositories                                           | the data layer's entry points                    |
 | use cases, where `android-domain-layer` says they earn it | reusable business operations                  |
-| `FirebaseController`                                   | cross-cutting telemetry, not app data; `LoggedScreenViewModel` requires it |
+| `TelemetryRepository`                                   | analytics and crash reporting; `LoggedScreenViewModel` requires it |
 | `DispatcherProvider`                                   | only for CPU-heavy work the ViewModel does itself |
 
 | A ViewModel never takes                                | Instead                                          |

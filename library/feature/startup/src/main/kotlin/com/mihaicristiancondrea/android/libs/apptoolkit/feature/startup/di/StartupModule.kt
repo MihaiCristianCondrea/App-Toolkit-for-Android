@@ -27,5 +27,5 @@ import org.koin.dsl.module
 fun startupModule(startupProviderFactory: () -> StartupProvider): Module = module {
     single<StartupProvider> { startupProviderFactory() }
 
-    viewModel { StartupViewModel(firebaseController = get()) }
+    viewModel { StartupViewModel(telemetryRepository = get()) }
 }

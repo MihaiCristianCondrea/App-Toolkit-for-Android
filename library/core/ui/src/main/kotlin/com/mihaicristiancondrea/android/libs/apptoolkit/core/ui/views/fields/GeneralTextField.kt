@@ -57,7 +57,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIconContent
@@ -71,6 +70,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.mar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.markdown.toTextFieldValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.getGroupedShape
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /** Visual treatment of a text field. */
 enum class GeneralTextFieldStyle {
@@ -187,7 +187,6 @@ enum class GeneralTextFieldMarkdown {
  * @param groupedOuterRadius Corner radius at the outside of that block.
  * @param shape Overrides the resting shape of the field.
  * @param colors Overrides the colors of the field.
- * @param firebaseController Optional Firebase controller used to log GA4 events.
  * @param ga4Event Optional GA4 event data, logged when the field gains focus.
  */
 @Composable
@@ -223,7 +222,6 @@ fun GeneralTextField(
     groupedOuterRadius: Dp = SizeConstants.LargeMediumSize,
     shape: Shape? = null,
     colors: TextFieldColors? = null,
-    firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
 ) {
     if (style == GeneralTextFieldStyle.Search) {
@@ -243,7 +241,7 @@ fun GeneralTextField(
             onValueChange = onValueChange,
             modifier = modifier
                 .fillMaxWidth()
-                .logFocusGain(firebaseController = firebaseController, ga4Event = ga4Event),
+                .logFocusGain(ga4Event = ga4Event),
             enabled = enabled,
             readOnly = readOnly,
             textStyle = textStyle,
@@ -310,7 +308,6 @@ fun GeneralTextField(
             groupedOuterRadius = groupedOuterRadius,
             shape = shape,
             colors = colors,
-            firebaseController = firebaseController,
             ga4Event = ga4Event,
         )
         return
@@ -339,7 +336,7 @@ fun GeneralTextField(
     val fieldColors: TextFieldColors = colors ?: generalTextFieldColors(style = style)
     val fieldModifier: Modifier = Modifier
         .fillMaxWidth()
-        .logFocusGain(firebaseController = firebaseController, ga4Event = ga4Event)
+        .logFocusGain(ga4Event = ga4Event)
     val transformation: VisualTransformation = rememberFieldTransformation(
         markdown = markdown,
         visualTransformation = visualTransformation,
@@ -438,7 +435,6 @@ fun GeneralTextField(
     groupedOuterRadius: Dp = SizeConstants.LargeMediumSize,
     shape: Shape? = null,
     colors: TextFieldColors? = null,
-    firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
 ) {
     require(style != GeneralTextFieldStyle.Search) {
@@ -468,7 +464,7 @@ fun GeneralTextField(
     val fieldColors: TextFieldColors = colors ?: generalTextFieldColors(style = style)
     val fieldModifier: Modifier = Modifier
         .fillMaxWidth()
-        .logFocusGain(firebaseController = firebaseController, ga4Event = ga4Event)
+        .logFocusGain(ga4Event = ga4Event)
     val transformation: VisualTransformation = rememberFieldTransformation(
         markdown = markdown,
         visualTransformation = visualTransformation,
@@ -667,12 +663,12 @@ private fun rememberFieldTransformation(
 /** Logs [ga4Event] the moment the field takes focus, and not again until focus comes back. */
 @Composable
 private fun Modifier.logFocusGain(
-    firebaseController: FirebaseController?,
     ga4Event: Ga4EventData?,
 ): Modifier {
+    val telemetryRepository = LocalTelemetry.current
     var focused: Boolean by remember { mutableStateOf(value = false) }
     return onFocusChanged { state ->
-        if (state.isFocused && !focused) firebaseController.logGa4Event(ga4Event = ga4Event)
+        if (state.isFocused && !focused) telemetryRepository.logGa4Event(ga4Event = ga4Event)
         focused = state.isFocused
     }
 }

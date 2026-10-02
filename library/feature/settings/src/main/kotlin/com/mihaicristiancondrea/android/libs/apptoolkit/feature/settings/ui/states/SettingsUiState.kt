@@ -15,9 +15,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.contracts
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.states
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
+import androidx.compose.runtime.Immutable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 
-/** Marker for future one-off changelog outputs. */
-sealed interface ChangelogAction : ActionEvent
+/**
+ * What the settings list renders.
+ *
+ * @property config The categories the host's `SettingsProvider` describes. Empty, with a message,
+ * when the provider lists no category.
+ */
+@Immutable
+data class SettingsUiState(
+    val config: Loadable<SettingsConfig> = Loadable.Loading,
+)

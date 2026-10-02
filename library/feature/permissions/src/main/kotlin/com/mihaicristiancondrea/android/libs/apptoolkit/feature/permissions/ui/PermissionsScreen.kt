@@ -17,34 +17,15 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.contracts.PermissionsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
-import org.koin.compose.koinInject
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.contracts.PermissionsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.states.PermissionsUiState
 import org.koin.compose.viewmodel.koinViewModel
 
 private const val PERMISSIONS_SCREEN_NAME = "Permissions"
@@ -53,101 +34,31 @@ private const val PERMISSIONS_SCREEN_CLASS = "PermissionsScreen"
 /**
  * The app's permissions and why it asks for each: the body of the permissions page, which
  * `permissionsPage()` registers, and what Android's permission manager opens for this app.
+ *
+ * This is the stateful half. It owns the [PermissionsViewModel] and tracks the screen, then hands
+ * the rendering to [PermissionsScreenContent].
  */
 @Composable
 fun PermissionsScreen() {
     val viewModel: PermissionsViewModel = koinViewModel()
-    val screenState: UiStateScreen<SettingsConfig> by viewModel.uiState.collectAsStateWithLifecycle()
-    val paddingValues = contentPadding()
+    val state: PermissionsUiState by viewModel.state.collectAsStateWithLifecycle()
 
-    val firebaseController: FirebaseController = koinInject()
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = PERMISSIONS_SCREEN_NAME,
         screenClass = PERMISSIONS_SCREEN_CLASS,
     )
     TrackScreenState(
-        firebaseController = firebaseController,
         screenName = PERMISSIONS_SCREEN_NAME,
-        screenState = screenState.screenState,
+        state = state.config,
     )
 
     LaunchedEffect(Unit) {
         viewModel.onEvent(PermissionsEvent.Load)
     }
 
-    ScreenStateHandler(
-        screenState = screenState,
-        onLoading = { LoadingScreen() },
-        onEmpty = {
-            NoDataScreen(
-                icon = Icons.Outlined.Settings,
-                showRetry = true,
-                onRetry = { viewModel.onEvent(PermissionsEvent.Load) },
-                paddingValues = paddingValues,
-            )
-        },
-        onError = {
-            NoDataScreen(
-                icon = Icons.Outlined.Settings,
-                isError = true,
-                showRetry = true,
-                onRetry = { viewModel.onEvent(PermissionsEvent.Load) },
-                paddingValues = paddingValues,
-            )
-        },
-        onSuccess = { settingsConfig ->
-            PermissionsContent(
-                paddingValues = paddingValues,
-                settingsConfig = settingsConfig,
-            )
-        },
+    PermissionsScreenContent(
+        state = state,
+        contentPadding = contentPadding(),
+        onRetry = { viewModel.onEvent(PermissionsEvent.Load) },
     )
-}
-
-@Composable
-fun PermissionsContent(
-    paddingValues: PaddingValues,
-    settingsConfig: SettingsConfig,
-) {
-    LazyColumn(
-        contentPadding = paddingValues,
-        modifier = Modifier.fillMaxHeight(),
-        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
-    ) {
-        settingsConfig.categories.forEachIndexed { categoryIndex, category ->
-            val categoryKey = category.title ?: "category_$categoryIndex"
-
-            item(
-                key = "permission_category_$categoryKey",
-                contentType = "permission_category",
-            ) {
-                category.title?.let { title ->
-                    PreferenceCategoryItem(title = title)
-                }
-            }
-
-            itemsIndexed(
-                items = category.preferences,
-                key = { index, preference ->
-                    val preferenceKey = preference.key ?: preference.title ?: index
-                    "permission_${categoryKey}_$preferenceKey"
-                },
-                contentType = { _, _ -> "permission_preference" },
-            ) { index, preference ->
-                SettingsPreferenceItem(
-                    title = preference.title,
-                    summary = preference.summary,
-                    onClick = { preference.action?.invoke() },
-                    modifier = Modifier.groupedPreferenceItem(
-                        position = groupedItemPosition(
-                            index = index,
-                            size = category.preferences.size
-                        ),
-                        outerRadius = SizeConstants.LargeMediumSize,
-                    )
-                )
-            }
-        }
-    }
 }

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,20 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.contracts
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
-
-/**
- * Events that [PermissionsViewModel] can react to.
- *
- * Keeping events free of any Android framework dependencies ensures the
- * ViewModel remains agnostic of the Android lifecycle as recommended by the
- * Android architecture guidelines.
- */
-sealed interface PermissionsEvent : UiEvent {
-    /**
-     * Requests that the ViewModel loads the permissions configuration.
-     */
+/** What the permissions page asks its ViewModel to do. */
+sealed interface PermissionsEvent {
+    /** Loads the permission catalog, each time the page is shown and on retry. */
     data object Load : PermissionsEvent
 }
-
-

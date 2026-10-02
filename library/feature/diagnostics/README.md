@@ -14,7 +14,7 @@ to its onboarding pages through its `OnboardingProvider`. The main toolkit modul
 Depends on core common, DataStore and UI (which exposes navigation), plus integration consent, and on no other
 feature module.
 UsageAndDiagnosticsViewModel observes the repository and coordinates consent application through
-ConsentRepository. The repository combines and updates the shared preference source; FirebaseController
+ConsentRepository. The repository combines and updates the shared preference source; `TelemetryRepository`
 receives diagnostic breadcrumbs. Defaults depend on the supplied build configuration.
 
 ## Screen shape

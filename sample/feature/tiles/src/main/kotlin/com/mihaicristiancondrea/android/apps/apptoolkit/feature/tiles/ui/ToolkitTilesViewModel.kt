@@ -28,7 +28,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ToolkitTilesFilter
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ToolkitTilesUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logSelectContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItemList
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
@@ -52,10 +52,10 @@ import kotlinx.coroutines.launch
 class ToolkitTilesViewModel(
     private val toolkitTilesRepository: ToolkitTilesRepository,
     private val dispatchers: DispatcherProvider,
-    firebaseController: FirebaseController,
+    telemetryRepository: TelemetryRepository,
 ) : LoggedScreenViewModel<ToolkitTilesUiState, ToolkitTilesEvent, ToolkitTilesAction>(
     initialState = UiStateScreen(data = ToolkitTilesUiState()),
-    firebaseController = firebaseController,
+    telemetryRepository = telemetryRepository,
     screenName = AppScreenTracking.Screens.TOOLKIT_TILES.name,
     viewModelName = "ToolkitTilesViewModel",
 ) {
@@ -106,7 +106,7 @@ class ToolkitTilesViewModel(
                     // list view is reported once rather than once per emission.
                     if (!hasLoggedCatalogueView) {
                         hasLoggedCatalogueView = true
-                        firebaseController.logViewItemList(
+                        telemetryRepository.logViewItemList(
                             itemListId = "all",
                             itemListName = "quick_tools_catalog",
                         )
@@ -143,7 +143,7 @@ class ToolkitTilesViewModel(
     private fun selectFilter(filter: ToolkitTilesFilter) {
         // One event per filter tap: the list it shows already names the filter, so a separate
         // select_content for the chip would count the same tap twice.
-        firebaseController.logViewItemList(
+        telemetryRepository.logViewItemList(
             itemListId = filter.name.lowercase(),
             itemListName = "quick_tools_${filter.name.lowercase()}",
         )
@@ -155,7 +155,7 @@ class ToolkitTilesViewModel(
     private fun toggleCategory(categoryId: String) {
         // Opening a category is the interest worth counting; closing it again is not a second one.
         if (screenData?.expandedCategoryIds?.contains(categoryId) == false) {
-            firebaseController.logSelectContent(
+            telemetryRepository.logSelectContent(
                 contentType = "tile_category",
                 itemId = categoryId,
             )
@@ -197,12 +197,12 @@ class ToolkitTilesViewModel(
      * already counts the requests and says what became of each.
      */
     private fun handleTileRequestFinished(requestKey: String, outcome: String) {
-        firebaseController.logQuickSettingsTileRequest(tileId = requestKey, outcome = outcome)
+        telemetryRepository.logQuickSettingsTileRequest(tileId = requestKey, outcome = outcome)
         refreshStatuses()
     }
 
     private fun handleTileSetup(tileId: String) {
-        firebaseController.logSelectContent(
+        telemetryRepository.logSelectContent(
             contentType = "tile_setup",
             itemId = tileId,
         )

@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui
 
 import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.contracts.ThemeSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
@@ -48,7 +48,7 @@ import kotlinx.coroutines.launch
 class ThemeSettingsViewModel(
     private val preferences: ThemePreferencesRepository,
     private val seasonal: SeasonalThemeRepository,
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
 ) : ScreenViewModel<ThemeSettingsUiState, ThemeSettingsEvent, ActionEvent>(
     initialState = UiStateScreen(screenState = ScreenState.IsLoading(), data = null),
 ) {
@@ -102,7 +102,7 @@ class ThemeSettingsViewModel(
         viewModelScope.launch {
             runSuspendCatching { block() }
                 .onFailure { throwable ->
-                    firebaseController.recordNonFatal(
+                    telemetryRepository.recordNonFatal(
                         throwable = throwable,
                         attributes = mapOf("operation" to "persistThemeSetting"),
                     )

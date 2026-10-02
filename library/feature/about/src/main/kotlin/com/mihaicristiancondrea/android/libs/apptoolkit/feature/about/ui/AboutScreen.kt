@@ -20,7 +20,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
@@ -28,7 +27,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.cont
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.AboutUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 internal const val ABOUT_SCREEN_NAME = "About"
@@ -54,17 +52,14 @@ fun AboutScreen(
 ) {
     val viewModel: AboutViewModel = koinViewModel()
     val state: AboutUiState by viewModel.state.collectAsStateWithLifecycle()
-    val firebaseController: FirebaseController = koinInject()
     val navigator = LocalShellNavigator.current
 
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = ABOUT_SCREEN_NAME,
         screenClass = ABOUT_SCREEN_CLASS,
     )
 
     TrackScreenState(
-        firebaseController = firebaseController,
         screenName = ABOUT_SCREEN_NAME,
         state = state.items,
     )
@@ -75,7 +70,6 @@ fun AboutScreen(
         onOpenLicenses = { navigator.navigate(LicensesRoute) },
         contentPadding = contentPadding(),
         onVersionTap = onVersionTap,
-        firebaseController = firebaseController,
     )
 
     MessageHost(viewModel = viewModel)

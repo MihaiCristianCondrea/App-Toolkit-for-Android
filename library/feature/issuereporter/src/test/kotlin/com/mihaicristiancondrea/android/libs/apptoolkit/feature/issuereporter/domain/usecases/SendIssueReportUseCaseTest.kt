@@ -23,7 +23,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.do
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.Report
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.ExtraInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import io.ktor.http.HttpStatusCode
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -57,7 +57,7 @@ class SendIssueReportUseCaseTest {
             )
         } returns IssueReportResult.Success("url")
 
-        val useCase = SendIssueReportUseCase(repository, FakeFirebaseController())
+        val useCase = SendIssueReportUseCase(repository, FakeTelemetryRepository())
         val result = useCase(params).first()
 
         assertThat(result).isInstanceOf(IssueReportResult.Success::class.java)
@@ -69,7 +69,7 @@ class SendIssueReportUseCaseTest {
         val repository = mockk<IssueReporterRepository>()
         coEvery { repository.sendReport(any(), any(), any()) } throws IllegalStateException("boom")
 
-        val useCase = SendIssueReportUseCase(repository, FakeFirebaseController())
+        val useCase = SendIssueReportUseCase(repository, FakeTelemetryRepository())
         val result = useCase(params).first()
 
         assertThat(result).isInstanceOf(IssueReportResult.Error::class.java)
@@ -89,7 +89,7 @@ class SendIssueReportUseCaseTest {
             )
         } throws CancellationException("cancel")
 
-        val useCase = SendIssueReportUseCase(repository, FakeFirebaseController())
+        val useCase = SendIssueReportUseCase(repository, FakeTelemetryRepository())
 
         assertFailsWith<CancellationException> {
             useCase(params).first()

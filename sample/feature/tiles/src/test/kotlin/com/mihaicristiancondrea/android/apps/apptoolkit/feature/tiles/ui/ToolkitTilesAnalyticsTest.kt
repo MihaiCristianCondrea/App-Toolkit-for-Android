@@ -25,7 +25,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.domain.uti
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ToolkitTilesEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ToolkitTilesFilter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import io.mockk.every
@@ -49,7 +49,7 @@ class ToolkitTilesAnalyticsTest {
         private const val CATEGORY_ID: String = "decisions"
     }
 
-    private val firebaseController = FakeFirebaseController()
+    private val telemetryRepository = FakeTelemetryRepository()
     private val categories = MutableStateFlow<ImmutableList<ToolkitTileCategoryData>>(
         persistentListOf(ToolkitTileCategoryData(id = CATEGORY_ID, tiles = persistentListOf())),
     )
@@ -61,11 +61,11 @@ class ToolkitTilesAnalyticsTest {
     private fun viewModel() = ToolkitTilesViewModel(
         toolkitTilesRepository = repository,
         dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
-        firebaseController = firebaseController,
+        telemetryRepository = telemetryRepository,
     )
 
     private fun eventsNamed(name: String) =
-        firebaseController.loggedEvents.filter { it.name == name }
+        telemetryRepository.loggedEvents.filter { it.name == name }
 
     @Test
     fun `a tile request reports how Android answered it`() {
@@ -93,12 +93,12 @@ class ToolkitTilesAnalyticsTest {
     @Test
     fun `tapping add tile reports nothing until the request has an outcome`() {
         val viewModel = viewModel()
-        firebaseController.loggedEvents.clear()
+        telemetryRepository.loggedEvents.clear()
 
         viewModel.onEvent(ToolkitTilesEvent.AddTileClicked(requestKey = ToolkitTileIds.COUNTER))
 
         // LoggedScreenViewModel's own operation telemetry (vm_op_*) is not product analytics.
-        val productEvents = firebaseController.loggedEvents
+        val productEvents = telemetryRepository.loggedEvents
             .filterNot { it.name.startsWith("vm_op_") }
         assertTrue(productEvents.isEmpty(), productEvents.toString())
     }
@@ -116,13 +116,13 @@ class ToolkitTilesAnalyticsTest {
     @Test
     fun `a filter tap is one view_item_list and no select_content`() {
         val viewModel = viewModel()
-        firebaseController.loggedEvents.clear()
+        telemetryRepository.loggedEvents.clear()
 
         viewModel.onEvent(ToolkitTilesEvent.FilterSelected(ToolkitTilesFilter.entries.last()))
 
         assertEquals(
             listOf(AppGa4Contract.EventName.VIEW_ITEM_LIST),
-            firebaseController.loggedEvents.map { it.name },
+            telemetryRepository.loggedEvents.map { it.name },
         )
     }
 
@@ -135,7 +135,7 @@ class ToolkitTilesAnalyticsTest {
             viewModel.onEvent(ToolkitTilesEvent.TileRequestFinished(ToolkitTileIds.SOS, outcome))
         }
 
-        firebaseController.loggedEvents.forEach { event ->
+        telemetryRepository.loggedEvents.forEach { event ->
             assertTrue(AppGa4ContractValidator.isValidEventName(event.name), event.name)
             assertEquals(
                 emptySet(),

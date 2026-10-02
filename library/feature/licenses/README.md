@@ -7,10 +7,10 @@ AboutLibraries metadata that backs them.
 
 ## Owns
 
-- `LicensesScreen`, drawn inside the shell's page frame.
+- `LicensesScreen`, drawn inside the shell's page frame, and the stateless `LicensesScreenContent`.
 - `licensesPage()`, the registration of `LicensesRoute`, opened from About and Help.
-- `LicensesViewModel` and `LicensesUiState`, which turn metadata parsing into loading and success
-  states.
+- `LicensesViewModel` and `LicensesUiState`, which turn metadata parsing into a loading and then
+  ready `Loadable` library count, for tracking and the `loadLibraries` report.
 - The AboutLibraries Gradle plugin and its generated `raw/aboutlibraries` resource.
 
 ## Does not own
@@ -41,16 +41,18 @@ flowchart TD
     Page --> Screen[LicensesScreen]
     Screen --> Producer[produceLibraries on raw metadata]
     Producer --> VM[LicensesViewModel]
-    VM --> State[Loading and success state]
-    Screen --> Container[LibrariesContainer]
+    VM --> State[libraryCount: Loadable]
+    Screen --> Content[LicensesScreenContent]
+    Content --> Container[LibrariesContainer]
 ```
 
 ## Architectural decisions
 
 - Metadata is parsed by the AboutLibraries Compose producer, which is inherently a composition-side
-  API. The screen reports when parsing finishes and `LicensesViewModel` turns that into the same
-  loading and success states the rest of the toolkit renders and tracks, instead of the screen
-  building a `ScreenState` inline.
+  API. The screen reports when parsing finishes and `LicensesViewModel` turns that into a
+  `Loadable` library count, the state `TrackScreenState` reports, instead of the screen building
+  one inline. The list itself is drawn straight from the producer's result, which
+  `LibrariesContainer` already shows as loading while it is `null`.
 - The module carries the AboutLibraries plugin so the generated metadata resource stays next to the
   screen that reads it, and so modules that only link to licenses do not inherit the plugin.
 - The page is `PaneRole.None`, not a detail: it opens from About, itself a detail beside the
@@ -61,7 +63,7 @@ flowchart TD
 ## Public contracts
 
 - `LicensesScreen`, `licensesPage()`, `LicensesViewModel`, `LicensesUiState`, `LicensesEvent`, and
-  `licensesModule`.
+  `licensesModule`. `LicensesScreenContent` is internal.
 
 ## Internal implementations
 

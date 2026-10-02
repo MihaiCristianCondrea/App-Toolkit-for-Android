@@ -27,7 +27,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.state
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.data.mappers.hasOneTimePurchaseOffer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.data.mappers.primaryFormattedPrice
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.domain.models.DonationProductIds
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.domain.models.PurchaseResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.utils.extensions.isValidForBilling
@@ -70,13 +70,13 @@ private const val BILLING_LAUNCH_TIMEOUT_MS = 20_000L
  */
 class SupportViewModel(
     private val billingRepository: BillingRepository,
-    firebaseController: FirebaseController,
+    telemetryRepository: TelemetryRepository,
 ) : LoggedScreenViewModel<SupportScreenUiState, SupportEvent, SupportAction>(
     initialState = UiStateScreen(
         screenState = ScreenState.IsLoading(),
         data = SupportScreenUiState(),
     ),
-    firebaseController = firebaseController,
+    telemetryRepository = telemetryRepository,
     screenName = "Support",
     viewModelName = "SupportViewModel",
 ) {
@@ -139,7 +139,7 @@ class SupportViewModel(
             return
         }
         val hostName = activity::class.java.name
-        firebaseController.logEvent(beginCheckoutEvent(productId = productId, details = details))
+        telemetryRepository.logEvent(beginCheckoutEvent(productId = productId, details = details))
         checkoutProductId = productId
         billingLaunchJob = billingLaunchJob.restart {
             launchReport(
@@ -286,7 +286,7 @@ class SupportViewModel(
     private fun reportDonationResult(outcome: String) {
         val productId: String = checkoutProductId ?: return
         checkoutProductId = null
-        firebaseController.logEvent(donationResultEvent(productId = productId, outcome = outcome))
+        telemetryRepository.logEvent(donationResultEvent(productId = productId, outcome = outcome))
     }
 
     private fun queryProductDetails() {

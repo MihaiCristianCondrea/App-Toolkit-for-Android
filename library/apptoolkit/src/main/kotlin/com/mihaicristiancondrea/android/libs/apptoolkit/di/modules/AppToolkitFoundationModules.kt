@@ -67,7 +67,7 @@ private fun corePlatformModule(hostBuildConfig: AppToolkitHostBuildConfig): Modu
     // Every toolkit ad surface resolves this, so it is bound here rather than left to the host:
     // an unbound reporter would turn a blank ad slot into a crash, which is the opposite of the
     // point.
-    single { AdLoadReporter(firebaseController = get(), buildInfoProvider = get()) }
+    single { AdLoadReporter(telemetryRepository = get(), buildInfoProvider = get()) }
     single { KtorClient.createClient(enableLogging = hostBuildConfig.isDebugBuild) }
     single<BuildInfoProvider> {
         object : BuildInfoProvider {

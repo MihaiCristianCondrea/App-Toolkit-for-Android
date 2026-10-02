@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.dat
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.domain.models.UsageAndDiagnosticsSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.UsageAndDiagnosticsPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
@@ -49,7 +49,7 @@ class DefaultUsageAndDiagnosticsRepository(
     private val dataSource: UsageAndDiagnosticsPreferencesDataSource,
     private val configProvider: BuildInfoProvider,
     private val dispatchers: DispatcherProvider,
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
     private val consentRepository: ConsentRepository,
 ) : UsageAndDiagnosticsRepository {
 
@@ -70,7 +70,7 @@ class DefaultUsageAndDiagnosticsRepository(
             )
         }
             .onStart {
-                firebaseController.logBreadcrumb(
+                telemetryRepository.logBreadcrumb(
                     message = "Usage diagnostics observe",
                     attributes = mapOf("defaultEnabled" to (!configProvider.isDebugBuild).toString()),
                 )
@@ -131,7 +131,7 @@ class DefaultUsageAndDiagnosticsRepository(
         write: suspend () -> Unit,
     ) {
         withContext(dispatchers.io) {
-            firebaseController.logBreadcrumb(message = message, attributes = attributes)
+            telemetryRepository.logBreadcrumb(message = message, attributes = attributes)
             write()
         }
         val stored: UsageAndDiagnosticsSettings = observeSettings().first()

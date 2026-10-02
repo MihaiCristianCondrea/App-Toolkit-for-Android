@@ -2,7 +2,7 @@
 
 package <base>.feature.x.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
@@ -19,10 +19,10 @@ import kotlinx.coroutines.Job
  */
 class XViewModel(
     private val repository: XRepository,
-    firebaseController: FirebaseController,
+    telemetryRepository: TelemetryRepository,
 ) : LoggedScreenViewModel<XUiState, XEvent>(
     initialState = XUiState(),
-    firebaseController = firebaseController,
+    telemetryRepository = telemetryRepository,
     screenName = "X",
     viewModelName = "XViewModel",
 ) {

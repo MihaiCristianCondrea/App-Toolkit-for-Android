@@ -60,7 +60,7 @@ fun issueReporterModule(
     single<DeviceInfoProvider> { DeviceInfoLocalDataSource(get(), get()) }
     single<IssueReporterRepository> { DefaultIssueReporterRepository(get(), get(), get(), get()) }
     single<SendIssueReportUseCase> {
-        SendIssueReportUseCase(repository = get(), firebaseController = get())
+        SendIssueReportUseCase(repository = get(), telemetryRepository = get())
     }
     single<GithubTarget> {
         GithubTarget(
@@ -80,7 +80,7 @@ fun issueReporterModule(
             githubTarget = get(),
             githubToken = get(githubTokenQualifier),
             repository = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
             dispatchers = get(),
         )
     }

@@ -45,14 +45,12 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.vi
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.LayoutShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.PreferenceShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.TextFieldShowcase
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import kotlinx.collections.immutable.persistentListOf
-import org.koin.compose.koinInject
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as ToolkitR
 
 /**
@@ -65,11 +63,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as ToolkitR
 fun ComponentsScreen(
     paddingValues: PaddingValues = contentPadding(),
 ) {
-    val firebaseController: FirebaseController = koinInject()
     val trackedScreen = AppScreenTracking.Screens.COMPONENTS
 
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = trackedScreen.name,
         screenClass = trackedScreen.className,
     )
@@ -142,21 +138,18 @@ fun ComponentsScreen(
         ) {
             item {
                 ButtonShowcase(
-                    firebaseController = firebaseController,
                     onLogEvent = ::ga4Event,
                 )
             }
 
             item {
                 FabShowcase(
-                    firebaseController = firebaseController,
                     onLogEvent = ::ga4Event,
                 )
             }
 
             item {
                 InputShowcase(
-                    firebaseController = firebaseController,
                     onLogEvent = ::ga4Event,
                     dateMillis = selectedDateMillis,
                     onDateSelected = { selectedDateMillis = it },
@@ -168,14 +161,12 @@ fun ComponentsScreen(
 
             item {
                 TextFieldShowcase(
-                    firebaseController = firebaseController,
                     onLogEvent = ::ga4Event,
                 )
             }
 
             item {
                 PreferenceShowcase(
-                    firebaseController = firebaseController,
                     onLogEvent = ::ga4Event,
                     switchEnabled = switchEnabled,
                     onSwitchEnabledChanged = { switchEnabled = it },
@@ -202,7 +193,6 @@ fun ComponentsScreen(
 
             item {
                 FilterShowcase(
-                    firebaseController = firebaseController,
                     onLogEvent = ::ga4Event,
                     filters = filters,
                     selectedFilter = selectedFilter,

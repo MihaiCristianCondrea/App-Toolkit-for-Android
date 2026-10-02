@@ -26,7 +26,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.doma
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
@@ -53,7 +53,7 @@ class AdsSettingsViewModelTest {
     private fun testDispatchers(): DispatcherProvider =
         TestDispatchers(dispatcherExtension.testDispatcher)
 
-    private val firebaseController = FakeFirebaseController()
+    private val telemetryRepository = FakeTelemetryRepository()
 
     private class FakeAdsSettingsRepository(
         override val defaultAdsEnabled: Boolean = true,
@@ -85,7 +85,7 @@ class AdsSettingsViewModelTest {
             repository = repository,
             consentRepository = FakeConsentRepository(),
             dispatchers = testDispatchers(),
-            firebaseController = firebaseController,
+            telemetryRepository = telemetryRepository,
         )
     }
 

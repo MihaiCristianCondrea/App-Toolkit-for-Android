@@ -21,7 +21,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSet
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
 import com.google.common.truth.Truth.assertThat
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.contracts.PrivacyAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.contracts.PrivacyEvent
@@ -46,7 +46,7 @@ class PrivacyViewModelTest {
     }
 
     private fun createViewModel(provider: PrivacySettingsProvider = TestProvider()) =
-        PrivacyViewModel(provider = provider, firebaseController = FakeFirebaseController())
+        PrivacyViewModel(provider = provider, telemetryRepository = FakeTelemetryRepository())
 
     @Test
     fun `initial load exposes the provider's entries`() =

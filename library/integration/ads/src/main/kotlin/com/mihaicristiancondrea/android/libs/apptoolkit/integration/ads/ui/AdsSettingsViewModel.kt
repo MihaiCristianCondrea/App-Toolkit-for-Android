@@ -25,7 +25,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.state
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.asUiText
@@ -56,10 +56,10 @@ class AdsSettingsViewModel(
     private val repository: AdsSettingsRepository,
     private val consentRepository: ConsentRepository,
     private val dispatchers: DispatcherProvider,
-    firebaseController: FirebaseController,
+    telemetryRepository: TelemetryRepository,
 ) : LoggedScreenViewModel<AdsSettingsUiState, AdsSettingsEvent, AdsSettingsAction>(
     initialState = UiStateScreen(data = AdsSettingsUiState()),
-    firebaseController = firebaseController,
+    telemetryRepository = telemetryRepository,
     screenName = "AdsSettings",
     viewModelName = "AdsSettingsViewModel",
 ) {

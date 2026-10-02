@@ -17,13 +17,13 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 
 /**
  * Logs a GA4 event for reusable UI components when both the controller and event data exist.
  */
-fun FirebaseController?.logGa4Event(ga4Event: Ga4EventData?) {
+fun TelemetryRepository?.logGa4Event(ga4Event: Ga4EventData?) {
     if (this == null || ga4Event == null) return
     logEvent(ga4Event.toAnalyticsEvent())
 }

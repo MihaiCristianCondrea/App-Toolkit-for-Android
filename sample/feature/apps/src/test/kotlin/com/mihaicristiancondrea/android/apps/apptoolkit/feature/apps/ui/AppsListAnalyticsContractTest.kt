@@ -86,8 +86,8 @@ class AppsListAnalyticsContractTest : AppsListViewModelBaseTest() {
             viewModel.onEvent(HomeEvent.AppSelected(APPS.first().packageName))
             advanceUntilIdle()
 
-            assertTrue(firebaseController.loggedEvents.isNotEmpty(), "No events were logged")
-            firebaseController.loggedEvents.forEach { it.assertSatisfiesContract() }
+            assertTrue(telemetryRepository.loggedEvents.isNotEmpty(), "No events were logged")
+            telemetryRepository.loggedEvents.forEach { it.assertSatisfiesContract() }
         }
 
     @Test
@@ -98,11 +98,11 @@ class AppsListAnalyticsContractTest : AppsListViewModelBaseTest() {
             viewModel.onEvent(HomeEvent.AppSelected(APPS.first().packageName))
             advanceUntilIdle()
 
-            val viewItem = firebaseController.loggedEvents
+            val viewItem = telemetryRepository.loggedEvents
                 .single { it.name == AppGa4Contract.EventName.VIEW_ITEM }
             assertTrue(AppGa4Contract.Param.ITEM_CATEGORY in viewItem.params)
 
-            val viewItemList = firebaseController.loggedEvents
+            val viewItemList = telemetryRepository.loggedEvents
                 .first { it.name == AppGa4Contract.EventName.VIEW_ITEM_LIST }
             assertTrue(AppGa4Contract.Param.ITEM_LIST_ID in viewItemList.params)
             assertTrue(AppGa4Contract.Param.ITEM_LIST_NAME in viewItemList.params)
@@ -113,14 +113,14 @@ class AppsListAnalyticsContractTest : AppsListViewModelBaseTest() {
         runTest(dispatcherExtension.testDispatcher) {
             setup(fetchApps = APPS)
             advanceUntilIdle()
-            firebaseController.loggedEvents.clear()
+            telemetryRepository.loggedEvents.clear()
 
             viewModel.onEvent(HomeEvent.AppSelected(APPS.first().packageName))
             advanceUntilIdle()
 
-            val names = firebaseController.loggedEvents.map { it.name }
+            val names = telemetryRepository.loggedEvents.map { it.name }
             assertEquals(1, names.count { it == AppGa4Contract.EventName.VIEW_ITEM })
-            val interaction = firebaseController.loggedEvents
+            val interaction = telemetryRepository.loggedEvents
                 .single { it.name == AppGa4Contract.EventName.APP_CARD_INTERACTION }
             assertEquals(
                 AnalyticsValue.Str("apps_list"),
@@ -134,19 +134,19 @@ class AppsListAnalyticsContractTest : AppsListViewModelBaseTest() {
             // Nothing is installed, so Installed matches nothing and falls back to All by itself.
             setup(fetchApps = APPS)
             advanceUntilIdle()
-            firebaseController.loggedEvents.clear()
+            telemetryRepository.loggedEvents.clear()
 
             viewModel.onEvent(HomeEvent.FilterSelected(AppsListFilter.Installed))
             advanceUntilIdle()
 
             assertEquals(AppsListFilter.All, viewModel.uiState.value.data?.selectedFilter)
-            val lists = firebaseController.loggedEvents
+            val lists = telemetryRepository.loggedEvents
                 .filter { it.name == AppGa4Contract.EventName.VIEW_ITEM_LIST }
             assertEquals(
                 listOf(AnalyticsValue.Str("installed")),
                 lists.map { it.params[AppGa4Contract.Param.ITEM_LIST_ID] },
             )
-            assertTrue(firebaseController.loggedEvents.none {
+            assertTrue(telemetryRepository.loggedEvents.none {
                 it.name == AppGa4Contract.EventName.SELECT_CONTENT
             })
         }

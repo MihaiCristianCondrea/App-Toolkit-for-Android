@@ -18,9 +18,10 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui
 
 import com.google.common.truth.Truth.assertThat
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.contracts.LicensesEvent
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -34,30 +35,28 @@ class LicensesViewModelTest {
         val dispatcherExtension = UnconfinedDispatcherExtension()
     }
 
-    private fun createViewModel() =
-        LicensesViewModel(firebaseController = FakeFirebaseController())
+    private val telemetryRepository = FakeTelemetryRepository()
+
+    private fun createViewModel() = LicensesViewModel(telemetryRepository = telemetryRepository)
 
     @Test
     fun `starts out loading while the metadata is parsed`() =
         runTest(dispatcherExtension.testDispatcher) {
             val viewModel = createViewModel()
-            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
-            assertThat(viewModel.uiState.value.screenState)
-                .isInstanceOf(ScreenState.IsLoading::class.java)
+            assertThat(viewModel.state.value.libraryCount).isEqualTo(Loadable.Loading)
         }
 
     @Test
-    fun `reports success with the parsed library count`() =
+    fun `shows the parsed library count and reports it`() =
         runTest(dispatcherExtension.testDispatcher) {
             val viewModel = createViewModel()
-            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
             viewModel.onEvent(LicensesEvent.LibrariesLoaded(libraryCount = 42))
-            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
-            assertThat(viewModel.uiState.value.screenState)
-                .isInstanceOf(ScreenState.Success::class.java)
-            assertThat(viewModel.uiState.value.data?.libraryCount).isEqualTo(42)
+            assertThat(viewModel.state.value.libraryCount).isEqualTo(Loadable.Ready(42))
+            val start = telemetryRepository.loggedEvents.single { it.name == "vm_op_start" }
+            assertThat(start.params["action"]).isEqualTo(AnalyticsValue.Str("loadLibraries"))
+            assertThat(start.params["libraryCount"]).isEqualTo(AnalyticsValue.Str("42"))
         }
 }

@@ -6,7 +6,10 @@ Displays a localized explanation of the permissions used by AppToolkit hosts.
 
 ## Owns
 
-- `PermissionsScreen`, `PermissionsViewModel` and their event and action contracts.
+- `PermissionsScreen`, `PermissionsViewModel`, `PermissionsUiState` (whose `config` is a
+  `Loadable`) and `PermissionsEvent.Load`.
+- `PermissionsScreenContent`, the stateless catalog with its loading, empty and failure states, and
+  `PermissionsContent`, the catalog's rows.
 - `permissionsPage()`, the registration of `PermissionsRoute`.
 - `PermissionsRepository` and its resource-backed implementation, which builds the normal/runtime
   permission catalog.
@@ -24,7 +27,7 @@ Displays a localized explanation of the permissions used by AppToolkit hosts.
 ## Depends on
 
 - `:library:core:common`, `:library:core:network`, and `:library:core:ui` for platform helpers,
-  dispatchers/errors, and presentation foundations.
+  telemetry, and presentation foundations.
 - [`:library:navigation`](../../navigation/README.md) for the key and the graph builder.
 - No other feature module. The catalog is described with the settings models of
   [`:library:core:ui`](../../core/ui/README.md).
@@ -41,15 +44,16 @@ flowchart TD
     Privacy[Privacy page] -->|navigate| Page[permissionsPage: PermissionsRoute]
     Page --> Screen[PermissionsScreen]
     Screen -->|load| VM[PermissionsViewModel]
+    Screen --> Content[PermissionsScreenContent]
     VM --> Repo[PermissionsRepository]
     Repo --> Resources[Localized permission names and summaries]
     Resources --> Normal[Normal permission category]
     Resources --> Runtime[Runtime permission category]
     Normal --> Config[SettingsConfig]
     Runtime --> Config
-    Config -->|Flow| VM
-    VM --> State[Loading / no-data / success / error]
-    State --> Screen
+    Config --> VM
+    VM --> State[Loadable: Loading / Empty / Ready / Failed]
+    State --> Content
 ```
 
 ## Architectural decisions
@@ -62,12 +66,16 @@ flowchart TD
   or infer whether a runtime permission is currently granted.
 - Resource-backed catalog assembly stays in the repository so the ViewModel handles only
   loading/error state and the composable renders the shared settings models.
-- The repository emits through a `Flow` on the injected IO dispatcher, matching the feature's
-  screen-state pipeline even though the current catalog is produced in one shot.
+- The page is on `core.ui.screen`. `getPermissionsConfig()` returns the catalog directly: reading
+  string resources is main-safe, so neither the repository nor the ViewModel takes a dispatcher. A
+  catalog with no category is `Loadable.Empty`; a repository that throws is `Loadable.Failed`,
+  reported to telemetry, with a retry.
 
 ## Public contracts
 
-- `PermissionsRepository`, `PermissionsScreen`, `permissionsPage()` and the presentation contracts.
+- `PermissionsRepository`, `PermissionsScreen`, `PermissionsContent`, `permissionsPage()`,
+  `PermissionsViewModel`, `PermissionsUiState` and `PermissionsEvent`. `PermissionsScreenContent` is
+  internal.
 
 ## Internal implementations
 

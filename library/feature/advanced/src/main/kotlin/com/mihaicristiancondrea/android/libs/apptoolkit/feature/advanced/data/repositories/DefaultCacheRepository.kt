@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.data.r
 import android.content.Context
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
 import kotlinx.coroutines.CancellationException
@@ -39,7 +39,7 @@ import java.io.File
  */
 class DefaultCacheRepository(
     private val context: Context,
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
     /**
      * Seam for the delete itself. Without it the failure branch is unreachable from a test: an
      * empty temp directory always deletes cleanly, so the error path shipped uncovered.
@@ -49,7 +49,7 @@ class DefaultCacheRepository(
 ) : CacheRepository {
 
     override fun clearCache(): Flow<DataState<Unit, Errors.Database>> = flow {
-        firebaseController.logBreadcrumb(
+        telemetryRepository.logBreadcrumb(
             message = "Cache clear requested",
             attributes = mapOf("source" to "DefaultCacheRepository"),
         )
@@ -71,7 +71,7 @@ class DefaultCacheRepository(
                 } else {
                     // Named here rather than by the ViewModel: which directory refused to go is
                     // something only this class can see, and the caller cannot re-derive it.
-                    firebaseController.logBreadcrumb(
+                    telemetryRepository.logBreadcrumb(
                         message = "Cache clear incomplete",
                         attributes = mapOf("failedDirectories" to failed.size.toString()),
                     )
@@ -80,7 +80,7 @@ class DefaultCacheRepository(
             },
             onFailure = { throwable ->
                 if (throwable is CancellationException) throw throwable
-                firebaseController.recordNonFatal(throwable = throwable)
+                telemetryRepository.recordNonFatal(throwable = throwable)
                 DataState.Error(
                     error = if (throwable is SecurityException) {
                         Errors.Database.DATABASE_CANT_OPEN

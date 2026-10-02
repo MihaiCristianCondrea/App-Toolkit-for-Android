@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStoreInterface
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onStart
 
@@ -30,19 +30,19 @@ import kotlinx.coroutines.flow.onStart
  */
 class DefaultFavoritesRepository(
     private val dataStore: DataStoreInterface,
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
 ) : FavoritesRepository {
 
     override fun observeFavorites(): Flow<Set<String>> = dataStore.favoriteApps
         .onStart {
-            firebaseController.logBreadcrumb(
+            telemetryRepository.logBreadcrumb(
                 message = "Favorites observe",
                 attributes = mapOf("source" to "DefaultFavoritesRepository"),
             )
         }
 
     override suspend fun toggleFavorite(packageName: String) {
-        firebaseController.logBreadcrumb(
+        telemetryRepository.logBreadcrumb(
             message = "Favorite toggled",
             attributes = mapOf("packageName" to packageName),
         )

@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
@@ -36,7 +36,7 @@ import kotlinx.coroutines.flow.onStart
  */
 class DefaultAdsSettingsRepository(
     private val dataStore: CommonDataStore,
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
 ) : AdsSettingsRepository {
 
     // Deliberately delegated rather than recomputed. `AdsCoreManager` gates SDK initialization on
@@ -50,7 +50,7 @@ class DefaultAdsSettingsRepository(
     override fun observeAdsEnabled(): Flow<Boolean> =
         dataStore.ads(default = defaultAdsEnabled)
             .onStart {
-                firebaseController.logBreadcrumb(
+                telemetryRepository.logBreadcrumb(
                     message = "Ads settings observe",
                     attributes = mapOf("defaultAdsEnabled" to defaultAdsEnabled.toString()),
                 )
@@ -77,7 +77,7 @@ class DefaultAdsSettingsRepository(
         enabled: Boolean,
         save: suspend () -> Unit,
     ): DataState<Unit, Errors.Database> {
-        firebaseController.logBreadcrumb(
+        telemetryRepository.logBreadcrumb(
             message = breadcrumb,
             attributes = mapOf("enabled" to enabled.toString()),
         )
@@ -85,7 +85,7 @@ class DefaultAdsSettingsRepository(
             onSuccess = { DataState.Success(Unit) },
             onFailure = { throwable ->
                 if (throwable is CancellationException) throw throwable
-                firebaseController.recordNonFatal(throwable = throwable)
+                telemetryRepository.recordNonFatal(throwable = throwable)
                 DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED)
             },
         )

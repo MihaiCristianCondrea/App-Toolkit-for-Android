@@ -39,11 +39,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonFeedback
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /**
  * A Composable function that displays a Floating Action Button with an animated appearance.
@@ -63,7 +63,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.sty
  * @param contentDescription Text used by accessibility services to describe what the icon represents.
  * @param onClick A lambda function to be invoked when the button is clicked.
  * @param feedback The feedback configuration for sound and haptics.
- * @param firebaseController Optional Firebase controller used to log GA4 events.
  * @param ga4Event Optional GA4 event data to log on click.
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
@@ -75,11 +74,10 @@ fun AnimatedFloatingActionButton(
     contentDescription: String? = null,
     onClick: () -> Unit,
     feedback: ButtonFeedback = ButtonFeedback(),
-    firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
 ) = AnimatedFloatingActionButton(
     modifier, isVisible, ToolkitIcon.Vector(icon), contentDescription, onClick,
-    feedback, firebaseController, ga4Event,
+    feedback, ga4Event,
 )
 
 /** Icon-source overload; playback state is local to the composed button. */
@@ -92,9 +90,9 @@ fun AnimatedFloatingActionButton(
     contentDescription: String? = null,
     onClick: () -> Unit,
     feedback: ButtonFeedback = ButtonFeedback(),
-    firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
 ) {
+    val telemetryRepository = LocalTelemetry.current
     val haptics = LocalHapticFeedback.current
     val view = LocalView.current
     val checkedState = rememberSaveable { mutableStateOf(false) }
@@ -111,7 +109,7 @@ fun AnimatedFloatingActionButton(
             onCheckedChange = { newChecked ->
                 clickCount++
                 feedback.performClick(view = view, hapticFeedback = haptics)
-                firebaseController.logGa4Event(ga4Event)
+                telemetryRepository.logGa4Event(ga4Event)
                 checkedState.value = newChecked
                 onClick()
             },

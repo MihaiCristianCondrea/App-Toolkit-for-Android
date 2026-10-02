@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.contracts.DisplaySettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DisplayPreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import io.mockk.coVerify
 import io.mockk.every
@@ -44,7 +44,7 @@ class DisplaySettingsViewModelTest {
         val display = displayPreferences()
         val theme = themePreferences()
 
-        val viewModel = DisplaySettingsViewModel(display, theme, FakeFirebaseController())
+        val viewModel = DisplaySettingsViewModel(display, theme, FakeTelemetryRepository())
 
         assertEquals("dark", viewModel.uiState.value.data?.themeMode)
         assertEquals(false, viewModel.uiState.value.data?.bouncyButtons)
@@ -55,7 +55,7 @@ class DisplaySettingsViewModelTest {
     fun `events persist through narrow preference sources`() = runTest {
         val display = displayPreferences()
         val theme = themePreferences()
-        val viewModel = DisplaySettingsViewModel(display, theme, FakeFirebaseController())
+        val viewModel = DisplaySettingsViewModel(display, theme, FakeTelemetryRepository())
 
         viewModel.onEvent(DisplaySettingsEvent.ThemeModeChanged("light"))
         viewModel.onEvent(DisplaySettingsEvent.BouncyButtonsChanged(true))

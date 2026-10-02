@@ -17,26 +17,23 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui
 
-import com.google.common.truth.Truth.assertThat
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.data.repositories.PermissionsRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.contracts.PermissionsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsCategory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
-import io.mockk.every
-import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.advanceUntilIdle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsPreference
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.data.repositories.PermissionsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.contracts.PermissionsEvent
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class PermissionsViewModelTest {
 
     companion object {
@@ -45,59 +42,82 @@ class PermissionsViewModelTest {
         val dispatcherExtension = UnconfinedDispatcherExtension()
     }
 
-    private lateinit var viewModel: PermissionsViewModel
-    private lateinit var repository: PermissionsRepository
-    private val firebaseController = FakeFirebaseController()
+    private val telemetryRepository = FakeTelemetryRepository()
 
-    private fun setup(config: SettingsConfig? = null, error: Throwable? = null) {
-        repository = mockk()
-        if (error != null) {
-            every { repository.getPermissionsConfig() } returns flow { throw error }
-        } else {
-            every { repository.getPermissionsConfig() } returns flowOf(config!!)
+    private val catalog = SettingsConfig(
+        title = "Permissions",
+        categories = listOf(
+            SettingsCategory(title = "Normal", preferences = listOf(SettingsPreference(title = "Internet"))),
+        ),
+    )
+
+    private fun createViewModel(repository: PermissionsRepository): PermissionsViewModel =
+        PermissionsViewModel(permissionsRepository = repository, telemetryRepository = telemetryRepository)
+
+    private fun advance() = dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+    @Test
+    fun `loading shows the catalog`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel(FakePermissionsRepository(catalog))
+
+        viewModel.onEvent(PermissionsEvent.Load)
+        advance()
+
+        assertEquals(Loadable.Ready(catalog), viewModel.state.value.config)
+    }
+
+    @Test
+    fun `a catalog with no category shows the empty state with its message`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = createViewModel(
+                FakePermissionsRepository(SettingsConfig(title = "", categories = emptyList())),
+            )
+
+            viewModel.onEvent(PermissionsEvent.Load)
+            advance()
+
+            val config = assertIs<Loadable.Empty>(viewModel.state.value.config)
+            assertEquals(
+                R.string.error_no_settings_found,
+                (config.message as UiTextHelper.StringResource).resourceId,
+            )
         }
-        val dispatchers =
-            TestDispatchers(dispatcherExtension.testDispatcher)
-        viewModel = PermissionsViewModel(
-            permissionsRepository = repository,
-            dispatchers = dispatchers,
-            firebaseController = firebaseController
-        )
-    }
 
     @Test
-    fun `load permissions success`() = runTest(dispatcherExtension.testDispatcher) {
-        val config = SettingsConfig(
-            title = "P",
-            categories = listOf(SettingsCategory(title = "c", preferences = emptyList()))
-        )
-        setup(config = config)
+    fun `a repository that throws shows a retryable failure and reports it`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = createViewModel(FakePermissionsRepository(catalog, failure = RuntimeException("fail")))
 
-        viewModel.onEvent(PermissionsEvent.Load)
-        advanceUntilIdle()
+            viewModel.onEvent(PermissionsEvent.Load)
+            advance()
 
-        assertThat(viewModel.uiState.value.data?.title).isEqualTo("P")
-        assertThat(viewModel.uiState.value.screenState).isInstanceOf(ScreenState.Success::class.java)
-    }
+            val config = assertIs<Loadable.Failed>(viewModel.state.value.config)
+            assertTrue(config.retryable)
+            assertTrue(telemetryRepository.loggedEvents.any { it.name == "vm_op_error" })
+        }
 
     @Test
-    fun `load permissions error`() = runTest(dispatcherExtension.testDispatcher) {
-        setup(error = RuntimeException("fail"))
-
+    fun `retrying after a failure shows the catalog`() = runTest(dispatcherExtension.testDispatcher) {
+        val repository = FakePermissionsRepository(catalog, failure = RuntimeException("fail"))
+        val viewModel = createViewModel(repository)
         viewModel.onEvent(PermissionsEvent.Load)
-        advanceUntilIdle()
+        advance()
+        assertIs<Loadable.Failed>(viewModel.state.value.config)
 
-        assertThat(viewModel.uiState.value.screenState).isInstanceOf(ScreenState.Error::class.java)
+        repository.failure = null
+        viewModel.onEvent(PermissionsEvent.Load)
+        advance()
+
+        assertEquals(Loadable.Ready(catalog), viewModel.state.value.config)
     }
 
-    @Test
-    fun `load permissions with empty categories`() = runTest(dispatcherExtension.testDispatcher) {
-        val config = SettingsConfig(title = "", categories = emptyList())
-        setup(config = config)
-
-        viewModel.onEvent(PermissionsEvent.Load)
-        advanceUntilIdle()
-
-        assertThat(viewModel.uiState.value.screenState).isInstanceOf(ScreenState.NoData::class.java)
+    private class FakePermissionsRepository(
+        private val config: SettingsConfig,
+        var failure: Throwable? = null,
+    ) : PermissionsRepository {
+        override fun getPermissionsConfig(): SettingsConfig {
+            failure?.let { throw it }
+            return config
+        }
     }
 }

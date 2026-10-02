@@ -27,6 +27,7 @@ import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppTheme
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.ProvideTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterBottomSheet
 
 /**
@@ -77,11 +78,14 @@ object IssueReporterLauncher {
         }
 
         host.setContent {
-            AppTheme {
-                // The sheet lives in its own window, so this view contributes no layout and is left
-                // to wrap to nothing. A view that filled the activity would sit over the screen
-                // behind the sheet with nothing to draw and touches to swallow.
-                IssueReporterBottomSheet(onDismissRequest = { content.removeView(host) })
+            // A composition of its own, outside ShellHost, so it provides the telemetry itself.
+            ProvideTelemetry {
+                AppTheme {
+                    // The sheet lives in its own window, so this view contributes no layout and is
+                    // left to wrap to nothing. A view that filled the activity would sit over the
+                    // screen behind the sheet with nothing to draw and touches to swallow.
+                    IssueReporterBottomSheet(onDismissRequest = { content.removeView(host) })
+                }
             }
         }
 

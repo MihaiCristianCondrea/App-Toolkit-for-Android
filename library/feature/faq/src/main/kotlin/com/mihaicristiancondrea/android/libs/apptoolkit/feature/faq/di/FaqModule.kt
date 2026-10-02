@@ -45,14 +45,14 @@ fun faqModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
                 isDebugBuild = hostBuildConfig.isDebugBuild,
             ),
             productId = hostBuildConfig.faqProductId,
-            firebaseController = get(),
+            telemetryRepository = get(),
         )
     }
     viewModel {
         FaqViewModel(
             faqRepository = get(),
             forceInAppReviewUseCase = get<ForceInAppReviewUseCase>(),
-            firebaseController = get(),
+            telemetryRepository = get(),
         )
     }
 }

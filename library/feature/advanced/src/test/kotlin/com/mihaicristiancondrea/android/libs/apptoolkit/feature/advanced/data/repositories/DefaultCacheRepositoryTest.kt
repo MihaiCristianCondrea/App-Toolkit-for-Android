@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.data.r
 import android.content.Context
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
 import io.mockk.every
 import io.mockk.mockk
@@ -53,7 +53,7 @@ class TestDefaultCacheRepository {
 
         val repository = DefaultCacheRepository(
             context = context,
-            firebaseController = mockk<FirebaseController>(relaxed = true),
+            telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
         )
         val result = repository.clearCache().single()
 
@@ -76,7 +76,7 @@ class TestDefaultCacheRepository {
 
         val repository = DefaultCacheRepository(
             context = context,
-            firebaseController = mockk<FirebaseController>(relaxed = true),
+            telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
             deleteRecursively = { file -> if (file == failing) false else file.deleteRecursively() },
         )
         val result = repository.clearCache().single()
@@ -94,7 +94,7 @@ class TestDefaultCacheRepository {
 
         val repository = DefaultCacheRepository(
             context = context,
-            firebaseController = mockk<FirebaseController>(relaxed = true),
+            telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
             deleteRecursively = { throw SecurityException("denied") },
         )
         val result = repository.clearCache().single()
@@ -115,7 +115,7 @@ class TestDefaultCacheRepository {
 
         val repository = DefaultCacheRepository(
             context = context,
-            firebaseController = mockk<FirebaseController>(relaxed = true),
+            telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
         )
         val result = repository.clearCache().single()
 
@@ -135,7 +135,7 @@ class TestDefaultCacheRepository {
 
         val repository = DefaultCacheRepository(
             context = context,
-            firebaseController = mockk<FirebaseController>(relaxed = true),
+            telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
             deleteRecursively = { throw SecurityException("denied") },
         )
         val result = repository.clearCache().single()
@@ -155,7 +155,7 @@ class TestDefaultCacheRepository {
 
         val repository = DefaultCacheRepository(
             context = context,
-            firebaseController = mockk<FirebaseController>(relaxed = true),
+            telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
         )
 
         repository.clearCache().test {

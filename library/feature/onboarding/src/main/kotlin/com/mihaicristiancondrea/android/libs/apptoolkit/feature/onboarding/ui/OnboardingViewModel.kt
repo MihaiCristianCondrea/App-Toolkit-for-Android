@@ -23,7 +23,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.co
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logTutorialBegin
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logTutorialComplete
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
@@ -48,10 +48,10 @@ import kotlinx.coroutines.withContext
 class OnboardingViewModel(
     private val onboardingRepository: OnboardingRepository,
     private val dispatchers: DispatcherProvider,
-    firebaseController: FirebaseController,
+    telemetryRepository: TelemetryRepository,
 ) : LoggedScreenViewModel<OnboardingUiState, OnboardingEvent, OnboardingAction>(
     initialState = UiStateScreen(data = OnboardingUiState()),
-    firebaseController = firebaseController,
+    telemetryRepository = telemetryRepository,
     screenName = "Onboarding",
     viewModelName = "OnboardingViewModel",
 ) {
@@ -60,7 +60,7 @@ class OnboardingViewModel(
     private var completeJob: Job? = null
 
     init {
-        firebaseController.logTutorialBegin()
+        telemetryRepository.logTutorialBegin()
         handleEvent(OnboardingEvent.ObserveCompletion)
     }
 
@@ -80,7 +80,7 @@ class OnboardingViewModel(
             onboardingRepository.observeOnboardingCompletion()
                 .flowOn(dispatchers.io)
                 .onStart {
-                    firebaseController.logBreadcrumb(
+                    telemetryRepository.logBreadcrumb(
                         message = "Observe onboarding completion started",
                         attributes = mapOf("source" to "OnboardingRepository")
                     )
@@ -116,7 +116,7 @@ class OnboardingViewModel(
                         onboardingRepository.setOnboardingCompleted()
                     }
 
-                    firebaseController.logTutorialComplete()
+                    telemetryRepository.logTutorialComplete()
 
                     updateStateThreadSafe {
                         screenState.copyData { copy(isOnboardingCompleted = true) }

@@ -22,7 +22,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.FaqRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.models.FaqQuestionDto
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.networkCall
 
@@ -51,11 +51,11 @@ class DefaultFaqRepository(
     private val remoteDataSource: FaqRemoteDataSource,
     private val catalogUrl: String,
     private val productId: String,
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
 ) : FaqRepository {
 
     override suspend fun getFaq(): List<FaqItem> {
-        firebaseController.logBreadcrumb(
+        telemetryRepository.logBreadcrumb(
             message = "FAQ repositories fetch",
             attributes = mapOf(
                 "catalogUrl" to catalogUrl,

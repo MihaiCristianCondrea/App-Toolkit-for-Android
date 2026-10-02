@@ -21,7 +21,7 @@ import android.app.Activity
 import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
@@ -47,7 +47,7 @@ class FaqViewModelTest {
         val dispatcherExtension = UnconfinedDispatcherExtension()
     }
 
-    private val firebaseController = FakeFirebaseController()
+    private val telemetryRepository = FakeTelemetryRepository()
     private val reviewUseCase: ForceInAppReviewUseCase = mockk()
     private val reviewHost = object : ReviewHost {
         override val activity: Activity = mockk()
@@ -61,7 +61,7 @@ class FaqViewModelTest {
         FaqViewModel(
             faqRepository = repository,
             forceInAppReviewUseCase = reviewUseCase,
-            firebaseController = firebaseController,
+            telemetryRepository = telemetryRepository,
         )
 
     private fun advance() = dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
@@ -95,7 +95,7 @@ class FaqViewModelTest {
             val questions = viewModel.state.value.questions as Loadable.Failed
             assertThat(questions.resourceId).isEqualTo(R.string.error_failed_to_load_faq)
             assertThat(questions.retryable).isTrue()
-            assertThat(firebaseController.loggedEvents.map { it.name }).contains("vm_op_error")
+            assertThat(telemetryRepository.loggedEvents.map { it.name }).contains("vm_op_error")
         }
 
     @Test
@@ -160,7 +160,7 @@ class FaqViewModelTest {
             advance()
 
             assertThat(viewModel.state.value.openStoreListing).isTrue()
-            assertThat(firebaseController.loggedEvents.map { it.name }).contains("vm_op_error")
+            assertThat(telemetryRepository.loggedEvents.map { it.name }).contains("vm_op_error")
         }
 
     private class FakeFaqRepository(

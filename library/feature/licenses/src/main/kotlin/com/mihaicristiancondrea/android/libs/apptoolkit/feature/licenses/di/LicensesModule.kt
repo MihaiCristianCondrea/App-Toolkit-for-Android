@@ -25,7 +25,7 @@ import org.koin.dsl.module
 val licensesModule: Module = module {
     viewModel {
         LicensesViewModel(
-            firebaseController = get(),
+            telemetryRepository = get(),
         )
     }
 }

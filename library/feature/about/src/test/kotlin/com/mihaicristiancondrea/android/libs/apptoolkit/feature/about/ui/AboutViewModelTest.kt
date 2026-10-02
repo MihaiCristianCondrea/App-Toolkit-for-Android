@@ -23,7 +23,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.reposit
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
@@ -58,7 +58,7 @@ class AboutViewModelTest {
 
     private val expectedItemKeys: List<String> = defaultAboutInfo.toAboutItems().map { it.key }
 
-    private val firebaseController = FakeFirebaseController()
+    private val telemetryRepository = FakeTelemetryRepository()
 
     private val seasonalThemes: SeasonalThemeRepository = mockk(relaxed = true)
 
@@ -71,7 +71,7 @@ class AboutViewModelTest {
     ): AboutViewModel = AboutViewModel(
         aboutRepository = repository,
         clipboardRepository = clipboard,
-        firebaseController = firebaseController,
+        telemetryRepository = telemetryRepository,
         seasonalThemes = seasonalThemes,
     )
 
@@ -166,7 +166,7 @@ class AboutViewModelTest {
             val message = viewModel.onlyMessage()
             assertThat(message.resourceId).isEqualTo(R.string.snack_copy_failed)
             assertThat(message.isError).isTrue()
-            assertThat(firebaseController.loggedEvents.map { it.name }).contains("vm_op_error")
+            assertThat(telemetryRepository.loggedEvents.map { it.name }).contains("vm_op_error")
         }
 
     @Test
@@ -242,7 +242,7 @@ class AboutViewModelTest {
             assertThat((items.message as UiTextHelper.StringResource).resourceId)
                 .isEqualTo(R.string.snack_device_info_failed)
             assertThat(items.retryable).isTrue()
-            assertThat(firebaseController.loggedEvents.map { it.name }).contains("vm_op_error")
+            assertThat(telemetryRepository.loggedEvents.map { it.name }).contains("vm_op_error")
         }
 
     @Test
@@ -310,7 +310,7 @@ class AboutViewModelTest {
 
             coVerify { seasonalThemes.unlockSeasonalThemes() }
             assertThat(viewModel.onlyMessage().resourceId).isEqualTo(R.string.snack_seasonal_themes_unlocked)
-            val achievement = firebaseController.loggedEvents.single { it.name == "unlock_achievement" }
+            val achievement = telemetryRepository.loggedEvents.single { it.name == "unlock_achievement" }
             assertThat(achievement.params["achievement_id"]).isEqualTo(AnalyticsValue.Str("seasonal_themes"))
         }
 
@@ -324,7 +324,7 @@ class AboutViewModelTest {
         advance()
 
         assertThat(viewModel.messages.value).isEmpty()
-        assertThat(firebaseController.loggedEvents.map { it.name }).doesNotContain("unlock_achievement")
+        assertThat(telemetryRepository.loggedEvents.map { it.name }).doesNotContain("unlock_achievement")
     }
 
     /** Records each accepted copy; [accepts] and [confirmsCopies] set how the system behaves. */

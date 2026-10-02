@@ -7,20 +7,22 @@ service wiring.
 
 ## Owns
 
-- `data.repositories.DefaultFirebaseController` for analytics events, breadcrumbs, and crash reporting.
+- `data.repositories.FirebaseTelemetryRepository` for analytics events, breadcrumbs, and crash
+  reporting. The old names `DefaultFirebaseController` and `FirebaseControllerImpl` stay beside it
+  as deprecated aliases.
 - `firebaseModule` Koin bindings.
 - `data.notifications.FirebaseNotificationsService` and its notification/wake-lock manifest
   permissions.
 
 ## Does not own
 
-- The SDK-neutral `FirebaseController` contract, owned by `:library:core:common`.
+- The SDK-neutral `TelemetryRepository` contract, owned by `:library:core:common`.
 - User consent decisions and persisted diagnostics preferences, owned by consent/settings/DataStore
   modules.
 
 ## Depends on
 
-- [`:library:core:common`](../../core/common/README.md) for the controller contract and shared
+- [`:library:core:common`](../../core/common/README.md) for the `TelemetryRepository` contract and shared
   analytics values.
 
 Firebase Analytics, Crashlytics, Performance, and Messaging materially define this module.
@@ -33,9 +35,9 @@ Firebase Analytics, Crashlytics, Performance, and Messaging materially define th
 
 ```mermaid
 flowchart TD
-    Features[Features and LoggedScreenViewModel] --> Contract[FirebaseController]
+    Features[Features and LoggedScreenViewModel] --> Contract[TelemetryRepository]
     Consent[Diagnostics and consent state] --> Contract
-    Contract -->|Koin binding| Impl[DefaultFirebaseController]
+    Contract -->|Koin binding| Impl[FirebaseTelemetryRepository]
     Impl --> Analytics[Firebase Analytics]
     Impl --> Crash[Crashlytics breadcrumbs and non-fatals]
     Impl --> Performance[Firebase Performance enablement]
@@ -46,12 +48,12 @@ flowchart TD
 
 ## Architectural decisions
 
-- Features depend on the SDK-neutral `FirebaseController`; only this module imports concrete
+- Features depend on the SDK-neutral `TelemetryRepository`; only this module imports concrete
   Firebase products.
-- Consent updates are applied through the same controller as analytics/crash/performance calls so
+- Consent updates are applied through the same repository as analytics/crash/performance calls so
   enablement policy does not leak into every feature.
 - Messaging remains a framework-created service and is wired through the manifest rather than the
-  Koin-created controller lifecycle.
+  Koin-created repository lifecycle.
 
 ## Public contracts
 

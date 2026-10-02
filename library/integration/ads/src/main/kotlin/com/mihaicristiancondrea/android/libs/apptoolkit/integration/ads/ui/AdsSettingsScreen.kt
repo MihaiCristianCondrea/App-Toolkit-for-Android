@@ -37,7 +37,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.contracts.AdsSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.states.AdsSettingsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
@@ -59,6 +58,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.D
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.R
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 private const val ADS_SETTINGS_SCREEN_NAME = "AdsSettings"
 private const val ADS_SETTINGS_SCREEN_CLASS = "AdsSettingsScreen"
@@ -79,18 +79,16 @@ fun AdsSettingsScreen() {
     val viewModel: AdsSettingsViewModel = koinViewModel()
     val screenState: UiStateScreen<AdsSettingsUiState> by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val firebaseController: FirebaseController = koinInject()
+    val telemetryRepository = LocalTelemetry.current
     val buildInfoProvider: BuildInfoProvider = koinInject()
     val context = LocalContext.current
 
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = ADS_SETTINGS_SCREEN_NAME,
         screenClass = ADS_SETTINGS_SCREEN_CLASS,
     )
 
     TrackScreenState(
-        firebaseController = firebaseController,
         screenName = ADS_SETTINGS_SCREEN_NAME,
         screenState = screenState.screenState,
     )
@@ -143,7 +141,6 @@ fun AdsSettingsScreen() {
                                     },
                                 )
                             },
-                            firebaseController = firebaseController,
                             ga4EventProvider = { isChecked ->
                                 Ga4EventData(
                                     name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
@@ -178,7 +175,6 @@ fun AdsSettingsScreen() {
                                         viewModel.onEvent(AdsSettingsEvent.RequestConsent(host))
                                     }
                                 },
-                                firebaseController = firebaseController,
                                 ga4Event = Ga4EventData(
                                     name = SettingsAnalytics.Events.PREFERENCE_VIEW,
                                     params = mapOf(
@@ -202,7 +198,7 @@ fun AdsSettingsScreen() {
                             message = stringResource(id = R.string.summary_ads),
                             learnMoreText = stringResource(id = R.string.learn_more),
                             learnMoreAction = {
-                                firebaseController.logEvent(
+                                telemetryRepository.logEvent(
                                     AnalyticsEvent(
                                         name = SettingsAnalytics.Events.PREFERENCE_VIEW,
                                         params = mapOf(

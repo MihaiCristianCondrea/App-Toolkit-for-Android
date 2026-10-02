@@ -39,12 +39,12 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches.CustomSwitch
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /**
  * Creates a clickable preference item with a switch for app preference screens.
@@ -65,7 +65,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches.C
  * Accessibility:
  * - [title] should be a concise action-oriented label.
  * - [summary] should clarify impact when the toggle changes behavior.
- * @param firebaseController Optional Firebase controller used to log GA4 events.
  * @param ga4Event Optional GA4 event data to log on click.
  */
 @Composable
@@ -76,9 +75,9 @@ fun SwitchPreferenceItem(
     summary: String? = null,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
-    firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
 ) {
+    val telemetryRepository = LocalTelemetry.current
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
     Card(
@@ -92,7 +91,7 @@ fun SwitchPreferenceItem(
                 .clickable(onClick = {
                     view.playSoundEffect(SoundEffectConstants.CLICK)
                     hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                    firebaseController.logGa4Event(ga4Event)
+                    telemetryRepository.logGa4Event(ga4Event)
                     onCheckedChange(!checked)
                 }),
             verticalAlignment = Alignment.CenterVertically,
@@ -121,7 +120,7 @@ fun SwitchPreferenceItem(
             CustomSwitch(
                 checked = checked,
                 onCheckedChange = { isChecked ->
-                    firebaseController.logGa4Event(ga4Event)
+                    telemetryRepository.logGa4Event(ga4Event)
                     onCheckedChange(isChecked)
                 },
                 modifier = Modifier.padding(all = SizeConstants.LargeSize)

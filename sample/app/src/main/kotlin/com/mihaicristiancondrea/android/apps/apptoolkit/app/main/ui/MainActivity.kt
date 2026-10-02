@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.ui.Modifier
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.states.MainUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.ProvideTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.StartupRoute
 import android.os.Bundle
@@ -51,7 +52,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.update.domain.models.InAppUpdateHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.views.dialogs.ChangelogDialog
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.ChangelogDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.ShellHost
 import kotlinx.coroutines.flow.first
 import org.koin.android.ext.android.inject
@@ -87,51 +88,54 @@ class MainActivity : AppCompatActivity() {
 
     private fun setShellContent() {
         setContent {
-            AppTheme {
-                var showChangelog by rememberSaveable { mutableStateOf(false) }
-                val isShowcaseUnlocked by componentsShowcaseRepository.isUnlocked
-                    .collectAsStateWithLifecycle(initialValue = false)
-                val showComponents = BuildConfig.DEBUG || isShowcaseUnlocked
-                val graph = remember(showComponents) {
-                    appGraph(
-                        showComponents = showComponents,
-                        onShowChangelog = { showChangelog = true },
-                    )
-                }
+            // Around everything, not only ShellHost: the changelog dialog reports too.
+            ProvideTelemetry {
+                AppTheme {
+                    var showChangelog by rememberSaveable { mutableStateOf(false) }
+                    val isShowcaseUnlocked by componentsShowcaseRepository.isUnlocked
+                        .collectAsStateWithLifecycle(initialValue = false)
+                    val showComponents = BuildConfig.DEBUG || isShowcaseUnlocked
+                    val graph = remember(showComponents) {
+                        appGraph(
+                            showComponents = showComponents,
+                            onShowChangelog = { showChangelog = true },
+                        )
+                    }
 
-                // Consent failures reported by MainViewModel, shown by the shell above its bottom
-                // bar, its buttons and the player, like every other snackbar.
-                val shellSnackbars = remember { SnackbarHostState() }
-                val mainState by viewModel.uiState.collectAsStateWithLifecycle()
-                DefaultSnackbarHandler<MainUiState, MainEvent>(
-                    screenState = mainState,
-                    snackbarHostState = shellSnackbars,
-                    drawHost = false,
-                )
-
-                Box(modifier = Modifier.fillMaxSize()) {
-                    ShellHost(
-                        graph = graph,
-                        // Read before the first frame: the first-launch start screens until
-                        // onboarding is done, then the start page chosen in the display settings.
-                        // DataStore reads are main-safe, so no dispatcher switch is needed.
-                        resolveStart = {
-                            if (dataStore.startup.first()) {
-                                StartupRoute
-                            } else {
-                                dataStore.startupDestinationFlow(
-                                    defaultRoute = ToolkitTilesRoute.ROUTE_ID,
-                                    mapToKey = ::startKeyFor,
-                                ).first()
-                            }
-                        },
-                        onReady = { keepSplashVisible = false },
+                    // Consent failures reported by MainViewModel, shown by the shell above its bottom
+                    // bar, its buttons and the player, like every other snackbar.
+                    val shellSnackbars = remember { SnackbarHostState() }
+                    val mainState by viewModel.uiState.collectAsStateWithLifecycle()
+                    DefaultSnackbarHandler<MainUiState, MainEvent>(
+                        screenState = mainState,
                         snackbarHostState = shellSnackbars,
+                        drawHost = false,
                     )
-                }
 
-                if (showChangelog) {
-                    ChangelogDialog(onDismiss = { showChangelog = false })
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        ShellHost(
+                            graph = graph,
+                            // Read before the first frame: the first-launch start screens until
+                            // onboarding is done, then the start page chosen in the display settings.
+                            // DataStore reads are main-safe, so no dispatcher switch is needed.
+                            resolveStart = {
+                                if (dataStore.startup.first()) {
+                                    StartupRoute
+                                } else {
+                                    dataStore.startupDestinationFlow(
+                                        defaultRoute = ToolkitTilesRoute.ROUTE_ID,
+                                        mapToKey = ::startKeyFor,
+                                    ).first()
+                                }
+                            },
+                            onReady = { keepSplashVisible = false },
+                            snackbarHostState = shellSnackbars,
+                        )
+                    }
+
+                    if (showChangelog) {
+                        ChangelogDialog(onDismiss = { showChangelog = false })
+                    }
                 }
             }
         }

@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen
 
 import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Job
@@ -38,21 +38,21 @@ class LoggedScreenViewModelTest {
         val dispatcherExtension = UnconfinedDispatcherExtension()
     }
 
-    private val firebaseController = FakeFirebaseController()
+    private val telemetryRepository = FakeTelemetryRepository()
 
     private fun advance() = dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
-    private fun eventNames(): List<String> = firebaseController.loggedEvents.map { it.name }
+    private fun eventNames(): List<String> = telemetryRepository.loggedEvents.map { it.name }
 
     @Test
     fun `a one-shot operation logs its start and runs`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = TestViewModel(firebaseController)
+        val viewModel = TestViewModel(telemetryRepository)
 
         viewModel.load { "loaded" }
         advance()
 
         assertThat(viewModel.state.value).isEqualTo("loaded")
-        val start = firebaseController.loggedEvents.single { it.name == "vm_op_start" }
+        val start = telemetryRepository.loggedEvents.single { it.name == "vm_op_start" }
         assertThat(start.params["action"]).isEqualTo(AnalyticsValue.Str("load"))
         assertThat(eventNames()).doesNotContain("vm_op_error")
     }
@@ -60,7 +60,7 @@ class LoggedScreenViewModelTest {
     @Test
     fun `a failed one-shot operation is reported and handed to onError`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val viewModel = TestViewModel(firebaseController)
+            val viewModel = TestViewModel(telemetryRepository)
             val failure = IllegalStateException("fail")
 
             viewModel.load { throw failure }
@@ -72,7 +72,7 @@ class LoggedScreenViewModelTest {
 
     @Test
     fun `a cancelled operation is not reported`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = TestViewModel(firebaseController)
+        val viewModel = TestViewModel(telemetryRepository)
         val never = CompletableDeferred<String>()
 
         val job = viewModel.load { never.await() }
@@ -86,7 +86,7 @@ class LoggedScreenViewModelTest {
 
     @Test
     fun `a collected flow passes every value on`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = TestViewModel(firebaseController)
+        val viewModel = TestViewModel(telemetryRepository)
 
         viewModel.observe(flowOf("first", "second"))
         advance()
@@ -98,7 +98,7 @@ class LoggedScreenViewModelTest {
     @Test
     fun `a failed flow is reported and handed to onError after the values before it`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val viewModel = TestViewModel(firebaseController)
+            val viewModel = TestViewModel(telemetryRepository)
             val failure = IllegalStateException("fail")
 
             viewModel.observe(
@@ -114,10 +114,10 @@ class LoggedScreenViewModelTest {
             assertThat(eventNames()).contains("vm_op_error")
         }
 
-    private class TestViewModel(firebaseController: FakeFirebaseController) :
+    private class TestViewModel(telemetryRepository: FakeTelemetryRepository) :
         LoggedScreenViewModel<String, Unit>(
             initialState = "",
-            firebaseController = firebaseController,
+            telemetryRepository = telemetryRepository,
             screenName = "Test",
         ) {
         var handledError: Throwable? = null

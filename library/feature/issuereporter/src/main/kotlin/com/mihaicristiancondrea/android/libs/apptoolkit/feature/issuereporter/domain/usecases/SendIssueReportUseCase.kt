@@ -21,7 +21,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.da
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.Report
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
@@ -34,7 +34,7 @@ import kotlinx.coroutines.flow.flow
  */
 class SendIssueReportUseCase(
     private val repository: IssueReporterRepository,
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
 ) {
 
     data class Params(
@@ -45,7 +45,7 @@ class SendIssueReportUseCase(
 
     operator fun invoke(param: Params): Flow<IssueReportResult> =
         flow {
-            firebaseController.logBreadcrumb(
+            telemetryRepository.logBreadcrumb(
                 message = "Issue report send started",
                 attributes = mapOf(
                     "targetRepo" to param.target.repository,

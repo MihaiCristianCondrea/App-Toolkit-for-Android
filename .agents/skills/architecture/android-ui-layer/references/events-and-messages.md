@@ -80,5 +80,19 @@ LaunchedEffect(state.saved) { if (state.saved) navigator.goBack() }
 The flag survives rotation, so the screen still leaves when the save finishes while it is being
 recreated. A one-off event sent at that moment could be lost.
 
+When the screen stays and the effect can happen again, the screen reports back once it has acted,
+and the ViewModel clears the flag. The help page does this for the store listing it opens when
+the in-app review cannot show:
+
+```kotlin
+// FaqScreen
+LaunchedEffect(state.openStoreListing) {
+    if (state.openStoreListing) {
+        context.openPlayStoreForApp(context.packageName)
+        viewModel.onEvent(FaqEvent.StoreListingOpened) // the ViewModel sets the flag back to false
+    }
+}
+```
+
 `core.ui.screen` has no effect stream. If a screen genuinely needs one, add it to `core.ui.screen`
 once, for every screen, rather than a per-feature `Channel` or `SharedFlow`.

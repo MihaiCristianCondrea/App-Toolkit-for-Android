@@ -18,13 +18,13 @@ class XViewModelTest {
         val dispatcherExtension = UnconfinedDispatcherExtension()
     }
 
-    private val firebaseController = FakeFirebaseController()
+    private val telemetryRepository = FakeTelemetryRepository()
 
     private fun advance() = dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
     @Test
     fun `repository error shows the failure state with a retry`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = XViewModel(repository = FailingXRepository(), firebaseController = firebaseController)
+        val viewModel = XViewModel(repository = FailingXRepository(), telemetryRepository = telemetryRepository)
         advance()
 
         val items = viewModel.state.value.items
@@ -40,7 +40,7 @@ class XViewModelTest {
   state or messages.
 - Test the message, not the snackbar: `messages.value.single().text` is the `UiTextHelper` the
   ViewModel raised. After `messageShown(id)` the queue is empty.
-- `FakeFirebaseController.loggedEvents` records GA4 events, so a test can check that a failure sent
+- `FakeTelemetryRepository.loggedEvents` records GA4 events, so a test can check that a failure sent
   `vm_op_error` with the right `action`. It does not record breadcrumbs or Crashlytics reports.
 - A platform rule the ViewModel depends on comes from a repository a fake can set, as
   `FakeClipboardRepository(confirmsCopies = true)` does in `AboutViewModelTest`, instead of

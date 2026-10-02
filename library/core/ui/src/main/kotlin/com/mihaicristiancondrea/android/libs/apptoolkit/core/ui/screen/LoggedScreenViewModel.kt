@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen
 
 import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import kotlinx.coroutines.Job
@@ -43,7 +43,7 @@ import kotlin.coroutines.cancellation.CancellationException
  */
 abstract class LoggedScreenViewModel<S, E : Any>(
     initialState: S,
-    protected val firebaseController: FirebaseController,
+    protected val telemetryRepository: TelemetryRepository,
     private val screenName: String,
     protected val viewModelName: String = screenName,
 ) : ScreenViewModel<S, E>(initialState) {
@@ -67,7 +67,7 @@ abstract class LoggedScreenViewModel<S, E : Any>(
         message: String,
         attributes: Map<String, String> = emptyMap(),
     ) {
-        firebaseController.logBreadcrumb(
+        telemetryRepository.logBreadcrumb(
             message = message,
             attributes = buildMap(attributes.size + 2) {
                 put(Breadcrumb.Keys.SCREEN, screenName)
@@ -91,7 +91,7 @@ abstract class LoggedScreenViewModel<S, E : Any>(
             },
         )
 
-        firebaseController.logEvent(
+        telemetryRepository.logEvent(
             AnalyticsEvent(
                 name = "vm_op_start",
                 params = buildMap {
@@ -180,7 +180,7 @@ abstract class LoggedScreenViewModel<S, E : Any>(
             },
         )
 
-        firebaseController.logEvent(
+        telemetryRepository.logEvent(
             AnalyticsEvent(
                 name = "vm_op_error",
                 params = buildMap {
@@ -193,7 +193,7 @@ abstract class LoggedScreenViewModel<S, E : Any>(
             ),
         )
 
-        firebaseController.reportViewModelError(
+        telemetryRepository.reportViewModelError(
             viewModelName = viewModelName,
             action = action,
             throwable = throwable,

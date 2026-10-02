@@ -21,7 +21,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSet
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
 import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
@@ -41,10 +41,10 @@ import kotlinx.coroutines.launch
  */
 class PrivacyViewModel(
     private val provider: PrivacySettingsProvider,
-    firebaseController: FirebaseController,
+    telemetryRepository: TelemetryRepository,
 ) : LoggedScreenViewModel<PrivacyUiState, PrivacyEvent, PrivacyAction>(
     initialState = UiStateScreen(data = PrivacyUiState()),
-    firebaseController = firebaseController,
+    telemetryRepository = telemetryRepository,
     screenName = "Privacy",
     viewModelName = "PrivacyViewModel",
 ) {

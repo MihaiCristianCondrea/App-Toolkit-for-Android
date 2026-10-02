@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui
 
 import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.contracts.DisplaySettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.states.DisplaySettingsUiState
@@ -40,7 +40,7 @@ import kotlinx.coroutines.launch
 class DisplaySettingsViewModel(
     private val displayPreferences: DisplayPreferencesRepository,
     private val themePreferences: ThemePreferencesRepository,
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
 ) : ScreenViewModel<DisplaySettingsUiState, DisplaySettingsEvent, ActionEvent>(
     initialState = UiStateScreen(
         screenState = ScreenState.Success(),
@@ -102,7 +102,7 @@ class DisplaySettingsViewModel(
         viewModelScope.launch {
             runSuspendCatching { block() }
                 .onFailure { throwable ->
-                    firebaseController.recordNonFatal(
+                    telemetryRepository.recordNonFatal(
                         throwable = throwable,
                         attributes = mapOf("operation" to "persistDisplaySetting"),
                     )

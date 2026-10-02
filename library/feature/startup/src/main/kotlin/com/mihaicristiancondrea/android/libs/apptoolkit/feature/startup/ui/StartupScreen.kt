@@ -46,7 +46,6 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.states.StartupUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
@@ -60,7 +59,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.se
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.TopAppBarScaffold
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.R
-import org.koin.compose.koinInject
 
 private const val STARTUP_SCREEN_NAME = "Startup"
 private const val STARTUP_SCREEN_CLASS = "StartupScreen"
@@ -73,15 +71,12 @@ fun StartupScreen(
     screenState: UiStateScreen<StartupUiState>,
     onContinueClick: () -> Unit,
 ) {
-    val firebaseController: FirebaseController = koinInject()
 
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = STARTUP_SCREEN_NAME,
         screenClass = STARTUP_SCREEN_CLASS,
     )
     TrackScreenState(
-        firebaseController = firebaseController,
         screenName = STARTUP_SCREEN_NAME,
         screenState = screenState.screenState,
     )

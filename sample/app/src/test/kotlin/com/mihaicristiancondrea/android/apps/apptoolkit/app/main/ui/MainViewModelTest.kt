@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.MainEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.StandardDispatcherExtension
@@ -81,7 +81,7 @@ class MainViewModelTest {
                 consentRepository = FakeConsentRepository(),
                 requestInAppReviewUseCase = requestInAppReviewUseCase,
                 inAppUpdateRepository = mockk(relaxed = true),
-                firebaseController = mockk<FirebaseController>(relaxed = true),
+                telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
                 dispatchers = TestDispatchers(testDispatcher = dispatcherExtension.testDispatcher),
             )
 
@@ -104,7 +104,7 @@ class MainViewModelTest {
                 consentRepository = consentRepository,
                 requestInAppReviewUseCase = mockk(relaxed = true),
                 inAppUpdateRepository = mockk(relaxed = true),
-                firebaseController = mockk<FirebaseController>(relaxed = true),
+                telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
                 dispatchers = TestDispatchers(testDispatcher = dispatcherExtension.testDispatcher),
             )
 
@@ -118,7 +118,7 @@ class MainViewModelTest {
     @Test
     fun `requestConsent skips overlapping calls while one is in progress`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val firebaseController = mockk<FirebaseController>(relaxed = true)
+            val telemetryRepository = mockk<TelemetryRepository>(relaxed = true)
             val consentRepository = CountingConsentRepository(
                 upstream = flow {
                     emit(DataState.Loading())
@@ -130,7 +130,7 @@ class MainViewModelTest {
                 consentRepository = consentRepository,
                 requestInAppReviewUseCase = mockk(relaxed = true),
                 inAppUpdateRepository = mockk(relaxed = true),
-                firebaseController = firebaseController,
+                telemetryRepository = telemetryRepository,
                 dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
             )
 
@@ -159,7 +159,7 @@ class MainViewModelTest {
                 consentRepository = consentRepository,
                 requestInAppReviewUseCase = mockk(relaxed = true),
                 inAppUpdateRepository = mockk(relaxed = true),
-                firebaseController = mockk<FirebaseController>(relaxed = true),
+                telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
                 dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
             )
 
@@ -188,7 +188,7 @@ class MainViewModelTest {
                 consentRepository = FakeConsentRepository(),
                 requestInAppReviewUseCase = mockk(relaxed = true),
                 inAppUpdateRepository = inAppUpdateRepository,
-                firebaseController = mockk<FirebaseController>(relaxed = true),
+                telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
                 dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
             )
 
@@ -221,7 +221,7 @@ class MainViewModelTest {
                 consentRepository = FakeConsentRepository(),
                 requestInAppReviewUseCase = mockk(relaxed = true),
                 inAppUpdateRepository = inAppUpdateRepository,
-                firebaseController = mockk<FirebaseController>(relaxed = true),
+                telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
                 dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
             )
 

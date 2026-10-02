@@ -15,7 +15,7 @@ val xModule: Module = module {
     viewModel {
         XViewModel(
             repository = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
         )
     }
 }

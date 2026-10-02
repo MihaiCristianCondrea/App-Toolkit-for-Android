@@ -23,7 +23,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.do
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.Report
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.ExtraInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
@@ -55,7 +55,7 @@ class TestIssueReporterRepository {
         remoteDataSource = IssueReporterRemoteDataSource(client),
         deviceInfoProvider = { error("device info is not captured in these tests") },
         dispatchers = testDispatchers(scheduler),
-        firebaseController = mockk<FirebaseController>(relaxed = true),
+        telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
     )
 
     // ✅ Pure-JVM fixture: no Android calls

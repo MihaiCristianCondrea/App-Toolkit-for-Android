@@ -49,7 +49,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
@@ -60,6 +59,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.IssueReporterActionNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.issueReporterActionEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /**
  * What will be attached to the report, as two grouped components: a header and its content.
@@ -74,10 +74,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui
 @Composable
 internal fun DeviceInfoSection(
     deviceInfoText: String?,
-    firebaseController: FirebaseController,
     onExpandRequested: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val telemetryRepository = LocalTelemetry.current
     var expanded: Boolean by rememberSaveable { mutableStateOf(value = false) }
 
     Column(
@@ -90,7 +90,7 @@ internal fun DeviceInfoSection(
                 expanded = !expanded
                 if (expanded) onExpandRequested()
 
-                firebaseController.logEvent(
+                telemetryRepository.logEvent(
                     issueReporterActionEvent(
                         actionName = IssueReporterActionNames.TOGGLE_DEVICE_INFO,
                         params = mapOf("expanded" to AnalyticsValue.Bool(expanded)),

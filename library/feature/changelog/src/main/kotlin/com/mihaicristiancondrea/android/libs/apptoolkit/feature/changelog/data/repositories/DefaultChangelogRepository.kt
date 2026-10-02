@@ -17,113 +17,71 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.api.ApiHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.toError
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.networkCall
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.toNetworkException
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.isSuccess
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.flow
 
 /**
  * Fetches changelog Markdown from the public Android App Metadata API.
  *
- * Change rationale: changelogs previously came directly from a GitHub raw URL in Compose. The
- * Worker package endpoint is now authoritative, while [legacyChangelogUrl] remains a compatibility
- * fallback only when the package is blank or the public endpoint returns HTTP 404.
+ * The package endpoint is authoritative, while [legacyChangelogUrl] is a compatibility fallback,
+ * used only when the package is blank or the endpoint answers HTTP 404. Any other failure of the
+ * endpoint is the answer: it is thrown, not covered by the fallback. It needs no dispatcher, as
+ * Ktor suspends.
  */
 class DefaultChangelogRepository(
     private val client: HttpClient,
     private val apiBaseUrl: String,
     private val legacyChangelogUrl: String,
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
 ) : ChangelogRepository {
 
-    override fun fetchChangelog(packageName: String): Flow<DataState<String, Errors>> = flow {
-        val primaryUrl = packageName.takeIf(String::isNotBlank)?.let { validPackageName ->
-            ApiHost.appChangelogUrl(
-                packageName = validPackageName,
-                baseUrl = apiBaseUrl,
-            )
+    override suspend fun getChangelog(packageName: String): String {
+        if (packageName.isBlank()) return getLegacyChangelog(reason = LegacyReason.BLANK_PACKAGE, packageName)
+
+        val primary = fetchMarkdown(url = ApiHost.appChangelogUrl(packageName = packageName, baseUrl = apiBaseUrl))
+        if (primary.status == HttpStatusCode.NotFound) {
+            return getLegacyChangelog(reason = LegacyReason.NOT_FOUND, packageName)
         }
-        val primaryResponse = primaryUrl?.let { url -> fetchMarkdown(url = url) }
-
-        when {
-            primaryResponse == null -> emitLegacyChangelog(packageName = packageName)
-
-            primaryResponse.isFailure -> emit(
-                DataState.Error(
-                    error = primaryResponse.exceptionOrNull()
-                        ?.toError(default = Errors.Network.UNKNOWN)
-                        ?: Errors.Network.UNKNOWN,
-                ),
-            )
-
-            primaryResponse.getOrThrow().status.isSuccess() -> emit(
-                DataState.Success(data = primaryResponse.getOrThrow().body),
-            )
-
-            primaryResponse.getOrThrow().status == HttpStatusCode.NotFound ->
-                emitLegacyChangelog(packageName = packageName)
-
-            else -> emit(
-                DataState.Error(error = primaryResponse.getOrThrow().status.toDomainError()),
-            )
-        }
+        return primary.bodyOrThrow()
     }
 
-    private suspend fun FlowCollector<DataState<String, Errors>>.emitLegacyChangelog(
-        packageName: String,
-    ) {
-        firebaseController.logBreadcrumb(
+    private suspend fun getLegacyChangelog(reason: String, packageName: String): String {
+        telemetryRepository.logBreadcrumb(
             message = "Changelog legacy fallback",
             attributes = mapOf(
                 "packageName" to packageName,
-                "reason" to if (packageName.isBlank()) "blank_package" else "not_found",
+                "reason" to reason,
             ),
         )
-        val fallbackResponse = fetchMarkdown(url = legacyChangelogUrl)
-        fallbackResponse.fold(
-            onSuccess = { response ->
-                if (response.status.isSuccess()) {
-                    emit(DataState.Success(data = response.body))
-                } else {
-                    emit(DataState.Error(error = response.status.toDomainError()))
-                }
-            },
-            onFailure = { throwable ->
-                emit(
-                    DataState.Error(
-                        error = throwable.toError(default = Errors.Network.UNKNOWN),
-                    ),
-                )
-            },
-        )
+        return fetchMarkdown(url = legacyChangelogUrl).bodyOrThrow()
     }
 
-    private suspend fun fetchMarkdown(url: String): Result<MarkdownResponse> {
-        firebaseController.logBreadcrumb(
+    /** The response to [url], whatever its status; a failure to get one is a [NetworkException]. */
+    private suspend fun fetchMarkdown(url: String): MarkdownResponse {
+        telemetryRepository.logBreadcrumb(
             message = "Changelog fetch",
             attributes = mapOf("url" to url),
         )
-        return runSuspendCatching {
+        return networkCall {
             val response = client.get(url) {
                 header(HttpHeaders.Accept, "text/markdown, text/plain;q=0.9, */*;q=0.1")
             }
-            MarkdownResponse(
-                status = response.status,
-                body = response.bodyAsText(),
-            )
+            MarkdownResponse(status = response.status, body = response.bodyAsText())
         }
+    }
+
+    private object LegacyReason {
+        const val BLANK_PACKAGE: String = "blank_package"
+        const val NOT_FOUND: String = "not_found"
     }
 }
 
@@ -132,11 +90,7 @@ private data class MarkdownResponse(
     val body: String,
 )
 
-private fun HttpStatusCode.toDomainError(): Errors = when {
-    this == HttpStatusCode.RequestTimeout -> Errors.Network.REQUEST_TIMEOUT
-    this == HttpStatusCode.TooManyRequests -> Errors.Network.RATE_LIMITED
-    value in 300..399 -> Errors.Network.HTTP_REDIRECT
-    value in 400..499 -> Errors.Network.HTTP_CLIENT_ERROR
-    value >= 500 -> Errors.Network.HTTP_SERVER_ERROR
-    else -> Errors.Network.UNKNOWN
+private fun MarkdownResponse.bodyOrThrow(): String {
+    status.toNetworkException()?.let { failure -> throw failure }
+    return body
 }

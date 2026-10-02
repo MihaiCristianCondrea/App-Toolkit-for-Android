@@ -39,12 +39,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches.CustomSwitch
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /**
  * Creates a clickable card with a title and a switch for app preference screens.
@@ -64,7 +64,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches.C
  * - Keep [title] actionable because it doubles as the primary spoken label.
  *
  * The card has a rounded corner shape and provides a click sound effect upon interaction.
- * @param firebaseController Optional Firebase controller used to log GA4 events.
  * @param ga4Event Optional GA4 event data to log on click.
  * @param ga4EventProvider Optional provider for GA4 event data resolved using the toggled state.
  */
@@ -77,10 +76,10 @@ fun SwitchCardItem(
     switchState: State<Boolean>,
     onSwitchToggled: (Boolean) -> Unit,
     checkIcon: ImageVector = Icons.Filled.Check,
-    firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
     ga4EventProvider: ((Boolean) -> Ga4EventData?)? = null,
 ) {
+    val telemetryRepository = LocalTelemetry.current
     val view: View = LocalView.current
     Card(
         enabled = enabled,
@@ -91,7 +90,7 @@ fun SwitchCardItem(
             if (!enabled) return@Card
             val updatedValue = !switchState.value
             view.playSoundEffect(SoundEffectConstants.CLICK)
-            firebaseController.logGa4Event(ga4EventProvider?.invoke(updatedValue) ?: ga4Event)
+            telemetryRepository.logGa4Event(ga4EventProvider?.invoke(updatedValue) ?: ga4Event)
             onSwitchToggled(updatedValue)
         }
     ) {
@@ -121,7 +120,7 @@ fun SwitchCardItem(
                 checked = switchState.value,
                 enabled = enabled,
                 onCheckedChange = { isChecked ->
-                    firebaseController.logGa4Event(ga4EventProvider?.invoke(isChecked) ?: ga4Event)
+                    telemetryRepository.logGa4Event(ga4EventProvider?.invoke(isChecked) ?: ga4Event)
                     onSwitchToggled(isChecked)
                 },
                 checkIcon = checkIcon

@@ -25,7 +25,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.contracts.SeasonalThemeOverlayEvent
 import io.mockk.coEvery
@@ -64,7 +64,7 @@ class SeasonalThemeOverlayViewModelTest {
     private val theme: ThemePreferencesRepository = mockk(relaxed = true) {
         every { preferencesState } returns themeState
     }
-    private val firebaseController = FakeFirebaseController()
+    private val telemetryRepository = FakeTelemetryRepository()
 
     @AfterEach
     fun tearDown() {
@@ -190,7 +190,7 @@ class SeasonalThemeOverlayViewModelTest {
         coVerify {
             seasonal.answerHolidayGreeting(HolidaySeason.CHRISTMAS, christmas, useHolidayTheme = true)
         }
-        val answered = firebaseController.loggedEvents.single()
+        val answered = telemetryRepository.loggedEvents.single()
         assertEquals("holiday_greeting_answered", answered.name)
         assertEquals(AnalyticsValue.Str("christmas"), answered.params["season"])
         assertEquals(AnalyticsValue.Str("use_holiday_theme"), answered.params["choice"])
@@ -212,7 +212,7 @@ class SeasonalThemeOverlayViewModelTest {
     private fun viewModel(today: LocalDate) = SeasonalThemeOverlayViewModel(
         seasonal = seasonal,
         theme = theme,
-        firebaseController = firebaseController,
+        telemetryRepository = telemetryRepository,
         today = { today },
     )
 

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,17 +15,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.contracts
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.states
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
+import androidx.compose.runtime.Immutable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 
 /**
- * Side-effect actions sent from [com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.PermissionsViewModel]
- * to the UI layer.
+ * What the permissions page renders.
  *
- * Currently no actions are defined but this sealed interface leaves room for
- * future one-off events such as navigation.
+ * @property config The permission catalog, grouped by kind. Empty, with a message, when the catalog
+ * has no category.
  */
-sealed interface PermissionsAction : ActionEvent
-
-
+@Immutable
+data class PermissionsUiState(
+    val config: Loadable<SettingsConfig> = Loadable.Loading,
+)

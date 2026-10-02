@@ -38,7 +38,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.text.font.FontWeight
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
@@ -81,7 +80,6 @@ data class FilterChipItem<T>(
  *   the row itself, so chips scroll under the edges instead of being clipped short of them. Pass
  *   `PaddingValues()` when the parent already insets this row.
  * @param hasAnimation Whether chip changes and the scroll-into-view animate.
- * @param firebaseController Optional Firebase controller used to log GA4 events.
  * @param ga4EventProvider Builds the GA4 event logged when a chip is chosen.
  */
 @Composable
@@ -93,7 +91,6 @@ fun <T> TopListFilters(
     leadingLabel: String? = null,
     contentPadding: PaddingValues = PaddingValues(horizontal = SizeConstants.LargeSize),
     hasAnimation: Boolean = true,
-    firebaseController: FirebaseController? = null,
     ga4EventProvider: ((T) -> Ga4EventData)? = null,
 ) {
     val listState: LazyListState = rememberLazyListState()
@@ -143,7 +140,6 @@ fun <T> TopListFilters(
                     modifier = if (hasAnimation) Modifier.animateItem() else Modifier,
                     icon = item.icon,
                     hasAnimation = hasAnimation,
-                    firebaseController = firebaseController,
                     ga4Event = ga4EventProvider?.invoke(item.value),
                 )
             }

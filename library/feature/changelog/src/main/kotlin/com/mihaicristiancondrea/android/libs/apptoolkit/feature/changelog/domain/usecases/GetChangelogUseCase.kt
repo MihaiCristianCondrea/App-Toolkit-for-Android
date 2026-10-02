@@ -17,46 +17,26 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.domain.usecases
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.utils.extensions.extractChangesForVersion
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.repositories.ChangelogRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.utils.extensions.extractChangesForVersion
 
 /**
  * Loads the host application's changelog and selects the most useful Markdown to display.
  *
  * The current-version section is preferred. When the API returns valid Markdown without that
  * section, the full history is returned so a version-format mismatch never hides useful content.
+ * A failure of the repository passes through unchanged.
  */
 class GetChangelogUseCase(
     private val repository: ChangelogRepository,
     private val buildInfoProvider: BuildInfoProvider,
 ) {
 
-    /** Returns current-version changes, full history, or a domain error. */
-    operator fun invoke(): Flow<DataState<String, Errors>> =
-        repository.fetchChangelog(packageName = buildInfoProvider.packageName)
-            .map { result ->
-                when (result) {
-                    is DataState.Success -> {
-                        val history = result.data.trim()
-                        val currentVersion = history.extractChangesForVersion(
-                            version = buildInfoProvider.appVersion,
-                        )
-                        DataState.Success(
-                            data = currentVersion.ifBlank { history },
-                        )
-                    }
-
-                    is DataState.Error -> DataState.Error(
-                        data = result.data,
-                        error = result.error,
-                    )
-
-                    is DataState.Loading -> DataState.Loading(data = result.data)
-                }
-            }
+    /** Returns the current version's changes, else the full history, else an empty string. */
+    suspend operator fun invoke(): String {
+        val history = repository.getChangelog(packageName = buildInfoProvider.packageName).trim()
+        val currentVersion = history.extractChangesForVersion(version = buildInfoProvider.appVersion)
+        return currentVersion.ifBlank { history }
+    }
 }

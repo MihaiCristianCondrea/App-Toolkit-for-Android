@@ -51,8 +51,6 @@ import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
@@ -75,8 +73,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.views.DeviceInfoSection
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.views.IssueReportForm
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.views.IssueSubmittedContent
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 private const val ISSUE_REPORTER_SCREEN_CLASS = "IssueReporterContent"
 
@@ -107,20 +105,17 @@ fun IssueReporterContent(
     modifier: Modifier = Modifier,
     viewModel: IssueReporterViewModel = koinViewModel(),
 ) {
-    val firebaseController: FirebaseController = koinInject()
 
     val uiStateScreen: UiStateScreen<IssueReporterUiState> by viewModel.uiState.collectAsStateWithLifecycle()
     val data: IssueReporterUiState = uiStateScreen.data ?: IssueReporterUiState()
     val submissionState: IssueSubmissionState = data.submissionState
 
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = ISSUE_REPORTER_SCREEN_NAME,
         screenClass = ISSUE_REPORTER_SCREEN_CLASS,
     )
 
     TrackScreenState(
-        firebaseController = firebaseController,
         screenName = ISSUE_REPORTER_SCREEN_NAME,
         screenState = uiStateScreen.screenState,
     )
@@ -155,7 +150,6 @@ fun IssueReporterContent(
             } else {
                 IssueReportEditor(
                     data = data,
-                    firebaseController = firebaseController,
                     isSending = submissionState is IssueSubmissionState.Sending,
                     onEvent = viewModel::onEvent,
                 )
@@ -173,11 +167,11 @@ fun IssueReporterContent(
 @Composable
 private fun IssueReportEditor(
     data: IssueReporterUiState,
-    firebaseController: FirebaseController,
     isSending: Boolean,
     onEvent: (IssueReporterEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val telemetryRepository = LocalTelemetry.current
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(space = SizeConstants.MediumSize),
@@ -198,7 +192,6 @@ private fun IssueReportEditor(
         ) {
             IssueReportForm(
                 data = data,
-                firebaseController = firebaseController,
                 onEvent = onEvent,
             )
 
@@ -206,14 +199,13 @@ private fun IssueReportEditor(
 
             DeviceInfoSection(
                 deviceInfoText = data.deviceInfoText,
-                firebaseController = firebaseController,
                 onExpandRequested = { onEvent(IssueReporterEvent.RequestDeviceInfo) },
             )
         }
 
         GeneralButton(
             onClick = {
-                firebaseController.logEvent(
+                telemetryRepository.logEvent(
                     issueReporterActionEvent(
                         actionName = IssueReporterActionNames.SEND_ISSUE,
                         params = mapOf(
@@ -300,7 +292,6 @@ private fun IssueReportEditorPreview() {
         Column(modifier = Modifier.padding(all = SizeConstants.LargeSize)) {
             IssueReportEditor(
                 data = dummyData,
-                firebaseController = PreviewFirebaseController,
                 isSending = false,
                 onEvent = {},
             )
@@ -318,18 +309,4 @@ private fun IssueSubmittedContentPreview() {
             )
         }
     }
-}
-
-/** Does nothing, so the previews can render composables that report what the author does. */
-private object PreviewFirebaseController : FirebaseController {
-    override fun updateConsent(analyticsGranted: Boolean, adStorageGranted: Boolean, adUserDataGranted: Boolean, adPersonalizationGranted: Boolean) = Unit
-    override fun setAnalyticsEnabled(enabled: Boolean) = Unit
-    override fun setCrashlyticsEnabled(enabled: Boolean) = Unit
-    override fun setPerformanceEnabled(enabled: Boolean) = Unit
-    override fun logBreadcrumb(message: String, attributes: Map<String, String>) = Unit
-    override fun reportViewModelError(viewModelName: String, action: String, throwable: Throwable, extraKeys: Map<String, String>) = Unit
-    override fun recordNonFatal(throwable: Throwable, attributes: Map<String, String>) = Unit
-    override fun logEvent(event: AnalyticsEvent) = Unit
-    override fun logScreenView(screenName: String, screenClass: String?) = Unit
-    override fun setUserProperty(name: String, value: String?) = Unit
 }

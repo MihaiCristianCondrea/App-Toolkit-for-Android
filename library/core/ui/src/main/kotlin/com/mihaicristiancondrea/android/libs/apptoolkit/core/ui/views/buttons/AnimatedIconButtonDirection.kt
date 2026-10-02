@@ -35,7 +35,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
@@ -59,7 +58,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics
  * @param fromRight If true, the button will slide in from the right and slide out to the right.
  *                  If false, the button will slide in from the left and slide out to the left. Defaults to false.
  * @param iconSize The icon size rendered inside the underlying icon-only button.
- * @param firebaseController Optional Firebase controller used to log GA4 events.
  * @param ga4Event Optional GA4 event data to log on click.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -76,7 +74,6 @@ fun AnimatedIconButtonDirection(
     feedback: ButtonFeedback = ButtonFeedback(),
     fromRight: Boolean = false,
     iconSize: Dp = SizeConstants.TwentyFourSize,
-    firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
 ) {
     val animatedVisibility: MutableState<Boolean> =
@@ -129,7 +126,6 @@ fun AnimatedIconButtonDirection(
                 icon = targetIcon,
                 iconSize = iconSize,
                 feedback = feedback,
-                firebaseController = firebaseController,
                 ga4Event = ga4Event,
                 style = GeneralButtonStyle.Text,
             )

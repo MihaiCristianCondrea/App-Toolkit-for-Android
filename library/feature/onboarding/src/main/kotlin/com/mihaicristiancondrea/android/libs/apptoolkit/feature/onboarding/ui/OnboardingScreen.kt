@@ -51,7 +51,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
@@ -77,15 +76,12 @@ private const val ONBOARDING_SCREEN_CLASS = "OnboardingScreen"
 /** How wide an onboarding page grows on a large window; it is centred in the rest. */
 internal val OnboardingContentMaxWidth: Dp = 640.dp
 
-
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun OnboardingScreen() {
     val context = LocalContext.current
-    val firebaseController: FirebaseController = koinInject()
 
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = ONBOARDING_SCREEN_NAME,
         screenClass = ONBOARDING_SCREEN_CLASS,
     )
@@ -100,7 +96,6 @@ fun OnboardingScreen() {
     val uiState = screenState.data ?: OnboardingUiState()
 
     TrackScreenState(
-        firebaseController = firebaseController,
         screenName = ONBOARDING_SCREEN_NAME,
         screenState = screenState.screenState,
     )

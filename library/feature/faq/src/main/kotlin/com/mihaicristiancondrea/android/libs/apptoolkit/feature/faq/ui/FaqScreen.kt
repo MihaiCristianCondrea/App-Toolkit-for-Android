@@ -25,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
@@ -48,6 +47,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domai
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 // The analytics screen name stays "Help": the destination is still "Help & feedback" to the
 // user, and changing it would split this screen's history in GA4 at the module rename.
@@ -79,7 +79,7 @@ private object FaqActionNames {
 fun FaqScreen() {
     val viewModel: FaqViewModel = koinViewModel()
     val state: FaqUiState by viewModel.state.collectAsStateWithLifecycle()
-    val firebaseController: FirebaseController = koinInject()
+    val telemetryRepository = LocalTelemetry.current
     val adsConfig: AdsConfig = koinInject(qualifier = named(AdsQualifiers.HELP_NATIVE_AD))
     val adsEnabled: Boolean = rememberAdsEnabled()
     val context = LocalContext.current
@@ -87,13 +87,11 @@ fun FaqScreen() {
     val reviewHost: ReviewHost? = remember(activity) { activity?.let(::ReviewHost) }
 
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = FAQ_SCREEN_NAME,
         screenClass = FAQ_SCREEN_CLASS,
     )
 
     TrackScreenState(
-        firebaseController = firebaseController,
         screenName = FAQ_SCREEN_NAME,
         state = state.questions,
     )
@@ -108,23 +106,23 @@ fun FaqScreen() {
     FaqScreenContent(
         state = state,
         onRetry = {
-            firebaseController.logEvent(faqActionEvent(actionName = FaqActionNames.RETRY_LOAD))
+            telemetryRepository.logEvent(faqActionEvent(actionName = FaqActionNames.RETRY_LOAD))
             viewModel.onEvent(FaqEvent.Load)
         },
         onFeedbackOpened = {
-            firebaseController.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.FEEDBACK))
-            firebaseController.logEvent(faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_OPENED))
+            telemetryRepository.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.FEEDBACK))
+            telemetryRepository.logEvent(faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_OPENED))
         },
         onRequestFeature = {
-            firebaseController.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.REQUEST_FEATURE))
+            telemetryRepository.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.REQUEST_FEATURE))
             context.openUrl(AppLinks.FEATURE_REQUESTS_FORM)
         },
         onLeaveReview = {
-            firebaseController.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.LEAVE_REVIEW))
+            telemetryRepository.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.LEAVE_REVIEW))
             reviewHost?.let { host -> viewModel.onEvent(FaqEvent.RequestReview(host = host)) }
         },
         onQuestionToggled = { question, position, expanded ->
-            firebaseController.logGa4Event(
+            telemetryRepository.logGa4Event(
                 faqPreferenceTapEvent(
                     preferenceKey = FaqPreferenceKeys.FAQ_ITEM,
                     faqId = question.id.value,
@@ -134,12 +132,12 @@ fun FaqScreen() {
             )
         },
         onShowMoreQuestions = {
-            firebaseController.logGa4Event(
+            telemetryRepository.logGa4Event(
                 faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.SHOW_MORE_QUESTIONS)
             )
         },
         onContactUs = {
-            firebaseController.logEvent(
+            telemetryRepository.logEvent(
                 faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.CONTACT_US).toAnalyticsEvent()
             )
             context.sendEmailToDeveloper(applicationNameRes = CommonR.string.app_name)

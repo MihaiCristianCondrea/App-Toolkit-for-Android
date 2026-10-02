@@ -28,7 +28,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.cont
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.contracts.AdvancedSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.states.AdvancedSettingsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onFailure
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onSuccess
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
@@ -55,14 +55,14 @@ import kotlinx.coroutines.launch
 class AdvancedSettingsViewModel(
     private val repository: CacheRepository,
     private val dispatchers: DispatcherProvider,
-    firebaseController: FirebaseController,
+    telemetryRepository: TelemetryRepository,
     developerOptionsUnlocked: Flow<Boolean> = flowOf(false),
 ) : LoggedScreenViewModel<AdvancedSettingsUiState, AdvancedSettingsEvent, AdvancedSettingsAction>(
     initialState = UiStateScreen(
         screenState = ScreenState.Success(),
         data = AdvancedSettingsUiState(),
     ),
-    firebaseController = firebaseController,
+    telemetryRepository = telemetryRepository,
     screenName = "AdvancedSettings",
     viewModelName = "AdvancedSettingsViewModel",
 ) {

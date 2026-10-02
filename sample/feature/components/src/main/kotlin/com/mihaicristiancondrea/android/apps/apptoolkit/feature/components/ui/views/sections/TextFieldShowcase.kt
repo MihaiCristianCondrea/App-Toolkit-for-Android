@@ -46,7 +46,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseHeader
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSection
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSurface
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
@@ -72,7 +71,6 @@ private const val MARKDOWN_MAX_LINES: Int = 10
  */
 @Composable
 fun TextFieldShowcase(
-    firebaseController: FirebaseController,
     onLogEvent: (String, String?) -> Ga4EventData,
 ) {
     var title: String by rememberSaveable { mutableStateOf(value = "") }
@@ -115,7 +113,6 @@ fun TextFieldShowcase(
                     capitalization = KeyboardCapitalization.Sentences,
                     imeAction = ImeAction.Next,
                 ),
-                firebaseController = firebaseController,
                 ga4Event = onLogEvent("text_field", "filled"),
             )
         }
@@ -147,7 +144,6 @@ fun TextFieldShowcase(
                     keyboardType = KeyboardType.Email,
                     imeAction = ImeAction.Next,
                 ),
-                firebaseController = firebaseController,
                 ga4Event = onLogEvent("text_field", "outlined"),
             )
         }
@@ -176,7 +172,6 @@ fun TextFieldShowcase(
                         capitalization = KeyboardCapitalization.Words,
                         imeAction = ImeAction.Next,
                     ),
-                    firebaseController = firebaseController,
                     ga4Event = onLogEvent("text_field", "grouped"),
                 )
                 GeneralTextField(
@@ -227,7 +222,6 @@ fun TextFieldShowcase(
                         )
                     }
                 },
-                firebaseController = firebaseController,
                 ga4Event = onLogEvent("text_field", "search"),
             )
         }
@@ -252,7 +246,6 @@ fun TextFieldShowcase(
                 ),
                 onTrailingIconClick = { outlinedSearch = "" },
                 singleLine = true,
-                firebaseController = firebaseController,
                 ga4Event = onLogEvent("text_field", "search_outlined"),
             )
         }
@@ -278,7 +271,6 @@ fun TextFieldShowcase(
                     imeAction = ImeAction.Default,
                 ),
                 markdown = GeneralTextFieldMarkdown.Editor,
-                firebaseController = firebaseController,
                 ga4Event = onLogEvent("text_field", "markdown"),
             )
         }

@@ -26,7 +26,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repos
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.domain.utils.ToolkitTileIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.StandardDispatcherExtension
 import io.mockk.every
 import io.mockk.mockk
@@ -45,15 +45,15 @@ class ToolAnalyticsTest {
         val dispatcherExtension = StandardDispatcherExtension()
     }
 
-    private val firebaseController = FakeFirebaseController()
+    private val telemetryRepository = FakeTelemetryRepository()
 
-    private fun toolUses(): List<String> = firebaseController.loggedEvents
+    private fun toolUses(): List<String> = telemetryRepository.loggedEvents
         .filter { it.name == AppGa4Contract.EventName.TOOL_USED }
         .map { (it.params.getValue(AppGa4Contract.Param.TOOL_ID) as AnalyticsValue.Str).value }
 
     @Test
     fun `a tool is reported used once per opening, however often it is used`() {
-        val viewModel = CoinFlipToolViewModel(firebaseController)
+        val viewModel = CoinFlipToolViewModel(telemetryRepository)
 
         repeat(times = 5) { viewModel.flip() }
 
@@ -62,7 +62,7 @@ class ToolAnalyticsTest {
 
     @Test
     fun `reopening a tool reports its use again`() {
-        val viewModel = DiceRollToolViewModel(firebaseController)
+        val viewModel = DiceRollToolViewModel(telemetryRepository)
 
         viewModel.roll()
         viewModel.dismiss()
@@ -73,11 +73,11 @@ class ToolAnalyticsTest {
 
     @Test
     fun `opening a tool without using it reports nothing`() {
-        val viewModel = CoinFlipToolViewModel(firebaseController)
+        val viewModel = CoinFlipToolViewModel(telemetryRepository)
 
         viewModel.dismiss()
 
-        assertTrue(firebaseController.loggedEvents.isEmpty())
+        assertTrue(telemetryRepository.loggedEvents.isEmpty())
     }
 
     @Test
@@ -85,7 +85,7 @@ class ToolAnalyticsTest {
         val morse: MorseRepository = mockk(relaxed = true) {
             every { state } returns MutableStateFlow(MorsePlaybackState())
         }
-        val viewModel = MorseToolViewModel(morse, firebaseController)
+        val viewModel = MorseToolViewModel(morse, telemetryRepository)
 
         viewModel.updateInput(input = "   ")
         viewModel.toggle()
@@ -103,7 +103,7 @@ class ToolAnalyticsTest {
             every { isActive } answers { active }
             every { toggle() } answers { active = !active }
         }
-        val viewModel = SosToolViewModel(sos, firebaseController)
+        val viewModel = SosToolViewModel(sos, telemetryRepository)
 
         viewModel.toggle()
         viewModel.dismiss()
@@ -117,7 +117,7 @@ class ToolAnalyticsTest {
     fun `a finished reaction round is posted as its score`() {
         var now = 1_000L
         val viewModel = ReactionTestToolViewModel(
-            firebaseController = firebaseController,
+            telemetryRepository = telemetryRepository,
             timeProvider = { now },
         )
 
@@ -126,7 +126,7 @@ class ToolAnalyticsTest {
         now += 215L
         viewModel.handleTap()
 
-        val score = firebaseController.loggedEvents
+        val score = telemetryRepository.loggedEvents
             .single { it.name == AppGa4Contract.EventName.POST_SCORE }
         assertEquals(AnalyticsValue.LongVal(215L), score.params[AppGa4Contract.Param.SCORE])
         assertEquals(
@@ -143,7 +143,7 @@ class ToolAnalyticsTest {
         }
         val scheduler = dispatcherExtension.testDispatcher.scheduler
 
-        val glance = CompassToolViewModel(sensors, firebaseController)
+        val glance = CompassToolViewModel(sensors, telemetryRepository)
         glance.open()
         scheduler.advanceTimeBy(FlowToolViewModel.WATCHED_USE_DELAY_MS - 1)
         glance.dismiss()
@@ -157,17 +157,17 @@ class ToolAnalyticsTest {
 
     @Test
     fun `every tool event satisfies the app GA4 contract`() {
-        CoinFlipToolViewModel(firebaseController).flip()
+        CoinFlipToolViewModel(telemetryRepository).flip()
         var now = 0L
-        ReactionTestToolViewModel(firebaseController, timeProvider = { now }).apply {
+        ReactionTestToolViewModel(telemetryRepository, timeProvider = { now }).apply {
             startTest(delayMs = 1L)
             dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
             now += 300L
             handleTap()
         }
 
-        assertTrue(firebaseController.loggedEvents.isNotEmpty())
-        firebaseController.loggedEvents.forEach { it.assertSatisfiesContract() }
+        assertTrue(telemetryRepository.loggedEvents.isNotEmpty())
+        telemetryRepository.loggedEvents.forEach { it.assertSatisfiesContract() }
     }
 
     private fun AnalyticsEvent.assertSatisfiesContract() {

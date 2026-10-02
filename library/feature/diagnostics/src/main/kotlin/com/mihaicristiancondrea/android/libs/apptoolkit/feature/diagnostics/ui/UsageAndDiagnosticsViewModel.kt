@@ -24,7 +24,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.c
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.contracts.UsageAndDiagnosticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.states.UsageAndDiagnosticsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.asUiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
@@ -47,10 +47,10 @@ import kotlinx.coroutines.flow.onStart
 class UsageAndDiagnosticsViewModel(
     private val repository: UsageAndDiagnosticsRepository,
     private val dispatchers: DispatcherProvider,
-    firebaseController: FirebaseController,
+    telemetryRepository: TelemetryRepository,
 ) : LoggedScreenViewModel<UsageAndDiagnosticsUiState, UsageAndDiagnosticsEvent, UsageAndDiagnosticsAction>(
     initialState = UiStateScreen(data = UsageAndDiagnosticsUiState()),
-    firebaseController = firebaseController,
+    telemetryRepository = telemetryRepository,
     screenName = "UsageAndDiagnostics",
     viewModelName = "UsageAndDiagnosticsViewModel",
 ) {

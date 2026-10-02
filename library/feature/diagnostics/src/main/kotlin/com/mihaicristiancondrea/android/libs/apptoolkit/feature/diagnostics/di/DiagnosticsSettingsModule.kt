@@ -31,7 +31,7 @@ val diagnosticsSettingsModule: Module = module {
             dataSource = get<CommonDataStore>(),
             configProvider = get(),
             dispatchers = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
             consentRepository = get(),
         )
     }
@@ -39,7 +39,7 @@ val diagnosticsSettingsModule: Module = module {
     viewModel {
         UsageAndDiagnosticsViewModel(
             repository = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
             dispatchers = get(),
         )
     }

@@ -42,12 +42,12 @@ import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.AnimatedToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /**
  * A [FilterChip] with the toolkit's click feedback, bounce, and GA4 logging.
@@ -67,7 +67,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.
  * @param icon Icon shown while the chip is not selected.
  * @param hasAnimation Whether the leading icon crossfades between its states.
  * @param leadingIcon Full override of the leading icon slot.
- * @param firebaseController Optional Firebase controller used to log GA4 events.
  * @param ga4Event Optional GA4 event data to log on click.
  */
 @Composable
@@ -79,9 +78,9 @@ fun CommonFilterChip(
     icon: ToolkitIcon? = null,
     hasAnimation: Boolean = true,
     leadingIcon: (@Composable (() -> Unit))? = null,
-    firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
 ) {
+    val telemetryRepository = LocalTelemetry.current
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
     val interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
@@ -91,7 +90,7 @@ fun CommonFilterChip(
         onClick = {
             view.playSoundEffect(SoundEffectConstants.CLICK)
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-            firebaseController.logGa4Event(ga4Event)
+            telemetryRepository.logGa4Event(ga4Event)
             onClick()
         },
         label = { Text(text = label) },

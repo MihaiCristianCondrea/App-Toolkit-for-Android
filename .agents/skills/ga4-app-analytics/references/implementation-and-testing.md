@@ -16,7 +16,7 @@ Implementation begins only after approval.
 
 When the host app uses App Toolkit:
 
-1. Reuse `FirebaseController`.
+1. Reuse `TelemetryRepository`.
 2. Reuse `AnalyticsEvent` and `AnalyticsValue`.
 3. Reuse `Ga4EventData` for Toolkit UI components that support it.
 4. Reuse `TrackScreenView` for explicit Compose screen views.

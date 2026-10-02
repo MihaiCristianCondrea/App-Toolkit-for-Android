@@ -30,7 +30,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextField
@@ -57,7 +56,6 @@ internal val ISSUE_GROUP_OUTER_RADIUS = SizeConstants.LargeMediumSize
 @Composable
 internal fun IssueReportForm(
     data: IssueReporterUiState,
-    firebaseController: FirebaseController,
     onEvent: (IssueReporterEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -83,7 +81,6 @@ internal fun IssueReportForm(
 
         IssueDescriptionField(
             description = data.description,
-            firebaseController = firebaseController,
             onDescriptionChange = { onEvent(IssueReporterEvent.UpdateDescription(it)) },
         )
 

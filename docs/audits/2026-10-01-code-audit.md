@@ -115,7 +115,7 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
 - `library/core/datastore/.../CommonDataStore.kt:141-142,186-190,309-314` and
   `DefaultFavoritesPreferencesDataSource` hold favorites and `componentsShowcaseUnlocked`, which only
   the sample uses.
-- `library/feature/permissions/.../DefaultPermissionsRepository.kt:47-95` hard-codes the permission
+- `library/feature/permissions/.../DefaultPermissionsRepository.kt:41-89` hard-codes the permission
   list instead of reading the host manifest, and returns the UI model `SettingsConfig`.
 - `library/core/network/.../Errors.kt:45-60` contains feature-specific errors (FAQ, SKU details,
   consent, review) and a `Database` group.
@@ -124,8 +124,9 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   `feature/support/domain`, `integration/billing/domain`, `integration/consent/domain`,
   `integration/update/domain`, and in the sample `feature/apps/domain`, `feature/onboarding/domain`,
   `feature/tiles/domain` and `core/analytics/domain`.
-- Use cases that only forward one repository call: `SendIssueReportUseCase` (which also repeats the
-  repository's breadcrumb and dispatcher switch) and `GetChangelogUseCase`.
+- A use case that only forwards one repository call: `SendIssueReportUseCase`, which also repeats
+  the repository's breadcrumb and dispatcher switch. (`GetChangelogUseCase` stays: it picks the
+  current version's section of the changelog.)
 - UI creating data sources directly: `TrackedTileService.kt:92` and `QuickSettingsTileRequests.kt:71`
   build `AndroidQuickSettingsTilesLocalDataSource`. `sample/feature/tiles/.../di/TilesModule.kt:68-72`
   writes into the raw `CommonDataStore`, bypassing `:sample:core:datastore`.
@@ -134,27 +135,15 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   and `core:common`. `onboarding`, `faq`, `issuereporter`, `settings`, `startup`, `support` and
   `shell` import `designsystem` without declaring it.
 - Declared dependencies with no imports: `core:datastore` in `core/ui`, `feature/changelog`,
-  `feature/faq` and `feature/settings`; `core:network` in `feature/onboarding`; `core:common` in
+  `feature/faq` and `feature/settings`; `core:network` in `feature/onboarding`, `feature/settings`
+  and `feature/permissions` (since their move to `core.ui.screen`); `core:common` in
   `integration/update` and `navigation`. The comment in `core/ui/build.gradle.kts:52-53` about
   `CommonDataStore` is stale.
 - `Errors.asUiText()` lives in `core/network/data/remote/extensions/ErrorExtensions.kt:30`, a data
   package, and seven ViewModels import it.
-- `FirebaseController` (`library/core/common/.../data/repositories/FirebaseController.kt`) is the
-  Toolkit's telemetry contract: analytics events, breadcrumbs, error reports and the collection
-  switches. Three things are off about it:
-  - Its name is the vendor's, although the interface hides the vendor.
-  - It sits in `data/repositories` without being a repository, since it holds no app data.
-  - The name has spread to about 136 files.
-
-  Injecting it into ViewModels is fine, as cross-cutting telemetry. Rename it in a breaking
-  release:
-  - choose a vendor-neutral name such as `Telemetry`;
-  - move it to a `telemetry` package;
-  - rename `DefaultFirebaseController` to `FirebaseTelemetry`;
-  - keep `@Deprecated typealias FirebaseController` with a `ReplaceWith`, as `FirebaseControllerImpl`
-    was kept, and add a migration guide entry.
-
-  `FakeFirebaseController` and the `firebaseController` parameter names follow.
+- `FirebaseController`, `DefaultFirebaseController` and `FirebaseControllerImpl` are deprecated
+  aliases of `TelemetryRepository` and `FirebaseTelemetryRepository`, kept for one release. Remove them in the release
+  after this one. (Components now read `LocalTelemetry` instead of taking a parameter.)
 - `:library:integration:ads` owns a full settings screen and ViewModel.
 - `:sample:integration:ads` depends on the whole `:library:apptoolkit` while it uses only
   `core:common` and `core:ui`. `:sample:widget` uses `api(project(":sample:feature:apps"))`.
@@ -164,7 +153,6 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
 - The theme picker exists twice, in `feature/onboarding/.../ThemeOnboardingPageTab.kt:104-201` and
   `feature/theme/.../ThemeSettingsScreen.kt:163-264`, and the copies have drifted (onboarding
   ignores `seasonalThemesUnlocked`).
-- `PermissionsViewModel.kt:86-151` and `SettingsViewModel.kt:82-143` have the same load pipeline.
 - The `persist` helper is still written out in `DisplaySettingsViewModel`, `ThemeSettingsViewModel`
   and `OnboardingThemeViewModel`; it could move into `ScreenViewModel` once that has a way to
   report.
@@ -176,12 +164,11 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   identical arguments.
 - Oversized composables: `ThemeSettingsScreen` (about 460 lines), `ListDetailLayout` (about 230),
   `ShellBody` (about 215), `ShellChrome` (about 170).
-- Unused public API, kept because removing it breaks consumers: the deprecated
-  `FirebaseControllerImpl` typealias and `AdsCoreManager.buildInfoProvider`. Remove both in a
-  breaking release, with a migration guide entry.
-- `MainAction.ReviewOutcomeReported` and `InAppUpdateResultReported` (and
-  `FaqAction.ReviewOutcomeReported`) are sent but mapped to `Unit`. They are the only actions of
-  their ViewModels, so removing them means changing those ViewModels' action type.
+- Unused public API, kept because removing it breaks consumers: `AdsCoreManager.buildInfoProvider`.
+  Remove it in a breaking release, with a migration guide entry.
+- `MainAction.ReviewOutcomeReported` and `InAppUpdateResultReported` are sent but mapped to `Unit`.
+  They are the only actions of their ViewModels, so removing them means changing those ViewModels'
+  action type. (`FaqAction` went with the FAQ's move to `core.ui.screen`.)
 - The comment above `core:datastore` in `library/core/ui/build.gradle.kts:52-53` says the module
   references `CommonDataStore` by type, which it no longer does.
 

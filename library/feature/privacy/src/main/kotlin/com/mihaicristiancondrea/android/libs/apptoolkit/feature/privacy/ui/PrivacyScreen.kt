@@ -31,7 +31,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
@@ -50,7 +49,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.contr
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.contracts.PrivacyEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.states.PrivacyUiState
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 private const val PRIVACY_SCREEN_NAME = "Privacy"
@@ -71,16 +69,12 @@ fun PrivacyScreen(
     val viewModel: PrivacyViewModel = koinViewModel()
     val screenState: UiStateScreen<PrivacyUiState> by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val firebaseController: FirebaseController = koinInject()
-
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = PRIVACY_SCREEN_NAME,
         screenClass = PRIVACY_SCREEN_CLASS,
     )
 
     TrackScreenState(
-        firebaseController = firebaseController,
         screenName = PRIVACY_SCREEN_NAME,
         screenState = screenState.screenState,
     )
@@ -122,7 +116,6 @@ fun PrivacyScreen(
                                         event = PrivacyEvent.ItemClicked(action = item.action),
                                     )
                                 },
-                                firebaseController = firebaseController,
                                 ga4Event = privacyPreferenceTapEvent(preferenceKey = item.key),
                                 modifier = Modifier.groupedPreferenceItem(
                                     position = item.position,

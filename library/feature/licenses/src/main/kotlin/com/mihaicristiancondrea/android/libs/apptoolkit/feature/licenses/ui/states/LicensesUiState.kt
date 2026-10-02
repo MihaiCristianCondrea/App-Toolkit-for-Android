@@ -18,13 +18,16 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.states
 
 import androidx.compose.runtime.Immutable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 
 /**
- * Rendering state for the open-source licenses screen.
+ * What the open-source licenses screen tracks.
  *
- * @property libraryCount Number of bundled libraries once the metadata has been parsed.
+ * @property libraryCount The number of bundled libraries, ready once the metadata is parsed. The
+ * libraries themselves are drawn straight from what `produceLibraries` returns, so only the count
+ * lives here, for tracking and the `loadLibraries` report.
  */
 @Immutable
 data class LicensesUiState(
-    val libraryCount: Int = 0,
+    val libraryCount: Loadable<Int> = Loadable.Loading,
 )
