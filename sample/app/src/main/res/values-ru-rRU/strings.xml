@@ -18,4 +18,5 @@
     <string name="app_short_description">Коллекция удобных инструментов и утилит для Android.</string>
     <string name="settings_disabled_message">Настройки сейчас недоступны.</string>
     <string name="long_settings_label">Открыть настройки</string>
+    <string name="error_failed_to_load_consent_info">Не удалось загрузить информацию о согласии</string>
 </resources>

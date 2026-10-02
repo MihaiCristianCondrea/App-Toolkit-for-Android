@@ -10,8 +10,6 @@ page frame, state handling, analytics hooks, and shared components.
 - The screen contracts, in `screen`: `ScreenViewModel`, `LoggedScreenViewModel`, `Loadable`,
   `TrackedStatus`, `UiMessage`, `ScreenStateHandler`, `TrackScreenState` and `MessageHost`. See
   [Screen state](#screen-state).
-- The previous screen contracts, in `base` and `states` (`BaseViewModel`, `UiStateScreen`,
-  `ScreenState`, `UiSnackbar` and their helpers), kept until every feature has moved to `screen`.
 - The shell's page frame, in `views/shell`: `PageScaffold`, `ShellTopAppBar` and
   `rememberTopBarScrollBehavior`, the app bar's search field, `LocalContentPadding` and
   `contentPadding`, `ContentWidthBox`, the pane placeholders, and the page's snackbar host
@@ -150,8 +148,7 @@ available; data-layer callers should use the lower-level API.
 
 
 - New ViewModels extend `core.ui.screen.ScreenViewModel`, or `core.ui.screen.LoggedScreenViewModel`
-  when Firebase breadcrumbs and error reporting are required. The `core.ui.base` classes are kept
-  only for the features not moved yet.
+  when Firebase breadcrumbs and error reporting are required.
 - ViewModels receive events through `onEvent`, change their state only through `setState`, and
   queue messages with `showMessage`. Operations run through `launchReport` (a suspend call),
   `collectReport` (a flow whose values go into state) or `catchReport` (a flow that keeps going),
@@ -297,10 +294,10 @@ app bar, such as tabs, call `PageScaffold` themselves.
   shows a message with `rememberScaffoldSnackbars()`: `post(...)` from a click handler, or
   `show(...)` from a coroutine, with the `ToolkitSnackbarStyle.Normal` or `Error` look, an action
   (`actionLabel`, `onAction`), a close button, an icon, its own `ToolkitSnackbarColors`, or its own
-  drawing through `content`. A view model's `UiSnackbar` goes through `DefaultSnackbarHandler`,
-  which uses the scaffold's host by default, takes the snackbar's `actionLabel` and sends
-  `getActionEvent` when the action is performed. It draws a host of its own only when given a
-  different one, so a screen never shows two (`drawHost` overrides that). An app's own messages,
+  drawing through `content`. A view model's messages go through `MessageHost(viewModel)`, which
+  uses the scaffold's host by default and calls `onAction` when a message's action is performed. It
+  draws a host of its own only when given a different one, so a screen never shows two
+  (`drawHost` overrides that). An app's own messages,
   such as those of its activity's view model, go to the host it hands `ShellHost(snackbarHostState)`,
   shown by the tabs' scaffold. `DefaultSnackbarHost` draws every snackbar with
   `ToolkitSnackbar`, the default look, unless its visuals carry their own `content`.
@@ -385,8 +382,8 @@ The full setup, with the file tree, templates and the migration steps, is the
 - **`LoggedScreenViewModel`** logs `vm_init` and `vm_event` itself; `launchReport` and
   `collectReport` take the same arguments and log `vm_op_start` and, on failure, `vm_op_error` and
   a Crashlytics report before calling `onError`. `catchReport` reports a failure of a flow that
-  keeps going, and hands it to a block that can emit a fallback. These are the same
-  messages, keys and events as the previous `core.ui.base.LoggedScreenViewModel`.
+  keeps going, and hands it to a block that can emit a fallback. The
+  messages, keys and events are fixed, because dashboards and Crashlytics filters read them.
 - **Failures are mapped here.** The data layer throws `NetworkException`, `StorageException` or a
   feature's own exception. In `onError`, `toFailed(fallback)` builds the `Loadable.Failed` and
   `toErrorMessage(fallback)` the error `UiMessage`. Both use `toUiText`, which gives every screen

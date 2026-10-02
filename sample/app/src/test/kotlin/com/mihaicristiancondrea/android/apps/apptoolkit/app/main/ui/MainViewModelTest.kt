@@ -21,7 +21,7 @@ import android.app.Activity
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.MainEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.R as NetworkR
+import com.mihaicristiancondrea.android.apps.apptoolkit.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.StandardDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
@@ -167,7 +167,7 @@ class MainViewModelTest {
             val message = viewModel.messages.value.single()
             assertTrue(message.isError)
             assertEquals(
-                NetworkR.string.error_failed_to_load_consent_info,
+                R.string.error_failed_to_load_consent_info,
                 (message.text as UiTextHelper.StringResource).resourceId,
             )
             assertTrue(telemetryRepository.loggedEvents.any { it.name == "vm_op_error" })

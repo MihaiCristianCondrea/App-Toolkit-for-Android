@@ -18,4 +18,5 @@
     <string name="app_short_description">مجموعة من أدوات وبرامج أندرويد المفيدة.</string>
     <string name="settings_disabled_message">الإعدادات غير متاحة حاليًا.</string>
     <string name="long_settings_label">فتح الإعدادات</string>
+    <string name="error_failed_to_load_consent_info">فشل في تحميل معلومات الموافقة</string>
 </resources>

@@ -33,8 +33,7 @@ import kotlin.coroutines.cancellation.CancellationException
  * event, and for each operation a start breadcrumb and `vm_op_start` event, and on failure an error
  * breadcrumb, a `vm_op_error` event and a Crashlytics report.
  *
- * The messages, keys and events are the ones the previous `core.ui.base.LoggedScreenViewModel`
- * sends, so dashboards and Crashlytics filters keep working across the move.
+ * The messages, keys and events are fixed: dashboards and Crashlytics filters read them.
  *
  * @param screenName The name reported as the `screen` key and parameter.
  * @param viewModelName The name reported as the breadcrumb `viewModel` key and the GA4

@@ -18,4 +18,5 @@
     <string name="app_short_description">유용한 Android 도구와 유틸리티 모음입니다.</string>
     <string name="settings_disabled_message">설정을 현재 사용할 수 없습니다.</string>
     <string name="long_settings_label">설정 열기</string>
+    <string name="error_failed_to_load_consent_info">동의 정보를 불러오지 못했습니다</string>
 </resources>

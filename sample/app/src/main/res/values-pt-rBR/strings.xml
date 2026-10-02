@@ -18,4 +18,5 @@
     <string name="app_short_description">Uma coleção de ferramentas e utilitários práticos para Android.</string>
     <string name="settings_disabled_message">As configurações não estão disponíveis no momento.</string>
     <string name="long_settings_label">Abrir configurações</string>
+    <string name="error_failed_to_load_consent_info">Falha ao carregar informações de consentimento</string>
 </resources>

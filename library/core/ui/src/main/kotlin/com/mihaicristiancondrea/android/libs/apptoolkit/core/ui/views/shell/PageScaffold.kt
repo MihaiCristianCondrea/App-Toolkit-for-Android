@@ -86,7 +86,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.LocalP
  * Pages registered with a title get this frame from the shell; pages that need something under
  * their app bar, such as tabs, call it themselves.
  *
- * Snackbars shown through `rememberScaffoldSnackbars()`, `DefaultSnackbarHandler` or
+ * Snackbars shown through `rememberScaffoldSnackbars()`, `MessageHost` or
  * [LocalPageSnackbarHostState] appear above the system bars and the buttons, in the Toolkit's
  * normal or error style or as the screen draws them.
  *

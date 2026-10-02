@@ -130,7 +130,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
  * may grow on large windows.
  * @param snackbarHostState Where the tabs' scaffold shows its snackbars. Pass one to show messages
  * that belong to the whole app, such as those of the activity's own view model, above the bottom
- * bar with the rest: `DefaultSnackbarHandler(state, snackbarHostState = it, drawHost = false)`.
+ * bar with the rest: `MessageHost(viewModel, snackbarHostState = it, drawHost = false)`.
  * While no tab is on screen, on a start screen or under a page, the shell shows them at the bottom
  * of the window instead. The shell keeps a host of its own by default.
  */

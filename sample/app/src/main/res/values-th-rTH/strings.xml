@@ -18,4 +18,5 @@
     <string name="app_short_description">ชุดเครื่องมือและยูทิลิตี Android ที่ใช้งานสะดวก</string>
     <string name="settings_disabled_message">ขณะนี้การตั้งค่าไม่พร้อมใช้งาน</string>
     <string name="long_settings_label">เปิดการตั้งค่า</string>
+    <string name="error_failed_to_load_consent_info">ไม่สามารถโหลดข้อมูลความยินยอมได้</string>
 </resources>

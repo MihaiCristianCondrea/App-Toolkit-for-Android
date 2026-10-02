@@ -18,7 +18,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.test.runTest
@@ -93,11 +92,5 @@ class NetworkExceptionsTest {
         val thrown = runCatching { networkCall<Unit> { throw failure } }.exceptionOrNull()
 
         assertSame(failure, thrown)
-    }
-
-    @Test
-    fun `legacy errors still classify translated exceptions`() {
-        assertEquals(Errors.Network.NO_INTERNET, NetworkException(NetworkException.Reason.NO_INTERNET).toError())
-        assertEquals(Errors.Network.HTTP_SERVER_ERROR, NetworkException(NetworkException.Reason.SERVER).toError())
     }
 }
