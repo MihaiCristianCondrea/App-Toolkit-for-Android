@@ -92,8 +92,6 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   `map`/`filter`/`sortedBy` on every frame of a roll: a few dozen small objects per frame for about
   a second. Reusing arrays would mean rewriting the projection math, which is not worth it without
   a profile showing a cost.
-- `library/feature/onboarding/.../ThemeOnboardingPageTab.kt` builds new page lambdas and lists on
-  every recomposition. (`ThemeSettingsScreen` no longer does.)
 
 ## Structure
 
@@ -125,8 +123,7 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
 - `library/feature/permissions/.../DefaultPermissionsRepository.kt:41-89` hard-codes the permission
   list instead of reading the host manifest, and returns the UI model `SettingsConfig`.
 - `domain/` packages that hold only models or constants, against `AGENTS.md`: `core/common/domain`,
-  `feature/diagnostics/domain`, `feature/onboarding/domain`,
-  `feature/support/domain`, `integration/billing/domain`, `integration/consent/domain`,
+  `feature/diagnostics/domain`, `feature/support/domain`, `integration/billing/domain`, `integration/consent/domain`,
   `integration/update/domain`, and in the sample `feature/apps/domain`, `feature/onboarding/domain`,
   `feature/tiles/domain` and `core/analytics/domain`.
 - UI creating data sources directly: `TrackedTileService.kt:92` and `QuickSettingsTileRequests.kt:71`
@@ -152,9 +149,6 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
 
 ## Clean code
 
-- The theme picker exists twice, in `feature/onboarding/.../ThemeOnboardingPageTab.kt:104-201` and
-  `feature/theme/.../ThemeSettingsScreen.kt:163-264`, and the copies have drifted (onboarding
-  ignores `seasonalThemesUnlocked`).
 - Gaps in `core.ui.screen` that the migrations worked around locally:
   - `MessageHost` has no `modifier`, so `FirebaseOnboardingPage` draws its own host, and no toast
     mode, so the issue reporter sheet has a private `MessageToasts`.

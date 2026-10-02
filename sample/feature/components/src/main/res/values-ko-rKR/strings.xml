@@ -112,4 +112,10 @@
     <string name="components_snackbar_retry">다시 시도</string>
     <string name="components_snackbar_icon">아이콘과 자체 색상이 있는 스낵바</string>
     <string name="components_snackbar_custom">%1$s: 화면이 직접 그리는 스낵바</string>
+    <string name="components_section_article_bar">기사 앱 바</string>
+    <string name="components_article_without_brand">브랜드 없음</string>
+    <string name="components_article_with_brand">브랜드 있음</string>
+    <string name="components_article_brand">샘플 발행처</string>
+    <string name="components_article_headline">차분한 앱 바가 기사를 먼저 보여 줍니다</string>
+    <string name="components_article_paragraph">처음에는 버튼만 표시됩니다. 헤드라인을 지나 스크롤하면 제목이 나타나고, 아래쪽 가장자리의 선이 얼마나 읽었는지 보여 줍니다.</string>
 </resources>

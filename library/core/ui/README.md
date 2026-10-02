@@ -24,6 +24,11 @@ page frame, state handling, analytics hooks, and shared components.
   `ToolkitFloatingActionButton` draw the `ToolkitFab`s of `:library:core:designsystem`, and
   `ScaffoldFabs` with `FabHost` and `LocalFabHost` let a screen put its own buttons in the
   scaffold around it. See [Floating action buttons](#floating-action-buttons).
+- The theme choices, in `views/theme`: `ThemeModePicker` (light, dark and follow system cards) and
+  `ThemePalettePicker` (wallpaper color variants and static palettes on two tabs, or the static
+  palettes alone without wallpaper colors), with `ThemePalettePager` and the mode previews under
+  them. The theme settings page and the onboarding theme page both use them, so the two cannot
+  drift apart; neither feature may depend on the other.
 - `ChoicePreferenceItem`, the settings row that shows the chosen option and opens a radio-list
   dialog to change it. Its `icon` is optional; the Toolkit's settings rows go without one, while
   their dialogs keep an icon on top through `dialogIcon`.
@@ -279,6 +284,13 @@ app bar, such as tabs, call `PageScaffold` themselves.
   part `TopBarHideState` has slid away, which reaches all of it, from under the status bar too,
   and a scaffold of your own attaches the state's `nestedScrollConnection` after the bar's own
   scroll behaviour.
+- **A screen can turn the bar into an article bar.** `PageScaffold` holds an `ArticleTopBarHost`
+  that the screen inside declares into with `ScaffoldArticleTopBar` from `:library:navigation`;
+  inside a list-detail pane it passes the scene's host through instead. `ShellTopAppBar` takes the
+  host as `article`: while one is declared it draws a large style small, shows the article's
+  compact title instead of the page's, and draws the reading progress over its bottom edge.
+  `TopBarStyle.forArticle(host)` gives the style it draws, for a scaffold of your own. See
+  [Article app bar](../../navigation/README.md#article-app-bar).
 - **Beside a rail or permanent drawer, the page it opened is a tab.** When `isTopLevelPage` says
   the navigation opened this page, the frame draws a small bar without a back button and, over a
   tinted frame, the tab's content card. Back still closes it.

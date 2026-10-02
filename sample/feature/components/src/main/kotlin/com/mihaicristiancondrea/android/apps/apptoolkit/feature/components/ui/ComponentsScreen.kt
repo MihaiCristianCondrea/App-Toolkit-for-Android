@@ -36,6 +36,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.co
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.AnimationShowcase
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.ArticleBarShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.DividerShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.ButtonShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.FabShowcase
@@ -144,6 +145,12 @@ fun ComponentsScreen(
 
             item {
                 FabShowcase(
+                    onLogEvent = ::ga4Event,
+                )
+            }
+
+            item {
+                ArticleBarShowcase(
                     onLogEvent = ::ga4Event,
                 )
             }

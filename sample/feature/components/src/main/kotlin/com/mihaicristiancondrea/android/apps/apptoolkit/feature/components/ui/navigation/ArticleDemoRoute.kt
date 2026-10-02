@@ -15,10 +15,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.domain.models
+package com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.navigation
 
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation3.runtime.NavKey
+import kotlinx.serialization.Serializable
 
-data class OnboardingThemeChoice(
-    val key: String, val displayName: String, val icon: ImageVector, val description: String
-)
+/** The article app bar demo, with the sample publisher's mark in the bar when [branded]. */
+@Serializable
+data class ArticleDemoRoute(val branded: Boolean) : NavKey

@@ -33,7 +33,9 @@ import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.apps.apptoolkit.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.AppsListScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.navigation.AppsListRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ArticleDemoScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ComponentsScreen
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.navigation.ArticleDemoRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.navigation.ComponentsRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ToolkitTilesScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ToolkitTilesRoute
@@ -42,6 +44,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.t
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIconReplayMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R as AppsR
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R as ComponentsR
@@ -52,8 +55,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as D
 const val ACTION_OPEN_SETTINGS: String = "com.d4rk.android.apps.apptoolkit.action.OPEN_SETTINGS"
 
 /**
- * The sample's whole navigation: two tabs, the drawer, the overflow menu, the components page, the
- * optional bottom banner and the intents it answers. `toolkitGraph` adds the Toolkit's own pages (settings,
+ * The sample's whole navigation: two tabs, the drawer, the overflow menu, the components page and
+ * its article bar demo, the optional bottom banner and the intents it answers. The demo registers a
+ * small bar, the one an article draws anyway, so it does not open large for its first frame. `toolkitGraph` adds the Toolkit's own pages (settings,
  * help, support, the first-launch start screens and the rest).
  *
  * This is the one place that knows the full feature set, which is why it stays in `:sample:app`:
@@ -95,6 +99,12 @@ fun appGraph(
     }
     page<ComponentsRoute>(title = { stringResource(ComponentsR.string.components_title) }) {
         ComponentsScreen()
+    }
+    page<ArticleDemoRoute>(
+        topBar = TopBarStyle.Small,
+        title = { stringResource(ComponentsR.string.components_section_article_bar) },
+    ) { key ->
+        ArticleDemoScreen(branded = key.branded)
     }
     aboutPages { AboutSettingsContent() }
     banner {

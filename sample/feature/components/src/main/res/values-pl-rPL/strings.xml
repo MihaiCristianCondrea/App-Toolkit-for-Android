@@ -112,4 +112,10 @@
     <string name="components_snackbar_retry">Ponów</string>
     <string name="components_snackbar_icon">Pasek powiadomień z ikoną i własnymi kolorami</string>
     <string name="components_snackbar_custom">%1$s: pasek powiadomień rysowany przez sam ekran</string>
+    <string name="components_section_article_bar">Pasek aplikacji artykułu</string>
+    <string name="components_article_without_brand">Bez marki</string>
+    <string name="components_article_with_brand">Z marką</string>
+    <string name="components_article_brand">Przykładowy wydawca</string>
+    <string name="components_article_headline">Dyskretny pasek aplikacji stawia historię na pierwszym miejscu</string>
+    <string name="components_article_paragraph">Pasek zaczyna tylko od swoich przycisków. Przewiń za nagłówek, a ich miejsce zajmie tytuł, a linia wzdłuż dolnej krawędzi pokaże, ile już przeczytano.</string>
 </resources>

@@ -112,4 +112,10 @@
     <string name="components_snackbar_retry">Retry</string>
     <string name="components_snackbar_icon">A snackbar with an icon and colours of its own</string>
     <string name="components_snackbar_custom">%1$s: a snackbar the screen draws itself</string>
+    <string name="components_section_article_bar">Article app bar</string>
+    <string name="components_article_without_brand">Without a brand</string>
+    <string name="components_article_with_brand">With a brand</string>
+    <string name="components_article_brand">Sample publisher</string>
+    <string name="components_article_headline">A quiet app bar keeps the story first</string>
+    <string name="components_article_paragraph">The bar starts with only its buttons. Scroll past the headline and the title takes their place, while the line along its bottom edge shows how far you have read.</string>
 </resources>

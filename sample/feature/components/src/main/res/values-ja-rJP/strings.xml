@@ -112,4 +112,10 @@
     <string name="components_snackbar_retry">再試行</string>
     <string name="components_snackbar_icon">アイコンと独自の色を持つスナックバー</string>
     <string name="components_snackbar_custom">%1$s: 画面が自分で描くスナックバー</string>
+    <string name="components_section_article_bar">記事用アプリバー</string>
+    <string name="components_article_without_brand">ブランドなし</string>
+    <string name="components_article_with_brand">ブランドあり</string>
+    <string name="components_article_brand">サンプル発行元</string>
+    <string name="components_article_headline">控えめなアプリバーで記事を主役に</string>
+    <string name="components_article_paragraph">最初はボタンだけが表示されます。見出しを過ぎてスクロールするとタイトルが表示され、下端の線でどこまで読んだかがわかります。</string>
 </resources>

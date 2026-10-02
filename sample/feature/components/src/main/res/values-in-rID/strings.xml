@@ -112,4 +112,10 @@
     <string name="components_snackbar_retry">Coba lagi</string>
     <string name="components_snackbar_icon">Snackbar dengan ikon dan warnanya sendiri</string>
     <string name="components_snackbar_custom">%1$s: snackbar yang digambar oleh layar sendiri</string>
+    <string name="components_section_article_bar">Bilah aplikasi artikel</string>
+    <string name="components_article_without_brand">Tanpa merek</string>
+    <string name="components_article_with_brand">Dengan merek</string>
+    <string name="components_article_brand">Penerbit contoh</string>
+    <string name="components_article_headline">Bilah aplikasi yang tenang mengutamakan cerita</string>
+    <string name="components_article_paragraph">Bilah ini awalnya hanya menampilkan tombolnya. Gulir melewati judul utama dan judul artikel akan menggantikannya, sementara garis di tepi bawahnya menunjukkan seberapa jauh Anda telah membaca.</string>
 </resources>

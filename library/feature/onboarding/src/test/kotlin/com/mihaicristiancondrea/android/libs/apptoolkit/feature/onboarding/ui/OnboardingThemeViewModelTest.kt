@@ -18,8 +18,12 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.HolidaySeason
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.SeasonalThemeState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.ThemePreferencesState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.WeatherEffect
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
@@ -33,7 +37,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import java.time.LocalDate
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class OnboardingThemeViewModelTest {
@@ -54,8 +60,14 @@ class OnboardingThemeViewModelTest {
         staticPaletteId = "blue",
     )
 
-    private fun createViewModel(preferences: ThemePreferencesRepository): OnboardingThemeViewModel =
-        OnboardingThemeViewModel(preferences = preferences, telemetryRepository = telemetryRepository)
+    private fun createViewModel(
+        preferences: ThemePreferencesRepository,
+        seasonal: FakeSeasonalThemeRepository = FakeSeasonalThemeRepository(),
+    ): OnboardingThemeViewModel = OnboardingThemeViewModel(
+        preferences = preferences,
+        seasonal = seasonal,
+        telemetryRepository = telemetryRepository,
+    )
 
     private fun advance() = dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
@@ -65,6 +77,19 @@ class OnboardingThemeViewModelTest {
         advance()
 
         assertEquals(stored, viewModel.state.value.preferences)
+        assertFalse(viewModel.state.value.seasonalThemesUnlocked)
+    }
+
+    @Test
+    fun `found seasonal themes are offered all year`() = runTest(dispatcherExtension.testDispatcher) {
+        val seasonal = FakeSeasonalThemeRepository()
+        val viewModel = createViewModel(FakeThemePreferencesRepository(initial = stored), seasonal)
+        advance()
+
+        seasonal.state.value = SeasonalThemeState(unlocked = true)
+        advance()
+
+        assertTrue(viewModel.state.value.seasonalThemesUnlocked)
     }
 
     @Test
@@ -176,5 +201,23 @@ class OnboardingThemeViewModelTest {
             check(!writeFails) { "write" }
             writes += entry
         }
+    }
+
+    private class FakeSeasonalThemeRepository : SeasonalThemeRepository {
+        override val state = MutableStateFlow(SeasonalThemeState())
+
+        override suspend fun unlockSeasonalThemes(): Boolean = false
+
+        override suspend fun setWeatherEffect(effect: WeatherEffect) = Unit
+
+        override suspend fun pendingHolidayGreeting(today: LocalDate): HolidaySeason? = null
+
+        override suspend fun answerHolidayGreeting(
+            season: HolidaySeason,
+            today: LocalDate,
+            useHolidayTheme: Boolean,
+        ) = Unit
+
+        override suspend fun restoreThemeAfterHoliday(today: LocalDate) = Unit
     }
 }

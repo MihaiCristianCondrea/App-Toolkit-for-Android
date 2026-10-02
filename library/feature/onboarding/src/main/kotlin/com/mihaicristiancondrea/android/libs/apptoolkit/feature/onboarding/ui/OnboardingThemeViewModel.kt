@@ -18,11 +18,15 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingThemeEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingThemeUiState
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 
 /**
  * ViewModel for the onboarding theme page. It reads and writes the same
@@ -34,6 +38,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.st
  */
 class OnboardingThemeViewModel(
     private val preferences: ThemePreferencesRepository,
+    private val seasonal: SeasonalThemeRepository,
     telemetryRepository: TelemetryRepository,
 ) : LoggedScreenViewModel<OnboardingThemeUiState, OnboardingThemeEvent>(
     initialState = OnboardingThemeUiState(),
@@ -66,10 +71,15 @@ class OnboardingThemeViewModel(
         }
     }
 
+    /** Follows the stored theme and whether the holiday palettes are offered all year. */
     private fun observePreferences() {
-        preferences.preferencesState.collectReport(action = Actions.OBSERVE_PREFERENCES) { stored ->
-            setState { copy(preferences = stored) }
-        }
+        combine(
+            preferences.preferencesState,
+            seasonal.state.map { it.unlocked }.distinctUntilChanged(),
+        ) { stored, unlocked -> stored to unlocked }
+            .collectReport(action = Actions.OBSERVE_PREFERENCES) { (stored, unlocked) ->
+                setState { copy(preferences = stored, seasonalThemesUnlocked = unlocked) }
+            }
     }
 
     /**

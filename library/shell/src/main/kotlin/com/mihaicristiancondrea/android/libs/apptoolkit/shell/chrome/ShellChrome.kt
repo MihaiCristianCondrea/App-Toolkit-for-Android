@@ -120,6 +120,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.Loca
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalTopBarStyleOverride
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.ShellTopAppBar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.TopBarSearch
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.forArticle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.frameTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.rememberTopBarHideState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.rememberTopBarScrollBehavior
@@ -139,8 +140,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.DrawerE
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleTopBarHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ContentCardShape
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FollowScrollWithFrameTint
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalArticleTopBarHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalShellLayout
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.besideNavigationTitle
@@ -176,21 +179,27 @@ class ShellChromeController(
 )
 
 /**
- * The floating action button hosts of the tab screens, by screen entry.
+ * What the tab screens declare into the shell's scaffold, by screen entry: their floating action
+ * buttons and their article bar.
  *
  * A stable holder, so the bodies it is passed to can skip; a plain mutable map is unstable. Its
- * contents need no snapshot state: a screen takes its host once, in `remember`.
+ * contents need no snapshot state: a screen takes its hosts once, in `remember`.
  */
 @Stable
-internal class FabHosts {
-    private val hosts: MutableMap<String, FabHost> = mutableMapOf()
+internal class EntryHosts {
+    private val fabHosts: MutableMap<String, FabHost> = mutableMapOf()
+    private val articleHosts: MutableMap<String, ArticleTopBarHost> = mutableMapOf()
 
-    /** The host for [entryKey], created the first time it is asked for. */
-    fun hostFor(entryKey: String): FabHost = hosts.getOrPut(entryKey) { FabHost() }
+    /** The floating action button host for [entryKey], created the first time it is asked for. */
+    fun fabHostFor(entryKey: String): FabHost = fabHosts.getOrPut(entryKey) { FabHost() }
+
+    /** The article bar host for [entryKey], created the first time it is asked for. */
+    fun articleHostFor(entryKey: String): ArticleTopBarHost = articleHosts.getOrPut(entryKey) { ArticleTopBarHost() }
 
     /** Drops the hosts of every screen not in [liveEntryKeys]. */
     fun retainOnly(liveEntryKeys: Set<String>) {
-        hosts.keys.retainAll(liveEntryKeys)
+        fabHosts.keys.retainAll(liveEntryKeys)
+        articleHosts.keys.retainAll(liveEntryKeys)
     }
 }
 
@@ -236,14 +245,15 @@ internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
             restore = { queries -> queries.map(::ShellSearch).toImmutableList() },
         ),
     ) { graph.tabs.map { ShellSearch() }.toImmutableList() }
-    // Where each tab screen puts the floating action buttons it declares, by the screen's entry.
-    val fabHosts = remember { FabHosts() }
+    // Where each tab screen puts the floating action buttons and article bar it declares, by the
+    // screen's entry.
+    val entryHosts = remember { EntryHosts() }
     // A host lives as long as its screen's entry: once a screen has left every tab's stack, its host
     // goes too, rather than one staying behind for every child ever opened.
     LaunchedEffect(navigator, graph) {
         snapshotFlow {
             graph.tabs.indices.flatMapTo(HashSet()) { tab -> navigator.tabStack(tab).map { tabEntryKey(tab, it) } }
-        }.collect { live -> fabHosts.retainOnly(live) }
+        }.collect { live -> entryHosts.retainOnly(live) }
     }
 
     val player = graph.player?.takeIf { settings.accessoryMode.showsPlayer }
@@ -298,7 +308,7 @@ internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
             graph = graph,
             navigator = navigator,
             searches = searches,
-            fabHosts = fabHosts,
+            entryHosts = entryHosts,
             callbacks = callbacks,
             // With the app named in the navigation beside it, the app bar names the tab instead.
             navigationNamesApp = layout.mode == ShellLayoutMode.PermanentDrawer ||
@@ -426,7 +436,7 @@ private fun ShellBody(
     graph: ShellGraph,
     navigator: ShellNavigator,
     searches: ImmutableList<ShellSearch>,
-    fabHosts: FabHosts,
+    entryHosts: EntryHosts,
     callbacks: NavigationCallbacks,
     navigationNamesApp: Boolean,
     showMenuButton: Boolean,
@@ -445,7 +455,8 @@ private fun ShellBody(
     val topKey = navigator.currentTabStack.last()
     val destination = graph.destination(topKey)
     val isChild = destination.kind == DestinationKind.Child
-    val style = layout.topBarFor(LocalTopBarStyleOverride.current ?: destination.topBar)
+    val article = remember(tabIndex, topKey) { entryHosts.articleHostFor(tabEntryKey(tabIndex, topKey)) }
+    val style = layout.topBarFor(LocalTopBarStyleOverride.current ?: destination.topBar).forArticle(article)
     val topScroll = rememberTopBarScrollBehavior(style)
     val bottomScroll = BottomAppBarDefaults.exitAlwaysScrollBehavior()
     // Extended buttons fold to their icon while the content scrolls down.
@@ -546,6 +557,7 @@ private fun ShellBody(
                     } else {
                         null
                     },
+                    article = article,
                 )
             }
         },
@@ -581,7 +593,7 @@ private fun ShellBody(
                 val fab = shown.floatingActionButton
                 // The buttons the graph describes, then those the screen itself declares. The host
                 // is held here, so a screen's buttons still scale out after its entry has gone.
-                val host = remember(index, key) { fabHosts.hostFor(tabEntryKey(index, key)) }
+                val host = remember(index, key) { entryHosts.fabHostFor(tabEntryKey(index, key)) }
                 val described = shown.floatingActionButtons?.invoke(key).orEmpty() + host.fabs
                 if (fab != null || described.isNotEmpty()) {
                     Column(
@@ -633,7 +645,7 @@ private fun ShellBody(
                 LocalPageSnackbarHostState provides snackbarHostState,
                 LocalScaffoldSnackbars provides snackbars,
             ) {
-                TabsNavDisplay(graph, navigator, searches, fabHosts)
+                TabsNavDisplay(graph, navigator, searches, entryHosts)
             }
         }
     }
@@ -651,7 +663,7 @@ private fun TabsNavDisplay(
     graph: ShellGraph,
     navigator: ShellNavigator,
     searches: ImmutableList<ShellSearch>,
-    fabHosts: FabHosts,
+    entryHosts: EntryHosts,
 ) {
     val motion = LocalShellMotion.current
     val layout = LocalShellLayout.current
@@ -663,7 +675,15 @@ private fun TabsNavDisplay(
                 rememberViewModelStoreNavEntryDecorator(),
             ),
             entryProvider = { key ->
-                tabEntry(graph, key, tabIndex, searches[tabIndex], fabHosts.hostFor(tabEntryKey(tabIndex, key)))
+                val entryKey = tabEntryKey(tabIndex, key)
+                tabEntry(
+                    graph = graph,
+                    key = key,
+                    tabIndex = tabIndex,
+                    search = searches[tabIndex],
+                    fabHost = entryHosts.fabHostFor(entryKey),
+                    articleHost = entryHosts.articleHostFor(entryKey),
+                )
             },
         )
     }
@@ -732,6 +752,7 @@ private fun tabEntry(
     tabIndex: Int,
     search: ShellSearch,
     fabHost: FabHost,
+    articleHost: ArticleTopBarHost,
 ): NavEntry<NavKey> {
     val destination = graph.destination(key)
     return NavEntry(
@@ -741,7 +762,11 @@ private fun tabEntry(
         metadata = ShellEntryInfo(destination.kind, tabIndex, destination.paneRole, destination.transition).toMetadata(),
     ) { entryKey ->
         val provided = if (graph.tabs[tabIndex].search != null) search else null
-        CompositionLocalProvider(LocalShellSearch provides provided, LocalFabHost provides fabHost) {
+        CompositionLocalProvider(
+            LocalShellSearch provides provided,
+            LocalFabHost provides fabHost,
+            LocalArticleTopBarHost provides articleHost,
+        ) {
             ContentWidthBox(
                 maxWidth = LocalShellLayout.current.maxWidthFor(destination.contentWidth),
                 modifier = Modifier.background(MaterialTheme.colorScheme.surface),

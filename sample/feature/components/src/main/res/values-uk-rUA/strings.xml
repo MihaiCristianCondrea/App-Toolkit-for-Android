@@ -112,4 +112,10 @@
     <string name="components_snackbar_retry">Повторити</string>
     <string name="components_snackbar_icon">Спливне повідомлення зі значком і власними кольорами</string>
     <string name="components_snackbar_custom">%1$s: спливне повідомлення, яке малює сам екран</string>
+    <string name="components_section_article_bar">Панель статті</string>
+    <string name="components_article_without_brand">Без бренду</string>
+    <string name="components_article_with_brand">З брендом</string>
+    <string name="components_article_brand">Видавець для прикладу</string>
+    <string name="components_article_headline">Стримана панель залишає першість історії</string>
+    <string name="components_article_paragraph">Спочатку панель показує лише свої кнопки. Прокрутіть далі заголовка, і їхнє місце займе назва, а лінія вздовж нижнього краю покаже, скільки ви вже прочитали.</string>
 </resources>

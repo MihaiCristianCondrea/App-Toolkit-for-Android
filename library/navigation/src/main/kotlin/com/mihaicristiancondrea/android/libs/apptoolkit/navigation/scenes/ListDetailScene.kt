@@ -111,7 +111,11 @@ import androidx.navigationevent.compose.rememberNavigationEventState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleReadingProgress
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleTopBarHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleTopBarTitle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ContentCardShape
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalArticleTopBarHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FollowScrollWithFrameTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FrameTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalBesideNavigation
@@ -312,7 +316,13 @@ private fun <T : Any> ListDetailLayout(
         // has content scrolled under it. A new detail starts at its top.
         val listScroll = remember { PaneScrollOffset() }
         val detailScroll = remember { PaneScrollOffset() }
-        LaunchedEffect(detailEntry?.contentKey) { detailScroll.offset = 0f }
+        val listArticle = remember { ArticleTopBarHost() }
+        val detailArticles = remember { mutableMapOf<Any, ArticleTopBarHost>() }
+        val detailArticle = detailEntry?.let { entry -> detailArticles.getOrPut(entry.contentKey) { ArticleTopBarHost() } }
+        LaunchedEffect(detailEntry?.contentKey) {
+            detailScroll.offset = 0f
+            detailArticles.keys.retainAll(setOfNotNull(detailEntry?.contentKey))
+        }
         if (framed) {
             FollowScrollWithFrameTint {
                 if (listScroll.scrolledUnder || detailScroll.scrolledUnder) FrameTint.Full else FrameTint.None
@@ -327,6 +337,8 @@ private fun <T : Any> ListDetailLayout(
                 ListDetailTopBar(
                     listChrome = listEntry.pageChrome,
                     detailChrome = detailEntry?.pageChrome,
+                    listArticle = listArticle,
+                    detailArticle = detailArticle,
                     listWidth = listWidth,
                     onCloseList = closeList,
                     showsBack = !topLevel,
@@ -344,6 +356,7 @@ private fun <T : Any> ListDetailLayout(
                     CompositionLocalProvider(
                         LocalPaneRole provides PaneRole.List,
                         LocalSelectedDetail provides detailEntry?.contentKey,
+                        LocalArticleTopBarHost provides if (framed) listArticle else LocalArticleTopBarHost.current,
                     ) {
                         listEntry.Content()
                     }
@@ -405,7 +418,14 @@ private fun <T : Any> ListDetailLayout(
                                 label = "DetailPane",
                             ) { entry ->
                                 if (entry != null) {
-                                    entry.Content()
+                                    val article = remember {
+                                        detailArticles.getOrPut(entry.contentKey) { ArticleTopBarHost() }
+                                    }
+                                    CompositionLocalProvider(
+                                        LocalArticleTopBarHost provides if (framed) article else LocalArticleTopBarHost.current,
+                                    ) {
+                                        entry.Content()
+                                    }
                                 } else {
                                     listEntry.metadata[ListDetailScene.DetailPlaceholderKey]?.invoke()
                                 }
@@ -452,11 +472,17 @@ private class PaneScrollOffset : NestedScrollConnection {
     }
 }
 
-/** One small app bar over both panes, each half titled after the page under it. */
+/**
+ * One small app bar over both panes, each half titled after the page under it. A pane that declares
+ * an article bar shows the article's compact title in its half, with its reading progress along
+ * that half's bottom edge only.
+ */
 @Composable
 private fun ListDetailTopBar(
     listChrome: PageChrome?,
     detailChrome: PageChrome?,
+    listArticle: ArticleTopBarHost,
+    detailArticle: ArticleTopBarHost?,
     listWidth: () -> Dp,
     onCloseList: () -> Unit,
     showsBack: Boolean,
@@ -472,60 +498,93 @@ private fun ListDetailTopBar(
             .height(64.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(
-            modifier = Modifier
-                .widthOf(listWidth)
-                .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Start)),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            // A list standing in for a tab has no way back but the navigation beside it.
-            if (showsBack) {
-                // This module cannot depend on core UI, so it supplies matching bounce and sound feedback locally.
-                IconButton(
-                    onClick = {
-                        view.playSoundEffect(SoundEffectConstants.CLICK)
-                        onCloseList()
-                    },
-                    modifier = Modifier
-                        .padding(start = 4.dp)
-                        .bounceClick(),
-                ) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.shell_navigate_back))
-                }
-            }
-            Text(
-                text = listChrome?.title?.invoke().orEmpty(),
-                style = MaterialTheme.typography.titleLarge,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
+        Box(Modifier.widthOf(listWidth).fillMaxHeight()) {
+            Row(
                 modifier = Modifier
-                    .padding(start = if (showsBack) 4.dp else 16.dp, end = 16.dp)
-                    .then(listTitleModifier),
-            )
+                    .fillMaxHeight()
+                    .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Start)),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                // A list standing in for a tab has no way back but the navigation beside it.
+                if (showsBack) {
+                    // This module cannot depend on core UI, so it supplies matching bounce and sound feedback locally.
+                    IconButton(
+                        onClick = {
+                            view.playSoundEffect(SoundEffectConstants.CLICK)
+                            onCloseList()
+                        },
+                        modifier = Modifier
+                            .padding(start = 4.dp)
+                            .bounceClick(),
+                    ) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.shell_navigate_back))
+                    }
+                }
+                PaneTitle(
+                    title = listChrome?.title?.invoke().orEmpty(),
+                    article = listArticle,
+                    modifier = Modifier.padding(start = if (showsBack) 4.dp else 16.dp, end = 16.dp),
+                    titleModifier = listTitleModifier,
+                )
+            }
+            if (listArticle.isDeclared) {
+                ArticleReadingProgress(listArticle, Modifier.align(Alignment.BottomStart))
+            }
         }
         Spacer(Modifier.width(SeparatorWidth))
         AnimatedContent(
-            targetState = detailChrome,
+            targetState = detailChrome to detailArticle,
             transitionSpec = { fadeIn() togetherWith fadeOut() },
             modifier = Modifier.weight(1f),
             label = "DetailTitle",
-        ) { chrome ->
-            Row(
-                modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.End)),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = chrome?.title?.invoke().orEmpty(),
-                    style = MaterialTheme.typography.titleLarge,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
+        ) { (chrome, article) ->
+            Box(Modifier.fillMaxHeight()) {
+                Row(
                     modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 8.dp),
-                )
-                chrome?.actions?.invoke(this)
+                        .fillMaxHeight()
+                        .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.End)),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    PaneTitle(
+                        title = chrome?.title?.invoke().orEmpty(),
+                        article = article,
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = 8.dp),
+                    )
+                    chrome?.actions?.invoke(this)
+                }
+                if (article?.isDeclared == true) {
+                    ArticleReadingProgress(article, Modifier.align(Alignment.BottomStart))
+                }
             }
         }
+    }
+}
+
+/**
+ * A pane's half of the shared bar: its page's [title], or the compact title of the article the
+ * page declares. [titleModifier] applies to the page's title only.
+ */
+@Composable
+private fun PaneTitle(
+    title: String,
+    article: ArticleTopBarHost?,
+    modifier: Modifier = Modifier,
+    titleModifier: Modifier = Modifier,
+) {
+    if (article?.isDeclared == true) {
+        Box(modifier, contentAlignment = Alignment.CenterStart) {
+            ArticleTopBarTitle(article, textStyle = MaterialTheme.typography.titleLarge)
+        }
+    } else {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleLarge,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = modifier.then(titleModifier),
+        )
     }
 }
 

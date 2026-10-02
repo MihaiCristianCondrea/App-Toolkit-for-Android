@@ -112,4 +112,10 @@
     <string name="components_snackbar_retry">Reintentar</string>
     <string name="components_snackbar_icon">Una barra de notificación con icono y colores propios</string>
     <string name="components_snackbar_custom">%1$s: una barra de notificación que dibuja la propia pantalla</string>
+    <string name="components_section_article_bar">Barra de aplicación de artículo</string>
+    <string name="components_article_without_brand">Sin marca</string>
+    <string name="components_article_with_brand">Con marca</string>
+    <string name="components_article_brand">Editorial de ejemplo</string>
+    <string name="components_article_headline">Una barra discreta deja la historia en primer plano</string>
+    <string name="components_article_paragraph">La barra empieza solo con sus botones. Desplázate más allá del titular y el título ocupa su lugar, mientras la línea de su borde inferior muestra cuánto has leído.</string>
 </resources>

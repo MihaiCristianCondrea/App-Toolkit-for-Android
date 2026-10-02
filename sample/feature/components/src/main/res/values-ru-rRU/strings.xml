@@ -112,4 +112,10 @@
     <string name="components_snackbar_retry">Повторить</string>
     <string name="components_snackbar_icon">Всплывающее сообщение со значком и собственными цветами</string>
     <string name="components_snackbar_custom">%1$s: всплывающее сообщение, которое рисует сам экран</string>
+    <string name="components_section_article_bar">Панель статьи</string>
+    <string name="components_article_without_brand">Без бренда</string>
+    <string name="components_article_with_brand">С брендом</string>
+    <string name="components_article_brand">Издатель для примера</string>
+    <string name="components_article_headline">Ненавязчивая панель оставляет главное статье</string>
+    <string name="components_article_paragraph">Сначала на панели только кнопки. Прокрутите дальше заголовка, и на их месте появится название, а линия по нижнему краю покажет, сколько вы уже прочитали.</string>
 </resources>

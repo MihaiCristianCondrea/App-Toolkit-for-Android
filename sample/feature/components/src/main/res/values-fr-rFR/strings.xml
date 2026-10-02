@@ -112,4 +112,10 @@
     <string name="components_snackbar_retry">Réessayer</string>
     <string name="components_snackbar_icon">Une barre de message avec une icône et ses propres couleurs</string>
     <string name="components_snackbar_custom">%1$s : une barre de message dessinée par l’écran lui-même</string>
+    <string name="components_section_article_bar">Barre supérieure pour article</string>
+    <string name="components_article_without_brand">Sans marque</string>
+    <string name="components_article_with_brand">Avec marque</string>
+    <string name="components_article_brand">Éditeur fictif</string>
+    <string name="components_article_headline">Une barre discrète laisse la place au récit</string>
+    <string name="components_article_paragraph">La barre commence avec ses seuls boutons. Faites défiler au-delà du titre principal et le titre prend leur place, tandis que la ligne sur son bord inférieur indique où vous en êtes dans votre lecture.</string>
 </resources>

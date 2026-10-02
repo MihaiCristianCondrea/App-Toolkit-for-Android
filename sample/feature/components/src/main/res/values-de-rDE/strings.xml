@@ -112,4 +112,10 @@
     <string name="components_snackbar_retry">Wiederholen</string>
     <string name="components_snackbar_icon">Eine Snackbar mit Symbol und eigenen Farben</string>
     <string name="components_snackbar_custom">%1$s: eine Snackbar, die der Bildschirm selbst zeichnet</string>
+    <string name="components_section_article_bar">Artikel-App-Leiste</string>
+    <string name="components_article_without_brand">Ohne Marke</string>
+    <string name="components_article_with_brand">Mit Marke</string>
+    <string name="components_article_brand">Beispielverlag</string>
+    <string name="components_article_headline">Eine zurückhaltende App-Leiste lässt der Geschichte den Vortritt</string>
+    <string name="components_article_paragraph">Die Leiste zeigt zunächst nur ihre Schaltflächen. Scrolle an der Überschrift vorbei, dann erscheint dort der Titel, und die Linie am unteren Rand zeigt, wie weit du gelesen hast.</string>
 </resources>

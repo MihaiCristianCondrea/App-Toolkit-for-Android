@@ -112,4 +112,10 @@
     <string name="components_snackbar_retry">Försök igen</string>
     <string name="components_snackbar_icon">En snackbar med ikon och egna färger</string>
     <string name="components_snackbar_custom">%1$s: en snackbar som skärmen själv ritar</string>
+    <string name="components_section_article_bar">Appfält för artiklar</string>
+    <string name="components_article_without_brand">Utan varumärke</string>
+    <string name="components_article_with_brand">Med varumärke</string>
+    <string name="components_article_brand">Exempelutgivare</string>
+    <string name="components_article_headline">Ett diskret appfält låter berättelsen gå först</string>
+    <string name="components_article_paragraph">Fältet visar först bara sina knappar. Scrolla förbi rubriken så tar titeln deras plats, medan linjen längs nederkanten visar hur långt du har läst.</string>
 </resources>

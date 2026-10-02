@@ -112,4 +112,10 @@
     <string name="components_snackbar_retry">دوبارہ کوشش کریں</string>
     <string name="components_snackbar_icon">آئیکن اور اپنے رنگوں والا اسنیک بار</string>
     <string name="components_snackbar_custom">%1$s: اسکرین کا خود بنایا ہوا اسنیک بار</string>
+    <string name="components_section_article_bar">مضمون کی ایپ بار</string>
+    <string name="components_article_without_brand">برانڈ کے بغیر</string>
+    <string name="components_article_with_brand">برانڈ کے ساتھ</string>
+    <string name="components_article_brand">نمونہ ناشر</string>
+    <string name="components_article_headline">ایک سادہ ایپ بار کہانی کو پہلے رکھتی ہے</string>
+    <string name="components_article_paragraph">شروع میں بار صرف اپنے بٹن دکھاتی ہے۔ سرخی سے آگے اسکرول کریں تو عنوان ان کی جگہ لے لیتا ہے، جبکہ نچلے کنارے کی لکیر بتاتی ہے کہ آپ کتنا پڑھ چکے ہیں۔</string>
 </resources>

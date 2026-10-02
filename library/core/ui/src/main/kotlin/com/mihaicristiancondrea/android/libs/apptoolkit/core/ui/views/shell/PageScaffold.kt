@@ -27,7 +27,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleTopBarHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ContentCardShape
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalArticleTopBarHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalBesideNavigation
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.besideNavigationTitle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.isTopLevelPage
@@ -93,6 +95,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.LocalP
  * Floating action buttons come from [fabs], from what the screen inside declares with
  * `ScaffoldFabs`, and from [floatingActionButton] for a button drawn by hand; the frame stacks the
  * described ones in a column at the bottom end.
+ *
+ * A screen inside can turn the app bar into an article bar with `ScaffoldArticleTopBar`; inside a
+ * list-detail pane it reaches the scene's bar over that pane instead.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -114,7 +119,12 @@ fun PageScaffold(
     val topLevel = pane == PaneRole.None && isTopLevelPage(pageKey)
     val carded = topLevel && beside?.tinted == true
     val declared = LocalTopBarStyleOverride.current ?: if (topLevel) TopBarStyle.Small else style
-    val resolvedStyle = if (pane == PaneRole.None) LocalShellLayout.current.topBarFor(declared) else TopBarStyle.Hidden
+    val article = remember { ArticleTopBarHost() }
+    val resolvedStyle = if (pane == PaneRole.None) {
+        LocalShellLayout.current.topBarFor(declared).forArticle(article)
+    } else {
+        TopBarStyle.Hidden
+    }
     val scrollBehavior = rememberTopBarScrollBehavior(resolvedStyle)
     val hideTopBar = LocalHideTopBarOnScroll.current && pane == PaneRole.None
     val topHide = rememberTopBarHideState()
@@ -163,6 +173,7 @@ fun PageScaffold(
                     } else {
                         null
                     },
+                    article = article,
                 )
             }
         },
@@ -189,6 +200,7 @@ fun PageScaffold(
                 LocalPageSnackbarHostState provides snackbarHostState,
                 LocalScaffoldSnackbars provides snackbars,
                 LocalFabHost provides fabHost,
+                LocalArticleTopBarHost provides if (pane == PaneRole.None) article else LocalArticleTopBarHost.current,
                 content = content,
             )
         }

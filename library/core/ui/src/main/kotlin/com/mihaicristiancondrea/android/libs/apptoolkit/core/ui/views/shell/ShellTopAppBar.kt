@@ -18,6 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -56,6 +58,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleReadingProgress
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleTopBarHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleTopBarTitle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FrameTint
 
 /**
@@ -125,12 +130,23 @@ fun topBarInsets(reachesStart: Boolean = true): WindowInsets = WindowInsets.safe
 )
 
 /**
+ * Whether [style] is drawn small while an article bar is declared: a large bar would show a second,
+ * expanded title above the article's own header.
+ */
+fun TopBarStyle.forArticle(article: ArticleTopBarHost?): TopBarStyle =
+    if (isLarge && article?.isDeclared == true) TopBarStyle.Small else this
+
+/**
  * Draws [style]. Draws nothing for [TopBarStyle.Hidden].
  *
  * @param colors The bar's colours; null keeps Material's, which tint the bar once content scrolls
  * under it.
  * @param titleModifier Applied to the title text of a small or centred bar, such as
  * `besideNavigationTitle()`. A large bar draws its title twice and ignores it.
+ * @param article The host a screen declares an article bar into with `ScaffoldArticleTopBar`. While
+ * one is declared, the bar is drawn small, shows the article's compact title in place of [title],
+ * and draws its reading progress over its bottom edge, keeping its height. A [search] field still
+ * takes the title's place, and a hidden bar stays hidden.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -144,9 +160,15 @@ fun ShellTopAppBar(
     search: TopBarSearch? = null,
     colors: TopAppBarColors? = null,
     titleModifier: Modifier = Modifier,
+    article: ArticleTopBarHost? = null,
 ) {
+    val showsArticle = article != null && article.isDeclared && search == null && style != TopBarStyle.Hidden
     // A large bar draws its title twice, once expanded and once collapsed; a field cannot be.
-    val resolvedStyle = if (search != null && style != TopBarStyle.Hidden) TopBarStyle.Small else style
+    val resolvedStyle = when {
+        search != null && style != TopBarStyle.Hidden -> TopBarStyle.Small
+        showsArticle -> style.forArticle(article)
+        else -> style
+    }
     // Wrap centered titles; other styles fill the width available to search.
     val centred = resolvedStyle == TopBarStyle.CenterAligned
     val textModifier = if (resolvedStyle.isLarge) Modifier else titleModifier
@@ -154,22 +176,39 @@ fun ShellTopAppBar(
     val titleContent: @Composable () -> Unit = {
         // Fix the slot height so search transitions do not move the bar or its actions.
         AnimatedContent(
-            targetState = search to title,
+            targetState = TitleSlot(search, title, showsArticle),
             // Share a content key across searching tabs to retain the field and avoid flicker.
-            contentKey = { (field, text) -> if (field != null) SearchFieldKey else text },
+            contentKey = { slot ->
+                when {
+                    slot.search != null -> SearchFieldKey
+                    slot.article -> ArticleTitleKey
+                    else -> slot.title
+                }
+            },
             modifier = Modifier
                 .then(if (centred) Modifier.animateContentSize() else Modifier.fillMaxWidth())
                 .height(SearchFieldHeight),
             contentAlignment = titleAlignment,
             transitionSpec = {
-                (fadeIn(tween(200, delayMillis = 60)) + scaleIn(initialScale = 0.96f))
-                    .togetherWith(fadeOut(tween(90)) + scaleOut(targetScale = 0.98f))
-                    .using(sizeTransform = null)
+                if (initialState.article != targetState.article) {
+                    EnterTransition.None togetherWith ExitTransition.None
+                } else {
+                    (fadeIn(tween(200, delayMillis = 60)) + scaleIn(initialScale = 0.96f))
+                        .togetherWith(fadeOut(tween(90)) + scaleOut(targetScale = 0.98f))
+                        .using(sizeTransform = null)
+                }
             },
             label = "TopBarTitle",
-        ) { (field, text) ->
+        ) { (field, text, articleTitle) ->
             if (field != null) {
                 TopBarSearchField(field)
+            } else if (articleTitle && article != null) {
+                Box(
+                    modifier = if (centred) Modifier.fillMaxHeight() else Modifier.fillMaxSize(),
+                    contentAlignment = titleAlignment,
+                ) {
+                    ArticleTopBarTitle(article)
+                }
             } else {
                 Box(
                     modifier = if (centred) Modifier.fillMaxHeight() else Modifier.fillMaxSize(),
@@ -185,37 +224,52 @@ fun ShellTopAppBar(
             }
         }
     }
-    when (resolvedStyle) {
-        TopBarStyle.Small -> TopAppBar(
-            title = titleContent,
-            navigationIcon = navigationIcon,
-            actions = actions,
-            windowInsets = windowInsets,
-            colors = colors ?: TopAppBarDefaults.topAppBarColors(),
-            scrollBehavior = scrollBehavior,
-        )
+    Box {
+        when (resolvedStyle) {
+            TopBarStyle.Small -> TopAppBar(
+                title = titleContent,
+                navigationIcon = navigationIcon,
+                actions = actions,
+                windowInsets = windowInsets,
+                colors = colors ?: TopAppBarDefaults.topAppBarColors(),
+                scrollBehavior = scrollBehavior,
+            )
 
-        TopBarStyle.CenterAligned -> CenterAlignedTopAppBar(
-            title = titleContent,
-            navigationIcon = navigationIcon,
-            actions = actions,
-            windowInsets = windowInsets,
-            colors = colors ?: TopAppBarDefaults.topAppBarColors(),
-            scrollBehavior = scrollBehavior,
-        )
+            TopBarStyle.CenterAligned -> CenterAlignedTopAppBar(
+                title = titleContent,
+                navigationIcon = navigationIcon,
+                actions = actions,
+                windowInsets = windowInsets,
+                colors = colors ?: TopAppBarDefaults.topAppBarColors(),
+                scrollBehavior = scrollBehavior,
+            )
 
-        TopBarStyle.Large, TopBarStyle.LargeCollapsed -> LargeTopAppBar(
-            title = titleContent,
-            navigationIcon = navigationIcon,
-            actions = actions,
-            windowInsets = windowInsets,
-            colors = colors ?: TopAppBarDefaults.topAppBarColors(),
-            scrollBehavior = scrollBehavior,
-        )
+            TopBarStyle.Large, TopBarStyle.LargeCollapsed -> LargeTopAppBar(
+                title = titleContent,
+                navigationIcon = navigationIcon,
+                actions = actions,
+                windowInsets = windowInsets,
+                colors = colors ?: TopAppBarDefaults.topAppBarColors(),
+                scrollBehavior = scrollBehavior,
+            )
 
-        TopBarStyle.Hidden -> Unit
+            TopBarStyle.Hidden -> Unit
+        }
+        if (showsArticle && article != null) {
+            ArticleReadingProgress(article, Modifier.align(Alignment.BottomStart))
+        }
     }
 }
 
+/**
+ * What the title slot shows: a search field, an article's compact title, or the bar's title. A
+ * change to or from the article is not animated, since the article declares itself a frame after
+ * its screen arrives.
+ */
+private data class TitleSlot(val search: TopBarSearch?, val title: String, val article: Boolean)
+
 /** The title slot's content key for a search field, whichever tab's it is. */
 private object SearchFieldKey
+
+/** The title slot's content key for an article's compact title. */
+private object ArticleTitleKey

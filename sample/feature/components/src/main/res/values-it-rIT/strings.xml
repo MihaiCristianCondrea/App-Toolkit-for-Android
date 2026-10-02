@@ -112,4 +112,10 @@
     <string name="components_snackbar_retry">Riprova</string>
     <string name="components_snackbar_icon">Una snackbar con icona e colori propri</string>
     <string name="components_snackbar_custom">%1$s: una snackbar disegnata dalla schermata stessa</string>
+    <string name="components_section_article_bar">Barra superiore per articoli</string>
+    <string name="components_article_without_brand">Senza marchio</string>
+    <string name="components_article_with_brand">Con marchio</string>
+    <string name="components_article_brand">Editore di esempio</string>
+    <string name="components_article_headline">Una barra discreta mette la storia al primo posto</string>
+    <string name="components_article_paragraph">La barra parte con i soli pulsanti. Scorri oltre il titolo principale e il titolo prende il loro posto, mentre la linea sul bordo inferiore mostra quanto hai letto.</string>
 </resources>

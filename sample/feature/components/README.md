@@ -9,6 +9,9 @@ The hidden components showcase and the unlock gesture that reveals it.
 - The concrete `ComponentsShowcaseRepository`, which owns the unlock flag.
 - `ComponentsRoute`, `ComponentsScreen`, and the unlock threshold behavior.
 - Localized strings for the component showcase.
+- The article app bar demo: `ArticleBarShowcase` opens `ArticleDemoRoute`, a made-up article
+  (`ArticleDemoScreen`) that declares `ScaffoldArticleTopBar`, without a brand or with
+  `components_article_brand`, a multicoloured vector mark drawn for this sample.
 - The `GeneralTextField` gallery: one card per variant, including the error state and the Markdown
   editor. The text typed into it is the showcase's own scratch state and stays inside the section.
 - The animation playground for bundled DesignSystem AVDs: a replay-mode menu, a Loop checkbox, and

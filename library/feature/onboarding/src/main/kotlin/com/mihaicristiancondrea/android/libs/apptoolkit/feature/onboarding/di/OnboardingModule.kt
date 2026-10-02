@@ -23,5 +23,5 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val onboardingModule: Module = module {
-    viewModel { OnboardingThemeViewModel(preferences = get(), telemetryRepository = get()) }
+    viewModel { OnboardingThemeViewModel(preferences = get(), seasonal = get(), telemetryRepository = get()) }
 }

@@ -20,6 +20,11 @@ it in the activity; this module has no chrome of its own.
 - `ScreenTransition`, `ShellTransitions`, the tab transitions and `CrossActivityBackMotion`, in
   `motion`.
 - `ShellLayoutPolicy`, `ShellLayoutMode` and `ShellLayout`, in `layout`.
+- The article app bar a screen declares, in `layout`: `ArticleTopBarHost`, `LocalArticleTopBarHost`,
+  `ScaffoldArticleTopBar`, the compact title and reading progress line every bar draws for it
+  (`ArticleTopBarTitle`, `ArticleReadingProgress`), and `readingProgress()` for `ScrollState` and
+  `LazyListState`. It is here, not in `:library:core:ui`, because the list-detail scene draws it
+  too.
 - `AppToolkitNavKey`, one `@Serializable` key per Toolkit page: `SettingsRoute`, `HelpRoute`, `SupportRoute`, `AdsSettingsRoute`, `PermissionsRoute`,
   `LicensesRoute`, `LibraryExtrasRoute`, `AboutRoute`, `ThemeSettingsRoute`,
   `DisplaySettingsRoute`, `PrivacySettingsRoute`, `AdvancedSettingsRoute`,
@@ -149,6 +154,14 @@ Screens then call `LocalShellNavigator.current.navigate(key)` with any registere
   detail's own side the finger moves toward the list, so the detail shrinks in place and leans
   after it instead, then fades out when back completes. While no detail is open, the detail side shows
   the page's `placeholder`, or `ListPlaceholder`.
+- **An article bar is declared, not registered.** A `TopBarStyle` is fixed per destination, while
+  an article bar changes as the story scrolls, so a screen declares it from inside with
+  `ScaffoldArticleTopBar`, as it declares buttons with `ScaffoldFabs`. The scaffold around it holds
+  an `ArticleTopBarHost` and draws what is declared there: `PageScaffold` for a page, one host per
+  tab screen entry in the shell, and one per pane in a framed list-detail scene, whose shared bar
+  shows the article over that pane only, its progress line under that half. The host belongs to
+  the screen's own scaffold or entry, so the article leaves with the screen and never reaches the
+  next destination. See [Article app bar](#article-app-bar).
 - **Scenes set their content colour.** `PageSurface` and the list-detail scene draw on the
   theme's surface and provide `onSurface` as `LocalContentColor`, so text outside a Material
   `Surface` never falls back to black.
@@ -181,6 +194,52 @@ Screens then call `LocalShellNavigator.current.navigate(key)` with any registere
   carries both the content width in force and `declaredContentMaxWidth`, the app's own limit.
 - `AppToolkitNavKey` and its keys. Their class names are part of saved state: renaming or moving
   one loses a restored back stack that held it.
+- `ScaffoldArticleTopBar`, `ArticleTopBarHost` (`isDeclared`, `isCompact`, `hasProgress`,
+  `progress()`, `title`, `brand`, `brandContentDescription`), `LocalArticleTopBarHost`,
+  `ArticleTopBarTitle`, `ArticleReadingProgress`, `ReadingProgressHeight` and `readingProgress()`.
+
+## Article app bar
+
+An optional bar for a screen that reads like a story. Nothing changes until a screen declares it:
+
+```kotlin
+val listState = rememberLazyListState()
+ScaffoldArticleTopBar(
+    title = article.title,
+    compact = { listState.firstVisibleItemIndex > 0 },
+    progress = listState::readingProgress,
+    brand = painterResource(R.drawable.publisher_mark),
+    brandContentDescription = stringResource(R.string.publisher_name),
+)
+```
+
+- **Minimal, then compact.** While `compact` is false the bar shows only its navigation icon and
+  actions. Once it is true, the title rises and fades in, after the brand if there is one, at the
+  shell's animation speed (`LocalShellMotion.durationScale`), and leaves the same way.
+- **Brand.** Any `Painter`, drawn with `Image` and never tinted, so a multicoloured logo or a vector
+  drawable from `painterResource` keeps its colours. It is drawn 24dp high at its own aspect ratio
+  (at most four times as wide), 8dp before the title. Without one there is no gap. It never
+  replaces the navigation icon.
+- **Progress.** A 3dp line over the bar's bottom edge, so the bar keeps its height, in Material's
+  linear progress colours. It shows while the title does, fills from the start edge (the right one
+  in right-to-left layouts), and is clamped to 0..1, with a value that is not a number read as 0.
+  Pass null for no line. `compact` and `progress` are lambdas read while drawing, or inside
+  `derivedStateOf`, so scrolling redraws the line without recomposing the screen or the shell.
+- **Accessibility.** The compact title is in the semantics tree only while shown. The line is a
+  progress bar that moves in tenths and is not a live region, so a screen reader reads it when
+  focused instead of announcing every scroll.
+- **Precedence.** A hidden bar, from the destination or the display settings' override, stays
+  hidden. A large style, the destination's or the override's, is drawn small while an article is
+  declared, since it would show a second, expanded title above the article's own header; register
+  an article page with `topBar = TopBarStyle.Small` to keep it small from its first frame, before
+  the screen declares. A tab's search field keeps the title's place. Hiding the bar on scroll
+  slides the line away with it. The navigation icon, actions and overflow menu are unchanged.
+- **Where it shows.** In `PageScaffold`; in the shell's tab scaffold, for the screen on top of the
+  tab; and in a framed list-detail scene, over the pane that declares it. Inside a tab, a list and
+  its detail share the shell's one bar, which follows the detail as its title does, so the line
+  then runs under the whole bar rather than the detail's half.
+- **Not a style.** There is no `TopBarStyle.Article`: a style is chosen once per destination, and
+  an article bar is the screen's state.
 
 ## Predictive back: Android's cross-activity animation
 

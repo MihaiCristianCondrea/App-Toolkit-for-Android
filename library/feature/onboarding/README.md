@@ -15,8 +15,10 @@ screen of [`:library:feature:startup`](../startup/README.md).
   consent on each resume and calls `enterShell()` once completion is saved.
 - `onboardingModule`, which binds `OnboardingThemeViewModel`.
 - `ThemeOnboardingPageTab`, `OnboardingThemeViewModel`, `OnboardingThemeUiState` and
-  `OnboardingThemeEvent`: the theme page reads the stored theme preferences and saves each choice
-  through `ThemePreferencesRepository`.
+  `OnboardingThemeEvent`: the theme page reads the stored theme preferences and the seasonal
+  unlock, and saves each choice through `ThemePreferencesRepository`. Its theme mode and palette
+  choices are `ThemeModePicker` and `ThemePalettePicker` from `:library:core:ui`, the same ones the
+  theme settings page shows; only the title, subtitle and AMOLED card are this page's own.
 - The `OnboardingProvider` host extension contract.
 - `OnboardingRepository` and `DefaultOnboardingRepository`, page models, controls, and the default
   and finish pages.

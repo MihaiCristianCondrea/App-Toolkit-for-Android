@@ -27,10 +27,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
  *
  * @property preferences The stored theme preferences. Until they arrive the page shows the
  * Toolkit's defaults (follow the system, dynamic colors, the default palette) instead of a spinner.
+ * @property seasonalThemesUnlocked Whether the holiday palettes are offered all year, as on the
+ * theme settings page, once the About screen's easter egg has been found.
  */
 @Immutable
 data class OnboardingThemeUiState(
     val preferences: ThemePreferencesState = DefaultThemePreferences,
+    val seasonalThemesUnlocked: Boolean = false,
 )
 
 private val DefaultThemePreferences: ThemePreferencesState = ThemePreferencesState(

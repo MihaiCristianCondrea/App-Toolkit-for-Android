@@ -21,6 +21,10 @@ drawer and transition the graph describes. It is the chrome around the navigatio
   children, in the page frame on pages. A destination's `fab` slot and its `fabs` list come from
   the graph; a screen adds its own with `ScaffoldFabs`, through a `FabHost` the shell keeps per
   tab screen. The described ones are drawn as one `ToolkitFabColumn`.
+- The article app bar of the tabs: a tab screen declares one with `ScaffoldArticleTopBar` through
+  an `ArticleTopBarHost` the shell keeps per tab screen entry, dropped with the entry, and the
+  tabs' app bar draws the host of the screen on top. Beside its list, that is the detail, as for
+  the title. See [Article app bar](../navigation/README.md#article-app-bar).
 - The frame (`ShellFrame`): beside a rail, an expanded rail or a permanent drawer, the navigation is
   drawn around the displays, so pages open next to it. See
   [Pages beside the navigation](#pages-beside-the-navigation).

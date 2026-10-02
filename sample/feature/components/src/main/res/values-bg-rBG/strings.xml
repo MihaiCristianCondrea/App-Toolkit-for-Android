@@ -112,4 +112,10 @@
     <string name="components_snackbar_retry">Опитай отново</string>
     <string name="components_snackbar_icon">Лента с известие с икона и собствени цветове</string>
     <string name="components_snackbar_custom">%1$s: лента с известие, която екранът рисува сам</string>
+    <string name="components_section_article_bar">Горна лента за статия</string>
+    <string name="components_article_without_brand">Без марка</string>
+    <string name="components_article_with_brand">С марка</string>
+    <string name="components_article_brand">Примерен издател</string>
+    <string name="components_article_headline">Ненатрапчивата горна лента оставя историята на първо място</string>
+    <string name="components_article_paragraph">Лентата започва само с бутоните си. Превъртете след заглавието и то заема мястото им, а линията по долния ѝ край показва докъде сте прочели.</string>
 </resources>

@@ -112,4 +112,10 @@
     <string name="components_snackbar_retry">Subukang muli</string>
     <string name="components_snackbar_icon">Isang snackbar na may icon at sariling mga kulay</string>
     <string name="components_snackbar_custom">%1$s: isang snackbar na ang screen mismo ang gumuhit</string>
+    <string name="components_section_article_bar">App bar ng artikulo</string>
+    <string name="components_article_without_brand">Walang brand</string>
+    <string name="components_article_with_brand">May brand</string>
+    <string name="components_article_brand">Halimbawang publisher</string>
+    <string name="components_article_headline">Inuuna ng tahimik na app bar ang kuwento</string>
+    <string name="components_article_paragraph">Nagsisimula ang bar sa mga button lang nito. Mag-scroll lampas sa headline at papalit ang pamagat sa kanila, habang ipinapakita ng linya sa ibabang gilid nito kung gaano na kalayo ang nabasa mo.</string>
 </resources>

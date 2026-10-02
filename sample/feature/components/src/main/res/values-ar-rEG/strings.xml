@@ -112,4 +112,10 @@
     <string name="components_snackbar_retry">إعادة المحاولة</string>
     <string name="components_snackbar_icon">شريط إشعار بأيقونة وألوان خاصة به</string>
     <string name="components_snackbar_custom">%1$s: شريط إشعار ترسمه الشاشة بنفسها</string>
+    <string name="components_section_article_bar">شريط تطبيق المقالة</string>
+    <string name="components_article_without_brand">بدون علامة تجارية</string>
+    <string name="components_article_with_brand">مع علامة تجارية</string>
+    <string name="components_article_brand">ناشر تجريبي</string>
+    <string name="components_article_headline">شريط تطبيق هادئ يُبقي القصة أولًا</string>
+    <string name="components_article_paragraph">يبدأ الشريط بأزراره فقط. مرّر بعد العنوان الرئيسي وسيحلّ العنوان محلّها، بينما يُظهر الخط على حافته السفلية مقدار ما قرأته.</string>
 </resources>
