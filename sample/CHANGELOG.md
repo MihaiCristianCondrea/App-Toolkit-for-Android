@@ -24,6 +24,7 @@
 
 ### Improved
 
+- Every quick tool reports its actions and any failure in them, so problems with the compass, level, breathing, SOS, Morse, flash dimmer, counter and reaction test can be traced.
 - The menu button turns into a back arrow when you open a screen, instead of popping in and out, and the navigation icons animate when you tap them.
 - The welcome and onboarding pages keep a comfortable width on tablets.
 - On tablets and wide windows, a page opened from the side navigation looks like a tab, without a back button.

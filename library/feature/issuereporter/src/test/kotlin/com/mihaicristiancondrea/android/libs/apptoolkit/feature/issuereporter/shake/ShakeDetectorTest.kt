@@ -69,10 +69,12 @@ class ShakeDetectorTest {
         assertEquals(0, shakes)
     }
 
+    /**
+     * Above the threshold for the whole burst, but over in less than the minimum duration. This is
+     * what putting a phone down firmly looks like.
+     */
     @Test
     fun `a single jolt is not long enough to count`() {
-        // Above the threshold for the whole burst, but over in less than the minimum duration: this
-        // is what putting a phone down firmly looks like.
         detector().shake(samples = SUSTAINED_SAMPLES, stepMillis = 1L)
 
         assertEquals(0, shakes)

@@ -112,7 +112,7 @@ class DefaultFaqRepositoryTest {
             ),
         ).getFaq()
 
-        assertThat(questions.map { it.id.value }).containsExactly("1")
+        assertEquals(listOf("1"), questions.map { it.id.value })
     }
 
     @Test
@@ -135,7 +135,7 @@ class DefaultFaqRepositoryTest {
             localQuestions = listOf(item("local", "Bundled?", "Yes.")),
         ).getFaq()
 
-        assertThat(questions.map { it.id.value }).containsExactly("local")
+        assertEquals(listOf("local"), questions.map { it.id.value })
     }
 
     @Test

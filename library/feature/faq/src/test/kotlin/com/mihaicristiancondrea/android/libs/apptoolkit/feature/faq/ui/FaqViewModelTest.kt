@@ -22,11 +22,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.excepti
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import kotlin.test.assertContains
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertIs
-import kotlin.test.assertTrue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
@@ -42,6 +37,11 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import kotlin.test.assertContains
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
 class FaqViewModelTest {
 
@@ -79,7 +79,7 @@ class FaqViewModelTest {
         advance()
 
         val questions = viewModel.state.value.questions as Loadable.Ready
-        assertThat(questions.value).containsExactly(question)
+        assertEquals(listOf(question), questions.value.toList())
     }
 
     @Test
@@ -124,7 +124,7 @@ class FaqViewModelTest {
         viewModel.onEvent(FaqEvent.Load)
         advance()
 
-        assertIs<Loadable.Ready>(viewModel.state.value.questions)
+        assertIs<Loadable.Ready<*>>(viewModel.state.value.questions)
     }
 
     @Test

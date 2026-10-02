@@ -18,13 +18,19 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.MorsePlaybackState
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 
 /** Provides the fixed SOS action through the shared Morse playback owner. */
 class SosRepository(
     private val morseRepository: MorseRepository,
 ) {
     val state: StateFlow<MorsePlaybackState> = morseRepository.state
+
+    /** Emits [isActive] now and on every change, so a custom Morse message never reads as SOS. */
+    fun observeActive(): Flow<Boolean> = state.map { playback -> playback.isSos() }.distinctUntilChanged()
 
     fun toggle() {
         if (isActive) {
@@ -39,7 +45,9 @@ class SosRepository(
     }
 
     val isActive: Boolean
-        get() = state.value.isActive && state.value.message == SOS_MESSAGE
+        get() = state.value.isSos()
+
+    private fun MorsePlaybackState.isSos(): Boolean = isActive && message == SOS_MESSAGE
 
     private companion object {
         const val SOS_MESSAGE: String = "SOS"

@@ -46,9 +46,9 @@ class IssueReporterPresenceTest {
         assertFalse(IssueReporterPresence.isShowing)
     }
 
+    /** A stray release would otherwise let the next sheet open twice over. */
     @Test
     fun `an unmatched hide cannot drive the count below nothing`() {
-        // A stray release would otherwise let the next sheet open twice over.
         IssueReporterPresence.onHidden()
         IssueReporterPresence.onShown()
 

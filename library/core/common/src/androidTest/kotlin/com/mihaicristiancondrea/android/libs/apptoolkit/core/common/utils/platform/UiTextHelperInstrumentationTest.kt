@@ -27,11 +27,11 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.Locale
-import kotlin.test.assertEquals
 
 /**
  * Verifies that [UiTextHelper.StringResource] resolves against the composition's `LocalContext`

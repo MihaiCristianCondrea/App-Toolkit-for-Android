@@ -33,6 +33,16 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.LevelTo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MorseToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ReactionTestToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SosToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.BreathingToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.CoinFlipToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.CompassToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.CounterToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.DiceRollToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.FlashDimmerToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.LevelToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.MorseToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ReactionTestToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.SosToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.BreathingTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.CoinFlipTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.CompassTool
@@ -56,38 +66,62 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 internal fun CoinFlipToolRoute(viewModel: CoinFlipToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    DisposeTool(viewModel::dismiss)
-    CoinFlipTool(state.isHeads, state.request, viewModel::flip)
+    DisposeTool { viewModel.onEvent(CoinFlipToolEvent.Dismiss) }
+    CoinFlipTool(
+        side = state.side,
+        flipRequest = state.request,
+        onFlip = { viewModel.onEvent(CoinFlipToolEvent.Flip) },
+    )
 }
 
 @Composable
 internal fun DiceRollToolRoute(viewModel: DiceRollToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    DisposeTool(viewModel::dismiss)
-    DiceRollTool(state.result, state.request, viewModel::roll)
+    DisposeTool { viewModel.onEvent(DiceRollToolEvent.Dismiss) }
+    DiceRollTool(
+        result = state.result,
+        rollRequest = state.request,
+        onRoll = { viewModel.onEvent(DiceRollToolEvent.Roll) },
+    )
 }
 
 @Composable
 internal fun CounterToolRoute(viewModel: CounterToolViewModel = koinViewModel()) {
-    val count by viewModel.count.collectAsStateWithLifecycle()
-    DisposeTool(viewModel::dismiss)
-    CounterTool(count, viewModel::increment, viewModel::reset)
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    DisposeTool { viewModel.onEvent(CounterToolEvent.Dismiss) }
+    CounterTool(
+        count = state.count,
+        onIncrement = { viewModel.onEvent(CounterToolEvent.Increment) },
+        onReset = { viewModel.onEvent(CounterToolEvent.Reset) },
+    )
 }
 
 @Composable
 internal fun CompassToolRoute(viewModel: CompassToolViewModel = koinViewModel()) {
-    val value by viewModel.state.collectAsStateWithLifecycle()
-    StartStopTool(viewModel::open, viewModel::dismiss)
-    ForegroundSensor(viewModel::startSensor, viewModel::stopSensor)
-    CompassTool(value)
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    StartStopTool(
+        start = { viewModel.onEvent(CompassToolEvent.Open) },
+        stop = { viewModel.onEvent(CompassToolEvent.Dismiss) },
+    )
+    ForegroundSensor(
+        start = { viewModel.onEvent(CompassToolEvent.StartSensor) },
+        stop = { viewModel.onEvent(CompassToolEvent.StopSensor) },
+    )
+    CompassTool(azimuth = state.azimuth)
 }
 
 @Composable
 internal fun LevelToolRoute(viewModel: LevelToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    StartStopTool(viewModel::open, viewModel::dismiss)
-    ForegroundSensor(viewModel::startSensor, viewModel::stopSensor)
-    LevelTool(state.pitch, state.roll)
+    StartStopTool(
+        start = { viewModel.onEvent(LevelToolEvent.Open) },
+        stop = { viewModel.onEvent(LevelToolEvent.Dismiss) },
+    )
+    ForegroundSensor(
+        start = { viewModel.onEvent(LevelToolEvent.StartSensor) },
+        stop = { viewModel.onEvent(LevelToolEvent.StopSensor) },
+    )
+    LevelTool(pitch = state.pitch, roll = state.roll)
 }
 
 /**
@@ -105,40 +139,54 @@ private fun ForegroundSensor(start: () -> Unit, stop: () -> Unit) {
 @Composable
 internal fun BreathingToolRoute(viewModel: BreathingToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    StartStopTool(viewModel::open, viewModel::close)
-    BreathingTool(state)
+    StartStopTool(
+        start = { viewModel.onEvent(BreathingToolEvent.Open) },
+        stop = { viewModel.onEvent(BreathingToolEvent.Dismiss) },
+    )
+    BreathingTool(state = state.breathing)
 }
 
 @Composable
 internal fun SosToolRoute(viewModel: SosToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    DisposeTool(viewModel::dismiss)
-    SosTool(state.isActive && state.message == "SOS", viewModel::toggle)
+    DisposeTool { viewModel.onEvent(SosToolEvent.Dismiss) }
+    SosTool(
+        isActive = state.isActive,
+        onToggle = { viewModel.onEvent(SosToolEvent.Toggle) },
+    )
 }
 
 @Composable
 internal fun MorseToolRoute(viewModel: MorseToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    DisposeTool(viewModel::dismiss)
-    MorseTool(state, viewModel::updateInput, viewModel::toggle)
+    DisposeTool { viewModel.onEvent(MorseToolEvent.Dismiss) }
+    MorseTool(
+        state = state,
+        onInputChanged = { input -> viewModel.onEvent(MorseToolEvent.InputChanged(input)) },
+        onToggle = { viewModel.onEvent(MorseToolEvent.Toggle) },
+    )
 }
 
 @Composable
 internal fun FlashDimmerToolRoute(viewModel: FlashDimmerToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    DisposeTool(viewModel::dismiss)
-    FlashDimmerTool(state, viewModel::setLevel, viewModel::applyPreset)
+    DisposeTool { viewModel.onEvent(FlashDimmerToolEvent.Dismiss) }
+    FlashDimmerTool(
+        state = state.torch,
+        onLevelChanged = { level -> viewModel.onEvent(FlashDimmerToolEvent.LevelChanged(level)) },
+        onPresetSelected = { preset -> viewModel.onEvent(FlashDimmerToolEvent.PresetSelected(preset)) },
+    )
 }
 
 @Composable
 internal fun ReactionTestToolRoute(viewModel: ReactionTestToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    DisposeTool(viewModel::dismiss)
+    DisposeTool { viewModel.onEvent(ReactionTestToolEvent.Dismiss) }
     ReactionTestTool(
         state = state,
-        onStart = { viewModel.startTest() },
-        onTap = viewModel::handleTap,
-        onReset = viewModel::resetSession,
+        onStart = { viewModel.onEvent(ReactionTestToolEvent.Start) },
+        onTap = { viewModel.onEvent(ReactionTestToolEvent.Tap) },
+        onReset = { viewModel.onEvent(ReactionTestToolEvent.Reset) },
     )
 }
 

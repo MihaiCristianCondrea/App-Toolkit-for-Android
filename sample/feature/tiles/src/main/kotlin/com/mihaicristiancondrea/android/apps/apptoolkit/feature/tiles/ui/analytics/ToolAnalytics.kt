@@ -58,6 +58,14 @@ class ToolUsageTracker(
     fun endSession() {
         hasReportedUse = false
     }
+
+    companion object {
+        /**
+         * How long a tool used by looking at it, such as the compass, must stay open to count as
+         * used. Opening and closing it straight away is not use.
+         */
+        const val WATCHED_USE_DELAY_MS: Long = 5_000L
+    }
 }
 
 /**

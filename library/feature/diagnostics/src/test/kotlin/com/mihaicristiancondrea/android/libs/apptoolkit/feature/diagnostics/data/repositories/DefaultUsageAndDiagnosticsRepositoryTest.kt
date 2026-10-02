@@ -108,6 +108,7 @@ class DefaultUsageAndDiagnosticsRepositoryTest {
             assertFalse(repository.observeSettings().first().usageAndDiagnostics)
         }
 
+    /** The SDKs get the stored answer once, after the write, with no mix in between. */
     @Test
     fun `setAll stores every value of the bundle`() =
         runTest(dispatcherExtension.testDispatcher) {
@@ -129,7 +130,6 @@ class DefaultUsageAndDiagnosticsRepositoryTest {
             advanceUntilIdle()
 
             assertEquals(essentialOnly, repository.observeSettings().first())
-            // The SDKs get the stored answer once, after the write, with no mix in between.
             coVerify(exactly = 1) {
                 consentRepository.applyConsentSettings(
                     ConsentSettings(

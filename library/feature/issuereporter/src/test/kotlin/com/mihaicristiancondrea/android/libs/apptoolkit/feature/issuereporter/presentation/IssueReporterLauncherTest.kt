@@ -68,9 +68,9 @@ class IssueReporterLauncherTest {
         assertFalse(IssueReporterLauncher.show(activity = activity))
     }
 
+    /** The screen underneath composed its own sheet, which the launcher cannot see as a view. */
     @Test
     fun `a sheet a host is already showing is not stacked on`() {
-        // The screen underneath composed its own sheet, which the launcher cannot see as a view.
         IssueReporterPresence.onShown()
         val activity: ComponentActivity = mockk {
             every { isFinishing } returns false

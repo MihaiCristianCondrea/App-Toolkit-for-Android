@@ -43,16 +43,19 @@ class AboutMappersTest {
     fun `maps full about info to ordered items`() {
         val items = aboutInfo.toAboutItems()
 
-        assertThat(items.map { it.key }).containsExactly(
-            AboutItemKey.HEADER_APP_INFO,
-            AboutItemKey.APP_NAME,
-            AboutItemKey.APP_BUILD_VERSION,
-            AboutItemKey.APP_TOOLKIT_VERSION,
-            AboutItemKey.GOOGLE_PLAY_SERVICES_VERSION,
-            AboutItemKey.OSS_LICENSES,
-            AboutItemKey.HEADER_DEVICE_INFO,
-            AboutItemKey.DEVICE_INFO,
-        ).inOrder()
+        assertEquals(
+            listOf(
+                AboutItemKey.HEADER_APP_INFO,
+                AboutItemKey.APP_NAME,
+                AboutItemKey.APP_BUILD_VERSION,
+                AboutItemKey.APP_TOOLKIT_VERSION,
+                AboutItemKey.GOOGLE_PLAY_SERVICES_VERSION,
+                AboutItemKey.OSS_LICENSES,
+                AboutItemKey.HEADER_DEVICE_INFO,
+                AboutItemKey.DEVICE_INFO,
+            ),
+            items.map { it.key },
+        )
 
         val appName = items.preference(AboutItemKey.APP_NAME)
         assertEquals(GroupedItemPosition.FIRST, appName.position)
@@ -71,12 +74,13 @@ class AboutMappersTest {
 
         assertEquals("device-info", (deviceInfoItem.summary as UiTextHelper.DynamicString).content)
         assertEquals(GroupedItemPosition.SINGLE, deviceInfoItem.position)
-        assertThat(deviceInfoItem.action).isEqualTo(
+        assertEquals(
             AboutItemAction.CopyToClipboard(
                 label = UiTextHelper.StringResource(R.string.device_info),
                 text = UiTextHelper.DynamicString("device-info"),
                 successMessage = UiTextHelper.StringResource(R.string.snack_device_info_copied),
-            )
+            ),
+            deviceInfoItem.action,
         )
     }
 
@@ -84,17 +88,19 @@ class AboutMappersTest {
     fun `version rows copy their own value without a custom confirmation`() {
         val items = aboutInfo.toAboutItems()
 
-        assertThat(items.preference(AboutItemKey.APP_TOOLKIT_VERSION).action).isEqualTo(
+        assertEquals(
             AboutItemAction.CopyToClipboard(
                 label = UiTextHelper.StringResource(R.string.app_toolkit_version),
                 text = UiTextHelper.DynamicString("3.0.0-test"),
-            )
+            ),
+            items.preference(AboutItemKey.APP_TOOLKIT_VERSION).action,
         )
-        assertThat(items.preference(AboutItemKey.GOOGLE_PLAY_SERVICES_VERSION).action).isEqualTo(
+        assertEquals(
             AboutItemAction.CopyToClipboard(
                 label = UiTextHelper.StringResource(R.string.google_play_services_version),
                 text = UiTextHelper.DynamicString("24.01.12"),
-            )
+            ),
+            items.preference(AboutItemKey.GOOGLE_PLAY_SERVICES_VERSION).action,
         )
     }
 
@@ -122,6 +128,7 @@ class AboutMappersTest {
         assertEquals(AboutItemKey.OSS_LICENSES, items.last().key)
     }
 
+    /** A row that looked clickable but did nothing is what made most of this screen seem broken. */
     @Test
     fun `every row that shows a value copies it, except licenses and the build version`() {
         val items = aboutInfo.toAboutItems()
@@ -131,9 +138,10 @@ class AboutMappersTest {
             .filterNot { it.action is AboutItemAction.CopyToClipboard }
             .map { it.key }
 
-        // A row that looked clickable but did nothing is what made most of this screen seem broken.
-        assertThat(notCopyable)
-            .containsExactly(AboutItemKey.OSS_LICENSES, AboutItemKey.APP_BUILD_VERSION)
+        assertEquals(
+            listOf(AboutItemKey.OSS_LICENSES, AboutItemKey.APP_BUILD_VERSION).sorted(),
+            notCopyable.sorted(),
+        )
         assertEquals(AboutItemAction.OpenLicenses, preferences.first { it.key == AboutItemKey.OSS_LICENSES }.action)
     }
 
@@ -161,7 +169,7 @@ class AboutMappersTest {
             .filter { it.countsVersionTap }
             .map { it.key }
 
-        assertThat(counting).containsExactly(AboutItemKey.APP_BUILD_VERSION)
+        assertEquals(listOf(AboutItemKey.APP_BUILD_VERSION), counting)
     }
 
     private fun List<AboutItem>.preference(key: String): AboutItem.Preference =

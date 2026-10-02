@@ -24,11 +24,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import kotlin.test.assertContains
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertIs
-import kotlin.test.assertTrue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
@@ -43,6 +38,11 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import kotlin.test.assertContains
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
 class AboutViewModelTest {
 
@@ -92,7 +92,7 @@ class AboutViewModelTest {
         advance()
 
         val items = viewModel.state.value.items
-        assertIs<Loadable.Ready>(items)
+        assertIs<Loadable.Ready<*>>(items)
         assertEquals(expectedItemKeys, (items as Loadable.Ready).value.map { it.key })
     }
 
@@ -184,7 +184,7 @@ class AboutViewModelTest {
             )
             advance()
 
-            assertThat(clipboard.copies).containsExactly("Device info" to "shown-device-info")
+            assertEquals(listOf("Device info" to "shown-device-info"), clipboard.copies)
         }
 
     @Test
@@ -200,9 +200,10 @@ class AboutViewModelTest {
             )
             advance()
 
-            assertThat(clipboard.copies)
-                .containsExactly("App name" to "App Toolkit", "App Toolkit version" to "3.0.0-test")
-                .inOrder()
+            assertEquals(
+                listOf("App name" to "App Toolkit", "App Toolkit version" to "3.0.0-test"),
+                clipboard.copies,
+            )
         }
 
     @Test
@@ -299,7 +300,7 @@ class AboutViewModelTest {
             viewModel.onEvent(AboutEvent.Load)
             advance()
 
-            assertIs<Loadable.Ready>(viewModel.state.value.items)
+            assertIs<Loadable.Ready<*>>(viewModel.state.value.items)
         }
 
     @Test

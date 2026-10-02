@@ -23,6 +23,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.model
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItemKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.providers.PrivacySettingsProvider
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 
 class PrivacyMappersTest {
 
@@ -38,18 +39,21 @@ class PrivacyMappersTest {
     fun `maps the provider into two ordered groups`() {
         val items = provider.toPrivacyItems()
 
-        assertThat(items.map { it.key }).containsExactly(
-            PrivacyItemKey.HEADER_PRIVACY,
-            PrivacyItemKey.PRIVACY_POLICY,
-            PrivacyItemKey.TERMS_OF_SERVICE,
-            PrivacyItemKey.CODE_OF_CONDUCT,
-            PrivacyItemKey.PERMISSIONS,
-            PrivacyItemKey.ADS,
-            PrivacyItemKey.USAGE_AND_DIAGNOSTICS,
-            PrivacyItemKey.HEADER_LEGAL,
-            PrivacyItemKey.LEGAL_NOTICES,
-            PrivacyItemKey.LICENSE,
-        ).inOrder()
+        assertEquals(
+            listOf(
+                PrivacyItemKey.HEADER_PRIVACY,
+                PrivacyItemKey.PRIVACY_POLICY,
+                PrivacyItemKey.TERMS_OF_SERVICE,
+                PrivacyItemKey.CODE_OF_CONDUCT,
+                PrivacyItemKey.PERMISSIONS,
+                PrivacyItemKey.ADS,
+                PrivacyItemKey.USAGE_AND_DIAGNOSTICS,
+                PrivacyItemKey.HEADER_LEGAL,
+                PrivacyItemKey.LEGAL_NOTICES,
+                PrivacyItemKey.LICENSE,
+            ),
+            items.map { it.key },
+        )
     }
 
     @Test

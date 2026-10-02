@@ -73,8 +73,17 @@ flowchart TD
   UI layer after availability filtering.
 - Torch state is shared because in-app tools and system-created services can operate concurrently.
   One Morse playback job serializes patterned output, and SOS delegates to it.
-- Only stateful/platform-backed tools receive dedicated ViewModels; stateless decision tools remain
-  local UI behavior rather than creating pass-through layers.
+- Each tool with behavior of its own has a dedicated ViewModel, one class per file in `ui/`, with
+  its `XToolUiState` in `ui/states/` and its `XToolEvent` in `ui/contracts/`. Every one extends
+  `LoggedScreenViewModel` and reports under the `ToolkitTiles` screen name, because the tools open in
+  that screen's bottom sheet, with the class name as `viewModelName`. One-shot work (a flip, a roll,
+  a counter write, a torch change) runs through `launchReport`, and repository streams (sensor
+  readings, torch and Morse playback state, the stored count) through `collectReport` for the
+  ViewModel's lifetime. The routes in `ToolRoutes.kt` collect `state` and send events: the Compass
+  and Level sensors start and stop with the app's foreground state, and every tool is dismissed when
+  its sheet leaves composition. No tool ViewModel queues messages, so the routes host no
+  `MessageHost`; their failures are only reported.
+- Material Colors has no ViewModel; its dialog is local UI behavior.
 - The catalogue screen is on `core.ui.screen`. `ToolkitTilesViewModel` exposes `state`, whose
   `categories` is a `Loadable`, and builds the UI models on the default dispatcher, its own CPU work.
   Adding a tile is a state flag, `pendingTileRequest`, that `ToolkitTilesScreen` turns into the
