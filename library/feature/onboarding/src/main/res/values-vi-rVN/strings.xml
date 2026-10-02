@@ -15,14 +15,9 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">Chế độ AMOLED</string>
     <string name="back_button_content_description">Quay lại</string>
     <string name="back_button_text">Quay lại</string>
-    <string name="dark_mode">Chế độ tối</string>
-    <string name="done_button_content_description">Xong</string>
     <string name="done_button_text">Xong</string>
-    <string name="follow_system">Theo chế độ hệ thống</string>
-    <string name="light_mode">Chế độ sáng</string>
     <string name="next_button_content_description">Tiếp theo</string>
     <string name="next_button_text">Tiếp theo</string>
     <string name="onboarding_amoled_mode_desc">Màu đen sâu hơn cho màn hình OLED.</string>
@@ -30,14 +25,9 @@
     <string name="onboarding_completion_failed">Không thể lưu thiết lập của bạn. Vui lòng thử lại.</string>
     <string name="onboarding_final_description">Cảm ơn bạn đã cá nhân hóa trải nghiệm của mình. Bây giờ bạn đã sẵn sàng khám phá tất cả các tính năng. Chúc bạn vui vẻ.</string>
     <string name="onboarding_final_title">Bạn đã sẵn sàng.</string>
-    <string name="onboarding_theme_dark_desc">Dịu mắt.</string>
-    <string name="onboarding_theme_light_desc">Sáng sủa và năng động.</string>
     <string name="onboarding_theme_subtitle">Chọn giao diện bạn muốn cho ứng dụng.</string>
-    <string name="onboarding_theme_system_desc">Phù hợp với thiết bị của bạn.</string>
     <string name="onboarding_theme_title">Chọn phong cách của bạn</string>
-    <string name="other_colors">Màu khác</string>
     <string name="skip_button_content_description">Bỏ qua</string>
     <string name="skip_button_text">Bỏ qua</string>
     <string name="usage_and_diagnostics">Sử dụng và chẩn đoán</string>
-    <string name="wallpaper_colors">Màu hình nền</string>
 </resources>

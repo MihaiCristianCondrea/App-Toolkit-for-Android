@@ -16,7 +16,6 @@
   -->
 <resources>
     <string name="agree">सहमत</string>
-    <string name="learn_more">अधिक जानें</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">जारी रखने के लिए हमारी सेवा की शर्तें और गोपनीयता नीति पढ़ें और सहमति दें</string>
     <string name="welcome">स्वागत है</string>
 </resources>

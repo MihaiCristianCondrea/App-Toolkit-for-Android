@@ -24,7 +24,6 @@
     <string name="consent_ad_user_data_title">إرسال البيانات للإعلانات</string>
     <string name="consent_analytics_storage_description">السماح بتخزين البيانات مثل استخدام التطبيق ومدة الزيارة لتحسين التحليلات وأداء التطبيق.</string>
     <string name="consent_analytics_storage_title">تخزين بيانات التحليلات</string>
-    <string name="learn_more">اعرف المزيد</string>
     <string name="summary_usage_and_diagnostics">ساعد في تحسين تجربتك عن طريق إرسال بيانات التشخيص والجهاز واستخدام التطبيق إلينا تلقائيًا. سيساعد هذا في تحسين أداء التطبيق واستقراره وتحسينات أخرى. ستساعد بعض البيانات المجمعة أيضًا تطبيقاتنا.\n\nهذه معلومات عامة حول جهازك وكيفية استخدامك لتطبيقاتنا (مثل مستوى البطارية ونشاط النظام والتطبيق والأخطاء). سيتم استخدام البيانات لتحسين تطبيقاتنا\n\nلا يؤثر إيقاف تشغيل هذه الميزة على قدرة جهازك على إرسال المعلومات اللازمة للخدمات الأساسية مثل تحديثات التطبيق والأمان.\n</string>
     <string name="usage_and_diagnostics">الاستخدام والتشخيصات</string>
     <string name="consent_ad_personalization_description_short">يمكّن الإعلانات المخصصة.</string>

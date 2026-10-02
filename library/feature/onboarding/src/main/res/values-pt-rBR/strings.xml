@@ -15,14 +15,9 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">Modo AMOLED</string>
     <string name="back_button_content_description">Voltar</string>
     <string name="back_button_text">Voltar</string>
-    <string name="dark_mode">Modo escuro</string>
-    <string name="done_button_content_description">Concluído</string>
     <string name="done_button_text">Concluído</string>
-    <string name="follow_system">Seguir o sistema</string>
-    <string name="light_mode">Modo claro</string>
     <string name="next_button_content_description">Próximo</string>
     <string name="next_button_text">Próximo</string>
     <string name="onboarding_amoled_mode_desc">Pretos mais profundos para telas OLED.</string>
@@ -30,14 +25,9 @@
     <string name="onboarding_completion_failed">Não foi possível salvar sua configuração. Tente novamente.</string>
     <string name="onboarding_final_description">Obrigado por personalizar sua experiência. Agora você está pronto para explorar todos os recursos. Aproveite.</string>
     <string name="onboarding_final_title">Está tudo pronto.</string>
-    <string name="onboarding_theme_dark_desc">Suave para os olhos.</string>
-    <string name="onboarding_theme_light_desc">Brilhante e energético.</string>
     <string name="onboarding_theme_subtitle">Selecione como você gostaria que o aplicativo se parecesse.</string>
-    <string name="onboarding_theme_system_desc">Corresponde ao seu dispositivo.</string>
     <string name="onboarding_theme_title">Escolha seu estilo</string>
-    <string name="other_colors">Outras cores</string>
     <string name="skip_button_content_description">Pular</string>
     <string name="skip_button_text">Pular</string>
     <string name="usage_and_diagnostics">Uso e diagnósticos</string>
-    <string name="wallpaper_colors">Cores do papel de parede</string>
 </resources>

@@ -16,7 +16,6 @@
   -->
 <resources>
     <string name="agree">রাজি</string>
-    <string name="learn_more">আরও জানুন</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">চালিয়ে যেতে আমাদের পরিষেবার শর্তাবলী এবং গোপনীয়তা নীতি পড়ুন এবং সম্মত হন</string>
     <string name="welcome">স্বাগতম</string>
 </resources>

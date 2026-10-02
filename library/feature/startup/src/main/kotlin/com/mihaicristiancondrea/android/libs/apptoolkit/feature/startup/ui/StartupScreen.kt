@@ -69,6 +69,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.Tr
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.TopAppBarScaffold
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.contracts.StartupEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.providers.StartupProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.states.ConsentRequestStatus
@@ -216,7 +217,7 @@ private fun StartupWelcome(
                 )
                 InfoMessageSection(
                     message = stringResource(R.string.summary_browse_terms_of_service_and_privacy_policy),
-                    learnMoreText = stringResource(R.string.learn_more),
+                    learnMoreText = stringResource(CoreUiR.string.learn_more),
                     learnMoreUrl = AppLinks.PRIVACY_POLICY,
                 )
             }

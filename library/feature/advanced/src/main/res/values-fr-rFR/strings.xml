@@ -25,4 +25,5 @@
     <string name="advanced">Avancé</string>
     <string name="developer_options">Options pour les développeurs</string>
     <string name="summary_preference_settings_developer_options">Tester la page de démarrage, la disposition de la navigation et les animations</string>
+    <string name="developer">Développeur</string>
 </resources>

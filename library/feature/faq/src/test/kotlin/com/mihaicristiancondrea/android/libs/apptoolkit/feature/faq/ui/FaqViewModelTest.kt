@@ -18,11 +18,15 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui
 
 import android.app.Activity
-import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
+import kotlin.test.assertContains
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertIs
+import kotlin.test.assertTrue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
@@ -83,7 +87,7 @@ class FaqViewModelTest {
         val viewModel = createViewModel(FakeFaqRepository(questions = emptyList()))
         advance()
 
-        assertThat(viewModel.state.value.questions).isInstanceOf(Loadable.Empty::class.java)
+        assertIs<Loadable.Empty>(viewModel.state.value.questions)
     }
 
     @Test
@@ -93,9 +97,9 @@ class FaqViewModelTest {
             advance()
 
             val questions = viewModel.state.value.questions as Loadable.Failed
-            assertThat(questions.resourceId).isEqualTo(R.string.error_failed_to_load_faq)
-            assertThat(questions.retryable).isTrue()
-            assertThat(telemetryRepository.loggedEvents.map { it.name }).contains("vm_op_error")
+            assertEquals(R.string.error_failed_to_load_faq, questions.resourceId)
+            assertTrue(questions.retryable)
+            assertContains(telemetryRepository.loggedEvents.map { it.name }, "vm_op_error")
         }
 
     @Test
@@ -106,7 +110,7 @@ class FaqViewModelTest {
         advance()
 
         val questions = viewModel.state.value.questions as Loadable.Failed
-        assertThat(questions.resourceId).isEqualTo(CoreUiR.string.screen_error_no_internet)
+        assertEquals(CoreUiR.string.screen_error_no_internet, questions.resourceId)
     }
 
     @Test
@@ -114,13 +118,13 @@ class FaqViewModelTest {
         val repository = FakeFaqRepository(questions = listOf(question), failure = IllegalStateException("bug"))
         val viewModel = createViewModel(repository)
         advance()
-        assertThat(viewModel.state.value.questions).isInstanceOf(Loadable.Failed::class.java)
+        assertIs<Loadable.Failed>(viewModel.state.value.questions)
 
         repository.failure = null
         viewModel.onEvent(FaqEvent.Load)
         advance()
 
-        assertThat(viewModel.state.value.questions).isInstanceOf(Loadable.Ready::class.java)
+        assertIs<Loadable.Ready>(viewModel.state.value.questions)
     }
 
     @Test
@@ -132,7 +136,7 @@ class FaqViewModelTest {
         viewModel.onEvent(FaqEvent.RequestReview(host = reviewHost))
         advance()
 
-        assertThat(viewModel.state.value.openStoreListing).isFalse()
+        assertFalse(viewModel.state.value.openStoreListing)
     }
 
     @Test
@@ -143,10 +147,10 @@ class FaqViewModelTest {
 
         viewModel.onEvent(FaqEvent.RequestReview(host = reviewHost))
         advance()
-        assertThat(viewModel.state.value.openStoreListing).isTrue()
+        assertTrue(viewModel.state.value.openStoreListing)
 
         viewModel.onEvent(FaqEvent.StoreListingOpened)
-        assertThat(viewModel.state.value.openStoreListing).isFalse()
+        assertFalse(viewModel.state.value.openStoreListing)
     }
 
     @Test
@@ -159,8 +163,8 @@ class FaqViewModelTest {
             viewModel.onEvent(FaqEvent.RequestReview(host = reviewHost))
             advance()
 
-            assertThat(viewModel.state.value.openStoreListing).isTrue()
-            assertThat(telemetryRepository.loggedEvents.map { it.name }).contains("vm_op_error")
+            assertTrue(viewModel.state.value.openStoreListing)
+            assertContains(telemetryRepository.loggedEvents.map { it.name }, "vm_op_error")
         }
 
     private class FakeFaqRepository(

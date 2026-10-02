@@ -24,7 +24,6 @@
     <string name="consent_ad_user_data_title">Отправка данных для рекламы</string>
     <string name="consent_analytics_storage_description">Разрешить хранение данных, таких как использование приложения и продолжительность посещения, для улучшения аналитики и производительности приложения.</string>
     <string name="consent_analytics_storage_title">Хранение данных аналитики</string>
-    <string name="learn_more">Узнать больше</string>
     <string name="summary_usage_and_diagnostics">Помогите улучшить ваш опыт, автоматически отправляя данные диагностики и использования устройства.</string>
     <string name="usage_and_diagnostics">Использование и диагностика</string>
     <string name="consent_ad_personalization_description_short">Включает персонализированную рекламу.</string>

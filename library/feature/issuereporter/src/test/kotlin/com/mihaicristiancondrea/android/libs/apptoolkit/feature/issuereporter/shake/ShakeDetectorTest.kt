@@ -17,8 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.shake
 
-import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 /**
  * Covers the three guards that separate a shake from ordinary handling.
@@ -58,14 +59,14 @@ class ShakeDetectorTest {
     fun `a sustained gesture above the threshold is reported`() {
         detector().shake(samples = SUSTAINED_SAMPLES)
 
-        assertThat(shakes).isEqualTo(1)
+        assertEquals(1, shakes)
     }
 
     @Test
     fun `handling below the threshold is never reported`() {
         detector().shake(samples = SUSTAINED_SAMPLES * 2, gForce = THRESHOLD - 0.1f)
 
-        assertThat(shakes).isEqualTo(0)
+        assertEquals(0, shakes)
     }
 
     @Test
@@ -74,14 +75,14 @@ class ShakeDetectorTest {
         // is what putting a phone down firmly looks like.
         detector().shake(samples = SUSTAINED_SAMPLES, stepMillis = 1L)
 
-        assertThat(shakes).isEqualTo(0)
+        assertEquals(0, shakes)
     }
 
     @Test
     fun `too few readings do not count however long they are spread out`() {
         detector().shake(samples = 2, stepMillis = MINIMUM_DURATION_MILLIS)
 
-        assertThat(shakes).isEqualTo(0)
+        assertEquals(0, shakes)
     }
 
     @Test
@@ -90,7 +91,7 @@ class ShakeDetectorTest {
         val after: Long = detector.shake(samples = SUSTAINED_SAMPLES)
         detector.shake(samples = SUSTAINED_SAMPLES, startMillis = after)
 
-        assertThat(shakes).isEqualTo(1)
+        assertEquals(1, shakes)
     }
 
     @Test
@@ -99,12 +100,12 @@ class ShakeDetectorTest {
         detector.shake(samples = SUSTAINED_SAMPLES)
         detector.shake(samples = SUSTAINED_SAMPLES, startMillis = COOLDOWN_MILLIS * 2)
 
-        assertThat(shakes).isEqualTo(2)
+        assertEquals(2, shakes)
     }
 
     @Test
     fun `start reports failure when the device exposes no sensor`() {
-        assertThat(detector().start()).isFalse()
+        assertFalse(detector().start())
     }
 
     private companion object {

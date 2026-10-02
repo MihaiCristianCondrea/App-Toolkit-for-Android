@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.mappers
 
-import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
@@ -26,6 +25,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItemKey
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class AboutMappersTest {
 
@@ -53,23 +55,22 @@ class AboutMappersTest {
         ).inOrder()
 
         val appName = items.preference(AboutItemKey.APP_NAME)
-        assertThat(appName.position).isEqualTo(GroupedItemPosition.FIRST)
+        assertEquals(GroupedItemPosition.FIRST, appName.position)
 
         val buildVersion = items.preference(AboutItemKey.APP_BUILD_VERSION)
-        assertThat((buildVersion.summary as UiTextHelper.DynamicString).content).isEqualTo("1.0 (1)")
+        assertEquals("1.0 (1)", (buildVersion.summary as UiTextHelper.DynamicString).content)
 
         val licenses = items.preference(AboutItemKey.OSS_LICENSES)
-        assertThat(licenses.position).isEqualTo(GroupedItemPosition.LAST)
-        assertThat(licenses.action).isEqualTo(AboutItemAction.OpenLicenses)
+        assertEquals(GroupedItemPosition.LAST, licenses.position)
+        assertEquals(AboutItemAction.OpenLicenses, licenses.action)
     }
 
     @Test
     fun `device info item carries the displayed report as its copy payload`() {
         val deviceInfoItem = aboutInfo.toAboutItems().preference(AboutItemKey.DEVICE_INFO)
 
-        assertThat((deviceInfoItem.summary as UiTextHelper.DynamicString).content)
-            .isEqualTo("device-info")
-        assertThat(deviceInfoItem.position).isEqualTo(GroupedItemPosition.SINGLE)
+        assertEquals("device-info", (deviceInfoItem.summary as UiTextHelper.DynamicString).content)
+        assertEquals(GroupedItemPosition.SINGLE, deviceInfoItem.position)
         assertThat(deviceInfoItem.action).isEqualTo(
             AboutItemAction.CopyToClipboard(
                 label = UiTextHelper.StringResource(R.string.device_info),
@@ -101,25 +102,24 @@ class AboutMappersTest {
     fun `omits google play services when it is not installed`() {
         val items = aboutInfo.copy(googlePlayServicesVersion = null).toAboutItems()
 
-        assertThat(items.none { it.key == AboutItemKey.GOOGLE_PLAY_SERVICES_VERSION }).isTrue()
-        assertThat(items.preference(AboutItemKey.OSS_LICENSES).position)
-            .isEqualTo(GroupedItemPosition.LAST)
+        assertTrue(items.none { it.key == AboutItemKey.GOOGLE_PLAY_SERVICES_VERSION })
+        assertEquals(GroupedItemPosition.LAST, items.preference(AboutItemKey.OSS_LICENSES).position)
     }
 
     @Test
     fun `omits the toolkit version when it is blank`() {
         val items = aboutInfo.copy(appToolkitVersion = "").toAboutItems()
 
-        assertThat(items.none { it.key == AboutItemKey.APP_TOOLKIT_VERSION }).isTrue()
+        assertTrue(items.none { it.key == AboutItemKey.APP_TOOLKIT_VERSION })
     }
 
     @Test
     fun `omits the device info section when there is nothing to show`() {
         val items = aboutInfo.copy(deviceInfo = "   ").toAboutItems()
 
-        assertThat(items.none { it.key == AboutItemKey.HEADER_DEVICE_INFO }).isTrue()
-        assertThat(items.none { it.key == AboutItemKey.DEVICE_INFO }).isTrue()
-        assertThat(items.last().key).isEqualTo(AboutItemKey.OSS_LICENSES)
+        assertTrue(items.none { it.key == AboutItemKey.HEADER_DEVICE_INFO })
+        assertTrue(items.none { it.key == AboutItemKey.DEVICE_INFO })
+        assertEquals(AboutItemKey.OSS_LICENSES, items.last().key)
     }
 
     @Test
@@ -134,8 +134,7 @@ class AboutMappersTest {
         // A row that looked clickable but did nothing is what made most of this screen seem broken.
         assertThat(notCopyable)
             .containsExactly(AboutItemKey.OSS_LICENSES, AboutItemKey.APP_BUILD_VERSION)
-        assertThat(preferences.first { it.key == AboutItemKey.OSS_LICENSES }.action)
-            .isEqualTo(AboutItemAction.OpenLicenses)
+        assertEquals(AboutItemAction.OpenLicenses, preferences.first { it.key == AboutItemKey.OSS_LICENSES }.action)
     }
 
     @Test
@@ -143,16 +142,16 @@ class AboutMappersTest {
         val appName = aboutInfo.toAboutItems().preference(AboutItemKey.APP_NAME)
 
         val action = appName.action as AboutItemAction.CopyToClipboard
-        assertThat(action.text).isEqualTo(appName.title)
+        assertEquals(appName.title, action.text)
     }
 
     @Test
     fun `the build version row feeds the version tap counter and copies nothing`() {
         val buildVersion = aboutInfo.toAboutItems().preference(AboutItemKey.APP_BUILD_VERSION)
 
-        assertThat(buildVersion.countsVersionTap).isTrue()
-        assertThat(buildVersion.summary).isEqualTo(UiTextHelper.DynamicString("1.0 (1)"))
-        assertThat(buildVersion.action).isNull()
+        assertTrue(buildVersion.countsVersionTap)
+        assertEquals(UiTextHelper.DynamicString("1.0 (1)"), buildVersion.summary)
+        assertNull(buildVersion.action)
     }
 
     @Test

@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.repositories
 
-import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.local.FaqLocalDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqId
@@ -33,6 +32,8 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import java.net.UnknownHostException
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
 
 private const val CATALOG_URL = "https://example.test/catalog"
 private const val PRODUCT_ID = "com.example.product"
@@ -97,8 +98,8 @@ class DefaultFaqRepositoryTest {
             remoteQuestions = listOf(dto("1", "  Why?  ", "\n Because. \t")),
         ).getFaq()
 
-        assertThat(questions.single().question).isEqualTo("Why?")
-        assertThat(questions.single().answer).isEqualTo("Because.")
+        assertEquals("Why?", questions.single().question)
+        assertEquals("Because.", questions.single().answer)
     }
 
     @Test
@@ -123,8 +124,8 @@ class DefaultFaqRepositoryTest {
             ),
         ).getFaq()
 
-        assertThat(questions).hasSize(1)
-        assertThat(questions.single().question).isEqualTo("First question?")
+        assertEquals(1, questions.size)
+        assertEquals("First question?", questions.single().question)
     }
 
     @Test
@@ -144,7 +145,7 @@ class DefaultFaqRepositoryTest {
             localQuestions = listOf(item("local", "Bundled?", "Yes.")),
         ).getFaq()
 
-        assertThat(questions.single().question).isEqualTo("Bundled?")
+        assertEquals("Bundled?", questions.single().question)
     }
 
     @Test
@@ -154,7 +155,7 @@ class DefaultFaqRepositoryTest {
             localQuestions = listOf(item("local", "Bundled?", "Yes.")),
         ).getFaq()
 
-        assertThat(questions.single().question).isEqualTo("Bundled?")
+        assertEquals("Bundled?", questions.single().question)
     }
 
     @Test
@@ -167,15 +168,15 @@ class DefaultFaqRepositoryTest {
             ),
         ).getFaq()
 
-        assertThat(questions).hasSize(1)
-        assertThat(questions.single().question).isEqualTo("Bundled?")
+        assertEquals(1, questions.size)
+        assertEquals("Bundled?", questions.single().question)
     }
 
     @Test
     fun `returns no questions when both sources load empty`() = runTest {
         val questions = repository(remoteQuestions = emptyList(), localQuestions = emptyList()).getFaq()
 
-        assertThat(questions).isEmpty()
+        assertEquals(emptyList(), questions)
     }
 
     @Test
@@ -184,7 +185,7 @@ class DefaultFaqRepositoryTest {
             repository(catalogFailure = UnknownHostException(), localQuestions = emptyList()).getFaq()
         }.exceptionOrNull()
 
-        assertThat(failure).isInstanceOf(NetworkException::class.java)
-        assertThat((failure as NetworkException).reason).isEqualTo(NetworkException.Reason.NO_INTERNET)
+        assertIs<NetworkException>(failure)
+        assertEquals(NetworkException.Reason.NO_INTERNET, (failure as NetworkException).reason)
     }
 }

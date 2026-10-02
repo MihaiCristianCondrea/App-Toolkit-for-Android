@@ -45,6 +45,10 @@ class PermissionsViewModel(
 ) {
     private var loadJob: Job? = null
 
+    init {
+        onEvent(PermissionsEvent.Load)
+    }
+
     override fun handleEvent(event: PermissionsEvent) {
         when (event) {
             PermissionsEvent.Load -> loadPermissions()

@@ -25,4 +25,5 @@
     <string name="advanced">詳細設定</string>
     <string name="developer_options">開発者向けオプション</string>
     <string name="summary_preference_settings_developer_options">開始ページ、ナビゲーション レイアウト、アニメーションをテストします</string>
+    <string name="developer">開発者</string>
 </resources>

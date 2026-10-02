@@ -15,14 +15,9 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">AMOLED 模式</string>
     <string name="back_button_content_description">返回</string>
     <string name="back_button_text">返回</string>
-    <string name="dark_mode">深色模式</string>
-    <string name="done_button_content_description">完成</string>
     <string name="done_button_text">完成</string>
-    <string name="follow_system">跟隨系統模式</string>
-    <string name="light_mode">淺色模式</string>
     <string name="next_button_content_description">下一步</string>
     <string name="next_button_text">下一步</string>
     <string name="onboarding_amoled_mode_desc">OLED 螢幕可呈現更深邃的黑色。</string>
@@ -30,14 +25,9 @@
     <string name="onboarding_completion_failed">無法儲存您的設定。請再試一次。</string>
     <string name="onboarding_final_description">感謝您個人化您的體驗。您現在已準備好探索所有功能。祝您使用愉快！</string>
     <string name="onboarding_final_title">一切就緒！</string>
-    <string name="onboarding_theme_dark_desc">對眼睛溫和。</string>
-    <string name="onboarding_theme_light_desc">明亮且充滿活力。</string>
     <string name="onboarding_theme_subtitle">選擇您希望應用程式顯示的方式。</string>
-    <string name="onboarding_theme_system_desc">與您的裝置設定相符。</string>
     <string name="onboarding_theme_title">選擇您的風格</string>
-    <string name="other_colors">其他顏色</string>
     <string name="skip_button_content_description">跳過</string>
     <string name="skip_button_text">跳過</string>
     <string name="usage_and_diagnostics">使用與診斷</string>
-    <string name="wallpaper_colors">桌布顏色</string>
 </resources>

@@ -25,4 +25,5 @@
     <string name="advanced">進階</string>
     <string name="developer_options">開發人員選項</string>
     <string name="summary_preference_settings_developer_options">測試起始頁面、導覽版面配置和動畫</string>
+    <string name="developer">開發人員</string>
 </resources>

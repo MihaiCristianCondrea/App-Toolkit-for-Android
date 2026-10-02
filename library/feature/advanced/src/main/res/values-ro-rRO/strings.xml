@@ -25,4 +25,5 @@
     <string name="advanced">Avansat</string>
     <string name="developer_options">Opțiuni pentru dezvoltatori</string>
     <string name="summary_preference_settings_developer_options">Testează pagina de pornire, aspectul navigării și animațiile</string>
+    <string name="developer">Dezvoltator</string>
 </resources>

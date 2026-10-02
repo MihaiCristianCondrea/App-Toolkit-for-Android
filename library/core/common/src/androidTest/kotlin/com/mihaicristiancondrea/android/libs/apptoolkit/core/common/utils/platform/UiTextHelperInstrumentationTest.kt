@@ -26,12 +26,12 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.Locale
+import kotlin.test.assertEquals
 
 /**
  * Verifies that [UiTextHelper.StringResource] resolves against the composition's `LocalContext`
@@ -65,7 +65,7 @@ class UiTextHelperInstrumentationTest {
         }
 
         composeRule.runOnIdle {
-            assertThat(actual).isEqualTo(expected)
+            assertEquals(expected, actual)
         }
     }
 }

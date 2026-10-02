@@ -25,4 +25,5 @@
     <string name="advanced">Advanced</string>
     <string name="developer_options">Mga opsyon ng developer</string>
     <string name="summary_preference_settings_developer_options">Subukan ang start page, layout ng navigation at mga animation</string>
+    <string name="developer">Developer</string>
 </resources>

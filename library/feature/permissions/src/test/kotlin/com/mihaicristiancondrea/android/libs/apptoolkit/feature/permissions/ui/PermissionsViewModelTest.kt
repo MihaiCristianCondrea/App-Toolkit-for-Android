@@ -57,10 +57,8 @@ class PermissionsViewModelTest {
     private fun advance() = dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
     @Test
-    fun `loading shows the catalog`() = runTest(dispatcherExtension.testDispatcher) {
+    fun `the first load shows the catalog`() = runTest(dispatcherExtension.testDispatcher) {
         val viewModel = createViewModel(FakePermissionsRepository(catalog))
-
-        viewModel.onEvent(PermissionsEvent.Load)
         advance()
 
         assertEquals(Loadable.Ready(catalog), viewModel.state.value.config)
@@ -72,8 +70,6 @@ class PermissionsViewModelTest {
             val viewModel = createViewModel(
                 FakePermissionsRepository(SettingsConfig(title = "", categories = emptyList())),
             )
-
-            viewModel.onEvent(PermissionsEvent.Load)
             advance()
 
             val config = assertIs<Loadable.Empty>(viewModel.state.value.config)
@@ -87,8 +83,6 @@ class PermissionsViewModelTest {
     fun `a repository that throws shows a retryable failure and reports it`() =
         runTest(dispatcherExtension.testDispatcher) {
             val viewModel = createViewModel(FakePermissionsRepository(catalog, failure = RuntimeException("fail")))
-
-            viewModel.onEvent(PermissionsEvent.Load)
             advance()
 
             val config = assertIs<Loadable.Failed>(viewModel.state.value.config)
@@ -100,7 +94,6 @@ class PermissionsViewModelTest {
     fun `retrying after a failure shows the catalog`() = runTest(dispatcherExtension.testDispatcher) {
         val repository = FakePermissionsRepository(catalog, failure = RuntimeException("fail"))
         val viewModel = createViewModel(repository)
-        viewModel.onEvent(PermissionsEvent.Load)
         advance()
         assertIs<Loadable.Failed>(viewModel.state.value.config)
 

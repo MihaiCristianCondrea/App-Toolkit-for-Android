@@ -16,7 +16,6 @@
   -->
 <resources>
     <string name="agree">أوافق</string>
-    <string name="learn_more">اعرف المزيد</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">اقرأ ووافق على شروط الخدمة وسياسة الخصوصية الخاصة بنا للمتابعة</string>
     <string name="welcome">مرحباً</string>
 </resources>

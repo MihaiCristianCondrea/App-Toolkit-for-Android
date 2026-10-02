@@ -67,6 +67,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.contracts.DisplaySettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.models.DisplaySettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.providers.DisplaySettingsProvider
@@ -403,7 +404,7 @@ private fun DisplaySettingsList(
         if (supportsStartupPage && tabCount > 1) {
             add { modifier ->
                 SettingsPreferenceItem(
-                    title = stringResource(id = R.string.startup_page),
+                    title = stringResource(id = CoreUiR.string.startup_page),
                     summary = stringResource(id = R.string.summary_preference_settings_startup_page),
                     onClick = onOpenStartupPage,
                     ga4Event = displayActionGa4Event(

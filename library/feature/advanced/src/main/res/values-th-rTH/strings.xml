@@ -25,4 +25,5 @@
     <string name="advanced">ขั้นสูง</string>
     <string name="developer_options">ตัวเลือกสำหรับนักพัฒนาแอป</string>
     <string name="summary_preference_settings_developer_options">ทดสอบหน้าเริ่มต้น เลย์เอาต์การนำทาง และภาพเคลื่อนไหว</string>
+    <string name="developer">นักพัฒนา</string>
 </resources>

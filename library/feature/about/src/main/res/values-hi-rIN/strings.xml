@@ -21,12 +21,9 @@
     <string name="app_build_version">एप्लिकेशन निर्माण संस्करण</string>
     <string name="app_info">ऐप जानकारी</string>
     <string name="app_toolkit_version">App Toolkit संस्करण</string>
-    <string name="content_description_more_options">अधिक विकल्प</string>
     <string name="debug">डीबग</string>
     <string name="device_info">डिवाइस जानकारी</string>
     <string name="device_model">डिवाइस मॉडल</string>
-    <string name="done_button_content_description">हो गया</string>
-    <string name="go_back">वापस जाओ</string>
     <string name="google_play_services_version">Google Play सेवाएं संस्करण</string>
     <string name="help_and_feedback">मदद और प्रतिक्रिया</string>
     <string name="manufacturer">निर्माता</string>
@@ -41,8 +38,6 @@
     <string name="snack_device_info_failed">डिवाइस की जानकारी लोड नहीं हो सकी</string>
     <string name="summary_preference_settings_oss">ओपन सोर्स सॉफ़्टवेयर के लिए लाइसेंस विवरण</string>
     <string name="summary_share_message">इस शानदार ऐप को देखें जिसे मैं उपयोग कर रहा हूँ. इसमें कुछ बहुत ही शानदार फीचर्स हैं जो आपको रोचक लग सकते हैं। इसे Play Store से डाउनलोड करें: %1$s</string>
-    <string name="support_us">हमें समर्थन दें</string>
-    <string name="try_again">फिर से प्रयास करें</string>
     <string name="updates">अपडेट्स</string>
     <string name="snack_seasonal_themes_unlocked">आनंद लें</string>
 </resources>

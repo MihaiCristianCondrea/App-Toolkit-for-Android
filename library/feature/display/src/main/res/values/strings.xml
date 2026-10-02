@@ -23,7 +23,6 @@
     <string name="language">Language</string>
     <string name="navigation">Navigation</string>
     <string name="show_labels_on_bottom_bar">Show labels on bottom bar</string>
-    <string name="startup_page">Startup page</string>
     <string name="summary_preference_settings_bounce_buttons">Applies a subtle bounce animation to all clickable elements when clicked</string>
     <string name="summary_preference_settings_dynamic_colors">Apply colors from wallpapers to the app theme</string>
     <string name="summary_preference_settings_language">Changes the language used in the app</string>

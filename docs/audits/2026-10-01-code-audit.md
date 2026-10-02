@@ -164,8 +164,11 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
     cast.
   - There is no in-coroutine form of `launchReport` to run two reported steps in order, so
     `SeasonalThemeOverlayViewModel` starts its greeting lookup from both the block and `onError`.
-- `ThemeSettingsScreen` resolves its labels from `core.ui.R` while `:library:feature:theme` keeps
-  its own copies of the same strings, most of them unused.
+- Strings that two features both need are copied into each, because features may not depend on
+  each other: for example `device_info` (About, issue reporter), `oss_license_title` (About, FAQ,
+  licenses), `usage_and_diagnostics` (diagnostics, onboarding, privacy) and `privacy_policy`. Moving
+  such a string to `:library:core:ui` is the fix when its copies must stay identical. Copies of
+  strings `:library:core:ui` already provides are gone.
 - `DefaultUsageAndDiagnosticsRepository.kt:49-64` and `UsageAndDiagnosticsSettings` duplicate
   `DefaultConsentRepository.readPersistedSettings` and `ConsentSettings`.
 - `sample/feature/apps/.../ui/views/AppActions.kt:36-74` and `AppActionLauncher.kt:77-174` both open

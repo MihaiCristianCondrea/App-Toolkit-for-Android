@@ -18,32 +18,18 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states
 
 import androidx.compose.runtime.Immutable
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.MorsePlaybackState
 
-enum class ReactionTestPhase {
-    Idle,
-    Waiting,
-    Signal,
-    Result,
-    FalseStart,
-}
-
-enum class ReactionRating {
-    Lightning,
-    Fast,
-    Average,
-    Slow,
-}
-
+/**
+ * State rendered by the Morse tool.
+ *
+ * @property input The message the user typed.
+ * @property inputError Why [input] cannot be sent, set when the user tries to send it.
+ * @property playback The shared Morse playback, which SOS also drives.
+ */
 @Immutable
-data class ReactionTestToolState(
-    val phase: ReactionTestPhase = ReactionTestPhase.Idle,
-    val lastReactionTimeMs: Long? = null,
-    val bestTimeMs: Long? = null,
-    val averageTimeMs: Long? = null,
-    val history: ImmutableList<Long> = persistentListOf(),
-    val roundCount: Int = 0,
-    val totalRounds: Int = 5,
-    val rating: ReactionRating? = null,
+data class MorseToolUiState(
+    val input: String = "",
+    val inputError: MorseInputError? = null,
+    val playback: MorsePlaybackState = MorsePlaybackState(),
 )

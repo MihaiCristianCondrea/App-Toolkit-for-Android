@@ -17,12 +17,12 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di
 
-import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.StandardDispatcherExtension
 import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import kotlin.test.assertEquals
 
 @ExtendWith(StandardDispatcherExtension::class)
 class StandardDispatchersTest {
@@ -31,21 +31,21 @@ class StandardDispatchersTest {
 
     @Test
     fun `main returns DispatchersMain`() {
-        assertThat(dispatchers.main).isEqualTo(Dispatchers.Main)
+        assertEquals(Dispatchers.Main, dispatchers.main)
     }
 
     @Test
     fun `io returns DispatchersIO`() {
-        assertThat(dispatchers.io).isEqualTo(Dispatchers.IO)
+        assertEquals(Dispatchers.IO, dispatchers.io)
     }
 
     @Test
     fun `default returns DispatchersDefault`() {
-        assertThat(dispatchers.default).isEqualTo(Dispatchers.Default)
+        assertEquals(Dispatchers.Default, dispatchers.default)
     }
 
     @Test
     fun `unconfined returns DispatchersUnconfined`() {
-        assertThat(dispatchers.unconfined).isEqualTo(Dispatchers.Unconfined)
+        assertEquals(Dispatchers.Unconfined, dispatchers.unconfined)
     }
 }

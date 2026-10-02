@@ -25,4 +25,5 @@
     <string name="advanced">جدید</string>
     <string name="developer_options">ڈیولپر اختیارات</string>
     <string name="summary_preference_settings_developer_options">آغاز کا صفحہ، نیویگیشن لے آؤٹ اور اینیمیشنز جانچیں</string>
+    <string name="developer">ڈویلپر</string>
 </resources>

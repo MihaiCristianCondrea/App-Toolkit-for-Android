@@ -25,4 +25,5 @@
     <string name="advanced">Haladó</string>
     <string name="developer_options">Fejlesztői beállítások</string>
     <string name="summary_preference_settings_developer_options">A kezdőlap, a navigáció elrendezése és az animációk tesztelése</string>
+    <string name="developer">Fejlesztő</string>
 </resources>

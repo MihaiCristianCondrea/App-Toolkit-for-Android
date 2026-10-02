@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui
 
-import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
@@ -26,6 +25,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.cont
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import kotlin.test.assertEquals
 
 class LicensesViewModelTest {
 
@@ -44,7 +44,7 @@ class LicensesViewModelTest {
         runTest(dispatcherExtension.testDispatcher) {
             val viewModel = createViewModel()
 
-            assertThat(viewModel.state.value.libraryCount).isEqualTo(Loadable.Loading)
+            assertEquals(Loadable.Loading, viewModel.state.value.libraryCount)
         }
 
     @Test
@@ -54,9 +54,9 @@ class LicensesViewModelTest {
 
             viewModel.onEvent(LicensesEvent.LibrariesLoaded(libraryCount = 42))
 
-            assertThat(viewModel.state.value.libraryCount).isEqualTo(Loadable.Ready(42))
+            assertEquals(Loadable.Ready(42), viewModel.state.value.libraryCount)
             val start = telemetryRepository.loggedEvents.single { it.name == "vm_op_start" }
-            assertThat(start.params["action"]).isEqualTo(AnalyticsValue.Str("loadLibraries"))
-            assertThat(start.params["libraryCount"]).isEqualTo(AnalyticsValue.Str("42"))
+            assertEquals(AnalyticsValue.Str("loadLibraries"), start.params["action"])
+            assertEquals(AnalyticsValue.Str("42"), start.params["libraryCount"])
         }
 }

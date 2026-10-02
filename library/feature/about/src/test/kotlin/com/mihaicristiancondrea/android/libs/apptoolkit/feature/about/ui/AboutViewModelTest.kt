@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 
-import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.ClipboardRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
@@ -25,6 +24,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
+import kotlin.test.assertContains
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertIs
+import kotlin.test.assertTrue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
@@ -88,8 +92,8 @@ class AboutViewModelTest {
         advance()
 
         val items = viewModel.state.value.items
-        assertThat(items).isInstanceOf(Loadable.Ready::class.java)
-        assertThat((items as Loadable.Ready).value.map { it.key }).isEqualTo(expectedItemKeys)
+        assertIs<Loadable.Ready>(items)
+        assertEquals(expectedItemKeys, (items as Loadable.Ready).value.map { it.key })
     }
 
     @Test
@@ -102,8 +106,8 @@ class AboutViewModelTest {
             advance()
 
             val message = viewModel.onlyMessage()
-            assertThat(message.resourceId).isEqualTo(R.string.snack_copied_to_clipboard)
-            assertThat(message.isError).isFalse()
+            assertEquals(R.string.snack_copied_to_clipboard, message.resourceId)
+            assertFalse(message.isError)
         }
 
     @Test
@@ -121,7 +125,7 @@ class AboutViewModelTest {
             )
             advance()
 
-            assertThat(viewModel.onlyMessage().resourceId).isEqualTo(R.string.snack_device_info_copied)
+            assertEquals(R.string.snack_device_info_copied, viewModel.onlyMessage().resourceId)
         }
 
     @Test
@@ -134,7 +138,7 @@ class AboutViewModelTest {
             viewModel.onEvent(AboutEvent.CopyToClipboard(label = "label", text = "text"))
             advance()
 
-            assertThat(viewModel.messages.value).isEmpty()
+            assertEquals(emptyList(), viewModel.messages.value)
         }
 
     @Test
@@ -149,8 +153,8 @@ class AboutViewModelTest {
             advance()
 
             val message = viewModel.onlyMessage()
-            assertThat(message.resourceId).isEqualTo(R.string.snack_copy_failed)
-            assertThat(message.isError).isTrue()
+            assertEquals(R.string.snack_copy_failed, message.resourceId)
+            assertTrue(message.isError)
         }
 
     @Test
@@ -164,9 +168,9 @@ class AboutViewModelTest {
             advance()
 
             val message = viewModel.onlyMessage()
-            assertThat(message.resourceId).isEqualTo(R.string.snack_copy_failed)
-            assertThat(message.isError).isTrue()
-            assertThat(telemetryRepository.loggedEvents.map { it.name }).contains("vm_op_error")
+            assertEquals(R.string.snack_copy_failed, message.resourceId)
+            assertTrue(message.isError)
+            assertContains(telemetryRepository.loggedEvents.map { it.name }, "vm_op_error")
         }
 
     @Test
@@ -210,7 +214,7 @@ class AboutViewModelTest {
         advance()
         viewModel.messageShown(viewModel.onlyMessage().id)
 
-        assertThat(viewModel.messages.value).isEmpty()
+        assertEquals(emptyList(), viewModel.messages.value)
     }
 
     @Test
@@ -224,8 +228,8 @@ class AboutViewModelTest {
             advance()
 
             val ids = viewModel.messages.value.map { it.id }
-            assertThat(ids).hasSize(2)
-            assertThat(ids.toSet()).hasSize(2)
+            assertEquals(2, ids.size)
+            assertEquals(2, ids.toSet().size)
         }
 
     @Test
@@ -239,10 +243,9 @@ class AboutViewModelTest {
             advance()
 
             val items = viewModel.state.value.items as Loadable.Failed
-            assertThat((items.message as UiTextHelper.StringResource).resourceId)
-                .isEqualTo(R.string.snack_device_info_failed)
-            assertThat(items.retryable).isTrue()
-            assertThat(telemetryRepository.loggedEvents.map { it.name }).contains("vm_op_error")
+            assertEquals(R.string.snack_device_info_failed, (items.message as UiTextHelper.StringResource).resourceId)
+            assertTrue(items.retryable)
+            assertContains(telemetryRepository.loggedEvents.map { it.name }, "vm_op_error")
         }
 
     @Test
@@ -257,9 +260,11 @@ class AboutViewModelTest {
             advance()
 
             val items = viewModel.state.value.items as Loadable.Failed
-            assertThat((items.message as UiTextHelper.StringResource).resourceId)
-                .isEqualTo(CoreUiR.string.screen_error_storage_busy)
-            assertThat(items.retryable).isTrue()
+            assertEquals(
+                CoreUiR.string.screen_error_storage_busy,
+                (items.message as UiTextHelper.StringResource).resourceId,
+            )
+            assertTrue(items.retryable)
         }
 
     @Test
@@ -274,9 +279,8 @@ class AboutViewModelTest {
             advance()
 
             val items = viewModel.state.value.items as Loadable.Failed
-            assertThat((items.message as UiTextHelper.StringResource).resourceId)
-                .isEqualTo(R.string.snack_device_info_failed)
-            assertThat(items.retryable).isFalse()
+            assertEquals(R.string.snack_device_info_failed, (items.message as UiTextHelper.StringResource).resourceId)
+            assertFalse(items.retryable)
         }
 
     @Test
@@ -289,13 +293,13 @@ class AboutViewModelTest {
             }
             val viewModel = createViewModel(repository = repository)
             advance()
-            assertThat(viewModel.state.value.items).isInstanceOf(Loadable.Failed::class.java)
+            assertIs<Loadable.Failed>(viewModel.state.value.items)
 
             fail = false
             viewModel.onEvent(AboutEvent.Load)
             advance()
 
-            assertThat(viewModel.state.value.items).isInstanceOf(Loadable.Ready::class.java)
+            assertIs<Loadable.Ready>(viewModel.state.value.items)
         }
 
     @Test
@@ -309,9 +313,9 @@ class AboutViewModelTest {
             advance()
 
             coVerify { seasonalThemes.unlockSeasonalThemes() }
-            assertThat(viewModel.onlyMessage().resourceId).isEqualTo(R.string.snack_seasonal_themes_unlocked)
+            assertEquals(R.string.snack_seasonal_themes_unlocked, viewModel.onlyMessage().resourceId)
             val achievement = telemetryRepository.loggedEvents.single { it.name == "unlock_achievement" }
-            assertThat(achievement.params["achievement_id"]).isEqualTo(AnalyticsValue.Str("seasonal_themes"))
+            assertEquals(AnalyticsValue.Str("seasonal_themes"), achievement.params["achievement_id"])
         }
 
     @Test
@@ -323,8 +327,8 @@ class AboutViewModelTest {
         viewModel.onEvent(AboutEvent.EasterEggFound)
         advance()
 
-        assertThat(viewModel.messages.value).isEmpty()
-        assertThat(telemetryRepository.loggedEvents.map { it.name }).doesNotContain("unlock_achievement")
+        assertEquals(emptyList(), viewModel.messages.value)
+        assertFalse("unlock_achievement" in telemetryRepository.loggedEvents.map { it.name })
     }
 
     /** Records each accepted copy; [accepts] and [confirmsCopies] set how the system behaves. */

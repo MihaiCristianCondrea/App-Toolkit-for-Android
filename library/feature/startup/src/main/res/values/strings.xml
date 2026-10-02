@@ -16,7 +16,6 @@
   -->
 <resources>
     <string name="agree">Agree</string>
-    <string name="learn_more">Learn more</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">Read and agree to the Terms of Service and Privacy Policy to continue</string>
     <string name="welcome">Welcome</string>
 </resources>

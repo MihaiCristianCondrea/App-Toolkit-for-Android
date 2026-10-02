@@ -26,7 +26,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -70,10 +69,6 @@ fun PermissionsScreen() {
         screenName = PERMISSIONS_SCREEN_NAME,
         state = state.config,
     )
-
-    LaunchedEffect(Unit) {
-        viewModel.onEvent(PermissionsEvent.Load)
-    }
 
     PermissionsScreenContent(
         state = state,

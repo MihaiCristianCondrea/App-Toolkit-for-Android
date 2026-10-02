@@ -15,19 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">Mode AMOLED</string>
-    <string name="color_palette">Palette de couleurs</string>
-    <string name="dark_mode">Mode sombre</string>
-    <string name="follow_system">Suivre le mode système</string>
-    <string name="light_mode">Mode clair</string>
-    <string name="onboarding_theme_dark_desc">Agréable pour les yeux.</string>
-    <string name="onboarding_theme_light_desc">Lumineux et énergique.</string>
-    <string name="onboarding_theme_system_desc">Correspond à votre appareil.</string>
-    <string name="other_colors">Autres couleurs</string>
-    <string name="screen_and_display_settings">Paramètres d\'écran et d\'affichage.</string>
-    <string name="summary_dark_theme">Le thème sombre exploite un fond profond pour étendre considérablement la durée de vie de votre batterie. Pour l\'activer, accédez simplement au gestionnaire de systèmes de votre Android et sélectionnez votre thème préféré dans</string>
-    <string name="theme_mode">Mode du thème</string>
-    <string name="wallpaper_colors">Couleurs du fond d\'écran</string>
     <string name="holiday_greeting_christmas_title">Joyeuses fêtes !</string>
     <string name="holiday_greeting_christmas_message">Le thème de Noël est arrivé, avec de la neige dans toute l\'appli. Voulez-vous le garder jusqu\'à la fin des fêtes ?</string>
     <string name="holiday_greeting_halloween_title">Joyeux Halloween !</string>

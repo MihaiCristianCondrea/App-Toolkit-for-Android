@@ -15,14 +15,9 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">وضع AMOLED</string>
     <string name="back_button_content_description">رجوع</string>
     <string name="back_button_text">رجوع</string>
-    <string name="dark_mode">الوضع الداكن</string>
-    <string name="done_button_content_description">تم</string>
     <string name="done_button_text">تم</string>
-    <string name="follow_system">اتباع وضع النظام</string>
-    <string name="light_mode">الوضع الفاتح</string>
     <string name="next_button_content_description">التالي</string>
     <string name="next_button_text">التالي</string>
     <string name="onboarding_amoled_mode_desc">أسود أعمق لشاشات OLED.</string>
@@ -30,14 +25,9 @@
     <string name="onboarding_completion_failed">تعذّر حفظ الإعداد. يُرجى المحاولة مرة أخرى.</string>
     <string name="onboarding_final_description">شكرًا لتخصيص تجربتك. أنت الآن جاهز لاستكشاف جميع الميزات. استمتع.</string>
     <string name="onboarding_final_title">أنت جاهز تمامًا.</string>
-    <string name="onboarding_theme_dark_desc">مريح للعينين.</string>
-    <string name="onboarding_theme_light_desc">مشرق وحيوي.</string>
     <string name="onboarding_theme_subtitle">حدد كيف تريد أن يبدو التطبيق.</string>
-    <string name="onboarding_theme_system_desc">يطابق جهازك.</string>
     <string name="onboarding_theme_title">اختر طرازك</string>
-    <string name="other_colors">ألوان أخرى</string>
     <string name="skip_button_content_description">تخطي</string>
     <string name="skip_button_text">تخطي</string>
     <string name="usage_and_diagnostics">الاستخدام والتشخيصات</string>
-    <string name="wallpaper_colors">ألوان خلفية الشاشة</string>
 </resources>

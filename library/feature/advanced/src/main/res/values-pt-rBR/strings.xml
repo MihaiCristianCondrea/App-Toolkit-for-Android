@@ -25,4 +25,5 @@
     <string name="advanced">Avançado</string>
     <string name="developer_options">Opções do desenvolvedor</string>
     <string name="summary_preference_settings_developer_options">Teste a página inicial, o layout de navegação e as animações</string>
+    <string name="developer">Desenvolvedor</string>
 </resources>

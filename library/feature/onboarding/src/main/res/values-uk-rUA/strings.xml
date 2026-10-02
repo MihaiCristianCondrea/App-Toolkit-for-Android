@@ -15,14 +15,9 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">Режим AMOLED</string>
     <string name="back_button_content_description">Назад</string>
     <string name="back_button_text">Назад</string>
-    <string name="dark_mode">Темна тема</string>
-    <string name="done_button_content_description">Готово</string>
     <string name="done_button_text">Готово</string>
-    <string name="follow_system">Дотримуватися системного режиму</string>
-    <string name="light_mode">Світла тема</string>
     <string name="next_button_content_description">Далі</string>
     <string name="next_button_text">Далі</string>
     <string name="onboarding_amoled_mode_desc">Глибші чорні кольори для OLED екранів.</string>
@@ -30,14 +25,9 @@
     <string name="onboarding_completion_failed">Не вдалося зберегти налаштування. Спробуйте ще раз.</string>
     <string name="onboarding_final_description">Дякуємо за персоналізацію вашого досвіду. Тепер ви готові досліджувати всі функції. Насолоджуйтесь.</string>
     <string name="onboarding_final_title">Ви все налаштували.</string>
-    <string name="onboarding_theme_dark_desc">Приємний для очей.</string>
-    <string name="onboarding_theme_light_desc">Яскравий та енергійний.</string>
     <string name="onboarding_theme_subtitle">Виберіть, як має виглядати додаток.</string>
-    <string name="onboarding_theme_system_desc">Відповідає налаштуванням вашого пристрою.</string>
     <string name="onboarding_theme_title">Оберіть свій стиль</string>
-    <string name="other_colors">Інші кольори</string>
     <string name="skip_button_content_description">Пропустити</string>
     <string name="skip_button_text">Пропустити</string>
     <string name="usage_and_diagnostics">Використання та діагностика</string>
-    <string name="wallpaper_colors">Кольори шпалер</string>
 </resources>

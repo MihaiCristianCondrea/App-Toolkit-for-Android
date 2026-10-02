@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.mappers
 
-import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItemAction
@@ -57,32 +56,31 @@ class PrivacyMappersTest {
     fun `assigns card positions per group rather than across the whole list`() {
         val items = provider.toPrivacyItems()
 
-        assertThat(items.preference(PrivacyItemKey.PRIVACY_POLICY).position)
-            .isEqualTo(GroupedItemPosition.FIRST)
-        assertThat(items.preference(PrivacyItemKey.ADS).position)
-            .isEqualTo(GroupedItemPosition.MIDDLE)
-        assertThat(items.preference(PrivacyItemKey.USAGE_AND_DIAGNOSTICS).position)
-            .isEqualTo(GroupedItemPosition.LAST)
-        assertThat(items.preference(PrivacyItemKey.LEGAL_NOTICES).position)
-            .isEqualTo(GroupedItemPosition.FIRST)
-        assertThat(items.preference(PrivacyItemKey.LICENSE).position)
-            .isEqualTo(GroupedItemPosition.LAST)
+        assertEquals(GroupedItemPosition.FIRST, items.preference(PrivacyItemKey.PRIVACY_POLICY).position)
+        assertEquals(GroupedItemPosition.MIDDLE, items.preference(PrivacyItemKey.ADS).position)
+        assertEquals(GroupedItemPosition.LAST, items.preference(PrivacyItemKey.USAGE_AND_DIAGNOSTICS).position)
+        assertEquals(GroupedItemPosition.FIRST, items.preference(PrivacyItemKey.LEGAL_NOTICES).position)
+        assertEquals(GroupedItemPosition.LAST, items.preference(PrivacyItemKey.LICENSE).position)
     }
 
     @Test
     fun `link rows carry the provider's urls and host rows carry their destination`() {
         val items = provider.toPrivacyItems()
 
-        assertThat(items.preference(PrivacyItemKey.PRIVACY_POLICY).action)
-            .isEqualTo(PrivacyItemAction.OpenUrl(url = "https://example.test/privacy"))
-        assertThat(items.preference(PrivacyItemKey.LICENSE).action)
-            .isEqualTo(PrivacyItemAction.OpenUrl(url = "https://example.test/license"))
-        assertThat(items.preference(PrivacyItemKey.PERMISSIONS).action)
-            .isEqualTo(PrivacyItemAction.OpenPermissions)
-        assertThat(items.preference(PrivacyItemKey.ADS).action)
-            .isEqualTo(PrivacyItemAction.OpenAds)
-        assertThat(items.preference(PrivacyItemKey.USAGE_AND_DIAGNOSTICS).action)
-            .isEqualTo(PrivacyItemAction.OpenUsageAndDiagnostics)
+        assertEquals(
+            PrivacyItemAction.OpenUrl(url = "https://example.test/privacy"),
+            items.preference(PrivacyItemKey.PRIVACY_POLICY).action,
+        )
+        assertEquals(
+            PrivacyItemAction.OpenUrl(url = "https://example.test/license"),
+            items.preference(PrivacyItemKey.LICENSE).action,
+        )
+        assertEquals(PrivacyItemAction.OpenPermissions, items.preference(PrivacyItemKey.PERMISSIONS).action)
+        assertEquals(PrivacyItemAction.OpenAds, items.preference(PrivacyItemKey.ADS).action)
+        assertEquals(
+            PrivacyItemAction.OpenUsageAndDiagnostics,
+            items.preference(PrivacyItemKey.USAGE_AND_DIAGNOSTICS).action,
+        )
     }
 
     private fun List<PrivacyItem>.preference(key: String): PrivacyItem.Preference =

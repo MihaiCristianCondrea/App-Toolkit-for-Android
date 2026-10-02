@@ -16,7 +16,6 @@
   -->
 <resources>
     <string name="agree">Kabul et</string>
-    <string name="learn_more">Daha fazla bilgi</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">Devam etmek için Hizmet şartlarımızı ve Gizlilik Politikamızı okuyun ve kabul edin</string>
     <string name="welcome">Hoş geldiniz</string>
 </resources>

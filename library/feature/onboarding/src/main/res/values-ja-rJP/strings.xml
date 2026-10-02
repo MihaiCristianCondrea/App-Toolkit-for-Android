@@ -15,14 +15,9 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">AMOLEDモード</string>
     <string name="back_button_content_description">戻る</string>
     <string name="back_button_text">戻る</string>
-    <string name="dark_mode">ダークモード</string>
-    <string name="done_button_content_description">完了</string>
     <string name="done_button_text">完了</string>
-    <string name="follow_system">システムモードに従う</string>
-    <string name="light_mode">ライトモード</string>
     <string name="next_button_content_description">次へ</string>
     <string name="next_button_text">次へ</string>
     <string name="onboarding_amoled_mode_desc">OLED画面でより深い黒を表現。</string>
@@ -30,14 +25,9 @@
     <string name="onboarding_completion_failed">設定を保存できませんでした。もう一度お試しください。</string>
     <string name="onboarding_final_description">エクスペリエンスをパーソナライズしていただきありがとうございます。これで、すべての機能を探索する準備ができました。お楽しみください！</string>
     <string name="onboarding_final_title">すべての準備ができました！</string>
-    <string name="onboarding_theme_dark_desc">目に優しい。</string>
-    <string name="onboarding_theme_light_desc">明るくエネルギッシュ。</string>
     <string name="onboarding_theme_subtitle">アプリの見た目を設定します。</string>
-    <string name="onboarding_theme_system_desc">デバイスに合わせる。</string>
     <string name="onboarding_theme_title">スタイルを選択</string>
-    <string name="other_colors">その他の色</string>
     <string name="skip_button_content_description">スキップ</string>
     <string name="skip_button_text">スキップ</string>
     <string name="usage_and_diagnostics">使用状況と診断</string>
-    <string name="wallpaper_colors">壁紙の色</string>
 </resources>

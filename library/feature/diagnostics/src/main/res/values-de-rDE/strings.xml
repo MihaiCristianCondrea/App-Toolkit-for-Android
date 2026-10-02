@@ -24,7 +24,6 @@
     <string name="consent_ad_user_data_title">Daten für werbung senden</string>
     <string name="consent_analytics_storage_description">Das Speichern von Daten wie App-Nutzung und Besuchsdauer erlauben, um Analysen und die App-Leistung zu verbessern.</string>
     <string name="consent_analytics_storage_title">Analysedaten speichern</string>
-    <string name="learn_more">Mehr erfahren</string>
     <string name="summary_usage_and_diagnostics">Verbessern Sie Ihre Erfahrung, indem Sie automatisch Diagnosedaten und Nutzungsinformationen senden.</string>
     <string name="usage_and_diagnostics">Nutzung und Diagnostik</string>
     <string name="consent_ad_personalization_description_short">Ermöglicht personalisierte Werbung.</string>

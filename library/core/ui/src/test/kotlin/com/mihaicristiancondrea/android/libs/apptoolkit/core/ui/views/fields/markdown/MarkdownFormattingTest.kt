@@ -17,8 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.markdown
 
-import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 
 class MarkdownFormattingTest {
 
@@ -31,8 +31,8 @@ class MarkdownFormattingTest {
             marker = MarkdownFormatting.BOLD_MARKER,
         )
 
-        assertThat(edit.text).isEqualTo("a **crash** happens")
-        assertThat(edit.text.substring(edit.selectionStart, edit.selectionEnd)).isEqualTo("crash")
+        assertEquals("a **crash** happens", edit.text)
+        assertEquals("crash", edit.text.substring(edit.selectionStart, edit.selectionEnd))
     }
 
     @Test
@@ -44,9 +44,9 @@ class MarkdownFormattingTest {
             marker = MarkdownFormatting.BOLD_MARKER,
         )
 
-        assertThat(edit.text).isEqualTo("****")
-        assertThat(edit.selectionStart).isEqualTo(2)
-        assertThat(edit.selectionEnd).isEqualTo(2)
+        assertEquals("****", edit.text)
+        assertEquals(2, edit.selectionStart)
+        assertEquals(2, edit.selectionEnd)
     }
 
     @Test
@@ -58,8 +58,8 @@ class MarkdownFormattingTest {
             marker = MarkdownFormatting.BOLD_MARKER,
         )
 
-        assertThat(edit.text).isEqualTo("a crash happens")
-        assertThat(edit.text.substring(edit.selectionStart, edit.selectionEnd)).isEqualTo("crash")
+        assertEquals("a crash happens", edit.text)
+        assertEquals("crash", edit.text.substring(edit.selectionStart, edit.selectionEnd))
     }
 
     @Test
@@ -71,7 +71,7 @@ class MarkdownFormattingTest {
             marker = MarkdownFormatting.BOLD_MARKER,
         )
 
-        assertThat(edit.text).isEqualTo("a crash happens")
+        assertEquals("a crash happens", edit.text)
     }
 
     @Test
@@ -83,7 +83,7 @@ class MarkdownFormattingTest {
             prefix = MarkdownFormatting.BULLET_PREFIX,
         )
 
-        assertThat(edit.text).isEqualTo("- open app\n- tap send\ncrash")
+        assertEquals("- open app\n- tap send\ncrash", edit.text)
     }
 
     @Test
@@ -95,7 +95,7 @@ class MarkdownFormattingTest {
             prefix = MarkdownFormatting.BULLET_PREFIX,
         )
 
-        assertThat(edit.text).isEqualTo("open app\ntap send")
+        assertEquals("open app\ntap send", edit.text)
     }
 
     @Test
@@ -108,7 +108,7 @@ class MarkdownFormattingTest {
             numbered = true,
         )
 
-        assertThat(edit.text).isEqualTo("1. open app\n2. tap send\n3. crash")
+        assertEquals("1. open app\n2. tap send\n3. crash", edit.text)
     }
 
     @Test
@@ -119,9 +119,9 @@ class MarkdownFormattingTest {
             selectionEnd = 12,
         )
 
-        assertThat(edit.text).isEqualTo("see the [docs]()")
-        assertThat(edit.selectionStart).isEqualTo(edit.text.length - 1)
-        assertThat(edit.selectionEnd).isEqualTo(edit.text.length - 1)
+        assertEquals("see the [docs]()", edit.text)
+        assertEquals(edit.text.length - 1, edit.selectionStart)
+        assertEquals(edit.text.length - 1, edit.selectionEnd)
     }
 
     @Test
@@ -132,7 +132,7 @@ class MarkdownFormattingTest {
             selectionEnd = 9,
         )
 
-        assertThat(edit.text).isEqualTo("log: \n```\nboom\n```")
-        assertThat(edit.text.substring(edit.selectionStart, edit.selectionEnd)).isEqualTo("boom")
+        assertEquals("log: \n```\nboom\n```", edit.text)
+        assertEquals("boom", edit.text.substring(edit.selectionStart, edit.selectionEnd))
     }
 }

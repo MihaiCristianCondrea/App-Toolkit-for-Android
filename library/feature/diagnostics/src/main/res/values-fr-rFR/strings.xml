@@ -24,7 +24,6 @@
     <string name="consent_ad_user_data_title">Envoyer des données pour la publicité</string>
     <string name="consent_analytics_storage_description">Autoriser le stockage de données telles que l\'utilisation de l\'application et la durée de la visite pour améliorer les analyses et les performances de l\'application.</string>
     <string name="consent_analytics_storage_title">Stocker les données d\'analyse</string>
-    <string name="learn_more">En savoir plus</string>
     <string name="summary_usage_and_diagnostics">Améliorez votre expérience en envoyant automatiquement des données de diagnostic et d\'utilisation de l\'application.</string>
     <string name="usage_and_diagnostics">Utilisation et diagnostics</string>
     <string name="consent_ad_personalization_description_short">Active la publicité personnalisée.</string>

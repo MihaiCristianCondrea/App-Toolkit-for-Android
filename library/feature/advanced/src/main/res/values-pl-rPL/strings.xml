@@ -25,4 +25,5 @@
     <string name="advanced">Zaawansowane</string>
     <string name="developer_options">Opcje programisty</string>
     <string name="summary_preference_settings_developer_options">Testuj stronę startową, układ nawigacji i animacje</string>
+    <string name="developer">Programista</string>
 </resources>

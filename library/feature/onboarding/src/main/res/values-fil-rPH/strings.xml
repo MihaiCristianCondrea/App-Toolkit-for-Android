@@ -15,14 +15,9 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">AMOLED mode</string>
     <string name="back_button_content_description">Bumalik</string>
     <string name="back_button_text">Bumalik</string>
-    <string name="dark_mode">Dark mode</string>
-    <string name="done_button_content_description">Tapos na</string>
     <string name="done_button_text">Tapos na</string>
-    <string name="follow_system">Sundin ang system mode</string>
-    <string name="light_mode">Light mode</string>
     <string name="next_button_content_description">Susunod</string>
     <string name="next_button_text">Susunod</string>
     <string name="onboarding_amoled_mode_desc">Mas matingkad na itim para sa mga OLED screen.</string>
@@ -30,14 +25,9 @@
     <string name="onboarding_completion_failed">Hindi na-save ang iyong setup. Pakisubukan muli.</string>
     <string name="onboarding_final_description">Salamat sa pag-personalize ng iyong karanasan. Handa ka na ngayong tuklasin ang lahat ng feature. Magsaya.</string>
     <string name="onboarding_final_title">Handa ka na.</string>
-    <string name="onboarding_theme_dark_desc">Maginhawa sa mata.</string>
-    <string name="onboarding_theme_light_desc">Maliwanag at masigla.</string>
     <string name="onboarding_theme_subtitle">Piliin kung paano mo gustong magmukha ang app.</string>
-    <string name="onboarding_theme_system_desc">Tumutugma sa iyong device.</string>
     <string name="onboarding_theme_title">Piliin ang iyong estilo</string>
-    <string name="other_colors">Ibang mga kulay</string>
     <string name="skip_button_content_description">Laktawan</string>
     <string name="skip_button_text">Laktawan</string>
     <string name="usage_and_diagnostics">Paggamit at mga diagnostic</string>
-    <string name="wallpaper_colors">Mga kulay ng wallpaper</string>
 </resources>

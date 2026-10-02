@@ -21,12 +21,9 @@
     <string name="app_build_version">애플리케이션 빌드 버전</string>
     <string name="app_info">앱 정보</string>
     <string name="app_toolkit_version">App Toolkit 버전</string>
-    <string name="content_description_more_options">더 많은 옵션</string>
     <string name="debug">디버그</string>
     <string name="device_info">기기 정보</string>
     <string name="device_model">기기 모델</string>
-    <string name="done_button_content_description">완료</string>
-    <string name="go_back">뒤로 가기</string>
     <string name="google_play_services_version">Google Play 서비스 버전</string>
     <string name="help_and_feedback">도움말 &amp; 의견</string>
     <string name="manufacturer">제조업체</string>
@@ -41,8 +38,6 @@
     <string name="snack_device_info_failed">디바이스 정보를 불러올 수 없습니다</string>
     <string name="summary_preference_settings_oss">오픈 소스 소프트웨어 라이선스 세부 정보</string>
     <string name="summary_share_message">제가 사용 중인 이 멋진 앱을 확인해 보세요. 흥미로운 기능이 많이 있습니다. Play 스토어에서 다운로드할 수 있습니다: %1$s</string>
-    <string name="support_us">지원하기</string>
-    <string name="try_again">다시 시도</string>
     <string name="updates">업데이트</string>
     <string name="snack_seasonal_themes_unlocked">즐겨 보세요</string>
 </resources>

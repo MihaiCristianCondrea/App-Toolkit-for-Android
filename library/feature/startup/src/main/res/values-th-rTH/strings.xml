@@ -16,7 +16,6 @@
   -->
 <resources>
     <string name="agree">ยอมรับ</string>
-    <string name="learn_more">เรียนรู้เพิ่มเติม</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">โปรดอ่านและยอมรับเงื่อนไขการให้บริการและนโยบายความเป็นส่วนตัวเพื่อดำเนินการต่อ</string>
     <string name="welcome">ยินดีต้อนรับ</string>
 </resources>

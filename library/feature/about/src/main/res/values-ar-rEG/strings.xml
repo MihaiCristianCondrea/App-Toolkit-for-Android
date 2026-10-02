@@ -21,12 +21,9 @@
     <string name="app_build_version">إصدار بناء التطبيق</string>
     <string name="app_info">معلومات التطبيق</string>
     <string name="app_toolkit_version">إصدار App Toolkit</string>
-    <string name="content_description_more_options">المزيد من الخيارات</string>
     <string name="debug">تصحيح</string>
     <string name="device_info">معلومات الجهاز</string>
     <string name="device_model">طراز الجهاز</string>
-    <string name="done_button_content_description">تم</string>
-    <string name="go_back">العودة</string>
     <string name="google_play_services_version">إصدار خدمات Google Play</string>
     <string name="help_and_feedback">المساعدة والملاحظات</string>
     <string name="manufacturer">الشركة المصنعة</string>
@@ -41,8 +38,6 @@
     <string name="snack_device_info_failed">تعذر تحميل معلومات الجهاز</string>
     <string name="summary_preference_settings_oss">تفاصيل الترخيص للبرامج مفتوحة المصدر</string>
     <string name="summary_share_message">اطلع على هذا التطبيق الرائع الذي أستخدمه. يحتوي على بعض الميزات الرائعة التي قد تجدها مثيرة للاهتمام. يمكنك تنزيله من متجر Play على: %1$s</string>
-    <string name="support_us">ادعمنا</string>
-    <string name="try_again">حاول مرة أخرى</string>
     <string name="updates">التحديثات</string>
     <string name="snack_seasonal_themes_unlocked">استمتع</string>
 </resources>

@@ -18,7 +18,6 @@
     <string name="ads">Hirdetések</string>
     <string name="display_ads">Hirdetések megjelenítése</string>
     <string name="reduce_ads">Hirdetések csökkentése</string>
-    <string name="learn_more">Tudj meg többet</string>
     <string name="personalized_ads">Személyre szabott hirdetések</string>
     <string name="summary_ads">Nézz meg számodra releváns hirdetéseket. A személyre szabást bármikor kikapcsolhatod itt.</string>
     <string name="summary_ads_personalized_ads">Válaszd ki, hogyan személyre szabjuk a hirdetéseket az érdeklődési köreid alapján</string>

@@ -16,7 +16,6 @@
   -->
 <resources>
     <string name="agree">Setuju</string>
-    <string name="learn_more">Pelajari lebih lanjut</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">Baca dan setujui Ketentuan layanan dan Kebijakan Privasi kami untuk melanjutkan</string>
     <string name="welcome">Selamat datang</string>
 </resources>

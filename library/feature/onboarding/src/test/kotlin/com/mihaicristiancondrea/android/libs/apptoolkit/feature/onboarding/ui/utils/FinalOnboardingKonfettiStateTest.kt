@@ -17,9 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.utils
 
-import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class FinalOnboardingKonfettiStateTest {
 
@@ -30,8 +31,8 @@ class FinalOnboardingKonfettiStateTest {
 
     @Test
     fun `flag toggles correctly`() {
-        assertThat(FinalOnboardingKonfettiState.hasKonfettiBeenShownGlobally).isFalse()
+        assertFalse(FinalOnboardingKonfettiState.hasKonfettiBeenShownGlobally)
         FinalOnboardingKonfettiState.hasKonfettiBeenShownGlobally = true
-        assertThat(FinalOnboardingKonfettiState.hasKonfettiBeenShownGlobally).isTrue()
+        assertTrue(FinalOnboardingKonfettiState.hasKonfettiBeenShownGlobally)
     }
 }

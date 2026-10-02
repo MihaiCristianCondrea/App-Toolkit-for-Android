@@ -24,7 +24,6 @@
     <string name="consent_ad_user_data_title">Enviar datos para anuncios</string>
     <string name="consent_analytics_storage_description">Permitir el almacenamiento de datos como el uso de la app y la duración de la visita para mejorar los análisis y el rendimiento de la app.</string>
     <string name="consent_analytics_storage_title">Almacenar datos de análisis</string>
-    <string name="learn_more">Más información</string>
     <string name="summary_usage_and_diagnostics">Ayuda a mejorar tu experiencia enviándonos automáticamente datos de diagnóstico, del dispositivo y de uso de la aplicación. Esto ayudará a mejorar el rendimiento de la aplicación, la estabilidad y otras mejoras. Algunos datos agregados también ayudarán a nuestras aplicaciones.\n\nEsta es información general sobre tu dispositivo y cómo usas nuestras aplicaciones (como el nivel de batería, la actividad del sistema y de la aplicación, y errores). Los datos se utilizarán para mejorar nuestras aplicaciones.\n\nDesactivar esta función no afecta la capacidad de tu dispositivo para enviar la información necesaria para servicios esenciales como actualizaciones de aplicaciones y seguridad.\n</string>
     <string name="usage_and_diagnostics">Uso y diagnósticos</string>
     <string name="consent_ad_personalization_description_short">Habilita la publicidad personalizada.</string>

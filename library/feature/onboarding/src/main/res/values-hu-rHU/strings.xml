@@ -15,14 +15,9 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">AMOLED mód</string>
     <string name="back_button_content_description">Vissza</string>
     <string name="back_button_text">Vissza</string>
-    <string name="dark_mode">Sötét mód</string>
-    <string name="done_button_content_description">Kész</string>
     <string name="done_button_text">Kész</string>
-    <string name="follow_system">Rendszerbeállítás követése</string>
-    <string name="light_mode">Világos mód</string>
     <string name="next_button_content_description">Tovább</string>
     <string name="next_button_text">Tovább</string>
     <string name="onboarding_amoled_mode_desc">Mélyebb feketék OLED képernyőkhöz.</string>
@@ -30,14 +25,9 @@
     <string name="onboarding_completion_failed">A beállítás mentése nem sikerült. Kérjük, próbálja újra.</string>
     <string name="onboarding_final_description">Köszönjük, hogy személyre szabta az élményét. Most már készen áll az összes funkció felfedezésére. Jó szórakozást.</string>
     <string name="onboarding_final_title">Minden készen áll.</string>
-    <string name="onboarding_theme_dark_desc">Kíméletes a szemnek.</string>
-    <string name="onboarding_theme_light_desc">Világos és energikus.</string>
     <string name="onboarding_theme_subtitle">Válassza ki, hogyan nézzen ki az alkalmazás.</string>
-    <string name="onboarding_theme_system_desc">Megfelel az eszközének.</string>
     <string name="onboarding_theme_title">Válassza ki a stílusát</string>
-    <string name="other_colors">Egyéb színek</string>
     <string name="skip_button_content_description">Kihagyás</string>
     <string name="skip_button_text">Kihagyás</string>
     <string name="usage_and_diagnostics">Használat és diagnosztika</string>
-    <string name="wallpaper_colors">Háttérkép színei</string>
 </resources>

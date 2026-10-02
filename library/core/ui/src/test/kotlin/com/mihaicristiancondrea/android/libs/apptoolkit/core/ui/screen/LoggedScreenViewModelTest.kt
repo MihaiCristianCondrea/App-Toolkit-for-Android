@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen
 
-import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
@@ -32,6 +31,11 @@ import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import kotlin.test.assertContains
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
+import kotlin.test.assertSame
 
 class LoggedScreenViewModelTest {
 
@@ -54,10 +58,10 @@ class LoggedScreenViewModelTest {
         viewModel.load { "loaded" }
         advance()
 
-        assertThat(viewModel.state.value).isEqualTo("loaded")
+        assertEquals("loaded", viewModel.state.value)
         val start = telemetryRepository.loggedEvents.single { it.name == "vm_op_start" }
-        assertThat(start.params["action"]).isEqualTo(AnalyticsValue.Str("load"))
-        assertThat(eventNames()).doesNotContain("vm_op_error")
+        assertEquals(AnalyticsValue.Str("load"), start.params["action"])
+        assertFalse("vm_op_error" in eventNames())
     }
 
     @Test
@@ -69,8 +73,8 @@ class LoggedScreenViewModelTest {
             viewModel.load { throw failure }
             advance()
 
-            assertThat(viewModel.handledError).isSameInstanceAs(failure)
-            assertThat(eventNames()).contains("vm_op_error")
+            assertSame(failure, viewModel.handledError)
+            assertContains(eventNames(), "vm_op_error")
         }
 
     @Test
@@ -83,8 +87,8 @@ class LoggedScreenViewModelTest {
         job.cancel()
         advance()
 
-        assertThat(viewModel.handledError).isNull()
-        assertThat(eventNames()).doesNotContain("vm_op_error")
+        assertNull(viewModel.handledError)
+        assertFalse("vm_op_error" in eventNames())
     }
 
     @Test
@@ -94,8 +98,8 @@ class LoggedScreenViewModelTest {
         viewModel.observe(flowOf("first", "second"))
         advance()
 
-        assertThat(viewModel.state.value).isEqualTo("second")
-        assertThat(eventNames()).contains("vm_op_start")
+        assertEquals("second", viewModel.state.value)
+        assertContains(eventNames(), "vm_op_start")
     }
 
     @Test
@@ -112,9 +116,9 @@ class LoggedScreenViewModelTest {
             )
             advance()
 
-            assertThat(viewModel.state.value).isEqualTo("first")
-            assertThat(viewModel.handledError).isSameInstanceAs(failure)
-            assertThat(eventNames()).contains("vm_op_error")
+            assertEquals("first", viewModel.state.value)
+            assertSame(failure, viewModel.handledError)
+            assertContains(eventNames(), "vm_op_error")
         }
 
     @Test
@@ -124,13 +128,13 @@ class LoggedScreenViewModelTest {
 
         viewModel.follow(stream.flow)
         advance()
-        assertThat(stream.collections).isEqualTo(0)
+        assertEquals(0, stream.collections)
 
         collectInBackground(viewModel.state)
         advance()
 
-        assertThat(stream.collections).isEqualTo(1)
-        assertThat(viewModel.state.value).isEqualTo("value 1")
+        assertEquals(1, stream.collections)
+        assertEquals("value 1", viewModel.state.value)
     }
 
     @Test
@@ -147,8 +151,8 @@ class LoggedScreenViewModelTest {
             collectInBackground(viewModel.state)
             advance()
 
-            assertThat(stream.collections).isEqualTo(1)
-            assertThat(stream.stopped).isEqualTo(0)
+            assertEquals(1, stream.collections)
+            assertEquals(0, stream.stopped)
         }
 
     @Test
@@ -163,13 +167,13 @@ class LoggedScreenViewModelTest {
             first.cancel()
             advanceTimeBy(ScreenViewModel.STOP_TIMEOUT_MILLIS + 1)
 
-            assertThat(stream.stopped).isEqualTo(1)
+            assertEquals(1, stream.stopped)
 
             collectInBackground(viewModel.state)
             advance()
 
-            assertThat(stream.collections).isEqualTo(2)
-            assertThat(eventNames().count { it == "vm_op_start" }).isEqualTo(2)
+            assertEquals(2, stream.collections)
+            assertEquals(2, eventNames().count { it == "vm_op_start" })
         }
 
     @Test
@@ -187,12 +191,12 @@ class LoggedScreenViewModelTest {
 
             viewModel.follow(stream)
             advance()
-            assertThat(viewModel.handledError).isSameInstanceAs(failure)
-            assertThat(eventNames()).contains("vm_op_error")
+            assertSame(failure, viewModel.handledError)
+            assertContains(eventNames(), "vm_op_error")
 
             viewModel.follow(stream)
             advance()
-            assertThat(viewModel.state.value).isEqualTo("recovered")
+            assertEquals("recovered", viewModel.state.value)
         }
 
     private class CountingStream {

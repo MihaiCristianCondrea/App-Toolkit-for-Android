@@ -16,7 +16,6 @@
   -->
 <resources>
     <string name="agree">Sumang-ayon</string>
-    <string name="learn_more">Matuto pa</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">Basahin at sumang-ayon sa aming Mga tuntunin ng serbisyo at Patakaran sa Privacy upang magpatuloy</string>
     <string name="welcome">Maligayang pagdating</string>
 </resources>

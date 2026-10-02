@@ -21,12 +21,9 @@
     <string name="app_build_version">Versiunea de compilare a aplicației</string>
     <string name="app_info">Informații despre aplicație</string>
     <string name="app_toolkit_version">Versiune App Toolkit</string>
-    <string name="content_description_more_options">Mai multe opțiuni</string>
     <string name="debug">Depanare</string>
     <string name="device_info">Informații despre dispozitiv</string>
     <string name="device_model">Model dispozitiv</string>
-    <string name="done_button_content_description">Gata</string>
-    <string name="go_back">Înapoi</string>
     <string name="google_play_services_version">Versiune servicii Google Play</string>
     <string name="help_and_feedback">Ajutor și feedback</string>
     <string name="manufacturer">Producător</string>
@@ -41,8 +38,6 @@
     <string name="snack_device_info_failed">Nu s-a putut încărca informațiile despre dispozitiv</string>
     <string name="summary_preference_settings_oss">Detalii despre licențele software-ului open source</string>
     <string name="summary_share_message">Verifică această aplicație uimitoare pe care o folosesc. Are câteva funcții interesante. O poți descărca din Play Store la: %1$s</string>
-    <string name="support_us">Susține-ne</string>
-    <string name="try_again">Încearcă din nou</string>
     <string name="updates">Actualizări</string>
     <string name="snack_seasonal_themes_unlocked">Distracție plăcută</string>
 </resources>

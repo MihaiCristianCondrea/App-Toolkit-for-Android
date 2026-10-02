@@ -15,14 +15,9 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">AMOLED मोड</string>
     <string name="back_button_content_description">वापस</string>
     <string name="back_button_text">वापस</string>
-    <string name="dark_mode">डार्क मोड</string>
-    <string name="done_button_content_description">हो गया</string>
     <string name="done_button_text">हो गया</string>
-    <string name="follow_system">सिस्टम मोड का अनुसरण करें</string>
-    <string name="light_mode">लाइट मोड</string>
     <string name="next_button_content_description">अगला</string>
     <string name="next_button_text">अगला</string>
     <string name="onboarding_amoled_mode_desc">OLED स्क्रीन के लिए गहरे काले रंग।</string>
@@ -30,14 +25,9 @@
     <string name="onboarding_completion_failed">आपका सेटअप सहेजा नहीं जा सका. कृपया फिर से कोशिश करें.</string>
     <string name="onboarding_final_description">अपने अनुभव को वैयक्तिकृत करने के लिए धन्यवाद। अब आप सभी सुविधाओं का पता लगाने के लिए तैयार हैं। आनंद लें.</string>
     <string name="onboarding_final_title">आप पूरी तरह तैयार हैं.</string>
-    <string name="onboarding_theme_dark_desc">आंखों के लिए आसान।</string>
-    <string name="onboarding_theme_light_desc">उज्ज्वल और ऊर्जावान।</string>
     <string name="onboarding_theme_subtitle">चुनें कि आप ऐप को कैसा दिखाना चाहते हैं।</string>
-    <string name="onboarding_theme_system_desc">आपके डिवाइस से मेल खाता है।</string>
     <string name="onboarding_theme_title">अपनी शैली चुनें</string>
-    <string name="other_colors">अन्य रंग</string>
     <string name="skip_button_content_description">छोड़ें</string>
     <string name="skip_button_text">छोड़ें</string>
     <string name="usage_and_diagnostics">उपयोग और निदान</string>
-    <string name="wallpaper_colors">वॉलपेपर के रंग</string>
 </resources>

@@ -18,26 +18,22 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states
 
 import androidx.compose.runtime.Immutable
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.MorsePlaybackState
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
+/**
+ * State rendered by the Reaction Test tool.
+ *
+ * @property history The latest reaction times in milliseconds, oldest first, at most five.
+ */
 @Immutable
-data class CoinFlipToolState(val isHeads: Boolean = true, val request: Int = 0)
-
-@Immutable
-data class DiceRollToolState(val result: Int = 1, val request: Int = 0)
-
-@Immutable
-data class LevelToolState(val pitch: Float = 0f, val roll: Float = 0f)
-
-@Immutable
-data class MorseToolState(
-    val input: String = "",
-    val inputError: MorseInputError? = null,
-    val playback: MorsePlaybackState = MorsePlaybackState(),
+data class ReactionTestToolUiState(
+    val phase: ReactionTestPhase = ReactionTestPhase.Idle,
+    val lastReactionTimeMs: Long? = null,
+    val bestTimeMs: Long? = null,
+    val averageTimeMs: Long? = null,
+    val history: ImmutableList<Long> = persistentListOf(),
+    val roundCount: Int = 0,
+    val totalRounds: Int = 5,
+    val rating: ReactionRating? = null,
 )
-
-enum class MorseInputError {
-    Empty,
-    TooLong,
-    UnsupportedCharacters,
-}

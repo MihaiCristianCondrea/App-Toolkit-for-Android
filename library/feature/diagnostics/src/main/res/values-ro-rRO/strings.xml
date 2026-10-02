@@ -24,7 +24,6 @@
     <string name="consent_ad_user_data_title">Trimitere date pentru anunțuri</string>
     <string name="consent_analytics_storage_description">Permiteți stocarea datelor, cum ar fi utilizarea aplicației și durata vizitei, pentru a îmbunătăți analiza și performanța aplicației.</string>
     <string name="consent_analytics_storage_title">Stocare date de analiză</string>
-    <string name="learn_more">Află mai multe</string>
     <string name="summary_usage_and_diagnostics">Ajută la îmbunătățirea experienței trimițând automat date de diagnosticare, utilizare a dispozitivului și a aplicației.</string>
     <string name="usage_and_diagnostics">Utilizare și diagnoză</string>
     <string name="consent_ad_personalization_description_short">Activează publicitatea personalizată.</string>

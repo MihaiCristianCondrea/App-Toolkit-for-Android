@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.navigation
 
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.SupportScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
@@ -31,7 +31,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.Suppor
 fun ShellGraphBuilder.supportPage() {
     pageIfAbsent<SupportRoute>(
         paneRole = PaneRole.None,
-        title = { stringResource(R.string.support_us) },
+        title = { stringResource(CoreUiR.string.support_us) },
     ) {
         SupportScreen()
     }

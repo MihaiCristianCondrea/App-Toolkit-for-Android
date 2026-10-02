@@ -15,14 +15,9 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">Mode AMOLED</string>
     <string name="back_button_content_description">Kembali</string>
     <string name="back_button_text">Kembali</string>
-    <string name="dark_mode">Mode gelap</string>
-    <string name="done_button_content_description">Selesai</string>
     <string name="done_button_text">Selesai</string>
-    <string name="follow_system">Ikuti mode sistem</string>
-    <string name="light_mode">Mode terang</string>
     <string name="next_button_content_description">Selanjutnya</string>
     <string name="next_button_text">Selanjutnya</string>
     <string name="onboarding_amoled_mode_desc">Hitam lebih pekat untuk layar OLED.</string>
@@ -30,14 +25,9 @@
     <string name="onboarding_completion_failed">Penyiapan Anda tidak dapat disimpan. Silakan coba lagi.</string>
     <string name="onboarding_final_description">Terima kasih telah mempersonalisasi pengalaman Anda. Sekarang Anda siap untuk menjelajahi semua fitur. Selamat menikmati.</string>
     <string name="onboarding_final_title">Anda siap.</string>
-    <string name="onboarding_theme_dark_desc">Nyaman di mata.</string>
-    <string name="onboarding_theme_light_desc">Terang dan energik.</string>
     <string name="onboarding_theme_subtitle">Pilih bagaimana Anda ingin tampilan aplikasi.</string>
-    <string name="onboarding_theme_system_desc">Sesuai dengan perangkat Anda.</string>
     <string name="onboarding_theme_title">Pilih gaya anda</string>
-    <string name="other_colors">Warna lainnya</string>
     <string name="skip_button_content_description">Lewati</string>
     <string name="skip_button_text">Lewati</string>
     <string name="usage_and_diagnostics">Penggunaan dan diagnostik</string>
-    <string name="wallpaper_colors">Warna wallpaper</string>
 </resources>

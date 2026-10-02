@@ -23,7 +23,6 @@
     <string name="language">Nyelv</string>
     <string name="navigation">Navigáció</string>
     <string name="show_labels_on_bottom_bar">Mutassa be a címkéket az alsó sávon</string>
-    <string name="startup_page">Indítóoldal</string>
     <string name="summary_preference_settings_bounce_buttons">Halvány visszapattanási animációt alkalmaz minden kattintható elemre</string>
     <string name="summary_preference_settings_dynamic_colors">Alkalmazd a háttérképek színeit az alkalmazás témájára</string>
     <string name="summary_preference_settings_language">Módosítja az alkalmazásban használt nyelvet</string>

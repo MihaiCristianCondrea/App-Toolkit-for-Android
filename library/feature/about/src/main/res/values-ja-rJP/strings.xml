@@ -21,12 +21,9 @@
     <string name="app_build_version">アプリビルドバージョン</string>
     <string name="app_info">アプリ情報</string>
     <string name="app_toolkit_version">App Toolkitバージョン</string>
-    <string name="content_description_more_options">その他のオプション</string>
     <string name="debug">デバッグ</string>
     <string name="device_info">デバイス情報</string>
     <string name="device_model">デバイスモデル</string>
-    <string name="done_button_content_description">完了</string>
-    <string name="go_back">戻る</string>
     <string name="google_play_services_version">Google Play開発者サービスのバージョン</string>
     <string name="help_and_feedback">ヘルプとフィードバック</string>
     <string name="manufacturer">メーカー</string>
@@ -41,8 +38,6 @@
     <string name="snack_device_info_failed">デバイス情報を読み込めませんでした</string>
     <string name="summary_preference_settings_oss">オープンソースソフトウェアのライセンス詳細</string>
     <string name="summary_share_message">この素晴らしいアプリを見てください！本当に面白い機能があります。Playストアからダウンロードできます：%1$s</string>
-    <string name="support_us">サポートする</string>
-    <string name="try_again">もう一度試してください</string>
     <string name="updates">更新情報</string>
     <string name="snack_seasonal_themes_unlocked">お楽しみください</string>
 </resources>

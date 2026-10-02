@@ -16,7 +16,6 @@
   -->
 <resources>
     <string name="agree">Zustimmen</string>
-    <string name="learn_more">Mehr erfahren</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">Lesen und akzeptieren Sie unsere Nutzungsbedingungen und Datenschutzrichtlinien, um fortzufahren</string>
     <string name="welcome">Willkommen</string>
 </resources>

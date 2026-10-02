@@ -23,7 +23,6 @@
     <string name="language">ভাষা</string>
     <string name="navigation">নেভিগেশন</string>
     <string name="show_labels_on_bottom_bar">নীচের বারে লেবেলগুলি দেখান</string>
-    <string name="startup_page">স্টার্টআপ পৃষ্ঠা</string>
     <string name="summary_preference_settings_bounce_buttons">ক্লিক করার সময় সমস্ত ক্লিকযোগ্য উপাদানে একটি সূক্ষ্ম বাউন্স অ্যানিমেশন প্রয়োগ করে</string>
     <string name="summary_preference_settings_dynamic_colors">ওয়ালপেপার থেকে রঙ অ্যাপ থিমে প্রয়োগ করুন</string>
     <string name="summary_preference_settings_language">অ্যাপে ব্যবহৃত ভাষা পরিবর্তন করে</string>

@@ -16,7 +16,6 @@
   -->
 <resources>
     <string name="agree">同意する</string>
-    <string name="learn_more">詳しく見る</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">続行するには、利用規約およびプライバシーポリシーをお読みいただき、同意してください</string>
     <string name="welcome">ようこそ</string>
 </resources>

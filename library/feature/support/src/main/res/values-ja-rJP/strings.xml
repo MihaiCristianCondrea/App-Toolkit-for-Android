@@ -22,6 +22,5 @@
     <string name="purchase_thank_you">寄付ありがとうございます！</string>
     <string name="summary_donations">寄付額にかかわらず、アプリの運営を支援し、機能改善にご協力いただけます。あなたの寛大さと親切心に感謝します！</string>
     <string name="support_offer_unavailable">この寄付オプションは現在ご利用いただけません。</string>
-    <string name="support_us">サポートする</string>
     <string name="web_ad">ウェブ広告</string>
 </resources>

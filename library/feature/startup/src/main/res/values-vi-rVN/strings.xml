@@ -16,7 +16,6 @@
   -->
 <resources>
     <string name="agree">Đồng ý</string>
-    <string name="learn_more">Tìm hiểu thêm</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">Đọc và đồng ý với Điều khoản dịch vụ và Chính sách quyền riêng tư của chúng tôi để tiếp tục</string>
     <string name="welcome">Chào mừng</string>
 </resources>

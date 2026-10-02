@@ -24,7 +24,6 @@
     <string name="consent_ad_user_data_title">Изпращане на данни за реклами</string>
     <string name="consent_analytics_storage_description">Разрешаване на съхраняването на данни, като например използване на приложението и продължителност на посещението, за подобряване на анализите и производителността на приложението.</string>
     <string name="consent_analytics_storage_title">Съхраняване на данни за анализ</string>
-    <string name="learn_more">Научете повече</string>
     <string name="summary_usage_and_diagnostics">Помогнете за подобряване на изживяването, като автоматично изпращате диагностични данни за устройството и приложението. Това ще помогне за подобряване на производителността и стабилността на приложението.</string>
     <string name="usage_and_diagnostics">Използване и диагностика</string>
     <string name="consent_ad_personalization_description_short">Активира персонализирана реклама.</string>

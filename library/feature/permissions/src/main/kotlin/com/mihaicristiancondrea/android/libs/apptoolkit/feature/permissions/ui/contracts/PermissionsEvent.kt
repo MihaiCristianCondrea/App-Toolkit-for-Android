@@ -19,6 +19,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.
 
 /** What the permissions page asks its ViewModel to do. */
 sealed interface PermissionsEvent {
-    /** Loads the permission catalog, each time the page is shown and on retry. */
+    /** Loads the permission catalog. The ViewModel sends it on start; the page sends it on retry. */
     data object Load : PermissionsEvent
 }

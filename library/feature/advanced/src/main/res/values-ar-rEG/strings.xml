@@ -25,4 +25,5 @@
     <string name="advanced">متقدم</string>
     <string name="developer_options">خيارات المطورين</string>
     <string name="summary_preference_settings_developer_options">اختبار صفحة البدء وتخطيط التنقل والرسوم المتحركة</string>
+    <string name="developer">المطوّر</string>
 </resources>

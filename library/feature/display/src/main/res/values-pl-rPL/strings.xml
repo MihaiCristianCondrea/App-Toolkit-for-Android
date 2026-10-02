@@ -23,7 +23,6 @@
     <string name="language">Język</string>
     <string name="navigation">Nawigacja</string>
     <string name="show_labels_on_bottom_bar">Pokaż etykiety na dolnym pasku</string>
-    <string name="startup_page">Strona startowa</string>
     <string name="summary_preference_settings_bounce_buttons">Zastosuj subtelną animację przy kliknięciu do wszystkich elementów klikalnych</string>
     <string name="summary_preference_settings_dynamic_colors">Zastosuj kolory z tapet do motywu aplikacji</string>
     <string name="summary_preference_settings_language">Zmień język używany w aplikacji</string>

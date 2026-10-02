@@ -23,7 +23,6 @@
     <string name="language">Мова</string>
     <string name="navigation">Навігація</string>
     <string name="show_labels_on_bottom_bar">Показати етикетки на нижній панелі</string>
-    <string name="startup_page">Початкова сторінка</string>
     <string name="summary_preference_settings_bounce_buttons">Додає легку анімацію відскоку для всіх натисканих елементів</string>
     <string name="summary_preference_settings_dynamic_colors">Застосуйте кольори з шпалер до теми додатка</string>
     <string name="summary_preference_settings_language">Змінити мову додатка</string>

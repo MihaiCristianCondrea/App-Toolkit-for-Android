@@ -25,4 +25,5 @@
     <string name="advanced">Nâng cao</string>
     <string name="developer_options">Tùy chọn cho nhà phát triển</string>
     <string name="summary_preference_settings_developer_options">Kiểm thử trang bắt đầu, bố cục điều hướng và ảnh động</string>
+    <string name="developer">Nhà phát triển</string>
 </resources>

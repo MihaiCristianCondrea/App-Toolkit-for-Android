@@ -23,7 +23,6 @@
     <string name="language">Язык</string>
     <string name="navigation">Навигация</string>
     <string name="show_labels_on_bottom_bar">Показать этикетки на нижней панели</string>
-    <string name="startup_page">Стартовая страница</string>
     <string name="summary_preference_settings_bounce_buttons">Применяет лёгкую анимацию отскока к кликабельным элементам</string>
     <string name="summary_preference_settings_dynamic_colors">Применяйте цвета обоев к теме приложения</string>
     <string name="summary_preference_settings_language">Измените язык, используемый в приложении</string>

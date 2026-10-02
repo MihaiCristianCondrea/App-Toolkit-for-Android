@@ -51,6 +51,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.domain.models.UsageAndDiagnosticsSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.contracts.UsageAndDiagnosticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.states.UsageAndDiagnosticsUiState
@@ -228,7 +229,7 @@ private fun UsageAndDiagnosticsList(
                     .fillMaxWidth()
                     .padding(horizontal = SizeConstants.MediumSize * 2),
                 message = stringResource(id = R.string.summary_usage_and_diagnostics),
-                learnMoreText = stringResource(id = R.string.learn_more),
+                learnMoreText = stringResource(id = CoreUiR.string.learn_more),
                 learnMoreUrl = AppLinks.PRIVACY_POLICY,
             )
         }

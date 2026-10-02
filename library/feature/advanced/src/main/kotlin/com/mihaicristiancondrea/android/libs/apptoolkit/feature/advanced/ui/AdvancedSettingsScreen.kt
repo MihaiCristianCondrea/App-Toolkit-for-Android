@@ -20,7 +20,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -168,17 +167,19 @@ internal fun AdvancedSettingsScreenContent(
 
         if (state.developerOptionsUnlocked) {
             item {
+                PreferenceCategoryItem(title = stringResource(id = R.string.developer))
+            }
+
+            item {
                 SettingsPreferenceItem(
                     title = stringResource(id = R.string.developer_options),
                     summary = stringResource(id = R.string.summary_preference_settings_developer_options),
                     onClick = onOpenDeveloperOptions,
                     ga4Event = advancedPreferenceTapEvent(preferenceKey = AdvancedPreferenceKeys.DEVELOPER_OPTIONS),
-                    modifier = Modifier
-                        .padding(top = SizeConstants.LargeSize)
-                        .groupedPreferenceItem(
-                            position = GroupedItemPosition.SINGLE,
-                            outerRadius = SizeConstants.LargeMediumSize,
-                        ),
+                    modifier = Modifier.groupedPreferenceItem(
+                        position = GroupedItemPosition.SINGLE,
+                        outerRadius = SizeConstants.LargeMediumSize,
+                    ),
                 )
             }
         }

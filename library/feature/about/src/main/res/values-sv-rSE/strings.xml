@@ -21,12 +21,9 @@
     <string name="app_build_version">Byggversion</string>
     <string name="app_info">Appinformation</string>
     <string name="app_toolkit_version">App Toolkit-version</string>
-    <string name="content_description_more_options">Fler alternativ</string>
     <string name="debug">Felsökning</string>
     <string name="device_info">Enhetsinformation</string>
     <string name="device_model">Enhetsmodell</string>
-    <string name="done_button_content_description">Klar</string>
-    <string name="go_back">Tillbaka</string>
     <string name="google_play_services_version">Version av Google Play-tjänster</string>
     <string name="help_and_feedback">Hjälp och feedback</string>
     <string name="manufacturer">Tillverkare</string>
@@ -41,8 +38,6 @@
     <string name="snack_device_info_failed">Det gick inte att läsa in enhetsinformation</string>
     <string name="summary_preference_settings_oss">Licensinformation för programvara med öppen källkod</string>
     <string name="summary_share_message">Kolla in den här fantastiska appen som jag använder. Den har några riktigt coola funktioner som du kanske tycker är intressanta. Du kan ladda ner den från Play Store på: %1$s</string>
-    <string name="support_us">Stöd oss</string>
-    <string name="try_again">Försök igen</string>
     <string name="updates">Uppdateringar</string>
     <string name="snack_seasonal_themes_unlocked">Njut</string>
 </resources>

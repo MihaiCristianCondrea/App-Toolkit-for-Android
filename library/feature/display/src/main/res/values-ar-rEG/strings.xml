@@ -23,7 +23,6 @@
     <string name="language">اللغة</string>
     <string name="navigation">التنقل</string>
     <string name="show_labels_on_bottom_bar">عرض الملصقات على الشريط السفلي</string>
-    <string name="startup_page">صفحة البدء</string>
     <string name="summary_preference_settings_bounce_buttons">يطبق رسومًا متحركة مرنة خفية على جميع العناصر القابلة للنقر عند النقر عليها</string>
     <string name="summary_preference_settings_dynamic_colors">تطبيق الألوان من الخلفيات على سمة التطبيق</string>
     <string name="summary_preference_settings_language">يغير اللغة المستخدمة في التطبيق</string>

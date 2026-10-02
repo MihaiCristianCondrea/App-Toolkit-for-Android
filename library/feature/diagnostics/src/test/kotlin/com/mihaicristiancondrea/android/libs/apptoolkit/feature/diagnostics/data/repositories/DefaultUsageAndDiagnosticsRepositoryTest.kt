@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.repositories
 
-import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.UsageAndDiagnosticsPreferencesDataSource
@@ -34,6 +33,9 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 private class FakeUsageAndDiagnosticsPreferencesDataSource :
     UsageAndDiagnosticsPreferencesDataSource {
@@ -98,12 +100,12 @@ class DefaultUsageAndDiagnosticsRepositoryTest {
                 consentRepository = consentRepository,
             )
 
-            assertThat(repository.observeSettings().first().usageAndDiagnostics).isTrue()
+            assertTrue(repository.observeSettings().first().usageAndDiagnostics)
 
             repository.setUsageAndDiagnostics(false)
             advanceUntilIdle()
 
-            assertThat(repository.observeSettings().first().usageAndDiagnostics).isFalse()
+            assertFalse(repository.observeSettings().first().usageAndDiagnostics)
         }
 
     @Test
@@ -126,7 +128,7 @@ class DefaultUsageAndDiagnosticsRepositoryTest {
             repository.setAll(essentialOnly)
             advanceUntilIdle()
 
-            assertThat(repository.observeSettings().first()).isEqualTo(essentialOnly)
+            assertEquals(essentialOnly, repository.observeSettings().first())
             // The SDKs get the stored answer once, after the write, with no mix in between.
             coVerify(exactly = 1) {
                 consentRepository.applyConsentSettings(

@@ -23,7 +23,6 @@
     <string name="language">Ngôn ngữ</string>
     <string name="navigation">Điều hướng</string>
     <string name="show_labels_on_bottom_bar">Hiển thị nhãn trên thanh dưới cùng</string>
-    <string name="startup_page">Trang khởi động</string>
     <string name="summary_preference_settings_bounce_buttons">Áp dụng hiệu ứng nảy tinh tế cho tất cả các yếu tố có thể nhấp khi được nhấp</string>
     <string name="summary_preference_settings_dynamic_colors">Áp dụng màu từ hình nền vào chủ đề ứng dụng</string>
     <string name="summary_preference_settings_language">Thay đổi ngôn ngữ được sử dụng trong ứng dụng</string>

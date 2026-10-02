@@ -16,7 +16,6 @@
   -->
 <resources>
     <string name="agree">متفق ہوں</string>
-    <string name="learn_more">مزید جانیں</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">جاری رکھنے کے لیے ہماری سروس کی شرائط اور رازداری کی پالیسی کو پڑھیں اور ان سے اتفاق کریں</string>
     <string name="welcome">خوش آمدید</string>
 </resources>

@@ -21,12 +21,9 @@
     <string name="app_build_version">Bersyon ng build ng application</string>
     <string name="app_info">Impormasyon ng app</string>
     <string name="app_toolkit_version">Bersyon ng App Toolkit</string>
-    <string name="content_description_more_options">Higit pang mga pagpipilian</string>
     <string name="debug">Debug</string>
     <string name="device_info">Impormasyon ng device</string>
     <string name="device_model">Modelo ng device</string>
-    <string name="done_button_content_description">Tapos na</string>
-    <string name="go_back">Bumalik</string>
     <string name="google_play_services_version">Bersyon ng mga serbisyo ng Google Play</string>
     <string name="help_and_feedback">Tulong &amp; Feedback</string>
     <string name="manufacturer">Manufacturer</string>
@@ -41,8 +38,6 @@
     <string name="snack_device_info_failed">Hindi ma-load ang impormasyon ng device</string>
     <string name="summary_preference_settings_oss">Mga detalye ng lisensya para sa open source software</string>
     <string name="summary_share_message">Tingnan itong kamangha-manghang app na ginagamit ko. Mayroon itong ilang mga talagang cool na feature na maaaring makita mong interesante. Maaari mo itong i-download mula sa Play Store sa: %1$s</string>
-    <string name="support_us">Suportahan kami</string>
-    <string name="try_again">Subukang muli</string>
     <string name="updates">Mga Update</string>
     <string name="snack_seasonal_themes_unlocked">Mag-enjoy ka</string>
 </resources>

@@ -21,12 +21,9 @@
     <string name="app_build_version">ایپلیکیشن بلڈ ورژن</string>
     <string name="app_info">ایپ کی معلومات</string>
     <string name="app_toolkit_version">App Toolkit ورژن</string>
-    <string name="content_description_more_options">مزید اختیارات</string>
     <string name="debug">ڈیبگ</string>
     <string name="device_info">ڈیوائس کی معلومات</string>
     <string name="device_model">ڈیوائس ماڈل</string>
-    <string name="done_button_content_description">ہو گیا</string>
-    <string name="go_back">پیچھے جائیں</string>
     <string name="google_play_services_version">Google Play سروسز ورژن</string>
     <string name="help_and_feedback">مدد اور رائے</string>
     <string name="manufacturer">مینوفیکچرر</string>
@@ -41,8 +38,6 @@
     <string name="snack_device_info_failed">ڈیوائس کی معلومات لوڈ نہیں ہو سکی</string>
     <string name="summary_preference_settings_oss">اوپن سورس سافٹ ویئر کے لیے لائسنس کی تفصیلات</string>
     <string name="summary_share_message">یہ حیرت انگیز ایپ دیکھیں جو میں استعمال کر رہا ہوں. اس میں کچھ واقعی عمدہ خصوصیات ہیں جو آپ کو دلچسپ لگ سکتی ہیں۔ آپ اسے پلے اسٹور سے یہاں سے ڈاؤن لوڈ کر سکتے ہیں: %1$s</string>
-    <string name="support_us">ہماری مدد کریں</string>
-    <string name="try_again">دوبارہ کوشش کریں</string>
     <string name="updates">اپ ڈیٹس</string>
     <string name="snack_seasonal_themes_unlocked">لطف اٹھائیں</string>
 </resources>

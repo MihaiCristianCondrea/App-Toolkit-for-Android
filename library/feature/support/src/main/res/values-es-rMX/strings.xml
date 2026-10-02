@@ -22,6 +22,5 @@
     <string name="purchase_thank_you">Gracias por tu donación.</string>
     <string name="summary_donations">No importa cuánto dones, nos ayudarás a mantener nuestra aplicación en funcionamiento y mejorar nuestras funciones. Apreciamos tu generosidad y amabilidad.</string>
     <string name="support_offer_unavailable">Esta opción de donación no está disponible por el momento.</string>
-    <string name="support_us">Apóyanos</string>
     <string name="web_ad">Anuncio web</string>
 </resources>

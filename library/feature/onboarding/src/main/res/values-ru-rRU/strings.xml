@@ -15,14 +15,9 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">AMOLED-режим</string>
     <string name="back_button_content_description">Назад</string>
     <string name="back_button_text">Назад</string>
-    <string name="dark_mode">Тёмный режим</string>
-    <string name="done_button_content_description">Готово</string>
     <string name="done_button_text">Готово</string>
-    <string name="follow_system">Следовать за системой</string>
-    <string name="light_mode">Светлый режим</string>
     <string name="next_button_content_description">Далее</string>
     <string name="next_button_text">Далее</string>
     <string name="onboarding_amoled_mode_desc">Более глубокие чёрные для OLED-экранов.</string>
@@ -30,14 +25,9 @@
     <string name="onboarding_completion_failed">Не удалось сохранить настройки. Пожалуйста, попробуйте ещё раз.</string>
     <string name="onboarding_final_description">Спасибо за персонализацию вашего опыта. Теперь вы готовы исследовать все функции. Наслаждайтесь.</string>
     <string name="onboarding_final_title">Всё готово.</string>
-    <string name="onboarding_theme_dark_desc">Приятный для глаз.</string>
-    <string name="onboarding_theme_light_desc">Яркий и энергичный.</string>
     <string name="onboarding_theme_subtitle">Выберите, как должно выглядеть приложение.</string>
-    <string name="onboarding_theme_system_desc">Соответствует настройкам вашего устройства.</string>
     <string name="onboarding_theme_title">Выберите свой стиль</string>
-    <string name="other_colors">Другие цвета</string>
     <string name="skip_button_content_description">Пропустить</string>
     <string name="skip_button_text">Пропустить</string>
     <string name="usage_and_diagnostics">Использование и диагностика</string>
-    <string name="wallpaper_colors">Цвета обоев</string>
 </resources>

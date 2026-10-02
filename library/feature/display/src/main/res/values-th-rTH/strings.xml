@@ -23,7 +23,6 @@
     <string name="language">ภาษา</string>
     <string name="navigation">การนำทาง</string>
     <string name="show_labels_on_bottom_bar">แสดงฉลากบนแถบด้านล่าง</string>
-    <string name="startup_page">หน้าจอเริ่มต้น</string>
     <string name="summary_preference_settings_bounce_buttons">เพิ่มแอนิเมชันการเด้งเบา ๆ เมื่อคลิกปุ่มต่าง ๆ</string>
     <string name="summary_preference_settings_dynamic_colors">ใช้สีจากภาพพื้นหลังกับธีมแอป</string>
     <string name="summary_preference_settings_language">เปลี่ยนภาษาที่ใช้ในแอป</string>

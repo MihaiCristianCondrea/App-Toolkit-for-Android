@@ -15,14 +15,9 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">Tryb AMOLED</string>
     <string name="back_button_content_description">Wstecz</string>
     <string name="back_button_text">Wstecz</string>
-    <string name="dark_mode">Tryb ciemny</string>
-    <string name="done_button_content_description">Gotowe</string>
     <string name="done_button_text">Gotowe</string>
-    <string name="follow_system">Podążaj za ustawieniami systemu</string>
-    <string name="light_mode">Tryb jasny</string>
     <string name="next_button_content_description">Dalej</string>
     <string name="next_button_text">Dalej</string>
     <string name="onboarding_amoled_mode_desc">Głębsze czernie dla ekranów OLED.</string>
@@ -30,14 +25,9 @@
     <string name="onboarding_completion_failed">Nie udało się zapisać konfiguracji. Spróbuj ponownie.</string>
     <string name="onboarding_final_description">Dziękujemy za spersonalizowanie swoich ustawień. Jesteś teraz gotowy do odkrywania wszystkich funkcji. Baw się dobrze.</string>
     <string name="onboarding_final_title">Wszystko gotowe.</string>
-    <string name="onboarding_theme_dark_desc">Przyjemny dla oczu.</string>
-    <string name="onboarding_theme_light_desc">Jasny i energiczny.</string>
     <string name="onboarding_theme_subtitle">Wybierz, jak ma wyglądać aplikacja.</string>
-    <string name="onboarding_theme_system_desc">Dopasowany do Twojego urządzenia.</string>
     <string name="onboarding_theme_title">Wybierz swój styl</string>
-    <string name="other_colors">Inne kolory</string>
     <string name="skip_button_content_description">Pomiń</string>
     <string name="skip_button_text">Pomiń</string>
     <string name="usage_and_diagnostics">Użycie i diagnostyka</string>
-    <string name="wallpaper_colors">Kolory tapety</string>
 </resources>

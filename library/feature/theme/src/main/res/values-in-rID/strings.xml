@@ -15,19 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">Mode AMOLED</string>
-    <string name="color_palette">Palet warna</string>
-    <string name="dark_mode">Mode gelap</string>
-    <string name="follow_system">Ikuti mode sistem</string>
-    <string name="light_mode">Mode terang</string>
-    <string name="onboarding_theme_dark_desc">Nyaman di mata.</string>
-    <string name="onboarding_theme_light_desc">Terang dan energik.</string>
-    <string name="onboarding_theme_system_desc">Sesuai dengan perangkat Anda.</string>
-    <string name="other_colors">Warna lainnya</string>
-    <string name="screen_and_display_settings">Layar dan Tampilan Pengaturan.</string>
-    <string name="summary_dark_theme">Tema gelap memanfaatkan latar belakang yang dalam untuk secara signifikan memperpanjang masa pakai baterai Anda. Untuk mengaktifkannya, cukup arahkan ke manajer sistem Android Anda dan pilih tema pilihan Anda</string>
-    <string name="theme_mode">Mode tema</string>
-    <string name="wallpaper_colors">Warna wallpaper</string>
     <string name="holiday_greeting_christmas_title">Selamat berlibur!</string>
     <string name="holiday_greeting_christmas_message">Tema Natal telah tiba, dengan salju turun di seluruh aplikasi. Ingin memakainya sampai liburan usai?</string>
     <string name="holiday_greeting_halloween_title">Selamat Halloween!</string>

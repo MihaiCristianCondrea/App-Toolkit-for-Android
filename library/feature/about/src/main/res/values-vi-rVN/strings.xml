@@ -21,12 +21,9 @@
     <string name="app_build_version">Phiên bản xây dựng ứng dụng</string>
     <string name="app_info">Thông tin ứng dụng</string>
     <string name="app_toolkit_version">Phiên bản App Toolkit</string>
-    <string name="content_description_more_options">Nhiều lựa chọn hơn</string>
     <string name="debug">Gỡ lỗi</string>
     <string name="device_info">Thông tin thiết bị</string>
     <string name="device_model">Kiểu máy</string>
-    <string name="done_button_content_description">Xong</string>
-    <string name="go_back">Quay lại</string>
     <string name="google_play_services_version">Phiên bản Dịch vụ Google Play</string>
     <string name="help_and_feedback">Trợ giúp &amp; phản hồi</string>
     <string name="manufacturer">Nhà sản xuất</string>
@@ -41,8 +38,6 @@
     <string name="snack_device_info_failed">Không thể tải thông tin thiết bị</string>
     <string name="summary_preference_settings_oss">Chi tiết giấy phép cho phần mềm nguồn mở</string>
     <string name="summary_share_message">Hãy xem ứng dụng tuyệt vời này mà tôi đang dùng. Nó có một số tính năng rất thú vị mà bạn có thể thấy hay. Bạn có thể tải xuống từ Play Store tại: %1$s</string>
-    <string name="support_us">Ủng hộ chúng tôi</string>
-    <string name="try_again">Thử lại</string>
     <string name="updates">Cập nhật</string>
     <string name="snack_seasonal_themes_unlocked">Chúc bạn vui vẻ</string>
 </resources>

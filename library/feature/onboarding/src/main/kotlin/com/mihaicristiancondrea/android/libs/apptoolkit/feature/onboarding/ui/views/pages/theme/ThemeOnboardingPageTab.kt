@@ -83,6 +83,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.prev
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.previews.LightModePreview
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.previews.SystemModePreview
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import java.time.LocalDate
 import java.time.ZoneId
 import kotlinx.collections.immutable.persistentListOf
@@ -139,21 +140,21 @@ internal fun ThemeOnboardingPageTabContent(
     val themeChoices: List<OnboardingThemeChoice> = listOf(
         OnboardingThemeChoice(
             key = DataStoreNamesConstants.THEME_MODE_LIGHT,
-            displayName = stringResource(id = R.string.light_mode),
+            displayName = stringResource(id = CoreUiR.string.light_mode),
             icon = Icons.Filled.LightMode,
-            description = stringResource(R.string.onboarding_theme_light_desc)
+            description = stringResource(CoreUiR.string.onboarding_theme_light_desc)
         ),
         OnboardingThemeChoice(
             key = DataStoreNamesConstants.THEME_MODE_DARK,
-            displayName = stringResource(id = R.string.dark_mode),
+            displayName = stringResource(id = CoreUiR.string.dark_mode),
             icon = Icons.Filled.DarkMode,
-            description = stringResource(R.string.onboarding_theme_dark_desc)
+            description = stringResource(CoreUiR.string.onboarding_theme_dark_desc)
         ),
         OnboardingThemeChoice(
             key = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
-            displayName = stringResource(id = R.string.follow_system),
+            displayName = stringResource(id = CoreUiR.string.follow_system),
             icon = Icons.Filled.BrightnessAuto,
-            description = stringResource(R.string.onboarding_theme_system_desc)
+            description = stringResource(CoreUiR.string.onboarding_theme_system_desc)
         )
     )
 
@@ -207,8 +208,8 @@ internal fun ThemeOnboardingPageTabContent(
         }
 
     val tabTitles = listOf(
-        stringResource(id = R.string.wallpaper_colors),
-        stringResource(id = R.string.other_colors)
+        stringResource(id = CoreUiR.string.wallpaper_colors),
+        stringResource(id = CoreUiR.string.other_colors)
     )
 
     val initialPagerPage = if (supportsDynamic && isDynamicColors) 0 else 1

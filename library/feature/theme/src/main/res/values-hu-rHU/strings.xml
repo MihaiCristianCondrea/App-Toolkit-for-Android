@@ -15,19 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">AMOLED mód</string>
-    <string name="color_palette">Színpaletta</string>
-    <string name="dark_mode">Sötét mód</string>
-    <string name="follow_system">Rendszerbeállítás követése</string>
-    <string name="light_mode">Világos mód</string>
-    <string name="onboarding_theme_dark_desc">Kíméletes a szemnek.</string>
-    <string name="onboarding_theme_light_desc">Világos és energikus.</string>
-    <string name="onboarding_theme_system_desc">Megfelel az eszközének.</string>
-    <string name="other_colors">Egyéb színek</string>
-    <string name="screen_and_display_settings">képernyő és megjelenítés a beállítások.</string>
-    <string name="summary_dark_theme">A sötét téma mély hátteret használ ki, hogy jelentősen meghosszabbítsa az akkumulátor élettartamát. Az aktiváláshoz egyszerűen keresse meg az Android Rendszerkezelőjét, és válassza ki a kívánt témát</string>
-    <string name="theme_mode">Téma mód</string>
-    <string name="wallpaper_colors">Háttérkép színei</string>
     <string name="holiday_greeting_christmas_title">Boldog ünnepeket!</string>
     <string name="holiday_greeting_christmas_message">Megérkezett a karácsonyi téma, hóeséssel az egész alkalmazásban. Szeretnéd használni az ünnepek végéig?</string>
     <string name="holiday_greeting_halloween_title">Boldog Halloweent!</string>

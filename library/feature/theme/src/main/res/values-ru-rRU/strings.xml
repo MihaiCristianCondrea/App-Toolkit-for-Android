@@ -15,19 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">AMOLED-режим</string>
-    <string name="color_palette">Цветовая палитра</string>
-    <string name="dark_mode">Тёмный режим</string>
-    <string name="follow_system">Следовать за системой</string>
-    <string name="light_mode">Светлый режим</string>
-    <string name="onboarding_theme_dark_desc">Приятный для глаз.</string>
-    <string name="onboarding_theme_light_desc">Яркий и энергичный.</string>
-    <string name="onboarding_theme_system_desc">Соответствует настройкам вашего устройства.</string>
-    <string name="other_colors">Другие цвета</string>
-    <string name="screen_and_display_settings">Настройки экрана и отображения.</string>
-    <string name="summary_dark_theme">Темная тема использует глубокий фон, чтобы значительно продлить срок службы батареи. Чтобы активировать его, просто перейдите к системному менеджеру Android и выберите свою предпочтительную тему в</string>
-    <string name="theme_mode">Режим темы</string>
-    <string name="wallpaper_colors">Цвета обоев</string>
     <string name="holiday_greeting_christmas_title">С праздниками!</string>
     <string name="holiday_greeting_christmas_message">Новогодняя тема уже здесь, и по всему приложению идёт снег. Использовать её до конца праздников?</string>
     <string name="holiday_greeting_halloween_title">С Хэллоуином!</string>

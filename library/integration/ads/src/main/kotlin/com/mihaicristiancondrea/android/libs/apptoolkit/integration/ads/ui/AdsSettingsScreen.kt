@@ -55,6 +55,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.contracts.AdsSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.models.AdsPreferences
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.states.AdsSettingsUiState
@@ -224,7 +225,7 @@ private fun AdsSettingsList(
                     .fillMaxWidth()
                     .padding(horizontal = SizeConstants.MediumSize * 2),
                 message = stringResource(id = R.string.summary_ads),
-                learnMoreText = stringResource(id = R.string.learn_more),
+                learnMoreText = stringResource(id = CoreUiR.string.learn_more),
                 learnMoreAction = onLearnMore,
             )
         }

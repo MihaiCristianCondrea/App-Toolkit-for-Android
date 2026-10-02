@@ -15,14 +15,9 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">Mod AMOLED</string>
     <string name="back_button_content_description">Înapoi</string>
     <string name="back_button_text">Înapoi</string>
-    <string name="dark_mode">Mod întunecat</string>
-    <string name="done_button_content_description">Gata</string>
     <string name="done_button_text">Gata</string>
-    <string name="follow_system">Urmărește setările sistemului</string>
-    <string name="light_mode">Mod luminos</string>
     <string name="next_button_content_description">Următorul</string>
     <string name="next_button_text">Următorul</string>
     <string name="onboarding_amoled_mode_desc">Negru mai profund pentru ecranele OLED.</string>
@@ -30,14 +25,9 @@
     <string name="onboarding_completion_failed">Configurarea ta nu a putut fi salvată. Încearcă din nou.</string>
     <string name="onboarding_final_description">Mulțumim că ți-ai personalizat experiența. Acum ești gata să explorezi toate funcționalitățile. Bucură-te.</string>
     <string name="onboarding_final_title">Ești gata.</string>
-    <string name="onboarding_theme_dark_desc">Ușor pentru ochi.</string>
-    <string name="onboarding_theme_light_desc">Luminos și energic.</string>
     <string name="onboarding_theme_subtitle">Selectează cum dorești să arate aplicația.</string>
-    <string name="onboarding_theme_system_desc">Se potrivește cu dispozitivul tău.</string>
     <string name="onboarding_theme_title">Alege-ți stilul</string>
-    <string name="other_colors">Alte culori</string>
     <string name="skip_button_content_description">Omite</string>
     <string name="skip_button_text">Omite</string>
     <string name="usage_and_diagnostics">Utilizare și diagnoză</string>
-    <string name="wallpaper_colors">Culorile fundalului</string>
 </resources>

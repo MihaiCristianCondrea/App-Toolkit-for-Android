@@ -25,4 +25,5 @@
     <string name="advanced">고급</string>
     <string name="developer_options">개발자 옵션</string>
     <string name="summary_preference_settings_developer_options">시작 페이지, 탐색 레이아웃, 애니메이션 테스트</string>
+    <string name="developer">개발자</string>
 </resources>

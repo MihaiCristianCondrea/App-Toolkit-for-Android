@@ -17,13 +17,15 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.privacy.ui.navigation
 
-import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class PermissionUsageGraphTest {
 
@@ -31,20 +33,20 @@ class PermissionUsageGraphTest {
 
     @Test
     fun `it opens on the privacy page with no shell under it`() {
-        assertThat(graph.start).isEqualTo(PrivacySettingsRoute)
-        assertThat(graph.tabs).isEmpty()
+        assertEquals(PrivacySettingsRoute, graph.start)
+        assertEquals(emptyList(), graph.tabs)
     }
 
     @Test
     fun `every page the privacy page links to opens inside it`() {
         listOf(PermissionsRoute, AdsSettingsRoute, DiagnosticsSettingsRoute).forEach { key ->
-            assertThat(graph.contains(key)).isTrue()
+            assertTrue(graph.contains(key))
         }
     }
 
     @Test
     fun `it offers no start choice, so the developer start option cannot replace the privacy page`() {
-        assertThat(graph.startOptions).isEmpty()
-        assertThat(graph.contains(SettingsRoute)).isFalse()
+        assertEquals(emptyList(), graph.startOptions)
+        assertFalse(graph.contains(SettingsRoute))
     }
 }

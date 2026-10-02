@@ -19,11 +19,11 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.p
 
 import android.app.Activity
 import androidx.activity.ComponentActivity
-import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
+import kotlin.test.assertFalse
 
 /**
  * Covers the cases the launcher has to survive rather than crash on.
@@ -46,7 +46,7 @@ class IssueReporterLauncherTest {
     fun `an activity that cannot own a composition is refused`() {
         val activity: Activity = mockk()
 
-        assertThat(IssueReporterLauncher.show(activity = activity)).isFalse()
+        assertFalse(IssueReporterLauncher.show(activity = activity))
     }
 
     @Test
@@ -55,7 +55,7 @@ class IssueReporterLauncherTest {
             every { isFinishing } returns true
         }
 
-        assertThat(IssueReporterLauncher.show(activity = activity)).isFalse()
+        assertFalse(IssueReporterLauncher.show(activity = activity))
     }
 
     @Test
@@ -65,7 +65,7 @@ class IssueReporterLauncherTest {
             every { isDestroyed } returns true
         }
 
-        assertThat(IssueReporterLauncher.show(activity = activity)).isFalse()
+        assertFalse(IssueReporterLauncher.show(activity = activity))
     }
 
     @Test
@@ -77,6 +77,6 @@ class IssueReporterLauncherTest {
             every { isDestroyed } returns false
         }
 
-        assertThat(IssueReporterLauncher.show(activity = activity)).isFalse()
+        assertFalse(IssueReporterLauncher.show(activity = activity))
     }
 }

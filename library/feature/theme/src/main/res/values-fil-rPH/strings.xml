@@ -15,19 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">AMOLED mode</string>
-    <string name="color_palette">Paleta ng kulay</string>
-    <string name="dark_mode">Dark mode</string>
-    <string name="follow_system">Sundin ang system mode</string>
-    <string name="light_mode">Light mode</string>
-    <string name="onboarding_theme_dark_desc">Maginhawa sa mata.</string>
-    <string name="onboarding_theme_light_desc">Maliwanag at masigla.</string>
-    <string name="onboarding_theme_system_desc">Tumutugma sa iyong device.</string>
-    <string name="other_colors">Ibang mga kulay</string>
-    <string name="screen_and_display_settings">Mga Setting ng Screen at Display.</string>
-    <string name="summary_dark_theme">Ang madilim na tema ay gumagamit ng isang malalim na background upang makabuluhang mapalawak ang iyong buhay ng baterya. Upang maisaaktibo ito, mag -navigate lamang sa manager ng system ng iyong Android at piliin ang iyong ginustong tema sa</string>
-    <string name="theme_mode">Mode ng tema</string>
-    <string name="wallpaper_colors">Mga kulay ng wallpaper</string>
     <string name="holiday_greeting_christmas_title">Maligayang pista!</string>
     <string name="holiday_greeting_christmas_message">Narito na ang Christmas theme, may niyebeng bumabagsak sa buong app. Gusto mo ba itong gamitin hanggang matapos ang pista?</string>
     <string name="holiday_greeting_halloween_title">Maligayang Halloween!</string>

@@ -17,12 +17,14 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen
 
-import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class ScreenErrorsTest {
 
@@ -30,41 +32,49 @@ class ScreenErrorsTest {
 
     @Test
     fun `failures the user can act on get their own text`() {
-        assertThat(NetworkException(NetworkException.Reason.NO_INTERNET).toUiText(fallback))
-            .isEqualTo(UiTextHelper.StringResource(R.string.screen_error_no_internet))
-        assertThat(NetworkException(NetworkException.Reason.TIMEOUT).toUiText(fallback))
-            .isEqualTo(UiTextHelper.StringResource(R.string.screen_error_timeout))
-        assertThat(NetworkException(NetworkException.Reason.SERVER).toUiText(fallback))
-            .isEqualTo(UiTextHelper.StringResource(R.string.screen_error_server))
-        assertThat(StorageException(StorageException.Reason.FULL).toUiText(fallback))
-            .isEqualTo(UiTextHelper.StringResource(R.string.screen_error_storage_full))
+        assertEquals(
+            UiTextHelper.StringResource(R.string.screen_error_no_internet),
+            NetworkException(NetworkException.Reason.NO_INTERNET).toUiText(fallback),
+        )
+        assertEquals(
+            UiTextHelper.StringResource(R.string.screen_error_timeout),
+            NetworkException(NetworkException.Reason.TIMEOUT).toUiText(fallback),
+        )
+        assertEquals(
+            UiTextHelper.StringResource(R.string.screen_error_server),
+            NetworkException(NetworkException.Reason.SERVER).toUiText(fallback),
+        )
+        assertEquals(
+            UiTextHelper.StringResource(R.string.screen_error_storage_full),
+            StorageException(StorageException.Reason.FULL).toUiText(fallback),
+        )
     }
 
     @Test
     fun `other failures get the screen's own text`() {
-        assertThat(NetworkException(NetworkException.Reason.SERIALIZATION).toUiText(fallback)).isEqualTo(fallback)
-        assertThat(StorageException(StorageException.Reason.CORRUPT).toUiText(fallback)).isEqualTo(fallback)
-        assertThat(IllegalStateException("bug").toUiText(fallback)).isEqualTo(fallback)
+        assertEquals(fallback, NetworkException(NetworkException.Reason.SERIALIZATION).toUiText(fallback))
+        assertEquals(fallback, StorageException(StorageException.Reason.CORRUPT).toUiText(fallback))
+        assertEquals(fallback, IllegalStateException("bug").toUiText(fallback))
     }
 
     @Test
     fun `without a fallback the generic text is used`() {
-        assertThat(IllegalStateException("bug").toUiText()).isEqualTo(GenericErrorText)
+        assertEquals(GenericErrorText, IllegalStateException("bug").toUiText())
     }
 
     @Test
     fun `failures that repeat the same way are not retryable`() {
-        assertThat(NetworkException(NetworkException.Reason.CLIENT).toFailed(fallback).retryable).isFalse()
-        assertThat(StorageException(StorageException.Reason.CORRUPT).toFailed(fallback).retryable).isFalse()
-        assertThat(NetworkException(NetworkException.Reason.NO_INTERNET).toFailed(fallback).retryable).isTrue()
-        assertThat(IllegalStateException("bug").toFailed(fallback).retryable).isTrue()
+        assertFalse(NetworkException(NetworkException.Reason.CLIENT).toFailed(fallback).retryable)
+        assertFalse(StorageException(StorageException.Reason.CORRUPT).toFailed(fallback).retryable)
+        assertTrue(NetworkException(NetworkException.Reason.NO_INTERNET).toFailed(fallback).retryable)
+        assertTrue(IllegalStateException("bug").toFailed(fallback).retryable)
     }
 
     @Test
     fun `an error message carries the mapped text`() {
         val message = NetworkException(NetworkException.Reason.NO_INTERNET).toErrorMessage(fallback)
 
-        assertThat(message.isError).isTrue()
-        assertThat(message.text).isEqualTo(UiTextHelper.StringResource(R.string.screen_error_no_internet))
+        assertTrue(message.isError)
+        assertEquals(UiTextHelper.StringResource(R.string.screen_error_no_internet), message.text)
     }
 }
