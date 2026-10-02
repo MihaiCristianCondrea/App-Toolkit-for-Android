@@ -4,7 +4,8 @@ description: >
   Design, implement, review, and migrate App Toolkit screens on the core.ui.screen setup: a
   ScreenViewModel or LoggedScreenViewModel, a feature-owned state data class with Loadable fields,
   an event contract, UiMessage queues shown by MessageHost, ScreenStateHandler, TrackScreenState,
-  the split between a stateful XScreen and a stateless, previewable XScreenContent, and the
+  the split between a stateful XScreen and a stateless, previewable XScreenContent in the same
+  file, and the
   mapping of thrown failures to error text. Use when creating a screen or ViewModel, adding
   loading, empty, error or custom statuses, deciding what a failure shows, showing snackbars from
   a ViewModel, wiring a ViewModel in Koin, testing a ViewModel or screen content, or moving a
@@ -61,8 +62,8 @@ Read the file for the part you are working on:
 | `XViewModel`     | `LoggedScreenViewModel<XUiState, XEvent>` | state, messages, operations, logging                   |
 | `XUiState`       | `@Immutable data class`                   | everything the screen renders                          |
 | `XEvent`         | `sealed interface`                        | what the user can ask the ViewModel to do              |
-| `XScreen`        | stateful `@Composable`                    | ViewModel, collection, tracking, messages, navigation  |
-| `XScreenContent` | stateless `@Composable`                   | rendering the state, reporting input through callbacks |
+| `XScreen`        | stateful `@Composable`, in `XScreen.kt`   | ViewModel, collection, tracking, messages, navigation  |
+| `XScreenContent` | stateless `@Composable`, in `XScreen.kt`  | rendering the state, reporting input through callbacks |
 
 State flows down from the ViewModel, events flow up from the content, and messages leave through
 their own queue.
@@ -130,6 +131,9 @@ their own queue.
 
 ### Screen and ScreenContent
 
+- `XScreen` and `XScreenContent` are two composables in one file, `XScreen.kt`: the screen first,
+  then the content, then the content's private helpers and previews. Never give the content a file
+  of its own.
 - `XScreen` is the public entry point. It gets the ViewModel, collects `state` with
   `collectAsStateWithLifecycle()`, calls `TrackScreenView` and `TrackScreenState`, hosts
   `MessageHost(viewModel)`, owns navigation, and calls `XScreenContent`.

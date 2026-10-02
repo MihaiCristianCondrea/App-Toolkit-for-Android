@@ -66,7 +66,8 @@ between them.
    `viewModelName` and action names unchanged, so the reports keep their history.
 4. Replace action emissions with `showMessage(UiMessage(...))` for snackbars, and with a callback
    or a state flag for navigation (`events-and-messages.md`).
-5. Split the screen into `XScreen` and `XScreenContent`, and add the previews.
+5. Split the screen into `XScreen` and `XScreenContent`, both in `XScreen.kt`, and add the
+   previews below the content.
 6. Remove a `DispatcherProvider` from the ViewModel and its Koin binding when it only moved
    repository calls. Move the repository off `DataState` (see above), and map its failures in
    `onError`.

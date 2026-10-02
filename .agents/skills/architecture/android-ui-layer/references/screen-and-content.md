@@ -1,9 +1,9 @@
 # Screen and ScreenContent
 
-The two composables every screen has. Templates: `templates/XScreen.kt.txt` and
-`templates/XScreenContent.kt.txt`. Reference: `AboutScreen.kt` and `AboutScreenContent.kt` in
-`:library:feature:about`, and `FaqScreen.kt` and `FaqScreenContent.kt` in `:library:feature:faq`
-for a screen with analytics on every tap, an ad slot and a bottom sheet.
+The two composables every screen has, declared together in `XScreen.kt`: `XScreen` first, then
+`XScreenContent`, its private helpers and its previews. Template: `templates/XScreen.kt.txt`.
+Reference: `AboutScreen.kt` in `:library:feature:about`, and `FaqScreen.kt` in
+`:library:feature:faq` for a screen with analytics on every tap, an ad slot and a bottom sheet.
 
 ## Who owns what
 

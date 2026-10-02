@@ -27,8 +27,7 @@ feature/x/
     │       ├── states/
     │       │   └── XUiState.kt           # @Immutable data class with Loadable fields
     │       ├── views/                    # stateless pieces used inside the content
-    │       ├── XScreen.kt                # stateful entry point
-    │       ├── XScreenContent.kt         # stateless rendering and @Previews
+    │       ├── XScreen.kt                # XScreen, then XScreenContent and its @Previews
     │       └── XViewModel.kt
     └── test/kotlin/<base>/feature/x/
         └── ui/
@@ -54,10 +53,8 @@ ui/
 │   ├── XListUiState.kt
 │   └── XDetailsUiState.kt
 ├── XListScreen.kt
-├── XListScreenContent.kt
 ├── XListViewModel.kt
 ├── XDetailsScreen.kt
-├── XDetailsScreenContent.kt
 └── XDetailsViewModel.kt
 ```
 
@@ -69,7 +66,7 @@ A secondary surface with a ViewModel of its own, such as a bottom sheet, repeats
 | File                 | Declares                                    | Visibility            |
 |----------------------|---------------------------------------------|-----------------------|
 | `XScreen.kt`         | `fun XScreen(...)`, screen name constants   | public                |
-| `XScreenContent.kt`  | `fun XScreenContent(...)`, its previews     | `internal`            |
+|                      | `fun XScreenContent(...)`, its previews     | `internal`, `private` |
 | `XViewModel.kt`      | `class XViewModel`                          | public, for Koin      |
 | `XUiState.kt`        | `data class XUiState`                       | public                |
 | `XEvent.kt`          | `sealed interface XEvent`                   | public                |
@@ -80,9 +77,14 @@ One top-level class or interface per file, named after it. An interface and its 
 two files side by side, as `AboutRepository.kt` and `DefaultAboutRepository.kt` are. Private
 helpers, constants and extension functions may share the file that uses them.
 
+`XScreen` and `XScreenContent` share `XScreen.kt`, the screen first and the content below it, as
+`AboutScreen.kt` does. The two are read and changed together, so one file keeps the screen in one
+place; the content never gets a file of its own. A dialog or sheet follows the same rule:
+`ChangelogDialog` and `ChangelogDialogContent` share `ChangelogDialog.kt`.
+
 The screen name passed to `TrackScreenView`, `TrackScreenState` and the ViewModel's `screenName` is
-the same literal. Declare it once in `XScreen.kt` as `internal const val X_SCREEN_NAME` when the
-content also reports with it, as `ABOUT_SCREEN_NAME` does.
+the same literal. Declare it once at the top of `XScreen.kt` as `private const val X_SCREEN_NAME`;
+the content in the same file reports with it too.
 
 A `views/` file holds a composable the content uses, such as a row or a card. `XScreenContent`
-itself stays in `ui/`, because it is the screen's body, not a reusable piece.
+itself stays in `XScreen.kt`, because it is the screen's body, not a reusable piece.

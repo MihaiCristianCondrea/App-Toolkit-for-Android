@@ -17,9 +17,14 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
@@ -29,6 +34,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.cont
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.states.LicensesUiState
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
+import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
+import com.mikepenz.aboutlibraries.ui.compose.variant.LibraryBadges
 import org.koin.compose.viewmodel.koinViewModel
 
 private const val LICENSES_SCREEN_NAME = "Licenses"
@@ -68,4 +75,35 @@ fun LicensesScreen() {
         libraries = libraries,
         contentPadding = contentPadding(),
     )
+}
+
+/**
+ * Draws [libraries], the parsed metadata of the bundled open-source libraries.
+ *
+ * The stateless half of [LicensesScreen]. While [libraries] is `null` the container shows its own
+ * progress indicator, so there is no separate loading state to draw.
+ */
+@Composable
+internal fun LicensesScreenContent(
+    libraries: Libs?,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
+) {
+    LibrariesContainer(
+        libraries = libraries,
+        modifier = modifier.fillMaxSize(),
+        contentPadding = contentPadding,
+        badges = LibraryBadges(
+            description = true,
+            funding = true,
+        ),
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun LicensesScreenContentLoadingPreview() {
+    MaterialTheme {
+        LicensesScreenContent(libraries = null)
+    }
 }
