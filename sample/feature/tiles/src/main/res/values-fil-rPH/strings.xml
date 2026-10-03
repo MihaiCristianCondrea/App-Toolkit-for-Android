@@ -133,4 +133,13 @@
     <string name="tiles_qs_integration_summary_format">Gamitin ang %1$s mula sa Mga Mabilisang Setting ng iyong telepono nang hindi binubuksan ang App Toolkit.</string>
     <string name="tiles_add_to_qs">Idagdag sa Mga Mabilisang Setting</string>
     <string name="tiles_search_hint">Maghanap ng tool</string>
+    <string name="tools_settings_title">Mga setting ng tool</string>
+    <string name="tools_settings_counter">Counter</string>
+    <string name="tools_settings_reset_counter">I-reset ang counter</string>
+    <string name="tools_settings_reset_counter_summary">Ibinabalik sa zero ang bilang na kahati ng tile ng Counter</string>
+    <string name="tools_settings_list">Listahan ng mga tool</string>
+    <string name="tools_settings_expand_all">Palawakin ang bawat kategorya</string>
+    <string name="tools_settings_expand_all_summary">Ipakita ang bawat tool sa listahan</string>
+    <string name="tools_settings_collapse_all">I-collapse ang bawat kategorya</string>
+    <string name="tools_settings_collapse_all_summary">Ipakita lang ang mga pamagat ng kategorya</string>
 </resources>

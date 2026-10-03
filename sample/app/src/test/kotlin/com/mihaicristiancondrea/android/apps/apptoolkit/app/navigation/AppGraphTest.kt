@@ -20,8 +20,18 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation
 import android.content.Intent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.navigation.AppsListRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.navigation.ComponentsRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.di.tilesModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ToolkitTilesRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ToolsSettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchContext
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.unregisteredDestinations
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.di.aboutModule
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.di.advancedSettingsModule
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.di.displaySettingsModule
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.di.privacyModule
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.di.themeSettingsModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.startupValueFlow
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.DrawerEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
@@ -48,6 +58,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
+import org.koin.dsl.koinApplication
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
@@ -117,6 +128,7 @@ class AppGraphTest {
             LibraryExtrasRoute,
             DeveloperOptionsRoute,
             ComponentsRoute,
+            ToolsSettingsRoute,
         )
 
         pages.forEach { key -> assertTrue(graph.contains(key), "$key is not registered") }
@@ -173,6 +185,27 @@ class AppGraphTest {
         listOf(DisplaySettingsRoute, PrivacySettingsRoute, AdvancedSettingsRoute, AboutRoute).forEach { key ->
             assertEquals(PaneRole.Detail, graph.destination(key).paneRole, "$key")
         }
+    }
+
+    @Test
+    fun `the tools settings page opens beside the settings list, and the tools tab offers it`() {
+        val graph = graph()
+
+        assertEquals(PaneRole.Detail, graph.destination(ToolsSettingsRoute).paneRole)
+        assertNotNull(graph.destination(ToolkitTilesRoute).actions)
+    }
+
+    @Test
+    fun `every settings search result, the app's and the Toolkit's, opens a registered page`() {
+        val koin = koinApplication {
+            modules(tilesModule, displaySettingsModule, themeSettingsModule, privacyModule, aboutModule, advancedSettingsModule)
+        }.koin
+        val providers = koin.getAll<SettingsSearchProvider>()
+        val context = SettingsSearchContext(graph())
+
+        assertEquals(6, providers.size)
+        assertEquals(emptyList(), providers.flatMap { it.unregisteredDestinations(context) })
+        assertTrue(providers.flatMap { it.entries(context) }.any { it.destination == ToolsSettingsRoute })
     }
 
     @Test

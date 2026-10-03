@@ -108,6 +108,14 @@ class ShellGraph internal constructor(
     /** Whether [key] can be navigated to. */
     fun contains(key: NavKey): Boolean = destinationOrNull(key) != null
 
+    /** How many destinations the graph registers, tabs included. */
+    internal val destinationCount: Int
+        get() = destinations.size
+
+    /** Whether some page is drawn in the shell's page frame, with its app bar. */
+    internal val hasFramedPages: Boolean
+        get() = destinations.values.any { it.kind == DestinationKind.Page && it.scaffold && it.title != null }
+
     @Suppress("UNCHECKED_CAST")
     fun destination(key: NavKey): Destination<NavKey> =
         checkNotNull(destinationOrNull(key)) {

@@ -33,7 +33,7 @@ drawer and transition the graph describes. It is the chrome around the navigatio
   banner slot, docked on the bottom navigation bar and nowhere else, docked player, and the inner
   display. `ShellChromeController` and
   `LocalShellChrome` let a page's own frame open the navigation.
-- The shell's developer settings, in `settings`: `ShellSettings`, `ShellPreferences`, its DataStore
+- The shell's developer overrides, in `settings`: `ShellSettings`, `ShellPreferences`, its DataStore
   and `InMemoryShellPreferences` for tests.
 - The strings the chrome adds: open, expand and collapse navigation.
 
@@ -44,11 +44,11 @@ drawer and transition the graph describes. It is the chrome around the navigatio
   [`:library:core:ui`](../core/ui/README.md).
 - The theme. The app wraps `ShellHost` in `AppTheme`; theme mode and dynamic colour stay in
   [`:library:feature:theme`](../feature/theme/README.md).
-- The screens that change its settings. The person's layout choices are offered by the display
-  settings of [`:library:feature:display`](../feature/display/README.md), which also keeps the
-  bottom bar labels and the start page (reaching the shell through `LocalShowBottomBarLabels` and
-  the app's `resolveStart`); the rest by the developer options page of
-  [`:library:feature:developer`](../feature/developer/README.md).
+- The screens that change its settings. Every override is offered by the developer options page of
+  [`:library:feature:developer`](../feature/developer/README.md). The person's own preferences
+  that reach the shell, the bottom bar labels and the startup page, are display settings of
+  [`:library:feature:display`](../feature/display/README.md), kept in the common store and read
+  through `LocalShowBottomBarLabels` and the app's `resolveStart`.
 - The Toolkit's pages and `toolkitGraph { }`, owned by [`:library:apptoolkit`](../apptoolkit/README.md).
 
 ## Depends on
@@ -224,12 +224,16 @@ JUnit 5. They start Koin with a `CommonDataStore`, which `AppTheme` reads.
   `PermissionUsageActivity` does for Android's permission manager.
 - **The start is decided before the first frame.** `resolveStart` may read stored state and is
   awaited with the settings; `onReady` then tells the activity it can drop its splash screen.
-- **The shell keeps its own store.** Its settings describe the shell (layout choices the display
-  settings offer, and developer options), so they live in a DataStore of their own rather than in
-  `:library:core:datastore`; that also keeps the datastore module free of navigation types.
-  `resetDeveloperOptions()` puts back only the developer options: the start, the forced layout,
-  the accessories and the animation speed. `ShellHost(preferences = ...)`
-  takes any `ShellPreferences`, and tests pass an `InMemoryShellPreferences`.
+- **The shell keeps its own store.** Its settings are developer overrides of the shell, so they
+  live in a DataStore of their own rather than in `:library:core:datastore`; that also keeps the
+  datastore module free of navigation types. Every value is a developer option, and
+  `resetDeveloperOptions()` puts all of them back, leaving the shell as the app declares it. The
+  person's preferences, such as the navigation labels, live in the common store and are not
+  touched. `ShellHost(preferences = ...)` takes any `ShellPreferences`, and tests pass an
+  `InMemoryShellPreferences`.
+- **Capabilities are computed once.** `ShellHost` builds `ShellCapabilities` from the graph and
+  `layoutPolicy` and provides them as `LocalShellCapabilities`, for the settings pages and the
+  settings search.
 - **A tab is selected only while it shows.** No navigation item is highlighted while a child
   covers its tab.
 - **Short windows get small bars.** A large app bar becomes a small one below

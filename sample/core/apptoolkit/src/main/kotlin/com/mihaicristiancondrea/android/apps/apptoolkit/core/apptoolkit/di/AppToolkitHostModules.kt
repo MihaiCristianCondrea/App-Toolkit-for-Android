@@ -79,6 +79,10 @@ internal fun appToolkitSettingsModule(hostBuildConfig: AppToolkitHostBuildConfig
         single<AboutSettingsProvider> {
             AppAboutSettingsProvider(context = get(), hostBuildConfig = hostBuildConfig)
         }
-        single<DisplaySettingsProvider> { AppDisplaySettingsProvider() }
+        single<DisplaySettingsProvider> {
+            AppDisplaySettingsProvider(
+                startupPageChoices = getOrNull<List<String>>(named(AppToolkitDiConstants.STARTUP_VALUES))?.size,
+            )
+        }
         single<PrivacySettingsProvider> { object : PrivacySettingsProvider {} }
     }

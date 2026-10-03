@@ -14,7 +14,7 @@ options entry once it is unlocked.
 - `CacheRepository` and `DefaultCacheRepository`, which delete the app's cache directories.
 - `advancedSettingsPage()`, the registration of `AdvancedSettingsRoute` as a detail of the settings
   list, and `advancedSettingsModule`.
-- Its clear cache row in the settings search, as a `SettingsSearchProvider`.
+- Its clear cache row in the settings search, a `settingsSearchProvider` bound as `advanced`.
 - The page's localized strings, including the cache confirmation and failure texts.
 
 ## Does not own

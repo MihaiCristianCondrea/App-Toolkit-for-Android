@@ -18,36 +18,50 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.TabTransitionStyle
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
 
 class ResetDeveloperOptionsTest {
 
+    /** Every [ShellSettings] value away from its default. */
+    private val everythingChanged = ShellSettings(
+        layoutMode = ShellLayoutMode.Rail,
+        topBarOverride = TopBarOverride.CenterAligned,
+        tabTransition = TabTransitionStyle.Fade,
+        accessoryMode = AccessoryMode.None,
+        hideBottomBarOnScroll = false,
+        limitContentWidth = false,
+        animationSpeed = AnimationSpeed.Slow,
+        backEdgeStyle = BackEdgeStyle.System,
+        startOverride = 1,
+        navigationBarStyle = NavigationBarStyle.Short,
+        navigationTint = NavigationTint.None,
+        hideTopBarOnScroll = true,
+    )
+
     @Test
-    fun `reset restores the developer options and keeps the person's display choices`() = runTest {
-        val preferences = InMemoryShellPreferences(
-            ShellSettings(
-                startOverride = 1,
-                layoutMode = ShellLayoutMode.Rail,
-                accessoryMode = AccessoryMode.None,
-                animationSpeed = AnimationSpeed.Slow,
-                topBarOverride = TopBarOverride.CenterAligned,
-                navigationBarStyle = NavigationBarStyle.Short,
-                backEdgeStyle = BackEdgeStyle.System,
-            ),
-        )
+    fun `the test changes every shell setting`() {
+        val defaults = ShellSettings()
+        val changed = ShellSettings::class.java.declaredFields
+            .filterNot { java.lang.reflect.Modifier.isStatic(it.modifiers) }
+            .onEach { it.isAccessible = true }
+            .filter { it.get(everythingChanged) == it.get(defaults) }
+            .map { it.name }
+
+        assertEquals(emptyList<String>(), changed, "left at their defaults")
+        assertNotEquals(defaults, everythingChanged)
+    }
+
+    @Test
+    fun `reset puts every shell setting back as the app declares it`() = runTest {
+        val preferences = InMemoryShellPreferences(everythingChanged)
 
         preferences.resetDeveloperOptions()
 
-        assertEquals(
-            ShellSettings(
-                topBarOverride = TopBarOverride.CenterAligned,
-                navigationBarStyle = NavigationBarStyle.Short,
-                backEdgeStyle = BackEdgeStyle.System,
-            ),
-            preferences.settings.first(),
-        )
+        assertEquals(ShellSettings(), preferences.settings.first())
     }
 }

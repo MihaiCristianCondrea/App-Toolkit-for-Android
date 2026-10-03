@@ -32,6 +32,14 @@ interface DisplaySettingsProvider {
         get() = false
 
     /**
+     * How many places [StartupPageDialog] offers to start. The startup page row shows only when
+     * there is more than one. Null when the host does not say, in which case the row shows when the
+     * app has more than one tab.
+     */
+    val startupPageChoices: Int?
+        get() = null
+
+    /**
      * Host-supplied startup selector. Implementations define the stored route format and report
      * selections through [onStartupSelected]; [onDismiss] closes the presentation.
      */

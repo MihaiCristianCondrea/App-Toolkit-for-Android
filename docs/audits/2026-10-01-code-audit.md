@@ -103,9 +103,9 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   `CommonDataStore` data sources directly although `ThemePreferencesRepository` exists. This is also
   the only reason `:library:core:designsystem` depends on `:library:core:datastore`.
 - Shell settings are written from composables through a CompositionLocal
-  (`DisplaySettingsScreen.kt:222`, `ShellDisplayRows.kt:61-81`, `DeveloperOptionsScreen.kt:78`),
-  and `:library:feature:developer` and `:library:feature:display` depend on all of `:library:shell`
-  just for `shell.settings`.
+  (`DeveloperOptionItem.kt`), and `:library:feature:developer` depends on all of `:library:shell`
+  just for `shell.settings`. `:library:feature:display` no longer uses the shell; its
+  `api(project(":library:shell"))` can be removed from its build file.
 - `BillingRepository` exposes `ProductDetails`. The support screen and state no longer see it, but
   `SupportViewModel` keeps it privately to launch a donation. Billing should:
   - throw from `queryProductDetails` on a non-OK response instead of emitting

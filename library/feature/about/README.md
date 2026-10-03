@@ -9,8 +9,8 @@ plus the tap-to-copy interaction for the entries it renders and the version-tap 
 
 - About information presentation (host application, App Toolkit, and Google Play services versions,
   and the host-formatted device report).
-- Its rows in the settings search (`SettingsSearchProvider`): app info, device info and the
-  open-source licenses.
+- Its rows in the settings search, a `settingsSearchProvider` bound as `about`: app info, device
+  info and the open-source licenses, which opens the licenses page.
 - Tap-to-copy for About entries, including the clipboard write and its in-app confirmation.
 - The version-tap easter egg: konfetti on the fifth tap, and the seasonal themes unlock it records.
 - The library-owned extras screen, `LibraryExtrasScreen`.

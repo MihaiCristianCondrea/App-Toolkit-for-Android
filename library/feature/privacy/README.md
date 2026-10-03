@@ -9,8 +9,8 @@ and the strings that name them.
 
 - `PrivacyScreen`, the data-driven privacy and legal preference list, which opens each row's link
   or page, and `PrivacyScreenContent`, the stateless list with its loading and failure states.
-- Its rows in the settings search (`SettingsSearchProvider`): permissions, ads and usage and
-  diagnostics, each opening its own page.
+- Its rows in the settings search, a `settingsSearchProvider` bound as `privacy`: permissions, ads
+  and usage and diagnostics, each naming the page it opens instead of the privacy page.
 - `PrivacyViewModel`, `PrivacyUiState` (whose `items` is a `Loadable`), `PrivacyEvent` and
   `PrivacyItem`.
 - `PrivacySettingsProvider`, the host contract supplying the legal URLs.

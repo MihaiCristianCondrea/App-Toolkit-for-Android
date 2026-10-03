@@ -73,6 +73,20 @@ data class ShellLayoutPolicy(
         width >= railFrom -> ShellLayoutMode.Rail
         else -> ShellLayoutMode.BottomBar
     }
+
+    /** Whether [resolve] gives [ShellLayoutMode.BottomBar] for some window: every threshold is above zero. */
+    val reachesBottomBar: Boolean
+        get() = widthThresholds.none { 0.dp >= it }
+
+    /**
+     * Whether [resolve] gives a rail or the permanent drawer for some window: one threshold is a
+     * finite width. [Dp.Infinity] turns a mode off.
+     */
+    val reachesWideNavigation: Boolean
+        get() = widthThresholds.any { it.value.isFinite() }
+
+    private val widthThresholds: List<Dp>
+        get() = listOf(railFrom, expandedRailFrom, permanentDrawerFrom)
 }
 
 /** The layout the shell is currently drawing, and the window it is drawing it for. */
@@ -87,11 +101,6 @@ data class ShellLayoutInfo(
     val contentMaxWidth: Dp = Dp.Unspecified,
     /** Whether the window is tall enough for large, collapsing app bars. */
     val allowsLargeTopBar: Boolean = true,
-    /**
-     * [ShellLayoutPolicy.contentMaxWidth] whether or not the developer options lift it, so a
-     * setting that limits the width can tell whether the app sets a limit at all.
-     */
-    val declaredContentMaxWidth: Dp = contentMaxWidth,
 ) {
     /** The width a destination's content is limited to, given its own [ContentWidth]. */
     fun maxWidthFor(contentWidth: ContentWidth): Dp = when (contentWidth) {
@@ -122,7 +131,6 @@ fun rememberShellLayoutInfo(
         listDetail = width >= policy.listDetailFrom,
         contentMaxWidth = if (limitContentWidth) policy.contentMaxWidth else Dp.Unspecified,
         allowsLargeTopBar = height >= policy.largeTopBarFrom,
-        declaredContentMaxWidth = policy.contentMaxWidth,
     )
 }
 

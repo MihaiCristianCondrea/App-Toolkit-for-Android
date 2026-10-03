@@ -20,7 +20,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import androidx.navigation3.runtime.NavKey
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 
 /**
  * A setting the settings search can find: a row on one of the settings pages, rather than the
@@ -43,10 +42,17 @@ data class SettingsSearchEntry(
 /**
  * The searchable rows one settings page contributes. Each page's module binds one in Koin, and
  * the settings list collects them all with `getAll`, so the list depends on none of the pages.
+ * [settingsSearchProvider] builds one with the page's section and destination given once.
  *
- * [entries] receives the app's graph, so a page can leave out the rows it only shows for some
- * apps, such as a bottom bar's options in an app without tabs.
+ * Bind each with a name of its own, `single<SettingsSearchProvider>(named("reader")) { ... }`:
+ * Koin keeps only the last of two bindings with the same name, or with none. Binding the name of a
+ * Toolkit page's provider (`display`, `theme`, `privacy`, `about`, `advanced`) replaces its rows.
+ *
+ * [entries] receives the app's declared shell as a [SettingsSearchContext], so a page lists the
+ * rows it shows in this app, under the same conditions as the page: a bottom bar's options only
+ * where the app uses bottom navigation. Rows whose destination the graph does not register are
+ * left out of the results.
  */
 fun interface SettingsSearchProvider {
-    fun entries(graph: ShellGraph): List<SettingsSearchEntry>
+    fun entries(context: SettingsSearchContext): List<SettingsSearchEntry>
 }

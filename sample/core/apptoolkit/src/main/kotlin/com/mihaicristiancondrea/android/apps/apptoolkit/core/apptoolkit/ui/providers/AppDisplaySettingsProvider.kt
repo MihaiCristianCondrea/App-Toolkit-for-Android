@@ -25,8 +25,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.provi
  * Supplies the sample's startup-destination dialog to toolkit display settings.
  *
  * The dialog reports only a confirmed route; persistence remains owned by the toolkit state holder.
+ *
+ * @param startupPageChoices How many startup routes the dialog lists, null when the host binds none.
  */
-class AppDisplaySettingsProvider : DisplaySettingsProvider {
+class AppDisplaySettingsProvider(
+    override val startupPageChoices: Int? = null,
+) : DisplaySettingsProvider {
     override val supportsStartupPage: Boolean = true
 
     @Composable

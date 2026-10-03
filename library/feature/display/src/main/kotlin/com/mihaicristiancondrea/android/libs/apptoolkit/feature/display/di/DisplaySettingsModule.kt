@@ -26,7 +26,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val displaySettingsModule: Module = module {
-    single<SettingsSearchProvider>(named("display")) { displaySettingsSearch }
+    single<SettingsSearchProvider>(named("display")) { displaySettingsSearch(startup = getOrNull()) }
     viewModel {
         DisplaySettingsViewModel(
             displayPreferences = get(),

@@ -133,4 +133,13 @@
     <string name="tiles_qs_integration_summary_format">不必開啟 App Toolkit，即可從手機的「快速設定」使用 %1$s。</string>
     <string name="tiles_add_to_qs">新增至「快速設定」</string>
     <string name="tiles_search_hint">搜尋工具</string>
+    <string name="tools_settings_title">工具設定</string>
+    <string name="tools_settings_counter">計數器</string>
+    <string name="tools_settings_reset_counter">重設計數器</string>
+    <string name="tools_settings_reset_counter_summary">將與計數器資訊方塊共用的計數歸零</string>
+    <string name="tools_settings_list">工具清單</string>
+    <string name="tools_settings_expand_all">展開所有類別</string>
+    <string name="tools_settings_expand_all_summary">顯示清單中的每個工具</string>
+    <string name="tools_settings_collapse_all">收合所有類別</string>
+    <string name="tools_settings_collapse_all_summary">只顯示類別標題</string>
 </resources>

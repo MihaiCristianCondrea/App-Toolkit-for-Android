@@ -47,10 +47,14 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MorseTo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ReactionTestToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SosToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ToolkitTilesViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ToolsSettingsViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.search.toolsSettingsSearch
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val tilesModule: Module = module {
@@ -118,4 +122,12 @@ val tilesModule: Module = module {
         )
     }
     viewModel { ReactionTestToolViewModel(telemetryRepository = get()) }
+    viewModel {
+        ToolsSettingsViewModel(
+            counterRepository = get(),
+            tilesRepository = get(),
+            telemetryRepository = get(),
+        )
+    }
+    single<SettingsSearchProvider>(named("tools")) { toolsSettingsSearch }
 }

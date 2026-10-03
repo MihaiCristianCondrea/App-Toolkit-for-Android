@@ -38,7 +38,11 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.Co
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.navigation.ArticleDemoRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.navigation.ComponentsRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ToolkitTilesScreen
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ToolsSettingsScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ToolkitTilesRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ToolsSettingsRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ToolsSettingsAction
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.toolkitFooter
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.toolkitGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
@@ -55,8 +59,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as D
 const val ACTION_OPEN_SETTINGS: String = "com.d4rk.android.apps.apptoolkit.action.OPEN_SETTINGS"
 
 /**
- * The sample's whole navigation: two tabs, the drawer, the overflow menu, the components page and
- * its article bar demo, the optional bottom banner and the intents it answers. The demo registers a
+ * The sample's whole navigation: two tabs, the tools settings page the tools tab's app bar opens,
+ * the drawer, the overflow menu, the components page and its article bar demo, the optional bottom
+ * banner and the intents it answers. The tools settings page is not in the root settings list; the
+ * settings search finds it through the provider `:sample:feature:tiles` binds. The demo registers a
  * small bar, the one an article draws anyway, so it does not open large for its first frame. `toolkitGraph` adds the Toolkit's own pages (settings,
  * help, support, the first-launch start screens and the rest).
  *
@@ -83,8 +89,15 @@ fun appGraph(
         ),
         // The app bar holds a search field for the tools; the screen filters by its query.
         search = TabSearch(hint = TilesR.string.tiles_search_hint),
+        actions = { ToolsSettingsAction() },
     ) {
         ToolkitTilesScreen()
+    }
+    page<ToolsSettingsRoute>(
+        paneRole = PaneRole.Detail,
+        title = { stringResource(TilesR.string.tools_settings_title) },
+    ) {
+        ToolsSettingsScreen()
     }
     tab(
         key = AppsListRoute,

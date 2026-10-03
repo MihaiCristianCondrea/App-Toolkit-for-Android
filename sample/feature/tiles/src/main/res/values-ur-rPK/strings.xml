@@ -133,4 +133,13 @@
     <string name="tiles_qs_integration_summary_format">App Toolkit کھولے بغیر اپنے فون کی فوری ترتیبات سے %1$s استعمال کریں۔</string>
     <string name="tiles_add_to_qs">فوری ترتیبات میں شامل کریں</string>
     <string name="tiles_search_hint">ٹولز تلاش کریں</string>
+    <string name="tools_settings_title">ٹول کی ترتیبات</string>
+    <string name="tools_settings_counter">کاؤنٹر</string>
+    <string name="tools_settings_reset_counter">کاؤنٹر ری سیٹ کریں</string>
+    <string name="tools_settings_reset_counter_summary">کاؤنٹر ٹائل کے ساتھ مشترک گنتی کو صفر پر لے آتا ہے</string>
+    <string name="tools_settings_list">ٹولز کی فہرست</string>
+    <string name="tools_settings_expand_all">تمام زمرے کھولیں</string>
+    <string name="tools_settings_expand_all_summary">فہرست میں ہر ٹول دکھائیں</string>
+    <string name="tools_settings_collapse_all">تمام زمرے بند کریں</string>
+    <string name="tools_settings_collapse_all_summary">صرف زمروں کے عنوان دکھائیں</string>
 </resources>

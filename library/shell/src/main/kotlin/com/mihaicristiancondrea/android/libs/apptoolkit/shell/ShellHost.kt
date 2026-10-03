@@ -75,6 +75,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGr
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalShellLayout
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutPolicy
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.LocalShellCapabilities
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellCapabilities
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.rememberShellLayoutInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.LocalShellMotion
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.ScreenTransition
@@ -163,6 +165,7 @@ fun ShellHost(
 
     val activity = LocalActivity.current
     val layoutInfo = rememberShellLayoutInfo(layoutPolicy, current.layoutMode, current.limitContentWidth)
+    val capabilities = remember(graph, layoutPolicy) { ShellCapabilities.of(graph, layoutPolicy) }
     val motion = rememberShellMotion(
         tabStyle = current.tabTransition,
         durationScale = current.animationSpeed.durationScale,
@@ -191,6 +194,7 @@ fun ShellHost(
         LocalShellPreferences provides store,
         LocalShellSettings provides current,
         LocalShellLayout provides layoutInfo,
+        LocalShellCapabilities provides capabilities,
         LocalShellMotion provides motion,
         LocalTopBarStyleOverride provides current.topBarOverride.style,
         LocalHideTopBarOnScroll provides current.hideTopBarOnScroll,

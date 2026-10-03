@@ -125,7 +125,13 @@ available; data-layer callers should use the lower-level API.
 - `SettingsSearchEntry` and `SettingsSearchProvider`, the settings search's contract: each settings
   page's module binds a provider in Koin listing its rows (title, the page they live on, the key
   they open), and the settings list collects them all with `getAll`, depending on none of the
-  pages. A provider receives the app's `ShellGraph`, to leave out rows the app does not show.
+  pages. A provider's one input is a `SettingsSearchContext`, the app's `ShellGraph` and
+  `ShellCapabilities`, to leave out rows the app does not show under the same rules as the page.
+  `settingsSearchProvider(section, destination) { preference(...) }` builds one through
+  `SettingsSearchScope`, which reads `capabilities` and `graph`, with the page's section and
+  destination given once, and `unregisteredDestinations(context)` lets a test catch rows whose page
+  the graph does not register.
+  See [Settings search](../../feature/settings/README.md#settings-search).
 - `IssueReporterSheet`, a `fun interface` whose `Show(onDismissRequest)` draws the issue reporter.
   Resolve it with `getKoin().getOrNull()`: it is absent when the issue reporter is not installed.
 - `AnimatedIconButtonDirection` slides, fades and scales in and out from its edge, and crossfades

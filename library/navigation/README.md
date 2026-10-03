@@ -20,6 +20,7 @@ it in the activity; this module has no chrome of its own.
 - `ScreenTransition`, `ShellTransitions`, the tab transitions and `CrossActivityBackMotion`, in
   `motion`.
 - `ShellLayoutPolicy`, `ShellLayoutMode` and `ShellLayout`, in `layout`.
+- `ShellCapabilities`, in `graph`: what the app's declared graph and layout policy can show.
 - The article app bar a screen declares, in `layout`: `ArticleTopBarHost`, `LocalArticleTopBarHost`,
   `ScaffoldArticleTopBar`, the compact title and reading progress line every bar draws for it
   (`ArticleTopBarTitle`, `ArticleReadingProgress`), and `readingProgress()` for `ScrollState` and
@@ -191,12 +192,40 @@ Screens then call `LocalShellNavigator.current.navigate(key)` with any registere
   the one on top decides, pages above the tabs. `LocalBesideNavigationTransitions` and
   `besideNavigationTitle()` let the title of the tab's bar and of the page standing in for it
   grow or shrink into one another as one replaces the other in place. `ShellLayoutInfo`
-  carries both the content width in force and `declaredContentMaxWidth`, the app's own limit.
+  carries the layout drawn now and the content width in force.
+- `ShellCapabilities`, `ShellCapabilities.of(graph, policy)` and `LocalShellCapabilities`, with
+  `ShellLayoutPolicy.reachesBottomBar` and `reachesWideNavigation`. See
+  [Capabilities](#capabilities).
 - `AppToolkitNavKey` and its keys. Their class names are part of saved state: renaming or moving
   one loses a restored back stack that held it.
 - `ScaffoldArticleTopBar`, `ArticleTopBarHost` (`isDeclared`, `isCompact`, `hasProgress`,
   `progress()`, `title`, `brand`, `brandContentDescription`), `LocalArticleTopBarHost`,
   `ArticleTopBarTitle`, `ArticleReadingProgress`, `ReadingProgressHeight` and `readingProgress()`.
+
+## Capabilities
+
+`ShellCapabilities` says what an app's declared shell can show, so a setting can tell whether it
+has anything to change in this app. `ShellCapabilities.of(graph, policy)` reads the graph and the
+layout policy and nothing else; `ShellHost` builds it once and provides it as
+`LocalShellCapabilities`, and the settings search hands the same value to its providers.
+
+| Property | True when |
+|---|---|
+| `hasTabs`, `hasMultipleTabs` | the graph declares one, or more than one, tab |
+| `usesBottomNavigation` | there are tabs and the policy resolves to the bottom bar on some window (`reachesBottomBar`) |
+| `usesWideNavigation` | there are tabs and the policy resolves to a rail or permanent drawer on some window (`reachesWideNavigation`) |
+| `hasShellTopBars` | the shell draws an app bar: the tabs', or a page drawn in the page frame with a title |
+| `hasContentWidthLimit` | the policy sets `contentMaxWidth` |
+| `hasBanner`, `hasPlayer`, `hasAccessories` | the graph declares them and has tabs, whose chrome shows them |
+| `hasMultipleStartOptions` | the app can start in more than one place, tabs and start screens |
+| `hasBackNavigation` | the graph has more than one destination |
+
+- **Declared, not current.** The capabilities never read the window or the developer options: an
+  app whose policy shows a bottom bar on phones `usesBottomNavigation` while a tablet draws a rail,
+  or while the developer options force one.
+- **Semantic, so rules are written once.** Settings ask `hasMultipleTabs` or `usesBottomNavigation`
+  instead of counting `graph.tabs` or reading the layout, so the display settings, their search
+  and the developer options cannot each apply a slightly different rule.
 
 ## Article app bar
 
@@ -228,7 +257,7 @@ ScaffoldArticleTopBar(
 - **Accessibility.** The compact title is in the semantics tree only while shown. The line is a
   progress bar that moves in tenths and is not a live region, so a screen reader reads it when
   focused instead of announcing every scroll.
-- **Precedence.** A hidden bar, from the destination or the display settings' override, stays
+- **Precedence.** A hidden bar, from the destination or the developer options' override, stays
   hidden. A large style, the destination's or the override's, is drawn small while an article is
   declared, since it would show a second, expanded title above the article's own header; register
   an article page with `topBar = TopBarStyle.Small` to keep it small from its first frame, before

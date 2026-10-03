@@ -133,4 +133,13 @@
     <string name="tiles_qs_integration_summary_format">ใช้ %1$s จากการตั้งค่าด่วนของโทรศัพท์โดยไม่ต้องเปิด App Toolkit</string>
     <string name="tiles_add_to_qs">เพิ่มในการตั้งค่าด่วน</string>
     <string name="tiles_search_hint">ค้นหาเครื่องมือ</string>
+    <string name="tools_settings_title">การตั้งค่าเครื่องมือ</string>
+    <string name="tools_settings_counter">ตัวนับ</string>
+    <string name="tools_settings_reset_counter">รีเซ็ตตัวนับ</string>
+    <string name="tools_settings_reset_counter_summary">ตั้งค่าจำนวนที่ใช้ร่วมกับไทล์ตัวนับกลับเป็นศูนย์</string>
+    <string name="tools_settings_list">รายการเครื่องมือ</string>
+    <string name="tools_settings_expand_all">ขยายทุกหมวดหมู่</string>
+    <string name="tools_settings_expand_all_summary">แสดงเครื่องมือทั้งหมดในรายการ</string>
+    <string name="tools_settings_collapse_all">ยุบทุกหมวดหมู่</string>
+    <string name="tools_settings_collapse_all_summary">แสดงเฉพาะชื่อหมวดหมู่</string>
 </resources>

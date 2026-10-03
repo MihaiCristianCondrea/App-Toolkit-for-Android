@@ -17,8 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.search
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchEntry
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.settingsSearchProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsRoute
 
@@ -26,13 +25,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.Advanc
  * The advanced page's rows the settings search finds. The bug report shows only where an issue
  * reporter is bound, and the developer options only once unlocked, so neither is listed.
  */
-internal val advancedSettingsSearch = SettingsSearchProvider { _ ->
-    listOf(
-        SettingsSearchEntry(
-            title = R.string.clear_cache,
-            section = R.string.advanced,
-            destination = AdvancedSettingsRoute,
-            summary = R.string.summary_preference_settings_clear_cache,
-        ),
-    )
+internal val advancedSettingsSearch = settingsSearchProvider(section = R.string.advanced, destination = AdvancedSettingsRoute) {
+    preference(R.string.clear_cache, summary = R.string.summary_preference_settings_clear_cache)
 }

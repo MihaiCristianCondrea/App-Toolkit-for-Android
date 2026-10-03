@@ -28,21 +28,18 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.isSpecified
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
@@ -58,7 +55,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenSta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItem
@@ -67,21 +63,17 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.contracts.DisplaySettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.models.DisplaySettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.models.DisplayCategory
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.models.DisplayRow
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.models.displayRows
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.providers.DisplaySettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.states.DisplaySettingsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.views.dialogs.SelectLanguageAlertDialog
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.views.preferences.ShellDisplayRows
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalShellLayout
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.LocalShellCapabilities
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.ThemeSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.InMemoryShellPreferences
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellPreferences
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellSettings
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -104,9 +96,9 @@ private object DisplayActionNames {
 }
 
 /**
- * Displays persisted appearance and interaction preferences, plus the shell options supported
- * by the host graph. Works only as a page of `ShellHost`, which provides the shell's settings
- * and the graph that decides which shell rows show.
+ * Displays the person's appearance, interaction, navigation and language preferences. Works only
+ * as a page of `ShellHost`, whose capabilities decide which rows mean something in this app; the
+ * settings search lists the same rows. The shell's own variations are developer options.
  *
  * Owns [DisplaySettingsViewModel], tracking, messages, the host's startup page dialog, the
  * language dialog and the system language settings, and logs each of their GA4 events.
@@ -134,20 +126,13 @@ fun DisplaySettingsScreen() {
     var showLanguageDialog: Boolean by rememberSaveable { mutableStateOf(false) }
     var showStartupDialog: Boolean by rememberSaveable { mutableStateOf(false) }
 
-    val graph = LocalShellGraph.current
-    val shellRows = ShellDisplayRows(
-        settings = LocalShellSettings.current,
-        preferences = LocalShellPreferences.current,
-        scope = rememberCoroutineScope(),
-    )
+    val capabilities = LocalShellCapabilities.current
+    val rows = remember(capabilities, provider) { displayRows(capabilities, provider) }
 
     DisplaySettingsScreenContent(
         state = state,
         onEvent = viewModel::onEvent,
-        shellRows = shellRows,
-        tabCount = graph.tabs.size,
-        appLimitsWidth = LocalShellLayout.current.declaredContentMaxWidth.isSpecified,
-        supportsStartupPage = provider.supportsStartupPage,
+        rows = rows,
         onDarkThemeChanged = { isChecked ->
             val targetMode =
                 if (isChecked) DataStoreNamesConstants.THEME_MODE_DARK
@@ -287,16 +272,11 @@ private fun displayActionEvent(
 }
 
 /**
- * The display settings for [state], or their loading or failure state. Each shell row shows only
- * where the app's graph gives it something to change: nothing about a bottom bar without tabs,
- * no tab transition or start page with a single tab, and no content width row unless the app
- * sets a maximum width.
+ * The display settings for [state], or their loading or failure state: the [rows] that mean
+ * something in this app, under their headings, and no heading without a row.
  *
  * @param onEvent Receives the events [DisplaySettingsViewModel] handles.
- * @param shellRows The shell's layout choices, which write to the shell's own store.
- * @param tabCount How many tabs the app's graph has.
- * @param appLimitsWidth Whether the app's layout policy sets a maximum content width.
- * @param supportsStartupPage Whether the host supplies a startup page dialog.
+ * @param rows The rows to show, from `displayRows`, in the page's order.
  * @param onDarkThemeChanged The dark theme switch was toggled.
  * @param onOpenThemeSettings The dark theme row was tapped.
  * @param onOpenStartupPage The startup page row was tapped.
@@ -307,10 +287,7 @@ private fun displayActionEvent(
 internal fun DisplaySettingsScreenContent(
     state: DisplaySettingsUiState,
     onEvent: (DisplaySettingsEvent) -> Unit,
-    shellRows: ShellDisplayRows,
-    tabCount: Int,
-    appLimitsWidth: Boolean,
-    supportsStartupPage: Boolean,
+    rows: List<DisplayRow>,
     onDarkThemeChanged: (Boolean) -> Unit,
     onOpenThemeSettings: () -> Unit,
     onOpenStartupPage: () -> Unit,
@@ -326,11 +303,8 @@ internal fun DisplaySettingsScreenContent(
     ) { ready ->
         DisplaySettingsList(
             settings = ready.value,
+            rows = rows,
             onEvent = onEvent,
-            shellRows = shellRows,
-            tabCount = tabCount,
-            appLimitsWidth = appLimitsWidth,
-            supportsStartupPage = supportsStartupPage,
             onDarkThemeChanged = onDarkThemeChanged,
             onOpenThemeSettings = onOpenThemeSettings,
             onOpenStartupPage = onOpenStartupPage,
@@ -343,18 +317,14 @@ internal fun DisplaySettingsScreenContent(
 @Composable
 private fun DisplaySettingsList(
     settings: DisplaySettings,
+    rows: List<DisplayRow>,
     onEvent: (DisplaySettingsEvent) -> Unit,
-    shellRows: ShellDisplayRows,
-    tabCount: Int,
-    appLimitsWidth: Boolean,
-    supportsStartupPage: Boolean,
     onDarkThemeChanged: (Boolean) -> Unit,
     onOpenThemeSettings: () -> Unit,
     onOpenStartupPage: () -> Unit,
     onOpenLanguage: () -> Unit,
     contentPadding: PaddingValues,
 ) {
-    val hasTabs: Boolean = tabCount > 0
     val isSystemDarkTheme: Boolean = isSystemInDarkTheme()
     val isDarkThemeActive: Boolean = when (settings.themeMode) {
         DataStoreNamesConstants.THEME_MODE_DARK -> true
@@ -368,158 +338,120 @@ private fun DisplaySettingsList(
 
         else -> stringResource(id = R.string.will_turn_on_automatically_by_system)
     }
-
-    val appearanceRows: List<@Composable (Modifier) -> Unit> = buildList {
-        add { modifier ->
-            SwitchPreferenceItemWithDivider(
-                title = stringResource(id = R.string.dark_theme),
-                summary = themeSummary,
-                checked = isDarkThemeActive,
-                onCheckedChange = onDarkThemeChanged,
-                onSwitchClick = onDarkThemeChanged,
-                onClick = onOpenThemeSettings,
-                modifier = modifier,
-            )
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            add { modifier ->
-                SwitchPreferenceItem(
-                    title = stringResource(id = R.string.dynamic_colors),
-                    summary = stringResource(id = R.string.summary_preference_settings_dynamic_colors),
-                    checked = settings.dynamicColors,
-                    onCheckedChange = { isChecked ->
-                        onEvent(DisplaySettingsEvent.DynamicColorsChanged(isChecked))
-                    },
-                    modifier = modifier,
-                )
-            }
-        }
-        add { modifier -> shellRows.TopBarStyle(modifier) }
-        add { modifier -> shellRows.HideTopBarOnScroll(modifier) }
-        if (hasTabs) add { modifier -> shellRows.NavigationTint(modifier) }
-        if (appLimitsWidth) add { modifier -> shellRows.ContentWidth(modifier) }
+    val categories: List<Pair<DisplayCategory, List<DisplayRow>>> = remember(rows) {
+        rows.groupBy { it.category }.toList()
     }
-
-    val navigationRows: List<@Composable (Modifier) -> Unit> = buildList {
-        if (supportsStartupPage && tabCount > 1) {
-            add { modifier ->
-                SettingsPreferenceItem(
-                    title = stringResource(id = CoreUiR.string.startup_page),
-                    summary = stringResource(id = R.string.summary_preference_settings_startup_page),
-                    onClick = onOpenStartupPage,
-                    ga4Event = displayActionGa4Event(
-                        actionName = DisplayActionNames.OPEN_STARTUP_DIALOG,
-                        preferenceKey = DisplayPreferenceKeys.STARTUP_PAGE,
-                    ),
-                    modifier = modifier,
-                )
-            }
-        }
-        if (hasTabs) {
-            add { modifier -> shellRows.NavigationBarStyle(modifier) }
-            add { modifier ->
-                SwitchPreferenceItem(
-                    title = stringResource(id = R.string.show_labels_on_bottom_bar),
-                    summary = stringResource(id = R.string.summary_preference_settings_show_labels_on_bottom_bar),
-                    checked = settings.showBottomBarLabels,
-                    onCheckedChange = { isChecked ->
-                        onEvent(DisplaySettingsEvent.BottomBarLabelsChanged(isChecked))
-                    },
-                    modifier = modifier,
-                )
-            }
-            add { modifier -> shellRows.HideBottomBarOnScroll(modifier) }
-        }
-        if (tabCount > 1) add { modifier -> shellRows.TabTransition(modifier) }
-        add { modifier -> shellRows.BackEdge(modifier) }
-    }
-
-    val appearanceTitle = stringResource(id = R.string.appearance)
-    val navigationTitle = stringResource(id = R.string.navigation)
 
     LazyColumn(
         contentPadding = contentPadding,
         modifier = Modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
     ) {
-        group(appearanceTitle, appearanceRows)
-
-        item {
-            PreferenceCategoryItem(title = stringResource(id = R.string.app_behavior))
-        }
-
-        item {
-            SwitchPreferenceItem(
-                title = stringResource(id = R.string.bounce_buttons),
-                summary = stringResource(id = R.string.summary_preference_settings_bounce_buttons),
-                checked = settings.bouncyButtons,
-                onCheckedChange = { isChecked ->
-                    onEvent(DisplaySettingsEvent.BouncyButtonsChanged(isChecked))
-                },
-                modifier = Modifier.groupedPreferenceItem(
-                    position = GroupedItemPosition.SINGLE,
+        categories.forEach { (category, categoryRows) ->
+            item(key = "category_${category.name}") {
+                PreferenceCategoryItem(title = stringResource(id = category.title))
+            }
+            itemsIndexed(categoryRows, key = { _, row -> "row_${row.name}" }) { index, row ->
+                val rowModifier = Modifier.groupedPreferenceItem(
+                    position = groupedItemPosition(index, categoryRows.size),
                     outerRadius = SizeConstants.LargeMediumSize,
                 )
-            )
-        }
+                when (row) {
+                    DisplayRow.DarkTheme -> SwitchPreferenceItemWithDivider(
+                        title = stringResource(id = row.title),
+                        summary = themeSummary,
+                        checked = isDarkThemeActive,
+                        onCheckedChange = onDarkThemeChanged,
+                        onSwitchClick = onDarkThemeChanged,
+                        onClick = onOpenThemeSettings,
+                        modifier = rowModifier,
+                    )
 
-        group(navigationTitle, navigationRows)
+                    DisplayRow.DynamicColors -> SwitchPreferenceItem(
+                        title = stringResource(id = row.title),
+                        summary = row.summaryText(),
+                        checked = settings.dynamicColors,
+                        onCheckedChange = { isChecked -> onEvent(DisplaySettingsEvent.DynamicColorsChanged(isChecked)) },
+                        modifier = rowModifier,
+                    )
 
-        item {
-            PreferenceCategoryItem(title = stringResource(id = R.string.language))
-        }
+                    DisplayRow.BounceButtons -> SwitchPreferenceItem(
+                        title = stringResource(id = row.title),
+                        summary = row.summaryText(),
+                        checked = settings.bouncyButtons,
+                        onCheckedChange = { isChecked -> onEvent(DisplaySettingsEvent.BouncyButtonsChanged(isChecked)) },
+                        modifier = rowModifier,
+                    )
 
-        item {
-            SettingsPreferenceItem(
-                title = stringResource(id = R.string.language),
-                summary = stringResource(id = R.string.summary_preference_settings_language),
-                onClick = onOpenLanguage,
-                modifier = Modifier.groupedPreferenceItem(
-                    position = GroupedItemPosition.SINGLE,
-                    outerRadius = SizeConstants.LargeMediumSize,
-                )
-            )
+                    DisplayRow.StartupPage -> SettingsPreferenceItem(
+                        title = stringResource(id = row.title),
+                        summary = row.summaryText(),
+                        onClick = onOpenStartupPage,
+                        ga4Event = displayActionGa4Event(
+                            actionName = DisplayActionNames.OPEN_STARTUP_DIALOG,
+                            preferenceKey = DisplayPreferenceKeys.STARTUP_PAGE,
+                        ),
+                        modifier = rowModifier,
+                    )
+
+                    DisplayRow.NavigationLabels -> SwitchPreferenceItem(
+                        title = stringResource(id = row.title),
+                        summary = row.summaryText(),
+                        checked = settings.showBottomBarLabels,
+                        onCheckedChange = { isChecked -> onEvent(DisplaySettingsEvent.BottomBarLabelsChanged(isChecked)) },
+                        modifier = rowModifier,
+                    )
+
+                    DisplayRow.Language -> SettingsPreferenceItem(
+                        title = stringResource(id = row.title),
+                        summary = row.summaryText(),
+                        onClick = onOpenLanguage,
+                        modifier = rowModifier,
+                    )
+                }
+            }
         }
     }
 }
 
-/** A category and its rows, drawn as one group of cards; nothing when there are no rows. */
-private fun LazyListScope.group(title: String, rows: List<@Composable (Modifier) -> Unit>) {
-    if (rows.isEmpty()) return
-    item { PreferenceCategoryItem(title = title) }
-    itemsIndexed(rows) { index, row ->
-        row(
-            Modifier.groupedPreferenceItem(
-                position = groupedItemPosition(index, rows.size),
-                outerRadius = SizeConstants.LargeMediumSize,
-            )
+@Composable
+private fun DisplayRow.summaryText(): String? = summary?.let { stringResource(id = it) }
+
+private val PreviewSettings = DisplaySettings(
+    themeMode = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
+    dynamicColors = true,
+    bouncyButtons = true,
+    showBottomBarLabels = true,
+    language = "en",
+    startupRoute = "",
+)
+
+/** Every row, as in an app with several tabs that offers a startup page. */
+@Preview(showBackground = true)
+@Composable
+private fun DisplaySettingsScreenContentPreview() {
+    MaterialTheme {
+        DisplaySettingsScreenContent(
+            state = DisplaySettingsUiState(settings = Loadable.Ready(PreviewSettings)),
+            onEvent = {},
+            rows = DisplayRow.entries,
+            onDarkThemeChanged = {},
+            onOpenThemeSettings = {},
+            onOpenStartupPage = {},
+            onOpenLanguage = {},
         )
     }
 }
 
+/** An app without tabs: no navigation heading. */
 @Preview(showBackground = true)
 @Composable
-private fun DisplaySettingsScreenContentPreview() {
-    val scope = rememberCoroutineScope()
+private fun DisplaySettingsScreenContentWithoutTabsPreview() {
     MaterialTheme {
         DisplaySettingsScreenContent(
-            state = DisplaySettingsUiState(
-                settings = Loadable.Ready(
-                    DisplaySettings(
-                        themeMode = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
-                        dynamicColors = true,
-                        bouncyButtons = true,
-                        showBottomBarLabels = true,
-                        language = "en",
-                        startupRoute = "",
-                    )
-                ),
-            ),
+            state = DisplaySettingsUiState(settings = Loadable.Ready(PreviewSettings)),
             onEvent = {},
-            shellRows = remember(scope) { ShellDisplayRows(ShellSettings(), InMemoryShellPreferences(), scope) },
-            tabCount = 3,
-            appLimitsWidth = true,
-            supportsStartupPage = true,
+            rows = DisplayRow.entries.filter { it.category != DisplayCategory.Navigation },
             onDarkThemeChanged = {},
             onOpenThemeSettings = {},
             onOpenStartupPage = {},
@@ -531,15 +463,11 @@ private fun DisplaySettingsScreenContentPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun DisplaySettingsScreenContentLoadingPreview() {
-    val scope = rememberCoroutineScope()
     MaterialTheme {
         DisplaySettingsScreenContent(
             state = DisplaySettingsUiState(settings = Loadable.Loading),
             onEvent = {},
-            shellRows = remember(scope) { ShellDisplayRows(ShellSettings(), InMemoryShellPreferences(), scope) },
-            tabCount = 3,
-            appLimitsWidth = false,
-            supportsStartupPage = false,
+            rows = DisplayRow.entries,
             onDarkThemeChanged = {},
             onOpenThemeSettings = {},
             onOpenStartupPage = {},

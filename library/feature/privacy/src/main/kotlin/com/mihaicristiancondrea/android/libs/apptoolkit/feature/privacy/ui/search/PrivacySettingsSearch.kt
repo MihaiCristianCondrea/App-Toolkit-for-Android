@@ -17,24 +17,26 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.search
 
-import androidx.navigation3.runtime.NavKey
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchEntry
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.settingsSearchProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsRoute
 
 /**
  * The privacy page's rows the settings search finds. Each opens the page the row opens, rather
  * than the privacy page it sits on.
  */
-internal val privacySettingsSearch = SettingsSearchProvider { _ ->
-    fun entry(title: Int, summary: Int, destination: NavKey) =
-        SettingsSearchEntry(title = title, section = R.string.security_and_privacy, destination = destination, summary = summary)
-    listOf(
-        entry(R.string.permissions, R.string.summary_preference_settings_permissions, PermissionsRoute),
-        entry(R.string.ads, R.string.summary_preference_settings_ads, AdsSettingsRoute),
-        entry(R.string.usage_and_diagnostics, R.string.summary_preference_settings_usage_and_diagnostics, DiagnosticsSettingsRoute),
+internal val privacySettingsSearch = settingsSearchProvider(
+    section = R.string.security_and_privacy,
+    destination = PrivacySettingsRoute,
+) {
+    preference(R.string.permissions, summary = R.string.summary_preference_settings_permissions, destination = PermissionsRoute)
+    preference(R.string.ads, summary = R.string.summary_preference_settings_ads, destination = AdsSettingsRoute)
+    preference(
+        R.string.usage_and_diagnostics,
+        summary = R.string.summary_preference_settings_usage_and_diagnostics,
+        destination = DiagnosticsSettingsRoute,
     )
 }

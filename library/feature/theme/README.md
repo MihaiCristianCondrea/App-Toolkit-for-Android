@@ -16,8 +16,8 @@ screen's easter egg unlocks.
 - `themeSettingsPage()`, the registration of `ThemeSettingsRoute`. The display settings' dark theme
   row opens it by key. The page is `PaneRole.None`: display is itself a detail beside the settings
   list, and a detail opened from a detail would replace it instead of stacking on it.
-- Its rows in the settings search (`SettingsSearchProvider`): theme mode, AMOLED, wallpaper colors
-  and palette.
+- Its rows in the settings search, a `settingsSearchProvider` bound as `theme`: theme mode, AMOLED,
+  wallpaper colors and palette.
 - `SeasonalThemeManager`, `SeasonalThemeOverlay`, `SeasonalThemeOverlayViewModel`, its state and
   event, and `HolidayGreetingDialog`.
 - `themeSettingsModule`, which registers the built-in qualified palettes and resolves the host's

@@ -133,4 +133,13 @@
     <string name="tiles_qs_integration_summary_format">Använd %1$s från telefonens Snabbinställningar utan att öppna App Toolkit.</string>
     <string name="tiles_add_to_qs">Lägg till i Snabbinställningar</string>
     <string name="tiles_search_hint">Sök verktyg</string>
+    <string name="tools_settings_title">Verktygsinställningar</string>
+    <string name="tools_settings_counter">Räknare</string>
+    <string name="tools_settings_reset_counter">Nollställ räknaren</string>
+    <string name="tools_settings_reset_counter_summary">Nollställer antalet som delas med Räknare-rutan</string>
+    <string name="tools_settings_list">Verktygslista</string>
+    <string name="tools_settings_expand_all">Expandera alla kategorier</string>
+    <string name="tools_settings_expand_all_summary">Visar alla verktyg i listan</string>
+    <string name="tools_settings_collapse_all">Fäll ihop alla kategorier</string>
+    <string name="tools_settings_collapse_all_summary">Visar bara kategoriernas rubriker</string>
 </resources>

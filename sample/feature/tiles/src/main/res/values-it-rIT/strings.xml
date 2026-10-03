@@ -133,4 +133,13 @@
     <string name="tiles_qs_integration_summary_format">Usa %1$s dalle Impostazioni rapide del telefono senza aprire App Toolkit.</string>
     <string name="tiles_add_to_qs">Aggiungi a Impostazioni rapide</string>
     <string name="tiles_search_hint">Cerca strumenti</string>
+    <string name="tools_settings_title">Impostazioni degli strumenti</string>
+    <string name="tools_settings_counter">Contatore</string>
+    <string name="tools_settings_reset_counter">Azzera il contatore</string>
+    <string name="tools_settings_reset_counter_summary">Riporta a zero il conteggio condiviso con il riquadro Contatore</string>
+    <string name="tools_settings_list">Elenco degli strumenti</string>
+    <string name="tools_settings_expand_all">Espandi tutte le categorie</string>
+    <string name="tools_settings_expand_all_summary">Mostra tutti gli strumenti della lista</string>
+    <string name="tools_settings_collapse_all">Comprimi tutte le categorie</string>
+    <string name="tools_settings_collapse_all_summary">Mostra solo i titoli delle categorie</string>
 </resources>

@@ -133,4 +133,13 @@
     <string name="tiles_qs_integration_summary_format">App Toolkit না খুলেই আপনার ফোনের কুইক সেটিংস থেকে %1$s ব্যবহার করুন।</string>
     <string name="tiles_add_to_qs">কুইক সেটিংসে যোগ করুন</string>
     <string name="tiles_search_hint">টুল খুঁজুন</string>
+    <string name="tools_settings_title">টুলের সেটিংস</string>
+    <string name="tools_settings_counter">কাউন্টার</string>
+    <string name="tools_settings_reset_counter">কাউন্টার রিসেট করুন</string>
+    <string name="tools_settings_reset_counter_summary">কাউন্টার টাইলের সাথে ভাগ করা গণনা শূন্যে ফিরিয়ে আনে</string>
+    <string name="tools_settings_list">টুলের তালিকা</string>
+    <string name="tools_settings_expand_all">সব বিভাগ প্রসারিত করুন</string>
+    <string name="tools_settings_expand_all_summary">টুলের তালিকায় প্রতিটি টুল দেখান</string>
+    <string name="tools_settings_collapse_all">সব বিভাগ সংকুচিত করুন</string>
+    <string name="tools_settings_collapse_all_summary">শুধু বিভাগের শিরোনাম দেখান</string>
 </resources>

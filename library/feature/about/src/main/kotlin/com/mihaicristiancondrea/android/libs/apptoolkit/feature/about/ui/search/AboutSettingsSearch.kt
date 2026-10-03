@@ -17,25 +17,17 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.search
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchEntry
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.settingsSearchProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
 
 /**
- * The About page's rows the settings search finds.
+ * The About page's rows the settings search finds. The licenses row opens the licenses page.
  */
-internal val aboutSettingsSearch = SettingsSearchProvider { _ ->
-    listOf(
-        SettingsSearchEntry(title = R.string.app_info, section = CoreUiR.string.about, destination = AboutRoute),
-        SettingsSearchEntry(title = R.string.device_info, section = CoreUiR.string.about, destination = AboutRoute),
-        SettingsSearchEntry(
-            title = R.string.oss_license_title,
-            section = CoreUiR.string.about,
-            destination = LicensesRoute,
-            summary = R.string.summary_preference_settings_oss,
-        ),
-    )
+internal val aboutSettingsSearch = settingsSearchProvider(section = CoreUiR.string.about, destination = AboutRoute) {
+    preference(R.string.app_info)
+    preference(R.string.device_info)
+    preference(R.string.oss_license_title, summary = R.string.summary_preference_settings_oss, destination = LicensesRoute)
 }
