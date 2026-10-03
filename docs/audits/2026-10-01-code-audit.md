@@ -104,8 +104,7 @@ on the sample, and there is no `GlobalScope`, `runBlocking` or `!!` in main code
   the only reason `:library:core:designsystem` depends on `:library:core:datastore`.
 - Shell settings are written from composables through a CompositionLocal
   (`DeveloperOptionItem.kt`), and `:library:feature:developer` depends on all of `:library:shell`
-  just for `shell.settings`. `:library:feature:display` no longer uses the shell; its
-  `api(project(":library:shell"))` can be removed from its build file.
+  just for `shell.settings`. `:library:feature:display` no longer depends on the shell.
 - `BillingRepository` exposes `ProductDetails`. The support screen and state no longer see it, but
   `SupportViewModel` keeps it privately to launch a donation. Billing should:
   - throw from `queryProductDetails` on a non-OK response instead of emitting

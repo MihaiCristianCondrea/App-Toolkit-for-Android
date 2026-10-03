@@ -41,7 +41,7 @@ it means something in the app. The shell's own variations are developer options,
 
 - `:library:core:common`, `:library:core:datastore`, `:library:core:ui` and
   [`:library:navigation`](../../navigation/README.md) for the keys, the graph and the capabilities.
-- No other feature module, and nothing of `:library:shell` any more.
+- No other feature module, and not `:library:shell`.
 
 ## Used by
 

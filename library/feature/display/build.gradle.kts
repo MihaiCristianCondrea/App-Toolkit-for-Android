@@ -48,5 +48,4 @@ dependencies {
     api(project(":library:core:ui"))
     api(project(":library:navigation"))
     // The shell's layout choices it offers, written to the shell's own store.
-    api(project(":library:shell"))
 }

@@ -20,7 +20,7 @@ plugins {
 // Keep the Kotlin DSL plugin aligned with the Gradle wrapper's embedded version;
 // an independent upgrade can select an incompatible script-compiler Kotlin version.
 //noinspection NewerVersionAvailable
-    id("org.gradle.kotlin.kotlin-dsl") version "6.7.3"
+    id("org.gradle.kotlin.kotlin-dsl") version "6.7.6"
 }
 
 group = "com.mihaicristiancondrea.android.apptoolkit.buildlogic"
