@@ -22,4 +22,8 @@
     <string name="error_reporting">Felrapportering</string>
     <string name="summary_preference_settings_bug_report">Skicka felrapporter och funktionsförfrågningar till appens GitHub-sida</string>
     <string name="summary_preference_settings_clear_cache">Rensa tillfälliga applikationsdata.</string>
+    <string name="advanced">Avancerat</string>
+    <string name="developer_options">Utvecklaralternativ</string>
+    <string name="summary_preference_settings_developer_options">Testa startsidan, navigeringslayouten och animeringarna</string>
+    <string name="developer">Utvecklare</string>
 </resources>

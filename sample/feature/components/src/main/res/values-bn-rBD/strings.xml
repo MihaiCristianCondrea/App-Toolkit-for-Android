@@ -104,4 +104,18 @@
     <string name="components_divider_width">প্রস্থ</string>
     <string name="components_divider_wave_height">ঢেউয়ের উচ্চতা</string>
     <string name="components_divider_vertical">উল্লম্ব</string>
+    <string name="components_snackbar_pressed">আপনি একটি বোতাম টিপেছেন</string>
+    <string name="components_snackbar_action_message">বোতামের কাজ সম্পন্ন হয়েছে</string>
+    <string name="components_snackbar_undo">পূর্বাবস্থায় ফেরান</string>
+    <string name="components_snackbar_undone">পূর্বাবস্থায় ফেরানো হয়েছে</string>
+    <string name="components_snackbar_error">কিছু ভুল হয়েছে</string>
+    <string name="components_snackbar_retry">আবার চেষ্টা করুন</string>
+    <string name="components_snackbar_icon">নিজস্ব আইকন ও রঙসহ একটি স্ন্যাকবার</string>
+    <string name="components_snackbar_custom">%1$s: স্ক্রিন নিজে আঁকা একটি স্ন্যাকবার</string>
+    <string name="components_section_article_bar">নিবন্ধের অ্যাপ বার</string>
+    <string name="components_article_without_brand">ব্র্যান্ড ছাড়া</string>
+    <string name="components_article_with_brand">ব্র্যান্ড সহ</string>
+    <string name="components_article_brand">নমুনা প্রকাশক</string>
+    <string name="components_article_headline">একটি শান্ত অ্যাপ বার গল্পকে প্রথমে রাখে</string>
+    <string name="components_article_paragraph">বারটি শুধু তার বোতামগুলো দিয়ে শুরু হয়। শিরোনাম পেরিয়ে স্ক্রল করুন, তখন নিবন্ধের নাম সেগুলোর জায়গা নেয়, আর নিচের প্রান্তের রেখাটি দেখায় আপনি কতটা পড়েছেন।</string>
 </resources>

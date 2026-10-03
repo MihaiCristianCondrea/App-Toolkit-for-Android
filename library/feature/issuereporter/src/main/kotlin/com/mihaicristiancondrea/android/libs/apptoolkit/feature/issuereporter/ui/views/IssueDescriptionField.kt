@@ -25,23 +25,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextField
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextFieldMarkdown
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextFieldStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.markdown.MarkdownFormatAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.IssueReporterActionNames
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.issueReporterActionEvent
 
 /** Rows the description field grows to before it starts scrolling its own content. */
 private const val DESCRIPTION_MIN_LINES: Int = 5
 private const val DESCRIPTION_MAX_LINES: Int = 12
-
-/** Analytics parameter naming which formatting action was used. */
-private const val FORMAT_PARAM: String = "format"
 
 /**
  * The report body: the toolkit's Markdown editor, cut into the grouped form above and below it.
@@ -54,20 +48,22 @@ private const val FORMAT_PARAM: String = "format"
  * Growth is capped at [DESCRIPTION_MAX_LINES] rows; past that the field scrolls internally instead
  * of pushing the rest of the form off screen while a long log is pasted in.
  *
- * This screen reports every formatting action, so a later look at the data says which of them the
- * bar is actually carrying.
+ * @param onMarkdownFormat Called with each formatting action used, which the sheet reports.
+ * @param errorText Why the description cannot be sent, shown beneath it; null shows nothing.
  */
 @Composable
 internal fun IssueDescriptionField(
     description: String,
-    firebaseController: FirebaseController,
     onDescriptionChange: (String) -> Unit,
+    onMarkdownFormat: (MarkdownFormatAction) -> Unit,
     modifier: Modifier = Modifier,
+    errorText: String? = null,
 ) {
     GeneralTextField(
         value = description,
         onValueChange = onDescriptionChange,
         modifier = modifier,
+        errorText = errorText,
         style = GeneralTextFieldStyle.Grouped,
         position = GroupedItemPosition.MIDDLE,
         groupedOuterRadius = ISSUE_GROUP_OUTER_RADIUS,
@@ -81,13 +77,6 @@ internal fun IssueDescriptionField(
             imeAction = ImeAction.Default,
         ),
         markdown = GeneralTextFieldMarkdown.Editor,
-        onMarkdownFormat = { action ->
-            firebaseController.logEvent(
-                issueReporterActionEvent(
-                    actionName = IssueReporterActionNames.FORMAT_DESCRIPTION,
-                    params = mapOf(FORMAT_PARAM to AnalyticsValue.Str(action.analyticsName)),
-                )
-            )
-        },
+        onMarkdownFormat = onMarkdownFormat,
     )
 }

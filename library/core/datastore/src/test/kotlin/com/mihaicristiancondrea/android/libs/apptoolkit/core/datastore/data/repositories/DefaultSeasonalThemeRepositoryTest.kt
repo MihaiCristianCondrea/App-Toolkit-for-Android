@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.WeatherEffect
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.HolidaySeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.SeasonalThemePreferencesDataSource
@@ -145,6 +146,11 @@ class DefaultSeasonalThemeRepositoryTest {
         override val seasonalThemesUnlocked = MutableStateFlow(false)
         override val lastHolidayGreeting = MutableStateFlow<String?>(null)
         override val holidayThemeSnapshot = MutableStateFlow<HolidayThemeSnapshot?>(null)
+        override val weatherEffect = MutableStateFlow(WeatherEffect.Automatic)
+
+        override suspend fun saveWeatherEffect(effect: WeatherEffect) {
+            weatherEffect.value = effect
+        }
 
         override suspend fun saveSeasonalThemesUnlocked(unlocked: Boolean) {
             seasonalThemesUnlocked.value = unlocked

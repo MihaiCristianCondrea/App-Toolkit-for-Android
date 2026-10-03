@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<!-- The components showcase's made-up publisher mark: several colours, twice as wide as tall. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="24dp"
+    android:viewportWidth="48"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#00897B"
+        android:pathData="M12,2a10,10 0,1 1,0 20a10,10 0,1 1,0 -20z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M7,7h10v2h-10zM7,11h10v2h-10zM7,15h6v2h-6z" />
+    <path
+        android:fillColor="#5E35B1"
+        android:pathData="M27,5h17a2,2 0,0 1,2 2v10a2,2 0,0 1,-2 2h-17a2,2 0,0 1,-2 -2v-10a2,2 0,0 1,2 -2z" />
+    <path
+        android:fillColor="#FFB300"
+        android:pathData="M29,10h13v4h-13z" />
+</vector>

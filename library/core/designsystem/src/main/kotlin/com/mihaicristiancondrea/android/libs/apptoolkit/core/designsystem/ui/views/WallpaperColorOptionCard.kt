@@ -119,10 +119,8 @@ fun WallpaperColorOptionCard(
 }
 
 /**
- * Local copy of the shared bounce-click effect.
- *
- * Duplicated here (rather than depending on `:library:core:ui`) because core:ui already
- * depends on core:designsystem for theming, and a reverse dependency would create a cycle.
+ * Local press feedback for palette cards. Kept in the design system to avoid a reverse
+ * dependency on core UI, which consumes this module.
  */
 @Composable
 private fun Modifier.bounceClick(): Modifier {

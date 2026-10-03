@@ -39,3 +39,23 @@ internal fun ImmutableList<ToolkitTileCategory>.filterByStatus(
     val tiles = category.tiles.filter { tile -> tile.status == status }
     if (tiles.isEmpty()) null else category.copy(tiles = tiles.toImmutableList())
 }
+
+/**
+ * Narrows the catalog to what [query] names: a category whose title matches keeps all its tiles,
+ * any other keeps only the tiles whose title or summary match. [text] resolves a string resource.
+ */
+internal fun List<ToolkitTileCategory>.search(
+    query: String,
+    text: (Int) -> String,
+): List<ToolkitTileCategory> {
+    val needle = query.trim()
+    if (needle.isEmpty()) return this
+    return mapNotNull { category ->
+        if (text(category.titleResId).contains(needle, ignoreCase = true)) return@mapNotNull category
+        val tiles = category.tiles.filter { tile ->
+            text(tile.titleResId).contains(needle, ignoreCase = true) ||
+                text(tile.summaryResId).contains(needle, ignoreCase = true)
+        }
+        if (tiles.isEmpty()) null else category.copy(tiles = tiles.toImmutableList())
+    }
+}

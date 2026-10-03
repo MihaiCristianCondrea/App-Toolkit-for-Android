@@ -17,15 +17,21 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.repositories
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
-import kotlinx.coroutines.flow.Flow
 
 /**
  * Repository for retrieving FAQ information.
  */
 interface FaqRepository {
-    fun fetchFaq(): Flow<DataState<List<FaqItem>, Errors>>
+
+    /**
+     * Returns the questions to show, or an empty list when there are none. Safe to call from the
+     * main thread.
+     *
+     * @throws NetworkException when the remote catalog could not be fetched and there are no
+     * bundled questions to fall back to.
+     */
+    suspend fun getFaq(): List<FaqItem>
 }
 

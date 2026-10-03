@@ -18,9 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.domain.models
 
 /**
- * Represents the persisted usage and diagnostics consents.
- * This model belongs to the domain layer and should not contain
- * any UI specific information.
+ * Persisted reporting and advertising consent values, independent of their UI presentation.
  */
 data class UsageAndDiagnosticsSettings(
     val usageAndDiagnostics: Boolean,

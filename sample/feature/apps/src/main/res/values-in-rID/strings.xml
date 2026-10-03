@@ -41,4 +41,6 @@
     <string name="favorite_apps">Favorit</string>
     <string name="summary_share_message">Lihat aplikasi luar biasa yang saya gunakan ini. Aplikasi ini memiliki beberapa fitur keren yang mungkin menarik bagi Anda. Unduh dari Play Store di: %1$s</string>
     <string name="apps_tools_title">Aplikasi</string>
+    <string name="open_random_app">Buka aplikasi acak</string>
+    <string name="apps_search_hint">Cari aplikasi</string>
 </resources>

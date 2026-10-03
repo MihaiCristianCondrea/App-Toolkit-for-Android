@@ -30,18 +30,21 @@ import androidx.compose.ui.unit.dp
 private const val VP_W = 888f
 private const val VP_H = 678f
 
+/**
+ * Remembers the illustration using every resolved color as a key, so changes to any theme role
+ * update the artwork.
+ */
 @Composable
 fun rememberPaletteImageVector(): ImageVector {
     val colorScheme = MaterialTheme.colorScheme
 
-    // Girl - Keep these stable to maintain character identity
+    // Keep skin color independent of the theme to preserve the character's appearance.
     val skin = Color(0xFFFAEED4)
     val hair = colorScheme.onSurfaceVariant
     val cloth = colorScheme.primary
     val legs = colorScheme.onPrimaryContainer
     val shoes = colorScheme.outline
 
-    // Env - These will shift with the theme
     val leafDark = colorScheme.primaryContainer
     val leafShadow = colorScheme.secondary
     val branch = colorScheme.secondaryContainer
@@ -50,7 +53,7 @@ fun rememberPaletteImageVector(): ImageVector {
     val backgroundTrees = colorScheme.surfaceContainerLowest
 
     return remember(
-        skin, leafDark, cloth, leafShadow, hair, sun, shoes, branch
+        skin, leafDark, cloth, leafShadow, hair, sun, shoes, branch, grass, legs, backgroundTrees
     ) {
         buildPalette(
             skin = skin,

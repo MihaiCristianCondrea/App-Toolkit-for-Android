@@ -18,8 +18,6 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views
 
 import android.content.ActivityNotFoundException
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
@@ -30,6 +28,8 @@ import android.widget.Toast
 import androidx.compose.runtime.Stable
 import androidx.core.net.toUri
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.ClipboardRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.DefaultClipboardRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
 
@@ -64,6 +64,7 @@ interface AppActionLauncher {
 /** Android implementation of [AppActionLauncher] backed by public intents and safe fallbacks. */
 class AndroidAppActionLauncher(
     private val context: Context,
+    private val clipboardRepository: ClipboardRepository = DefaultClipboardRepository(context),
 ) : AppActionLauncher {
 
     companion object {
@@ -110,28 +111,20 @@ class AndroidAppActionLauncher(
         return startFirstAvailable(notificationIntent, appInfoIntent(packageName))
     }
 
-    /*
-     * There is no stable public cross-OEM intent for:
-     * Settings > Apps > App > Permissions
-     *
-     * Some AOSP/private Settings fragments exist on some builds, but they are not API contracts.
-     * For many OEMs they either do nothing, open the wrong page, or throw.
+    /**
+     * Opens app info because the permission subpage has no stable public intent across OEMs.
      */
     override fun openPermissions(packageName: String): Boolean = openAppInfo(packageName)
 
-    /*
-     * There is no stable public cross-OEM intent for:
-     * Settings > Apps > App > Storage / Storage & cache
-     *
-     * ACTION_STORAGE_VOLUME_ACCESS_SETTINGS is not this screen and is deprecated.
+    /**
+     * Opens app info because the per-app storage subpage has no stable public intent.
+     * Storage-volume access targets a different screen.
      */
     override fun openStorage(packageName: String): Boolean = openAppInfo(packageName)
 
-    /*
-     * There is no stable public cross-OEM intent for:
-     * Settings > Apps > App > Battery / App battery usage
-     *
-     * Battery saver and battery optimization actions are different, broader system pages.
+    /**
+     * Opens app info because the per-app battery subpage has no stable public intent.
+     * Battery-saver and optimization actions target broader settings.
      */
     override fun openBattery(packageName: String): Boolean = openAppInfo(packageName)
 
@@ -176,20 +169,18 @@ class AndroidAppActionLauncher(
     override fun copyPackageName(packageName: String): Boolean {
         if (!packageName.isProbablyValidPackageName()) return false
 
-        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-
-        clipboard.setPrimaryClip(
-            ClipData.newPlainText(
-                context.getString(R.string.app_details_package_name_clip_label),
-                packageName,
-            ),
+        clipboardRepository.copyText(
+            label = context.getString(R.string.app_details_package_name_clip_label),
+            text = packageName,
         )
 
-        Toast.makeText(
-            context,
-            context.getString(R.string.app_details_package_name_copied),
-            Toast.LENGTH_SHORT,
-        ).show()
+        if (!clipboardRepository.confirmsCopies) {
+            Toast.makeText(
+                context,
+                context.getString(R.string.app_details_package_name_copied),
+                Toast.LENGTH_SHORT,
+            ).show()
+        }
 
         return true
     }
@@ -316,11 +307,8 @@ class AndroidAppActionLauncher(
                 context.startActivity(preparedIntent)
                 return true
             } catch (_: ActivityNotFoundException) {
-                // Try next fallback.
             } catch (_: SecurityException) {
-                // Try next fallback.
             } catch (_: IllegalArgumentException) {
-                // Try next fallback.
             } catch (_: NullPointerException) {
                 // Some OEM Settings implementations are not very defensive.
             }

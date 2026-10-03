@@ -39,14 +39,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 /**
- * Regression cover for the crash where the Mobile Ads SDK was never initialized while the ad views
- * happily loaded ads: `NativeAdLoader.load` throws
- * `IllegalStateException("MobileAds.initialize must be called before using the Google Mobile Ads
- * SDK.")`, from inside composition, and the process dies.
- *
- * The cause was two different readings of the same preference, this manager sampled it once with a
- * `!isDebugBuild` default while the views read it with a `true` default, plus initialization that
- * was never retried when the preference changed.
+ * Verifies that manager initialization and ad-view enablement use the same preference,
+ * including when ads become enabled after startup.
  */
 @OptIn(ExperimentalCoroutinesApi::class)
 class AdsCoreManagerInitializationTest {

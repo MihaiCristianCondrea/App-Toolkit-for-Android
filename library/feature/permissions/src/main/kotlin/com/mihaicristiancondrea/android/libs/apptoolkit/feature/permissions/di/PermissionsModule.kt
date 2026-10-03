@@ -28,16 +28,14 @@ val permissionsModule: Module = module {
     single<PermissionsRepository> {
         DefaultPermissionsRepository(
             context = get(),
-            dispatchers = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
         )
     }
 
     viewModel {
         PermissionsViewModel(
             permissionsRepository = get(),
-            dispatchers = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
         )
     }
 }

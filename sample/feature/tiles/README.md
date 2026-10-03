@@ -14,21 +14,20 @@ Quick tools: the in-app tool catalogue and the Quick Settings tile services behi
   `SosRepository`, and `CounterRepository`, which remain the data-layer entry points and own
   coordination or runtime state.
 - UI catalogue models and mappers, the screen and dedicated tool ViewModels, tool composables,
-  `toolkitTilesEntryBuilder`, and the Quick Settings services.
-- Localized Quick Tools strings and plurals.
+  `ToolkitTilesRoute`, this feature's tab key, and the Quick Settings services.
+- Localized Quick Tools strings and plurals, and the Quick Settings tile and coin icons.
 - Feature-owned manifest permissions for haptics and flashlight access. The feature
   declares no foreground service and no wake locks.
 
 ## Does not own
 
-- The route key it registers against, owned by
-  [`:sample:core:navigation`](../../core/navigation/README.md).
+- Its registration as a tab, done by `:sample:app`'s `appGraph`.
 - Native ad rendering, owned by [`:library:core:ui`](../../../library/core/ui/README.md); this
   module supplies only the quick-tools card styling.
 
 ## Depends on
 
-- `:sample:core:navigation`, `:sample:core:common`, `:sample:core:ui`.
+- `:sample:core:analytics` and `:sample:integration:ads`.
 - [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for ad slots and screen contracts.
 
 ## Used by
@@ -74,14 +73,30 @@ flowchart TD
   UI layer after availability filtering.
 - Torch state is shared because in-app tools and system-created services can operate concurrently.
   One Morse playback job serializes patterned output, and SOS delegates to it.
-- Only stateful/platform-backed tools receive dedicated ViewModels; stateless decision tools remain
-  local UI behavior rather than creating pass-through layers.
+- Each tool with behavior of its own has a dedicated ViewModel, one class per file in `ui/`, with
+  its `XToolUiState` in `ui/states/` and its `XToolEvent` in `ui/contracts/`. Every one extends
+  `LoggedScreenViewModel` and reports under the `ToolkitTiles` screen name, because the tools open in
+  that screen's bottom sheet, with the class name as `viewModelName`. One-shot work (a flip, a roll,
+  a counter write, a torch change) runs through `launchReport`, and repository streams (sensor
+  readings, torch and Morse playback state, the stored count) through `collectReport` for the
+  ViewModel's lifetime. The routes in `ToolRoutes.kt` collect `state` and send events: the Compass
+  and Level sensors start and stop with the app's foreground state, and every tool is dismissed when
+  its sheet leaves composition. No tool ViewModel queues messages, so the routes host no
+  `MessageHost`; their failures are only reported.
+- Material Colors has no ViewModel; its dialog is local UI behavior.
+- The catalogue screen is on `core.ui.screen`. `ToolkitTilesViewModel` exposes `state`, whose
+  `categories` is a `Loadable`, and builds the UI models on the default dispatcher, its own CPU work.
+  Adding a tile is a state flag, `pendingTileRequest`, that `ToolkitTilesScreen` turns into the
+  Quick Settings request and clears with `TileRequestLaunched`. The no-tile message is a queued
+  message shown as a toast, because it comes while a tool's bottom sheet would cover a snackbar.
+  `ToolkitTilesScreen` and the stateless `ToolkitTilesScreenContent` share `ToolkitTilesScreen.kt`.
 
 ## Public contracts
 
 - `ToolkitTilesRepository`, `TorchRepository`, `MorseRepository`, `CounterRepository`,
   `ToolkitTilesViewModel`, the
-  dedicated tool ViewModels, `toolkitTilesEntryBuilder`, and the source-neutral tile models.
+  dedicated tool ViewModels, `ToolkitTilesScreen`, `ToolkitTilesRoute` and the source-neutral
+  tile models.
 
 ## Internal implementations
 
@@ -120,6 +135,14 @@ reset; closing the Counter sheet no longer clears the count, and its Reset butto
 Tile subtitles exist only from Android 10, below the module's minimum SDK. `TileText` moves a tap's
 result into the label on Android 8 and 9, where it would otherwise be invisible. Declining the
 system add-tile prompt is treated as the user's choice, not as a failure.
+
+## Search
+
+The tab declares a search field in its app bar, and `ToolkitTilesScreen` reads its query from
+`LocalShellSearch`. After the filter chips, `search` keeps a whole category whose name matches, or
+only the tiles whose title or summary match; every match is shown expanded, whatever the stored
+expansion. Titles and summaries are string resources, so the query is matched against them in the
+current language. `ToolkitTilesSearchTest` covers the rules.
 
 ## Migration notes
 

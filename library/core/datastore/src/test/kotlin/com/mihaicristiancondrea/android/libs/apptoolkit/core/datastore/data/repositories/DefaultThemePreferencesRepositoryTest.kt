@@ -35,8 +35,8 @@ import org.junit.jupiter.api.Test
 class DefaultThemePreferencesRepositoryTest {
 
     /**
-     * A true-black surface means nothing in the light theme, and both the settings screen and the
-     * onboarding page offer this choice: the rule belongs here, once, rather than in each of them.
+     * Selecting Light clears AMOLED in the repository, so onboarding and settings apply the
+     * same rule.
      */
     @Test
     fun `switching to the light theme turns amoled off`() = runTest {
@@ -77,9 +77,8 @@ class DefaultThemePreferencesRepositoryTest {
 
         DefaultThemePreferencesRepository(preferences).selectStaticPalette("rose")
 
-        coVerifyOrder {
-            preferences.saveDynamicColors(false)
-            preferences.saveStaticPaletteId("rose")
+        coVerify(exactly = 1) {
+            preferences.savePalette(dynamicColors = false, staticPaletteId = "rose")
         }
     }
 
@@ -89,38 +88,31 @@ class DefaultThemePreferencesRepositoryTest {
 
         DefaultThemePreferencesRepository(preferences).selectDynamicPalette(variant = 3)
 
-        coVerifyOrder {
-            preferences.saveDynamicColors(true)
-            preferences.saveDynamicPaletteVariant(3)
+        coVerify(exactly = 1) {
+            preferences.savePalette(dynamicColors = true, dynamicPaletteVariant = 3)
         }
     }
 
     /**
-     * The theme page positions its palette rows on the first state it sees. A first state made of
-     * placeholder defaults (wallpaper colors on, default palette) left them on the wrong palette.
+     * The first emission must reflect storage so palette rows initialize to the selected
+     * palette.
      */
     @Test
     fun `the first state is the stored one, even when the store answers late`() = runTest {
+        val stored = ThemePreferencesState(
+            themeMode = DataStoreNamesConstants.THEME_MODE_DARK,
+            dynamicColors = false,
+            amoledMode = true,
+            dynamicPaletteVariant = 4,
+            staticPaletteId = "skin",
+        )
         val preferences: ThemePreferencesDataSource = mockk(relaxed = true) {
-            every { themeMode } returns flow { delay(50); emit(DataStoreNamesConstants.THEME_MODE_DARK) }
-            every { amoledMode } returns flow { delay(50); emit(true) }
-            every { dynamicColors } returns flow { delay(50); emit(false) }
-            every { dynamicPaletteVariant } returns flow { delay(50); emit(4) }
-            every { staticPaletteId } returns flow { delay(50); emit("skin") }
+            every { storedPreferences } returns flow { delay(50); emit(stored) }
         }
 
         val first = DefaultThemePreferencesRepository(preferences).preferencesState.first()
 
-        assertEquals(
-            ThemePreferencesState(
-                themeMode = DataStoreNamesConstants.THEME_MODE_DARK,
-                dynamicColors = false,
-                amoledMode = true,
-                dynamicPaletteVariant = 4,
-                staticPaletteId = "skin",
-            ),
-            first,
-        )
+        assertEquals(stored, first)
     }
 
     private fun preferences(amoledMode: Boolean = false): ThemePreferencesDataSource =

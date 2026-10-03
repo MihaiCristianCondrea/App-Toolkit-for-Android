@@ -1,21 +1,4 @@
 /*
- * Copyright (©) 2026 Mihai-Cristian Condrea
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- */
-
-/*
  * Copyright (C) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -26,16 +9,15 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.http.HttpStatusCode
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
+import java.net.UnknownHostException
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 
@@ -51,9 +33,9 @@ class DefaultChangelogRepositoryTest {
             },
         )
 
-        val result = repository.fetchChangelog("com.example.app").first()
+        val changelog = repository.getChangelog("com.example.app")
 
-        assertEquals("# 2.0.0\n- Worker", assertIs<DataState.Success<String, Errors>>(result).data)
+        assertEquals("# 2.0.0\n- Worker", changelog)
         assertEquals(listOf("/api/v1/apps/com.example.app/changelog.md"), requestedPaths)
     }
 
@@ -71,9 +53,9 @@ class DefaultChangelogRepositoryTest {
             },
         )
 
-        val result = repository.fetchChangelog("com.example.missing").first()
+        val changelog = repository.getChangelog("com.example.missing")
 
-        assertEquals("# Legacy", assertIs<DataState.Success<String, Errors>>(result).data)
+        assertEquals("# Legacy", changelog)
         assertEquals(
             listOf(
                 "/api/v1/apps/com.example.missing/changelog.md",
@@ -93,14 +75,14 @@ class DefaultChangelogRepositoryTest {
             },
         )
 
-        val result = repository.fetchChangelog(" ").first()
+        val changelog = repository.getChangelog(" ")
 
-        assertEquals("# Legacy", assertIs<DataState.Success<String, Errors>>(result).data)
+        assertEquals("# Legacy", changelog)
         assertEquals(listOf("legacy.example"), requestedHosts)
     }
 
     @Test
-    fun `server failure is reported without invoking the legacy fallback`() = runTest {
+    fun `server failure is thrown without invoking the legacy fallback`() = runTest {
         var requestCount = 0
         val repository = createRepository(
             engine = MockEngine {
@@ -109,13 +91,36 @@ class DefaultChangelogRepositoryTest {
             },
         )
 
-        val result = repository.fetchChangelog("com.example.app").first()
+        val failure = runCatching { repository.getChangelog("com.example.app") }.exceptionOrNull()
 
-        assertEquals(
-            Errors.Network.HTTP_SERVER_ERROR,
-            assertIs<DataState.Error<String, Errors>>(result).error,
-        )
+        assertEquals(NetworkException.Reason.SERVER, assertIs<NetworkException>(failure).reason)
         assertEquals(1, requestCount)
+    }
+
+    @Test
+    fun `a failed legacy fallback is thrown`() = runTest {
+        val repository = createRepository(
+            engine = MockEngine { request ->
+                if (request.url.host == "legacy.example") {
+                    respond(content = "gone", status = HttpStatusCode.Gone)
+                } else {
+                    respond(content = "{}", status = HttpStatusCode.NotFound)
+                }
+            },
+        )
+
+        val failure = runCatching { repository.getChangelog("com.example.missing") }.exceptionOrNull()
+
+        assertEquals(NetworkException.Reason.CLIENT, assertIs<NetworkException>(failure).reason)
+    }
+
+    @Test
+    fun `a transport failure is thrown translated`() = runTest {
+        val repository = createRepository(engine = MockEngine { throw UnknownHostException() })
+
+        val failure = runCatching { repository.getChangelog("com.example.app") }.exceptionOrNull()
+
+        assertEquals(NetworkException.Reason.NO_INTERNET, assertIs<NetworkException>(failure).reason)
     }
 
     private fun createRepository(engine: MockEngine): DefaultChangelogRepository =
@@ -123,6 +128,6 @@ class DefaultChangelogRepositoryTest {
             client = HttpClient(engine),
             apiBaseUrl = "https://metadata.example",
             legacyChangelogUrl = "https://legacy.example/changelog.md",
-            firebaseController = FakeFirebaseController(),
+            telemetryRepository = FakeTelemetryRepository(),
         )
 }

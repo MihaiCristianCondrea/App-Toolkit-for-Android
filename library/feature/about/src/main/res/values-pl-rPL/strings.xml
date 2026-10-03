@@ -21,12 +21,9 @@
     <string name="app_build_version">Wersja kompilacji aplikacji</string>
     <string name="app_info">Informacje o aplikacji</string>
     <string name="app_toolkit_version">Wersja App Toolkit</string>
-    <string name="content_description_more_options">Więcej opcji</string>
     <string name="debug">Debugowanie</string>
     <string name="device_info">Informacje o urządzeniu</string>
     <string name="device_model">Model urządzenia</string>
-    <string name="done_button_content_description">Gotowe</string>
-    <string name="go_back">Wróć</string>
     <string name="google_play_services_version">Wersja Usług Google Play</string>
     <string name="help_and_feedback">Pomoc i opinie</string>
     <string name="manufacturer">Producent</string>
@@ -41,8 +38,6 @@
     <string name="snack_device_info_failed">Nie można załadować informacji o urządzeniu</string>
     <string name="summary_preference_settings_oss">Szczegóły licencji na oprogramowanie open source</string>
     <string name="summary_share_message">Sprawdź tę niesamowitą aplikację, której używam. Ma kilka naprawdę ciekawych funkcji, które mogą Ci się spodobać. Pobierz ją z Play Store pod adresem: %1$s</string>
-    <string name="support_us">Wesprzyj nas</string>
-    <string name="try_again">Spróbuj ponownie</string>
     <string name="updates">Aktualizacje</string>
     <string name="snack_seasonal_themes_unlocked">Miłej zabawy</string>
 </resources>

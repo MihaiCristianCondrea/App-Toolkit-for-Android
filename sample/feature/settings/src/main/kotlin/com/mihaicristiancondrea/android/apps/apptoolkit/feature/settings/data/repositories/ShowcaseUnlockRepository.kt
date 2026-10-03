@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.data.r
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStoreInterface
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.BuildConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logUnlockAchievement
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
@@ -37,7 +37,7 @@ import kotlinx.coroutines.sync.withLock
  */
 class ShowcaseUnlockRepository(
     private val dataStore: DataStoreInterface,
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
     private val isDebugBuild: Boolean = BuildConfig.DEBUG,
 ) {
     private val unlockMutex = Mutex()
@@ -48,11 +48,11 @@ class ShowcaseUnlockRepository(
 
         unlockMutex.withLock {
             if (dataStore.componentsShowcaseUnlocked.first()) return
-            firebaseController.logBreadcrumb(
+            telemetryRepository.logBreadcrumb(
                 message = "Components showcase unlocked",
                 attributes = mapOf("source" to "ShowcaseUnlockRepository"),
             )
-            firebaseController.logUnlockAchievement("showcase_unlocked")
+            telemetryRepository.logUnlockAchievement("showcase_unlocked")
             dataStore.saveComponentsShowcaseUnlocked(isUnlocked = true)
         }
     }

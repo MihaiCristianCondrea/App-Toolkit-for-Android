@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.di.modules
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers.StartupProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.providers.StartupProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReporterConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.di.billingModule
@@ -58,7 +58,7 @@ import org.koin.core.module.Module
  * ```
  *
  * This is how a host supplies `SettingsProvider`, `PrivacySettingsProvider`, other host provider
- * contracts, custom settings content, or a different `FirebaseController` without the toolkit
+ * contracts, custom settings content, or a different `TelemetryRepository` without the toolkit
  * needing to know the implementation.
  *
  * @param hostBuildConfig Host build values the toolkit cannot read from its own BuildConfig.

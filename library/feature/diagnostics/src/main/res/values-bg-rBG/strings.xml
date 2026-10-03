@@ -24,7 +24,6 @@
     <string name="consent_ad_user_data_title">Изпращане на данни за реклами</string>
     <string name="consent_analytics_storage_description">Разрешаване на съхраняването на данни, като например използване на приложението и продължителност на посещението, за подобряване на анализите и производителността на приложението.</string>
     <string name="consent_analytics_storage_title">Съхраняване на данни за анализ</string>
-    <string name="learn_more">Научете повече</string>
     <string name="summary_usage_and_diagnostics">Помогнете за подобряване на изживяването, като автоматично изпращате диагностични данни за устройството и приложението. Това ще помогне за подобряване на производителността и стабилността на приложението.</string>
     <string name="usage_and_diagnostics">Използване и диагностика</string>
     <string name="consent_ad_personalization_description_short">Активира персонализирана реклама.</string>
@@ -48,4 +47,13 @@
     <string name="privacy_choices_title">Настройки за поверителност</string>
     <string name="summary_advanced_privacy_settings">Изберете какво споделяте за анализи и реклама.</string>
     <string name="learn_more_about_provider">Научи повече за този доставчик</string>
+    <string name="onboarding_crashlytics_title">Помогни ни да се подобрим</string>
+    <string name="onboarding_crashlytics_description">Разреши на приложението да изпраща анонимни данни за употреба и отчети за сривове. Това ни помага да поправяме грешки и да подобрим твоето преживяване. Не се събира лична информация.</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">Покажи подробна информация за употребата и диагностиката</string>
+    <string name="onboarding_crashlytics_show_details_button">Покажи подробна информация</string>
+    <string name="error">Грешка</string>
+    <string name="onboarding_crashlytics_privacy_info">Твоята поверителност е важна. Ние използваме тези данни само за поправяне на грешки и подобряване на функциите. За повече подробности, моля, прегледай нашата политика за поверителност.</string>
+    <string name="learn_more_privacy_policy">Прегледай нашата политика за поверителност</string>
+    <string name="onboarding_crashlytics_enabled_desc">Докладването на данни е активно.</string>
+    <string name="onboarding_crashlytics_disabled_desc">Докладването на данни е неактивно.</string>
 </resources>

@@ -15,22 +15,16 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">AMOLED 모드</string>
-    <string name="color_palette">색상 팔레트</string>
-    <string name="dark_mode">다크 모드</string>
-    <string name="follow_system">시스템 모드 따르기</string>
-    <string name="light_mode">라이트 모드</string>
-    <string name="onboarding_theme_dark_desc">눈이 편안한 스타일.</string>
-    <string name="onboarding_theme_light_desc">밝고 활기찬 스타일.</string>
-    <string name="onboarding_theme_system_desc">기기 설정과 일치.</string>
-    <string name="other_colors">기타 색상</string>
-    <string name="screen_and_display_settings">화면 및 디스플레이 설정.</string>
-    <string name="summary_dark_theme">다크 테마는 깊은 배경을 활용하여 배터리 수명을 크게 연장합니다. 활성화하려면 Android의 시스템 관리자로 이동하여 선호하는 테마를 선택하십시오.</string>
-    <string name="theme_mode">테마 모드</string>
-    <string name="wallpaper_colors">배경화면 색상</string>
     <string name="holiday_greeting_christmas_title">즐거운 연휴 보내세요!</string>
     <string name="holiday_greeting_christmas_message">크리스마스 테마가 도착했어요. 앱 전체에 눈이 내려요. 연휴가 끝날 때까지 사용할까요?</string>
     <string name="holiday_greeting_halloween_title">해피 할로윈!</string>
     <string name="holiday_greeting_halloween_message">으스스한 시즌이 왔어요. 시즌 동안 할로윈 테마를 사용할까요?</string>
     <string name="holiday_greeting_use_theme">연휴 동안 연휴 테마 사용</string>
+    <string name="dark_theme">어두운 테마</string>
+    <string name="weather_effect">날씨 효과</string>
+    <string name="weather_effect_automatic">자동</string>
+    <string name="weather_effect_snow">눈</string>
+    <string name="weather_effect_off">사용 안함</string>
+    <string name="weather_effect_rain">비</string>
+    <string name="weather_effect_info">자동으로 설정하면 크리스마스 팔레트를 사용하는 동안 눈이 내립니다. 눈과 비는 모든 팔레트에서 내립니다.</string>
 </resources>

@@ -72,10 +72,10 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
 
-// Each device animation is bundled once, playing from the device's resting state into its active
-// one. The opposite direction is the same animation played backwards, which the replay mode control
-// below reaches through ToolkitIconReplayMode.Reverse, so a second drawable per device would ship
-// the same motion twice. anim_media_play covers pause the same way.
+/**
+ * Bundles one animation per device; reverse playback demonstrates the return motion without
+ * duplicating drawables.
+ */
 private val animationSamples = listOf(
     "anim_check" to DesignSystemR.drawable.anim_check,
     "anim_square_container" to DesignSystemR.drawable.anim_square_container,

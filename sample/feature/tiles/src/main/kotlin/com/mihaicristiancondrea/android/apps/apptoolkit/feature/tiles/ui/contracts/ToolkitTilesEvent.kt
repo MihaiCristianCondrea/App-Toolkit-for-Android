@@ -18,14 +18,20 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ToolkitTilesFilter
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 
-sealed interface ToolkitTilesEvent : UiEvent {
-    data object Initialize : ToolkitTilesEvent
+/** What the Toolkit Tiles screen asks its ViewModel to do. */
+sealed interface ToolkitTilesEvent {
+    /** Follows the catalogue, on start and on retry. */
+    data object Load : ToolkitTilesEvent
+
+    /** Re-reads Quick Settings membership, on every resume. */
     data object Refresh : ToolkitTilesEvent
     data class FilterSelected(val filter: ToolkitTilesFilter) : ToolkitTilesEvent
     data class CategoryToggled(val categoryId: String) : ToolkitTilesEvent
     data class AddTileClicked(val requestKey: String?) : ToolkitTilesEvent
+
+    /** The screen asked Android to add the pending tile. */
+    data object TileRequestLaunched : ToolkitTilesEvent
 
     /** Android answered a request to add [requestKey]; [outcome] is a `TileRequestOutcome`. */
     data class TileRequestFinished(val requestKey: String, val outcome: String) : ToolkitTilesEvent

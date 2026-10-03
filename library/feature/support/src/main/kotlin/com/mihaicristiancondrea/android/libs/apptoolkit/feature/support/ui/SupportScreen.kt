@@ -33,21 +33,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MoneyOff
 import androidx.compose.material.icons.outlined.Paid
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
@@ -56,24 +51,24 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extens
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.views.ads.SupportNativeAdCard
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.domain.models.DonationProductIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.constants.ShortenLinkConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.contracts.SupportEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.states.DonationOptionUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.states.SupportScreenUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.models.DonationOption
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.states.SupportUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.views.ads.SupportNativeAdCard
 import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentMapOf
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
@@ -91,118 +86,110 @@ private object SupportPreferenceKeys {
     const val DESTINATION: String = "destination"
 }
 
-private object SupportActionNames {
-    const val BACK_CLICK: String = "back_click"
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SupportComposable() {
     SupportScreen()
 }
 
 /**
- * Renders the support and donation screen.
+ * The support page: donation tiers bought through Google Play, a web ad link and a native ad. It
+ * is the body of the page `supportPage()` registers, which the overflow menu's `supportUs()` entry
+ * opens.
  *
- * @param isEmbedded When true, the screen omits its own top app bar so a host navigation shell can
- * provide app-level chrome.
+ * Owns [SupportViewModel], tracking and messages. A purchase needs the host activity, so a tap
+ * while there is none does nothing.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SupportScreen(isEmbedded: Boolean = false) {
+fun SupportScreen() {
     val viewModel: SupportViewModel = koinViewModel()
-    val activity = LocalActivity.current
-    val screenState: UiStateScreen<SupportScreenUiState> by viewModel.uiState.collectAsStateWithLifecycle()
-    val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
-    val currentViewModel = rememberUpdatedState(newValue = viewModel)
+    val state: SupportUiState by viewModel.state.collectAsStateWithLifecycle()
+    val context: Context = LocalContext.current
+    val activity: Activity? = LocalActivity.current
+    val adsConfig: AdsConfig = koinInject(qualifier = named(name = AdsQualifiers.SUPPORT_NATIVE_AD))
 
-    val onDonateClick: (Activity, String) -> Unit =
-        remember(currentViewModel) {
-            { hostActivity, productId ->
-                currentViewModel.value.onDonateClicked(
-                    activity = hostActivity,
-                    productId = productId
-                )
-            }
-        }
-
-    val firebaseController: FirebaseController = koinInject()
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = SUPPORT_SCREEN_NAME,
         screenClass = SUPPORT_SCREEN_CLASS,
     )
 
     TrackScreenState(
-        firebaseController = firebaseController,
         screenName = SUPPORT_SCREEN_NAME,
-        screenState = screenState.screenState,
+        state = state.donationOptions,
     )
 
-    val content: @Composable (PaddingValues) -> Unit = { paddingValues ->
-        ScreenStateHandler(
-            screenState = screenState,
-            onLoading = { LoadingScreen() },
-            onEmpty = { NoDataScreen(paddingValues = paddingValues) },
-            onError = {
-                NoDataScreen(
-                    icon = Icons.Outlined.MoneyOff,
-                    isError = true,
-                    textMessage = R.string.error_failed_to_load_sku_details,
-                    paddingValues = paddingValues
-                )
-            },
-            onSuccess = { data: SupportScreenUiState ->
-                SupportScreenContent(
-                    paddingValues = paddingValues,
-                    donationOptions = data.donationOptions,
-                    isBillingInProgress = data.isBillingInProgress,
-                    firebaseController = firebaseController,
-                    onDonateClick = { productId ->
-                        activity?.let { hostActivity ->
-                            onDonateClick(hostActivity, productId)
-                        }
-                    },
-                )
-            })
-        DefaultSnackbarHandler(
-            screenState = screenState,
-            snackbarHostState = snackbarHostState,
-            getDismissEvent = { SupportEvent.DismissSnackbar },
-            onEvent = { viewModel.onEvent(it) }
-        )
-    }
+    SupportScreenContent(
+        state = state,
+        onEvent = viewModel::onEvent,
+        onDonate = { productId ->
+            activity?.let { host -> viewModel.onEvent(SupportEvent.Donate(productId = productId, activity = host)) }
+        },
+        onOpenWebAd = { context.openUrl(ShortenLinkConstants.LINKVERTISE_APP_DIRECT_LINK) },
+        contentPadding = contentPadding(),
+        adUnitId = adsConfig.bannerAdUnitId,
+    )
 
-    if (isEmbedded) {
-        content(PaddingValues())
-    } else {
-        LargeTopAppBarWithScaffold(
-            title = stringResource(id = R.string.support_us),
-            onBackClicked = {
-                firebaseController.logEvent(supportActionEvent(actionName = SupportActionNames.BACK_CLICK))
-                activity?.finish()
-            },
-            snackbarHostState = snackbarHostState,
-            content = content,
+    MessageHost(viewModel = viewModel)
+}
+
+/**
+ * Renders the donation tiers, the web ad and the native ad for [state], or the loading, empty or
+ * failure state. Each button logs its own tap through its `ga4Event`. The failure state keeps the
+ * money icon and offers a retry when the failure is retryable.
+ *
+ * @param onEvent Receives the events [SupportViewModel] handles.
+ * @param onDonate A donation tier was tapped. Launching the purchase needs the activity, so it
+ * belongs to the caller.
+ * @param onOpenWebAd The web ad button was tapped. Opening the link needs a `Context`.
+ * @param contentPadding Padding from the shell, applied inside the list and the state screens.
+ * @param adUnitId The native ad slot's unit, or null when no ad should show.
+ */
+@Composable
+internal fun SupportScreenContent(
+    state: SupportUiState,
+    onEvent: (SupportEvent) -> Unit,
+    onDonate: (productId: String) -> Unit,
+    onOpenWebAd: () -> Unit,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
+    adUnitId: String? = null,
+) {
+    ScreenStateHandler(
+        state = state.donationOptions,
+        modifier = modifier,
+        contentPadding = contentPadding,
+        onRetry = { onEvent(SupportEvent.QueryProductDetails) },
+        onError = { failed ->
+            NoDataScreen(
+                message = failed.message.asString(),
+                icon = Icons.Outlined.MoneyOff,
+                isError = true,
+                showRetry = failed.retryable,
+                onRetry = { onEvent(SupportEvent.QueryProductDetails) },
+                paddingValues = contentPadding,
+            )
+        },
+    ) { ready ->
+        SupportList(
+            donationOptions = ready.value,
+            isBillingInProgress = state.isBillingInProgress,
+            onDonate = onDonate,
+            onOpenWebAd = onOpenWebAd,
+            contentPadding = contentPadding,
+            adUnitId = adUnitId,
         )
     }
 }
 
 @Composable
-fun SupportScreenContent(
-    paddingValues: PaddingValues,
-    donationOptions: ImmutableMap<String, DonationOptionUiState>,
+private fun SupportList(
+    donationOptions: ImmutableMap<String, DonationOption>,
     isBillingInProgress: Boolean,
-    firebaseController: FirebaseController,
-    onDonateClick: (String) -> Unit,
+    onDonate: (productId: String) -> Unit,
+    onOpenWebAd: () -> Unit,
+    contentPadding: PaddingValues,
+    adUnitId: String?,
 ) {
-    val context: Context = LocalContext.current
-    val nativeAdsConfig: AdsConfig =
-        koinInject(qualifier = named(name = AdsQualifiers.SUPPORT_NATIVE_AD))
-
-    LazyColumn(
-        modifier = Modifier.padding(paddingValues),
-    ) {
+    LazyColumn(contentPadding = contentPadding) {
         item {
             Text(
                 text = stringResource(id = R.string.paid_support),
@@ -231,42 +218,22 @@ fun SupportScreenContent(
                             .padding(horizontal = SizeConstants.LargeSize),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        val lowDonation = donationOptions[DonationProductIds.LOW_DONATION]
-                        val normalDonation = donationOptions[DonationProductIds.NORMAL_DONATION]
-                        GeneralButton(
-                            style = GeneralButtonStyle.Tonal,
+                        DonationButton(
+                            productId = DonationProductIds.LOW_DONATION,
+                            preferenceKey = SupportPreferenceKeys.DONATE_LOW,
+                            option = donationOptions[DonationProductIds.LOW_DONATION],
+                            isBillingInProgress = isBillingInProgress,
+                            onDonate = onDonate,
                             modifier = Modifier.weight(1f),
-                            onClick = { onDonateClick(DonationProductIds.LOW_DONATION) },
-                            firebaseController = firebaseController,
-                            ga4Event = supportPreferenceTapEvent(
-                                preferenceKey = SupportPreferenceKeys.DONATE_LOW,
-                                productId = DonationProductIds.LOW_DONATION,
-                            ),
-                            enabled = lowDonation?.isEligible == true && !isBillingInProgress,
-                            icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Paid),
-                            label = if (lowDonation?.isEligible == true) {
-                                lowDonation.formattedPrice.orEmpty()
-                            } else {
-                                stringResource(id = R.string.support_offer_unavailable)
-                            }
                         )
                         Spacer(modifier = Modifier.width(SizeConstants.MediumSize))
-                        GeneralButton(
-                            style = GeneralButtonStyle.Tonal,
+                        DonationButton(
+                            productId = DonationProductIds.NORMAL_DONATION,
+                            preferenceKey = SupportPreferenceKeys.DONATE_NORMAL,
+                            option = donationOptions[DonationProductIds.NORMAL_DONATION],
+                            isBillingInProgress = isBillingInProgress,
+                            onDonate = onDonate,
                             modifier = Modifier.weight(1f),
-                            onClick = { onDonateClick(DonationProductIds.NORMAL_DONATION) },
-                            firebaseController = firebaseController,
-                            ga4Event = supportPreferenceTapEvent(
-                                preferenceKey = SupportPreferenceKeys.DONATE_NORMAL,
-                                productId = DonationProductIds.NORMAL_DONATION,
-                            ),
-                            enabled = normalDonation?.isEligible == true && !isBillingInProgress,
-                            icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Paid),
-                            label = if (normalDonation?.isEligible == true) {
-                                normalDonation.formattedPrice.orEmpty()
-                            } else {
-                                stringResource(id = R.string.support_offer_unavailable)
-                            }
                         )
                     }
                     Row(
@@ -275,42 +242,22 @@ fun SupportScreenContent(
                             .padding(all = SizeConstants.LargeSize),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        val highDonation = donationOptions[DonationProductIds.HIGH_DONATION]
-                        val extremeDonation = donationOptions[DonationProductIds.EXTREME_DONATION]
-                        GeneralButton(
-                            style = GeneralButtonStyle.Tonal,
+                        DonationButton(
+                            productId = DonationProductIds.HIGH_DONATION,
+                            preferenceKey = SupportPreferenceKeys.DONATE_HIGH,
+                            option = donationOptions[DonationProductIds.HIGH_DONATION],
+                            isBillingInProgress = isBillingInProgress,
+                            onDonate = onDonate,
                             modifier = Modifier.weight(1f),
-                            onClick = { onDonateClick(DonationProductIds.HIGH_DONATION) },
-                            firebaseController = firebaseController,
-                            ga4Event = supportPreferenceTapEvent(
-                                preferenceKey = SupportPreferenceKeys.DONATE_HIGH,
-                                productId = DonationProductIds.HIGH_DONATION,
-                            ),
-                            enabled = highDonation?.isEligible == true && !isBillingInProgress,
-                            icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Paid),
-                            label = if (highDonation?.isEligible == true) {
-                                highDonation.formattedPrice.orEmpty()
-                            } else {
-                                stringResource(id = R.string.support_offer_unavailable)
-                            }
                         )
                         Spacer(modifier = Modifier.width(SizeConstants.MediumSize))
-                        GeneralButton(
-                            style = GeneralButtonStyle.Tonal,
+                        DonationButton(
+                            productId = DonationProductIds.EXTREME_DONATION,
+                            preferenceKey = SupportPreferenceKeys.DONATE_EXTREME,
+                            option = donationOptions[DonationProductIds.EXTREME_DONATION],
+                            isBillingInProgress = isBillingInProgress,
+                            onDonate = onDonate,
                             modifier = Modifier.weight(1f),
-                            onClick = { onDonateClick(DonationProductIds.EXTREME_DONATION) },
-                            firebaseController = firebaseController,
-                            ga4Event = supportPreferenceTapEvent(
-                                preferenceKey = SupportPreferenceKeys.DONATE_EXTREME,
-                                productId = DonationProductIds.EXTREME_DONATION,
-                            ),
-                            enabled = extremeDonation?.isEligible == true && !isBillingInProgress,
-                            icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Paid),
-                            label = if (extremeDonation?.isEligible == true) {
-                                extremeDonation.formattedPrice.orEmpty()
-                            } else {
-                                stringResource(id = R.string.support_offer_unavailable)
-                            }
                         )
                     }
                 }
@@ -329,10 +276,7 @@ fun SupportScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(all = SizeConstants.LargeSize),
-                onClick = {
-                    context.openUrl(ShortenLinkConstants.LINKVERTISE_APP_DIRECT_LINK)
-                },
-                firebaseController = firebaseController,
+                onClick = onOpenWebAd,
                 ga4Event = supportPreferenceTapEvent(
                     preferenceKey = SupportPreferenceKeys.WEB_AD,
                     destination = ShortenLinkConstants.LINKVERTISE_APP_DIRECT_LINK,
@@ -341,17 +285,47 @@ fun SupportScreenContent(
                 label = stringResource(id = R.string.web_ad)
             )
         }
-        item {
-            SupportNativeAdCard(
-                modifier = Modifier
-                    .padding(all = SizeConstants.LargeSize)
-                    .animateItem(),
-                adUnitId = nativeAdsConfig.bannerAdUnitId
-            )
+        if (adUnitId != null) {
+            item {
+                SupportNativeAdCard(
+                    modifier = Modifier
+                        .padding(all = SizeConstants.LargeSize)
+                        .animateItem(),
+                    adUnitId = adUnitId,
+                )
+            }
         }
     }
 }
 
+/** A tier without a one-time offer from Play shows as unavailable and cannot be tapped. */
+@Composable
+private fun DonationButton(
+    productId: String,
+    preferenceKey: String,
+    option: DonationOption?,
+    isBillingInProgress: Boolean,
+    onDonate: (productId: String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val eligibleOption: DonationOption? = option?.takeIf { it.isEligible }
+    GeneralButton(
+        style = GeneralButtonStyle.Tonal,
+        modifier = modifier,
+        onClick = { onDonate(productId) },
+        ga4Event = supportPreferenceTapEvent(
+            preferenceKey = preferenceKey,
+            productId = productId,
+        ),
+        enabled = eligibleOption != null && !isBillingInProgress,
+        icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Paid),
+        label = if (eligibleOption != null) {
+            eligibleOption.formattedPrice.orEmpty()
+        } else {
+            stringResource(id = R.string.support_offer_unavailable)
+        }
+    )
+}
 
 private fun supportPreferenceTapEvent(
     preferenceKey: String,
@@ -369,13 +343,53 @@ private fun supportPreferenceTapEvent(
     )
 }
 
-private fun supportActionEvent(actionName: String): AnalyticsEvent {
-    return AnalyticsEvent(
-        name = SettingsAnalytics.Events.ACTION,
-        params = mapOf(
-            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(SUPPORT_SCREEN_NAME),
-            SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(actionName),
-        ),
-    )
+@Preview(showBackground = true)
+@Composable
+private fun SupportScreenContentPreview() {
+    MaterialTheme {
+        SupportScreenContent(
+            state = SupportUiState(
+                donationOptions = Loadable.Ready(
+                    persistentMapOf(
+                        DonationProductIds.LOW_DONATION to DonationOption(
+                            productId = DonationProductIds.LOW_DONATION,
+                            formattedPrice = "€0.99",
+                            isEligible = true,
+                        ),
+                        DonationProductIds.NORMAL_DONATION to DonationOption(
+                            productId = DonationProductIds.NORMAL_DONATION,
+                            formattedPrice = "€1.99",
+                            isEligible = true,
+                        ),
+                        DonationProductIds.HIGH_DONATION to DonationOption(
+                            productId = DonationProductIds.HIGH_DONATION,
+                            formattedPrice = "€4.99",
+                            isEligible = true,
+                        ),
+                        DonationProductIds.EXTREME_DONATION to DonationOption(
+                            productId = DonationProductIds.EXTREME_DONATION,
+                            formattedPrice = null,
+                            isEligible = false,
+                        ),
+                    )
+                ),
+            ),
+            onEvent = {},
+            onDonate = {},
+            onOpenWebAd = {},
+        )
+    }
 }
 
+@Preview(showBackground = true)
+@Composable
+private fun SupportScreenContentLoadingPreview() {
+    MaterialTheme {
+        SupportScreenContent(
+            state = SupportUiState(donationOptions = Loadable.Loading),
+            onEvent = {},
+            onDonate = {},
+            onOpenWebAd = {},
+        )
+    }
+}

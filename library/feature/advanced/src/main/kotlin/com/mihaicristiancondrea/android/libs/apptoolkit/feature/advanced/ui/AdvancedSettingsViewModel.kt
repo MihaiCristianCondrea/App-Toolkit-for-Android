@@ -17,103 +17,86 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui
 
-import androidx.lifecycle.viewModelScope
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.data.repositories.CacheRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.contracts.AdvancedSettingsAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.contracts.AdvancedSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.states.AdvancedSettingsUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onFailure
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.copyData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.dismissSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoading
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.updateData
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.states.CacheClearStatus
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 /**
- * ViewModel for advanced settings actions such as cache clearing.
+ * ViewModel for the advanced settings page: clearing the cache, and whether the developer options
+ * are offered.
+ *
+ * [CacheRepository] moves its own file work off the main thread, so this needs no dispatcher. A
+ * clear confirms with a message, and a failed one reports with an error message while the rows stay.
+ *
+ * @param developerOptionsUnlocked Whether the About screen's version easter egg has been found,
+ * which offers the developer options here.
  */
 class AdvancedSettingsViewModel(
     private val repository: CacheRepository,
-    private val dispatchers: DispatcherProvider,
-    firebaseController: FirebaseController,
-) : LoggedScreenViewModel<AdvancedSettingsUiState, AdvancedSettingsEvent, AdvancedSettingsAction>(
-    initialState = UiStateScreen(
-        screenState = ScreenState.Success(),
-        data = AdvancedSettingsUiState(),
-    ),
-    firebaseController = firebaseController,
+    telemetryRepository: TelemetryRepository,
+    developerOptionsUnlocked: Flow<Boolean> = flowOf(false),
+) : LoggedScreenViewModel<AdvancedSettingsUiState, AdvancedSettingsEvent>(
+    initialState = AdvancedSettingsUiState(),
+    telemetryRepository = telemetryRepository,
     screenName = "AdvancedSettings",
+    viewModelName = "AdvancedSettingsViewModel",
 ) {
-    private var observeJob: Job? = null
+    private var clearJob: Job? = null
+
+    init {
+        observeDeveloperOptions(unlocked = developerOptionsUnlocked)
+    }
 
     override fun handleEvent(event: AdvancedSettingsEvent) {
         when (event) {
-            is AdvancedSettingsEvent.ClearCache -> clearCache()
-            is AdvancedSettingsEvent.MessageShown -> onMessageShown()
+            AdvancedSettingsEvent.ClearCache -> clearCache()
         }
     }
 
+    /** A failure leaves the row hidden; the unlock is read again the next time the page opens. */
+    private fun observeDeveloperOptions(unlocked: Flow<Boolean>) {
+        unlocked.collectReport(action = Actions.OBSERVE_DEVELOPER_OPTIONS) { isUnlocked ->
+            setState { copy(developerOptionsUnlocked = isUnlocked) }
+        }
+    }
+
+    /** A second tap restarts the clear rather than queueing another, so only one result shows. */
     private fun clearCache() {
-        startOperation(action = Actions.CLEAR_CACHE)
-        observeJob = observeJob.restart {
-            repository.clearCache()
-                .flowOn(dispatchers.io)
-                .onStart {
-                    updateStateThreadSafe {
-                        screenState.dismissSnackbar()
-                        screenState.setLoading()
-                    }
-                }
-                .onEach { result ->
-                    result
-                        .onSuccess {
-                            updateStateThreadSafe {
-                                screenState.updateData(newState = ScreenState.Success()) { current ->
-                                    current.copy(cacheClearMessage = R.string.cache_cleared_success)
-                                }
-                            }
-                        }
-                        .onFailure {
-                            updateStateThreadSafe {
-                                screenState.updateData(newState = ScreenState.Error()) { current ->
-                                    current.copy(cacheClearMessage = R.string.cache_cleared_error)
-                                }
-                            }
-                        }
-                }
-                .catchReport(action = Actions.CLEAR_CACHE) {
-                    updateStateThreadSafe {
-                        screenState.updateData(newState = ScreenState.Error()) { current ->
-                            current.copy(cacheClearMessage = R.string.cache_cleared_error)
-                        }
-                    }
-                }
-                .launchIn(viewModelScope)
-        }
-    }
-
-    private fun onMessageShown() {
-        viewModelScope.launch {
-            updateStateThreadSafe {
-                screenState.copyData { copy(cacheClearMessage = null) }
+        clearJob = clearJob.restart {
+            launchReport(
+                action = Actions.CLEAR_CACHE,
+                onError = { error ->
+                    setState { copy(cacheClear = CacheClearStatus.Failed) }
+                    showMessage(error.toErrorMessage(fallback = ClearFailedText))
+                },
+            ) {
+                setState { copy(cacheClear = CacheClearStatus.Clearing) }
+                repository.clearCache()
+                setState { copy(cacheClear = CacheClearStatus.Idle) }
+                showMessage(UiMessage(ClearedText))
             }
         }
     }
 
     private object Actions {
         const val CLEAR_CACHE: String = "clearCache"
+        const val OBSERVE_DEVELOPER_OPTIONS: String = "observeDeveloperOptions"
+    }
+
+    private companion object {
+        val ClearedText = UiTextHelper.StringResource(R.string.cache_cleared_success)
+
+        /** Shown for a failure with no text of its own; see `toUiText` for the ones that have one. */
+        val ClearFailedText = UiTextHelper.StringResource(R.string.cache_cleared_error)
     }
 }
-

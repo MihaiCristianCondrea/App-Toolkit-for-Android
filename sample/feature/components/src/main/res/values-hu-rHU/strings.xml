@@ -104,4 +104,18 @@
     <string name="components_divider_width">Szélesség</string>
     <string name="components_divider_wave_height">Hullámmagasság</string>
     <string name="components_divider_vertical">Függőleges</string>
+    <string name="components_snackbar_pressed">Megnyomtál egy gombot</string>
+    <string name="components_snackbar_action_message">A gomb művelete megtörtént</string>
+    <string name="components_snackbar_undo">Visszavonás</string>
+    <string name="components_snackbar_undone">Visszavonva</string>
+    <string name="components_snackbar_error">Hiba történt</string>
+    <string name="components_snackbar_retry">Újra</string>
+    <string name="components_snackbar_icon">Értesítősáv ikonnal és saját színekkel</string>
+    <string name="components_snackbar_custom">%1$s: a képernyő által rajzolt értesítősáv</string>
+    <string name="components_section_article_bar">Cikk alkalmazássáv</string>
+    <string name="components_article_without_brand">Márka nélkül</string>
+    <string name="components_article_with_brand">Márkával</string>
+    <string name="components_article_brand">Mintakiadó</string>
+    <string name="components_article_headline">A visszafogott alkalmazássáv a történetet helyezi előtérbe</string>
+    <string name="components_article_paragraph">A sáv eleinte csak a gombjait mutatja. Görgess a főcím alá, és a cím veszi át a helyüket, az alsó szélén futó vonal pedig mutatja, mennyit olvastál el.</string>
 </resources>

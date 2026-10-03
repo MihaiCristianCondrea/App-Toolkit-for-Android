@@ -54,7 +54,8 @@ retention, and value.
 Search for:
 
 ```text
-FirebaseController
+TelemetryRepository
+LocalTelemetry
 AnalyticsEvent
 AnalyticsValue
 Ga4EventData

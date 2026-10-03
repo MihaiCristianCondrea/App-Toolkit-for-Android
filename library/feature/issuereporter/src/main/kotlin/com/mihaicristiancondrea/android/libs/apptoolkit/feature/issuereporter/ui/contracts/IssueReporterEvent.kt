@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,23 +17,24 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.contracts
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
-
-sealed interface IssueReporterEvent : UiEvent {
+/**
+ * What the author can ask the issue reporter's ViewModel to do.
+ */
+sealed interface IssueReporterEvent {
     data class UpdateTitle(val value: String) : IssueReporterEvent
+
     data class UpdateDescription(val value: String) : IssueReporterEvent
+
     data class UpdateEmail(val value: String) : IssueReporterEvent
+
+    /** Captures the device details for the panel, unless they are already shown or loading. */
     data object RequestDeviceInfo : IssueReporterEvent
+
     data object Send : IssueReporterEvent
 
     /**
-     * Returns the reporter to an empty report.
-     *
-     * The presentation outlives no state of its own, so closing the sheet has to say so: the
-     * ViewModel is scoped to the screen that opened it, and without this an abandoned draft, or the
-     * confirmation of a report already filed, would be waiting the next time the sheet opened.
+     * Returns the reporter to an empty report when the sheet closes. The ViewModel outlives the
+     * sheet, so without it a draft or a filed report's confirmation would show on the next opening.
      */
     data object Reset : IssueReporterEvent
-    data object DismissSnackbar : IssueReporterEvent
 }
-

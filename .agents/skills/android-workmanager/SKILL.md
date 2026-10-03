@@ -104,3 +104,10 @@ while (true) {
     doSomething()
     delay(...)
 }
+```
+
+Such a loop stops with the process and does not survive a restart or a reboot. Schedule the work as
+a `PeriodicWorkRequest`, as unique work so it is not enqueued twice.
+
+For constraints, retries and backoff, expedited and long-running work, chaining, and the APIs
+WorkManager replaces, read `references/workmanager.md`.

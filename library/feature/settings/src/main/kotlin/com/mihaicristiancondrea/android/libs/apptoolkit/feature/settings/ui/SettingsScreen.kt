@@ -17,347 +17,241 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
-import android.content.Context
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ContactSupport
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.compose.AsyncImage
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsCategory
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsPreference
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextField
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextFieldStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.rememberWindowWidthSizeClass
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.FaqActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsCategory
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsPreference
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.contracts.SettingsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.general.GeneralSettingsContent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.general.GeneralSettingsViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.general.contracts.GeneralSettingsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.GeneralSettingsContentProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.views.dropdowns.SettingsMenuActions
-import org.koin.compose.koinInject
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.search.rememberSettingsSearchIndex
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.states.SettingsUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellBackHandler
 import org.koin.compose.viewmodel.koinViewModel
-
 
 private const val SETTINGS_SCREEN_NAME = "Settings"
 private const val SETTINGS_SCREEN_CLASS = "SettingsScreen"
-private const val UNKNOWN_PREFERENCE_KEY = "unknown"
 
 private object SettingsActionNames {
-    const val BACK_CLICK: String = "back_click"
     const val RETRY_LOAD: String = "retry_load"
-    const val OPEN_HELP: String = "open_help"
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
+/**
+ * Host-supplied settings categories with search and navigation. A row's external action gets
+ * first chance to handle a click; otherwise its destination opens, beside the list on wide
+ * windows or over it on phones.
+ *
+ * Owns [SettingsViewModel], tracking, and a saved search query. Loading on each composition
+ * entry refreshes row summaries. The query remains with the list while a result opens beside
+ * it; Back clears it before leaving the page.
+ */
 @Composable
-fun SettingsScreen(
-    isEmbedded: Boolean = false,
-) {
+fun SettingsScreen() {
     val viewModel: SettingsViewModel = koinViewModel()
-    val contentProvider: GeneralSettingsContentProvider = koinInject()
-    val screenState: UiStateScreen<SettingsConfig> by viewModel.uiState.collectAsStateWithLifecycle()
-    val context: Context = LocalContext.current
+    val state: SettingsUiState by viewModel.state.collectAsStateWithLifecycle()
+    val navigator = LocalShellNavigator.current
+    val telemetryRepository = LocalTelemetry.current
 
-    val firebaseController: FirebaseController = koinInject()
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = SETTINGS_SCREEN_NAME,
         screenClass = SETTINGS_SCREEN_CLASS,
     )
     TrackScreenState(
-        firebaseController = firebaseController,
         screenName = SETTINGS_SCREEN_NAME,
-        screenState = screenState.screenState,
+        state = state.config,
     )
 
     LaunchedEffect(Unit) {
         viewModel.onEvent(event = SettingsEvent.Load)
     }
 
-    val content: @Composable (PaddingValues) -> Unit = { paddingValues ->
-        ScreenStateHandler(
-            screenState = screenState,
-            onLoading = { LoadingScreen() },
-            onEmpty = {
-                NoDataScreen(
-                    icon = Icons.Outlined.Settings,
-                    showRetry = true,
-                    onRetry = {
-                        firebaseController.logGa4Event(
-                            ga4Event = settingsActionGa4Event(actionName = SettingsActionNames.RETRY_LOAD)
-                        )
-                        viewModel.onEvent(event = SettingsEvent.Load)
-                    },
-                    paddingValues = paddingValues,
-                )
-            },
-            onSuccess = { config: SettingsConfig ->
-                SettingsScreenContent(
-                    paddingValues = paddingValues,
-                    settingsConfig = config,
-                    contentProvider = contentProvider,
-                    firebaseController = firebaseController,
-                )
-            },
-        )
+    var query by rememberSaveable { mutableStateOf("") }
+    val config: SettingsConfig? = (state.config as? Loadable.Ready)?.value
+    val results: List<SettingsPreference>? = config?.let { loaded ->
+        val index = rememberSettingsSearchIndex(loaded)
+        remember(index, query) { if (query.isBlank()) null else index.matching(query) }
     }
+    ShellBackHandler(enabled = config != null && query.isNotEmpty()) { query = "" }
 
-    if (isEmbedded) {
-        content(PaddingValues())
-    } else {
-        LargeTopAppBarWithScaffold(
-            title = stringResource(id = R.string.settings),
-            onBackClicked = {
-                firebaseController.logGa4Event(
-                    ga4Event = settingsActionGa4Event(actionName = SettingsActionNames.BACK_CLICK)
-                )
-                (context as? android.app.Activity)?.finish()
-            },
-            actions = { SettingsMenuActions() },
-            content = content
-        )
-    }
-}
-
-@Composable
-fun SettingsScreenContent(
-    paddingValues: PaddingValues,
-    settingsConfig: SettingsConfig,
-    contentProvider: GeneralSettingsContentProvider,
-    firebaseController: FirebaseController,
-) {
-    val windowWidthSizeClass: AppWindowWidthSizeClass = rememberWindowWidthSizeClass()
-    if (windowWidthSizeClass == AppWindowWidthSizeClass.Compact) {
-        PhoneSettingsScreen(
-            paddingValues = paddingValues,
-            settingsConfig = settingsConfig,
-            firebaseController = firebaseController,
-        )
-    } else {
-        TabletSettingsScreen(
-            paddingValues = paddingValues,
-            settingsConfig = settingsConfig,
-            contentProvider = contentProvider,
-            firebaseController = firebaseController,
-        )
-    }
-}
-
-@Composable
-fun PhoneSettingsScreen(
-    paddingValues: PaddingValues,
-    settingsConfig: SettingsConfig,
-    firebaseController: FirebaseController,
-) {
-    SettingsList(
-        paddingValues = paddingValues,
-        settingsConfig = settingsConfig,
-        firebaseController = firebaseController,
-        onPreferenceClick = { preference -> preference.action() },
-    )
-}
-
-@Composable
-fun TabletSettingsScreen(
-    paddingValues: PaddingValues,
-    settingsConfig: SettingsConfig,
-    contentProvider: GeneralSettingsContentProvider,
-    firebaseController: FirebaseController,
-) {
-    var selected: SettingsPreference? by remember { mutableStateOf(null) }
-
-    Row(modifier = Modifier.fillMaxSize()) {
-        Box(modifier = Modifier.weight(1f)) {
-            SettingsList(
-                paddingValues = paddingValues,
-                settingsConfig = settingsConfig,
-                firebaseController = firebaseController,
-                onPreferenceClick = { selected = it },
+    SettingsScreenContent(
+        state = state,
+        contentPadding = contentPadding(),
+        query = query,
+        onQueryChange = { query = it },
+        results = results,
+        onPreferenceClick = { preference ->
+            if (preference.action?.invoke() != true) {
+                preference.destination?.let(navigator::navigate)
+            }
+        },
+        onRetry = {
+            telemetryRepository.logGa4Event(
+                ga4Event = settingsActionGa4Event(actionName = SettingsActionNames.RETRY_LOAD),
             )
-        }
-        Box(modifier = Modifier.weight(2f)) {
-            AnimatedContent(targetState = selected) { preference ->
-                preference?.let {
-                    SettingsDetail(
-                        preference = it,
-                        paddingValues = paddingValues,
-                        contentProvider = contentProvider,
-                    )
-                } ?: SettingsDetailPlaceholder(paddingValues = paddingValues)
-            }
-        }
-    }
+            viewModel.onEvent(event = SettingsEvent.Load)
+        },
+    )
 }
 
-@Composable
-fun SettingsDetailPlaceholder(paddingValues: PaddingValues) {
-    val context: Context = LocalContext.current
-    val firebaseController: FirebaseController = koinInject()
-
-    LazyColumn(
-        contentPadding = paddingValues,
-        modifier = Modifier.fillMaxHeight(),
-    ) {
-        item {
-            Card(
-                modifier = Modifier
-                    .padding(top = SizeConstants.LargeSize, end = SizeConstants.LargeSize)
-                    .fillMaxSize()
-                    .wrapContentHeight(),
-                shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize),
-            ) {
-                Column(
-                    modifier = Modifier.padding(all = SizeConstants.MediumSize * 2),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                ) {
-                    AsyncImage(
-                        model = R.drawable.il_settings,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(size = SizeConstants.TwoHundredFiftyEightSize)
-                            .fillMaxWidth(),
-                    )
-                    LargeVerticalSpacer()
-                    Text(
-                        text = stringResource(id = CommonR.string.app_name),
-                        style = MaterialTheme.typography.titleMedium,
-                        textAlign = TextAlign.Center,
-                    )
-                    SmallVerticalSpacer()
-                    Text(
-                        text = stringResource(id = R.string.settings_placeholder_description),
-                        style = MaterialTheme.typography.bodyMedium,
-                        textAlign = TextAlign.Center,
-                    )
-                }
-                GeneralButton(
-                    style = GeneralButtonStyle.Outlined,
-                    modifier = Modifier
-                        .padding(all = SizeConstants.MediumSize * 2)
-                        .align(alignment = Alignment.Start),
-                    onClick = {
-                        context.openActivity(
-                            FaqActivity::class.java,
-                        )
-                    },
-                    icon = ToolkitIcon.Vector(imageVector = Icons.AutoMirrored.Outlined.ContactSupport),
-                    label = stringResource(id = R.string.get_help),
-                    firebaseController = firebaseController,
-                    ga4Event = settingsActionGa4Event(actionName = SettingsActionNames.OPEN_HELP),
-                )
-            }
-        }
-    }
+private fun settingsActionGa4Event(actionName: String): Ga4EventData {
+    return Ga4EventData(
+        name = SettingsAnalytics.Events.ACTION,
+        params = mapOf(
+            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(SETTINGS_SCREEN_NAME),
+            SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(actionName),
+        ),
+    )
 }
 
+private const val UNKNOWN_PREFERENCE_KEY = "unknown"
+
+/**
+ * The stateless half of [SettingsScreen]: the list, or its loading, empty or failure state.
+ *
+ * The empty and failure states keep the settings icon and always offer a retry, which
+ * [SettingsScreen] logs before it reloads.
+ *
+ * @param query The search query; [onQueryChange] edits it.
+ * @param results The rows the search found, or null while there is no query.
+ * @param onPreferenceClick A row was tapped.
+ * @param onRetry The empty or failure state's retry was tapped.
+ */
 @Composable
-fun SettingsDetail(
-    preference: SettingsPreference,
-    paddingValues: PaddingValues,
-    contentProvider: GeneralSettingsContentProvider,
+internal fun SettingsScreenContent(
+    state: SettingsUiState,
+    contentPadding: PaddingValues,
+    query: String,
+    onQueryChange: (String) -> Unit,
+    results: List<SettingsPreference>?,
+    onPreferenceClick: (SettingsPreference) -> Unit,
+    onRetry: () -> Unit,
 ) {
-    val viewModel: GeneralSettingsViewModel = koinViewModel()
-    val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
-
-    val firebaseController: FirebaseController = koinInject()
-    TrackScreenView(
-        firebaseController = firebaseController,
-        screenName = "GeneralSettings",
-        screenClass = preference.key,
+    ScreenStateHandler(
+        state = state.config,
+        contentPadding = contentPadding,
+        onRetry = onRetry,
+        onEmpty = { empty ->
+            NoDataScreen(
+                icon = Icons.Outlined.Settings,
+                message = empty.message?.asString(),
+                showRetry = true,
+                onRetry = onRetry,
+                paddingValues = contentPadding,
+            )
+        },
+        onError = { failed ->
+            NoDataScreen(
+                icon = Icons.Outlined.Settings,
+                message = failed.message.asString(),
+                isError = true,
+                showRetry = failed.retryable,
+                onRetry = onRetry,
+                paddingValues = contentPadding,
+            )
+        },
+        onSuccess = { ready ->
+            SettingsList(
+                paddingValues = contentPadding,
+                settingsConfig = ready.value,
+                onPreferenceClick = onPreferenceClick,
+                query = query,
+                onQueryChange = onQueryChange,
+                results = results,
+            )
+        },
     )
-
-    LaunchedEffect(key1 = preference.key) {
-        viewModel.onEvent(event = GeneralSettingsEvent.Load(contentKey = preference.key))
-    }
-
-    val uiStateScreen = viewModel.uiState.collectAsStateWithLifecycle().value
-
-    TrackScreenState(
-        firebaseController = firebaseController,
-        screenName = "GeneralSettings",
-        screenState = uiStateScreen.screenState,
-    )
-
-    Box(modifier = Modifier.fillMaxSize()) {
-        GeneralSettingsContent(
-            screenState = uiStateScreen,
-            contentProvider = contentProvider,
-            paddingValues = paddingValues,
-            snackbarHostState = snackbarHostState,
-        )
-    }
 }
 
+/**
+ * The settings rows, grouped by category.
+ *
+ * With [onQueryChange] set, a search field heads the list, and while [results] is not null the
+ * list shows those instead of the categories: every row the search found, host rows and the rows
+ * of the settings pages alike, or a line saying none did.
+ */
 @Composable
 fun SettingsList(
     paddingValues: PaddingValues,
     settingsConfig: SettingsConfig,
-    firebaseController: FirebaseController,
     onPreferenceClick: (SettingsPreference) -> Unit = {},
+    query: String = "",
+    onQueryChange: ((String) -> Unit)? = null,
+    results: List<SettingsPreference>? = null,
 ) {
     LazyColumn(
         contentPadding = paddingValues,
         modifier = Modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
     ) {
+        if (onQueryChange != null) {
+            item(key = "settings_search") {
+                GeneralTextField(
+                    value = query,
+                    onValueChange = onQueryChange,
+                    style = GeneralTextFieldStyle.SearchOutlined,
+                    placeholder = stringResource(R.string.search_settings),
+                    leadingIcon = ToolkitIcon.Vector(Icons.Outlined.Search),
+                    trailingIcon = if (query.isNotEmpty()) ToolkitIcon.Vector(Icons.Outlined.Close) else null,
+                    trailingIconContentDescription = stringResource(CoreUiR.string.clear_search),
+                    onTrailingIconClick = { onQueryChange("") },
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = SizeConstants.LargeSize)
+                        .padding(top = SizeConstants.MediumSize),
+                )
+            }
+        }
+        if (results != null) {
+            searchResults(results, onPreferenceClick)
+            return@LazyColumn
+        }
         settingsConfig.categories.forEachIndexed { categoryIndex: Int, category: SettingsCategory ->
             if (category.preferences.isNotEmpty()) {
                 item(key = "settings_category_spacing_$categoryIndex") {
@@ -384,7 +278,6 @@ fun SettingsList(
                         useIconContainer = preference.useIconContainer,
                         iconColor = preference.iconColor,
                         iconContainerColor = preference.iconContainerColor,
-                        firebaseController = firebaseController,
                         ga4EventProvider = {
                             Ga4EventData(
                                 name = SettingsAnalytics.Events.PREFERENCE_VIEW,
@@ -410,13 +303,100 @@ fun SettingsList(
     }
 }
 
-private fun settingsActionGa4Event(actionName: String): Ga4EventData {
-    return Ga4EventData(
-        name = SettingsAnalytics.Events.ACTION,
-        params = mapOf(
-            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(SETTINGS_SCREEN_NAME),
-            SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(actionName),
-        ),
-    )
+/** The rows the search found, as one group, or a line saying there are none. */
+private fun LazyListScope.searchResults(
+    results: List<SettingsPreference>,
+    onPreferenceClick: (SettingsPreference) -> Unit,
+) {
+    item(key = "settings_search_spacing") { LargeVerticalSpacer() }
+    if (results.isEmpty()) {
+        item(key = "settings_search_empty") {
+            Text(
+                text = stringResource(R.string.no_settings_found),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(SizeConstants.LargeSize),
+            )
+        }
+        return
+    }
+    itemsIndexed(
+        items = results,
+        key = { index: Int, preference: SettingsPreference -> "settings_search_${preference.key ?: index}_$index" },
+    ) { index: Int, preference: SettingsPreference ->
+        SettingsPreferenceItem(
+            icon = preference.icon,
+            title = preference.title,
+            summary = preference.summary,
+            useIconContainer = preference.useIconContainer,
+            iconColor = preference.iconColor,
+            iconContainerColor = preference.iconContainerColor,
+            onClick = { onPreferenceClick(preference) },
+            modifier = Modifier.groupedPreferenceItem(
+                position = groupedItemPosition(index = index, size = results.size),
+                outerRadius = SizeConstants.ExtraLargeSize,
+            ),
+        )
+    }
 }
 
+// Only the loaded and loading states have previews: the empty and failure states draw
+// `NoDataScreen`, which resolves its ad unit through Koin.
+@Preview(showBackground = true)
+@Composable
+private fun SettingsScreenContentPreview() {
+    MaterialTheme {
+        SettingsScreenContent(
+            state = SettingsUiState(
+                config = Loadable.Ready(
+                    SettingsConfig(
+                        title = "Settings",
+                        categories = listOf(
+                            SettingsCategory(
+                                preferences = listOf(
+                                    SettingsPreference(
+                                        key = "notifications",
+                                        icon = Icons.Outlined.Notifications,
+                                        title = "Notifications",
+                                        summary = "Alerts and reminders",
+                                    ),
+                                    SettingsPreference(
+                                        key = "display",
+                                        icon = Icons.Outlined.Settings,
+                                        title = "Display",
+                                        summary = "Layout and text size",
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            contentPadding = PaddingValues(),
+            query = "",
+            onQueryChange = {},
+            results = null,
+            onPreferenceClick = {},
+            onRetry = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SettingsScreenContentLoadingPreview() {
+    MaterialTheme {
+        SettingsScreenContent(
+            state = SettingsUiState(config = Loadable.Loading),
+            contentPadding = PaddingValues(),
+            query = "",
+            onQueryChange = {},
+            results = null,
+            onPreferenceClick = {},
+            onRetry = {},
+        )
+    }
+}

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="shell_dev_live_state">即時狀態</string>
+    <string name="shell_dev_window">視窗</string>
+    <string name="shell_dev_window_summary">%1$d × %2$d dp · %3$s</string>
+    <string name="shell_dev_page_stack">頁面堆疊</string>
+    <string name="shell_dev_tab_stack">%1$s 堆疊</string>
+    <string name="shell_dev_navigation">導覽</string>
+    <string name="shell_dev_start">下次啟動時的起始畫面</string>
+    <string name="shell_dev_layout">導覽版面配置</string>
+    <string name="shell_dev_accessories">底部配件</string>
+    <string name="shell_dev_bottom_accessory">導覽列上方</string>
+    <string name="shell_dev_motion">動態效果</string>
+    <string name="shell_dev_animation_speed">動畫速度</string>
+    <string name="shell_dev_reset">重設開發人員選項</string>
+    <string name="shell_dev_reset_summary">恢復為應用程式宣告的設定</string>
+    <string name="shell_layout_auto">自動，依視窗寬度</string>
+    <string name="shell_layout_bottom_bar">底部列與導覽匣</string>
+    <string name="shell_layout_rail">導覽邊欄</string>
+    <string name="shell_layout_expanded_rail">展開的導覽邊欄</string>
+    <string name="shell_layout_permanent_drawer">固定導覽匣</string>
+    <string name="shell_accessory_as_declared">橫幅，播放時由播放器取代</string>
+    <string name="shell_accessory_none">無</string>
+    <string name="shell_accessory_banner">僅橫幅</string>
+    <string name="shell_accessory_player">僅播放器</string>
+    <string name="shell_start_as_declared">依應用程式宣告：%1$s</string>
+    <string name="shell_start_screen">%1$s，在主畫面之前</string>
+    <string name="shell_speed_normal">一般</string>
+    <string name="shell_speed_slow">慢 2 倍</string>
+    <string name="shell_speed_very_slow">慢 5 倍</string>
+    <string name="shell_developer_options">開發人員選項</string>
+    <string name="shell_top_bar">頂端應用程式列</string>
+    <string name="shell_navigation_bar">底部導覽列</string>
+    <string name="shell_navigation_tint">側邊欄與應用程式列顏色</string>
+    <string name="shell_hide_bottom_bar">捲動時隱藏底部列</string>
+    <string name="shell_hide_bottom_bar_summary">未顯示播放器時，內容向下捲動會滑出畫面</string>
+    <string name="shell_hide_top_bar">捲動時隱藏應用程式列</string>
+    <string name="shell_hide_top_bar_summary">內容向下捲動時會滑出畫面（大型列會先收合），向上捲動時立即返回</string>
+    <string name="shell_limit_width">在大型視窗中限制內容寬度</string>
+    <string name="shell_limit_width_summary">超過版面配置政策的寬度上限時，像網站一樣以邊界將內容置中</string>
+    <string name="shell_tab_transition">分頁之間</string>
+    <string name="shell_back_edge">從右側邊緣滑動返回</string>
+    <string name="shell_as_declared">依各畫面宣告</string>
+    <string name="shell_top_bar_small">小</string>
+    <string name="shell_top_bar_center">置中</string>
+    <string name="shell_top_bar_large">大，可收合</string>
+    <string name="shell_top_bar_large_collapsed">大，開啟時已收合</string>
+    <string name="shell_top_bar_hidden">隱藏</string>
+    <string name="shell_navigation_bar_standard">標準，80 dp</string>
+    <string name="shell_navigation_bar_short">短，64 dp</string>
+    <string name="shell_navigation_tint_none">表面；捲動時應用程式列會著色</string>
+    <string name="shell_navigation_tint_always">一同著色，內容顯示在卡片中</string>
+    <string name="shell_navigation_tint_on_scroll">內容捲動後一同著色</string>
+    <string name="shell_back_edge_system">如同 Android：頁面在原地縮小</string>
+    <string name="shell_back_edge_follow">跟隨手指，與左側邊緣對稱 (預設)</string>
+    <string name="shell_transition_directional">方向性滑動</string>
+    <string name="shell_transition_fade_through">淡出淡入</string>
+    <string name="shell_transition_fade">交叉淡化</string>
+    <string name="shell_transition_none">無</string>
+    <string name="shell_dev_layout_and_bars">版面配置與列</string>
+</resources>

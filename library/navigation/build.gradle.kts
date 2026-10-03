@@ -20,7 +20,7 @@ import com.mihaicristiancondrea.android.apptoolkit.buildlogic.VersioningExtensio
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.serialization)
     id("com.mihaicristiancondrea.android.apptoolkit.unit-test")
     id("com.mihaicristiancondrea.android.apptoolkit.versioning")
     id("com.mihaicristiancondrea.android.apptoolkit.jvm-target")
@@ -47,8 +47,11 @@ dependencies {
     api(project(":library:core:common"))
     api(project(":library:core:designsystem"))
 
-    // Navigation3
+    // Navigation3. The shell's back stacks save their keys through kotlinx.serialization, so keys
+    // declared here and by apps need the runtime on the API.
     api(libs.bundles.androidx.navigation3)
+    api(libs.kotlinx.serialization.core)
+    implementation(libs.androidx.core.ktx)
 
     // Compose
     api(platform(libs.androidx.compose.bom))

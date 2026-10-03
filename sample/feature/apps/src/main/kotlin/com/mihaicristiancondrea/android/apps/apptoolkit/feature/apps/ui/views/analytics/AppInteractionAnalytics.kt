@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.a
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.contracts.AppGa4Contract
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 
@@ -38,7 +38,7 @@ enum class AppInteractionType {
 /**
  * Logs app-card interactions from app list style screens in a consistent GA4 format.
  */
-fun FirebaseController.logAppInteraction(
+fun TelemetryRepository.logAppInteraction(
     source: String,
     appInfo: AppInfo,
     interaction: AppInteractionType,

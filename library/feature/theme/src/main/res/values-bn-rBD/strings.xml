@@ -15,22 +15,16 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">AMOLED মোড</string>
-    <string name="color_palette">রঙের প্যালেট</string>
-    <string name="dark_mode">ডার্ক মোড</string>
-    <string name="follow_system">সিস্টেম মোড অনুসরণ করুন</string>
-    <string name="light_mode">লাইট মোড</string>
-    <string name="onboarding_theme_dark_desc">চোখের জন্য আরামদায়ক।</string>
-    <string name="onboarding_theme_light_desc">উজ্জ্বল এবং প্রাণবন্ত।</string>
-    <string name="onboarding_theme_system_desc">আপনার ডিভাইসের সাথে মেলে।</string>
-    <string name="other_colors">অন্যান্য রং</string>
-    <string name="screen_and_display_settings">স্ক্রিন এবং প্রদর্শন সেটিংস।</string>
-    <string name="summary_dark_theme">গা dark ় থিম আপনার ব্যাটারির জীবনকে উল্লেখযোগ্যভাবে প্রসারিত করতে একটি গভীর পটভূমি উপার্জন করে। এটি সক্রিয় করতে, কেবল আপনার অ্যান্ড্রয়েডের সিস্টেম ম্যানেজারে নেভিগেট করুন এবং আপনার পছন্দসই থিমটি নির্বাচন করুন</string>
-    <string name="theme_mode">থিম মোড</string>
-    <string name="wallpaper_colors">ওয়ালপেপারের রং</string>
     <string name="holiday_greeting_christmas_title">শুভ ছুটির দিন!</string>
     <string name="holiday_greeting_christmas_message">ক্রিসমাস থিম এসে গেছে, পুরো অ্যাপ জুড়ে তুষার পড়ছে। ছুটি শেষ না হওয়া পর্যন্ত এটি ব্যবহার করতে চান?</string>
     <string name="holiday_greeting_halloween_title">শুভ হ্যালোইন!</string>
     <string name="holiday_greeting_halloween_message">ভুতুড়ে মৌসুম এসে গেছে। যতদিন চলে ততদিন হ্যালোইন থিম ব্যবহার করতে চান?</string>
     <string name="holiday_greeting_use_theme">ছুটির সময় ছুটির থিম ব্যবহার করুন</string>
+    <string name="dark_theme">ডার্ক থিম</string>
+    <string name="weather_effect">আবহাওয়ার ইফেক্ট</string>
+    <string name="weather_effect_automatic">স্বয়ংক্রিয়</string>
+    <string name="weather_effect_snow">তুষার</string>
+    <string name="weather_effect_off">বন্ধ</string>
+    <string name="weather_effect_rain">বৃষ্টি</string>
+    <string name="weather_effect_info">স্বয়ংক্রিয় থাকলে ক্রিসমাস প্যালেট ব্যবহারের সময় তুষার পড়ে। তুষার ও বৃষ্টি যেকোনো প্যালেটের সাথে পড়ে।</string>
 </resources>

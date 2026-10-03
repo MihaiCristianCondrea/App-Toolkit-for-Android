@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="shell_dev_live_state">Live state</string>
+    <string name="shell_dev_window">Window</string>
+    <string name="shell_dev_window_summary">%1$d × %2$d dp · %3$s</string>
+    <string name="shell_dev_page_stack">Page stack</string>
+    <string name="shell_dev_tab_stack">%1$s stack</string>
+    <string name="shell_dev_navigation">Navigation</string>
+    <string name="shell_dev_start">Start on, from the next launch</string>
+    <string name="shell_dev_layout">Navigation layout</string>
+    <string name="shell_dev_accessories">Bottom accessories</string>
+    <string name="shell_dev_bottom_accessory">Above the navigation bar</string>
+    <string name="shell_dev_motion">Motion</string>
+    <string name="shell_dev_animation_speed">Animation speed</string>
+    <string name="shell_dev_reset">Reset developer options</string>
+    <string name="shell_dev_reset_summary">Back to what the app declares</string>
+    <string name="shell_layout_auto">Automatic, from the window width</string>
+    <string name="shell_layout_bottom_bar">Bottom bar and drawer</string>
+    <string name="shell_layout_rail">Navigation rail</string>
+    <string name="shell_layout_expanded_rail">Expanded navigation rail</string>
+    <string name="shell_layout_permanent_drawer">Permanent drawer</string>
+    <string name="shell_accessory_as_declared">Banner, replaced by the player while it plays</string>
+    <string name="shell_accessory_none">Nothing</string>
+    <string name="shell_accessory_banner">Banner only</string>
+    <string name="shell_accessory_player">Player only</string>
+    <string name="shell_start_as_declared">As the app declares: %1$s</string>
+    <string name="shell_start_screen">%1$s, before the shell</string>
+    <string name="shell_speed_normal">Normal</string>
+    <string name="shell_speed_slow">2× slower</string>
+    <string name="shell_speed_very_slow">5× slower</string>
+    <string name="shell_developer_options">Developer options</string>
+    <string name="shell_top_bar">Top app bar</string>
+    <string name="shell_navigation_bar">Bottom navigation bar</string>
+    <string name="shell_navigation_tint">Rail and app bar color</string>
+    <string name="shell_hide_bottom_bar">Hide the bottom bar on scroll</string>
+    <string name="shell_hide_bottom_bar_summary">Slides away as the content scrolls down, while no player is showing</string>
+    <string name="shell_hide_top_bar">Hide the app bar on scroll</string>
+    <string name="shell_hide_top_bar_summary">Slides away as the content scrolls down, a large bar once it has collapsed, and comes back as soon as it scrolls up</string>
+    <string name="shell_limit_width">Limit content width on large windows</string>
+    <string name="shell_limit_width_summary">Center content with margins, like a website, past the layout policy\'s maximum width</string>
+    <string name="shell_tab_transition">Between tabs</string>
+    <string name="shell_back_edge">Back swipe from the right edge</string>
+    <string name="shell_as_declared">As each screen declares</string>
+    <string name="shell_top_bar_small">Small</string>
+    <string name="shell_top_bar_center">Center aligned</string>
+    <string name="shell_top_bar_large">Large, collapsing</string>
+    <string name="shell_top_bar_large_collapsed">Large, opens collapsed</string>
+    <string name="shell_top_bar_hidden">Hidden</string>
+    <string name="shell_navigation_bar_standard">Standard, 80dp</string>
+    <string name="shell_navigation_bar_short">Short, 64dp</string>
+    <string name="shell_navigation_tint_none">Surface; the app bar tints on scroll</string>
+    <string name="shell_navigation_tint_always">Tinted together, content in a card</string>
+    <string name="shell_navigation_tint_on_scroll">Tinted together once content scrolls</string>
+    <string name="shell_back_edge_system">As Android: the page shrinks in place</string>
+    <string name="shell_back_edge_follow">Follows the finger, mirroring the left edge (default)</string>
+    <string name="shell_transition_directional">Directional slide</string>
+    <string name="shell_transition_fade_through">Fade through</string>
+    <string name="shell_transition_fade">Cross-fade</string>
+    <string name="shell_transition_none">None</string>
+    <string name="shell_dev_layout_and_bars">Layout and bars</string>
+</resources>

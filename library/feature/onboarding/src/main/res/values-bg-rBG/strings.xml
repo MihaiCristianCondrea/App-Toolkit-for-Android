@@ -15,42 +15,19 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="agree">Съгласен съм</string>
-    <string name="amoled_mode">AMOLED режим</string>
     <string name="back_button_content_description">Назад</string>
     <string name="back_button_text">Назад</string>
-    <string name="dark_mode">Тъмен режим</string>
-    <string name="done_button_content_description">Готово</string>
     <string name="done_button_text">Готово</string>
-    <string name="error">Грешка</string>
-    <string name="follow_system">Следвай системния режим</string>
-    <string name="learn_more">Научете повече</string>
-    <string name="learn_more_privacy_policy">Прегледай нашата политика за поверителност</string>
-    <string name="light_mode">Светъл режим</string>
     <string name="next_button_content_description">Напред</string>
     <string name="next_button_text">Напред</string>
     <string name="onboarding_amoled_mode_desc">По-дълбоки черни за OLED екрани.</string>
     <string name="onboarding_complete_icon_desc">Началната настройка е завършена</string>
     <string name="onboarding_completion_failed">Настройката ви не можа да бъде запазена. Моля, опитайте отново.</string>
-    <string name="onboarding_crashlytics_description">Разреши на приложението да изпраща анонимни данни за употреба и отчети за сривове. Това ни помага да поправяме грешки и да подобрим твоето преживяване. Не се събира лична информация.</string>
-    <string name="onboarding_crashlytics_disabled_desc">Докладването на данни е неактивно.</string>
-    <string name="onboarding_crashlytics_enabled_desc">Докладването на данни е активно.</string>
-    <string name="onboarding_crashlytics_privacy_info">Твоята поверителност е важна. Ние използваме тези данни само за поправяне на грешки и подобряване на функциите. За повече подробности, моля, прегледай нашата политика за поверителност.</string>
-    <string name="onboarding_crashlytics_show_details_button">Покажи подробна информация</string>
-    <string name="onboarding_crashlytics_show_details_button_cd">Покажи подробна информация за употребата и диагностиката</string>
-    <string name="onboarding_crashlytics_title">Помогни ни да се подобрим</string>
     <string name="onboarding_final_description">Благодарим ти, че персонализира своето преживяване. Вече си готов да изследваш всички функции. Приятно ползване.</string>
     <string name="onboarding_final_title">Всичко е готово.</string>
-    <string name="onboarding_theme_dark_desc">Приятен за очите.</string>
-    <string name="onboarding_theme_light_desc">Светъл и енергичен.</string>
     <string name="onboarding_theme_subtitle">Избери как да изглежда приложението.</string>
-    <string name="onboarding_theme_system_desc">Съответства на твоето устройство.</string>
     <string name="onboarding_theme_title">Избери своя стил</string>
-    <string name="other_colors">Други цветове</string>
     <string name="skip_button_content_description">Пропусни</string>
     <string name="skip_button_text">Пропусни</string>
-    <string name="summary_browse_terms_of_service_and_privacy_policy">Прочетете и се съгласете с нашите Общи условия и Политика за поверителност, за да продължите</string>
     <string name="usage_and_diagnostics">Използване и диагностика</string>
-    <string name="wallpaper_colors">Цветове на тапета</string>
-    <string name="welcome">Добре дошли</string>
 </resources>

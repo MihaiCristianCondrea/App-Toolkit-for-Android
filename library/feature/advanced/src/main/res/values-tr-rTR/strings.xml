@@ -22,4 +22,8 @@
     <string name="error_reporting">Hata raporlama</string>
     <string name="summary_preference_settings_bug_report">Hata raporları ve istekleri GitHub sorunlar sayfasına gönderin</string>
     <string name="summary_preference_settings_clear_cache">Geçici uygulama verilerini temizle.</string>
+    <string name="advanced">Gelişmiş</string>
+    <string name="developer_options">Geliştirici seçenekleri</string>
+    <string name="summary_preference_settings_developer_options">Başlangıç sayfasını, gezinme düzenini ve animasyonları test edin</string>
+    <string name="developer">Geliştirici</string>
 </resources>

@@ -23,7 +23,6 @@
     <string name="language">Limbă</string>
     <string name="navigation">Navigare</string>
     <string name="show_labels_on_bottom_bar">Afișați etichete pe bara de jos</string>
-    <string name="startup_page">Pagina de pornire</string>
     <string name="summary_preference_settings_bounce_buttons">Aplică o animație subtilă de săritură la elementele clicabile</string>
     <string name="summary_preference_settings_dynamic_colors">Aplică culorile din tapetul dispozitivului la tema aplicației</string>
     <string name="summary_preference_settings_language">Schimbă limba utilizată în aplicație</string>
@@ -31,4 +30,5 @@
     <string name="summary_preference_settings_startup_page">Alege ecranul care va fi afișat la pornirea aplicației.</string>
     <string name="will_never_turn_on_automatically">Nu se va activa niciodată automat</string>
     <string name="will_turn_on_automatically_by_system">Se va activa automat prin setările sistemului</string>
+    <string name="display">Afișaj</string>
 </resources>

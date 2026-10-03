@@ -24,6 +24,6 @@ import org.koin.dsl.module
 
 val supportModule: Module = module {
     viewModel {
-        SupportViewModel(billingRepository = get(), firebaseController = get())
+        SupportViewModel(billingRepository = get(), telemetryRepository = get())
     }
 }

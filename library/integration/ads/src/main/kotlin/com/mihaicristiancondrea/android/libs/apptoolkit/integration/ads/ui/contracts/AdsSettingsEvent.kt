@@ -18,12 +18,14 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.contracts
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 
-/** User interactions on the ads settings screen. */
-sealed interface AdsSettingsEvent : UiEvent {
-    data object Initialize : AdsSettingsEvent
+/** What the ads settings screen asks its ViewModel to do. */
+sealed interface AdsSettingsEvent {
+    /** Follows the stored ad preferences, on start and on retry. */
+    data object Load : AdsSettingsEvent
     data class SetAdsEnabled(val enabled: Boolean) : AdsSettingsEvent
     data class SetReduceAds(val enabled: Boolean) : AdsSettingsEvent
+
+    /** Opens the UMP privacy form from [host], whether or not UMP requires it. */
     data class RequestConsent(val host: ConsentHost) : AdsSettingsEvent
 }

@@ -15,9 +15,20 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="error_description_missing">समस्या का वर्णन करें</string>
+    <string name="error_email_invalid">एक मान्य ईमेल पता दर्ज करें</string>
+    <string name="error_email_missing">अपना ईमेल दर्ज करें</string>
     <string name="error_forbidden">निषिद्ध: अपर्याप्त अनुमतियाँ</string>
     <string name="error_gone">API एंडपॉइंट हटा दिया गया</string>
-    <string name="error_invalid_report">शीर्षक और विवरण खाली नहीं हो सकते</string>
+    <string name="error_link_only">केवल लिंक नहीं, समस्या का वर्णन करें।</string>
+    <string name="error_repetitive">बहुत अधिक दोहराव है। बताएं कि क्या हुआ।</string>
+    <string name="error_report_cooldown">कृपया दूसरी रिपोर्ट भेजने से पहले कुछ मिनट प्रतीक्षा करें।</string>
+    <string name="error_report_duplicate">यह रिपोर्ट पहले ही भेजी जा चुकी है।</string>
+    <string name="error_same_as_title">शीर्षक से अधिक विवरण जोड़ें।</string>
+    <string name="error_title_missing">एक शीर्षक दर्ज करें</string>
+    <string name="error_too_few_letters">केवल चिह्न या इमोजी नहीं, शब्दों का उपयोग करें।</string>
+    <string name="error_too_long">बहुत लंबा है। अधिकतम %1$d वर्णों का उपयोग करें।</string>
+    <string name="error_too_short">बहुत छोटा है। कम से कम %1$d वर्णों का उपयोग करें।</string>
     <string name="error_unauthorized">अनधिकृत: अमान्य टोकन</string>
     <string name="error_unprocessable">इश्यू बनाने के लिए अमान्य डेटा</string>
 </resources>

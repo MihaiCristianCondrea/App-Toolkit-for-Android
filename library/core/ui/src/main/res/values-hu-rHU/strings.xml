@@ -56,4 +56,5 @@
     <string name="theme_mode">Téma mód</string>
     <string name="try_again">Próbáld újra</string>
     <string name="wallpaper_colors">Háttérkép színei</string>
+    <string name="shell_list_placeholder">Válasszon egy elemet, hogy itt megjelenjen.</string>
 </resources>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="shell_dev_live_state">現在の状態</string>
+    <string name="shell_dev_window">ウィンドウ</string>
+    <string name="shell_dev_window_summary">%1$d × %2$d dp · %3$s</string>
+    <string name="shell_dev_page_stack">ページスタック</string>
+    <string name="shell_dev_tab_stack">%1$sのスタック</string>
+    <string name="shell_dev_navigation">ナビゲーション</string>
+    <string name="shell_dev_start">次回起動時の開始画面</string>
+    <string name="shell_dev_layout">ナビゲーションのレイアウト</string>
+    <string name="shell_dev_accessories">下部のアクセサリ</string>
+    <string name="shell_dev_bottom_accessory">ナビゲーションバーの上</string>
+    <string name="shell_dev_motion">モーション</string>
+    <string name="shell_dev_animation_speed">アニメーション速度</string>
+    <string name="shell_dev_reset">開発者向けオプションをリセット</string>
+    <string name="shell_dev_reset_summary">アプリの宣言どおりに戻す</string>
+    <string name="shell_layout_auto">自動（ウィンドウ幅に応じて）</string>
+    <string name="shell_layout_bottom_bar">下部バーとドロワー</string>
+    <string name="shell_layout_rail">ナビゲーションレール</string>
+    <string name="shell_layout_expanded_rail">展開したナビゲーションレール</string>
+    <string name="shell_layout_permanent_drawer">常時表示のドロワー</string>
+    <string name="shell_accessory_as_declared">バナー（再生中はプレーヤーに置き換え）</string>
+    <string name="shell_accessory_none">なし</string>
+    <string name="shell_accessory_banner">バナーのみ</string>
+    <string name="shell_accessory_player">プレーヤーのみ</string>
+    <string name="shell_start_as_declared">アプリの宣言どおり: %1$s</string>
+    <string name="shell_start_screen">%1$s（メイン画面の前）</string>
+    <string name="shell_speed_normal">標準</string>
+    <string name="shell_speed_slow">2 倍遅く</string>
+    <string name="shell_speed_very_slow">5 倍遅く</string>
+    <string name="shell_developer_options">開発者向けオプション</string>
+    <string name="shell_top_bar">トップアプリバー</string>
+    <string name="shell_navigation_bar">下部ナビゲーションバー</string>
+    <string name="shell_navigation_tint">レールとアプリバーの色</string>
+    <string name="shell_hide_bottom_bar">スクロール時に下部バーを隠す</string>
+    <string name="shell_hide_bottom_bar_summary">プレーヤーが表示されていないとき、コンテンツを下にスクロールするとスライドして隠れます</string>
+    <string name="shell_hide_top_bar">スクロール時にアプリバーを隠す</string>
+    <string name="shell_hide_top_bar_summary">コンテンツを下にスクロールするとスライドして隠れ（大きなバーは折りたたまれた後）、上にスクロールするとすぐに戻ります</string>
+    <string name="shell_limit_width">大きなウィンドウでコンテンツの幅を制限</string>
+    <string name="shell_limit_width_summary">レイアウトポリシーの最大幅を超えたら、ウェブサイトのように余白を付けてコンテンツを中央に配置します</string>
+    <string name="shell_tab_transition">タブ間</string>
+    <string name="shell_back_edge">右端からの戻るスワイプ</string>
+    <string name="shell_as_declared">各画面の宣言どおり</string>
+    <string name="shell_top_bar_small">小</string>
+    <string name="shell_top_bar_center">中央揃え</string>
+    <string name="shell_top_bar_large">大（折りたたみ可能）</string>
+    <string name="shell_top_bar_large_collapsed">大（折りたたんだ状態で開く）</string>
+    <string name="shell_top_bar_hidden">非表示</string>
+    <string name="shell_navigation_bar_standard">標準（80 dp）</string>
+    <string name="shell_navigation_bar_short">ショート（64 dp）</string>
+    <string name="shell_navigation_tint_none">サーフェス。スクロールするとアプリバーに色が付きます</string>
+    <string name="shell_navigation_tint_always">一緒に着色し、コンテンツをカードに表示</string>
+    <string name="shell_navigation_tint_on_scroll">コンテンツがスクロールしたら一緒に着色</string>
+    <string name="shell_back_edge_system">Android と同じ: ページがその場で縮小</string>
+    <string name="shell_back_edge_follow">指に追従し、左端と対称に動く（デフォルト）</string>
+    <string name="shell_transition_directional">方向付きスライド</string>
+    <string name="shell_transition_fade_through">フェードスルー</string>
+    <string name="shell_transition_fade">クロスフェード</string>
+    <string name="shell_transition_none">なし</string>
+    <string name="shell_dev_layout_and_bars">レイアウトとバー</string>
+</resources>

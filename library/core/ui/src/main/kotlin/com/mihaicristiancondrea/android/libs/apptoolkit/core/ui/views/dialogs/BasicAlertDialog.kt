@@ -34,15 +34,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.Ge
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 
 /**
- * Reusable alert dialog with optional icon, custom body content, and confirm/dismiss actions.
- *
- * State hoisting contract:
- * - Visibility is owned by the caller.
- * - [onDismiss], [onConfirm], and [onCancel] should update caller-managed state.
- *
- * Dismissal contract:
- * - Back press/outside tap dispatches [onDismiss].
- * - Secondary button dispatches [onCancel] (defaults to [onDismiss]).
+ * Alert dialog with caller-owned visibility. Back and outside taps call [onDismiss]; the
+ * secondary button calls [onCancel], which defaults to [onDismiss]. Action callbacks must
+ * update the caller's visibility state.
  */
 @Composable
 fun BasicAlertDialog(

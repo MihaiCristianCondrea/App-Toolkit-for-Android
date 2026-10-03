@@ -21,12 +21,9 @@
     <string name="app_build_version">เวอร์ชันแอป</string>
     <string name="app_info">ข้อมูลแอป</string>
     <string name="app_toolkit_version">เวอร์ชัน App Toolkit</string>
-    <string name="content_description_more_options">ตัวเลือกเพิ่มเติม</string>
     <string name="debug">แก้ไขข้อผิดพลาด</string>
     <string name="device_info">ข้อมูลอุปกรณ์</string>
     <string name="device_model">รุ่นอุปกรณ์</string>
-    <string name="done_button_content_description">เสร็จสิ้น</string>
-    <string name="go_back">กลับ</string>
     <string name="google_play_services_version">เวอร์ชันบริการ Google Play</string>
     <string name="help_and_feedback">ความช่วยเหลือและข้อเสนอแนะ</string>
     <string name="manufacturer">ผู้ผลิต</string>
@@ -41,8 +38,6 @@
     <string name="snack_device_info_failed">ไม่สามารถโหลดข้อมูลอุปกรณ์ได้</string>
     <string name="summary_preference_settings_oss">รายละเอียดใบอนุญาตซอฟต์แวร์โอเพ่นซอร์ส</string>
     <string name="summary_share_message">ลองดูแอปนี้ที่ฉันใช้อยู่. มีฟีเจอร์เจ๋ง ๆ มากมายที่คุณอาจสนใจ ดาวน์โหลดได้จาก Play Store ที่: %1$s</string>
-    <string name="support_us">สนับสนุนเรา</string>
-    <string name="try_again">ลองอีกครั้ง</string>
     <string name="updates">การอัปเดต</string>
     <string name="snack_seasonal_themes_unlocked">ขอให้สนุก</string>
 </resources>

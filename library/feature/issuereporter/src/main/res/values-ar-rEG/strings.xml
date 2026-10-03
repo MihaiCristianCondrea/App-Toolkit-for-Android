@@ -22,7 +22,6 @@
     <string name="issue_description_placeholder">صف المشكلة وكيفية إعادة إنتاجها</string>
     <string name="issue_done">تم</string>
     <string name="issue_email_label">البريد الإلكتروني</string>
-    <string name="issue_email_optional_placeholder">البريد الإلكتروني (اختياري)</string>
     <string name="issue_section_label">المشكلة</string>
     <string name="issue_send">إرسال</string>
     <string name="issue_submitted_message">شكرًا لمساعدتك في تحسين التطبيق.</string>

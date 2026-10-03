@@ -15,9 +15,20 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="error_description_missing">Beskriv problemet</string>
+    <string name="error_email_invalid">Ange en giltig e-postadress</string>
+    <string name="error_email_missing">Ange din e-postadress</string>
     <string name="error_forbidden">Åtkomst nekad: otillräckliga behörigheter</string>
     <string name="error_gone">API-slutpunkt borttagen</string>
-    <string name="error_invalid_report">Titel och beskrivning får inte vara tomma</string>
+    <string name="error_link_only">Beskriv problemet, inte bara en länk.</string>
+    <string name="error_repetitive">För mycket upprepning. Beskriv vad som hände.</string>
+    <string name="error_report_cooldown">Vänta några minuter innan du skickar en ny rapport.</string>
+    <string name="error_report_duplicate">Den här rapporten har redan skickats.</string>
+    <string name="error_same_as_title">Lägg till fler detaljer än i titeln.</string>
+    <string name="error_title_missing">Ange en titel</string>
+    <string name="error_too_few_letters">Använd ord, inte bara symboler eller emojier.</string>
+    <string name="error_too_long">För långt. Använd högst %1$d tecken.</string>
+    <string name="error_too_short">För kort. Använd minst %1$d tecken.</string>
     <string name="error_unauthorized">Obehörig: ogiltig token</string>
     <string name="error_unprocessable">Ogiltiga data för skapande av ärende</string>
 </resources>

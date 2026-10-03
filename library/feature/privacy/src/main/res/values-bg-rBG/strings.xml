@@ -32,4 +32,5 @@
     <string name="summary_preference_settings_usage_and_diagnostics">Споделяйте данни за подобряване на изживяването в приложението</string>
     <string name="terms_of_service">Общи условия</string>
     <string name="usage_and_diagnostics">Използване и диагностика</string>
+    <string name="security_and_privacy">Сигурност и поверителност</string>
 </resources>

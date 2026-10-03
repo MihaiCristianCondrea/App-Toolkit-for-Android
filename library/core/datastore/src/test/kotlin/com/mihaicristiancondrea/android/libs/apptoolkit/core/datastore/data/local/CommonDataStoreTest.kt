@@ -398,8 +398,7 @@ class CommonDataStoreTest {
     }
 
     /**
-     * The sharing scope behind `adsEnabledFlow` now belongs to the ads preference source, which is
-     * what `CommonDataStore.close()` shuts down.
+     * Closing [CommonDataStore] cancels the ads preference source's sharing scope.
      */
     private fun CommonDataStore.extractScope(): CoroutineScope {
         val adsSource = adsPreferences as DefaultAdsPreferencesDataSource

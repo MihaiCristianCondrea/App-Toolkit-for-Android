@@ -18,14 +18,17 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.states
 
 import androidx.compose.runtime.Immutable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItem
+import kotlinx.collections.immutable.ImmutableList
 
 /**
- * UI representation for the privacy screen.
+ * Everything the privacy page renders.
  *
- * @property items The ordered list of category headers and preference items ready to render.
+ * @property items The category headers and preference rows, in order, built from the host's
+ * `PrivacySettingsProvider`. Failed when the provider throws.
  */
 @Immutable
 data class PrivacyUiState(
-    val items: List<PrivacyItem> = emptyList(),
+    val items: Loadable<ImmutableList<PrivacyItem>> = Loadable.Loading,
 )

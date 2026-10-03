@@ -15,9 +15,20 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="error_description_missing">Sorunu açıklayın</string>
+    <string name="error_email_invalid">Geçerli bir e-posta adresi girin</string>
+    <string name="error_email_missing">E-posta adresinizi girin</string>
     <string name="error_forbidden">Yasaklı: yetersiz izinler</string>
     <string name="error_gone">API uç noktası kaldırıldı</string>
-    <string name="error_invalid_report">Başlık ve açıklama boş olamaz</string>
+    <string name="error_link_only">Yalnızca bağlantı değil, sorunu açıklayın.</string>
+    <string name="error_repetitive">Çok fazla tekrar var. Ne olduğunu açıklayın.</string>
+    <string name="error_report_cooldown">Başka bir rapor göndermeden önce lütfen birkaç dakika bekleyin.</string>
+    <string name="error_report_duplicate">Bu rapor zaten gönderildi.</string>
+    <string name="error_same_as_title">Başlıktan daha fazla ayrıntı ekleyin.</string>
+    <string name="error_title_missing">Bir başlık girin</string>
+    <string name="error_too_few_letters">Yalnızca sembol veya emoji değil, kelimeler kullanın.</string>
+    <string name="error_too_long">Çok uzun. En fazla %1$d karakter kullanın.</string>
+    <string name="error_too_short">Çok kısa. En az %1$d karakter kullanın.</string>
     <string name="error_unauthorized">Yetkisiz: Geçersiz belirteç</string>
     <string name="error_unprocessable">Sorun oluşturma için geçersiz veriler</string>
 </resources>

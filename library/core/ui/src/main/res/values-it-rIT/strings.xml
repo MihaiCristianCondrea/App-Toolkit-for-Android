@@ -56,4 +56,5 @@
     <string name="theme_mode">Modalità tema</string>
     <string name="try_again">Riprova</string>
     <string name="wallpaper_colors">Colori dello sfondo</string>
+    <string name="shell_list_placeholder">Scegli un elemento per vederlo qui.</string>
 </resources>

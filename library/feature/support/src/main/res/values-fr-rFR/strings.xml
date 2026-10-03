@@ -22,6 +22,5 @@
     <string name="purchase_thank_you">Merci pour votre don.</string>
     <string name="summary_donations">Peu importe le montant que vous donnez, vous nous aiderez à maintenir notre application et à améliorer ses fonctionnalités. Nous apprécions votre générosité .</string>
     <string name="support_offer_unavailable">Cette option de don est actuellement indisponible.</string>
-    <string name="support_us">Soutenez-nous</string>
     <string name="web_ad">Publicité web</string>
 </resources>

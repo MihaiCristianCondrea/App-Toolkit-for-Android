@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.translate
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.effects.ParticleSimulation
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.roundToInt
@@ -45,7 +46,7 @@ import kotlin.random.Random
 internal class SnowfallSimulation(
     private val style: SnowfallStyle,
     private val random: Random = Random.Default,
-) {
+) : ParticleSimulation {
     private var width: Float = 0f
     private var height: Float = 0f
 
@@ -100,9 +101,11 @@ internal class SnowfallSimulation(
 
     private var windPxPerMs: Float = 0f
 
-    /** Number of flakes currently simulated. */
     val flakeCount: Int
         get() = y.size
+
+    override val particleCount: Int
+        get() = flakeCount
 
     /** Current position of flake [index], including its sway. */
     fun positionOf(index: Int): Offset =
@@ -119,7 +122,7 @@ internal class SnowfallSimulation(
      *
      * @param pxPerDp Screen density, so sizes and speeds are the same physical size on every device.
      */
-    fun resize(widthPx: Int, heightPx: Int, pxPerDp: Float) {
+    override fun resize(widthPx: Int, heightPx: Int, pxPerDp: Float) {
         if (widthPx == width.toInt() && heightPx == height.toInt() && flakeCount > 0) return
         width = widthPx.toFloat()
         height = heightPx.toFloat()
@@ -173,7 +176,7 @@ internal class SnowfallSimulation(
      * The step is clamped, so a frame that arrives late (after a pause, or a slow first frame) moves
      * the snow by one ordinary step instead of teleporting it.
      */
-    fun advance(elapsedMillis: Float) {
+    override fun advance(elapsedMillis: Float) {
         val step = elapsedMillis.coerceIn(0f, MAX_STEP_MILLIS)
         if (step == 0f) return
         for (index in 0 until flakeCount) {
@@ -193,8 +196,7 @@ internal class SnowfallSimulation(
         }
     }
 
-    /** Draws every flake into this scope. */
-    fun draw(scope: DrawScope) {
+    override fun draw(scope: DrawScope) {
         for (index in 0 until flakeCount) {
             val color = color[index]
             val center = positionOf(index)

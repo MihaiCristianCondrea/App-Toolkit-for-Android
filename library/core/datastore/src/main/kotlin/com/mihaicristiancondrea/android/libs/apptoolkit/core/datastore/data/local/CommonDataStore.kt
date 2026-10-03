@@ -102,7 +102,7 @@ open class CommonDataStore(
     val themePreferences: ThemePreferencesDataSource =
         DefaultThemePreferencesDataSource(dataStore = dataStore)
 
-    /** Seasonal themes: the easter egg unlock, snowfall, and holiday theme bookkeeping. */
+    /** Seasonal themes: the easter egg unlock, the weather effect, and holiday theme bookkeeping. */
     val seasonalThemePreferences: SeasonalThemePreferencesDataSource =
         DefaultSeasonalThemePreferencesDataSource(dataStore = dataStore)
 
@@ -180,7 +180,7 @@ open class CommonDataStore(
 
     val settingsInteracted: Flow<Boolean> get() = appStatePreferences.settingsInteracted
 
-    @Suppress("unused") // Compatibility delegate; see the class KDoc.
+    @Suppress("unused")
     suspend fun markSettingsInteracted() = appStatePreferences.markSettingsInteracted()
 
     val componentsShowcaseUnlocked: Flow<Boolean>
@@ -247,19 +247,18 @@ open class CommonDataStore(
 
     val dynamicPaletteVariant: Flow<Int> get() = themePreferences.dynamicPaletteVariant
 
-    @Suppress("unused") // Compatibility delegate; see the class KDoc.
+    @Suppress("unused")
     suspend fun saveDynamicPaletteVariant(variant: Int) =
         themePreferences.saveDynamicPaletteVariant(variant)
 
     val staticPaletteId: Flow<String> get() = themePreferences.staticPaletteId
 
-    @Suppress("unused") // Compatibility delegate; see the class KDoc.
+    @Suppress("unused")
     suspend fun saveStaticPaletteId(id: String) = themePreferences.saveStaticPaletteId(id)
 
     // endregion
 
     // region Consent and diagnostics
-
     override fun usageAndDiagnostics(default: Boolean): Flow<Boolean> =
         diagnosticsPreferences.usageAndDiagnostics(default)
 
@@ -289,47 +288,30 @@ open class CommonDataStore(
 
     override suspend fun saveAdPersonalizationConsent(isGranted: Boolean) =
         diagnosticsPreferences.saveAdPersonalizationConsent(isGranted)
-
     // endregion
 
     // region Ads
-
     fun ads(default: Boolean): Flow<Boolean> = adsPreferences.ads(default = default)
-
     val adsEnabledFlow: StateFlow<Boolean> get() = adsPreferences.adsEnabled
-
     suspend fun saveAds(isChecked: Boolean) = adsPreferences.saveAds(isChecked)
-
     val reduceAds: Flow<Boolean> get() = adsPreferences.reduceAds
-
     suspend fun saveReduceAds(isChecked: Boolean) = adsPreferences.saveReduceAds(isChecked)
-
     // endregion
 
     // region Favorites
-
     val favoriteApps: Flow<Set<String>> get() = favoritesPreferences.favoriteApps
-
     suspend fun toggleFavoriteApp(packageName: String) =
         favoritesPreferences.toggleFavoriteApp(packageName)
-
     // endregion
 
     // region Review
-
     val sessionCount: Flow<Int> get() = reviewPreferences.sessionCount
-
     val hasPromptedReview: Flow<Boolean> get() = reviewPreferences.hasPromptedReview
-
     suspend fun incrementSessionCount() = reviewPreferences.incrementSessionCount()
-
-    suspend fun setHasPromptedReview(value: Boolean) =
-        reviewPreferences.setHasPromptedReview(value)
-
+    suspend fun setHasPromptedReview(value: Boolean) = reviewPreferences.setHasPromptedReview(value)
     // endregion
 
     // region Changelog
-
     fun getLastSeenVersion(default: String = ""): Flow<String> =
         changelogPreferences.lastSeenVersion(default = default)
 
@@ -341,6 +323,5 @@ open class CommonDataStore(
 
     suspend fun saveCachedChangelog(changelog: String) =
         changelogPreferences.saveCachedChangelog(changelog)
-
     // endregion
 }

@@ -19,9 +19,13 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.preferences.FakeToolkitTilesPreferencesDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.CounterRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.CoinFlipToolState
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.DiceRollToolState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.CoinFlipToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.CounterToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.DiceRollToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.CoinSide
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.CoinFlipToolUiState
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.DiceRollToolUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import org.junit.jupiter.api.Test
@@ -31,31 +35,36 @@ import kotlin.test.assertTrue
 
 class DecisionToolViewModelsTest {
 
-    @JvmField
-    @RegisterExtension
-    val dispatcherExtension = UnconfinedDispatcherExtension()
+    companion object {
+        @JvmField
+        @RegisterExtension
+        val dispatcherExtension = UnconfinedDispatcherExtension()
+    }
 
     @Test
     fun `coin flip publishes a new request and resets on dismiss`() {
-        val viewModel = CoinFlipToolViewModel(FakeFirebaseController())
+        val viewModel = CoinFlipToolViewModel(telemetryRepository = FakeTelemetryRepository())
 
-        viewModel.flip()
+        viewModel.onEvent(CoinFlipToolEvent.Flip)
         assertEquals(1, viewModel.state.value.request)
 
-        viewModel.dismiss()
-        assertEquals(CoinFlipToolState(), viewModel.state.value)
+        viewModel.onEvent(CoinFlipToolEvent.Dismiss)
+        assertEquals(CoinFlipToolUiState(), viewModel.state.value)
+        assertEquals(CoinSide.Heads, viewModel.state.value.side)
+        assertTrue(viewModel.messages.value.isEmpty())
     }
 
     @Test
     fun `dice roll stays in range and resets on dismiss`() {
-        val viewModel = DiceRollToolViewModel(FakeFirebaseController())
+        val viewModel = DiceRollToolViewModel(telemetryRepository = FakeTelemetryRepository())
 
-        viewModel.roll()
+        viewModel.onEvent(DiceRollToolEvent.Roll)
         assertTrue(viewModel.state.value.result in 1..6)
         assertEquals(1, viewModel.state.value.request)
 
-        viewModel.dismiss()
-        assertEquals(DiceRollToolState(), viewModel.state.value)
+        viewModel.onEvent(DiceRollToolEvent.Dismiss)
+        assertEquals(DiceRollToolUiState(), viewModel.state.value)
+        assertTrue(viewModel.messages.value.isEmpty())
     }
 
     @Test
@@ -64,17 +73,34 @@ class DecisionToolViewModelsTest {
             preferencesDataSource = FakeToolkitTilesPreferencesDataSource(),
             dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
         )
-        val firstSheet = CounterToolViewModel(repository, FakeFirebaseController())
+        val firstSheet = CounterToolViewModel(repository = repository, telemetryRepository = FakeTelemetryRepository())
 
-        firstSheet.increment()
-        firstSheet.increment()
-        assertEquals(2, firstSheet.count.value)
+        firstSheet.onEvent(CounterToolEvent.Increment)
+        firstSheet.onEvent(CounterToolEvent.Increment)
+        assertEquals(2, firstSheet.state.value.count)
 
-        val reopenedSheet = CounterToolViewModel(repository, FakeFirebaseController())
-        assertEquals(2, reopenedSheet.count.value)
+        val reopenedSheet = CounterToolViewModel(
+            repository = repository,
+            telemetryRepository = FakeTelemetryRepository(),
+        )
+        assertEquals(2, reopenedSheet.state.value.count)
 
-        reopenedSheet.reset()
-        assertEquals(0, firstSheet.count.value)
-        assertEquals(0, reopenedSheet.count.value)
+        reopenedSheet.onEvent(CounterToolEvent.Reset)
+        assertEquals(0, firstSheet.state.value.count)
+        assertEquals(0, reopenedSheet.state.value.count)
+    }
+
+    @Test
+    fun `closing the counter keeps the count`() {
+        val repository = CounterRepository(
+            preferencesDataSource = FakeToolkitTilesPreferencesDataSource(),
+            dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
+        )
+        val viewModel = CounterToolViewModel(repository = repository, telemetryRepository = FakeTelemetryRepository())
+
+        viewModel.onEvent(CounterToolEvent.Increment)
+        viewModel.onEvent(CounterToolEvent.Dismiss)
+
+        assertEquals(1, viewModel.state.value.count)
     }
 }

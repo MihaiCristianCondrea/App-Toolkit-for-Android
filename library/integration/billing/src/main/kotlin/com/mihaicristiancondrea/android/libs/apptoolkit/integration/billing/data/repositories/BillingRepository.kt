@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.dat
 import android.app.Activity
 import com.android.billingclient.api.ProductDetails
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BillingCore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.billing.PurchaseResult
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.domain.models.PurchaseResult
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -54,7 +54,10 @@ interface BillingRepository : BillingCore {
     /** Loads details for [productIds] and publishes them through [productDetails]. */
     suspend fun queryProductDetails(productIds: List<String>)
 
-    /** Consumes purchases that completed while the app was not running. */
+    /**
+     * Settles purchases that completed while the app was not running: one-time products are
+     * consumed and subscriptions are acknowledged.
+     */
     suspend fun processPastPurchases()
 
     /** Starts the purchase flow for a one-time product such as a donation. */

@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.ProvideTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.R
 
 /**
@@ -127,7 +128,8 @@ class SeasonalThemeManager(
             descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS
             isFocusable = false
             isClickable = false
-            setContent { SeasonalThemeOverlay() }
+            // A composition of its own, outside the activity's, so it provides the telemetry itself.
+            setContent { ProvideTelemetry { SeasonalThemeOverlay() } }
         }
 
         content.addView(

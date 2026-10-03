@@ -25,6 +25,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.ThemePreferencesState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.DynamicPaletteVariant
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
@@ -49,25 +50,46 @@ class DefaultThemePreferencesDataSource(
     private val staticPaletteIdKey =
         stringPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_STATIC_PALETTE_ID)
 
-    override val themeMode: Flow<String> = dataStore.data.map { preferences: Preferences ->
-        preferences[themeModeKey] ?: DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM
-    }.distinctUntilChanged()
+    override val themeMode: Flow<String> =
+        dataStore.data.map { preferences: Preferences -> preferences.themeMode() }.distinctUntilChanged()
 
-    override val amoledMode: Flow<Boolean> = dataStore.data.map { preferences: Preferences ->
-        preferences[amoledModeKey] == true
-    }.distinctUntilChanged()
+    override val amoledMode: Flow<Boolean> =
+        dataStore.data.map { preferences: Preferences -> preferences.amoledMode() }.distinctUntilChanged()
 
-    override val dynamicColors: Flow<Boolean> = dataStore.data.map { preferences: Preferences ->
-        preferences[dynamicColorsKey] != false
-    }.distinctUntilChanged()
+    override val dynamicColors: Flow<Boolean> =
+        dataStore.data.map { preferences: Preferences -> preferences.dynamicColors() }.distinctUntilChanged()
 
-    override val dynamicPaletteVariant: Flow<Int> = dataStore.data.map { preferences: Preferences ->
-        DynamicPaletteVariant.clamp(preferences[dynamicPaletteVariantKey] ?: 0)
-    }.distinctUntilChanged()
+    override val dynamicPaletteVariant: Flow<Int> =
+        dataStore.data.map { preferences: Preferences -> preferences.dynamicPaletteVariant() }
+            .distinctUntilChanged()
 
-    override val staticPaletteId: Flow<String> = dataStore.data.map { preferences: Preferences ->
-        StaticPaletteIds.sanitize(preferences[staticPaletteIdKey] ?: StaticPaletteIds.DEFAULT)
-    }.distinctUntilChanged()
+    override val staticPaletteId: Flow<String> =
+        dataStore.data.map { preferences: Preferences -> preferences.staticPaletteId() }
+            .distinctUntilChanged()
+
+    override val storedPreferences: Flow<ThemePreferencesState> =
+        dataStore.data.map { preferences: Preferences ->
+            ThemePreferencesState(
+                themeMode = preferences.themeMode(),
+                dynamicColors = preferences.dynamicColors(),
+                amoledMode = preferences.amoledMode(),
+                dynamicPaletteVariant = preferences.dynamicPaletteVariant(),
+                staticPaletteId = preferences.staticPaletteId(),
+            )
+        }.distinctUntilChanged()
+
+    private fun Preferences.themeMode(): String =
+        this[themeModeKey] ?: DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM
+
+    private fun Preferences.amoledMode(): Boolean = this[amoledModeKey] == true
+
+    private fun Preferences.dynamicColors(): Boolean = this[dynamicColorsKey] != false
+
+    private fun Preferences.dynamicPaletteVariant(): Int =
+        DynamicPaletteVariant.clamp(this[dynamicPaletteVariantKey] ?: 0)
+
+    private fun Preferences.staticPaletteId(): String =
+        StaticPaletteIds.sanitize(this[staticPaletteIdKey] ?: StaticPaletteIds.DEFAULT)
 
     override suspend fun saveThemeMode(mode: String) {
         dataStore.edit { preferences: MutablePreferences ->
@@ -97,6 +119,21 @@ class DefaultThemePreferencesDataSource(
         val safe = StaticPaletteIds.sanitize(id)
         dataStore.edit { preferences: MutablePreferences ->
             preferences[staticPaletteIdKey] = safe
+        }
+    }
+
+    override suspend fun savePalette(
+        dynamicColors: Boolean,
+        dynamicPaletteVariant: Int?,
+        staticPaletteId: String?,
+    ) {
+        val safePaletteId: String? = staticPaletteId?.let(StaticPaletteIds::sanitize)
+        dataStore.edit { preferences: MutablePreferences ->
+            preferences[dynamicColorsKey] = dynamicColors
+            dynamicPaletteVariant?.let { variant ->
+                preferences[dynamicPaletteVariantKey] = DynamicPaletteVariant.clamp(variant)
+            }
+            safePaletteId?.let { id -> preferences[staticPaletteIdKey] = id }
         }
     }
 }

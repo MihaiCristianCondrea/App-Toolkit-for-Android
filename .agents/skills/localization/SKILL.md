@@ -52,7 +52,8 @@ Preserve exactly:
 * HTML/XML markup
 * `\\n`, escaped quotes, apostrophes, and other escapes
 * intentional whitespace
-* remove duplicated string resources if they are already exists
+
+Remove a string resource that duplicates one already defined under the same name in the same file.
 
 Escape Android XML correctly:
 
@@ -75,7 +76,9 @@ Translations must be natural and context-aware, not literal.
 
 Use appropriate UX tone for the target language.
 
-Skip a locale rather than adding a translation whose meaning is uncertain.
+Every supported locale needs every translatable string: lint's `MissingTranslation` check is an
+error, so a skipped locale fails the build. When a string's meaning is uncertain, ask before
+translating it rather than leaving the locale out.
 
 ## Existing translations
 

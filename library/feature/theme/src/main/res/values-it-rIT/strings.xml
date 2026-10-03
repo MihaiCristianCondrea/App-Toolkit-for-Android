@@ -15,22 +15,16 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">Modalità AMOLED</string>
-    <string name="color_palette">Palette colori</string>
-    <string name="dark_mode">Modalità scura</string>
-    <string name="follow_system">Segui modalità sistema</string>
-    <string name="light_mode">Modalità chiara</string>
-    <string name="onboarding_theme_dark_desc">Delicato per gli occhi.</string>
-    <string name="onboarding_theme_light_desc">Luminoso ed energico.</string>
-    <string name="onboarding_theme_system_desc">Corrisponde al tuo dispositivo.</string>
-    <string name="other_colors">Altri colori</string>
-    <string name="screen_and_display_settings">Impostazioni di schermata e visualizzazione.</string>
-    <string name="summary_dark_theme">Il tema oscuro sfrutta uno sfondo profondo per prolungare significativamente la durata della batteria. Per attivarlo, basta passare al gestore di sistemi del tuo Android e selezionare il tema preferito in</string>
-    <string name="theme_mode">Modalità tema</string>
-    <string name="wallpaper_colors">Colori dello sfondo</string>
     <string name="holiday_greeting_christmas_title">Buone feste!</string>
     <string name="holiday_greeting_christmas_message">Il tema natalizio è arrivato, con la neve che cade in tutta l\'app. Vuoi usarlo fino alla fine delle feste?</string>
     <string name="holiday_greeting_halloween_title">Buon Halloween!</string>
     <string name="holiday_greeting_halloween_message">È arrivata la stagione dei brividi. Vuoi usare il tema di Halloween finché dura?</string>
     <string name="holiday_greeting_use_theme">Usa il tema festivo durante le feste</string>
+    <string name="dark_theme">Tema scuro</string>
+    <string name="weather_effect">Effetto meteo</string>
+    <string name="weather_effect_automatic">Automatico</string>
+    <string name="weather_effect_snow">Neve</string>
+    <string name="weather_effect_off">Disattivato</string>
+    <string name="weather_effect_rain">Pioggia</string>
+    <string name="weather_effect_info">Con Automatico la neve cade mentre è in uso la tavolozza natalizia. Neve e pioggia cadono con qualsiasi tavolozza.</string>
 </resources>

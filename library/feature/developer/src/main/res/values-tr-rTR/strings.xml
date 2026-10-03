@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="shell_dev_live_state">Anlık durum</string>
+    <string name="shell_dev_window">Pencere</string>
+    <string name="shell_dev_window_summary">%1$d × %2$d dp · %3$s</string>
+    <string name="shell_dev_page_stack">Sayfa yığını</string>
+    <string name="shell_dev_tab_stack">%1$s yığını</string>
+    <string name="shell_dev_navigation">Gezinme</string>
+    <string name="shell_dev_start">Bir sonraki açılıştan itibaren başlangıç</string>
+    <string name="shell_dev_layout">Gezinme düzeni</string>
+    <string name="shell_dev_accessories">Alt öğeler</string>
+    <string name="shell_dev_bottom_accessory">Gezinme çubuğunun üstünde</string>
+    <string name="shell_dev_motion">Hareket</string>
+    <string name="shell_dev_animation_speed">Animasyon hızı</string>
+    <string name="shell_dev_reset">Geliştirici seçeneklerini sıfırla</string>
+    <string name="shell_dev_reset_summary">Uygulamanın belirlediğine geri dön</string>
+    <string name="shell_layout_auto">Otomatik, pencere genişliğine göre</string>
+    <string name="shell_layout_bottom_bar">Alt çubuk ve çekmece</string>
+    <string name="shell_layout_rail">Yan gezinme çubuğu</string>
+    <string name="shell_layout_expanded_rail">Genişletilmiş yan gezinme çubuğu</string>
+    <string name="shell_layout_permanent_drawer">Kalıcı çekmece</string>
+    <string name="shell_accessory_as_declared">Banner, oynatma sırasında oynatıcı ile değiştirilir</string>
+    <string name="shell_accessory_none">Hiçbir şey</string>
+    <string name="shell_accessory_banner">Yalnızca banner</string>
+    <string name="shell_accessory_player">Yalnızca oynatıcı</string>
+    <string name="shell_start_as_declared">Uygulamanın belirlediği gibi: %1$s</string>
+    <string name="shell_start_screen">%1$s, ana arayüzden önce</string>
+    <string name="shell_speed_normal">Normal</string>
+    <string name="shell_speed_slow">2× daha yavaş</string>
+    <string name="shell_speed_very_slow">5× daha yavaş</string>
+    <string name="shell_developer_options">Geliştirici seçenekleri</string>
+    <string name="shell_top_bar">Üst uygulama çubuğu</string>
+    <string name="shell_navigation_bar">Alt gezinme çubuğu</string>
+    <string name="shell_navigation_tint">Yan çubuk ve uygulama çubuğu rengi</string>
+    <string name="shell_hide_bottom_bar">Kaydırırken alt çubuğu gizle</string>
+    <string name="shell_hide_bottom_bar_summary">İçerik aşağı kaydırıldığında, oynatıcı gösterilmiyorsa kayarak gizlenir</string>
+    <string name="shell_hide_top_bar">Kaydırırken uygulama çubuğunu gizle</string>
+    <string name="shell_hide_top_bar_summary">İçerik aşağı kaydırıldığında kayarak gizlenir, büyük çubuk daraldıktan sonra, ve yukarı kaydırılınca hemen geri gelir</string>
+    <string name="shell_limit_width">Büyük pencerelerde içerik genişliğini sınırla</string>
+    <string name="shell_limit_width_summary">Düzen politikasının azami genişliğini aşınca içeriği bir web sitesi gibi kenar boşluklarıyla ortala</string>
+    <string name="shell_tab_transition">Sekmeler arasında</string>
+    <string name="shell_back_edge">Sağ kenardan geri kaydırma</string>
+    <string name="shell_as_declared">Her ekranın belirlediği gibi</string>
+    <string name="shell_top_bar_small">Küçük</string>
+    <string name="shell_top_bar_center">Ortalanmış</string>
+    <string name="shell_top_bar_large">Büyük, daralan</string>
+    <string name="shell_top_bar_large_collapsed">Büyük, daraltılmış açılır</string>
+    <string name="shell_top_bar_hidden">Gizli</string>
+    <string name="shell_navigation_bar_standard">Standart, 80 dp</string>
+    <string name="shell_navigation_bar_short">Kısa, 64 dp</string>
+    <string name="shell_navigation_tint_none">Yüzey; uygulama çubuğu kaydırınca renklenir</string>
+    <string name="shell_navigation_tint_always">Birlikte renkli, içerik bir kartta</string>
+    <string name="shell_navigation_tint_on_scroll">İçerik kaydırılınca birlikte renkli</string>
+    <string name="shell_back_edge_system">Android gibi: sayfa yerinde küçülür</string>
+    <string name="shell_back_edge_follow">Parmağı izler, sol kenarın aynası (varsayılan)</string>
+    <string name="shell_transition_directional">Yönlü kaydırma</string>
+    <string name="shell_transition_fade_through">Arka plan üzerinden geçiş</string>
+    <string name="shell_transition_fade">Çapraz geçiş</string>
+    <string name="shell_transition_none">Yok</string>
+    <string name="shell_dev_layout_and_bars">Düzen ve çubuklar</string>
+</resources>

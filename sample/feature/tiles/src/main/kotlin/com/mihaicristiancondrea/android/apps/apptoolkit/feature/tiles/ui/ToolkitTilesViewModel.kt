@@ -17,61 +17,59 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
-import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.ToolkitTilesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.logQuickSettingsTileRequest
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ToolkitTilesAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ToolkitTilesEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.toUiModels
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ToolkitTilesFilter
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ToolkitTilesUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logSelectContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItemList
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setError
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoading
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
 import kotlinx.collections.immutable.mutate
 import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
-/** Coordinates the static Toolkit Tiles catalog, filtering, and add-tile requests. */
+/**
+ * Coordinates the static Toolkit Tiles catalog, filtering, and add-tile requests. Building the UI
+ * models from the catalogue is its own CPU work, so that runs on the default dispatcher.
+ */
 class ToolkitTilesViewModel(
     private val toolkitTilesRepository: ToolkitTilesRepository,
     private val dispatchers: DispatcherProvider,
-    firebaseController: FirebaseController,
-) : LoggedScreenViewModel<ToolkitTilesUiState, ToolkitTilesEvent, ToolkitTilesAction>(
-    initialState = UiStateScreen(data = ToolkitTilesUiState()),
-    firebaseController = firebaseController,
+    telemetryRepository: TelemetryRepository,
+) : LoggedScreenViewModel<ToolkitTilesUiState, ToolkitTilesEvent>(
+    initialState = ToolkitTilesUiState(),
+    telemetryRepository = telemetryRepository,
     screenName = AppScreenTracking.Screens.TOOLKIT_TILES.name,
+    viewModelName = "ToolkitTilesViewModel",
 ) {
     private var loadJob: Job? = null
+    private var saveExpandedJob: Job? = null
     private var hasLoggedCatalogueView: Boolean = false
 
     init {
-        onEvent(ToolkitTilesEvent.Initialize)
+        onEvent(ToolkitTilesEvent.Load)
     }
 
     override fun handleEvent(event: ToolkitTilesEvent) {
         when (event) {
-            is ToolkitTilesEvent.Initialize -> loadTiles()
-            is ToolkitTilesEvent.Refresh -> refreshStatuses()
+            ToolkitTilesEvent.Load -> loadTiles()
+            ToolkitTilesEvent.Refresh -> refreshStatuses()
             is ToolkitTilesEvent.FilterSelected -> selectFilter(event.filter)
             is ToolkitTilesEvent.CategoryToggled -> toggleCategory(event.categoryId)
             is ToolkitTilesEvent.AddTileClicked -> handleAddTile(event.requestKey)
+            ToolkitTilesEvent.TileRequestLaunched -> setState { copy(pendingTileRequest = null) }
             is ToolkitTilesEvent.TileRequestFinished ->
                 handleTileRequestFinished(event.requestKey, event.outcome)
             is ToolkitTilesEvent.TileSetupClicked -> handleTileSetup(event.tileId)
@@ -80,100 +78,77 @@ class ToolkitTilesViewModel(
     }
 
     private fun updateAdStatus(adId: String, isLoaded: Boolean) {
-        screenState.update { current ->
-            val data = current.data ?: return@update current
-            val updated = data.loadedAdIds.mutate {
-                if (isLoaded) it.add(adId) else it.remove(adId)
-            }
-            current.copy(data = data.copy(loadedAdIds = updated))
-        }
-    }
-
-    private fun loadTiles() {
-        startOperation(action = Actions.LOAD_TILES)
-        loadJob = loadJob.restart {
-            combine(
-                toolkitTilesRepository.tileCategories(),
-                toolkitTilesRepository.expandedCategoryIds,
-            ) { categories, expandedCategoryIds ->
-                categories to expandedCategoryIds
-            }
-                .flowOn(dispatchers.default)
-                .onStart { screenState.setLoading() }
-                .catchReport(action = Actions.LOAD_TILES) {
-                    screenState.setError(
-                        message = UiTextHelper.StringResource(R.string.tiles_error_failed_to_load),
-                    )
-                }
-                .onEach { (categories, expandedCategoryIds) ->
-                    // The catalogue re-emits on every refresh and on every expand/collapse, so the
-                    // list view is reported once rather than once per emission.
-                    if (!hasLoggedCatalogueView) {
-                        hasLoggedCatalogueView = true
-                        firebaseController.logViewItemList(
-                            itemListId = "all",
-                            itemListName = "quick_tools_catalog",
-                        )
-                    }
-                    screenState.setSuccess(
-                        data = (screenData ?: ToolkitTilesUiState()).copy(
-                            categories = categories.toUiModels(),
-                            expandedCategoryIds = expandedCategoryIds.toPersistentSet(),
-                        )
-                    )
-                }
-                .launchIn(viewModelScope)
+        setState {
+            copy(loadedAdIds = loadedAdIds.mutate { if (isLoaded) it.add(adId) else it.remove(adId) })
         }
     }
 
     /**
-     * Re-reads Quick Settings membership.
-     *
-     * This goes through the catalogue flow rather than writing statuses into the state directly.
-     * Writing directly used to lose the refresh: the flow still held the statuses captured when the
-     * screen loaded, so the next expand or collapse put the stale ones back.
+     * Follows the catalogue and the expanded categories. The catalogue re-emits on every refresh
+     * and on every expand or collapse, so the list view is reported once rather than per emission.
+     */
+    private fun loadTiles() {
+        loadJob = loadJob.restart {
+            setState { copy(categories = Loadable.Loading) }
+            combine(
+                toolkitTilesRepository.tileCategories(),
+                toolkitTilesRepository.expandedCategoryIds,
+            ) { categories, expandedCategoryIds ->
+                categories.toUiModels() to expandedCategoryIds.toPersistentSet()
+            }
+                .flowOn(dispatchers.default)
+                .collectReport(
+                    action = Actions.LOAD_TILES,
+                    onError = { error -> setState { copy(categories = error.toFailed(fallback = LoadFailedText)) } },
+                ) { (categories, expandedCategoryIds) ->
+                    if (!hasLoggedCatalogueView) {
+                        hasLoggedCatalogueView = true
+                        telemetryRepository.logViewItemList(
+                            itemListId = "all",
+                            itemListName = "quick_tools_catalog",
+                        )
+                    }
+                    setState {
+                        copy(categories = Loadable.Ready(categories), expandedCategoryIds = expandedCategoryIds)
+                    }
+                }
+        }
+    }
+
+    /**
+     * Refreshes membership through the catalog flow so a later catalog emission cannot
+     * overwrite the refreshed status.
      */
     private fun refreshStatuses() {
         toolkitTilesRepository.refreshTileCategories()
     }
 
+    /**
+     * One event per filter tap: the list it shows already names the filter, so a separate
+     * `select_content` for the chip would count the same tap twice.
+     */
     private fun selectFilter(filter: ToolkitTilesFilter) {
-        // One event per filter tap: the list it shows already names the filter, so a separate
-        // select_content for the chip would count the same tap twice.
-        firebaseController.logViewItemList(
+        telemetryRepository.logViewItemList(
             itemListId = filter.name.lowercase(),
             itemListName = "quick_tools_${filter.name.lowercase()}",
         )
-        screenState.update { current ->
-            current.copy(data = current.data?.copy(selectedFilter = filter))
-        }
+        setState { copy(selectedFilter = filter) }
     }
 
+    /** Opening a category is the interest worth counting; closing it again is not a second one. */
     private fun toggleCategory(categoryId: String) {
-        // Opening a category is the interest worth counting; closing it again is not a second one.
-        if (screenData?.expandedCategoryIds?.contains(categoryId) == false) {
-            firebaseController.logSelectContent(
+        val expandedIds = state.value.expandedCategoryIds
+        if (categoryId !in expandedIds) {
+            telemetryRepository.logSelectContent(
                 contentType = "tile_category",
                 itemId = categoryId,
             )
         }
-        var updatedIds: Set<String>? = null
-        screenState.update { current ->
-            val data = current.data ?: return@update current
-            val expandedIds = data.expandedCategoryIds
-            val updated = expandedIds.mutate {
-                if (categoryId in it) {
-                    it.remove(categoryId)
-                } else {
-                    it.add(categoryId)
-                }
-            }
-            updatedIds = updated
-            current.copy(data = data.copy(expandedCategoryIds = updated))
-        }
-        updatedIds?.let { categoryIds ->
-            viewModelScope.launch {
-                toolkitTilesRepository.saveExpandedCategoryIds(categoryIds)
+        val updated = expandedIds.mutate { if (categoryId in it) it.remove(categoryId) else it.add(categoryId) }
+        setState { copy(expandedCategoryIds = updated) }
+        saveExpandedJob = saveExpandedJob.restart {
+            launchReport(action = Actions.SAVE_EXPANDED_CATEGORIES) {
+                toolkitTilesRepository.saveExpandedCategoryIds(updated)
             }
         }
     }
@@ -183,7 +158,7 @@ class ToolkitTilesViewModel(
         if (requestKey == null) {
             showNoTileMessage()
         } else {
-            sendAction(ToolkitTilesAction.RequestAddTile(requestKey))
+            setState { copy(pendingTileRequest = requestKey) }
         }
     }
 
@@ -194,12 +169,12 @@ class ToolkitTilesViewModel(
      * already counts the requests and says what became of each.
      */
     private fun handleTileRequestFinished(requestKey: String, outcome: String) {
-        firebaseController.logQuickSettingsTileRequest(tileId = requestKey, outcome = outcome)
+        telemetryRepository.logQuickSettingsTileRequest(tileId = requestKey, outcome = outcome)
         refreshStatuses()
     }
 
     private fun handleTileSetup(tileId: String) {
-        firebaseController.logSelectContent(
+        telemetryRepository.logSelectContent(
             contentType = "tile_setup",
             itemId = tileId,
         )
@@ -211,16 +186,22 @@ class ToolkitTilesViewModel(
     }
 
     private fun showNoTileMessage() {
-        sendAction(ToolkitTilesAction.ShowNoTileMessage)
+        showMessage(UiMessage(NoTileText))
     }
 
     private object Actions {
         const val LOAD_TILES: String = "loadTiles"
         const val ADD_TILE: String = "addTile"
         const val OPEN_TILE_SETUP: String = "openTileSetup"
+        const val SAVE_EXPANDED_CATEGORIES: String = "saveExpandedCategories"
     }
 
     private object ExtraKeys {
         const val TILE_ID: String = "tileId"
+    }
+
+    private companion object {
+        val LoadFailedText = UiTextHelper.StringResource(R.string.tiles_error_failed_to_load)
+        val NoTileText = UiTextHelper.StringResource(R.string.tiles_no_tile_message)
     }
 }

@@ -26,12 +26,11 @@ import com.google.firebase.Firebase
 import com.google.firebase.appcheck.appCheck
 import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
 import com.google.firebase.initialize
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.managers.BaseCoreManager.Companion.isAppLoaded
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.CommonDataStoreCore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BillingCore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.crash.ConsentSdkCrashGuard
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -55,10 +54,17 @@ open class BaseCoreManager : MultiDexApplication(), Application.ActivityLifecycl
     LifecycleObserver {
 
     protected val billingRepository: BillingCore by inject()
-    private val firebaseController: FirebaseController by inject()
+    private val telemetryRepository: TelemetryRepository by inject()
     protected val dataStore: CommonDataStoreCore by inject()
     protected open val dispatchers: DispatcherProvider = StandardDispatchers()
-    private val applicationScope = CoroutineScope(SupervisorJob() + dispatchers.io)
+
+    /**
+     * Defers reading the open [dispatchers] property until subclass initialization has
+     * completed.
+     */
+    private val applicationScope: CoroutineScope by lazy {
+        CoroutineScope(SupervisorJob() + dispatchers.io)
+    }
 
     /**
      * Whether [ConsentSdkCrashGuard] is installed for this app.
@@ -71,7 +77,12 @@ open class BaseCoreManager : MultiDexApplication(), Application.ActivityLifecycl
     protected open val installsConsentSdkCrashGuard: Boolean = true
 
     companion object {
-        /** Flag indicating whether the application finished its startup work. */
+        /**
+         * Flag indicating whether the application finished its startup work.
+         *
+         * Written from a background coroutine and read from the main thread, hence volatile.
+         */
+        @Volatile
         var isAppLoaded: Boolean = false
             private set
     }
@@ -96,26 +107,20 @@ open class BaseCoreManager : MultiDexApplication(), Application.ActivityLifecycl
     }
 
     /**
-     * Installs the UMP crash guard for every app built on the toolkit.
-     *
-     * Change rationale: the guard used to live in a single consumer app, which left every other app
-     * exposed to the same process kill through the same library code path. It belongs here because
-     * every consumer already extends this class, so no per-app wiring is needed.
-     *
-     * It runs directly after [Firebase.initialize] returns, which is when Crashlytics has registered
-     * its uncaught-exception handler. Installing at that point makes this guard the outer handler:
-     * everything it does not recognise still reaches Crashlytics as a fatal, exactly as before.
+     * Installs the guard after Firebase initialization so unrecognized failures still reach
+     * Crashlytics through its existing uncaught-exception handler.
      */
     private fun installConsentSdkCrashGuard() {
         if (!installsConsentSdkCrashGuard) return
         ConsentSdkCrashGuard.install { throwable, attributes ->
-            firebaseController.recordNonFatal(throwable = throwable, attributes = attributes)
+            telemetryRepository.recordNonFatal(throwable = throwable, attributes = attributes)
         }
     }
 
     /**
-     * Executes [onInitializeApp] inside a supervisor scope and marks the
-     * application as loaded once completed.
+     * Runs host initialization in a supervisor scope. Non-cancellation failures are reported
+     * and startup still completes, so callers waiting on [isAppLoaded] do not wait
+     * indefinitely.
      */
     private suspend fun initializeApp() = supervisorScope {
         val appComponentsInitialization: Deferred<Unit> = async { onInitializeApp() }
@@ -125,10 +130,7 @@ open class BaseCoreManager : MultiDexApplication(), Application.ActivityLifecycl
         } catch (cancellation: CancellationException) {
             throw cancellation
         } catch (throwable: Throwable) {
-            // A host that fails to set itself up is still a running app, and [isAppLoaded] is how
-            // anything else finds out startup is over. Leaving it false because an SDK could not
-            // reach the network would keep the app waiting on something that is never coming.
-            firebaseController.recordNonFatal(
+            telemetryRepository.recordNonFatal(
                 throwable = throwable,
                 attributes = mapOf("phase" to "onInitializeApp"),
             )
@@ -144,7 +146,6 @@ open class BaseCoreManager : MultiDexApplication(), Application.ActivityLifecycl
      */
     protected open suspend fun onInitializeApp() {}
 
-    /** Marks the application as fully initialized. */
     private fun finalizeInitialization() {
         isAppLoaded = true
     }
@@ -157,9 +158,6 @@ open class BaseCoreManager : MultiDexApplication(), Application.ActivityLifecycl
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
     override fun onActivityDestroyed(activity: Activity) {}
 
-    /**
-     * Cleans up resources when the process is terminating.
-     */
     override fun onTerminate() {
         super.onTerminate()
         billingRepository.close()

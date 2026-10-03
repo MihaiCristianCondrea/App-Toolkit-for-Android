@@ -17,65 +17,37 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui
 
-import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.data.repositories.PermissionsRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.contracts.PermissionsAction
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.contracts.PermissionsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.asUiText
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onFailure
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setErrors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoading
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setNoData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.updateData
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.data.repositories.PermissionsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.contracts.PermissionsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.states.PermissionsUiState
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 
 /**
- * ViewModel for the permissions screen.
+ * Loads the permission catalog for the permissions page.
  *
- * This ViewModel is responsible for orchestrating the retrieval of permission configurations
- * from the [PermissionsRepository] and exposing them to the UI. It handles the loading state,
- * success state with the configuration data, and various error states (e.g., network errors,
- * no permissions found).
- *
- * It extends [ScreenViewModel] to manage the UI state ([UiStateScreen]) and handle UI events
- * ([PermissionsEvent]) and actions ([PermissionsAction]).
- *
- * @param permissionsRepository The repositories responsible for fetching permissions data info.
- * @param firebaseController Reports ViewModel flow failures to Firebase.
+ * [PermissionsRepository] is main-safe, so it needs no dispatcher. A catalog with no category is
+ * [Loadable.Empty]; a repository that throws is [Loadable.Failed], reported to telemetry.
  */
 class PermissionsViewModel(
     private val permissionsRepository: PermissionsRepository,
-    private val dispatchers: DispatcherProvider,
-    firebaseController: FirebaseController,
-) : LoggedScreenViewModel<SettingsConfig, PermissionsEvent, PermissionsAction>(
-    initialState = UiStateScreen(
-        data = SettingsConfig(
-            title = "",
-            categories = emptyList(),
-        )
-    ),
-    firebaseController = firebaseController,
+    telemetryRepository: TelemetryRepository,
+) : LoggedScreenViewModel<PermissionsUiState, PermissionsEvent>(
+    initialState = PermissionsUiState(),
+    telemetryRepository = telemetryRepository,
     screenName = "Permissions",
+    viewModelName = "PermissionsViewModel",
 ) {
+    private var loadJob: Job? = null
 
-    private var observeJob: Job? = null
+    init {
+        onEvent(PermissionsEvent.Load)
+    }
 
     override fun handleEvent(event: PermissionsEvent) {
         when (event) {
@@ -84,74 +56,28 @@ class PermissionsViewModel(
     }
 
     private fun loadPermissions() {
-        observeJob = observeJob.restart {
-            startOperation(action = Actions.LOAD_PERMISSIONS)
-
-            permissionsRepository.getPermissionsConfig()
-                .flowOn(dispatchers.io)
-                .map<SettingsConfig, DataState<SettingsConfig, Errors>> { config ->
-                    if (config.categories.isEmpty()) {
-                        DataState.Error(
-                            data = config,
-                            error = Errors.UseCase.NO_DATA,
-                        )
-                    } else {
-                        DataState.Success(config)
-                    }
+        loadJob = loadJob.restart {
+            launchReport(
+                action = Actions.LOAD_PERMISSIONS,
+                onError = { error -> setState { copy(config = error.toFailed()) } },
+            ) {
+                setState { copy(config = Loadable.Loading) }
+                val loaded = permissionsRepository.getPermissionsConfig()
+                val content = if (loaded.categories.isEmpty()) {
+                    Loadable.Empty(NoPermissionsText)
+                } else {
+                    Loadable.Ready(loaded)
                 }
-                .onStart {
-                    updateStateThreadSafe {
-                        screenState.setErrors(emptyList())
-                        screenState.setLoading()
-                    }
-                }
-                .catchReport(action = Actions.LOAD_PERMISSIONS) {
-                    emit(
-                        DataState.Error(
-                            error = Errors.UseCase.INVALID_STATE,
-                        )
-                    )
-                }
-                .onEach { result ->
-                    result
-                        .onSuccess { config ->
-                            updateStateThreadSafe {
-                                screenState.setSuccess(data = config)
-                            }
-                        }
-                        .onFailure { error ->
-                            updateStateThreadSafe {
-                                val fallback = (result as? DataState.Error)?.data ?: SettingsConfig(
-                                    title = "",
-                                    categories = emptyList()
-                                )
-                                if (error == Errors.UseCase.NO_DATA) {
-                                    screenState.setErrors(
-                                        listOf(
-                                            UiSnackbar(
-                                                message = UiTextHelper.StringResource(
-                                                    R.string.error_no_settings_found
-                                                )
-                                            )
-                                        )
-                                    )
-                                    screenState.setNoData(data = fallback)
-                                } else {
-                                    screenState.setErrors(listOf(UiSnackbar(message = error.asUiText())))
-                                    screenState.updateData(newState = com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState.Error()) { current ->
-                                        current
-                                    }
-                                }
-                            }
-                        }
-
-                }
-                .launchIn(viewModelScope)
+                setState { copy(config = content) }
+            }
         }
     }
 
     private object Actions {
         const val LOAD_PERMISSIONS: String = "loadPermissions"
     }
-}
 
+    private companion object {
+        val NoPermissionsText = UiTextHelper.StringResource(R.string.error_no_settings_found)
+    }
+}

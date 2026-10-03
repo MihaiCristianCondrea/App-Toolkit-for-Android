@@ -19,4 +19,8 @@
     <string name="settings">Налаштування</string>
     <string name="share">Поділитися</string>
     <string name="updates">Оновлення</string>
+    <string name="shell_navigate_back">Повернутися</string>
+    <string name="shell_pane_separator">Змінити розмір панелей</string>
+    <string name="shell_support_us">Підтримайте нас</string>
+    <string name="shell_support_short">Підтримка</string>
 </resources>

@@ -32,4 +32,5 @@
     <string name="summary_preference_settings_usage_and_diagnostics">ऐप अनुभव को बेहतर बनाने में मदद के लिए डेटा साझा करें</string>
     <string name="terms_of_service">सेवा की शर्तें</string>
     <string name="usage_and_diagnostics">उपयोग और निदान</string>
+    <string name="security_and_privacy">सुरक्षा और गोपनीयता</string>
 </resources>

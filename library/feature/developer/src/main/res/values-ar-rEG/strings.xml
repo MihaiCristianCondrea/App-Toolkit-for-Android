@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="shell_dev_live_state">الحالة الحالية</string>
+    <string name="shell_dev_window">النافذة</string>
+    <string name="shell_dev_window_summary">%1$d × %2$d dp · %3$s</string>
+    <string name="shell_dev_page_stack">مكدس الصفحات</string>
+    <string name="shell_dev_tab_stack">مكدس %1$s</string>
+    <string name="shell_dev_navigation">التنقل</string>
+    <string name="shell_dev_start">البدء في، من التشغيل التالي</string>
+    <string name="shell_dev_layout">تخطيط التنقل</string>
+    <string name="shell_dev_accessories">العناصر السفلية</string>
+    <string name="shell_dev_bottom_accessory">فوق شريط التنقل</string>
+    <string name="shell_dev_motion">الحركة</string>
+    <string name="shell_dev_animation_speed">سرعة الرسوم المتحركة</string>
+    <string name="shell_dev_reset">إعادة ضبط خيارات المطورين</string>
+    <string name="shell_dev_reset_summary">العودة إلى ما يحدده التطبيق</string>
+    <string name="shell_layout_auto">تلقائي، حسب عرض النافذة</string>
+    <string name="shell_layout_bottom_bar">الشريط السفلي والدرج</string>
+    <string name="shell_layout_rail">شريط التنقل الجانبي</string>
+    <string name="shell_layout_expanded_rail">شريط التنقل الجانبي الموسع</string>
+    <string name="shell_layout_permanent_drawer">درج دائم</string>
+    <string name="shell_accessory_as_declared">بانر، يحل محله المشغل أثناء التشغيل</string>
+    <string name="shell_accessory_none">لا شيء</string>
+    <string name="shell_accessory_banner">البانر فقط</string>
+    <string name="shell_accessory_player">المشغل فقط</string>
+    <string name="shell_start_as_declared">كما يحدد التطبيق: %1$s</string>
+    <string name="shell_start_screen">%1$s، قبل الواجهة الرئيسية</string>
+    <string name="shell_speed_normal">عادية</string>
+    <string name="shell_speed_slow">أبطأ بمقدار 2×</string>
+    <string name="shell_speed_very_slow">أبطأ بمقدار 5×</string>
+    <string name="shell_developer_options">خيارات المطورين</string>
+    <string name="shell_top_bar">شريط التطبيق العلوي</string>
+    <string name="shell_navigation_bar">شريط التنقل السفلي</string>
+    <string name="shell_navigation_tint">لون الشريط الجانبي وشريط التطبيق</string>
+    <string name="shell_hide_bottom_bar">إخفاء الشريط السفلي عند التمرير</string>
+    <string name="shell_hide_bottom_bar_summary">ينزلق بعيدًا عند تمرير المحتوى لأسفل، ما دام لا يظهر مشغل</string>
+    <string name="shell_hide_top_bar">إخفاء شريط التطبيق عند التمرير</string>
+    <string name="shell_hide_top_bar_summary">ينزلق بعيدًا عند تمرير المحتوى لأسفل، والشريط الكبير بعد أن يُطوى، ويعود فور التمرير لأعلى</string>
+    <string name="shell_limit_width">تحديد عرض المحتوى في النوافذ الكبيرة</string>
+    <string name="shell_limit_width_summary">توسيط المحتوى بهوامش، مثل موقع ويب، بعد تجاوز الحد الأقصى للعرض في سياسة التخطيط</string>
+    <string name="shell_tab_transition">بين علامات التبويب</string>
+    <string name="shell_back_edge">التمرير للرجوع من الحافة اليمنى</string>
+    <string name="shell_as_declared">كما تحدد كل شاشة</string>
+    <string name="shell_top_bar_small">صغير</string>
+    <string name="shell_top_bar_center">في المنتصف</string>
+    <string name="shell_top_bar_large">كبير، قابل للطي</string>
+    <string name="shell_top_bar_large_collapsed">كبير، يُفتح مطويًا</string>
+    <string name="shell_top_bar_hidden">مخفي</string>
+    <string name="shell_navigation_bar_standard">عادي، 80 dp</string>
+    <string name="shell_navigation_bar_short">قصير، 64 dp</string>
+    <string name="shell_navigation_tint_none">السطح؛ يتلون شريط التطبيق عند التمرير</string>
+    <string name="shell_navigation_tint_always">ملونان معًا، والمحتوى داخل بطاقة</string>
+    <string name="shell_navigation_tint_on_scroll">ملونان معًا بمجرد تمرير المحتوى</string>
+    <string name="shell_back_edge_system">مثل Android: تتقلص الصفحة في مكانها</string>
+    <string name="shell_back_edge_follow">تتبع الإصبع، مثل الحافة اليسرى (الافتراضي)</string>
+    <string name="shell_transition_directional">انزلاق اتجاهي</string>
+    <string name="shell_transition_fade_through">تلاشٍ عبر الخلفية</string>
+    <string name="shell_transition_fade">تلاشٍ متقاطع</string>
+    <string name="shell_transition_none">بلا</string>
+    <string name="shell_dev_layout_and_bars">التخطيط والأشرطة</string>
+</resources>

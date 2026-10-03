@@ -15,42 +15,19 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="agree">متفق ہوں</string>
-    <string name="amoled_mode">AMOLED موڈ</string>
     <string name="back_button_content_description">پیچھے</string>
     <string name="back_button_text">پیچھے</string>
-    <string name="dark_mode">ڈارک موڈ</string>
-    <string name="done_button_content_description">ہو گیا</string>
     <string name="done_button_text">ہو گیا</string>
-    <string name="error">خرابی</string>
-    <string name="follow_system">سسٹم موڈ فالو کریں</string>
-    <string name="learn_more">مزید جانیں</string>
-    <string name="learn_more_privacy_policy">ہماری رازداری کی پالیسی کا جائزہ لیں</string>
-    <string name="light_mode">لائٹ موڈ</string>
     <string name="next_button_content_description">آگے</string>
     <string name="next_button_text">آگے</string>
     <string name="onboarding_amoled_mode_desc">OLED اسکرینوں کے لیے گہرے سیاہ رنگ۔</string>
     <string name="onboarding_complete_icon_desc">آن بورڈنگ مکمل</string>
     <string name="onboarding_completion_failed">آپ کا سیٹ اپ محفوظ نہیں ہو سکا۔ براہ کرم دوبارہ کوشش کریں۔</string>
-    <string name="onboarding_crashlytics_description">ایپ کو گمنام استعمال کا ڈیٹا اور کریش رپورٹس بھیجنے کی اجازت دیں۔ اس سے ہمیں کیڑے ٹھیک کرنے اور آپ کے تجربے کو بہتر بنانے میں مدد ملتی ہے۔ کوئی ذاتی معلومات کبھی جمع نہیں کی جاتیں۔</string>
-    <string name="onboarding_crashlytics_disabled_desc">ڈیٹا رپورٹنگ غیر فعال ہے۔</string>
-    <string name="onboarding_crashlytics_enabled_desc">ڈیٹا رپورٹنگ فعال ہے۔</string>
-    <string name="onboarding_crashlytics_privacy_info">آپ کی رازداری اہم ہے۔ ہم اس ڈیٹا کو صرف کیڑے ٹھیک کرنے اور خصوصیات کو بہتر بنانے کے لیے استعمال کرتے ہیں۔ مزید تفصیلات کے لیے، براہ کرم ہماری رازداری کی پالیسی کا جائزہ لیں۔</string>
-    <string name="onboarding_crashlytics_show_details_button">تفصیلی معلومات دکھائیں</string>
-    <string name="onboarding_crashlytics_show_details_button_cd">استعمال اور تشخیص کے بارے میں تفصیلی معلومات دکھائیں</string>
-    <string name="onboarding_crashlytics_title">بہتر بنانے میں ہماری مدد کریں</string>
     <string name="onboarding_final_description">اپنے تجربے کو ذاتی بنانے کا شکریہ۔ اب آپ تمام خصوصیات کو دریافت کرنے کے لیے تیار ہیں۔ لطف اٹھائیں.</string>
     <string name="onboarding_final_title">آپ پوری طرح تیار ہیں.</string>
-    <string name="onboarding_theme_dark_desc">آنکھوں کے لیے آرام دہ۔</string>
-    <string name="onboarding_theme_light_desc">روشن اور توانا۔</string>
     <string name="onboarding_theme_subtitle">منتخب کریں کہ آپ ایپ کو کیسا دیکھنا چاہیں گے۔</string>
-    <string name="onboarding_theme_system_desc">آپ کے آلے سے مطابقت رکھتا ہے۔</string>
     <string name="onboarding_theme_title">اپنا انداز منتخب کریں</string>
-    <string name="other_colors">دیگر رنگ</string>
     <string name="skip_button_content_description">اسکپ کریں</string>
     <string name="skip_button_text">اسکپ کریں</string>
-    <string name="summary_browse_terms_of_service_and_privacy_policy">جاری رکھنے کے لیے ہماری سروس کی شرائط اور رازداری کی پالیسی کو پڑھیں اور ان سے اتفاق کریں</string>
     <string name="usage_and_diagnostics">استعمال اور تشخیص</string>
-    <string name="wallpaper_colors">وال پیپر کے رنگ</string>
-    <string name="welcome">خوش آمدید</string>
 </resources>

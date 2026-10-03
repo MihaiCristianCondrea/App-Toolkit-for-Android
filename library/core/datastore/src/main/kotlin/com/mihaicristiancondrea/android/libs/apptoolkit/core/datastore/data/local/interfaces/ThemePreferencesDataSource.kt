@@ -18,7 +18,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.ThemePreferencesState
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 
 /**
  * Persisted appearance preferences: theme mode, AMOLED, and palette selection.
@@ -28,10 +30,8 @@ interface ThemePreferencesDataSource {
     /** Emits the stored theme mode, defaulting to "follow system". */
     val themeMode: Flow<String>
 
-    /** Emits whether the AMOLED (true-black) variant is enabled. */
     val amoledMode: Flow<Boolean>
 
-    /** Emits whether Material You dynamic colors are enabled. */
     val dynamicColors: Flow<Boolean>
 
     /** Emits the selected dynamic palette variant, clamped to a supported index. */
@@ -40,13 +40,35 @@ interface ThemePreferencesDataSource {
     /** Emits the selected static palette id, sanitized to a known palette. */
     val staticPaletteId: Flow<String>
 
-    /** Persists the theme mode. */
+    /**
+     * Emits every stored value at once, each as its own flow above reports it.
+     *
+     * Combining the separate flows reports a write that changes two values, such as a palette
+     * choice, as two emissions with a mixed state in between. `DefaultThemePreferencesDataSource`
+     * reads all of them from one snapshot of storage, so each write is one emission; this default
+     * combines the flows so other implementations keep compiling.
+     */
+    val storedPreferences: Flow<ThemePreferencesState>
+        get() = combine(
+            themeMode,
+            dynamicColors,
+            amoledMode,
+            dynamicPaletteVariant,
+            staticPaletteId,
+        ) { themeMode, dynamicColors, amoledMode, dynamicPaletteVariant, staticPaletteId ->
+            ThemePreferencesState(
+                themeMode = themeMode,
+                dynamicColors = dynamicColors,
+                amoledMode = amoledMode,
+                dynamicPaletteVariant = dynamicPaletteVariant,
+                staticPaletteId = staticPaletteId,
+            )
+        }
+
     suspend fun saveThemeMode(mode: String)
 
-    /** Persists the AMOLED preference. */
     suspend fun saveAmoledMode(isChecked: Boolean)
 
-    /** Persists the dynamic-colors preference. */
     suspend fun saveDynamicColors(isChecked: Boolean)
 
     /** Persists the dynamic palette variant, clamped to a supported index. */
@@ -54,4 +76,23 @@ interface ThemePreferencesDataSource {
 
     /** Persists the static palette id, sanitized to a known palette. */
     suspend fun saveStaticPaletteId(id: String)
+
+    /**
+     * Persists a palette choice: whether dynamic colors are on, plus the palette that goes with
+     * it. A null value is left unchanged.
+     *
+     * A palette choice always changes [dynamicColors] together with a palette, and two separate
+     * writes would let a process death keep only the first one. `DefaultThemePreferencesDataSource`
+     * writes everything in one transaction; this default writes the values one by one so other
+     * implementations keep compiling.
+     */
+    suspend fun savePalette(
+        dynamicColors: Boolean,
+        dynamicPaletteVariant: Int? = null,
+        staticPaletteId: String? = null,
+    ) {
+        saveDynamicColors(dynamicColors)
+        dynamicPaletteVariant?.let { variant -> saveDynamicPaletteVariant(variant) }
+        staticPaletteId?.let { id -> saveStaticPaletteId(id) }
+    }
 }

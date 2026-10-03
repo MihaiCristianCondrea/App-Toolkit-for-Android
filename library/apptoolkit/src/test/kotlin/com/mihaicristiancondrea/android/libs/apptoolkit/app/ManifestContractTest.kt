@@ -17,9 +17,13 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app
 
-import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.Test
 import java.io.File
+import kotlin.test.assertContains
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 /**
  * Guards the manifest and resource defaults contributed to AppToolkit hosts.
@@ -52,7 +56,7 @@ class ManifestContractTest {
                 if (attributes.isEmpty()) null else "${manifest.relativePath()}: $attributes"
             }
 
-        assertThat(offenders).isEmpty()
+        assertEquals(emptyList(), offenders)
     }
 
     @Test
@@ -63,19 +67,18 @@ class ManifestContractTest {
             ?.let { ATTRIBUTE_NAME.findAll(it).map { match -> match.groupValues[1] }.toSet() }
             .orEmpty()
 
-        assertThat(attributes).containsExactlyElementsIn(APPTOOLKIT_APPLICATION_ATTRIBUTES)
+        assertEquals(APPTOOLKIT_APPLICATION_ATTRIBUTES, attributes)
     }
 
     @Test
     fun `app toolkit owns default themes colors locale config and backup rules`() {
         TOOLKIT_DEFAULT_RESOURCES.forEach { relativePath ->
-            assertThat(File(repositoryRoot, relativePath).isFile).isTrue()
+            assertTrue(File(repositoryRoot, relativePath).isFile)
         }
         FORMER_SAMPLE_DEFAULT_RESOURCES.forEach { relativePath ->
-            assertThat(File(repositoryRoot, relativePath).exists()).isFalse()
+            assertFalse(File(repositoryRoot, relativePath).exists())
         }
-        assertThat(File(repositoryRoot, SAMPLE_MANIFEST).readText())
-            .contains("android:localeConfig=\"@xml/config_locales\"")
+        assertContains(File(repositoryRoot, SAMPLE_MANIFEST).readText(), "android:localeConfig=\"@xml/config_locales\"")
     }
 
     @Test
@@ -84,33 +87,58 @@ class ManifestContractTest {
         val sampleResources = File(repositoryRoot, SAMPLE_IDENTITY_RESOURCES).readText()
 
         TOOLKIT_IDENTITY_DEFAULTS.forEach { (name, value) ->
-            assertThat(untranslatableStringValue(defaultResources, name)).isEqualTo(value)
+            assertEquals(value, untranslatableStringValue(defaultResources, name))
         }
         SAMPLE_IDENTITY_OVERRIDES.forEach { (name, value) ->
-            assertThat(untranslatableStringValue(sampleResources, name)).isEqualTo(value)
-            assertThat(resourceDefinitions(name))
-                .containsExactly(TOOLKIT_IDENTITY_RESOURCES, SAMPLE_IDENTITY_RESOURCES)
+            assertEquals(value, untranslatableStringValue(sampleResources, name))
+            assertEquals(
+                listOf(TOOLKIT_IDENTITY_RESOURCES, SAMPLE_IDENTITY_RESOURCES).sorted(),
+                resourceDefinitions(name).sorted(),
+            )
         }
-        assertThat(resourceDefinitions("copyright")).containsExactly(TOOLKIT_IDENTITY_RESOURCES)
+        assertEquals(listOf(TOOLKIT_IDENTITY_RESOURCES), resourceDefinitions("copyright"))
     }
 
+    /**
+     * The shell opens the page a deep link maps an intent to, at launch and for the intents a
+     * running activity receives, so the shortcut needs only the mapping in the graph.
+     */
     @Test
     fun `settings shortcut enters through the exported sample launcher`() {
         val shortcut = File(repositoryRoot, SAMPLE_SHORTCUTS).readText()
         val buildScript = File(repositoryRoot, SAMPLE_BUILD_SCRIPT).readText()
         val mainActivity = File(repositoryRoot, SAMPLE_MAIN_ACTIVITY_SOURCE).readText()
+        val appGraph = File(repositoryRoot, SAMPLE_APP_GRAPH_SOURCE).readText()
 
-        assertThat(shortcut).contains("android:action=\"$OPEN_SETTINGS_ACTION\"")
-        assertThat(shortcut).contains("android:targetClass=\"$SAMPLE_MAIN_ACTIVITY\"")
-        assertThat(shortcut).contains("android:targetPackage=\"@string/app_package_name\"")
-        assertThat(buildScript).contains("val releasedApplicationId = \"$SAMPLE_APPLICATION_ID\"")
-        assertThat(buildScript).contains("applicationId = releasedApplicationId")
-        assertThat(buildScript).contains("resValue(\"string\", \"app_package_name\", releasedApplicationId)")
-        assertThat(mainActivity).contains("override fun onNewIntent(intent: Intent)")
-        assertThat(mainActivity).contains("setIntent(intent)")
-        assertThat(mainActivity).contains("\"$OPEN_SETTINGS_ACTION\"")
-        assertThat(mainActivity)
-            .contains("openActivity(activityClass = SettingsActivity::class.java)")
+        assertContains(shortcut, "android:action=\"$OPEN_SETTINGS_ACTION\"")
+        assertContains(shortcut, "android:targetClass=\"$SAMPLE_MAIN_ACTIVITY\"")
+        assertContains(shortcut, "android:targetPackage=\"@string/app_package_name\"")
+        assertContains(buildScript, "val releasedApplicationId = \"$SAMPLE_APPLICATION_ID\"")
+        assertContains(buildScript, "applicationId = releasedApplicationId")
+        assertContains(buildScript, "resValue(\"string\", \"app_package_name\", releasedApplicationId)")
+        assertContains(mainActivity, "ShellHost(")
+        assertContains(appGraph, "\"$OPEN_SETTINGS_ACTION\"")
+        assertContains(appGraph, "deepLinks { action(ACTION_OPEN_SETTINGS) { SettingsRoute } }")
+    }
+
+    /**
+     * The entry point opens over the system's settings, never inside the app's own task. The host
+     * no longer declares one, which would give the system two entry points.
+     */
+    @Test
+    fun `the permission usage entry point is built in and only the system can open it`() {
+        val manifest = File(repositoryRoot, APPTOOLKIT_MANIFEST).readText().replace(XML_COMMENT, "")
+        val entry = Regex("""<activity\b[^>]*\.PermissionUsageActivity".*?</activity>""", RegexOption.DOT_MATCHES_ALL)
+            .find(manifest)?.value
+
+        assertNotNull(entry)
+        assertContains(entry, "android:exported=\"true\"")
+        assertContains(entry, "android:permission=\"android.permission.START_VIEW_PERMISSION_USAGE\"")
+        assertContains(entry, "android.intent.action.VIEW_PERMISSION_USAGE\"")
+        assertContains(entry, "android.intent.action.VIEW_PERMISSION_USAGE_FOR_PERIOD\"")
+        assertContains(entry, "android.intent.category.DEFAULT")
+        assertContains(entry, "android:taskAffinity=\"\"")
+        assertFalse("VIEW_PERMISSION_USAGE" in File(repositoryRoot, SAMPLE_MANIFEST).readText())
     }
 
     @Test
@@ -119,35 +147,39 @@ class ManifestContractTest {
             .filterNot { component -> EXPORTED.containsMatchIn(component.declaration) }
             .map { "${it.manifestPath}: ${it.name}" }
 
-        assertThat(offenders).isEmpty()
+        assertEquals(emptyList(), offenders)
     }
 
+    /**
+     * An exported component is reachable from any other app on the device. The toolkit has one
+     * legitimate case, the activity the system opens for VIEW_PERMISSION_USAGE, and it is
+     * exported precisely because a filter makes it a system entry point. Anything exported
+     * without a filter is reachable by other apps for no reason at all.
+     */
     @Test
     fun `library components are only exported when they answer an intent filter`() {
-        // An exported component is reachable from any other app on the device. The toolkit has one
-        // legitimate case, the activity the system opens for VIEW_PERMISSION_USAGE, and it is
-        // exported precisely because a filter makes it a system entry point. Anything exported
-        // without a filter is reachable by other apps for no reason at all.
         val offenders = libraryComponents()
             .filter { component -> EXPORTED_TRUE.containsMatchIn(component.declaration) }
             .filterNot { component -> INTENT_FILTER in component.declaration }
             .map { "${it.manifestPath}: ${it.name}" }
 
-        assertThat(offenders).isEmpty()
+        assertEquals(emptyList(), offenders)
     }
 
+    /**
+     * AGP takes the namespace from Gradle, so a module needs a manifest only when it declares
+     * permissions, queries, features or components. An empty placeholder in one module and
+     * none in its sibling hides which modules actually change the merged host manifest.
+     */
     @Test
     fun `module manifests exist only to contribute entries`() {
-        // AGP takes the namespace from Gradle, so a module needs a manifest only when it declares
-        // permissions, queries, features or components. An empty placeholder in one module and
-        // none in its sibling hides which modules actually change the merged host manifest.
         val offenders = moduleManifests()
             .filterNot { manifest ->
                 MANIFEST_CHILD.containsMatchIn(manifest.readText().replace(XML_COMMENT, ""))
             }
             .map { it.relativePath() }
 
-        assertThat(offenders).isEmpty()
+        assertEquals(emptyList(), offenders)
     }
 
     private data class Component(
@@ -236,6 +268,9 @@ class ManifestContractTest {
         const val SAMPLE_MAIN_ACTIVITY_SOURCE =
             "sample/app/src/main/kotlin/com/mihaicristiancondrea/android/apps/apptoolkit/" +
                 "app/main/ui/MainActivity.kt"
+        const val SAMPLE_APP_GRAPH_SOURCE =
+            "sample/app/src/main/kotlin/com/mihaicristiancondrea/android/apps/apptoolkit/" +
+                "app/navigation/AppGraph.kt"
 
         val APPTOOLKIT_APPLICATION_ATTRIBUTES = setOf(
             "android:allowBackup",

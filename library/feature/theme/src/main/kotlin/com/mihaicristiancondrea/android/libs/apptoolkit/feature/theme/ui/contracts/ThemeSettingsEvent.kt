@@ -17,12 +17,22 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.contracts
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.WeatherEffect
 
-sealed interface ThemeSettingsEvent : UiEvent {
-    data object Initialize : ThemeSettingsEvent
+/**
+ * What the user can ask the theme settings ViewModel to do.
+ */
+sealed interface ThemeSettingsEvent {
+    /** Starts observing the stored appearance, on start and on retry. */
+    data object Load : ThemeSettingsEvent
+
     data class SelectThemeMode(val mode: String) : ThemeSettingsEvent
+
     data class SetAmoledMode(val enabled: Boolean) : ThemeSettingsEvent
+
+    data class SetWeatherEffect(val effect: WeatherEffect) : ThemeSettingsEvent
+
     data class SelectDynamicPalette(val variant: Int) : ThemeSettingsEvent
+
     data class SelectStaticPalette(val id: String) : ThemeSettingsEvent
 }

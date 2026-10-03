@@ -17,25 +17,22 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui
 
-import com.google.common.truth.Truth.assertThat
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsCategory
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsCategory
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsPreference
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.contracts.SettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.SettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
-
-@OptIn(ExperimentalCoroutinesApi::class)
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
 class SettingsViewModelTest {
 
@@ -45,81 +42,102 @@ class SettingsViewModelTest {
         val dispatcherExtension = UnconfinedDispatcherExtension()
     }
 
-    private lateinit var viewModel: SettingsViewModel
-    private lateinit var provider: SettingsProvider
-    private val firebaseController = FakeFirebaseController()
+    private val telemetryRepository = FakeTelemetryRepository()
 
-    private fun setup(config: SettingsConfig) {
-        provider = mockk()
-        every { provider.provideSettingsConfig() } returns config
-        val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
-        viewModel = SettingsViewModel(provider, dispatchers, firebaseController)
+    private val filled = SettingsConfig(
+        title = "Settings",
+        categories = listOf(SettingsCategory(preferences = listOf(SettingsPreference(key = "display")))),
+    )
+    private val empty = SettingsConfig(title = "Settings", categories = emptyList())
+
+    private fun createViewModel(provider: SettingsProvider): SettingsViewModel =
+        SettingsViewModel(settingsProvider = provider, telemetryRepository = telemetryRepository)
+
+    private fun advance() = dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+    @Test
+    fun `nothing loads before the list asks`() {
+        val provider = FakeSettingsProvider(filled)
+        val viewModel = createViewModel(provider)
+        advance()
+
+        assertEquals(Loadable.Loading, viewModel.state.value.config)
+        assertEquals(0, provider.calls)
     }
 
     @Test
-    fun `load settings success`() = runTest(dispatcherExtension.testDispatcher) {
-        val config = SettingsConfig(
-            title = "Title",
-            categories = listOf(SettingsCategory(title = "c", preferences = emptyList()))
-        )
-        setup(config)
+    fun `loading shows the provider's categories`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel(FakeSettingsProvider(filled))
 
         viewModel.onEvent(SettingsEvent.Load)
-        advanceUntilIdle()
+        advance()
 
-        assertThat(viewModel.uiState.value.data?.title).isEqualTo("Title")
-        assertThat(viewModel.uiState.value.screenState).isInstanceOf(ScreenState.Success::class.java)
+        assertEquals(Loadable.Ready(filled), viewModel.state.value.config)
     }
 
     @Test
-    fun `load settings no data`() = runTest(dispatcherExtension.testDispatcher) {
-        val config = SettingsConfig(title = "", categories = emptyList())
-        setup(config)
-
-        viewModel.onEvent(SettingsEvent.Load)
-        advanceUntilIdle()
-
-        assertThat(viewModel.uiState.value.screenState).isInstanceOf(ScreenState.NoData::class.java)
-    }
-
-    @Test
-    fun `load settings clears previous errors on success`() =
+    fun `a config with no category shows the empty state with its message`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val empty = SettingsConfig(title = "", categories = emptyList())
-            val valid = SettingsConfig(
-                title = "Title",
-                categories = listOf(SettingsCategory(title = "c", preferences = emptyList()))
+            val viewModel = createViewModel(FakeSettingsProvider(empty))
+
+            viewModel.onEvent(SettingsEvent.Load)
+            advance()
+
+            val config = assertIs<Loadable.Empty>(viewModel.state.value.config)
+            assertEquals(
+                R.string.error_no_settings_found,
+                (config.message as UiTextHelper.StringResource).resourceId,
             )
-            provider = mockk()
-            every { provider.provideSettingsConfig() } returnsMany listOf(empty, valid)
-            val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
-            viewModel = SettingsViewModel(provider, dispatchers, firebaseController)
-
-            viewModel.onEvent(SettingsEvent.Load)
-            advanceUntilIdle()
-            assertThat(viewModel.uiState.value.screenState).isInstanceOf(ScreenState.NoData::class.java)
-            assertThat(viewModel.uiState.value.errors).isNotEmpty()
-
-            viewModel.onEvent(SettingsEvent.Load)
-            advanceUntilIdle()
-            assertThat(viewModel.uiState.value.screenState).isInstanceOf(ScreenState.Success::class.java)
-            assertThat(viewModel.uiState.value.errors).isEmpty()
         }
 
     @Test
-    fun `provider called once per load event`() = runTest(dispatcherExtension.testDispatcher) {
-        val config = SettingsConfig(
-            title = "Title",
-            categories = listOf(SettingsCategory(title = "c", preferences = emptyList()))
-        )
-        provider = mockk()
-        every { provider.provideSettingsConfig() } returns config
-        val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
-        viewModel = SettingsViewModel(provider, dispatchers, firebaseController)
+    fun `a provider that throws shows a failure and reports it`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel(FakeSettingsProvider(filled, failure = IllegalStateException("bug")))
 
         viewModel.onEvent(SettingsEvent.Load)
-        advanceUntilIdle()
+        advance()
 
-        verify(exactly = 1) { provider.provideSettingsConfig() }
+        assertIs<Loadable.Failed>(viewModel.state.value.config)
+        assertTrue(telemetryRepository.loggedEvents.any { it.name == "vm_op_error" })
+    }
+
+    @Test
+    fun `loading again replaces the empty state`() = runTest(dispatcherExtension.testDispatcher) {
+        val provider = FakeSettingsProvider(empty)
+        val viewModel = createViewModel(provider)
+        viewModel.onEvent(SettingsEvent.Load)
+        advance()
+        assertIs<Loadable.Empty>(viewModel.state.value.config)
+
+        provider.config = filled
+        viewModel.onEvent(SettingsEvent.Load)
+        advance()
+
+        assertEquals(Loadable.Ready(filled), viewModel.state.value.config)
+    }
+
+    @Test
+    fun `each load asks the provider once`() = runTest(dispatcherExtension.testDispatcher) {
+        val provider = FakeSettingsProvider(filled)
+        val viewModel = createViewModel(provider)
+
+        viewModel.onEvent(SettingsEvent.Load)
+        advance()
+
+        assertEquals(1, provider.calls)
+    }
+
+    private class FakeSettingsProvider(
+        var config: SettingsConfig,
+        private val failure: Throwable? = null,
+    ) : SettingsProvider {
+        var calls: Int = 0
+            private set
+
+        override fun provideSettingsConfig(): SettingsConfig {
+            calls++
+            failure?.let { throw it }
+            return config
+        }
     }
 }

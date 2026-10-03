@@ -22,7 +22,6 @@
     <string name="issue_description_placeholder">সমস্যাটি এবং কীভাবে এটি পুনরায় তৈরি করা যায় তা বর্ণনা করুন</string>
     <string name="issue_done">সম্পন্ন</string>
     <string name="issue_email_label">ইমেল</string>
-    <string name="issue_email_optional_placeholder">ইমেল (ঐচ্ছিক)</string>
     <string name="issue_section_label">সমস্যা</string>
     <string name="issue_send">পাঠান</string>
     <string name="issue_submitted_message">অ্যাপটি উন্নত করতে সাহায্য করার জন্য ধন্যবাদ।</string>

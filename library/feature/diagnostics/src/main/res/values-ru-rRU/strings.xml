@@ -24,7 +24,6 @@
     <string name="consent_ad_user_data_title">Отправка данных для рекламы</string>
     <string name="consent_analytics_storage_description">Разрешить хранение данных, таких как использование приложения и продолжительность посещения, для улучшения аналитики и производительности приложения.</string>
     <string name="consent_analytics_storage_title">Хранение данных аналитики</string>
-    <string name="learn_more">Узнать больше</string>
     <string name="summary_usage_and_diagnostics">Помогите улучшить ваш опыт, автоматически отправляя данные диагностики и использования устройства.</string>
     <string name="usage_and_diagnostics">Использование и диагностика</string>
     <string name="consent_ad_personalization_description_short">Включает персонализированную рекламу.</string>
@@ -48,4 +47,13 @@
     <string name="privacy_choices_title">Параметры конфиденциальности</string>
     <string name="summary_advanced_privacy_settings">Выберите, чем вы делитесь для аналитики и рекламы.</string>
     <string name="learn_more_about_provider">Подробнее об этом поставщике</string>
+    <string name="onboarding_crashlytics_title">Помогите нам стать лучше</string>
+    <string name="onboarding_crashlytics_description">Разрешите приложению отправлять анонимные данные об использовании и отчёты о сбоях. Это помогает нам исправлять ошибки и улучшать ваш опыт. Личная информация никогда не собирается.</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">Показать подробную информацию об использовании и диагностике</string>
+    <string name="onboarding_crashlytics_show_details_button">Показать подробную информацию</string>
+    <string name="error">Ошибка</string>
+    <string name="onboarding_crashlytics_privacy_info">Ваша конфиденциальность важна. Мы используем эти данные только для исправления ошибок и улучшения функций. Для получения более подробной информации, пожалуйста, ознакомьтесь с нашей политикой конфиденциальности.</string>
+    <string name="learn_more_privacy_policy">Ознакомиться с нашей Политикой конфиденциальности</string>
+    <string name="onboarding_crashlytics_enabled_desc">Отправка данных активна.</string>
+    <string name="onboarding_crashlytics_disabled_desc">Отправка данных неактивна.</string>
 </resources>

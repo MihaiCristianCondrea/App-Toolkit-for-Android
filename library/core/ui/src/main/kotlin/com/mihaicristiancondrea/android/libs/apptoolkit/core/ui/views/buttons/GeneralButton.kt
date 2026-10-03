@@ -50,12 +50,12 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /** Visual treatment shared by labelled and icon-only buttons. */
 enum class GeneralButtonStyle { Filled, Tonal, Outlined, Elevated, Text }
@@ -105,9 +105,9 @@ fun GeneralButton(
     contentColor: Color? = null,
     shape: Shape? = null,
     feedback: ButtonFeedback = ButtonFeedback(),
-    firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
 ) {
+    val telemetryRepository = LocalTelemetry.current
     val hasLabel = !label.isNullOrBlank()
     require(hasLabel || icon != null) { "GeneralButton requires a nonblank label or an icon." }
     val hapticFeedback = LocalHapticFeedback.current
@@ -116,7 +116,7 @@ fun GeneralButton(
     val click = {
         clickCount++
         feedback.performClick(view = view, hapticFeedback = hapticFeedback)
-        firebaseController.logGa4Event(ga4Event)
+        telemetryRepository.logGa4Event(ga4Event)
         onClick()
     }
     val buttonModifier = modifier.bounceClick(animationEnabled = enabled)

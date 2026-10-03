@@ -22,7 +22,6 @@
     <string name="issue_description_placeholder">مسئلہ اور اسے دہرانے کا طریقہ بیان کریں</string>
     <string name="issue_done">ہو گیا</string>
     <string name="issue_email_label">ای میل</string>
-    <string name="issue_email_optional_placeholder">ای میل (اختیاری)</string>
     <string name="issue_section_label">مسئلہ</string>
     <string name="issue_send">بھیجیں</string>
     <string name="issue_submitted_message">ایپ کو بہتر بنانے میں مدد کرنے کا شکریہ۔</string>

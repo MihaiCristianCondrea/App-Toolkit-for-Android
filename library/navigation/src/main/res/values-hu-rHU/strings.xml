@@ -19,4 +19,8 @@
     <string name="settings">Beállítások</string>
     <string name="share">Megosztás</string>
     <string name="updates">Frissítések</string>
+    <string name="shell_navigate_back">Vissza</string>
+    <string name="shell_pane_separator">Panelek átméretezése</string>
+    <string name="shell_support_us">Támogass minket</string>
+    <string name="shell_support_short">Támogatás</string>
 </resources>

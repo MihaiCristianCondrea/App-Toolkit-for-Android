@@ -15,22 +15,16 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">AMOLED-läge</string>
-    <string name="color_palette">Färgpalett</string>
-    <string name="dark_mode">Mörkt läge</string>
-    <string name="follow_system">Följ systeminställningar</string>
-    <string name="light_mode">Ljust läge</string>
-    <string name="onboarding_theme_dark_desc">Behagligt för ögonen.</string>
-    <string name="onboarding_theme_light_desc">Ljust och energiskt.</string>
-    <string name="onboarding_theme_system_desc">Matchar din enhet.</string>
-    <string name="other_colors">Andra färger</string>
-    <string name="screen_and_display_settings">Skärm- och visningsinställningar.</string>
-    <string name="summary_dark_theme">Dark Theme utnyttjar en djup bakgrund för att avsevärt förlänga batteritiden. För att aktivera det, navigera bara till din Androids systemhanterare och välj ditt föredragna tema i</string>
-    <string name="theme_mode">Temaläge</string>
-    <string name="wallpaper_colors">Bakgrundsfärger</string>
     <string name="holiday_greeting_christmas_title">Trevlig helg!</string>
     <string name="holiday_greeting_christmas_message">Jultemat är här, med snö som faller över hela appen. Vill du använda det tills helgerna är över?</string>
     <string name="holiday_greeting_halloween_title">Glad Halloween!</string>
     <string name="holiday_greeting_halloween_message">Den läskiga säsongen är här. Vill du använda Halloween-temat så länge den varar?</string>
     <string name="holiday_greeting_use_theme">Använd högtidstemat under helgerna</string>
+    <string name="dark_theme">Mörkt tema</string>
+    <string name="weather_effect">Vädereffekt</string>
+    <string name="weather_effect_automatic">Automatiskt</string>
+    <string name="weather_effect_snow">Snö</string>
+    <string name="weather_effect_off">Av</string>
+    <string name="weather_effect_rain">Regn</string>
+    <string name="weather_effect_info">Med Automatiskt faller snö medan julpaletten används. Snö och regn faller med alla paletter.</string>
 </resources>

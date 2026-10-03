@@ -17,18 +17,23 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui
 
-import com.google.common.truth.Truth.assertThat
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.contracts.PrivacyAction
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.contracts.PrivacyEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItemKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.providers.PrivacySettingsProvider
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
 class PrivacyViewModelTest {
 
@@ -38,70 +43,79 @@ class PrivacyViewModelTest {
         val dispatcherExtension = UnconfinedDispatcherExtension()
     }
 
-    private class RecordingProvider : PrivacySettingsProvider {
-        var permissionsOpened: Int = 0
-        var adsOpened: Int = 0
-        var diagnosticsOpened: Int = 0
+    private val telemetryRepository = FakeTelemetryRepository()
 
-        override val privacyPolicyUrl: String = "https://example.test/privacy"
+    private fun createViewModel(
+        provider: PrivacySettingsProvider = FakePrivacySettingsProvider(),
+    ): PrivacyViewModel =
+        PrivacyViewModel(provider = provider, telemetryRepository = telemetryRepository)
 
-        override fun openPermissionsScreen() { permissionsOpened += 1 }
-        override fun openAdsScreen() { adsOpened += 1 }
-        override fun openUsageAndDiagnosticsScreen() { diagnosticsOpened += 1 }
+    private fun advance() = dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+    @Test
+    fun `the first load shows the provider's entries`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel()
+        advance()
+
+        val items = (viewModel.state.value.items as Loadable.Ready).value
+        val policy = items.single { it.key == PrivacyItemKey.PRIVACY_POLICY } as PrivacyItem.Preference
+        assertEquals(PrivacyItemAction.OpenUrl(url = "https://example.test/privacy"), policy.action)
+        assertTrue(items.any { it.key == PrivacyItemKey.LICENSE })
     }
 
-    private fun createViewModel(provider: PrivacySettingsProvider = RecordingProvider()) =
-        PrivacyViewModel(provider = provider, firebaseController = FakeFirebaseController())
-
     @Test
-    fun `initial load exposes the provider's entries`() =
+    fun `a provider that throws shows a retryable failure and reports it`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val viewModel = createViewModel()
-            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+            val viewModel = createViewModel(FakePrivacySettingsProvider(failure = IllegalStateException("fail")))
+            advance()
 
-            val keys = viewModel.uiState.value.data?.items?.map { it.key }
-            assertThat(keys).contains(PrivacyItemKey.PRIVACY_POLICY)
-            assertThat(keys).contains(PrivacyItemKey.LICENSE)
-        }
-
-    @Test
-    fun `a url row leaves as an action for the screen to open`() =
-        runTest(dispatcherExtension.testDispatcher) {
-            val viewModel = createViewModel()
-            val actions = mutableListOf<PrivacyAction>()
-            val job = launch { viewModel.actionEvent.collect { actions.add(it) } }
-            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
-
-            viewModel.onEvent(
-                PrivacyEvent.ItemClicked(
-                    action = PrivacyItemAction.OpenUrl(url = "https://example.test/privacy"),
-                )
+            val items = assertIs<Loadable.Failed>(viewModel.state.value.items)
+            assertEquals(
+                CoreUiR.string.screen_error_generic,
+                (items.message as UiTextHelper.StringResource).resourceId,
             )
-            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
-
-            assertThat(actions)
-                .containsExactly(PrivacyAction.OpenUrl(url = "https://example.test/privacy"))
-            job.cancel()
+            assertTrue(items.retryable)
+            assertTrue(telemetryRepository.loggedEvents.any { it.name == "vm_op_error" })
         }
 
     @Test
-    fun `host destinations are opened through the provider, not emitted as actions`() =
+    fun `retrying after a failure shows the entries`() = runTest(dispatcherExtension.testDispatcher) {
+        val provider = FakePrivacySettingsProvider(failure = IllegalStateException("fail"))
+        val viewModel = createViewModel(provider)
+        advance()
+        assertIs<Loadable.Failed>(viewModel.state.value.items)
+
+        provider.failure = null
+        viewModel.onEvent(PrivacyEvent.Load)
+        advance()
+
+        assertIs<Loadable.Ready<*>>(viewModel.state.value.items)
+    }
+
+    @Test
+    fun `a tapped row is reported as the open operation and leaves the entries as they are`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val provider = RecordingProvider()
-            val viewModel = createViewModel(provider = provider)
-            val actions = mutableListOf<PrivacyAction>()
-            val job = launch { viewModel.actionEvent.collect { actions.add(it) } }
-            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+            val viewModel = createViewModel()
+            advance()
+            val loaded = viewModel.state.value
 
-            viewModel.onEvent(PrivacyEvent.ItemClicked(PrivacyItemAction.OpenPermissions))
-            viewModel.onEvent(PrivacyEvent.ItemClicked(PrivacyItemAction.OpenAds))
-            viewModel.onEvent(PrivacyEvent.ItemClicked(PrivacyItemAction.OpenUsageAndDiagnostics))
-            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+            viewModel.onEvent(PrivacyEvent.ItemClicked(action = PrivacyItemAction.OpenPermissions))
+            advance()
 
-            assertThat(provider.permissionsOpened).isEqualTo(1)
-            assertThat(provider.adsOpened).isEqualTo(1)
-            assertThat(provider.diagnosticsOpened).isEqualTo(1)
-            assertThat(actions).isEmpty()
-            job.cancel()
+            assertEquals(loaded, viewModel.state.value)
+            assertTrue(
+                telemetryRepository.loggedEvents.any { event ->
+                    event.name == "vm_op_start" && event.params["action"] == AnalyticsValue.Str("openPrivacyItem")
+                }
+            )
         }
+
+    /** Supplies one URL of its own, and throws from it while [failure] is set. */
+    private class FakePrivacySettingsProvider(var failure: Throwable? = null) : PrivacySettingsProvider {
+        override val privacyPolicyUrl: String
+            get() {
+                failure?.let { throw it }
+                return "https://example.test/privacy"
+            }
+    }
 }

@@ -19,4 +19,8 @@
     <string name="settings">الإعدادات</string>
     <string name="share">مشاركة</string>
     <string name="updates">التحديثات</string>
+    <string name="shell_navigate_back">العودة</string>
+    <string name="shell_pane_separator">تغيير حجم الأجزاء</string>
+    <string name="shell_support_us">ادعمنا</string>
+    <string name="shell_support_short">دعم</string>
 </resources>

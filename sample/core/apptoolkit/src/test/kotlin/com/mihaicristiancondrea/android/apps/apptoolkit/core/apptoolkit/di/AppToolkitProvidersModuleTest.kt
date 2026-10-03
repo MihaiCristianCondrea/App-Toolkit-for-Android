@@ -24,10 +24,8 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.koinApplication
 
 /**
- * Checks the host-wide toolkit answers this module still owns.
- *
- * The settings providers moved to `:sample:feature:settings` with the surfaces they configure, and
- * `SettingsModuleTest` covers them there.
+ * Checks the host-wide provider bindings owned by this module; settings bindings have their own
+ * contract tests.
  */
 class AppToolkitProvidersModuleTest {
 

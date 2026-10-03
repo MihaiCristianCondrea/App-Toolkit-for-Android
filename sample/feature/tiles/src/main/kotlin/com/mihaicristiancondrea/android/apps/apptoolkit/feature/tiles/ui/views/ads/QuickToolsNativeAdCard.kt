@@ -32,20 +32,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.Native
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 
 /**
- * Native ad row rendered between Toolkit Tiles categories.
+ * Sample-owned ad row matching the Quick Tools surfaces, text actions, and headline weight. The
+ * two-line body cap keeps descriptions within the surrounding row height; [NativeAdSlot] owns
+ * ad lifecycle.
  *
- * Change rationale: this used to inflate `R.layout.native_ad_quick_tools_row` through
- * `NativeAdViewHost` and bind it with `findViewById`. It is now a thin wrapper over the toolkit's
- * shared [NativeAdSlot], so the row picks up the same lifecycle, palette and disclosure handling as
- * every other ad surface.
- *
- * The Toolkit Tiles list is an exception to the toolkit's default of drawing ads on a plain card:
- * its rows are built as `surfaceContainerLow` surfaces, so the ad passes that container explicitly
- * rather than inheriting a tint the rest of the app does not want.
- *
- * @param initiallyLoaded keeps an already reported ad visible while this composable is moved from
- * the hidden preloader slot into the visible list. The slot reports `false` before its own load
- * resolves; suppressing only that first report avoids a transient status reset and layout gap.
+ * @param initiallyLoaded Suppresses the first `false` status when moving an already visible ad
+ * from preloading into the list, preventing a transient layout gap.
  */
 @Composable
 fun QuickToolsNativeAdCard(
@@ -57,9 +49,6 @@ fun QuickToolsNativeAdCard(
 ) {
     var isFirstReport: Boolean by remember(adUnitId) { mutableStateOf(value = true) }
 
-    // The screen's own rows use titleMedium at its default weight and their actions are text
-    // buttons, so a bold headline and a filled pill would both be heavier than anything around
-    // them. Two body lines stop a long description making the row taller than the tile rows.
     val style = NativeAdStyle(
         headlineBold = false,
         bodyMaxLines = 2,

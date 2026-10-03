@@ -129,7 +129,6 @@ fun GridShowcase() {
         )
     }
 
-    // The same cells without their supporting line, at the smallest size class.
     val compactActions: ImmutableList<GroupedGridItem> = remember(categories) {
         categories.take(n = 3).map { item -> item.copy(subtitle = null) }.toImmutableList()
     }

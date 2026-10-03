@@ -18,68 +18,20 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.di
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.data.repositories.ShowcaseUnlockRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.providers.AppAboutSettingsProvider
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.providers.AppDisplaySettingsProvider
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.providers.AppPrivacySettingsProvider
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.providers.AppSettingsProvider
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.views.AboutSettingsContent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.AboutSettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.providers.DisplaySettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.providers.PrivacySettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.SettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.data.repositories.GeneralSettingsRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.general.GeneralSettingsViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.GeneralSettingsContentProvider
 import org.koin.core.module.Module
-import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 /**
- * The sample's settings surface, and its answers to the toolkit's settings extension points.
+ * The sample's own settings additions: the About page's hidden unlock of the components showcase.
  *
- * The provider implementations are bound here rather than in the host composition root because
- * they live here: a module that owns a settings surface owns what that surface shows. The root
- * still decides ordering, it adds this module after the toolkit's own, so these bindings win.
+ * The toolkit's settings extension points are answered in `:sample:core:apptoolkit`, with the rest
+ * of the App Toolkit setup.
  */
-fun settingsModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
-    single<SettingsProvider> { AppSettingsProvider(context = get()) }
-    single<AboutSettingsProvider> {
-        AppAboutSettingsProvider(context = get(), hostBuildConfig = hostBuildConfig)
-    }
-    single<DisplaySettingsProvider> { AppDisplaySettingsProvider(context = get()) }
-    single<PrivacySettingsProvider> { AppPrivacySettingsProvider(context = get()) }
-
+val settingsModule: Module = module {
     single {
         ShowcaseUnlockRepository(
             dataStore = get(),
-            firebaseController = get(),
-        )
-    }
-
-    factory {
-        GeneralSettingsContentProvider(
-            aboutContent = { paddingValues, snackbarHostState ->
-                AboutSettingsContent(
-                    paddingValues = paddingValues,
-                    snackbarHostState = snackbarHostState,
-                )
-            },
-        )
-    }
-
-    single {
-        GeneralSettingsRepository(
-            firebaseController = get(),
-            appStatePreferences = get(),
-        )
-    }
-
-    viewModel {
-        GeneralSettingsViewModel(
-            repository = get(),
-            dispatchers = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
         )
     }
 }

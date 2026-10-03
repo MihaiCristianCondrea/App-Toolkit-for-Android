@@ -24,7 +24,6 @@
     <string name="consent_ad_user_data_title">Daten für werbung senden</string>
     <string name="consent_analytics_storage_description">Das Speichern von Daten wie App-Nutzung und Besuchsdauer erlauben, um Analysen und die App-Leistung zu verbessern.</string>
     <string name="consent_analytics_storage_title">Analysedaten speichern</string>
-    <string name="learn_more">Mehr erfahren</string>
     <string name="summary_usage_and_diagnostics">Verbessern Sie Ihre Erfahrung, indem Sie automatisch Diagnosedaten und Nutzungsinformationen senden.</string>
     <string name="usage_and_diagnostics">Nutzung und Diagnostik</string>
     <string name="consent_ad_personalization_description_short">Ermöglicht personalisierte Werbung.</string>
@@ -48,4 +47,13 @@
     <string name="privacy_choices_title">Datenschutzoptionen</string>
     <string name="summary_advanced_privacy_settings">Wählen Sie, was Sie für Analysen und Werbung teilen.</string>
     <string name="learn_more_about_provider">Mehr über diesen Anbieter erfahren</string>
+    <string name="onboarding_crashlytics_title">Hilf uns zu verbessern</string>
+    <string name="onboarding_crashlytics_description">Erlaube der App, anonyme Nutzungsdaten und Absturzberichte zu senden. Dies hilft uns, Fehler zu beheben und deine Erfahrung zu verbessern. Es werden niemals persönliche Informationen gesammelt.</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">Detaillierte Informationen zu Nutzung und Diagnose anzeigen</string>
+    <string name="onboarding_crashlytics_show_details_button">Detaillierte informationen anzeigen</string>
+    <string name="error">Fehler</string>
+    <string name="onboarding_crashlytics_privacy_info">Deine Privatsphäre ist uns wichtig. Wir verwenden diese Daten nur zur Fehlerbehebung und Funktionsverbesserung. Weitere Details findest du in unserer Datenschutzerklärung.</string>
+    <string name="learn_more_privacy_policy">Unsere Datenschutzerklärung überprüfen</string>
+    <string name="onboarding_crashlytics_enabled_desc">Datenberichterstattung ist aktiv.</string>
+    <string name="onboarding_crashlytics_disabled_desc">Datenberichterstattung ist inaktiv.</string>
 </resources>

@@ -30,7 +30,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
  * Copies [text] to the clipboard.
  *
  * - Android 13+ shows system UI confirmation; avoid duplicate in-app snackbars there.
- * - If [isSensitive] is true, the clipboard preview is obfuscated on Android 13+. :contentReference[oaicite:5]{index=5}
+ * - If [isSensitive] is true, the clipboard preview is obfuscated on Android 13+.
  * - [onCopyFallback] is invoked only on API 32 and lower where in-app feedback is still needed.
  *
  * The write is deliberately not read back to confirm it. `ClipboardService` allows

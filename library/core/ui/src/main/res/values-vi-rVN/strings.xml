@@ -56,4 +56,5 @@
     <string name="theme_mode">Chế độ chủ đề</string>
     <string name="try_again">Thử lại</string>
     <string name="wallpaper_colors">Màu hình nền</string>
+    <string name="shell_list_placeholder">Chọn một mục để xem tại đây.</string>
 </resources>

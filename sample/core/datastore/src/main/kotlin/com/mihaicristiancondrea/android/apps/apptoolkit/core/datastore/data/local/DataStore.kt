@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.loc
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.startupValueFlow
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
+import androidx.navigation3.runtime.NavKey
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -33,7 +33,7 @@ class DataStore(
         commonDataStore.componentsShowcaseUnlocked
     override val favoriteApps: Flow<Set<String>> = commonDataStore.favoriteApps
 
-    override fun <T : StableNavKey> startupDestinationFlow(
+    override fun <T : NavKey> startupDestinationFlow(
         defaultRoute: String,
         mapToKey: (String) -> T
     ): Flow<T> =

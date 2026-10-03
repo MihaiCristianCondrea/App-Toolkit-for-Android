@@ -132,4 +132,5 @@
     <string name="tiles_qs_integration_title">Schnelleinstellungen-Kachel</string>
     <string name="tiles_qs_integration_summary_format">Verwenden Sie %1$s über die Schnelleinstellungen Ihres Telefons, ohne App Toolkit zu öffnen.</string>
     <string name="tiles_add_to_qs">Zu Schnelleinstellungen hinzufügen</string>
+    <string name="tiles_search_hint">Tools durchsuchen</string>
 </resources>

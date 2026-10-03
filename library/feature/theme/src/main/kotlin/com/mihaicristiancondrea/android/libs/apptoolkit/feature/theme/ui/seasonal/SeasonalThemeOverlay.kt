@@ -27,45 +27,52 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.isSystemAnimationDisabled
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.effects.rainfall.RainfallStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.effects.rainfall.rainfall
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.effects.snowfall.SnowfallStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.effects.snowfall.snowfall
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppTheme
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.isAppInDarkTheme
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.contracts.SeasonalThemeOverlayEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.states.SeasonalThemeOverlayUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.views.HolidayGreetingDialog
 import org.koin.compose.viewmodel.koinViewModel
 
 /**
- * The seasonal layer drawn over one activity: snow while the Christmas palette is worn, and the
- * holiday greeting when one is due.
+ * The seasonal layer drawn over one activity: the weather effect (snow while the Christmas palette
+ * is worn, or rain when picked in the theme settings), and the holiday greeting when one is due.
  *
  * [SeasonalThemeManager] puts this over every activity. A host that would rather place it itself,
  * inside its own root composable, can call it directly and skip the manager. It fills its parent and
  * takes no input, so it belongs last in a `Box` above the content.
  *
- * Snow is skipped when the person has turned animations off system-wide.
+ * Snow and rain are skipped when the person has turned animations off system-wide.
  *
  * It composes no app theme of its own until there is a greeting to show. It sits over every
  * activity, and a second theme there meant a second set of preference collectors and a second
- * color scheme per screen, most of the year for nothing. Snow only needs to know light from dark.
+ * color scheme per screen, most of the year for nothing. The weather only needs to know light from
+ * dark.
  */
 @Composable
 fun SeasonalThemeOverlay(modifier: Modifier = Modifier) {
     val viewModel: SeasonalThemeOverlayViewModel = koinViewModel()
-    val screenState by viewModel.uiState.collectAsStateWithLifecycle()
-    val state = screenState.data ?: return
+    val state: SeasonalThemeOverlayUiState by viewModel.state.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
     val animationsDisabled: Boolean = remember(context) { context.isSystemAnimationDisabled() }
     val isDarkSurface: Boolean = isAppInDarkTheme(themeMode = state.themeMode)
-    val style: SnowfallStyle = remember(isDarkSurface) {
+    val snowStyle: SnowfallStyle = remember(isDarkSurface) {
         SnowfallStyle(colors = if (isDarkSurface) darkSurfaceSnow else lightSurfaceSnow)
+    }
+    val rainStyle: RainfallStyle = remember(isDarkSurface) {
+        RainfallStyle(colors = if (isDarkSurface) darkSurfaceRain else lightSurfaceRain)
     }
 
     Box(
         modifier = modifier
             .fillMaxSize()
-            .snowfall(style = style, enabled = state.showSnowfall && !animationsDisabled),
+            .snowfall(style = snowStyle, enabled = state.showSnowfall && !animationsDisabled)
+            .rainfall(style = rainStyle, enabled = state.showRain && !animationsDisabled),
     )
 
     state.greeting?.let { season ->
@@ -84,3 +91,8 @@ private val darkSurfaceSnow: List<Color> = listOf(Color.White, Color(0xFFDCE8F5)
 
 /** White snow vanishes on a light surface, so light themes get a cold blue-grey instead. */
 private val lightSurfaceSnow: List<Color> = listOf(Color(0xFF8FAACB), Color(0xFFA9C0DB))
+
+private val darkSurfaceRain: List<Color> = listOf(Color(0xFFB3C7DD), Color(0xFFD6E2EF))
+
+/** Pale streaks disappear on a light surface, so light themes get a deeper slate blue. */
+private val lightSurfaceRain: List<Color> = listOf(Color(0xFF5E7A99), Color(0xFF7890AD))

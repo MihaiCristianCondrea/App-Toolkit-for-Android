@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.WeatherEffect
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.HolidaySeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.SeasonalThemeState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.holidayOccurrenceKey
@@ -29,7 +30,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 
-/** Reads and writes the seasonal themes through the preference store. */
+/**
+ * Coordinates holiday palette changes and restoration. An existing snapshot retains the
+ * original appearance when switching between holiday themes.
+ */
 class DefaultSeasonalThemeRepository(
     private val seasonal: SeasonalThemePreferencesDataSource,
     private val theme: ThemePreferencesDataSource,
@@ -38,9 +42,12 @@ class DefaultSeasonalThemeRepository(
     override val state: Flow<SeasonalThemeState> = combine(
         seasonal.seasonalThemesUnlocked,
         seasonal.holidayThemeSnapshot,
-    ) { unlocked, snapshot ->
-        SeasonalThemeState(unlocked = unlocked, holidayThemeInUse = snapshot?.season)
+        seasonal.weatherEffect,
+    ) { unlocked, snapshot, weatherEffect ->
+        SeasonalThemeState(unlocked = unlocked, holidayThemeInUse = snapshot?.season, weatherEffect = weatherEffect)
     }
+
+    override suspend fun setWeatherEffect(effect: WeatherEffect) = seasonal.saveWeatherEffect(effect)
 
     override suspend fun unlockSeasonalThemes(): Boolean {
         if (seasonal.seasonalThemesUnlocked.first()) return false
@@ -68,16 +75,16 @@ class DefaultSeasonalThemeRepository(
         if (today.holidaySeason == snapshot.season) return
 
         if (isWearing(snapshot.season)) {
-            theme.saveStaticPaletteId(snapshot.previousPaletteId)
-            theme.saveDynamicColors(snapshot.previousDynamicColors)
+            theme.savePalette(
+                dynamicColors = snapshot.previousDynamicColors,
+                staticPaletteId = snapshot.previousPaletteId,
+            )
         }
         seasonal.saveHolidayThemeSnapshot(null)
     }
 
     private suspend fun applyHolidayTheme(season: HolidaySeason) {
         if (isWearing(season)) return
-        // Keep the oldest appearance. If a snapshot exists the person is already wearing a holiday
-        // theme, and the snapshot holds their everyday appearance, which is what they expect back.
         val snapshot = seasonal.holidayThemeSnapshot.first()?.copy(season = season)
             ?: HolidayThemeSnapshot(
                 season = season,
@@ -85,8 +92,7 @@ class DefaultSeasonalThemeRepository(
                 previousDynamicColors = theme.dynamicColors.first(),
             )
         seasonal.saveHolidayThemeSnapshot(snapshot)
-        theme.saveDynamicColors(false)
-        theme.saveStaticPaletteId(season.paletteId)
+        theme.savePalette(dynamicColors = false, staticPaletteId = season.paletteId)
     }
 
     private suspend fun isWearing(season: HolidaySeason): Boolean =

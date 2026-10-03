@@ -24,16 +24,8 @@ import kotlinx.coroutines.flow.Flow
  * Persisted changelog state: the last version the user saw and its cached Markdown.
  */
 interface ChangelogPreferencesDataSource {
-
-    /** Emits the last app version whose changelog was shown. */
     fun lastSeenVersion(default: String = ""): Flow<String>
-
-    /** Emits the cached changelog Markdown for the last seen version. */
     fun cachedChangelog(default: String = ""): Flow<String>
-
-    /** Persists the last app version whose changelog was shown. */
     suspend fun saveLastSeenVersion(version: String)
-
-    /** Persists the cached changelog Markdown. */
     suspend fun saveCachedChangelog(changelog: String)
 }

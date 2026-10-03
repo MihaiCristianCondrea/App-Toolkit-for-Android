@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -47,6 +47,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.sty
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches.CustomSwitch
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 @Composable
 fun AmoledModeToggleCard(
@@ -90,7 +91,7 @@ fun AmoledModeToggleCard(
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = stringResource(id = R.string.amoled_mode),
+                    text = stringResource(id = CoreUiR.string.amoled_mode),
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
                     color = MaterialTheme.colorScheme.onSurface
                 )

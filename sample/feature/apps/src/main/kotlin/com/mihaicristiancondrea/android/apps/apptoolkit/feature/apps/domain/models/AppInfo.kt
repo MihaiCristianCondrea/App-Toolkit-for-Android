@@ -20,11 +20,8 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.mod
 import androidx.compose.runtime.Immutable
 
 /**
- * Compact application metadata returned by the public catalog endpoint.
- *
- * Change rationale: the retired API returned list and detail fields in one document. Keeping the
- * catalog model compact now prevents description, screenshot, and link payloads from being loaded
- * for every grid item.
+ * Compact catalog metadata for the app grid. Description, screenshots, and links are loaded
+ * separately when details are expanded.
  */
 data class AppSummary(
     val name: String,
@@ -38,11 +35,8 @@ data class AppSummary(
 typealias AppInfo = AppSummary
 
 /**
- * Full package-specific metadata loaded when an application is expanded.
- *
- * `@Immutable` because the `List` properties leave Compose unable to infer stability, which made
- * every composable taking an `AppDetails` unskippable. The lists are produced once by the DTO
- * mappers and never mutated afterwards, so the promise holds.
+ * Package details loaded when an app is expanded. Lists are produced once by DTO mapping and
+ * must remain immutable to satisfy the Compose [Immutable] contract.
  */
 @Immutable
 data class AppDetails(

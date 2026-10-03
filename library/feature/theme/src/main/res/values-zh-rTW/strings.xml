@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="holiday_greeting_christmas_title">佳節愉快！</string>
+    <string name="holiday_greeting_christmas_message">聖誕主題來了，整個應用程式都會飄雪。要在假期結束前一直使用這個主題嗎？</string>
+    <string name="holiday_greeting_halloween_title">萬聖節快樂！</string>
+    <string name="holiday_greeting_halloween_message">萬聖節季節到了。要在季節結束前一直使用萬聖節主題嗎？</string>
+    <string name="holiday_greeting_use_theme">在節日期間使用節日主題</string>
+    <string name="dark_theme">深色主題</string>
+    <string name="weather_effect">天氣效果</string>
+    <string name="weather_effect_automatic">自動</string>
+    <string name="weather_effect_snow">下雪</string>
+    <string name="weather_effect_off">關閉</string>
+    <string name="weather_effect_rain">下雨</string>
+    <string name="weather_effect_info">「自動」會在使用聖誕色盤時讓雪花飄落。雪和雨可搭配任何色盤。</string>
+</resources>

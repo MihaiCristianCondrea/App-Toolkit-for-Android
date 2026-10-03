@@ -17,44 +17,47 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.networkCall
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.mappers.toCreateIssueRequest
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.remote.IssueReporterRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.DeviceInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.Report
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.providers.DeviceInfoProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import kotlinx.coroutines.withContext
 
+/**
+ * Sends reports through [remoteDataSource] and captures device details through
+ * [deviceInfoProvider], which moves its own platform reads off the main thread. Ktor suspends, so
+ * sending needs no dispatcher.
+ */
 class DefaultIssueReporterRepository(
     private val remoteDataSource: IssueReporterRemoteDataSource,
     private val deviceInfoProvider: DeviceInfoProvider,
-    private val dispatchers: DispatcherProvider,
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
 ) : IssueReporterRepository {
 
-    // The data source already moves itself to IO, so no withContext here.
     override suspend fun captureDeviceInfo(): DeviceInfo = deviceInfoProvider.capture()
 
+    /** The breadcrumb names the target repository and whether a token is set, never the token. */
     override suspend fun sendReport(
         report: Report,
         target: GithubTarget,
         token: String?,
-    ): IssueReportResult = withContext(dispatchers.io) {
-        firebaseController.logBreadcrumb(
+    ): String {
+        telemetryRepository.logBreadcrumb(
             message = "Issue report sending",
             attributes = mapOf(
                 "targetRepo" to target.repository,
                 "hasToken" to (!token.isNullOrBlank()).toString(),
             ),
         )
-        val payload = report.toCreateIssueRequest()
-        remoteDataSource.createIssue(
-            payload = payload,
-            target = target,
-            token = token,
-        )
+        return networkCall {
+            remoteDataSource.createIssue(
+                payload = report.toCreateIssueRequest(),
+                target = target,
+                token = token,
+            )
+        }
     }
 }

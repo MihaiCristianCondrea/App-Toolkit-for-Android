@@ -22,7 +22,6 @@
     <string name="issue_description_placeholder">Descrie problema și cum poate fi reprodusă</string>
     <string name="issue_done">Gata</string>
     <string name="issue_email_label">Email</string>
-    <string name="issue_email_optional_placeholder">Email (opțional)</string>
     <string name="issue_section_label">Problemă</string>
     <string name="issue_send">Trimite</string>
     <string name="issue_submitted_message">Îți mulțumim că ne ajuți să îmbunătățim aplicația.</string>

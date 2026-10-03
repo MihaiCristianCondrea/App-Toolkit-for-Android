@@ -12,6 +12,9 @@ theme-selection visuals, and the shared icon slot used by navigation items and b
 - `ColorPalette`, `ThemeSettingOption`, and wallpaper swatch models.
 - Theme option/swatch composables.
 - `ToolkitIcon` and its renderers, the icon slot shared by navigation items and buttons.
+- `ToolkitFab`, `FabSize` and `FabColor`, the description of a floating action button. It lives
+  here, beside `ToolkitIcon`, so the navigation graph can take it; `:library:core:ui` draws it
+  (see its [Floating action buttons](../ui/README.md#floating-action-buttons)).
 - Reusable bundled AVD resources for Check, Clock, Grid, Settings, and Share.
 - `il_wavy_line`, the wavy line the wavy dividers in `:library:core:ui` reproduce.
 
@@ -73,11 +76,13 @@ flowchart TD
 - `AppTheme`, `AppThemeConfig`, `ColorPalette`, palette providers/values, theme models, and
   selection composables.
 - `Modifier.snowfall`, `SnowfallStyle`, and `SnowflakeShape`.
+- `Modifier.rainfall` and `RainfallStyle`.
 - `isAppInDarkTheme(themeMode)`, the same light or dark decision `AppTheme` makes, for surfaces
   that need it without composing a whole theme.
 - `ColorScheme.toSwatchColors()`, the colors a palette swatch shows.
 - `ToolkitIcon`, `ToolkitIconReplayMode`, `resolveToolkitIcon`, `ToolkitIconContent`, and
   `AnimatedToolkitIcon`. See [the Toolkit Icon API](#toolkit-icon-api) below.
+- `ToolkitFab`, `FabSize` and `FabColor`.
 
 ## Toolkit Icon API
 
@@ -347,6 +352,14 @@ follows the composition's frame clock, so nothing recomposes while snow falls an
 background. `SnowfallStyle` sets density, colors, flake size, speed, wind, opacity, and shape. The
 motion lives in `SnowfallSimulation`, which is covered by JVM tests.
 
+`Modifier.rainfall(RainfallStyle)` in `ui.effects.rainfall` draws falling rain the same way: drawn
+in the draw phase only from plain arrays, following the frame clock. Each drop has a depth, and a
+nearer drop is longer, thicker, brighter and faster, and lands lower. Landing drops leave a flat
+ring that widens and fades, the wind gusts around its set value, and the rain thickens and thins
+in showers. `RainfallStyle` sets density, colors, streak length and thickness, speed, wind, gusts,
+showers, splashes and their size, opacity, and a cap on the number of drops. The motion lives in
+`RainfallSimulation`, which is covered by JVM tests.
+
 ## Current risks
 
 The module still depends directly on the preference contracts needed by `AppTheme`. The persisted
@@ -387,7 +400,7 @@ slot and existing `Restart` / `Reverse` replay contract described above, includi
 `loop` for animated sources.
 
 Every enabled click replays the icon, performs `ButtonFeedback`, logs the optional `ga4Event`
-through `firebaseController`, then invokes `onClick`. Disabled buttons do none of these.
+through `LocalTelemetry`, then invokes `onClick`. Disabled buttons do none of these.
 Do not add `bounceClick()`, manual sounds, haptics, or duplicate analytics at call sites.
 
 ```kotlin
@@ -444,23 +457,22 @@ another theme color.
 
 ### One animation for a navigation item
 
-`BottomBarItem` and `NavigationDrawerItem` accept a dedicated `animatedIcon` constructor. It needs
-no `icon` or `selectedIcon` arguments and accepts only `ToolkitIcon.Animated` (AVD or Lottie).
-Internally both non-null icon states reference that same value, so existing custom navigation
-renderers can continue consuming `item.icon` and `item.selectedIcon`. Selection changes animate
-between the first and last frames; repeated clicks follow the chosen replay mode.
+A shell tab takes `icon` and `selectedIcon`, and `selectedIcon` defaults to `icon`. Passing one
+`ToolkitIcon.Animated` (AVD or Lottie) as `icon` therefore uses the same animation for both states:
+selection changes animate between its first and last frames, and repeated clicks follow the chosen
+replay mode.
 
 ```kotlin
-BottomBarItem(
-    route = ToolkitTilesRoute,
-    title = R.string.tiles_title,
-    animatedIcon = ToolkitIcon.AnimatedVector(
-        resId = DesignSystemR.drawable.anim_grid,
+tab(
+    key = ToolkitTilesRoute,
+    label = R.string.tiles_title,
+    icon = ToolkitIcon.AnimatedVector(
+        resId = DesignSystemR.drawable.anim_grid_select,
         replayMode = ToolkitIconReplayMode.Reverse,
     ),
-)
+) { ToolkitTilesScreen() }
 ```
 
-Use the `icon` / `selectedIcon` constructor when the two states need distinct artwork; both
-arguments are required. Pass the same static icon twice when it should not change on selection.
+Pass a distinct `selectedIcon` when the two states need different artwork. Drawer and overflow
+entries take one `ToolkitIcon`, which plays on each click.
 Moved resources must now be imported from `core.designsystem.R`, not `navigation.R`.

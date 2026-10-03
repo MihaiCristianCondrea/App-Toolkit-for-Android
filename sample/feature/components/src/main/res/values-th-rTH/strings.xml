@@ -104,4 +104,18 @@
     <string name="components_divider_width">ความกว้าง</string>
     <string name="components_divider_wave_height">ความสูงคลื่น</string>
     <string name="components_divider_vertical">แนวตั้ง</string>
+    <string name="components_snackbar_pressed">คุณกดปุ่มแล้ว</string>
+    <string name="components_snackbar_action_message">ดำเนินการของปุ่มเสร็จแล้ว</string>
+    <string name="components_snackbar_undo">เลิกทำ</string>
+    <string name="components_snackbar_undone">เลิกทำแล้ว</string>
+    <string name="components_snackbar_error">เกิดข้อผิดพลาด</string>
+    <string name="components_snackbar_retry">ลองอีกครั้ง</string>
+    <string name="components_snackbar_icon">สแน็กบาร์ที่มีไอคอนและสีของตัวเอง</string>
+    <string name="components_snackbar_custom">%1$s: สแน็กบาร์ที่หน้าจอวาดเอง</string>
+    <string name="components_section_article_bar">แถบแอปสำหรับบทความ</string>
+    <string name="components_article_without_brand">ไม่มีแบรนด์</string>
+    <string name="components_article_with_brand">มีแบรนด์</string>
+    <string name="components_article_brand">ผู้เผยแพร่ตัวอย่าง</string>
+    <string name="components_article_headline">แถบแอปที่เรียบง่ายให้เรื่องราวมาก่อน</string>
+    <string name="components_article_paragraph">ในตอนแรกแถบจะแสดงเพียงปุ่มของมัน เลื่อนผ่านพาดหัวแล้วชื่อเรื่องจะขึ้นมาแทนที่ ส่วนเส้นที่ขอบล่างจะแสดงว่าคุณอ่านไปมากแค่ไหนแล้ว</string>
 </resources>

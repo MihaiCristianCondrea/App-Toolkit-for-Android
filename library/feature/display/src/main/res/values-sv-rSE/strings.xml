@@ -23,7 +23,6 @@
     <string name="language">Språk</string>
     <string name="navigation">Navigering</string>
     <string name="show_labels_on_bottom_bar">Visa etiketter på bottenstången</string>
-    <string name="startup_page">Startsida</string>
     <string name="summary_preference_settings_bounce_buttons">Tillämpa en subtil studsande animation på klickbara element</string>
     <string name="summary_preference_settings_dynamic_colors">Applicera färger från tapeten till appens tema</string>
     <string name="summary_preference_settings_language">Ändra det språk som används i appen</string>
@@ -31,4 +30,5 @@
     <string name="summary_preference_settings_startup_page">Välj vilken skärm som ska visas vid appens start.</string>
     <string name="will_never_turn_on_automatically">Kommer aldrig att aktiveras automatiskt</string>
     <string name="will_turn_on_automatically_by_system">Kommer att aktiveras automatiskt av systemet</string>
+    <string name="display">Skärm</string>
 </resources>

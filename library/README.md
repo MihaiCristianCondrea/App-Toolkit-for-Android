@@ -8,7 +8,7 @@ by architectural role but has no build script or runtime artifact of its own.
 ## Owns
 
 - The filesystem and Gradle hierarchy below `:library`.
-- Grouping for the main toolkit module, core, navigation contract/UI, feature, and integration projects.
+- Grouping for the main toolkit module, core, navigation, shell, feature, and integration projects.
 
 ## Does not own
 
@@ -31,14 +31,16 @@ flowchart TD
     Library[":library implicit parent"] --> AppToolkit[":library:apptoolkit"]
     Library --> Core[":library:core:*"]
     Library --> Navigation[":library:navigation"]
+    Library --> Shell[":library:shell"]
     Library --> Features[":library:feature:*"]
     Library --> Integrations[":library:integration:*"]
     Core --> Foundations["common / datastore / network / designsystem / ui"]
     Core --> Testing["testing (test-only helpers)"]
-    Features --> ReusableScreens["about / help / issue reporter / onboarding / permissions / settings / support"]
+    Features --> ReusableScreens["about / help / issue reporter / onboarding / permissions / settings / support / developer"]
     Integrations --> SDKs["ads / billing / consent / Firebase / review / update"]
     AppToolkit -->|api dependencies| Foundations
     AppToolkit -->|api dependencies| Navigation
+    AppToolkit -->|api dependencies| Shell
     AppToolkit -->|api dependencies| ReusableScreens
     AppToolkit -->|api dependencies| SDKs
 ```

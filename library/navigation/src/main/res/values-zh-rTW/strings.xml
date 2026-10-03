@@ -19,4 +19,8 @@
     <string name="settings">設定</string>
     <string name="share">分享</string>
     <string name="updates">更新</string>
+    <string name="shell_navigate_back">返回</string>
+    <string name="shell_pane_separator">調整窗格大小</string>
+    <string name="shell_support_us">支持我們</string>
+    <string name="shell_support_short">支持</string>
 </resources>

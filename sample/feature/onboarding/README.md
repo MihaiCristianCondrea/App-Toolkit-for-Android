@@ -8,7 +8,8 @@ completion logic to the App Toolkit's onboarding infrastructure.
 ## Owns
 
 - `AppOnboardingProvider`, which defines the set of pages shown to the user (Welcome,
-  Personalization, Theme, Features, Crashlytics, Finish).
+  Personalization, Theme, Features, Crashlytics, Finish). The Crashlytics page is
+  `FirebaseOnboardingPage` from `:library:feature:diagnostics`.
 - Stable onboarding page identifiers in `domain/models`.
 - Onboarding-specific strings and keys.
 - `OnboardingFeatureModule`, which connects the sample's provider to the library's
@@ -16,8 +17,7 @@ completion logic to the App Toolkit's onboarding infrastructure.
 
 ## Depends on
 
-- `:sample:core:navigation` for navigation keys.
-- `:sample:core:common` for shared utilities.
+- `:sample:core:datastore`.
 - [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for the core onboarding UI and
   logic.
 
@@ -31,13 +31,12 @@ completion logic to the App Toolkit's onboarding infrastructure.
 flowchart TD
     App[":sample:app"] -->|initializes Koin| Module[OnboardingFeatureModule]
     Module --> Provider[AppOnboardingProvider]
-    App -->|checks startup state| OnboardingActivity[":library:feature:onboarding"]
-    OnboardingActivity --> ViewModel[OnboardingViewModel]
+    App -->|resolveStart: startup flag set| Start[StartupRoute, then OnboardingRoute]
+    Start --> ViewModel[OnboardingViewModel]
     ViewModel -->|requests pages| Provider
     Provider -->|returns| Pages[List of OnboardingPage]
     Pages --> UI[Onboarding UI]
-    UI -->|onFinish| Provider
-    Provider -->|launches| MainActivity[":sample:app Launcher"]
+    UI -->|finished| Enter[enterShell: the app's start tab]
 ```
 
 ## Architectural decisions
@@ -45,7 +44,7 @@ flowchart TD
 - The sample module intentionally has no `data` package: persistence and its repository
   implementation are owned by `:library:feature:onboarding`; this module only supplies host page
   configuration and DI composition.
-- **Decoupled Completion**: The provider uses the package manager to find the launcher activity on
-  completion, avoiding a hard dependency on `:sample:app`.
+- **Completion stays in the Toolkit**: finishing onboarding enters the shell in the same activity,
+  so the provider supplies pages only and knows nothing of `:sample:app`.
 - **Toolkit Integration**: This module demonstrates the "Provider Pattern" where the sample app
   supplies implementation details to a generic library feature via Koin injection.

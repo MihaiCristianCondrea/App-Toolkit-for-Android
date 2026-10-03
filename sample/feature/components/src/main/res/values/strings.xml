@@ -104,4 +104,18 @@
     <string name="components_divider_width">Width</string>
     <string name="components_divider_wave_height">Wave height</string>
     <string name="components_divider_vertical">Vertical</string>
+    <string name="components_snackbar_pressed">You pressed a button</string>
+    <string name="components_snackbar_action_message">Button action done</string>
+    <string name="components_snackbar_undo">Undo</string>
+    <string name="components_snackbar_undone">Undone</string>
+    <string name="components_snackbar_error">Something went wrong</string>
+    <string name="components_snackbar_retry">Retry</string>
+    <string name="components_snackbar_icon">A snackbar with an icon and colours of its own</string>
+    <string name="components_snackbar_custom">%1$s: a snackbar the screen draws itself</string>
+    <string name="components_section_article_bar">Article app bar</string>
+    <string name="components_article_without_brand">Without a brand</string>
+    <string name="components_article_with_brand">With a brand</string>
+    <string name="components_article_brand">Sample publisher</string>
+    <string name="components_article_headline">A quiet app bar keeps the story first</string>
+    <string name="components_article_paragraph">The bar starts with only its buttons. Scroll past the headline and the title takes their place, while the line along its bottom edge shows how far you have read.</string>
 </resources>

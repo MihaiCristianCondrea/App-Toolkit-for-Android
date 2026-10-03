@@ -28,3 +28,8 @@ import android.app.Activity
 interface ReviewHost {
     val activity: Activity
 }
+
+/** A [ReviewHost] for [activity], such as `LocalActivity.current` in a page or the app's activity. */
+fun ReviewHost(activity: Activity): ReviewHost = object : ReviewHost {
+    override val activity: Activity = activity
+}

@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.a
 import androidx.compose.runtime.Stable
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.AppActionLauncher
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 
 /**
  * Reports the two app-details launches that leave the app, then forwards to [delegate].
@@ -35,13 +35,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.reposit
 @Stable
 class AnalyticsAppActionLauncher(
     private val delegate: AppActionLauncher,
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
     private val appInfo: AppInfo,
     private val source: String,
 ) : AppActionLauncher by delegate {
 
     override fun openApp(packageName: String): Boolean {
-        firebaseController.logAppInteraction(
+        telemetryRepository.logAppInteraction(
             source = source,
             appInfo = appInfo,
             interaction = AppInteractionType.OpenInstalledApp,
@@ -50,7 +50,7 @@ class AnalyticsAppActionLauncher(
     }
 
     override fun openPlayStore(packageName: String): Boolean {
-        firebaseController.logAppInteraction(
+        telemetryRepository.logAppInteraction(
             source = source,
             appInfo = appInfo,
             interaction = AppInteractionType.OpenInPlayStore,

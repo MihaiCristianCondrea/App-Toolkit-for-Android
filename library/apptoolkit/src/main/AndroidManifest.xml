@@ -39,5 +39,24 @@
                 android:name="autoStoreLocales"
                 android:value="true" />
         </service>
+
+        <!-- The information icon Android's permission manager (VIEW_PERMISSION_USAGE) and privacy
+             dashboard (VIEW_PERMISSION_USAGE_FOR_PERIOD) show beside the app opens this. Only the
+             system holds START_VIEW_PERMISSION_USAGE, so nothing else can start it. An empty task
+             affinity keeps it out of the app's own task: it opens over the system's settings and
+             back returns there. An app replaces it by declaring this name with tools:node="remove"
+             and an activity of its own. -->
+        <activity
+            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.app.privacy.ui.PermissionUsageActivity"
+            android:exported="true"
+            android:permission="android.permission.START_VIEW_PERMISSION_USAGE"
+            android:taskAffinity="">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW_PERMISSION_USAGE" />
+                <action android:name="android.intent.action.VIEW_PERMISSION_USAGE_FOR_PERIOD" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>

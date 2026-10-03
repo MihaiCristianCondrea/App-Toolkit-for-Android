@@ -17,10 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.contracts
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
-
-sealed interface DisplaySettingsEvent : UiEvent {
-    data object Initialize : DisplaySettingsEvent
+/** What the display settings screen asks its ViewModel to do. */
+sealed interface DisplaySettingsEvent {
+    /** Follows the stored preferences, on start and on retry. */
+    data object Load : DisplaySettingsEvent
     data class ThemeModeChanged(val mode: String) : DisplaySettingsEvent
     data class DynamicColorsChanged(val enabled: Boolean) : DisplaySettingsEvent
     data class BouncyButtonsChanged(val enabled: Boolean) : DisplaySettingsEvent

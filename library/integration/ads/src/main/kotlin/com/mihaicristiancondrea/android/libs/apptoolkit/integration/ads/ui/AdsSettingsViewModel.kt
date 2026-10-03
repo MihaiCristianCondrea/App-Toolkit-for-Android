@@ -17,227 +17,117 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui
 
-import androidx.lifecycle.viewModelScope
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.repositories.AdsSettingsRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.contracts.AdsSettingsAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.contracts.AdsSettingsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.models.AdsPreferences
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.states.AdsSettingsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.asUiText
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onFailure
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.dismissSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setError
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoading
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.showSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.updateData
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 
 /**
- * ViewModel for ads settings and consent interaction.
+ * Shows and stores the ad preferences, and opens the UMP privacy form. The switches follow the
+ * store, so a failed write leaves them where they were and shows an error message. A failed read
+ * replaces them with a retryable failure.
  */
 class AdsSettingsViewModel(
     private val repository: AdsSettingsRepository,
     private val consentRepository: ConsentRepository,
-    private val dispatchers: DispatcherProvider,
-    firebaseController: FirebaseController,
-) : LoggedScreenViewModel<AdsSettingsUiState, AdsSettingsEvent, AdsSettingsAction>(
-    initialState = UiStateScreen(data = AdsSettingsUiState()),
-    firebaseController = firebaseController,
+    telemetryRepository: TelemetryRepository,
+) : LoggedScreenViewModel<AdsSettingsUiState, AdsSettingsEvent>(
+    initialState = AdsSettingsUiState(),
+    telemetryRepository = telemetryRepository,
     screenName = "AdsSettings",
+    viewModelName = "AdsSettingsViewModel",
 ) {
 
     private var observeJob: Job? = null
-    private var persistJob: Job? = null
+    private var persistAdsEnabledJob: Job? = null
+    private var persistReduceAdsJob: Job? = null
     private var consentJob: Job? = null
 
     init {
-        onEvent(event = AdsSettingsEvent.Initialize)
+        onEvent(event = AdsSettingsEvent.Load)
     }
 
     override fun handleEvent(event: AdsSettingsEvent) {
         when (event) {
-            is AdsSettingsEvent.Initialize -> observe()
-            is AdsSettingsEvent.SetAdsEnabled -> persist(enabled = event.enabled)
-            is AdsSettingsEvent.SetReduceAds -> persistReduceAds(enabled = event.enabled)
+            AdsSettingsEvent.Load -> observe()
+
+            is AdsSettingsEvent.SetAdsEnabled ->
+                persistAdsEnabledJob = persistPreference(
+                    job = persistAdsEnabledJob,
+                    action = Actions.PERSIST_ADS_ENABLED,
+                    enabled = event.enabled,
+                ) { repository.setAdsEnabled(event.enabled) }
+
+            is AdsSettingsEvent.SetReduceAds ->
+                persistReduceAdsJob = persistPreference(
+                    job = persistReduceAdsJob,
+                    action = Actions.PERSIST_REDUCE_ADS,
+                    enabled = event.enabled,
+                ) { repository.setReduceAds(event.enabled) }
+
             is AdsSettingsEvent.RequestConsent -> requestConsent(host = event.host)
         }
     }
 
-    private fun errorSnackbar(message: UiTextHelper): UiSnackbar =
-        UiSnackbar(
-            type = ScreenMessageType.SNACKBAR,
-            message = message,
-            isError = true,
-            timeStamp = System.nanoTime(),
-        )
-
+    /** Follows both stored preferences. A retry restarts the collection that failed. */
     private fun observe() {
-        startOperation(action = Actions.OBSERVE_ADS_ENABLED)
         observeJob = observeJob.restart {
+            setState { copy(preferences = Loadable.Loading) }
             combine(
                 repository.observeAdsEnabled(),
                 repository.observeReduceAds(),
-            ) { adsEnabled, reduceAds -> AdsSettingsUiState(adsEnabled, reduceAds) }
-                .flowOn(dispatchers.io)
-                .onStart {
-                    updateStateThreadSafe {
-                        screenState.dismissSnackbar()
-                        screenState.setLoading()
-                    }
+            ) { adsEnabled, reduceAds -> AdsPreferences(adsEnabled = adsEnabled, reduceAds = reduceAds) }
+                .collectReport(
+                    action = Actions.OBSERVE_ADS_ENABLED,
+                    onError = { error -> setState { copy(preferences = error.toFailed(fallback = StorageErrorText)) } },
+                ) { preferences ->
+                    setState { copy(preferences = Loadable.Ready(preferences)) }
                 }
-                .onEach { settings ->
-                    updateStateThreadSafe {
-                        screenState.updateData(newState = ScreenState.Success()) { settings }
-                    }
-                }
-                .catchReport(action = Actions.OBSERVE_ADS_ENABLED) {
-                    updateStateThreadSafe {
-                        val fallback =
-                            screenState.value.data?.adsEnabled ?: repository.defaultAdsEnabled
-                        screenState.updateData(newState = ScreenState.Error()) { current ->
-                            current.copy(adsEnabled = fallback)
-                        }
-                        screenState.setError(message = Errors.Database.DATABASE_OPERATION_FAILED.asUiText())
-                    }
-                }
-                .launchIn(viewModelScope)
         }
     }
 
-    private fun persist(enabled: Boolean) {
-        startOperation(
-            action = Actions.PERSIST_ADS_ENABLED,
-            extra = mapOf(ExtraKeys.ENABLED to enabled.toString())
-        )
-        persistJob = persistJob.restart {
-            var previousValue = repository.defaultAdsEnabled
-
-            persistAdsEnabled(enabled)
-                .flowOn(dispatchers.io)
-                .onStart {
-                    updateStateThreadSafe {
-                        previousValue =
-                            screenState.value.data?.adsEnabled ?: repository.defaultAdsEnabled
-                        screenState.dismissSnackbar()
-                        screenState.updateData(newState = ScreenState.Success()) { current ->
-                            current.copy(adsEnabled = enabled)
-                        }
-                    }
-                }
-                .onEach { result ->
-                    result
-                        .onFailure { error ->
-                            updateStateThreadSafe {
-                                screenState.updateData(newState = ScreenState.Error()) { current ->
-                                    current.copy(adsEnabled = previousValue)
-                                }
-                                screenState.setError(message = error.asUiText())
-                            }
-                        }
-
-                }
-                .catchReport(
-                    action = Actions.PERSIST_ADS_ENABLED,
-                    extra = mapOf(ExtraKeys.ENABLED to enabled.toString())
-                ) {
-                    updateStateThreadSafe {
-                        screenState.updateData(newState = ScreenState.Error()) { current ->
-                            current.copy(adsEnabled = previousValue)
-                        }
-                        screenState.setError(message = Errors.Database.DATABASE_OPERATION_FAILED.asUiText())
-                    }
-                }
-                .launchIn(viewModelScope)
-        }
-    }
-
-    private fun persistReduceAds(enabled: Boolean) {
-        startOperation(
-            action = Actions.PERSIST_REDUCE_ADS,
+    /**
+     * Restarts [job] with a reported [write] of one preference. Each preference keeps its own job,
+     * so changing one switch never cancels the other's write.
+     */
+    private fun persistPreference(
+        job: Job?,
+        action: String,
+        enabled: Boolean,
+        write: suspend () -> Unit,
+    ): Job = job.restart {
+        launchReport(
+            action = action,
             extra = mapOf(ExtraKeys.ENABLED to enabled.toString()),
+            onError = { error -> showMessage(error.toErrorMessage(fallback = StorageErrorText)) },
+            block = write,
         )
-        persistJob = persistJob.restart {
-            var previousValue = false
-            flow { emit(repository.setReduceAds(enabled)) }
-                .flowOn(dispatchers.io)
-                .onStart {
-                    updateStateThreadSafe {
-                        previousValue = screenState.value.data?.reduceAds ?: false
-                        screenState.dismissSnackbar()
-                        screenState.updateData(newState = ScreenState.Success()) { current ->
-                            current.copy(reduceAds = enabled)
-                        }
-                    }
-                }
-                .onEach { result ->
-                    result.onFailure { error ->
-                        updateStateThreadSafe {
-                            screenState.updateData(newState = ScreenState.Error()) { current ->
-                                current.copy(reduceAds = previousValue)
-                            }
-                            screenState.setError(message = error.asUiText())
-                        }
-                    }
-                }
-                .catchReport(action = Actions.PERSIST_REDUCE_ADS) {
-                    updateStateThreadSafe {
-                        screenState.updateData(newState = ScreenState.Error()) { current ->
-                            current.copy(reduceAds = previousValue)
-                        }
-                        screenState.setError(message = Errors.Database.DATABASE_OPERATION_FAILED.asUiText())
-                    }
-                }
-                .launchIn(viewModelScope)
-        }
     }
 
-    private fun persistAdsEnabled(enabled: Boolean): Flow<DataState<Unit, Errors>> =
-        flow { emit(repository.setAdsEnabled(enabled)) }
-
+    /**
+     * Shows the privacy form from [host]. A new request replaces the wait for the previous one;
+     * the round trip itself belongs to [ConsentRepository] and goes on.
+     */
     private fun requestConsent(host: ConsentHost) {
-        startOperation(
-            action = Actions.REQUEST_CONSENT,
-            extra = mapOf(ExtraKeys.HOST to host.activity::class.java.name)
-        )
         consentJob = consentJob.restart {
-            consentRepository.requestConsent(host = host, showIfRequired = false)
-                // Keep upstream consent work off Main by not applying flowOn(main) here.
-                .onEach { result ->
-                    result.onFailure { error ->
-                        updateStateThreadSafe {
-                            screenState.showSnackbar(errorSnackbar(error.asUiText()))
-                        }
-                    }
-                }
-                .catchReport(
-                    action = Actions.REQUEST_CONSENT,
-                    extra = mapOf(ExtraKeys.HOST to host.activity::class.java.name)
-                ) {
-                    updateStateThreadSafe {
-                        screenState.showSnackbar(
-                            errorSnackbar(Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO.asUiText())
-                        )
-                    }
-                }
-                .launchIn(viewModelScope)
+            launchReport(
+                action = Actions.REQUEST_CONSENT,
+                extra = mapOf(ExtraKeys.HOST to host.activity::class.java.name),
+                onError = { error -> showMessage(error.toErrorMessage(fallback = ConsentErrorText)) },
+            ) {
+                consentRepository.requestConsent(host = host, showIfRequired = false)
+            }
         }
     }
 
@@ -251,5 +141,10 @@ class AdsSettingsViewModel(
     private object ExtraKeys {
         const val ENABLED: String = "enabled"
         const val HOST: String = "host"
+    }
+
+    private companion object {
+        val StorageErrorText = UiTextHelper.StringResource(R.string.error_ads_settings_storage)
+        val ConsentErrorText = UiTextHelper.StringResource(R.string.error_ads_consent_failed)
     }
 }

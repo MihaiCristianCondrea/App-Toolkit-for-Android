@@ -15,9 +15,20 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="error_description_missing">Beschreibe das Problem</string>
+    <string name="error_email_invalid">Gib eine gültige E-Mail-Adresse ein</string>
+    <string name="error_email_missing">Gib deine E-Mail-Adresse ein</string>
     <string name="error_forbidden">Verboten: unzureichende Berechtigungen</string>
     <string name="error_gone">API-Endpunkt entfernt</string>
-    <string name="error_invalid_report">Titel und Beschreibung dürfen nicht leer sein</string>
+    <string name="error_link_only">Beschreibe das Problem, nicht nur einen Link.</string>
+    <string name="error_repetitive">Zu viele Wiederholungen. Beschreibe, was passiert ist.</string>
+    <string name="error_report_cooldown">Bitte warte ein paar Minuten, bevor du einen weiteren Bericht sendest.</string>
+    <string name="error_report_duplicate">Dieser Bericht wurde bereits gesendet.</string>
+    <string name="error_same_as_title">Füge mehr Details hinzu, als der Titel enthält.</string>
+    <string name="error_title_missing">Gib einen Titel ein</string>
+    <string name="error_too_few_letters">Verwende Wörter, nicht nur Symbole oder Emojis.</string>
+    <string name="error_too_long">Zu lang. Verwende höchstens %1$d Zeichen.</string>
+    <string name="error_too_short">Zu kurz. Verwende mindestens %1$d Zeichen.</string>
     <string name="error_unauthorized">Nicht autorisiert: Ungültiges Token</string>
     <string name="error_unprocessable">Ungültige Daten für die Erstellung des Vorgangs</string>
 </resources>

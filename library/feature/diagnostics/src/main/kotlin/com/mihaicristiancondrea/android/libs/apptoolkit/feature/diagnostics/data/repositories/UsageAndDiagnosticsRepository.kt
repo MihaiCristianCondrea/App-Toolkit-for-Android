@@ -34,5 +34,20 @@ interface UsageAndDiagnosticsRepository {
     suspend fun setAdStorageConsent(granted: Boolean)
     suspend fun setAdUserDataConsent(granted: Boolean)
     suspend fun setAdPersonalizationConsent(granted: Boolean)
+
+    /**
+     * Stores every value of [settings] together, for whole-bundle answers such as "Allow all", so
+     * [observeSettings] never reports a mix of the old and new choices in between.
+     *
+     * The default stores the values one by one, so other implementations keep compiling;
+     * `DefaultUsageAndDiagnosticsRepository` stores them in one write.
+     */
+    suspend fun setAll(settings: UsageAndDiagnosticsSettings) {
+        setUsageAndDiagnostics(settings.usageAndDiagnostics)
+        setAnalyticsConsent(settings.analyticsConsent)
+        setAdStorageConsent(settings.adStorageConsent)
+        setAdUserDataConsent(settings.adUserDataConsent)
+        setAdPersonalizationConsent(settings.adPersonalizationConsent)
+    }
 }
 

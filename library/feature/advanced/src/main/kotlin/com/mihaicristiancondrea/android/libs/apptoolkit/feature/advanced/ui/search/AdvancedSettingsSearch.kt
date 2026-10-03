@@ -1,0 +1,30 @@
+/*
+ * Copyright (©) 2026 Mihai-Cristian Condrea
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.search
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.settingsSearchProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsRoute
+
+/**
+ * The advanced page's rows the settings search finds. The bug report shows only where an issue
+ * reporter is bound, and the developer options only once unlocked, so neither is listed.
+ */
+internal val advancedSettingsSearch = settingsSearchProvider(section = R.string.advanced, destination = AdvancedSettingsRoute) {
+    preference(R.string.clear_cache, summary = R.string.summary_preference_settings_clear_cache)
+}

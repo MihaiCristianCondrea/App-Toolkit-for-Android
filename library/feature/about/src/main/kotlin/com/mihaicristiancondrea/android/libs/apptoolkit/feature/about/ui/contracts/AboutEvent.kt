@@ -18,12 +18,12 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 
 /**
  * User driven events from the About screen UI.
  */
-sealed interface AboutEvent : UiEvent {
+sealed interface AboutEvent {
+    /** Loads the screen's entries, on start and again from the failure screen's retry. */
     data object Load : AboutEvent
 
     /**
@@ -39,8 +39,6 @@ sealed interface AboutEvent : UiEvent {
         val text: String,
         val successMessage: UiTextHelper? = null,
     ) : AboutEvent
-
-    data object DismissSnackbar : AboutEvent
 
     /** The version was tapped enough times to set off the easter egg. */
     data object EasterEggFound : AboutEvent

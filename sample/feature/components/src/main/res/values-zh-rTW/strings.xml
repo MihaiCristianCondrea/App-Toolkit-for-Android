@@ -104,4 +104,18 @@
     <string name="components_divider_width">寬度</string>
     <string name="components_divider_wave_height">波浪高度</string>
     <string name="components_divider_vertical">垂直</string>
+    <string name="components_snackbar_pressed">你按下了按鈕</string>
+    <string name="components_snackbar_action_message">已執行按鈕動作</string>
+    <string name="components_snackbar_undo">復原</string>
+    <string name="components_snackbar_undone">已復原</string>
+    <string name="components_snackbar_error">發生錯誤</string>
+    <string name="components_snackbar_retry">重試</string>
+    <string name="components_snackbar_icon">帶有圖示和專屬顏色的訊息列</string>
+    <string name="components_snackbar_custom">%1$s：由畫面自行繪製的訊息列</string>
+    <string name="components_section_article_bar">文章應用程式列</string>
+    <string name="components_article_without_brand">不含品牌</string>
+    <string name="components_article_with_brand">含品牌</string>
+    <string name="components_article_brand">範例發行者</string>
+    <string name="components_article_headline">低調的應用程式列讓報導優先</string>
+    <string name="components_article_paragraph">一開始，列上只有按鈕。捲動越過大標後，文章標題就會出現在列上，底部邊緣的線條則顯示你已讀了多少。</string>
 </resources>

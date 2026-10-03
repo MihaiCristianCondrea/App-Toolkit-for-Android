@@ -21,12 +21,9 @@
     <string name="app_build_version">Версія додатка</string>
     <string name="app_info">Інформація про додаток</string>
     <string name="app_toolkit_version">Версія App Toolkit</string>
-    <string name="content_description_more_options">Більше варіантів</string>
     <string name="debug">Налагодження</string>
     <string name="device_info">Інформація про пристрій</string>
     <string name="device_model">Модель пристрою</string>
-    <string name="done_button_content_description">Готово</string>
-    <string name="go_back">Повернутися</string>
     <string name="google_play_services_version">Версія сервісів Google Play</string>
     <string name="help_and_feedback">Допомога та зворотній зв\'язок</string>
     <string name="manufacturer">Виробник</string>
@@ -41,8 +38,6 @@
     <string name="snack_device_info_failed">Не вдалося завантажити інформацію про пристрій</string>
     <string name="summary_preference_settings_oss">Деталі ліцензій на програмне забезпечення з відкритим кодом</string>
     <string name="summary_share_message">Перегляньте цей чудовий додаток, яким я користуюся. У ньому є цікаві функції, які можуть вас зацікавити. Ви можете завантажити його з Play Store за посиланням: %1$s</string>
-    <string name="support_us">Підтримайте нас</string>
-    <string name="try_again">Спробувати знову</string>
     <string name="updates">Оновлення</string>
     <string name="snack_seasonal_themes_unlocked">Насолоджуйтеся</string>
 </resources>

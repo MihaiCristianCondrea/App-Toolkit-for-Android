@@ -34,8 +34,16 @@ class AndroidQuickSettingsTilesLocalDataSource(
 
     private val addedTiles = context.getSharedPreferences("quick_settings_tiles", Context.MODE_PRIVATE)
 
+    /**
+     * Records whether [component] is in Quick Settings.
+     *
+     * A tile reports this every time System UI starts listening, which is every time the shade
+     * opens, so the value is only written when it changes.
+     */
     fun recordTileAdded(component: ComponentName, added: Boolean) {
-        addedTiles.edit { putBoolean(component.flattenToString(), added) }
+        val key = component.flattenToString()
+        if (addedTiles.contains(key) && addedTiles.getBoolean(key, !added) == added) return
+        addedTiles.edit { putBoolean(key, added) }
     }
 
     override fun activeTileComponents(): Set<String> = mergeActiveTileComponents(

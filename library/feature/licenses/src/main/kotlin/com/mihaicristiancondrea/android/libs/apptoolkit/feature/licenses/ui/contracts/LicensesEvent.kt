@@ -17,10 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.contracts
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
-
-/** Lifecycle requests raised by the licenses screen. */
-sealed interface LicensesEvent : UiEvent {
+/** What the licenses screen tells its ViewModel. */
+sealed interface LicensesEvent {
     /** Parsing of the bundled library metadata has finished. */
     data class LibrariesLoaded(val libraryCount: Int) : LicensesEvent
 }

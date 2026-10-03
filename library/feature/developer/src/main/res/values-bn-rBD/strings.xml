@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="shell_dev_live_state">বর্তমান অবস্থা</string>
+    <string name="shell_dev_window">উইন্ডো</string>
+    <string name="shell_dev_window_summary">%1$d × %2$d dp · %3$s</string>
+    <string name="shell_dev_page_stack">পেজ স্ট্যাক</string>
+    <string name="shell_dev_tab_stack">%1$s স্ট্যাক</string>
+    <string name="shell_dev_navigation">নেভিগেশন</string>
+    <string name="shell_dev_start">পরের বার চালু করলে যেখান থেকে শুরু</string>
+    <string name="shell_dev_layout">নেভিগেশন লেআউট</string>
+    <string name="shell_dev_accessories">নিচের আনুষঙ্গিক উপাদান</string>
+    <string name="shell_dev_bottom_accessory">নেভিগেশন বারের উপরে</string>
+    <string name="shell_dev_motion">মোশন</string>
+    <string name="shell_dev_animation_speed">অ্যানিমেশনের গতি</string>
+    <string name="shell_dev_reset">ডেভেলপার বিকল্প রিসেট করুন</string>
+    <string name="shell_dev_reset_summary">অ্যাপ যা ঘোষণা করে সেখানে ফিরে যান</string>
+    <string name="shell_layout_auto">স্বয়ংক্রিয়, উইন্ডোর প্রস্থ অনুযায়ী</string>
+    <string name="shell_layout_bottom_bar">নিচের বার ও ড্রয়ার</string>
+    <string name="shell_layout_rail">নেভিগেশন রেল</string>
+    <string name="shell_layout_expanded_rail">প্রসারিত নেভিগেশন রেল</string>
+    <string name="shell_layout_permanent_drawer">স্থায়ী ড্রয়ার</string>
+    <string name="shell_accessory_as_declared">ব্যানার, চলার সময় প্লেয়ার দিয়ে প্রতিস্থাপিত</string>
+    <string name="shell_accessory_none">কিছুই না</string>
+    <string name="shell_accessory_banner">শুধু ব্যানার</string>
+    <string name="shell_accessory_player">শুধু প্লেয়ার</string>
+    <string name="shell_start_as_declared">অ্যাপ যেমন ঘোষণা করে: %1$s</string>
+    <string name="shell_start_screen">%1$s, মূল ইন্টারফেসের আগে</string>
+    <string name="shell_speed_normal">স্বাভাবিক</string>
+    <string name="shell_speed_slow">2× ধীর</string>
+    <string name="shell_speed_very_slow">5× ধীর</string>
+    <string name="shell_developer_options">ডেভেলপার বিকল্প</string>
+    <string name="shell_top_bar">উপরের অ্যাপ বার</string>
+    <string name="shell_navigation_bar">নিচের নেভিগেশন বার</string>
+    <string name="shell_navigation_tint">রেল ও অ্যাপ বারের রং</string>
+    <string name="shell_hide_bottom_bar">স্ক্রল করলে নিচের বার লুকান</string>
+    <string name="shell_hide_bottom_bar_summary">কোনো প্লেয়ার দেখানো না থাকলে কনটেন্ট নিচে স্ক্রল করলে সরে যায়</string>
+    <string name="shell_hide_top_bar">স্ক্রল করলে অ্যাপ বার লুকান</string>
+    <string name="shell_hide_top_bar_summary">কনটেন্ট নিচে স্ক্রল করলে সরে যায়, বড় বার গুটিয়ে যাওয়ার পরে, এবং ওপরে স্ক্রল করলেই ফিরে আসে</string>
+    <string name="shell_limit_width">বড় উইন্ডোতে কনটেন্টের প্রস্থ সীমিত করুন</string>
+    <string name="shell_limit_width_summary">লেআউট নীতির সর্বোচ্চ প্রস্থ ছাড়িয়ে গেলে ওয়েবসাইটের মতো মার্জিন দিয়ে কনটেন্ট মাঝখানে রাখুন</string>
+    <string name="shell_tab_transition">ট্যাবগুলোর মধ্যে</string>
+    <string name="shell_back_edge">ডান প্রান্ত থেকে পেছনে সোয়াইপ</string>
+    <string name="shell_as_declared">প্রতিটি স্ক্রিন যেমন ঘোষণা করে</string>
+    <string name="shell_top_bar_small">ছোট</string>
+    <string name="shell_top_bar_center">মাঝখানে</string>
+    <string name="shell_top_bar_large">বড়, সংকুচিত হয়</string>
+    <string name="shell_top_bar_large_collapsed">বড়, সংকুচিত অবস্থায় খোলে</string>
+    <string name="shell_top_bar_hidden">লুকানো</string>
+    <string name="shell_navigation_bar_standard">স্ট্যান্ডার্ড, 80 dp</string>
+    <string name="shell_navigation_bar_short">ছোট, 64 dp</string>
+    <string name="shell_navigation_tint_none">সারফেস; স্ক্রল করলে অ্যাপ বার রঙিন হয়</string>
+    <string name="shell_navigation_tint_always">একসাথে রঙিন, কনটেন্ট একটি কার্ডে</string>
+    <string name="shell_navigation_tint_on_scroll">কনটেন্ট স্ক্রল হলেই একসাথে রঙিন</string>
+    <string name="shell_back_edge_system">Android-এর মতো: পেজ নিজের জায়গায় ছোট হয়</string>
+    <string name="shell_back_edge_follow">আঙুল অনুসরণ করে, বাম প্রান্তের মতো (ডিফল্ট)</string>
+    <string name="shell_transition_directional">দিকনির্দেশক স্লাইড</string>
+    <string name="shell_transition_fade_through">ফেড থ্রু</string>
+    <string name="shell_transition_fade">ক্রস-ফেড</string>
+    <string name="shell_transition_none">কোনোটি নয়</string>
+    <string name="shell_dev_layout_and_bars">লেআউট ও বার</string>
+</resources>

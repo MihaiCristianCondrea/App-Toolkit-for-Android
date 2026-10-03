@@ -32,6 +32,14 @@ android {
     defaultConfig {
         minSdk = versioning.minSdk
     }
+
+    // The JUnit and BouncyCastle jars the test helpers expose each ship these files; the module has
+    // no instrumented tests, but its androidTest APK is still assembled with them.
+    packaging {
+        resources {
+            excludes += setOf("META-INF/LICENSE.md", "META-INF/LICENSE-notice.md")
+        }
+    }
 }
 
 // Test helpers live in `main` on purpose: consumers take this module through `testImplementation`,

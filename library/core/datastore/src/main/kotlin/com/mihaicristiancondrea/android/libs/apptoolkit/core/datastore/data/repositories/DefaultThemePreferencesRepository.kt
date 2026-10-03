@@ -37,9 +37,7 @@ class DefaultThemePreferencesRepository(
 
     override suspend fun selectThemeMode(mode: String) {
         preferences.saveThemeMode(mode)
-        // Read what is stored rather than what a screen happens to be showing: the same choice is
-        // offered during onboarding and in settings, and one of them used to decide from a copy of
-        // the state it had loaded.
+        // Use the persisted AMOLED preference because a screen may hold an older snapshot.
         if (mode == DataStoreNamesConstants.THEME_MODE_LIGHT && preferences.amoledMode.first()) {
             preferences.saveAmoledMode(false)
         }
@@ -54,12 +52,10 @@ class DefaultThemePreferencesRepository(
     }
 
     override suspend fun selectDynamicPalette(variant: Int) {
-        preferences.saveDynamicColors(true)
-        preferences.saveDynamicPaletteVariant(variant)
+        preferences.savePalette(dynamicColors = true, dynamicPaletteVariant = variant)
     }
 
     override suspend fun selectStaticPalette(id: String) {
-        preferences.saveDynamicColors(false)
-        preferences.saveStaticPaletteId(id)
+        preferences.savePalette(dynamicColors = false, staticPaletteId = id)
     }
 }

@@ -33,23 +33,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememb
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 
 /**
- * Icon-led native ad row used inside the grouped FAQ content list.
+ * Feature-owned native ad row styled to match the grouped FAQ questions and contact card.
+ * [NativeAdSlot] owns loading and disposal; the screen owns placement policy.
  *
- * Change rationale: this used to inflate `R.layout.native_ad_help_card` through `NativeAdViewHost`
- * and bind it with `findViewById`. It is now a thin wrapper over [NativeAdSlot], which builds the
- * same `NativeAdView` in Kotlin. The behaviour changes that came with the shared renderer are
- * listed in the `:library:integration:ads` README.
- *
- * It lives here rather than in the toolkit's shared UI because it is a FAQ screen placement, not a
- * reusable primitive: only this feature's content list draws it.
- *
- * Integration and compliance notes:
- * - Render this composable only after consent/ads settings allow ad serving.
- * - Placement policy stays with the screen; this is a view-layer primitive.
- *
- * @param groupedPosition position inside a grouped FAQ section, or `null` when standalone.
- * @param containerColor overrides the card container for hosts whose surfaces are their own.
- * @param onAdLoaded reports whether an ad is currently displayed.
+ * @param groupedPosition Position in a grouped FAQ section, or `null` when standalone.
+ * @param containerColor Optional host surface override.
+ * @param onAdLoaded Reports whether an ad is currently displayed.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -60,16 +49,13 @@ fun FaqNativeAdCard(
     containerColor: Color = Color.Unspecified,
     onAdLoaded: (Boolean) -> Unit = {},
 ) {
-    // The rows this ad is interleaved with all carry a 48dp badge filled with primaryContainer, a
-    // titleMedium title and a bodyMedium summary, and QuestionCard's action is a text button. The ad
-    // takes the same finish so it reads as one more row of the list rather than as a card dropped
-    // into it. The badge repeats ContactUsCard's silhouette, which is the row directly below it.
     val style = NativeAdStyle(
         badgeShape = rememberNativeAdBadgeShape(
             shape = MaterialShapes.Cookie12Sided.toShape(),
             size = SizeConstants.LauncherIconSize,
         ),
         badgeColor = MaterialTheme.colorScheme.primaryContainer,
+        iconInsetDp = 12,
         headlineTextSizeSp = MaterialTheme.typography.titleMedium.fontSize.value,
         headlineBold = false,
         bodyTextSizeSp = MaterialTheme.typography.bodyMedium.fontSize.value,
@@ -81,7 +67,6 @@ fun FaqNativeAdCard(
         presentation = NativeAdPresentation.Compact,
         modifier = modifier,
         position = groupedPosition ?: GroupedItemPosition.SINGLE,
-        // Matches QuestionCard, the item this row is interleaved with.
         cornerRadius = SizeConstants.MediumSize,
         containerColor = containerColor,
         style = style,

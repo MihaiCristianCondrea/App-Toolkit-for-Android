@@ -38,22 +38,13 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 
 /**
- * The pill-shaped search input, drawn by [GeneralTextFieldStyle.Search].
+ * Standalone Material search input for filtering content behind the field. Avoids the expanded
+ * search surface, which would reserve an empty results panel.
  *
- * Built on [SearchBarDefaults.InputField], the current Material search input, and used on its own
- * rather than inside a [androidx.compose.material3.SearchBar]: the collapsed search bar intercepts
- * the soft keyboard, so typing only happens once it expands into an
- * [androidx.compose.material3.ExpandedDockedSearchBar], and that surface reserves a 240dp minimum
- * height for the results it expects to host. A field that filters the content behind it as you type
- * has no results of its own, so the expanded surface would only lay an empty panel over that
- * content. The [SearchBarState] is still hoisted here because the input field drives it, and it
- * keeps the field's focus and keyboard behavior intact.
- *
- * This is also why the search style is the one style the `TextFieldValue` overload refuses: the
- * Material input owns its text state, and there is no caret to hand over.
- *
- * [value] stays the single source of truth. Edits flow out through [onValueChange], and changes made
- * outside the field, such as a clear action, flow back into its own [TextFieldState].
+ * [value] remains the source of truth: edits go through [onValueChange] and external changes
+ * update the Material [TextFieldState]. Search submission clears focus before invoking
+ * [onSearch], even when no callback is supplied. The Material input owns its caret, so the
+ * `TextFieldValue` overload does not support this style.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -91,8 +82,6 @@ internal fun GeneralSearchField(
         textFieldState = textFieldState,
         searchBarState = searchBarState,
         onSearch = { query ->
-            // Submitting a filter that already applied itself as it was typed means "I am done
-            // typing", so the keyboard goes away whether or not the host does anything else.
             focusManager.clearFocus()
             onSearch?.invoke(query)
         },

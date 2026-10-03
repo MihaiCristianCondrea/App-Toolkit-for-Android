@@ -46,16 +46,23 @@ android {
         compose = true
     }
 
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+        unitTests.all { test ->
+            // Robolectric reaches into these JDK internals; newer JDKs close them by default.
+            test.jvmArgs(
+                "--add-opens=java.base/java.io=ALL-UNNAMED",
+                "--add-opens=java.base/java.lang=ALL-UNNAMED",
+                "--add-opens=java.base/java.util=ALL-UNNAMED",
+                "--add-exports=java.base/jdk.internal.access=ALL-UNNAMED",
+            )
+        }
+    }
 }
 
-// `RepositoryConventionsTest` and `ManifestContractTest` read production source trees rather than
-// the classpath, and Gradle cannot infer that. Without declaring it, moving a repositories into the
-// wrong package, or re-adding an `<application>` attribute to a library manifest, leaves the test
-// task up to date and the violation ships unnoticed, the exact failure these tests exist to
-// prevent.
+// Source-scanning contract tests need explicit inputs so source-only violations invalidate the test task.
 tasks.withType<Test>().configureEach {
-    // `build` is excluded so the scan stops before it reaches this module's own intermediates,
-    // Gradle rejects an input that overlaps another task's output directory.
+    // Exclude intermediates so test inputs do not overlap other tasks' output directories.
     inputs.files(
         listOf("library", "sample").map { sourceRoot ->
             rootProject.fileTree(rootProject.layout.projectDirectory.dir(sourceRoot)) {
@@ -89,6 +96,10 @@ tasks.withType<Test>().configureEach {
 
 dependencies {
     testImplementation(project(":library:core:testing"))
+    // `PermissionUsageActivityTest` launches the activity under Robolectric, which runs on JUnit 4.
+    testImplementation(dependencyNotation = libs.androidx.compose.ui.test.junit4)
+    testImplementation(dependencyNotation = libs.androidx.test.ext.junit)
+    testRuntimeOnly(dependencyNotation = libs.test.junit.vintage.engine)
     // Internal modules
     api(project(":library:core:common"))
     api(project(":library:core:datastore"))
@@ -96,16 +107,23 @@ dependencies {
     api(project(":library:core:ui"))
     api(project(":library:core:designsystem"))
     api(project(":library:navigation"))
+    api(project(":library:shell"))
     api(project(":library:feature:about"))
+    api(project(":library:feature:advanced"))
     api(project(":library:feature:changelog"))
+    api(project(":library:feature:developer"))
+    api(project(":library:feature:diagnostics"))
+    api(project(":library:feature:display"))
     api(project(":library:feature:faq"))
     api(project(":library:feature:issuereporter"))
     api(project(":library:feature:licenses"))
     api(project(":library:feature:onboarding"))
+    api(project(":library:feature:startup"))
     api(project(":library:feature:permissions"))
     api(project(":library:feature:privacy"))
     api(project(":library:feature:settings"))
     api(project(":library:feature:support"))
+    api(project(":library:feature:theme"))
     api(project(":library:integration:ads"))
     api(project(":library:integration:billing"))
     api(project(":library:integration:consent"))

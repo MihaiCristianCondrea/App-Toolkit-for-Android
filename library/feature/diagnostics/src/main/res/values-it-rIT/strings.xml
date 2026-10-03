@@ -24,7 +24,6 @@
     <string name="consent_ad_user_data_title">Invia dati per annunci</string>
     <string name="consent_analytics_storage_description">Consenti la memorizzazione di dati come l\'utilizzo dell\'app e la durata della visita per migliorare l\'analisi e le prestazioni dell\'app.</string>
     <string name="consent_analytics_storage_title">Memorizza dati di analisi</string>
-    <string name="learn_more">Scopri di più</string>
     <string name="summary_usage_and_diagnostics">Aiuta a migliorare la tua esperienza inviando automaticamente dati diagnostici, di utilizzo e informazioni sul dispositivo.</string>
     <string name="usage_and_diagnostics">Utilizzo e diagnostica</string>
     <string name="consent_ad_personalization_description_short">Abilita la pubblicità personalizzata.</string>
@@ -48,4 +47,13 @@
     <string name="privacy_choices_title">Scelte sulla privacy</string>
     <string name="summary_advanced_privacy_settings">Scegli cosa condividere per analisi e pubblicità.</string>
     <string name="learn_more_about_provider">Scopri di più su questo fornitore</string>
+    <string name="onboarding_crashlytics_title">Aiutaci a migliorare</string>
+    <string name="onboarding_crashlytics_description">Consenti all\'app di inviare dati di utilizzo anonimi e rapporti di arresto anomalo. Questo ci aiuta a correggere i bug e a migliorare la tua esperienza. Nessuna informazione personale viene mai raccolta.</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">Mostra informazioni dettagliate su utilizzo e diagnostica</string>
+    <string name="onboarding_crashlytics_show_details_button">Mostra informazioni dettagliate</string>
+    <string name="error">Errore</string>
+    <string name="onboarding_crashlytics_privacy_info">La tua privacy è importante. Utilizziamo questi dati solo per correggere bug e migliorare le funzionalità. Per maggiori dettagli, consulta la nostra informativa sulla privacy.</string>
+    <string name="learn_more_privacy_policy">Rivedi la nostra Informativa sulla privacy</string>
+    <string name="onboarding_crashlytics_enabled_desc">Il rapporto dati è attivo.</string>
+    <string name="onboarding_crashlytics_disabled_desc">Il rapporto dati è inattivo.</string>
 </resources>

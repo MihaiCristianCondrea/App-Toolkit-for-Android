@@ -15,22 +15,16 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">Tryb AMOLED</string>
-    <string name="color_palette">Paleta kolorów</string>
-    <string name="dark_mode">Tryb ciemny</string>
-    <string name="follow_system">Podążaj za ustawieniami systemu</string>
-    <string name="light_mode">Tryb jasny</string>
-    <string name="onboarding_theme_dark_desc">Przyjemny dla oczu.</string>
-    <string name="onboarding_theme_light_desc">Jasny i energiczny.</string>
-    <string name="onboarding_theme_system_desc">Dopasowany do Twojego urządzenia.</string>
-    <string name="other_colors">Inne kolory</string>
-    <string name="screen_and_display_settings">Ustawienia ekranu i wyświetlania.</string>
-    <string name="summary_dark_theme">Mroczny motyw wykorzystuje głębokie tło, aby znacznie wydłużyć żywotność baterii. Aby go aktywować, po prostu przejdź do menedżera systemu Androida i wybierz preferowany motyw w</string>
-    <string name="theme_mode">Tryb motywu</string>
-    <string name="wallpaper_colors">Kolory tapety</string>
     <string name="holiday_greeting_christmas_title">Wesołych świąt!</string>
     <string name="holiday_greeting_christmas_message">Świąteczny motyw już jest, a w całej aplikacji pada śnieg. Chcesz go używać do końca świąt?</string>
     <string name="holiday_greeting_halloween_title">Wesołego Halloween!</string>
     <string name="holiday_greeting_halloween_message">Nadszedł straszny sezon. Chcesz używać motywu Halloween, dopóki trwa?</string>
     <string name="holiday_greeting_use_theme">Używaj świątecznego motywu w czasie świąt</string>
+    <string name="dark_theme">Motyw ciemny</string>
+    <string name="weather_effect">Efekt pogody</string>
+    <string name="weather_effect_automatic">Automatycznie</string>
+    <string name="weather_effect_snow">Śnieg</string>
+    <string name="weather_effect_off">Wyłączony</string>
+    <string name="weather_effect_rain">Deszcz</string>
+    <string name="weather_effect_info">W trybie automatycznym śnieg pada, gdy używana jest paleta świąteczna. Śnieg i deszcz padają przy każdej palecie.</string>
 </resources>

@@ -32,7 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.MorseInputError
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.MorseToolState
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.MorseToolUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ResultPill
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
@@ -40,7 +40,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.Ge
 
 @Composable
 fun MorseTool(
-    state: MorseToolState,
+    state: MorseToolUiState,
     onInputChanged: (String) -> Unit,
     onToggle: () -> Unit,
 ) {

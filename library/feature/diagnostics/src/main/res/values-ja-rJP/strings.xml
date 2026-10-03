@@ -24,7 +24,6 @@
     <string name="consent_ad_user_data_title">広告用のデータを送信</string>
     <string name="consent_analytics_storage_description">アプリの使用状況やアクセス時間などのデータを保存して、アナリティクスとアプリのパフォーマンスを改善することを許可します。</string>
     <string name="consent_analytics_storage_title">アナリティクス データを保存</string>
-    <string name="learn_more">詳しく見る</string>
     <string name="summary_usage_and_diagnostics">診断、デバイス、およびアプリの使用データを自動的に送信することで、体験を向上させる手助けをしてください。</string>
     <string name="usage_and_diagnostics">使用状況と診断</string>
     <string name="consent_ad_personalization_description_short">パーソナライズド広告を有効にします。</string>
@@ -48,4 +47,13 @@
     <string name="privacy_choices_title">プライバシーの選択</string>
     <string name="summary_advanced_privacy_settings">分析と広告のために共有する内容を選択します。</string>
     <string name="learn_more_about_provider">このプロバイダについて詳しく知る</string>
+    <string name="onboarding_crashlytics_title">改善にご協力ください</string>
+    <string name="onboarding_crashlytics_description">アプリが匿名の利用データとクラッシュレポートを送信することを許可します。これは、バグの修正とエクスペリエンスの向上に役立ちます。個人情報が収集されることはありません。</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">使用状況と診断に関する詳細情報を表示</string>
+    <string name="onboarding_crashlytics_show_details_button">詳細情報を表示</string>
+    <string name="error">エラー</string>
+    <string name="onboarding_crashlytics_privacy_info">お客様のプライバシーは重要です。このデータは、バグの修正と機能の改善にのみ使用されます。詳細については、プライバシーポリシーをご確認ください。</string>
+    <string name="learn_more_privacy_policy">プライバシーポリシーを確認する</string>
+    <string name="onboarding_crashlytics_enabled_desc">データ報告は有効です。</string>
+    <string name="onboarding_crashlytics_disabled_desc">データ報告は無効です。</string>
 </resources>

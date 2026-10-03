@@ -109,7 +109,6 @@ fun FinishOnboardingPage() {
     ) { visible -> if (visible) 0f else 30f }
 
     LaunchedEffect(Unit) {
-        // Always show the icon with its enter animation
         iconVisible.value = true
 
         if (!FinalOnboardingKonfettiState.hasKonfettiBeenShownGlobally) {
@@ -117,7 +116,7 @@ fun FinishOnboardingPage() {
             showKonfetti.value = true
             FinalOnboardingKonfettiState.hasKonfettiBeenShownGlobally = true
             delay(4_000.milliseconds)
-            showKonfetti.value = false // optional: removes KonfettiView from composition
+            showKonfetti.value = false
         }
     }
 

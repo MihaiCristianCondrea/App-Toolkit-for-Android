@@ -104,4 +104,18 @@
     <string name="components_divider_width">Chiều rộng</string>
     <string name="components_divider_wave_height">Chiều cao sóng</string>
     <string name="components_divider_vertical">Dọc</string>
+    <string name="components_snackbar_pressed">Bạn đã nhấn một nút</string>
+    <string name="components_snackbar_action_message">Đã thực hiện thao tác của nút</string>
+    <string name="components_snackbar_undo">Hoàn tác</string>
+    <string name="components_snackbar_undone">Đã hoàn tác</string>
+    <string name="components_snackbar_error">Đã xảy ra lỗi</string>
+    <string name="components_snackbar_retry">Thử lại</string>
+    <string name="components_snackbar_icon">Thanh thông báo có biểu tượng và màu riêng</string>
+    <string name="components_snackbar_custom">%1$s: thanh thông báo do chính màn hình vẽ</string>
+    <string name="components_section_article_bar">Thanh ứng dụng bài viết</string>
+    <string name="components_article_without_brand">Không có thương hiệu</string>
+    <string name="components_article_with_brand">Có thương hiệu</string>
+    <string name="components_article_brand">Nhà xuất bản mẫu</string>
+    <string name="components_article_headline">Thanh ứng dụng tinh gọn để câu chuyện lên trước</string>
+    <string name="components_article_paragraph">Ban đầu thanh chỉ có các nút. Cuộn qua dòng tiêu đề lớn thì tiêu đề bài viết sẽ thế chỗ, còn đường kẻ ở cạnh dưới cho biết bạn đã đọc được bao nhiêu.</string>
 </resources>

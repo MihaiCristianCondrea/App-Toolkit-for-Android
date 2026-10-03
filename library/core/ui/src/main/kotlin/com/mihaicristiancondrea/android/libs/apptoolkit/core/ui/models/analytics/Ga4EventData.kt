@@ -32,9 +32,6 @@ data class Ga4EventData(
     val name: String,
     val params: Map<String, AnalyticsValue> = emptyMap(),
 ) {
-    /**
-     * Converts this UI payload into a domain [AnalyticsEvent] for Firebase logging.
-     */
     fun toAnalyticsEvent(): AnalyticsEvent = AnalyticsEvent(
         name = name,
         params = params,

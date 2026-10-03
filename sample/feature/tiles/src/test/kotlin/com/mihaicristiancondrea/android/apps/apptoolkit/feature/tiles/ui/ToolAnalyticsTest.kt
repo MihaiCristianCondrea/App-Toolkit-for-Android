@@ -19,97 +19,131 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.contracts.AppGa4Contract
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.contracts.AppGa4ContractValidator
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.MorsePlaybackState
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.models.AppScreenTracking
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.sensors.FakeSensorLocalDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.FakeTorchRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.MorseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.SensorRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.SosRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.domain.utils.ToolkitTileIds
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.ToolUsageTracker
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.CoinFlipToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.CompassToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.DiceRollToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.MorseToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ReactionTestToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.SosToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.MorseInputError
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.StandardDispatcherExtension
-import io.mockk.every
-import io.mockk.mockk
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.emptyFlow
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class ToolAnalyticsTest {
 
     companion object {
         @JvmField
         @RegisterExtension
-        val dispatcherExtension = StandardDispatcherExtension()
+        val dispatcherExtension = UnconfinedDispatcherExtension()
     }
 
-    private val firebaseController = FakeFirebaseController()
+    private val telemetryRepository = FakeTelemetryRepository()
 
-    private fun toolUses(): List<String> = firebaseController.loggedEvents
+    private fun toolUses(): List<String> = telemetryRepository.loggedEvents
         .filter { it.name == AppGa4Contract.EventName.TOOL_USED }
         .map { (it.params.getValue(AppGa4Contract.Param.TOOL_ID) as AnalyticsValue.Str).value }
 
+    private fun startedActions(viewModelName: String): List<String> = telemetryRepository.loggedEvents
+        .filter { it.name == "vm_op_start" && it.params["view_model"] == AnalyticsValue.Str(viewModelName) }
+        .map { (it.params.getValue("action") as AnalyticsValue.Str).value }
+
+    private fun morseRepository(): MorseRepository = MorseRepository(
+        torchRepository = FakeTorchRepository(),
+        dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
+    )
+
     @Test
     fun `a tool is reported used once per opening, however often it is used`() {
-        val viewModel = CoinFlipToolViewModel(firebaseController)
+        val viewModel = CoinFlipToolViewModel(telemetryRepository = telemetryRepository)
 
-        repeat(times = 5) { viewModel.flip() }
+        repeat(times = 5) { viewModel.onEvent(CoinFlipToolEvent.Flip) }
 
         assertEquals(listOf(ToolkitTileIds.COIN_FLIP), toolUses())
     }
 
     @Test
     fun `reopening a tool reports its use again`() {
-        val viewModel = DiceRollToolViewModel(firebaseController)
+        val viewModel = DiceRollToolViewModel(telemetryRepository = telemetryRepository)
 
-        viewModel.roll()
-        viewModel.dismiss()
-        viewModel.roll()
+        viewModel.onEvent(DiceRollToolEvent.Roll)
+        viewModel.onEvent(DiceRollToolEvent.Dismiss)
+        viewModel.onEvent(DiceRollToolEvent.Roll)
 
         assertEquals(listOf(ToolkitTileIds.DICE_ROLL, ToolkitTileIds.DICE_ROLL), toolUses())
     }
 
     @Test
     fun `opening a tool without using it reports nothing`() {
-        val viewModel = CoinFlipToolViewModel(firebaseController)
+        val viewModel = CoinFlipToolViewModel(telemetryRepository = telemetryRepository)
 
-        viewModel.dismiss()
+        viewModel.onEvent(CoinFlipToolEvent.Dismiss)
 
-        assertTrue(firebaseController.loggedEvents.isEmpty())
+        assertTrue(telemetryRepository.loggedEvents.isEmpty())
+    }
+
+    @Test
+    fun `each flip is reported as an operation of the tiles screen`() {
+        val viewModel = CoinFlipToolViewModel(telemetryRepository = telemetryRepository)
+
+        viewModel.onEvent(CoinFlipToolEvent.Flip)
+        viewModel.onEvent(CoinFlipToolEvent.Flip)
+
+        assertEquals(listOf("flipCoin", "flipCoin"), startedActions(viewModelName = "CoinFlipToolViewModel"))
+        val start: AnalyticsEvent = telemetryRepository.loggedEvents.first { it.name == "vm_op_start" }
+        assertEquals(AnalyticsValue.Str(AppScreenTracking.Screens.TOOLKIT_TILES.name), start.params["screen"])
     }
 
     @Test
     fun `a Morse message that cannot be sent is not use`() {
-        val morse: MorseRepository = mockk(relaxed = true) {
-            every { state } returns MutableStateFlow(MorsePlaybackState())
-        }
-        val viewModel = MorseToolViewModel(morse, firebaseController)
+        val viewModel = MorseToolViewModel(repository = morseRepository(), telemetryRepository = telemetryRepository)
 
-        viewModel.updateInput(input = "   ")
-        viewModel.toggle()
+        viewModel.onEvent(MorseToolEvent.InputChanged(input = "   "))
+        viewModel.onEvent(MorseToolEvent.Toggle)
+        assertEquals(MorseInputError.Empty, viewModel.state.value.inputError)
         assertTrue(toolUses().isEmpty())
 
-        viewModel.updateInput(input = "HELLO")
-        viewModel.toggle()
+        viewModel.onEvent(MorseToolEvent.InputChanged(input = "HELLO"))
+        viewModel.onEvent(MorseToolEvent.Toggle)
         assertEquals(listOf(ToolkitTileIds.MORSE), toolUses())
+        assertTrue(viewModel.state.value.playback.isActive)
+
+        viewModel.onEvent(MorseToolEvent.Dismiss)
+        assertEquals(listOf("observePlayback", "startMorse", "stopMorse"), startedActions("MorseToolViewModel"))
     }
 
     @Test
     fun `stopping SOS is not reported as another use`() {
-        var active = false
-        val sos: SosRepository = mockk(relaxed = true) {
-            every { isActive } answers { active }
-            every { toggle() } answers { active = !active }
-        }
-        val viewModel = SosToolViewModel(sos, firebaseController)
+        val sos = SosRepository(morseRepository = morseRepository())
+        val viewModel = SosToolViewModel(repository = sos, telemetryRepository = telemetryRepository)
 
-        viewModel.toggle()
-        viewModel.dismiss()
-        active = true
-        viewModel.toggle()
+        viewModel.onEvent(SosToolEvent.Toggle)
+        assertTrue(viewModel.state.value.isActive)
+        viewModel.onEvent(SosToolEvent.Dismiss)
+        assertFalse(viewModel.state.value.isActive)
 
+        sos.toggle()
+        assertTrue(viewModel.state.value.isActive)
+        viewModel.onEvent(SosToolEvent.Toggle)
+
+        assertFalse(viewModel.state.value.isActive)
         assertEquals(listOf(ToolkitTileIds.SOS), toolUses())
     }
 
@@ -117,16 +151,17 @@ class ToolAnalyticsTest {
     fun `a finished reaction round is posted as its score`() {
         var now = 1_000L
         val viewModel = ReactionTestToolViewModel(
-            firebaseController = firebaseController,
+            telemetryRepository = telemetryRepository,
             timeProvider = { now },
+            signalDelayMs = { 100L },
         )
 
-        viewModel.startTest(delayMs = 100L)
+        viewModel.onEvent(ReactionTestToolEvent.Start)
         dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
         now += 215L
-        viewModel.handleTap()
+        viewModel.onEvent(ReactionTestToolEvent.Tap)
 
-        val score = firebaseController.loggedEvents
+        val score = telemetryRepository.loggedEvents
             .single { it.name == AppGa4Contract.EventName.POST_SCORE }
         assertEquals(AnalyticsValue.LongVal(215L), score.params[AppGa4Contract.Param.SCORE])
         assertEquals(
@@ -138,36 +173,38 @@ class ToolAnalyticsTest {
 
     @Test
     fun `a watched tool counts as used only once it has stayed open`() {
-        val sensors: SensorRepository = mockk {
-            every { getCompassAzimuth() } returns emptyFlow()
-        }
+        val sensors = SensorRepository(localDataSource = FakeSensorLocalDataSource())
         val scheduler = dispatcherExtension.testDispatcher.scheduler
 
-        val glance = CompassToolViewModel(sensors, firebaseController)
-        glance.open()
-        scheduler.advanceTimeBy(FlowToolViewModel.WATCHED_USE_DELAY_MS - 1)
-        glance.dismiss()
+        val glance = CompassToolViewModel(repository = sensors, telemetryRepository = telemetryRepository)
+        glance.onEvent(CompassToolEvent.Open)
+        scheduler.advanceTimeBy(ToolUsageTracker.WATCHED_USE_DELAY_MS - 1)
+        glance.onEvent(CompassToolEvent.Dismiss)
         scheduler.advanceUntilIdle()
         assertTrue(toolUses().isEmpty())
 
-        glance.open()
-        scheduler.advanceTimeBy(FlowToolViewModel.WATCHED_USE_DELAY_MS + 1)
+        glance.onEvent(CompassToolEvent.Open)
+        scheduler.advanceTimeBy(ToolUsageTracker.WATCHED_USE_DELAY_MS + 1)
         assertEquals(listOf(ToolkitTileIds.COMPASS), toolUses())
     }
 
     @Test
     fun `every tool event satisfies the app GA4 contract`() {
-        CoinFlipToolViewModel(firebaseController).flip()
+        CoinFlipToolViewModel(telemetryRepository = telemetryRepository).onEvent(CoinFlipToolEvent.Flip)
         var now = 0L
-        ReactionTestToolViewModel(firebaseController, timeProvider = { now }).apply {
-            startTest(delayMs = 1L)
+        ReactionTestToolViewModel(
+            telemetryRepository = telemetryRepository,
+            timeProvider = { now },
+            signalDelayMs = { 1L },
+        ).apply {
+            onEvent(ReactionTestToolEvent.Start)
             dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
             now += 300L
-            handleTap()
+            onEvent(ReactionTestToolEvent.Tap)
         }
 
-        assertTrue(firebaseController.loggedEvents.isNotEmpty())
-        firebaseController.loggedEvents.forEach { it.assertSatisfiesContract() }
+        assertTrue(telemetryRepository.loggedEvents.isNotEmpty())
+        telemetryRepository.loggedEvents.forEach { it.assertSatisfiesContract() }
     }
 
     private fun AnalyticsEvent.assertSatisfiesContract() {

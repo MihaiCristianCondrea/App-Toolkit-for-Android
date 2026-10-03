@@ -1,5 +1,5 @@
 ---
-name: android-architecture
+name: android-data-layer
 description: >
   Design, review, refactor, and explain Android application architecture
   following Google's official Android architecture guidance. Use when working
@@ -175,14 +175,28 @@ Network model -> application/data model -> UI model
 
 but this is not mandatory for every feature.
 
-Never expose a network DTO merely because mapping it would require another
-class when the DTO already represents the application's required data and
-does not leak inappropriate external concerns.
+Do not add a mapping only for symmetry: a network DTO that already represents
+the data the application needs, and carries no external concerns, can serve as
+the application model.
 
-Conversely, map external models when their structure does not match what the
-application needs.
+Map external models when their structure does not match what the application
+needs.
 
 Keep UI-specific models in the UI layer.
+
+## Errors
+
+A repository either returns its data or throws. Use `try/catch` around suspend calls and the
+`catch` operator in flows; the UI layer handles what reaches it. Throw a custom exception when a
+failure means something callers act on, such as `UserNotAuthenticatedException`. See "Expose
+errors" in `references/architecture.md`.
+
+Do not return a loading value from the data layer. Loading belongs to the UI state.
+
+In App Toolkit, wrap remote calls in `networkCall { }` and storage calls in `storageCall { }`, so
+callers receive a `NetworkException` or `StorageException` with a `reason` instead of the client's
+own exception. A feature's own exceptions live in its `data/exceptions/`. The text each failure
+shows is the UI layer's: see the `android-ui-layer` skill, `references/errors.md`.
 
 ## Source of truth
 
@@ -212,6 +226,24 @@ Move blocking or CPU-intensive work to an appropriate dispatcher in the
 class that owns that work.
 
 Prefer injecting dispatchers when doing so improves testability.
+
+| API                                                        | Switch?                   |
+|------------------------------------------------------------|---------------------------|
+| DataStore, Room suspend and `Flow` APIs                    | no                        |
+| Ktor and Retrofit suspend calls                            | no                        |
+| Play Core, Play Billing, UMP callbacks and `Task`s         | no                        |
+| `PackageManager`, `ContentResolver`, `File`                | `dispatchers.io`          |
+| Mobile Ads SDK initialization                              | `dispatchers.io`          |
+| bitmap decoding and drawing, large sorts and mappings      | `dispatchers.default`     |
+
+- Take the dispatcher from the injected `DispatcherProvider`, never a hardcoded `Dispatchers.X`.
+- Wrap only the blocking call, so the rest of the function stays on the caller's thread.
+- Wrap DataStore failures with `storageCall { }`, and a DataStore flow with
+  `catch { throw it.toStorageException() ?: it }`; that is the data layer's job, not a dispatcher
+  switch.
+- `DefaultCacheRepository` (file deletes), `DefaultAboutRepository` (a `PackageManager` lookup) and
+  `AdsCoreManager.ensureAdsSdkInitialized` are the reference switches;
+  `DefaultAdsSettingsRepository` and `DefaultBillingRepository` are the reference non-switches.
 
 ## Long-running work
 

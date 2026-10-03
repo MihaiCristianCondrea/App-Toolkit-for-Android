@@ -22,6 +22,5 @@
     <string name="purchase_thank_you">Thank you for your donation.</string>
     <string name="summary_donations">Any amount you donate helps keep the app running and improve features. Your generosity is appreciated.</string>
     <string name="support_offer_unavailable">This donation option is currently unavailable.</string>
-    <string name="support_us">Support the app</string>
     <string name="web_ad">Web ad</string>
 </resources>

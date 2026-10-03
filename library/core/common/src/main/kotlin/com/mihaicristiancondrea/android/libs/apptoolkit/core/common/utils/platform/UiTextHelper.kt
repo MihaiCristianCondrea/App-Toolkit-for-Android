@@ -23,11 +23,8 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 
 /**
- * UiTextHelper is a sealed class that represents text that can be either a dynamic string or a string resource.
- * It provides methods to convert the text to a String in both a Context-based and a Composable context.
- *
- * This class is useful for handling text that might come from different sources, like hardcoded strings or
- * string resources, without having to worry about the specific type when using it.
+ * Text that remains unresolved until rendering, allowing state holders to supply literal text,
+ * string resources, or plural resources without retaining a [Context].
  */
 sealed class UiTextHelper {
     data class DynamicString(val content: String) : UiTextHelper()
@@ -35,12 +32,8 @@ sealed class UiTextHelper {
         UiTextHelper()
 
     /**
-     * A `<plurals>` resource, where [count] picks the quantity.
-     *
-     * [count] selects the wording only; pass it again in [arguments] if the text also prints it.
-     * Without this case a state holder that needs a plural has to resolve the string itself, which
-     * means holding a Context and pinning the text to the configuration that was current when it
-     * was built.
+     * A plural resource whose [count] selects the quantity. Include [count] in [arguments] as
+     * well if the text displays it.
      */
     data class PluralResource(
         val resourceId: Int,
@@ -49,18 +42,10 @@ sealed class UiTextHelper {
     ) : UiTextHelper()
 
     /**
-     * Converts the current object to a String.
+     * Resolves text using the supplied context and its current resource configuration.
      *
-     * This function handles two different types: `DynamicString` and `StringResource`.
-     *
-     * - If the object is a `DynamicString`, it returns the `content` directly.
-     * - If the object is a `StringResource`, it retrieves the string from the Android resources
-     *   using the provided `context` and the `resourceId`, substituting any format arguments
-     *   if present.
-     *
-     * @param context The Android context used to retrieve string resources.
-     * @return The string representation of the object.
-     * @throws android.content.res.Resources.NotFoundException If the resourceId is not found in the resources.
+     * @throws android.content.res.Resources.NotFoundException if the string or plural resource
+     * is missing.
      */
     fun asString(context: Context): String {
         return when (this) {
@@ -75,26 +60,11 @@ sealed class UiTextHelper {
     }
 
     /**
-     * Converts a [UiTextHelper] to a plain String.
+     * Resolves text against the current composition configuration, including locale changes.
      *
-     * This function is a Composable extension function on the [UiTextHelper] sealed class.
-     * It provides a way to get the actual string value represented by the [UiTextHelper].
-     *
-     * There are two types of [UiTextHelper] supported:
-     * - [DynamicString]: Represents a string that is directly provided.
-     * - [StringResource]: Represents a string that is loaded from Android resources.
-     *
-     * For [DynamicString], it simply returns the stored string.
-     * For [StringResource], it uses the Android Context to fetch the string from the resources
-     * using the provided resource ID and arguments.
-     *
-     * @return The String representation of the [UiTextHelper].
-     *
-     * @throws android.content.res.Resources.NotFoundException if a [StringResource] is used and the resource ID does not exist.
-     * @throws java.util.MissingFormatArgumentException if a [StringResource] is used with format arguments and not all of them are provided.
-     *
-     * @see DynamicString
-     * @see StringResource
+     * @throws android.content.res.Resources.NotFoundException if the string or plural resource
+     * is missing.
+     * @throws java.util.MissingFormatArgumentException if required format arguments are absent.
      */
     @Composable
     fun asString(): String {

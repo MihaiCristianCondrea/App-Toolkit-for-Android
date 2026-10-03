@@ -15,22 +15,16 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">AMOLED-Modus</string>
-    <string name="color_palette">Farbpalette</string>
-    <string name="dark_mode">Dunkles thema</string>
-    <string name="follow_system">Systemmodus folgen</string>
-    <string name="light_mode">Helles thema</string>
-    <string name="onboarding_theme_dark_desc">Angenehm für die Augen.</string>
-    <string name="onboarding_theme_light_desc">Hells und energiegeladen.</string>
-    <string name="onboarding_theme_system_desc">Entspricht den Geräteeinstellungen.</string>
-    <string name="other_colors">Andere Farben</string>
-    <string name="screen_and_display_settings">Bildschirm und Einstellungen anzeigen.</string>
-    <string name="summary_dark_theme">Das Dunkle Thema nutzt einen tiefen Hintergrund, um Ihre Akkulaufzeit erheblich zu verlängern. Um es zu aktivieren, navigieren Sie einfach zum Systemmanager Ihres Android -Systems und wählen Sie Ihr bevorzugtes Thema in</string>
-    <string name="theme_mode">Themenmodus</string>
-    <string name="wallpaper_colors">Hintergrundfarben</string>
     <string name="holiday_greeting_christmas_title">Frohe Feiertage!</string>
     <string name="holiday_greeting_christmas_message">Das Weihnachtsdesign ist da, mit Schnee in der ganzen App. Möchtest du es bis zum Ende der Feiertage verwenden?</string>
     <string name="holiday_greeting_halloween_title">Fröhliches Halloween!</string>
     <string name="holiday_greeting_halloween_message">Die gruselige Zeit ist da. Möchtest du das Halloween-Design verwenden, solange sie dauert?</string>
     <string name="holiday_greeting_use_theme">Feiertagsdesign während der Feiertage verwenden</string>
+    <string name="dark_theme">Dunkles Thema</string>
+    <string name="weather_effect">Wettereffekt</string>
+    <string name="weather_effect_automatic">Automatisch</string>
+    <string name="weather_effect_snow">Schnee</string>
+    <string name="weather_effect_off">Aus</string>
+    <string name="weather_effect_rain">Regen</string>
+    <string name="weather_effect_info">Bei „Automatisch“ fällt Schnee, solange die Weihnachtspalette verwendet wird. Schnee und Regen fallen bei jeder Palette.</string>
 </resources>

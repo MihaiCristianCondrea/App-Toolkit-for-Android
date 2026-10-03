@@ -22,7 +22,6 @@
     <string name="issue_description_placeholder">Ilarawan ang isyu at kung paano ito maulit</string>
     <string name="issue_done">Tapos na</string>
     <string name="issue_email_label">Email</string>
-    <string name="issue_email_optional_placeholder">Email (opsyonal)</string>
     <string name="issue_section_label">Isyu</string>
     <string name="issue_send">Ipadala</string>
     <string name="issue_submitted_message">Salamat sa pagtulong na mapabuti ang app.</string>

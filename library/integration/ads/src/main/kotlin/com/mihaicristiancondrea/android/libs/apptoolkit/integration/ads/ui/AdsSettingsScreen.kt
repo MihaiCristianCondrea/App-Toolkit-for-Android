@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui
 
+import android.content.Context
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,7 +26,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -33,11 +34,8 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.contracts.AdsSettingsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.states.AdsSettingsUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
@@ -46,17 +44,22 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.contracts.AdsSettingsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.models.AdsPreferences
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.states.AdsSettingsUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -70,187 +73,197 @@ private object AdsPreferenceKeys {
     const val LEARN_MORE: String = "learn_more"
 }
 
-private object AdsActionNames {
-    const val BACK_CLICK: String = "back_click"
-}
-
-/** Compose screen displaying ad preferences. */
-@OptIn(ExperimentalMaterial3Api::class)
+/**
+ * The ad preferences page, which `adsSettingsPage()` registers and the privacy page opens. Debug
+ * builds show the display ads switch, release builds the reduce ads switch.
+ *
+ * Owns [AdsSettingsViewModel], tracking and its messages, such as a failed write or consent
+ * request. The personalized ads row opens the UMP privacy form from the current activity, and
+ * Learn more opens the AdMob help center.
+ */
 @Composable
-fun AdsSettingsScreen(
-    isEmbedded: Boolean = false,
-) {
+fun AdsSettingsScreen() {
     val viewModel: AdsSettingsViewModel = koinViewModel()
-    val screenState: UiStateScreen<AdsSettingsUiState> by viewModel.uiState.collectAsStateWithLifecycle()
-
-    val firebaseController: FirebaseController = koinInject()
+    val state: AdsSettingsUiState by viewModel.state.collectAsStateWithLifecycle()
+    val telemetryRepository = LocalTelemetry.current
     val buildInfoProvider: BuildInfoProvider = koinInject()
-    val context = LocalContext.current
+    val context: Context = LocalContext.current
+    val activity = LocalActivity.current
+    val consentHost: ConsentHost? = remember(activity) { activity?.let(::ConsentHost) }
 
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = ADS_SETTINGS_SCREEN_NAME,
         screenClass = ADS_SETTINGS_SCREEN_CLASS,
     )
 
     TrackScreenState(
-        firebaseController = firebaseController,
         screenName = ADS_SETTINGS_SCREEN_NAME,
-        screenState = screenState.screenState,
+        state = state.preferences,
     )
 
-    val activity = LocalActivity.current
-    val consentHost = remember(activity) {
-        activity?.let {
-            object : ConsentHost {
-                override val activity = it
-            }
-        }
-    }
+    AdsSettingsScreenContent(
+        state = state,
+        onEvent = viewModel::onEvent,
+        showDisplayAdsSwitch = buildInfoProvider.isDebugBuild,
+        onOpenPrivacyForm = {
+            consentHost?.let { host -> viewModel.onEvent(AdsSettingsEvent.RequestConsent(host)) }
+        },
+        onLearnMore = {
+            telemetryRepository.logEvent(
+                AnalyticsEvent(
+                    name = SettingsAnalytics.Events.PREFERENCE_VIEW,
+                    params = adsPreferenceParams(preferenceKey = AdsPreferenceKeys.LEARN_MORE),
+                )
+            )
+            context.openUrl(url = AppLinks.ADS_HELP_CENTER)
+        },
+        contentPadding = contentPadding(),
+    )
 
-    val content: @Composable (PaddingValues) -> Unit = { paddingValues ->
-        ScreenStateHandler(
-            screenState = screenState,
-            onLoading = { LoadingScreen() },
-            onEmpty = { NoDataScreen(paddingValues = paddingValues) },
-            onError = { NoDataScreen(isError = true, paddingValues = paddingValues) },
-            onSuccess = { data: AdsSettingsUiState ->
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues = paddingValues),
-                    verticalArrangement = Arrangement.spacedBy(space = SizeConstants.LargeSize),
-                ) {
+    MessageHost(viewModel = viewModel)
+}
 
-                    item {
-                        SwitchCardItem(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = SizeConstants.LargeSize),
-                            title = stringResource(
-                                id = if (buildInfoProvider.isDebugBuild) {
-                                    R.string.display_ads
-                                } else {
-                                    R.string.reduce_ads
-                                },
-                            ),
-                            switchState = rememberUpdatedState(
-                                if (buildInfoProvider.isDebugBuild) data.adsEnabled else data.reduceAds,
-                            ),
-                            onSwitchToggled = { isChecked: Boolean ->
-                                viewModel.onEvent(
-                                    if (buildInfoProvider.isDebugBuild) {
-                                        AdsSettingsEvent.SetAdsEnabled(isChecked)
-                                    } else {
-                                        AdsSettingsEvent.SetReduceAds(isChecked)
-                                    },
-                                )
-                            },
-                            firebaseController = firebaseController,
-                            ga4EventProvider = { isChecked ->
-                                Ga4EventData(
-                                    name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
-                                    params = mapOf(
-                                        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
-                                            ADS_SETTINGS_SCREEN_NAME
-                                        ),
-                                        SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
-                                            if (buildInfoProvider.isDebugBuild) {
-                                                AdsPreferenceKeys.DISPLAY_ADS
-                                            } else {
-                                                AdsPreferenceKeys.REDUCE_ADS
-                                            }
-                                        ),
-                                        SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(
-                                            isChecked.toString()
-                                        ),
-                                    ),
-                                )
-                            }
-                        )
-                    }
-
-                    item {
-                        Box(modifier = Modifier.padding(horizontal = SizeConstants.SmallSize)) {
-                            PreferenceItem(
-                                title = stringResource(id = R.string.personalized_ads),
-                                enabled = data.adsEnabled,
-                                summary = stringResource(id = R.string.summary_ads_personalized_ads),
-                                onClick = {
-                                    consentHost?.let { host ->
-                                        viewModel.onEvent(AdsSettingsEvent.RequestConsent(host))
-                                    }
-                                },
-                                firebaseController = firebaseController,
-                                ga4Event = Ga4EventData(
-                                    name = SettingsAnalytics.Events.PREFERENCE_VIEW,
-                                    params = mapOf(
-                                        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
-                                            ADS_SETTINGS_SCREEN_NAME
-                                        ),
-                                        SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
-                                            AdsPreferenceKeys.PERSONALIZED_ADS
-                                        ),
-                                    ),
-                                )
-                            )
-                        }
-                    }
-
-                    item {
-                        InfoMessageSection(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = SizeConstants.MediumSize * 2),
-                            message = stringResource(id = R.string.summary_ads),
-                            learnMoreText = stringResource(id = R.string.learn_more),
-                            learnMoreAction = {
-                                firebaseController.logEvent(
-                                    AnalyticsEvent(
-                                        name = SettingsAnalytics.Events.PREFERENCE_VIEW,
-                                        params = mapOf(
-                                            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
-                                                ADS_SETTINGS_SCREEN_NAME
-                                            ),
-                                            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
-                                                AdsPreferenceKeys.LEARN_MORE
-                                            ),
-                                        ),
-                                    )
-                                )
-                                context.openUrl(url = AppLinks.ADS_HELP_CENTER)
-                            }
-                        )
-                    }
-                }
-            }
+/**
+ * The ads switch, the personalized ads row and the ads note for [state], or its loading or
+ * failure state.
+ *
+ * @param onEvent Receives the events [AdsSettingsViewModel] handles.
+ * @param showDisplayAdsSwitch Shows the display ads switch instead of the reduce ads switch.
+ * @param onOpenPrivacyForm The personalized ads row was tapped.
+ * @param onLearnMore The note's Learn more was tapped.
+ * @param contentPadding Padding from the shell, applied inside the list and the state screens.
+ */
+@Composable
+internal fun AdsSettingsScreenContent(
+    state: AdsSettingsUiState,
+    onEvent: (AdsSettingsEvent) -> Unit,
+    showDisplayAdsSwitch: Boolean,
+    onOpenPrivacyForm: () -> Unit,
+    onLearnMore: () -> Unit,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
+) {
+    ScreenStateHandler(
+        state = state.preferences,
+        modifier = modifier,
+        contentPadding = contentPadding,
+        onRetry = { onEvent(AdsSettingsEvent.Load) },
+    ) { ready ->
+        AdsSettingsList(
+            preferences = ready.value,
+            onEvent = onEvent,
+            showDisplayAdsSwitch = showDisplayAdsSwitch,
+            onOpenPrivacyForm = onOpenPrivacyForm,
+            onLearnMore = onLearnMore,
+            contentPadding = contentPadding,
         )
     }
+}
 
-    if (isEmbedded) {
-        content(PaddingValues())
-    } else {
-        LargeTopAppBarWithScaffold(
-            title = stringResource(id = R.string.ads),
-            onBackClicked = remember(activity) {
-                {
-                    firebaseController.logEvent(
-                        AnalyticsEvent(
-                            name = SettingsAnalytics.Events.ACTION,
-                            params = mapOf(
-                                SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
-                                    ADS_SETTINGS_SCREEN_NAME
-                                ),
-                                SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(
-                                    AdsActionNames.BACK_CLICK
-                                ),
-                            ),
-                        )
+@Composable
+private fun AdsSettingsList(
+    preferences: AdsPreferences,
+    onEvent: (AdsSettingsEvent) -> Unit,
+    showDisplayAdsSwitch: Boolean,
+    onOpenPrivacyForm: () -> Unit,
+    onLearnMore: () -> Unit,
+    contentPadding: PaddingValues,
+) {
+    val switchKey: String = if (showDisplayAdsSwitch) AdsPreferenceKeys.DISPLAY_ADS else AdsPreferenceKeys.REDUCE_ADS
+
+    LazyColumn(
+        contentPadding = contentPadding,
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.LargeSize),
+    ) {
+        item {
+            SwitchCardItem(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = SizeConstants.LargeSize),
+                title = stringResource(id = if (showDisplayAdsSwitch) R.string.display_ads else R.string.reduce_ads),
+                switchState = rememberUpdatedState(
+                    newValue = if (showDisplayAdsSwitch) preferences.adsEnabled else preferences.reduceAds,
+                ),
+                onSwitchToggled = { isChecked: Boolean ->
+                    onEvent(
+                        if (showDisplayAdsSwitch) {
+                            AdsSettingsEvent.SetAdsEnabled(isChecked)
+                        } else {
+                            AdsSettingsEvent.SetReduceAds(isChecked)
+                        },
                     )
-                    activity?.finish()
-                }
-            },
-            content = content
+                },
+                ga4EventProvider = { isChecked ->
+                    Ga4EventData(
+                        name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
+                        params = adsPreferenceParams(preferenceKey = switchKey) +
+                            (SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(isChecked.toString())),
+                    )
+                },
+            )
+        }
+
+        item {
+            Box(modifier = Modifier.padding(horizontal = SizeConstants.SmallSize)) {
+                PreferenceItem(
+                    title = stringResource(id = R.string.personalized_ads),
+                    enabled = preferences.adsEnabled,
+                    summary = stringResource(id = R.string.summary_ads_personalized_ads),
+                    onClick = onOpenPrivacyForm,
+                    ga4Event = Ga4EventData(
+                        name = SettingsAnalytics.Events.PREFERENCE_VIEW,
+                        params = adsPreferenceParams(preferenceKey = AdsPreferenceKeys.PERSONALIZED_ADS),
+                    ),
+                )
+            }
+        }
+
+        item {
+            InfoMessageSection(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = SizeConstants.MediumSize * 2),
+                message = stringResource(id = R.string.summary_ads),
+                learnMoreText = stringResource(id = CoreUiR.string.learn_more),
+                learnMoreAction = onLearnMore,
+            )
+        }
+    }
+}
+
+/** The `screen` and `preference_key` parameters every ads settings GA4 event carries. */
+private fun adsPreferenceParams(preferenceKey: String): Map<String, AnalyticsValue> = mapOf(
+    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(ADS_SETTINGS_SCREEN_NAME),
+    SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
+)
+
+@Preview(showBackground = true)
+@Composable
+private fun AdsSettingsScreenContentPreview() {
+    MaterialTheme {
+        AdsSettingsScreenContent(
+            state = AdsSettingsUiState(
+                preferences = Loadable.Ready(AdsPreferences(adsEnabled = true, reduceAds = false)),
+            ),
+            onEvent = {},
+            showDisplayAdsSwitch = false,
+            onOpenPrivacyForm = {},
+            onLearnMore = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AdsSettingsScreenContentLoadingPreview() {
+    MaterialTheme {
+        AdsSettingsScreenContent(
+            state = AdsSettingsUiState(preferences = Loadable.Loading),
+            onEvent = {},
+            showDisplayAdsSwitch = false,
+            onOpenPrivacyForm = {},
+            onLearnMore = {},
         )
     }
 }

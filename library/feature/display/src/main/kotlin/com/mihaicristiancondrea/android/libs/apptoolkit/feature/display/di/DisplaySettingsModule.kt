@@ -17,16 +17,21 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.di
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.DisplaySettingsViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.search.displaySettingsSearch
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val displaySettingsModule: Module = module {
+    single<SettingsSearchProvider>(named("display")) { displaySettingsSearch(startup = getOrNull()) }
     viewModel {
         DisplaySettingsViewModel(
             displayPreferences = get(),
             themePreferences = get(),
+            telemetryRepository = get(),
         )
     }
 }

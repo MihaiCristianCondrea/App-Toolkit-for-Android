@@ -15,9 +15,20 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="error_description_missing">সমস্যাটি বর্ণনা করুন</string>
+    <string name="error_email_invalid">একটি সঠিক ইমেল ঠিকানা লিখুন</string>
+    <string name="error_email_missing">আপনার ইমেল লিখুন</string>
     <string name="error_forbidden">নিষিদ্ধ: পর্যাপ্ত অনুমতি নেই</string>
     <string name="error_gone">API এন্ডপয়েন্ট সরানো হয়েছে</string>
-    <string name="error_invalid_report">শিরোনাম এবং বিবরণ খালি হতে পারে না</string>
+    <string name="error_link_only">শুধু একটি লিংক নয়, সমস্যাটি বর্ণনা করুন।</string>
+    <string name="error_repetitive">খুব বেশি পুনরাবৃত্তি। কী ঘটেছে তা বর্ণনা করুন।</string>
+    <string name="error_report_cooldown">আরেকটি রিপোর্ট পাঠানোর আগে অনুগ্রহ করে কয়েক মিনিট অপেক্ষা করুন।</string>
+    <string name="error_report_duplicate">এই রিপোর্টটি আগেই পাঠানো হয়েছে।</string>
+    <string name="error_same_as_title">শিরোনামের চেয়ে আরও বিস্তারিত লিখুন।</string>
+    <string name="error_title_missing">একটি শিরোনাম লিখুন</string>
+    <string name="error_too_few_letters">শুধু চিহ্ন বা ইমোজি নয়, শব্দ ব্যবহার করুন।</string>
+    <string name="error_too_long">খুব বড়। সর্বোচ্চ %1$d অক্ষর ব্যবহার করুন।</string>
+    <string name="error_too_short">খুব ছোট। কমপক্ষে %1$d অক্ষর ব্যবহার করুন।</string>
     <string name="error_unauthorized">অননুমোদিত: অবৈধ টোকেন</string>
     <string name="error_unprocessable">ইস্যু তৈরি করার জন্য অবৈধ ডেটা</string>
 </resources>

@@ -17,12 +17,16 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
-
-sealed interface OnboardingThemeEvent : UiEvent {
-    data object Initialize : OnboardingThemeEvent
+/**
+ * What the user can ask the onboarding theme page's ViewModel to do. Each event saves one theme
+ * setting.
+ */
+sealed interface OnboardingThemeEvent {
     data class SelectThemeMode(val mode: String) : OnboardingThemeEvent
+
     data class SetAmoledMode(val enabled: Boolean) : OnboardingThemeEvent
+
     data class SelectDynamicPalette(val variant: Int) : OnboardingThemeEvent
+
     data class SelectStaticPalette(val id: String) : OnboardingThemeEvent
 }

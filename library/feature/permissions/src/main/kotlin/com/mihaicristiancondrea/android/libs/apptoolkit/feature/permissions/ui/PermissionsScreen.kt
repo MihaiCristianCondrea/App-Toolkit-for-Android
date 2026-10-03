@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui
 
-import android.app.Activity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -25,103 +24,103 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.contracts.PermissionsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsCategory
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsPreference
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.R
-import org.koin.compose.koinInject
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.contracts.PermissionsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.states.PermissionsUiState
 import org.koin.compose.viewmodel.koinViewModel
 
 private const val PERMISSIONS_SCREEN_NAME = "Permissions"
 private const val PERMISSIONS_SCREEN_CLASS = "PermissionsScreen"
 
-@OptIn(ExperimentalMaterial3Api::class)
+/**
+ * Descriptive permission catalog registered by `permissionsPage()`. It explains why permissions
+ * are used rather than reporting their current grant state. Owns [PermissionsViewModel] and
+ * screen tracking; [PermissionsScreenContent] handles rendering.
+ */
 @Composable
-fun PermissionsScreen(
-    isEmbedded: Boolean = false,
-) {
+fun PermissionsScreen() {
     val viewModel: PermissionsViewModel = koinViewModel()
-    val screenState: UiStateScreen<SettingsConfig> by viewModel.uiState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
+    val state: PermissionsUiState by viewModel.state.collectAsStateWithLifecycle()
 
-    val firebaseController: FirebaseController = koinInject()
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = PERMISSIONS_SCREEN_NAME,
         screenClass = PERMISSIONS_SCREEN_CLASS,
     )
     TrackScreenState(
-        firebaseController = firebaseController,
         screenName = PERMISSIONS_SCREEN_NAME,
-        screenState = screenState.screenState,
+        state = state.config,
     )
 
-    LaunchedEffect(Unit) {
-        viewModel.onEvent(PermissionsEvent.Load)
-    }
-
-    val content: @Composable (PaddingValues) -> Unit = { paddingValues ->
-        ScreenStateHandler(
-            screenState = screenState,
-            onLoading = { LoadingScreen() },
-            onEmpty = {
-                NoDataScreen(
-                    icon = Icons.Outlined.Settings,
-                    showRetry = true,
-                    onRetry = { viewModel.onEvent(PermissionsEvent.Load) },
-                    paddingValues = paddingValues,
-                )
-            },
-            onError = {
-                NoDataScreen(
-                    icon = Icons.Outlined.Settings,
-                    isError = true,
-                    showRetry = true,
-                    onRetry = { viewModel.onEvent(PermissionsEvent.Load) },
-                    paddingValues = paddingValues,
-                )
-            },
-            onSuccess = { settingsConfig ->
-                PermissionsContent(
-                    paddingValues = paddingValues,
-                    settingsConfig = settingsConfig,
-                )
-            },
-        )
-    }
-
-    if (isEmbedded) {
-        content(PaddingValues())
-    } else {
-        LargeTopAppBarWithScaffold(
-            title = stringResource(id = R.string.permissions),
-            onBackClicked = { (context as Activity).finish() },
-            content = content
-        )
-    }
+    PermissionsScreenContent(
+        state = state,
+        contentPadding = contentPadding(),
+        onRetry = { viewModel.onEvent(PermissionsEvent.Load) },
+    )
 }
 
+/**
+ * The stateless half of [PermissionsScreen]: the catalog, or its loading, empty or failure state.
+ *
+ * @param onRetry The empty or failure state's retry was tapped.
+ */
+@Composable
+internal fun PermissionsScreenContent(
+    state: PermissionsUiState,
+    contentPadding: PaddingValues,
+    onRetry: () -> Unit,
+) {
+    ScreenStateHandler(
+        state = state.config,
+        contentPadding = contentPadding,
+        onRetry = onRetry,
+        onEmpty = { empty ->
+            NoDataScreen(
+                icon = Icons.Outlined.Settings,
+                message = empty.message?.asString(),
+                showRetry = true,
+                onRetry = onRetry,
+                paddingValues = contentPadding,
+            )
+        },
+        onError = { failed ->
+            NoDataScreen(
+                icon = Icons.Outlined.Settings,
+                message = failed.message.asString(),
+                isError = true,
+                showRetry = failed.retryable,
+                onRetry = onRetry,
+                paddingValues = contentPadding,
+            )
+        },
+        onSuccess = { ready ->
+            PermissionsContent(
+                paddingValues = contentPadding,
+                settingsConfig = ready.value,
+            )
+        },
+    )
+}
 
+/** The permission catalog: one titled group per category. */
 @Composable
 fun PermissionsContent(
     paddingValues: PaddingValues,
@@ -155,7 +154,7 @@ fun PermissionsContent(
                 SettingsPreferenceItem(
                     title = preference.title,
                     summary = preference.summary,
-                    onClick = { preference.action.invoke() },
+                    onClick = { preference.action?.invoke() },
                     modifier = Modifier.groupedPreferenceItem(
                         position = groupedItemPosition(
                             index = index,
@@ -166,5 +165,61 @@ fun PermissionsContent(
                 )
             }
         }
+    }
+}
+
+// Only the loaded and loading states have previews: the empty and failure states draw
+// `NoDataScreen`, which resolves its ad unit through Koin.
+@Preview(showBackground = true)
+@Composable
+private fun PermissionsScreenContentPreview() {
+    MaterialTheme {
+        PermissionsScreenContent(
+            state = PermissionsUiState(
+                config = Loadable.Ready(
+                    SettingsConfig(
+                        title = "Permissions",
+                        categories = listOf(
+                            SettingsCategory(
+                                title = "Normal",
+                                preferences = listOf(
+                                    SettingsPreference(
+                                        title = "Internet",
+                                        summary = "Loads the changelog and help pages.",
+                                    ),
+                                    SettingsPreference(
+                                        title = "Billing",
+                                        summary = "Lets you support the app.",
+                                    ),
+                                ),
+                            ),
+                            SettingsCategory(
+                                title = "Runtime",
+                                preferences = listOf(
+                                    SettingsPreference(
+                                        title = "Notifications",
+                                        summary = "Shows reminders you ask for.",
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            contentPadding = PaddingValues(),
+            onRetry = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PermissionsScreenContentLoadingPreview() {
+    MaterialTheme {
+        PermissionsScreenContent(
+            state = PermissionsUiState(config = Loadable.Loading),
+            contentPadding = PaddingValues(),
+            onRetry = {},
+        )
     }
 }

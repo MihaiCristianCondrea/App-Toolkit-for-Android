@@ -59,7 +59,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.sty
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumHorizontalSpacer
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.states.UsageAndDiagnosticsUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.domain.models.UsageAndDiagnosticsSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs.pages.AboutPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs.pages.ConsentPage
@@ -68,7 +68,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun FirebaseConsentDialog(
-    state: UsageAndDiagnosticsUiState,
+    settings: UsageAndDiagnosticsSettings,
     onDismissRequest: () -> Unit,
     onAllowAll: () -> Unit,
     onAllowEssentials: () -> Unit,
@@ -170,7 +170,7 @@ fun FirebaseConsentDialog(
                             0 -> ConsentPage()
 
                             1 -> DetailsPage(
-                                state = state,
+                                settings = settings,
                                 onAnalyticsConsentChanged = onAnalyticsConsentChanged,
                                 onAdStorageConsentChanged = onAdStorageConsentChanged,
                                 onAdUserDataConsentChanged = onAdUserDataConsentChanged,

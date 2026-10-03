@@ -15,9 +15,20 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="error_description_missing">مسئلہ بیان کریں</string>
+    <string name="error_email_invalid">درست ای میل پتہ درج کریں</string>
+    <string name="error_email_missing">اپنا ای میل درج کریں</string>
     <string name="error_forbidden">ممنوع: ناکافی اجازتیں</string>
     <string name="error_gone">API اینڈ پوائنٹ ہٹا دیا گیا</string>
-    <string name="error_invalid_report">عنوان اور تفصیل خالی نہیں ہو سکتے</string>
+    <string name="error_link_only">صرف لنک نہیں، مسئلہ بیان کریں۔</string>
+    <string name="error_repetitive">بہت زیادہ تکرار ہے۔ بتائیں کہ کیا ہوا۔</string>
+    <string name="error_report_cooldown">براہ کرم دوسری رپورٹ بھیجنے سے پہلے چند منٹ انتظار کریں۔</string>
+    <string name="error_report_duplicate">یہ رپورٹ پہلے ہی بھیجی جا چکی ہے۔</string>
+    <string name="error_same_as_title">عنوان سے زیادہ تفصیل شامل کریں۔</string>
+    <string name="error_title_missing">عنوان درج کریں</string>
+    <string name="error_too_few_letters">صرف علامات یا ایموجی نہیں، الفاظ استعمال کریں۔</string>
+    <string name="error_too_long">بہت طویل۔ زیادہ سے زیادہ %1$d حروف استعمال کریں۔</string>
+    <string name="error_too_short">بہت مختصر۔ کم از کم %1$d حروف استعمال کریں۔</string>
     <string name="error_unauthorized">غیر مجاز: غلط ٹوکن</string>
     <string name="error_unprocessable">مسئلہ بنانے کے لیے غلط ڈیٹا</string>
 </resources>

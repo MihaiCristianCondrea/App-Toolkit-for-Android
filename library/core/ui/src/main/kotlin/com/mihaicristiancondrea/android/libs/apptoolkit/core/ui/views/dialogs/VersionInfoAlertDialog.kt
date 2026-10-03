@@ -37,17 +37,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.La
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 
 /**
- * Displays an AlertDialog containing application version information.
+ * Version-information dialog with caller-owned dismissal.
  *
- * This composable function presents a modal dialog displaying the application's name,
- * version, and copyright information. It leverages the [AlertDialog] composable
- * for the dialog UI and [VersionInfoAlertDialogContent] for the content.
- *
- * @param onDismiss Callback that is invoked when the dialog is dismissed (e.g., by clicking outside the dialog).
- * @param copyrightString The copyright string to display.
- * @param appName The string resource ID for the application's name.
- * @param versionName The application's version name (e.g., "1.0.0").
- * @param versionString The string resource ID for the version string to display before the versionName (e.g., "Version ").
+ * @param versionString String resource formatting [versionName].
  */
 @Composable
 fun VersionInfoAlertDialog(
@@ -72,14 +64,10 @@ fun VersionInfoAlertDialog(
 }
 
 /**
- * Composable function that displays the version information in an alert dialog.
+ * Version-information content using the host app icon. The icon is resolved once per context
+ * and loaded through Coil's shared loader.
  *
- * This composable displays the application icon, name, version, and copyright information.
- *
- * @param copyrightString The copyright string to be displayed.
- * @param appName The resource ID of the application name string.
- * @param versionName The version name string.
- * @param versionString The resource ID of the version string format (e.g., "Version %s").
+ * @param versionString String resource formatting [versionName].
  */
 @Composable
 fun VersionInfoAlertDialogContent(
@@ -89,9 +77,6 @@ fun VersionInfoAlertDialogContent(
     versionString: Int
 ) {
     val context: Context = LocalContext.current
-    // The icon lookup is a package manager call, so it is made once rather than per recomposition.
-    // The image goes through Coil's shared loader; a private one would carry its own caches and
-    // dispatchers and would have to be shut down when the dialog leaves.
     val appIcon: Drawable = remember(context) {
         context.packageManager.getApplicationIcon(context.packageName)
     }

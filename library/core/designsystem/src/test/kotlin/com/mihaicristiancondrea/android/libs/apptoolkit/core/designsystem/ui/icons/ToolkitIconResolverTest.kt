@@ -99,7 +99,7 @@ class ToolkitIconResolverTest {
     fun `animations do not loop unless a caller opts in`() {
         assertFalse(shareAnimated.loop)
         assertFalse(ToolkitIcon.Lottie(resId = 3).loop)
-        assertFalse((ToolkitIcon.animated(resId = 3) as ToolkitIcon.AnimatedVector).loop)
+        assertFalse(ToolkitIcon.animated(resId = 3).loop)
     }
 
     @Test
@@ -182,7 +182,7 @@ class ToolkitIconResolverTest {
         assertEquals(ToolkitIconReplayMode.Restart, shareAnimated.replayMode)
         assertEquals(
             ToolkitIconReplayMode.Restart,
-            (ToolkitIcon.animated(resId = 3) as ToolkitIcon.AnimatedVector).replayMode,
+            ToolkitIcon.animated(resId = 3).replayMode,
         )
         assertEquals(
             ToolkitIconReplayMode.Reverse,

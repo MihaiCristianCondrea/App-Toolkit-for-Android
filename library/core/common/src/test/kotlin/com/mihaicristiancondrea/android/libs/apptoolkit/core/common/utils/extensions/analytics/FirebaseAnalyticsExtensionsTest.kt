@@ -18,46 +18,46 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class FirebaseAnalyticsExtensionsTest {
 
-    private lateinit var firebaseController: FakeFirebaseController
+    private lateinit var telemetryRepository: FakeTelemetryRepository
 
     @BeforeEach
     fun setUp() {
-        firebaseController = FakeFirebaseController()
+        telemetryRepository = FakeTelemetryRepository()
     }
 
     @Test
     fun `logTutorialBegin logs tutorial_begin event`() {
-        firebaseController.logTutorialBegin()
+        telemetryRepository.logTutorialBegin()
 
-        assertEquals(1, firebaseController.loggedEvents.size)
-        val event = firebaseController.loggedEvents.first()
+        assertEquals(1, telemetryRepository.loggedEvents.size)
+        val event = telemetryRepository.loggedEvents.first()
         assertEquals("tutorial_begin", event.name)
         assertEquals(emptyMap(), event.params)
     }
 
     @Test
     fun `logTutorialComplete logs tutorial_complete event`() {
-        firebaseController.logTutorialComplete()
+        telemetryRepository.logTutorialComplete()
 
-        assertEquals(1, firebaseController.loggedEvents.size)
-        val event = firebaseController.loggedEvents.first()
+        assertEquals(1, telemetryRepository.loggedEvents.size)
+        val event = telemetryRepository.loggedEvents.first()
         assertEquals("tutorial_complete", event.name)
         assertEquals(emptyMap(), event.params)
     }
 
     @Test
     fun `logSearch logs search event with search_term parameter`() {
-        firebaseController.logSearch("android architecture")
+        telemetryRepository.logSearch("android architecture")
 
-        assertEquals(1, firebaseController.loggedEvents.size)
-        val event = firebaseController.loggedEvents.first()
+        assertEquals(1, telemetryRepository.loggedEvents.size)
+        val event = telemetryRepository.loggedEvents.first()
         assertEquals("search", event.name)
         assertEquals(
             mapOf("search_term" to AnalyticsValue.Str("android architecture")),
@@ -67,17 +67,17 @@ class FirebaseAnalyticsExtensionsTest {
 
     @Test
     fun `logSearch ignores blank search terms`() {
-        firebaseController.logSearch("   ")
+        telemetryRepository.logSearch("   ")
 
-        assertEquals(0, firebaseController.loggedEvents.size)
+        assertEquals(0, telemetryRepository.loggedEvents.size)
     }
 
     @Test
     fun `logSelectContent logs select_content event with content_type and item_id`() {
-        firebaseController.logSelectContent(contentType = "button", itemId = "submit_feedback")
+        telemetryRepository.logSelectContent(contentType = "button", itemId = "submit_feedback")
 
-        assertEquals(1, firebaseController.loggedEvents.size)
-        val event = firebaseController.loggedEvents.first()
+        assertEquals(1, telemetryRepository.loggedEvents.size)
+        val event = telemetryRepository.loggedEvents.first()
         assertEquals("select_content", event.name)
         assertEquals(
             mapOf(
@@ -90,14 +90,14 @@ class FirebaseAnalyticsExtensionsTest {
 
     @Test
     fun `logShare logs share event with method, content_type, and item_id`() {
-        firebaseController.logShare(
+        telemetryRepository.logShare(
             method = "system_share",
             contentType = "app",
             itemId = "com.example.app",
         )
 
-        assertEquals(1, firebaseController.loggedEvents.size)
-        val event = firebaseController.loggedEvents.first()
+        assertEquals(1, telemetryRepository.loggedEvents.size)
+        val event = telemetryRepository.loggedEvents.first()
         assertEquals("share", event.name)
         assertEquals(
             mapOf(
@@ -111,14 +111,14 @@ class FirebaseAnalyticsExtensionsTest {
 
     @Test
     fun `logViewItem logs view_item event with item_id, item_name, and optional item_category`() {
-        firebaseController.logViewItem(
+        telemetryRepository.logViewItem(
             itemId = "com.example.app",
             itemName = "Example App",
             itemCategory = "tools",
         )
 
-        assertEquals(1, firebaseController.loggedEvents.size)
-        val event = firebaseController.loggedEvents.first()
+        assertEquals(1, telemetryRepository.loggedEvents.size)
+        val event = telemetryRepository.loggedEvents.first()
         assertEquals("view_item", event.name)
         assertEquals(
             mapOf(
@@ -132,13 +132,13 @@ class FirebaseAnalyticsExtensionsTest {
 
     @Test
     fun `logViewItemList logs view_item_list event with list params`() {
-        firebaseController.logViewItemList(
+        telemetryRepository.logViewItemList(
             itemListId = "popular_apps",
             itemListName = "Popular Developer Apps",
         )
 
-        assertEquals(1, firebaseController.loggedEvents.size)
-        val event = firebaseController.loggedEvents.first()
+        assertEquals(1, telemetryRepository.loggedEvents.size)
+        val event = telemetryRepository.loggedEvents.first()
         assertEquals("view_item_list", event.name)
         assertEquals(
             mapOf(
@@ -151,10 +151,10 @@ class FirebaseAnalyticsExtensionsTest {
 
     @Test
     fun `logUnlockAchievement logs unlock_achievement event with achievement_id`() {
-        firebaseController.logUnlockAchievement("showcase_unlocked")
+        telemetryRepository.logUnlockAchievement("showcase_unlocked")
 
-        assertEquals(1, firebaseController.loggedEvents.size)
-        val event = firebaseController.loggedEvents.first()
+        assertEquals(1, telemetryRepository.loggedEvents.size)
+        val event = telemetryRepository.loggedEvents.first()
         assertEquals("unlock_achievement", event.name)
         assertEquals(
             mapOf("achievement_id" to AnalyticsValue.Str("showcase_unlocked")),

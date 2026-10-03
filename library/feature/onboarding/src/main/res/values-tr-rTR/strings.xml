@@ -15,42 +15,19 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="agree">Kabul et</string>
-    <string name="amoled_mode">AMOLED modu</string>
     <string name="back_button_content_description">Geri</string>
     <string name="back_button_text">Geri̇</string>
-    <string name="dark_mode">Koyu mod</string>
-    <string name="done_button_content_description">Bitti</string>
     <string name="done_button_text">Bi̇tti̇</string>
-    <string name="error">Hata</string>
-    <string name="follow_system">Sistem modunu takip et</string>
-    <string name="learn_more">Daha fazla bilgi</string>
-    <string name="learn_more_privacy_policy">Gizlilik Politikamızı İnceleyin</string>
-    <string name="light_mode">Aydınlık mod</string>
     <string name="next_button_content_description">İleri</string>
     <string name="next_button_text">İleri̇</string>
     <string name="onboarding_amoled_mode_desc">OLED ekranlar için daha derin siyahlar.</string>
     <string name="onboarding_complete_icon_desc">Başlangıç tamamlandı</string>
     <string name="onboarding_completion_failed">Kurulumunuz kaydedilemedi. Lütfen tekrar deneyin.</string>
-    <string name="onboarding_crashlytics_description">Uygulamanın anonim kullanım verileri ve kilitlenme raporları göndermesine izin verin. Bu, hataları düzeltmemize ve deneyiminizi iyileştirmemize yardımcı olur. Hiçbir kişisel bilgi toplanmaz.</string>
-    <string name="onboarding_crashlytics_disabled_desc">Veri raporlama pasif.</string>
-    <string name="onboarding_crashlytics_enabled_desc">Veri raporlama aktif.</string>
-    <string name="onboarding_crashlytics_privacy_info">Gizliliğiniz önemlidir. Bu verileri yalnızca hataları düzeltmek ve özellikleri geliştirmek için kullanırız. Daha fazla ayrıntı için lütfen gizlilik politikamızı inceleyin.</string>
-    <string name="onboarding_crashlytics_show_details_button">Ayrıntılı bilgileri göster</string>
-    <string name="onboarding_crashlytics_show_details_button_cd">Kullanım ve tanılama hakkında ayrıntılı bilgileri göster</string>
-    <string name="onboarding_crashlytics_title">Geliştirmemize yardım edin</string>
     <string name="onboarding_final_description">Deneyiminizi kişiselleştirdiğiniz için teşekkürler. Artık tüm özellikleri keşfetmeye hazırsınız. Keyfini çıkarın.</string>
     <string name="onboarding_final_title">Her şey hazır.</string>
-    <string name="onboarding_theme_dark_desc">Gözleri yormaz.</string>
-    <string name="onboarding_theme_light_desc">Parlak ve enerjik.</string>
     <string name="onboarding_theme_subtitle">Uygulamanın nasıl görünmesini istediğinizi seçin.</string>
-    <string name="onboarding_theme_system_desc">Cihazınızla eşleşir.</string>
     <string name="onboarding_theme_title">Tarzınızı seçin</string>
-    <string name="other_colors">Diğer renkler</string>
     <string name="skip_button_content_description">Atla</string>
     <string name="skip_button_text">Atla</string>
-    <string name="summary_browse_terms_of_service_and_privacy_policy">Devam etmek için Hizmet şartlarımızı ve Gizlilik Politikamızı okuyun ve kabul edin</string>
     <string name="usage_and_diagnostics">Kullanım ve teşhis</string>
-    <string name="wallpaper_colors">Duvar kâğıdı renkleri</string>
-    <string name="welcome">Hoş geldiniz</string>
 </resources>

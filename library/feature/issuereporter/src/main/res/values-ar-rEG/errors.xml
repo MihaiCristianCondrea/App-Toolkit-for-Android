@@ -15,9 +15,20 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="error_description_missing">صِف المشكلة</string>
+    <string name="error_email_invalid">أدخل عنوان بريد إلكتروني صالحًا</string>
+    <string name="error_email_missing">أدخل بريدك الإلكتروني</string>
     <string name="error_forbidden">محظور: أذونات غير كافية</string>
     <string name="error_gone">تمت إزالة نقطة نهاية واجهة برمجة التطبيقات</string>
-    <string name="error_invalid_report">لا يمكن أن يكون العنوان والوصف فارغين</string>
+    <string name="error_link_only">صِف المشكلة، ولا تكتفِ بإضافة رابط.</string>
+    <string name="error_repetitive">النص مكرر كثيرًا. صِف ما حدث.</string>
+    <string name="error_report_cooldown">يُرجى الانتظار بضع دقائق قبل إرسال تقرير آخر.</string>
+    <string name="error_report_duplicate">تم إرسال هذا التقرير بالفعل.</string>
+    <string name="error_same_as_title">أضف تفاصيل أكثر مما في العنوان.</string>
+    <string name="error_title_missing">أدخل عنوانًا</string>
+    <string name="error_too_few_letters">استخدم كلمات، لا رموزًا أو رموزًا تعبيرية فقط.</string>
+    <string name="error_too_long">طويل جدًا. الحد الأقصى لعدد الأحرف: %1$d</string>
+    <string name="error_too_short">قصير جدًا. الحد الأدنى لعدد الأحرف: %1$d</string>
     <string name="error_unauthorized">غير مصرح: رمز غير صالح</string>
     <string name="error_unprocessable">بيانات غير صالحة لإنشاء المشكلة</string>
 </resources>

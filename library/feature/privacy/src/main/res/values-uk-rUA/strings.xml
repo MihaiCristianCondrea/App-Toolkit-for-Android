@@ -32,4 +32,5 @@
     <string name="summary_preference_settings_usage_and_diagnostics">Поділіться даними для покращення роботи додатка</string>
     <string name="terms_of_service">Умови використання</string>
     <string name="usage_and_diagnostics">Використання та діагностика</string>
+    <string name="security_and_privacy">Безпека та конфіденційність</string>
 </resources>

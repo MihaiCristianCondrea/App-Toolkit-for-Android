@@ -17,23 +17,23 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.repositories
 
-import com.google.common.truth.Truth.assertThat
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.local.FaqLocalDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqId
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.FaqRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.models.FaqCatalogDto
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.models.FaqProductDto
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.models.FaqQuestionDto
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.models.FaqQuestionSourceDto
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqId
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
+import java.net.UnknownHostException
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
 
 private const val CATALOG_URL = "https://example.test/catalog"
 private const val PRODUCT_ID = "com.example.product"
@@ -41,24 +41,33 @@ private const val QUESTIONS_URL = "https://example.test/questions"
 
 class DefaultFaqRepositoryTest {
 
+    /**
+     * @param remoteQuestions The question source's answer; `null` makes that source fail.
+     * @param catalogFailure Makes the catalog itself fail with this, so nothing remote loads.
+     */
     private fun repository(
         remoteQuestions: List<FaqQuestionDto>? = emptyList(),
         localQuestions: List<FaqItem> = emptyList(),
+        catalogFailure: Throwable? = null,
     ): DefaultFaqRepository {
         val remote = mockk<FaqRemoteDataSource>()
-        coEvery { remote.fetchCatalog(CATALOG_URL) } returns FaqCatalogDto(
-            schemaVersion = 1,
-            products = listOf(
-                FaqProductDto(
-                    name = "Product",
-                    productId = PRODUCT_ID,
-                    key = PRODUCT_ID,
-                    questionSources = listOf(
-                        FaqQuestionSourceDto(url = QUESTIONS_URL, category = "general"),
+        if (catalogFailure != null) {
+            coEvery { remote.fetchCatalog(CATALOG_URL) } throws catalogFailure
+        } else {
+            coEvery { remote.fetchCatalog(CATALOG_URL) } returns FaqCatalogDto(
+                schemaVersion = 1,
+                products = listOf(
+                    FaqProductDto(
+                        name = "Product",
+                        productId = PRODUCT_ID,
+                        key = PRODUCT_ID,
+                        questionSources = listOf(
+                            FaqQuestionSourceDto(url = QUESTIONS_URL, category = "general"),
+                        ),
                     ),
                 ),
-            ),
-        )
+            )
+        }
         if (remoteQuestions == null) {
             coEvery { remote.fetchQuestions(QUESTIONS_URL) } throws IllegalStateException("offline")
         } else {
@@ -73,7 +82,7 @@ class DefaultFaqRepositoryTest {
             remoteDataSource = remote,
             catalogUrl = CATALOG_URL,
             productId = PRODUCT_ID,
-            firebaseController = mockk(relaxed = true),
+            telemetryRepository = mockk(relaxed = true),
         )
     }
 
@@ -85,84 +94,98 @@ class DefaultFaqRepositoryTest {
 
     @Test
     fun `trims surrounding whitespace from remote questions and answers`() = runTest {
-        val result = repository(
+        val questions = repository(
             remoteQuestions = listOf(dto("1", "  Why?  ", "\n Because. \t")),
-        ).fetchFaq().first()
+        ).getFaq()
 
-        val data = (result as DataState.Success).data
-        assertThat(data.single().question).isEqualTo("Why?")
-        assertThat(data.single().answer).isEqualTo("Because.")
+        assertEquals("Why?", questions.single().question)
+        assertEquals("Because.", questions.single().answer)
     }
 
     @Test
     fun `drops entries with a blank question or answer`() = runTest {
-        val result = repository(
+        val questions = repository(
             remoteQuestions = listOf(
                 dto("1", "Kept?", "Yes."),
                 dto("2", "   ", "Orphan answer."),
                 dto("3", "Orphan question?", "  "),
             ),
-        ).fetchFaq().first()
+        ).getFaq()
 
-        assertThat((result as DataState.Success).data.map { it.id.value }).containsExactly("1")
+        assertEquals(listOf("1"), questions.map { it.id.value })
     }
 
     @Test
     fun `keeps the first entry when ids repeat`() = runTest {
-        val result = repository(
+        val questions = repository(
             remoteQuestions = listOf(
                 dto("dup", "First question?", "First answer."),
                 dto("dup", "Second question?", "Second answer."),
             ),
-        ).fetchFaq().first()
+        ).getFaq()
 
-        val data = (result as DataState.Success).data
-        assertThat(data).hasSize(1)
-        assertThat(data.single().question).isEqualTo("First question?")
+        assertEquals(1, questions.size)
+        assertEquals("First question?", questions.single().question)
     }
 
     @Test
     fun `falls back to the local questions when the remote catalog is all blanks`() = runTest {
-        val result = repository(
+        val questions = repository(
             remoteQuestions = listOf(dto("1", "   ", "   ")),
             localQuestions = listOf(item("local", "Bundled?", "Yes.")),
-        ).fetchFaq().first()
+        ).getFaq()
 
-        val data = (result as DataState.Success).data
-        assertThat(data.map { it.id.value }).containsExactly("local")
+        assertEquals(listOf("local"), questions.map { it.id.value })
     }
 
     @Test
-    fun `falls back to the local questions when the remote fetch throws`() = runTest {
-        val result = repository(
+    fun `falls back to the local questions when a question source fails`() = runTest {
+        val questions = repository(
             remoteQuestions = null,
             localQuestions = listOf(item("local", "Bundled?", "Yes.")),
-        ).fetchFaq().first()
+        ).getFaq()
 
-        assertThat((result as DataState.Success).data.single().question).isEqualTo("Bundled?")
+        assertEquals("Bundled?", questions.single().question)
+    }
+
+    @Test
+    fun `falls back to the local questions when the catalog fails`() = runTest {
+        val questions = repository(
+            catalogFailure = UnknownHostException(),
+            localQuestions = listOf(item("local", "Bundled?", "Yes.")),
+        ).getFaq()
+
+        assertEquals("Bundled?", questions.single().question)
     }
 
     @Test
     fun `normalizes the local questions too`() = runTest {
-        val result = repository(
+        val questions = repository(
             remoteQuestions = emptyList(),
             localQuestions = listOf(
                 item("local", "  Bundled?  ", " Yes. "),
                 item("blank", "  ", "  "),
             ),
-        ).fetchFaq().first()
+        ).getFaq()
 
-        val data = (result as DataState.Success).data
-        assertThat(data).hasSize(1)
-        assertThat(data.single().question).isEqualTo("Bundled?")
+        assertEquals(1, questions.size)
+        assertEquals("Bundled?", questions.single().question)
     }
 
     @Test
-    fun `reports an error when neither source yields anything` () = runTest {
-        val result = repository(remoteQuestions = emptyList(), localQuestions = emptyList())
-            .fetchFaq().first()
+    fun `returns no questions when both sources load empty`() = runTest {
+        val questions = repository(remoteQuestions = emptyList(), localQuestions = emptyList()).getFaq()
 
-        assertThat(result).isInstanceOf(DataState.Error::class.java)
-        assertThat((result as DataState.Error).error).isEqualTo(Errors.UseCase.FAILED_TO_LOAD_FAQ)
+        assertEquals(emptyList(), questions)
+    }
+
+    @Test
+    fun `throws the catalog failure, translated, when there is nothing to fall back to`() = runTest {
+        val failure = runCatching {
+            repository(catalogFailure = UnknownHostException(), localQuestions = emptyList()).getFaq()
+        }.exceptionOrNull()
+
+        assertIs<NetworkException>(failure)
+        assertEquals(NetworkException.Reason.NO_INTERNET, failure.reason)
     }
 }

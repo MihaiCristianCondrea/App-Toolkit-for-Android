@@ -36,8 +36,8 @@ val onboardingModule: Module = module {
     viewModel {
         OnboardingViewModel(
             onboardingRepository = get(),
-            dispatchers = get(),
-            firebaseController = get(),
+            consentRepository = get(),
+            telemetryRepository = get(),
         )
     }
 }

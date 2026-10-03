@@ -17,11 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging
 
-const val STARTUP_LOG_TAG: String = "StartupActivity"
 const val CLIPBOARD_HELPER_LOG_TAG: String = "ClipboardHelper"
 const val CONSENT_LOG_TAG: String = "Consent"
-const val GENERAL_SETTINGS_LOG_TAG: String = "GeneralSettingsActivity"
 const val FCM_LOG_TAG: String = "FirebaseNotifications"
 const val THEME_SETTINGS_LOG_TAG: String = "ThemeSettingsScreen"
-const val ABOUT_SETTINGS_LOG_TAG: String = "AboutSettings"
 const val INFO_MESSAGE_LOG_TAG: String = "InfoMessageSection"

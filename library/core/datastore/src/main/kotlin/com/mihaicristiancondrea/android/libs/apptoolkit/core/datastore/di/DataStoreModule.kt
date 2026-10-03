@@ -40,20 +40,16 @@ import org.koin.core.module.Module
 import org.koin.dsl.module
 
 /**
- * Koin module for the data store.
+ * Binds the process-wide preference store and its repositories.
+ *
+ * Creates [CommonDataStore] eagerly through [CommonDataStore.getInstance] so Koin and Compose
+ * share the same instance and ads default. Ads default to enabled in all builds unless a stored
+ * choice overrides them.
+ *
+ * Data-source bindings reuse the store-owned instances, avoiding duplicate sharing coroutines.
+ * State holders consume the repository bindings.
  */
 fun dataStoreModule(): Module = module {
-    // Through `getInstance`, not the constructor, and eagerly: this is what makes the graph's store
-    // and the one `rememberCommonDataStore()` hands to Compose the same object. Built lazily via
-    // the constructor, Koin's copy never populated the companion, so the first `getInstance` caller
-    // created a second store, and the two then disagreed about whether ads were on for any install
-    // with no stored value. `createdAtStart` closes the race for good: Koin starts in
-    // `Application.onCreate`, long before anything can compose.
-    //
-    // Ads default on in every build, debug included. The default used to be `!isDebugBuild`, which
-    // meant a fresh debug install had no ads at all until someone found the switch, so the one build
-    // where ad rendering is actually inspected was the one build that rendered none. A developer who
-    // turns them off still has that stored and honoured; only the starting point changed.
     single<CommonDataStore>(createdAtStart = true) {
         CommonDataStore.getInstance(
             context = get(),
@@ -63,9 +59,6 @@ fun dataStoreModule(): Module = module {
 
     single<CommonDataStoreCore> { get<CommonDataStore>() }
 
-    // Bound from CommonDataStore rather than constructed here so that exactly one instance of each
-    // group exists per process. DefaultAdsPreferencesDataSource in particular starts an eager
-    // collector, so a second copy would observe the same preference twice.
     single<ThemePreferencesDataSource> { get<CommonDataStore>().themePreferences }
     single<SeasonalThemePreferencesDataSource> { get<CommonDataStore>().seasonalThemePreferences }
     single<DisplayPreferencesDataSource> { get<CommonDataStore>().displayPreferences }
@@ -80,7 +73,6 @@ fun dataStoreModule(): Module = module {
         get<CommonDataStore>().diagnosticsPreferences
     }
 
-    // The entry points state holders use. The data sources above stay internal to this layer.
     single<ThemePreferencesRepository> {
         DefaultThemePreferencesRepository(preferences = get())
     }

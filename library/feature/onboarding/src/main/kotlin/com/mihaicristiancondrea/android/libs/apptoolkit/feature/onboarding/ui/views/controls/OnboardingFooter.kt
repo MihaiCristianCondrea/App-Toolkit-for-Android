@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -46,6 +46,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 @OptIn(
     ExperimentalFoundationApi::class,
@@ -128,7 +129,7 @@ fun OnboardingFooter(
                     }
                 ),
                 contentDescription = if (isLastPage) {
-                    stringResource(id = R.string.done_button_content_description)
+                    stringResource(id = CoreUiR.string.done_button_content_description)
                 } else {
                     stringResource(id = R.string.next_button_content_description)
                 },

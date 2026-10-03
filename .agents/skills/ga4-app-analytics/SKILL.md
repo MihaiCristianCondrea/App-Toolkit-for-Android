@@ -56,7 +56,7 @@ Review enough of the project to understand:
 - Application purpose and major user journeys.
 - Navigation destinations and meaningful screens.
 - Existing analytics modules, contracts, constants, tests, and helper functions.
-- App Toolkit usage, especially `FirebaseController`, `LoggedScreenViewModel`, `TrackScreenView`,
+- App Toolkit usage, especially `TelemetryRepository`, `LoggedScreenViewModel`, `TrackScreenView`,
   `TrackScreenState`, `AnalyticsEvent`, `AnalyticsValue`, `Ga4EventData`, and reusable UI components
   with GA4 support.
 - Existing Firebase Analytics, Crashlytics, Performance, consent, AdMob, mediation, purchases,
@@ -297,7 +297,7 @@ When the host uses App Toolkit:
 
 - App Toolkit owns Firebase transport and common analytics helpers.
 - The host application owns its product-specific event vocabulary and screen identifiers.
-- `FirebaseController` is the normal path for event delivery.
+- `TelemetryRepository` is the normal path for event delivery.
 - `LoggedScreenViewModel` provides standardized operation and error telemetry.
 - `TrackScreenView` handles explicit screen views for Compose destinations.
 - `TrackScreenState` can record bounded screen state transitions.

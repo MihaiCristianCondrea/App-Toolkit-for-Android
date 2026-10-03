@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="screen_error_no_internet">沒有網際網路連線。</string>
+    <string name="screen_error_connection">網路錯誤。請再試一次。</string>
+    <string name="screen_error_timeout">要求逾時。請再試一次。</string>
+    <string name="screen_error_rate_limited">請求次數過多。請稍後再試。</string>
+    <string name="screen_error_server">伺服器錯誤。請稍後再試。</string>
+    <string name="screen_error_storage_full">儲存空間已滿。</string>
+    <string name="screen_error_storage_busy">儲存空間忙碌中。請再試一次。</string>
+    <string name="screen_error_generic">發生未知錯誤。</string>
+</resources>

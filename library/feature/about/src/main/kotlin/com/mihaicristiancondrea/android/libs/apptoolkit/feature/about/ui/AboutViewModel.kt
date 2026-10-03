@@ -17,37 +17,22 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 
-import android.content.Context
-import android.os.Build
-import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.ClipboardRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logUnlockAchievement
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.copyTextToClipboard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.dismissSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setError
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoading
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.showSnackbar
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories.AboutRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.mappers.toUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.mappers.toAboutItems
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.AboutUiState
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
 
 /** Reported as `unlock_achievement` the first time the version-tap easter egg is found. */
 private const val SEASONAL_THEMES_ACHIEVEMENT: String = "seasonal_themes"
@@ -56,30 +41,29 @@ private const val SEASONAL_THEMES_ACHIEVEMENT: String = "seasonal_themes"
  * ViewModel for the About screen, including tap-to-copy of the entries it renders.
  *
  * Writing to the clipboard is a system UI interaction, so it happens on the main thread, which is
- * where `viewModelScope` already runs. Android 13 raised its own clipboard preview for every copy,
- * so a successful copy is confirmed in-app only below that, where nothing else tells the user
- * anything happened. A failed copy raises no system UI at all, so it is always reported.
+ * where `viewModelScope` already runs. A successful copy is confirmed in-app only where the system
+ * does not confirm it itself ([ClipboardRepository.confirmsCopies]). A failed copy raises no system
+ * UI at all, so it is always reported.
  *
- * The version-tap easter egg also unlocks the seasonal themes controls on the theme screen. The
- * first unlock is announced, since nothing else points at where the reward went.
+ * The version-tap easter egg also unlocks the seasonal themes controls on the theme screen and the
+ * developer options entry in the advanced settings. The first unlock is announced, since nothing
+ * else points at where the reward went.
  *
+ * @param clipboardRepository Receives the copied entries, so this ViewModel holds no `Context`.
  * @param seasonalThemes Records the easter egg unlock.
- * @param sdkIntProvider Supplies the running platform level, so the confirmation rule is testable
- * without a device.
  */
 open class AboutViewModel(
     private val aboutRepository: AboutRepository,
-    private val context: Context,
-    private val dispatchers: DispatcherProvider,
-    firebaseController: FirebaseController,
+    private val clipboardRepository: ClipboardRepository,
+    telemetryRepository: TelemetryRepository,
     private val seasonalThemes: SeasonalThemeRepository,
-    private val sdkIntProvider: () -> Int = { Build.VERSION.SDK_INT },
-) : LoggedScreenViewModel<AboutUiState, AboutEvent, AboutAction>(
-    initialState = UiStateScreen(data = AboutUiState()),
-    firebaseController = firebaseController,
+) : LoggedScreenViewModel<AboutUiState, AboutEvent>(
+    initialState = AboutUiState(),
+    telemetryRepository = telemetryRepository,
     screenName = "About",
+    viewModelName = "AboutViewModel",
 ) {
-    private var observeJob: Job? = null
+    private var loadJob: Job? = null
 
     init {
         onEvent(AboutEvent.Load)
@@ -87,7 +71,7 @@ open class AboutViewModel(
 
     override fun handleEvent(event: AboutEvent) {
         when (event) {
-            is AboutEvent.Load -> loadAboutInfo()
+            AboutEvent.Load -> loadAboutInfo()
 
             is AboutEvent.CopyToClipboard -> copyToClipboard(
                 label = event.label,
@@ -95,46 +79,32 @@ open class AboutViewModel(
                 successMessage = event.successMessage,
             )
 
-            is AboutEvent.DismissSnackbar -> dismissSnackbar()
-
-            is AboutEvent.EasterEggFound -> unlockSeasonalThemes()
-        }
-    }
-
-    private fun loadAboutInfo() {
-        startOperation(action = Actions.LOAD_ABOUT_INFO)
-        observeJob = observeJob.restart {
-            flow { emit(aboutRepository.getAboutInfo()) }
-                .flowOn(dispatchers.io)
-                .onStart {
-                    updateStateThreadSafe {
-                        screenState.setLoading()
-                    }
-                }
-                .onEach { info ->
-                    updateStateThreadSafe {
-                        screenState.setSuccess(data = info.toUiState())
-                    }
-                }
-                .catchReport(action = Actions.LOAD_ABOUT_INFO) {
-                    updateStateThreadSafe {
-                        screenState.setError(
-                            message = UiTextHelper.StringResource(R.string.snack_device_info_failed)
-                        )
-                    }
-                }
-                .launchIn(viewModelScope)
+            AboutEvent.EasterEggFound -> unlockSeasonalThemes()
         }
     }
 
     /**
-     * Copies [text] under [label], then confirms it where the platform will not.
-     *
-     * Each copy is its own job on purpose. An earlier version restarted a shared `copyJob`, which
-     * bought nothing, a clipboard write is instant and idempotent, and gave cancellation a way to
-     * drop a copy the user had already asked for. There is no `withContext` either: the write has
-     * to happen on the main thread and `viewModelScope` is already there, so hopping dispatchers
-     * only moved the write off the click's own frame.
+     * Loads the entries. [AboutRepository.getAboutInfo] moves its own package manager lookup off
+     * the main thread, so this needs no dispatcher.
+     */
+    private fun loadAboutInfo() {
+        loadJob = loadJob.restart {
+            launchReport(
+                action = Actions.LOAD_ABOUT_INFO,
+                onError = { error ->
+                    setState { copy(items = error.toFailed(fallback = UiTextHelper.StringResource(R.string.snack_device_info_failed))) }
+                },
+            ) {
+                setState { copy(items = Loadable.Loading) }
+                val items = aboutRepository.getAboutInfo().toAboutItems()
+                setState { copy(items = Loadable.Ready(items)) }
+            }
+        }
+    }
+
+    /**
+     * Copies on the main thread and confirms the write when the platform does not. Each request
+     * runs independently so a later click cannot cancel an earlier copy.
      */
     private fun copyToClipboard(
         label: String,
@@ -144,69 +114,28 @@ open class AboutViewModel(
         launchReport(
             action = Actions.COPY_TO_CLIPBOARD,
             extra = mapOf(ExtraKeys.LABEL to label),
-            block = {
-                val copied: Boolean = context.copyTextToClipboard(label = label, text = text)
-                check(copied) { "Clipboard rejected the copy for \"$label\"" }
-                if (!showsSystemClipboardPreview()) {
-                    showSnackbar(
-                        message = successMessage
-                            ?: UiTextHelper.StringResource(R.string.snack_copied_to_clipboard),
-                        isError = false,
-                    )
-                }
+            onError = { error ->
+                showMessage(error.toErrorMessage(fallback = UiTextHelper.StringResource(R.string.snack_copy_failed)))
             },
-            onError = {
-                showSnackbar(
-                    message = UiTextHelper.StringResource(R.string.snack_copy_failed),
-                    isError = true,
+        ) {
+            clipboardRepository.copyText(label = label, text = text)
+            if (!clipboardRepository.confirmsCopies) {
+                showMessage(
+                    UiMessage(successMessage ?: UiTextHelper.StringResource(R.string.snack_copied_to_clipboard)),
                 )
-            },
-        )
-    }
-
-    private fun unlockSeasonalThemes() {
-        launchReport(
-            action = Actions.UNLOCK_SEASONAL_THEMES,
-            block = {
-                if (seasonalThemes.unlockSeasonalThemes()) {
-                    firebaseController.logUnlockAchievement(
-                        achievementId = SEASONAL_THEMES_ACHIEVEMENT,
-                    )
-                    showSnackbar(
-                        message = UiTextHelper.StringResource(R.string.snack_seasonal_themes_unlocked),
-                        isError = false,
-                    )
-                }
-            },
-            // Konfetti already played; a failed write only means the unlock is offered next time.
-            onError = {},
-        )
-    }
-
-    /**
-     * True when the platform raises its own clipboard preview, making an in-app confirmation a
-     * duplicate report of the same copy.
-     */
-    private fun showsSystemClipboardPreview(): Boolean =
-        sdkIntProvider() > Build.VERSION_CODES.S_V2
-
-    private suspend fun showSnackbar(message: UiTextHelper, isError: Boolean) {
-        updateStateThreadSafe {
-            screenState.showSnackbar(
-                UiSnackbar(
-                    message = message,
-                    isError = isError,
-                    timeStamp = System.nanoTime(),
-                    type = ScreenMessageType.SNACKBAR,
-                )
-            )
+            }
         }
     }
 
-    private fun dismissSnackbar() {
-        viewModelScope.launch {
-            updateStateThreadSafe {
-                screenState.dismissSnackbar()
+    /**
+     * A failed unlock write is reported without interrupting the celebration; the unlock can be
+     * retried on a later visit.
+     */
+    private fun unlockSeasonalThemes() {
+        launchReport(action = Actions.UNLOCK_SEASONAL_THEMES) {
+            if (seasonalThemes.unlockSeasonalThemes()) {
+                telemetryRepository.logUnlockAchievement(achievementId = SEASONAL_THEMES_ACHIEVEMENT)
+                showMessage(UiMessage(UiTextHelper.StringResource(R.string.snack_seasonal_themes_unlocked)))
             }
         }
     }

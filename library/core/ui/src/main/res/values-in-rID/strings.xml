@@ -56,4 +56,5 @@
     <string name="theme_mode">Mode tema</string>
     <string name="try_again">Coba lagi</string>
     <string name="wallpaper_colors">Warna wallpaper</string>
+    <string name="shell_list_placeholder">Pilih item untuk melihatnya di sini.</string>
 </resources>

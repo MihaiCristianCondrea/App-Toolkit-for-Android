@@ -17,18 +17,37 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.common.domain.models.network.AppErrors
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppDetails
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppSummary
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import kotlinx.coroutines.flow.Flow
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 
-/** Domain contract for compact catalog and package-specific application metadata. */
+/**
+ * The developer's app catalogue and each app's details. Every call is safe from the main thread.
+ */
 interface DeveloperAppsRepository {
 
-    /** Returns compact summaries for every public application. */
-    fun fetchDeveloperApps(): Flow<DataState<List<AppSummary>, AppErrors>>
+    /**
+     * Downloads the catalogue, saves it for [savedDeveloperApps], and returns it sorted by name with
+     * one entry per package. An empty list means the catalogue has no apps.
+     *
+     * @throws NetworkException when the catalogue could not be downloaded.
+     */
+    suspend fun fetchDeveloperApps(): List<AppSummary>
 
-    /** Returns the full public metadata document for [packageName]. */
-    fun fetchAppDetails(packageName: String): Flow<DataState<AppDetails, AppErrors>>
+    /**
+     * The catalogue saved by the last successful [fetchDeveloperApps], without touching the
+     * network, or null when nothing has been saved yet.
+     *
+     * @throws StorageException when the saved catalogue could not be read.
+     */
+    suspend fun savedDeveloperApps(): List<AppSummary>?
+
+    /**
+     * Downloads the full metadata document for [packageName].
+     *
+     * @throws IllegalArgumentException when [packageName] is blank.
+     * @throws NetworkException when the document could not be downloaded.
+     */
+    suspend fun fetchAppDetails(packageName: String): AppDetails
 }

@@ -17,7 +17,8 @@
 
 plugins {
     id("com.mihaicristiancondrea.android.apptoolkit.sample-module")
-    alias(libs.plugins.kotlin.parcelize)
+    // Routes are @Serializable: the shell saves its back stacks through kotlinx.serialization.
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -27,8 +28,6 @@ android {
 dependencies {
     testImplementation(project(":library:core:testing"))
     implementation(project(":sample:core:analytics"))
-    api(project(":sample:core:navigation"))
     api(project(":sample:integration:ads"))
-    api(project(":sample:core:ui"))
     api(project(":library:apptoolkit"))
 }

@@ -22,7 +22,6 @@
     <string name="issue_description_placeholder">請描述問題以及重現步驟</string>
     <string name="issue_done">完成</string>
     <string name="issue_email_label">電子郵件</string>
-    <string name="issue_email_optional_placeholder">電子郵件（選填）</string>
     <string name="issue_section_label">問題</string>
     <string name="issue_send">傳送</string>
     <string name="issue_submitted_message">感謝你協助我們改進這個應用程式。</string>

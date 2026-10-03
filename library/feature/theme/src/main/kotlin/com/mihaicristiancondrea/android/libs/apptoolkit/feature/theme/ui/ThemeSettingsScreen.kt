@@ -20,605 +20,372 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui
 import android.content.Context
 import android.os.Build
 import android.util.Log
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BrightnessAuto
 import androidx.compose.material.icons.filled.Contrast
-import androidx.compose.material.icons.filled.DarkMode
-import androidx.compose.material.icons.filled.LightMode
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.snapshotFlow
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.gestures.scrollBy
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.filterSeasonalStaticPalettes
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.contracts.ThemeSettingsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.WallpaperSwatchColors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.toSwatchColors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ThemePaletteProvider.paletteById
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.views.WallpaperColorOptionCard
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.ThemePreferencesState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.DynamicPaletteVariant
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.THEME_SETTINGS_LOG_TAG
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.colorscheme.applyDynamicVariant
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openDisplaySettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.isChristmasSeason
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.isHalloweenSeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.theme.ThemeModeChoice
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.cards.ThemeChoicePreviewCard
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.drawable.rememberPaletteImageVector
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.ThemePalettePager
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.dedupeStaticPaletteIds
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.ThemeModePicker
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.ThemePalettePicker
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.WALLPAPER_PALETTE_PAGE
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.isAmoledAllowed
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.previews.DarkModePreview
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.previews.LightModePreview
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.previews.SystemModePreview
-import java.time.LocalDate
-import java.time.ZoneId
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import org.koin.compose.koinInject
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.contracts.ThemeSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.states.ThemeSettingsUiState
 import org.koin.compose.viewmodel.koinViewModel
 
-internal const val THEME_SCREEN_NAME = "Theme"
+private const val THEME_SCREEN_NAME = "Theme"
 private const val THEME_SCREEN_CLASS = "ThemeSettingsScreen"
 
 /**
- * Theme settings content for the app.
+ * The theme settings page: the color palette, the theme mode, AMOLED, and a link to the system
+ * display settings.
  *
- * This composable renders a vertical list of theme-related controls:
- * - Optional header illustration.
- * - Dynamic vs static (wallpaper/other) palette pickers when the device supports dynamic color.
- * - AMOLED toggle.
- * - Theme mode selection (follow system / dark / light).
- * - An informational message with a "Learn more" action that opens system display settings.
- *
- * [ThemeSettingsViewModel] owns persisted state and mutations.
+ * Owns [ThemeSettingsViewModel], tracking and messages. Each tap logs its GA4 event before it
+ * reaches the ViewModel.
  */
 @Composable
-fun ThemeSettingsScreen(paddingValues: PaddingValues) {
-    val firebaseController: FirebaseController = koinInject()
-    val firebase = rememberUpdatedState(firebaseController)
+fun ThemeSettingsScreen() {
     val viewModel: ThemeSettingsViewModel = koinViewModel()
-    val screenState: UiStateScreen<ThemeSettingsUiState> by
-        viewModel.uiState.collectAsStateWithLifecycle()
+    val state: ThemeSettingsUiState by viewModel.state.collectAsStateWithLifecycle()
+    val telemetryRepository = LocalTelemetry.current
+    val context: Context = LocalContext.current
 
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = THEME_SCREEN_NAME,
         screenClass = THEME_SCREEN_CLASS,
     )
+
     TrackScreenState(
-        firebaseController = firebaseController,
         screenName = THEME_SCREEN_NAME,
-        screenState = screenState.screenState,
+        state = state.preferences,
     )
 
-    val coroutineScope: CoroutineScope = rememberCoroutineScope()
-    val context: Context = LocalContext.current
-    val uiState: ThemeSettingsUiState = screenState.data ?: return
-    val themePreferences = uiState.preferences
-    val showSeasonalAllYear: Boolean = uiState.seasonalThemesUnlocked
-    val currentThemeModeKey = themePreferences.themeMode
-    val isAmoledMode = themePreferences.amoledMode
-    val isDynamicColors: Boolean = themePreferences.dynamicColors
-    val dynamicVariantIndex: Int = themePreferences.dynamicPaletteVariant
-    val staticPaletteId: String = themePreferences.staticPaletteId
-    val amoledAllowed = isAmoledAllowed(currentThemeModeKey)
-
-    val supportsDynamic = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-
-    val themeChoices: List<ThemeModeChoice> = listOf(
-        ThemeModeChoice(
-            key = DataStoreNamesConstants.THEME_MODE_LIGHT,
-            title = stringResource(id = R.string.light_mode),
-            description = stringResource(R.string.onboarding_theme_light_desc),
-            icon = Icons.Filled.LightMode,
-        ),
-        ThemeModeChoice(
-            key = DataStoreNamesConstants.THEME_MODE_DARK,
-            title = stringResource(id = R.string.dark_mode),
-            description = stringResource(R.string.onboarding_theme_dark_desc),
-            icon = Icons.Filled.DarkMode,
-        ),
-        ThemeModeChoice(
-            key = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
-            title = stringResource(id = R.string.follow_system),
-            description = stringResource(R.string.onboarding_theme_system_desc),
-            icon = Icons.Filled.BrightnessAuto,
-        ),
+    ThemeSettingsScreenContent(
+        state = state,
+        onEvent = viewModel::onEvent,
+        onPaletteTabSelected = { page ->
+            telemetryRepository.logEvent(paletteTabSelectEvent(page = page))
+        },
+        onDynamicPaletteSelected = { variant ->
+            telemetryRepository.logEvent(dynamicPaletteSelectEvent(variant = variant))
+            viewModel.onEvent(ThemeSettingsEvent.SelectDynamicPalette(variant))
+        },
+        onStaticPaletteSelected = { id, seasonal ->
+            telemetryRepository.logEvent(staticPaletteSelectEvent(id = id, seasonal = seasonal))
+            viewModel.onEvent(ThemeSettingsEvent.SelectStaticPalette(id))
+        },
+        onThemeModeSelected = { mode ->
+            telemetryRepository.logEvent(themeModeSelectEvent(mode = mode))
+            viewModel.onEvent(ThemeSettingsEvent.SelectThemeMode(mode))
+        },
+        onAmoledModeChanged = { enabled ->
+            telemetryRepository.logEvent(amoledToggleEvent(enabled = enabled))
+            viewModel.onEvent(ThemeSettingsEvent.SetAmoledMode(enabled))
+        },
+        onOpenDisplaySettings = {
+            val opened: Boolean = context.openDisplaySettings()
+            telemetryRepository.logEvent(openDisplaySettingsEvent(opened = opened))
+            if (!opened) {
+                Log.w(THEME_SETTINGS_LOG_TAG, "Failed to open display settings from theme page")
+            }
+        },
+        contentPadding = contentPadding(),
     )
 
-    // Swatches follow the theme the app is drawn in, which can differ from the system's.
-    val isAppInDarkTheme: Boolean =
-        MaterialTheme.colorScheme.surface.luminance() < DARK_SURFACE_LUMINANCE
+    MessageHost(viewModel = viewModel)
+}
 
-    val wallpaperPreviewScheme: ColorScheme? = remember(supportsDynamic, isAppInDarkTheme) {
-        if (!supportsDynamic) null
-        else if (isAppInDarkTheme) dynamicDarkColorScheme(context)
-        else dynamicLightColorScheme(context)
+/**
+ * Renders [state] and reports each tap through its own callback, so the caller can log it.
+ *
+ * @param onEvent Receives [ThemeSettingsEvent.Load] from the failure screen's retry.
+ * @param onPaletteTabSelected Called with the pager page a palette tab opens.
+ * @param onStaticPaletteSelected Called with the palette id and whether it is a holiday palette in
+ * its season.
+ * @param contentPadding Padding from the shell, applied inside the list and the state screens.
+ * @param supportsDynamicColors Whether the device offers wallpaper colors, which adds the palette
+ * tabs.
+ */
+@Composable
+internal fun ThemeSettingsScreenContent(
+    state: ThemeSettingsUiState,
+    onEvent: (ThemeSettingsEvent) -> Unit,
+    onPaletteTabSelected: (page: Int) -> Unit,
+    onDynamicPaletteSelected: (variant: Int) -> Unit,
+    onStaticPaletteSelected: (id: String, seasonal: Boolean) -> Unit,
+    onThemeModeSelected: (mode: String) -> Unit,
+    onAmoledModeChanged: (enabled: Boolean) -> Unit,
+    onOpenDisplaySettings: () -> Unit,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
+    supportsDynamicColors: Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
+) {
+    ScreenStateHandler(
+        state = state.preferences,
+        modifier = modifier,
+        contentPadding = contentPadding,
+        onRetry = { onEvent(ThemeSettingsEvent.Load) },
+    ) { ready ->
+        ThemeSettingsList(
+            preferences = ready.value,
+            seasonalThemesUnlocked = state.seasonalThemesUnlocked,
+            supportsDynamicColors = supportsDynamicColors,
+            contentPadding = contentPadding,
+            onPaletteTabSelected = onPaletteTabSelected,
+            onDynamicPaletteSelected = onDynamicPaletteSelected,
+            onStaticPaletteSelected = onStaticPaletteSelected,
+            onThemeModeSelected = onThemeModeSelected,
+            onAmoledModeChanged = onAmoledModeChanged,
+            onOpenDisplaySettings = onOpenDisplaySettings,
+        )
     }
+}
 
-    val variantSwatches: List<WallpaperSwatchColors> = remember(wallpaperPreviewScheme) {
-        val base = wallpaperPreviewScheme ?: return@remember emptyList()
-        DynamicPaletteVariant.indices.map { variant ->
-            base.applyDynamicVariant(variant).toSwatchColors()
-        }
-    }
-
-    val isChristmasSeason: Boolean = remember {
-        LocalDate.now(ZoneId.systemDefault()).isChristmasSeason
-    }
-    val isHalloweenSeason: Boolean = remember {
-        LocalDate.now(ZoneId.systemDefault()).isHalloweenSeason
-    }
-
-    val staticOptions: List<String> = remember(
-        isChristmasSeason,
-        isHalloweenSeason,
-        staticPaletteId,
-        showSeasonalAllYear,
+/**
+ * The page's list once [preferences] have loaded, so the palette rows open on the stored
+ * selection. The palette and theme mode choices are the shared [ThemePalettePicker] and
+ * [ThemeModePicker], which the onboarding theme page shows too.
+ */
+@Composable
+private fun ThemeSettingsList(
+    preferences: ThemePreferencesState,
+    seasonalThemesUnlocked: Boolean,
+    supportsDynamicColors: Boolean,
+    contentPadding: PaddingValues,
+    onPaletteTabSelected: (page: Int) -> Unit,
+    onDynamicPaletteSelected: (variant: Int) -> Unit,
+    onStaticPaletteSelected: (id: String, seasonal: Boolean) -> Unit,
+    onThemeModeSelected: (mode: String) -> Unit,
+    onAmoledModeChanged: (enabled: Boolean) -> Unit,
+    onOpenDisplaySettings: () -> Unit,
+) {
+    LazyColumn(
+        contentPadding = contentPadding,
+        verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
+        modifier = Modifier.fillMaxSize(),
     ) {
-        val seasonalOptions = filterSeasonalStaticPalettes(
-            baseOptions = StaticPaletteIds.withDefault,
-            isChristmasSeason = isChristmasSeason,
-            isHalloweenSeason = isHalloweenSeason,
-            selectedPaletteId = staticPaletteId,
-            showAllYear = showSeasonalAllYear,
-        )
-        dedupeStaticPaletteIds(
-            options = seasonalOptions,
-            selectedPaletteId = staticPaletteId
-        )
-    }
-
-    val staticSwatches: List<WallpaperSwatchColors> =
-        remember(staticOptions, isAppInDarkTheme) {
-            staticOptions.map { id ->
-                val p = paletteById(id)
-                val scheme = if (isAppInDarkTheme) p.darkColorScheme else p.lightColorScheme
-                scheme.toSwatchColors()
-            }
+        item {
+            Image(
+                imageVector = rememberPaletteImageVector(),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(SizeConstants.TwoHundredTwentySize)
+                    .clip(RoundedCornerShape(size = SizeConstants.LargeSize + SizeConstants.SmallSize)),
+            )
         }
 
-    val variantRowState: LazyListState = rememberScrolledToSelected(
-        selectedIndex = if (isDynamicColors) dynamicVariantIndex else -1,
-    )
-    val selectedStaticIndex: Int = staticOptions.indexOf(staticPaletteId)
-    val staticPagerRowState: LazyListState = rememberScrolledToSelected(
-        selectedIndex = if (!isDynamicColors) selectedStaticIndex else -1,
-    )
-    val staticRowState: LazyListState = rememberScrolledToSelected(selectedIndex = selectedStaticIndex)
+        item { SectionDivider() }
 
-    val tabTitles = listOf(
-        stringResource(id = R.string.wallpaper_colors),
-        stringResource(id = R.string.other_colors)
-    )
+        item { SectionTitle(title = R.string.color_palette) }
 
-    val initialPagerPage = if (supportsDynamic && isDynamicColors) 0 else 1
-    val pagerState = rememberPagerState(
-        initialPage = initialPagerPage,
-        pageCount = { 2 }
-    )
-
-    LaunchedEffect(initialPagerPage) {
-        if (pagerState.currentPage != initialPagerPage) {
-            pagerState.scrollToPage(initialPagerPage)
+        item {
+            ThemePalettePicker(
+                preferences = preferences,
+                seasonalThemesUnlocked = seasonalThemesUnlocked,
+                onDynamicPaletteSelected = onDynamicPaletteSelected,
+                onStaticPaletteSelected = onStaticPaletteSelected,
+                onPaletteTabSelected = onPaletteTabSelected,
+                supportsDynamicColors = supportsDynamicColors,
+            )
         }
-    }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        LazyColumn(
-            contentPadding = paddingValues,
-            verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            item {
-                Image(
-                    imageVector = rememberPaletteImageVector(),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(SizeConstants.TwoHundredTwentySize)
-                        .clip(
-                            RoundedCornerShape(
-                                size = SizeConstants.LargeSize + SizeConstants.SmallSize
-                            )
-                        )
-                )
-            }
+        item { SectionDivider() }
 
-            item {
-                HorizontalDivider(modifier = Modifier.padding(all = SizeConstants.SmallSize))
-            }
+        item { SectionTitle(title = R.string.theme_mode) }
 
-            item {
-                Text(
-                    modifier = Modifier.padding(horizontal = SizeConstants.LargeSize),
-                    text = stringResource(id = R.string.color_palette),
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.SemiBold,
-                )
-            }
+        item {
+            ThemeModePicker(
+                selectedMode = preferences.themeMode,
+                onSelected = onThemeModeSelected,
+                modifier = Modifier.padding(horizontal = SizeConstants.LargeSize),
+            )
+        }
 
-            if (supportsDynamic) {
-                item {
-                    SingleChoiceSegmentedButtonRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = SizeConstants.LargeSize)
-                    ) {
-                        tabTitles.forEachIndexed { index, title ->
-                            SegmentedButton(
-                                selected = pagerState.currentPage == index,
-                                onClick = {
-                                    firebase.value.logEvent(
-                                        AnalyticsEvent(
-                                            name = "theme_tab_select",
-                                            params = mapOf(
-                                                SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
-                                                    THEME_SCREEN_NAME
-                                                ),
-                                                "tab" to AnalyticsValue.Str(
-                                                    if (index == 0) "wallpaper" else "other"
-                                                ),
-                                            ),
-                                        ),
-                                    )
-                                    coroutineScope.launch { pagerState.animateScrollToPage(index) }
-                                },
-                                shape = SegmentedButtonDefaults.itemShape(
-                                    index = index,
-                                    count = tabTitles.size
-                                )
-                            ) {
-                                Text(
-                                    text = title,
-                                    modifier = Modifier.padding(vertical = SizeConstants.LargeSize)
-                                )
-                            }
-                        }
-                    }
-                }
+        item {
+            SwitchCardItem(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = SizeConstants.MediumSize * 2),
+                title = stringResource(id = R.string.amoled_mode),
+                enabled = isAmoledAllowed(preferences.themeMode),
+                switchState = rememberUpdatedState(preferences.amoledMode),
+                onSwitchToggled = onAmoledModeChanged,
+                checkIcon = Icons.Filled.Contrast,
+            )
+        }
 
-                item {
-                    ThemePalettePager(
-                        pagerState = pagerState,
-                        pages = persistentListOf(
-                            {
-                                LazyRow(
-                                    state = variantRowState,
-                                    contentPadding = PaddingValues(horizontal = SizeConstants.LargeSize),
-                                    horizontalArrangement = Arrangement.spacedBy(
-                                        space = SizeConstants.MediumSize,
-                                        alignment = Alignment.CenterHorizontally
-                                    )
-                                ) {
-                                    itemsIndexed(
-                                        items = variantSwatches,
-                                        key = { index, _ -> index }
-                                    ) { index, palette ->
-                                        WallpaperColorOptionCard(
-                                            colors = palette,
-                                            selected = isDynamicColors && index == dynamicVariantIndex,
-                                            onClick = {
-                                                firebase.value.logEvent(
-                                                    AnalyticsEvent(
-                                                        name = "theme_palette_select",
-                                                        params = mapOf(
-                                                            "screen" to AnalyticsValue.Str(
-                                                                THEME_SCREEN_NAME
-                                                            ),
-                                                            "palette_type" to AnalyticsValue.Str("dynamic"),
-                                                            "variant" to AnalyticsValue.Str(index.toString()),
-                                                        ),
-                                                    ),
-                                                )
-                                                viewModel.onEvent(
-                                                    ThemeSettingsEvent.SelectDynamicPalette(index)
-                                                )
-                                            }
-                                        )
-                                    }
-                                }
-                            },
-                            {
-                                LazyRow(
-                                    state = staticPagerRowState,
-                                    contentPadding = PaddingValues(horizontal = SizeConstants.LargeSize),
-                                    horizontalArrangement = Arrangement.spacedBy(
-                                        space = SizeConstants.MediumSize,
-                                        alignment = Alignment.CenterHorizontally
-                                    )
-                                ) {
-                                    itemsIndexed(
-                                        items = staticOptions,
-                                        key = { _, id -> id }
-                                    ) { index, id ->
-                                        WallpaperColorOptionCard(
-                                            colors = staticSwatches[index],
-                                            selected = !isDynamicColors && id == staticPaletteId,
-                                            showSeasonalBadge = (isChristmasSeason && id == StaticPaletteIds.CHRISTMAS) ||
-                                                    (isHalloweenSeason && id == StaticPaletteIds.HALLOWEEN),
-                                            onClick = {
-                                                firebase.value.logEvent(
-                                                    AnalyticsEvent(
-                                                        name = "theme_palette_select",
-                                                        params = mapOf(
-                                                            "screen" to AnalyticsValue.Str(
-                                                                THEME_SCREEN_NAME
-                                                            ),
-                                                            "palette_type" to AnalyticsValue.Str("static"),
-                                                            "palette_id" to AnalyticsValue.Str(id),
-                                                            "seasonal" to AnalyticsValue.Str(
-                                                                ((isChristmasSeason && id == StaticPaletteIds.CHRISTMAS) ||
-                                                                        (isHalloweenSeason && id == StaticPaletteIds.HALLOWEEN)).toString()
-                                                            ),
-                                                        ),
-                                                    ),
-                                                )
-                                                viewModel.onEvent(
-                                                    ThemeSettingsEvent.SelectStaticPalette(id)
-                                                )
-                                            }
-                                        )
-                                    }
-                                }
-                            },
-                        ),
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                }
-            } else {
-                item {
-                    LazyRow(
-                        state = staticRowState,
-                        contentPadding = PaddingValues(horizontal = SizeConstants.LargeSize),
-                        horizontalArrangement = Arrangement.spacedBy(
-                            space = SizeConstants.MediumSize,
-                            alignment = Alignment.CenterHorizontally
-                        )
-                    ) {
-                        itemsIndexed(
-                            items = staticOptions,
-                            key = { _, id -> id }
-                        ) { index, id ->
-                            WallpaperColorOptionCard(
-                                colors = staticSwatches[index],
-                                selected = id == staticPaletteId,
-                                showSeasonalBadge = (isChristmasSeason && id == StaticPaletteIds.CHRISTMAS) ||
-                                        (isHalloweenSeason && id == StaticPaletteIds.HALLOWEEN),
-                                onClick = {
-                                    firebase.value.logEvent(
-                                        AnalyticsEvent(
-                                            name = "theme_palette_select",
-                                            params = mapOf(
-                                                SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
-                                                    THEME_SCREEN_NAME
-                                                ),
-                                                "palette_type" to AnalyticsValue.Str("static"),
-                                                "palette_id" to AnalyticsValue.Str(id),
-                                                "seasonal" to AnalyticsValue.Str(
-                                                    ((isChristmasSeason && id == StaticPaletteIds.CHRISTMAS) ||
-                                                            (isHalloweenSeason && id == StaticPaletteIds.HALLOWEEN)).toString()
-                                                ),
-                                            ),
-                                        ),
-                                    )
-                                    viewModel.onEvent(ThemeSettingsEvent.SelectStaticPalette(id))
-                                }
-                            )
-                        }
-                    }
-                }
-            }
-
-            item {
-                HorizontalDivider(modifier = Modifier.padding(all = SizeConstants.SmallSize))
-            }
-
-            item {
-                Text(
-                    modifier = Modifier.padding(horizontal = SizeConstants.LargeSize),
-                    text = stringResource(id = R.string.theme_mode),
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.SemiBold,
-                )
-            }
-
-            item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = SizeConstants.LargeSize)
-                        .selectableGroup(),
-                    horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
-                ) {
-                    themeChoices.forEach { choice ->
-                        ThemeChoicePreviewCard(
-                            title = choice.title,
-                            description = choice.description,
-                            icon = choice.icon,
-                            isSelected = currentThemeModeKey == choice.key,
-                            onClick = {
-                                firebase.value.logEvent(
-                                    AnalyticsEvent(
-                                        name = SettingsAnalytics.Events.THEME_SWITCH,
-                                        params = mapOf(
-                                            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
-                                                THEME_SCREEN_NAME
-                                            ),
-                                            SettingsAnalytics.Params.THEME_MODE to AnalyticsValue.Str(
-                                                choice.key
-                                            ),
-                                        ),
-                                    ),
-                                )
-                                viewModel.onEvent(ThemeSettingsEvent.SelectThemeMode(choice.key))
-                            },
-                            modifier = Modifier.weight(1f),
-                            preview = {
-                                when (choice.key) {
-                                    DataStoreNamesConstants.THEME_MODE_LIGHT -> LightModePreview(
-                                        Modifier.fillMaxWidth()
-                                    )
-
-                                    DataStoreNamesConstants.THEME_MODE_DARK -> DarkModePreview(
-                                        Modifier.fillMaxWidth()
-                                    )
-
-                                    else -> SystemModePreview(Modifier.fillMaxWidth())
-                                }
-                            }
-                        )
-                    }
-                }
-            }
-
-            item {
-                SwitchCardItem(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = SizeConstants.MediumSize * 2),
-                    title = stringResource(id = R.string.amoled_mode),
-                    enabled = amoledAllowed,
-                    switchState = rememberUpdatedState(isAmoledMode),
-                    onSwitchToggled = { isChecked ->
-                        firebase.value.logEvent(
-                            AnalyticsEvent(
-                                name = "theme_toggle_amoled",
-                                params = mapOf(
-                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
-                                        THEME_SCREEN_NAME
-                                    ),
-                                    "enabled" to AnalyticsValue.Str(isChecked.toString()),
-                                ),
-                            ),
-                        )
-                        viewModel.onEvent(ThemeSettingsEvent.SetAmoledMode(isChecked))
-                    },
-                    checkIcon = Icons.Filled.Contrast
-                )
-            }
-
-            item {
-                InfoMessageSection(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(all = SizeConstants.MediumSize * 2),
-                    message = stringResource(id = R.string.summary_dark_theme),
-                    newLine = false,
-                    learnMoreText = stringResource(id = R.string.screen_and_display_settings),
-                    learnMoreAction = {
-                        val opened = context.openDisplaySettings()
-                        firebase.value.logEvent(
-                            AnalyticsEvent(
-                                name = "theme_open_display_settings",
-                                params = mapOf(
-                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
-                                        THEME_SCREEN_NAME
-                                    ),
-                                    "opened" to AnalyticsValue.Str(opened.toString()),
-                                ),
-                            ),
-                        )
-                        if (!opened) {
-                            Log.w(
-                                THEME_SETTINGS_LOG_TAG,
-                                "Failed to open display settings from theme page"
-                            )
-                        }
-                    }
-                )
-            }
+        item {
+            InfoMessageSection(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = SizeConstants.MediumSize * 2),
+                message = stringResource(id = R.string.summary_dark_theme),
+                newLine = false,
+                learnMoreText = stringResource(id = R.string.screen_and_display_settings),
+                learnMoreAction = onOpenDisplaySettings,
+            )
         }
     }
 }
 
-private const val DARK_SURFACE_LUMINANCE: Float = 0.5f
-
-/**
- * A row state that opens with [selectedIndex] in view and then centers it.
- *
- * The state is created already positioned on the selection, so the first layout shows it without
- * waiting for anything to run. Once that layout exists the item is moved to the center of the row.
- * This happens once: picking another item later must not scroll the row under the finger. A
- * negative [selectedIndex] (nothing selected in this row) leaves the row at its start.
- *
- * Callers create it only once the stored selection has loaded, so it never positions on a
- * placeholder.
- */
 @Composable
-private fun rememberScrolledToSelected(selectedIndex: Int): LazyListState {
-    val state: LazyListState = rememberLazyListState(
-        initialFirstVisibleItemIndex = selectedIndex.coerceAtLeast(0),
+private fun SectionDivider() {
+    HorizontalDivider(modifier = Modifier.padding(all = SizeConstants.SmallSize))
+}
+
+@Composable
+private fun SectionTitle(@StringRes title: Int) {
+    Text(
+        modifier = Modifier.padding(horizontal = SizeConstants.LargeSize),
+        text = stringResource(id = title),
+        style = MaterialTheme.typography.titleLarge,
+        fontWeight = FontWeight.SemiBold,
     )
-    var centered: Boolean by rememberSaveable { mutableStateOf(selectedIndex < 0) }
-    LaunchedEffect(state) {
-        if (centered) return@LaunchedEffect
-        // The row may sit on a pager page that is not composed yet; this waits for its first layout.
-        val item = snapshotFlow {
-            state.layoutInfo.visibleItemsInfo.firstOrNull { it.index == selectedIndex }
-        }.filterNotNull().first()
-        val layoutInfo = state.layoutInfo
-        val center = (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2f
-        state.scrollBy(item.offset + item.size / 2f - center)
-        centered = true
+}
+
+private fun themeEvent(name: String, vararg params: Pair<String, String>): AnalyticsEvent = AnalyticsEvent(
+    name = name,
+    params = buildMap<String, AnalyticsValue> {
+        put(SettingsAnalytics.Params.SCREEN, AnalyticsValue.Str(THEME_SCREEN_NAME))
+        params.forEach { (key, value) -> put(key, AnalyticsValue.Str(value)) }
+    },
+)
+
+private fun paletteTabSelectEvent(page: Int): AnalyticsEvent = themeEvent(
+    "theme_tab_select",
+    "tab" to (if (page == WALLPAPER_PALETTE_PAGE) "wallpaper" else "other"),
+)
+
+private fun dynamicPaletteSelectEvent(variant: Int): AnalyticsEvent = themeEvent(
+    "theme_palette_select",
+    "palette_type" to "dynamic",
+    "variant" to variant.toString(),
+)
+
+private fun staticPaletteSelectEvent(id: String, seasonal: Boolean): AnalyticsEvent = themeEvent(
+    "theme_palette_select",
+    "palette_type" to "static",
+    "palette_id" to id,
+    "seasonal" to seasonal.toString(),
+)
+
+private fun themeModeSelectEvent(mode: String): AnalyticsEvent = themeEvent(
+    SettingsAnalytics.Events.THEME_SWITCH,
+    SettingsAnalytics.Params.THEME_MODE to mode,
+)
+
+private fun amoledToggleEvent(enabled: Boolean): AnalyticsEvent = themeEvent(
+    "theme_toggle_amoled",
+    "enabled" to enabled.toString(),
+)
+
+private fun openDisplaySettingsEvent(opened: Boolean): AnalyticsEvent = themeEvent(
+    "theme_open_display_settings",
+    "opened" to opened.toString(),
+)
+
+private val PreviewPreferences = ThemePreferencesState(
+    themeMode = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
+    dynamicColors = false,
+    amoledMode = false,
+    dynamicPaletteVariant = 0,
+    staticPaletteId = StaticPaletteIds.GOOGLE_BLUE,
+)
+
+/** Ready and Loading only: the default empty and failure screens inject Koin bindings. */
+@Preview(showBackground = true)
+@Composable
+private fun ThemeSettingsScreenContentPreview() {
+    MaterialTheme {
+        ThemeSettingsScreenContent(
+            state = ThemeSettingsUiState(preferences = Loadable.Ready(PreviewPreferences)),
+            onEvent = {},
+            onPaletteTabSelected = {},
+            onDynamicPaletteSelected = {},
+            onStaticPaletteSelected = { _, _ -> },
+            onThemeModeSelected = {},
+            onAmoledModeChanged = {},
+            onOpenDisplaySettings = {},
+            supportsDynamicColors = false,
+        )
     }
-    return state
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ThemeSettingsScreenContentWallpaperColorsPreview() {
+    MaterialTheme {
+        ThemeSettingsScreenContent(
+            state = ThemeSettingsUiState(
+                preferences = Loadable.Ready(PreviewPreferences.copy(dynamicColors = true)),
+                seasonalThemesUnlocked = true,
+            ),
+            onEvent = {},
+            onPaletteTabSelected = {},
+            onDynamicPaletteSelected = {},
+            onStaticPaletteSelected = { _, _ -> },
+            onThemeModeSelected = {},
+            onAmoledModeChanged = {},
+            onOpenDisplaySettings = {},
+            supportsDynamicColors = true,
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ThemeSettingsScreenContentLoadingPreview() {
+    MaterialTheme {
+        ThemeSettingsScreenContent(
+            state = ThemeSettingsUiState(),
+            onEvent = {},
+            onPaletteTabSelected = {},
+            onDynamicPaletteSelected = {},
+            onStaticPaletteSelected = { _, _ -> },
+            onThemeModeSelected = {},
+            onAmoledModeChanged = {},
+            onOpenDisplaySettings = {},
+        )
+    }
 }

@@ -17,13 +17,14 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style
 
-import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.runtime.compositionLocalOf
+
 
 /** Enables bounce animations for the current UI subtree. */
-val LocalBouncyAnimationsEnabled = staticCompositionLocalOf { true }
+val LocalBouncyAnimationsEnabled = compositionLocalOf { true }
 
 /** Controls whether bottom navigation destinations always render labels. */
-val LocalShowBottomBarLabels = staticCompositionLocalOf { true }
+val LocalShowBottomBarLabels = compositionLocalOf { true }
 
 /** Controls whether UI ad slots may request and render ads. */
-val LocalAdsEnabled = staticCompositionLocalOf { false }
+val LocalAdsEnabled = compositionLocalOf { false }

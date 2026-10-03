@@ -2,133 +2,406 @@
 
 ## Purpose
 
-Defines navigation models, route identifiers, repository contracts, back-stack operations, and
-transition helpers shared by host and feature UI.
+Holds the navigation core of the one-activity shell: the graph an app describes, the navigator that
+moves through it, the scenes that lay pages out, and the transitions and predictive back that move
+between them. It also owns the Toolkit's route keys.
+
+`:library:shell` draws the graph (bars, rail, drawers, overflow menu, banner and player) and hosts
+it in the activity; this module has no chrome of its own.
 
 ## Owns
 
-- `NavigationDestination`, `MainNavigationItem`, `NavigationDrawerItem`, and `BottomBarItem` models.
-- `StableNavKey` and the reusable typed AppToolkit route keys.
-- Drawer route identifiers and the repository contract hosts implement to supply items.
-- Back-stack mutation helpers.
-- Shared activity and bottom-navigation transitions.
-- Click and selection state for navigation icons; reusable AVD resources live in DesignSystem.
-- Bottom navigation, navigation rail, drawer-item content, and hide-on-scroll shell rendering.
-- `DefaultNavigationRepository`, the standard four-entry drawer list, and the labels that name it.
-- `NavigationDrawerRoutes.StandardRoutes`, and the drawer layout that follows from it.
-- `NavigationDrawerHeader` and `NavigationDrawerBranding`, the app's logo and name at the top of a
-  drawer.
+- The graph and its builder DSL: `ShellGraph`, `ShellGraphBuilder`, `DrawerBuilder`,
+  `DeepLinkBuilder`, `Destination`, `DestinationKind`, `ShellTab`, `DrawerEntry`, `PaneRole`,
+  `TopBarStyle`, `ContentWidth` and `ShellPlayer`, in the `graph` package, and `shellGraph { }`.
+- `ShellNavigator`, `rememberShellNavigator`, `ShellHomeRoute`, `ShellNavDisplay`,
+  `ShellBackHandler` and `ShellSearch`, in the root package.
+- The page and list-detail scenes and their strategies, in `scenes`.
+- `ScreenTransition`, `ShellTransitions`, the tab transitions and `CrossActivityBackMotion`, in
+  `motion`.
+- `ShellLayoutPolicy`, `ShellLayoutMode` and `ShellLayout`, in `layout`.
+- `ShellCapabilities`, in `graph`: what the app's declared graph and layout policy can show.
+- The article app bar a screen declares, in `layout`: `ArticleTopBarHost`, `LocalArticleTopBarHost`,
+  `ScaffoldArticleTopBar`, the compact title and reading progress line every bar draws for it
+  (`ArticleTopBarTitle`, `ArticleReadingProgress`), and `readingProgress()` for `ScrollState` and
+  `LazyListState`. It is here, not in `:library:core:ui`, because the list-detail scene draws it
+  too.
+- `AppToolkitNavKey`, one `@Serializable` key per Toolkit page: `SettingsRoute`, `HelpRoute`, `SupportRoute`, `AdsSettingsRoute`, `PermissionsRoute`,
+  `LicensesRoute`, `LibraryExtrasRoute`, `AboutRoute`, `ThemeSettingsRoute`,
+  `DisplaySettingsRoute`, `PrivacySettingsRoute`, `AdvancedSettingsRoute`,
+  `DiagnosticsSettingsRoute`, `DeveloperOptionsRoute`, `StartupRoute` and `OnboardingRoute`.
+- The strings the graph's built-in entries use: settings, support us, navigate back and the pane
+  separator's description.
 
 ## Does not own
 
-- Destination registration, owned by `:library:apptoolkit` and host composition roots.
+- The chrome and the host composable, owned by [`:library:shell`](../shell/README.md).
+- The page frame (`PageScaffold`, the app bar, content padding), owned by
+  [`:library:core:ui`](../core/ui/README.md).
+- The pages behind the Toolkit's keys. Each feature owns its screen, and `toolkitGraph { }` in
+  [`:library:apptoolkit`](../apptoolkit/README.md) registers them.
 - The icon slot and its rendering, owned by [`:library:core:designsystem`](../core/designsystem/README.md).
-- `MainTopAppBar`, owned by [`:library:core:ui`](../core/ui/README.md).
-- Host-app routes and the root navigation graph, owned by `:sample`.
+- An app's own keys and graph, owned by the app (`:sample:app` in this repository).
 
 ## Depends on
 
 - [`:library:core:common`](../core/common/README.md) for shared sizing constants.
-- [`:library:core:designsystem`](../core/designsystem/README.md) for interaction feedback, global
-  UI preference values, and the `ToolkitIcon` slot navigation items expose.
-- Navigation 3, Compose, and immutable collections materially define the module's public role.
+- [`:library:core:designsystem`](../core/designsystem/README.md) for `ToolkitIcon`, the slot every
+  tab, drawer entry and overflow entry takes, and the `anim_settings` drawable.
+- Navigation 3, with the navigation event library it brings, and Compose, which define the
+  module's public role.
+- kotlinx.serialization, exposed as `api`: the back stacks save their keys with it, so every key an
+  app declares needs it.
+- AndroidX Core, for the display's rounded corners the page scenes clip to.
 
 ## Used by
 
-- `:sample` for host navigation.
-- `:library:apptoolkit` and `:library:core:ui` for shared destination registration and navigation
-  UI.
-- `:library:feature:about`, `:library:feature:faq`, `:library:feature:issuereporter`,
-  `:library:feature:onboarding`, `:library:feature:permissions`, `:library:feature:settings`, and
-  `:library:feature:support` for feature routes and navigation surfaces.
+- [`:library:shell`](../shell/README.md), which hosts the graph.
+- [`:library:core:ui`](../core/ui/README.md), whose page frame reads the navigator and the layout.
+- `:library:apptoolkit`, `:library:feature:*` and `:sample` for keys and page registration.
 
 ## Flow chart
 
 ```mermaid
 flowchart TD
-    Host[Host composition root] --> Builders[Feature entry builders]
-    Builders --> Entries[Navigation 3 entries]
-    Keys[StableNavKey route values] --> Entries
-    Keys --> Type{Destination type}
-    Type -->|TopLevel| Top[navigateTopLevel trims nested entries]
-    Type -->|ActivityLike or Nested| Single[navigateSingleTop]
-    Top --> Stack[SnapshotStateList back stack]
-    Single --> Stack
-    Stack --> Scenes[Host scene / destination content]
-    Items[Bottom bar / rail / drawer models] --> Shell[Navigation shell composables]
-    Stack --> Shell
-    Transitions[Shared activity and bottom-nav transitions] --> Scenes
+    App[App: shellGraph / toolkitGraph] --> Builder[ShellGraphBuilder]
+    Features[Features: pages for their keys] --> Builder
+    Builder --> Graph[ShellGraph]
+    Graph --> Navigator[ShellNavigator]
+    Screen[Screen: navigate key] --> Navigator
+    Intent[Intent: deepLinks] --> Navigator
+    Navigator --> Kind{DestinationKind}
+    Kind -->|Tab| Tabs[Tab stacks and tab history]
+    Kind -->|Child| Tabs
+    Kind -->|Page| Pages[Page stack over the shell]
+    Tabs --> Display[ShellNavDisplay]
+    Pages --> Display
+    Display --> Scenes[Page and list-detail scenes]
+    Display --> Back[CrossActivityBackMotion]
 ```
+
+## Using it
+
+A host describes its app once:
+
+```kotlin
+val graph = shellGraph(appTitle = R.string.app_name) {
+    tab(
+        key = HomeRoute,
+        label = R.string.home,
+        icon = ToolkitIcon.AnimatedVector(R.drawable.anim_home),
+        search = TabSearch(hint = R.string.search_home),
+        fabs = { listOf(ToolkitFab(ToolkitIcon.Vector(Icons.Outlined.Add), onClick = ::add, label = "New")) },
+    ) { HomeScreen() }
+    child<ItemRoute>(title = { it.name }) { ItemScreen(it) }
+    page<LicensesRoute>(paneRole = PaneRole.Detail, title = { stringResource(R.string.licenses) }) { LicensesScreen() }
+    drawer {
+        link(LibraryRoute, R.string.library, ToolkitIcon.Vector(Icons.Outlined.VideoLibrary))
+        footer { settings(); link(HelpRoute, R.string.help_and_feedback, ToolkitIcon.Vector(Icons.Outlined.HelpOutline)) }
+    }
+    overflow { supportUs() }
+    deepLinks { action(ACTION_OPEN_SETTINGS) { SettingsRoute } }
+}
+```
+
+An app built on the whole Toolkit calls `toolkitGraph { }` instead, which adds the Toolkit's pages.
+Screens then call `LocalShellNavigator.current.navigate(key)` with any registered key, and
+`close(key)` or `goBack()` to leave it.
 
 ## Architectural decisions
 
-- Route keys are typed, parcelable, and Compose-stable so host and library destinations share one
-  Navigation 3 vocabulary without string parsing.
-- Destination type is data on the route contract. Back-stack helpers validate top-level navigation
-  and suppress duplicate single-top entries.
-- This module owns shell rendering and mutation primitives but not destination registration; only
-  the host/toolkit composition roots know the complete feature set.
-- The drawer repository contract and its default four-entry implementation live together here,
-  because the entries name navigation destinations this module already owns. Keeping the default in
-  a feature module forced that feature to own navigation labels it did not otherwise use.
-- `MainTopAppBar` lives in [`:library:core:ui`](../core/ui/README.md), not here. It is built from
-  that module's buttons and dropdown, and `:library:core:ui` already depends on this module for
-  `StableNavKey`, so hosting the app bar here would invert that edge into a dependency cycle.
+- **The navigator decides where a key goes.** Screens call `navigate(key)`; the key's
+  `DestinationKind` selects a tab, pushes a child on the current tab, or opens a page over the
+  shell. Keys carry their arguments, so no destination needs an intent extra or a string route.
+- **Tabs keep a true back stack.** Back from a tab's root returns to the tab visited before it,
+  each tab remembered once and moved to the top when revisited, the first tab included. When the
+  history runs out on another tab, back goes to the first tab, from which the app closes.
+- **An app starts on a tab or on a screen of its own.** A start screen, such as `StartupRoute`,
+  has no shell under it, so back from it leaves the app. `continueStart(next)` hands over to the
+  next start screen, and navigating to a tab, or `enterShell()`, replaces the last with the shell
+  for good.
+- **Intents are destinations too.** `deepLinks { }` maps an intent's action, data or extras to a
+  key, so a shortcut, a notification or a widget opens a page instead of an activity of its own.
+  `keyFor` drops keys the graph does not register.
+- **A graph can be pages only.** Without tabs, a graph must `start(page)`: it shows that page with
+  no shell under it, opens the pages it links to, and back from it (or its back arrow, or
+  `enterShell()`) leaves the activity. It is for a separate entry point that opens over another
+  app, such as the Toolkit's permission usage screen, where back must return to the caller rather
+  than into the app.
+- **The drawer ends with its footer.** Entries given to `footer { }` come after every other entry,
+  pinned to the bottom edge, whichever `drawer { }` call adds them and in whatever order. The
+  Toolkit's Settings, Help, Updates and Share go there (`toolkitFooter` in `:library:apptoolkit`),
+  so they are always last, below anything the app lists.
+- **Floating action buttons are described, not drawn.** A tab, child or page lists them with
+  `fabs = { listOf(ToolkitFab(...)) }`, read in composition so they follow state; the shell draws
+  them as one column. The `fab` slot stays for a button drawn by hand.
+- **Features register, apps decide.** `pageIfAbsent` registers a page only when the app has not
+  registered the key itself, so an app replaces any Toolkit page by registering its key first. The
+  app alone decides where a page is offered: drawer, overflow menu or a screen's button.
+- **Every icon is a `ToolkitIcon`.** Tabs, drawer entries and overflow entries take the same icon
+  slot as every other Toolkit component, so an animated vector drawable or a Lottie icon plays
+  when the entry is clicked or selected. `settings()` uses the `anim_settings` drawable.
+- **Every transition is a choice.** A child or a page enters and leaves with a
+  `ScreenTransition`: `Activity` (the activity transition, and the system's cross-activity back
+  animation on the gesture), `Slide`, `FadeThrough`, `Fade` or `None`. `ShellTransitions` holds
+  the defaults, children `Slide` and pages `Activity`, optionally per `ShellLayoutMode`; a
+  destination's own `transition` wins.
+- **Predictive back is Android's, rectangle for rectangle.** See
+  [Predictive back](#predictive-back-androids-cross-activity-animation) below.
+- **List and detail share the window.** A `PaneRole.List` page shows the `PaneRole.Detail` page
+  opened from it beside it from 600dp, under one app bar titled over each pane, with a separator
+  that can be dragged to resize the panes or to the end to close the detail. The back gesture on
+  the detail slides the separator the same way when it comes from the list's side. From the
+  detail's own side the finger moves toward the list, so the detail shrinks in place and leans
+  after it instead, then fades out when back completes. While no detail is open, the detail side shows
+  the page's `placeholder`, or `ListPlaceholder`.
+- **An article bar is declared, not registered.** A `TopBarStyle` is fixed per destination, while
+  an article bar changes as the story scrolls, so a screen declares it from inside with
+  `ScaffoldArticleTopBar`, as it declares buttons with `ScaffoldFabs`. The scaffold around it holds
+  an `ArticleTopBarHost` and draws what is declared there: `PageScaffold` for a page, one host per
+  tab screen entry in the shell, and one per pane in a framed list-detail scene, whose shared bar
+  shows the article over that pane only, its progress line under that half. The host belongs to
+  the screen's own scaffold or entry, so the article leaves with the screen and never reaches the
+  next destination. See [Article app bar](#article-app-bar).
+- **Scenes set their content colour.** `PageSurface` and the list-detail scene draw on the
+  theme's surface and provide `onSurface` as `LocalContentColor`, so text outside a Material
+  `Surface` never falls back to black.
+- **Covered displays stand down.** A scene stays composed while another opens over it, so
+  `ShellNavDisplay(backEnabled = false)` keeps a covered display from taking a back gesture meant
+  for what covers it.
+- **Overlays register late.** A display inside a `Scaffold` is composed during layout, after what
+  is composed beside it. `ShellBackHandler` waits a frame before registering, so overlay handlers
+  always come after, and win over, the displays.
+- **Keys are serializable.** `rememberNavBackStack` saves keys with kotlinx.serialization, so the
+  stacks survive rotation and process death. A key that is not `@Serializable` fails at runtime
+  when the stack is saved.
 
 ## Public contracts
 
-- Navigation destination/item models, including `NavigationDrawerItem` and `BottomBarItem`, whose
-  `icon` and `selectedIcon` are `ToolkitIcon` values. The `animatedIcon` constructor accepts a single
-  `ToolkitIcon.Animated` and uses it for both states, preserving Restart/Reverse behavior. See [the design system README](../core/designsystem/README.md#toolkit-icon-api).
-- `StableNavKey` and `AppToolkitNavKey` route implementations.
-- `NavigationDrawerRoutes`, including `StandardRoutes`, and
-  `navigation.data.repositories.NavigationRepository`.
-- `NavigationDrawerBranding`, the title resource and `ToolkitIcon` naming an app in its drawer.
-- Back-stack action extensions and transition helpers.
-- `BottomNavigationBar`, `LeftNavigationRail`, `NavigationDrawerItemContent`,
-  `NavigationDrawerHeader`, `NavigationDrawerSheet`, and `HideOnScrollBottomBar`.
+- The graph DSL and `ShellGraph`, including `contains`, `destination`, `keyFor`, `startOptions`
+  and `tabIndexOf`.
+- `ShellNavigator` (`navigate`, `close`, `goBack`, `selectTab`, `continueStart`, `enterShell`, the
+  page and tab stacks) and `rememberShellNavigator`.
+- `ShellNavDisplay`, `ShellBackHandler`, `ShellHomeRoute`, the scenes and their strategies,
+  `ScreenTransition`, `ShellTransitions`, `CrossActivityBackMotion` and `ShellLayoutPolicy`.
+- The composition locals `LocalShellNavigator`, `LocalShellGraph`, `LocalPageKey`,
+  `LocalPaneRole`, `LocalSelectedDetail`, `LocalShellSearch`, `LocalShellLayout`,
+  `LocalShellMotion` and `LocalBesideNavigation`, with `isTopLevelPage`. While the shared colour
+  beside the navigation follows scrolling, `BesideNavigation.scrollTint` is a `FrameScrollTint`,
+  and app bars join it with `FollowScrollWithFrameTint`, saying how far to tint as a `FrameTint`:
+  the one on top decides, pages above the tabs. `LocalBesideNavigationTransitions` and
+  `besideNavigationTitle()` let the title of the tab's bar and of the page standing in for it
+  grow or shrink into one another as one replaces the other in place. `ShellLayoutInfo`
+  carries the layout drawn now and the content width in force.
+- `ShellCapabilities`, `ShellCapabilities.of(graph, policy)` and `LocalShellCapabilities`, with
+  `ShellLayoutPolicy.reachesBottomBar` and `reachesWideNavigation`. See
+  [Capabilities](#capabilities).
+- `AppToolkitNavKey` and its keys. Their class names are part of saved state: renaming or moving
+  one loses a restored back stack that held it.
+- `ScaffoldArticleTopBar`, `ArticleTopBarHost` (`isDeclared`, `isCompact`, `hasProgress`,
+  `progress()`, `title`, `brand`, `brandContentDescription`), `LocalArticleTopBarHost`,
+  `ArticleTopBarTitle`, `ArticleReadingProgress`, `ReadingProgressHeight` and `readingProgress()`.
 
-## Drawer layout
+## Capabilities
 
-`NavigationDrawerSheet` adds two behaviours to the plain list, and they are independent of each
-other. A host can take either, both, or neither.
+`ShellCapabilities` says what an app's declared shell can show, so a setting can tell whether it
+has anything to change in this app. `ShellCapabilities.of(graph, policy)` reads the graph and the
+layout policy and nothing else; `ShellHost` builds it once and provides it as
+`LocalShellCapabilities`, and the settings search hands the same value to its providers.
 
-`branding` draws the app's logo and name above the items. It is null by default, which draws no
-header at all, so a drawer that does not name its app renders exactly as it did before the header
-existed. Passing one always shows it, whatever else the drawer contains.
+| Property | True when |
+|---|---|
+| `hasTabs`, `hasMultipleTabs` | the graph declares one, or more than one, tab |
+| `usesBottomNavigation` | there are tabs and the policy resolves to the bottom bar on some window (`reachesBottomBar`) |
+| `usesWideNavigation` | there are tabs and the policy resolves to a rail or permanent drawer on some window (`reachesWideNavigation`) |
+| `hasShellTopBars` | the shell draws an app bar: the tabs', or a page drawn in the page frame with a title |
+| `hasContentWidthLimit` | the policy sets `contentMaxWidth` |
+| `hasBanner`, `hasPlayer`, `hasAccessories` | the graph declares them and has tabs, whose chrome shows them |
+| `hasMultipleStartOptions` | the app can start in more than one place, tabs and start screens |
+| `hasBackNavigation` | the graph has more than one destination |
 
-`pinStandardRoutes` moves the entries named by `pinnedRoutes`, which defaults to
-`NavigationDrawerRoutes.StandardRoutes`, to the bottom edge of the drawer. It is true by default.
-Pinning only does something once the host adds a destination outside that set: the app's
-destinations take the top and Settings, Help, Updates and Share become the drawer's footer. A drawer
-holding nothing but the standard entries has nothing to separate them from, so it renders as one
-top-aligned block either way. Pass `false` to render `items` in the order given.
+- **Declared, not current.** The capabilities never read the window or the developer options: an
+  app whose policy shows a bottom bar on phones `usesBottomNavigation` while a tablet draws a rail,
+  or while the developer options force one.
+- **Semantic, so rules are written once.** Settings ask `hasMultipleTabs` or `usesBottomNavigation`
+  instead of counting `graph.tabs` or reading the layout, so the display settings, their search
+  and the developer options cannot each apply a slightly different rule.
 
-Which items land where is `navigationDrawerPlan`, which is unit tested; the composable renders the
-plan it returns.
+## Article app bar
 
-The footer is pinned with a weighted spacer rather than a scroll container, so the two groups
-together have to fit the drawer's height. The standard entries plus a handful of app destinations
-do; a drawer long enough to need scrolling wants its own sheet.
+An optional bar for a screen that reads like a story. Nothing changes until a screen declares it:
 
-`NavigationDrawerHeader` is separately public, for a host that wants its logo and name somewhere the
-sheet does not put them. It takes either a `NavigationDrawerBranding` or an already-resolved title
-and icon, and sizes the logo to the title's line height so the pair stays balanced as the person
-scales their font up.
+```kotlin
+val listState = rememberLazyListState()
+ScaffoldArticleTopBar(
+    title = article.title,
+    compact = { listState.firstVisibleItemIndex > 0 },
+    progress = listState::readingProgress,
+    brand = painterResource(R.drawable.publisher_mark),
+    brandContentDescription = stringResource(R.string.publisher_name),
+)
+```
 
-The logo is a `ToolkitIcon`, the same slot every other toolkit component takes, so an app can name
-itself with a drawable, a Compose vector, a bitmap resolved at runtime, or an animated mark without
-the header knowing which. It is drawn untinted unless `logoTint` says otherwise, so a multi-colour
-brand mark arrives intact. Give it artwork cropped to the mark: a launcher foreground still carries
-its adaptive-icon safe zone, which renders here as padding and leaves the logo looking smaller than
-the title beside it. `:sample` crops its own rather than reusing `ic_launcher_foreground`.
+- **Minimal, then compact.** While `compact` is false the bar shows only its navigation icon and
+  actions. Once it is true, the title rises and fades in, after the brand if there is one, at the
+  shell's animation speed (`LocalShellMotion.durationScale`), and leaves the same way.
+- **Brand.** Any `Painter`, drawn with `Image` and never tinted, so a multicoloured logo or a vector
+  drawable from `painterResource` keeps its colours. It is drawn 24dp high at its own aspect ratio
+  (at most four times as wide), 8dp before the title. Without one there is no gap. It never
+  replaces the navigation icon.
+- **Progress.** A 3dp line over the bar's bottom edge, so the bar keeps its height, in Material's
+  linear progress colours. It shows while the title does, fills from the start edge (the right one
+  in right-to-left layouts), and is clamped to 0..1, with a value that is not a number read as 0.
+  Pass null for no line. `compact` and `progress` are lambdas read while drawing, or inside
+  `derivedStateOf`, so scrolling redraws the line without recomposing the screen or the shell.
+- **Accessibility.** The compact title is in the semantics tree only while shown. The line is a
+  progress bar that moves in tenths and is not a live region, so a screen reader reads it when
+  focused instead of announcing every scroll.
+- **Precedence.** A hidden bar, from the destination or the developer options' override, stays
+  hidden. A large style, the destination's or the override's, is drawn small while an article is
+  declared, since it would show a second, expanded title above the article's own header; register
+  an article page with `topBar = TopBarStyle.Small` to keep it small from its first frame, before
+  the screen declares. A tab's search field keeps the title's place. Hiding the bar on scroll
+  slides the line away with it. The navigation icon, actions and overflow menu are unchanged.
+- **Where it shows.** In `PageScaffold`; in the shell's tab scaffold, for the screen on top of the
+  tab; and in a framed list-detail scene, over the pane that declares it. Inside a tab, a list and
+  its detail share the shell's one bar, which follows the detail as its title does, so the line
+  then runs under the whole bar rather than the detail's half.
+- **Not a style.** There is no `TopBarStyle.Article`: a style is chosen once per destination, and
+  an article bar is the screen's state.
 
-## Internal implementations
+## Predictive back: Android's cross-activity animation
 
-- Compose rendering and transition specifications remain implementation helpers; destination
-  registration stays with consumers.
+The back gesture between two activities is animated by the system, not by the app. This section
+records where that happens in AOSP, what each class does with the gesture, and which part of this
+module reproduces it for pages that are not activities. Read it before changing
+`CrossActivityBackMotion` or `ShellNavDisplay`.
+
+All paths are in `platform/frameworks/base` (Apache License 2.0).
+
+### The classes
+
+| Class | Where | Role |
+|---|---|---|
+| `BackAnimationController` | `libs/WindowManager/Shell/src/com/android/wm/shell/back/BackAnimationController.java` | Receives the system back gesture in the Shell (SystemUI) process. Decides what the back target is (another activity, another task, home, or the app's own callback), starts the matching `ShellBackAnimation`, and hands it the gesture. When the target is the app itself, the gesture goes to the app's `OnBackAnimationCallback` instead, which is the case for the shell's pages. |
+| `BackProgressAnimator` | `core/java/android/window/BackProgressAnimator.java` | Smooths the raw gesture progress with a spring (`STIFFNESS_MEDIUM`, no bounce) before anyone sees it. Used on both sides: the Shell's animations and the app's `WindowOnBackInvokedDispatcher` both read progress through it. On cancel it springs the progress back to 0 and only then reports the cancel. With a swipe edge of `EDGE_NONE` (three-button navigation, from Android 16) it animates the progress toward 1 by itself with a low-stiffness spring while the button is held. |
+| `BackTouchTracker` | `core/java/android/window/BackTouchTracker.java` | Turns touch positions into raw progress and the trigger threshold. |
+| `WindowOnBackInvokedDispatcher` | `core/java/android/window/WindowOnBackInvokedDispatcher.java` | The app side: delivers `onBackStarted`, the smoothed `onBackProgressed`, `onBackCancelled` and `onBackInvoked` to the app's callback. AndroidX `navigationevent` receives these and passes them on as `NavigationEvent`s. |
+| `CrossActivityBackAnimation` | `libs/WindowManager/Shell/src/com/android/wm/shell/back/CrossActivityBackAnimation.kt` | The base of the animation between two activities: the pre-commit phase, the vertical follow, the scrim, the post-commit timing and the fling spring. Works in rectangles: every frame places the closing and the entering window in a rectangle of the display. |
+| `DefaultCrossActivityBackAnimation` | `libs/WindowManager/Shell/src/com/android/wm/shell/back/DefaultCrossActivityBackAnimation.kt` | The default subclass: where the rectangles start and end, and the post-commit movement. |
+| `ProgressVelocityTracker` | `libs/WindowManager/Shell/src/com/android/wm/shell/back/ProgressVelocityTracker.kt` | Measures how fast the progress changes, in progress per second, for the fling. |
+| `Interpolators` | `libs/WindowManager/Shell/shared/src/com/android/wm/shell/shared/animation/Interpolators.java` | `BACK_GESTURE` is `BackGestureInterpolator`, a `PathInterpolator(0.1, 0.1, 0, 1)`; `EMPHASIZED` is the two-segment `fast_out_extra_slow_in` path. |
+
+### Pre-commit, while the finger is down
+
+`CrossActivityBackAnimation.onGestureProgress`:
+
+1. `progress = BACK_GESTURE(event.progress)`, where `event.progress` has already been smoothed by
+   `BackProgressAnimator`. It is not smoothed a second time.
+2. The closing rectangle goes from the full display to the display scaled by `MAX_SCALE` (0.9)
+   around its centre, then, unless the swipe came from the right edge, moved so its right edge is
+   `cross_task_back_vertical_margin` (8dp) from the display's right edge.
+3. The entering rectangle starts `cross_activity_back_entering_start_offset` (96dp) to the left
+   of the display and shrinks by the same 0.9 around its own centre.
+4. Both are interpolated linearly by `progress` between start and target.
+5. Both shift vertically by `getYOffset`: the finger's vertical travel, as a ratio of half the
+   display's height, through a `DecelerateInterpolator`, times the room left by the **current**
+   closing rectangle, `(displayHeight − currentHeight) / 2 − 8dp`, never below 0. At the start of
+   a gesture the page is barely smaller than the display, so it can barely move up or down.
+6. A black scrim sits under the closing window, over everything else, at 0.2 alpha in light mode
+   and 0.8 in dark mode, from the first frame.
+7. Every window keeps the display's corner radius.
+
+### Commit
+
+`DefaultCrossActivityBackAnimation.onGestureCommitted` takes the rectangles **where they are**:
+`startClosingRect = currentClosingRect`, `startEnteringRect = currentEnteringRect`. The targets
+are the full display for the entering window, and the full display moved right by
+`currentClosingRect.left + 96dp` for the closing one. A release at 22% continues from 22%.
+
+### Post-commit
+
+Over `POST_COMMIT_DURATION` (450ms), with the `EMPHASIZED` interpolator:
+
+- both rectangles move from their commit position to their target;
+- the closing window's alpha is `max(1 − linearProgress × 5, 0)`, gone within the first 90ms;
+- the scrim fades from its full alpha to 0 linearly.
+
+On top of that, a spring (`STIFFNESS_LOW`, `DAMPING_RATIO_LOW_BOUNCY`) starts at 100 with the
+gesture's velocity: `velocity × 100 × (1 − 0.9)`, doubled for a swipe from a side edge, at least
+120 when the gesture had barely started, at most 1000. Both rectangles are scaled around their
+centres by `min(springValue / 100, 1)`, so a quick flick makes them dip a little smaller before
+they settle.
+
+### Cancel
+
+`BackProgressAnimator.onBackCancelled` springs the progress back to 0, reporting it along the way,
+and the rectangles follow it. Only then is `onBackCancelled` delivered.
+
+### A swipe from the right edge
+
+`DefaultCrossActivityBackAnimation.preparePreCommitClosingRectMovement` moves the closing window
+against the right edge only `if (swipeEdge != BackEvent.EDGE_RIGHT)`: *"scale closing target into
+the middle for rhs and to the right for lhs"*. A swipe from the right shrinks the window in place,
+centred, and never moves it sideways with the finger, which is why it feels less direct than a
+swipe from the left. This is unchanged in Android 16 (checked against LineageOS 23.2, which
+tracks Android 16 QPR2); `BackTouchTracker` computes progress the same way from both edges.
+
+The shell departs from Android here, on purpose, and by default draws a swipe from the right as
+the mirror image of one from the left (`CrossActivityBackMotion.mirrorRightEdge`): the page rests
+against the left edge, following the finger, and the page underneath waits on the right, with
+every AOSP value unchanged. Screens that use a seeked transition, such as `ScreenTransition.Slide`,
+are mirrored the same way. Setting `mirrorRightEdge` to false (`BackEdgeStyle.System` in the
+developer options of [`:library:feature:developer`](../feature/developer/README.md)) restores
+Android's shrink in place.
+
+### How the shell reproduces it
+
+| AOSP | Shell |
+|---|---|
+| The windows | The scenes of a `NavDisplay`. `ShellNavDisplay` wraps every scene its strategies calculate in a layer that `CrossActivityBackMotion` places in a rectangle each frame. |
+| `BackAnimationController` handing the gesture to the animation | `ShellNavDisplay`'s handler on the system dispatcher. It forwards the gesture to the display's own handler, on a private dispatcher, at progress 0, so the display composes the scene underneath and holds both with a transition that moves nothing. The gesture itself goes to `CrossActivityBackMotion`. |
+| `CrossActivityBackAnimation` + `DefaultCrossActivityBackAnimation` | `CrossActivityBackMotion`: the same rectangles, vertical follow, scrim, commit from the current rectangles, emphasized post-commit, closing fade and fling spring. |
+| `ProgressVelocityTracker` | A `VelocityTracker1D` fed with the eased progress and the event's frame time. |
+| `BackProgressAnimator` | Not reimplemented: the platform has already applied it to the progress the app receives. |
+
+A back between two tabs is not a back between activities. There, `ShellNavDisplay` passes the
+gesture through untouched and the display seeks the tab transition, as `NavDisplay` would.
+
+### Why one timeline was not enough
+
+The first version seeked one `ContentTransform` timeline whose first half was the gesture and
+whose second half was the post-commit phase. Three things made it feel close to Android but not
+quite right, all fixed by the version above:
+
+- **The commit boundary.** A release anywhere was first played on to the halfway point in 120ms,
+  the canonical end of the gesture, before the post-commit half began. Android continues from
+  where the finger let go. The same flaw made a three-button press, which reports a small
+  progress and then invokes, visibly shrink the page and then grow it again.
+- **The vertical room** was computed from the final 0.9 scale, not from the current rectangle, so
+  pages could drift further early in a gesture than a window can, and the vertical ratio used the
+  gesture curve instead of a `DecelerateInterpolator`.
+- **The fling.** Android's post-commit carries the gesture's speed into a spring; the timeline
+  had a fixed settle.
+
+## Sources
+
+The per-tab stacks and the list-detail scene are adapted from
+[android/nav3-recipes](https://github.com/android/nav3-recipes) (Apache License 2.0), and the back
+motion is a port of AOSP's `CrossActivityBackAnimation` and `DefaultCrossActivityBackAnimation`
+(Apache License 2.0); the adapted files say so. Slide to pop and driving a dispatcher with
+`DirectNavigationEventInput` come from *3 unique predictive back animations you can create with
+the Navigation Events library* (tunjid.com).
+
+## Migration
+
+3.0.0 removed the navigation this module held before the shell: the `animations`, `backstack`,
+`data`, `models` and `ui` packages, `NavigationDrawerRoutes` and `StableNavKey`. The
+[3.0.0 migration guide](../../docs/migration/3.0.0.md) maps each to its replacement.
 
 ## Current risks
 
-The module mixes navigation models with Compose rendering and animation, so non-UI consumers still
-receive a UI-oriented artifact.
+The back motion relies on `NavDisplay`'s `sceneState` overload and on navigation event's
+`DirectNavigationEventInput`, both public but young APIs. `ShellNavDisplay` wraps every scene in
+its own `Scene` class, so code that checks a scene's type sees the wrapper; read entries and
+metadata instead.

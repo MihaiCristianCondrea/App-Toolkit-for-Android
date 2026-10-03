@@ -23,7 +23,6 @@
     <string name="language">Idioma</string>
     <string name="navigation">Navegación</string>
     <string name="show_labels_on_bottom_bar">Mostrar etiquetas en la barra inferior</string>
-    <string name="startup_page">Página de inicio</string>
     <string name="summary_preference_settings_bounce_buttons">Aplica una sutil animación de rebote a todos los elementos clicables al hacer clic</string>
     <string name="summary_preference_settings_dynamic_colors">Aplicar colores de los fondos de pantalla al tema de la aplicación</string>
     <string name="summary_preference_settings_language">Cambia el idioma utilizado en la aplicación</string>
@@ -31,4 +30,5 @@
     <string name="summary_preference_settings_startup_page">Elige la pantalla que se mostrará cuando se inicie la aplicación.</string>
     <string name="will_never_turn_on_automatically">Nunca se activará automáticamente</string>
     <string name="will_turn_on_automatically_by_system">Se activará automáticamente por el sistema</string>
+    <string name="display">Pantalla</string>
 </resources>

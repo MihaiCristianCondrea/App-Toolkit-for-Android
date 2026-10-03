@@ -24,10 +24,8 @@ import com.google.android.libraries.ads.mobile.sdk.MobileAds
 import com.google.android.libraries.ads.mobile.sdk.initialization.InitializationConfig
 
 /**
- * The single call site of `MobileAds.initialize`.
- *
- * It exists as a seam so the initialization contract, initialize once, with the host's own app id,
- * before anything loads an ad, can be tested without a live SDK.
+ * SDK initialization boundary. [AdsCoreManager] controls one-time initialization with the host
+ * ID before any ad is loaded; tests can replace this boundary without invoking the SDK.
  */
 fun interface AdsSdkInitializer {
 

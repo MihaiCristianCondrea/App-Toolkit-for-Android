@@ -22,7 +22,6 @@
     <string name="issue_description_placeholder">問題の内容と再現手順を記入してください</string>
     <string name="issue_done">完了</string>
     <string name="issue_email_label">メール</string>
-    <string name="issue_email_optional_placeholder">メール（任意）</string>
     <string name="issue_section_label">問題</string>
     <string name="issue_send">送信</string>
     <string name="issue_submitted_message">アプリの改善にご協力いただきありがとうございます。</string>

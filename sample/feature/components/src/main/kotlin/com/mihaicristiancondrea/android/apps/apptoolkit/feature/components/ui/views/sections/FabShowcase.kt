@@ -33,7 +33,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseHeader
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSection
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSurface
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedExtendedFloatingActionButton
@@ -41,12 +40,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fa
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.SmallFloatingActionButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 @Composable
 fun FabShowcase(
-    firebaseController: FirebaseController,
     onLogEvent: (String, String?) -> Ga4EventData,
 ) {
+    val telemetryRepository = LocalTelemetry.current
     val iconContentDescription = stringResource(id = R.string.components_icon_content_description)
 
     ShowcaseHeader(
@@ -66,7 +66,6 @@ fun FabShowcase(
                     expanded = true,
                     icon = ToolkitIcon.Vector(imageVector = Icons.Filled.Add),
                     text = { Text(text = stringResource(id = R.string.components_fab_extended)) },
-                    firebaseController = firebaseController,
                     ga4Event = onLogEvent("fab", "extended"),
                 )
                 AnimatedFloatingActionButton(
@@ -74,7 +73,6 @@ fun FabShowcase(
                     icon = ToolkitIcon.Lottie(R.raw.toolkit_add_icon, tintable = true),
                     contentDescription = iconContentDescription,
                     onClick = {},
-                    firebaseController = firebaseController,
                     ga4Event = onLogEvent("fab", "animated"),
                 )
                 SmallFloatingActionButton(
@@ -84,7 +82,7 @@ fun FabShowcase(
                     contentDescription = iconContentDescription,
                     onClick = {},
                     onLogClick = {
-                        firebaseController.logGa4Event(
+                        telemetryRepository.logGa4Event(
                             onLogEvent("fab", "small"),
                         )
                     },

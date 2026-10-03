@@ -18,4 +18,5 @@
     <string name="app_short_description">Kumpulan alat dan utilitas Android yang praktis.</string>
     <string name="settings_disabled_message">Setelan saat ini tidak tersedia.</string>
     <string name="long_settings_label">Buka setelan</string>
+    <string name="error_failed_to_load_consent_info">Gagal memuat informasi persetujuan</string>
 </resources>

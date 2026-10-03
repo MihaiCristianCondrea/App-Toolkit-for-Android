@@ -23,7 +23,6 @@
     <string name="language">زبان</string>
     <string name="navigation">نیویگیشن</string>
     <string name="show_labels_on_bottom_bar">نیچے بار پر لیبل دکھائیں</string>
-    <string name="startup_page">شروعاتی صفحہ</string>
     <string name="summary_preference_settings_bounce_buttons">کلک کرنے پر تمام کلک کے قابل عناصر پر ایک لطیف باؤنس اینیمیشن لاگو کرتا ہے</string>
     <string name="summary_preference_settings_dynamic_colors">وال پیپرز سے رنگ ایپ تھیم پر لاگو کریں</string>
     <string name="summary_preference_settings_language">ایپ میں استعمال ہونے والی زبان کو تبدیل کرتا ہے</string>
@@ -31,4 +30,5 @@
     <string name="summary_preference_settings_startup_page">ایپ شروع ہونے پر دکھائی جانے والی اسکرین منتخب کریں۔</string>
     <string name="will_never_turn_on_automatically">کبھی خود بخود آن نہیں ہوگا</string>
     <string name="will_turn_on_automatically_by_system">سسٹم کے ذریعے خود بخود آن ہو جائے گا</string>
+    <string name="display">ڈسپلے</string>
 </resources>

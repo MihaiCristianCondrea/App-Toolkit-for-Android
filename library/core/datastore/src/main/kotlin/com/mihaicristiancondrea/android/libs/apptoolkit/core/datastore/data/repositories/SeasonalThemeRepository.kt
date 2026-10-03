@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.WeatherEffect
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.HolidaySeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.SeasonalThemeState
 import java.time.LocalDate
@@ -41,6 +42,9 @@ interface SeasonalThemeRepository {
      * @return true only for the call that unlocked them, so the unlock can be announced once.
      */
     suspend fun unlockSeasonalThemes(): Boolean
+
+    /** Chooses what falls over the app; offered once the easter egg is found. */
+    suspend fun setWeatherEffect(effect: WeatherEffect)
 
     /**
      * The holiday whose greeting should be shown on [today], or null.

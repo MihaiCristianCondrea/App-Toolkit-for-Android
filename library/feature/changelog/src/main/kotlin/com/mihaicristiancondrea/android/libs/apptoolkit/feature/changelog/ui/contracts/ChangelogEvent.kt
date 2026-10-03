@@ -17,10 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.contracts
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
-
-/** User and lifecycle requests supported by the changelog dialog. */
-sealed interface ChangelogEvent : UiEvent {
+/** What the changelog dialog asks its ViewModel to do. */
+sealed interface ChangelogEvent {
+    /** Loads the changelog, on start and on retry. */
     data object Load : ChangelogEvent
-    data object Retry : ChangelogEvent
 }

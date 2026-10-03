@@ -198,8 +198,6 @@ internal fun ToolkitTileCard(
     tile: ToolkitTile,
     position: GroupedItemPosition,
     modifier: Modifier = Modifier,
-    // `String?` rather than `Any?`: the only caller passes a string, and `Any?` is stability-opaque
-    // to Compose, which made every card unskippable.
     key: String? = null,
     onPreviewTile: () -> Unit,
 ) {

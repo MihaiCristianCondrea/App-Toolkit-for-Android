@@ -66,6 +66,8 @@ import org.koin.core.qualifier.named
  * @param onRetry Callback invoked when the retry button is pressed.
  * @param showAd Whether a [NoDataNativeAdCard] should be displayed.
  * @param isError Shows the indicator with error styling when true.
+ * @param message The message as text, for one that is not a string resource, such as a
+ * `Loadable.Failed` message. Shown instead of [textMessage] when given.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -78,6 +80,7 @@ fun NoDataScreen(
     showAd: Boolean = true,
     isError: Boolean = false,
     paddingValues: PaddingValues = PaddingValues(),
+    message: String? = null,
 ) {
     val adUnitId = koinInject<AdsConfig>(
         qualifier = named(name = AdsQualifiers.NO_DATA_NATIVE_AD)
@@ -109,7 +112,7 @@ fun NoDataScreen(
         }
 
         Text(
-            text = stringResource(id = textMessage),
+            text = message ?: stringResource(id = textMessage),
             style = MaterialTheme.typography.displaySmall.copy(textAlign = TextAlign.Center),
             color = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onBackground
         )

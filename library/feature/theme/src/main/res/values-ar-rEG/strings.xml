@@ -15,22 +15,16 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">وضع AMOLED</string>
-    <string name="color_palette">لوحة الألوان</string>
-    <string name="dark_mode">الوضع الداكن</string>
-    <string name="follow_system">اتباع وضع النظام</string>
-    <string name="light_mode">الوضع الفاتح</string>
-    <string name="onboarding_theme_dark_desc">مريح للعينين.</string>
-    <string name="onboarding_theme_light_desc">مشرق وحيوي.</string>
-    <string name="onboarding_theme_system_desc">يطابق جهازك.</string>
-    <string name="other_colors">ألوان أخرى</string>
-    <string name="screen_and_display_settings">.ﺽﺮﻌﻟﺍﻭ ﺔﺷﺎﺸﻟﺍ ﺕﺍﺩﺍﺪﻋﺇ</string>
-    <string name="summary_dark_theme">ﻲﻓ ﻚﻳﺪﻟ ﺔﻠﻀﻔﻤﻟﺍ ﺔﻤﺴﻟﺍ ﺩﺪﺣﻭ Android ﻡﺎﻈﻧ ﺮﻳﺪﻣ ﻰﻟﺇ ﻝﺎﻘﺘﻧﻻﺍ ﻯﻮﺳ ﻚﻴﻠﻋ ﺎﻣ ، ﻪﻠﻴﻌﻔﺘﻟ</string>
-    <string name="theme_mode">وضع المظهر</string>
-    <string name="wallpaper_colors">ألوان خلفية الشاشة</string>
     <string name="holiday_greeting_christmas_title">أعياد سعيدة!</string>
     <string name="holiday_greeting_christmas_message">ثيم الكريسماس وصل، ومعاه ثلج بينزل على التطبيق كله. تحب تستخدمه لحد ما الأعياد تخلص؟</string>
     <string name="holiday_greeting_halloween_title">هالوين سعيد!</string>
     <string name="holiday_greeting_halloween_message">موسم الرعب وصل. تحب تستخدم ثيم الهالوين لحد ما يخلص؟</string>
     <string name="holiday_greeting_use_theme">استخدم ثيم الأعياد خلال الأعياد</string>
+    <string name="dark_theme">المظهر الداكن</string>
+    <string name="weather_effect">تأثير الطقس</string>
+    <string name="weather_effect_automatic">تلقائي</string>
+    <string name="weather_effect_snow">ثلج</string>
+    <string name="weather_effect_off">إيقاف</string>
+    <string name="weather_effect_rain">مطر</string>
+    <string name="weather_effect_info">يُسقط الوضع التلقائي الثلج أثناء استخدام لوحة ألوان عيد الميلاد. ويتساقط الثلج والمطر مع أي لوحة ألوان.</string>
 </resources>

@@ -50,7 +50,7 @@ val appsModule: Module = module {
     single<DeveloperAppsRepository> {
         DefaultDeveloperAppsRepository(
             remoteDataSource = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
             localDataSource = get(),
         )
     }
@@ -63,7 +63,7 @@ val appsModule: Module = module {
     }
 
     single<InstalledAppsLocalDataSource> {
-        AndroidInstalledAppsLocalDataSource(context = androidContext())
+        AndroidInstalledAppsLocalDataSource(context = androidContext(), dispatchers = get())
     }
     single<InstalledAppsRepository> { DefaultInstalledAppsRepository(localDataSource = get()) }
 
@@ -72,15 +72,14 @@ val appsModule: Module = module {
             developerAppsRepository = get(),
             installedAppsRepository = get(),
             favoritesRepository = get(),
-            dispatchers = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
         )
     }
 
     single<FavoritesRepository> {
         DefaultFavoritesRepository(
             dataStore = get(),
-            firebaseController = get()
+            telemetryRepository = get()
         )
     }
 }

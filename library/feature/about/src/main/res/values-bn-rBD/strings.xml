@@ -21,12 +21,9 @@
     <string name="app_build_version">অ্যাপ্লিকেশন বিল্ড সংস্করণ</string>
     <string name="app_info">অ্যাপের তথ্য</string>
     <string name="app_toolkit_version">App Toolkit সংস্করণ</string>
-    <string name="content_description_more_options">আরও বিকল্প</string>
     <string name="debug">ডিবাগ</string>
     <string name="device_info">ডিভাইসের তথ্য</string>
     <string name="device_model">ডিভাইস মডেল</string>
-    <string name="done_button_content_description">সম্পন্ন</string>
-    <string name="go_back">ফিরে যান</string>
     <string name="google_play_services_version">Google Play পরিষেবা সংস্করণ</string>
     <string name="help_and_feedback">সাহায্য ও প্রতিক্রিয়া</string>
     <string name="manufacturer">প্রস্তুতকারক</string>
@@ -41,8 +38,6 @@
     <string name="snack_device_info_failed">ডিভাইসের তথ্য লোড করা যায়নি</string>
     <string name="summary_preference_settings_oss">ওপেন সোর্স সফ্টওয়্যারের জন্য লাইসেন্সের বিবরণ</string>
     <string name="summary_share_message">আমার ব্যবহার করা এই অসাধারণ অ্যাপটি দেখুন. এর কিছু দারুণ ফিচার আছে যা আপনার আকর্ষণীয় লাগতে পারে। আপনি এটি প্লে স্টোর থেকে ডাউনলোড করতে পারেন: %1$s</string>
-    <string name="support_us">আমাদের সমর্থন করুন</string>
-    <string name="try_again">আবার চেষ্টা করুন</string>
     <string name="updates">আপডেট</string>
     <string name="snack_seasonal_themes_unlocked">উপভোগ করো</string>
 </resources>

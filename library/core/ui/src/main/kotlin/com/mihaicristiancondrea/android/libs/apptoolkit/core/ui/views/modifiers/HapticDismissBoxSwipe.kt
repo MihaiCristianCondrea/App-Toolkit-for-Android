@@ -58,7 +58,7 @@ fun Modifier.hapticSwipeToDismissBox(
                     true
                 }
             }
-            .collect { /* handled by fold */ }
+            .collect {  }
     }
 
     return this

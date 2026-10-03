@@ -28,9 +28,8 @@ class ForceInAppReviewUseCase(
     private val reviewRepository: ReviewRepository,
 ) {
     /**
-     * Launches the in-app review flow when possible.
-     *
-     * @return [ReviewOutcome.Launched] if the flow was shown, or a failure outcome otherwise.
+     * Bypasses session throttling but still checks availability. [ReviewOutcome.Launched] means
+     * Play accepted the flow; it does not guarantee a dialog was displayed.
      */
     suspend operator fun invoke(host: ReviewHost): ReviewOutcome {
         val isAvailable = reviewRepository.isReviewAvailable(activity = host.activity)

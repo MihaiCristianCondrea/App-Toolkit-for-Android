@@ -19,12 +19,13 @@ stores.
 ## Depends on
 
 - [`:library:core:datastore`](../../../library/core/datastore/README.md) for `CommonDataStore`.
-- :library:navigation for StableNavKey. Startup projection uses core DataStore directly; this module has no direct core:ui dependency.
+- [`:library:navigation`](../../../library/navigation/README.md) for Navigation 3's `NavKey`, the
+  type the stored start page maps to. Startup projection uses core DataStore directly; this module
+  has no direct core:ui dependency.
 
 ## Used by
 
-- `:sample:feature:apps`, `:sample:feature:components`, `:sample:core:shell`,
-  `:sample:feature:settings`, `:sample:app`.
+- `:sample:feature:apps`, `:sample:feature:components`, `:sample:feature:settings`, `:sample:app`.
 
 ## Flow chart
 
@@ -36,7 +37,7 @@ flowchart TD
     Adapter --> Common[Toolkit CommonDataStore]
     Common --> Store["shared settings Preferences DataStore"]
     Store -->|startup / unlock / favorites Flow| Adapter
-    Adapter -->|typed values and StableNavKey mapping| Contract
+    Adapter -->|typed values and NavKey mapping| Contract
     Contract --> Repos
     Repos -->|suspend mutations| Contract
     Contract -->|delegate edit| Common
@@ -46,12 +47,13 @@ flowchart TD
 
 - The sample reuses the toolkit's single preferences file and exposes only host-required values
   through `DataStoreInterface`; feature repositories do not depend on `CommonDataStore` directly.
-- Persisted routes remain strings at the storage boundary and are mapped to `StableNavKey` values by
+- Persisted routes remain strings at the storage boundary and are mapped to `NavKey` values by
   a caller-supplied function, keeping host route knowledge out of the toolkit DataStore.
 - The contract groups sample-wide preference access because there is one implementation and one
   backing store; feature repositories still own the meaning of each value.
 
-Startup mapping delegates to core DataStore's generic startupValueFlow while retaining the host's StableNavKey contract and caller-supplied fallback mapping.
+Startup mapping delegates to core DataStore's generic startupValueFlow with the caller-supplied
+mapping; `:sample:app`'s `startKeyFor` maps each stored value to a tab.
 
 ## Public contracts
 

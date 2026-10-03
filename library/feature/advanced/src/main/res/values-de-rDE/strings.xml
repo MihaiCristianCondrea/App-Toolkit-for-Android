@@ -22,4 +22,8 @@
     <string name="error_reporting">Fehlerberichte</string>
     <string name="summary_preference_settings_bug_report">Senden Sie Fehlerberichte und Funktionsanfragen an die GitHub-Seite des Projekts</string>
     <string name="summary_preference_settings_clear_cache">Temporäre Anwendungsdaten löschen.</string>
+    <string name="advanced">Erweitert</string>
+    <string name="developer_options">Entwickleroptionen</string>
+    <string name="summary_preference_settings_developer_options">Startseite, Navigationslayout und Animationen testen</string>
+    <string name="developer">Entwickler</string>
 </resources>

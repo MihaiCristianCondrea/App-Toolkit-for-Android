@@ -17,247 +17,206 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui
 
-import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.models.AppScreenTracking
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.common.domain.models.network.AppErrors
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories.DeveloperAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories.FavoritesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories.InstalledAppsRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.HomeAction
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInfo
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInstallInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.HomeEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.mappers.toAppDetailsFailed
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.mappers.toCatalogueFailed
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.mappers.toFavoriteErrorMessage
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.mappers.toStaleCatalogueMessage
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppListUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppsListFilter
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.utils.toErrorMessage
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.isAvailable
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.analytics.AppInteractionType
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.analytics.logAppInteraction
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logSelectContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItemList
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onFailure
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.dismissSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setError
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoading
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setNoData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.withContext
 
 /**
- * ViewModel for the Apps List screen.
+ * Owns catalogue loading, favorites and installed state, and the selected app's details.
  *
- * This ViewModel is responsible for fetching and managing the list of developer applications,
- * handling user interactions such as fetching apps, opening a random app, and toggling favorites.
- * It observes changes in favorite apps and updates the UI state accordingly.
+ * A failed download falls back to the catalogue saved by the last successful one, shown as stale
+ * with a message, and fails the screen only when nothing was saved. Results for an app that is no
+ * longer selected never replace the newer selection.
  *
- * @param developerAppsRepository Source of the developer's app catalog and per-app details.
- * @param installedAppsRepository Resolves which catalog entries are installed and their metadata.
- * @param favoritesRepository Reads and updates the set of favorite app package names.
- * @param dispatchers Provides coroutine dispatchers for different contexts (IO, Main, etc.).
- * @param firebaseController Reports ViewModel flow failures to Firebase.
+ * Every repository is main-safe and the filtering runs in the content, so it needs no dispatcher.
  */
-@OptIn(ExperimentalCoroutinesApi::class)
 class AppsListViewModel(
     private val developerAppsRepository: DeveloperAppsRepository,
     private val installedAppsRepository: InstalledAppsRepository,
     private val favoritesRepository: FavoritesRepository,
-    private val dispatchers: DispatcherProvider,
-    firebaseController: FirebaseController,
-) : LoggedScreenViewModel<AppListUiState, HomeEvent, HomeAction>(
-    initialState = UiStateScreen(data = AppListUiState()),
-    firebaseController = firebaseController,
+    telemetryRepository: TelemetryRepository,
+) : LoggedScreenViewModel<AppListUiState, HomeEvent>(
+    initialState = AppListUiState(),
+    telemetryRepository = telemetryRepository,
     screenName = AppScreenTracking.Screens.APPS_LIST.name,
+    viewModelName = "AppsListViewModel",
 ) {
-
-    private val fetchAppsTrigger = MutableSharedFlow<Unit>(replay = 1)
-    private var fetchJob: Job? = null
+    private var loadJob: Job? = null
+    private var savedAppsJob: Job? = null
     private var appDetailsJob: Job? = null
     private var appInstallInfoJob: Job? = null
-    private var toggleJob: Job? = null
-
-    val favorites = favoritesRepository.observeFavorites()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = emptySet()
-        )
-
-    val canOpenRandomApp = screenState
-        .map { it.data?.apps?.isNotEmpty() == true }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = false
-        )
 
     init {
-        observeFetch()
-        observeFilterValidity()
-        onEvent(HomeEvent.FetchApps)
+        observeFavorites()
+        onEvent(HomeEvent.Load)
     }
 
     override fun handleEvent(event: HomeEvent) {
         when (event) {
-            HomeEvent.FetchApps -> fetchAppsTrigger.tryEmit(Unit)
-
+            HomeEvent.Load -> load()
+            HomeEvent.OpenRandomApp -> openRandomApp()
+            HomeEvent.RandomAppOpened -> setState { copy(randomAppToOpen = null) }
             is HomeEvent.FilterSelected -> {
-                firebaseController.logViewItemList(
+                telemetryRepository.logViewItemList(
                     itemListId = event.filter.name.lowercase(),
                     itemListName = "developer_apps_${event.filter.name.lowercase()}",
                 )
-                selectFilter(event.filter)
+                setState { copy(selectedFilter = event.filter).withAvailableFilter() }
             }
+
+            is HomeEvent.FavoriteToggled -> toggleFavorite(event.packageName)
             is HomeEvent.AppSelected -> selectApp(event.packageName)
-            HomeEvent.RetryAppDetails -> screenData?.selectedApp?.packageName?.let(::loadSelectedAppDetails)
-            HomeEvent.AppDetailsDismissed -> clearSelectedAppInstallInfo()
-
-            HomeEvent.OpenRandomApp -> {
-                val randomApp = screenData?.apps?.randomOrNull() ?: return
-                firebaseController.logSelectContent(
-                    contentType = "random_app",
-                    itemId = randomApp.packageName,
-                )
-                startOperation(
-                    action = Actions.OPEN_RANDOM_APP,
-                    extra = mapOf(ExtraKeys.PACKAGE_NAME to randomApp.packageName),
-                )
-                sendAction(HomeAction.OpenRandomApp(randomApp))
-            }
+            HomeEvent.RetryAppDetails -> currentState.selectedApp?.packageName?.let(::loadSelectedAppDetails)
+            HomeEvent.AppDetailsDismissed -> clearSelectedApp()
         }
-    }
-
-    private fun observeFetch() {
-        startOperation(action = Actions.OBSERVE_FETCH)
-        fetchJob = fetchJob.restart {
-            fetchAppsTrigger
-                .flatMapLatest {
-                    developerAppsRepository.fetchDeveloperApps()
-                        .flowOn(dispatchers.io)
-                        .onStart {
-                            breadcrumb(
-                                message = "Fetch developer apps collecting",
-                                attributes = mapOf("source" to "AppsListViewModel"),
-                            )
-                            updateStateThreadSafe {
-                                screenState.dismissSnackbar()
-                                screenState.setLoading()
-                            }
-                        }
-                }
-                .catchReport(action = Actions.OBSERVE_FETCH) {
-                    updateStateThreadSafe {
-                        showLoadAppsError()
-                    }
-                }
-                .onEach { result ->
-                    result
-                        .onSuccess { apps ->
-                            val list = apps.toImmutableList()
-                            val installedPackages = withContext(dispatchers.io) {
-                                installedAppsRepository.getInstalledPackages(
-                                    packageNames = list.map { app -> app.packageName },
-                                ).toImmutableSet()
-                            }
-                            updateStateThreadSafe {
-                                val base = screenData ?: AppListUiState()
-                                val updated = base.copy(
-                                    apps = list,
-                                    installedPackages = installedPackages,
-                                )
-
-                                if (list.isEmpty()) {
-                                    screenState.setNoData(data = updated)
-                                } else {
-                                    firebaseController.logViewItemList(
-                                        itemListId = "all",
-                                        itemListName = "developer_apps_all",
-                                    )
-                                    screenState.setSuccess(data = updated)
-                                }
-                            }
-                        }
-                        .onFailure { error ->
-                            updateStateThreadSafe {
-                                showLoadAppsError(error)
-                            }
-                        }
-                }
-                .launchIn(viewModelScope)
-        }
-    }
-
-    private fun observeFilterValidity() {
-        screenState.mapNotNull { it.data }
-            .onEach { state ->
-                val allAppsCount = state.apps.size
-                val installedPackagesCount = state.installedPackages.size
-                val favoritesCount = favorites.value.size
-
-                val isFilterValid = when (state.selectedFilter) {
-                    AppsListFilter.All -> true
-                    AppsListFilter.Installed -> installedPackagesCount > 0
-                    AppsListFilter.NotInstalled -> installedPackagesCount in 1..<allAppsCount
-                    AppsListFilter.Favorites -> favoritesCount > 0
-                }
-
-                if (!isFilterValid) {
-                    selectFilter(AppsListFilter.All)
-                }
-            }
-            .launchIn(viewModelScope)
     }
 
     /**
-     * Applies [filter] without reporting it: this also runs when a filter stops matching anything
-     * and falls back to All, which nobody tapped. The tap is reported where the event arrives.
+     * Downloads the catalogue. Content already shown stays while the download runs, marked as
+     * refreshing, so a retry from the stale catalogue does not blank the grid.
      */
-    private fun selectFilter(filter: AppsListFilter) {
-        screenState.update { current ->
-            current.copy(data = (current.data ?: AppListUiState()).copy(selectedFilter = filter))
+    private fun load() {
+        savedAppsJob?.cancel()
+        loadJob = loadJob.restart {
+            launchReport(
+                action = Actions.OBSERVE_FETCH,
+                onError = { error -> showSavedApps(fetchError = error) },
+            ) {
+                breadcrumb(
+                    message = "Fetch developer apps collecting",
+                    attributes = mapOf("source" to "AppsListViewModel"),
+                )
+                setState {
+                    val shown = apps
+                    copy(apps = if (shown is Loadable.Ready) shown.copy(refreshing = true) else Loadable.Loading)
+                }
+                showApps(apps = developerAppsRepository.fetchDeveloperApps(), stale = false)
+            }
         }
     }
 
+    /**
+     * Shows the saved catalogue after [fetchError], with a message saying why it may be old. The
+     * screen fails with [fetchError] only when nothing was saved or the saved copy cannot be read.
+     */
+    private fun showSavedApps(fetchError: Throwable) {
+        savedAppsJob = savedAppsJob.restart {
+            launchReport(
+                action = Actions.LOAD_SAVED_APPS,
+                onError = { setState { copy(apps = fetchError.toCatalogueFailed()) } },
+            ) {
+                val savedApps = developerAppsRepository.savedDeveloperApps().orEmpty()
+                if (savedApps.isEmpty()) {
+                    setState { copy(apps = fetchError.toCatalogueFailed()) }
+                } else {
+                    showApps(apps = savedApps, stale = true)
+                    showMessage(fetchError.toStaleCatalogueMessage())
+                }
+            }
+        }
+    }
+
+    private suspend fun showApps(apps: List<AppInfo>, stale: Boolean) {
+        val list: ImmutableList<AppInfo> = apps.toImmutableList()
+        val installed = installedAppsRepository.getInstalledPackages(
+            packageNames = list.map { app -> app.packageName },
+        ).toImmutableSet()
+        setState {
+            copy(
+                apps = if (list.isEmpty()) Loadable.Empty() else Loadable.Ready(value = list, stale = stale),
+                installedPackages = installed,
+            ).withAvailableFilter()
+        }
+        if (list.isNotEmpty()) {
+            telemetryRepository.logViewItemList(
+                itemListId = "all",
+                itemListName = "developer_apps_all",
+            )
+        }
+    }
+
+    /**
+     * Keeps the favorites in the state. A change also re-checks the selected filter, so removing
+     * the last favorite does not leave an empty Favorites filter selected with its chip gone.
+     */
+    private fun observeFavorites() {
+        favoritesRepository.observeFavorites().collectReport(action = Actions.OBSERVE_FAVORITES) { favorites ->
+            setState { copy(favorites = favorites.toImmutableSet()).withAvailableFilter() }
+        }
+    }
+
+    /**
+     * Each call completes on its own, so two quick taps on different cards both apply. A failure
+     * keeps the grid and shows a message.
+     */
+    private fun toggleFavorite(packageName: String) {
+        launchReport(
+            action = Actions.TOGGLE_FAVORITE,
+            extra = mapOf(ExtraKeys.PACKAGE_NAME to packageName),
+            onError = { error -> showMessage(error.toFavoriteErrorMessage()) },
+        ) {
+            favoritesRepository.toggleFavorite(packageName)
+        }
+    }
+
+    /**
+     * Picks the app and closes the details sheet. The screen opens the app, since that needs a
+     * `Context`, and reports back with [HomeEvent.RandomAppOpened].
+     */
+    private fun openRandomApp() {
+        val randomApp = currentState.loadedApps.randomOrNull() ?: return
+        telemetryRepository.logSelectContent(
+            contentType = "random_app",
+            itemId = randomApp.packageName,
+        )
+        startOperation(
+            action = Actions.OPEN_RANDOM_APP,
+            extra = mapOf(ExtraKeys.PACKAGE_NAME to randomApp.packageName),
+        )
+        clearSelectedApp()
+        setState { copy(randomAppToOpen = randomApp) }
+    }
+
     private fun selectApp(packageName: String) {
-        val selectedApp = screenData?.apps?.firstOrNull { it.packageName == packageName } ?: return
-        firebaseController.logViewItem(
+        val selectedApp = currentState.loadedApps.firstOrNull { it.packageName == packageName } ?: return
+        telemetryRepository.logViewItem(
             itemId = selectedApp.packageName,
             itemName = selectedApp.name,
             itemCategory = selectedApp.category?.label,
         )
-        firebaseController.logAppInteraction(
+        telemetryRepository.logAppInteraction(
             source = "apps_list",
             appInfo = selectedApp,
             interaction = AppInteractionType.OpenDetailsBottomSheet,
         )
-        screenState.update { current ->
-            current.copy(
-                data = current.data?.copy(
-                    selectedApp = selectedApp,
-                    selectedAppDetails = null,
-                    isAppDetailsLoading = true,
-                    hasAppDetailsError = false,
-                    selectedAppInstallInfo = null,
-                ),
+        setState {
+            copy(
+                selectedApp = selectedApp,
+                selectedAppDetails = Loadable.Loading,
+                selectedAppInstallInfo = null,
             )
         }
         loadSelectedAppDetails(packageName)
@@ -266,144 +225,75 @@ class AppsListViewModel(
 
     private fun loadSelectedAppDetails(packageName: String) {
         appDetailsJob = appDetailsJob.restart {
-            developerAppsRepository.fetchAppDetails(packageName)
-                .flowOn(dispatchers.io)
-                .onStart {
-                    screenState.update { current ->
-                        current.copy(
-                            data = current.data?.copy(
-                                selectedAppDetails = null,
-                                isAppDetailsLoading = true,
-                                hasAppDetailsError = false,
-                            ),
-                        )
-                    }
-                }
-                .catchReport(
-                    action = Actions.LOAD_APP_DETAILS,
-                    extra = mapOf(ExtraKeys.PACKAGE_NAME to packageName),
-                ) {
-                    updateAppDetailsFailure(packageName)
-                }
-                .onEach { result ->
-                    result
-                        .onSuccess { details ->
-                            screenState.update { current ->
-                                val data = current.data ?: return@update current
-                                // A cancelled request can still finish at the transport boundary.
-                                // Never apply its detail document to a newer sheet selection.
-                                if (data.selectedApp?.packageName != packageName) return@update current
-                                current.copy(
-                                    data = data.copy(
-                                        selectedAppDetails = details,
-                                        isAppDetailsLoading = false,
-                                        hasAppDetailsError = false,
-                                    ),
-                                )
-                            }
-                        }
-                        .onFailure {
-                            updateAppDetailsFailure(packageName)
-                        }
-                }
-                .launchIn(viewModelScope)
+            launchReport(
+                action = Actions.LOAD_APP_DETAILS,
+                extra = mapOf(ExtraKeys.PACKAGE_NAME to packageName),
+                onError = { error ->
+                    updateSelectedApp(packageName) { copy(selectedAppDetails = error.toAppDetailsFailed()) }
+                },
+            ) {
+                updateSelectedApp(packageName) { copy(selectedAppDetails = Loadable.Loading) }
+                val details = developerAppsRepository.fetchAppDetails(packageName)
+                updateSelectedApp(packageName) { copy(selectedAppDetails = Loadable.Ready(details)) }
+            }
         }
     }
 
-    private fun updateAppDetailsFailure(packageName: String) {
-        screenState.update { current ->
-            val data = current.data ?: return@update current
-            if (data.selectedApp?.packageName != packageName) return@update current
-            current.copy(
-                data = data.copy(
-                    selectedAppDetails = null,
-                    isAppDetailsLoading = false,
-                    hasAppDetailsError = true,
-                ),
-            )
-        }
-    }
-
+    /** An app without a package name cannot be installed, so it needs no lookup. */
     private fun loadSelectedAppInstallInfo(packageName: String) {
         if (packageName.isBlank()) {
-            screenState.update { current ->
-                current.copy(
-                    data = current.data?.copy(
-                        selectedAppInstallInfo = installedAppsRepository.getInstallInfo(packageName),
-                    ),
-                )
-            }
+            setState { copy(selectedAppInstallInfo = AppInstallInfo(isInstalled = false, versionInfo = null)) }
             return
         }
         appInstallInfoJob = appInstallInfoJob.restart {
             launchReport(
                 action = Actions.LOAD_APP_INSTALL_INFO,
                 extra = mapOf(ExtraKeys.PACKAGE_NAME to packageName),
-                block = {
-                    val installInfo = withContext(dispatchers.io) {
-                        installedAppsRepository.getInstallInfo(packageName)
-                    }
-                    screenState.update { current ->
-                        val data = current.data ?: return@update current
-                        if (data.selectedApp?.packageName != packageName) return@update current
-                        current.copy(data = data.copy(selectedAppInstallInfo = installInfo))
-                    }
-                },
-                onError = {
-                    screenState.update { current ->
-                        val data = current.data ?: return@update current
-                        if (data.selectedApp?.packageName != packageName) return@update current
-                        current.copy(data = data.copy(selectedAppInstallInfo = null))
-                    }
-                },
-            )
+                onError = { updateSelectedApp(packageName) { copy(selectedAppInstallInfo = null) } },
+            ) {
+                val installInfo = installedAppsRepository.getInstallInfo(packageName)
+                updateSelectedApp(packageName) { copy(selectedAppInstallInfo = installInfo) }
+            }
         }
     }
 
-    private fun clearSelectedAppInstallInfo() {
+    private fun clearSelectedApp() {
         appDetailsJob?.cancel()
         appInstallInfoJob?.cancel()
-        screenState.update { current ->
-            current.copy(
-                data = current.data?.copy(
-                    selectedApp = null,
-                    selectedAppDetails = null,
-                    isAppDetailsLoading = false,
-                    hasAppDetailsError = false,
-                    selectedAppInstallInfo = null,
-                ),
+        setState {
+            copy(
+                selectedApp = null,
+                selectedAppDetails = Loadable.Empty(),
+                selectedAppInstallInfo = null,
             )
         }
     }
 
-    private fun showLoadAppsError(error: AppErrors? = null) {
-        screenState.setError(
-            message = error?.toErrorMessage()
-                ?: UiTextHelper.StringResource(R.string.error_failed_to_load_apps)
+    /**
+     * Applies [reduce] only while [packageName] is still the selected app. A cancelled request can
+     * still finish at the transport boundary, and its result must not reach a newer selection.
+     */
+    private fun updateSelectedApp(packageName: String, reduce: AppListUiState.() -> AppListUiState) {
+        setState { if (selectedApp?.packageName == packageName) reduce() else this }
+    }
+
+    /**
+     * Falls back to [AppsListFilter.All] when the selected filter matches nothing. It is not
+     * reported: nobody tapped it, and the tap itself is reported where the event arrives.
+     */
+    private fun AppListUiState.withAvailableFilter(): AppListUiState {
+        val isAvailable = selectedFilter.isAvailable(
+            appCount = loadedApps.size,
+            installedCount = installedPackages.size,
+            favoritesCount = favorites.size,
         )
-    }
-
-    fun toggleFavorite(packageName: String) {
-        toggleJob = toggleJob.restart {
-            launchReport(
-                action = Actions.TOGGLE_FAVORITE,
-                extra = mapOf(ExtraKeys.PACKAGE_NAME to packageName),
-                block = {
-                    withContext(dispatchers.io) { favoritesRepository.toggleFavorite(packageName) }
-                },
-                onError = {
-                    updateStateThreadSafe {
-                        screenState.setError(
-                            message = UiTextHelper.StringResource(R.string.error_failed_to_update_favorite),
-                        )
-                    }
-                },
-            )
-        }
+        return if (isAvailable) this else copy(selectedFilter = AppsListFilter.All)
     }
 
     private object Actions {
         const val OBSERVE_FETCH: String = "observeFetch"
+        const val LOAD_SAVED_APPS: String = "loadSavedApps"
+        const val OBSERVE_FAVORITES: String = "observeFavorites"
         const val TOGGLE_FAVORITE: String = "toggleFavorite"
         const val OPEN_RANDOM_APP: String = "openRandomApp"
         const val LOAD_APP_INSTALL_INFO: String = "loadAppInstallInfo"

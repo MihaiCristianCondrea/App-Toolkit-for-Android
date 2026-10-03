@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,8 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.remote
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.toNetworkException
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.exceptions.IssueReportRejectedException
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.remote.models.CreateIssueRequest
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
 import io.ktor.client.HttpClient
 import io.ktor.client.request.header
@@ -32,15 +34,27 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 
+/**
+ * Files issues through the GitHub REST API. The token is sent only as the `Authorization` header
+ * and never appears in a thrown exception.
+ */
 class IssueReporterRemoteDataSource(
     private val client: HttpClient,
 ) {
 
+    /**
+     * Files [payload] in [target] and returns the created issue's web URL, which is empty when
+     * GitHub leaves it out.
+     *
+     * @throws IssueReportRejectedException when GitHub refuses the token, the repository or the
+     * issue's fields.
+     * @throws NetworkException when GitHub answers with any other failure.
+     */
     suspend fun createIssue(
         payload: CreateIssueRequest,
         target: GithubTarget,
         token: String?,
-    ): IssueReportResult {
+    ): String {
         val url = "https://api.github.com/repos/${target.username}/${target.repository}/issues"
         val response = client.post(url) {
             contentType(ContentType.Application.Json)
@@ -49,14 +63,24 @@ class IssueReporterRemoteDataSource(
             setBody(Json.encodeToString(CreateIssueRequest.serializer(), payload))
         }
 
-        val responseBody = response.bodyAsText()
-        if (response.status == HttpStatusCode.Created) {
-            val json = Json.parseToJsonElement(responseBody).jsonObject
-            val issueUrl = json["html_url"]?.jsonPrimitive?.content ?: ""
-            return IssueReportResult.Success(issueUrl)
+        if (response.status != HttpStatusCode.Created) {
+            throw response.status.toRejectedException()
+                ?: response.status.toNetworkException()
+                ?: NetworkException(reason = NetworkException.Reason.UNEXPECTED_RESPONSE)
         }
 
-        return IssueReportResult.Error(response.status, responseBody)
+        val json = Json.parseToJsonElement(response.bodyAsText()).jsonObject
+        return json["html_url"]?.jsonPrimitive?.content.orEmpty()
     }
 }
 
+private fun HttpStatusCode.toRejectedException(): IssueReportRejectedException? {
+    val reason: IssueReportRejectedException.Reason = when (this) {
+        HttpStatusCode.Unauthorized -> IssueReportRejectedException.Reason.UNAUTHORIZED
+        HttpStatusCode.Forbidden -> IssueReportRejectedException.Reason.FORBIDDEN
+        HttpStatusCode.Gone -> IssueReportRejectedException.Reason.GONE
+        HttpStatusCode.UnprocessableEntity -> IssueReportRejectedException.Reason.UNPROCESSABLE
+        else -> return null
+    }
+    return IssueReportRejectedException(reason = reason)
+}

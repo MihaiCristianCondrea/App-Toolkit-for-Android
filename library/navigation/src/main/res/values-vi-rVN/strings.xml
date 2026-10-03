@@ -19,4 +19,8 @@
     <string name="settings">Cài đặt</string>
     <string name="share">Chia sẻ</string>
     <string name="updates">Cập nhật</string>
+    <string name="shell_navigate_back">Quay lại</string>
+    <string name="shell_pane_separator">Đổi kích thước ngăn</string>
+    <string name="shell_support_us">Ủng hộ chúng tôi</string>
+    <string name="shell_support_short">Ủng hộ</string>
 </resources>

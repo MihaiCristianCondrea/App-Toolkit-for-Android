@@ -17,191 +17,69 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.theme
 
-import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BrightnessAuto
-import androidx.compose.material.icons.filled.DarkMode
-import androidx.compose.material.icons.filled.LightMode
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.luminance
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.domain.models.OnboardingThemeChoice
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.ThemeModePicker
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.ThemePalettePicker
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.isAmoledAllowed
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.OnboardingThemeViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingThemeEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingThemeUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.theme.cards.AmoledModeToggleCard
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.filterSeasonalStaticPalettes
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.WallpaperSwatchColors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.toSwatchColors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ThemePaletteProvider.paletteById
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.views.WallpaperColorOptionCard
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.DynamicPaletteVariant
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.colorscheme.applyDynamicVariant
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.isChristmasSeason
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.isHalloweenSeason
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.ThemePreferencesState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.cards.ThemeChoicePreviewCard
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.ThemePalettePager
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.dedupeStaticPaletteIds
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.isAmoledAllowed
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.previews.DarkModePreview
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.previews.LightModePreview
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.previews.SystemModePreview
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
-import java.time.LocalDate
-import java.time.ZoneId
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
+/**
+ * The theme page of onboarding: the theme mode, AMOLED, and a wallpaper or static palette. An app
+ * adds it as an `OnboardingPage.CustomPage` from its `OnboardingProvider`. A failed write shows
+ * through the onboarding screen's snackbar host.
+ */
 @Composable
 fun ThemeOnboardingPageTab() {
-    val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val viewModel: OnboardingThemeViewModel = koinViewModel()
-    val screenState by viewModel.uiState.collectAsStateWithLifecycle()
-    val themePreferences = screenState.data ?: ThemePreferencesState(
-        themeMode = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
-        dynamicColors = true,
-        amoledMode = false,
-        dynamicPaletteVariant = 0,
-        staticPaletteId = StaticPaletteIds.DEFAULT,
-    )
-    val context = LocalContext.current
+    val state: OnboardingThemeUiState by viewModel.state.collectAsStateWithLifecycle()
 
-    val defaultThemeModeKey: String = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM
-    val currentThemeMode: String = themePreferences.themeMode.ifBlank { defaultThemeModeKey }
-    val isAmoledMode: Boolean = themePreferences.amoledMode
-    val isDynamicColors: Boolean = themePreferences.dynamicColors
-    val dynamicVariantIndex: Int = themePreferences.dynamicPaletteVariant
-    val staticPaletteId: String = themePreferences.staticPaletteId
-
-    val supportsDynamic = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-
-    val amoledAllowed = isAmoledAllowed(currentThemeMode)
-
-    val themeChoices: List<OnboardingThemeChoice> = listOf(
-        OnboardingThemeChoice(
-            key = DataStoreNamesConstants.THEME_MODE_LIGHT,
-            displayName = stringResource(id = R.string.light_mode),
-            icon = Icons.Filled.LightMode,
-            description = stringResource(R.string.onboarding_theme_light_desc)
-        ),
-        OnboardingThemeChoice(
-            key = DataStoreNamesConstants.THEME_MODE_DARK,
-            displayName = stringResource(id = R.string.dark_mode),
-            icon = Icons.Filled.DarkMode,
-            description = stringResource(R.string.onboarding_theme_dark_desc)
-        ),
-        OnboardingThemeChoice(
-            key = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
-            displayName = stringResource(id = R.string.follow_system),
-            icon = Icons.Filled.BrightnessAuto,
-            description = stringResource(R.string.onboarding_theme_system_desc)
-        )
+    ThemeOnboardingPageTabContent(
+        state = state,
+        onEvent = viewModel::onEvent,
     )
 
-    // Swatches follow the theme the app is drawn in, which can differ from the system's.
-    val isAppInDarkTheme: Boolean =
-        MaterialTheme.colorScheme.surface.luminance() < DARK_SURFACE_LUMINANCE
+    MessageHost(viewModel = viewModel)
+}
 
-    val wallpaperPreviewScheme: ColorScheme? = remember(supportsDynamic, isAppInDarkTheme) {
-        if (!supportsDynamic) null
-        else if (isAppInDarkTheme) dynamicDarkColorScheme(context)
-        else dynamicLightColorScheme(context)
-    }
-
-    val variantSwatches: List<WallpaperSwatchColors> = remember(wallpaperPreviewScheme) {
-        val base = wallpaperPreviewScheme ?: return@remember emptyList()
-        DynamicPaletteVariant.indices.map { variant ->
-            base.applyDynamicVariant(variant).toSwatchColors()
-        }
-    }
-
-    val isChristmasSeason: Boolean = remember {
-        LocalDate.now(ZoneId.systemDefault()).isChristmasSeason
-    }
-    val isHalloweenSeason: Boolean = remember {
-        LocalDate.now(ZoneId.systemDefault()).isHalloweenSeason
-    }
-
-    val staticOptions: List<String> = remember(
-        isChristmasSeason,
-        isHalloweenSeason,
-        staticPaletteId
-    ) {
-        val seasonalOptions = filterSeasonalStaticPalettes(
-            baseOptions = StaticPaletteIds.withDefault,
-            isChristmasSeason = isChristmasSeason,
-            isHalloweenSeason = isHalloweenSeason,
-            selectedPaletteId = staticPaletteId
-        )
-        dedupeStaticPaletteIds(
-            options = seasonalOptions,
-            selectedPaletteId = staticPaletteId
-        )
-    }
-
-    val staticSwatches: List<WallpaperSwatchColors> =
-        remember(staticOptions, isAppInDarkTheme) {
-            staticOptions.map { id ->
-                val p = paletteById(id)
-                val scheme = if (isAppInDarkTheme) p.darkColorScheme else p.lightColorScheme
-                scheme.toSwatchColors()
-            }
-        }
-
-    val tabTitles = listOf(
-        stringResource(id = R.string.wallpaper_colors),
-        stringResource(id = R.string.other_colors)
-    )
-
-    val initialPagerPage = if (supportsDynamic && isDynamicColors) 0 else 1
-    val pagerState = rememberPagerState(
-        initialPage = initialPagerPage,
-        pageCount = { 2 }
-    )
-
-    LaunchedEffect(initialPagerPage) {
-        if (pagerState.currentPage != initialPagerPage) {
-            pagerState.scrollToPage(initialPagerPage)
-        }
-    }
+/**
+ * Renders the theme choices for [state] with the same [ThemeModePicker] and [ThemePalettePicker]
+ * the theme settings page uses, under the page's own title, and with the AMOLED switch as a card.
+ *
+ * @param onEvent Receives the events [OnboardingThemeViewModel] handles.
+ */
+@Composable
+internal fun ThemeOnboardingPageTabContent(
+    state: OnboardingThemeUiState,
+    onEvent: (OnboardingThemeEvent) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val themeMode: String = state.preferences.themeMode
+    val amoledAllowed: Boolean = isAmoledAllowed(themeMode)
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(horizontal = SizeConstants.LargeSize),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -223,147 +101,36 @@ fun ThemeOnboardingPageTab() {
             modifier = Modifier.padding(horizontal = SizeConstants.LargeSize)
         )
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .selectableGroup(),
-            horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
-        ) {
-            themeChoices.forEach { choice ->
-                ThemeChoicePreviewCard(
-                    title = choice.displayName,
-                    description = choice.description,
-                    icon = choice.icon,
-                    isSelected = currentThemeMode == choice.key,
-                    onClick = {
-                        viewModel.onEvent(OnboardingThemeEvent.SelectThemeMode(choice.key))
-                    },
-                    modifier = Modifier.weight(1f),
-                    preview = {
-                        when (choice.key) {
-                            DataStoreNamesConstants.THEME_MODE_LIGHT -> LightModePreview(Modifier.fillMaxWidth())
-                            DataStoreNamesConstants.THEME_MODE_DARK -> DarkModePreview(Modifier.fillMaxWidth())
-                            else -> SystemModePreview(Modifier.fillMaxWidth())
-                        }
-                    }
-                )
-            }
-        }
+        ThemeModePicker(
+            selectedMode = themeMode,
+            onSelected = { mode -> onEvent(OnboardingThemeEvent.SelectThemeMode(mode)) },
+        )
 
         AmoledModeToggleCard(
-            isAmoledMode = isAmoledMode,
+            isAmoledMode = state.preferences.amoledMode,
             enabled = amoledAllowed,
             onCheckedChange = { isChecked ->
-                if (!amoledAllowed) return@AmoledModeToggleCard
-                viewModel.onEvent(OnboardingThemeEvent.SetAmoledMode(isChecked))
+                if (amoledAllowed) onEvent(OnboardingThemeEvent.SetAmoledMode(isChecked))
             }
         )
 
-        if (supportsDynamic) {
-            SingleChoiceSegmentedButtonRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                tabTitles.forEachIndexed { index, title ->
-                    SegmentedButton(
-                        selected = pagerState.currentPage == index,
-                        onClick = {
-                            coroutineScope.launch {
-                                pagerState.animateScrollToPage(index)
-                            }
-                        },
-                        shape = SegmentedButtonDefaults.itemShape(
-                            index = index,
-                            count = tabTitles.size
-                        )
-                    ) {
-                        Text(
-                            text = title,
-                            modifier = Modifier.padding(vertical = SizeConstants.LargeSize)
-                        )
-                    }
-                }
-            }
-
-            ThemePalettePager(
-                pagerState = pagerState,
-                pages = persistentListOf(
-                    {
-                        LazyRow(
-                            contentPadding = PaddingValues(horizontal = SizeConstants.LargeSize),
-                            horizontalArrangement = Arrangement.spacedBy(
-                                space = SizeConstants.MediumSize,
-                                alignment = Alignment.CenterHorizontally
-                            )
-                        ) {
-                            itemsIndexed(
-                                items = variantSwatches,
-                                key = { index, _ -> index }
-                            ) { index, palette ->
-                                WallpaperColorOptionCard(
-                                    colors = palette,
-                                    selected = isDynamicColors && index == dynamicVariantIndex,
-                                    onClick = {
-                                        viewModel.onEvent(
-                                            OnboardingThemeEvent.SelectDynamicPalette(index)
-                                        )
-                                    }
-                                )
-                            }
-                        }
-                    },
-                    {
-                        LazyRow(
-                            horizontalArrangement = Arrangement.spacedBy(
-                                space = SizeConstants.MediumSize,
-                                alignment = Alignment.CenterHorizontally
-                            )
-                        ) {
-                            itemsIndexed(
-                                items = staticOptions,
-                                key = { _, id -> id }
-                            ) { index, id ->
-                                WallpaperColorOptionCard(
-                                    colors = staticSwatches[index],
-                                    selected = !isDynamicColors && id == staticPaletteId,
-                                    showSeasonalBadge = (isChristmasSeason && id == StaticPaletteIds.CHRISTMAS) || (isHalloweenSeason && id == StaticPaletteIds.HALLOWEEN),
-                                    onClick = {
-                                        viewModel.onEvent(
-                                            OnboardingThemeEvent.SelectStaticPalette(id)
-                                        )
-                                    }
-                                )
-                            }
-                        }
-                    },
-                ),
-                modifier = Modifier.fillMaxWidth(),
-            )
-        } else {
-            LazyRow(
-                contentPadding = PaddingValues(horizontal = SizeConstants.LargeSize),
-                horizontalArrangement = Arrangement.spacedBy(
-                    space = SizeConstants.MediumSize,
-                    alignment = Alignment.CenterHorizontally
-                )
-            ) {
-                itemsIndexed(
-                    items = staticOptions,
-                    key = { _, id -> id }
-                ) { index, id ->
-                    WallpaperColorOptionCard(
-                        colors = staticSwatches[index],
-                        selected = id == staticPaletteId,
-                        showSeasonalBadge = (isChristmasSeason && id == StaticPaletteIds.CHRISTMAS) ||
-                                (isHalloweenSeason && id == StaticPaletteIds.HALLOWEEN),
-                        onClick = {
-                            viewModel.onEvent(OnboardingThemeEvent.SelectStaticPalette(id))
-                        }
-                    )
-                }
-            }
-        }
+        ThemePalettePicker(
+            preferences = state.preferences,
+            seasonalThemesUnlocked = state.seasonalThemesUnlocked,
+            onDynamicPaletteSelected = { variant -> onEvent(OnboardingThemeEvent.SelectDynamicPalette(variant)) },
+            onStaticPaletteSelected = { id, _ -> onEvent(OnboardingThemeEvent.SelectStaticPalette(id)) },
+            horizontalPadding = SizeConstants.ZeroSize,
+        )
     }
 }
 
-private const val DARK_SURFACE_LUMINANCE: Float = 0.5f
+@Preview(showBackground = true)
+@Composable
+private fun ThemeOnboardingPageTabContentPreview() {
+    MaterialTheme {
+        ThemeOnboardingPageTabContent(
+            state = OnboardingThemeUiState(),
+            onEvent = {},
+        )
+    }
+}

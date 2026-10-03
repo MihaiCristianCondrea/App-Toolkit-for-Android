@@ -23,7 +23,6 @@
     <string name="language">ভাষা</string>
     <string name="navigation">নেভিগেশন</string>
     <string name="show_labels_on_bottom_bar">নীচের বারে লেবেলগুলি দেখান</string>
-    <string name="startup_page">স্টার্টআপ পৃষ্ঠা</string>
     <string name="summary_preference_settings_bounce_buttons">ক্লিক করার সময় সমস্ত ক্লিকযোগ্য উপাদানে একটি সূক্ষ্ম বাউন্স অ্যানিমেশন প্রয়োগ করে</string>
     <string name="summary_preference_settings_dynamic_colors">ওয়ালপেপার থেকে রঙ অ্যাপ থিমে প্রয়োগ করুন</string>
     <string name="summary_preference_settings_language">অ্যাপে ব্যবহৃত ভাষা পরিবর্তন করে</string>
@@ -31,4 +30,5 @@
     <string name="summary_preference_settings_startup_page">অ্যাপ শুরু হওয়ার সময় প্রদর্শিত স্ক্রিনটি পছন্দ করুন।</string>
     <string name="will_never_turn_on_automatically">কখনো স্বয়ংক্রিয়ভাবে চালু হবে না</string>
     <string name="will_turn_on_automatically_by_system">সিস্টেম দ্বারা স্বয়ংক্রিয়ভাবে চালু হবে</string>
+    <string name="display">ডিসপ্লে</string>
 </resources>

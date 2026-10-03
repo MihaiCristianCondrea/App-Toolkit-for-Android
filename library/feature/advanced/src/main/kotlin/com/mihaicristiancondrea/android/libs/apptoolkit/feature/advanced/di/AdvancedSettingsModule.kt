@@ -17,8 +17,12 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.di
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.search.advancedSettingsSearch
+import org.koin.core.qualifier.named
+import kotlinx.coroutines.flow.map
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.data.repositories.CacheRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.data.repositories.DefaultCacheRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.AdvancedSettingsViewModel
@@ -26,19 +30,25 @@ import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
+/**
+ * Binds the advanced settings page. The developer options row follows the seasonal themes unlock,
+ * which the About screen's version easter egg records.
+ */
 val advancedSettingsModule: Module = module {
+    single<SettingsSearchProvider>(named("advanced")) { advancedSettingsSearch }
     single<CacheRepository> {
         DefaultCacheRepository(
             context = get(),
-            firebaseController = get<FirebaseController>(),
+            telemetryRepository = get<TelemetryRepository>(),
+            dispatchers = get(),
         )
     }
 
     viewModel {
         AdvancedSettingsViewModel(
             repository = get(),
-            dispatchers = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
+            developerOptionsUnlocked = get<SeasonalThemeRepository>().state.map { it.unlocked },
         )
     }
 }

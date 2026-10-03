@@ -19,7 +19,10 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Casino
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetState
@@ -31,14 +34,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.models.AppScreenTracking
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.domain.models.RandomAppHandler
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInfo
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.HomeAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.HomeEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppListUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.AndroidAppActionLauncher
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.AppActionLauncher
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.AppDetailsBottomSheet
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.analytics.AnalyticsAppActionLauncher
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.analytics.AppInteractionType
@@ -48,204 +53,289 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.bu
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.screens.AppsList
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.screens.loading.HomeLoadingScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AppAdsQualifiers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logShare
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ScaffoldFabs
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
-import kotlinx.collections.immutable.toImmutableSet
-import kotlinx.coroutines.flow.collectLatest
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.rememberWindowWidthSizeClass
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellSearch
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
 
+private const val APPS_LIST_INTERACTION_SOURCE: String = "apps_list"
+private const val APP_DETAILS_INTERACTION_SOURCE: String = "app_details"
+
 /**
- * A route-level composable that orchestrates the display of the apps list screen.
+ * The Apps tab: the catalogue grid, searched from the app bar, with native ad cards, the details
+ * sheet and the random-app button.
  *
- * This function is responsible for:
- * - Observing state from the [AppsListViewModel].
- * - Handling UI state (loading, success, error, empty).
- * - Managing user interactions such as toggling favorites, clicking on an app to view details,
- *   sharing an app, and retrying data fetching.
- * - Displaying a modal bottom sheet for app details when an app is selected.
- * - Registering a handler for opening a random app, which can be triggered by a parent composable
- *   (e.g., a Floating Action Button in the main scaffold).
- *
- * @param paddingValues The padding values to be applied to the screen content, typically from a
- *   [Scaffold].
- * @param windowWidthSizeClass The window width size class, used to adapt the layout for
- *   different screen sizes.
- * @param onRegisterRandomAppHandler A callback to register or unregister the "open random app"
- *   action. It passes a [RandomAppHandler] lambda when the action is available (i.e., when
- *   there are apps to choose from), and `null` otherwise.
+ * Logs each card and sheet tap, and opens and shares apps, since both need a `Context`. A share
+ * logs only the recommended `share` event, because a second `app_card_interaction` for it would
+ * count every share twice. The favorite callback reads the state at tap time, so its identity stays
+ * the same when the favorites change and the cards do not recompose for it.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppsListScreen(
-    paddingValues: PaddingValues,
-    windowWidthSizeClass: AppWindowWidthSizeClass,
-    onRegisterRandomAppHandler: (RandomAppHandler?) -> Unit,
-) {
+fun AppsListScreen() {
     val viewModel: AppsListViewModel = koinViewModel()
-
-    val screenState: UiStateScreen<AppListUiState> by viewModel.uiState.collectAsStateWithLifecycle()
-    val favoritesRaw: Set<String> by viewModel.favorites.collectAsStateWithLifecycle()
-    val favorites = remember(favoritesRaw) { favoritesRaw.toImmutableSet() } // ✅ stable
-    val canOpenRandomApp by viewModel.canOpenRandomApp.collectAsStateWithLifecycle()
-
+    val state: AppListUiState by viewModel.state.collectAsStateWithLifecycle()
+    val telemetryRepository = LocalTelemetry.current
     val context = LocalContext.current
-    val adsEnabled = rememberAdsEnabled()
-
-    val appDetailsAdsConfig: AdsConfig =
-        koinInject(qualifier = named(AppAdsQualifiers.APP_DETAILS_NATIVE_AD))
-    val firebaseController: FirebaseController = koinInject()
+    val adsEnabled: Boolean = rememberAdsEnabled()
+    val listAdsConfig: AdsConfig = koinInject(qualifier = named(AppAdsQualifiers.APPS_LIST_NATIVE_AD))
+    val detailsAdsConfig: AdsConfig = koinInject(qualifier = named(AppAdsQualifiers.APP_DETAILS_NATIVE_AD))
+    val openApp: (AppInfo) -> Unit = buildOnAppClick()
+    val shareApp: (AppInfo) -> Unit = buildOnShareClick()
+    val appActionLauncher = remember(context) { AndroidAppActionLauncher(context) }
+    val selectedApp: AppInfo? = state.selectedApp
+    val detailsActionLauncher: AppActionLauncher = remember(appActionLauncher, telemetryRepository, selectedApp) {
+        selectedApp?.let { app ->
+            AnalyticsAppActionLauncher(
+                delegate = appActionLauncher,
+                telemetryRepository = telemetryRepository,
+                appInfo = app,
+                source = APP_DETAILS_INTERACTION_SOURCE,
+            )
+        } ?: appActionLauncher
+    }
+    val currentState: AppListUiState by rememberUpdatedState(state)
 
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = AppScreenTracking.Screens.APPS_LIST.name,
         screenClass = AppScreenTracking.Screens.APPS_LIST.className,
     )
 
-    val onFavoriteToggle: (String) -> Unit =
-        remember(viewModel, firebaseController, screenState.data?.apps, favorites) {
-            { pkg ->
-                val app = screenState.data?.apps?.firstOrNull { it.packageName == pkg }
-                val wasFavorite = favorites.contains(pkg)
-                if (app != null) {
-                    firebaseController.logAppInteraction(
-                        source = "apps_list",
-                        appInfo = app,
-                        interaction = if (wasFavorite) AppInteractionType.RemoveFavorite else AppInteractionType.AddFavorite,
-                    )
-                }
-                viewModel.toggleFavorite(pkg)
-            }
-        }
-    val onRetry: () -> Unit = remember(viewModel) { { viewModel.onEvent(HomeEvent.FetchApps) } }
+    TrackScreenState(
+        screenName = AppScreenTracking.Screens.APPS_LIST.name,
+        state = state.apps,
+    )
 
-    val buildAppClick = buildOnAppClick()
-    val buildShareClick = buildOnShareClick()
-    val openApp: (AppInfo) -> Unit = remember { buildAppClick }
-    val onShareClick: (AppInfo) -> Unit = remember(buildShareClick, firebaseController) {
-        { app ->
-            // The recommended share event covers this tap; a second app_card_interaction for it
-            // would count every share twice.
-            firebaseController.logShare(
+    val randomAppToOpen: AppInfo? = state.randomAppToOpen
+    LaunchedEffect(randomAppToOpen) {
+        if (randomAppToOpen != null) {
+            openApp(randomAppToOpen)
+            viewModel.onEvent(HomeEvent.RandomAppOpened)
+        }
+    }
+
+    val onFavoriteToggle: (String) -> Unit = remember(viewModel, telemetryRepository) {
+        { packageName ->
+            val current = currentState
+            current.loadedApps.firstOrNull { it.packageName == packageName }?.let { app ->
+                telemetryRepository.logAppInteraction(
+                    source = APPS_LIST_INTERACTION_SOURCE,
+                    appInfo = app,
+                    interaction = if (packageName in current.favorites) {
+                        AppInteractionType.RemoveFavorite
+                    } else {
+                        AppInteractionType.AddFavorite
+                    },
+                )
+            }
+            viewModel.onEvent(HomeEvent.FavoriteToggled(packageName = packageName))
+        }
+    }
+
+    AppsListScreenContent(
+        state = state,
+        onEvent = viewModel::onEvent,
+        onFavoriteToggle = onFavoriteToggle,
+        onShareClick = { app ->
+            telemetryRepository.logShare(
                 method = "system_share",
                 contentType = "app",
                 itemId = app.packageName,
             )
-            buildShareClick(app)
-        }
-    }
+            shareApp(app)
+        },
+        onDetailsClosed = { app ->
+            telemetryRepository.logAppInteraction(
+                source = APPS_LIST_INTERACTION_SOURCE,
+                appInfo = app,
+                interaction = AppInteractionType.CloseDetailsBottomSheet,
+            )
+        },
+        detailsActionLauncher = detailsActionLauncher,
+        windowWidthSizeClass = rememberWindowWidthSizeClass(),
+        contentPadding = contentPadding(),
+        searchQuery = LocalShellSearch.current?.query.orEmpty(),
+        listAdUnitId = listAdsConfig.bannerAdUnitId.takeIf { adsEnabled && it.isNotBlank() },
+        detailsAdsConfig = detailsAdsConfig,
+    )
 
-    val selectedApp: AppInfo? = screenState.data?.selectedApp
-    val selectedAppDetails = screenState.data?.selectedAppDetails
-    val isAppDetailsLoading = screenState.data?.isAppDetailsLoading == true
-    val hasAppDetailsError = screenState.data?.hasAppDetailsError == true
-    val selectedAppInstallInfo = screenState.data?.selectedAppInstallInfo
-    val appActionLauncher = remember(context) { AndroidAppActionLauncher(context) }
+    MessageHost(
+        viewModel = viewModel,
+        onAction = { viewModel.onEvent(HomeEvent.Load) },
+    )
+}
 
+/**
+ * Renders [state]: the grid with its filter chips, the details sheet of the selected app, and the
+ * random-app button, which the tab's scaffold draws and scales out while there is no app to open.
+ * Holds no ViewModel, injects nothing and opens nothing, so it renders in a preview with plain
+ * values.
+ *
+ * @param onEvent Receives the events [AppsListViewModel] handles.
+ * @param onFavoriteToggle A card's or the sheet's favorite button was tapped.
+ * @param onShareClick A card's share button was tapped.
+ * @param onDetailsClosed The details sheet of this app was dismissed. The content then hides the
+ * sheet and sends `HomeEvent.AppDetailsDismissed` itself.
+ * @param detailsActionLauncher Opens the system pages and links the details sheet offers.
+ * @param contentPadding Padding from the shell, applied inside the grid and the state screens.
+ * @param searchQuery The app bar's search text.
+ * @param listAdUnitId The grid's native ad unit, or null when no ad should show.
+ * @param detailsAdsConfig The details sheet's native ad configuration.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun AppsListScreenContent(
+    state: AppListUiState,
+    onEvent: (HomeEvent) -> Unit,
+    onFavoriteToggle: (packageName: String) -> Unit,
+    onShareClick: (AppInfo) -> Unit,
+    onDetailsClosed: (AppInfo) -> Unit,
+    detailsActionLauncher: AppActionLauncher,
+    windowWidthSizeClass: AppWindowWidthSizeClass,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
+    searchQuery: String = "",
+    listAdUnitId: String? = null,
+    detailsAdsConfig: AdsConfig = AdsConfig(),
+) {
     val sheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
 
-    selectedApp?.let { app ->
-        val detailsActionLauncher = remember(appActionLauncher, firebaseController, app) {
-            AnalyticsAppActionLauncher(
-                delegate = appActionLauncher,
-                firebaseController = firebaseController,
-                appInfo = app,
-                source = "app_details",
+    ScaffoldFabs(
+        listOf(
+            ToolkitFab(
+                icon = ToolkitIcon.Vector(Icons.Outlined.Casino),
+                onClick = { onEvent(HomeEvent.OpenRandomApp) },
+                label = stringResource(R.string.open_random_app),
+                visible = state.canOpenRandomApp,
+            ),
+        ),
+    )
+
+    ScreenStateHandler(
+        state = state.apps,
+        modifier = modifier,
+        contentPadding = contentPadding,
+        onRetry = { onEvent(HomeEvent.Load) },
+        onLoading = {
+            HomeLoadingScreen(
+                paddingValues = contentPadding,
+                windowWidthSizeClass = windowWidthSizeClass,
             )
-        }
+        },
+    ) { ready ->
+        AppsList(
+            allApps = ready.value,
+            selectedFilter = state.selectedFilter,
+            favorites = state.favorites,
+            installedPackages = state.installedPackages,
+            contentPadding = contentPadding,
+            adUnitId = listAdUnitId,
+            onFilterSelected = { filter -> onEvent(HomeEvent.FilterSelected(filter = filter)) },
+            onFavoriteToggle = onFavoriteToggle,
+            onAppClick = { app -> onEvent(HomeEvent.AppSelected(packageName = app.packageName)) },
+            onShareClick = onShareClick,
+            windowWidthSizeClass = windowWidthSizeClass,
+            searchQuery = searchQuery,
+        )
+    }
+
+    state.selectedApp?.let { app ->
+        val details = state.selectedAppDetails
         ModalBottomSheet(
             modifier = Modifier.fillMaxHeight(),
             sheetState = sheetState,
             onDismissRequest = {
-                firebaseController.logAppInteraction(
-                    source = "apps_list",
-                    appInfo = app,
-                    interaction = AppInteractionType.CloseDetailsBottomSheet
-                )
+                onDetailsClosed(app)
                 coroutineScope.launch {
                     sheetState.hide()
-                    viewModel.onEvent(HomeEvent.AppDetailsDismissed)
+                    onEvent(HomeEvent.AppDetailsDismissed)
                 }
-            }
+            },
         ) {
             AppDetailsBottomSheet(
                 appInfo = app,
-                appDetails = selectedAppDetails,
-                isDetailsLoading = isAppDetailsLoading,
-                hasDetailsError = hasAppDetailsError,
-                isFavorite = favorites.contains(app.packageName),
-                isAppInstalled = selectedAppInstallInfo?.isInstalled,
-                installedVersionInfo = selectedAppInstallInfo?.versionInfo,
+                appDetails = (details as? Loadable.Ready)?.value,
+                isDetailsLoading = details is Loadable.Loading,
+                hasDetailsError = details is Loadable.Failed,
+                isFavorite = app.packageName in state.favorites,
+                isAppInstalled = state.selectedAppInstallInfo?.isInstalled,
+                installedVersionInfo = state.selectedAppInstallInfo?.versionInfo,
                 actionLauncher = detailsActionLauncher,
                 onFavoriteClick = { onFavoriteToggle(app.packageName) },
-                onRetryDetails = { viewModel.onEvent(HomeEvent.RetryAppDetails) },
-                adsConfig = appDetailsAdsConfig
+                onRetryDetails = { onEvent(HomeEvent.RetryAppDetails) },
+                adsConfig = detailsAdsConfig,
             )
         }
     }
+}
 
-    val randomAppHandler: RandomAppHandler =
-        remember(viewModel) { { viewModel.onEvent(HomeEvent.OpenRandomApp) } }
+private val PreviewApps = persistentListOf(
+    AppInfo(
+        name = "App Toolkit",
+        packageName = "com.example.apptoolkit",
+        iconUrl = "",
+        shortDescription = "Reusable building blocks for Android apps",
+    ),
+    AppInfo(
+        name = "Smart Cleaner",
+        packageName = "com.example.cleaner",
+        iconUrl = "",
+        shortDescription = "Frees up storage",
+    ),
+)
 
-    val registerHandler by rememberUpdatedState(onRegisterRandomAppHandler)
-
-    LaunchedEffect(canOpenRandomApp) {
-        registerHandler(if (canOpenRandomApp) randomAppHandler else null)
+@Preview(showBackground = true)
+@Composable
+private fun AppsListScreenContentPreview() {
+    val context = LocalContext.current
+    MaterialTheme {
+        AppsListScreenContent(
+            state = AppListUiState(
+                apps = Loadable.Ready(PreviewApps),
+                installedPackages = persistentSetOf("com.example.apptoolkit"),
+                favorites = persistentSetOf("com.example.cleaner"),
+            ),
+            onEvent = {},
+            onFavoriteToggle = {},
+            onShareClick = {},
+            onDetailsClosed = {},
+            detailsActionLauncher = remember(context) { AndroidAppActionLauncher(context) },
+            windowWidthSizeClass = AppWindowWidthSizeClass.Compact,
+        )
     }
+}
 
-    LaunchedEffect(viewModel) {
-        viewModel.actionEvent.collectLatest { action ->
-            when (action) {
-                is HomeAction.OpenRandomApp -> {
-                    if (sheetState.isVisible) sheetState.hide()
-                    viewModel.onEvent(HomeEvent.AppDetailsDismissed)
-                    openApp(action.app)
-                }
-            }
-        }
+@Preview(showBackground = true)
+@Composable
+private fun AppsListScreenContentLoadingPreview() {
+    val context = LocalContext.current
+    MaterialTheme {
+        AppsListScreenContent(
+            state = AppListUiState(apps = Loadable.Loading),
+            onEvent = {},
+            onFavoriteToggle = {},
+            onShareClick = {},
+            onDetailsClosed = {},
+            detailsActionLauncher = remember(context) { AndroidAppActionLauncher(context) },
+            windowWidthSizeClass = AppWindowWidthSizeClass.Compact,
+        )
     }
-
-    ScreenStateHandler(
-        screenState = screenState,
-        onLoading = {
-            HomeLoadingScreen(
-                paddingValues = paddingValues,
-                windowWidthSizeClass = windowWidthSizeClass,
-            )
-        },
-        onEmpty = { NoDataScreen(paddingValues = paddingValues) },
-        onError = {
-            NoDataScreen(
-                showRetry = true,
-                onRetry = onRetry,
-                isError = true,
-                paddingValues = paddingValues
-            )
-        },
-        onSuccess = { uiHomeScreen ->
-            AppsList(
-                uiHomeScreen = uiHomeScreen,
-                favorites = favorites,
-                installedPackages = uiHomeScreen.installedPackages,
-                paddingValues = paddingValues,
-                adsEnabled = adsEnabled,
-                onFilterSelected = { filter -> viewModel.onEvent(HomeEvent.FilterSelected(filter)) },
-                onFavoriteToggle = onFavoriteToggle,
-                // AppsListViewModel reports the opened details once it has resolved the app.
-                onAppClick = { app -> viewModel.onEvent(HomeEvent.AppSelected(app.packageName)) },
-                onShareClick = onShareClick,
-                windowWidthSizeClass = windowWidthSizeClass,
-            )
-        }
-    )
 }

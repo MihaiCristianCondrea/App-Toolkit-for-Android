@@ -15,6 +15,5 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="error_invalid_content_key">Kunci konten tidak valid.</string>
     <string name="error_no_settings_found">Tidak ada pengaturan yang ditemukan</string>
 </resources>

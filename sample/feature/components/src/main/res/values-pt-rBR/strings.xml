@@ -104,4 +104,18 @@
     <string name="components_divider_width">Largura</string>
     <string name="components_divider_wave_height">Altura da onda</string>
     <string name="components_divider_vertical">Vertical</string>
+    <string name="components_snackbar_pressed">Você tocou em um botão</string>
+    <string name="components_snackbar_action_message">Ação do botão concluída</string>
+    <string name="components_snackbar_undo">Desfazer</string>
+    <string name="components_snackbar_undone">Desfeito</string>
+    <string name="components_snackbar_error">Algo deu errado</string>
+    <string name="components_snackbar_retry">Tentar novamente</string>
+    <string name="components_snackbar_icon">Uma snackbar com ícone e cores próprias</string>
+    <string name="components_snackbar_custom">%1$s: uma snackbar desenhada pela própria tela</string>
+    <string name="components_section_article_bar">Barra de app de artigo</string>
+    <string name="components_article_without_brand">Sem marca</string>
+    <string name="components_article_with_brand">Com marca</string>
+    <string name="components_article_brand">Editora de exemplo</string>
+    <string name="components_article_headline">Uma barra discreta deixa a história em primeiro lugar</string>
+    <string name="components_article_paragraph">A barra começa só com seus botões. Role além da manchete e o título ocupa o lugar deles, enquanto a linha na borda inferior mostra quanto você já leu.</string>
 </resources>

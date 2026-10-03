@@ -77,9 +77,8 @@ class BuildAppListItemsTest {
         }.toImmutableList()
 
     /**
-     * Reference implementation used only in tests, matching the behavior your tests
-     * currently assert: insert an ad after every [adFrequency] apps, and add a trailing ad
-     * if there are remaining apps.
+     * Reference ad interleaving rule: insert an ad after each full [adFrequency] apps and after
+     * a trailing partial group.
      */
     private fun expectedItems(
         apps: ImmutableList<AppInfo>,

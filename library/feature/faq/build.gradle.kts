@@ -50,5 +50,4 @@ dependencies {
     api(project(":library:core:ui"))
     api(project(":library:navigation"))
     api(project(":library:integration:review"))
-    api(project(":library:feature:licenses"))
 }

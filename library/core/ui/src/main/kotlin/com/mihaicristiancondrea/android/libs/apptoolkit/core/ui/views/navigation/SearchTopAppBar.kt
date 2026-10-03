@@ -130,18 +130,14 @@ fun SearchTopAppBar(
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
 ) {
     val titleSlot: @Composable () -> Unit = {
-        // One fixed height for both states. The title is shorter than the field, and letting the
-        // slot follow whichever is showing made the bar re-centre the title a few frames after the
-        // field had gone, which read as a jump.
+        // Keep both states at the field's height to prevent the title jumping after search closes.
         AnimatedContent(
             targetState = showSearch,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(height = SearchFieldHeight),
             contentAlignment = if (centerTitle) Alignment.Center else Alignment.CenterStart,
-            // Both states fill the same box, so there is no size to animate. Fading in place,
-            // rather than growing the field out of its centre, keeps the placeholder where it will
-            // rest instead of sliding it past the title.
+            // Fade within fixed bounds so the placeholder stays aligned with its final position.
             transitionSpec = {
                 (fadeIn(animationSpec = tween(durationMillis = 200, delayMillis = 60)) +
                         scaleIn(
@@ -189,9 +185,7 @@ fun SearchTopAppBar(
                     },
                 )
             } else {
-                // The slot is as tall as the field, and a title handed that height draws its text
-                // at the top of it, above the navigation icon. The box lets the title keep its own
-                // height and centres it, which is where MainTopAppBar puts it.
+                // Center the title at its natural height inside the taller search slot.
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = if (centerTitle) Alignment.Center else Alignment.CenterStart,

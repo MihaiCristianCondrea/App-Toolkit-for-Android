@@ -17,13 +17,16 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
-import kotlinx.coroutines.flow.Flow
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 
 /** Provides Markdown changelog content for a host application package. */
 interface ChangelogRepository {
 
-    /** Fetches the preferred changelog for [packageName], applying the data-layer fallback. */
-    fun fetchChangelog(packageName: String): Flow<DataState<String, Errors>>
+    /**
+     * Returns the changelog Markdown for [packageName], applying the data-layer fallback. Safe to
+     * call from the main thread.
+     *
+     * @throws NetworkException when the changelog could not be fetched.
+     */
+    suspend fun getChangelog(packageName: String): String
 }

@@ -24,7 +24,6 @@
     <string name="consent_ad_user_data_title">傳送廣告資料</string>
     <string name="consent_analytics_storage_description">允許儲存應用程式使用情況和造訪持續時間等資料，以改善分析和應用程式效能。</string>
     <string name="consent_analytics_storage_title">儲存分析資料</string>
-    <string name="learn_more">了解更多</string>
     <string name="summary_usage_and_diagnostics">通過自動發送診斷、設備和應用程式使用數據來改進您的體驗。</string>
     <string name="usage_and_diagnostics">使用與診斷</string>
     <string name="consent_ad_personalization_description_short">啟用個人化廣告。</string>
@@ -48,4 +47,13 @@
     <string name="privacy_choices_title">隱私選項</string>
     <string name="summary_advanced_privacy_settings">選擇你要為分析與廣告分享的內容。</string>
     <string name="learn_more_about_provider">進一步瞭解此服務提供者</string>
+    <string name="onboarding_crashlytics_title">協助我們改進</string>
+    <string name="onboarding_crashlytics_description">允許應用程式傳送匿名使用資料和當機報告。這有助於我們修復錯誤並改善您的體驗。我們絕不會收集個人資訊。</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">顯示有關使用情況與診斷的詳細資訊</string>
+    <string name="onboarding_crashlytics_show_details_button">顯示詳細資訊</string>
+    <string name="error">錯誤</string>
+    <string name="onboarding_crashlytics_privacy_info">您的隱私非常重要。我們僅將這些資料用於修復錯誤和改進功能。如需更多詳細資訊，請查閱我們的隱私權政策。</string>
+    <string name="learn_more_privacy_policy">查閱我們的隱私權政策</string>
+    <string name="onboarding_crashlytics_enabled_desc">資料報告已啟用。</string>
+    <string name="onboarding_crashlytics_disabled_desc">資料報告已停用。</string>
 </resources>

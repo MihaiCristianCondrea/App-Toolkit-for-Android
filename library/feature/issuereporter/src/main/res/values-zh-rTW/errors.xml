@@ -15,9 +15,20 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="error_description_missing">請描述問題</string>
+    <string name="error_email_invalid">請輸入有效的電子郵件地址</string>
+    <string name="error_email_missing">請輸入電子郵件地址</string>
     <string name="error_forbidden">禁止存取：權限不足</string>
     <string name="error_gone">API 端點已移除</string>
-    <string name="error_invalid_report">標題與描述不可為空白</string>
+    <string name="error_link_only">請描述問題，不要只提供連結。</string>
+    <string name="error_repetitive">重複內容過多，請說明發生了什麼事。</string>
+    <string name="error_report_cooldown">請等待幾分鐘後再提交另一份報告。</string>
+    <string name="error_report_duplicate">這份報告已經提交過了。</string>
+    <string name="error_same_as_title">請提供比標題更詳細的內容。</string>
+    <string name="error_title_missing">請輸入標題</string>
+    <string name="error_too_few_letters">請使用文字，而不是只有符號或表情符號。</string>
+    <string name="error_too_long">太長了，請勿超過 %1$d 個字元。</string>
+    <string name="error_too_short">太短了，請至少輸入 %1$d 個字元。</string>
     <string name="error_unauthorized">未授權：權杖無效</string>
     <string name="error_unprocessable">建立問題的資料無效</string>
 </resources>

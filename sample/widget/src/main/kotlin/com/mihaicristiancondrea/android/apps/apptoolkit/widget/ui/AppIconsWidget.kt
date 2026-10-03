@@ -1,5 +1,5 @@
 /*
- * Copyright (©) 2026 Mihai-Cristian Condrea
+ * Copyright (Â©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,16 +20,17 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.widget.ui
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.createBitmap
-import androidx.core.graphics.scale
 import androidx.core.net.toUri
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
@@ -59,27 +60,27 @@ import androidx.glance.layout.size
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
+import coil3.SingletonImageLoader
+import coil3.request.ImageRequest
+import coil3.request.SuccessResult
+import coil3.request.allowHardware
+import coil3.toBitmap
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories.DeveloperAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.widget.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import org.koin.core.context.GlobalContext
-import java.net.URL
 
 /**
- * A highly expressive, resizable 3x3 grid widget that focuses on fast app launching.
- *
- * Change rationale:
- * - Previously, the widget resolved package icons for the full app list even though only the first
- *   3x3 slots were rendered.
- * - Now, app loading is capped to the visible 9 entries before icon decoding, reducing background
- *   work and memory pressure for each update.
+ * Resizable app-launch grid. Icon decoding is bounded to the nine visible entries, avoiding
+ * work for catalog apps the widget cannot show.
  */
 class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons_error) {
 
@@ -87,70 +88,109 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
         sizes = setOf(SMALL_SIZE, MEDIUM_SIZE, LARGE_SIZE),
     )
 
+    /**
+     * Displays the saved catalog while fetching its replacement. Loading content is used only
+     * when no saved catalog is available, and a failed fetch keeps the saved catalog on screen.
+     */
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val state = loadApps(context = context)
+        val savedState: AppIconsWidgetState? = loadSavedApps(context = context)
         provideContent {
+            val freshState = remember { flow { emit(loadApps(context = context, savedState = savedState)) } }
+            val state: AppIconsWidgetState by freshState.collectAsState(
+                initial = savedState ?: AppIconsWidgetState.Loading,
+            )
             AppIconsWidgetContent(state = state)
         }
     }
 
-    private suspend fun loadApps(context: Context): AppIconsWidgetState =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val developerAppsRepository = GlobalContext.get().get<DeveloperAppsRepository>()
-                val state =
-                    developerAppsRepository.fetchDeveloperApps().first { it !is DataState.Loading }
-                val apps = when (state) {
-                    is DataState.Success -> state.data
-                    is DataState.Error -> return@withContext state.data
-                        ?.takeIf { it.isNotEmpty() }
-                        ?.let { AppIconsWidgetState.Content(createEntries(context, it)) }
-                        ?: AppIconsWidgetState.Error
-
-                    is DataState.Loading -> return@withContext AppIconsWidgetState.Loading
-                }
-
-                if (apps.isEmpty()) AppIconsWidgetState.Empty
-                else AppIconsWidgetState.Content(createEntries(context, apps))
-            }.getOrElse { throwable ->
-                if (throwable is CancellationException) throw throwable
-                AppIconsWidgetState.Error
-            }
+    /**
+     * The catalogue the apps screen saved, read without the network, or null when there is none or
+     * it cannot be read. The widget has no failure of its own to show here: the fetch that follows
+     * decides between the grid and the error content.
+     */
+    private suspend fun loadSavedApps(context: Context): AppIconsWidgetState? =
+        try {
+            developerAppsRepository().savedDeveloperApps()
+                ?.takeIf { it.isNotEmpty() }
+                ?.let { apps -> AppIconsWidgetState.Content(createEntries(context, apps)) }
+        } catch (cancellation: CancellationException) {
+            throw cancellation
+        } catch (failure: Exception) {
+            null
         }
 
-    private fun createEntries(
+    /**
+     * Downloads the catalogue. A failed download falls back to [savedState], and shows the error
+     * content with its retry action only when nothing was saved.
+     */
+    private suspend fun loadApps(
+        context: Context,
+        savedState: AppIconsWidgetState?,
+    ): AppIconsWidgetState =
+        try {
+            val apps = developerAppsRepository().fetchDeveloperApps()
+            if (apps.isEmpty()) {
+                AppIconsWidgetState.Empty
+            } else {
+                AppIconsWidgetState.Content(createEntries(context, apps))
+            }
+        } catch (cancellation: CancellationException) {
+            throw cancellation
+        } catch (failure: Exception) {
+            savedState ?: AppIconsWidgetState.Error
+        }
+
+    private fun developerAppsRepository(): DeveloperAppsRepository =
+        GlobalContext.get().get<DeveloperAppsRepository>()
+
+    private fun dispatchers(): DispatcherProvider = GlobalContext.get().get<DispatcherProvider>()
+
+    /**
+     * Builds the visible entries, resolving their icons in parallel. The package manager lookups
+     * and bitmap drawing block, so they run on IO; the repository calls before them are main-safe.
+     */
+    private suspend fun createEntries(
         context: Context,
         apps: List<AppInfo>
-    ): ImmutableList<WidgetAppEntry> =
+    ): ImmutableList<WidgetAppEntry> = withContext(dispatchers().io) {
         apps.take(MAX_GRID_ITEMS).map { app ->
-            val launchIntent = context.packageManager.getLaunchIntentForPackage(app.packageName)
-            WidgetAppEntry(
-                app = app,
-                icon = resolveAppIcon(context, app),
-                destination = launchIntent ?: Intent(
-                    Intent.ACTION_VIEW,
-                    "https://play.google.com/store/apps/details?id=${Uri.encode(app.packageName)}".toUri(),
-                ),
-            )
-        }.toImmutableList()
+            async {
+                val launchIntent = context.packageManager.getLaunchIntentForPackage(app.packageName)
+                WidgetAppEntry(
+                    app = app,
+                    icon = resolveAppIcon(context, app),
+                    destination = launchIntent ?: Intent(
+                        Intent.ACTION_VIEW,
+                        "https://play.google.com/store/apps/details?id=${Uri.encode(app.packageName)}".toUri(),
+                    ),
+                )
+            }
+        }.awaitAll().toImmutableList()
+    }
 
-    private fun resolveAppIcon(context: Context, app: AppInfo): Bitmap {
+    /**
+     * The installed app's own icon, else its catalogue icon, else this app's icon.
+     *
+     * Catalogue icons go through the app's Coil [ImageLoader][coil3.ImageLoader], the same one the
+     * Apps tab uses, so an icon the app has shown comes from its disk cache instead of the network.
+     * The bitmap is a software one at the size the widget draws, as `RemoteViews` needs.
+     */
+    private suspend fun resolveAppIcon(context: Context, app: AppInfo): Bitmap {
         val installedIcon = runCatching {
             context.packageManager.getApplicationIcon(app.packageName)
         }.getOrNull()
         if (installedIcon != null) return installedIcon.toBitmap(DEFAULT_ICON_BITMAP_SIZE_PX)
 
-        val remoteIcon = runCatching {
-            URL(app.iconUrl).openConnection().run {
-                connectTimeout = ICON_REQUEST_TIMEOUT_MILLIS
-                readTimeout = ICON_REQUEST_TIMEOUT_MILLIS
-                getInputStream().use(BitmapFactory::decodeStream)
-            }
-        }.getOrNull()
-        if (remoteIcon != null) {
-            return remoteIcon.scale(DEFAULT_ICON_BITMAP_SIZE_PX, DEFAULT_ICON_BITMAP_SIZE_PX)
-                .also { scaled -> if (scaled !== remoteIcon) remoteIcon.recycle() }
-        }
+        val request = ImageRequest.Builder(context)
+            .data(app.iconUrl)
+            .size(DEFAULT_ICON_BITMAP_SIZE_PX)
+            .allowHardware(false)
+            .build()
+        val remoteIcon = (SingletonImageLoader.get(context).execute(request) as? SuccessResult)
+            ?.image
+            ?.toBitmap(DEFAULT_ICON_BITMAP_SIZE_PX, DEFAULT_ICON_BITMAP_SIZE_PX)
+        if (remoteIcon != null) return remoteIcon
+
         return context.packageManager.getApplicationIcon(context.packageName)
             .toBitmap(DEFAULT_ICON_BITMAP_SIZE_PX)
     }
@@ -160,7 +200,6 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
         const val GRID_ROWS: Int = 3
         private const val MAX_GRID_ITEMS: Int = GRID_COLUMNS * GRID_ROWS
         private const val DEFAULT_ICON_BITMAP_SIZE_PX: Int = 72
-        private const val ICON_REQUEST_TIMEOUT_MILLIS: Int = 5_000
 
         val SMALL_SIZE: DpSize = DpSize(width = 120.dp, height = 120.dp)
         val MEDIUM_SIZE: DpSize = DpSize(width = 180.dp, height = 180.dp)

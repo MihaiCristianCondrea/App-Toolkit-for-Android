@@ -15,9 +15,20 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="error_description_missing">อธิบายปัญหา</string>
+    <string name="error_email_invalid">ป้อนที่อยู่อีเมลที่ถูกต้อง</string>
+    <string name="error_email_missing">ป้อนอีเมลของคุณ</string>
     <string name="error_forbidden">ถูกปฏิเสธ: สิทธิ์ไม่เพียงพอ</string>
     <string name="error_gone">ปลายทาง API ถูกลบแล้ว</string>
-    <string name="error_invalid_report">ชื่อเรื่องและคำอธิบายต้องไม่เว้นว่าง</string>
+    <string name="error_link_only">อธิบายปัญหา ไม่ใช่แค่ใส่ลิงก์</string>
+    <string name="error_repetitive">ซ้ำกันมากเกินไป อธิบายว่าเกิดอะไรขึ้น</string>
+    <string name="error_report_cooldown">โปรดรอสองสามนาทีก่อนส่งรายงานอีกฉบับ</string>
+    <string name="error_report_duplicate">ส่งรายงานนี้ไปแล้ว</string>
+    <string name="error_same_as_title">เพิ่มรายละเอียดให้มากกว่าชื่อเรื่อง</string>
+    <string name="error_title_missing">ป้อนชื่อเรื่อง</string>
+    <string name="error_too_few_letters">ใช้ถ้อยคำ ไม่ใช่แค่สัญลักษณ์หรืออีโมจิ</string>
+    <string name="error_too_long">ยาวเกินไป ใช้ได้ไม่เกิน %1$d ตัวอักษร</string>
+    <string name="error_too_short">สั้นเกินไป ใช้อย่างน้อย %1$d ตัวอักษร</string>
     <string name="error_unauthorized">ไม่ได้รับอนุญาต: โทเค็นไม่ถูกต้อง</string>
     <string name="error_unprocessable">ข้อมูลไม่ถูกต้องสำหรับการสร้างปัญหา</string>
 </resources>

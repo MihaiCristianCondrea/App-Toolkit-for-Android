@@ -15,22 +15,16 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">AMOLED режим</string>
-    <string name="color_palette">Цветова палитра</string>
-    <string name="dark_mode">Тъмен режим</string>
-    <string name="follow_system">Следвай системния режим</string>
-    <string name="light_mode">Светъл режим</string>
-    <string name="onboarding_theme_dark_desc">Приятен за очите.</string>
-    <string name="onboarding_theme_light_desc">Светъл и енергичен.</string>
-    <string name="onboarding_theme_system_desc">Съответства на твоето устройство.</string>
-    <string name="other_colors">Други цветове</string>
-    <string name="screen_and_display_settings">Настройки на екрана и дисплея.</string>
-    <string name="summary_dark_theme">Тъмната тема използва дълбок фон, за да удължи значително живота на батерията ви. За да го активирате, просто отидете до системния мениджър на вашия Android и изберете предпочитаната от вас тема в</string>
-    <string name="theme_mode">Режим на тема</string>
-    <string name="wallpaper_colors">Цветове на тапета</string>
     <string name="holiday_greeting_christmas_title">Весели празници!</string>
     <string name="holiday_greeting_christmas_message">Коледната тема е тук, със сняг, който вали из цялото приложение. Искате ли да я използвате до края на празниците?</string>
     <string name="holiday_greeting_halloween_title">Честит Хелоуин!</string>
     <string name="holiday_greeting_halloween_message">Страшният сезон започна. Искате ли да използвате темата за Хелоуин, докато трае?</string>
     <string name="holiday_greeting_use_theme">Използвай празничната тема по време на празниците</string>
+    <string name="dark_theme">Тъмна тема</string>
+    <string name="weather_effect">Метеорологичен ефект</string>
+    <string name="weather_effect_automatic">Автоматично</string>
+    <string name="weather_effect_snow">Сняг</string>
+    <string name="weather_effect_off">Изключено</string>
+    <string name="weather_effect_rain">Дъжд</string>
+    <string name="weather_effect_info">При „Автоматично“ вали сняг, докато се използва коледната палитра. Снегът и дъждът валят при всяка палитра.</string>
 </resources>

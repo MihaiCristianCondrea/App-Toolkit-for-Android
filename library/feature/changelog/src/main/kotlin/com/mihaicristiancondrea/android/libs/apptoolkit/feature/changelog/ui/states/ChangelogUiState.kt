@@ -18,9 +18,15 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.states
 
 import androidx.compose.runtime.Immutable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 
-/** Immutable content rendered by the changelog dialog. */
+/**
+ * What the changelog dialog renders.
+ *
+ * @property markdown The release notes to show. Empty when the changelog loaded but has nothing in
+ * it, which the dialog shows as "no new updates".
+ */
 @Immutable
 data class ChangelogUiState(
-    val markdown: String = "",
+    val markdown: Loadable<String> = Loadable.Loading,
 )

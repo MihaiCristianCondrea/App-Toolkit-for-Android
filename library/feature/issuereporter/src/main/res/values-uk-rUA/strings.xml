@@ -22,7 +22,6 @@
     <string name="issue_description_placeholder">Опишіть проблему та спосіб її відтворення</string>
     <string name="issue_done">Готово</string>
     <string name="issue_email_label">Електронна пошта</string>
-    <string name="issue_email_optional_placeholder">Електронна пошта (необовʼязково)</string>
     <string name="issue_section_label">Проблема</string>
     <string name="issue_send">Надіслати</string>
     <string name="issue_submitted_message">Дякуємо, що допомагаєте покращувати застосунок.</string>

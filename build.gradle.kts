@@ -26,17 +26,14 @@ plugins {
     alias(notation = libs.plugins.firebase.performance) apply false
     alias(notation = libs.plugins.about.libraries) apply true
     alias(notation = libs.plugins.mannodermaus.android.junit5) apply false
+    alias(notation = libs.plugins.roborazzi) apply false
 }
 
 val publishingGroupId = providers.gradleProperty("JITPACK_GROUP_ID")
 val publishingVersion = providers.gradleProperty("PUBLISHING_VERSION")
 
 subprojects {
-    // The sample gets its own group. Project dependencies resolve by `group:name:version`, and the
-    // sample mirrors the library's module names: `core:common`, `core:ui`, `core:datastore`. With
-    // one shared group, `:sample:core:common` depending on `:library:core:common` produced the same
-    // coordinates on both sides, and Gradle rejected it as a circular dependency on itself rather
-    // than reporting a name clash. Only the library is published, so this affects nothing else.
+    // Keep sample and library coordinates distinct: mirrored project names under one group can resolve as self-dependencies.
     group = if (path.startsWith(":sample")) "${publishingGroupId.get()}.sample" else publishingGroupId.get()
     version = publishingVersion.get()
 }

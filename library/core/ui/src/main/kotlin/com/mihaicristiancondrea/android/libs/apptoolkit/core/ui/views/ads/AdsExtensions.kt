@@ -21,15 +21,8 @@ import androidx.compose.runtime.Composable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.LocalAdsEnabled
 
 /**
- * A Composable function that remembers and observes whether ads are enabled.
- *
- * Change rationale: this used to build its own flow with a hardcoded `default = true`, while
- * Ads initialization and [AppTheme][com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppTheme]
- * read the same preference source, while ad slots consume the provided UI value.
- * When the two disagreed, ad views loaded ads for an SDK that had never been initialized, and the
- * The host-configured default is therefore preserved without creating one collector per ad slot.
- *
- * @return `true` if ads are enabled, `false` otherwise. The value is lifecycle-aware.
+ * Reads the ads preference provided by [LocalAdsEnabled]. Reuses the theme's observation and
+ * host-configured default instead of creating a collector for each ad slot.
  */
 @Composable
 fun rememberAdsEnabled(): Boolean = LocalAdsEnabled.current

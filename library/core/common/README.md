@@ -8,10 +8,18 @@ Android utility abstractions shared across the toolkit.
 ## Owns
 
 - Analytics and billing value models, and the application-facing theme preference model.
-- `FirebaseController`, `BillingCore`, dispatcher, build-info, app-info, permissions, and ad-SDK
-  contracts.
+- `ClipboardRepository` and its system-backed `DefaultClipboardRepository`, so a ViewModel copies
+  text without holding a `Context`. It also says whether the system confirms copies itself.
+- The failures the data layer throws: `NetworkException` and `StorageException`, each with a
+  `reason`. Translating into them belongs to `:library:core:network` and `:library:core:datastore`,
+  and the text a screen shows for them to `:library:core:ui`.
+- `TelemetryRepository` (`core.common.data.repositories`), the vendor-neutral contract for analytics, breadcrumbs and
+  error reports. `FirebaseController` stays in `data.repositories` as a deprecated alias of it.
+- `BillingCore`, dispatcher, build-info, app-info, permissions, and ad-SDK contracts.
 - Host DI configuration (`AppToolkitHostBuildConfig`, qualifiers, and constants).
-- Small platform and Kotlin extensions used across modules.
+- Small platform and Kotlin extensions used across modules. An extension or constant that one
+  module uses lives in that module instead: FAQ, changelog, issue reporter, billing, ads and review
+  each own theirs.
 - The Play Integrity license-check manifest permission required by the shared App Check setup.
 - The `App Name` placeholders for `app_name` and `app_full_name`, plus the default copyright
   resource used by toolkit UI. A host replaces the name resources with its application identity.
@@ -33,8 +41,8 @@ No internal Gradle modules. This is the bottom shared runtime dependency for mos
 - `:library:core:datastore`, `:library:core:network`, `:library:core:ui`, and
   `:library:core:designsystem`.
 - `:library:feature:about`, `:library:feature:faq`, `:library:feature:issuereporter`,
-  `:library:feature:onboarding`, `:library:feature:permissions`, `:library:feature:settings`, and
-  `:library:feature:support`.
+  `:library:feature:onboarding`, `:library:feature:permissions`, `:library:feature:settings`,
+  `:library:feature:startup`, and `:library:feature:support`.
 - `:library:integration:ads`, `:library:integration:billing`, `:library:integration:consent`,
   `:library:integration:firebase`, `:library:integration:review`, and `:library:integration:update`.
 
@@ -76,7 +84,7 @@ extension maps this result into its unchanged AppVersionInfo class.
 
 ## Public contracts
 
-- `FirebaseController`, `BillingCore`, `DispatcherProvider`, and provider/helper interfaces.
+- `TelemetryRepository`, `BillingCore`, `DispatcherProvider`, and provider/helper interfaces.
 - `AppToolkitHostBuildConfig`, DI qualifiers, common result/value models, and stable constants.
 - `core.common.domain.models.theme.ThemePreferencesState`, the immutable application-facing
   representation shared by persistence and theme UI.
@@ -117,7 +125,7 @@ metrics error response has an empty body. `ConsentSdkCrashGuard` is installed by
 immediately after Firebase initialization so it wraps the Crashlytics handler. It suppresses only a
 non-main-thread `NoSuchElementException` whose stack contains both `java.util.Scanner` and
 `com.google.android.gms.internal.consent_sdk`; every other throwable is delegated unchanged. The
-suppressed telemetry failure is recorded through `FirebaseController.recordNonFatal`.
+suppressed telemetry failure is recorded through `TelemetryRepository.recordNonFatal`.
 
 Hosts may opt out by overriding `installsConsentSdkCrashGuard` with `false`. Do not broaden the
 guard predicate, and do not remove the guard until the affected UMP artifact behavior is verified as

@@ -15,42 +15,19 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="agree">Godkänn</string>
-    <string name="amoled_mode">AMOLED-läge</string>
     <string name="back_button_content_description">Tillbaka</string>
     <string name="back_button_text">Tillbaka</string>
-    <string name="dark_mode">Mörkt läge</string>
-    <string name="done_button_content_description">Klar</string>
     <string name="done_button_text">Klar</string>
-    <string name="error">Fel</string>
-    <string name="follow_system">Följ systeminställningar</string>
-    <string name="learn_more">Läs mer</string>
-    <string name="learn_more_privacy_policy">Granska vår integritetspolicy</string>
-    <string name="light_mode">Ljust läge</string>
     <string name="next_button_content_description">Nästa</string>
     <string name="next_button_text">Nästa</string>
     <string name="onboarding_amoled_mode_desc">Djupare svärta för OLED-skärmar.</string>
     <string name="onboarding_complete_icon_desc">Introduktion klar</string>
     <string name="onboarding_completion_failed">Din konfiguration kunde inte sparas. Försök igen.</string>
-    <string name="onboarding_crashlytics_description">Tillåt appen att skicka anonym användningsdata och kraschrapporter. Detta hjälper oss att åtgärda buggar och förbättra din upplevelse. Ingen personlig information samlas in.</string>
-    <string name="onboarding_crashlytics_disabled_desc">Datarapportering är inaktiv.</string>
-    <string name="onboarding_crashlytics_enabled_desc">Datarapportering är aktiv.</string>
-    <string name="onboarding_crashlytics_privacy_info">Din integritet är viktig. Vi använder endast dessa data för att åtgärda buggar och förbättra funktioner. För mer information, läs vår integritetspolicy.</string>
-    <string name="onboarding_crashlytics_show_details_button">Visa detaljerad information</string>
-    <string name="onboarding_crashlytics_show_details_button_cd">Visa detaljerad information om användning och diagnostik</string>
-    <string name="onboarding_crashlytics_title">Hjälp oss att förbättra</string>
     <string name="onboarding_final_description">Tack för att du anpassade din upplevelse. Du är nu redo att utforska alla funktioner. Ha så kul.</string>
     <string name="onboarding_final_title">Allt är klart.</string>
-    <string name="onboarding_theme_dark_desc">Behagligt för ögonen.</string>
-    <string name="onboarding_theme_light_desc">Ljust och energiskt.</string>
     <string name="onboarding_theme_subtitle">Välj hur du vill att appen ska se ut.</string>
-    <string name="onboarding_theme_system_desc">Matchar din enhet.</string>
     <string name="onboarding_theme_title">Välj din stil</string>
-    <string name="other_colors">Andra färger</string>
     <string name="skip_button_content_description">Hoppa över</string>
     <string name="skip_button_text">Hoppa över</string>
-    <string name="summary_browse_terms_of_service_and_privacy_policy">Läs och godkänn våra användarvillkor och integritetspolicy för att fortsätta</string>
     <string name="usage_and_diagnostics">Användning och diagnostik</string>
-    <string name="wallpaper_colors">Bakgrundsfärger</string>
-    <string name="welcome">Välkommen</string>
 </resources>

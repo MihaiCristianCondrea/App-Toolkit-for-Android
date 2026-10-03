@@ -21,10 +21,7 @@ import androidx.compose.runtime.Stable
 import kotlinx.coroutines.CoroutineDispatcher
 
 /**
- * Abstraction for providing coroutine dispatchers.
- *
- * Having an interface allows production code to use the standard dispatchers
- * while tests can supply their own implementations to control threading.
+ * Coroutine dispatchers supplied by the host or by tests to control execution contexts.
  */
 @Stable
 interface DispatcherProvider {

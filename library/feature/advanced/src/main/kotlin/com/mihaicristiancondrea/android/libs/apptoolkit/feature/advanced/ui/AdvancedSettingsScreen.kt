@@ -17,42 +17,39 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.contracts.AdvancedSettingsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.states.AdvancedSettingsUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterBottomSheet
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.sheets.IssueReporterSheet
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.R
-import org.koin.compose.koinInject
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.contracts.AdvancedSettingsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.states.AdvancedSettingsUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DeveloperOptionsRoute
+import org.koin.compose.getKoin
 import org.koin.compose.viewmodel.koinViewModel
 
 private const val ADVANCED_SETTINGS_SCREEN_NAME = "AdvancedSettings"
@@ -61,113 +58,132 @@ private const val ADVANCED_SETTINGS_SCREEN_CLASS = "AdvancedSettingsScreen"
 private object AdvancedPreferenceKeys {
     const val BUG_REPORT: String = "bug_report"
     const val CLEAR_CACHE: String = "clear_cache"
+    const val DEVELOPER_OPTIONS: String = "developer_options"
 }
 
 /**
- * A Composable function that displays a list of advanced settings.
+ * The advanced settings page: the bug report, clearing the cache, and the developer options once
+ * the About screen's easter egg unlocks them.
  *
- * This screen fetches its state from [AdvancedSettingsViewModel] and handles different states
- * such as loading, empty, and success. On success, it displays a list of settings categorized
- * into "Error Reporting" and "Cache Management".
- *
- * It includes options to:
- * - Open the issue reporter sheet over this screen.
- * - Clear the application's cache, showing a toast message upon completion.
- *
- * @param paddingValues The padding values to be applied to the root layout of the list,
- * typically provided by a Scaffold. Defaults to an empty `PaddingValues`.
+ * Owns [AdvancedSettingsViewModel], tracking, messages and navigation. The bug report opens the
+ * `IssueReporterSheet` bound in Koin over this page, and is left out when nothing binds one. The
+ * sheet's visibility is saved, so a rotation does not close it.
  */
 @Composable
-fun AdvancedSettingsScreen(
-    paddingValues: PaddingValues = PaddingValues(),
-) {
+fun AdvancedSettingsScreen() {
     val viewModel: AdvancedSettingsViewModel = koinViewModel()
-    val screenState: UiStateScreen<AdvancedSettingsUiState> by viewModel.uiState.collectAsStateWithLifecycle()
-
-    val firebaseController: FirebaseController = koinInject()
+    val state: AdvancedSettingsUiState by viewModel.state.collectAsStateWithLifecycle()
+    val navigator = LocalShellNavigator.current
+    val issueReporterSheet: IssueReporterSheet? = getKoin().getOrNull()
+    var showIssueReporter: Boolean by rememberSaveable { mutableStateOf(value = false) }
 
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = ADVANCED_SETTINGS_SCREEN_NAME,
         screenClass = ADVANCED_SETTINGS_SCREEN_CLASS,
     )
 
     TrackScreenState(
-        firebaseController = firebaseController,
         screenName = ADVANCED_SETTINGS_SCREEN_NAME,
-        screenState = screenState.screenState,
+        state = state.cacheClear,
     )
 
-    val context = LocalContext.current
-    val appContext = remember(context) { context.applicationContext }
-
-    // rememberSaveable, so rotating with the reporter open does not close it.
-    var showIssueReporter: Boolean by rememberSaveable { mutableStateOf(value = false) }
+    AdvancedSettingsScreenContent(
+        state = state,
+        onEvent = viewModel::onEvent,
+        onReportBug = { showIssueReporter = true },
+        onOpenDeveloperOptions = { navigator.navigate(DeveloperOptionsRoute) },
+        contentPadding = contentPadding(),
+        showBugReport = issueReporterSheet != null,
+    )
 
     if (showIssueReporter) {
-        IssueReporterBottomSheet(onDismissRequest = { showIssueReporter = false })
+        issueReporterSheet?.Show(onDismissRequest = { showIssueReporter = false })
     }
 
-    val messageRes: Int? = screenState.data?.cacheClearMessage
-    val toastText: String? = messageRes?.let { stringResource(id = it) }
+    MessageHost(viewModel = viewModel)
+}
 
-    LaunchedEffect(messageRes) {
-        toastText?.let {
-            Toast.makeText(appContext, toastText, Toast.LENGTH_SHORT).show()
-            viewModel.onEvent(AdvancedSettingsEvent.MessageShown)
+/**
+ * Renders the advanced settings rows for [state]. Each row logs its own tap through its
+ * `ga4Event`.
+ *
+ * @param onEvent Receives the events [AdvancedSettingsViewModel] handles.
+ * @param onReportBug Opens the issue reporter. Shown only when [showBugReport] is true.
+ * @param onOpenDeveloperOptions Opens the developer options. Navigation belongs to the caller.
+ * @param contentPadding Padding from the shell, applied inside the list.
+ * @param showBugReport Whether an issue reporter is available, which adds the error reporting
+ * category.
+ */
+@Composable
+internal fun AdvancedSettingsScreenContent(
+    state: AdvancedSettingsUiState,
+    onEvent: (AdvancedSettingsEvent) -> Unit,
+    onReportBug: () -> Unit,
+    onOpenDeveloperOptions: () -> Unit,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
+    showBugReport: Boolean = false,
+) {
+    LazyColumn(
+        contentPadding = contentPadding,
+        modifier = modifier.fillMaxHeight(),
+        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
+    ) {
+        if (showBugReport) {
+            item {
+                PreferenceCategoryItem(title = stringResource(id = R.string.error_reporting))
+            }
+
+            item {
+                SettingsPreferenceItem(
+                    title = stringResource(id = R.string.bug_report),
+                    summary = stringResource(id = R.string.summary_preference_settings_bug_report),
+                    onClick = onReportBug,
+                    ga4Event = advancedPreferenceTapEvent(preferenceKey = AdvancedPreferenceKeys.BUG_REPORT),
+                    modifier = Modifier.groupedPreferenceItem(
+                        position = GroupedItemPosition.SINGLE,
+                        outerRadius = SizeConstants.LargeMediumSize,
+                    ),
+                )
+            }
+        }
+
+        item {
+            PreferenceCategoryItem(title = stringResource(id = R.string.cache_management))
+        }
+
+        item {
+            SettingsPreferenceItem(
+                title = stringResource(id = R.string.clear_cache),
+                summary = stringResource(id = R.string.summary_preference_settings_clear_cache),
+                onClick = { onEvent(AdvancedSettingsEvent.ClearCache) },
+                ga4Event = advancedPreferenceTapEvent(preferenceKey = AdvancedPreferenceKeys.CLEAR_CACHE),
+                modifier = Modifier.groupedPreferenceItem(
+                    position = GroupedItemPosition.SINGLE,
+                    outerRadius = SizeConstants.LargeMediumSize,
+                ),
+            )
+        }
+
+        if (state.developerOptionsUnlocked) {
+            item {
+                PreferenceCategoryItem(title = stringResource(id = R.string.developer))
+            }
+
+            item {
+                SettingsPreferenceItem(
+                    title = stringResource(id = R.string.developer_options),
+                    summary = stringResource(id = R.string.summary_preference_settings_developer_options),
+                    onClick = onOpenDeveloperOptions,
+                    ga4Event = advancedPreferenceTapEvent(preferenceKey = AdvancedPreferenceKeys.DEVELOPER_OPTIONS),
+                    modifier = Modifier.groupedPreferenceItem(
+                        position = GroupedItemPosition.SINGLE,
+                        outerRadius = SizeConstants.LargeMediumSize,
+                    ),
+                )
+            }
         }
     }
-
-    ScreenStateHandler(
-        screenState = screenState,
-        onLoading = { LoadingScreen() },
-        onEmpty = { NoDataScreen(paddingValues = paddingValues) },
-        onError = { NoDataScreen(isError = true, paddingValues = paddingValues) },
-        onSuccess = {
-            LazyColumn(
-                contentPadding = paddingValues,
-                modifier = Modifier.fillMaxHeight(),
-                verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
-            ) {
-
-                item {
-                    PreferenceCategoryItem(title = stringResource(id = R.string.error_reporting))
-                }
-
-                item {
-                    SettingsPreferenceItem(
-                        title = stringResource(id = R.string.bug_report),
-                        summary = stringResource(id = R.string.summary_preference_settings_bug_report),
-                        onClick = { showIssueReporter = true },
-                        firebaseController = firebaseController,
-                        ga4Event = advancedPreferenceTapEvent(preferenceKey = AdvancedPreferenceKeys.BUG_REPORT),
-                        modifier = Modifier.groupedPreferenceItem(
-                            position = GroupedItemPosition.SINGLE,
-                            outerRadius = SizeConstants.LargeMediumSize,
-                        )
-                    )
-                }
-
-                item {
-                    PreferenceCategoryItem(title = stringResource(id = R.string.cache_management))
-                }
-
-                item {
-                    SettingsPreferenceItem(
-                        title = stringResource(id = R.string.clear_cache),
-                        summary = stringResource(id = R.string.summary_preference_settings_clear_cache),
-                        onClick = { viewModel.onEvent(AdvancedSettingsEvent.ClearCache) },
-                        firebaseController = firebaseController,
-                        ga4Event = advancedPreferenceTapEvent(preferenceKey = AdvancedPreferenceKeys.CLEAR_CACHE),
-                        modifier = Modifier.groupedPreferenceItem(
-                            position = GroupedItemPosition.SINGLE,
-                            outerRadius = SizeConstants.LargeMediumSize,
-                        )
-                    )
-                }
-            }
-        },
-    )
 }
 
 private fun advancedPreferenceTapEvent(preferenceKey: String): Ga4EventData {
@@ -180,3 +196,30 @@ private fun advancedPreferenceTapEvent(preferenceKey: String): Ga4EventData {
     )
 }
 
+@Preview(showBackground = true)
+@Composable
+private fun AdvancedSettingsScreenContentPreview() {
+    MaterialTheme {
+        AdvancedSettingsScreenContent(
+            state = AdvancedSettingsUiState(developerOptionsUnlocked = true),
+            onEvent = {},
+            onReportBug = {},
+            onOpenDeveloperOptions = {},
+            showBugReport = true,
+        )
+    }
+}
+
+/** Without an issue reporter and before the easter egg, only the cache row shows. */
+@Preview(showBackground = true)
+@Composable
+private fun AdvancedSettingsScreenContentMinimalPreview() {
+    MaterialTheme {
+        AdvancedSettingsScreenContent(
+            state = AdvancedSettingsUiState(),
+            onEvent = {},
+            onReportBug = {},
+            onOpenDeveloperOptions = {},
+        )
+    }
+}

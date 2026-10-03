@@ -162,8 +162,7 @@ private fun LoopingAnimatedVectorIcon(
 ) {
     val image = AnimatedImageVector.animatedVectorResource(id = icon.resId)
     val restarts: Boolean = icon.replayMode == ToolkitIconReplayMode.Restart
-    // A drawable that declares no duration would otherwise schedule the next cycle immediately and
-    // spin this loop, so a malformed resource costs one frame per cycle instead of the frame clock.
+    // Floor zero-duration cycles to one frame to prevent a busy loop.
     val cycleMillis: Long = image.totalDuration.toLong().coerceAtLeast(minimumValue = OneFrameMillis)
     var cycle: Int by remember(icon) { mutableIntStateOf(value = 0) }
 
@@ -171,8 +170,7 @@ private fun LoopingAnimatedVectorIcon(
         var atEnd: Boolean by remember(icon) { mutableStateOf(value = !restarts && restingAtEnd) }
 
         LaunchedEffect(icon, cycle) {
-            // The painter has to draw the frame it starts on before the target flips, otherwise the
-            // drawable is created already at that target and the cycle never animates.
+            // Draw the initial frame before changing the target so the drawable can animate.
             withFrameNanos { }
             atEnd = if (restarts) true else !atEnd
             delay(timeMillis = cycleMillis)

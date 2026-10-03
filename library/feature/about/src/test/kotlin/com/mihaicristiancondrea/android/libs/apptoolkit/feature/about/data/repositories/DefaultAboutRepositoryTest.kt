@@ -17,8 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories
 
-import com.google.common.truth.Truth.assertThat
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.providers.GooglePlayServicesVersionProvider
@@ -29,6 +28,8 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 class TestDefaultAboutRepository {
 
@@ -58,7 +59,7 @@ class TestDefaultAboutRepository {
         DefaultAboutRepository(
             deviceProvider = deviceProvider,
             buildInfoProvider = buildInfoProvider,
-            firebaseController = mockk<FirebaseController>(relaxed = true),
+            telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
             gmsVersionProvider = gmsVersionProvider,
             toolkitVersionProvider = toolkitVersionProvider,
         )
@@ -70,14 +71,15 @@ class TestDefaultAboutRepository {
 
             val result: AboutInfo = repo.getAboutInfo()
 
-            assertThat(result).isEqualTo(
+            assertEquals(
                 AboutInfo(
                     appVersion = "1.0",
                     appVersionCode = 1,
                     appToolkitVersion = "3.0.0-test",
                     googlePlayServicesVersion = "24.01.12",
                     deviceInfo = deviceProvider.deviceInfo,
-                )
+                ),
+                result,
             )
         }
 
@@ -91,7 +93,7 @@ class TestDefaultAboutRepository {
 
             val result: AboutInfo = repo.getAboutInfo()
 
-            assertThat(result.googlePlayServicesVersion).isNull()
+            assertNull(result.googlePlayServicesVersion)
         }
 
     @Test
@@ -101,6 +103,6 @@ class TestDefaultAboutRepository {
 
             val result: AboutInfo = repo.getAboutInfo()
 
-            assertThat(result.appToolkitVersion).isEmpty()
+            assertEquals("", result.appToolkitVersion)
         }
 }

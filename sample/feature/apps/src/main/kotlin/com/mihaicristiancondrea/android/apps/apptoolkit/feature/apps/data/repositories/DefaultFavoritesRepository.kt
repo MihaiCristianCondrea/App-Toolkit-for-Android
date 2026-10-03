@@ -18,34 +18,36 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStoreInterface
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.toStorageException
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 
 /**
- * Favorites source of truth backed directly by the app DataStore.
- *
- * `DataStoreInterface` already is the local data source for this feature, so the repository talks
- * to it without an extra per-feature data-source wrapper.
+ * Favorites source of truth backed by the app DataStore, which is the existing local source for
+ * this feature. DataStore failures reach callers as `StorageException`.
  */
 class DefaultFavoritesRepository(
     private val dataStore: DataStoreInterface,
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
 ) : FavoritesRepository {
 
     override fun observeFavorites(): Flow<Set<String>> = dataStore.favoriteApps
         .onStart {
-            firebaseController.logBreadcrumb(
+            telemetryRepository.logBreadcrumb(
                 message = "Favorites observe",
                 attributes = mapOf("source" to "DefaultFavoritesRepository"),
             )
         }
+        .catch { failure -> throw failure.toStorageException() ?: failure }
 
     override suspend fun toggleFavorite(packageName: String) {
-        firebaseController.logBreadcrumb(
+        telemetryRepository.logBreadcrumb(
             message = "Favorite toggled",
             attributes = mapOf("packageName" to packageName),
         )
-        dataStore.toggleFavoriteApp(packageName)
+        storageCall { dataStore.toggleFavoriteApp(packageName) }
     }
 }

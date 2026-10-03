@@ -18,24 +18,38 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 
 /**
- * Full-width native ad strip styled to sit in a bottom app bar.
+ * Native ad strip for a bottom app bar, using [NativeAdSlot] without a card container.
  *
- * Change rationale: this used to inflate `R.layout.native_ad_bottom_bar` and bind it with
- * `findViewById`. It is now a thin wrapper over [NativeAdSlot]; the behaviour changes that came
- * with the shared renderer are listed in the `:library:integration:ads` README. The strip paints its own surface, so it
- * renders without a card container.
+ * Disabled by default. The host must explicitly enable this placement after reviewing its layout.
  *
- * @param onAdLoaded reports whether an ad is currently displayed, so the bar can collapse.
+ * **Warning:** native ads next to navigation or other frequently tapped controls can cause
+ * accidental clicks. Prefer a clearly labelled ad within scrolling content. See
+ * [Google's placement guidance](https://support.google.com/admob/answer/10094971).
+ * Enabling this component does not establish policy compliance for the host's layout.
+ *
+ * @param enabled Opts into loading and rendering this placement. When false, no ad is requested
+ * or rendered and [onAdLoaded] reports false.
+ * @param onAdLoaded Reports whether an ad is displayed so the host can collapse the bar.
  */
 @Composable
 fun BottomAppBarNativeAdBanner(
     modifier: Modifier = Modifier,
     adUnitId: String,
+    enabled: Boolean = false,
     onAdLoaded: (Boolean) -> Unit = {},
 ) {
+    if (!enabled) {
+        val currentOnAdLoaded by rememberUpdatedState(onAdLoaded)
+        LaunchedEffect(Unit) { currentOnAdLoaded(false) }
+        return
+    }
+
     NativeAdSlot(
         adUnitId = adUnitId,
         presentation = NativeAdPresentation.BarRow,

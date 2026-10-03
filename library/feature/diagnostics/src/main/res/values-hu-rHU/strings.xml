@@ -24,7 +24,6 @@
     <string name="consent_ad_user_data_title">Adatok küldése hirdetésekhez</string>
     <string name="consent_analytics_storage_description">Engedélyezi az adatok, például az alkalmazáshasználat és a látogatás időtartamának tárolását az analitika és az alkalmazás teljesítményének javítása érdekében.</string>
     <string name="consent_analytics_storage_title">Analitikai adatok tárolása</string>
-    <string name="learn_more">Tudj meg többet</string>
     <string name="summary_usage_and_diagnostics">Javítsd a tapasztalataidat azáltal, hogy automatikusan küldöd a diagnosztikai, eszköz- és alkalmazáshasználati adatokat.</string>
     <string name="usage_and_diagnostics">Használat és diagnosztika</string>
     <string name="consent_ad_personalization_description_short">Engedélyezi a személyre szabott hirdetéseket.</string>
@@ -48,4 +47,13 @@
     <string name="privacy_choices_title">Adatvédelmi beállítások</string>
     <string name="summary_advanced_privacy_settings">Válassza ki, mit oszt meg elemzés és hirdetés céljából.</string>
     <string name="learn_more_about_provider">További információ erről a szolgáltatóról</string>
+    <string name="onboarding_crashlytics_title">Segítsen nekünk fejlődni</string>
+    <string name="onboarding_crashlytics_description">Engedélyezze az alkalmazásnak, hogy névtelen használati adatokat és összeomlási jelentéseket küldjön. Ez segít nekünk kijavítani a hibákat és javítani az élményét. Soha nem gyűjtünk személyes adatokat.</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">Részletes információk megjelenítése a használatról és a diagnosztikáról</string>
+    <string name="onboarding_crashlytics_show_details_button">Részletes információk megjelenítése</string>
+    <string name="error">Hiba</string>
+    <string name="onboarding_crashlytics_privacy_info">Az Ön adatvédelme fontos. Ezeket az adatokat csak hibajavításra és funkciófejlesztésre használjuk. További részletekért kérjük, tekintse át adatvédelmi irányelveinket.</string>
+    <string name="learn_more_privacy_policy">Tekintse át adatvédelmi irányelveinket</string>
+    <string name="onboarding_crashlytics_enabled_desc">Az adatok jelentése aktív.</string>
+    <string name="onboarding_crashlytics_disabled_desc">Az adatok jelentése inaktív.</string>
 </resources>

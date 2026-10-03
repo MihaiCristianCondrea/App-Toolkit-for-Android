@@ -15,42 +15,19 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="agree">ยอมรับ</string>
-    <string name="amoled_mode">โหมด AMOLED</string>
     <string name="back_button_content_description">ย้อนกลับ</string>
     <string name="back_button_text">ย้อนกลับ</string>
-    <string name="dark_mode">โหมดมืด</string>
-    <string name="done_button_content_description">เสร็จสิ้น</string>
     <string name="done_button_text">เสร็จสิ้น</string>
-    <string name="error">ข้อผิดพลาด</string>
-    <string name="follow_system">ตามการตั้งค่าระบบ</string>
-    <string name="learn_more">เรียนรู้เพิ่มเติม</string>
-    <string name="learn_more_privacy_policy">อ่านนโยบายความเป็นส่วนตัวของเรา</string>
-    <string name="light_mode">โหมดสว่าง</string>
     <string name="next_button_content_description">ถัดไป</string>
     <string name="next_button_text">ถัดไป</string>
     <string name="onboarding_amoled_mode_desc">สีดำเข้มขึ้นสำหรับหน้าจอ OLED</string>
     <string name="onboarding_complete_icon_desc">การเริ่มต้นใช้งานเสร็จสมบูรณ์</string>
     <string name="onboarding_completion_failed">ไม่สามารถบันทึกการตั้งค่าของคุณได้ โปรดลองอีกครั้ง</string>
-    <string name="onboarding_crashlytics_description">อนุญาตให้แอปส่งข้อมูลการใช้งานที่ไม่ระบุตัวตนและรายงานข้อขัดข้อง ซึ่งช่วยให้เราแก้ไขข้อบกพร่องและปรับปรุงประสบการณ์ของคุณให้ดีขึ้น จะไม่มีการรวบรวมข้อมูลส่วนบุคคลใดๆ</string>
-    <string name="onboarding_crashlytics_disabled_desc">การรายงานข้อมูลไม่ทำงาน</string>
-    <string name="onboarding_crashlytics_enabled_desc">การรายงานข้อมูลทำงานอยู่</string>
-    <string name="onboarding_crashlytics_privacy_info">ความเป็นส่วนตัวของคุณเป็นสิ่งสำคัญ เราใช้ข้อมูลนี้เพื่อแก้ไขข้อบกพร่องและปรับปรุงคุณสมบัติเท่านั้น สำหรับรายละเอียดเพิ่มเติม โปรดอ่านนโยบายความเป็นส่วนตัวของเรา</string>
-    <string name="onboarding_crashlytics_show_details_button">แสดงข้อมูลโดยละเอียด</string>
-    <string name="onboarding_crashlytics_show_details_button_cd">แสดงข้อมูลโดยละเอียดเกี่ยวกับการใช้งานและการวินิจฉัย</string>
-    <string name="onboarding_crashlytics_title">ช่วยเราปรับปรุง</string>
     <string name="onboarding_final_description">ขอบคุณสำหรับการปรับแต่งประสบการณ์ของคุณ ตอนนี้คุณพร้อมที่จะสำรวจคุณสมบัติทั้งหมดแล้ว ขอให้สนุก.</string>
     <string name="onboarding_final_title">คุณพร้อมแล้ว.</string>
-    <string name="onboarding_theme_dark_desc">สบายตา</string>
-    <string name="onboarding_theme_light_desc">สว่างสดใสและมีชีวิตชีวา</string>
     <string name="onboarding_theme_subtitle">เลือกรูปลักษณ์ที่คุณต้องการสำหรับแอป</string>
-    <string name="onboarding_theme_system_desc">ตรงกับอุปกรณ์ของคุณ</string>
     <string name="onboarding_theme_title">เลือกสไตล์ของคุณ</string>
-    <string name="other_colors">สีอื่นๆ</string>
     <string name="skip_button_content_description">ข้าม</string>
     <string name="skip_button_text">ข้าม</string>
-    <string name="summary_browse_terms_of_service_and_privacy_policy">โปรดอ่านและยอมรับเงื่อนไขการให้บริการและนโยบายความเป็นส่วนตัวเพื่อดำเนินการต่อ</string>
     <string name="usage_and_diagnostics">การใช้งานและการวินิจฉัย</string>
-    <string name="wallpaper_colors">สีของวอลเปเปอร์</string>
-    <string name="welcome">ยินดีต้อนรับ</string>
 </resources>

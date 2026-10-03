@@ -25,13 +25,10 @@ import kotlinx.coroutines.flow.Flow
  */
 interface DisplayPreferencesRepository {
 
-    /** Emits whether bottom-bar labels are shown. */
     val showBottomBarLabels: Flow<Boolean>
 
-    /** Emits whether the bounce-click button animation is enabled. */
     val bouncyButtons: Flow<Boolean>
 
-    /** Emits the stored language tag. */
     val language: Flow<String>
 
     /**
@@ -41,15 +38,11 @@ interface DisplayPreferencesRepository {
      */
     fun startupPage(default: String): Flow<String>
 
-    /** Shows or hides bottom-bar labels. */
     suspend fun setShowBottomBarLabels(show: Boolean)
 
-    /** Turns the bounce-click animation on or off. */
     suspend fun setBouncyButtons(enabled: Boolean)
 
-    /** Stores the language tag the app should use. */
     suspend fun setLanguage(language: String)
 
-    /** Stores the route the app opens on. */
     suspend fun setStartupPage(route: String)
 }

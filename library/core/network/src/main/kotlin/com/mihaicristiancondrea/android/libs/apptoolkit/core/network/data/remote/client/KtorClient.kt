@@ -29,32 +29,30 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.accept
 import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 /**
- * An object responsible for creating and configuring a Ktor [HttpClient].
- *
- * It provides a centralized way to create a pre-configured client instance with common settings
- * such as JSON content negotiation, request timeouts, and default request headers.
+ * Creates Toolkit HTTP clients with shared serialization, timeout, and request defaults.
  */
 object KtorClient {
 
     private const val REQUEST_TIMEOUT_LIMIT: Long = 30_000L
-    private var client: HttpClient? = null
 
     /**
-     * Returns a shared [HttpClient] instance for making network requests.
+     * Creates a new [HttpClient] for making network requests.
      *
-     * The client is created once and reused on subsequent calls. It is configured with:
+     * Each call builds a new client with its own engine and connection pool, so hold on to it: the
+     * Toolkit registers one as a Koin `single`. It is configured with:
      * - **Android Engine:** Uses the Android engine for network operations.
      * - **Content Negotiation:** Configures JSON serialization and deserialization with lenient parsing and ignoring unknown keys.
      * - **Timeout Configuration:** Sets request, connect and socket timeouts.
      * - **Default Request Configuration:** Sets default content type and accept headers to JSON.
      */
     fun createClient(enableLogging: Boolean = false): HttpClient {
-        return client ?: HttpClient(engineFactory = Android) {
+        return HttpClient(engineFactory = Android) {
             configureLogging(enableLogging)
 
             install(plugin = ContentNegotiation) {
@@ -76,18 +74,16 @@ object KtorClient {
                 contentType(type = ContentType.Application.Json)
                 accept(contentType = ContentType.Application.Json)
             }
-        }.also { client = it }
+        }
     }
 
     /**
-     * Configures the [Logging] plugin for the [HttpClient] if logging is enabled.
+     * Installs the [Logging] plugin when [enableLogging] is true, printing each request and
+     * response line with its headers, prefixed with "KtorClient:".
      *
-     * This function is an extension on [HttpClientConfig] and is called during the client's setup.
-     * If `enableLogging` is true, it installs the [Logging] plugin with a custom logger that prints
-     * logs to the console, prefixed with "KtorClient:". The log level is set to [LogLevel.ALL]
-     * to capture all request and response details.
-     *
-     * @param enableLogging A boolean flag to determine whether to enable logging.
+     * Bodies are not logged and the `Authorization` header is masked: an issue report carries a
+     * GitHub token in that header and the reporter's email in its body, and both would otherwise
+     * land in logcat.
      */
     private fun HttpClientConfig<AndroidEngineConfig>.configureLogging(enableLogging: Boolean) {
         if (!enableLogging) return
@@ -97,7 +93,8 @@ object KtorClient {
                     println("KtorClient: $message")
                 }
             }
-            level = LogLevel.ALL
+            level = LogLevel.HEADERS
+            sanitizeHeader { header -> header == HttpHeaders.Authorization }
         }
     }
 }

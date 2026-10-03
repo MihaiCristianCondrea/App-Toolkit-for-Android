@@ -47,7 +47,6 @@ dependencies {
     api(project(":library:core:datastore"))
     api(project(":library:core:network"))
     api(project(":library:core:ui"))
-    api(project(":library:integration:update"))
 
     api(libs.compose.markdown)
 }

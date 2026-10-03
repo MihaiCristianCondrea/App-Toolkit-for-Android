@@ -21,12 +21,9 @@
     <string name="app_build_version">Uygulama sürümü</string>
     <string name="app_info">Uygulama bilgisi</string>
     <string name="app_toolkit_version">App Toolkit sürümü</string>
-    <string name="content_description_more_options">Daha Fazla Seçenekler</string>
     <string name="debug">Hata ayıklama</string>
     <string name="device_info">Cihaz bilgileri</string>
     <string name="device_model">Cihaz modeli</string>
-    <string name="done_button_content_description">Bitti</string>
-    <string name="go_back">Geri dön</string>
     <string name="google_play_services_version">Google Play Hizmetleri sürümü</string>
     <string name="help_and_feedback">Yardım ve geri bildirim</string>
     <string name="manufacturer">Üretici</string>
@@ -41,8 +38,6 @@
     <string name="snack_device_info_failed">Cihaz bilgileri yüklenemedi</string>
     <string name="summary_preference_settings_oss">Açık kaynak yazılım lisansları hakkında detaylar</string>
     <string name="summary_share_message">Bu harika uygulamaya bir göz atın. Kullanmakta olduğum ve ilginizi çekebilecek bazı harika özelliklere sahip. Play Store\'dan indirilebilir: %1$s</string>
-    <string name="support_us">Bizi destekle</string>
-    <string name="try_again">Tekrar dene</string>
     <string name="updates">Güncellemeler</string>
     <string name="snack_seasonal_themes_unlocked">Keyfini çıkar</string>
 </resources>

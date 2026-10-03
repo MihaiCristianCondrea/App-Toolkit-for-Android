@@ -33,9 +33,10 @@ plugins {
     id("com.mihaicristiancondrea.android.apptoolkit.jvm-target")
 }
 
-// The Play Store identity of an already-released app. Kept next to the Firebase check below
-// because the two have to agree: `google-services.json` is matched by package name, so changing
-// one without the other fails the build.
+/**
+ * Released application identity. Firebase clients must match this value; changing it publishes
+ * a different app.
+ */
 val releasedApplicationId = "com.d4rk.android.apps.apptoolkit"
 
 val googleServicesFiles: List<File> = listOf(
@@ -44,13 +45,7 @@ val googleServicesFiles: List<File> = listOf(
     "src/release/google-services.json",
 ).map(::file).filter(File::exists)
 
-// Checking that a config file exists is not the same as checking it is the right one. The Google
-// Services plugin matches by package name and fails with "No matching client found for package
-// name", which reads as a build misconfiguration rather than what it is: this Firebase project has
-// no app registered for the id we ship under. Detecting it here turns that into an actionable
-// message, and lets a contributor without the real config still build.
-// Matched with a regex rather than an exact substring: the file is generated JSON and its spacing
-// is not a contract we control.
+// Match generated JSON independently of whitespace, and enable Firebase only for the released application ID.
 val packageNamePattern = Regex(
     """"package_name"\s*:\s*"${Regex.escape(releasedApplicationId)}""""
 )
@@ -58,8 +53,6 @@ val hasMatchingGoogleServicesConfig: Boolean = googleServicesFiles.any { configF
     packageNamePattern.containsMatchIn(configFile.readText())
 }
 
-// A config that is present but names a different package is the dangerous case: it looks
-// configured, and the only symptom is that Firebase quietly does nothing.
 val hasMismatchedGoogleServicesConfig: Boolean =
     googleServicesFiles.isNotEmpty() && !hasMatchingGoogleServicesConfig
 
@@ -75,11 +68,7 @@ if (hasMatchingGoogleServicesConfig) {
     )
 }
 
-// `google-services.json` is gitignored, so an absent file is the normal state on CI and on any
-// clone, it means "not configured here", which is obvious and harmless. A file that is present but
-// names a different package means "configured wrong", which is invisible: Firebase is skipped and
-// the release ships with no crash reporting. Only the second case fails the build; failing on the
-// first would break `./gradlew build` on CI, which assembles release variants.
+// An absent local config is valid on CI; a present mismatched config must block release tasks.
 gradle.taskGraph.whenReady {
     val assemblesRelease = allTasks.any { task ->
         task.project == project && task.name.contains("Release")
@@ -99,10 +88,6 @@ android {
     compileSdk = appVersion.compileSdk
 
     defaultConfig {
-        // The Play Store identity of an app that is already released. It must not follow the
-        // `namespace` above: `namespace` names the generated R/BuildConfig classes and can be
-        // renamed freely, while changing `applicationId` publishes a different app and strands
-        // every existing install. See build-logic/README.md#application-id.
         applicationId = releasedApplicationId
         resValue("string", "app_package_name", releasedApplicationId)
         minSdk = appVersion.minSdk
@@ -175,19 +160,7 @@ android {
         }
     }
 
-    /**
-     * Configures build types for the sample application.
-     *
-     * ### Release Configuration:
-     * - **Signing**: Dynamically assigns release signing if `signing.properties` exists.
-     * - **App Optimization (AGP 9.0+)**: Uses `optimization { enable = true }` to enable unified R8
-     *   code and resource shrinking with built-in default platform keep rules.
-     *   *Crucial:* DO NOT remove or replace this with legacy `isMinifyEnabled` or `proguardFiles(...)`.
-     *   Refer to the `r8-analyzer` skill for auditing and optimizing R8 keep rules.
-     * - **Crashlytics**: Enables mapping file upload when a matching Google Services config is detected.
-     *
-     * @see <a href="https://developer.android.com/topic/performance/app-optimization/enable-app-optimization">Enable App Optimization</a>
-     */
+    // Release signing is optional for local builds. AGP's unified optimization enables code and resource shrinking; Firebase mapping upload requires a matching host config.
     buildTypes {
         release {
             val signingFile = rootProject.file("signing.properties")
@@ -216,12 +189,6 @@ android {
         resValues = true
     }
 
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-        compilerOptions {
-            freeCompilerArgs.add("-Xannotation-default-target=param-property")
-        }
-    }
-
     bundle {
         storeArchive {
             enable = true
@@ -239,20 +206,16 @@ android {
 dependencies {
     testImplementation(project(":library:core:testing"))
     implementation(project(":sample:core:analytics"))
-    implementation(project(":sample:core:common"))
     implementation(project(":sample:core:datastore"))
-    implementation(project(":sample:core:navigation"))
     implementation(project(":sample:integration:ads"))
     implementation(project(":sample:feature:apps"))
     implementation(project(":sample:feature:components"))
     implementation(project(":sample:feature:faq"))
-    implementation(project(":sample:core:shell"))
     implementation(project(":sample:feature:onboarding"))
     implementation(project(":sample:feature:settings"))
     implementation(project(":sample:feature:tiles"))
     implementation(project(":sample:widget"))
     implementation(project(":sample:core:apptoolkit"))
-    implementation(project(":sample:core:ui"))
     implementation(project(":library:apptoolkit"))
     implementation(project(":library:core:common"))
     implementation(project(":library:core:ui"))
@@ -262,6 +225,7 @@ dependencies {
     implementation(project(":library:feature:faq"))
     implementation(project(":library:feature:issuereporter"))
     implementation(project(":library:feature:onboarding"))
+    implementation(project(":library:feature:startup"))
     implementation(project(":library:feature:permissions"))
     implementation(project(":library:feature:settings"))
     implementation(project(":library:feature:support"))

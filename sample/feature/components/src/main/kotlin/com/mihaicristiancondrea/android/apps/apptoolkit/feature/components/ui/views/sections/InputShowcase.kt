@@ -43,7 +43,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseHeader
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSection
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSurface
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
@@ -58,7 +57,6 @@ import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun InputShowcase(
-    firebaseController: FirebaseController,
     onLogEvent: (String, String?) -> Ga4EventData,
     dateMillis: Long,
     onDateSelected: (Long) -> Unit,
@@ -100,7 +98,6 @@ fun InputShowcase(
                         icon = ToolkitIcon.Vector(imageVector = Icons.Filled.MoreVert),
                         contentDescription = iconContentDescription,
                         onClick = { showMenu = true },
-                        firebaseController = firebaseController,
                         ga4Event = onLogEvent("dropdown", "menu_button"),
                     )
                     DropdownMenu(
@@ -112,14 +109,12 @@ fun InputShowcase(
                             textResId = R.string.components_menu_option_primary,
                             icon = Icons.Outlined.Info,
                             onClick = { showMenu = false },
-                            firebaseController = firebaseController,
                             ga4Event = onLogEvent("dropdown", "menu_option_primary"),
                         )
                         CommonDropdownMenuItem(
                             textResId = R.string.components_menu_option_secondary,
                             icon = Icons.Outlined.Favorite,
                             onClick = { showMenu = false },
-                            firebaseController = firebaseController,
                             ga4Event = onLogEvent("dropdown", "menu_option_secondary"),
                         )
                     }
@@ -136,7 +131,6 @@ fun InputShowcase(
             DatePickerTextField(
                 dateMillis = dateMillis,
                 onDateSelected = onDateSelected,
-                firebaseController = firebaseController,
                 ga4Event = onLogEvent("input", "date_picker"),
             )
             SmallVerticalSpacer()
@@ -144,7 +138,6 @@ fun InputShowcase(
                 selectedText = selectedDropdownOption,
                 options = dropdownOptions,
                 onOptionSelected = onDropdownOptionSelected,
-                firebaseController = firebaseController,
                 ga4Event = onLogEvent("input", "dropdown"),
             )
         }

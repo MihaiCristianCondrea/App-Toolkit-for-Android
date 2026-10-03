@@ -24,7 +24,6 @@
     <string name="consent_ad_user_data_title">Magpadala ng data para sa mga ad</string>
     <string name="consent_analytics_storage_description">Payagan ang pag-iimbak ng data tulad ng paggamit ng app at tagal ng pagbisita para mapahusay ang analytics at performance ng app.</string>
     <string name="consent_analytics_storage_title">Mag-imbak ng data ng analytics</string>
-    <string name="learn_more">Matuto pa</string>
     <string name="summary_usage_and_diagnostics">Tumulong na mapabuti ang iyong karanasan sa pamamagitan ng awtomatikong pagpapadala ng data ng diagnostic, device, at paggamit ng app sa amin. Makakatulong ito na mapabuti ang performance ng app, katatagan, at iba pang mga pagpapahusay. Makakatulong din ang ilang pinagsama-samang data sa aming mga app.\n\nIto ay pangkalahatang impormasyon tungkol sa iyong device at kung paano mo ginagamit ang aming mga app (tulad ng antas ng baterya, aktibidad ng system at app, at mga error). Gagamitin ang data para mapabuti ang aming mga app\n\nHindi naaapektuhan ng pag-off sa feature na ito ang kakayahan ng iyong device na ipadala ang impormasyong kailangan para sa mahahalagang serbisyo tulad ng mga update sa app at seguridad.\n</string>
     <string name="usage_and_diagnostics">Paggamit at mga diagnostic</string>
     <string name="consent_ad_personalization_description_short">Pinapagana ang personalized na advertising.</string>
@@ -48,4 +47,13 @@
     <string name="privacy_choices_title">Mga pagpipilian sa privacy</string>
     <string name="summary_advanced_privacy_settings">Piliin kung ano ang ibinabahagi mo para sa analytics at advertising.</string>
     <string name="learn_more_about_provider">Alamin pa ang tungkol sa provider na ito</string>
+    <string name="onboarding_crashlytics_title">Tulungan kaming mapabuti</string>
+    <string name="onboarding_crashlytics_description">Payagan ang app na magpadala ng anonymous na data ng paggamit at mga ulat ng pag-crash. Nakakatulong ito sa amin na ayusin ang mga bug at pagandahin ang iyong karanasan. Walang personal na impormasyon ang kailanman kinokolekta.</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">Ipakita ang detalyadong impormasyon tungkol sa paggamit at diagnostics</string>
+    <string name="onboarding_crashlytics_show_details_button">Ipakita ang detalyadong impormasyon</string>
+    <string name="error">Error</string>
+    <string name="onboarding_crashlytics_privacy_info">Mahalaga ang iyong privacy. Ginagamit lang namin ang data na ito para ayusin ang mga bug at pagbutihin ang mga feature. Para sa karagdagang detalye, pakisuri ang aming patakaran sa privacy.</string>
+    <string name="learn_more_privacy_policy">Suriin ang aming Patakaran sa Privacy</string>
+    <string name="onboarding_crashlytics_enabled_desc">Aktibo ang pag-uulat ng data.</string>
+    <string name="onboarding_crashlytics_disabled_desc">Hindi aktibo ang pag-uulat ng data.</string>
 </resources>

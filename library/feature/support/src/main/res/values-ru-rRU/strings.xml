@@ -22,6 +22,5 @@
     <string name="purchase_thank_you">Спасибо за пожертвование.</string>
     <string name="summary_donations">Независимо от суммы пожертвования, вы поможете нам поддерживать работу приложения и улучшать его функции. Мы благодарны за вашу щедрость и доброту.</string>
     <string name="support_offer_unavailable">Этот вариант пожертвования сейчас недоступен.</string>
-    <string name="support_us">Поддержите нас</string>
     <string name="web_ad">Веб-реклама</string>
 </resources>

@@ -104,4 +104,18 @@
     <string name="components_divider_width">Genişlik</string>
     <string name="components_divider_wave_height">Dalga yüksekliği</string>
     <string name="components_divider_vertical">Dikey</string>
+    <string name="components_snackbar_pressed">Bir düğmeye bastınız</string>
+    <string name="components_snackbar_action_message">Düğme işlemi yapıldı</string>
+    <string name="components_snackbar_undo">Geri al</string>
+    <string name="components_snackbar_undone">Geri alındı</string>
+    <string name="components_snackbar_error">Bir sorun oluştu</string>
+    <string name="components_snackbar_retry">Yeniden dene</string>
+    <string name="components_snackbar_icon">Simgesi ve kendi renkleri olan bir bilgi çubuğu</string>
+    <string name="components_snackbar_custom">%1$s: ekranın kendisinin çizdiği bir bilgi çubuğu</string>
+    <string name="components_section_article_bar">Makale uygulama çubuğu</string>
+    <string name="components_article_without_brand">Markasız</string>
+    <string name="components_article_with_brand">Markalı</string>
+    <string name="components_article_brand">Örnek yayıncı</string>
+    <string name="components_article_headline">Sade bir uygulama çubuğu haberi öne çıkarır</string>
+    <string name="components_article_paragraph">Çubuk başta yalnızca düğmelerini gösterir. Başlığı geçecek kadar kaydırın, başlık onların yerini alır; alt kenarındaki çizgi de ne kadar okuduğunuzu gösterir.</string>
 </resources>

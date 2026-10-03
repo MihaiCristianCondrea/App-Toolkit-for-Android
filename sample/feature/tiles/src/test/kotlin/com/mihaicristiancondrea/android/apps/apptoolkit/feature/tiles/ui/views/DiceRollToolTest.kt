@@ -41,7 +41,6 @@ class DiceRollToolTest {
         assertEquals(0f to 180f, targetAnglesFor(5))
         // 6 -> Bottom visible
         assertEquals(90f to 0f, targetAnglesFor(6))
-        // Default
         assertEquals(0f to 0f, targetAnglesFor(7))
     }
 

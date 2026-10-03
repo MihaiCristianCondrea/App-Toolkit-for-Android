@@ -104,4 +104,18 @@
     <string name="components_divider_width">चौड़ाई</string>
     <string name="components_divider_wave_height">लहर की ऊँचाई</string>
     <string name="components_divider_vertical">लंबवत</string>
+    <string name="components_snackbar_pressed">आपने एक बटन दबाया</string>
+    <string name="components_snackbar_action_message">बटन की कार्रवाई पूरी हुई</string>
+    <string name="components_snackbar_undo">पहले जैसा करें</string>
+    <string name="components_snackbar_undone">पहले जैसा किया गया</string>
+    <string name="components_snackbar_error">कुछ गलत हो गया</string>
+    <string name="components_snackbar_retry">फिर से कोशिश करें</string>
+    <string name="components_snackbar_icon">आइकन और अपने रंगों वाला स्नैकबार</string>
+    <string name="components_snackbar_custom">%1$s: स्क्रीन द्वारा खुद बनाया गया स्नैकबार</string>
+    <string name="components_section_article_bar">लेख ऐप बार</string>
+    <string name="components_article_without_brand">ब्रांड के बिना</string>
+    <string name="components_article_with_brand">ब्रांड के साथ</string>
+    <string name="components_article_brand">नमूना प्रकाशक</string>
+    <string name="components_article_headline">एक शांत ऐप बार कहानी को सबसे आगे रखता है</string>
+    <string name="components_article_paragraph">बार शुरू में केवल अपने बटन दिखाता है। शीर्षक से आगे स्क्रॉल करें और लेख का नाम उनकी जगह ले लेता है, जबकि उसके निचले किनारे की रेखा दिखाती है कि आपने कितना पढ़ लिया है।</string>
 </resources>

@@ -23,7 +23,6 @@
     <string name="language">Wika</string>
     <string name="navigation">Nabigasyon</string>
     <string name="show_labels_on_bottom_bar">Ipakita ang mga label sa ilalim na bar</string>
-    <string name="startup_page">Startup page</string>
     <string name="summary_preference_settings_bounce_buttons">Naglalapat ng banayad na bounce animation sa lahat ng naki-click na elemento kapag na-click</string>
     <string name="summary_preference_settings_dynamic_colors">Ilapat ang mga kulay mula sa mga wallpaper sa tema ng app</string>
     <string name="summary_preference_settings_language">Binabago ang wikang ginagamit sa app</string>
@@ -31,4 +30,5 @@
     <string name="summary_preference_settings_startup_page">Piliin ang screen na ipapakita kapag nagsimula ang app.</string>
     <string name="will_never_turn_on_automatically">Hindi kailanman awtomatikong mag-o-on</string>
     <string name="will_turn_on_automatically_by_system">Awtomatikong mag-o-on sa pamamagitan ng system</string>
+    <string name="display">Display</string>
 </resources>

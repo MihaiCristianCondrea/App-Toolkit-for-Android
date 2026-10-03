@@ -123,8 +123,7 @@ fun rememberNativeAdState(
 
         when {
             !enabled || adUnitId.isBlank() -> holder.release()
-            // Not reported: the SDK is still starting and this effect re-runs when it is ready.
-            // Only a request that was attempted and could not be made is worth a non-fatal.
+            // SDK startup is expected; this effect retries when readiness changes.
             !AdsSdkState.canRequestAds() -> holder.waitForSdk()
             else -> holder.load(
                 loaderClient = loaderClient,

@@ -40,33 +40,16 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /**
- * A composable function that creates a preference item with a checkbox.
- *
- * This item displays an optional icon, a title, an optional summary, and a checkbox.
- * Clicking the item toggles the checkbox state and triggers the provided [onCheckedChange] callback.
- *
- * @param icon The optional icon to display at the start of the item.
- * @param title The main title text for the preference item.
- * @param summary The optional summary text to display below the title.
- * @param checked The current checked state of the checkbox.
- * @param onCheckedChange A callback function that is invoked when the checkbox state changes.
- *                       It receives the new checked state as a boolean parameter.
- *
- * State ownership:
- * - [checked] is caller-owned state and should come from immutable UI state.
- * - This composable should not perform persistence or repositories calls.
- *
- * Accessibility:
- * - Keep [title] clear and [summary] short to preserve readability on smaller screens.
- * @param firebaseController Optional Firebase controller used to log GA4 events.
- * @param ga4Event Optional GA4 event data to log on click.
+ * Checkbox preference with caller-owned [checked] state. Row and checkbox taps emit
+ * [onCheckedChange]; callers handle persistence. Provide a clear [title] and supporting
+ * [summary].
  */
 @Composable
 fun CheckBoxPreferenceItem(
@@ -76,9 +59,9 @@ fun CheckBoxPreferenceItem(
     summary: String? = null,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
-    firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
 ) {
+    val telemetryRepository = LocalTelemetry.current
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
     Card(
@@ -91,7 +74,7 @@ fun CheckBoxPreferenceItem(
                 .clickable {
                     view.playSoundEffect(SoundEffectConstants.CLICK)
                     hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                    firebaseController.logGa4Event(ga4Event)
+                    telemetryRepository.logGa4Event(ga4Event)
                     onCheckedChange(!checked)
                 },
             verticalAlignment = Alignment.CenterVertically,
@@ -122,7 +105,7 @@ fun CheckBoxPreferenceItem(
                 onCheckedChange = { isChecked: Boolean ->
                     view.playSoundEffect(SoundEffectConstants.CLICK)
                     hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                    firebaseController.logGa4Event(ga4Event)
+                    telemetryRepository.logGa4Event(ga4Event)
                     onCheckedChange(isChecked)
                 },
                 modifier = Modifier.padding(start = SizeConstants.LargeSize),

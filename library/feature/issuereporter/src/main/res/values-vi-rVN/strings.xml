@@ -22,7 +22,6 @@
     <string name="issue_description_placeholder">Mô tả sự cố và cách tái hiện</string>
     <string name="issue_done">Xong</string>
     <string name="issue_email_label">Email</string>
-    <string name="issue_email_optional_placeholder">Email (không bắt buộc)</string>
     <string name="issue_section_label">Vấn đề</string>
     <string name="issue_send">Gửi</string>
     <string name="issue_submitted_message">Cảm ơn bạn đã giúp cải thiện ứng dụng.</string>

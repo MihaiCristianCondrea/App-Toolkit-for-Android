@@ -17,15 +17,19 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportResult
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.models.IssueReporterError
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.DeviceInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.Report
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.ExtraInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueReporterUiState
 
-/** Maps the repository's send outcome onto the state the report screen renders. */
-internal fun IssueReportResult.asDataState(): DataState<String, IssueReporterError> =
-    when (this) {
-        is IssueReportResult.Success -> DataState.Success(url)
-        is IssueReportResult.Error -> DataState.Error(
-            error = IssueReporterError.Http(status = status, message = message),
-        )
-    }
+/**
+ * The draft as the report filed on GitHub, trimmed, with [deviceInfo] attached. A blank email is
+ * left out.
+ */
+internal fun IssueReporterUiState.toReport(deviceInfo: DeviceInfo): Report = Report(
+    title = title.trim(),
+    description = description.trim(),
+    deviceInfo = deviceInfo,
+    extraInfo = ExtraInfo(),
+    email = email.trim().ifEmpty { null },
+)

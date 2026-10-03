@@ -40,18 +40,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
 
 /**
- * The Compose container an ad is drawn in.
+ * Compose container for a loaded native ad. Composed only after an ad is available to avoid
+ * leaving an empty card when loading fails.
  *
- * Kept separate from [NativeAdRenderer] so the container is only ever composed once an ad exists:
- * the previous cards rendered their `OutlinedCard` shell up front and left an empty bordered card
- * behind whenever the load failed.
- *
- * @param position position inside a grouped list; [GroupedItemPosition.SINGLE] renders a standalone
- * rounded card.
- * @param showContainer `false` draws the ad with no card behind it, for hosts that already provide
- * their own surface.
- * @param containerColor overrides the card container for screens whose own cards are not default
- * cards. [Color.Unspecified] keeps the default.
+ * @param position [GroupedItemPosition.SINGLE] uses standalone rounded corners.
+ * @param showContainer `false` leaves the surface to the host.
+ * @param containerColor [Color.Unspecified] uses Material card defaults; set a color to match a
+ * custom host surface.
  */
 @Composable
 internal fun NativeAdSurface(
@@ -68,10 +63,6 @@ internal fun NativeAdSurface(
     }
 
     val grouped: Boolean = position != GroupedItemPosition.SINGLE
-    // The default is deliberately an unstyled card: an ad sits among ordinary content and should
-    // read as ordinary content. Screens whose own cards are not default cards, and consumer apps
-    // with their own surfaces, pass `containerColor` rather than getting a toolkit-wide tint that
-    // is wrong everywhere else.
     Card(
         modifier = if (grouped) {
             modifier.groupedCorners(

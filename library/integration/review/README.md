@@ -8,7 +8,9 @@ Encapsulates Google Play in-app review eligibility, prompting, and persisted req
 
 - Review repository contract/implementation and review outcome/host models.
 - Normal and forced in-app-review use cases.
-- Activity extension helpers for the Play review flow.
+- Activity extension helpers for the Play review flow, and the install source checks
+  (`installingPackageNameOrNull`, `hasPlayStore`, `isInstalledFromPlayStore`) that decide whether
+  to ask.
 
 ## Does not own
 
@@ -71,6 +73,8 @@ flowchart TD
 ## Public contracts
 
 - `ReviewRepository`, review use cases, `ReviewHost`, and `ReviewOutcome`.
+- `ReviewHost(activity)`, which builds the host from the activity a page reads from
+  `LocalActivity.current`. It replaced About's `GmsHostFactory`.
 
 ## Internal implementations
 
@@ -82,7 +86,7 @@ flowchart TD
 session**. A host that sends the request from `onResume` sends it again on every return from another
 activity, which counts resumes as sessions: the three-session threshold is then reached in the first
 minute after install, and the in-flight flow is cancelled and restarted each time. Guard the request
-where it survives configuration change — the ViewModel, not an Activity field — as `:sample` does.
+where it survives configuration change (the ViewModel, not an Activity field), as `:sample` does.
 
 ## Current risks
 

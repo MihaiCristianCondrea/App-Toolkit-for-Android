@@ -54,22 +54,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.CoinSide
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R as CoreUiR
 
 @Composable
-fun CoinFlipTool(isHeads: Boolean, flipRequest: Int, onFlip: () -> Unit) {
+fun CoinFlipTool(side: CoinSide, flipRequest: Int, onFlip: () -> Unit) {
     var flipping by remember { mutableStateOf(false) }
     var rotationTarget by remember { mutableFloatStateOf(0f) }
 
     LaunchedEffect(flipRequest) {
         if (flipRequest > 0) {
             flipping = true
-            rotationTarget += 1800f + (if (isHeads) 0f else 180f)
+            rotationTarget += 1800f + (if (side == CoinSide.Heads) 0f else 180f)
         }
     }
 
@@ -114,7 +114,12 @@ fun CoinFlipTool(isHeads: Boolean, flipRequest: Int, onFlip: () -> Unit) {
             text = if (flipping) {
                 stringResource(id = R.string.tool_coin_flip_waiting)
             } else {
-                stringResource(id = if (isHeads) R.string.tile_service_heads else R.string.tile_service_tails)
+                stringResource(
+                    id = when (side) {
+                        CoinSide.Heads -> R.string.tile_service_heads
+                        CoinSide.Tails -> R.string.tile_service_tails
+                    },
+                )
             },
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -156,14 +161,14 @@ private fun Coin(
         if (isBackVisible) {
             Box(Modifier.graphicsLayer { this.rotationY = 180f }) {
                 CoinFace(
-                    iconRes = CoreUiR.drawable.ic_coin_tails,
+                    iconRes = R.drawable.ic_coin_tails,
                     color = MaterialTheme.colorScheme.secondaryContainer,
                     tint = MaterialTheme.colorScheme.onSecondaryContainer
                 )
             }
         } else {
             CoinFace(
-                iconRes = CoreUiR.drawable.ic_coin_heads,
+                iconRes = R.drawable.ic_coin_heads,
                 color = MaterialTheme.colorScheme.primaryContainer,
                 tint = MaterialTheme.colorScheme.onPrimaryContainer
             )
@@ -199,7 +204,7 @@ private fun CoinFlipToolPreview() {
     MaterialTheme {
         Surface {
             CoinFlipTool(
-                isHeads = true,
+                side = CoinSide.Heads,
                 flipRequest = 0,
                 onFlip = {},
             )

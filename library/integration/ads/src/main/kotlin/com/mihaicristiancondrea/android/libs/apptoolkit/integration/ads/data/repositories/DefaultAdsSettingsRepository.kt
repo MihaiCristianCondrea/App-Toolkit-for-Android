@@ -17,86 +17,63 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
-import kotlinx.coroutines.CancellationException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.toStorageException
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 
 /**
- * Concrete implementation of [AdsSettingsRepository].
- *
- * This class manages the persistence and retrieval of ad-related settings, specifically whether ads
- * are enabled or disabled. [CommonDataStore] owns both the persistence and the build-dependent
- * default, so this repositories never recomputes either.
- *
- * @param dataStore The data store used for persisting ad settings.
+ * Reads and writes the ad preferences in [CommonDataStore], with the store's own default, which
+ * the ads manager and the ad views share. It reads the cold preference flows rather than the
+ * eagerly started `adsEnabledFlow`, so a read failure reaches the caller as a [StorageException].
  */
 class DefaultAdsSettingsRepository(
     private val dataStore: CommonDataStore,
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
 ) : AdsSettingsRepository {
 
-    // Deliberately delegated rather than recomputed. `AdsCoreManager` gates SDK initialization on
-    // the same preference and the ad views observe it; a repositories with its own default is how the
-    // two came to disagree before, which made ad views request ads for an uninitialized SDK.
-    override val defaultAdsEnabled: Boolean = dataStore.defaultAdsEnabled
-
-    // The cold `ads(...)` flow rather than `adsEnabledFlow`: the settings screen needs IO errors and
-    // cancellation to reach it, and the eagerly-started StateFlow swallows both into its own scope.
-    // Only the default is shared, that is what used to diverge.
     override fun observeAdsEnabled(): Flow<Boolean> =
-        dataStore.ads(default = defaultAdsEnabled)
+        dataStore.ads(default = dataStore.defaultAdsEnabled)
             .onStart {
-                firebaseController.logBreadcrumb(
+                telemetryRepository.logBreadcrumb(
                     message = "Ads settings observe",
-                    attributes = mapOf("defaultAdsEnabled" to defaultAdsEnabled.toString()),
+                    attributes = mapOf("defaultAdsEnabled" to dataStore.defaultAdsEnabled.toString()),
                 )
             }
+            .asStorageFlow()
 
-    override fun observeReduceAds(): Flow<Boolean> = dataStore.reduceAds
+    override fun observeReduceAds(): Flow<Boolean> = dataStore.reduceAds.asStorageFlow()
 
-    // Previously returned Success unconditionally, so a DataStore write failure reached the caller
-    // as an uncaught exception rather than the error state the settings screen renders.
-    override suspend fun setAdsEnabled(enabled: Boolean): DataState<Unit, Errors.Database> {
-        firebaseController.logBreadcrumb(
-            message = "Ads settings updated",
-            attributes = mapOf("enabled" to enabled.toString()),
-        )
-        return runCatching { dataStore.saveAds(isChecked = enabled) }.fold(
-            onSuccess = { DataState.Success(Unit) },
-            onFailure = { throwable ->
-                if (throwable is CancellationException) throw throwable
-                firebaseController.recordNonFatal(throwable = throwable)
-                DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED)
-            },
-        )
-    }
+    override suspend fun setAdsEnabled(enabled: Boolean) =
+        persistPreference(breadcrumb = "Ads settings updated", enabled = enabled) {
+            dataStore.saveAds(isChecked = enabled)
+        }
 
-    override suspend fun setReduceAds(enabled: Boolean): DataState<Unit, Errors.Database> =
-        persistPreference(
-            breadcrumb = "Reduce ads setting updated",
-            enabled = enabled,
-        ) { dataStore.saveReduceAds(isChecked = enabled) }
+    override suspend fun setReduceAds(enabled: Boolean) =
+        persistPreference(breadcrumb = "Reduce ads setting updated", enabled = enabled) {
+            dataStore.saveReduceAds(isChecked = enabled)
+        }
 
     private suspend fun persistPreference(
         breadcrumb: String,
         enabled: Boolean,
         save: suspend () -> Unit,
-    ): DataState<Unit, Errors.Database> {
-        firebaseController.logBreadcrumb(
+    ) {
+        telemetryRepository.logBreadcrumb(
             message = breadcrumb,
             attributes = mapOf("enabled" to enabled.toString()),
         )
-        return runCatching { save() }.fold(
-            onSuccess = { DataState.Success(Unit) },
-            onFailure = { throwable ->
-                if (throwable is CancellationException) throw throwable
-                firebaseController.recordNonFatal(throwable = throwable)
-                DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED)
-            },
-        )
+        storageCall { save() }
     }
+
+    /**
+     * Rethrows a storage failure of this flow as a [StorageException], the flow counterpart of
+     * [storageCall]. Cancellation and other failures pass through unchanged.
+     */
+    private fun Flow<Boolean>.asStorageFlow(): Flow<Boolean> =
+        catch { failure -> throw failure.toStorageException() ?: failure }
 }

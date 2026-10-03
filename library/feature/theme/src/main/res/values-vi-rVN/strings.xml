@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="holiday_greeting_christmas_title">Chúc mừng ngày lễ!</string>
+    <string name="holiday_greeting_christmas_message">Chủ đề Giáng sinh đã đến, với tuyết rơi khắp ứng dụng. Bạn có muốn dùng chủ đề này cho đến hết kỳ nghỉ lễ không?</string>
+    <string name="holiday_greeting_halloween_title">Chúc mừng Halloween!</string>
+    <string name="holiday_greeting_halloween_message">Mùa Halloween đã đến. Bạn có muốn dùng chủ đề Halloween cho đến khi mùa lễ kết thúc không?</string>
+    <string name="holiday_greeting_use_theme">Dùng chủ đề ngày lễ trong dịp lễ</string>
+    <string name="dark_theme">Giao diện tối</string>
+    <string name="weather_effect">Hiệu ứng thời tiết</string>
+    <string name="weather_effect_automatic">Tự động</string>
+    <string name="weather_effect_snow">Tuyết</string>
+    <string name="weather_effect_off">Tắt</string>
+    <string name="weather_effect_rain">Mưa</string>
+    <string name="weather_effect_info">Chế độ Tự động cho tuyết rơi khi đang dùng bảng màu Giáng sinh. Tuyết và mưa rơi với mọi bảng màu.</string>
+</resources>

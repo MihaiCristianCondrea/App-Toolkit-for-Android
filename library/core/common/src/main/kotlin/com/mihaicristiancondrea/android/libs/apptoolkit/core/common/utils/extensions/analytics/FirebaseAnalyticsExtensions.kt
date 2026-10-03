@@ -17,12 +17,12 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 
 /**
- * Standard GA4 recommended event helpers on [FirebaseController].
+ * Standard GA4 recommended event helpers on [TelemetryRepository].
  *
  * Provides typed extensions for Google Analytics recommended events and parameters:
  * - tutorial_begin / tutorial_complete
@@ -34,17 +34,17 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model
  */
 
 /** Logs standard GA4 `tutorial_begin` event. */
-fun FirebaseController.logTutorialBegin() {
+fun TelemetryRepository.logTutorialBegin() {
     logEvent(AnalyticsEvent(name = "tutorial_begin"))
 }
 
 /** Logs standard GA4 `tutorial_complete` event. */
-fun FirebaseController.logTutorialComplete() {
+fun TelemetryRepository.logTutorialComplete() {
     logEvent(AnalyticsEvent(name = "tutorial_complete"))
 }
 
 /** Logs standard GA4 `search` event with parameter `search_term`. */
-fun FirebaseController.logSearch(searchTerm: String) {
+fun TelemetryRepository.logSearch(searchTerm: String) {
     if (searchTerm.isBlank()) return
     logEvent(
         AnalyticsEvent(
@@ -55,7 +55,7 @@ fun FirebaseController.logSearch(searchTerm: String) {
 }
 
 /** Logs standard GA4 `select_content` event with parameters `content_type` and `item_id`. */
-fun FirebaseController.logSelectContent(contentType: String, itemId: String) {
+fun TelemetryRepository.logSelectContent(contentType: String, itemId: String) {
     logEvent(
         AnalyticsEvent(
             name = "select_content",
@@ -68,7 +68,7 @@ fun FirebaseController.logSelectContent(contentType: String, itemId: String) {
 }
 
 /** Logs standard GA4 `share` event with parameters `method`, `content_type`, and `item_id`. */
-fun FirebaseController.logShare(
+fun TelemetryRepository.logShare(
     method: String,
     contentType: String,
     itemId: String,
@@ -86,7 +86,7 @@ fun FirebaseController.logShare(
 }
 
 /** Logs standard GA4 `view_item` event with parameters `item_id`, `item_name`, and optional `item_category`. */
-fun FirebaseController.logViewItem(
+fun TelemetryRepository.logViewItem(
     itemId: String,
     itemName: String,
     itemCategory: String? = null,
@@ -106,7 +106,7 @@ fun FirebaseController.logViewItem(
 }
 
 /** Logs standard GA4 `view_item_list` event with optional parameters `item_list_id` and `item_list_name`. */
-fun FirebaseController.logViewItemList(
+fun TelemetryRepository.logViewItemList(
     itemListId: String? = null,
     itemListName: String? = null,
 ) {
@@ -126,7 +126,7 @@ fun FirebaseController.logViewItemList(
 }
 
 /** Logs standard GA4 `unlock_achievement` event with parameter `achievement_id`. */
-fun FirebaseController.logUnlockAchievement(achievementId: String) {
+fun TelemetryRepository.logUnlockAchievement(achievementId: String) {
     logEvent(
         AnalyticsEvent(
             name = "unlock_achievement",

@@ -66,31 +66,26 @@ val ButtonMeasurements.containerHeight: Dp
         ButtonMeasurements.ExtraLarge -> ButtonDefaults.ExtraLargeContainerHeight
     }
 
-/** Resting and pressed shapes for a labelled button at this size. */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 internal fun ButtonMeasurements.buttonShapes(): ButtonShapes =
     ButtonDefaults.shapesFor(buttonHeight = containerHeight)
 
-/** Content padding for a labelled button at this size. */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 internal fun ButtonMeasurements.contentPadding(
     hasLeadingIcon: Boolean,
     hasTrailingIcon: Boolean,
 ): PaddingValues = ButtonDefaults.contentPaddingFor(containerHeight, hasLeadingIcon, hasTrailingIcon)
 
-/** Label typography for a labelled button at this size. */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 internal fun ButtonMeasurements.labelTextStyle(): TextStyle =
     ButtonDefaults.textStyleFor(buttonHeight = containerHeight)
 
-/** Icon size beside a label at this size. */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 internal val ButtonMeasurements.labelIconSize: Dp
     get() = ButtonDefaults.iconSizeFor(containerHeight)
 
-/** Gap between the icon and the label at this size. */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 internal val ButtonMeasurements.labelIconSpacing: Dp
     get() = ButtonDefaults.iconSpacingFor(containerHeight)
@@ -111,7 +106,6 @@ internal val ButtonMeasurements.iconButtonContainerSize: DpSize
         ButtonMeasurements.ExtraLarge -> IconButtonDefaults.extraLargeContainerSize()
     }
 
-/** Icon size for an icon-only button at this size class. */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 internal val ButtonMeasurements.iconButtonIconSize: Dp
     get() = when (this) {
@@ -122,7 +116,6 @@ internal val ButtonMeasurements.iconButtonIconSize: Dp
         ButtonMeasurements.ExtraLarge -> IconButtonDefaults.extraLargeIconSize
     }
 
-/** Resting and pressed shapes for an icon-only button at this size class. */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 internal fun ButtonMeasurements.iconButtonShapes(): IconButtonShapes = when (this) {

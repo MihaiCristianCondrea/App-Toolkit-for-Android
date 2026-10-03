@@ -45,7 +45,7 @@ fun Modifier.hapticPagerSwipe(pagerState: PagerState): Modifier {
                     true
                 }
             }
-            .collect { /* state already handled */ }
+            .collect {  }
     }
 
     return this

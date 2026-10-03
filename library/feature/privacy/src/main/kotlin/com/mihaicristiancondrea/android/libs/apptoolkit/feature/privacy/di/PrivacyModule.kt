@@ -17,16 +17,20 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.di
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.search.privacySettingsSearch
+import org.koin.core.qualifier.named
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.PrivacyViewModel
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val privacyModule: Module = module {
+    single<SettingsSearchProvider>(named("privacy")) { privacySettingsSearch }
     viewModel {
         PrivacyViewModel(
             provider = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
         )
     }
 }

@@ -25,15 +25,11 @@ import kotlinx.coroutines.flow.Flow
  */
 interface ReviewPreferencesDataSource {
 
-    /** Emits how many sessions have been recorded. */
     val sessionCount: Flow<Int>
 
-    /** Emits whether the review prompt has already been shown. */
     val hasPromptedReview: Flow<Boolean>
 
-    /** Increments the recorded session count. */
     suspend fun incrementSessionCount()
 
-    /** Records whether the review prompt has been shown. */
     suspend fun setHasPromptedReview(value: Boolean)
 }

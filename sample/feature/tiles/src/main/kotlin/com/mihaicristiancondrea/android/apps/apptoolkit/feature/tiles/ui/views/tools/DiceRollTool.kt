@@ -20,7 +20,6 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,6 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
@@ -209,9 +209,9 @@ fun DiceWithButtonAndProceduralDice(
     ) {
         MaterialProceduralDice3D(
             value = displayedResult,
-            rotationX = rotationX.value,
-            rotationY = rotationY.value,
-            rotationZ = rotationZ.value,
+            rotationX = { rotationX.value },
+            rotationY = { rotationY.value },
+            rotationZ = { rotationZ.value },
             modifier = Modifier
                 .size(150.dp)
                 .graphicsLayer {
@@ -237,12 +237,18 @@ fun DiceWithButtonAndProceduralDice(
     }
 }
 
+/**
+ * Draws the die at the given rotations.
+ *
+ * The rotations are read only while drawing, so a roll redraws the die on each frame without
+ * recomposing it or the button below it.
+ */
 @Composable
 private fun MaterialProceduralDice3D(
     value: Int,
-    rotationX: Float,
-    rotationY: Float,
-    rotationZ: Float,
+    rotationX: () -> Float,
+    rotationY: () -> Float,
+    rotationZ: () -> Float,
     modifier: Modifier = Modifier,
 ) {
     val colorScheme = MaterialTheme.colorScheme
@@ -255,7 +261,6 @@ private fun MaterialProceduralDice3D(
         pipColor = colorScheme.onPrimaryContainer,
     )
 
-    // Using `remember` to hoist Paints out of DrawScope
     val fillPaint = remember {
         Paint().apply {
             style = PaintingStyle.Fill
@@ -273,18 +278,29 @@ private fun MaterialProceduralDice3D(
     }
 
     val path = remember { Path() }
+    val pipPath = remember { Path() }
 
-    Canvas(modifier = modifier) {
-        drawProceduralDiceCube(
-            rotationX = rotationX,
-            rotationY = rotationY,
-            rotationZ = rotationZ,
-            colors = colors,
-            fillPaint = fillPaint,
-            strokePaint = strokePaint,
-            reusablePath = path,
-        )
-    }
+    Spacer(
+        modifier = modifier.drawWithCache {
+            // Depends only on the size, so it is built when the size changes, not on every frame.
+            val cornerEffect = PathEffect.cornerPathEffect(
+                min(size.width, size.height) * CubeHalfSizeFraction * CornerRadiusFraction,
+            )
+            onDrawBehind {
+                drawProceduralDiceCube(
+                    rotationX = rotationX(),
+                    rotationY = rotationY(),
+                    rotationZ = rotationZ(),
+                    colors = colors,
+                    fillPaint = fillPaint,
+                    strokePaint = strokePaint,
+                    cornerEffect = cornerEffect,
+                    reusablePath = path,
+                    reusablePipPath = pipPath,
+                )
+            }
+        },
+    )
 }
 
 private fun DrawScope.drawProceduralDiceCube(
@@ -294,7 +310,9 @@ private fun DrawScope.drawProceduralDiceCube(
     colors: ProceduralDiceColors,
     fillPaint: Paint,
     strokePaint: Paint,
+    cornerEffect: PathEffect,
     reusablePath: Path,
+    reusablePipPath: Path,
 ) {
     val center = Offset(
         x = size.width / 2f,
@@ -304,7 +322,7 @@ private fun DrawScope.drawProceduralDiceCube(
     val cubeHalfSize: Float = min(
         a = size.width,
         b = size.height,
-    ) * 0.34f
+    ) * CubeHalfSizeFraction
 
     val rotationXRadians: Double = rotationX.toRadians()
     val rotationYRadians: Double = rotationY.toRadians()
@@ -349,8 +367,6 @@ private fun DrawScope.drawProceduralDiceCube(
         }
 
     val edgeWidth: Float = cubeHalfSize * 0.08f
-    val cornerRadius: Float = cubeHalfSize * 0.18f // Reduced corner radius for stability
-    val cornerEffect = PathEffect.cornerPathEffect(cornerRadius)
 
     fillPaint.pathEffect = cornerEffect
     strokePaint.pathEffect = cornerEffect
@@ -386,6 +402,7 @@ private fun DrawScope.drawProceduralDiceCube(
             corners = face.corners,
             value = face.number,
             pipColor = colors.pipColor,
+            path = reusablePipPath,
         )
     }
 }
@@ -394,6 +411,7 @@ private fun DrawScope.drawProjectedPips(
     corners: List<Offset>,
     value: Int,
     pipColor: Color,
+    path: Path,
 ) {
     pipCentersFor(value = value).forEach { center: Offset ->
         drawProjectedPip(
@@ -401,17 +419,20 @@ private fun DrawScope.drawProjectedPips(
             center = center,
             radius = PipRadius,
             color = pipColor,
+            path = path,
         )
     }
 }
 
+/** Draws one pip into [path], which is reset first so one path serves every pip of every frame. */
 private fun DrawScope.drawProjectedPip(
     corners: List<Offset>,
     center: Offset,
     radius: Float,
     color: Color,
+    path: Path,
 ) {
-    val path = Path()
+    path.reset()
 
     repeat(times = PipSegmentCount) { index: Int ->
         val angle: Double = (index.toDouble() / PipSegmentCount.toDouble()) * FullCircleRadians
@@ -739,6 +760,8 @@ private const val RollDurationMillis = 960
 private const val FullRotationDegrees = 360f
 
 private const val CameraDistance = 3.2f
+private const val CubeHalfSizeFraction = 0.34f
+private const val CornerRadiusFraction = 0.18f
 private const val PipRadius = 0.064f
 private const val PipSegmentCount = 18
 

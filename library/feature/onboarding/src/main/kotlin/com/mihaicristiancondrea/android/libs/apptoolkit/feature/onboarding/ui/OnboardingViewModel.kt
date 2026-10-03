@@ -17,153 +17,99 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui
 
-import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.repositories.OnboardingRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingAction
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logTutorialBegin
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logTutorialComplete
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.copyData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.dismissSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.showSnackbar
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.repositories.OnboardingRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingCompletion
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
- * ViewModel for the onboarding flow, including completion and consent requests.
+ * ViewModel for the onboarding screen: the selected page, the consent request, and saving
+ * completion.
+ *
+ * Both repositories are main-safe, so it needs no dispatcher. Finishing is the only way out of
+ * onboarding, so a failed save shows an error message instead of leaving a button that seems to
+ * do nothing.
  */
 class OnboardingViewModel(
     private val onboardingRepository: OnboardingRepository,
-    private val dispatchers: DispatcherProvider,
-    firebaseController: FirebaseController,
-) : LoggedScreenViewModel<OnboardingUiState, OnboardingEvent, OnboardingAction>(
-    initialState = UiStateScreen(data = OnboardingUiState()),
-    firebaseController = firebaseController,
+    private val consentRepository: ConsentRepository,
+    telemetryRepository: TelemetryRepository,
+) : LoggedScreenViewModel<OnboardingUiState, OnboardingEvent>(
+    initialState = OnboardingUiState(),
+    telemetryRepository = telemetryRepository,
     screenName = "Onboarding",
+    viewModelName = "OnboardingViewModel",
 ) {
-
-    private var observerJob: Job? = null
+    private var consentJob: Job? = null
     private var completeJob: Job? = null
 
     init {
-        firebaseController.logTutorialBegin()
-        handleEvent(OnboardingEvent.ObserveCompletion)
+        telemetryRepository.logTutorialBegin()
+        observeCompletion()
     }
 
     override fun handleEvent(event: OnboardingEvent) {
         when (event) {
-            is OnboardingEvent.ObserveCompletion -> observeCompletion()
-            is OnboardingEvent.UpdateCurrentTab -> updateCurrentTab(event.index)
-            is OnboardingEvent.CompleteOnboarding -> completeOnboarding()
-            is OnboardingEvent.RequestConsent -> requestConsent()
-            is OnboardingEvent.ShowCrashlyticsDialog -> setCrashlyticsDialogVisibility(isVisible = true)
-            is OnboardingEvent.HideCrashlyticsDialog -> setCrashlyticsDialogVisibility(isVisible = false)
-            is OnboardingEvent.DismissSnackbar -> dismissSnackbar()
+            is OnboardingEvent.PageSelected -> setState { copy(currentTabIndex = event.index) }
+            is OnboardingEvent.RequestConsent -> requestConsent(host = event.host)
+            OnboardingEvent.CompleteOnboarding -> completeOnboarding()
         }
     }
 
+    /** A failed read is reported and the flag reads as not completed. */
     private fun observeCompletion() {
-        startOperation(action = Actions.OBSERVE_COMPLETION)
-        observerJob = observerJob.restart {
-            onboardingRepository.observeOnboardingCompletion()
-                .flowOn(dispatchers.io)
-                .onStart {
-                    firebaseController.logBreadcrumb(
-                        message = "Observe onboarding completion started",
-                        attributes = mapOf("source" to "OnboardingRepository")
-                    )
-                }
-                .onEach { completed ->
-                    updateStateThreadSafe {
-                        screenState.copyData { copy(isOnboardingCompleted = completed) }
-                    }
-                }
-                .catchReport(action = Actions.OBSERVE_COMPLETION) {
-                    updateStateThreadSafe {
-                        screenState.copyData { copy(isOnboardingCompleted = false) }
-                    }
-                }
-                .launchIn(viewModelScope)
-        }
+        onboardingRepository.observeOnboardingCompletion()
+            .onStart {
+                telemetryRepository.logBreadcrumb(
+                    message = "Observe onboarding completion started",
+                    attributes = mapOf("source" to "OnboardingRepository"),
+                )
+            }
+            .collectReport(
+                action = Actions.OBSERVE_COMPLETION,
+                onError = { setState { copy(isOnboardingCompleted = false) } },
+            ) { completed ->
+                setState { copy(isOnboardingCompleted = completed) }
+            }
     }
 
-    private fun updateCurrentTab(index: Int) {
-        viewModelScope.launch {
-            updateStateThreadSafe {
-                screenState.copyData { copy(currentTabIndex = index) }
+    /**
+     * Each resume restarts a request still waiting from the last one. The outcome does not change
+     * the screen; a failure is only reported.
+     */
+    private fun requestConsent(host: ConsentHost) {
+        consentJob = consentJob.restart {
+            launchReport(action = Actions.REQUEST_CONSENT) {
+                consentRepository.requestConsent(host = host)
             }
         }
     }
 
+    /** A second tap restarts the save rather than running two, so only one result shows. */
     private fun completeOnboarding() {
         completeJob = completeJob.restart {
             launchReport(
                 action = Actions.COMPLETE_ONBOARDING,
-                block = {
-                    withContext(dispatchers.io) {
-                        onboardingRepository.setOnboardingCompleted()
-                    }
-
-                    firebaseController.logTutorialComplete()
-
-                    updateStateThreadSafe {
-                        screenState.copyData { copy(isOnboardingCompleted = true) }
-                    }
-
-                    sendAction(OnboardingAction.OnboardingCompleted)
+                onError = { error ->
+                    setState { copy(completion = OnboardingCompletion.Failed) }
+                    showMessage(error.toErrorMessage(fallback = CompletionFailedText))
                 },
-                onError = {
-                    // Finishing is the only way out of onboarding, so a failure that says nothing
-                    // reads as a dead button: the user taps Finish and stays where they are.
-                    updateStateThreadSafe {
-                        screenState.copyData { copy(isOnboardingCompleted = false) }
-                        screenState.showSnackbar(
-                            snackbar = UiSnackbar(
-                                message = UiTextHelper.StringResource(
-                                    resourceId = R.string.onboarding_completion_failed,
-                                ),
-                                isError = true,
-                                timeStamp = System.currentTimeMillis(),
-                            ),
-                        )
-                    }
-                },
-            )
-        }
-    }
-
-    private fun dismissSnackbar() {
-        viewModelScope.launch {
-            updateStateThreadSafe {
-                screenState.dismissSnackbar()
-            }
-        }
-    }
-
-    private fun requestConsent() {
-        startOperation(action = Actions.REQUEST_CONSENT)
-        viewModelScope.launch {
-            sendAction(OnboardingAction.RequestConsentUi)
-        }
-    }
-
-    private fun setCrashlyticsDialogVisibility(isVisible: Boolean) {
-        viewModelScope.launch {
-            updateStateThreadSafe {
-                screenState.copyData { copy(isCrashlyticsDialogVisible = isVisible) }
+            ) {
+                setState { copy(completion = OnboardingCompletion.Saving) }
+                onboardingRepository.setOnboardingCompleted()
+                telemetryRepository.logTutorialComplete()
+                setState { copy(completion = OnboardingCompletion.Saved) }
             }
         }
     }
@@ -174,5 +120,8 @@ class OnboardingViewModel(
         const val REQUEST_CONSENT: String = "requestConsent"
     }
 
+    private companion object {
+        /** Shown for a failure with no text of its own; see `toUiText` for the ones that have one. */
+        val CompletionFailedText = UiTextHelper.StringResource(R.string.onboarding_completion_failed)
+    }
 }
-

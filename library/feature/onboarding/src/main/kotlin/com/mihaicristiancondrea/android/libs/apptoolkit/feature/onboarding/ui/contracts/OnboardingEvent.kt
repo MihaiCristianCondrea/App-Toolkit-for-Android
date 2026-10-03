@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,15 +17,23 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
 
-sealed interface OnboardingEvent : UiEvent {
-    data object ObserveCompletion : OnboardingEvent
-    data class UpdateCurrentTab(val index: Int) : OnboardingEvent
-    data object RequestConsent : OnboardingEvent
+/**
+ * What the user can ask the onboarding screen's ViewModel to do.
+ */
+sealed interface OnboardingEvent {
+    /** The pager settled on the page at [index]. */
+    data class PageSelected(val index: Int) : OnboardingEvent
+
+    /**
+     * Asks for consent, showing the form when the consent SDK requires it. The screen sends it on
+     * every resume.
+     *
+     * @property host The activity the form shows over, used only for this request.
+     */
+    data class RequestConsent(val host: ConsentHost) : OnboardingEvent
+
+    /** Saves completion, then enters the shell. Sent by Skip and by Finish on the last page. */
     data object CompleteOnboarding : OnboardingEvent
-    data object ShowCrashlyticsDialog : OnboardingEvent
-    data object HideCrashlyticsDialog : OnboardingEvent
-    data object DismissSnackbar : OnboardingEvent
 }
-

@@ -27,11 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 
 /**
- * Displays a category header within preference screens.
- *
- * This composable function renders a distinct header for preference categories, enhancing the visual organization of settings screens. It uses a primary color and semi-bold text styling to clearly distinguish the category title from individual preference items.
- *
- * @param title The text to be displayed as the category header. This should clearly and concisely name the preference category.
+ * Category heading for preference rows, using the current theme's primary color.
  */
 @Composable
 fun PreferenceCategoryItem(title: String) {

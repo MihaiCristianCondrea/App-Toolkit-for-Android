@@ -24,7 +24,7 @@ import com.google.android.libraries.ads.mobile.sdk.appopen.AppOpenAd
 import com.google.android.libraries.ads.mobile.sdk.appopen.AppOpenAdEventCallback
 import com.google.android.libraries.ads.mobile.sdk.common.AdLoadCallback
 import com.google.android.libraries.ads.mobile.sdk.initialization.InitializationConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.interfaces.OnShowAdCompleteListener
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.utils.interfaces.OnShowAdCompleteListener
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.AdMobAppIdProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
@@ -51,34 +51,21 @@ import java.util.Date
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.test.assertFailsWith
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class TestAdsCoreManager {
     private val testScope = CoroutineScope(Dispatchers.Unconfined)
 
     /**
-     * Dispatchers for the `runBlocking` bodies below.
-     *
-     * These tests cannot use the default [TestDispatchers], which is backed by a
-     * `StandardTestDispatcher`: that dispatcher only queues work and runs it when a
-     * `TestCoroutineScheduler` is advanced, which nothing outside `runTest` does. `initializeAds`
-     * opens with `withContext(dispatchers.io) { … }`, so under `runBlocking` that block was queued
-     * and never executed, and every one of these tests parked forever, the whole
-     * `testDebugUnitTest` task hung on this file rather than failing.
-     *
-     * `UnconfinedTestDispatcher` runs eagerly on the calling thread, so the `withContext` completes
-     * inline and `runBlocking` returns.
+     * Eager dispatchers for tests using `runBlocking`. A queued [StandardTestDispatcher] cannot
+     * progress there without scheduler advancement, leaving dispatcher switches suspended.
      */
     private fun eagerDispatchers(): TestDispatchers =
         TestDispatchers(UnconfinedTestDispatcher())
 
     /**
-     * Counts initializations instead of touching the real SDK.
-     *
-     * These tests used to stub the SDK with `mockkStatic(MobileAds::class)`, which never took
-     * effect: `MobileAds.initialize` is declared on `MobileAds.Companion`, not as a static, so the
-     * real implementation ran and threw `IllegalArgumentException: The provided application context
-     * is not an instance of Application` against the mocked [Context]. [AdsCoreManager] takes an
-     * [AdsSdkInitializer] precisely so a test never has to reach the SDK at all.
+     * Counts SDK initialization calls without invoking the Android SDK.
      */
     private class RecordingAdsSdkInitializer : AdsSdkInitializer {
         var initializations: Int = 0
@@ -103,16 +90,8 @@ class TestAdsCoreManager {
     }
 
     /**
-     * The [dataStore] has to be passed, never left to the constructor default.
-     *
-     * That default is `CommonDataStore.getInstance(context)`, which builds a real Preferences
-     * `DataStore` over `context.commonDataStore` when the singleton is unset. Against a mocked
-     * [Context] the store's first read fails with `no answer found for Context.getFilesDir()`
-     * inside DataStore's own scope, so it surfaces as an uncaught exception on a background thread
-     * rather than here. `runTest` reports whatever it finds pending as
-     * `UncaughtExceptionsBeforeTest`, which failed an unrelated test in another class, whichever
-     * one happened to start next. Tests that replace the store by reflection after construction
-     * are too late: the real one already exists.
+     * Supply the mocked store during construction. Leaving the default creates a real DataStore
+     * whose background reads can fail after setup and contaminate later tests.
      */
     private fun managerWith(
         context: Context,
@@ -134,8 +113,7 @@ class TestAdsCoreManager {
     }
 
     /**
-     * [AdsCoreManager] now resolves the AdMob app id from the host manifest instead of using a
-     * hardcoded sample id, so the tests have to supply one.
+     * Host-manifest AdMob ID fixture for manager initialization.
      */
     private val adMobAppIdProvider = AdMobAppIdProvider { "ca-app-pub-1234567890123456~1234567890" }
     private val noopContinuation = object : Continuation<Unit> {
@@ -312,10 +290,7 @@ class TestAdsCoreManager {
         val adField = inner3.javaClass.getDeclaredField("appOpenAd")
         adField.isAccessible = true
         adField.set(inner3, ad)
-        // isAdAvailable() is `appOpenAd != null && wasLoadTimeLessThanNHoursAgo()`. Planting the ad
-        // without a load time leaves loadTime at 0, so the ad reads as expired, showAdIfAvailable
-        // takes its reload branch, and adEventCallback is never assigned, which is what left the
-        // capturing slot empty.
+        // A planted ad also needs a recent load time; otherwise it is expired and the reload branch runs.
         val loadTimeField = inner3.javaClass.getDeclaredField("loadTime")
         loadTimeField.isAccessible = true
         loadTimeField.setLong(inner3, Date().time)
@@ -490,9 +465,7 @@ class TestAdsCoreManager {
         }
         verify(exactly = 2) { AppOpenAd.load(any(), any()) }
 
-        // But once an ad is actually held, requesting again must not spend another impression:
-        // loadAd()'s guard is `isLoadingAd || isAdAvailable()`. This assertion used to expect a
-        // reload here, which the production code has never done.
+        // A held, unexpired ad must suppress additional load requests.
         slot.captured.onAdLoaded(mockk())
         inner.javaClass.getDeclaredMethod("loadAd").apply {
             isAccessible = true

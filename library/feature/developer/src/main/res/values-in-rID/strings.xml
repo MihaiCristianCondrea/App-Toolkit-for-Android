@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="shell_dev_live_state">Status saat ini</string>
+    <string name="shell_dev_window">Jendela</string>
+    <string name="shell_dev_window_summary">%1$d × %2$d dp · %3$s</string>
+    <string name="shell_dev_page_stack">Tumpukan halaman</string>
+    <string name="shell_dev_tab_stack">Tumpukan %1$s</string>
+    <string name="shell_dev_navigation">Navigasi</string>
+    <string name="shell_dev_start">Mulai di, sejak peluncuran berikutnya</string>
+    <string name="shell_dev_layout">Tata letak navigasi</string>
+    <string name="shell_dev_accessories">Aksesori bawah</string>
+    <string name="shell_dev_bottom_accessory">Di atas panel navigasi</string>
+    <string name="shell_dev_motion">Gerakan</string>
+    <string name="shell_dev_animation_speed">Kecepatan animasi</string>
+    <string name="shell_dev_reset">Reset opsi developer</string>
+    <string name="shell_dev_reset_summary">Kembali ke yang ditetapkan aplikasi</string>
+    <string name="shell_layout_auto">Otomatis, dari lebar jendela</string>
+    <string name="shell_layout_bottom_bar">Panel bawah dan laci</string>
+    <string name="shell_layout_rail">Rel navigasi</string>
+    <string name="shell_layout_expanded_rail">Rel navigasi yang diperluas</string>
+    <string name="shell_layout_permanent_drawer">Laci permanen</string>
+    <string name="shell_accessory_as_declared">Banner, diganti oleh pemutar saat memutar</string>
+    <string name="shell_accessory_none">Tidak ada</string>
+    <string name="shell_accessory_banner">Hanya banner</string>
+    <string name="shell_accessory_player">Hanya pemutar</string>
+    <string name="shell_start_as_declared">Seperti yang ditetapkan aplikasi: %1$s</string>
+    <string name="shell_start_screen">%1$s, sebelum tampilan utama</string>
+    <string name="shell_speed_normal">Normal</string>
+    <string name="shell_speed_slow">2× lebih lambat</string>
+    <string name="shell_speed_very_slow">5× lebih lambat</string>
+    <string name="shell_developer_options">Opsi developer</string>
+    <string name="shell_top_bar">Panel aplikasi atas</string>
+    <string name="shell_navigation_bar">Panel navigasi bawah</string>
+    <string name="shell_navigation_tint">Warna rel dan panel aplikasi</string>
+    <string name="shell_hide_bottom_bar">Sembunyikan panel bawah saat menggulir</string>
+    <string name="shell_hide_bottom_bar_summary">Bergeser pergi saat konten digulir ke bawah, selama tidak ada pemutar yang tampil</string>
+    <string name="shell_hide_top_bar">Sembunyikan panel aplikasi saat menggulir</string>
+    <string name="shell_hide_top_bar_summary">Bergeser pergi saat konten digulir ke bawah, panel besar setelah menciut, dan kembali begitu digulir ke atas</string>
+    <string name="shell_limit_width">Batasi lebar konten di jendela besar</string>
+    <string name="shell_limit_width_summary">Pusatkan konten dengan margin, seperti situs web, melewati lebar maksimum kebijakan tata letak</string>
+    <string name="shell_tab_transition">Antar-tab</string>
+    <string name="shell_back_edge">Geser kembali dari tepi kanan</string>
+    <string name="shell_as_declared">Seperti yang ditetapkan tiap layar</string>
+    <string name="shell_top_bar_small">Kecil</string>
+    <string name="shell_top_bar_center">Rata tengah</string>
+    <string name="shell_top_bar_large">Besar, dapat diciutkan</string>
+    <string name="shell_top_bar_large_collapsed">Besar, terbuka diciutkan</string>
+    <string name="shell_top_bar_hidden">Tersembunyi</string>
+    <string name="shell_navigation_bar_standard">Standar, 80 dp</string>
+    <string name="shell_navigation_bar_short">Pendek, 64 dp</string>
+    <string name="shell_navigation_tint_none">Permukaan; panel aplikasi berwarna saat menggulir</string>
+    <string name="shell_navigation_tint_always">Berwarna bersama, konten di dalam kartu</string>
+    <string name="shell_navigation_tint_on_scroll">Berwarna bersama setelah konten digulir</string>
+    <string name="shell_back_edge_system">Seperti Android: halaman mengecil di tempat</string>
+    <string name="shell_back_edge_follow">Mengikuti jari, mencerminkan tepi kiri (default)</string>
+    <string name="shell_transition_directional">Geser berarah</string>
+    <string name="shell_transition_fade_through">Pudar melalui</string>
+    <string name="shell_transition_fade">Pudar silang</string>
+    <string name="shell_transition_none">Tidak ada</string>
+    <string name="shell_dev_layout_and_bars">Tata letak dan bilah</string>
+</resources>

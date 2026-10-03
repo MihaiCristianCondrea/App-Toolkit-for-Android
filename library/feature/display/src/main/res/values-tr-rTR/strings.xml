@@ -23,7 +23,6 @@
     <string name="language">Dil</string>
     <string name="navigation">Gezinti</string>
     <string name="show_labels_on_bottom_bar">Alt çubukta etiketleri gösterin</string>
-    <string name="startup_page">Başlangıç sayfası</string>
     <string name="summary_preference_settings_bounce_buttons">Tıklanabilir öğelere hafif bir sıçrama animasyonu uygular</string>
     <string name="summary_preference_settings_dynamic_colors">Uygulama temasına duvar kağıtlarından renkler uygula</string>
     <string name="summary_preference_settings_language">Uygulamada kullanılan dili değiştirin</string>
@@ -31,4 +30,5 @@
     <string name="summary_preference_settings_startup_page">Uygulama başlatıldığında görüntülenecek ekranı seçin.</string>
     <string name="will_never_turn_on_automatically">Hiçbir zaman otomatik olarak açılmayacak</string>
     <string name="will_turn_on_automatically_by_system">Sistem tarafından otomatik olarak açılacak</string>
+    <string name="display">Ekran</string>
 </resources>

@@ -22,4 +22,8 @@
     <string name="error_reporting">Pelaporan kesalahan</string>
     <string name="summary_preference_settings_bug_report">Kirim laporan bug dan permintaan fitur ke halaman masalah di repositori GitHub aplikasi</string>
     <string name="summary_preference_settings_clear_cache">Bersihkan data aplikasi sementara.</string>
+    <string name="advanced">Lanjutan</string>
+    <string name="developer_options">Opsi developer</string>
+    <string name="summary_preference_settings_developer_options">Uji halaman awal, tata letak navigasi, dan animasi</string>
+    <string name="developer">Developer</string>
 </resources>

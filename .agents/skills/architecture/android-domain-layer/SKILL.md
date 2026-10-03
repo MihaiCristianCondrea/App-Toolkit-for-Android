@@ -104,3 +104,16 @@ class GetUserUseCase(
     suspend operator fun invoke(): User =
         userRepository.getUser()
 }
+```
+
+adds a class, a binding and a test without adding behavior; the ViewModel can call the repository.
+Keep such a use case only when the project's conventions require every call to go through one.
+
+For naming, dependencies, threading, lifecycle, combining repositories, and testing use cases, read
+`references/domain-layer.md`.
+
+## Errors
+
+A use case lets the repository's exceptions pass through, and throws its own only when a business
+rule is what failed. Mapping a failure to text is not a reason to add a use case: the UI layer does
+that, as the `android-ui-layer` skill describes in `references/errors.md`.

@@ -17,44 +17,33 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui
 
-import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.repositories.UsageAndDiagnosticsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.domain.models.UsageAndDiagnosticsSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.contracts.UsageAndDiagnosticsAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.contracts.UsageAndDiagnosticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.states.UsageAndDiagnosticsUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.asUiText
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.dismissSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setErrors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoading
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.updateState
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 
+/**
+ * Shows and stores the reporting and consent choices for the usage and diagnostics screen and the
+ * onboarding page. The repository applies each stored choice to the consent SDKs, so this only
+ * follows and writes them. A failed read replaces the choices with a retryable failure; a failed
+ * write keeps them on screen and shows an error message.
+ */
 class UsageAndDiagnosticsViewModel(
     private val repository: UsageAndDiagnosticsRepository,
-    private val dispatchers: DispatcherProvider,
-    private val consentRepository: ConsentRepository,
-    firebaseController: FirebaseController,
-) : LoggedScreenViewModel<UsageAndDiagnosticsUiState, UsageAndDiagnosticsEvent, UsageAndDiagnosticsAction>(
-    initialState = UiStateScreen(data = UsageAndDiagnosticsUiState()),
-    firebaseController = firebaseController,
+    telemetryRepository: TelemetryRepository,
+) : LoggedScreenViewModel<UsageAndDiagnosticsUiState, UsageAndDiagnosticsEvent>(
+    initialState = UsageAndDiagnosticsUiState(),
+    telemetryRepository = telemetryRepository,
     screenName = "UsageAndDiagnostics",
+    viewModelName = "UsageAndDiagnosticsViewModel",
 ) {
 
     private var observeConsentsJob: Job? = null
@@ -64,30 +53,59 @@ class UsageAndDiagnosticsViewModel(
     private var setAdStorageConsentJob: Job? = null
     private var setAdUserDataConsentJob: Job? = null
     private var setAdPersonalizationConsentJob: Job? = null
+    private var setConsentBundleJob: Job? = null
 
     init {
-        onEvent(event = UsageAndDiagnosticsEvent.Initialize)
+        onEvent(event = UsageAndDiagnosticsEvent.Load)
     }
 
     override fun handleEvent(event: UsageAndDiagnosticsEvent) {
         when (event) {
-            is UsageAndDiagnosticsEvent.Initialize -> observeConsents()
-            is UsageAndDiagnosticsEvent.SetUsageAndDiagnostics -> updateUsageAndDiagnostics(enabled = event.enabled)
-            is UsageAndDiagnosticsEvent.SetAnalyticsConsent -> updateAnalyticsConsent(granted = event.granted)
-            is UsageAndDiagnosticsEvent.SetAdStorageConsent -> updateAdStorageConsent(granted = event.granted)
-            is UsageAndDiagnosticsEvent.SetAdUserDataConsent -> updateAdUserDataConsent(granted = event.granted)
-            is UsageAndDiagnosticsEvent.SetAdPersonalizationConsent -> updateAdPersonalizationConsent(
-                granted = event.granted
-            )
+            UsageAndDiagnosticsEvent.Load -> observeConsents()
 
-            is UsageAndDiagnosticsEvent.AllowAllConsent -> applyConsentBundle(
+            is UsageAndDiagnosticsEvent.SetUsageAndDiagnostics ->
+                setUsageAndDiagnosticsJob = persistChoice(
+                    job = setUsageAndDiagnosticsJob,
+                    action = Actions.SET_USAGE_AND_DIAGNOSTICS,
+                    extra = mapOf(ExtraKeys.ENABLED to event.enabled.toString()),
+                ) { repository.setUsageAndDiagnostics(event.enabled) }
+
+            is UsageAndDiagnosticsEvent.SetAnalyticsConsent ->
+                setAnalyticsConsentJob = persistChoice(
+                    job = setAnalyticsConsentJob,
+                    action = Actions.SET_ANALYTICS_CONSENT,
+                    extra = mapOf(ExtraKeys.GRANTED to event.granted.toString()),
+                ) { repository.setAnalyticsConsent(event.granted) }
+
+            is UsageAndDiagnosticsEvent.SetAdStorageConsent ->
+                setAdStorageConsentJob = persistChoice(
+                    job = setAdStorageConsentJob,
+                    action = Actions.SET_AD_STORAGE_CONSENT,
+                    extra = mapOf(ExtraKeys.GRANTED to event.granted.toString()),
+                ) { repository.setAdStorageConsent(event.granted) }
+
+            is UsageAndDiagnosticsEvent.SetAdUserDataConsent ->
+                setAdUserDataConsentJob = persistChoice(
+                    job = setAdUserDataConsentJob,
+                    action = Actions.SET_AD_USER_DATA_CONSENT,
+                    extra = mapOf(ExtraKeys.GRANTED to event.granted.toString()),
+                ) { repository.setAdUserDataConsent(event.granted) }
+
+            is UsageAndDiagnosticsEvent.SetAdPersonalizationConsent ->
+                setAdPersonalizationConsentJob = persistChoice(
+                    job = setAdPersonalizationConsentJob,
+                    action = Actions.SET_AD_PERSONALIZATION_CONSENT,
+                    extra = mapOf(ExtraKeys.GRANTED to event.granted.toString()),
+                ) { repository.setAdPersonalizationConsent(event.granted) }
+
+            UsageAndDiagnosticsEvent.AllowAllConsent -> applyConsentBundle(
                 analytics = true,
                 adStorage = true,
                 adUserData = true,
                 adPersonalization = true,
             )
 
-            is UsageAndDiagnosticsEvent.AllowEssentialConsent -> applyConsentBundle(
+            UsageAndDiagnosticsEvent.AllowEssentialConsent -> applyConsentBundle(
                 analytics = true,
                 adStorage = true,
                 adUserData = false,
@@ -96,56 +114,23 @@ class UsageAndDiagnosticsViewModel(
         }
     }
 
+    /** Follows the stored choices. A retry restarts the collection that failed. */
     private fun observeConsents() {
-        startOperation(action = Actions.OBSERVE_CONSENTS)
-
         observeConsentsJob = observeConsentsJob.restart {
-            repository.observeSettings()
-                .flowOn(dispatchers.io)
-                .onStart {
-                    updateStateThreadSafe {
-                        screenState.dismissSnackbar()
-                        screenState.setLoading()
-                    }
-                }
-                .onEach { settings: UsageAndDiagnosticsSettings ->
-                    val consentSettings = ConsentSettings(
-                        usageAndDiagnostics = settings.usageAndDiagnostics,
-                        analyticsConsent = settings.analyticsConsent,
-                        adStorageConsent = settings.adStorageConsent,
-                        adUserDataConsent = settings.adUserDataConsent,
-                        adPersonalizationConsent = settings.adPersonalizationConsent,
-                    )
-                    updateStateThreadSafe {
-                        val updated = UsageAndDiagnosticsUiState(
-                            usageAndDiagnostics = settings.usageAndDiagnostics,
-                            analyticsConsent = settings.analyticsConsent,
-                            adStorageConsent = settings.adStorageConsent,
-                            adUserDataConsent = settings.adUserDataConsent,
-                            adPersonalizationConsent = settings.adPersonalizationConsent,
-                        )
-
-                        screenState.setSuccess(data = updated)
-                    }
-                    consentRepository.applyConsentSettings(consentSettings)
-                }
-                .catchReport(action = Actions.OBSERVE_CONSENTS) {
-                    updateStateThreadSafe {
-                        handleObservationError(
-                            message = Errors.Database.DATABASE_OPERATION_FAILED.asUiText()
-                        )
-                    }
-                }
-                .launchIn(viewModelScope) // returns Job :contentReference[oaicite:2]{index=2}
+            setState { copy(settings = Loadable.Loading) }
+            repository.observeSettings().collectReport(
+                action = Actions.OBSERVE_CONSENTS,
+                onError = { error -> setState { copy(settings = error.toFailed(fallback = ErrorText)) } },
+            ) { settings ->
+                setState { copy(settings = Loadable.Ready(settings)) }
+            }
         }
     }
 
     /**
-     * Applies one of the dialog's whole-bundle answers.
-     *
-     * Reporting is turned on with any of them: a person choosing what to share has said they are
-     * sharing something, and leaving the master switch off would silently drop every choice they
-     * just made.
+     * Stores one of the dialog's whole-bundle answers in one write, after cancelling single-choice
+     * writes still in flight so they cannot overwrite it. Reporting is turned on with either
+     * answer, since leaving it off would drop every choice just made.
      */
     private fun applyConsentBundle(
         analytics: Boolean,
@@ -153,99 +138,50 @@ class UsageAndDiagnosticsViewModel(
         adUserData: Boolean,
         adPersonalization: Boolean,
     ) {
-        updateUsageAndDiagnostics(enabled = true)
-        updateAnalyticsConsent(granted = analytics)
-        updateAdStorageConsent(granted = adStorage)
-        updateAdUserDataConsent(granted = adUserData)
-        updateAdPersonalizationConsent(granted = adPersonalization)
-    }
-
-    private fun updateUsageAndDiagnostics(enabled: Boolean) {
-        setUsageAndDiagnosticsJob = setUsageAndDiagnosticsJob.restart {
+        val settings = UsageAndDiagnosticsSettings(
+            usageAndDiagnostics = true,
+            analyticsConsent = analytics,
+            adStorageConsent = adStorage,
+            adUserDataConsent = adUserData,
+            adPersonalizationConsent = adPersonalization,
+        )
+        listOf(
+            setUsageAndDiagnosticsJob,
+            setAnalyticsConsentJob,
+            setAdStorageConsentJob,
+            setAdUserDataConsentJob,
+            setAdPersonalizationConsentJob,
+        ).forEach { job -> job?.cancel() }
+        setConsentBundleJob = setConsentBundleJob.restart {
             launchReport(
-                action = Actions.SET_USAGE_AND_DIAGNOSTICS,
-                extra = mapOf(ExtraKeys.ENABLED to enabled.toString()),
-                block = { repository.setUsageAndDiagnostics(enabled) },
-                onError = {
-                    updateStateThreadSafe {
-                        handleObservationError(
-                            message = UiTextHelper.StringResource(R.string.error_an_error_occurred)
-                        )
-                    }
-                },
-            )
+                action = Actions.SET_CONSENT_BUNDLE,
+                extra = mapOf(
+                    ExtraKeys.ANALYTICS to analytics.toString(),
+                    ExtraKeys.AD_PERSONALIZATION to adPersonalization.toString(),
+                ),
+                onError = { error -> showMessage(error.toErrorMessage(fallback = ErrorText)) },
+            ) {
+                repository.setAll(settings)
+            }
         }
     }
 
-    private fun updateAnalyticsConsent(granted: Boolean) {
-        setAnalyticsConsentJob = setAnalyticsConsentJob.restart {
-            launchReport(
-                action = Actions.SET_ANALYTICS_CONSENT,
-                extra = mapOf(ExtraKeys.GRANTED to granted.toString()),
-                block = { repository.setAnalyticsConsent(granted) },
-                onError = {
-                    updateStateThreadSafe {
-                        handleObservationError(
-                            message = UiTextHelper.StringResource(R.string.error_an_error_occurred)
-                        )
-                    }
-                },
-            )
-        }
-    }
-
-    private fun updateAdStorageConsent(granted: Boolean) {
-        setAdStorageConsentJob = setAdStorageConsentJob.restart {
-            launchReport(
-                action = Actions.SET_AD_STORAGE_CONSENT,
-                extra = mapOf(ExtraKeys.GRANTED to granted.toString()),
-                block = { repository.setAdStorageConsent(granted) },
-                onError = {
-                    updateStateThreadSafe {
-                        handleObservationError(
-                            message = UiTextHelper.StringResource(R.string.error_an_error_occurred)
-                        )
-                    }
-                },
-            )
-        }
-    }
-
-    private fun updateAdUserDataConsent(granted: Boolean) {
-        setAdUserDataConsentJob = setAdUserDataConsentJob.restart {
-            launchReport(
-                action = Actions.SET_AD_USER_DATA_CONSENT,
-                extra = mapOf(ExtraKeys.GRANTED to granted.toString()),
-                block = { repository.setAdUserDataConsent(granted) },
-                onError = {
-                    updateStateThreadSafe {
-                        handleObservationError(
-                            message = UiTextHelper.StringResource(R.string.error_an_error_occurred)
-                        )
-                    }
-                },
-            )
-        }
-    }
-
-    private fun updateAdPersonalizationConsent(granted: Boolean) {
-        setAdPersonalizationConsentJob = setAdPersonalizationConsentJob.restart {
-            launchReport(
-                action = Actions.SET_AD_PERSONALIZATION_CONSENT,
-                extra = mapOf(ExtraKeys.GRANTED to granted.toString()),
-                block = { repository.setAdPersonalizationConsent(granted) },
-                onError = {
-                    updateStateThreadSafe {
-                        handleObservationError(message = UiTextHelper.StringResource(R.string.error_an_error_occurred))
-                    }
-                },
-            )
-        }
-    }
-
-    private fun handleObservationError(message: UiTextHelper = UiTextHelper.StringResource(R.string.error_an_error_occurred)) {
-        screenState.setErrors(errors = listOf(UiSnackbar(message = message, isError = true)))
-        screenState.updateState(ScreenState.Error())
+    /**
+     * Restarts [job] with a reported [write] of one choice. Each choice keeps its own job, so
+     * changing one never cancels another's write.
+     */
+    private fun persistChoice(
+        job: Job?,
+        action: String,
+        extra: Map<String, String>,
+        write: suspend () -> Unit,
+    ): Job = job.restart {
+        launchReport(
+            action = action,
+            extra = extra,
+            onError = { error -> showMessage(error.toErrorMessage(fallback = ErrorText)) },
+            block = write,
+        )
     }
 
     private object Actions {
@@ -255,10 +191,17 @@ class UsageAndDiagnosticsViewModel(
         const val SET_AD_STORAGE_CONSENT: String = "setAdStorageConsent"
         const val SET_AD_USER_DATA_CONSENT: String = "setAdUserDataConsent"
         const val SET_AD_PERSONALIZATION_CONSENT: String = "setAdPersonalizationConsent"
+        const val SET_CONSENT_BUNDLE: String = "setConsentBundle"
     }
 
     private object ExtraKeys {
         const val ENABLED: String = "enabled"
         const val GRANTED: String = "granted"
+        const val ANALYTICS: String = "analytics"
+        const val AD_PERSONALIZATION: String = "adPersonalization"
+    }
+
+    private companion object {
+        val ErrorText = UiTextHelper.StringResource(R.string.error_an_error_occurred)
     }
 }

@@ -20,10 +20,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.d
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.DeviceInfo
 
 /**
- * Captures the device details attached to a report.
- *
- * A `fun interface` so a test can supply one as a lambda. Callers outside the data layer should go
- * through `IssueReporterRepository.captureDeviceInfo()`, this is the data source's own contract.
+ * Device-capture contract for the local data source. Callers outside the data layer use
+ * [IssueReporterRepository.captureDeviceInfo][com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReporterRepository.captureDeviceInfo].
  */
 fun interface DeviceInfoProvider {
     suspend fun capture(): DeviceInfo

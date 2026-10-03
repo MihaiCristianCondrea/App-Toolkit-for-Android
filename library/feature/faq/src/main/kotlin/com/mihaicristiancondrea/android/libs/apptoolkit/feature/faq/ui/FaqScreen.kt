@@ -17,72 +17,98 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui
 
-import androidx.compose.foundation.layout.Box
+import androidx.activity.compose.LocalActivity
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.outlined.Lightbulb
 import androidx.compose.material.icons.outlined.RateReview
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberBottomSheetState
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.contracts.FaqAction
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.contracts.FaqEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.states.FaqUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.content.FaqScreenContent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.dropdowns.FaqScreenMenuActions
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.findActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openPlayStoreForApp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.sendEmailToDeveloper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedExtendedFloatingActionButton
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ScaffoldFabs
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists.GroupedAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists.GroupedActionList
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraLargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqId
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.contracts.FaqEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.states.FaqUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.ads.FaqNativeAdCard
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.cards.ContactUsCard
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.cards.QuestionCard
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewHost
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.flow.distinctUntilChanged
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.qualifier.named
 
-// The analytics screen name stays "Help": the destination is still "Help & feedback" to the
-// user, and changing it would split this screen's history in GA4 at the module rename.
+/**
+ * Keeps the established `Help` analytics identity so the screen retains its GA4 history.
+ */
 private const val FAQ_SCREEN_NAME: String = "Help"
 private const val FAQ_SCREEN_CLASS: String = "FaqScreen"
 
@@ -90,223 +116,112 @@ private object FaqPreferenceKeys {
     const val FEEDBACK: String = "feedback"
     const val REQUEST_FEATURE: String = "request_feature"
     const val LEAVE_REVIEW: String = "leave_review"
+    const val FAQ_ITEM: String = "faq_item"
+    const val SHOW_MORE_QUESTIONS: String = "show_more_questions"
+    const val CONTACT_US: String = "contact_us"
 }
 
 private object FaqActionNames {
-    const val BACK_CLICK: String = "back_click"
     const val RETRY_LOAD: String = "retry_load"
     const val FEEDBACK_SHEET_OPENED: String = "feedback_sheet_opened"
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+/**
+ * Help and feedback: the questions, a contact card and a button that opens the feedback sheet.
+ *
+ * The body of the help page, which `helpPage()` registers with `FaqMenuActions` in its app bar.
+ * This is the stateful half. It owns the [FaqViewModel], tracks the screen, logs each tap, opens
+ * links, mail and the store listing, and hands the rendering to [FaqScreenContent].
+ */
 @Composable
-fun FaqScreen(
-    config: AppVersionInfo,
-    isEmbedded: Boolean = false,
-) {
+fun FaqScreen() {
     val viewModel: FaqViewModel = koinViewModel()
-    val firebaseController: FirebaseController = koinInject()
-
+    val state: FaqUiState by viewModel.state.collectAsStateWithLifecycle()
+    val telemetryRepository = LocalTelemetry.current
+    val adsConfig: AdsConfig = koinInject(qualifier = named(AdsQualifiers.HELP_NATIVE_AD))
+    val adsEnabled: Boolean = rememberAdsEnabled()
     val context = LocalContext.current
-    val activity = remember(context) { context.findActivity() }
-    val reviewHost = remember(activity) {
-        activity?.let { hostActivity ->
-            object : ReviewHost {
-                override val activity = hostActivity
-            }
-        }
-    }
-
-    val scrollBehavior: TopAppBarScrollBehavior =
-        TopAppBarDefaults.enterAlwaysScrollBehavior(state = rememberTopAppBarState())
-    val isFabExtended = rememberSaveable { mutableStateOf(true) }
-    val showDialog = rememberSaveable { mutableStateOf(false) }
-    val showFeedbackBottomSheet = rememberSaveable { mutableStateOf(false) }
-    val feedbackBottomSheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
-
-    val screenState: UiStateScreen<FaqUiState> by viewModel.uiState.collectAsStateWithLifecycle()
+    val activity = LocalActivity.current
+    val reviewHost: ReviewHost? = remember(activity) { activity?.let(::ReviewHost) }
 
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = FAQ_SCREEN_NAME,
         screenClass = FAQ_SCREEN_CLASS,
     )
 
     TrackScreenState(
-        firebaseController = firebaseController,
         screenName = FAQ_SCREEN_NAME,
-        screenState = screenState.screenState,
+        state = state.questions,
     )
 
-    LaunchedEffect(Unit) {
-        viewModel.actionEvent.collect { action ->
-            when (action) {
-                is FaqAction.OpenUrl -> context.openUrl(action.url)
-                is FaqAction.OpenPlayStoreReview -> context.openPlayStoreForApp(context.packageName)
-                is FaqAction.ReviewOutcomeReported -> Unit
-            }
+    LaunchedEffect(state.openStoreListing) {
+        if (state.openStoreListing) {
+            context.openPlayStoreForApp(context.packageName)
+            viewModel.onEvent(FaqEvent.StoreListingOpened)
         }
     }
 
-    LaunchedEffect(scrollBehavior) {
-        snapshotFlow { scrollBehavior.state.contentOffset >= 0f }
-            .distinctUntilChanged()
-            .collect { extended ->
-                isFabExtended.value = extended
-            }
-    }
-
-    val content: @Composable (PaddingValues) -> Unit = { paddingValues ->
-        ScreenStateHandler(
-            screenState = screenState,
-            onLoading = { LoadingScreen() },
-            onEmpty = {
-                NoDataScreen(
-                    showRetry = true,
-                    onRetry = {
-                        firebaseController.logEvent(faqActionEvent(actionName = FaqActionNames.RETRY_LOAD))
-                        viewModel.onEvent(FaqEvent.LoadFaq)
-                    },
-                    paddingValues = paddingValues
+    FaqScreenContent(
+        state = state,
+        onRetry = {
+            telemetryRepository.logEvent(faqActionEvent(actionName = FaqActionNames.RETRY_LOAD))
+            viewModel.onEvent(FaqEvent.Load)
+        },
+        onFeedbackOpened = {
+            telemetryRepository.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.FEEDBACK))
+            telemetryRepository.logEvent(faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_OPENED))
+        },
+        onRequestFeature = {
+            telemetryRepository.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.REQUEST_FEATURE))
+            context.openUrl(AppLinks.FEATURE_REQUESTS_FORM)
+        },
+        onLeaveReview = {
+            telemetryRepository.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.LEAVE_REVIEW))
+            reviewHost?.let { host -> viewModel.onEvent(FaqEvent.RequestReview(host = host)) }
+        },
+        onQuestionToggled = { question, position, expanded ->
+            telemetryRepository.logGa4Event(
+                faqPreferenceTapEvent(
+                    preferenceKey = FaqPreferenceKeys.FAQ_ITEM,
+                    faqId = question.id.value,
+                    faqPosition = position,
+                    expanded = expanded,
                 )
-            },
-            onError = {
-                NoDataScreen(
-                    isError = true,
-                    showRetry = true,
-                    onRetry = {
-                        firebaseController.logEvent(faqActionEvent(actionName = FaqActionNames.RETRY_LOAD))
-                        viewModel.onEvent(FaqEvent.LoadFaq)
-                    },
-                    paddingValues = paddingValues
-                )
-            },
-            onSuccess = { data: FaqUiState ->
-                FaqScreenContent(
-                    questions = data.questions,
-                    paddingValues = paddingValues,
-                )
-            }
-        )
-    }
-
-    if (isEmbedded) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            content(PaddingValues())
-            Box(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(all = SizeConstants.LargeSize)
-            ) {
-                AnimatedExtendedFloatingActionButton(
-                    visible = true,
-                    expanded = isFabExtended.value,
-                    onClick = {
-                        firebaseController.logEvent(faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_OPENED))
-                        showFeedbackBottomSheet.value = true
-                    },
-                    firebaseController = firebaseController,
-                    ga4Event = faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.FEEDBACK),
-                    text = { Text(text = stringResource(id = R.string.feedback)) },
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Outlined.RateReview,
-                            contentDescription = null
-                        )
-                    },
-                )
-            }
-        }
-    } else {
-        LargeTopAppBarWithScaffold(
-            title = stringResource(id = R.string.help),
-            onBackClicked = {
-                firebaseController.logEvent(faqActionEvent(actionName = FaqActionNames.BACK_CLICK))
-                activity?.finish()
-            },
-            actions = {
-                FaqScreenMenuActions(
-                    config = config,
-                    showDialog = showDialog.value,
-                    onShowDialogChange = { showDialog.value = it }
-                )
-            },
-            scrollBehavior = scrollBehavior,
-            floatingActionButton = {
-                AnimatedExtendedFloatingActionButton(
-                    visible = true,
-                    expanded = isFabExtended.value,
-                    onClick = {
-                        firebaseController.logEvent(faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_OPENED))
-                        showFeedbackBottomSheet.value = true
-                    },
-                    firebaseController = firebaseController,
-                    ga4Event = faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.FEEDBACK),
-                    text = { Text(text = stringResource(id = R.string.feedback)) },
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Outlined.RateReview,
-                            contentDescription = null
-                        )
-                    },
-                )
-            },
-            content = content
-        )
-    }
-
-    if (showFeedbackBottomSheet.value) {
-        ModalBottomSheet(
-            onDismissRequest = { showFeedbackBottomSheet.value = false },
-            sheetState = feedbackBottomSheetState,
-        ) {
-            Text(
-                text = stringResource(id = R.string.help_feedback_sheet_title),
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.padding(horizontal = SizeConstants.ExtraLargeCompactSize)
             )
-            Spacer(modifier = Modifier.height(SizeConstants.SmallSize))
-
-            GroupedActionList(
-                modifier = Modifier.padding(horizontal = SizeConstants.MediumSize),
-                actions = persistentListOf(
-                    GroupedAction(
-                        title = stringResource(id = R.string.help_feedback_sheet_feature_request_title),
-                        description = stringResource(id = R.string.help_feedback_sheet_feature_request_description),
-                        icon = Icons.Outlined.Lightbulb,
-                        onClick = {
-                            firebaseController.logGa4Event(faqPreferenceTapEvent(FaqPreferenceKeys.REQUEST_FEATURE))
-                            showFeedbackBottomSheet.value = false
-                            viewModel.onEvent(FaqEvent.OpenFeatureRequestForm)
-                        },
-                    ),
-                    GroupedAction(
-                        title = stringResource(id = R.string.help_feedback_sheet_review_title),
-                        description = stringResource(id = R.string.help_feedback_sheet_review_description),
-                        icon = Icons.Outlined.RateReview,
-                        onClick = {
-                            firebaseController.logGa4Event(faqPreferenceTapEvent(FaqPreferenceKeys.LEAVE_REVIEW))
-                            showFeedbackBottomSheet.value = false
-                            reviewHost?.let { host ->
-                                viewModel.onEvent(FaqEvent.RequestReview(host = host))
-                            }
-                        },
-                    ),
-                ),
+        },
+        onShowMoreQuestions = {
+            telemetryRepository.logGa4Event(
+                faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.SHOW_MORE_QUESTIONS)
             )
+        },
+        onContactUs = {
+            telemetryRepository.logEvent(
+                faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.CONTACT_US).toAnalyticsEvent()
+            )
+            context.sendEmailToDeveloper(applicationNameRes = CommonR.string.app_name)
+        },
+        contentPadding = contentPadding(),
+        adUnitId = adsConfig.bannerAdUnitId.takeIf { adsEnabled && it.isNotBlank() },
+    )
 
-            Spacer(modifier = Modifier.height(SizeConstants.ExtraLargeCompactSize))
-        }
-    }
+    MessageHost(viewModel = viewModel)
 }
 
-private fun faqPreferenceTapEvent(preferenceKey: String): Ga4EventData {
+private fun faqPreferenceTapEvent(
+    preferenceKey: String,
+    faqId: String? = null,
+    faqPosition: Int? = null,
+    expanded: Boolean? = null,
+): Ga4EventData {
     return Ga4EventData(
         name = SettingsAnalytics.Events.PREFERENCE_VIEW,
-        params = mapOf(
-            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(FAQ_SCREEN_NAME),
-            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
-        ),
+        params = buildMap {
+            put(SettingsAnalytics.Params.SCREEN, AnalyticsValue.Str(FAQ_SCREEN_NAME))
+            put(SettingsAnalytics.Params.PREFERENCE_KEY, AnalyticsValue.Str(preferenceKey))
+            faqId?.let { put(SettingsAnalytics.Params.FAQ_ID, AnalyticsValue.Str(it)) }
+            faqPosition?.let { put(SettingsAnalytics.Params.FAQ_POSITION, AnalyticsValue.LongVal(it.toLong())) }
+            expanded?.let { put(SettingsAnalytics.Params.EXPANDED, AnalyticsValue.Bool(it)) }
+        },
     )
 }
 
@@ -318,4 +233,310 @@ private fun faqActionEvent(actionName: String): AnalyticsEvent {
             SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(actionName),
         ),
     )
+}
+
+private const val INITIAL_VISIBLE_QUESTION_COUNT = 5
+
+/**
+ * Renders the help page for [state]: the questions, the contact card, the feedback button and its
+ * sheet. Reports every tap through a callback and does nothing else with it.
+ *
+ * This is the stateless half of [FaqScreen]: it holds no ViewModel, injects nothing, logs nothing
+ * and opens nothing, so it renders in a preview or a test with plain values. The state it keeps is
+ * visual: which questions are expanded, whether all of them show, and whether the sheet is open.
+ *
+ * @param onRetry Loads the questions again after a failure or an empty result.
+ * @param onFeedbackOpened The feedback button opened the sheet.
+ * @param onRequestFeature The sheet's feature request row was tapped; the sheet closes itself.
+ * @param onLeaveReview The sheet's review row was tapped; the sheet closes itself.
+ * @param onQuestionToggled A question was expanded or collapsed, with its position in the list.
+ * @param onShowMoreQuestions The rest of the questions were revealed.
+ * @param onContactUs The contact card was tapped.
+ * @param contentPadding Padding from the shell, applied inside the list and the state screens.
+ * @param adUnitId The native ad slot's unit, or `null` when no ad should show.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun FaqScreenContent(
+    state: FaqUiState,
+    onRetry: () -> Unit,
+    onFeedbackOpened: () -> Unit,
+    onRequestFeature: () -> Unit,
+    onLeaveReview: () -> Unit,
+    onQuestionToggled: (question: FaqItem, position: Int, expanded: Boolean) -> Unit,
+    onShowMoreQuestions: () -> Unit,
+    onContactUs: () -> Unit,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
+    adUnitId: String? = null,
+) {
+    var showFeedbackSheet by rememberSaveable { mutableStateOf(value = false) }
+    val feedbackSheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
+
+    // The page frame draws it at the bottom end, above the system bar.
+    ScaffoldFabs(
+        listOf(
+            ToolkitFab(
+                icon = ToolkitIcon.Vector(Icons.Outlined.RateReview),
+                label = stringResource(id = R.string.feedback),
+                onClick = {
+                    onFeedbackOpened()
+                    showFeedbackSheet = true
+                },
+            ),
+        ),
+    )
+
+    ScreenStateHandler(
+        state = state.questions,
+        modifier = modifier,
+        contentPadding = contentPadding,
+        onRetry = onRetry,
+        // Nothing to show is still worth another try: the catalog may have been updated.
+        onEmpty = { empty ->
+            NoDataScreen(
+                message = empty.message?.asString(),
+                showRetry = true,
+                onRetry = onRetry,
+                paddingValues = contentPadding,
+            )
+        },
+    ) { ready ->
+        FaqList(
+            questions = ready.value,
+            contentPadding = contentPadding,
+            adUnitId = adUnitId,
+            onQuestionToggled = onQuestionToggled,
+            onShowMoreQuestions = onShowMoreQuestions,
+            onContactUs = onContactUs,
+        )
+    }
+
+    if (showFeedbackSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showFeedbackSheet = false },
+            sheetState = feedbackSheetState,
+        ) {
+            Text(
+                text = stringResource(id = R.string.help_feedback_sheet_title),
+                style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.padding(horizontal = SizeConstants.ExtraLargeCompactSize),
+            )
+            Spacer(modifier = Modifier.height(SizeConstants.SmallSize))
+
+            GroupedActionList(
+                modifier = Modifier.padding(horizontal = SizeConstants.MediumSize),
+                actions = persistentListOf(
+                    GroupedAction(
+                        title = stringResource(id = R.string.help_feedback_sheet_feature_request_title),
+                        description = stringResource(id = R.string.help_feedback_sheet_feature_request_description),
+                        icon = Icons.Outlined.Lightbulb,
+                        onClick = {
+                            showFeedbackSheet = false
+                            onRequestFeature()
+                        },
+                    ),
+                    GroupedAction(
+                        title = stringResource(id = R.string.help_feedback_sheet_review_title),
+                        description = stringResource(id = R.string.help_feedback_sheet_review_description),
+                        icon = Icons.Outlined.RateReview,
+                        onClick = {
+                            showFeedbackSheet = false
+                            onLeaveReview()
+                        },
+                    ),
+                ),
+            )
+
+            Spacer(modifier = Modifier.height(SizeConstants.ExtraLargeCompactSize))
+        }
+    }
+}
+
+@Composable
+private fun FaqList(
+    questions: ImmutableList<FaqItem>,
+    contentPadding: PaddingValues,
+    adUnitId: String?,
+    onQuestionToggled: (question: FaqItem, position: Int, expanded: Boolean) -> Unit,
+    onShowMoreQuestions: () -> Unit,
+    onContactUs: () -> Unit,
+) {
+    var showAllQuestions by rememberSaveable { mutableStateOf(value = false) }
+    var isAdLoaded by remember { mutableStateOf(value = false) }
+    val visibleQuestions = if (showAllQuestions) {
+        questions
+    } else {
+        questions.take(INITIAL_VISIBLE_QUESTION_COUNT)
+    }
+    val hasHiddenQuestions = questions.size > INITIAL_VISIBLE_QUESTION_COUNT
+    val popularGroupItemCount = visibleQuestions.size + if (hasHiddenQuestions) 1 else 0
+    val supportGroupItemCount = 1 + if (adUnitId != null && isAdLoaded) 1 else 0
+
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(
+            top = contentPadding.calculateTopPadding(),
+            bottom = contentPadding.calculateBottomPadding(),
+            start = SizeConstants.LargeSize,
+            end = SizeConstants.LargeSize,
+        ),
+        verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
+    ) {
+        item {
+            Text(text = stringResource(id = R.string.popular_help_resources))
+        }
+
+        visibleQuestions.forEachIndexed { index: Int, question: FaqItem ->
+            item(key = question.id.value) {
+                var isExpanded by rememberSaveable(question.id.value) {
+                    mutableStateOf(value = false)
+                }
+                QuestionCard(
+                    title = question.question,
+                    summary = question.answer,
+                    isExpanded = isExpanded,
+                    groupedPosition = groupedItemPosition(
+                        index = index,
+                        size = if (showAllQuestions) questions.size else popularGroupItemCount,
+                    ),
+                    onToggleExpand = {
+                        val expanded = !isExpanded
+                        onQuestionToggled(question, index, expanded)
+                        isExpanded = expanded
+                    },
+                    modifier = Modifier
+                        .animateItem(
+                            placementSpec = spring(
+                                dampingRatio = Spring.DampingRatioLowBouncy,
+                                stiffness = Spring.StiffnessLow,
+                            )
+                        )
+                        .animateVisibility(index = index),
+                )
+            }
+        }
+
+        if (hasHiddenQuestions) {
+            item(key = "show_more_questions") {
+                AnimatedVisibility(
+                    visible = !showAllQuestions,
+                    exit = slideOutVertically(
+                        targetOffsetY = { it },
+                        animationSpec = tween(durationMillis = 500),
+                    ) + fadeOut(
+                        animationSpec = tween(durationMillis = 300),
+                    ) + shrinkVertically(
+                        animationSpec = tween(durationMillis = 500),
+                    ),
+                ) {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .animateItem(
+                                placementSpec = spring(
+                                    dampingRatio = Spring.DampingRatioLowBouncy,
+                                    stiffness = Spring.StiffnessLow,
+                                )
+                            )
+                            .groupedCorners(
+                                position = groupedItemPosition(
+                                    index = popularGroupItemCount - 1,
+                                    size = popularGroupItemCount,
+                                ),
+                                outerRadius = SizeConstants.ExtraLargeIncreasedSize,
+                            )
+                            .animateVisibility(index = popularGroupItemCount - 1),
+                        shape = RectangleShape,
+                        onClick = {
+                            onShowMoreQuestions()
+                            showAllQuestions = true
+                        },
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    horizontal = SizeConstants.LargeSize,
+                                    vertical = SizeConstants.MediumSize,
+                                ),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.show_more),
+                                style = MaterialTheme.typography.titleMedium,
+                            )
+                            Icon(
+                                imageVector = Icons.Filled.ExpandMore,
+                                contentDescription = null,
+                                modifier = Modifier.padding(start = SizeConstants.SmallSize),
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        item {
+            Text(text = stringResource(id = R.string.need_more_help))
+        }
+
+        if (adUnitId != null) {
+            item {
+                FaqNativeAdCard(
+                    adUnitId = adUnitId,
+                    groupedPosition = groupedItemPosition(
+                        index = 0,
+                        size = supportGroupItemCount,
+                    ),
+                    modifier = Modifier.animateItem(),
+                    onAdLoaded = { isAdLoaded = it },
+                )
+            }
+        }
+
+        item {
+            ContactUsCard(
+                groupedPosition = groupedItemPosition(
+                    index = supportGroupItemCount - 1,
+                    size = supportGroupItemCount,
+                ),
+                onClick = onContactUs,
+            )
+            repeat(3) { ExtraLargeVerticalSpacer() }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun FaqScreenContentPreview() {
+    MaterialTheme {
+        FaqScreenContent(
+            state = FaqUiState(
+                questions = Loadable.Ready(
+                    persistentListOf(
+                        FaqItem(
+                            id = FaqId("preview-1"),
+                            question = "How do I change the theme?",
+                            answer = "Open Settings, then Theme, and pick a palette.",
+                        ),
+                        FaqItem(
+                            id = FaqId("preview-2"),
+                            question = "Does the app work offline?",
+                            answer = "Yes. Everything but the remote questions works offline.",
+                        ),
+                    )
+                ),
+            ),
+            onRetry = {},
+            onFeedbackOpened = {},
+            onRequestFeature = {},
+            onLeaveReview = {},
+            onQuestionToggled = { _, _, _ -> },
+            onShowMoreQuestions = {},
+            onContactUs = {},
+        )
+    }
 }

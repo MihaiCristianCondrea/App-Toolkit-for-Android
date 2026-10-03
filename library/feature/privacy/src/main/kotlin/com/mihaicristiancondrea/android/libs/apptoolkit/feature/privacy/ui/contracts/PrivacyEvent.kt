@@ -17,13 +17,18 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.contracts
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItemAction
 
-/** User driven events from the privacy screen UI. */
-sealed interface PrivacyEvent : UiEvent {
+/**
+ * What the user can ask the privacy page's ViewModel to do.
+ */
+sealed interface PrivacyEvent {
+    /** Builds the rows from the provider, on start and on retry. */
     data object Load : PrivacyEvent
 
-    /** A preference row was tapped; [action] describes what it opens. */
+    /**
+     * A preference row was tapped. The ViewModel reports it as the `openPrivacyItem` operation;
+     * the screen opens what [action] points to.
+     */
     data class ItemClicked(val action: PrivacyItemAction) : PrivacyEvent
 }

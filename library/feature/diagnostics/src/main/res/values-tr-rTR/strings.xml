@@ -24,7 +24,6 @@
     <string name="consent_ad_user_data_title">Reklamlar i̇çin veri gönder</string>
     <string name="consent_analytics_storage_description">Analizi ve uygulama performansını iyileştirmek için uygulama kullanımı ve ziyaret süresi gibi verilerin depolanmasına izin verin.</string>
     <string name="consent_analytics_storage_title">Analiz verilerini depola</string>
-    <string name="learn_more">Daha fazla bilgi</string>
     <string name="summary_usage_and_diagnostics">Otomatik teşhis ve kullanım verilerini göndererek deneyiminizi iyileştirin</string>
     <string name="usage_and_diagnostics">Kullanım ve teşhis</string>
     <string name="consent_ad_personalization_description_short">Kişiselleştirilmiş reklamları etkinleştirir.</string>
@@ -48,4 +47,13 @@
     <string name="privacy_choices_title">Gizlilik seçenekleri</string>
     <string name="summary_advanced_privacy_settings">Analiz ve reklam için nelerin paylaşılacağını seçin.</string>
     <string name="learn_more_about_provider">Bu sağlayıcı hakkında daha fazla bilgi edinin</string>
+    <string name="onboarding_crashlytics_title">Geliştirmemize yardım edin</string>
+    <string name="onboarding_crashlytics_description">Uygulamanın anonim kullanım verileri ve kilitlenme raporları göndermesine izin verin. Bu, hataları düzeltmemize ve deneyiminizi iyileştirmemize yardımcı olur. Hiçbir kişisel bilgi toplanmaz.</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">Kullanım ve tanılama hakkında ayrıntılı bilgileri göster</string>
+    <string name="onboarding_crashlytics_show_details_button">Ayrıntılı bilgileri göster</string>
+    <string name="error">Hata</string>
+    <string name="onboarding_crashlytics_privacy_info">Gizliliğiniz önemlidir. Bu verileri yalnızca hataları düzeltmek ve özellikleri geliştirmek için kullanırız. Daha fazla ayrıntı için lütfen gizlilik politikamızı inceleyin.</string>
+    <string name="learn_more_privacy_policy">Gizlilik Politikamızı İnceleyin</string>
+    <string name="onboarding_crashlytics_enabled_desc">Veri raporlama aktif.</string>
+    <string name="onboarding_crashlytics_disabled_desc">Veri raporlama pasif.</string>
 </resources>

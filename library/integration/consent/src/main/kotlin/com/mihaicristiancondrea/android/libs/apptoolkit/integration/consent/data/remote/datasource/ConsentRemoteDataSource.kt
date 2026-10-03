@@ -17,24 +17,24 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.remote.datasource
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.exceptions.ConsentException
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
-import kotlinx.coroutines.flow.Flow
 
 /**
- * Remote data source responsible for coordinating consent requests with UMP.
+ * One UMP consent round trip.
  */
 interface ConsentRemoteDataSource {
 
     /**
-     * Requests consent information and optionally shows the consent form.
+     * Updates the consent information, then shows the form: only when UMP requires it when
+     * [showIfRequired] is true, always otherwise. Returns once the round trip has ended. UMP needs
+     * its entry points called on the main thread.
      *
      * @param host The UI host needed by the UMP SDK.
-     * @param showIfRequired When true, the form is shown only when required by UMP.
+     * @throws ConsentException when UMP fails or [host] can no longer show a form.
      */
-    fun requestConsent(
+    suspend fun requestConsent(
         host: ConsentHost,
         showIfRequired: Boolean,
-    ): Flow<DataState<Unit, Errors.UseCase>>
+    )
 }

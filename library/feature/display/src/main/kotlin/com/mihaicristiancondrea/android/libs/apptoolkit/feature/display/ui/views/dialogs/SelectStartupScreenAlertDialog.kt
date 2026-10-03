@@ -68,9 +68,7 @@ fun SelectStartupScreenAlertDialog(
     onDismiss: () -> Unit,
     onStartupSelected: (String) -> Unit,
     /**
-     * Defaults to wrapping the option list. This dialog usually offers a handful of startup screens
-     * and previously reserved 60% of the screen height for them regardless, leaving most of the
-     * dialog empty. Pass [DialogContentSizing.FractionOfScreen] to restore the fixed height.
+     * Wraps the option list by default; hosts may supply a bounded modifier for a longer list.
      */
     sizing: DialogContentSizing = DialogContentSizing.WrapContent,
 ) {

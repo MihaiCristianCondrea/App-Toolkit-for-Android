@@ -20,7 +20,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models
 @JvmInline
 value class FaqId(val value: String)
 
-/** Simple representation of a FAQ item */
 data class FaqItem(
     val id: FaqId,
     val question: String,

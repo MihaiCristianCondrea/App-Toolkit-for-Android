@@ -65,5 +65,4 @@ dependencies {
 
     api(libs.google.ads.mobile.sdk)
 
-    // api(project(":library:core:datastore")) // Removed to break circular dependency
 }

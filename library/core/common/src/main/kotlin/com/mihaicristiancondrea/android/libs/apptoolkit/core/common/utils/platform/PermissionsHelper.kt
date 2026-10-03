@@ -25,25 +25,19 @@ import androidx.core.app.ActivityCompat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.permissions.PermissionsConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.hasPostNotificationsPermissions
 
-/**
- * Utility class for handling runtime permissions.
- */
 object PermissionsHelper {
 
     /**
-     * Checks if the app has permission to post notifications.
-     *
-     * @param context The application context.
-     * @return True if the permission is granted, false otherwise.
+     * Returns `true` when notification permission is granted or the platform does not require
+     * it.
      */
     fun hasNotificationPermission(context: Context): Boolean {
         return context.hasPostNotificationsPermissions()
     }
 
     /**
-     * Requests the notification permission.
-     *
-     * @param activity The Activity instance required to request the permission.
+     * Requests notification permission on Android 13 and later only when it has not been
+     * granted.
      */
     fun requestNotificationPermission(activity: Activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&

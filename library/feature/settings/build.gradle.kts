@@ -43,18 +43,9 @@ android {
 
 dependencies {
     testImplementation(project(":library:core:testing"))
-    api(project(":library:feature:advanced"))
-    api(project(":library:feature:diagnostics"))
-    api(project(":library:feature:display"))
-    api(project(":library:feature:theme"))
     api(project(":library:core:common"))
     api(project(":library:core:datastore"))
     api(project(":library:core:network"))
     api(project(":library:core:ui"))
     api(project(":library:navigation"))
-    api(project(":library:integration:consent"))
-    api(project(":library:feature:about"))
-    api(project(":library:feature:faq"))
-    api(project(":library:feature:issuereporter"))
-    api(project(":library:feature:privacy"))
 }

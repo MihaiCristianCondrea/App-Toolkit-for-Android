@@ -17,9 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.contracts
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
-
-sealed interface SettingsEvent : UiEvent {
+/** What the settings list asks its ViewModel to do. */
+sealed interface SettingsEvent {
+    /** Loads the host's settings, each time the list is shown and on retry. */
     data object Load : SettingsEvent
 }
-

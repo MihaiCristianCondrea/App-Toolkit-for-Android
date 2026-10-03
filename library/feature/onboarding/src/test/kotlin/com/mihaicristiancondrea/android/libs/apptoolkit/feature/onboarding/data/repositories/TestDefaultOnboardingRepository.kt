@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.repositories
 
-import com.google.common.truth.Truth.assertThat
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.OnboardingPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -27,6 +27,11 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import java.io.IOException
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 private class FakeOnboardingPreferencesDataSource : OnboardingPreferencesDataSource {
     private val state = MutableStateFlow(true)
@@ -51,10 +56,10 @@ class TestDefaultOnboardingRepository {
             val dataSource = FakeOnboardingPreferencesDataSource()
             val repository = DefaultOnboardingRepository(dataStore = dataSource)
 
-            assertThat(repository.observeOnboardingCompletion().first()).isFalse()
+            assertFalse(repository.observeOnboardingCompletion().first())
 
             dataSource.saveStartup(false)
-            assertThat(repository.observeOnboardingCompletion().first()).isTrue()
+            assertTrue(repository.observeOnboardingCompletion().first())
         }
 
     @Test
@@ -66,8 +71,26 @@ class TestDefaultOnboardingRepository {
             repository.setOnboardingCompleted()
             advanceUntilIdle()
 
-            assertThat(dataSource.startup.first()).isFalse()
-            assertThat(repository.observeOnboardingCompletion().first()).isTrue()
+            assertFalse(dataSource.startup.first())
+            assertTrue(repository.observeOnboardingCompletion().first())
         }
+
+    @Test
+    fun `a failed completion write throws a storage failure`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val repository = DefaultOnboardingRepository(dataStore = FailingOnboardingPreferencesDataSource())
+
+            val failure = assertFailsWith<StorageException> { repository.setOnboardingCompleted() }
+
+            assertEquals(StorageException.Reason.FAILED, failure.reason)
+        }
+
+    private class FailingOnboardingPreferencesDataSource : OnboardingPreferencesDataSource {
+        override val startup = MutableStateFlow(true)
+
+        override suspend fun saveStartup(isFirstTime: Boolean) {
+            throw IOException("disk")
+        }
+    }
 }
 

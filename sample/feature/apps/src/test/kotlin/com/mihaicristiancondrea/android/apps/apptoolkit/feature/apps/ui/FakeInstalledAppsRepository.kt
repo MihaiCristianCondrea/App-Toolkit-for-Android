@@ -24,11 +24,11 @@ class FakeInstalledAppsRepository(
     private val installedPackages: Set<String> = emptySet(),
     private val installInfoMap: Map<String, AppInstallInfo> = emptyMap(),
 ) : InstalledAppsRepository {
-    override fun getInstalledPackages(packageNames: Collection<String>): Set<String> {
+    override suspend fun getInstalledPackages(packageNames: Collection<String>): Set<String> {
         return packageNames.filter { it in installedPackages }.toSet()
     }
 
-    override fun getInstallInfo(packageName: String): AppInstallInfo {
+    override suspend fun getInstallInfo(packageName: String): AppInstallInfo {
         return installInfoMap[packageName] ?: AppInstallInfo(
             isInstalled = false,
             versionInfo = null

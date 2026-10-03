@@ -21,12 +21,9 @@
     <string name="app_build_version">Application build version</string>
     <string name="app_info">App info</string>
     <string name="app_toolkit_version">App Toolkit version</string>
-    <string name="content_description_more_options">More options</string>
     <string name="debug">Debug</string>
     <string name="device_info">Device info</string>
     <string name="device_model">Device model</string>
-    <string name="done_button_content_description">Done</string>
-    <string name="go_back">Go back</string>
     <string name="google_play_services_version">Google Play services version</string>
     <string name="help_and_feedback">Help &amp; feedback</string>
     <string name="manufacturer">Manufacturer</string>
@@ -41,8 +38,6 @@
     <string name="snack_device_info_failed">Unable to load device info</string>
     <string name="summary_preference_settings_oss">License details for open source software</string>
     <string name="summary_share_message">Check out this app that I\'m using. It has some really cool features that you might find interesting. You can download it from the Play Store at: %1$s</string>
-    <string name="support_us">Support the app</string>
-    <string name="try_again">Try again</string>
     <string name="updates">Updates</string>
     <string name="snack_seasonal_themes_unlocked">Enjoy</string>
 </resources>

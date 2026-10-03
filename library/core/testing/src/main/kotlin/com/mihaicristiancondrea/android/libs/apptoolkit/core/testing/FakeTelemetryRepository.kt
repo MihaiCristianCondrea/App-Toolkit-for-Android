@@ -1,0 +1,71 @@
+/*
+ * Copyright (©) 2026 Mihai-Cristian Condrea
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.testing
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
+
+/**
+ * Telemetry test double that discards events and reports.
+ */
+class FakeTelemetryRepository : TelemetryRepository {
+    val loggedEvents: MutableList<AnalyticsEvent> = mutableListOf()
+    val loggedScreenViews: MutableList<Pair<String, String?>> = mutableListOf()
+
+    override fun updateConsent(
+        analyticsGranted: Boolean,
+        adStorageGranted: Boolean,
+        adUserDataGranted: Boolean,
+        adPersonalizationGranted: Boolean,
+    ) {
+    }
+
+    override fun setAnalyticsEnabled(enabled: Boolean) {
+    }
+
+    override fun setCrashlyticsEnabled(enabled: Boolean) {
+    }
+
+    override fun setPerformanceEnabled(enabled: Boolean) {
+    }
+
+    override fun logBreadcrumb(message: String, attributes: Map<String, String>) {
+    }
+
+    override fun reportViewModelError(
+        viewModelName: String,
+        action: String,
+        throwable: Throwable,
+        extraKeys: Map<String, String>,
+    ) {
+    }
+
+    override fun recordNonFatal(throwable: Throwable, attributes: Map<String, String>) {
+    }
+
+    override fun logEvent(event: AnalyticsEvent) {
+        loggedEvents.add(event)
+    }
+
+    override fun logScreenView(screenName: String, screenClass: String?) {
+        loggedScreenViews.add(screenName to screenClass)
+    }
+
+    override fun setUserProperty(name: String, value: String?) {
+    }
+}

@@ -30,17 +30,15 @@ val diagnosticsSettingsModule: Module = module {
         DefaultUsageAndDiagnosticsRepository(
             dataSource = get<CommonDataStore>(),
             configProvider = get(),
-            dispatchers = get(),
-            firebaseController = get(),
+            telemetryRepository = get(),
+            consentRepository = get(),
         )
     }
 
     viewModel {
         UsageAndDiagnosticsViewModel(
             repository = get(),
-            firebaseController = get(),
-            dispatchers = get(),
-            consentRepository = get(),
+            telemetryRepository = get(),
         )
     }
 }

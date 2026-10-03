@@ -15,22 +15,16 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">Modo AMOLED</string>
-    <string name="color_palette">Paleta de cores</string>
-    <string name="dark_mode">Modo escuro</string>
-    <string name="follow_system">Seguir o sistema</string>
-    <string name="light_mode">Modo claro</string>
-    <string name="onboarding_theme_dark_desc">Suave para os olhos.</string>
-    <string name="onboarding_theme_light_desc">Brilhante e energético.</string>
-    <string name="onboarding_theme_system_desc">Corresponde ao seu dispositivo.</string>
-    <string name="other_colors">Outras cores</string>
-    <string name="screen_and_display_settings">Configurações de tela e exibição.</string>
-    <string name="summary_dark_theme">O tema escuro aproveita um fundo profundo para estender significativamente a vida útil da bateria. Para ativá -lo, simplesmente navegue para o gerente de sistema do seu Android e selecione seu tema preferido em</string>
-    <string name="theme_mode">Modo de tema</string>
-    <string name="wallpaper_colors">Cores do papel de parede</string>
     <string name="holiday_greeting_christmas_title">Boas festas!</string>
     <string name="holiday_greeting_christmas_message">O tema de Natal chegou, com neve caindo por todo o app. Quer usá-lo até o fim das festas?</string>
     <string name="holiday_greeting_halloween_title">Feliz Halloween!</string>
     <string name="holiday_greeting_halloween_message">A temporada assustadora chegou. Quer usar o tema de Halloween enquanto ela durar?</string>
     <string name="holiday_greeting_use_theme">Usar o tema festivo durante as festas</string>
+    <string name="dark_theme">Tema escuro</string>
+    <string name="weather_effect">Efeito do clima</string>
+    <string name="weather_effect_automatic">Automático</string>
+    <string name="weather_effect_snow">Neve</string>
+    <string name="weather_effect_off">Desativado</string>
+    <string name="weather_effect_rain">Chuva</string>
+    <string name="weather_effect_info">No modo Automático, a neve cai enquanto a paleta de Natal estiver em uso. Neve e chuva caem com qualquer paleta.</string>
 </resources>

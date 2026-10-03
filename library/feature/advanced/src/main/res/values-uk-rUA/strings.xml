@@ -22,4 +22,8 @@
     <string name="error_reporting">Звіт про помилки</string>
     <string name="summary_preference_settings_bug_report">Надішліть звіти про помилки та побажання через сторінку GitHub</string>
     <string name="summary_preference_settings_clear_cache">Очистити тимчасові дані застосунку.</string>
+    <string name="advanced">Додаткові налаштування</string>
+    <string name="developer_options">Параметри розробника</string>
+    <string name="summary_preference_settings_developer_options">Перевірка стартової сторінки, макета навігації та анімацій</string>
+    <string name="developer">Розробник</string>
 </resources>

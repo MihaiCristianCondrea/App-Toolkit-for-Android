@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="shell_dev_live_state">موجودہ حالت</string>
+    <string name="shell_dev_window">ونڈو</string>
+    <string name="shell_dev_window_summary">%1$d × %2$d dp · %3$s</string>
+    <string name="shell_dev_page_stack">صفحات کا اسٹیک</string>
+    <string name="shell_dev_tab_stack">%1$s اسٹیک</string>
+    <string name="shell_dev_navigation">نیویگیشن</string>
+    <string name="shell_dev_start">اگلی بار کھلنے پر یہاں سے شروع کریں</string>
+    <string name="shell_dev_layout">نیویگیشن لے آؤٹ</string>
+    <string name="shell_dev_accessories">نچلے اضافی عناصر</string>
+    <string name="shell_dev_bottom_accessory">نیویگیشن بار کے اوپر</string>
+    <string name="shell_dev_motion">حرکت</string>
+    <string name="shell_dev_animation_speed">اینیمیشن کی رفتار</string>
+    <string name="shell_dev_reset">ڈیولپر اختیارات ری سیٹ کریں</string>
+    <string name="shell_dev_reset_summary">ایپ جو مقرر کرتی ہے اس پر واپس جائیں</string>
+    <string name="shell_layout_auto">خودکار، ونڈو کی چوڑائی کے مطابق</string>
+    <string name="shell_layout_bottom_bar">نچلا بار اور دراز</string>
+    <string name="shell_layout_rail">نیویگیشن ریل</string>
+    <string name="shell_layout_expanded_rail">پھیلی ہوئی نیویگیشن ریل</string>
+    <string name="shell_layout_permanent_drawer">مستقل دراز</string>
+    <string name="shell_accessory_as_declared">بینر، چلنے کے دوران پلیئر سے بدل جاتا ہے</string>
+    <string name="shell_accessory_none">کچھ نہیں</string>
+    <string name="shell_accessory_banner">صرف بینر</string>
+    <string name="shell_accessory_player">صرف پلیئر</string>
+    <string name="shell_start_as_declared">جیسا ایپ مقرر کرتی ہے: %1$s</string>
+    <string name="shell_start_screen">%1$s، مرکزی انٹرفیس سے پہلے</string>
+    <string name="shell_speed_normal">عام</string>
+    <string name="shell_speed_slow">2× سست</string>
+    <string name="shell_speed_very_slow">5× سست</string>
+    <string name="shell_developer_options">ڈیولپر اختیارات</string>
+    <string name="shell_top_bar">اوپری ایپ بار</string>
+    <string name="shell_navigation_bar">نچلا نیویگیشن بار</string>
+    <string name="shell_navigation_tint">ریل اور ایپ بار کا رنگ</string>
+    <string name="shell_hide_bottom_bar">اسکرول کرنے پر نچلا بار چھپائیں</string>
+    <string name="shell_hide_bottom_bar_summary">مواد نیچے اسکرول ہونے پر ہٹ جاتا ہے، جب تک کوئی پلیئر نظر نہ آ رہا ہو</string>
+    <string name="shell_hide_top_bar">اسکرول کرنے پر ایپ بار چھپائیں</string>
+    <string name="shell_hide_top_bar_summary">مواد نیچے اسکرول ہونے پر ہٹ جاتا ہے، بڑا بار سکڑنے کے بعد، اور اوپر اسکرول کرتے ہی واپس آ جاتا ہے</string>
+    <string name="shell_limit_width">بڑی ونڈوز میں مواد کی چوڑائی محدود کریں</string>
+    <string name="shell_limit_width_summary">لے آؤٹ پالیسی کی زیادہ سے زیادہ چوڑائی سے آگے، ویب سائٹ کی طرح حاشیوں کے ساتھ مواد کو درمیان میں رکھیں</string>
+    <string name="shell_tab_transition">ٹیبز کے درمیان</string>
+    <string name="shell_back_edge">دائیں کنارے سے واپس سوائپ</string>
+    <string name="shell_as_declared">جیسا ہر اسکرین مقرر کرتی ہے</string>
+    <string name="shell_top_bar_small">چھوٹا</string>
+    <string name="shell_top_bar_center">درمیان میں</string>
+    <string name="shell_top_bar_large">بڑا، سکڑنے والا</string>
+    <string name="shell_top_bar_large_collapsed">بڑا، سکڑا ہوا کھلتا ہے</string>
+    <string name="shell_top_bar_hidden">چھپا ہوا</string>
+    <string name="shell_navigation_bar_standard">معیاری، 80 dp</string>
+    <string name="shell_navigation_bar_short">چھوٹا، 64 dp</string>
+    <string name="shell_navigation_tint_none">سطح؛ اسکرول کرنے پر ایپ بار رنگین ہوتا ہے</string>
+    <string name="shell_navigation_tint_always">ایک ساتھ رنگین، مواد ایک کارڈ میں</string>
+    <string name="shell_navigation_tint_on_scroll">مواد اسکرول ہوتے ہی ایک ساتھ رنگین</string>
+    <string name="shell_back_edge_system">Android کی طرح: صفحہ اپنی جگہ پر سکڑتا ہے</string>
+    <string name="shell_back_edge_follow">انگلی کے ساتھ چلتا ہے، بائیں کنارے کی طرح (ڈیفالٹ)</string>
+    <string name="shell_transition_directional">سمت والی سلائیڈ</string>
+    <string name="shell_transition_fade_through">فیڈ تھرو</string>
+    <string name="shell_transition_fade">کراس فیڈ</string>
+    <string name="shell_transition_none">کوئی نہیں</string>
+    <string name="shell_dev_layout_and_bars">لے آؤٹ اور بارز</string>
+</resources>

@@ -21,12 +21,12 @@ androidxLifecycle = "2.11.0"
 androidxNavigation3 = "1.2.0"
 androidxGlance = "1.2.0"
 googleAccompanistDrawablePainter = "0.37.3"
-googleGuava = "33.7.1-android"
+googleGuava = "33.7.2-android" # TODO: Check if still needed. else remove
 googleMaterial = "1.14.0"
 googlePlayInAppReview = "2.0.2"
 googlePlayInAppUpdate = "2.1.0"
 googlePlayIntegrity = "1.6.0"
-googleAdsMobileSdk = "1.4.0"
+googleAdsMobileSdk = "1.5.0"
 googleUserMessagingPlatform = "4.0.0"
 firebaseBom = "34.19.0"
 firebaseCrashlyticsPlugin = "3.0.8"
@@ -40,7 +40,7 @@ kotlinxSerialization = "1.11.0"
 ktor = "3.6.0"
 koin = "4.2.2"
 aboutLibraries = "15.2.0"
-coil = "3.6.2"
+coil = "3.6.3"
 composeMarkdown = "0.7.1"
 konfettiCompose = "2.0.5"
 lottie = "6.7.1"
@@ -49,15 +49,14 @@ androidxComposeUiTestManifest = "1.12.1"
 androidxEspressoCore = "3.7.0"
 androidxTestExtJunit = "1.3.0"
 androidxTestRunner = "1.7.0"
-androidxTestTruth = "1.7.0"
 testJupiter = "6.1.3"
 testKotlinCoroutines = "1.11.0"
 testMockk = "1.14.11"
 testRobolectric = "4.17"
+testRoborazzi = "1.76.0"
 testSlf4jSimple = "2.0.20"
 testTurbine = "1.2.1"
-#noinspection GradleDependency
-cronetFallback = "143.7445.0"
+cronetFallback = "500.1.0"
 
 [libraries]
 # AndroidX
@@ -161,11 +160,13 @@ test-junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", versi
 #noinspection UnusedVersionCatalogEntry
 test-junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "testJupiter" }
 #noinspection UnusedVersionCatalogEntry
-test-junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "testJupiter" } # Intentionally unwired; see the note above the `unitTestRuntime` bundle.
+test-junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "testJupiter" } # Wired only in `:library:shell` and `:library:apptoolkit`, for their Robolectric tests; see the note above the `unitTestRuntime` bundle.
 test-junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "testJupiter" }
 test-kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "testKotlinCoroutines" }
 test-mockk = { module = "io.mockk:mockk", version.ref = "testMockk" }
 test-robolectric = { module = "org.robolectric:robolectric", version.ref = "testRobolectric" }
+test-roborazzi = { module = "io.github.takahirom.roborazzi:roborazzi", version.ref = "testRoborazzi" }
+test-roborazzi-compose = { module = "io.github.takahirom.roborazzi:roborazzi-compose", version.ref = "testRoborazzi" }
 test-slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "testSlf4jSimple" }
 test-turbine = { module = "app.cash.turbine:turbine", version.ref = "testTurbine" }
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "androidxComposeUiTestManifest" }
@@ -173,10 +174,10 @@ androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-te
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidxEspressoCore" }
 androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidxTestExtJunit" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidxTestRunner" }
-androidx-test-truth = { module = "androidx.test.ext:truth", version.ref = "androidxTestTruth" }
 test-mockk-android = { module = "io.mockk:mockk-android", version.ref = "testMockk" }
 
 [plugins]
+roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "testRoborazzi" }
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
@@ -298,7 +299,6 @@ ui-richtext = [
 
 # For local tests on the JVM (test sourceSet)
 unitTest = [
-    "androidx-test-truth",
     "ktor-client-mock",
     "test-junit-jupiter-api",
     "test-junit-jupiter-params",
@@ -310,7 +310,8 @@ unitTest = [
     "test-turbine",
 ]
 
-# NOTE: `test-junit-vintage-engine` is declared but deliberately not in this bundle yet. Adding it
+# NOTE: `test-junit-vintage-engine` is deliberately not in this bundle yet (only `:library:shell`
+# and `:library:apptoolkit` add it, for their Robolectric tests). Adding it to the bundle
 # makes the 13 JUnit 4 suites run, and 11 of their tests fail immediately, because they stub
 # `Build.VERSION.SDK_INT` with `mockkStatic`, which cannot intercept a static final field. Those
 # suites have therefore never passed; they need porting to Robolectric's `@Config(sdk = …)` first.
@@ -327,7 +328,6 @@ instrumentationTest = [
     "androidx-test-espresso-core",
     "androidx-test-ext-junit",
     "androidx-test-runner",
-    "androidx-test-truth",
     "koin-androidx-compose",
     "test-junit-jupiter-api",
     "test-junit-jupiter-params",

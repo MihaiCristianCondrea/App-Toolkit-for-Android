@@ -23,25 +23,14 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.getByType
 
 /**
- * Baseline configuration shared by every `:sample:*` library module.
- *
- * The host app was one module, so its Android/Compose/versioning setup was written once. Splitting
- * it into ten would have copied that block ten times, and the modules would drift the way the
- * library modules did before the JVM-target and unit-test plugins landed, silently, because a
- * module with the wrong `compileSdk` or a missing `compose = true` still assembles until something
- * in it needs the missing piece.
- *
- * `buildConfig` is on for all of them: several sample modules branch on `BuildConfig.DEBUG`, which
- * is per-module but reflects the same build type, so each needs its own generated class. Fields
- * that are genuinely app-wide, the application id, version, GitHub token, stay in `:sample:app`,
- * which is the only module that can meaningfully declare them.
+ * Shared Android, Compose, versioning, and test configuration for sample library modules. Each
+ * module generates its own build-type `BuildConfig`; app-wide identity and version fields stay
+ * in `:sample:app`.
  */
 class SampleModulePlugin : Plugin<Project> {
 
     override fun apply(target: Project) = with(target) {
-        // No `org.jetbrains.kotlin.android` here: AGP 9 compiles Kotlin itself, and applying the
-        // standalone plugin on top of the built-in support fails with an empty Throwable. Every
-        // library module in this repo relies on the same built-in path.
+        // Use AGP's built-in Kotlin support; applying the standalone Android Kotlin plugin conflicts with it.
         pluginManager.apply("com.android.library")
         pluginManager.apply("org.jetbrains.kotlin.plugin.compose")
         pluginManager.apply("com.mihaicristiancondrea.android.apptoolkit.versioning")
@@ -56,8 +45,7 @@ class SampleModulePlugin : Plugin<Project> {
             buildFeatures.buildConfig = true
         }
 
-        // Applied last, and through the plugin manager rather than the `plugins {}` block, because
-        // it reads the Android extension configured just above.
+        // Apply after configuring the Android extension that this plugin reads.
         pluginManager.apply("com.mihaicristiancondrea.android.apptoolkit.jvm-target")
     }
 }

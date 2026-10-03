@@ -21,12 +21,9 @@
     <string name="app_build_version">應用程式構建版本</string>
     <string name="app_info">應用程式資訊</string>
     <string name="app_toolkit_version">App Toolkit 版本</string>
-    <string name="content_description_more_options">更多选项</string>
     <string name="debug">除錯</string>
     <string name="device_info">設備資訊</string>
     <string name="device_model">設備型號：</string>
-    <string name="done_button_content_description">完成</string>
-    <string name="go_back">返回</string>
     <string name="google_play_services_version">Google Play 服務版本</string>
     <string name="help_and_feedback">幫助與反饋</string>
     <string name="manufacturer">製造商：</string>
@@ -41,8 +38,6 @@
     <string name="snack_device_info_failed">無法載入裝置資訊</string>
     <string name="summary_preference_settings_oss">開源軟體的許可證詳情</string>
     <string name="summary_share_message">看看我正在使用的這個很棒的應用程式！它有一些您可能感興趣的酷炫功能。您可以從 Play 商店下載：%1$s</string>
-    <string name="support_us">支持我們</string>
-    <string name="try_again">再試一次</string>
     <string name="updates">更新</string>
     <string name="snack_seasonal_themes_unlocked">盡情享受</string>
 </resources>

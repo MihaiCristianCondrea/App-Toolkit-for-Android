@@ -15,9 +15,20 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="error_description_missing">Describe the issue</string>
+    <string name="error_email_invalid">Enter a valid email address</string>
+    <string name="error_email_missing">Enter your email</string>
     <string name="error_forbidden">Forbidden: insufficient permissions</string>
     <string name="error_gone">API endpoint removed</string>
-    <string name="error_invalid_report">Title and description cannot be empty</string>
+    <string name="error_link_only">Describe the issue, not only a link.</string>
+    <string name="error_repetitive">Too repetitive. Describe what happened.</string>
+    <string name="error_report_cooldown">Please wait a few minutes before submitting another report.</string>
+    <string name="error_report_duplicate">This report was already submitted.</string>
+    <string name="error_same_as_title">Add more detail than the title.</string>
+    <string name="error_title_missing">Enter a title</string>
+    <string name="error_too_few_letters">Use words, not only symbols or emoji.</string>
+    <string name="error_too_long">Too long. Use at most %1$d characters.</string>
+    <string name="error_too_short">Too short. Use at least %1$d characters.</string>
     <string name="error_unauthorized">Unauthorized: Invalid token</string>
     <string name="error_unprocessable">Invalid data for issue creation</string>
 </resources>

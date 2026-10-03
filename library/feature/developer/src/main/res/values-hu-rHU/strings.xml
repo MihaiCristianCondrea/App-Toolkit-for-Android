@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="shell_dev_live_state">Aktuális állapot</string>
+    <string name="shell_dev_window">Ablak</string>
+    <string name="shell_dev_window_summary">%1$d × %2$d dp · %3$s</string>
+    <string name="shell_dev_page_stack">Oldalverem</string>
+    <string name="shell_dev_tab_stack">%1$s verem</string>
+    <string name="shell_dev_navigation">Navigáció</string>
+    <string name="shell_dev_start">Indítás ezen, a következő indítástól</string>
+    <string name="shell_dev_layout">Navigációs elrendezés</string>
+    <string name="shell_dev_accessories">Alsó elemek</string>
+    <string name="shell_dev_bottom_accessory">A navigációs sáv felett</string>
+    <string name="shell_dev_motion">Mozgás</string>
+    <string name="shell_dev_animation_speed">Animáció sebessége</string>
+    <string name="shell_dev_reset">Fejlesztői beállítások visszaállítása</string>
+    <string name="shell_dev_reset_summary">Vissza ahhoz, amit az alkalmazás megad</string>
+    <string name="shell_layout_auto">Automatikus, az ablak szélessége szerint</string>
+    <string name="shell_layout_bottom_bar">Alsó sáv és fiók</string>
+    <string name="shell_layout_rail">Oldalsó navigációs sáv</string>
+    <string name="shell_layout_expanded_rail">Kibővített oldalsó navigációs sáv</string>
+    <string name="shell_layout_permanent_drawer">Állandó fiók</string>
+    <string name="shell_accessory_as_declared">Szalaghirdetés, amelyet lejátszás közben a lejátszó vált fel</string>
+    <string name="shell_accessory_none">Semmi</string>
+    <string name="shell_accessory_banner">Csak szalaghirdetés</string>
+    <string name="shell_accessory_player">Csak lejátszó</string>
+    <string name="shell_start_as_declared">Ahogy az alkalmazás megadja: %1$s</string>
+    <string name="shell_start_screen">%1$s, a fő felület előtt</string>
+    <string name="shell_speed_normal">Normál</string>
+    <string name="shell_speed_slow">2× lassabb</string>
+    <string name="shell_speed_very_slow">5× lassabb</string>
+    <string name="shell_developer_options">Fejlesztői beállítások</string>
+    <string name="shell_top_bar">Felső alkalmazássáv</string>
+    <string name="shell_navigation_bar">Alsó navigációs sáv</string>
+    <string name="shell_navigation_tint">Az oldalsáv és az alkalmazássáv színe</string>
+    <string name="shell_hide_bottom_bar">Alsó sáv elrejtése görgetéskor</string>
+    <string name="shell_hide_bottom_bar_summary">Eltűnik, amikor a tartalom lefelé görget, amíg nem látszik lejátszó</string>
+    <string name="shell_hide_top_bar">Alkalmazássáv elrejtése görgetéskor</string>
+    <string name="shell_hide_top_bar_summary">Eltűnik, amikor a tartalom lefelé görget, a nagy sáv az összecsukása után, és visszatér, amint felfelé görget</string>
+    <string name="shell_limit_width">Tartalomszélesség korlátozása nagy ablakokban</string>
+    <string name="shell_limit_width_summary">Tartalom középre igazítása margókkal, mint egy weboldalon, az elrendezési szabály maximális szélessége felett</string>
+    <string name="shell_tab_transition">Lapok között</string>
+    <string name="shell_back_edge">Vissza-húzás a jobb szélről</string>
+    <string name="shell_as_declared">Ahogy az egyes képernyők megadják</string>
+    <string name="shell_top_bar_small">Kicsi</string>
+    <string name="shell_top_bar_center">Középre igazított</string>
+    <string name="shell_top_bar_large">Nagy, összecsukódó</string>
+    <string name="shell_top_bar_large_collapsed">Nagy, összecsukva nyílik</string>
+    <string name="shell_top_bar_hidden">Rejtett</string>
+    <string name="shell_navigation_bar_standard">Normál, 80 dp</string>
+    <string name="shell_navigation_bar_short">Rövid, 64 dp</string>
+    <string name="shell_navigation_tint_none">Felület; az alkalmazássáv görgetéskor színeződik</string>
+    <string name="shell_navigation_tint_always">Együtt színezve, a tartalom kártyán</string>
+    <string name="shell_navigation_tint_on_scroll">Együtt színezve, amint a tartalom görget</string>
+    <string name="shell_back_edge_system">Mint az Android: az oldal helyben zsugorodik</string>
+    <string name="shell_back_edge_follow">Követi az ujjat, a bal szél tükreként (alapértelmezett)</string>
+    <string name="shell_transition_directional">Irányított csúsztatás</string>
+    <string name="shell_transition_fade_through">Áttűnés háttéren át</string>
+    <string name="shell_transition_fade">Áttűnés</string>
+    <string name="shell_transition_none">Nincs</string>
+    <string name="shell_dev_layout_and_bars">Elrendezés és sávok</string>
+</resources>

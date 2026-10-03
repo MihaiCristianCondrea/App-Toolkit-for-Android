@@ -36,14 +36,4 @@
         <package android:name="com.d4rk.android.apps.weddix" />
     </queries>
 
-    <application>
-        <receiver
-            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.broadcast.FavoritesChangedReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.mihaicristiancondrea.android.apps.apptoolkit.action.FAVORITES_CHANGED" />
-            </intent-filter>
-        </receiver>
-    </application>
-
 </manifest>

@@ -147,6 +147,7 @@ The following are common entry points. This list is not exhaustive.
 | Build validation, Gradle checks, SDK setup                      | `.agents/skills/android-build-validation/SKILL.md`          |
 | Repository, data source, model, threading and caching decisions | `.agents/skills/architecture/android-data-layer/SKILL.md`   |
 | Domain layer and use-case decisions                             | `.agents/skills/architecture/android-domain-layer/SKILL.md` |
+| Screens, ViewModels, UI state, events and messages              | `.agents/skills/architecture/android-ui-layer/SKILL.md`     |
 | Module and package placement                                    | `.agents/skills/architecture/layered-tree-review/SKILL.md`  |
 | Navigation 3                                                    | `.agents/skills/navigation/navigation-3/SKILL.md`           |
 | Navigation events                                               | `.agents/skills/navigation/navigation-event/SKILL.md`       |
@@ -374,6 +375,31 @@ Move genuinely blocking or CPU-heavy work to the appropriate dispatcher in the c
 work.
 
 Inject dispatchers when doing so improves testability or follows the existing project pattern.
+
+Already main-safe, so never wrapped in `withContext` or `flowOn`:
+
+* DataStore reads, writes and flows
+* Room suspend and `Flow` APIs
+* Ktor and Retrofit suspend calls
+* Play Core, Play Billing, UMP and other callback or `Task` APIs, awaited with `await` or a
+  `suspendCancellableCoroutine`; their callbacks already arrive on the main thread
+
+Blocking or CPU-heavy, so switched in the class that does it:
+
+* `PackageManager` lookups, `ContentResolver` queries and file I/O (`dispatchers.io`)
+* Mobile Ads SDK initialization, which Google asks to run off the main thread (`dispatchers.io`)
+* decoding or drawing bitmaps, sorting or mapping large lists (`dispatchers.default`)
+
+Rules that follow from this:
+
+* Take dispatchers from the injected `DispatcherProvider`; never hardcode `Dispatchers.IO`,
+  `Dispatchers.Default` or `Dispatchers.Main` in production code. A default value on a constructor
+  parameter that tests replace is acceptable.
+* Switch around the blocking call only, not around a whole function that also calls main-safe APIs.
+* A ViewModel takes a `DispatcherProvider` only for CPU work it does itself, never to move
+  repository calls.
+* When a call blocks the main thread, a switch in its caller is never the fix; make the owning
+  repository or data source main-safe instead.
 
 ## App Toolkit usage
 
@@ -688,10 +714,10 @@ These are examples. Run only tasks that actually exist in the current project.
 
 ### App Toolkit
 
-The App Toolkit repository currently contains a `checkModuleBoundaries` verification task for the
-sample application.
+The App Toolkit repository contains a `checkModuleBoundaries` verification task for the sample
+application and the library.
 
-Its rules include:
+Its sample rules include:
 
 * `:sample:core:*` cannot depend on `:sample:feature:*` or `:sample:app`
 * `:sample:integration:*` cannot depend on `:sample:feature:*` or `:sample:app`
@@ -699,10 +725,21 @@ Its rules include:
 * feature modules cannot depend on `:sample:app`
 * packages in the sample must not be split across modules
 * non-app sample modules must not import app-owned composition packages
-* `:sample:core:navigation` must not import product feature implementations
+* `:sample:core:*` must not import product feature implementations
 * inline analytics screen names are rejected
 
-These rules are build-enforced inside App Toolkit's sample.
+Its library rules include:
+
+* `:library:core:*`, `:library:integration:*`, `:library:navigation` and `:library:shell` cannot depend on
+  `:library:feature:*` or `:library:apptoolkit`
+* no library module can depend on a `:sample:*` module
+* sibling `:library:feature:*` modules cannot depend on each other. A feature opens another's page
+  by navigating to its key from `:library:navigation`, and shares a contract through
+  `:library:core:ui` and Koin (as `IssueReporterSheet` does); only `:library:apptoolkit` names every
+  feature
+* packages in the library must not be split across modules
+
+These rules are build-enforced inside App Toolkit.
 
 Consumer applications should follow the equivalent architectural rules, but do not claim they are
 build-enforced unless that repository actually contains equivalent verification.

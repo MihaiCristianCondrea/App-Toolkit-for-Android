@@ -15,9 +15,20 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="error_description_missing">Ilarawan ang isyu</string>
+    <string name="error_email_invalid">Maglagay ng wastong email address</string>
+    <string name="error_email_missing">Ilagay ang iyong email</string>
     <string name="error_forbidden">Ipinagbabawal: kulang ang mga pahintulot</string>
     <string name="error_gone">Inalis ang API endpoint</string>
-    <string name="error_invalid_report">Hindi maaaring walang laman ang pamagat at paglalarawan</string>
+    <string name="error_link_only">Ilarawan ang isyu, hindi lang isang link.</string>
+    <string name="error_repetitive">Masyadong paulit-ulit. Ilarawan kung ano ang nangyari.</string>
+    <string name="error_report_cooldown">Maghintay ng ilang minuto bago magpadala ng isa pang ulat.</string>
+    <string name="error_report_duplicate">Naipadala na ang ulat na ito.</string>
+    <string name="error_same_as_title">Magdagdag ng mas maraming detalye kaysa sa pamagat.</string>
+    <string name="error_title_missing">Maglagay ng pamagat</string>
+    <string name="error_too_few_letters">Gumamit ng mga salita, hindi lang mga simbolo o emoji.</string>
+    <string name="error_too_long">Masyadong mahaba. Gumamit ng hindi hihigit sa %1$d character.</string>
+    <string name="error_too_short">Masyadong maikli. Gumamit ng hindi bababa sa %1$d character.</string>
     <string name="error_unauthorized">Hindi awtorisado: Hindi wastong token</string>
     <string name="error_unprocessable">Hindi wastong data para sa paglikha ng isyu</string>
 </resources>

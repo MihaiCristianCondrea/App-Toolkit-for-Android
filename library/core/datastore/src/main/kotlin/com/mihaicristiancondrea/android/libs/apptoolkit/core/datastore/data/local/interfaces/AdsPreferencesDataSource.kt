@@ -39,10 +39,8 @@ interface AdsPreferencesDataSource {
     /** Emits the ads preference with a caller-supplied default. */
     fun ads(default: Boolean): Flow<Boolean>
 
-    /** Persists the ads preference. */
     suspend fun saveAds(isChecked: Boolean)
 
-    /** Persists whether App Open ads should be suppressed. */
     suspend fun saveReduceAds(isChecked: Boolean)
 
     /** Stops the sharing coroutine backing [adsEnabled]. */

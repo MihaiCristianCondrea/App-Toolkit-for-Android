@@ -22,4 +22,8 @@
     <string name="error_reporting">錯誤回報</string>
     <string name="summary_preference_settings_bug_report">將錯誤回報和功能請求發送至應用程式的 GitHub 問題頁面</string>
     <string name="summary_preference_settings_clear_cache">清除臨時應用資料</string>
+    <string name="advanced">進階</string>
+    <string name="developer_options">開發人員選項</string>
+    <string name="summary_preference_settings_developer_options">測試起始頁面、導覽版面配置和動畫</string>
+    <string name="developer">開發人員</string>
 </resources>

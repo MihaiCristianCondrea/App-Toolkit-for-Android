@@ -18,4 +18,5 @@
     <string name="app_short_description">Kullanışlı Android araçları ve yardımcı programlarından oluşan bir koleksiyon.</string>
     <string name="settings_disabled_message">Ayarlar şu anda kullanılamıyor.</string>
     <string name="long_settings_label">Ayarları aç</string>
+    <string name="error_failed_to_load_consent_info">Onay bilgileri yüklenemedi</string>
 </resources>

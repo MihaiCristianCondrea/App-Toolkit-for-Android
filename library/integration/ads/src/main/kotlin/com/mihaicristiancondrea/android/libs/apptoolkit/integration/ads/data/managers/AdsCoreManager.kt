@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.managers
 
-// import com.mihaicristiancondrea.android.libs.apptoolkit.R
 import android.app.Activity
 import android.content.Context
 import android.util.Log
@@ -30,7 +29,7 @@ import com.google.android.libraries.ads.mobile.sdk.common.LoadAdError
 import com.google.android.libraries.ads.mobile.sdk.initialization.InitializationConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.ads.AdsSdkState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.interfaces.OnShowAdCompleteListener
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.utils.interfaces.OnShowAdCompleteListener
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.AdMobAppIdProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.ManifestAdMobAppIdProvider
@@ -44,6 +43,11 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.util.Date
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.hours
+
+/** How long an app open ad stays valid after loading; Google expires them after four hours. */
+private val APP_OPEN_AD_LIFETIME: Duration = 4.hours
 
 /**
  * Manager responsible for configuring and displaying App Open ads.
@@ -70,31 +74,16 @@ open class AdsCoreManager(
     private var isSdkInitialized: Boolean = false
 
     /**
-     * Prepares the SDK and loads an [AppOpenAd] if ads are enabled.
+     * Initializes ads from the host-manifest [AdMobAppIdProvider] and observes the shared
+     * [CommonDataStore.adsEnabledFlow], so enabling ads later can initialize the SDK without a
+     * process restart. Missing or invalid app IDs skip initialization; no fallback publisher ID
+     * is supplied.
      *
-     * The AdMob application id is resolved from the host app's manifest through
-     * [AdMobAppIdProvider]. The toolkit previously initialized the SDK with Google's sample app id,
-     * which pointed every consumer app at a publisher account that was not its own. When the host
-     * declares no usable `com.google.android.gms.ads.APPLICATION_ID` meta-data, initialization is
-     * skipped instead of falling back to a foreign id.
-     *
-     * Hosts must not call [MobileAds.initialize] themselves; a second initialization with a
-     * different id re-introduces the mismatch this method exists to prevent. Use
-     * [disableNativeValidator] instead of a bespoke initialization when the host needs the SDK's
-     * native ad validator turned off.
-     *
-     * Change rationale: this used to sample the ads preference once at startup with its own default
-     * (`!isDebugBuild`), while the ad views read the preference through
-     * [CommonDataStore.adsEnabledFlow] with a different default. On a build where the two disagreed
-     * the views loaded ads that the SDK had never been initialized for, and the loader throws
-     * `IllegalStateException` for that. Both sides now read the same flow, and the preference is
-     * observed rather than sampled, so turning ads on at runtime initializes the SDK instead of
-     * waiting for the next process start.
+     * Hosts must use this manager rather than initializing [MobileAds] separately. Use
+     * [disableNativeValidator] to configure native-ad validation.
      */
     suspend fun initializeAds(appOpenUnitId: String, disableNativeValidator: Boolean = false) {
-        val isAdsChecked: Boolean = withContext(dispatchers.io) {
-            dataStore.adsEnabledFlow.first()
-        }
+        val isAdsChecked: Boolean = dataStore.adsEnabledFlow.first()
         if (isAdsChecked) {
             startAds(appOpenUnitId = appOpenUnitId, disableNativeValidator = disableNativeValidator)
         }
@@ -129,14 +118,11 @@ open class AdsCoreManager(
     }
 
     /**
-     * Initializes the Mobile Ads SDK exactly once, and reports whether it is usable.
+     * Initializes the SDK once and publishes readiness. Ad loaders must wait for `true`;
+     * loading before initialization throws. The SDK initializes on IO, as Google asks for it to
+     * run off the main thread; the preference reads need no switch, since DataStore is main-safe.
      *
-     * Nothing may load an ad before this returns `true`: the loader throws
-     * `IllegalStateException("MobileAds.initialize must be called before using the Google Mobile
-     * Ads SDK.")` otherwise.
-     *
-     * @return `false` when the host declares no valid AdMob application id, in which case no ad can
-     * be served at all.
+     * @return `false` when the host provides no valid AdMob application ID.
      */
     suspend fun ensureAdsSdkInitialized(disableNativeValidator: Boolean = false): Boolean {
         if (isSdkInitialized) return true
@@ -177,9 +163,6 @@ open class AdsCoreManager(
         }
     }
 
-    /**
-     * Helper that wraps loading and showing of the App Open ad.
-     */
     private inner class AppOpenAdManager(private val appOpenUnitId: String) {
         private var appOpenAd: AppOpenAd? = null
         private var isLoadingAd: Boolean = false
@@ -207,13 +190,12 @@ open class AdsCoreManager(
                 })
         }
 
+        /** Whether the loaded ad is younger than [APP_OPEN_AD_LIFETIME], after which it expires. */
         private fun wasLoadTimeLessThanNHoursAgo(): Boolean {
             val dateDifference: Long = Date().time - loadTime
-            val numMilliSecondsPerHour: Long = 3600000
-            return dateDifference < numMilliSecondsPerHour * 4
+            return dateDifference < APP_OPEN_AD_LIFETIME.inWholeMilliseconds
         }
 
-        /** Whether a valid ad is ready to be shown. */
         private fun isAdAvailable(): Boolean {
             return appOpenAd != null && wasLoadTimeLessThanNHoursAgo()
         }
@@ -231,12 +213,8 @@ open class AdsCoreManager(
         suspend fun showAdIfAvailable(
             activity: Activity, onShowAdCompleteListener: OnShowAdCompleteListener
         ) {
-            val isAdsChecked: Boolean = withContext(dispatchers.io) {
-                dataStore.adsEnabledFlow.first()
-            }
-            val shouldReduceAds: Boolean = withContext(dispatchers.io) {
-                dataStore.reduceAds.first()
-            }
+            val isAdsChecked: Boolean = dataStore.adsEnabledFlow.first()
+            val shouldReduceAds: Boolean = dataStore.reduceAds.first()
 
             if (isShowingAd || !isAdsChecked || shouldReduceAds) {
                 return

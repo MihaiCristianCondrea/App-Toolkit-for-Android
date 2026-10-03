@@ -32,4 +32,5 @@
     <string name="summary_preference_settings_usage_and_diagnostics">Partajează date pentru a ajuta la îmbunătățirea experienței în aplicație</string>
     <string name="terms_of_service">Termeni de serviciu</string>
     <string name="usage_and_diagnostics">Utilizare și diagnoză</string>
+    <string name="security_and_privacy">Securitate și confidențialitate</string>
 </resources>

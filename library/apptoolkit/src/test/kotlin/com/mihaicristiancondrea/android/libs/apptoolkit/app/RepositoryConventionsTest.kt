@@ -17,9 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app
 
-import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.Test
 import java.io.File
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 /** Guards the repositories placement and naming rules used by every active Android module. */
 class RepositoryConventionsTest {
@@ -31,7 +32,7 @@ class RepositoryConventionsTest {
             .filterNot { source -> DATA_REPOSITORY_PACKAGES.any(source.parentPath()::endsWith) }
             .map { it.relativePath() }
 
-        assertThat(misplaced).isEmpty()
+        assertEquals(emptyList(), misplaced)
     }
 
     @Test
@@ -43,7 +44,7 @@ class RepositoryConventionsTest {
             }
             .map { it.relativePath() }
 
-        assertThat(legacyNames).isEmpty()
+        assertEquals(emptyList(), legacyNames)
     }
 
     @Test
@@ -54,7 +55,7 @@ class RepositoryConventionsTest {
             declaredPackage == null ||
                 !source.parentPath().endsWith("/" + declaredPackage.replace('.', '/'))
         }.map { it.relativePath() }
-        assertThat(misplaced).isEmpty()
+        assertEquals(emptyList(), misplaced)
     }
 
     @Test
@@ -64,12 +65,12 @@ class RepositoryConventionsTest {
             path.startsWith("sample/core/datastore/") ||
                 (path.startsWith("library/feature/issuereporter/") && "/data/" in path)
         }
-        assertThat(consumers).isNotEmpty()
+        assertTrue(consumers.isNotEmpty())
         val violations = consumers.filter { source ->
             Regex("(?m)^import\\s+[^\\r\\n]*\\.core\\.ui\\.")
                 .containsMatchIn(source.readText())
         }.map { it.relativePath() }
-        assertThat(violations).isEmpty()
+        assertEquals(emptyList(), violations)
     }
 
     private fun productionSources(): List<File> = ACTIVE_SOURCE_ROOTS
@@ -98,10 +99,7 @@ class RepositoryConventionsTest {
         const val REPOSITORY_FILE_SUFFIX = "Repository.kt"
         const val REPOSITORY_IMPL = "RepositoryImpl"
 
-        // A regex, not the literal "class RepositoryImpl": that substring never appears in a real
-        // declaration, because the class name always carries a prefix, `class AboutRepositoryImpl`
-        // does not contain it. The check silently passed everything, leaving the file-name check as
-        // the only live rule and a mis-named class inside a correctly named file undetected.
+        // Match prefixed repository class names; a literal `class RepositoryImpl` would miss them.
         val REPOSITORY_IMPL_DECLARATION = Regex("""class\s+\w*RepositoryImpl\b""")
         const val SETTINGS_FILE = "settings.gradle.kts"
 

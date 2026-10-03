@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.data.repositories
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStoreInterface
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test
 class ShowcaseUnlockRepositoryTest {
 
     private val dataStore = mockk<DataStoreInterface>()
-    private val firebaseController = mockk<FirebaseController>(relaxed = true)
+    private val telemetryRepository = mockk<TelemetryRepository>(relaxed = true)
 
     @Test
     fun `release build unlocks at seven taps only once`() = runTest {
@@ -41,7 +41,7 @@ class ShowcaseUnlockRepositoryTest {
         }
         val repository = ShowcaseUnlockRepository(
             dataStore = dataStore,
-            firebaseController = firebaseController,
+            telemetryRepository = telemetryRepository,
             isDebugBuild = false,
         )
 
@@ -50,7 +50,7 @@ class ShowcaseUnlockRepositoryTest {
         repository.unlockAfterVersionTaps(tapCount = 8)
 
         coVerify(exactly = 1) { dataStore.saveComponentsShowcaseUnlocked(isUnlocked = true) }
-        coVerify(exactly = 1) { firebaseController.logEvent(match { it.name == "unlock_achievement" }) }
+        coVerify(exactly = 1) { telemetryRepository.logEvent(match { it.name == "unlock_achievement" }) }
     }
 
     @Test
@@ -58,7 +58,7 @@ class ShowcaseUnlockRepositoryTest {
         every { dataStore.componentsShowcaseUnlocked } returns MutableStateFlow(false)
         val repository = ShowcaseUnlockRepository(
             dataStore = dataStore,
-            firebaseController = firebaseController,
+            telemetryRepository = telemetryRepository,
             isDebugBuild = true,
         )
 

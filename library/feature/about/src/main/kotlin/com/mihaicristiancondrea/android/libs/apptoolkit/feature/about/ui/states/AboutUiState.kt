@@ -18,18 +18,19 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states
 
 import androidx.compose.runtime.Immutable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItem
+import kotlinx.collections.immutable.ImmutableList
 
 /**
- * UI representation for the about screen.
+ * State of the About screen.
  *
- * Values are loaded by [com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.AboutViewModel]
- * using the provided data sources and are exposed as immutable properties to the UI layer.
- *
- * @property items The ordered list of category headers and preference items ready to render.
+ * @property items The category headers and preference rows to render, in order, once
+ * [com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.AboutViewModel] has loaded
+ * them.
  */
 @Immutable
 data class AboutUiState(
-    val items: List<AboutItem> = emptyList(),
+    val items: Loadable<ImmutableList<AboutItem>> = Loadable.Loading,
 )
 

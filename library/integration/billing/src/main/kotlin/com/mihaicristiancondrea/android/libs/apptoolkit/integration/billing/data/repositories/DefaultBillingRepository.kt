@@ -19,6 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.dat
 
 import android.app.Activity
 import android.content.Context
+import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
@@ -31,8 +32,8 @@ import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchasesParams
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.billing.PurchaseResult
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.domain.models.PurchaseResult
 import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -43,7 +44,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -55,15 +55,16 @@ private const val RETRY_MAX_DELAY_MS = 16_000L
  * Process-scoped Play Billing implementation.
  *
  * The repository owns one [BillingClient], reconnects with bounded retries, replays the latest
- * product query, and emits purchase outcomes as one-off events. One-time donations are consumed;
- * unconsumed purchases are recovered on initial connection and later reconnects.
+ * product query, and emits purchase outcomes as one-off events. One-time donations are consumed and
+ * subscriptions are acknowledged. Unsettled purchases of both types are recovered on initial
+ * connection and later reconnects.
  *
  * Use [getInstance] rather than constructing a second callback/listener graph.
  */
 class DefaultBillingRepository private constructor(
     context: Context,
     private val dispatchers: DispatcherProvider,
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
     externalScope: CoroutineScope,
 ) : PurchasesUpdatedListener, BillingRepository {
 
@@ -79,16 +80,25 @@ class DefaultBillingRepository private constructor(
         _purchaseResult.asSharedFlow()
 
     /**
-     * Purchase tokens whose consumption is in flight or has succeeded.
+     * Purchase tokens whose consumption or acknowledgement is in flight or has succeeded.
      *
-     * One unconsumed purchase can reach [handlePurchases] from several paths at once: the purchase
+     * One unsettled purchase can reach [handlePurchases] from several paths at once: the purchase
      * callback, and [processPastPurchases] on connection and whenever the app resumes, which
      * returning from Play's purchase screen can trigger. Consuming the same token twice fails the
      * second call with `ITEM_NOT_OWNED`, which would reach the UI as a failed purchase right after
-     * the successful one. A token leaves the set only when its consumption fails, so a later pass
-     * can retry it.
+     * the successful one. A token leaves the set only when settling it fails, so a later pass can
+     * retry it.
      */
-    private val consumingTokens: MutableSet<String> = ConcurrentHashMap.newKeySet()
+    private val settlingTokens: MutableSet<String> = ConcurrentHashMap.newKeySet()
+
+    /**
+     * Product type of every product launched through [launchBillingFlow], keyed by product id.
+     *
+     * [Purchase] does not carry its product type, yet a purchase reported through
+     * [onPurchasesUpdated] must be settled the way its type requires: consuming a subscription
+     * token fails, and Play refunds a subscription that is not acknowledged within three days.
+     */
+    private val launchedProductTypes: MutableMap<String, String> = ConcurrentHashMap()
 
     private val billingClient: BillingClient = BillingClient.newBuilder(context)
         .setListener(this)
@@ -109,17 +119,23 @@ class DefaultBillingRepository private constructor(
         fun getInstance(
             context: Context,
             dispatchers: DispatcherProvider,
-            firebaseController: FirebaseController,
+            telemetryRepository: TelemetryRepository,
             externalScope: CoroutineScope,
         ): DefaultBillingRepository {
             return INSTANCE ?: synchronized(this) {
                 INSTANCE ?: DefaultBillingRepository(
                     context.applicationContext,
                     dispatchers,
-                    firebaseController,
+                    telemetryRepository,
                     externalScope
                 )
                     .also { INSTANCE = it }
+            }
+        }
+
+        private fun clearInstance(closed: DefaultBillingRepository) {
+            synchronized(this) {
+                if (INSTANCE === closed) INSTANCE = null
             }
         }
     }
@@ -177,12 +193,22 @@ class DefaultBillingRepository private constructor(
         }
     }
 
-    private fun handlePurchases(purchases: List<Purchase>) {
+    /**
+     * Settles each completed purchase and reports pending ones.
+     *
+     * @param productType The type of every purchase in [purchases], when the caller knows it from
+     * its query. When null the type is looked up in [launchedProductTypes], and a product that was
+     * never launched in this process is treated as a one-time donation.
+     */
+    private fun handlePurchases(purchases: List<Purchase>, productType: String? = null) {
         purchases.forEach { purchase ->
             when (purchase.purchaseState) {
                 Purchase.PurchaseState.PURCHASED -> {
                     if (!purchase.isAcknowledged) {
-                        consumePurchase(purchase)
+                        when (productType ?: purchase.launchedProductType()) {
+                            BillingClient.ProductType.SUBS -> acknowledgePurchase(purchase)
+                            else -> consumePurchase(purchase)
+                        }
                     }
                 }
 
@@ -195,28 +221,53 @@ class DefaultBillingRepository private constructor(
         }
     }
 
+    private fun Purchase.launchedProductType(): String? =
+        products.firstNotNullOfOrNull { productId -> launchedProductTypes[productId] }
+
     private fun consumePurchase(purchase: Purchase) {
+        val params = ConsumeParams.newBuilder()
+            .setPurchaseToken(purchase.purchaseToken)
+            .build()
+        settlePurchase(purchase) { complete ->
+            billingClient.consumeAsync(params) { billingResult: BillingResult, _ ->
+                complete(BillingCallResult(billingResult, Unit))
+            }
+        }
+    }
+
+    private fun acknowledgePurchase(purchase: Purchase) {
+        val params = AcknowledgePurchaseParams.newBuilder()
+            .setPurchaseToken(purchase.purchaseToken)
+            .build()
+        settlePurchase(purchase) { complete ->
+            billingClient.acknowledgePurchase(params) { billingResult: BillingResult ->
+                complete(BillingCallResult(billingResult, Unit))
+            }
+        }
+    }
+
+    /**
+     * Runs [settle], a consume or acknowledge call, at most once per purchase token at a time, with
+     * retries, and reports the outcome through [purchaseResult].
+     */
+    private fun settlePurchase(
+        purchase: Purchase,
+        settle: (complete: (BillingCallResult<Unit>) -> Unit) -> Unit,
+    ) {
         val purchaseToken: String = purchase.purchaseToken
-        if (!consumingTokens.add(purchaseToken)) return
+        if (!settlingTokens.add(purchaseToken)) return
 
         scope.launch {
-            val params = ConsumeParams.newBuilder()
-                .setPurchaseToken(purchaseToken)
-                .build()
             val result: BillingCallResult<Unit> = try {
                 retryBillingCall(RetryStrategy.Exponential()) {
-                    awaitBillingCallback { complete ->
-                        billingClient.consumeAsync(params) { billingResult: BillingResult, _ ->
-                            complete(BillingCallResult(billingResult, Unit))
-                        }
-                    }
+                    awaitBillingCallback(settle)
                 }
             } catch (throwable: Throwable) {
-                consumingTokens.remove(purchaseToken)
+                settlingTokens.remove(purchaseToken)
                 throw throwable
             }
             if (result.billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
-                consumingTokens.remove(purchaseToken)
+                settlingTokens.remove(purchaseToken)
             }
             when (result.billingResult.responseCode) {
                 BillingClient.BillingResponseCode.OK -> _purchaseResult.emit(PurchaseResult.Success)
@@ -230,52 +281,63 @@ class DefaultBillingRepository private constructor(
         }
     }
 
+    /** Play Billing answers through its own callbacks, so the queries need no dispatcher switch. */
     override suspend fun processPastPurchases() {
-        withContext(dispatchers.io) {
-            val params = QueryPurchasesParams.newBuilder()
-                .setProductType(BillingClient.ProductType.INAPP)
-                .build()
-            val result = retryBillingCall(RetryStrategy.Exponential()) {
-                awaitBillingCallback { complete ->
-                    billingClient.queryPurchasesAsync(params) { billingResult, purchasesList ->
-                        complete(BillingCallResult(billingResult, purchasesList))
-                    }
+        processPastPurchases(BillingClient.ProductType.INAPP)
+        processPastPurchases(BillingClient.ProductType.SUBS)
+    }
+
+    private suspend fun processPastPurchases(productType: String) {
+        val params = QueryPurchasesParams.newBuilder()
+            .setProductType(productType)
+            .build()
+        val result = retryBillingCall(RetryStrategy.Exponential()) {
+            awaitBillingCallback { complete ->
+                billingClient.queryPurchasesAsync(params) { billingResult, purchasesList ->
+                    complete(BillingCallResult(billingResult, purchasesList))
                 }
             }
-            if (result.billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                result.data?.let { handlePurchases(it) }
-            } else if (!result.billingResult.shouldRetryExponential()) {
+        }
+        val responseCode = result.billingResult.responseCode
+        when {
+            responseCode == BillingClient.BillingResponseCode.OK ->
+                result.data?.let { handlePurchases(purchases = it, productType = productType) }
+
+            // A device without subscription support has no subscriptions to recover, so this is
+            // not a failure to show the user.
+            productType == BillingClient.ProductType.SUBS &&
+                responseCode == BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED -> Unit
+
+            !result.billingResult.shouldRetryExponential() ->
                 scope.launch { _purchaseResult.emit(result.billingResult.toFailureResult()) }
-            }
         }
     }
 
+    /** Play Billing answers through its own callbacks, so the query needs no dispatcher switch. */
     override suspend fun queryProductDetails(productIds: List<String>) {
-        withContext(dispatchers.io) {
-            val products = productIds.map {
-                QueryProductDetailsParams.Product.newBuilder()
-                    .setProductId(it)
-                    .setProductType(BillingClient.ProductType.INAPP)
-                    .build()
-            }
-            val params = QueryProductDetailsParams.newBuilder()
-                .setProductList(products)
+        val products = productIds.map {
+            QueryProductDetailsParams.Product.newBuilder()
+                .setProductId(it)
+                .setProductType(BillingClient.ProductType.INAPP)
                 .build()
-            val callResult = retryBillingCall(RetryStrategy.Simple()) {
-                awaitBillingCallback { complete ->
-                    billingClient.queryProductDetailsAsync(params) { billingResult, result ->
-                        complete(BillingCallResult(billingResult, result))
-                    }
+        }
+        val params = QueryProductDetailsParams.newBuilder()
+            .setProductList(products)
+            .build()
+        val callResult = retryBillingCall(RetryStrategy.Simple()) {
+            awaitBillingCallback { complete ->
+                billingClient.queryProductDetailsAsync(params) { billingResult, result ->
+                    complete(BillingCallResult(billingResult, result))
                 }
             }
+        }
 
-            if (callResult.billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                val map =
-                    callResult.data?.productDetailsList?.associateBy { it.productId }.orEmpty()
-                _productDetails.emit(map)
-            } else {
-                scope.launch { _purchaseResult.emit(callResult.billingResult.toFailureResult()) }
-            }
+        if (callResult.billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+            val map =
+                callResult.data?.productDetailsList?.associateBy { it.productId }.orEmpty()
+            _productDetails.emit(map)
+        } else {
+            scope.launch { _purchaseResult.emit(callResult.billingResult.toFailureResult()) }
         }
     }
 
@@ -328,7 +390,9 @@ class DefaultBillingRepository private constructor(
             return
         }
 
-        firebaseController.logBreadcrumb(
+        launchedProductTypes[details.productId] = productType
+
+        telemetryRepository.logBreadcrumb(
             message = "Billing flow launch",
             attributes = mapOf(
                 "productId" to details.productId,
@@ -356,7 +420,7 @@ class DefaultBillingRepository private constructor(
 
             billingClient.launchBillingFlow(activity, params)
         }.onSuccess { billingResult ->
-            firebaseController.logBreadcrumb(
+            telemetryRepository.logBreadcrumb(
                 message = "Billing flow result",
                 attributes = mapOf(
                     "responseCode" to billingResult.responseCode.toString(),
@@ -372,11 +436,10 @@ class DefaultBillingRepository private constructor(
                 scope.launch { _purchaseResult.emit(result) }
             }
         }.onFailure { throwable ->
-            firebaseController.reportViewModelError(
-                viewModelName = "SupportViewModel",
-                action = "launchBillingFlow",
+            telemetryRepository.recordNonFatal(
                 throwable = throwable,
-                extraKeys = mapOf(
+                attributes = mapOf(
+                    "operation" to "launchBillingFlow",
                     "product_id" to details.productId,
                     "product_type" to productType,
                 ),
@@ -392,6 +455,9 @@ class DefaultBillingRepository private constructor(
     override fun close() {
         scope.cancel()
         billingClient.endConnection()
+        // A closed client cannot reconnect, so the next getInstance must build a new repository
+        // rather than hand back this one.
+        clearInstance(this)
     }
 
     private suspend fun retryBillingConnection(maxAttempts: Int = 3) {
@@ -532,7 +598,7 @@ class DefaultBillingRepository private constructor(
         return PurchaseResult.Failed(message)
     }
 
-    // Helper extension to handle offer tokens (assumed to be available via imports in original file)
+    /** The offer token of the first subscription offer; one-time products need none. */
     private fun ProductDetails.primaryOfferToken(productType: String): String? {
         return when (productType) {
             BillingClient.ProductType.SUBS -> subscriptionOfferDetails?.firstOrNull()?.offerToken

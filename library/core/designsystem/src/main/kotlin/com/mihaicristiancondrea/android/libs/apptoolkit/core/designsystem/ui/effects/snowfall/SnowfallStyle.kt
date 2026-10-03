@@ -22,7 +22,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-/** How individual flakes are drawn. */
 enum class SnowflakeShape {
     /** Soft round dots, the lightest option to draw. */
     Dots,

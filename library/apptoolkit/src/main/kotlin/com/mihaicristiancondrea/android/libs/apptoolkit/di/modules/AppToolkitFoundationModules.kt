@@ -18,9 +18,10 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.di.modules
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.AdLoadReporter
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.factory.GmsHostFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.ClipboardRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.DefaultClipboardRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.api.ApiHost
@@ -37,17 +38,13 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 /**
- * AppToolkit foundation modules to be loaded by the host app.
- *
- * Composes dispatchers, datastore, host providers, networking, and the ads, consent, and update
- * integration modules, along with shared dependencies such as [GmsHostFactory].
+ * Assembles shared providers, networking, and ads, consent, and update integrations for the
+ * host graph. Preference bindings come once from `:library:core:datastore`, and shared ad
+ * reporting is supplied here rather than required from each host.
  */
 fun appToolkitFoundationModules(hostBuildConfig: AppToolkitHostBuildConfig): List<Module> =
     listOf(
         dispatchersModule(),
-        // :library:core:datastore owns the CommonDataStore definition and the preference
-        // data-source bindings that hang off it. Including it here keeps one registration for
-        // every host instead of a second copy in corePlatformModule.
         dataStoreModule(),
         corePlatformModule(hostBuildConfig = hostBuildConfig),
         consentModule(),
@@ -62,10 +59,8 @@ private fun dispatchersModule(): Module = module {
 
 private fun corePlatformModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
     single<AdMobAppIdProvider> { ManifestAdMobAppIdProvider(context = get()) }
-    // Every toolkit ad surface resolves this, so it is bound here rather than left to the host:
-    // an unbound reporter would turn a blank ad slot into a crash, which is the opposite of the
-    // point.
-    single { AdLoadReporter(firebaseController = get(), buildInfoProvider = get()) }
+    single<ClipboardRepository> { DefaultClipboardRepository(context = get()) }
+    single { AdLoadReporter(telemetryRepository = get(), buildInfoProvider = get()) }
     single { KtorClient.createClient(enableLogging = hostBuildConfig.isDebugBuild) }
     single<BuildInfoProvider> {
         object : BuildInfoProvider {
@@ -78,7 +73,6 @@ private fun corePlatformModule(hostBuildConfig: AppToolkitHostBuildConfig): Modu
 }
 
 private fun mainSharedModule(): Module = module {
-    single { GmsHostFactory() } // Lightweight creator without screen references; safe as singleton.
     single<String>(qualifier = named(name = AppToolkitDiConstants.ANDROID_APPS_METADATA_API_BASE_URL)) {
         ApiHost.BASE_URL
     }

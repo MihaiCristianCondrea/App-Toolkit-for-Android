@@ -17,73 +17,97 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui
 
-import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingThemeEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme.ThemePreferencesState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.ScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.updateData
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingThemeEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingThemeUiState
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 
-/** Owns theme preference state used by the onboarding theme page. */
+/**
+ * ViewModel for the onboarding theme page. It reads and writes the same
+ * [ThemePreferencesRepository] as the theme settings page, so a choice made here is the app's theme
+ * from then on.
+ *
+ * A failed write shows an error message. A failed read is reported and the page keeps what it
+ * showed last.
+ */
 class OnboardingThemeViewModel(
     private val preferences: ThemePreferencesRepository,
-) : ScreenViewModel<ThemePreferencesState, OnboardingThemeEvent, ActionEvent>(
-    initialState = UiStateScreen(
-        screenState = ScreenState.Success(),
-        data = ThemePreferencesState(
-            themeMode = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
-            dynamicColors = true,
-            amoledMode = false,
-            dynamicPaletteVariant = 0,
-            staticPaletteId = StaticPaletteIds.DEFAULT,
-        ),
-    ),
+    private val seasonal: SeasonalThemeRepository,
+    telemetryRepository: TelemetryRepository,
+) : LoggedScreenViewModel<OnboardingThemeUiState, OnboardingThemeEvent>(
+    initialState = OnboardingThemeUiState(),
+    telemetryRepository = telemetryRepository,
+    screenName = "Onboarding",
+    viewModelName = "OnboardingThemeViewModel",
 ) {
-    private var observationJob: Job? = null
 
     init {
-        onEvent(OnboardingThemeEvent.Initialize)
+        observePreferences()
     }
 
-    override fun onEvent(event: OnboardingThemeEvent) {
+    override fun handleEvent(event: OnboardingThemeEvent) {
         when (event) {
-            OnboardingThemeEvent.Initialize -> observePreferences()
-            is OnboardingThemeEvent.SelectThemeMode -> selectThemeMode(event.mode)
-            is OnboardingThemeEvent.SetAmoledMode -> persist {
+            is OnboardingThemeEvent.SelectThemeMode -> persist(setting = Settings.THEME_MODE) {
+                preferences.selectThemeMode(event.mode)
+            }
+
+            is OnboardingThemeEvent.SetAmoledMode -> persist(setting = Settings.AMOLED_MODE) {
                 preferences.setAmoledMode(event.enabled)
             }
-            is OnboardingThemeEvent.SelectDynamicPalette -> persist {
+
+            is OnboardingThemeEvent.SelectDynamicPalette -> persist(setting = Settings.DYNAMIC_PALETTE) {
                 preferences.selectDynamicPalette(event.variant)
             }
-            is OnboardingThemeEvent.SelectStaticPalette -> persist {
+
+            is OnboardingThemeEvent.SelectStaticPalette -> persist(setting = Settings.STATIC_PALETTE) {
                 preferences.selectStaticPalette(event.id)
             }
         }
     }
 
+    /** Follows the stored theme and whether the holiday palettes are offered all year. */
     private fun observePreferences() {
-        observationJob?.cancel()
-        observationJob = preferences.preferencesState.onEach { state ->
-            updateStateThreadSafe {
-                screenState.updateData(newState = ScreenState.Success()) { state }
+        combine(
+            preferences.preferencesState,
+            seasonal.state.map { it.unlocked }.distinctUntilChanged(),
+        ) { stored, unlocked -> stored to unlocked }
+            .collectReport(action = Actions.OBSERVE_PREFERENCES) { (stored, unlocked) ->
+                setState { copy(preferences = stored, seasonalThemesUnlocked = unlocked) }
             }
-        }.launchIn(viewModelScope)
     }
 
-    private fun selectThemeMode(mode: String) = persist {
-        preferences.selectThemeMode(mode)
+    /**
+     * Saves one theme setting as the [Actions.PERSIST_ONBOARDING_THEME] operation. Every write runs
+     * to completion, so a quick second tap never cancels the first.
+     */
+    private fun persist(setting: String, write: suspend () -> Unit) {
+        launchReport(
+            action = Actions.PERSIST_ONBOARDING_THEME,
+            extra = mapOf(ExtraKeys.SETTING to setting),
+            onError = { error -> showMessage(error.toErrorMessage()) },
+            block = write,
+        )
     }
 
-    private fun persist(block: suspend () -> Unit) {
-        viewModelScope.launch { runCatching { block() } }
+    private object Actions {
+        const val OBSERVE_PREFERENCES: String = "observePreferences"
+        const val PERSIST_ONBOARDING_THEME: String = "persistOnboardingTheme"
+    }
+
+    private object ExtraKeys {
+        const val SETTING: String = "setting"
+    }
+
+    private object Settings {
+        const val THEME_MODE: String = "theme_mode"
+        const val AMOLED_MODE: String = "amoled_mode"
+        const val DYNAMIC_PALETTE: String = "dynamic_palette"
+        const val STATIC_PALETTE: String = "static_palette"
     }
 }

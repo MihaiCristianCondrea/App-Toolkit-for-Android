@@ -25,7 +25,7 @@ Firebase transport or Compose tracking APIs.
 
 ## Used by
 
-- `:sample:core:shell` and sample feature modules when emitting screen views or app events.
+- `:sample:app` and sample feature modules when emitting screen views or app events.
 
 ## Architectural decisions
 

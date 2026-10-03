@@ -8,8 +8,10 @@ Owns ad enablement settings and Google Mobile Ads integration UI used by AppTool
 
 - `di.adsIntegrationModule()` binds the ads manager, settings repository, and ViewModel. The main toolkit
   module composes it; hosts supply their placement configuration and foundation providers.
-- Ads settings repository, ViewModel, screen, and activity.
+- Ads settings repository, ViewModel and screen, and `adsSettingsPage()`, the registration of
+  `AdsSettingsRoute` (opened from the privacy page).
 - `AdsCoreManager`, `AdsSdkInitializer`, and Google Mobile Ads SDK initialization.
+- `OnShowAdCompleteListener`, called once an app-open ad has been shown.
 - App-open ad lifecycle; the `INTERNET`, `ACCESS_NETWORK_STATE`, and `AD_ID` permissions required by
   the SDK; and default Mobile Ads initialization/loading metadata.
 
@@ -111,7 +113,7 @@ without an ad, so bind every qualifier whose screen you include:
 | Qualifier           | Injected by                                     | Format          |
 |---------------------|-------------------------------------------------|-----------------|
 | `NO_DATA_NATIVE_AD` | `NoDataScreen`, in `:library:core:ui`           | Native advanced |
-| `HELP_NATIVE_AD`    | `FaqScreenContent`, in `:library:feature:faq`   | Native advanced |
+| `HELP_NATIVE_AD`    | `FaqScreen`, in `:library:feature:faq`          | Native advanced |
 | `SUPPORT_NATIVE_AD` | `SupportScreen`, in `:library:feature:support`  | Native advanced |
 
 `NoDataScreen` is the one to watch: it is a shared empty/error state rather than a screen a host
@@ -139,10 +141,41 @@ host decides whether it wants the ad at all, see the toggle table above.
 
 ## Rendering an ad
 
-Start with `NativeAdSlot`. It is the recommended way, and for most placements it is the only thing
+Start with `NativeAdSlot` for an explicit placement inside content. It is the recommended way, and for most placements it is the only thing
 you need. It is not the only way, and it is not meant to be: an ad should look like it belongs in
 your app, and a shared component cannot know what your app looks like. There are three levels, and
 moving to a lower one is expected rather than a workaround.
+
+### Placement warning and explicit opt-in
+
+> **Warning:** native ads next to bottom navigation, retry buttons, or other frequently tapped
+> controls can cause accidental clicks. Do not use a persistent native ad directly above the
+> navigation bar as a default placement. Review the host's actual layout and Google's guidance
+> before enabling any ad near app controls.
+
+The shell's `banner { }` slot is optional host content and is absent unless the graph registers it.
+`PageScaffold` adds no ads. `BottomAppBarNativeAdBanner` is retained as an optional component, but
+its `enabled` parameter defaults to `false`: it renders nothing, requests no ad, and reports
+`onAdLoaded(false)`. A host that chooses to use it must pass `enabled = true` explicitly. The sample
+keeps its shell banner registration and `BOTTOM_NAV_BAR_NATIVE_AD` configuration, but passes
+`enabled = false`, so the bottom-bar ad stays hidden and makes no request.
+
+This opt-in default applies to the bottom-bar component only. `NoDataScreen` keeps
+`showAd = true` by default and still requires a `NO_DATA_NATIVE_AD` binding. Its ad placement must
+remain distinct from the empty/error message and retry action.
+
+Native ads explicitly placed in a scrolling list or grid remain available. Keep each ad distinct
+from app content, preserve visible ad attribution and AdChoices, and avoid overlapping app
+controls with ad assets. A Toolkit component, an opt-in flag, or a successful validator check
+does not establish compliance for a host's placement.
+
+Google's source guidance:
+
+- [About Confirmed Click: preventing accidental clicks](https://support.google.com/admob/answer/10094971?hl=en), including ads near navigation and buttons.
+- [Invalid activity: deceptive placements and accidental clicks](https://support.google.com/admob/answer/6213019?hl=en), including ads too close to clickable app elements.
+- [Native ads using native advanced](https://support.google.com/admob/answer/6329638?hl=en), covering attribution, AdChoices, asset layout, and differentiation from content.
+- [Overview of native ads](https://support.google.com/admob/answer/6239795?hl=en), explaining how native ads fit within surrounding content.
+- [Validate your native ads on Android](https://developers.google.com/admob/android/native/validator), for the SDK's checks on test ads.
 
 ### Level 1: `NativeAdSlot`, recommended
 
@@ -159,8 +192,8 @@ NativeAdSlot(
 )
 ```
 
-That gets you a correct ad. It does not yet get you an ad that looks like it belongs on your screen,
-which is the whole point of a native ad. That is Level 1b.
+The slot supplies the ad assets and disclosure. The host still reviews the placement and can match
+its appearance to the surrounding content with Level 1b.
 
 ### Level 1b: `NativeAdStyle`, the finish
 
@@ -179,6 +212,7 @@ NativeAdSlot(
             size = SizeConstants.LauncherIconSize,
         ),
         badgeColor = MaterialTheme.colorScheme.primaryContainer,
+        iconInsetDp = 12,
         headlineTextSizeSp = MaterialTheme.typography.titleMedium.fontSize.value,
         headlineBold = false,
         bodyTextSizeSp = MaterialTheme.typography.bodyMedium.fontSize.value,
@@ -191,6 +225,7 @@ NativeAdSlot(
 |---------------------------------------------|---------------------------------------------------------|
 | `badgeShape`, `badgeCornerRadiusDp`         | the screen's own icons are cut from a shape             |
 | `badgeColor`                                | the screen's own icons are not on a neutral surface     |
+| `iconInsetDp`                               | the advertiser icon should sit inside a visible badge shape without cropping |
 | `headlineTextSizeSp`, `headlineBold`        | the headline is heavier or larger than the titles near it |
 | `bodyTextSizeSp`, `bodyMaxLines`            | the body is a different size, or grows the row too tall |
 | `headlineColor`, `bodyColor`                | the screen's text colours are not the default pair      |
@@ -201,8 +236,13 @@ one property and everything else stays as the presentation built it. And **a sty
 views that already exist**, in the same pass as the palette, so changing one repaints the ad instead
 of rebuilding it and losing the loaded ad.
 
-What a style cannot change is the arrangement: which views exist, in what order, at what size. If
-you need a 44dp badge instead of a 48dp one, or the disclosure chip somewhere else, that is Level 2.
+`iconInsetDp` fits the full advertiser icon inside the badge without cropping it. Help uses a 12dp
+inset inside its 48dp badge, matching the contact card's centred icon. When the override is removed,
+the renderer restores the presentation's original inset and image scaling without replacing the
+registered icon view.
+
+A style keeps the presentation's view hierarchy, order, and outer badge size. A 44dp badge instead
+of a 48dp one, or a disclosure chip somewhere else, requires Level 2.
 
 ### Level 2: your own view tree, the toolkit's loading
 
@@ -425,6 +465,10 @@ The validator is the SDK's own debug overlay, configured at initialization:
 `initializeAds(appOpenUnitId, disableNativeValidator = true)` turns it off. It is left on by
 default.
 
+[Google's Android validator guide](https://developers.google.com/admob/android/native/validator)
+explains the overlay and the issues it checks. Use test ads and keep the validator enabled during
+development; it checks certain implementation issues, not every placement or policy requirement.
+
 ## FAQ: are the ads written in Compose?
 
 Short answer: **no, and they cannot be.** They are Compose-*hosted* Android views. This trips
@@ -525,7 +569,8 @@ so none of them need a `NativeAdView`.
 
 ## Public contracts
 
-- Ads settings screen/activity, repository contract, and UI event/action/state contracts.
+- `AdsSettingsScreen`, `adsSettingsPage()`, the repository contract, and the UI event, action and
+  state contracts.
 - `AdsCoreManager` and its replaceable `AdsSdkInitializer` test seam.
 
 ## Internal implementations

@@ -32,10 +32,8 @@ interface ThemePreferencesRepository {
     /** The stored appearance, with defaults filled in for anything never set. */
     val preferencesState: Flow<ThemePreferencesState>
 
-    /** Emits the stored theme mode. */
     val themeMode: Flow<String>
 
-    /** Emits whether Material You dynamic colors are enabled. */
     val dynamicColors: Flow<Boolean>
 
     /**
@@ -45,10 +43,8 @@ interface ThemePreferencesRepository {
      */
     suspend fun selectThemeMode(mode: String)
 
-    /** Turns the AMOLED (true-black) variant on or off. */
     suspend fun setAmoledMode(enabled: Boolean)
 
-    /** Turns Material You dynamic colors on or off. */
     suspend fun setDynamicColors(enabled: Boolean)
 
     /** Picks a dynamic palette variant, which implies dynamic colors are on. */

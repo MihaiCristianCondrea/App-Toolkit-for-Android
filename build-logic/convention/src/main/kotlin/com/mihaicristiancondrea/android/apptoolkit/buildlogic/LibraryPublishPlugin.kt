@@ -26,18 +26,9 @@ import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.getByType
 
 /**
- * Publishes a library module so JitPack serves it.
- *
- * Why every module needs this: `:library:apptoolkit` re-exports the whole toolkit with
- * `api(project(...))`, so its generated POM lists nineteen sibling modules as dependencies. Only
- * `apptoolkit` and `navigation` used to apply `maven-publish`, so the other eighteen coordinates in
- * that POM pointed at artifacts that were never published. A host adding the library resolved the
- * POM and then failed on every one of them.
- *
- * The artifact id is the Gradle project name, which is exactly what the consuming POM already
- * references, `:library:core:ui` is published as `ui`, `:library:feature:about` as `about`. Group
- * and version come from the root `subprojects` block, so a module cannot drift from the release it
- * ships in.
+ * Publishes each library dependency re-exported by `:library:apptoolkit` so its POM refers to
+ * available artifacts. Artifact IDs use project names; group and version come from the root
+ * project configuration.
  */
 class LibraryPublishPlugin : Plugin<Project> {
 

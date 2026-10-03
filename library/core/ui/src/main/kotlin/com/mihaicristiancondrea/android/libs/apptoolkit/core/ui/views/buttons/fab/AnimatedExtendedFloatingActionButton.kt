@@ -41,11 +41,11 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonFeedback
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /**
  * An animated extended floating action button that scales in and out based on its visibility.
@@ -65,7 +65,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.sty
  * @param expanded Determines whether the button is in its expanded state (with text) or collapsed (icon only).
  * @param modifier Modifier to apply to the button.
  * @param feedback The feedback configuration for sound and haptics.
- * @param firebaseController Optional Firebase controller used to log GA4 events.
  * @param ga4Event Optional GA4 event data to log on click.
  */
 @Composable
@@ -80,7 +79,6 @@ fun AnimatedExtendedFloatingActionButton(
     expanded: Boolean = true,
     containerColor: Color = FloatingActionButtonDefaults.containerColor,
     feedback: ButtonFeedback = ButtonFeedback(),
-    firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
 ) {
     var clickCount by remember { mutableIntStateOf(0) }
@@ -94,7 +92,6 @@ fun AnimatedExtendedFloatingActionButton(
         expanded = expanded,
         containerColor = containerColor,
         feedback = feedback,
-        firebaseController = firebaseController,
         ga4Event = ga4Event,
     )
 }
@@ -111,9 +108,9 @@ fun AnimatedExtendedFloatingActionButton(
     expanded: Boolean = true,
     containerColor: Color = FloatingActionButtonDefaults.containerColor,
     feedback: ButtonFeedback = ButtonFeedback(),
-    firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
 ) {
+    val telemetryRepository = LocalTelemetry.current
     val animatedScale: Float by animateFloatAsState(
         targetValue = if (visible) 1f else 0f,
         animationSpec = tween(durationMillis = 400, easing = FastOutSlowInEasing),
@@ -138,7 +135,7 @@ fun AnimatedExtendedFloatingActionButton(
                 onClick = {
                     if (enabled) {
                         feedback.performClick(view = view, hapticFeedback = hapticFeedback)
-                        firebaseController.logGa4Event(ga4Event)
+                        telemetryRepository.logGa4Event(ga4Event)
                         onClick()
                     }
                 },

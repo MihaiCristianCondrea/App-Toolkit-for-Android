@@ -22,6 +22,5 @@
     <string name="purchase_thank_you">Köszönöm az adományt.</string>
     <string name="summary_donations">Akármennyit adományozol, segítesz az alkalmazásunk működésének fenntartásában és a funkciók javításában. Nagyra értékeljük a nagylelkűségedet és kedvességedet.</string>
     <string name="support_offer_unavailable">Ez az adományozási lehetőség jelenleg nem érhető el.</string>
-    <string name="support_us">Támogass minket</string>
     <string name="web_ad">Webes hirdetés</string>
 </resources>

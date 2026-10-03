@@ -23,11 +23,20 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ProjectDependency
 
-/** Enforces dependency and source-ownership rules for the sample application. */
+/**
+ * Enforces dependency and source-ownership rules for the sample application and the library.
+ *
+ * Applied to the root project, it registers [CHECK_TASK_NAME] and enforces the library's
+ * dependency rules on every `:library:*` module. Sample modules apply it themselves through the
+ * sample convention plugin.
+ */
 class ModuleBoundariesPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         if (target == target.rootProject) {
             registerRepositoryCheck(target)
+            target.subprojects {
+                if (path.startsWith(":library:")) enforceLibraryDependencies(this)
+            }
             return
         }
 
@@ -40,7 +49,7 @@ class ModuleBoundariesPlugin : Plugin<Project> {
     private fun registerRepositoryCheck(rootProject: Project) {
         rootProject.tasks.register(CHECK_TASK_NAME) {
             group = "verification"
-            description = "Checks sample source ownership, package separation, and telemetry conventions."
+            description = "Checks sample and library source ownership, package separation, and telemetry conventions."
 
             doLast {
                 val sampleRoot = rootProject.layout.projectDirectory.dir("sample").asFile
@@ -48,17 +57,23 @@ class ModuleBoundariesPlugin : Plugin<Project> {
                     include("**/src/**/*.kt")
                     exclude("**/build/**")
                 }.files
+                val libraryRoot = rootProject.layout.projectDirectory.dir("library").asFile
+                val librarySourceFiles = rootProject.fileTree(libraryRoot) {
+                    include("**/src/**/*.kt")
+                    exclude("**/build/**")
+                }.files
 
                 val violations = mutableListOf<String>()
                 checkSplitPackages(sampleRoot, sourceFiles, violations)
+                checkSplitPackages(libraryRoot, librarySourceFiles, violations)
                 checkAppOwnership(sampleRoot, sourceFiles, violations)
-                checkCoreNavigation(sampleRoot, sourceFiles, violations)
+                checkSampleCore(sampleRoot, sourceFiles, violations)
                 checkScreenTracking(sampleRoot, sourceFiles, violations)
 
                 if (violations.isNotEmpty()) {
                     throw GradleException(
                         buildString {
-                            appendLine("Sample module boundary violations:")
+                            appendLine("Module boundary violations:")
                             violations.sorted().forEach { appendLine("- $it") }
                         },
                     )
@@ -98,15 +113,52 @@ class ModuleBoundariesPlugin : Plugin<Project> {
         }
     }
 
+    /**
+     * The library's rules: shared modules never reach up into features or the assembly module, the
+     * library never depends on the sample, and features do not depend on each other: a feature
+     * opens another's page by key, and `:library:apptoolkit` is the one module that knows them all.
+     */
+    private fun enforceLibraryDependencies(target: Project) {
+        target.afterEvaluate {
+            val projectPath = target.path
+            val projectDependencies = target.configurations
+                .flatMap { configuration -> configuration.dependencies.withType(ProjectDependency::class.java) }
+                .mapTo(mutableSetOf()) { dependency -> dependency.path }
+            val shared = projectPath.startsWith(":library:core:") ||
+                projectPath.startsWith(":library:integration:") ||
+                projectPath == ":library:navigation" ||
+                projectPath == ":library:shell"
+
+            projectDependencies.forEach { dependencyPath ->
+                check(!dependencyPath.startsWith(":sample:")) {
+                    "Architecture violation: library module $projectPath cannot depend on sample module $dependencyPath"
+                }
+                if (shared) {
+                    check(!dependencyPath.startsWith(":library:feature:") && dependencyPath != ":library:apptoolkit") {
+                        "Architecture violation: $projectPath cannot depend on $dependencyPath"
+                    }
+                }
+                if (projectPath.startsWith(":library:feature:") && dependencyPath.startsWith(":library:feature:")) {
+                    check(dependencyPath == projectPath) {
+                        "Architecture violation: $projectPath cannot depend on sibling feature $dependencyPath"
+                    }
+                }
+            }
+        }
+        target.tasks.matching { it.name == "check" }.configureEach {
+            dependsOn(target.rootProject.tasks.named(CHECK_TASK_NAME))
+        }
+    }
+
     private fun checkSplitPackages(
-        sampleRoot: File,
+        root: File,
         sourceFiles: Set<File>,
         violations: MutableList<String>,
     ) {
         val packageModules = mutableMapOf<String, MutableSet<String>>()
         sourceFiles.forEach { file ->
             val packageName = PACKAGE_REGEX.find(file.readText())?.groupValues?.get(1) ?: return@forEach
-            packageModules.getOrPut(packageName, ::mutableSetOf).add(modulePath(sampleRoot, file))
+            packageModules.getOrPut(packageName, ::mutableSetOf).add(modulePath(root, file))
         }
         packageModules.filterValues { it.size > 1 }.forEach { (packageName, modules) ->
             violations += "Package $packageName is split across ${modules.sorted().joinToString()}"
@@ -125,12 +177,13 @@ class ModuleBoundariesPlugin : Plugin<Project> {
         }
     }
 
-    private fun checkCoreNavigation(
+    /** The sample's core modules sit under its features, so none may import one. */
+    private fun checkSampleCore(
         sampleRoot: File,
         sourceFiles: Set<File>,
         violations: MutableList<String>,
     ) {
-        sourceFiles.filter { modulePath(sampleRoot, it) == ":sample:core:navigation" }.forEach { file ->
+        sourceFiles.filter { modulePath(sampleRoot, it).startsWith(":sample:core:") }.forEach { file ->
             if (FEATURE_IMPORT_REGEX.containsMatchIn(file.readText())) {
                 violations += "${file.relativeTo(sampleRoot)} imports a product feature"
             }
@@ -149,19 +202,21 @@ class ModuleBoundariesPlugin : Plugin<Project> {
         }
     }
 
-    private fun modulePath(sampleRoot: File, file: File): String {
-        val segments = file.relativeTo(sampleRoot).invariantSeparatorsPath.split('/')
+    /** The Gradle path of the module under [root], `sample` or `library`, that owns [file]. */
+    private fun modulePath(root: File, file: File): String {
+        val segments = file.relativeTo(root).invariantSeparatorsPath.split('/')
         val moduleSegments = if (segments.first() in NESTED_MODULE_GROUPS) {
             segments.take(2)
         } else {
             segments.take(1)
         }
-        return ":sample:${moduleSegments.joinToString(":")}"
+        return ":${root.name}:${moduleSegments.joinToString(":")}"
     }
 
     private companion object {
         const val CHECK_TASK_NAME = "checkModuleBoundaries"
         val NESTED_MODULE_GROUPS = setOf("core", "feature", "integration")
+
         val PACKAGE_REGEX = Regex("(?m)^package\\s+([A-Za-z0-9_.]+)")
         val APP_OWNED_IMPORT_REGEX = Regex(
             "(?m)^import\\s+com\\.mihaicristiancondrea\\.android\\.apps\\.apptoolkit\\.app\\.(main|integration|navigation)(\\.|$)",

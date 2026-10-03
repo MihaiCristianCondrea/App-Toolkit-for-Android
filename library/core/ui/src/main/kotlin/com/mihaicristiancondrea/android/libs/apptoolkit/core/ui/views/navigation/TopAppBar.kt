@@ -25,18 +25,24 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalPageSnackbarHostState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.LocalScaffoldSnackbars
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.ScaffoldSnackbars
 
 /**
  * Provides a scaffold with a Material 3 large top app bar, back navigation, and optional actions.
@@ -68,7 +74,7 @@ fun LargeTopAppBarWithScaffold(
     onBackClicked: () -> Unit,
     actions: @Composable (RowScope.() -> Unit) = {},
     floatingActionButton: @Composable (() -> Unit)? = null,
-    snackbarHostState: SnackbarHostState = SnackbarHostState(),
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
     content: @Composable (PaddingValues) -> Unit
 ) {
@@ -87,10 +93,17 @@ fun LargeTopAppBarWithScaffold(
                 scrollBehavior = scrollBehavior
             )
         },
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        snackbarHost = { DefaultSnackbarHost(snackbarState = snackbarHostState) },
         floatingActionButton = floatingActionButton ?: {},
     ) { paddingValues ->
-        content(paddingValues)
+        val scope = rememberCoroutineScope()
+        val snackbars = remember(snackbarHostState, scope) { ScaffoldSnackbars(snackbarHostState, scope) }
+        CompositionLocalProvider(
+            LocalPageSnackbarHostState provides snackbarHostState,
+            LocalScaffoldSnackbars provides snackbars,
+        ) {
+            content(paddingValues)
+        }
     }
 }
 

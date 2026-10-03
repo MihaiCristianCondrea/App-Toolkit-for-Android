@@ -17,25 +17,18 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui
 
-import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.rememberTopAppBarState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.contracts.LicensesEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.states.LicensesUiState
@@ -43,7 +36,6 @@ import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
 import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
 import com.mikepenz.aboutlibraries.ui.compose.variant.LibraryBadges
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 private const val LICENSES_SCREEN_NAME = "Licenses"
@@ -52,69 +44,66 @@ private const val LICENSES_SCREEN_CLASS = "LicensesScreen"
 /**
  * Lists the open-source libraries bundled with the host application.
  *
- * @param onBackClicked Navigates back. Defaults to finishing the hosting activity.
- * @param isEmbedded True when the caller already provides a scaffold and top app bar.
+ * The body of the licenses page, which `licensesPage()` registers; the page frame draws the app bar.
+ * This is the stateful half. It parses the bundled metadata with the library's own producer, tells
+ * the [LicensesViewModel] when that is done, tracks the screen, and hands the list to
+ * [LicensesScreenContent].
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LicensesScreen(
-    onBackClicked: (() -> Unit)? = null,
-    isEmbedded: Boolean = false,
-) {
-    val firebaseController: FirebaseController = koinInject()
+fun LicensesScreen() {
     val viewModel: LicensesViewModel = koinViewModel()
-    val screenState: UiStateScreen<LicensesUiState> by
-    viewModel.uiState.collectAsStateWithLifecycle()
+    val state: LicensesUiState by viewModel.state.collectAsStateWithLifecycle()
+    val libraries: Libs? by produceLibraries(resId = R.raw.aboutlibraries)
 
     TrackScreenView(
-        firebaseController = firebaseController,
         screenName = LICENSES_SCREEN_NAME,
         screenClass = LICENSES_SCREEN_CLASS,
     )
 
     TrackScreenState(
-        firebaseController = firebaseController,
         screenName = LICENSES_SCREEN_NAME,
-        screenState = screenState.screenState,
+        state = state.libraryCount,
     )
 
-    val scrollBehavior: TopAppBarScrollBehavior =
-        TopAppBarDefaults.enterAlwaysScrollBehavior(state = rememberTopAppBarState())
-
-    val activity = LocalActivity.current
-    val defaultBackClicked: () -> Unit = remember(activity) { { activity?.finish() } }
-    val backClicked: () -> Unit = onBackClicked ?: defaultBackClicked
-
-    val content: @Composable (PaddingValues) -> Unit = { paddingValues ->
-        val libraries: Libs? by produceLibraries(resId = R.raw.aboutlibraries)
-
-        LaunchedEffect(libraries) {
-            libraries?.let { loaded ->
-                viewModel.onEvent(
-                    event = LicensesEvent.LibrariesLoaded(libraryCount = loaded.libraries.size),
-                )
-            }
+    LaunchedEffect(libraries) {
+        libraries?.let { loaded ->
+            viewModel.onEvent(LicensesEvent.LibrariesLoaded(libraryCount = loaded.libraries.size))
         }
-
-        LibrariesContainer(
-            libraries = libraries,
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = paddingValues,
-            badges = LibraryBadges(
-                description = true,
-                funding = true,
-            ),
-        )
     }
 
-    if (isEmbedded) {
-        content(PaddingValues())
-    } else {
-        LargeTopAppBarWithScaffold(
-            title = stringResource(id = R.string.oss_license_title),
-            onBackClicked = backClicked,
-            scrollBehavior = scrollBehavior,
-            content = content,
-        )
+    LicensesScreenContent(
+        libraries = libraries,
+        contentPadding = contentPadding(),
+    )
+}
+
+/**
+ * Draws [libraries], the parsed metadata of the bundled open-source libraries.
+ *
+ * The stateless half of [LicensesScreen]. While [libraries] is `null` the container shows its own
+ * progress indicator, so there is no separate loading state to draw.
+ */
+@Composable
+internal fun LicensesScreenContent(
+    libraries: Libs?,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
+) {
+    LibrariesContainer(
+        libraries = libraries,
+        modifier = modifier.fillMaxSize(),
+        contentPadding = contentPadding,
+        badges = LibraryBadges(
+            description = true,
+            funding = true,
+        ),
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun LicensesScreenContentLoadingPreview() {
+    MaterialTheme {
+        LicensesScreenContent(libraries = null)
     }
 }

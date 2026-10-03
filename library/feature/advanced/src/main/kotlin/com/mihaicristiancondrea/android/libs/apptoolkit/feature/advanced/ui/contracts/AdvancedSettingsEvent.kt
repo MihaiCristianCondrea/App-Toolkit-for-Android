@@ -17,14 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.contracts
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
-
 /**
- * Defines UI events that can be triggered from the Advanced Settings screen.
- * These events are sent from the UI to the ViewModel to signal user actions.
+ * What the user can ask the advanced settings page's ViewModel to do.
  */
-sealed interface AdvancedSettingsEvent : UiEvent {
+sealed interface AdvancedSettingsEvent {
+    /** Deletes the application's cache directories, then confirms or reports the failure. */
     data object ClearCache : AdvancedSettingsEvent
-    data object MessageShown : AdvancedSettingsEvent
 }
-

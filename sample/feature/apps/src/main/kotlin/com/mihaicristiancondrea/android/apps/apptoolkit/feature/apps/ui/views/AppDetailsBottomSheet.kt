@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R as CoreUiR
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -48,7 +47,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -72,6 +70,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.models.A
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
@@ -80,7 +79,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.La
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumHorizontalSpacer
 
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AppDetailsBottomSheet(
     appInfo: AppInfo,
@@ -120,8 +118,7 @@ fun AppDetailsBottomSheet(
             installedVersionInfo = installedVersionInfo,
         )
         LargeVerticalSpacer()
-        // The sheet's sponsored rows used to sit loose either side of this block. The quick-action
-        // grid carries one of its own, in the middle of its cells, so it is the only one here.
+        // The grouped quick-action grid owns the sheet's ad placement.
         AppDetailsQuickActions(
             appInfo = appInfo,
             isFavorite = isFavorite,
@@ -151,7 +148,7 @@ fun AppDetailsBottomSheet(
                 Text(text = stringResource(id = R.string.error_failed_to_load_apps))
                 GeneralButton(
                     onClick = onRetryDetails,
-                    label = stringResource(id = com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.try_again),
+                    label = stringResource(id = CoreUiR.string.try_again),
                 )
             }
         }
@@ -278,7 +275,7 @@ private fun AppDetailsActions(
             false -> {
                 Spacer(modifier = Modifier.weight(1f))
                 Image(
-                    painter = painterResource(id = CoreUiR.drawable.get_it_on_google_play),
+                    painter = painterResource(id = R.drawable.get_it_on_google_play),
                     contentDescription = stringResource(R.string.app_details_view_on_play_store),
                     contentScale = ContentScale.Fit,
                     modifier = Modifier

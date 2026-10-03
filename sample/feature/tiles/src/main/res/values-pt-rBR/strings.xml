@@ -132,4 +132,5 @@
     <string name="tiles_qs_integration_title">Bloco de Configurações Rápidas</string>
     <string name="tiles_qs_integration_summary_format">Use %1$s das Configurações Rápidas do seu smartphone sem abrir o App Toolkit.</string>
     <string name="tiles_add_to_qs">Adicionar às Configurações Rápidas</string>
+    <string name="tiles_search_hint">Pesquisar ferramentas</string>
 </resources>

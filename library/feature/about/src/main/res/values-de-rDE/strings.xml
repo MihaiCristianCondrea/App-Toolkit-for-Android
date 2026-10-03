@@ -21,12 +21,9 @@
     <string name="app_build_version">App-Build-Version</string>
     <string name="app_info">App-Informationen</string>
     <string name="app_toolkit_version">App Toolkit-Version</string>
-    <string name="content_description_more_options">Weitere Optionen</string>
     <string name="debug">Debug</string>
     <string name="device_info">Geräteinformationen</string>
     <string name="device_model">Gerätemodell</string>
-    <string name="done_button_content_description">Fertig</string>
-    <string name="go_back">Zurück</string>
     <string name="google_play_services_version">Google Play-Dienste-Version</string>
     <string name="help_and_feedback">Hilfe &amp; Feedback</string>
     <string name="manufacturer">Hersteller</string>
@@ -41,8 +38,6 @@
     <string name="snack_device_info_failed">Geräteinformationen konnten nicht geladen werden</string>
     <string name="summary_preference_settings_oss">Details zu Open-Source-Lizenzen anzeigen</string>
     <string name="summary_share_message">Schauen Sie sich diese großartige App an, die ich benutze. Sie bietet wirklich coole Funktionen, die Sie interessieren könnten. Sie können sie im Play Store herunterladen unter: %1$s</string>
-    <string name="support_us">Unterstützen sie uns</string>
-    <string name="try_again">Erneut versuchen</string>
     <string name="updates">Updates</string>
     <string name="snack_seasonal_themes_unlocked">Viel Spaß</string>
 </resources>

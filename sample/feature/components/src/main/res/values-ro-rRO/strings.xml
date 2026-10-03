@@ -104,4 +104,18 @@
     <string name="components_divider_width">Lățime</string>
     <string name="components_divider_wave_height">Înălțimea valului</string>
     <string name="components_divider_vertical">Vertical</string>
+    <string name="components_snackbar_pressed">Ai apăsat un buton</string>
+    <string name="components_snackbar_action_message">Acțiunea butonului a fost făcută</string>
+    <string name="components_snackbar_undo">Anulează</string>
+    <string name="components_snackbar_undone">Anulat</string>
+    <string name="components_snackbar_error">Ceva nu a mers bine</string>
+    <string name="components_snackbar_retry">Reîncearcă</string>
+    <string name="components_snackbar_icon">Un snackbar cu pictogramă și culori proprii</string>
+    <string name="components_snackbar_custom">%1$s: un snackbar desenat chiar de ecran</string>
+    <string name="components_section_article_bar">Bară de aplicație pentru articol</string>
+    <string name="components_article_without_brand">Fără marcă</string>
+    <string name="components_article_with_brand">Cu marcă</string>
+    <string name="components_article_brand">Editor demonstrativ</string>
+    <string name="components_article_headline">O bară discretă lasă povestea pe primul loc</string>
+    <string name="components_article_paragraph">Bara începe doar cu butoanele sale. Derulează dincolo de titlu, iar titlul articolului le ia locul, în timp ce linia de pe marginea de jos arată cât ai citit.</string>
 </resources>

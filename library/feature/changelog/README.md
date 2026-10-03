@@ -9,9 +9,14 @@ and the bottom sheet that renders it.
 
 - `ChangelogRepository` and `DefaultChangelogRepository`, including the Android App Metadata API
   call and the legacy GitHub fallback.
-- `GetChangelogUseCase`, which picks the current-version section or the full history.
-- `ChangelogViewModel`, `ChangelogUiState`, and the retry contract.
-- `ChangelogDialog`, the modal bottom sheet the host shows from its drawer.
+- `GetChangelogUseCase`, which picks the current-version section or the full history, and
+  `extractChangesForVersion`, which finds that section's heading.
+- `ChangelogViewModel`, `ChangelogUiState` (whose `markdown` is a `Loadable`), and `ChangelogEvent.Load`,
+  sent on start and on retry.
+- `ChangelogDialog`, in `feature.changelog.ui`, the modal bottom sheet the host shows from its drawer,
+  and the stateless `ChangelogDialogContent` it draws inside the sheet. The content draws each part of
+  the Markdown on its own and the Toolkit's `HorizontalWavyDivider` where the Markdown has a rule
+  (`splitAtThematicBreaks`), in place of the renderer's flat line.
 
 ## Does not own
 
@@ -24,7 +29,6 @@ and the bottom sheet that renders it.
 
 - `:library:core:common`, `:library:core:datastore`, `:library:core:network`, and
   `:library:core:ui` for shared state, persistence, HTTP, and Compose.
-- `:library:integration:update` for the Play update flow hosts pair with a new changelog.
 - `compose-markdown` to render the fetched Markdown.
 
 ## Used by
@@ -36,16 +40,23 @@ and the bottom sheet that renders it.
 ```mermaid
 flowchart TD
     Dialog[ChangelogDialog] --> VM[ChangelogViewModel]
+    Dialog --> Content[ChangelogDialogContent]
     VM --> UseCase[GetChangelogUseCase]
     UseCase --> Repo[ChangelogRepository]
     Repo --> Api[App metadata API]
     Repo --> Legacy[Legacy GitHub changelog]
-    VM --> Retry[ChangelogEvent.Retry]
-    Retry --> VM
+    Content -->|retry| Load[ChangelogEvent.Load]
+    Load --> VM
 ```
 
 ## Architectural decisions
 
+- The dialog is on `core.ui.screen`. `ChangelogRepository.getChangelog` returns the Markdown or throws a
+  `NetworkException`, the use case passes a failure through, and `ChangelogViewModel` maps it with
+  `toFailed`: an offline device sees the offline text, anything else the changelog's own, and the
+  sheet's action retries only a failure that a retry can fix. A changelog with nothing in it is
+  `Loadable.Empty`, shown as no new updates. Neither the ViewModel nor the repository needs a
+  dispatcher: Ktor suspends.
 - The package endpoint is authoritative and the legacy URL is a compatibility fallback, used only
   when the package name is blank or the endpoint answers 404, so a host that has not been published
   to the metadata API still shows release notes.
@@ -58,11 +69,11 @@ flowchart TD
 ## Public contracts
 
 - `ChangelogRepository`, `GetChangelogUseCase`, `ChangelogViewModel`, `ChangelogUiState`,
-  `ChangelogEvent`, `ChangelogDialog`, and `changelogModule`.
+  `ChangelogEvent`, `ChangelogDialog`, and `changelogModule`. `ChangelogDialogContent` is internal.
 
 ## Internal implementations
 
-- HTTP fetch, status-to-domain error mapping, fallback selection, and Markdown rendering.
+- HTTP fetch, status-to-`NetworkException` mapping, fallback selection, and Markdown rendering.
 
 ## Current risks
 

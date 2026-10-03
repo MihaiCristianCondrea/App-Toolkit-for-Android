@@ -24,7 +24,6 @@
     <string name="consent_ad_user_data_title">اشتہارات کے لیے ڈیٹا بھیجیں</string>
     <string name="consent_analytics_storage_description">ایپ کے استعمال اور وزٹ کے دورانیے جیسے ڈیٹا کو اسٹور کرنے کی اجازت دیں تاکہ تجزیات اور ایپ کی کارکردگی کو بہتر بنایا جا سکے۔</string>
     <string name="consent_analytics_storage_title">تجزیاتی ڈیٹا اسٹور کریں</string>
-    <string name="learn_more">مزید جانیں</string>
     <string name="summary_usage_and_diagnostics">تشخیصی، ڈیوائس، اور ایپ کے استعمال کا ڈیٹا خود بخود ہمیں بھیج کر اپنے تجربے کو بہتر بنانے میں مدد کریں۔ اس سے ایپ کی کارکردگی، استحکام، اور دیگر اضافہ جات کو بہتر بنانے میں مدد ملے گی۔ کچھ مجموعی ڈیٹا ہماری ایپس کی بھی مدد کرے گا۔\n\nیہ آپ کے ڈیوائس اور آپ ہماری ایپس کو کیسے استعمال کرتے ہیں (جیسے بیٹری لیول، سسٹم اور ایپ کی سرگرمی، اور خرابیاں) کے بارے میں عمومی معلومات ہیں۔ ڈیٹا ہماری ایپس کو بہتر بنانے کے لیے استعمال کیا جائے گا\n\nاس خصوصیت کو بند کرنے سے آپ کے ڈیوائس کی ضروری خدمات جیسے ایپ اپ ڈیٹس اور سیکیورٹی کے لیے درکار معلومات بھیجنے کی صلاحیت متاثر نہیں ہوتی۔\n</string>
     <string name="usage_and_diagnostics">استعمال اور تشخیص</string>
     <string name="consent_ad_personalization_description_short">ذاتی نوعیت کی تشہیر کو فعال کرتا ہے۔</string>
@@ -48,4 +47,13 @@
     <string name="privacy_choices_title">رازداری کے اختیارات</string>
     <string name="summary_advanced_privacy_settings">منتخب کریں کہ آپ تجزیات اور اشتہارات کے لیے کیا شیئر کرتے ہیں۔</string>
     <string name="learn_more_about_provider">اس فراہم کنندہ کے بارے میں مزید جانیں</string>
+    <string name="onboarding_crashlytics_title">بہتر بنانے میں ہماری مدد کریں</string>
+    <string name="onboarding_crashlytics_description">ایپ کو گمنام استعمال کا ڈیٹا اور کریش رپورٹس بھیجنے کی اجازت دیں۔ اس سے ہمیں کیڑے ٹھیک کرنے اور آپ کے تجربے کو بہتر بنانے میں مدد ملتی ہے۔ کوئی ذاتی معلومات کبھی جمع نہیں کی جاتیں۔</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">استعمال اور تشخیص کے بارے میں تفصیلی معلومات دکھائیں</string>
+    <string name="onboarding_crashlytics_show_details_button">تفصیلی معلومات دکھائیں</string>
+    <string name="error">خرابی</string>
+    <string name="onboarding_crashlytics_privacy_info">آپ کی رازداری اہم ہے۔ ہم اس ڈیٹا کو صرف کیڑے ٹھیک کرنے اور خصوصیات کو بہتر بنانے کے لیے استعمال کرتے ہیں۔ مزید تفصیلات کے لیے، براہ کرم ہماری رازداری کی پالیسی کا جائزہ لیں۔</string>
+    <string name="learn_more_privacy_policy">ہماری رازداری کی پالیسی کا جائزہ لیں</string>
+    <string name="onboarding_crashlytics_enabled_desc">ڈیٹا رپورٹنگ فعال ہے۔</string>
+    <string name="onboarding_crashlytics_disabled_desc">ڈیٹا رپورٹنگ غیر فعال ہے۔</string>
 </resources>

@@ -21,12 +21,9 @@
     <string name="app_build_version">Versi build aplikasi</string>
     <string name="app_info">Info aplikasi</string>
     <string name="app_toolkit_version">Versi App Toolkit</string>
-    <string name="content_description_more_options">Lebih banyak opsi</string>
     <string name="debug">Debug</string>
     <string name="device_info">Informasi perangkat</string>
     <string name="device_model">Model perangkat</string>
-    <string name="done_button_content_description">Selesai</string>
-    <string name="go_back">Kembali</string>
     <string name="google_play_services_version">Versi layanan Google Play</string>
     <string name="help_and_feedback">Bantuan &amp; umpan balik</string>
     <string name="manufacturer">Pabrikan</string>
@@ -41,8 +38,6 @@
     <string name="snack_device_info_failed">Tidak dapat memuat info perangkat</string>
     <string name="summary_preference_settings_oss">Detail lisensi untuk perangkat lunak sumber terbuka</string>
     <string name="summary_share_message">Lihat aplikasi luar biasa yang saya gunakan ini. Aplikasi ini memiliki beberapa fitur keren yang mungkin menarik bagi Anda. Unduh dari Play Store di: %1$s</string>
-    <string name="support_us">Dukung kami</string>
-    <string name="try_again">Coba lagi</string>
     <string name="updates">Pembaruan</string>
     <string name="snack_seasonal_themes_unlocked">Selamat menikmati</string>
 </resources>

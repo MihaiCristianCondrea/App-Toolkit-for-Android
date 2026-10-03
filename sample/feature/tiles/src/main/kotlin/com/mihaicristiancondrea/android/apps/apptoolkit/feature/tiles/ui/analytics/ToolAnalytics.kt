@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analyt
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.contracts.AppGa4Contract
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.domain.utils.ToolkitTileIds
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 
@@ -37,7 +37,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model
  * @param toolId one of [ToolkitTileIds], so the value stays bounded and matches the catalogue.
  */
 class ToolUsageTracker(
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
     private val toolId: String,
 ) {
     private var hasReportedUse: Boolean = false
@@ -46,7 +46,7 @@ class ToolUsageTracker(
     fun markUsed() {
         if (hasReportedUse) return
         hasReportedUse = true
-        firebaseController.logEvent(
+        telemetryRepository.logEvent(
             AnalyticsEvent(
                 name = AppGa4Contract.EventName.TOOL_USED,
                 params = mapOf(AppGa4Contract.Param.TOOL_ID to AnalyticsValue.Str(toolId)),
@@ -58,6 +58,14 @@ class ToolUsageTracker(
     fun endSession() {
         hasReportedUse = false
     }
+
+    companion object {
+        /**
+         * How long a tool used by looking at it, such as the compass, must stay open to count as
+         * used. Opening and closing it straight away is not use.
+         */
+        const val WATCHED_USE_DELAY_MS: Long = 5_000L
+    }
 }
 
 /**
@@ -66,7 +74,7 @@ class ToolUsageTracker(
  * The score is the reaction time in milliseconds, so lower is better. `character` names the game,
  * which is how GA4 tells this score apart from any other scored feature added later.
  */
-fun FirebaseController.logReactionScore(reactionTimeMs: Long) {
+fun TelemetryRepository.logReactionScore(reactionTimeMs: Long) {
     logEvent(
         AnalyticsEvent(
             name = AppGa4Contract.EventName.POST_SCORE,
@@ -83,7 +91,7 @@ fun FirebaseController.logReactionScore(reactionTimeMs: Long) {
  *
  * @param outcome one of [AppGa4Contract.TileRequestOutcome].
  */
-fun FirebaseController.logQuickSettingsTileRequest(tileId: String, outcome: String) {
+fun TelemetryRepository.logQuickSettingsTileRequest(tileId: String, outcome: String) {
     logEvent(
         AnalyticsEvent(
             name = AppGa4Contract.EventName.QUICK_SETTINGS_TILE_REQUEST,

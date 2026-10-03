@@ -56,7 +56,7 @@ import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ReactionRating
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ReactionTestPhase
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ReactionTestToolState
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ReactionTestToolUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
@@ -66,7 +66,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.Ge
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ReactionTestTool(
-    state: ReactionTestToolState,
+    state: ReactionTestToolUiState,
     onStart: () -> Unit,
     onTap: () -> Unit,
     onReset: () -> Unit,

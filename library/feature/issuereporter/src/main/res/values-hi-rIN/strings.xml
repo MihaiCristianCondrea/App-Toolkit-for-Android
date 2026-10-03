@@ -22,7 +22,6 @@
     <string name="issue_description_placeholder">समस्या और उसे दोहराने का तरीका बताएं</string>
     <string name="issue_done">हो गया</string>
     <string name="issue_email_label">ईमेल</string>
-    <string name="issue_email_optional_placeholder">ईमेल (वैकल्पिक)</string>
     <string name="issue_section_label">समस्या</string>
     <string name="issue_send">भेजें</string>
     <string name="issue_submitted_message">ऐप को बेहतर बनाने में मदद करने के लिए धन्यवाद।</string>

@@ -3,15 +3,20 @@
 ## Purpose
 
 Acts as the host-facing entry point and composition root for reusable AppToolkit features. It assembles
-Koin modules and Navigation 3 destinations while re-exporting the toolkit modules through Gradle
-`api` dependencies.
+Koin modules and the Toolkit's pages of the shell graph while re-exporting the toolkit modules
+through Gradle `api` dependencies.
 
 ## Owns
 
 - `appToolkitModules`, the single entry point returning the toolkit's whole Koin graph.
 - `appToolkitFoundationModules`, `appToolkitFeatureModules`, and `appToolkitSettingsModules`, the
   granular lists `appToolkitModules` composes.
-- `appToolkitNavigationEntryBuilders` for shared embedded destinations.
+- `toolkitGraph { }` and `ShellGraphBuilder.toolkitPages()`, which register the Toolkit's pages in
+  an app's shell graph. See [Navigation](#navigation).
+- `toolkitFooter(onShowUpdates)`, the drawer footer every Toolkit app ends with. See
+  [The drawer's footer](#the-drawers-footer).
+- `PermissionUsageActivity` and `permissionUsageGraph()`: the screen Android opens from the
+  information icon beside the app. See [Permission usage](#permission-usage).
 - Host-to-library composition using `AppToolkitHostBuildConfig` and host provider factories.
 - Common host defaults contributed through manifest/resource merging: the AppCompat application
   theme, RTL/window behavior, backup and data-extraction rules, locale configuration resource,
@@ -28,11 +33,10 @@ Koin modules and Navigation 3 destinations while re-exporting the toolkit module
 ## Depends on
 
 - `:library:core:common`, `:library:core:datastore`, `:library:core:network`, `:library:core:ui`,
-  `:library:core:designsystem` and `:library:navigation` to assemble common infrastructure and UI
-  contracts.
-- `:library:feature:about`, `:library:feature:faq`, `:library:feature:issuereporter`,
-  `:library:feature:onboarding`, `:library:feature:permissions`, `:library:feature:settings`, and
-  `:library:feature:support` to provision toolkit ViewModels, repositories, and destinations.
+  `:library:core:designsystem`, `:library:navigation` and `:library:shell` to assemble common
+  infrastructure, UI contracts and the shell.
+- Every `:library:feature` module to provision toolkit ViewModels and repositories and to call each
+  feature's page registration.
 - `:library:integration:ads`, `:library:integration:billing`, `:library:integration:consent`,
   `:library:integration:firebase`, `:library:integration:review`, and `:library:integration:update`
   to connect SDK implementations.
@@ -42,7 +46,7 @@ boundary.
 
 ## Used by
 
-- `:sample`, which loads the assembled DI modules and navigation builders.
+- `:sample`, which loads the assembled DI modules and builds its graph with `toolkitGraph { }`.
 
 ## Flow chart
 
@@ -59,9 +63,9 @@ flowchart TD
     Settings --> ProviderDefaults[Default host extension bindings]
     Features --> FeatureVMs[Feature repositories and ViewModels]
     Features --> Integrations[SDK-backed integrations]
-    Host --> NavBuilders[appToolkitNavigationEntryBuilders]
-    NavBuilders --> Entries[Navigation 3 entries]
-    Entries --> Screens[Embedded toolkit screens]
+    Host --> Graph["toolkitGraph { }"]
+    Graph --> Pages[Toolkit pages, unless the app registered the key]
+    Pages --> Screens[Toolkit screens in the page frame]
     Manifest[AppToolkit manifest and resources] -->|manifest/resource merge| Host
 ```
 
@@ -80,8 +84,8 @@ flowchart TD
 
 ## Public contracts
 
-- `appToolkitModules`, the three DI module-list factories it composes, and
-  `appToolkitNavigationEntryBuilders`.
+- `appToolkitModules`, the three DI module-list factories it composes, `toolkitGraph`, and
+  `toolkitPages`.
 - Transitive APIs from all `api(project(...))` dependencies are also visible to consumers.
 
 ### Manifest and resource defaults
@@ -112,8 +116,8 @@ their product identity by defining `app_name`, `app_full_name`, and `copyright` 
 
 ## Internal implementations
 
-- Koin module-list composition, qualifier wiring, and private destination builders. Individual
-  feature modules own their DI definitions and default palette registration.
+- Koin module-list composition and qualifier wiring. Individual feature modules own their DI
+  definitions and default palette registration.
 
 ## Publishing
 
@@ -127,11 +131,86 @@ modules they compose.
 
 ## Navigation
 
-`appToolkitNavigationEntryBuilders` lives in `app.main.ui.navigation` and registers the shared
-AppToolkit destinations for a host Navigation 3 graph. The historical forwarding function in
-`feature.about.ui.navigation` was removed so this module no longer ships a package owned by
-`:library:feature:about`; hosts importing it must switch to the `app.main.ui.navigation` import.
-Route keys and behavior are unchanged.
+`toolkitGraph { }` lives in `app.main.ui.navigation`. It runs the app's builder first and then
+`toolkitPages()`, which calls each feature's own registration. Every registration uses
+`pageIfAbsent`, so a key the app registered itself keeps the app's page:
+
+| Registration | Module | Keys | Pane role |
+|---|---|---|---|
+| `settingsPage()` | settings | `SettingsRoute` | List |
+| `displaySettingsPage()` | display | `DisplaySettingsRoute` | Detail |
+| `themeSettingsPage()` | theme | `ThemeSettingsRoute` | None |
+| `privacySettingsPage()` | privacy | `PrivacySettingsRoute` | Detail |
+| `diagnosticsSettingsPage()` | diagnostics | `DiagnosticsSettingsRoute` | None |
+| `permissionsPage()` | permissions | `PermissionsRoute` | None |
+| `adsSettingsPage()` | integration:ads | `AdsSettingsRoute` | None |
+| `advancedSettingsPage()` | advanced | `AdvancedSettingsRoute` | Detail |
+| `aboutPages()` | about | `AboutRoute`, `LibraryExtrasRoute` | Detail, None |
+| `licensesPage()` | licenses | `LicensesRoute` | None |
+| `helpPage()` | faq | `HelpRoute` | None |
+| `supportPage()` | support | `SupportRoute` | None |
+| `developerOptionsPage()` | developer | `DeveloperOptionsRoute` | None |
+| `startupPage()` | startup | `StartupRoute`, as a start screen | None |
+| `onboardingPages()` | onboarding | `OnboardingRoute`, as a start screen | None |
+
+The settings categories are details, so on a wide window they open beside the list. Pages opened
+from a detail are `None`: a detail opened from a detail replaces it instead of stacking on it.
+
+`toolkitPages()` is the only place that names every feature. The features know nothing of each
+other and open one another's pages by key, which `checkModuleBoundaries` enforces: no
+`:library:feature` module may depend on another.
+
+It registers pages only; the app decides where each is offered (`settings()` and `supportUs()` in
+the drawer and overflow builders, links, or a screen's button). An app that needs to pass a
+registration arguments calls it in its own builder first, such as `aboutPages { ... }`. An app that
+builds its graph with `ShellGraphBuilder` directly calls `toolkitPages()` after its own
+destinations.
+
+### The drawer's footer
+
+Every Toolkit app ends its drawer the same way: Settings, Help and feedback, Updates and Share, in
+that order, pinned to the bottom. `toolkitFooter(onShowUpdates)` adds them to the drawer's footer,
+which the graph always places after the app's own entries:
+
+```kotlin
+drawer {
+    link(DownloadsRoute, R.string.downloads, ToolkitIcon.Vector(Icons.Outlined.Download))
+    toolkitFooter(onShowUpdates = { showChangelog = true })
+}
+```
+
+Pass `null` for `onShowUpdates` to leave Updates out. The developer options are not a drawer entry:
+the advanced settings offer them once the About screen's version easter egg is found.
+
+## Permission usage
+
+Android's permission manager (from each permission's page) and its privacy dashboard show an
+information icon beside an app that declares an activity for `VIEW_PERMISSION_USAGE` and
+`VIEW_PERMISSION_USAGE_FOR_PERIOD`, protected by `START_VIEW_PERMISSION_USAGE`. This module's
+manifest declares `PermissionUsageActivity` for both, so every app built on the Toolkit gets the
+icon without declaring anything. Tapping it opens the privacy page.
+
+- **Only the system can open it.** `START_VIEW_PERMISSION_USAGE` is held by the permission
+  controller alone, which is why the activity may be exported.
+- **It opens over the system's settings.** It is a second activity on purpose: routing the intent
+  to the app's own activity would bring the app's task forward (for a `singleTask` activity, push
+  the page onto whatever the person had open) and back would stay in the app. Its empty
+  `taskAffinity` keeps it out of the app's task even when the caller starts a new one.
+- **It is a shell of its own.** It hosts `ShellHost` with `permissionUsageGraph()`, a graph of
+  pages only: the privacy page as its start, and the permissions, ads and diagnostics pages it
+  links to. Back from the privacy page, gesture or arrow, finishes it.
+- **It uses the Toolkit's pages.** It cannot see the app's graph, so a page the app registered for
+  one of these keys is not used here, though the app's `PrivacySettingsProvider` is. An app that
+  wants its own screen removes this one and declares its own:
+
+```xml
+<activity
+    android:name="com.mihaicristiancondrea.android.libs.apptoolkit.app.privacy.ui.PermissionUsageActivity"
+    tools:node="remove" />
+```
+
+`PermissionUsageActivityTest` launches it under Robolectric with both actions, and
+`ManifestContractTest` checks its declaration.
 
 ## Architecture guards
 
@@ -170,8 +249,8 @@ things:
 This is not a complete generic-host contract test. Reflection verification sees constructor
 dependencies, but it cannot discover `koinInject()` calls inside composables such as
 `DisplaySettingsProvider` and `PrivacySettingsProvider`. Those host requirements are documented and
-bound in [`:sample:core:apptoolkit`](../../sample/core/apptoolkit/README.md), whose own tests resolve
-the provider bindings directly.
+bound in [`:sample:feature:settings`](../../sample/feature/settings/README.md), whose own tests
+resolve the provider bindings directly.
 
 Two mechanics are easy to get wrong when editing that test. Koin resolves a definition against its
 own module plus that module's `includes`, so the graph must be wrapped as

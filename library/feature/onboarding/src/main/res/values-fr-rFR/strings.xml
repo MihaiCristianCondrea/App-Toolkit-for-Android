@@ -15,42 +15,19 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="agree">Accepter</string>
-    <string name="amoled_mode">Mode AMOLED</string>
     <string name="back_button_content_description">Retour</string>
     <string name="back_button_text">Retour</string>
-    <string name="dark_mode">Mode sombre</string>
-    <string name="done_button_content_description">Terminé</string>
     <string name="done_button_text">Terminé</string>
-    <string name="error">Erreur</string>
-    <string name="follow_system">Suivre le mode système</string>
-    <string name="learn_more">En savoir plus</string>
-    <string name="learn_more_privacy_policy">Consultez notre politique de confidentialité</string>
-    <string name="light_mode">Mode clair</string>
     <string name="next_button_content_description">Suivant</string>
     <string name="next_button_text">Suivant</string>
     <string name="onboarding_amoled_mode_desc">Noirs plus profonds pour les écrans OLED.</string>
     <string name="onboarding_complete_icon_desc">Intégration terminée</string>
     <string name="onboarding_completion_failed">Votre configuration n\'a pas pu être enregistrée. Veuillez réessayer.</string>
-    <string name="onboarding_crashlytics_description">Autorisez l\'application à envoyer des données d\'utilisation anonymes et des rapports d\'erreur. Cela nous aide à corriger les bugs et à améliorer votre expérience. Aucune information personnelle n\'est jamais collectée.</string>
-    <string name="onboarding_crashlytics_disabled_desc">Le rapport de données est inactif.</string>
-    <string name="onboarding_crashlytics_enabled_desc">Le rapport de données est actif.</string>
-    <string name="onboarding_crashlytics_privacy_info">Votre confidentialité est importante. Nous utilisons ces données uniquement pour corriger les bugs et améliorer les fonctionnalités. Pour plus de détails, veuillez consulter notre politique de confidentialité.</string>
-    <string name="onboarding_crashlytics_show_details_button">Afficher les informations détaillées</string>
-    <string name="onboarding_crashlytics_show_details_button_cd">Afficher les informations détaillées sur l\'utilisation et les diagnostics</string>
-    <string name="onboarding_crashlytics_title">Aidez-nous à améliorer</string>
     <string name="onboarding_final_description">Merci d\'avoir personnalisé votre expérience. Vous êtes maintenant prêt à explorer toutes les fonctionnalités. Amusez-vous .</string>
     <string name="onboarding_final_title">Vous êtes prêt .</string>
-    <string name="onboarding_theme_dark_desc">Agréable pour les yeux.</string>
-    <string name="onboarding_theme_light_desc">Lumineux et énergique.</string>
     <string name="onboarding_theme_subtitle">Sélectionnez l\'apparence de l\'application.</string>
-    <string name="onboarding_theme_system_desc">Correspond à votre appareil.</string>
     <string name="onboarding_theme_title">Choisissez votre style</string>
-    <string name="other_colors">Autres couleurs</string>
     <string name="skip_button_content_description">Passer</string>
     <string name="skip_button_text">Passer</string>
-    <string name="summary_browse_terms_of_service_and_privacy_policy">Lisez et acceptez nos Conditions d\'utilisation et notre Politique de confidentialité pour continuer</string>
     <string name="usage_and_diagnostics">Utilisation et diagnostics</string>
-    <string name="wallpaper_colors">Couleurs du fond d\'écran</string>
-    <string name="welcome">Bienvenue</string>
 </resources>

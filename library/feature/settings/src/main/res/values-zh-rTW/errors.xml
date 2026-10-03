@@ -15,6 +15,5 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="error_invalid_content_key">內容金鑰無效。</string>
     <string name="error_no_settings_found">找不到設定</string>
 </resources>

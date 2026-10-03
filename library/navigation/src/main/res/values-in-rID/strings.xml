@@ -19,4 +19,8 @@
     <string name="settings">Pengaturan</string>
     <string name="share">Bagikan</string>
     <string name="updates">Pembaruan</string>
+    <string name="shell_navigate_back">Kembali</string>
+    <string name="shell_pane_separator">Ubah ukuran panel</string>
+    <string name="shell_support_us">Dukung kami</string>
+    <string name="shell_support_short">Dukung</string>
 </resources>

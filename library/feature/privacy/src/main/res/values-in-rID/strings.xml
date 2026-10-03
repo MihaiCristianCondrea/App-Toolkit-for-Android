@@ -32,4 +32,5 @@
     <string name="summary_preference_settings_usage_and_diagnostics">Bagikan data untuk membantu meningkatkan pengalaman dalam aplikasi</string>
     <string name="terms_of_service">Ketentuan layanan</string>
     <string name="usage_and_diagnostics">Penggunaan dan diagnostik</string>
+    <string name="security_and_privacy">Keamanan &amp; privasi</string>
 </resources>

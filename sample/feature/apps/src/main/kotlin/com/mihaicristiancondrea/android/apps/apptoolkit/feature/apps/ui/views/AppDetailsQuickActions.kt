@@ -26,7 +26,7 @@ import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material.icons.outlined.Security
-import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.outlined.Storage
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialShapes
@@ -52,11 +52,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 /**
- * The app-details quick actions, drawn as one grouped block.
- *
- * The actions used to be free-floating tiles in a three-column grid. They are peers of one another,
- * so they now read as one block through the toolkit's `GroupedGrid`, which also owns the sponsored
- * row that used to sit loose underneath them.
+ * Groups app-detail actions and their sponsored row in one [GroupedGrid].
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -119,8 +115,9 @@ internal fun AppDetailsQuickActions(
             }.takeIf { installed },
             GroupedGridItem(
                 title = favoriteLabel,
+                // Use a visibly outlined star for the unselected state; the bundled Material variant appears filled.
                 icon = ToolkitIcon.Vector(
-                    imageVector = if (isFavorite) Icons.Outlined.Star else Icons.Default.Star,
+                    imageVector = if (isFavorite) Icons.Filled.Star else Icons.Outlined.StarOutline,
                 ),
                 onClick = onFavoriteClick,
             ),

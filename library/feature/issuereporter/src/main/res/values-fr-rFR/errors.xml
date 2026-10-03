@@ -15,9 +15,20 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="error_description_missing">Décrivez le problème</string>
+    <string name="error_email_invalid">Saisissez une adresse e-mail valide</string>
+    <string name="error_email_missing">Saisissez votre adresse e-mail</string>
     <string name="error_forbidden">Interdit : autorisations insuffisantes</string>
     <string name="error_gone">Point de terminaison de l\'API supprimé</string>
-    <string name="error_invalid_report">Le titre et la description ne peuvent pas être vides</string>
+    <string name="error_link_only">Décrivez le problème, pas seulement un lien.</string>
+    <string name="error_repetitive">Trop répétitif. Décrivez ce qui s\'est passé.</string>
+    <string name="error_report_cooldown">Veuillez patienter quelques minutes avant d\'envoyer un autre rapport.</string>
+    <string name="error_report_duplicate">Ce rapport a déjà été envoyé.</string>
+    <string name="error_same_as_title">Ajoutez plus de détails que le titre.</string>
+    <string name="error_title_missing">Saisissez un titre</string>
+    <string name="error_too_few_letters">Utilisez des mots, pas seulement des symboles ou des emoji.</string>
+    <string name="error_too_long">Trop long. Utilisez au maximum %1$d caractères.</string>
+    <string name="error_too_short">Trop court. Utilisez au moins %1$d caractères.</string>
     <string name="error_unauthorized">Non autorisé : jeton non valide</string>
     <string name="error_unprocessable">Données non valides pour la création du problème</string>
 </resources>

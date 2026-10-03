@@ -15,22 +15,16 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">AMOLED modu</string>
-    <string name="color_palette">Renk paleti</string>
-    <string name="dark_mode">Koyu mod</string>
-    <string name="follow_system">Sistem modunu takip et</string>
-    <string name="light_mode">Aydınlık mod</string>
-    <string name="onboarding_theme_dark_desc">Gözleri yormaz.</string>
-    <string name="onboarding_theme_light_desc">Parlak ve enerjik.</string>
-    <string name="onboarding_theme_system_desc">Cihazınızla eşleşir.</string>
-    <string name="other_colors">Diğer renkler</string>
-    <string name="screen_and_display_settings">Ekran ve görüntüleme ayarları.</string>
-    <string name="summary_dark_theme">Karanlık tema, pil ömrünüzü önemli ölçüde uzatmak için derin bir arka plandan yararlanır. Etkinleştirmek için, Android\'in sistem yöneticisine gidin ve tercih ettiğiniz temayı seçin</string>
-    <string name="theme_mode">Tema modu</string>
-    <string name="wallpaper_colors">Duvar kâğıdı renkleri</string>
     <string name="holiday_greeting_christmas_title">Mutlu bayramlar!</string>
     <string name="holiday_greeting_christmas_message">Noel teması geldi, tüm uygulamada kar yağıyor. Tatil bitene kadar kullanmak ister misin?</string>
     <string name="holiday_greeting_halloween_title">Mutlu Cadılar Bayramı!</string>
     <string name="holiday_greeting_halloween_message">Ürkütücü sezon geldi. Sürdüğü sürece Cadılar Bayramı temasını kullanmak ister misin?</string>
     <string name="holiday_greeting_use_theme">Tatil boyunca tatil temasını kullan</string>
+    <string name="dark_theme">Koyu tema</string>
+    <string name="weather_effect">Hava efekti</string>
+    <string name="weather_effect_automatic">Otomatik</string>
+    <string name="weather_effect_snow">Kar</string>
+    <string name="weather_effect_off">Kapalı</string>
+    <string name="weather_effect_rain">Yağmur</string>
+    <string name="weather_effect_info">Otomatik seçiliyken Noel paleti kullanıldığı sürece kar yağar. Kar ve yağmur her paletle yağar.</string>
 </resources>

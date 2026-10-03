@@ -53,7 +53,7 @@ fun MiniUiPreview(
         bottomEnd = SizeConstants.ZeroSize
     )
 
-    val screenCorner = SizeConstants.MediumSize + SizeConstants.ExtraTinySize // 18dp
+    val screenCorner = SizeConstants.MediumSize + SizeConstants.ExtraTinySize
     val screenShape = RoundedCornerShape(
         topStart = screenCorner,
         topEnd = screenCorner,

@@ -7,7 +7,9 @@ review, and store actions around it. This module replaced `:library:feature:help
 
 ## Owns
 
-- `FaqScreen`, `FaqActivity`, `FaqViewModel`, and their state, event, and action contracts.
+- `FaqScreen` and the stateless `FaqScreenContent`, `FaqViewModel`, and their state and event
+  contracts.
+- `helpPage()`, the registration of `HelpRoute`, with `FaqMenuActions` in its app bar.
 - `FaqRepository` and `DefaultFaqRepository`, which normalize both sources, prefer the remote
   catalog, and fall back to the resources bundled in the host.
 - `FaqRemoteDataSource`, `FaqLocalDataSource`, the catalog DTOs, and the DTO mappers under
@@ -15,11 +17,13 @@ review, and store actions around it. This module replaced `:library:feature:help
 - `FaqItem` and `FaqId` in `data/models`, `QuestionCard`, `ContactUsCard`, `FaqNativeAdCard`, and
   the overflow menu.
 - The nine question and nine answer placeholder resources a host fills in.
+- `FaqConstants.FAQ_BASE_URL` and `faqCatalogUrl`, which build the catalogue address for the
+  build type.
 
 ## Does not own
 
 - Open-source licenses, owned by [`:library:feature:licenses`](../licenses/README.md); the overflow
-  menu only opens them.
+  menu only navigates to `LicensesRoute`.
 - In-app review implementation, owned by
   [`:library:integration:review`](../../integration/review/README.md).
 - HTTP client construction, owned by [`:library:core:network`](../../core/network/README.md).
@@ -57,7 +61,7 @@ fixed here, not derived from what the host declares.
 
 ### The FAQ native ad unit
 
-`FaqScreenContent` resolves an `AdsConfig` from Koin under the `AdsQualifiers.HELP_NATIVE_AD`
+`FaqScreen` resolves an `AdsConfig` from Koin under the `AdsQualifiers.HELP_NATIVE_AD`
 qualifier. Unlike the FAQ strings this one is not optional: the lookup throws and the screen fails
 to compose when no host has registered it, so every host must, the way `:sample:integration:ads`
 does.
@@ -69,29 +73,32 @@ The screen already skips the slot when the id is blank or the user has ads switc
 
 - `:library:core:common`, `:library:core:datastore`, `:library:core:network`, and `:library:core:ui`
   for shared configuration, persistence access, networking, and UI.
-- [`:library:navigation`](../../navigation/README.md) for feature routes.
+- [`:library:navigation`](../../navigation/README.md) for the keys and the graph builder.
 - [`:library:integration:review`](../../integration/review/README.md) for review prompts.
-- [`:library:feature:licenses`](../licenses/README.md), which the overflow menu opens.
+- No other feature module.
 
 ## Used by
 
-- `:library:apptoolkit`, `:library:feature:settings`, and `:sample`.
+- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `helpPage()` from
+  `toolkitPages()`, and `:sample:feature:faq`, which fills in the questions.
 
 ## Flow chart
 
 ```mermaid
 flowchart TD
-    Screen[FaqScreen] --> VM[FaqViewModel]
-    Activity[FaqActivity] --> Screen
+    Page[helpPage: HelpRoute] --> Screen[FaqScreen]
+    Page --> Menu[FaqMenuActions]
+    Screen --> VM[FaqViewModel]
+    Screen --> Content[FaqScreenContent]
     VM --> Repo[FaqRepository]
     Repo --> Remote[FaqRemoteDataSource]
     Remote --> Catalog[FAQ catalog endpoint]
     Repo --> Local[FaqLocalDataSource]
     Local --> Resources[Host question and answer resources]
-    Screen --> Card[QuestionCard]
-    Screen --> Contact[ContactUsCard]
+    Content --> Card[QuestionCard]
+    Content --> Contact[ContactUsCard]
     VM --> Review[ForceInAppReviewUseCase]
-    Menu[Overflow menu] --> Licenses[LicensesActivity]
+    Menu --> Licenses[navigate LicensesRoute]
 ```
 
 ## Architectural decisions
@@ -107,14 +114,29 @@ flowchart TD
 - There is no FAQ use case. Cleaning the catalog is transforming a data-source model into an
   application model, which is repository work, and the one thing a use case would have added is a
   layer the single caller does not need. `FaqViewModel` reads `FaqRepository` directly.
+- The screen is on `core.ui.screen`. `FaqRepository.getFaq()` returns the questions or throws, and
+  `FaqViewModel` maps a failure with `toFailed`, so an offline device sees the offline text and
+  anything else the FAQ's own. Neither needs a dispatcher: Ktor suspends, and the bundled questions
+  are string resources.
+- The repository throws only when there is nothing to show. A failed catalog with bundled questions
+  to fall back on is not an error, and a catalog that loaded empty is `Loadable.Empty`, with Retry.
+- `FaqScreenContent` logs nothing and opens nothing. Every tap reaches `FaqScreen` as a named
+  callback, which logs the same GA4 events as before and opens the form, mail or store listing,
+  since those need a `Context`.
+- When the in-app review cannot show, the ViewModel sets `openStoreListing` and the screen opens the
+  store listing, then reports back with `StoreListingOpened`. A flag in state, not a one-off event,
+  so it still happens when the review finishes during a configuration change.
+- The feedback button stays in the screen's body rather than the shell's FAB slot: it belongs to
+  this page only, and the page pads it by `contentPadding()`.
 - Normalizing inside the repository, before the emptiness check rather than after it, is what makes
   the fallback correct: a remote catalog of nothing but blank rows now counts as empty and falls
   through to the local questions instead of rendering blank rows.
 
 ## Public contracts
 
-- `FaqScreen`, `FaqActivity`, `FaqViewModel`, `FaqUiState`, `FaqEvent`, `FaqAction`,
-  `FaqRepository`, `FaqItem`, `FaqId`, `QuestionCard`, and `faqModule`.
+- `FaqScreen`, `helpPage()`, `FaqMenuActions`, `FaqViewModel`, `FaqUiState`, `FaqEvent`,
+  `FaqRepository`, `FaqItem`, `FaqId`, `QuestionCard`, and `faqModule`. `FaqScreenContent` is
+  internal.
 
 ## Internal implementations
 

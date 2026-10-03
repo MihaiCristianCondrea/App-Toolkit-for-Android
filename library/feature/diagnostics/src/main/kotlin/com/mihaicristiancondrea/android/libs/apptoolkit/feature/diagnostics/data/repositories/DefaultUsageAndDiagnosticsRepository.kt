@@ -18,32 +18,33 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.repositories
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.domain.models.UsageAndDiagnosticsSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.toStorageException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.UsageAndDiagnosticsPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentSettings
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.withContext
 
 /**
- * Implementation of [UsageAndDiagnosticsRepository] that manages user consent and diagnostic settings.
+ * Persists reporting and advertising consents, then applies the stored bundle to the consent
+ * SDKs. Applying after each write keeps SDK state current even when the settings screen is
+ * closed. Unset choices default to enabled in release builds and disabled in debug builds.
  *
- * This repositories coordinates the flow of data between the [UsageAndDiagnosticsPreferencesDataSource]
- * and the domain layer, ensuring that settings are persisted and retrieved correctly.
- * Default values for settings are determined based on the build type provided by [BuildInfoProvider].
- *
- * @property dataSource The local data source for persisting usage and diagnostics preferences.
- * @property configProvider Provider used to determine build-specific configurations like debug status.
- * @property dispatchers Provider for coroutine dispatchers to ensure operations run on the appropriate thread.
+ * DataStore is main-safe, so this needs no dispatcher. A read or write that fails fails with a
+ * [StorageException].
  */
 class DefaultUsageAndDiagnosticsRepository(
     private val dataSource: UsageAndDiagnosticsPreferencesDataSource,
     private val configProvider: BuildInfoProvider,
-    private val dispatchers: DispatcherProvider,
-    private val firebaseController: FirebaseController,
+    private val telemetryRepository: TelemetryRepository,
+    private val consentRepository: ConsentRepository,
 ) : UsageAndDiagnosticsRepository {
 
     override fun observeSettings(): Flow<UsageAndDiagnosticsSettings> =
@@ -63,57 +64,79 @@ class DefaultUsageAndDiagnosticsRepository(
             )
         }
             .onStart {
-                firebaseController.logBreadcrumb(
+                telemetryRepository.logBreadcrumb(
                     message = "Usage diagnostics observe",
                     attributes = mapOf("defaultEnabled" to (!configProvider.isDebugBuild).toString()),
                 )
             }
-            .flowOn(dispatchers.io)
+            .catch { failure -> throw failure.toStorageException() ?: failure }
 
     override suspend fun setUsageAndDiagnostics(enabled: Boolean) =
-        withContext(dispatchers.io) {
-            firebaseController.logBreadcrumb(
-                message = "Usage diagnostics updated",
-                attributes = mapOf("usageAndDiagnostics" to enabled.toString()),
-            )
-            dataSource.saveUsageAndDiagnostics(isChecked = enabled)
-        }
+        save(
+            message = "Usage diagnostics updated",
+            attributes = mapOf("usageAndDiagnostics" to enabled.toString()),
+        ) { dataSource.saveUsageAndDiagnostics(isChecked = enabled) }
 
     override suspend fun setAnalyticsConsent(granted: Boolean) =
-        withContext(dispatchers.io) {
-            firebaseController.logBreadcrumb(
-                message = "Analytics consent updated",
-                attributes = mapOf("granted" to granted.toString()),
-            )
+        save(message = "Analytics consent updated", attributes = mapOf("granted" to granted.toString())) {
             dataSource.saveAnalyticsConsent(isGranted = granted)
         }
 
     override suspend fun setAdStorageConsent(granted: Boolean) =
-        withContext(dispatchers.io) {
-            firebaseController.logBreadcrumb(
-                message = "Ad storage consent updated",
-                attributes = mapOf("granted" to granted.toString()),
-            )
+        save(message = "Ad storage consent updated", attributes = mapOf("granted" to granted.toString())) {
             dataSource.saveAdStorageConsent(isGranted = granted)
         }
 
     override suspend fun setAdUserDataConsent(granted: Boolean) =
-        withContext(dispatchers.io) {
-            firebaseController.logBreadcrumb(
-                message = "Ad user data consent updated",
-                attributes = mapOf("granted" to granted.toString()),
-            )
+        save(message = "Ad user data consent updated", attributes = mapOf("granted" to granted.toString())) {
             dataSource.saveAdUserDataConsent(isGranted = granted)
         }
 
     override suspend fun setAdPersonalizationConsent(granted: Boolean) =
-        withContext(dispatchers.io) {
-            firebaseController.logBreadcrumb(
-                message = "Ad personalization consent updated",
-                attributes = mapOf("granted" to granted.toString()),
+        save(
+            message = "Ad personalization consent updated",
+            attributes = mapOf("granted" to granted.toString()),
+        ) { dataSource.saveAdPersonalizationConsent(isGranted = granted) }
+
+    override suspend fun setAll(settings: UsageAndDiagnosticsSettings) =
+        save(
+            message = "Usage diagnostics bundle updated",
+            attributes = mapOf(
+                "usageAndDiagnostics" to settings.usageAndDiagnostics.toString(),
+                "analyticsConsent" to settings.analyticsConsent.toString(),
+                "adStorageConsent" to settings.adStorageConsent.toString(),
+                "adUserDataConsent" to settings.adUserDataConsent.toString(),
+                "adPersonalizationConsent" to settings.adPersonalizationConsent.toString(),
+            ),
+        ) {
+            dataSource.saveAll(
+                usageAndDiagnostics = settings.usageAndDiagnostics,
+                analyticsConsent = settings.analyticsConsent,
+                adStorageConsent = settings.adStorageConsent,
+                adUserDataConsent = settings.adUserDataConsent,
+                adPersonalizationConsent = settings.adPersonalizationConsent,
             )
-            dataSource.saveAdPersonalizationConsent(isGranted = granted)
         }
+
+    /** Logs [message], runs [write], then applies everything now stored to the consent SDKs. */
+    private suspend fun save(
+        message: String,
+        attributes: Map<String, String>,
+        write: suspend () -> Unit,
+    ) {
+        telemetryRepository.logBreadcrumb(message = message, attributes = attributes)
+        storageCall { write() }
+        val stored: UsageAndDiagnosticsSettings = observeSettings().first()
+        consentRepository.applyConsentSettings(
+            ConsentSettings(
+                usageAndDiagnostics = stored.usageAndDiagnostics,
+                analyticsConsent = stored.analyticsConsent,
+                adStorageConsent = stored.adStorageConsent,
+                adUserDataConsent = stored.adUserDataConsent,
+                adPersonalizationConsent = stored.adPersonalizationConsent,
+            )
+        )
+    }
 }
 
 

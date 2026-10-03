@@ -64,7 +64,6 @@ val GroupedGridMeasurements.cellHeight: Dp
         GroupedGridMeasurements.ExtraLarge -> SizeConstants.NinetySixSize + SizeConstants.LargeSize
     }
 
-/** Size of the badge drawn behind a cell's icon at this size class. */
 val GroupedGridMeasurements.iconContainerSize: Dp
     get() = when (this) {
         GroupedGridMeasurements.ExtraSmall -> SizeConstants.ExtraLargeIncreasedSize
@@ -74,7 +73,6 @@ val GroupedGridMeasurements.iconContainerSize: Dp
         GroupedGridMeasurements.ExtraLarge -> SizeConstants.LauncherIconSize + SizeConstants.LargeSize
     }
 
-/** Size of the glyph inside the badge at this size class. */
 internal val GroupedGridMeasurements.iconSize: Dp
     get() = when (this) {
         GroupedGridMeasurements.ExtraSmall -> SizeConstants.LargeMediumSize
@@ -84,7 +82,6 @@ internal val GroupedGridMeasurements.iconSize: Dp
         GroupedGridMeasurements.ExtraLarge -> SizeConstants.ExtraLargeIncreasedSize
     }
 
-/** Inset between a cell's edges and its content at this size class. */
 internal val GroupedGridMeasurements.contentPadding: PaddingValues
     get() = when (this) {
         GroupedGridMeasurements.ExtraSmall -> PaddingValues(
@@ -98,7 +95,6 @@ internal val GroupedGridMeasurements.contentPadding: PaddingValues
         GroupedGridMeasurements.ExtraLarge -> PaddingValues(all = SizeConstants.ExtraLargeCompactSize)
     }
 
-/** Gap between the icon badge and the text column at this size class. */
 internal val GroupedGridMeasurements.iconSpacing: Dp
     get() = when (this) {
         GroupedGridMeasurements.ExtraSmall -> SizeConstants.SmallSize
@@ -108,7 +104,6 @@ internal val GroupedGridMeasurements.iconSpacing: Dp
         GroupedGridMeasurements.ExtraLarge -> SizeConstants.LargeSize
     }
 
-/** Title typography at this size class. */
 @Composable
 internal fun GroupedGridMeasurements.titleTextStyle(): TextStyle = when (this) {
     GroupedGridMeasurements.ExtraSmall -> MaterialTheme.typography.labelLarge
@@ -118,7 +113,6 @@ internal fun GroupedGridMeasurements.titleTextStyle(): TextStyle = when (this) {
     GroupedGridMeasurements.ExtraLarge -> MaterialTheme.typography.headlineSmall
 }
 
-/** Subtitle typography at this size class. */
 @Composable
 internal fun GroupedGridMeasurements.subtitleTextStyle(): TextStyle = when (this) {
     GroupedGridMeasurements.ExtraSmall -> MaterialTheme.typography.labelSmall

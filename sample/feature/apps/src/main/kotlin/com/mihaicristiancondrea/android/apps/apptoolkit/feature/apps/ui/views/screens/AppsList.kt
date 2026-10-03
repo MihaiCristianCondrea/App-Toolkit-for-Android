@@ -43,15 +43,13 @@ import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.models.AppListItem
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppListUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppsListFilter
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.isAvailable
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.AppCard
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.utils.buildAppListItems
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
-import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AppAdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdCache
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberNativeAdCache
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.ads.AppsListNativeAdCard
@@ -64,53 +62,47 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import org.koin.compose.koinInject
-import org.koin.core.qualifier.named
 
 /**
- * A composable that displays a grid of applications.
- * This function is responsible for determining the grid layout based on the window size,
- * injecting ads into the list at a specified frequency, and passing the data to the
- * underlying `AppsGrid` composable for rendering.
+ * Adaptive app grid with host-controlled favorites, installed state, filtering, and actions.
+ * Ads are interleaved after filtering and search.
  *
- * @param uiHomeScreen The state object containing the list of apps to display.
- * @param favorites A set of package names for the apps marked as favorite.
- * @param installedPackages A set of package names detected as installed on the current device.
- * @param paddingValues Padding to be applied from the outside, typically from a Scaffold.
- * @param adsEnabled A boolean flag to determine if ads should be displayed in the list.
- * @param onFilterSelected A callback invoked when the user chooses an app filter chip.
- * @param onFavoriteToggle A lambda function to be invoked when the favorite icon on an app card is toggled. It receives the package name.
- * @param onAppClick A lambda function to be invoked when an app card is clicked. It receives the [AppInfo] of the clicked app.
- * @param onShareClick A lambda function to be invoked when the share icon on an app card is clicked. It receives the [AppInfo] of the app to be shared.
- * @param adFrequency The frequency at which ads are inserted into the list (e.g., an ad every `adFrequency` items).
- * @param windowWidthSizeClass The current window width size class, used to determine the number of columns in the grid.
+ * @param contentPadding Padding from the shell, added inside the grid's own spacing.
+ * @param adUnitId The native ad slots' unit, or null when no ad should show.
+ * @param searchQuery Matches app names, packages, and short descriptions; blank shows every
+ * filtered app.
+ * @param adFrequency Number of apps between native ad slots.
  */
 @Composable
 fun AppsList(
-    uiHomeScreen: AppListUiState,
+    allApps: ImmutableList<AppInfo>,
+    selectedFilter: AppsListFilter,
     favorites: ImmutableSet<String>,
     installedPackages: ImmutableSet<String>,
-    paddingValues: PaddingValues,
-    adsEnabled: Boolean,
+    contentPadding: PaddingValues,
+    adUnitId: String?,
     onFilterSelected: (AppsListFilter) -> Unit,
     onFavoriteToggle: (String) -> Unit,
     onAppClick: (AppInfo) -> Unit,
     onShareClick: (AppInfo) -> Unit,
-    adFrequency: Int = AdsConstants.APPS_LIST_AD_FREQUENCY,
     windowWidthSizeClass: AppWindowWidthSizeClass,
+    adFrequency: Int = AdsConstants.APPS_LIST_AD_FREQUENCY,
+    searchQuery: String = "",
 ) {
     val apps: ImmutableList<AppInfo> = remember(
-        uiHomeScreen.apps,
-        uiHomeScreen.selectedFilter,
+        allApps,
+        selectedFilter,
         installedPackages,
         favorites,
+        searchQuery,
     ) {
-        uiHomeScreen.apps.filterFor(
-            filter = uiHomeScreen.selectedFilter,
+        allApps.filterFor(
+            filter = selectedFilter,
             installedPackages = installedPackages,
             favorites = favorites,
-        ).toImmutableList()
+        ).search(searchQuery).toImmutableList()
     }
+    val adsEnabled = adUnitId != null
 
     val columnCount = remember(windowWidthSizeClass) {
         when (windowWidthSizeClass) {
@@ -128,44 +120,26 @@ fun AppsList(
         buildAppListItems(apps, adsEnabled, adFrequency)
     }
 
-    val adsConfig: AdsConfig = koinInject(qualifier = named(AppAdsQualifiers.APPS_LIST_NATIVE_AD))
-
     AppsGrid(
         items = items,
-        allAppsCount = uiHomeScreen.apps.size,
+        allAppsCount = allApps.size,
         favorites = favorites,
         installedPackages = installedPackages,
-        selectedFilter = uiHomeScreen.selectedFilter,
+        selectedFilter = selectedFilter,
         onFilterSelected = onFilterSelected,
-        paddingValues = paddingValues,
+        paddingValues = contentPadding,
         columnCount = columnCount,
         listState = listState,
         onFavoriteToggle = onFavoriteToggle,
         onAppClick = onAppClick,
         onShareClick = onShareClick,
-        adUnitId = adsConfig.bannerAdUnitId,
+        adUnitId = adUnitId.orEmpty(),
     )
 }
 
 /**
- * A composable that displays a grid of applications and ads.
- * It uses a [LazyVerticalGrid] to efficiently display a potentially large list of items.
- *
- * This function is responsible for the layout and rendering of individual app cards and ad cards within the grid.
- *
- * @param items The list of [AppListItem]s to display, which can be either an app or an ad.
- * @param allAppsCount Total number of available apps.
- * @param favorites A set of package names for the apps that are marked as favorites.
- * @param installedPackages A set of package names for the apps that are installed.
- * @param selectedFilter The currently selected chip filter.
- * @param onFilterSelected A callback invoked when the user chooses an app filter chip.
- * @param paddingValues Padding to be applied from the parent composable, typically from a Scaffold.
- * @param columnCount The number of columns in the grid.
- * @param listState The state object to be used for the [LazyVerticalGrid], allowing for observation and control of the scroll position.
- * @param onFavoriteToggle A callback lambda that is invoked when the favorite icon on an app card is toggled. It receives the package name of the app.
- * @param onAppClick A callback lambda that is invoked when an app card is clicked. It receives the [AppInfo] of the clicked app.
- * @param onShareClick A callback lambda that is invoked when the share icon on an app card is clicked. It receives the [AppInfo] of the app to be shared.
- * @param adUnitId The ad unit ID for the native ads to be displayed in the grid.
+ * Owns the native-ad cache outside lazy cells so scrolling away and back reuses loaded ads.
+ * Cell identity includes the selected filter to isolate exiting cells from their replacements.
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -184,8 +158,6 @@ private fun AppsGrid(
     onShareClick: (AppInfo) -> Unit,
     adUnitId: String,
 ) {
-    // Outside the grid, so an ad cell that scrolls away leaves its ad here instead of destroying it
-    // and requesting another one when it scrolls back.
     val adCache: NativeAdCache = rememberNativeAdCache()
 
     val layoutDirection = LocalLayoutDirection.current
@@ -250,8 +222,6 @@ private fun AppsGrid(
                     AppsListNativeAdCard(
                         adUnitId = adUnitId,
                         cache = adCache,
-                        // The grid key includes the filter, so a cell fading out after a filter
-                        // change never shares its ad with the cell replacing it.
                         cacheKey = appListItemKey(
                             selectedFilter = selectedFilter,
                             index = index,
@@ -289,21 +259,13 @@ private fun AppsListFilters(
     onFilterSelected: (AppsListFilter) -> Unit,
 ) {
     val filters = remember(allAppsCount, installedPackages, favorites) {
-        val list = mutableListOf<AppsFilterItem>()
-        list.add(AppsFilterItems[0]) // All
-
-        if (installedPackages.isNotEmpty()) {
-            list.add(AppsFilterItems[1]) // Installed
-        }
-
-        if (installedPackages.isNotEmpty() && installedPackages.size < allAppsCount) {
-            list.add(AppsFilterItems[2]) // Not Installed
-        }
-
-        if (favorites.isNotEmpty()) {
-            list.add(AppsFilterItems[3]) // Favorites
-        }
-        list.toImmutableList()
+        AppsFilterItems.filter { item ->
+            item.filter.isAvailable(
+                appCount = allAppsCount,
+                installedCount = installedPackages.size,
+                favoritesCount = favorites.size,
+            )
+        }.toImmutableList()
     }
 
     if (filters.size > 1) {
@@ -346,6 +308,17 @@ private val AppsFilterItems: ImmutableList<AppsFilterItem> = persistentListOf(
     AppsFilterItem(AppsListFilter.Favorites, R.string.favorite_apps, Icons.Outlined.StarOutline),
 )
 
+/** The apps whose name, package or short description contain [query]; all of them for a blank one. */
+internal fun List<AppInfo>.search(query: String): List<AppInfo> {
+    val needle = query.trim()
+    if (needle.isEmpty()) return this
+    return filter { app ->
+        app.name.contains(needle, ignoreCase = true) ||
+            app.packageName.contains(needle, ignoreCase = true) ||
+            app.shortDescription.contains(needle, ignoreCase = true)
+    }
+}
+
 private fun ImmutableList<AppInfo>.filterFor(
     filter: AppsListFilter,
     installedPackages: ImmutableSet<String>,
@@ -357,18 +330,6 @@ private fun ImmutableList<AppInfo>.filterFor(
     AppsListFilter.Favorites -> filter { app -> app.packageName in favorites }
 }
 
-/**
- * A composable that wraps the [AppCard] and provides it with the necessary data and callbacks.
- * This function acts as a bridge, extracting the [AppInfo] from the [AppListItem.App]
- * and passing it along with other parameters to the [AppCard].
- *
- * @param item The app item data, containing the [AppInfo].
- * @param isFavorite A boolean indicating whether the app is marked as a favorite.
- * @param modifier A [Modifier] for this composable.
- * @param onFavoriteToggle A lambda function to be invoked when the favorite icon is toggled. It receives the package name.
- * @param onAppClick A lambda function to be invoked when the app card is clicked. It receives the [AppInfo] of the clicked app.
- * @param onShareClick A lambda function to be invoked when the share icon is clicked. It receives the [AppInfo] of the app to be shared.
- */
 @Composable
 private fun AppCardItem(
     item: AppListItem.App,

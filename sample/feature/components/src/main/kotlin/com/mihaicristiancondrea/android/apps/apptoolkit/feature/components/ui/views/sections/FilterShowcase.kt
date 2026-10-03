@@ -27,7 +27,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseHeader
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSection
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSurface
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.FilterChipItem
@@ -39,7 +38,6 @@ import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun FilterShowcase(
-    firebaseController: FirebaseController,
     onLogEvent: (String, String?) -> Ga4EventData,
     filters: ImmutableList<String>,
     selectedFilter: String,
@@ -69,7 +67,6 @@ fun FilterShowcase(
                 selectedFilter = selectedFilter,
                 onFilterSelected = onFilterSelected,
                 leadingLabel = stringResource(id = CoreUiR.string.sort_by),
-                firebaseController = firebaseController,
                 ga4EventProvider = { filter ->
                     onLogEvent("filter", filter)
                 },

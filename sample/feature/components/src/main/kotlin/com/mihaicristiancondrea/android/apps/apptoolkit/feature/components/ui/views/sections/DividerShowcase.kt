@@ -27,11 +27,8 @@ import androidx.compose.material.icons.outlined.HorizontalRule
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberSliderState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -53,7 +50,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.Sm
  * The wavy divider at its default size, resized live, and running vertically.
  *
  * The sliders are there to show the divider adapting: however wide or tall it is made, the wave
- * keeps its shape and ends cleanly on both sides.
+ * keeps its shape and ends cleanly on both sides. Its line thickens with the wave, as `il_wavy_line`'s
+ * does, so a tall wave is not drawn as a hairline. Each slider's saveable state holds its value.
  */
 @Composable
 fun DividerShowcase() {
@@ -62,10 +60,11 @@ fun DividerShowcase() {
         icon = Icons.Outlined.HorizontalRule,
     )
 
-    var widthFraction: Float by rememberSaveable { mutableFloatStateOf(value = 1f) }
-    var waveHeight: Float by rememberSaveable {
-        mutableFloatStateOf(value = WavyDividerDefaults.WaveSize.value)
-    }
+    val widthFraction = rememberSliderState(value = 1f, trackRange = MIN_WIDTH_FRACTION..1f)
+    val waveHeight = rememberSliderState(
+        value = WavyDividerDefaults.WaveSize.value,
+        trackRange = MIN_WAVE_HEIGHT..MAX_WAVE_HEIGHT,
+    )
 
     ShowcaseSection {
         ShowcaseSurface(position = GroupedItemPosition.FIRST) {
@@ -75,9 +74,8 @@ fun DividerShowcase() {
         }
 
         ShowcaseSurface(position = GroupedItemPosition.MIDDLE) {
-            // Scaled with the wave, as il_wavy_line is, so a tall wave is not drawn as a hairline.
             val thickness: Float =
-                (waveHeight / WavyDividerDefaults.WaveSize.value).coerceAtLeast(minimumValue = 1f)
+                (waveHeight.value / WavyDividerDefaults.WaveSize.value).coerceAtLeast(minimumValue = 1f)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -85,23 +83,21 @@ fun DividerShowcase() {
                 contentAlignment = Alignment.Center,
             ) {
                 HorizontalWavyDivider(
-                    modifier = Modifier.fillMaxWidth(fraction = widthFraction),
-                    waveHeight = waveHeight.dp,
+                    modifier = Modifier.fillMaxWidth(fraction = widthFraction.value),
+                    waveHeight = waveHeight.value.dp,
                     thickness = thickness.dp,
                 )
             }
             SmallVerticalSpacer()
             DividerLabel(text = stringResource(id = R.string.components_divider_width))
             Slider(
-                value = widthFraction,
-                onValueChange = { widthFraction = it },
-                valueRange = MIN_WIDTH_FRACTION..1f,
+                state = widthFraction,
+                onValueChange = { widthFraction.value = it },
             )
             DividerLabel(text = stringResource(id = R.string.components_divider_wave_height))
             Slider(
-                value = waveHeight,
-                onValueChange = { waveHeight = it },
-                valueRange = MIN_WAVE_HEIGHT..MAX_WAVE_HEIGHT,
+                state = waveHeight,
+                onValueChange = { waveHeight.value = it },
             )
         }
 

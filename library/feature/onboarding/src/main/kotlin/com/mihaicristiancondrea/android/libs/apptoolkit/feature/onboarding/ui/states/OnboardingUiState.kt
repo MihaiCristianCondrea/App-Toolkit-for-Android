@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,12 +17,20 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states
 
+import androidx.compose.runtime.Immutable
+
 /**
- * UI state for [com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.OnboardingViewModel].
+ * Everything the onboarding screen renders. The pages come from the host's provider and are there
+ * from the start, so nothing here loads.
+ *
+ * @property currentTabIndex The page the pager last settled on, where it opens again.
+ * @property isOnboardingCompleted Whether the stored flag says onboarding is done. The screen does
+ * not navigate on it: it is already true when onboarding is opened again from the developer options.
+ * @property completion Where finishing stands. [OnboardingCompletion.Saved] enters the shell.
  */
+@Immutable
 data class OnboardingUiState(
     val currentTabIndex: Int = 0,
     val isOnboardingCompleted: Boolean = false,
-    val isCrashlyticsDialogVisible: Boolean = true,
+    val completion: OnboardingCompletion = OnboardingCompletion.Pending,
 )
-

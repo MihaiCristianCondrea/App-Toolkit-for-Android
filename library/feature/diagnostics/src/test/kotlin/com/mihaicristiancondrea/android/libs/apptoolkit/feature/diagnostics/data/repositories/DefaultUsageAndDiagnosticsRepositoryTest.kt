@@ -17,12 +17,14 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.repositories
 
-import com.google.common.truth.Truth.assertThat
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.UsageAndDiagnosticsPreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.domain.models.UsageAndDiagnosticsSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentSettings
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,6 +33,9 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 private class FakeUsageAndDiagnosticsPreferencesDataSource :
     UsageAndDiagnosticsPreferencesDataSource {
@@ -82,6 +87,8 @@ class DefaultUsageAndDiagnosticsRepositoryTest {
         val dispatcherExtension = UnconfinedDispatcherExtension()
     }
 
+    private val consentRepository: ConsentRepository = mockk(relaxed = true)
+
     @Test
     fun `observeSettings reflects data source updates`() =
         runTest(dispatcherExtension.testDispatcher) {
@@ -89,16 +96,51 @@ class DefaultUsageAndDiagnosticsRepositoryTest {
             val repository = DefaultUsageAndDiagnosticsRepository(
                 dataSource = dataSource,
                 configProvider = FakeBuildInfoProvider(),
-                dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
-                firebaseController = mockk<FirebaseController>(relaxed = true),
+                telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
+                consentRepository = consentRepository,
             )
 
-            assertThat(repository.observeSettings().first().usageAndDiagnostics).isTrue()
+            assertTrue(repository.observeSettings().first().usageAndDiagnostics)
 
             repository.setUsageAndDiagnostics(false)
             advanceUntilIdle()
 
-            assertThat(repository.observeSettings().first().usageAndDiagnostics).isFalse()
+            assertFalse(repository.observeSettings().first().usageAndDiagnostics)
+        }
+
+    /** The SDKs get the stored answer once, after the write, with no mix in between. */
+    @Test
+    fun `setAll stores every value of the bundle`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val repository = DefaultUsageAndDiagnosticsRepository(
+                dataSource = FakeUsageAndDiagnosticsPreferencesDataSource(),
+                configProvider = FakeBuildInfoProvider(),
+                telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
+                consentRepository = consentRepository,
+            )
+            val essentialOnly = UsageAndDiagnosticsSettings(
+                usageAndDiagnostics = true,
+                analyticsConsent = true,
+                adStorageConsent = true,
+                adUserDataConsent = false,
+                adPersonalizationConsent = false,
+            )
+
+            repository.setAll(essentialOnly)
+            advanceUntilIdle()
+
+            assertEquals(essentialOnly, repository.observeSettings().first())
+            coVerify(exactly = 1) {
+                consentRepository.applyConsentSettings(
+                    ConsentSettings(
+                        usageAndDiagnostics = true,
+                        analyticsConsent = true,
+                        adStorageConsent = true,
+                        adUserDataConsent = false,
+                        adPersonalizationConsent = false,
+                    )
+                )
+            }
         }
 }
 

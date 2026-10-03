@@ -15,9 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,6 +27,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
@@ -37,23 +39,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.models.AppScreenTracking
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitQuickTool
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ToolkitTilesAction
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ToolkitTilesEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.PositionedToolkitTilesListItem
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileCategory
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTilesListItem
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.isVisible
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.stableKey
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ToolkitTilesUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils.filterFor
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils.requestQuickSettingsTile
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils.search
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.MaterialColorsToolDialog
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ToolkitToolBottomSheet
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ads.QuickToolsNativeAdCard
@@ -64,40 +69,49 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.c
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.TileCategorySection
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.TilesFilters
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.LocalNativeAdViewFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellSearch
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
-/** Route-level composable for the Toolkit Tiles catalog. */
+private val TilesScreen = AppScreenTracking.Screens.TOOLKIT_TILES
+
+/**
+ * The Toolkit Tiles catalog. Owns [ToolkitTilesViewModel], tracking, the Quick Settings add-tile
+ * request and the tab's search query, and re-reads tile membership on every resume.
+ */
 @Composable
-fun ToolkitTilesScreen(
-    paddingValues: PaddingValues,
-) {
+fun ToolkitTilesScreen() {
     val viewModel: ToolkitTilesViewModel = koinViewModel()
-    val screenState: UiStateScreen<ToolkitTilesUiState> by viewModel.uiState.collectAsStateWithLifecycle()
+    val state: ToolkitTilesUiState by viewModel.state.collectAsStateWithLifecycle()
+    val messages: ImmutableList<UiMessage> by viewModel.messages.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val firebaseController: FirebaseController = koinInject()
+    val lifecycleOwner = LocalLifecycleOwner.current
 
     TrackScreenView(
-        firebaseController = firebaseController,
-        screenName = AppScreenTracking.Screens.TOOLKIT_TILES.name,
-        screenClass = AppScreenTracking.Screens.TOOLKIT_TILES.className,
+        screenName = TilesScreen.name,
+        screenClass = TilesScreen.className,
     )
-    val lifecycleOwner = LocalLifecycleOwner.current
+    TrackScreenState(
+        screenName = TilesScreen.name,
+        state = state.categories,
+    )
 
     DisposableEffect(viewModel, lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
@@ -111,64 +125,97 @@ fun ToolkitTilesScreen(
         }
     }
 
-    LaunchedEffect(viewModel, context) {
-        viewModel.actionEvent.collect { action ->
-            when (action) {
-                is ToolkitTilesAction.RequestAddTile -> requestQuickSettingsTile(
-                    context = context,
-                    requestKey = action.requestKey,
-                    onResult = { outcome ->
-                        viewModel.onEvent(
-                            ToolkitTilesEvent.TileRequestFinished(
-                                requestKey = action.requestKey,
-                                outcome = outcome,
-                            ),
-                        )
-                    },
-                )
-
-                ToolkitTilesAction.ShowNoTileMessage -> Toast.makeText(
-                    context,
-                    R.string.tiles_no_tile_message,
-                    Toast.LENGTH_SHORT,
-                ).show()
-            }
-        }
+    LaunchedEffect(state.pendingTileRequest) {
+        val requestKey: String = state.pendingTileRequest ?: return@LaunchedEffect
+        requestQuickSettingsTile(
+            context = context,
+            requestKey = requestKey,
+            onResult = { outcome ->
+                viewModel.onEvent(ToolkitTilesEvent.TileRequestFinished(requestKey = requestKey, outcome = outcome))
+            },
+        )
+        viewModel.onEvent(ToolkitTilesEvent.TileRequestLaunched)
     }
 
-    ScreenStateHandler(
-        screenState = screenState,
-        onLoading = { LoadingScreen(paddingValues = paddingValues) },
-        onEmpty = { NoDataScreen() },
-        onError = { NoDataScreen() },
-        onSuccess = { state ->
-            CompositionLocalProvider(
-                LocalNativeAdViewFactory provides remember { ToolkitTilesNativeAdViewFactory() }
-            ) {
-                ToolkitTilesScreen(
-                    state = state,
-                    paddingValues = paddingValues,
-                    onEvent = viewModel::onEvent,
-                )
-            }
-        },
-    )
+    MessageToasts(messages = messages, onShown = viewModel::messageShown)
+
+    CompositionLocalProvider(
+        LocalNativeAdViewFactory provides remember { ToolkitTilesNativeAdViewFactory() }
+    ) {
+        ToolkitTilesScreenContent(
+            state = state,
+            contentPadding = contentPadding(),
+            onEvent = viewModel::onEvent,
+            searchQuery = LocalShellSearch.current?.query.orEmpty(),
+        )
+    }
 }
 
-/** Stateless Material 3 screen that renders Quick Settings tile categories and actions. */
+/**
+ * Shows [messages] as toasts, oldest first, and calls [onShown] with each one's id once its toast
+ * is posted. The messages come while a tool's bottom sheet is open, which would cover a snackbar.
+ */
 @Composable
-fun ToolkitTilesScreen(
+private fun MessageToasts(
+    messages: ImmutableList<UiMessage>,
+    onShown: (id: Long) -> Unit,
+) {
+    val context: Context = LocalContext.current
+    val next: UiMessage? = messages.firstOrNull()
+
+    LaunchedEffect(next?.id) {
+        val message: UiMessage = next ?: return@LaunchedEffect
+        Toast.makeText(context.applicationContext, message.text.asString(context = context), Toast.LENGTH_SHORT)
+            .show()
+        onShown(message.id)
+    }
+}
+
+/**
+ * The stateless catalog: the loading or failure state, or the filters, the categories with ad
+ * cards between them, and the tool a tapped tile opens.
+ *
+ * @param searchQuery What the tab's search field holds; matches show expanded.
+ */
+@Composable
+internal fun ToolkitTilesScreenContent(
     state: ToolkitTilesUiState,
-    paddingValues: PaddingValues,
+    contentPadding: PaddingValues,
     onEvent: (ToolkitTilesEvent) -> Unit,
+    searchQuery: String = "",
+) {
+    ScreenStateHandler(
+        state = state.categories,
+        contentPadding = contentPadding,
+        onRetry = { onEvent(ToolkitTilesEvent.Load) },
+    ) { ready ->
+        ToolkitTilesCatalog(
+            categories = ready.value,
+            state = state,
+            contentPadding = contentPadding,
+            onEvent = onEvent,
+            searchQuery = searchQuery,
+        )
+    }
+}
+
+@Composable
+private fun ToolkitTilesCatalog(
+    categories: ImmutableList<ToolkitTileCategory>,
+    state: ToolkitTilesUiState,
+    contentPadding: PaddingValues,
+    onEvent: (ToolkitTilesEvent) -> Unit,
+    searchQuery: String,
 ) {
     val showAds = rememberAdsEnabled()
-    val firebaseController: FirebaseController = koinInject()
+    val telemetryRepository = LocalTelemetry.current
     var selectedTile by remember { mutableStateOf<ToolkitTile?>(null) }
     var quickToolDialog by remember { mutableStateOf<ToolkitQuickTool?>(null) }
-    val filteredCategories = remember(state.categories, state.selectedFilter) {
-        state.categories.filterFor(state.selectedFilter)
+    val resources = LocalContext.current.resources
+    val filteredCategories = remember(categories, state.selectedFilter, searchQuery, resources) {
+        categories.filterFor(state.selectedFilter).search(searchQuery, resources::getString)
     }
+    val searching = searchQuery.isNotBlank()
     val listItems = remember(filteredCategories) {
         buildList {
             filteredCategories.forEachIndexed { index, category ->
@@ -220,14 +267,14 @@ fun ToolkitTilesScreen(
             verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
             contentPadding = PaddingValues(
                 start = SizeConstants.LargeSize,
-                top = paddingValues.calculateTopPadding() + SizeConstants.LargeSize,
+                top = contentPadding.calculateTopPadding() + SizeConstants.LargeSize,
                 end = SizeConstants.LargeSize,
-                bottom = paddingValues.calculateBottomPadding() + SizeConstants.LargeSize,
+                bottom = contentPadding.calculateBottomPadding() + SizeConstants.LargeSize,
             ),
         ) {
             item {
                 TilesFilters(
-                    categories = state.categories,
+                    categories = categories,
                     selectedFilter = state.selectedFilter,
                     onFilterSelected = { filter -> onEvent(ToolkitTilesEvent.FilterSelected(filter)) },
                 )
@@ -248,7 +295,7 @@ fun ToolkitTilesScreen(
                     when (item) {
                         is ToolkitTilesListItem.Category -> {
                             val category = item.category
-                            val expanded = category.id in state.expandedCategoryIds
+                            val expanded = searching || category.id in state.expandedCategoryIds
                             TileCategorySection(
                                 category = category,
                                 position = position,
@@ -259,7 +306,7 @@ fun ToolkitTilesScreen(
                                 selectedFilter = state.selectedFilter,
                                 onToggle = { onEvent(ToolkitTilesEvent.CategoryToggled(category.id)) },
                                 onPreviewTile = { tile ->
-                                    firebaseController.logViewItem(
+                                    telemetryRepository.logViewItem(
                                         itemId = tile.id,
                                         itemName = tile.id,
                                         itemCategory = category.id,
@@ -305,7 +352,7 @@ fun ToolkitTilesScreen(
     }
 
     selectedTile?.let { selected ->
-        val tile = state.categories.asSequence().flatMap { it.tiles }
+        val tile = categories.asSequence().flatMap { it.tiles }
             .firstOrNull { it.id == selected.id } ?: selected
         ToolkitToolBottomSheet(
             tile = tile,
@@ -317,5 +364,58 @@ fun ToolkitTilesScreen(
 
     if (quickToolDialog == ToolkitQuickTool.MaterialColors) {
         MaterialColorsToolDialog(onClose = { quickToolDialog = null })
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ToolkitTilesScreenContentPreview() {
+    MaterialTheme {
+        Surface {
+            ToolkitTilesScreenContent(
+                state = ToolkitTilesUiState(
+                    categories = Loadable.Ready(
+                        persistentListOf(
+                            ToolkitTileCategory(
+                                id = "sensors",
+                                titleResId = android.R.string.unknownName,
+                                icon = ToolkitTileIcon.Compass,
+                                tiles = persistentListOf(
+                                    ToolkitTile(
+                                        id = "level",
+                                        titleResId = android.R.string.unknownName,
+                                        summaryResId = android.R.string.unknownName,
+                                        icon = ToolkitTileIcon.Level,
+                                        status = ToolkitTileStatus.Available,
+                                    ),
+                                    ToolkitTile(
+                                        id = "compass",
+                                        titleResId = android.R.string.unknownName,
+                                        summaryResId = android.R.string.unknownName,
+                                        icon = ToolkitTileIcon.Compass,
+                                        status = ToolkitTileStatus.NotAdded,
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                    expandedCategoryIds = persistentSetOf("sensors"),
+                ),
+                contentPadding = PaddingValues(),
+                onEvent = {},
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ToolkitTilesScreenContentLoadingPreview() {
+    MaterialTheme {
+        ToolkitTilesScreenContent(
+            state = ToolkitTilesUiState(categories = Loadable.Loading),
+            contentPadding = PaddingValues(),
+            onEvent = {},
+        )
     }
 }

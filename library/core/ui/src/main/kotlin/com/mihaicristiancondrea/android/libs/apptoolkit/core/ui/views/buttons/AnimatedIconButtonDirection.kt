@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -25,6 +26,7 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,31 +35,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 
 /**
- * An animated button that slides in and out horizontally with a fade effect.
+ * Icon action button with slide, fade, and scale visibility transitions. Icon replacements
+ * crossfade in place without replaying the entrance. Click feedback, playback, and analytics
+ * follow [GeneralButton].
  *
- * This composable provides an animated button that appears and disappears with a slide and fade animation.
- * The animation direction (from the left or right) and duration can be customized.
- *
- * @param modifier Modifier to be applied to the button.
- * @param visible Controls the visibility of the button. If true, the button will be visible, otherwise it will be hidden.
- * @param icon The icon to display within the button. An animated icon plays on every click.
- * @param contentDescription The content description for the icon, used for accessibility.
- * @param onClick The callback that will be invoked when the button is clicked.
- * @param durationMillis The duration of the animation in milliseconds. Defaults to 500ms.
- * @param autoAnimate If true, the button will automatically animate in when `visible` is true.
- *                    If false, the animation will not be triggered automatically and will only occur when the visibility state changes. Defaults to true.
- * @param feedback The feedback configuration for sound and haptics.
- * @param fromRight If true, the button will slide in from the right and slide out to the right.
- *                  If false, the button will slide in from the left and slide out to the left. Defaults to false.
- * @param iconSize The icon size rendered inside the underlying icon-only button.
- * @param firebaseController Optional Firebase controller used to log GA4 events.
- * @param ga4Event Optional GA4 event data to log on click.
+ * @param autoAnimate Reveals a hidden button when [visible] becomes `true`. Disabling this
+ * leaves a hidden button hidden.
+ * @param fromRight Selects the physical right edge; `false` selects the left edge.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -73,7 +62,6 @@ fun AnimatedIconButtonDirection(
     feedback: ButtonFeedback = ButtonFeedback(),
     fromRight: Boolean = false,
     iconSize: Dp = SizeConstants.TwentyFourSize,
-    firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
 ) {
     val animatedVisibility: MutableState<Boolean> =
@@ -108,17 +96,25 @@ fun AnimatedIconButtonDirection(
                     animationSpec = tween(durationMillis = durationMillis)
                 )
     ) {
-        GeneralButton(
-            modifier = modifier,
-            onClick = onClick,
-            enabled = enabled,
-            contentDescription = contentDescription,
-            icon = icon,
-            iconSize = iconSize,
-            feedback = feedback,
-            firebaseController = firebaseController,
-            ga4Event = ga4Event,
-            style = GeneralButtonStyle.Text,
-        )
+        AnimatedContent(
+            targetState = icon to contentDescription,
+            transitionSpec = {
+                (fadeIn(tween(220, delayMillis = 90)) + scaleIn(tween(220, delayMillis = 90), initialScale = 0.92f))
+                    .togetherWith(fadeOut(tween(90)))
+            },
+            label = "AnimatedIconButtonDirectionIcon",
+        ) { (targetIcon, targetDescription) ->
+            GeneralButton(
+                modifier = modifier,
+                onClick = onClick,
+                enabled = enabled,
+                contentDescription = targetDescription,
+                icon = targetIcon,
+                iconSize = iconSize,
+                feedback = feedback,
+                ga4Event = ga4Event,
+                style = GeneralButtonStyle.Text,
+            )
+        }
     }
 }

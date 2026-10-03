@@ -17,26 +17,40 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states
 
+import androidx.compose.runtime.Immutable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackedStatus
+
 /**
- * Where a report is in its one-way trip from draft to filed.
- *
- * This is stated rather than inferred. The sheet used to read submission off a non-null issue URL,
- * which made "submitted" a side effect of a field the form also displayed, and left the reporter
- * showing an editable form, a live send button and a confirmation of a report already filed at the
- * same time. Naming the three states is what lets the sheet show exactly one of them.
+ * Mutually exclusive editor, pending-submission, and confirmation states. A failed submission
+ * returns to the editor with the draft intact. The labels are the ones the reporter has always
+ * reported in `screen_state`.
  */
-sealed interface IssueSubmissionState {
+@Immutable
+sealed interface IssueSubmissionState : TrackedStatus {
 
-    /** The author is composing the report. */
-    data object Editing : IssueSubmissionState
+    /** The author is writing the report. */
+    data object Editing : IssueSubmissionState {
+        override val trackingLabel: String get() = "success"
+    }
 
-    /** The report is with GitHub and the answer has not come back. */
-    data object Sending : IssueSubmissionState
+    /**
+     * A submission is in flight; a second send must wait for its result.
+     */
+    data object Sending : IssueSubmissionState {
+        override val trackingLabel: String get() = "loading"
+    }
+
+    /** The last send failed. The editor stays open with the draft, so the author can send again. */
+    data object Failed : IssueSubmissionState {
+        override val trackingLabel: String get() = "error"
+    }
 
     /**
      * The report was filed.
      *
      * @property issueUrl The created issue, which the confirmation offers to open.
      */
-    data class Submitted(val issueUrl: String) : IssueSubmissionState
+    data class Submitted(val issueUrl: String) : IssueSubmissionState {
+        override val trackingLabel: String get() = "success"
+    }
 }

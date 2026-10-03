@@ -19,4 +19,8 @@
     <string name="settings">Impostazioni</string>
     <string name="share">Condividi</string>
     <string name="updates">Aggiornamenti</string>
+    <string name="shell_navigate_back">Torna indietro</string>
+    <string name="shell_pane_separator">Ridimensiona i riquadri</string>
+    <string name="shell_support_us">Supportaci</string>
+    <string name="shell_support_short">Supporta</string>
 </resources>

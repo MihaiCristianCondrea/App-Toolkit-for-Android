@@ -20,8 +20,10 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.p
 import android.content.Context
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.models.OnboardingPage
 
+/**
+ * The host's onboarding pages. Finishing onboarding enters the shell; the host has nothing to do.
+ */
 interface OnboardingProvider {
     fun getOnboardingPages(context: Context): List<OnboardingPage>
-    fun onOnboardingFinished(context: Context)
 }
 

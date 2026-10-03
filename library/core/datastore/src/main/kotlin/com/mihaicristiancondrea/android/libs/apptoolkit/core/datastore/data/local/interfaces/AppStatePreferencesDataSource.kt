@@ -28,18 +28,13 @@ interface AppStatePreferencesDataSource {
     /** Emits the last-used timestamp, or 0 when the app has never recorded one. */
     val lastUsed: Flow<Long>
 
-    /** Emits whether the user has ever opened a settings screen. */
     val settingsInteracted: Flow<Boolean>
 
-    /** Emits whether the components showcase has been unlocked. */
     val componentsShowcaseUnlocked: Flow<Boolean>
 
-    /** Persists the last-used timestamp. */
     suspend fun saveLastUsed(timestamp: Long)
 
-    /** Records that the user has opened a settings screen. */
     suspend fun markSettingsInteracted()
 
-    /** Persists whether the components showcase is unlocked. */
     suspend fun saveComponentsShowcaseUnlocked(isUnlocked: Boolean)
 }

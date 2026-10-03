@@ -17,13 +17,14 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.di
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.AppNavigationItemsProvider
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.navigation.NavigationItemsProvider
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.navigation.AppsListRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ToolkitTilesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
 import org.koin.android.ext.koin.androidContext
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.usecases.RequestInAppReviewUseCase
 import org.koin.core.module.Module
+import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R as AppsR
@@ -32,14 +33,17 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R as Tiles
 /**
  * Main application module for `:sample:app`.
  *
- * Holds the wiring that needs to see more than one feature: the drawer, the startup-screen choices
- * and the toolkit extension points this app implements. Features stay unaware of each other.
+ * Holds the wiring that needs to see more than one feature: the main screen's view model, the
+ * startup-screen choices and the toolkit extension points this app implements. Features stay
+ * unaware of each other; the drawer and tabs are declared in `appGraph`.
  */
 val appModule: Module = module {
-    single<NavigationItemsProvider> {
-        AppNavigationItemsProvider(
-            componentsShowcaseRepository = get(),
-            firebaseController = get(),
+    viewModel {
+        MainViewModel(
+            consentRepository = get(),
+            requestInAppReviewUseCase = get<RequestInAppReviewUseCase>(),
+            inAppUpdateRepository = get(),
+            telemetryRepository = get(),
         )
     }
 

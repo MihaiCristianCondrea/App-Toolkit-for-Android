@@ -17,9 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.presentation
 
-import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 /** Covers the latch that keeps the reporter's two entry points from stacking sheets. */
 class IssueReporterPresenceTest {
@@ -33,24 +34,24 @@ class IssueReporterPresenceTest {
 
     @Test
     fun `nothing is showing to begin with`() {
-        assertThat(IssueReporterPresence.isShowing).isFalse()
+        assertFalse(IssueReporterPresence.isShowing)
     }
 
     @Test
     fun `a composed sheet is reported as showing until it leaves`() {
         IssueReporterPresence.onShown()
-        assertThat(IssueReporterPresence.isShowing).isTrue()
+        assertTrue(IssueReporterPresence.isShowing)
 
         IssueReporterPresence.onHidden()
-        assertThat(IssueReporterPresence.isShowing).isFalse()
+        assertFalse(IssueReporterPresence.isShowing)
     }
 
+    /** A stray release would otherwise let the next sheet open twice over. */
     @Test
     fun `an unmatched hide cannot drive the count below nothing`() {
-        // A stray release would otherwise let the next sheet open twice over.
         IssueReporterPresence.onHidden()
         IssueReporterPresence.onShown()
 
-        assertThat(IssueReporterPresence.isShowing).isTrue()
+        assertTrue(IssueReporterPresence.isShowing)
     }
 }

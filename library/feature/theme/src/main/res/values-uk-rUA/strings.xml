@@ -15,22 +15,16 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="amoled_mode">Режим AMOLED</string>
-    <string name="color_palette">Палітра кольорів</string>
-    <string name="dark_mode">Темна тема</string>
-    <string name="follow_system">Дотримуватися системного режиму</string>
-    <string name="light_mode">Світла тема</string>
-    <string name="onboarding_theme_dark_desc">Приємний для очей.</string>
-    <string name="onboarding_theme_light_desc">Яскравий та енергійний.</string>
-    <string name="onboarding_theme_system_desc">Відповідає налаштуванням вашого пристрою.</string>
-    <string name="other_colors">Інші кольори</string>
-    <string name="screen_and_display_settings">Налаштування екрана та відображення.</string>
-    <string name="summary_dark_theme">Темна тема використовує глибокий фон, щоб значно продовжити час роботи акумулятора. Щоб активувати його, просто перейдіть до системного менеджера Android та виберіть бажану тему в</string>
-    <string name="theme_mode">Режим теми</string>
-    <string name="wallpaper_colors">Кольори шпалер</string>
     <string name="holiday_greeting_christmas_title">Зі святами!</string>
     <string name="holiday_greeting_christmas_message">Різдвяна тема вже тут, і по всьому застосунку падає сніг. Використовувати її до кінця свят?</string>
     <string name="holiday_greeting_halloween_title">З Гелловіном!</string>
     <string name="holiday_greeting_halloween_message">Настав моторошний сезон. Використовувати тему Гелловіну, поки він триває?</string>
     <string name="holiday_greeting_use_theme">Використовувати святкову тему під час свят</string>
+    <string name="dark_theme">Темна тема</string>
+    <string name="weather_effect">Погодний ефект</string>
+    <string name="weather_effect_automatic">Автоматично</string>
+    <string name="weather_effect_snow">Сніг</string>
+    <string name="weather_effect_off">Вимк.</string>
+    <string name="weather_effect_rain">Дощ</string>
+    <string name="weather_effect_info">В автоматичному режимі сніг падає, поки використовується різдвяна палітра. Сніг і дощ падають з будь-якою палітрою.</string>
 </resources>

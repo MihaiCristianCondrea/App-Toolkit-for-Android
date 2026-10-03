@@ -25,7 +25,6 @@ import kotlinx.coroutines.flow.Flow
  */
 interface FavoritesPreferencesDataSource {
 
-    /** Emits the favorited package names. */
     val favoriteApps: Flow<Set<String>>
 
     /** Adds the package name when absent, removes it when present. */

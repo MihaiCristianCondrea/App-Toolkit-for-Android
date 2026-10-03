@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="shell_dev_live_state">Kasalukuyang estado</string>
+    <string name="shell_dev_window">Window</string>
+    <string name="shell_dev_window_summary">%1$d × %2$d dp · %3$s</string>
+    <string name="shell_dev_page_stack">Stack ng mga page</string>
+    <string name="shell_dev_tab_stack">Stack ng %1$s</string>
+    <string name="shell_dev_navigation">Navigation</string>
+    <string name="shell_dev_start">Magsimula sa, mula sa susunod na pagbukas</string>
+    <string name="shell_dev_layout">Layout ng navigation</string>
+    <string name="shell_dev_accessories">Mga accessory sa ibaba</string>
+    <string name="shell_dev_bottom_accessory">Sa itaas ng navigation bar</string>
+    <string name="shell_dev_motion">Galaw</string>
+    <string name="shell_dev_animation_speed">Bilis ng animation</string>
+    <string name="shell_dev_reset">I-reset ang mga opsyon ng developer</string>
+    <string name="shell_dev_reset_summary">Ibalik sa itinakda ng app</string>
+    <string name="shell_layout_auto">Awtomatiko, batay sa lapad ng window</string>
+    <string name="shell_layout_bottom_bar">Ibabang bar at drawer</string>
+    <string name="shell_layout_rail">Navigation rail</string>
+    <string name="shell_layout_expanded_rail">Pinalawak na navigation rail</string>
+    <string name="shell_layout_permanent_drawer">Permanenteng drawer</string>
+    <string name="shell_accessory_as_declared">Banner, pinapalitan ng player habang nagpe-play</string>
+    <string name="shell_accessory_none">Wala</string>
+    <string name="shell_accessory_banner">Banner lang</string>
+    <string name="shell_accessory_player">Player lang</string>
+    <string name="shell_start_as_declared">Ayon sa itinakda ng app: %1$s</string>
+    <string name="shell_start_screen">%1$s, bago ang pangunahing view</string>
+    <string name="shell_speed_normal">Normal</string>
+    <string name="shell_speed_slow">2× mas mabagal</string>
+    <string name="shell_speed_very_slow">5× mas mabagal</string>
+    <string name="shell_developer_options">Mga opsyon ng developer</string>
+    <string name="shell_top_bar">Itaas na app bar</string>
+    <string name="shell_navigation_bar">Ibabang navigation bar</string>
+    <string name="shell_navigation_tint">Kulay ng rail at app bar</string>
+    <string name="shell_hide_bottom_bar">Itago ang ibabang bar habang nag-i-scroll</string>
+    <string name="shell_hide_bottom_bar_summary">Umaalis kapag nag-scroll pababa ang content, habang walang player na ipinapakita</string>
+    <string name="shell_hide_top_bar">Itago ang app bar habang nag-i-scroll</string>
+    <string name="shell_hide_top_bar_summary">Umaalis kapag nag-scroll pababa ang content, ang malaking bar pagkatapos nitong lumiit, at bumabalik agad kapag nag-scroll pataas</string>
+    <string name="shell_limit_width">Limitahan ang lapad ng content sa malalaking window</string>
+    <string name="shell_limit_width_summary">Igitna ang content na may margin, parang website, lampas sa maximum na lapad ng layout policy</string>
+    <string name="shell_tab_transition">Sa pagitan ng mga tab</string>
+    <string name="shell_back_edge">Pag-swipe pabalik mula sa kanang gilid</string>
+    <string name="shell_as_declared">Ayon sa itinakda ng bawat screen</string>
+    <string name="shell_top_bar_small">Maliit</string>
+    <string name="shell_top_bar_center">Nakagitna</string>
+    <string name="shell_top_bar_large">Malaki, nagsasara</string>
+    <string name="shell_top_bar_large_collapsed">Malaki, bumubukas nang nakasara</string>
+    <string name="shell_top_bar_hidden">Nakatago</string>
+    <string name="shell_navigation_bar_standard">Standard, 80 dp</string>
+    <string name="shell_navigation_bar_short">Maikli, 64 dp</string>
+    <string name="shell_navigation_tint_none">Surface; kinukulayan ang app bar kapag nag-scroll</string>
+    <string name="shell_navigation_tint_always">Magkasamang may kulay, content sa loob ng card</string>
+    <string name="shell_navigation_tint_on_scroll">Magkasamang may kulay kapag nag-scroll ang content</string>
+    <string name="shell_back_edge_system">Parang Android: lumiliit ang page sa lugar nito</string>
+    <string name="shell_back_edge_follow">Sumusunod sa daliri, gaya ng sa kaliwang gilid (default)</string>
+    <string name="shell_transition_directional">Direksyonal na pag-slide</string>
+    <string name="shell_transition_fade_through">Fade through</string>
+    <string name="shell_transition_fade">Cross-fade</string>
+    <string name="shell_transition_none">Wala</string>
+    <string name="shell_dev_layout_and_bars">Layout at mga bar</string>
+</resources>

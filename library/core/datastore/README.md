@@ -13,6 +13,8 @@ used by onboarding, consent, ads, diagnostics, review, and theming.
 - `CommonDataStore`, which owns one instance of each source, exposes them, and keeps the flat
   pre-split API delegating to them.
 - Persisted theme, review, display-ads, reduce-ads, and consent-related values.
+- Translating storage failures into `StorageException` (from `:library:core:common`):
+  `storageCall { }` and `Throwable.toStorageException()`, for DataStore and SQLite exceptions.
 - The Koin DataStore module at `core.datastore.di`, which is the single place `CommonDataStore` is registered;
   `appToolkitFoundationModules` includes it rather than defining its own copy.
 
@@ -95,7 +97,9 @@ change stored keys, defaults, or the shared preferences file.
   `ReviewPreferencesDataSource`, …), all of which `dataStoreModule` registers. `CommonDataStore`
   remains for callers written against the earlier single-class API.
 - `SeasonalThemeRepository` and `DefaultSeasonalThemeRepository`, registered by `dataStoreModule`,
-  for the seasonal themes state, the holiday greeting, and the easter egg unlock.
+  for the seasonal themes state, the holiday greeting, the easter egg unlock, and the weather
+  effect it unlocks (`setWeatherEffect`, a `WeatherEffect` stored by name under
+  `seasonal_weather_effect`; an unknown name reads as `WeatherEffect.Automatic`).
 - `themePreferencesState()` combines stored theme values into the application-facing
   `ThemePreferencesState`; Compose collection of that flow belongs to `:library:core:designsystem`.
   Its first emission is the stored state, never placeholder defaults, so a screen can act on the

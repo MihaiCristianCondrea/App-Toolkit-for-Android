@@ -26,9 +26,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.update.domai
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.isActive
 
 /**
  * Data-layer implementation for Play Core in-app updates.
+ *
+ * Play Core listeners cannot be removed, so a result that arrives once the request was cancelled
+ * is ignored: starting the update flow then would use an activity that has gone.
  */
 class DefaultInAppUpdateRepository : InAppUpdateRepository {
     override fun requestUpdate(host: InAppUpdateHost): Flow<InAppUpdateResult> = callbackFlow {
@@ -36,6 +40,7 @@ class DefaultInAppUpdateRepository : InAppUpdateRepository {
 
         appUpdateManager.appUpdateInfo
             .addOnSuccessListener { appUpdateInfo ->
+                if (!isActive) return@addOnSuccessListener
                 val updateAvailability = appUpdateInfo.updateAvailability()
                 val isImmediateAllowed =
                     appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
@@ -70,6 +75,7 @@ class DefaultInAppUpdateRepository : InAppUpdateRepository {
                 close()
             }
             .addOnFailureListener {
+                if (!isActive) return@addOnFailureListener
                 trySend(InAppUpdateResult.Failed)
                 close()
             }

@@ -8,11 +8,18 @@ libraries with the host's own feature modules.
 ## Owns
 
 - The `AppToolkit` application class, the manifest, `MainActivity`, and the Koin bootstrap.
+- `MainViewModel`, which runs the consent, in-app review and in-app update requests `MainActivity`
+  sends from `onResume`.
 - `sampleAppModules`, the single source of truth used by runtime startup and DI graph tests.
 - App-only bridges that intentionally connect otherwise independent features, such as the About
   version-tap callback to the Components unlock repository.
-- `appNavigationEntryBuilders`, the one declaration that names every host feature.
-- The sample onboarding provider; startup and settings provider adapters live in
+- `appGraph`, the one declaration that names every host feature: the Tiles and Apps tabs, the
+  components page, the drawer, the overflow menu and the settings shortcut's deep link, on top of
+  the Toolkit's pages from `toolkitGraph { }`. `startKeyFor` maps the stored start page to its tab.
+- The drawer header's `app_logo`.
+- The sample onboarding provider, owned by
+  [`:sample:feature:onboarding`](../feature/onboarding/README.md), and the whole App Toolkit setup
+  (the toolkit module ordering, the startup and settings providers, the palette), owned by
   [`:sample:core:apptoolkit`](../core/apptoolkit/README.md).
 - Application identity resources: launcher mipmaps and host-specific `xml/` configuration
   (shortcuts and widget provider info), including the shortcut target package generated from the
@@ -29,20 +36,22 @@ libraries with the host's own feature modules.
   `:sample:widget`.
 - Feature strings and layouts, owned by their respective `:sample:feature:*`, core, or widget
   module. Default themes, colors and backup policies come from
-  [`:library:apptoolkit`](../../library/apptoolkit/README.md); shared host artwork remains in
-  [`:sample:core:ui`](../core/ui/README.md).
+  [`:library:apptoolkit`](../../library/apptoolkit/README.md). Artwork lives with the module
+  that draws it; this module keeps only its own: the launcher foreground, the TV banner and the
+  Apps tab's selected icon.
 - Advertising configuration, including the sample's AdMob application ID and merged-manifest
   declaration, owned by [`:sample:integration:ads`](../integration/ads/README.md).
-- Route keys and the entry-builder context, owned by
-  [`:sample:core:navigation`](../core/navigation/README.md).
+- Route keys, owned by the feature each belongs to (`ToolkitTilesRoute`, `AppsListRoute`,
+  `ComponentsRoute`).
+- The chrome and navigation, owned by [`:library:shell`](../../library/shell/README.md) and
+  [`:library:navigation`](../../library/navigation/README.md).
 
 ## Depends on
 
 - Every `:sample:core:*`, `:sample:feature:*` and `:sample:widget` module, including
-  `:sample:core:apptoolkit` for the host's toolkit adapter.
-- [`:library:apptoolkit`](../../library/apptoolkit/README.md) for shared DI and navigation
-  composition,
-  plus the toolkit feature and integration modules it configures.
+  `:sample:core:apptoolkit` for the toolkit's module graph.
+- [`:library:apptoolkit`](../../library/apptoolkit/README.md) for shared DI, `toolkitGraph { }` and
+  `ShellHost`, plus the toolkit feature and integration modules it configures.
 
 ## Used by
 
@@ -60,33 +69,55 @@ flowchart TD
     App --> Lifecycle[Process/activity lifecycle]
     Lifecycle --> Ads[Ads initialization and app-open display]
     Lifecycle --> Billing[Past-purchase processing]
-    Launcher[MainActivity] --> FirstRun{Onboarding complete?}
-    FirstRun -->|no| Startup[Toolkit StartupActivity]
-    FirstRun -->|yes| Route[Persisted StableNavKey]
-    Route --> Theme[AppTheme]
-    Theme --> Shell["MainScreen (:sample:core:shell)"]
-    Launcher --> Builders[appNavigationEntryBuilders]
-    Builders --> HostEntries[":sample:feature:* entries"]
-    Builders --> ToolkitEntries[Toolkit entries]
-    Shell --> HostEntries
-    Shell --> ToolkitEntries
+    Launcher[MainActivity] --> Theme[AppTheme]
+    Theme --> Host[ShellHost]
+    Launcher --> Graph[appGraph]
+    Graph --> HostPages[":sample:feature:* tabs and pages"]
+    Graph --> ToolkitPages["toolkitGraph { }: Toolkit pages"]
+    Host --> Graph
+    Host --> Start{resolveStart: onboarding done?}
+    Start -->|no| FirstRun[StartupRoute, then OnboardingRoute]
+    Start -->|yes| Stored[Stored start page]
+    FirstRun --> Ready[onReady: splash screen leaves]
+    Stored --> Ready
+    Host --> Snackbars[MainViewModel snackbars above the bottom chrome]
 ```
 
 ## Architectural decisions
 
 - The application module is the only place that knows the complete runtime graph, final manifest,
   and destination set; feature modules remain unaware of their siblings.
-- Host-to-toolkit provider adaptation is isolated in `:sample:core:apptoolkit`, while this module
+- Host-to-toolkit module ordering is isolated in `:sample:core:apptoolkit`, while this module
   retains final Koin startup and app-only configuration.
-- `MainActivity` resolves first-run state and the persisted startup key before composing the shell,
-  preventing a default destination from flashing before the real route is known.
+- `ShellHost` decides the start in `resolveStart` before its first frame: the Toolkit's first-launch
+  start screens while onboarding is not done, the stored start page after. The splash screen stays
+  up until `onReady`, so a default tab never flashes before the chosen one, and first launch no
+  longer leaves for a second activity.
+- Android's permission manager and privacy dashboard open the privacy page through the Toolkit's
+  built-in `PermissionUsageActivity`, so this manifest declares nothing for them.
+- The graph keeps the bottom-bar native ad and its configuration, with `enabled = false` to avoid
+  a persistent ad beside navigation. Ads within feature content and the default empty/error screens
+  remain available.
+- `MainViewModel`'s messages (a consent form that fails to load) go to the snackbar host handed to
+  `ShellHost(snackbarHostState)`: the tabs' scaffold shows them above the bottom chrome, and the
+  shell at the bottom of the window while a start screen or a page covers the tabs.
+- The launcher shortcut's `OPEN_SETTINGS` action is a deep link in `appGraph`, so the shell opens
+  the settings page for it at launch and while running, with no activity of its own.
+- Both tabs declare a `TabSearch`, so the app bar holds a search field that filters the quick
+  tools and the apps. The Apps tab's random-app button is declared by the list itself with
+  `ScaffoldFabs`, so the graph holds no button of its own.
+- The drawer's Components entry depends on the showcase being unlocked, so the graph is rebuilt
+  when that changes; the back stacks are kept, since they are saved by position, not by graph. The
+  drawer ends with `toolkitFooter`, so Settings, Help, Updates and Share stay last; the developer
+  options are reached from Advanced settings, not the drawer.
 - Process-lifetime ads, billing recovery, installing the seasonal overlay, and current-activity tracking
   stay in the application class because their lifetime exceeds any screen ViewModel.
 
 ## Public contracts
 
 Not a library. Its integration surface is the host configuration and app-specific modules passed
-through the adapter in `:sample:core:apptoolkit`, plus the final manifest/resource overrides.
+through `appToolkitHostModules` in `:sample:core:apptoolkit`, plus the final manifest/resource
+overrides.
 
 The host inherits common application attributes, backup/data-extraction rules, colors and themes
 from `:library:apptoolkit`. Android's manifest and resource merger gives this application higher
@@ -100,16 +131,13 @@ the application-level locale link.
 
 ## Internal implementations
 
-- Koin module wiring, host provider bindings, and the navigation entry aggregation.
+- Koin module wiring, host provider bindings, and the graph.
 
 ## Current risks
 
-`appNavigationEntryBuilders` is the single place that knows the full feature set, so every new
-destination touches this module. That is deliberate, it is what keeps the feature modules from
-depending on each other, but it does make this file a merge point.
-
-The application still names the complete feature and destination set. This is an intentional merge
-point, but conflicts are possible when several features are added at once.
+`appGraph` is the single place that knows the full feature set, so every new destination touches
+this module. That is deliberate, it is what keeps the feature modules from depending on each other,
+but it does make this file a merge point.
 
 ## Architecture guards
 
@@ -127,11 +155,12 @@ startup without also becoming part of graph verification.
 The host was a single `:sample` module until the split. Three couplings had to be broken to make the
 feature modules leaves rather than a chain:
 
-- `MainScreen` imported `appNavigationEntryBuilders`, which would have made the shell depend on
-  every
-  feature it renders. It now takes the builders as a parameter, supplied here by `MainActivity`.
+- The old `MainScreen` imported the app's entry builders, which would have made the shell depend on
+  every feature it renders. In 3.0.0 the shell became `:library:shell` and the graph moved here as
+  `appGraph`; `:sample:core:shell` and `:sample:core:navigation` were removed.
 - `APPS_LIST_AD_FREQUENCY` was a `buildConfigField` here, which no library module can read. It is a
-  fixed tuning value, so it became a constant in [`:sample:core:common`](../core/common/README.md).
+  fixed tuning value, so it became `AdsConstants.APPS_LIST_AD_FREQUENCY` in
+  [`:sample:integration:ads`](../integration/ads/README.md).
 
 Quick-tool repositories in `:sample:feature:tiles` intentionally stay concrete classes: each wraps
 one

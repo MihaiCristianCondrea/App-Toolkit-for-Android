@@ -24,7 +24,6 @@
     <string name="consent_ad_user_data_title">Trimitere date pentru anunțuri</string>
     <string name="consent_analytics_storage_description">Permiteți stocarea datelor, cum ar fi utilizarea aplicației și durata vizitei, pentru a îmbunătăți analiza și performanța aplicației.</string>
     <string name="consent_analytics_storage_title">Stocare date de analiză</string>
-    <string name="learn_more">Află mai multe</string>
     <string name="summary_usage_and_diagnostics">Ajută la îmbunătățirea experienței trimițând automat date de diagnosticare, utilizare a dispozitivului și a aplicației.</string>
     <string name="usage_and_diagnostics">Utilizare și diagnoză</string>
     <string name="consent_ad_personalization_description_short">Activează publicitatea personalizată.</string>
@@ -48,4 +47,13 @@
     <string name="privacy_choices_title">Opțiuni de confidențialitate</string>
     <string name="summary_advanced_privacy_settings">Alege ce partajezi pentru analize și publicitate.</string>
     <string name="learn_more_about_provider">Află mai multe despre acest furnizor</string>
+    <string name="onboarding_crashlytics_title">Ajută-ne să îmbunătățim</string>
+    <string name="onboarding_crashlytics_description">Permite aplicației să trimită date anonime de utilizare și rapoarte de erori. Acest lucru ne ajută să remediem erorile și să-ți îmbunătățim experiența. Nu sunt colectate niciodată informații personale.</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">Afișați informații detaliate despre utilizare și diagnosticare</string>
+    <string name="onboarding_crashlytics_show_details_button">Afișați informații detaliate</string>
+    <string name="error">Eroare</string>
+    <string name="onboarding_crashlytics_privacy_info">Confidențialitatea ta este importantă. Utilizăm aceste date doar pentru a remedia erorile și a îmbunătăți funcționalitățile. Pentru mai multe detalii, te rugăm să consulți politica noastră de confidențialitate.</string>
+    <string name="learn_more_privacy_policy">Revizuiește Politica noastră de confidențialitate</string>
+    <string name="onboarding_crashlytics_enabled_desc">Raportarea datelor este activă.</string>
+    <string name="onboarding_crashlytics_disabled_desc">Raportarea datelor este inactivă.</string>
 </resources>

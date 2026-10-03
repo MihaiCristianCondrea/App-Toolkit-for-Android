@@ -56,4 +56,5 @@
     <string name="theme_mode">Mod temă</string>
     <string name="try_again">Încearcă din nou</string>
     <string name="wallpaper_colors">Culorile fundalului</string>
+    <string name="shell_list_placeholder">Alegeți un element pentru a-l vedea aici.</string>
 </resources>

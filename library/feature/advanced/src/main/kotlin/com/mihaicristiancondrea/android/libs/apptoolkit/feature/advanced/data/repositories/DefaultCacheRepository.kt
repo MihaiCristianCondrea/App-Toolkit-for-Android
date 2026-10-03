@@ -18,74 +18,56 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.data.repositories
 
 import android.content.Context
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
+import kotlinx.coroutines.withContext
 import java.io.File
 
 /**
- * Implementation of the [CacheRepository] interface.
- * This class handles the logic for clearing the application's cache directories.
+ * Clears application cache directories on the IO dispatcher, since the recursive delete blocks.
+ * An incomplete deletion is logged here because callers cannot identify the failed directories.
  *
- * @property context The application context used to access cache directories.
+ * @param deleteRecursively Returns `true` when the entire directory was deleted, or `false` for
+ * an incomplete deletion.
  */
 class DefaultCacheRepository(
     private val context: Context,
-    private val firebaseController: FirebaseController,
-    /**
-     * Seam for the delete itself. Without it the failure branch is unreachable from a test: an
-     * empty temp directory always deletes cleanly, so the error path shipped uncovered.
-     */
+    private val telemetryRepository: TelemetryRepository,
     private val deleteRecursively: (File) -> Boolean = File::deleteRecursively,
+    private val dispatchers: DispatcherProvider = StandardDispatchers(),
 ) : CacheRepository {
 
-    override fun clearCache(): Flow<DataState<Unit, Errors.Database>> = flow {
-        firebaseController.logBreadcrumb(
+    override suspend fun clearCache() {
+        telemetryRepository.logBreadcrumb(
             message = "Cache clear requested",
             attributes = mapOf("source" to "DefaultCacheRepository"),
         )
-        // Resolving and deleting cache directories can both throw, SecurityException from a
-        // restricted profile, IO failures mid-delete. Those have to surface as DataState.Error, or
-        // the exception escapes the flow and the caller reports nothing at all.
-        val state: DataState<Unit, Errors.Database> = runCatching {
-            val cacheDirs: List<File> = buildList {
-                add(context.cacheDir)
-                add(context.codeCacheDir)
-                context.externalCacheDir?.let(::add)
-            }.distinct()
+        val failed: List<File> = withContext(dispatchers.io) {
+            storageCall { deleteCacheDirectories() }
+        }
+        if (failed.isNotEmpty()) {
+            telemetryRepository.logBreadcrumb(
+                message = "Cache clear incomplete",
+                attributes = mapOf("failedDirectories" to failed.size.toString()),
+            )
+            throw StorageException(reason = StorageException.Reason.FAILED)
+        }
+    }
 
-            cacheDirs.filterNot(deleteRecursively)
-        }.fold(
-            onSuccess = { failed ->
-                if (failed.isEmpty()) {
-                    DataState.Success(Unit)
-                } else {
-                    // Named here rather than by the ViewModel: which directory refused to go is
-                    // something only this class can see, and the caller cannot re-derive it.
-                    firebaseController.logBreadcrumb(
-                        message = "Cache clear incomplete",
-                        attributes = mapOf("failedDirectories" to failed.size.toString()),
-                    )
-                    DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED)
-                }
-            },
-            onFailure = { throwable ->
-                if (throwable is CancellationException) throw throwable
-                firebaseController.recordNonFatal(throwable = throwable)
-                DataState.Error(
-                    error = if (throwable is SecurityException) {
-                        Errors.Database.DATABASE_CANT_OPEN
-                    } else {
-                        Errors.Database.DATABASE_OPERATION_FAILED
-                    },
-                )
-            },
-        )
-
-        emit(state)
+    /**
+     * Deletes each cache directory and returns the ones that were not fully deleted. A restricted
+     * profile can refuse access to a directory, which is reported as [StorageException.Reason.UNAVAILABLE].
+     */
+    private fun deleteCacheDirectories(): List<File> = try {
+        buildList {
+            add(context.cacheDir)
+            add(context.codeCacheDir)
+            context.externalCacheDir?.let(::add)
+        }.distinct().filterNot(deleteRecursively)
+    } catch (security: SecurityException) {
+        throw StorageException(reason = StorageException.Reason.UNAVAILABLE, cause = security)
     }
 }
-

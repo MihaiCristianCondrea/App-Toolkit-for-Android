@@ -9,17 +9,17 @@ The home-screen app-icons widget.
 - `AppIconsWidget` and `AppIconsWidgetReceiver`.
 - `RefreshWidgetAction`, which retries an unsuccessful catalogue load through Glance's action
   worker.
-- The widget's localized strings and fallback layouts.
+- The widget's localized strings, fallback layouts, provider XML, receiver manifest entry, and
+  preview image shown by the widget picker.
 
 ## Does not own
 
 - The app catalogue it renders, owned by [`:sample:feature:apps`](../feature/apps/README.md).
-- The widget's provider `xml/` and its manifest receiver entry, currently declared in `:sample:app`.
 
 ## Depends on
 
 - `:sample:feature:apps` for `DeveloperAppsRepository` and `AppInfo`.
-- [`:library:apptoolkit`](../../library/apptoolkit/README.md) for Glance and `DataState`.
+- [`:library:apptoolkit`](../../library/apptoolkit/README.md) for Glance.
 
 ## Used by
 
@@ -32,18 +32,17 @@ flowchart TD
     System[AppWidgetManager / Glance] --> Receiver[AppIconsWidgetReceiver]
     Receiver --> Widget[AppIconsWidget]
     Widget -->|Koin GlobalContext lookup| Repo[DeveloperAppsRepository]
-    Repo --> Remote[Apps metadata API]
-    Repo --> Cache[Persistent catalog snapshot]
-    Remote --> State{DataState}
-    Cache --> State
-    State -->|loading| Loading[Loading content]
-    State -->|success or stale data| Grid[Bounded app-icon grid]
-    State -->|empty| Empty[Empty content]
-    State -->|error without data| Error[Error and retry content]
+    Repo -->|savedDeveloperApps| Cache[Persistent catalog snapshot]
+    Repo -->|fetchDeveloperApps| Remote[Apps metadata API]
+    Cache -->|nothing saved| Loading[Loading content]
+    Cache -->|saved apps| Grid[Bounded app-icon grid]
+    Remote -->|apps| Grid
+    Remote -->|no apps| Empty[Empty content]
+    Remote -->|throws, saved apps shown| Grid
+    Remote -->|throws, nothing saved| Error[Error and retry content]
     Grid --> Launch[Glance activity / store action]
     Error --> Retry[RefreshWidgetAction]
     Retry --> Repo
-    Favorites[FavoritesChangedReceiver] --> Receiver
 ```
 
 ## Architectural decisions
@@ -54,8 +53,16 @@ flowchart TD
   the widget boundary and protected by host graph tests.
 - Loading, empty, stale-success, and error states render independently; retry is a Glance action so
   it can run outside an activity.
+- An update draws the catalogue the apps screen saved (`DeveloperAppsRepository.savedDeveloperApps`)
+  straight away and replaces it once the network answers, so the widget does not wait on the
+  network. It shows its loading content only when nothing has been saved yet. When
+  `fetchDeveloperApps` throws, the saved catalogue stays; the error content shows only when there
+  is none. An unreadable snapshot counts as nothing saved.
 - Icon work is bounded to the visible widget capacity to avoid unbounded network/bitmap work during
   an update.
+- Icons that are not installed load in parallel through the app's Coil image loader, the one the
+  apps screen uses, so an icon the app has already shown comes from its disk cache. They are decoded
+  as software bitmaps at the widget's size, as `RemoteViews` requires.
 
 ## Public contracts
 

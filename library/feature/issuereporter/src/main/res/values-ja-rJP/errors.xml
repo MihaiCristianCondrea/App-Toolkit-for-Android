@@ -15,9 +15,20 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="error_description_missing">問題の内容を入力してください</string>
+    <string name="error_email_invalid">有効なメールアドレスを入力してください</string>
+    <string name="error_email_missing">メールアドレスを入力してください</string>
     <string name="error_forbidden">禁止: 権限が不足しています</string>
     <string name="error_gone">API エンドポイントが削除されました</string>
-    <string name="error_invalid_report">タイトルと説明を空にすることはできません</string>
+    <string name="error_link_only">リンクだけでなく、問題の内容を記入してください。</string>
+    <string name="error_repetitive">同じ内容の繰り返しが多すぎます。何が起きたかを記入してください。</string>
+    <string name="error_report_cooldown">別のレポートを送信する前に、数分お待ちください。</string>
+    <string name="error_report_duplicate">このレポートはすでに送信されています。</string>
+    <string name="error_same_as_title">タイトルより詳しい内容を記入してください。</string>
+    <string name="error_title_missing">タイトルを入力してください</string>
+    <string name="error_too_few_letters">記号や絵文字だけでなく、文章で入力してください。</string>
+    <string name="error_too_long">長すぎます。%1$d 文字以内で入力してください。</string>
+    <string name="error_too_short">短すぎます。%1$d 文字以上で入力してください。</string>
     <string name="error_unauthorized">未認証: 無効なトークン</string>
     <string name="error_unprocessable">課題作成のためのデータが無効です</string>
 </resources>
