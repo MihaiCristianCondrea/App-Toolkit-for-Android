@@ -26,6 +26,7 @@
 
 ### Improved
 
+- Opening an app from the Apps list no longer checks installed packages on the main thread.
 - Every quick tool reports its actions and any failure in them, so problems with the compass, level, breathing, SOS, Morse, flash dimmer, counter and reaction test can be traced.
 - The menu button turns into a back arrow when you open a screen, instead of popping in and out, and the navigation icons animate when you tap them.
 - The welcome and onboarding pages keep a comfortable width on tablets.

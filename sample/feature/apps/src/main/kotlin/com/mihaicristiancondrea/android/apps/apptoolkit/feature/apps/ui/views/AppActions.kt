@@ -31,6 +31,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extens
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.packagemanager.isAppInstalled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.AppInfoHelper
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.compose.koinInject
 
 @Composable
@@ -46,7 +47,10 @@ fun buildOnAppClick(
             coroutineScope.launch {
                 val context = currentContext
                 if (appInfo.packageName.isNotEmpty()) {
-                    if (context.isAppInstalled(appInfo.packageName)) {
+                    val isInstalled = withContext(dispatchers.io) {
+                        context.isAppInstalled(appInfo.packageName)
+                    }
+                    if (isInstalled) {
                         if (!appInfoHelper.openApp(context, appInfo.packageName)) {
                             context.openPlayStoreForApp(appInfo.packageName)
                         }

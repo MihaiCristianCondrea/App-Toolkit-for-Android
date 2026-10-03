@@ -119,6 +119,8 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 
 ### Improved
 
+- The version information dialog loads the host app icon without querying `PackageManager` during
+  composition.
 - `AnimatedIconButtonDirection` crossfades its glyph when `icon` changes, so one button can turn from a menu button into a back arrow without popping.
 - A navigation no longer recomposes every tab screen: the shell keeps its callbacks and the static `LocalShellChrome` controller across recompositions. The chrome and the player overlay no longer recompose on every frame the player moves.
 - A page beside the rail or permanent drawer keeps its tab-like app bar while another entry replaces it, instead of showing a back button for the length of its exit.

@@ -18,7 +18,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -77,8 +76,8 @@ fun VersionInfoAlertDialogContent(
     versionString: Int
 ) {
     val context: Context = LocalContext.current
-    val appIcon: Drawable = remember(context) {
-        context.packageManager.getApplicationIcon(context.packageName)
+    val appIcon: String = remember(context) {
+        "android.resource://${context.packageName}/${context.applicationInfo.icon}"
     }
 
     Row(modifier = Modifier.fillMaxWidth()) {
