@@ -2,7 +2,9 @@
 
 ---
 
-# Unreleased
+# October 03, 2026
+
+**Version:** `3.0.0-pre22`
 
 This release replaces the Toolkit's navigation with a one-activity shell. It removes the old navigation instead of deprecating it; the [3.0.0 migration guide](../docs/migration/3.0.0.md) maps every removed API to its replacement.
 
