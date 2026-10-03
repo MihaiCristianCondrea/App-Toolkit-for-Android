@@ -133,13 +133,4 @@
     <string name="tiles_qs_integration_summary_format">Використовуйте %1$s зі швидких налаштувань телефону, не відкриваючи App Toolkit.</string>
     <string name="tiles_add_to_qs">Додати до швидких налаштувань</string>
     <string name="tiles_search_hint">Пошук інструментів</string>
-    <string name="tools_settings_title">Налаштування інструментів</string>
-    <string name="tools_settings_counter">Лічильник</string>
-    <string name="tools_settings_reset_counter">Скинути лічильник</string>
-    <string name="tools_settings_reset_counter_summary">Обнуляє значення, спільне з плиткою лічильника</string>
-    <string name="tools_settings_list">Список інструментів</string>
-    <string name="tools_settings_expand_all">Розгорнути всі категорії</string>
-    <string name="tools_settings_expand_all_summary">Показує всі інструменти у списку</string>
-    <string name="tools_settings_collapse_all">Згорнути всі категорії</string>
-    <string name="tools_settings_collapse_all_summary">Показує лише назви категорій</string>
 </resources>

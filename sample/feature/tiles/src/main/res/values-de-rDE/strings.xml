@@ -133,13 +133,4 @@
     <string name="tiles_qs_integration_summary_format">Verwenden Sie %1$s über die Schnelleinstellungen Ihres Telefons, ohne App Toolkit zu öffnen.</string>
     <string name="tiles_add_to_qs">Zu Schnelleinstellungen hinzufügen</string>
     <string name="tiles_search_hint">Tools durchsuchen</string>
-    <string name="tools_settings_title">Werkzeugeinstellungen</string>
-    <string name="tools_settings_counter">Zähler</string>
-    <string name="tools_settings_reset_counter">Zähler zurücksetzen</string>
-    <string name="tools_settings_reset_counter_summary">Setzt den mit der Zähler-Kachel geteilten Wert auf null zurück</string>
-    <string name="tools_settings_list">Werkzeugliste</string>
-    <string name="tools_settings_expand_all">Alle Kategorien aufklappen</string>
-    <string name="tools_settings_expand_all_summary">Zeigt jedes Werkzeug in der Liste</string>
-    <string name="tools_settings_collapse_all">Alle Kategorien zuklappen</string>
-    <string name="tools_settings_collapse_all_summary">Zeigt nur die Kategorietitel</string>
 </resources>

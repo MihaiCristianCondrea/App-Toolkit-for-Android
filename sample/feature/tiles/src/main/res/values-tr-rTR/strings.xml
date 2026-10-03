@@ -133,13 +133,4 @@
     <string name="tiles_qs_integration_summary_format">App Toolkit\'i açmadan telefonunuzun Hızlı Ayarlarından %1$s kullanın.</string>
     <string name="tiles_add_to_qs">Hızlı Ayarlara ekle</string>
     <string name="tiles_search_hint">Araç ara</string>
-    <string name="tools_settings_title">Araç ayarları</string>
-    <string name="tools_settings_counter">Sayaç</string>
-    <string name="tools_settings_reset_counter">Sayacı sıfırla</string>
-    <string name="tools_settings_reset_counter_summary">Sayaç kutucuğuyla paylaşılan sayıyı sıfırlar</string>
-    <string name="tools_settings_list">Araç listesi</string>
-    <string name="tools_settings_expand_all">Tüm kategorileri genişlet</string>
-    <string name="tools_settings_expand_all_summary">Listedeki her aracı gösterir</string>
-    <string name="tools_settings_collapse_all">Tüm kategorileri daralt</string>
-    <string name="tools_settings_collapse_all_summary">Yalnızca kategori başlıklarını gösterir</string>
 </resources>

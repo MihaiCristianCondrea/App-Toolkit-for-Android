@@ -15,19 +15,13 @@ Quick tools: the in-app tool catalogue and the Quick Settings tile services behi
   coordination or runtime state.
 - UI catalogue models and mappers, the screen and dedicated tool ViewModels, tool composables,
   `ToolkitTilesRoute`, this feature's tab key, and the Quick Settings services.
-- The tools settings page, an app-owned settings page outside the Toolkit's features:
-  `ToolsSettingsRoute`, `ToolsSettingsScreen`, `ToolsSettingsViewModel` and `ToolsSettingsAction`,
-  the tab's app bar button that opens it, and `toolsSettingsSearch`, its rows in the Toolkit's
-  settings search. See [Tools settings](#tools-settings).
 - Localized Quick Tools strings and plurals, and the Quick Settings tile and coin icons.
 - Feature-owned manifest permissions for haptics and flashlight access. The feature
   declares no foreground service and no wake locks.
 
 ## Does not own
 
-- Its registration as a tab, and the tools settings page's registration, done by `:sample:app`'s
-  `appGraph`.
-- The settings search itself, owned by [`:library:feature:settings`](../../../library/feature/settings/README.md#settings-search).
+- Its registration as a tab, done by `:sample:app`'s `appGraph`.
 - Native ad rendering, owned by [`:library:core:ui`](../../../library/core/ui/README.md); this
   module supplies only the quick-tools card styling.
 
@@ -101,8 +95,7 @@ flowchart TD
 
 - `ToolkitTilesRepository`, `TorchRepository`, `MorseRepository`, `CounterRepository`,
   `ToolkitTilesViewModel`, the
-  dedicated tool ViewModels, `ToolkitTilesScreen`, `ToolkitTilesRoute`, `ToolsSettingsRoute`,
-  `ToolsSettingsScreen`, `ToolsSettingsViewModel`, `ToolsSettingsAction` and the source-neutral
+  dedicated tool ViewModels, `ToolkitTilesScreen`, `ToolkitTilesRoute` and the source-neutral
   tile models.
 
 ## Internal implementations
@@ -150,23 +143,6 @@ The tab declares a search field in its app bar, and `ToolkitTilesScreen` reads i
 only the tiles whose title or summary match; every match is shown expanded, whatever the stored
 expansion. Titles and summaries are string resources, so the query is matched against them in the
 current language. `ToolkitTilesSearchTest` covers the rules.
-
-## Tools settings
-
-The tools settings page resets the count shared with the Counter tile and opens or closes every
-category of the tools list. It shows how an app adds a settings page of its own to the Toolkit's
-settings search, with the same public API any app uses:
-
-- `toolsSettingsSearch` declares the page's rows with `settingsSearchProvider`, its section and
-  destination given once, and `tilesModule` binds it as `single<SettingsSearchProvider>(named("tools"))`.
-- `:sample:app` registers `ToolsSettingsRoute` as a `PaneRole.Detail` page, so a result opens it
-  beside the settings list on a wide window, and the tab's app bar opens it with
-  `ToolsSettingsAction`.
-- The root settings list does not link the page. Its rows are found only through the provider,
-  beside the Toolkit's own, which shows that a page needs no root row to be searchable.
-
-`ToolsSettingsSearchTest` covers the rows, and `AppGraphTest` in `:sample:app` checks that every
-bound provider, this one and the Toolkit's, opens a page the app's graph registers.
 
 ## Migration notes
 

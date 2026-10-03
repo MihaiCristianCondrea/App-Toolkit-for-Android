@@ -133,13 +133,4 @@
     <string name="tiles_qs_integration_summary_format">Folosește %1$s din Setările rapide ale telefonului tău fără a deschide App Toolkit.</string>
     <string name="tiles_add_to_qs">Adaugă la Setări rapide</string>
     <string name="tiles_search_hint">Caută instrumente</string>
-    <string name="tools_settings_title">Setările instrumentelor</string>
-    <string name="tools_settings_counter">Contor</string>
-    <string name="tools_settings_reset_counter">Resetează contorul</string>
-    <string name="tools_settings_reset_counter_summary">Readuce la zero numărul împărțit cu dala Contor</string>
-    <string name="tools_settings_list">Lista instrumentelor</string>
-    <string name="tools_settings_expand_all">Extinde toate categoriile</string>
-    <string name="tools_settings_expand_all_summary">Afișează fiecare instrument din listă</string>
-    <string name="tools_settings_collapse_all">Restrânge toate categoriile</string>
-    <string name="tools_settings_collapse_all_summary">Afișează doar titlurile categoriilor</string>
 </resources>

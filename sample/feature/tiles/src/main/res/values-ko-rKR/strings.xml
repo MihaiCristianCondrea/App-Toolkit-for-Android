@@ -133,13 +133,4 @@
     <string name="tiles_qs_integration_summary_format">App Toolkit을 열지 않고도 휴대전화의 빠른 설정에서 %1$s을(를) 사용하세요.</string>
     <string name="tiles_add_to_qs">빠른 설정에 추가</string>
     <string name="tiles_search_hint">도구 검색</string>
-    <string name="tools_settings_title">도구 설정</string>
-    <string name="tools_settings_counter">카운터</string>
-    <string name="tools_settings_reset_counter">카운터 초기화</string>
-    <string name="tools_settings_reset_counter_summary">카운터 타일과 공유하는 숫자를 0으로 되돌립니다</string>
-    <string name="tools_settings_list">도구 목록</string>
-    <string name="tools_settings_expand_all">모든 카테고리 펼치기</string>
-    <string name="tools_settings_expand_all_summary">목록의 모든 도구를 표시합니다</string>
-    <string name="tools_settings_collapse_all">모든 카테고리 접기</string>
-    <string name="tools_settings_collapse_all_summary">카테고리 제목만 표시합니다</string>
 </resources>

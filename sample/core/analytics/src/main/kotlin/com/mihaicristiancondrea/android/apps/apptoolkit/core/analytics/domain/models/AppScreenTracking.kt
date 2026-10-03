@@ -30,14 +30,12 @@ object AppScreenTracking {
         val APPS_LIST = TrackedScreen(name = "AppsList", className = "AppsListScreen")
         val TOOLKIT_TILES = TrackedScreen(name = "ToolkitTiles", className = "ToolkitTilesScreen")
         val COMPONENTS = TrackedScreen(name = "Components", className = "ComponentsScreen")
-        val TOOLS_SETTINGS = TrackedScreen(name = "ToolsSettings", className = "ToolsSettingsScreen")
 
         val all: List<TrackedScreen> = listOf(
             MAIN,
             APPS_LIST,
             TOOLKIT_TILES,
             COMPONENTS,
-            TOOLS_SETTINGS,
         )
     }
 }

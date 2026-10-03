@@ -133,13 +133,4 @@
     <string name="tiles_qs_integration_summary_format">Sử dụng %1$s từ Cài đặt nhanh của điện thoại mà không cần mở App Toolkit.</string>
     <string name="tiles_add_to_qs">Thêm vào Cài đặt nhanh</string>
     <string name="tiles_search_hint">Tìm công cụ</string>
-    <string name="tools_settings_title">Cài đặt công cụ</string>
-    <string name="tools_settings_counter">Bộ đếm</string>
-    <string name="tools_settings_reset_counter">Đặt lại bộ đếm</string>
-    <string name="tools_settings_reset_counter_summary">Đưa số đếm dùng chung với ô Bộ đếm về 0</string>
-    <string name="tools_settings_list">Danh sách công cụ</string>
-    <string name="tools_settings_expand_all">Mở rộng mọi danh mục</string>
-    <string name="tools_settings_expand_all_summary">Hiện mọi công cụ trong danh sách</string>
-    <string name="tools_settings_collapse_all">Thu gọn mọi danh mục</string>
-    <string name="tools_settings_collapse_all_summary">Chỉ hiện tên các danh mục</string>
 </resources>

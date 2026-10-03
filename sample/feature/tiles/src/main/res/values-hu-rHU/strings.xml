@@ -133,13 +133,4 @@
     <string name="tiles_qs_integration_summary_format">Használja a(z) %1$s funkciót a telefon Gyorsbeállítások menüjéből anélkül, hogy megnyitná az App Toolkit alkalmazást.</string>
     <string name="tiles_add_to_qs">Hozzáadás a Gyorsbeállításokhoz</string>
     <string name="tiles_search_hint">Eszközök keresése</string>
-    <string name="tools_settings_title">Eszközbeállítások</string>
-    <string name="tools_settings_counter">Számláló</string>
-    <string name="tools_settings_reset_counter">Számláló nullázása</string>
-    <string name="tools_settings_reset_counter_summary">Nullára állítja a Számláló csempével közös értéket</string>
-    <string name="tools_settings_list">Eszközlista</string>
-    <string name="tools_settings_expand_all">Minden kategória kibontása</string>
-    <string name="tools_settings_expand_all_summary">Minden eszköz megjelenítése a listában</string>
-    <string name="tools_settings_collapse_all">Minden kategória összecsukása</string>
-    <string name="tools_settings_collapse_all_summary">Csak a kategóriák címének megjelenítése</string>
 </resources>

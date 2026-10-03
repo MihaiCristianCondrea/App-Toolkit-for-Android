@@ -133,13 +133,4 @@
     <string name="tiles_qs_integration_summary_format">App Toolkit を開かずに、スマートフォンのクイック設定から %1$s を使用します。</string>
     <string name="tiles_add_to_qs">クイック設定に追加</string>
     <string name="tiles_search_hint">ツールを検索</string>
-    <string name="tools_settings_title">ツールの設定</string>
-    <string name="tools_settings_counter">カウンター</string>
-    <string name="tools_settings_reset_counter">カウンターをリセット</string>
-    <string name="tools_settings_reset_counter_summary">カウンタータイルと共有している数を0に戻します</string>
-    <string name="tools_settings_list">ツールの一覧</string>
-    <string name="tools_settings_expand_all">すべてのカテゴリを展開</string>
-    <string name="tools_settings_expand_all_summary">一覧のすべてのツールを表示します</string>
-    <string name="tools_settings_collapse_all">すべてのカテゴリを折りたたむ</string>
-    <string name="tools_settings_collapse_all_summary">カテゴリ名だけを表示します</string>
 </resources>

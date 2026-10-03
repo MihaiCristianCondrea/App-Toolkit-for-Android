@@ -133,13 +133,4 @@
     <string name="tiles_qs_integration_summary_format">استخدم %1$s من الإعدادات السريعة في هاتفك بدون فتح App Toolkit.</string>
     <string name="tiles_add_to_qs">إضافة إلى الإعدادات السريعة</string>
     <string name="tiles_search_hint">البحث في الأدوات</string>
-    <string name="tools_settings_title">إعدادات الأدوات</string>
-    <string name="tools_settings_counter">العدّاد</string>
-    <string name="tools_settings_reset_counter">إعادة ضبط العدّاد</string>
-    <string name="tools_settings_reset_counter_summary">يعيد العدد المشترك مع مربع العدّاد إلى الصفر</string>
-    <string name="tools_settings_list">قائمة الأدوات</string>
-    <string name="tools_settings_expand_all">توسيع كل الفئات</string>
-    <string name="tools_settings_expand_all_summary">عرض كل أداة في قائمة الأدوات</string>
-    <string name="tools_settings_collapse_all">طي كل الفئات</string>
-    <string name="tools_settings_collapse_all_summary">عرض عناوين الفئات فقط</string>
 </resources>

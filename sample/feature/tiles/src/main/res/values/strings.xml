@@ -136,13 +136,4 @@
     <string name="tiles_qs_integration_summary_format">Use %1$s from your phone\'s Quick Settings without opening App Toolkit.</string>
     <string name="tiles_add_to_qs">Add to Quick Settings</string>
     <string name="tiles_search_hint">Search tools</string>
-    <string name="tools_settings_title">Tools settings</string>
-    <string name="tools_settings_counter">Counter</string>
-    <string name="tools_settings_reset_counter">Reset the counter</string>
-    <string name="tools_settings_reset_counter_summary">Sets the count shared with the Counter tile back to zero</string>
-    <string name="tools_settings_list">Tools list</string>
-    <string name="tools_settings_expand_all">Expand every category</string>
-    <string name="tools_settings_expand_all_summary">Show every tool in the tools list</string>
-    <string name="tools_settings_collapse_all">Collapse every category</string>
-    <string name="tools_settings_collapse_all_summary">Show only the category titles</string>
 </resources>

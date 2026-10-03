@@ -20,9 +20,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation
 import android.content.Intent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.navigation.AppsListRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.navigation.ComponentsRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.di.tilesModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ToolkitTilesRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ToolsSettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchContext
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
@@ -128,7 +126,6 @@ class AppGraphTest {
             LibraryExtrasRoute,
             DeveloperOptionsRoute,
             ComponentsRoute,
-            ToolsSettingsRoute,
         )
 
         pages.forEach { key -> assertTrue(graph.contains(key), "$key is not registered") }
@@ -188,24 +185,15 @@ class AppGraphTest {
     }
 
     @Test
-    fun `the tools settings page opens beside the settings list, and the tools tab offers it`() {
-        val graph = graph()
-
-        assertEquals(PaneRole.Detail, graph.destination(ToolsSettingsRoute).paneRole)
-        assertNotNull(graph.destination(ToolkitTilesRoute).actions)
-    }
-
-    @Test
-    fun `every settings search result, the app's and the Toolkit's, opens a registered page`() {
+    fun `every settings search result opens a page the app registers`() {
         val koin = koinApplication {
-            modules(tilesModule, displaySettingsModule, themeSettingsModule, privacyModule, aboutModule, advancedSettingsModule)
+            modules(displaySettingsModule, themeSettingsModule, privacyModule, aboutModule, advancedSettingsModule)
         }.koin
         val providers = koin.getAll<SettingsSearchProvider>()
         val context = SettingsSearchContext(graph())
 
-        assertEquals(6, providers.size)
+        assertEquals(5, providers.size)
         assertEquals(emptyList(), providers.flatMap { it.unregisteredDestinations(context) })
-        assertTrue(providers.flatMap { it.entries(context) }.any { it.destination == ToolsSettingsRoute })
     }
 
     @Test

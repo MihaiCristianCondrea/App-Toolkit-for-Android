@@ -133,13 +133,4 @@
     <string name="tiles_qs_integration_summary_format">Используйте %1$s из быстрых настроек телефона, не открывая App Toolkit.</string>
     <string name="tiles_add_to_qs">Добавить в быстрые настройки</string>
     <string name="tiles_search_hint">Поиск инструментов</string>
-    <string name="tools_settings_title">Настройки инструментов</string>
-    <string name="tools_settings_counter">Счётчик</string>
-    <string name="tools_settings_reset_counter">Сбросить счётчик</string>
-    <string name="tools_settings_reset_counter_summary">Обнуляет значение, общее с плиткой счётчика</string>
-    <string name="tools_settings_list">Список инструментов</string>
-    <string name="tools_settings_expand_all">Развернуть все категории</string>
-    <string name="tools_settings_expand_all_summary">Показывает все инструменты в списке</string>
-    <string name="tools_settings_collapse_all">Свернуть все категории</string>
-    <string name="tools_settings_collapse_all_summary">Показывает только названия категорий</string>
 </resources>

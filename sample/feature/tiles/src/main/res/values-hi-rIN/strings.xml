@@ -133,13 +133,4 @@
     <string name="tiles_qs_integration_summary_format">App Toolkit खोले बिना अपने फ़ोन की क्विक सेटिंग से %1$s का इस्तेमाल करें.</string>
     <string name="tiles_add_to_qs">क्विक सेटिंग में जोड़ें</string>
     <string name="tiles_search_hint">टूल खोजें</string>
-    <string name="tools_settings_title">टूल सेटिंग</string>
-    <string name="tools_settings_counter">काउंटर</string>
-    <string name="tools_settings_reset_counter">काउंटर रीसेट करें</string>
-    <string name="tools_settings_reset_counter_summary">काउंटर टाइल के साथ साझा गिनती को शून्य पर लौटाता है</string>
-    <string name="tools_settings_list">टूल की सूची</string>
-    <string name="tools_settings_expand_all">हर श्रेणी खोलें</string>
-    <string name="tools_settings_expand_all_summary">सूची में हर टूल दिखाएं</string>
-    <string name="tools_settings_collapse_all">हर श्रेणी बंद करें</string>
-    <string name="tools_settings_collapse_all_summary">केवल श्रेणियों के शीर्षक दिखाएं</string>
 </resources>

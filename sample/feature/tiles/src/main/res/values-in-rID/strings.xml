@@ -133,13 +133,4 @@
     <string name="tiles_qs_integration_summary_format">Gunakan %1$s dari Setelan Cepat ponsel Anda tanpa membuka App Toolkit.</string>
     <string name="tiles_add_to_qs">Tambahkan ke Setelan Cepat</string>
     <string name="tiles_search_hint">Cari alat</string>
-    <string name="tools_settings_title">Setelan alat</string>
-    <string name="tools_settings_counter">Penghitung</string>
-    <string name="tools_settings_reset_counter">Setel ulang penghitung</string>
-    <string name="tools_settings_reset_counter_summary">Mengembalikan hitungan yang dibagi dengan tile Penghitung ke nol</string>
-    <string name="tools_settings_list">Daftar alat</string>
-    <string name="tools_settings_expand_all">Luaskan semua kategori</string>
-    <string name="tools_settings_expand_all_summary">Tampilkan setiap alat di daftar</string>
-    <string name="tools_settings_collapse_all">Ciutkan semua kategori</string>
-    <string name="tools_settings_collapse_all_summary">Tampilkan judul kategori saja</string>
 </resources>
