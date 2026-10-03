@@ -331,7 +331,7 @@ private fun <T : Any> ListDetailLayout(
         Column(
             Modifier
                 .fillMaxSize()
-                .then(if (carded && beside != null) Modifier.drawBehind { drawRect(beside.frameColor()) } else Modifier),
+                .then(if (carded) Modifier.drawBehind { drawRect(beside.frameColor()) } else Modifier),
         ) {
             if (framed) {
                 ListDetailTopBar(

@@ -25,6 +25,14 @@ plugins {
 
 group = "com.mihaicristiancondrea.android.apptoolkit.buildlogic"
 
+// Android Studio's Rebuild Project cleans this included build in the same run that already loaded
+// its plugins, and Gradle never lets that clean destroy outputs the run is using: the build stalls
+// with "Unable to make progress running work". Gradle rebuilds these outputs when they change, so
+// the clean deletes nothing and leaves the rebuild free to finish.
+tasks.named<Delete>("clean") {
+    setDelete(emptySet<Any>())
+}
+
 dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
