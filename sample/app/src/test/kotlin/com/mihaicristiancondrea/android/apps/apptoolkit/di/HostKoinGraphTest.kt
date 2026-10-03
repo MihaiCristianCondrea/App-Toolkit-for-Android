@@ -28,10 +28,12 @@ import org.junit.jupiter.api.Test
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import org.koin.test.verify.verify
+import org.koin.core.annotation.KoinExperimentalAPI
 
 /**
  * Verifies the dependency graph the app actually starts with.
  */
+@OptIn(KoinExperimentalAPI::class)
 class HostKoinGraphTest {
 
     private val platformTypes = listOf(Context::class, Activity::class, Application::class)

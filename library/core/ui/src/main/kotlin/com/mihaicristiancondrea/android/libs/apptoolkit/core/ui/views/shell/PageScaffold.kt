@@ -143,7 +143,7 @@ fun PageScaffold(
     }
     Scaffold(
         modifier = modifier
-            .then(if (carded && beside != null) Modifier.drawBehind { drawRect(beside.frameColor()) } else Modifier)
+            .then(if (carded) Modifier.drawBehind { drawRect(beside.frameColor()) } else Modifier)
             .nestedScroll(scrollBehavior.nestedScrollConnection)
             // After the bar's own behaviour, so a large bar collapses before it slides away.
             .then(if (hideTopBar) Modifier.nestedScroll(topHide.nestedScrollConnection) else Modifier)

@@ -51,7 +51,9 @@ import java.util.Date
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.test.assertFailsWith
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class TestAdsCoreManager {
     private val testScope = CoroutineScope(Dispatchers.Unconfined)
 

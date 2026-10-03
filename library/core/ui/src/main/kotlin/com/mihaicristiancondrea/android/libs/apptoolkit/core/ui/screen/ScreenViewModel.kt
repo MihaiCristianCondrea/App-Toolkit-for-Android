@@ -85,12 +85,12 @@ abstract class ScreenViewModel<S, E : Any>(initialState: S) : ViewModel() {
 
     /** Queues [message] to be shown after the ones already waiting. */
     protected fun showMessage(message: UiMessage) {
-        mutableMessages.update { queue -> queue.add(message) }
+        mutableMessages.update { queue -> queue.adding(message) }
     }
 
     /** Removes the message with [id] from the queue, once it has been shown. */
     fun messageShown(id: Long) {
-        mutableMessages.update { queue -> queue.removeAll { it.id == id } }
+        mutableMessages.update { queue -> queue.removingAll { it.id == id } }
     }
 
     /** Cancels this job, if any, and starts the one [start] returns. */

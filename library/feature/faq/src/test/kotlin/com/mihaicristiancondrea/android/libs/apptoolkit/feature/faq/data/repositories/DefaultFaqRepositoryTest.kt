@@ -186,6 +186,6 @@ class DefaultFaqRepositoryTest {
         }.exceptionOrNull()
 
         assertIs<NetworkException>(failure)
-        assertEquals(NetworkException.Reason.NO_INTERNET, (failure as NetworkException).reason)
+        assertEquals(NetworkException.Reason.NO_INTERNET, failure.reason)
     }
 }

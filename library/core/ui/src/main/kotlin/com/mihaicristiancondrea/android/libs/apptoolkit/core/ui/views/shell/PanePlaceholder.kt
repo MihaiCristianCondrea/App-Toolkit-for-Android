@@ -29,7 +29,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
-import androidx.compose.material.icons.outlined.ViewSidebar
+import androidx.compose.material.icons.automirrored.outlined.ViewSidebar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -91,7 +91,7 @@ fun PanePlaceholder(icon: ImageVector, title: String?, message: String) {
 @Composable
 fun ListPlaceholder() {
     PanePlaceholder(
-        icon = Icons.Outlined.ViewSidebar,
+        icon = Icons.AutoMirrored.Outlined.ViewSidebar,
         title = null,
         message = stringResource(R.string.shell_list_placeholder),
     )

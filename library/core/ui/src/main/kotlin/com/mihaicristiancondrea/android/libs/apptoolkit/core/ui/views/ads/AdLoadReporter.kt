@@ -75,7 +75,7 @@ class AdLoadReporter(
             attributes = mapOf(
                 "slot" to slotName,
                 "ad_unit_id" to adUnitId,
-                "error_code" to errorCode.toString(),
+                "error_code" to errorCode,
                 "error_message" to errorMessage,
                 "no_fill" to isNoFill.toString(),
             ),

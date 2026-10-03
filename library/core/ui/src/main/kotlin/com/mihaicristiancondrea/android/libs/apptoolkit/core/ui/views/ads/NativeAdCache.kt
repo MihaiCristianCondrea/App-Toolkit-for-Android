@@ -94,7 +94,7 @@ class NativeAdCache internal constructor(
                 kept.adUnitId == adUnitId &&
                 kept.isRetained &&
                 !kept.isOlderThan(maxAgeMillis)
-        return if (reusable && kept != null) kept else newHolder(adUnitId)
+        return if (reusable) kept else newHolder(adUnitId)
     }
 
     /** Records [holder] as the one behind [key], releasing whichever it replaces. */

@@ -255,7 +255,7 @@ fun ShellTopAppBar(
 
             TopBarStyle.Hidden -> Unit
         }
-        if (showsArticle && article != null) {
+        if (showsArticle) {
             ArticleReadingProgress(article, Modifier.align(Alignment.BottomStart))
         }
     }
