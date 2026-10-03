@@ -63,6 +63,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.compose.KoinIsolatedContext
+import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.core.qualifier.named
@@ -91,6 +93,7 @@ class HostSettingsSearchTest {
     private val context: Context = ApplicationProvider.getApplicationContext()
 
     private var notificationActions = 0
+    private lateinit var koinApplication: KoinApplication
 
     private val hostSearch: SettingsSearchProvider = settingsSearchProvider(
         section = SupportR.string.paid_support,
@@ -103,7 +106,7 @@ class HostSettingsSearchTest {
 
     @Before
     fun setUp() {
-        startKoin {
+        koinApplication = startKoin {
             modules(
                 module {
                     single { CommonDataStore(context) }
@@ -199,8 +202,11 @@ class HostSettingsSearchTest {
 
     private fun openSettings() {
         compose.setContent {
-            AppTheme {
-                ShellHost(graph = HostGraph, preferences = InMemoryShellPreferences())
+            // Each test starts a new Koin instance; Compose must not reuse a closed default context.
+            KoinIsolatedContext(koinApplication) {
+                AppTheme {
+                    ShellHost(graph = HostGraph, preferences = InMemoryShellPreferences())
+                }
             }
         }
         compose.waitUntil(timeoutMillis = 10_000) {
@@ -240,17 +246,18 @@ private class HostSettingsProvider(private val onNotifications: () -> Unit) : Se
     )
 }
 
+// Navigation 3 discovers object serializers by reflection, which requires JVM-visible route classes.
 @Serializable
-private data object HostHome : NavKey
+internal data object HostHome : NavKey
 
 @Serializable
-private data object HostPage : NavKey
+internal data object HostPage : NavKey
 
 @Serializable
-private data object HostSubpage : NavKey
+internal data object HostSubpage : NavKey
 
 @Serializable
-private data object UnregisteredPage : NavKey
+internal data object UnregisteredPage : NavKey
 
 private val HostGraph = toolkitGraph(appTitle = CommonR.string.app_name) {
     tab(HostHome, NavigationR.string.updates, ToolkitIcon.Vector(Icons.Outlined.Home)) {

@@ -15,33 +15,28 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.di
+package com.mihaicristiancondrea.android.apps.apptoolkit.di
 
 import android.content.Context
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.about.ui.providers.AppAboutSettingsProvider
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.display.ui.providers.AppDisplaySettingsProvider
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.providers.AppSettingsProvider
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.startup.ui.providers.AppStartupProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.AboutSettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.providers.DisplaySettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.providers.PrivacySettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.SettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.providers.StartupProvider
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Test
 import org.koin.core.Koin
 import org.koin.dsl.koinApplication
 import org.koin.dsl.module
+import kotlin.test.assertIs
 
-/**
- * Checks that [appToolkitSettingsModule] answers every settings extension point the toolkit asks a
- * host about.
- *
- * `HostKoinGraphTest` in `:sample:app` already verifies the assembled graph, but it verifies it by
- * reflection over declared types and it only runs when the app module is built. This one resolves
- * each provider from a live graph, so it also proves they can be constructed, and it fails in the
- * module that owns them, which is where someone editing them is looking.
- *
- * A missing Koin binding does not fail at startup. It fails the first time something asks for it,
- * which for these is inside a settings screen the user has just opened.
- */
+/** Resolves the feature-owned settings providers from the app's Toolkit composition. */
 class AppToolkitSettingsModuleTest {
 
     private val hostBuildConfig = AppToolkitHostBuildConfig(
@@ -62,9 +57,10 @@ class AppToolkitSettingsModuleTest {
     private fun koin(): Koin {
         val context = mockk<Context>(relaxed = true)
         every { context.applicationContext } returns context
-        return koinApplication {
+        // Resolve providers explicitly without starting eager Android SDK integrations in a JVM test.
+        return koinApplication(createEagerInstances = false) {
             modules(module { single<Context> { context } })
-            modules(appToolkitSettingsModule(hostBuildConfig = hostBuildConfig))
+            modules(sampleToolkitModules(hostBuildConfig = hostBuildConfig))
         }.koin
     }
 
@@ -80,11 +76,15 @@ class AppToolkitSettingsModuleTest {
         // `hostBuildConfig` by constructor, so a graph that cannot supply one fails here. Its
         // `deviceInfo` output is not asserted, the getter reads `Build.SUPPORTED_ABIS`, which is
         // null off-device, and Robolectric would be a lot of machinery for a formatted string.
-        with(koin()) {
-            get<SettingsProvider>()
-            get<AboutSettingsProvider>()
-            get<DisplaySettingsProvider>()
-            get<PrivacySettingsProvider>()
+        val koin = koin()
+        try {
+            assertIs<AppSettingsProvider>(koin.get<SettingsProvider>())
+            assertIs<AppAboutSettingsProvider>(koin.get<AboutSettingsProvider>())
+            assertIs<AppDisplaySettingsProvider>(koin.get<DisplaySettingsProvider>())
+            assertIs<AppStartupProvider>(koin.get<StartupProvider>())
+            koin.get<PrivacySettingsProvider>()
+        } finally {
+            koin.close()
         }
     }
 }

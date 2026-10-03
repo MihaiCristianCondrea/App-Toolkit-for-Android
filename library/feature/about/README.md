@@ -45,7 +45,7 @@ plus the tap-to-copy interaction for the entries it renders and the version-tap 
 - [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `aboutPages()` from
   `toolkitPages()`.
 - `:sample:app`, which registers About first with its own content (`aboutPages {
-  AboutSettingsContent() }`), and `:sample:feature:settings`, which provides the device report.
+  AboutSettingsContent() }`), and `:sample:feature:about`, which provides the device report.
 
 ## Flow chart
 

@@ -39,7 +39,7 @@ and the strings that name them.
 ## Used by
 
 - [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `privacySettingsPage()` from
-  `toolkitPages()`, and `:sample:feature:settings`, which binds a default provider.
+  `toolkitPages()`, and `:sample:core:apptoolkit`, which binds a default provider.
 
 ## Flow chart
 

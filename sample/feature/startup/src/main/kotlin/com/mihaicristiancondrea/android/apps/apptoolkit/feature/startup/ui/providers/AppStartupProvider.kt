@@ -15,12 +15,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.ui.providers
+package com.mihaicristiancondrea.android.apps.apptoolkit.feature.startup.ui.providers
 
 import android.Manifest
 import android.os.Build
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.providers.StartupProvider
-import javax.inject.Inject
 
 /**
  * Sample startup policy used by the reusable startup feature.
@@ -28,7 +27,7 @@ import javax.inject.Inject
  * Notification permission is requested only where it is runtime-gated. The startup screen then
  * hands over to the Toolkit's onboarding start screen.
  */
-class AppStartupProvider @Inject constructor() : StartupProvider {
+class AppStartupProvider : StartupProvider {
     override val requiredPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         arrayOf(Manifest.permission.POST_NOTIFICATIONS)
     } else {

@@ -17,72 +17,51 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.di
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.ui.providers.AppAboutSettingsProvider
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.ui.providers.AppDisplaySettingsProvider
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.ui.providers.AppSettingsProvider
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.ui.providers.AppStartupProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ColorPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.google.blue.bluePalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitModules
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.AboutSettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.providers.DisplaySettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReporterConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.providers.PrivacySettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.SettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.providers.StartupProvider
 import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 /**
- * The App Toolkit's Koin graph, with the sample's answers to every extension point it asks about:
- * the startup permissions, the settings list, the About, display and privacy pages, and the
- * default palette.
+ * Orders the Toolkit graph, host-wide defaults, and feature provider modules supplied by the app.
  *
  * This is the one call a host makes for the toolkit itself. Its job is ordering: the toolkit's own
  * modules go first, so the host modules added after it win wherever Koin's later definition should
  * replace a toolkit binding.
  */
-fun appToolkitHostModules(hostBuildConfig: AppToolkitHostBuildConfig): List<Module> = buildList {
+fun appToolkitHostModules(
+    hostBuildConfig: AppToolkitHostBuildConfig,
+    startupProviderFactory: () -> StartupProvider,
+    hostProviderModules: List<Module>,
+): List<Module> = buildList {
     addAll(
         appToolkitModules(
             hostBuildConfig = hostBuildConfig,
-            startupProviderFactory = ::AppStartupProvider,
+            startupProviderFactory = startupProviderFactory,
             // The sample turns the gesture on because it is what the sample is for: showing a host
             // what the toolkit offers. It stays off by default for everyone else.
             issueReporterConfig = IssueReporterConfig(shakeToReportEnabled = true),
         )
     )
     add(appToolkitProvidersModule())
-    add(appToolkitSettingsModule(hostBuildConfig = hostBuildConfig))
+    addAll(hostProviderModules)
 }
 
 /**
  * The host-wide toolkit answers that belong to no single feature.
  *
- * Currently the default theme palette: the toolkit asks every host which one to start from, and
- * that is an application-level choice rather than a settings one.
+ * The default theme palette is an application-level choice. Privacy uses the Toolkit's default
+ * provider until the sample supplies its own privacy feature.
  */
 internal fun appToolkitProvidersModule(): Module =
     module {
         single<ColorPalette>(named(AppToolkitDiConstants.DEFAULT_THEME_PALETTE)) { bluePalette }
-    }
-
-/**
- * The sample's answers to the toolkit's settings extension points: the settings list, and the
- * About, display and privacy pages.
- */
-internal fun appToolkitSettingsModule(hostBuildConfig: AppToolkitHostBuildConfig): Module =
-    module {
-        single<SettingsProvider> { AppSettingsProvider(context = get()) }
-        single<AboutSettingsProvider> {
-            AppAboutSettingsProvider(context = get(), hostBuildConfig = hostBuildConfig)
-        }
-        single<DisplaySettingsProvider> {
-            AppDisplaySettingsProvider(
-                startupPageChoices = getOrNull<List<String>>(named(AppToolkitDiConstants.STARTUP_VALUES))?.size,
-            )
-        }
         single<PrivacySettingsProvider> { object : PrivacySettingsProvider {} }
     }

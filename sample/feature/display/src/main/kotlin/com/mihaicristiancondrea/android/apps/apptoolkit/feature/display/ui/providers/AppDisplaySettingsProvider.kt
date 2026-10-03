@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.ui.providers
+package com.mihaicristiancondrea.android.apps.apptoolkit.feature.display.ui.providers
 
 import androidx.compose.runtime.Composable
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.views.dialogs.SelectStartupScreenAlertDialog

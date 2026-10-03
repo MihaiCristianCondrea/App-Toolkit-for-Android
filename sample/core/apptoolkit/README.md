@@ -2,85 +2,71 @@
 
 ## Purpose
 
-The sample's whole App Toolkit setup: the Koin graph the application loads first, and the
-sample's answer to every extension point the Toolkit asks a host about.
+Orders the Toolkit graph and the sample's host provider modules. The app supplies feature-owned
+providers, so this core module stays independent of sample features.
 
 ## Owns
 
-- `appToolkitHostModules`, which orders the Toolkit graph ahead of the host's own modules.
-- `AppStartupProvider`, the sample's `StartupProvider`: notification permission on Android 13 and
-  later, nothing before.
-- The settings extension points: `AppSettingsProvider` (the rows of the settings list and the keys
-  they open, with `SettingsConstants` for their keys), `AppAboutSettingsProvider`,
-  `AppDisplaySettingsProvider` and the default `PrivacySettingsProvider`, bound by
-  `appToolkitSettingsModule`.
-- The host-wide answers that belong to no single screen, currently the default theme palette.
+- `appToolkitHostModules`, which loads Toolkit definitions before host overrides.
+- The sample's default theme palette and default `PrivacySettingsProvider`, bound by
+  `appToolkitProvidersModule`.
+- The sample's shake-to-report configuration.
 
 ## Does not own
 
-- Toolkit provider contracts or default implementations, owned by `:library:feature:*` modules.
-  The startup screen itself is [`:library:feature:startup`](../../../library/feature/startup/README.md)'s.
-- The settings pages themselves, owned by
-  [`:library:feature:settings`](../../../library/feature/settings/README.md) and the modules that
-  register the keys the rows open.
-- The About page content and the components unlock it hosts, owned by
-  [`:sample:feature:settings`](../../feature/settings/README.md).
-- The onboarding pages, owned by [`:sample:feature:onboarding`](../../feature/onboarding/README.md).
-- The sample's FAQ questions and answers, owned by [`:sample:feature:faq`](../../feature/faq/README.md).
-- Deciding at launch whether startup runs, the startup-screen choices, and the final Koin
-  bootstrap, owned by [`:sample:app`](../../app/README.md).
+- Startup permission policy, owned by [`:sample:feature:startup`](../../feature/startup/README.md).
+- Root settings rows and keys, owned by [`:sample:feature:settings`](../../feature/settings/README.md).
+- Display customization, owned by [`:sample:feature:display`](../../feature/display/README.md).
+- About build and device metadata, owned by [`:sample:feature:about`](../../feature/about/README.md).
+- Final Koin startup and the connections between features, owned by
+  [`:sample:app`](../../app/README.md).
+- Toolkit provider contracts and screens, owned by `:library:feature:*`.
 
 ## Depends on
 
 - [`:library:apptoolkit`](../../../library/apptoolkit/README.md), exported because
-  `appToolkitHostModules` names Toolkit configuration and Koin types.
+  `appToolkitHostModules` accepts Toolkit configuration, provider, and Koin types.
+- No sample feature module.
 
 ## Used by
 
-- `:sample:app`, which calls `appToolkitHostModules` before adding app-specific modules.
+- `:sample:app`, which passes the startup provider factory and feature provider modules.
 
 ## Flow chart
 
 ```mermaid
 flowchart TD
-    Config[AppToolkitHostBuildConfig] --> HostModules[appToolkitHostModules]
-    Startup[AppStartupProvider factory] --> Toolkit[appToolkitModules]
-    Config --> Toolkit
-    Toolkit --> ToolkitGraph[Toolkit-owned definitions requiring host providers]
-    Palette[Default theme palette] --> Overrides[appToolkitProvidersModule]
-    Settings[Settings, About, display and privacy providers] --> SettingsModule[appToolkitSettingsModule]
-    ToolkitGraph --> Ordered[Ordered module list]
-    Overrides -->|loaded after defaults| Ordered
-    SettingsModule -->|loaded after defaults| Ordered
-    Ordered --> App[":sample:app Koin bootstrap"]
-    App -->|first launch| Screen[StartupRoute asks for AppStartupProvider.requiredPermissions]
+    App[Sample app composition] --> Factory[Startup provider factory]
+    App --> Providers[Feature provider modules]
+    Factory --> Adapter[appToolkitHostModules]
+    Providers --> Adapter
+    Adapter --> Toolkit[Toolkit definitions first]
+    Toolkit --> Defaults[Host-wide defaults]
+    Defaults --> Overrides[Feature provider modules last]
+    Overrides --> Bootstrap[App Koin startup]
 ```
 
 ## Architectural decisions
 
-- One core module holds everything that configures the Toolkit, so a host reads one place to see
-  how it is set up. Code that is the sample's own, such as the About content and its unlock,
-  stays in the features.
-- A core module, so it may not depend on a sample feature: the providers here name only Toolkit
-  types and keys, which keeps that true.
-- Toolkit modules are added before host bindings because Koin's later definitions win when the host
-  intentionally replaces a Toolkit binding; the ordering is part of `appToolkitHostModules`'
-  contract.
+- Feature-specific providers live with their features. The settings, startup, display, and about
+  modules are separate now so each area can expand without moving its provider out of core later.
+- The app passes a `StartupProvider` factory and Koin modules through library contracts. Core does
+  not import sample feature implementations or depend on their modules.
+- Toolkit modules load first, followed by host-wide defaults and feature modules. Koin's later
+  definitions keep the host's intentional overrides.
 
 ## Public contracts
 
-- `appToolkitHostModules` is the module's integration entry point. Every provider is bound through
-  it.
+- `appToolkitHostModules(hostBuildConfig, startupProviderFactory, hostProviderModules)` returns
+  the ordered integration graph. The app must supply its feature provider bindings.
 
 ## Internal implementations
 
-- `appToolkitProvidersModule` (the palette) and `appToolkitSettingsModule` (the settings
-  providers).
+- `appToolkitProvidersModule`, which binds the default palette and privacy provider.
 
 ## Current risks
 
-Reversing module order lets duplicate Toolkit definitions replace host choices. Adding a new
-Toolkit host extension also requires a binding here and an update to the host graph verification
-tests; composable `koinInject()` lookups need direct resolution tests because constructor reflection
-cannot discover them. A settings row whose key no module registers opens nothing; `:sample:app`'s
-`AppGraphTest` checks every key the rows use.
+Reversing module order can replace host choices with Toolkit defaults. The app's
+`HostKoinGraphTest` verifies constructor dependencies, and `AppToolkitSettingsModuleTest` resolves
+settings provider bindings that composables request directly. Feature modules added by the app
+may also require shared app dependencies, such as the settings showcase datastore.

@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.privacy.ui
 import android.content.Context
 import android.content.Intent
 import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -80,9 +81,18 @@ class PermissionUsageActivityTest {
     private fun launch(action: String): ActivityScenario<PermissionUsageActivity> =
         ActivityScenario.launch(Intent(action).setClass(context, PermissionUsageActivity::class.java))
 
+    private fun awaitPrivacyPage() {
+        // ShellHost awaits DataStore before drawing its first page.
+        composeRule.waitUntil(timeoutMillis = 10_000) {
+            composeRule.onAllNodesWithText(context.getString(PrivacyR.string.security_and_privacy))
+                .fetchSemanticsNodes().isNotEmpty()
+        }
+    }
+
     @Test
     fun `the permission manager's icon opens the privacy page, and its back arrow leaves`() {
         launch("android.intent.action.VIEW_PERMISSION_USAGE").use { scenario ->
+            awaitPrivacyPage()
             composeRule.onNodeWithText(context.getString(PrivacyR.string.security_and_privacy)).assertExists()
 
             composeRule.onNodeWithContentDescription(context.getString(CoreUiR.string.go_back)).performClick()
@@ -97,7 +107,7 @@ class PermissionUsageActivityTest {
     @Test
     fun `system back leaves the privacy page for the system's settings`() {
         launch("android.intent.action.VIEW_PERMISSION_USAGE").use { scenario ->
-            composeRule.waitForIdle()
+            awaitPrivacyPage()
 
             var finishing = false
             scenario.onActivity { activity ->
@@ -111,6 +121,7 @@ class PermissionUsageActivityTest {
     @Test
     fun `the privacy dashboard's icon opens the privacy page too`() {
         launch("android.intent.action.VIEW_PERMISSION_USAGE_FOR_PERIOD").use {
+            awaitPrivacyPage()
             composeRule.onNodeWithText(context.getString(PrivacyR.string.security_and_privacy)).assertExists()
         }
     }

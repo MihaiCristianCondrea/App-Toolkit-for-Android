@@ -315,22 +315,22 @@ private const val StoryTitle = "Story title"
 private val BrandWidthAndSpacing: Dp = 32.dp
 
 @Serializable
-private data object NewsKey : NavKey
+internal data object NewsKey : NavKey
 
 @Serializable
-private data class StoryKey(val name: String, val branded: Boolean = false) : NavKey
+internal data class StoryKey(val name: String, val branded: Boolean = false) : NavKey
 
 @Serializable
-private data object PlainKey : NavKey
+internal data object PlainKey : NavKey
 
 @Serializable
-private data object StoryPageKey : NavKey
+internal data object StoryPageKey : NavKey
 
 @Serializable
-private data object StoriesKey : NavKey
+internal data object StoriesKey : NavKey
 
 @Serializable
-private data class StoryDetailKey(val name: String) : NavKey
+internal data class StoryDetailKey(val name: String) : NavKey
 
 private val ArticleGraph: ShellGraph = shellGraph(appTitle = CommonR.string.app_name) {
     tab(NewsKey, NavigationR.string.updates, ToolkitIcon.Vector(Icons.Outlined.Home)) {

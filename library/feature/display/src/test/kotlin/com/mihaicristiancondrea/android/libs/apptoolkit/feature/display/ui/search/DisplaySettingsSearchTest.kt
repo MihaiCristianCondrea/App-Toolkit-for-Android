@@ -49,7 +49,9 @@ class DisplaySettingsSearchTest {
 
     private fun graph(tabs: Int): ShellGraph = shellGraph(appTitle = 0) {
         val icon = ToolkitIcon.Vector(Icons.Outlined.Home)
-        listOf(First, Second, Third).take(tabs).forEach { key -> tab(key, 0, icon) {} }
+        if (tabs >= 1) tab(First, 0, icon) {}
+        if (tabs >= 2) tab(Second, 0, icon) {}
+        if (tabs >= 3) tab(Third, 0, icon) {}
         page<DisplaySettingsRoute> {}
         if (tabs == 0) start(DisplaySettingsRoute)
     }

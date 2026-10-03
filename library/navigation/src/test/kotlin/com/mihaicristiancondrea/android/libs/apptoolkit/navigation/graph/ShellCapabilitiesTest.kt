@@ -42,7 +42,11 @@ class ShellCapabilitiesTest {
     private val icon = ToolkitIcon.Vector(Icons.Outlined.Home)
 
     private fun ShellGraphBuilder.tabs(count: Int) {
-        listOf(First, Second, Third, Fourth).take(count).forEach { tab(it, 0, icon) {} }
+        // The builder registers the reified type, so each tab needs its concrete key type.
+        if (count >= 1) tab(First, 0, icon) {}
+        if (count >= 2) tab(Second, 0, icon) {}
+        if (count >= 3) tab(Third, 0, icon) {}
+        if (count >= 4) tab(Fourth, 0, icon) {}
     }
 
     /** App A: three tabs, a framed page, no accessories. */

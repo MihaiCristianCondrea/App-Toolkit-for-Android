@@ -21,7 +21,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import androidx.compose.material3.ColorScheme
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.di.appToolkitHostModules
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.di.dataStoreModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
 import io.ktor.client.engine.HttpClientEngine
 import org.junit.jupiter.api.Test
@@ -50,7 +50,7 @@ class HostKoinGraphTest {
     private fun hostModules(): List<Module> = sampleAppModules(hostBuildConfig = hostBuildConfig)
 
     private fun toolkitModules(): List<Module> =
-        appToolkitHostModules(hostBuildConfig = hostBuildConfig)
+        sampleToolkitModules(hostBuildConfig = hostBuildConfig) + dataStoreModule
 
     @Test
     fun `every host definition can be resolved`() {
@@ -59,8 +59,8 @@ class HostKoinGraphTest {
     }
 
     /**
-     * `:sample:core:apptoolkit` answers every extension point the toolkit declares but does not
-     * bind (the settings providers and the palette), so its graph stands on its own.
+     * The app supplies feature provider modules to the core adapter. Settings also needs the
+     * shared datastore for its showcase unlock repository.
      */
     @Test
     fun `sample adapter satisfies constructor-visible toolkit dependencies`() {

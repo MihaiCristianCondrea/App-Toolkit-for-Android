@@ -86,7 +86,7 @@ integration, and widget modules. Reusable modules never depend back on the app.
 |-------------|-------------------------|-------------------------------------------------------------------------------------------------------|
 | App         | `:sample:app`           | Android packaging, startup, the complete DI graph, navigation aggregation, and cross-feature bridges. |
 | Core        | `:sample:core:*`        | Neutral contracts and capabilities reused by multiple features.                                       |
-| Core        | `:sample:core:apptoolkit` | The whole App Toolkit setup: the Toolkit's Koin graph and every provider the Toolkit asks a host for. |
+| Core        | `:sample:core:apptoolkit` | Toolkit module ordering and host-wide defaults, with feature provider modules supplied by the app. |
 | Feature     | `:sample:feature:*`     | A user-facing vertical slice, including its routes, state, data ownership, and DI bindings.           |
 | Integration | `:sample:integration:*` | Host configuration for an external or reusable SDK boundary.                                          |
 | Widget      | `:sample:widget`        | Home-screen widget UI, receiver, and widget-specific data access.                                     |

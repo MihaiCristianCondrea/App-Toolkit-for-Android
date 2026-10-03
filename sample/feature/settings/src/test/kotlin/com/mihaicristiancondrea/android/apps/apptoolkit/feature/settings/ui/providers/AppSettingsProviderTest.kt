@@ -15,7 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.ui.providers
+package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.providers
+
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.utils.constants.SettingsConstants
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsRoute

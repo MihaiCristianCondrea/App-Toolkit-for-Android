@@ -26,6 +26,9 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.di.appsModu
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.di.componentsModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.di.onboardingModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.di.settingsModule
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.about.di.aboutModule
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.display.di.displayModule
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.startup.ui.providers.AppStartupProvider
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.di.tilesModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.di.adsIntegrationModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
@@ -35,16 +38,23 @@ import org.koin.core.module.Module
 
 /** The exact Koin graph started by the sample application. */
 fun sampleAppModules(hostBuildConfig: AppToolkitHostBuildConfig): List<Module> = buildList {
-    addAll(appToolkitHostModules(hostBuildConfig = hostBuildConfig))
+    addAll(sampleToolkitModules(hostBuildConfig = hostBuildConfig))
     add(dataStoreModule)
     add(appModule)
-    add(settingsModule)
     add(tilesModule)
     add(appsModule)
     add(componentsModule)
     add(adsIntegrationModule)
     add(onboardingModule)
 }
+
+/** Connects feature-owned host providers to the Toolkit without core-to-feature dependencies. */
+internal fun sampleToolkitModules(hostBuildConfig: AppToolkitHostBuildConfig): List<Module> =
+    appToolkitHostModules(
+        hostBuildConfig = hostBuildConfig,
+        startupProviderFactory = ::AppStartupProvider,
+        hostProviderModules = listOf(settingsModule, displayModule, aboutModule(hostBuildConfig)),
+    )
 
 fun initializeKoin(context: Context) {
     val appToolkitBuildConfig = AppToolkitHostBuildConfig(

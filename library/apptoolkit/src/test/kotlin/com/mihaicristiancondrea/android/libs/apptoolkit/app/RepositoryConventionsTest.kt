@@ -28,6 +28,8 @@ class RepositoryConventionsTest {
     @Test
     fun `repositories live in data repository packages`() {
         val misplaced = productionSources()
+            // Shared test fixtures use src/main so other modules can consume them in tests.
+            .filterNot { it.relativePath().startsWith("library/core/testing/") }
             .filter { it.name.endsWith(REPOSITORY_FILE_SUFFIX) }
             .filterNot { source -> DATA_REPOSITORY_PACKAGES.any(source.parentPath()::endsWith) }
             .map { it.relativePath() }

@@ -47,7 +47,7 @@ it means something in the app. The shell's own variations are developer options,
 
 - [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `displaySettingsPage()` and
   includes `displaySettingsModule`.
-- `:sample:core:apptoolkit`, which provides the sample's `DisplaySettingsProvider`.
+- `:sample:feature:display`, which provides the sample's `DisplaySettingsProvider`.
 
 ## Rows
 

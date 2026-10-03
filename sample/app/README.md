@@ -18,9 +18,10 @@ libraries with the host's own feature modules.
   the Toolkit's pages from `toolkitGraph { }`. `startKeyFor` maps the stored start page to its tab.
 - The drawer header's `app_logo`.
 - The sample onboarding provider, owned by
-  [`:sample:feature:onboarding`](../feature/onboarding/README.md), and the whole App Toolkit setup
-  (the toolkit module ordering, the startup and settings providers, the palette), owned by
-  [`:sample:core:apptoolkit`](../core/apptoolkit/README.md).
+  [`:sample:feature:onboarding`](../feature/onboarding/README.md). Startup, settings, display, and
+  About metadata providers live in their corresponding sample features. This module passes their
+  bindings to [`:sample:core:apptoolkit`](../core/apptoolkit/README.md), which owns Toolkit module
+  ordering and host-wide defaults.
 - Application identity resources: launcher mipmaps and host-specific `xml/` configuration
   (shortcuts and widget provider info), including the shortcut target package generated from the
   released application ID.

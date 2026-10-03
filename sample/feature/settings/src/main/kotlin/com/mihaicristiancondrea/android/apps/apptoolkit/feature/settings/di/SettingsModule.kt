@@ -18,16 +18,16 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.di
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.data.repositories.ShowcaseUnlockRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.providers.AppSettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.SettingsProvider
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
 /**
- * The sample's own settings additions: the About page's hidden unlock of the components showcase.
- *
- * The toolkit's settings extension points are answered in `:sample:core:apptoolkit`, with the rest
- * of the App Toolkit setup.
+ * Binds the sample's root settings provider and the About gesture's showcase unlock.
  */
 val settingsModule: Module = module {
+    single<SettingsProvider> { AppSettingsProvider(context = get()) }
     single {
         ShowcaseUnlockRepository(
             dataStore = get(),

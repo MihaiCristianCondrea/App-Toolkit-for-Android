@@ -15,13 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.ui.providers
+plugins {
+    id("com.mihaicristiancondrea.android.apptoolkit.sample-module")
+}
 
-/** The keys of the sample's settings rows, for analytics and as list item keys. */
-object SettingsConstants {
-    const val KEY_SETTINGS_NOTIFICATION: String = "notifications"
-    const val KEY_SETTINGS_DISPLAY: String = "display"
-    const val KEY_SETTINGS_SECURITY_AND_PRIVACY: String = "security_and_privacy"
-    const val KEY_SETTINGS_ADVANCED: String = "advanced"
-    const val KEY_SETTINGS_ABOUT: String = "about"
+android {
+    namespace = "com.mihaicristiancondrea.android.apps.apptoolkit.feature.about"
+}
+
+dependencies {
+    api(project(":library:feature:about"))
 }

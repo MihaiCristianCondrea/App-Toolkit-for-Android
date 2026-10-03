@@ -223,6 +223,10 @@ and `sample` and fails when a repository breaks the project-wide convention:
 
 It also checks production package/directory alignment and prevents sample storage and Issue Reporter data sources from importing core UI helpers.
 
+The repository-placement check excludes `:library:core:testing`, whose shared test fixtures live
+in `src/main` for consumption through `testImplementation`. Package alignment and repository naming
+checks still cover those fixtures.
+
 It replaces a hand-written list of interface/implementation pairs checked with `isAssignableFrom`,
 which the compiler already guaranteed and which had fallen six repositories behind.
 
@@ -248,9 +252,9 @@ things:
 
 This is not a complete generic-host contract test. Reflection verification sees constructor
 dependencies, but it cannot discover `koinInject()` calls inside composables such as
-`DisplaySettingsProvider` and `PrivacySettingsProvider`. Those host requirements are documented and
-bound in [`:sample:feature:settings`](../../sample/feature/settings/README.md), whose own tests
-resolve the provider bindings directly.
+`DisplaySettingsProvider` and `PrivacySettingsProvider`. The sample's feature modules provide their
+own settings bindings, while `:sample:core:apptoolkit` supplies the default privacy provider.
+[`:sample:app`](../../sample/app/README.md) connects them and directly tests provider resolution.
 
 Two mechanics are easy to get wrong when editing that test. Koin resolves a definition against its
 own module plus that module's `includes`, so the graph must be wrapped as

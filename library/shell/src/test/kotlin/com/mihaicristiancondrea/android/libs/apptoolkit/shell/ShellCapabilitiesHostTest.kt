@@ -107,13 +107,13 @@ class ShellCapabilitiesHostTest {
 }
 
 @Serializable
-private data object FirstTab : NavKey
+internal data object FirstTab : NavKey
 
 @Serializable
-private data object SecondTab : NavKey
+internal data object SecondTab : NavKey
 
 @Serializable
-private data object ThirdTab : NavKey
+internal data object ThirdTab : NavKey
 
 /** Writes out the capabilities the shell provides, for the test to read. */
 @Composable
