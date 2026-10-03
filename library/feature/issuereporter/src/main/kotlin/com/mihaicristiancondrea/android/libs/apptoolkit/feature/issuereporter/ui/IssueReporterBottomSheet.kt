@@ -56,9 +56,7 @@ import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
@@ -72,7 +70,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.mar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportFieldError
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportValidation
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.presentation.IssueReporterPresence
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.ISSUE_REPORTER_SCREEN_NAME
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.IssueReporterActionNames
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.issueReporterActionEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.contracts.IssueReporterEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueReporterUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueSubmissionState
@@ -82,14 +85,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui
 import kotlinx.collections.immutable.ImmutableList
 import org.koin.compose.viewmodel.koinViewModel
 
-private const val ISSUE_REPORTER_SCREEN_NAME = "IssueReporter"
 private const val ISSUE_REPORTER_SCREEN_CLASS = "IssueReporterContent"
-
-private object IssueReporterActionNames {
-    const val SEND_ISSUE: String = "send_issue"
-    const val TOGGLE_DEVICE_INFO: String = "toggle_device_info"
-    const val FORMAT_DESCRIPTION: String = "format_description"
-}
 
 /**
  * Shared report sheet for Compose hosts and
@@ -147,19 +143,7 @@ fun IssueReporterBottomSheet(
         IssueReporterBottomSheetContent(
             state = state,
             onEvent = viewModel::onEvent,
-            onSend = {
-                telemetryRepository.logEvent(
-                    issueReporterActionEvent(
-                        actionName = IssueReporterActionNames.SEND_ISSUE,
-                        params = mapOf(
-                            "title_length" to AnalyticsValue.LongVal(state.title.length.toLong()),
-                            "description_length" to AnalyticsValue.LongVal(state.description.length.toLong()),
-                            "has_email" to AnalyticsValue.Bool(state.email.isNotBlank()),
-                        ),
-                    ),
-                )
-                viewModel.onEvent(IssueReporterEvent.Send)
-            },
+            onSend = { viewModel.onEvent(IssueReporterEvent.Send) },
             onDeviceInfoExpandedChange = { expanded ->
                 if (expanded) viewModel.onEvent(IssueReporterEvent.RequestDeviceInfo)
                 telemetryRepository.logEvent(
@@ -340,18 +324,6 @@ private fun MessageToasts(
     }
 }
 
-private fun issueReporterActionEvent(
-    actionName: String,
-    params: Map<String, AnalyticsValue> = emptyMap(),
-): AnalyticsEvent = AnalyticsEvent(
-    name = SettingsAnalytics.Events.ACTION,
-    params = buildMap {
-        put(SettingsAnalytics.Params.SCREEN, AnalyticsValue.Str(ISSUE_REPORTER_SCREEN_NAME))
-        put(SettingsAnalytics.Params.ACTION_NAME, AnalyticsValue.Str(actionName))
-        putAll(params)
-    },
-)
-
 @Preview(showBackground = true)
 @Composable
 private fun IssueReporterBottomSheetContentPreview() {
@@ -362,6 +334,30 @@ private fun IssueReporterBottomSheetContentPreview() {
                 description = "This is a detailed description of the bug in the sample application.",
                 email = "user@example.com",
                 deviceInfo = Loadable.Ready("Device: Pixel 7\nOS: Android 14\nApp Version: 1.0.0"),
+            ),
+            onEvent = {},
+            onSend = {},
+            onDeviceInfoExpandedChange = {},
+            onMarkdownFormat = {},
+            onDone = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun IssueReporterBottomSheetContentInvalidPreview() {
+    MaterialTheme {
+        IssueReporterBottomSheetContent(
+            state = IssueReporterUiState(
+                title = "Crash",
+                description = "",
+                email = "user at example",
+                fieldErrors = IssueReportValidation(
+                    titleError = IssueReportFieldError.TooShort(minimumLength = 10),
+                    descriptionError = IssueReportFieldError.Missing,
+                    emailError = IssueReportFieldError.InvalidEmail,
+                ),
             ),
             onEvent = {},
             onSend = {},

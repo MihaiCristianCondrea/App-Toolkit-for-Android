@@ -22,11 +22,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.do
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.ExtraInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueReporterUiState
 
-/** The draft as the report filed on GitHub, with [deviceInfo] attached. A blank email is left out. */
+/**
+ * The draft as the report filed on GitHub, trimmed, with [deviceInfo] attached. A blank email is
+ * left out.
+ */
 internal fun IssueReporterUiState.toReport(deviceInfo: DeviceInfo): Report = Report(
-    title = title,
-    description = description,
+    title = title.trim(),
+    description = description.trim(),
     deviceInfo = deviceInfo,
     extraInfo = ExtraInfo(),
-    email = email.ifBlank { null },
+    email = email.trim().ifEmpty { null },
 )

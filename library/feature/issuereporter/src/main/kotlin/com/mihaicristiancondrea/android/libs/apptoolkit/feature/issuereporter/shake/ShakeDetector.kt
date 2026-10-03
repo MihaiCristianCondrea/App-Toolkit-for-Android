@@ -25,23 +25,30 @@ import android.os.SystemClock
 import kotlin.math.sqrt
 
 /**
- * Reports a deliberate shake of the device.
+ * Reports a deliberate, repeated shake of the device.
  *
- * Three guards separate a shake from ordinary handling, and all three are needed. [threshold] alone
- * fires on a single jolt, which is what putting a phone down on a table produces, so a gesture must
- * also stay above it across [minimumDurationMillis] and [MINIMUM_SAMPLES] separate readings. The
- * samples are counted over a rolling window rather than required to be consecutive, because a real
- * shake oscillates and its magnitude passes back through rest at every direction reversal.
- * [cooldownMillis] then keeps one gesture from reporting several times as it decays.
+ * A shake is counted each time the acceleration rises above [threshold] after settling back
+ * towards rest, which is what every direction reversal of a hand shaking the phone produces; a
+ * back-and-forth is two. A reading must fall below the midpoint between rest and [threshold]
+ * before the next rise counts, so a reading that hovers around [threshold] stays one shake.
  *
- * The defaults are a starting point tuned to be hard to trigger by accident; they are constructor
- * parameters so they can be tightened against real devices without touching this logic.
+ * Three guards separate the gesture from ordinary handling, and all three are needed. A single jolt,
+ * which is what putting a phone down on a table produces, is one or two shakes, so the gesture
+ * needs [minimumShakes] of them, spread across at least [minimumDurationMillis], within a rolling
+ * window that forgets a half-finished gesture. [cooldownMillis] then keeps one gesture from
+ * reporting several times as it decays.
+ *
+ * The defaults ask for about three firm back-and-forth shakes over most of a second, so the sheet
+ * never opens from a phone being handled, pocketed or put down; they are constructor parameters so
+ * they can be tuned against real devices without touching this logic.
  *
  * Nothing is registered until [start], and [stop] leaves no listener behind. The detector reads
  * acceleration only, which needs no runtime permission.
  *
  * @param sensorManager Platform sensor service, null on a device that does not expose one.
- * @param threshold Acceleration counted as shaking, as a multiple of gravity.
+ * @param threshold Acceleration counted as shaking, as a multiple of gravity. Must exceed 1, the
+ * resting reading.
+ * @param minimumShakes Shakes the gesture needs before it is reported.
  * @param minimumDurationMillis How long the gesture must last before it counts.
  * @param cooldownMillis Quiet period after a reported shake.
  * @param elapsedRealtime Monotonic clock, replaceable in tests.
@@ -50,6 +57,7 @@ import kotlin.math.sqrt
 class ShakeDetector(
     private val sensorManager: SensorManager?,
     private val threshold: Float = DEFAULT_THRESHOLD_G,
+    private val minimumShakes: Int = DEFAULT_MINIMUM_SHAKES,
     private val minimumDurationMillis: Long = DEFAULT_MINIMUM_DURATION_MILLIS,
     private val cooldownMillis: Long = DEFAULT_COOLDOWN_MILLIS,
     private val elapsedRealtime: () -> Long = SystemClock::elapsedRealtime,
@@ -60,9 +68,13 @@ class ShakeDetector(
         sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
     }
 
+    /** Below this the device has settled enough for the next rise to count as a new shake. */
+    private val releaseLevel: Float = (threshold + REST_G) / 2f
+
     private var listening: Boolean = false
+    private var aboveThreshold: Boolean = false
     private var shakingSince: Long = NO_TIMESTAMP
-    private var shakingSamples: Int = 0
+    private var shakes: Int = 0
     private var lastShakeAt: Long = NO_TIMESTAMP
 
     /**
@@ -84,6 +96,7 @@ class ShakeDetector(
 
         if (registered) {
             listening = true
+            aboveThreshold = false
             resetGesture()
         }
         return registered
@@ -99,6 +112,7 @@ class ShakeDetector(
         if (!listening) return
         sensorManager?.unregisterListener(this)
         listening = false
+        aboveThreshold = false
         resetGesture()
     }
 
@@ -124,18 +138,22 @@ class ShakeDetector(
      * through [onSensorChanged].
      */
     internal fun onAcceleration(gForce: Float, now: Long) {
-        if (gForce < threshold) return
+        if (gForce < releaseLevel) {
+            aboveThreshold = false
+            return
+        }
+        if (gForce < threshold || aboveThreshold) return
+        aboveThreshold = true
 
         if (shakingSince == NO_TIMESTAMP || now - shakingSince > GESTURE_WINDOW_MILLIS) {
             shakingSince = now
-            shakingSamples = 1
+            shakes = 1
             return
         }
 
-        shakingSamples++
+        shakes++
 
-        val sustained: Boolean = now - shakingSince >= minimumDurationMillis &&
-                shakingSamples >= MINIMUM_SAMPLES
+        val sustained: Boolean = now - shakingSince >= minimumDurationMillis && shakes >= minimumShakes
         if (!sustained) return
 
         val cooling: Boolean = lastShakeAt != NO_TIMESTAMP && now - lastShakeAt < cooldownMillis
@@ -150,24 +168,27 @@ class ShakeDetector(
 
     private fun resetGesture() {
         shakingSince = NO_TIMESTAMP
-        shakingSamples = 0
+        shakes = 0
     }
 
     companion object {
         /** Acceleration, in multiples of gravity, above which the device counts as shaking. */
         const val DEFAULT_THRESHOLD_G: Float = 2.5f
 
-        /** How long a gesture must stay above the threshold before it is reported. */
-        const val DEFAULT_MINIMUM_DURATION_MILLIS: Long = 300L
+        /** Shakes a gesture needs: three back-and-forth movements. */
+        const val DEFAULT_MINIMUM_SHAKES: Int = 6
+
+        /** How long a gesture must last before it is reported. */
+        const val DEFAULT_MINIMUM_DURATION_MILLIS: Long = 800L
 
         /** Quiet period after a reported shake, so one gesture reports once. */
         const val DEFAULT_COOLDOWN_MILLIS: Long = 1_500L
 
-        /** How long readings are gathered before a half-finished gesture is forgotten. */
-        private const val GESTURE_WINDOW_MILLIS: Long = 1_000L
+        /** How long shakes are gathered before a half-finished gesture is forgotten. */
+        private const val GESTURE_WINDOW_MILLIS: Long = 2_000L
 
-        /** Readings above the threshold a gesture needs, which a single jolt cannot reach. */
-        private const val MINIMUM_SAMPLES: Int = 4
+        /** The reading of a device at rest: gravity alone. */
+        private const val REST_G: Float = 1f
 
         private const val AXIS_COUNT: Int = 3
         private const val NO_TIMESTAMP: Long = -1L

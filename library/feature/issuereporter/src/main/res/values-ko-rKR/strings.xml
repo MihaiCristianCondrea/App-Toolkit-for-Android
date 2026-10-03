@@ -22,7 +22,6 @@
     <string name="issue_description_placeholder">문제 내용과 재현 방법을 설명해 주세요</string>
     <string name="issue_done">완료</string>
     <string name="issue_email_label">이메일</string>
-    <string name="issue_email_optional_placeholder">이메일(선택사항)</string>
     <string name="issue_section_label">문제</string>
     <string name="issue_send">보내기</string>
     <string name="issue_submitted_message">앱을 개선하는 데 도움을 주셔서 감사합니다.</string>

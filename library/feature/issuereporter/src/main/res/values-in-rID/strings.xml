@@ -22,7 +22,6 @@
     <string name="issue_description_placeholder">Jelaskan masalahnya dan cara mereproduksinya</string>
     <string name="issue_done">Selesai</string>
     <string name="issue_email_label">Email</string>
-    <string name="issue_email_optional_placeholder">Email (opsional)</string>
     <string name="issue_section_label">Masalah</string>
     <string name="issue_send">Kirim</string>
     <string name="issue_submitted_message">Terima kasih telah membantu meningkatkan aplikasi ini.</string>

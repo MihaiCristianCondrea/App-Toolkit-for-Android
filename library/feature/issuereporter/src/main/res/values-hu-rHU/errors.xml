@@ -15,9 +15,20 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="error_description_missing">Írd le a hibát</string>
+    <string name="error_email_invalid">Adj meg egy érvényes e-mail-címet</string>
+    <string name="error_email_missing">Add meg az e-mail-címedet</string>
     <string name="error_forbidden">Tiltott: elégtelen jogosultságok</string>
     <string name="error_gone">Az API végpont eltávolítva</string>
-    <string name="error_invalid_report">A cím és a leírás nem lehet üres</string>
+    <string name="error_link_only">Írd le a hibát, ne csak egy linket adj meg.</string>
+    <string name="error_repetitive">Túl sok az ismétlés. Írd le, mi történt.</string>
+    <string name="error_report_cooldown">Várj néhány percet, mielőtt újabb jelentést küldesz.</string>
+    <string name="error_report_duplicate">Ezt a jelentést már elküldted.</string>
+    <string name="error_same_as_title">Adj meg több részletet, mint ami a címben van.</string>
+    <string name="error_title_missing">Adj meg egy címet</string>
+    <string name="error_too_few_letters">Szavakat használj, ne csak szimbólumokat vagy emojikat.</string>
+    <string name="error_too_long">Túl hosszú. Legfeljebb %1$d karaktert használj.</string>
+    <string name="error_too_short">Túl rövid. Legalább %1$d karaktert használj.</string>
     <string name="error_unauthorized">Nem engedélyezett: érvénytelen token</string>
     <string name="error_unprocessable">Érvénytelen adatok a probléma létrehozásához</string>
 </resources>

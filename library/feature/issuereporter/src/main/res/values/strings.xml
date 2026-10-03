@@ -22,7 +22,6 @@
     <string name="issue_description_placeholder">Describe the issue and how to reproduce it</string>
     <string name="issue_done">Done</string>
     <string name="issue_email_label">Email</string>
-    <string name="issue_email_optional_placeholder">Email (optional)</string>
     <string name="issue_section_label">Issue</string>
     <string name="issue_send">Send</string>
     <string name="issue_submitted_message">Thanks for helping improve the app.</string>

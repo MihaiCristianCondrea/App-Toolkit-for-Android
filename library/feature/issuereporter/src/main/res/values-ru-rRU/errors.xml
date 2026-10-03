@@ -15,9 +15,20 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="error_description_missing">Опишите проблему</string>
+    <string name="error_email_invalid">Введите корректный адрес электронной почты</string>
+    <string name="error_email_missing">Введите адрес электронной почты</string>
     <string name="error_forbidden">Доступ запрещён: недостаточно прав</string>
     <string name="error_gone">Конечная точка API удалена</string>
-    <string name="error_invalid_report">Заголовок и описание не могут быть пустыми</string>
+    <string name="error_link_only">Опишите проблему, а не просто вставьте ссылку.</string>
+    <string name="error_repetitive">Слишком много повторов. Опишите, что произошло.</string>
+    <string name="error_report_cooldown">Подождите несколько минут, прежде чем отправлять следующий отчет.</string>
+    <string name="error_report_duplicate">Этот отчет уже отправлен.</string>
+    <string name="error_same_as_title">Добавьте больше подробностей, чем в заголовке.</string>
+    <string name="error_title_missing">Введите заголовок</string>
+    <string name="error_too_few_letters">Используйте слова, а не только символы или эмодзи.</string>
+    <string name="error_too_long">Слишком длинно. Максимальное количество символов: %1$d</string>
+    <string name="error_too_short">Слишком коротко. Минимальное количество символов: %1$d</string>
     <string name="error_unauthorized">Не авторизовано: недопустимый токен</string>
     <string name="error_unprocessable">Недопустимые данные для создания задачи</string>
 </resources>

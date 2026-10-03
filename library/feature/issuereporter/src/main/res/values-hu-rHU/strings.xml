@@ -22,7 +22,6 @@
     <string name="issue_description_placeholder">Írd le a hibát és azt, hogyan reprodukálható</string>
     <string name="issue_done">Kész</string>
     <string name="issue_email_label">E-mail</string>
-    <string name="issue_email_optional_placeholder">E-mail (nem kötelező)</string>
     <string name="issue_section_label">Hiba</string>
     <string name="issue_send">Küldés</string>
     <string name="issue_submitted_message">Köszönjük, hogy segítesz jobbá tenni az alkalmazást.</string>

@@ -15,9 +15,20 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="error_description_missing">Опишете проблема</string>
+    <string name="error_email_invalid">Въведете валиден имейл адрес</string>
+    <string name="error_email_missing">Въведете своя имейл</string>
     <string name="error_forbidden">Забранено: недостатъчни разрешения</string>
     <string name="error_gone">Крайната точка на API е премахната</string>
-    <string name="error_invalid_report">Заглавието и описанието не могат да бъдат празни</string>
+    <string name="error_link_only">Опишете проблема, а не само връзка.</string>
+    <string name="error_repetitive">Твърде много повторения. Опишете какво се случи.</string>
+    <string name="error_report_cooldown">Моля, изчакайте няколко минути, преди да изпратите друг доклад.</string>
+    <string name="error_report_duplicate">Този доклад вече е изпратен.</string>
+    <string name="error_same_as_title">Добавете повече подробности от заглавието.</string>
+    <string name="error_title_missing">Въведете заглавие</string>
+    <string name="error_too_few_letters">Използвайте думи, а не само символи или емоджи.</string>
+    <string name="error_too_long">Твърде дълго. Максимален брой знаци: %1$d</string>
+    <string name="error_too_short">Твърде кратко. Минимален брой знаци: %1$d</string>
     <string name="error_unauthorized">Неоторизиран достъп: Невалиден токен</string>
     <string name="error_unprocessable">Невалидни данни за създаване на проблем</string>
 </resources>

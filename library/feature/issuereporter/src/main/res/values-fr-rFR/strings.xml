@@ -22,7 +22,6 @@
     <string name="issue_description_placeholder">Décrivez le problème et comment le reproduire</string>
     <string name="issue_done">Terminé</string>
     <string name="issue_email_label">E-mail</string>
-    <string name="issue_email_optional_placeholder">E-mail (facultatif)</string>
     <string name="issue_section_label">Problème</string>
     <string name="issue_send">Envoyer</string>
     <string name="issue_submitted_message">Merci de nous aider à améliorer l\'application.</string>

@@ -38,6 +38,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.mar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.contracts.IssueReporterEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers.toUiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueReporterUiState
 
 /** Outward-facing corner radius shared by every grouped block on the report screen. */
@@ -53,6 +54,9 @@ internal val ISSUE_GROUP_OUTER_RADIUS = SizeConstants.LargeMediumSize
  *
  * The leading icon is also what names each field for screen readers: the placeholder is gone as soon
  * as there is content.
+ *
+ * Every field is required. A field's error, from the last send, shows beneath it until the author
+ * edits that field; with no errors the form looks exactly as it always has.
  *
  * @param onMarkdownFormat Called with each formatting action used in the description.
  */
@@ -76,6 +80,7 @@ internal fun IssueReportForm(
             placeholder = stringResource(id = R.string.issue_title_label),
             leadingIcon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Title),
             leadingIconContentDescription = stringResource(id = R.string.issue_title_label),
+            errorText = data.fieldErrors.titleError?.toUiText(missingText = R.string.error_title_missing)?.asString(),
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
@@ -87,6 +92,9 @@ internal fun IssueReportForm(
             description = data.description,
             onDescriptionChange = { onEvent(IssueReporterEvent.UpdateDescription(it)) },
             onMarkdownFormat = onMarkdownFormat,
+            errorText = data.fieldErrors.descriptionError
+                ?.toUiText(missingText = R.string.error_description_missing)
+                ?.asString(),
         )
 
         GeneralTextField(
@@ -95,9 +103,10 @@ internal fun IssueReportForm(
             style = GeneralTextFieldStyle.Grouped,
             position = GroupedItemPosition.LAST,
             groupedOuterRadius = ISSUE_GROUP_OUTER_RADIUS,
-            placeholder = stringResource(id = R.string.issue_email_optional_placeholder),
+            placeholder = stringResource(id = R.string.issue_email_label),
             leadingIcon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Email),
             leadingIconContentDescription = stringResource(id = R.string.issue_email_label),
+            errorText = data.fieldErrors.emailError?.toUiText(missingText = R.string.error_email_missing)?.asString(),
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,

@@ -49,6 +49,7 @@ private const val DESCRIPTION_MAX_LINES: Int = 12
  * of pushing the rest of the form off screen while a long log is pasted in.
  *
  * @param onMarkdownFormat Called with each formatting action used, which the sheet reports.
+ * @param errorText Why the description cannot be sent, shown beneath it; null shows nothing.
  */
 @Composable
 internal fun IssueDescriptionField(
@@ -56,11 +57,13 @@ internal fun IssueDescriptionField(
     onDescriptionChange: (String) -> Unit,
     onMarkdownFormat: (MarkdownFormatAction) -> Unit,
     modifier: Modifier = Modifier,
+    errorText: String? = null,
 ) {
     GeneralTextField(
         value = description,
         onValueChange = onDescriptionChange,
         modifier = modifier,
+        errorText = errorText,
         style = GeneralTextFieldStyle.Grouped,
         position = GroupedItemPosition.MIDDLE,
         groupedOuterRadius = ISSUE_GROUP_OUTER_RADIUS,

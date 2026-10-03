@@ -18,6 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
@@ -27,11 +29,16 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.exceptions.IssueReportRejectedException
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReportHistoryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReporterRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.mappers.toPlainText
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.DeviceInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportFieldError
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportRefusal
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportValidation
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.Report
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.usecases.ValidateIssueReportUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.contracts.IssueReporterEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueReporterUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueSubmissionState
@@ -51,15 +58,21 @@ class IssueReporterViewModelTest {
         val dispatcherExtension = UnconfinedDispatcherExtension()
 
         private const val ISSUE_URL = "https://github.com/user/repo/issues/1"
+        private const val TITLE = "Crash when opening settings"
+        private const val DESCRIPTION = "The app closes as soon as I open the settings page from the drawer."
+        private const val EMAIL = "me@example.com"
     }
 
     private val telemetryRepository = FakeTelemetryRepository()
 
     private fun createViewModel(
         repository: IssueReporterRepository = FakeIssueReporterRepository(),
+        historyRepository: IssueReportHistoryRepository = FakeIssueReportHistoryRepository(),
         githubToken: String = "token",
     ): IssueReporterViewModel = IssueReporterViewModel(
         repository = repository,
+        historyRepository = historyRepository,
+        validateReport = ValidateIssueReportUseCase(),
         githubTarget = GithubTarget(username = "user", repository = "repo"),
         githubToken = githubToken,
         telemetryRepository = telemetryRepository,
@@ -67,9 +80,13 @@ class IssueReporterViewModelTest {
 
     private fun advance() = dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
-    private fun IssueReporterViewModel.writeDraft(email: String = "") {
-        onEvent(IssueReporterEvent.UpdateTitle("Bug"))
-        onEvent(IssueReporterEvent.UpdateDescription("Desc"))
+    private fun IssueReporterViewModel.writeDraft(
+        title: String = TITLE,
+        description: String = DESCRIPTION,
+        email: String = EMAIL,
+    ) {
+        onEvent(IssueReporterEvent.UpdateTitle(title))
+        onEvent(IssueReporterEvent.UpdateDescription(description))
         onEvent(IssueReporterEvent.UpdateEmail(email))
     }
 
@@ -77,6 +94,12 @@ class IssueReporterViewModelTest {
 
     private val UiMessage.resourceId: Int
         get() = (text as UiTextHelper.StringResource).resourceId
+
+    private fun sendAttempts(): List<AnalyticsEvent> = telemetryRepository.loggedEvents.filter { event ->
+        event.params["action_name"] == AnalyticsValue.Str("send_issue")
+    }
+
+    private fun AnalyticsEvent.validationFailure(): AnalyticsValue? = params["validation_failure"]
 
     @Test
     fun `the sheet opens with an empty draft and no message`() = runTest(dispatcherExtension.testDispatcher) {
@@ -103,41 +126,214 @@ class IssueReporterViewModelTest {
     }
 
     @Test
-    fun `a blank report is refused with a message and nothing is sent`() =
+    fun `a blank report shows an error under every field and nothing is sent`() =
         runTest(dispatcherExtension.testDispatcher) {
             val repository = FakeIssueReporterRepository()
-            val viewModel = createViewModel(repository = repository)
+            val history = FakeIssueReportHistoryRepository()
+            val viewModel = createViewModel(repository = repository, historyRepository = history)
 
             viewModel.onEvent(IssueReporterEvent.Send)
             advance()
 
-            val message = viewModel.onlyMessage()
-            assertEquals(R.string.error_invalid_report, message.resourceId)
-            assertTrue(message.isError)
+            assertEquals(
+                IssueReportValidation(
+                    titleError = IssueReportFieldError.Missing,
+                    descriptionError = IssueReportFieldError.Missing,
+                    emailError = IssueReportFieldError.Missing,
+                ),
+                viewModel.state.value.fieldErrors,
+            )
+            assertTrue(viewModel.messages.value.isEmpty())
             assertTrue(repository.sentReports.isEmpty())
+            assertEquals(0, history.checks)
             assertEquals(IssueSubmissionState.Editing, viewModel.state.value.submissionState)
         }
 
     @Test
-    fun `sending files the draft and shows the confirmation`() = runTest(dispatcherExtension.testDispatcher) {
+    fun `a report without an email is not sent`() = runTest(dispatcherExtension.testDispatcher) {
         val repository = FakeIssueReporterRepository()
         val viewModel = createViewModel(repository = repository)
-        viewModel.writeDraft(email = "me@example.com")
+        viewModel.writeDraft(email = "")
 
         viewModel.onEvent(IssueReporterEvent.Send)
         advance()
 
-        val state = viewModel.state.value
-        assertEquals(IssueSubmissionState.Submitted(issueUrl = ISSUE_URL), state.submissionState)
-        assertEquals("Bug", state.title)
-        assertEquals("Desc", state.description)
-        assertTrue(viewModel.messages.value.isEmpty())
-        val report = repository.sentReports.single()
-        assertEquals("Bug", report.title)
-        assertTrue(report.getDescription().contains("Desc"))
-        assertTrue(report.getDescription().contains("me@example.com"))
-        assertEquals(listOf<String?>("token"), repository.sentTokens)
+        assertEquals(
+            IssueReportValidation(emailError = IssueReportFieldError.Missing),
+            viewModel.state.value.fieldErrors,
+        )
+        assertTrue(repository.sentReports.isEmpty())
     }
+
+    @Test
+    fun `a malformed email is not sent`() = runTest(dispatcherExtension.testDispatcher) {
+        val repository = FakeIssueReporterRepository()
+        val viewModel = createViewModel(repository = repository)
+        viewModel.writeDraft(email = "achrafachrafachref 123@gmail.com")
+
+        viewModel.onEvent(IssueReporterEvent.Send)
+        advance()
+
+        assertEquals(IssueReportFieldError.InvalidEmail, viewModel.state.value.fieldErrors.emailError)
+        assertTrue(repository.sentReports.isEmpty())
+    }
+
+    /** The shape of the garbage reports filed as #714 and #715. */
+    @Test
+    fun `a short unrelated report is not sent`() = runTest(dispatcherExtension.testDispatcher) {
+        val repository = FakeIssueReporterRepository()
+        val viewModel = createViewModel(repository = repository)
+        viewModel.writeDraft(title = "Hello", description = "Good app")
+
+        viewModel.onEvent(IssueReporterEvent.Send)
+        advance()
+
+        val errors = viewModel.state.value.fieldErrors
+        assertEquals(IssueReportFieldError.TooShort(minimumLength = 10), errors.titleError)
+        assertEquals(IssueReportFieldError.TooShort(minimumLength = 40), errors.descriptionError)
+        assertTrue(repository.sentReports.isEmpty())
+    }
+
+    @Test
+    fun `editing a field clears only its own error`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel()
+        viewModel.onEvent(IssueReporterEvent.Send)
+        advance()
+
+        viewModel.onEvent(IssueReporterEvent.UpdateEmail("m"))
+        advance()
+
+        val errors = viewModel.state.value.fieldErrors
+        assertNull(errors.emailError)
+        assertEquals(IssueReportFieldError.Missing, errors.titleError)
+        assertEquals(IssueReportFieldError.Missing, errors.descriptionError)
+    }
+
+    @Test
+    fun `a report in another script is sent`() = runTest(dispatcherExtension.testDispatcher) {
+        val repository = FakeIssueReporterRepository()
+        val viewModel = createViewModel(repository = repository)
+        viewModel.writeDraft(
+            title = "應用程式開啟設定時閃退",
+            description = "每次我從主畫面開啟設定頁面時，應用程式都會立即關閉。重新安裝後問題仍然存在，請協助檢查這個錯誤。",
+        )
+
+        viewModel.onEvent(IssueReporterEvent.Send)
+        advance()
+
+        assertEquals("應用程式開啟設定時閃退", repository.sentReports.single().title)
+    }
+
+    @Test
+    fun `sending files the trimmed draft, records it and shows the confirmation`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val repository = FakeIssueReporterRepository()
+            val history = FakeIssueReportHistoryRepository()
+            val viewModel = createViewModel(repository = repository, historyRepository = history)
+            viewModel.writeDraft(title = "  $TITLE  ", description = "\n$DESCRIPTION\n", email = " $EMAIL ")
+
+            viewModel.onEvent(IssueReporterEvent.Send)
+            advance()
+
+            val state = viewModel.state.value
+            assertEquals(IssueSubmissionState.Submitted(issueUrl = ISSUE_URL), state.submissionState)
+            assertEquals(IssueReportValidation(), state.fieldErrors)
+            assertTrue(viewModel.messages.value.isEmpty())
+            val report = repository.sentReports.single()
+            assertEquals(TITLE, report.title)
+            assertTrue(report.getDescription().contains(DESCRIPTION))
+            assertTrue(report.getDescription().contains("*Reported by [$EMAIL](mailto:$EMAIL)*"))
+            assertEquals(listOf<String?>("token"), repository.sentTokens)
+            assertEquals(listOf(TITLE to DESCRIPTION), history.recorded)
+        }
+
+    @Test
+    fun `a report inside the cooldown is held back with a message`() = runTest(dispatcherExtension.testDispatcher) {
+        val repository = FakeIssueReporterRepository()
+        val history = FakeIssueReportHistoryRepository(refusal = IssueReportRefusal.COOLDOWN)
+        val viewModel = createViewModel(repository = repository, historyRepository = history)
+        viewModel.writeDraft()
+
+        viewModel.onEvent(IssueReporterEvent.Send)
+        advance()
+
+        val message = viewModel.onlyMessage()
+        assertEquals(R.string.error_report_cooldown, message.resourceId)
+        assertTrue(message.isError)
+        assertTrue(repository.sentReports.isEmpty())
+        assertTrue(history.recorded.isEmpty())
+        assertEquals(IssueSubmissionState.Editing, viewModel.state.value.submissionState)
+        assertEquals(TITLE, viewModel.state.value.title)
+    }
+
+    @Test
+    fun `a duplicate report is held back with a message`() = runTest(dispatcherExtension.testDispatcher) {
+        val repository = FakeIssueReporterRepository()
+        val viewModel = createViewModel(
+            repository = repository,
+            historyRepository = FakeIssueReportHistoryRepository(refusal = IssueReportRefusal.DUPLICATE),
+        )
+        viewModel.writeDraft()
+
+        viewModel.onEvent(IssueReporterEvent.Send)
+        advance()
+
+        assertEquals(R.string.error_report_duplicate, viewModel.onlyMessage().resourceId)
+        assertTrue(repository.sentReports.isEmpty())
+    }
+
+    @Test
+    fun `a second report right after the first is held back`() = runTest(dispatcherExtension.testDispatcher) {
+        val repository = FakeIssueReporterRepository()
+        val history = FakeIssueReportHistoryRepository()
+        val viewModel = createViewModel(repository = repository, historyRepository = history)
+        viewModel.writeDraft()
+        viewModel.onEvent(IssueReporterEvent.Send)
+        advance()
+        viewModel.onEvent(IssueReporterEvent.Reset)
+        advance()
+
+        history.refusal = IssueReportRefusal.COOLDOWN
+        viewModel.writeDraft(title = "Another crash in settings")
+        viewModel.onEvent(IssueReporterEvent.Send)
+        advance()
+
+        assertEquals(1, repository.sentReports.size)
+        assertEquals(R.string.error_report_cooldown, viewModel.onlyMessage().resourceId)
+    }
+
+    @Test
+    fun `each send attempt is logged with what stopped it, and never the text`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val history = FakeIssueReportHistoryRepository()
+            val viewModel = createViewModel(historyRepository = history)
+
+            viewModel.writeDraft(email = "achrafachrafachref 123@gmail.com")
+            viewModel.onEvent(IssueReporterEvent.Send)
+            advance()
+
+            viewModel.writeDraft(description = "Too short")
+            viewModel.onEvent(IssueReporterEvent.Send)
+            advance()
+
+            history.refusal = IssueReportRefusal.DUPLICATE
+            viewModel.writeDraft()
+            viewModel.onEvent(IssueReporterEvent.Send)
+            advance()
+
+            history.refusal = null
+            viewModel.onEvent(IssueReporterEvent.Send)
+            advance()
+
+            val attempts = sendAttempts()
+            assertEquals(
+                listOf("email_invalid", "description_too_short", "duplicate", "none").map { AnalyticsValue.Str(it) },
+                attempts.map { it.validationFailure() },
+            )
+            assertTrue(attempts.none { "has_email" in it.params })
+            val logged: String = telemetryRepository.loggedEvents.joinToString { it.params.values.toString() }
+            assertTrue(EMAIL !in logged && TITLE !in logged && "achraf" !in logged)
+        }
 
     @Test
     fun `a blank token is sent as none`() = runTest(dispatcherExtension.testDispatcher) {
@@ -194,7 +390,7 @@ class IssueReporterViewModelTest {
 
         val state = viewModel.state.value
         assertEquals(IssueSubmissionState.Failed, state.submissionState)
-        assertEquals("Bug", state.title)
+        assertEquals(TITLE, state.title)
         val message = viewModel.onlyMessage()
         assertEquals(R.string.error_unauthorized, message.resourceId)
         assertTrue(message.isError)
@@ -308,7 +504,10 @@ class IssueReporterViewModelTest {
 
     @Test
     fun `reset clears a message still waiting`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = createViewModel()
+        val viewModel = createViewModel(
+            historyRepository = FakeIssueReportHistoryRepository(refusal = IssueReportRefusal.COOLDOWN),
+        )
+        viewModel.writeDraft()
         viewModel.onEvent(IssueReporterEvent.Send)
         advance()
 
@@ -367,7 +566,10 @@ class IssueReporterViewModelTest {
 
     @Test
     fun `a shown message leaves the queue`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = createViewModel()
+        val viewModel = createViewModel(
+            historyRepository = FakeIssueReportHistoryRepository(refusal = IssueReportRefusal.COOLDOWN),
+        )
+        viewModel.writeDraft()
         viewModel.onEvent(IssueReporterEvent.Send)
         advance()
 
@@ -415,6 +617,22 @@ class IssueReporterViewModelTest {
             sentReports += report
             sentTokens += token
             return ISSUE_URL
+        }
+    }
+
+    private class FakeIssueReportHistoryRepository(
+        var refusal: IssueReportRefusal? = null,
+    ) : IssueReportHistoryRepository {
+        val recorded: MutableList<Pair<String, String>> = mutableListOf()
+        var checks: Int = 0
+
+        override suspend fun refusalFor(title: String, description: String): IssueReportRefusal? {
+            checks++
+            return refusal
+        }
+
+        override suspend fun recordSubmission(title: String, description: String) {
+            recorded += title to description
         }
     }
 }

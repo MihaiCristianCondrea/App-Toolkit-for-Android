@@ -15,9 +15,20 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="error_description_missing">Mô tả sự cố</string>
+    <string name="error_email_invalid">Nhập địa chỉ email hợp lệ</string>
+    <string name="error_email_missing">Nhập email của bạn</string>
     <string name="error_forbidden">Bị cấm: không đủ quyền</string>
     <string name="error_gone">Điểm cuối API đã bị xóa</string>
-    <string name="error_invalid_report">Tiêu đề và mô tả không được để trống</string>
+    <string name="error_link_only">Hãy mô tả sự cố, không chỉ một liên kết.</string>
+    <string name="error_repetitive">Lặp lại quá nhiều. Hãy mô tả điều đã xảy ra.</string>
+    <string name="error_report_cooldown">Vui lòng đợi vài phút trước khi gửi báo cáo khác.</string>
+    <string name="error_report_duplicate">Báo cáo này đã được gửi.</string>
+    <string name="error_same_as_title">Thêm nhiều chi tiết hơn tiêu đề.</string>
+    <string name="error_title_missing">Nhập tiêu đề</string>
+    <string name="error_too_few_letters">Hãy dùng từ ngữ, không chỉ ký hiệu hoặc biểu tượng cảm xúc.</string>
+    <string name="error_too_long">Quá dài. Hãy dùng tối đa %1$d ký tự.</string>
+    <string name="error_too_short">Quá ngắn. Hãy dùng ít nhất %1$d ký tự.</string>
     <string name="error_unauthorized">Không được ủy quyền: mã thông báo không hợp lệ</string>
     <string name="error_unprocessable">Dữ liệu không hợp lệ để tạo vấn đề</string>
 </resources>

@@ -19,11 +19,14 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.u
 
 import androidx.compose.runtime.Immutable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportValidation
 
 /**
  * Everything the issue reporter sheet renders. The form fields survive submission and are cleared
  * when the sheet is dismissed.
  *
+ * @property fieldErrors The errors shown under the fields. Set by a send that failed validation,
+ * and cleared field by field as the author edits.
  * @property submissionState Which of the editor and the confirmation shows.
  * @property deviceInfo The device details as plain text. Stays [Loadable.Empty] until the device
  * panel is first opened.
@@ -33,6 +36,7 @@ data class IssueReporterUiState(
     val title: String = "",
     val description: String = "",
     val email: String = "",
+    val fieldErrors: IssueReportValidation = IssueReportValidation(),
     val submissionState: IssueSubmissionState = IssueSubmissionState.Editing,
     val deviceInfo: Loadable<String> = Loadable.Empty(),
 )

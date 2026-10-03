@@ -15,9 +15,20 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="error_description_missing">Jelaskan masalahnya</string>
+    <string name="error_email_invalid">Masukkan alamat email yang valid</string>
+    <string name="error_email_missing">Masukkan email Anda</string>
     <string name="error_forbidden">Dilarang: izin tidak mencukupi</string>
     <string name="error_gone">Endpoint API dihapus</string>
-    <string name="error_invalid_report">Judul dan deskripsi tidak boleh kosong</string>
+    <string name="error_link_only">Jelaskan masalahnya, bukan hanya tautan.</string>
+    <string name="error_repetitive">Terlalu berulang. Jelaskan apa yang terjadi.</string>
+    <string name="error_report_cooldown">Harap tunggu beberapa menit sebelum mengirim laporan lain.</string>
+    <string name="error_report_duplicate">Laporan ini sudah dikirim.</string>
+    <string name="error_same_as_title">Tambahkan detail yang lebih lengkap daripada judul.</string>
+    <string name="error_title_missing">Masukkan judul</string>
+    <string name="error_too_few_letters">Gunakan kata-kata, bukan hanya simbol atau emoji.</string>
+    <string name="error_too_long">Terlalu panjang. Gunakan maksimal %1$d karakter.</string>
+    <string name="error_too_short">Terlalu pendek. Gunakan minimal %1$d karakter.</string>
     <string name="error_unauthorized">Tidak diizinkan: token tidak valid</string>
     <string name="error_unprocessable">Data tidak valid untuk pembuatan isu</string>
 </resources>

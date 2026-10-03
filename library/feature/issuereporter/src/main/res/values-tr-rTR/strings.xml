@@ -22,7 +22,6 @@
     <string name="issue_description_placeholder">Sorunu ve nasıl yeniden oluşturulacağını açıklayın</string>
     <string name="issue_done">Bitti</string>
     <string name="issue_email_label">E-posta</string>
-    <string name="issue_email_optional_placeholder">E-posta (isteğe bağlı)</string>
     <string name="issue_section_label">Sorun</string>
     <string name="issue_send">Gönder</string>
     <string name="issue_submitted_message">Uygulamayı geliştirmemize yardımcı olduğunuz için teşekkürler.</string>

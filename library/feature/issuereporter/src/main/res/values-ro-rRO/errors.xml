@@ -15,9 +15,20 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="error_description_missing">Descrie problema</string>
+    <string name="error_email_invalid">Introdu o adresă de e-mail validă</string>
+    <string name="error_email_missing">Introdu adresa ta de e-mail</string>
     <string name="error_forbidden">Interzis: permisiuni insuficiente</string>
     <string name="error_gone">Punctul final API a fost eliminat</string>
-    <string name="error_invalid_report">Titlul și descrierea nu pot fi goale</string>
+    <string name="error_link_only">Descrie problema, nu doar un link.</string>
+    <string name="error_repetitive">Prea repetitiv. Descrie ce s-a întâmplat.</string>
+    <string name="error_report_cooldown">Te rugăm să aștepți câteva minute înainte de a trimite un alt raport.</string>
+    <string name="error_report_duplicate">Acest raport a fost deja trimis.</string>
+    <string name="error_same_as_title">Adaugă mai multe detalii decât în titlu.</string>
+    <string name="error_title_missing">Introdu un titlu</string>
+    <string name="error_too_few_letters">Folosește cuvinte, nu doar simboluri sau emoji.</string>
+    <string name="error_too_long">Prea lung. Număr maxim de caractere: %1$d</string>
+    <string name="error_too_short">Prea scurt. Număr minim de caractere: %1$d</string>
     <string name="error_unauthorized">Neautorizat: token invalid</string>
     <string name="error_unprocessable">Date invalide pentru crearea problemei</string>
 </resources>

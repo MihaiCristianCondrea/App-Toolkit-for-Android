@@ -15,9 +15,20 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="error_description_missing">Опишіть проблему</string>
+    <string name="error_email_invalid">Введіть правильну адресу електронної пошти</string>
+    <string name="error_email_missing">Введіть адресу електронної пошти</string>
     <string name="error_forbidden">Заборонено: недостатньо дозволів</string>
     <string name="error_gone">Кінцеву точку API видалено</string>
-    <string name="error_invalid_report">Заголовок і опис не можуть бути порожніми</string>
+    <string name="error_link_only">Опишіть проблему, а не лише вставте посилання.</string>
+    <string name="error_repetitive">Забагато повторів. Опишіть, що сталося.</string>
+    <string name="error_report_cooldown">Зачекайте кілька хвилин, перш ніж надсилати наступний звіт.</string>
+    <string name="error_report_duplicate">Цей звіт уже надіслано.</string>
+    <string name="error_same_as_title">Додайте більше подробиць, ніж у заголовку.</string>
+    <string name="error_title_missing">Введіть заголовок</string>
+    <string name="error_too_few_letters">Використовуйте слова, а не лише символи чи емодзі.</string>
+    <string name="error_too_long">Занадто довго. Максимальна кількість символів: %1$d</string>
+    <string name="error_too_short">Занадто коротко. Мінімальна кількість символів: %1$d</string>
     <string name="error_unauthorized">Неавторизовано: недійсний токен</string>
     <string name="error_unprocessable">Недійсні дані для створення запиту</string>
 </resources>

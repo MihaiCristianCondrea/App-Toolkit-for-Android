@@ -18,17 +18,26 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReportHistoryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReporterRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.di.GithubToken
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.mappers.toPlainText
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportRefusal
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportValidation
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.usecases.ValidateIssueReportUseCase
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.ISSUE_REPORTER_SCREEN_NAME
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.IssueReporterActionNames
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.IssueReporterParams
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.analyticsName
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.failureName
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.issueReporterActionEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.contracts.IssueReporterEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers.toMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers.toReport
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers.toSendFailedMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueReporterUiState
@@ -40,17 +49,23 @@ import kotlinx.coroutines.Job
  * dismissal; a reset requested during sending is deferred until that send finishes. Success is
  * rendered by the confirmation state rather than a transient message.
  *
- * [IssueReporterRepository] is main-safe, so this needs no dispatcher.
+ * A send passes three gates before it reaches GitHub: [validateReport], whose errors show under the
+ * fields, then the cooldown and the duplicate check of [historyRepository], which show as a
+ * message. Each attempt is logged once as `send_issue` with the gate that stopped it.
+ *
+ * Both repositories are main-safe, so this needs no dispatcher.
  */
 class IssueReporterViewModel(
     private val repository: IssueReporterRepository,
+    private val historyRepository: IssueReportHistoryRepository,
+    private val validateReport: ValidateIssueReportUseCase,
     private val githubTarget: GithubTarget,
     @param:GithubToken private val githubToken: String,
     telemetryRepository: TelemetryRepository,
 ) : LoggedScreenViewModel<IssueReporterUiState, IssueReporterEvent>(
     initialState = IssueReporterUiState(),
     telemetryRepository = telemetryRepository,
-    screenName = "IssueReporter",
+    screenName = ISSUE_REPORTER_SCREEN_NAME,
     viewModelName = "IssueReporterViewModel",
 ) {
     private var sendJob: Job? = null
@@ -59,9 +74,18 @@ class IssueReporterViewModel(
 
     override fun handleEvent(event: IssueReporterEvent) {
         when (event) {
-            is IssueReporterEvent.UpdateTitle -> setState { copy(title = event.value) }
-            is IssueReporterEvent.UpdateDescription -> setState { copy(description = event.value) }
-            is IssueReporterEvent.UpdateEmail -> setState { copy(email = event.value) }
+            is IssueReporterEvent.UpdateTitle -> setState {
+                copy(title = event.value, fieldErrors = fieldErrors.copy(titleError = null))
+            }
+
+            is IssueReporterEvent.UpdateDescription -> setState {
+                copy(description = event.value, fieldErrors = fieldErrors.copy(descriptionError = null))
+            }
+
+            is IssueReporterEvent.UpdateEmail -> setState {
+                copy(email = event.value, fieldErrors = fieldErrors.copy(emailError = null))
+            }
+
             IssueReporterEvent.RequestDeviceInfo -> loadDeviceInfo()
             IssueReporterEvent.Send -> sendReport()
             IssueReporterEvent.Reset -> resetReport()
@@ -89,40 +113,73 @@ class IssueReporterViewModel(
     }
 
     /**
-     * Files the draft as it stands when sent. A blank title or description is refused with a
-     * message, and a send already in flight makes this a no-op. A failure returns to the editor
-     * with the draft intact.
+     * Files the draft, trimmed, as it stands when sent. An invalid draft shows its field errors
+     * and a report held back by the cooldown or as a duplicate shows a message; neither is sent.
+     * A send already in flight makes this a no-op. A failure returns to the editor with the draft
+     * intact.
      */
     private fun sendReport() {
         if (sendJob?.isActive == true) return
 
         val draft: IssueReporterUiState = currentState
-        if (draft.title.isBlank() || draft.description.isBlank()) {
-            showMessage(UiMessage(text = InvalidReportText, isError = true))
+        val validation: IssueReportValidation = validateReport(
+            title = draft.title,
+            description = draft.description,
+            email = draft.email,
+        )
+        setState { copy(fieldErrors = validation) }
+        if (!validation.isValid) {
+            logSendAttempt(draft = draft, failure = validation.failureName())
             return
         }
 
         sendJob = launchReport(
             action = Actions.SEND_REPORT,
-            extra = mapOf(
-                ExtraKeys.HAS_TITLE to draft.title.isNotBlank().toString(),
-                ExtraKeys.HAS_DESCRIPTION to draft.description.isNotBlank().toString(),
-            ),
             onError = { error ->
                 setState { copy(submissionState = IssueSubmissionState.Failed) }
                 showMessage(error.toSendFailedMessage())
                 applyPendingReset()
             },
         ) {
+            val title: String = draft.title.trim()
+            val description: String = draft.description.trim()
+            val refusal: IssueReportRefusal? = historyRepository.refusalFor(title = title, description = description)
+            logSendAttempt(draft = draft, failure = refusal?.analyticsName)
+            if (refusal != null) {
+                showMessage(refusal.toMessage())
+                applyPendingReset()
+                return@launchReport
+            }
+
             setState { copy(submissionState = IssueSubmissionState.Sending) }
             val issueUrl: String = repository.sendReport(
                 report = draft.toReport(deviceInfo = repository.captureDeviceInfo()),
                 target = githubTarget,
                 token = githubToken.takeIf { it.isNotBlank() },
             )
+            historyRepository.recordSubmission(title = title, description = description)
             setState { copy(submissionState = IssueSubmissionState.Submitted(issueUrl = issueUrl)) }
             applyPendingReset()
         }
+    }
+
+    /**
+     * Logs a tap on Send with the gate that stopped it, or [IssueReporterParams.VALIDATION_PASSED].
+     * Only lengths and the failure's name are sent, never the text or the email.
+     */
+    private fun logSendAttempt(draft: IssueReporterUiState, failure: String?) {
+        telemetryRepository.logEvent(
+            issueReporterActionEvent(
+                actionName = IssueReporterActionNames.SEND_ISSUE,
+                params = mapOf(
+                    IssueReporterParams.TITLE_LENGTH to AnalyticsValue.LongVal(draft.title.length.toLong()),
+                    IssueReporterParams.DESCRIPTION_LENGTH to
+                        AnalyticsValue.LongVal(draft.description.length.toLong()),
+                    IssueReporterParams.VALIDATION_FAILURE to
+                        AnalyticsValue.Str(failure ?: IssueReporterParams.VALIDATION_PASSED),
+                ),
+            ),
+        )
     }
 
     /**
@@ -152,14 +209,5 @@ class IssueReporterViewModel(
     private object Actions {
         const val SEND_REPORT: String = "sendReport"
         const val LOAD_DEVICE_INFO: String = "loadDeviceInfo"
-    }
-
-    private object ExtraKeys {
-        const val HAS_TITLE: String = "hasTitle"
-        const val HAS_DESCRIPTION: String = "hasDescription"
-    }
-
-    private companion object {
-        val InvalidReportText = UiTextHelper.StringResource(R.string.error_invalid_report)
     }
 }

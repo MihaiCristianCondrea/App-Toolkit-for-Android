@@ -26,11 +26,15 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.utils.extensions.toToken
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.local.DeviceInfoLocalDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.remote.IssueReporterRemoteDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.DefaultIssueReportHistoryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.DefaultIssueReporterRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReportHistoryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReporterRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReporterConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.providers.DeviceInfoProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.usecases.ValidateIssueReportUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.shake.IssueReporterShakeManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterViewModel
 import org.koin.android.ext.koin.androidApplication
@@ -65,6 +69,10 @@ fun issueReporterModule(
             telemetryRepository = get(),
         )
     }
+    single<IssueReportHistoryRepository> {
+        DefaultIssueReportHistoryRepository(dataStore = get<CommonDataStore>().dataStore)
+    }
+    single<ValidateIssueReportUseCase> { ValidateIssueReportUseCase() }
     single<GithubTarget> {
         GithubTarget(
             username = GithubConstants.GITHUB_USER,
@@ -80,6 +88,8 @@ fun issueReporterModule(
     viewModel {
         IssueReporterViewModel(
             repository = get(),
+            historyRepository = get(),
+            validateReport = get(),
             githubTarget = get(),
             githubToken = get(qualifier = githubTokenQualifier),
             telemetryRepository = get(),
