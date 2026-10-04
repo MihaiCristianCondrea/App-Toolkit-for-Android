@@ -2,200 +2,692 @@
 
 ---
 
-# October 03, 2026
+# Unreleased
 
-**Version:** `3.0.0-pre22`
+### Fixed
 
-This release replaces the Toolkit's navigation with a one-activity shell. It removes the old navigation instead of deprecating it; the [3.0.0 migration guide](../docs/migration/3.0.0.md) maps every removed API to its replacement.
-
-### Added
-
-- Added the shell navigation core to `:library:navigation`: `shellGraph { }` describes tabs, children, pages, the drawer, the overflow menu, start screens and deep links; `ShellNavigator` moves through them with one stack per tab and a tab history that back follows; `ShellNavDisplay` plays Android's cross-activity back animation on the back gesture; `ListDetailScene` shows a list page and its detail side by side with a draggable separator. Tabs, drawer entries and overflow entries take `ToolkitIcon`, so animated vector drawables and Lottie icons play on them.
-- Added `:library:shell` with `ShellHost`, which draws an app's graph in its one activity: app bar, navigation bar, rail, drawers with the app's header, overflow menu, banner, player and floating action button, built from the Toolkit's own buttons and icons.
-- Added `:library:feature:developer` with `DeveloperOptionsScreen`, which switches every shell variation while the app runs and shows the window size and every back stack.
-- Added `toolkitGraph { }` and `toolkitPages()` to `:library:apptoolkit`, which register the Toolkit's pages in an app's graph unless the app registers the key itself.
-- Added a page registration to each feature: `settingsPage()`, `displaySettingsPage()`, `themeSettingsPage()`, `privacySettingsPage()`, `diagnosticsSettingsPage()`, `advancedSettingsPage()`, `aboutPages()`, `licensesPage()`, `helpPage()`, `supportPage()`, `permissionsPage()`, `adsSettingsPage()`, `developerOptionsPage()` and `onboardingPages()`. The settings categories are details of the settings list, so on wide windows they open beside it.
-- Added `StartupRoute` and `OnboardingRoute` as start screens: the first launch runs inside the app's one activity, chosen in `ShellHost(resolveStart = ...)`.
-- Added `PermissionUsageActivity` to `:library:apptoolkit`, declared in its manifest for `VIEW_PERMISSION_USAGE` and `VIEW_PERMISSION_USAGE_FOR_PERIOD`: every app gets the information icon in Android's permission manager and privacy dashboard, which opens the privacy page over the system's settings.
-- Added graphs of pages only to `:library:navigation`: a graph without tabs starts on a page and is left from it. A page's back arrow now leaves the app when that page is the whole stack, as back does.
-- Added `SettingsPreference.destination` and `SettingsPreference.action`: a settings row opens a key, unless the app's action handles the click first.
-- Added `LocalPageSnackbarHostState` and `rememberPageSnackbarHostState()` to `:library:core:ui`, so a page's snackbars sit above the shell's bottom chrome.
-- Added the `IssueReporterSheet` contract to `:library:core:ui`, bound by `:library:feature:issuereporter`, and `ConsentHost(activity)` and `ReviewHost(activity)` builders.
-- Added screenshot tests of the shell's chrome to `:library:shell`, recorded with Roborazzi.
-- Added a column of floating action buttons to the Toolkit's scaffolds: `ToolkitFab` in `:library:core:designsystem` describes one (icon, action, optional label for an extended button, Material 3 size, container colour, expanded, visible), and `ToolkitFabColumn` in `:library:core:ui` draws a list with the Toolkit's sound, haptics, bounce and animated icons. Declare them in the graph with `fabs = { listOf(...) }` on a tab, child or page, or from the screen with `ScaffoldFabs(listOf(...))`; `PageScaffold` takes `fabs` too.
-- Added `DrawerBuilder.footer { }`, entries that always close the drawer, pinned to its bottom edge, and `toolkitFooter(onShowUpdates)` in `:library:apptoolkit`, which puts Settings, Help and feedback, Updates and Share there.
-- Added `ChoicePreferenceItem` to `:library:core:ui`: a settings row that shows the chosen option and opens a radio-list dialog.
-- Added a Developer options row to the advanced settings, shown once the About screen's version easter egg is found.
-- Added the page frame to `:library:core:ui`: `PageScaffold`, `ShellTopAppBar`, `LocalContentPadding` and `contentPadding()`, `ContentWidthBox`, `PanePlaceholder` and `ListPlaceholder`.
-- Added `FabScrollBehavior` to `:library:core:ui`, and an `expanded` parameter to `ToolkitFabColumn` and `ToolkitFloatingActionButton`: `PageScaffold` and the shell's tab scaffold fold extended buttons to their icon while the content scrolls down and unfold them when it scrolls back.
-- Added `placeholder` to `page { }` and `pageIfAbsent { }` in `:library:navigation`: what the detail side of a `PaneRole.List` page shows while no detail is open, `ListPlaceholder` when absent.
-- Added `LocalBesideNavigation` and `isTopLevelPage(key)` to `:library:navigation`, which tell a page whether the rail or permanent drawer opened it.
-- Added a weather effect action to the theme settings' app bar, shown once the About screen's easter egg is found. Its dialog picks Automatic (snow with the Christmas palette, the default), Snow (snow over any palette, all year), Rain (rain over any palette) or Off (the palette without the snow): `WeatherEffect`, `SeasonalThemeState.weatherEffect` and `SeasonalThemeRepository.setWeatherEffect`, stored under a new `seasonal_weather_effect` key.
-- Added `Modifier.rainfall` and `RainfallStyle` to `:library:core:designsystem`: falling rain drawn over any element, with density, colors, streak length and thickness, speed, wind, gusts, showers, splashes and opacity. Drops fall at different depths, lean with the gusting wind, thicken and thin in showers, and splash where they land. Like the snow, it runs in the draw phase only, stops in the background, and lets taps through.
-- Added a settings search to `:library:feature:settings`: a field above the rows that finds the host's rows and the rows of the display, theme, privacy, advanced and About pages, which each register them as a `SettingsSearchProvider` (with `SettingsSearchEntry`, in `:library:core:ui`).
-- Added `dialogIcon` to `ChoicePreferenceItem`, so a row without an icon still gives its dialog one.
-- Added hiding the app bar on scroll, for every style: `ShellSettings.hideTopBarOnScroll`, offered in the developer options, and `HideOnScrollTopBar`, `TopBarHideState` and `LocalHideTopBarOnScroll` in `:library:core:ui`, which `PageScaffold` and the shell's tab scaffold use. A large bar collapses before it slides away.
-- Added `ShellCapabilities` to `:library:navigation`, what an app's declared graph and layout policy can show (`hasTabs`, `hasMultipleTabs`, `usesBottomNavigation`, `usesWideNavigation`, `hasShellTopBars`, `hasContentWidthLimit`, `hasBanner`, `hasPlayer`, `hasAccessories`, `hasMultipleStartOptions`, `hasBackNavigation`), built with `ShellCapabilities.of(graph, policy)` and provided by `ShellHost` as `LocalShellCapabilities`, and `ShellLayoutPolicy.reachesBottomBar` and `reachesWideNavigation`. They describe the app as declared, never the window drawn now or the developer options, so settings decide which rows mean something in the app from one set of rules.
-- Added `DisplaySettingsProvider.startupPageChoices`: how many places the host's startup page dialog offers. The startup page row shows only with more than one; while it is null, as before, with more than one tab.
-- Added `AboutRoute`, `ThemeSettingsRoute`, `DisplaySettingsRoute`, `PrivacySettingsRoute`, `AdvancedSettingsRoute`, `DiagnosticsSettingsRoute`, `DeveloperOptionsRoute`, `StartupRoute` and `OnboardingRoute`, one key per Toolkit page.
-- Added `FrameScrollTint`, `FrameTint`, `FollowScrollWithFrameTint` and `BesideNavigation.scrollTint` to `:library:navigation`, and `TopAppBarScrollBehavior.frameTint` to `:library:core:ui`: while the navigation colour follows scrolling, the app bar on top drives it, a page's as well as a tab's.
-- Added `ScaffoldSnackbars`, `LocalScaffoldSnackbars` and `rememberScaffoldSnackbars()` to `:library:core:ui`: the shell's tab scaffold now draws snackbars too, as `PageScaffold` does, and a screen shows one through the scaffold around it with `post` or `show`, in the normal or error style (`ToolkitSnackbarStyle`), with an action, an icon, its own `ToolkitSnackbarColors`, or drawn by the screen through `content`. `ToolkitSnackbar` and `ToolkitSnackbarDefaults` draw the default look.
-- Added `UiSnackbar.actionLabel` and `DefaultSnackbarHandler(getActionEvent, drawHost)`, and `DefaultSnackbarHandler` now uses the scaffold's host when given none.
-- Added `ShellHost(snackbarHostState)`: an app shows its own messages, such as its activity's view model's, in the tabs' scaffold with every other snackbar, above the bottom bar, its buttons and the player, on any window size.
-- Added `besideNavigationTitle()` and `LocalBesideNavigationTransitions` to `:library:navigation`, and `titleModifier` to `ShellTopAppBar`: beside a rail or drawer, the title of the tab's bar and of the page standing in for it grow or shrink into one another as one replaces the other in place.
-- Added `ThemePreferencesDataSource.savePalette(dynamicColors, dynamicPaletteVariant, staticPaletteId)`, which stores a palette choice in one write. It has a default implementation, so other implementations of the interface keep compiling.
-- Added `ThemePreferencesDataSource.storedPreferences`, every theme value read from one snapshot of storage, which `themePreferencesState()` now follows.
-- Added `UsageAndDiagnosticsPreferencesDataSource.saveAll(...)` and `UsageAndDiagnosticsRepository.setAll(settings)`, which store a whole consent answer in one write. Both have default implementations.
-- Added a `viewModelName` parameter to `LoggedScreenViewModel`, defaulting to `screenName`, which sets the name its breadcrumbs and `vm_op_*` events report.
-- Added the `core.ui.screen` package to `:library:core:ui`, the new way a screen holds and shows its state: `ScreenViewModel<S, E>` and `LoggedScreenViewModel<S, E>` over the feature's own state type, changed with `setState`; `Loadable` for each piece of content that loads (`Loading`, `Ready` with `refreshing` and `stale`, `Empty`, `Failed`); `TrackedStatus` for statuses a screen declares itself; queued `UiMessage`s shown by `MessageHost`; and `ScreenStateHandler` and `TrackScreenState` for a `Loadable`. `LoggedScreenViewModel` sends the same breadcrumbs, events and Crashlytics reports as before. The `core.ui.base` and `core.ui.states` classes stay until every feature has moved. See the [`:library:core:ui` README](core/ui/README.md#screen-state).
-- Added a `message` parameter to `NoDataScreen`, for a message that is not a string resource.
-- Added `NetworkException` and `StorageException` to `:library:core:common`, the failures a repository throws, each with a `reason`. `networkCall { }` in `:library:core:network` and `storageCall { }` in `:library:core:datastore` translate the HTTP client's and the storage library's exceptions into them, keeping the original as the `cause`. `toError()` recognizes both, so code that still reads `Errors` keeps working.
-- Added `collectReport(action, extra, onError) { value -> }` to `core.ui.screen.LoggedScreenViewModel`, the flow counterpart of `launchReport`: it logs the start once, passes every value on, and reports a failure before handing it to `onError`.
-- Added `ClipboardRepository` and `DefaultClipboardRepository` to `:library:core:common`, bound in the foundation modules: a ViewModel copies text through it instead of holding a `Context`, and reads `confirmsCopies` instead of checking the Android version. `copyText` throws when the clipboard rejects the write.
-- Added `toUiText(fallback)`, `toFailed(fallback)`, `toErrorMessage(fallback)` and `isRetryable` to `core.ui.screen`: the text a screen shows for a failure, with the same text everywhere for being offline, a timeout, a busy server, rate limiting and busy or full storage, and the screen's own fallback for anything else.
-- Added `ThemeModePicker` and `ThemePalettePicker` to `core.ui.views.theme`: the theme mode cards and the wallpaper and static palette choice that the theme settings page and the onboarding theme page now both show. The palette picker offers the holiday palettes all year once the seasonal themes are unlocked, and opens each row scrolled to its selection.
-- Added `observeReport(action, extra, onError) { value -> }` to `core.ui.screen.LoggedScreenViewModel`, for a stream that is expensive to keep running, such as location, sensors or a socket: it collects only while the screen collects `state`, stops five seconds after the screen leaves and starts over when it returns, the policy of `SharingStarted.WhileSubscribed(5_000)`. `ScreenViewModel.launchWhileSubscribed { }` exposes the same policy for any work, and `collectInBackground(flow)` in `:library:core:testing` subscribes a test the way a screen does. The Toolkit's own streams stay on `collectReport`, which collects for the ViewModel's lifetime.
-- Added an optional article app bar, as news apps draw over a story: a screen calls `ScaffoldArticleTopBar(title, compact, progress, brand, brandContentDescription)` from `:library:navigation`, and the bar of the scaffold around it shows only its buttons until `compact`, then the title after an optional untinted `brand` painter, with a reading progress line along its bottom edge that keeps the bar's height. It works in `PageScaffold`, in the shell's tabs and children, and in each pane of a list and its detail; a large bar is drawn small while it is declared, a hidden bar stays hidden, and a search field keeps the title's place. `ArticleTopBarHost`, `LocalArticleTopBarHost`, `ArticleTopBarTitle`, `ArticleReadingProgress` and `readingProgress()` for `ScrollState` and `LazyListState` come with it, and `ShellTopAppBar` takes the host as a new optional `article` parameter. The components showcase in the sample opens a demo with and without a brand.
-- Added `settingsSearchProvider(section, destination) { preference(title, summary, destination) }` and `SettingsSearchScope` to `:library:core:ui`, which declare a settings page's rows for the settings search with the page's section and destination given once, a row naming its own destination where it opens another page, and plain Kotlin conditions over the app's `capabilities` and `graph`. A provider's one input is a `SettingsSearchContext`, the app's `ShellGraph` and `ShellCapabilities` from the same `ShellHost` locals the settings pages read, so a page and its search rows follow the same rules; `SettingsSearchProvider { context -> ... }` receives the same context. `SettingsSearchProvider.unregisteredDestinations(context)` lets an app's tests check that every result opens a page its graph registers. The [settings README](feature/settings/README.md#settings-search) shows an app's own page declared, bound and checked end to end.
-- Added report checks to `:library:feature:issuereporter`, against people filing empty or unrelated reports. `ValidateIssueReportUseCase` returns an `IssueReportValidation` holding an `IssueReportFieldError` for each field that cannot be filed: empty, too short or too long, too few letters or digits (counted in any script), one run of characters repeated, a link alone, a description repeating the title, or an invalid email. `IssueReportHistoryRepository`, kept in the app's DataStore, holds any report back for five minutes after the last one and refuses the same report for a day (`IssueReportRefusal`); it stores only a hash of each report and the time it was filed.
-
-### Changed
-
-- `BottomAppBarNativeAdBanner` is disabled by default. Hosts must explicitly pass `enabled = true`; `NoDataScreen` keeps its existing ad default. Review the placement warning and Google guidance in the [ads documentation](integration/ads/README.md#placement-warning-and-explicit-opt-in) before opting in.
-- `ConsentRepository.requestConsent(host, showIfRequired)` suspends until completion and throws `ConsentException` on failure. Replace result-flow collection with a direct suspend call; loading belongs to the caller's UI state.
-- Composables report through the new `LocalTelemetry` instead of a `firebaseController` parameter. `TrackScreenView`, `TrackScreenState`, the buttons, chips, text fields, dropdown items, FABs and every preference row read it themselves, so their `firebaseController` parameter is removed; pass only the `ga4Event`. `ShellHost` provides it, and `ProvideTelemetry { }` provides it to a composition outside `ShellHost`. Where nothing does, as in a preview, it is the new `NoOpTelemetryRepository`, so previews need no fake.
-- Renamed `FirebaseController` to `TelemetryRepository`, in the same package, so the contract names no vendor; the SDKs behind it are its data sources. Its implementation `DefaultFirebaseController` is now `FirebaseTelemetryRepository`, and the test fake `FakeFirebaseController` is `FakeTelemetryRepository`. Every `firebaseController` parameter of a ViewModel, repository or other class is now `telemetryRepository`, so named arguments need the new name. `FirebaseController`, `DefaultFirebaseController` and `FirebaseControllerImpl` remain in their old packages as deprecated aliases. The [3.0.0 migration guide](../docs/migration/3.0.0.md#telemetry) has the mapping.
-- Every `AppToolkitNavKey` is now a plain `@Serializable` `NavKey`, no longer `Parcelable` or a `StableNavKey`. `:library:navigation` exposes `kotlinx-serialization-core` as `api`.
-- `:library:apptoolkit` now exposes `:library:shell`, `:library:feature:developer`, `:library:feature:advanced`, `:library:feature:diagnostics`, `:library:feature:display` and `:library:feature:theme` through `api`.
-- Every Toolkit screen is now a page of the shell instead of an activity. Screens pad by `contentPadding()` and lost their `isEmbedded` and navigation callback parameters: `LicensesScreen()`, `FaqScreen()`, `SupportScreen()`, `PermissionsScreen()`, `AdsSettingsScreen()` and `LibraryExtrasScreen()` take none.
-- Features open one another's pages by key and no longer depend on each other: the privacy page navigates to the permissions, ads and diagnostics keys; the display settings open `ThemeSettingsRoute`; About and Help open `LicensesRoute`; the advanced settings resolve `IssueReporterSheet` from Koin and hide the bug report when it is absent.
-- `PrivacySettingsProvider` supplies only the legal links, and `DisplaySettingsProvider` no longer has `openThemeSettings`.
-- Moved `SettingsConfig`, `SettingsCategory` and `SettingsPreference` to `:library:core:ui` (`core.ui.models.settings`).
-- Moved `FirebaseOnboardingPage` and its strings from `:library:feature:onboarding` to `:library:feature:diagnostics`.
-- `StartupProvider` supplies only `requiredPermissions`, and `OnboardingProvider` only the pages; finishing onboarding enters the shell.
-- Beside a rail, an expanded rail or a permanent drawer, pages now open in the space next to the navigation instead of covering it: the navigation stays, marks the entry whose page is open, and a tab or another entry replaces the open pages. `ShellHost` draws that navigation itself, around its displays.
-- The display settings keep only the person's own preferences: dark theme and dynamic colors, bounce buttons, the startup page, the navigation labels and the language. Every shell override is a developer option: the forced layout, app bar style, hiding the app bar and the bottom bar on scroll, navigation bar style, navigation tint, content width, where the app starts, tab transition, back swipe, animation speed and bottom accessories, under Layout and bars, Navigation, Motion and Accessories. `ShellPreferences.resetDeveloperOptions()` resets every `ShellSettings` value and none of the person's preferences, and the stored keys are unchanged. `:library:feature:display` no longer depends on `:library:shell`.
-- Display rows and developer options show only where they act on something in the app, from `ShellCapabilities`: the navigation labels need more than one tab in a bottom bar the layout policy reaches, the startup page more than one choice, the tab transition more than one tab, the app bar overrides an app bar the shell draws, and the bottom accessory a declared banner or player. The display page and its settings search rows come from one list, `displayRows`, so the startup page is now searchable and the labels row is no longer offered with one tab, where the bar always labels its tab.
-- A page the rail or permanent drawer opens is drawn like a tab: a small app bar without a back button, and, when the navigation and the app bar share a colour, the tab's rounded content card. `PageScaffold` and the list-detail scene both do this.
-- The settings list shows its illustrated card, with a Get help button, beside it on wide windows while no category is open, instead of the generic placeholder.
-- `ChangelogDialog` draws the Toolkit's wavy line between releases, where the Markdown has a rule (`splitAtThematicBreaks`), instead of the Markdown renderer's flat line.
-- Moved the startup screen out of `:library:feature:onboarding` into a new `:library:feature:startup`: `StartupProvider`, `StartupScreen`, `StartupViewModel` and their contracts, now under `feature.startup`, with `startupPage()` registering `StartupRoute` and `startupModule(startupProviderFactory)` binding them. `onboardingPages()` registers only `OnboardingRoute`, and `onboardingModule` is a value without parameters. `toolkitPages()` and `appToolkitModules` include both, and `:library:apptoolkit` exposes the new module.
-- Moved single-owner code out of `:library:core:common` into the module that uses it: `FaqConstants` and `faqCatalogUrl` to `:library:feature:faq`, `extractChangesForVersion` to `:library:feature:changelog`, `GithubToken` and `toToken` to `:library:feature:issuereporter`, `PurchaseResult` and `isValidForBilling` to `:library:integration:billing`, `OnShowAdCompleteListener` to `:library:integration:ads`, and `installingPackageNameOrNull`, `hasPlayStore` and `isInstalledFromPlayStore` to `:library:integration:review`. The [3.0.0 migration guide](../docs/migration/3.0.0.md#moved-apis) lists the new packages.
-- The display settings rows, the developer options rows and the advanced settings' Developer options row no longer draw leading icons, matching the other settings rows. `ChoicePreferenceItem`'s `icon` moved after `modifier` and defaults to none.
-- The content width override shows only when the app's `ShellLayoutPolicy` sets a maximum width, and the developer options offer the player accessory only to an app with a player.
-- A page beside a rail or a permanent drawer keeps square start corners (`rememberDeviceCornerShape(squareStart = true)`), so its app bar is no longer rounded next to the rail on phones with rounded screens, in landscape.
-- `PageSurface`, `PageScaffold`, the list-detail scene and the shell's tab scaffold now provide `LocalContentColor` for the colour they draw on, so text and icons outside a Material `Surface` follow the theme instead of defaulting to black in the dark theme.
-- `DisplaySettingsViewModel`, `ThemeSettingsViewModel` and `OnboardingThemeViewModel` take a `TelemetryRepository`, and a failed preference write is reported and shows an error message instead of being dropped. Their Koin modules pass it already; code that builds them directly must pass one.
-- `LoggedScreenViewModel` no longer reads names from classes, which R8 renames in release builds. The `view_model` breadcrumb key and GA4 parameter use `viewModelName`, which every Toolkit ViewModel sets to its class name, so the reported values stay the same. The event breadcrumb uses the event's source name.
-- `FirebaseTelemetryRepository.reportViewModelError` and `recordNonFatal` attach their keys to that one report instead of setting them with `setCustomKey`, so a later, unrelated crash no longer carries them.
-- `SupportEvent.QueryProductDetails` is a `data object` without the unused `BillingClient` parameter.
-- `Throwable.toError()` maps `IllegalStateException` to `Errors.UseCase.INVALID_STATE` instead of `NO_DATA`.
-- `KtorClient.createClient` builds a new client on every call instead of caching the first, whose logging setting later calls ignored. Debug logging prints headers with `Authorization` masked, and no longer prints bodies.
-- `DefaultUsageAndDiagnosticsRepository` takes a `ConsentRepository` and applies the stored choices to the consent SDKs after every write, and `UsageAndDiagnosticsViewModel` no longer takes one or applies consent itself. A change now reaches the SDKs whether or not the diagnostics screen is still open; opening the screen no longer re-applies consent, which the host applies at startup with `ConsentRepository.applyInitialConsent()`.
-- `DefaultAboutRepository` and `DefaultCacheRepository` take a `DispatcherProvider`, defaulting to `StandardDispatchers()`, and run their package manager lookup and cache delete on IO themselves, so both are safe to call from the main thread.
-- `:library:feature:about` is the first feature on `core.ui.screen`. `AboutViewModel` no longer takes a `DispatcherProvider`, a `Context` or an `sdkIntProvider`; it takes a `ClipboardRepository`, exposes `state` (an `AboutUiState` whose `items` is a `Loadable`) and queued `messages`, and `AboutEvent.DismissSnackbar` and `AboutAction` are removed. `AboutScreen` now only wires the ViewModel, tracking, messages and navigation, and the list renders in a stateless, previewable `AboutScreenContent`. Its load and copy failures go through `toFailed` and `toErrorMessage`, so a storage or network failure shows its own text and a failure that would repeat offers no Retry.
-- `:library:feature:settings` is on `core.ui.screen`. `SettingsViewModel` no longer takes a `DispatcherProvider` and exposes `state`, a `SettingsUiState` whose `config` is a `Loadable`: a provider with no category is `Loadable.Empty`, whose "No settings found" the empty page now shows (the old snackbar error was never displayed), and a provider that throws is `Loadable.Failed`. `SettingsAction` is removed, and `SettingsEvent` no longer extends `UiEvent`. `SettingsScreen` wires the ViewModel, the search query and index, tracking and navigation, and the list renders in the stateless `SettingsScreenContent`. Both live in `SettingsScreen.kt`, and `SettingsList` keeps its signature.
-- `:library:feature:permissions` is on `core.ui.screen`. `PermissionsRepository.getPermissionsConfig()` returns the `SettingsConfig` instead of a `Flow`, and `DefaultPermissionsRepository` and `PermissionsViewModel` no longer take a `DispatcherProvider`, since reading string resources is main-safe. `PermissionsViewModel` exposes `state`, a `PermissionsUiState` whose `config` is a `Loadable`. `PermissionsAction` is removed, and `PermissionsEvent` no longer extends `UiEvent`. `PermissionsScreen` wires the ViewModel and tracking, and the catalog renders in the stateless `PermissionsScreenContent`. Both live in `PermissionsScreen.kt`, and `PermissionsContent` keeps its signature.
-- `:library:feature:licenses` is on `core.ui.screen`. `LicensesViewModel` exposes `state`, an `LicensesUiState` whose `libraryCount` is a `Loadable`, and `LicensesAction` is removed. `LicensesScreen` wires the ViewModel, the metadata producer and tracking, and the list renders in the stateless `LicensesScreenContent`.
-- `:library:feature:changelog` is on `core.ui.screen`. `ChangelogRepository.fetchChangelog(): Flow<DataState<…>>` is now `suspend fun getChangelog(packageName): String`, which throws a `NetworkException`, and `GetChangelogUseCase` is a `suspend` call returning the Markdown. `ChangelogViewModel` no longer takes a `DispatcherProvider` and exposes `state`, an `ChangelogUiState` whose `markdown` is a `Loadable`. `ChangelogEvent.Retry` is merged into `ChangelogEvent.Load`, and `ChangelogAction` is removed. `ChangelogDialog` moved from `feature.changelog.ui.views.dialogs` to `feature.changelog.ui`, and the sheet's body renders in the stateless `ChangelogDialogContent`. An offline device now sees the offline text, and a failure a retry cannot fix offers Done instead of Try again.
-- `:library:feature:faq` is on `core.ui.screen`. `FaqRepository.fetchFaq(): Flow<DataState<…>>` is now `suspend fun getFaq(): List<FaqItem>`, which throws a `NetworkException` when the catalog failed and there are no bundled questions. `FaqViewModel` no longer takes a `DispatcherProvider` and exposes `state`, an `FaqUiState` whose `questions` is a `Loadable`, with `openStoreListing` for the review fallback. `FaqEvent.LoadFaq` is `FaqEvent.Load`, `DismissSnackbar` and `OpenFeatureRequestForm` are removed (the screen opens the form itself), `StoreListingOpened` is added, and `FaqAction` is removed. `FaqScreenContent` moved from `ui.views.content` into `FaqScreen.kt` and is internal and stateless; `FaqScreen` logs the same GA4 events as before.
-- `:library:feature:advanced` is on `core.ui.screen`. `CacheRepository.clearCache(): Flow<DataState<…>>` is now a `suspend` function that throws a `StorageException`, and `AdvancedSettingsViewModel` no longer takes a `DispatcherProvider`. It exposes `state`, an `AdvancedSettingsUiState` with a `CacheClearStatus` and `developerOptionsUnlocked` (replacing the separate `developerOptionsUnlocked` flow), and queued `messages`. `AdvancedSettingsEvent.MessageShown` and `AdvancedSettingsAction` are removed, and `AdvancedSettingsEvent` no longer extends `UiEvent`. Clearing the cache confirms with a snackbar instead of a toast. `AdvancedSettingsScreen` no longer takes `paddingValues`, and the rows render in the stateless `AdvancedSettingsScreenContent` in the same file.
-- `:library:feature:privacy` is on `core.ui.screen`. `PrivacyViewModel` exposes `state`, a `PrivacyUiState` whose `items` is a `Loadable`. `PrivacyAction` is removed: `PrivacyScreen` opens a row's link and navigates to the permissions, ads and diagnostics keys itself. `PrivacyEvent` no longer extends `UiEvent`. `PrivacyScreen` no longer takes `paddingValues`, and the list renders in the stateless `PrivacyScreenContent` in the same file.
-- `:library:feature:diagnostics` is on `core.ui.screen`. `UsageAndDiagnosticsViewModel` no longer takes a `DispatcherProvider` and exposes `state`, a `UsageAndDiagnosticsUiState` whose `settings` is a `Loadable<UsageAndDiagnosticsSettings>`, and queued `messages`. `UsageAndDiagnosticsEvent.Initialize` is `Load`, `UsageAndDiagnosticsEvent` no longer extends `UiEvent`, and `UsageAndDiagnosticsAction` is removed. `FirebaseConsentDialog` and `DetailsPage` take `settings: UsageAndDiagnosticsSettings` instead of the UI state. `UsageAndDiagnosticsScreen` no longer takes `paddingValues`, and the page renders in the stateless `UsageAndDiagnosticsScreenContent` in the same file. `FirebaseOnboardingPage` keeps its signature and renders in `FirebaseOnboardingPageContent`.
-- `:library:feature:display` is on `core.ui.screen`. `DisplaySettingsViewModel` is a `LoggedScreenViewModel` and exposes `state`, a `DisplaySettingsUiState` whose `settings` is a `Loadable` of the new `DisplaySettings`, which carries the start page route, and queued `messages`. `DisplaySettingsViewModel.startupRoute(defaultRoute)` is removed, `DisplaySettingsEvent.Initialize` is `Load`, and `DisplaySettingsEvent` no longer extends `UiEvent`. Each preference write is reported as its own operation (`setThemeMode`, `setDynamicColors`, `setBouncyButtons`, `setShowBottomBarLabels`, `setLanguage`, `setStartupPage`). `DisplaySettingsScreen` no longer takes `paddingValues`, and the list renders in the stateless `DisplaySettingsScreenContent` in the same file. GA4 events are unchanged.
-- `:library:feature:theme` is on `core.ui.screen`. `ThemeSettingsViewModel` and `SeasonalThemeOverlayViewModel` extend `LoggedScreenViewModel` and expose `state` instead of `uiState`. `ThemeSettingsUiState` is a data class whose `preferences` is a `Loadable<ThemePreferencesState>`. `ThemeSettingsEvent.Initialize` is `Load`, and `ThemeSettingsEvent` and `SeasonalThemeOverlayEvent` no longer extend `UiEvent`. A preference write is the `persistThemeSetting` operation, with the setting in its `setting` parameter. `ThemeSettingsScreen` no longer takes `paddingValues`, and the page renders in the stateless `ThemeSettingsScreenContent` in the same file. The palette pager's pages and the theme mode and tab lists are no longer rebuilt on every recomposition.
-- `:library:feature:support` is on `core.ui.screen`. `SupportViewModel` exposes `state`, a `SupportUiState` whose `donationOptions` is a `Loadable` of `DonationOption` (formerly `DonationOptionUiState`, now in `feature.support.ui.models`), and queued `messages`. `SupportScreenUiState` is `SupportUiState`, without its `error` field. `SupportAction`, `SupportEvent.SetUpBilling`, `SupportEvent.DismissSnackbar` and `setupBilling()` are removed, `SupportEvent` no longer extends `UiEvent`, and a donation is `SupportEvent.Donate(productId, activity)` instead of `onDonateClicked`. The page renders in the stateless, now internal `SupportScreenContent` in `SupportScreen.kt`, and the screen logs the same GA4 events as before.
-- `:library:feature:onboarding` is on `core.ui.screen`. `OnboardingViewModel` no longer takes a `DispatcherProvider`; it takes a `ConsentRepository` and asks for consent itself with the `ConsentHost` in `OnboardingEvent.RequestConsent(host)`. It exposes `state`, an `OnboardingUiState` whose `completion` is an `OnboardingCompletion`, and queued `messages`. `OnboardingEvent.UpdateCurrentTab` is `PageSelected`, and `ObserveCompletion`, `DismissSnackbar` and `OnboardingAction` are removed. `OnboardingScreen` enters the shell once completion is saved, and the pager renders in the stateless `OnboardingScreenContent` in the same file. Pages show their messages through the onboarding screen's snackbar host. `OnboardingThemeViewModel` is a `LoggedScreenViewModel` exposing `state`, an `OnboardingThemeUiState`, and `OnboardingThemeEvent.Initialize` is removed. `DefaultOnboardingRepository.setOnboardingCompleted()` throws a `StorageException` when the write fails.
-- `:library:feature:startup` is on `core.ui.screen`. `StartupViewModel` takes a `ConsentRepository` and asks for consent itself with the `ConsentHost` in `StartupEvent.RequestConsent(host)`, settling on any answer, on a failure or after 15 seconds as before. It exposes `state`, a `StartupUiState` whose `consent` is a `ConsentRequestStatus`. `StartupEvent.ConsentFormLoaded`, `StartupEvent.Continue` and `StartupAction` are removed. `StartupScreen()` takes no parameters and owns the permission request, consent and navigation, and its body renders in the stateless `StartupScreenContent` in the same file.
-- `DefaultUsageAndDiagnosticsRepository` no longer takes a `DispatcherProvider`, since DataStore is main-safe, and its reads and writes fail with a `StorageException`. `AdsCoreManager` reads the ads preferences without a dispatcher switch and still initializes the Mobile Ads SDK on IO, and `DefaultBillingRepository` no longer switches dispatchers around its product and purchase queries, whose callbacks Play Billing already delivers asynchronously.
-- Feature modules no longer keep their own copies of strings `:library:core:ui` provides, and read them from `core.ui.R` instead: the theme mode, palette and AMOLED labels in `:library:feature:theme` and `:library:feature:onboarding`, and `done_button_content_description`, `go_back`, `content_description_more_options`, `try_again`, `support_us`, `learn_more` and `startup_page` in About, Diagnostics, Startup, Display, Support and the ads integration. An app that overrode one of those copies by name overrides the `:library:core:ui` string instead.
-- The onboarding theme page uses the same theme mode and palette pickers as the theme settings page instead of its own copy, so it now offers the holiday palettes all year once they are unlocked and opens on the selected palette. `OnboardingThemeViewModel` takes a `SeasonalThemeRepository`, and `OnboardingThemeUiState` gains `seasonalThemesUnlocked`. `OnboardingThemeChoice` is removed.
-- `PermissionsViewModel` loads the permission catalog once, when it is created, instead of each time the page is shown; the catalog does not change while the app runs.
-- `:library:integration:ads`'s settings page is on `core.ui.screen`. `AdsSettingsRepository` reads fail with a `StorageException` from their flows and `setAdsEnabled` and `setReduceAds` throw one instead of returning `DataState`, and `defaultAdsEnabled` is gone from the contract: the store's default applies. `AdsSettingsViewModel` no longer takes a `DispatcherProvider` and exposes `state`, an `AdsSettingsUiState` whose `preferences` is a `Loadable<AdsPreferences>`, and queued `messages`; a failed write keeps the switch where it was and shows an error message. `AdsSettingsAction` is removed, and `AdsSettingsEvent` no longer extends `UiEvent`. The page renders in the stateless `AdsSettingsScreenContent` in `AdsSettingsScreen.kt`.
-- `:library:feature:issuereporter` is on `core.ui.screen`. `IssueReporterRepository.sendReport` returns the created issue's URL instead of an `IssueReportResult`, and throws an `IssueReportRejectedException` (with a `reason`) for GitHub's 401, 403, 410 and 422 answers, or a `NetworkException` for any other failure. `DefaultIssueReporterRepository` and `IssueReporterViewModel` no longer take a `DispatcherProvider`, and the ViewModel calls the repository directly. `IssueReporterViewModel` exposes `state`, an `IssueReporterUiState` whose `deviceInfo` is a `Loadable`, and queued `messages`. `IssueSubmissionState` gains `Failed`. `IssueReporterEvent` no longer extends `UiEvent`, and `DismissSnackbar` is removed. The sheet renders in the stateless `IssueReporterBottomSheetContent` in `IssueReporterBottomSheet.kt`, and logs the same GA4 events as before.
-- The display, theme, privacy, About and advanced pages declare their settings search rows with `settingsSearchProvider`. The theme, privacy, About and advanced rows are as before; the display rows are those `displayRows` gives the page.
-- The issue reporter requires an email, a title of 10 to 120 characters and a description of 40 to 5,000 characters, and trims all three before filing. The sheet looks as before and Send stays enabled: an invalid field shows its error beneath it, and a report held back by the cooldown or as a duplicate shows a message. `IssueReporterViewModel` takes an `IssueReportHistoryRepository` and a `ValidateIssueReportUseCase`, and `IssueReporterUiState` gains `fieldErrors`. The `send_issue` event is now logged by the ViewModel, once per attempt, with `validation_failure` (such as `title_too_short`, `email_invalid`, `cooldown`, `duplicate`, or `none` for a report handed to GitHub) in place of `has_email`; no report text or email is ever logged. The `issue_email_optional_placeholder` and `error_invalid_report` strings are removed.
-- Shake-to-report needs a deliberate, repeated shake: `ShakeDetector` counts distinct shakes and by default asks for six, three back-and-forth movements, over at least 800 ms, instead of four readings over 300 ms. The new `minimumShakes` parameter sets the count.
+- Rainfall wind starts at its initial gust phase, preventing a sudden change in direction on the
+  first animation frame.
 
 ### Improved
 
 - The version information dialog loads the host app icon without querying `PackageManager` during
   composition.
-- `AnimatedIconButtonDirection` crossfades its glyph when `icon` changes, so one button can turn from a menu button into a back arrow without popping.
-- A navigation no longer recomposes every tab screen: the shell keeps its callbacks and the static `LocalShellChrome` controller across recompositions. The chrome and the player overlay no longer recompose on every frame the player moves.
-- A page beside the rail or permanent drawer keeps its tab-like app bar while another entry replaces it, instead of showing a back button for the length of its exit.
-- Beside a rail or a permanent drawer, the tabs and the page the navigation opened replace one another with a fade in place (`TabTransitions.inPlace(back)`), instead of the page sliding in like a new window under a navigation already on screen. Only the one on top fades, over one that stays opaque, so the display's grey backdrop no longer flashes between them.
-- The expanded rail starts collapsed and collapses again when the layout changes, such as on rotation.
-- A back swipe from the detail's own edge of a list and detail shrinks the detail in place, following the finger, instead of sliding the separator away from it.
-- Switching between two tabs that both search keeps the search field in place instead of fading it out and in.
-- The startup and onboarding pages keep to a 640dp column centred on tablets and wide windows instead of stretching across them.
-- Improved the shell's performance without changing how it looks or moves: the list-detail separator, its back gesture and the hiding bottom bar no longer recompose the panes or the mini player on each frame; the rail and the permanent drawer no longer recompose on every navigation; a screen's floating action buttons redraw only when they change, and their hosts leave with their screens; the settings search builds its index on the first search instead of when the settings open.
-- Improved snowfall and rainfall, which now share one frame node (`ParticleEffectNode`): the frame loop is cancelled on detach and requests no frames while there is nothing to move, and the rain's gusts and showers stay smooth however long it falls.
-- The shell's player no longer recomposes itself or the app's player content on each frame while it is dragged, expands or collapses: its size, corners and shadow follow the drag in layout and drawing.
-- Changing the bouncy buttons, bottom bar labels or ads setting now recomposes only the parts that read it (`LocalBouncyAnimationsEnabled`, `LocalShowBottomBarLabels`, `LocalAdsEnabled`), instead of everything under `AppTheme`.
-- Choosing a palette, and the holiday theme applying or restoring itself, now store dynamic colors and the palette in one write, so a process death in between can no longer keep only half the choice. `AppTheme` also receives that write as one state, so the app no longer flashes the wrong palette in between.
+
+---
+
+# October 03, 2026
+
+**Version:** `3.0.0-pre22`
+
+This release replaces the Toolkit's navigation with a one-activity shell. It removes the old
+navigation instead of deprecating it; the [3.0.0 migration guide](../docs/migration/3.0.0.md) maps
+every removed API to its replacement.
+
+### Added
+
+- Added the shell navigation core to `:library:navigation`: `shellGraph { }` describes tabs,
+  children, pages, the drawer, the overflow menu, start screens and deep links; `ShellNavigator`
+  moves through them with one stack per tab and a tab history that back follows; `ShellNavDisplay`
+  plays Android's cross-activity back animation on the back gesture; `ListDetailScene` shows a list
+  page and its detail side by side with a draggable separator. Tabs, drawer entries and overflow
+  entries take `ToolkitIcon`, so animated vector drawables and Lottie icons play on them.
+- Added `:library:shell` with `ShellHost`, which draws an app's graph in its one activity: app bar,
+  navigation bar, rail, drawers with the app's header, overflow menu, banner, player and floating
+  action button, built from the Toolkit's own buttons and icons.
+- Added `:library:feature:developer` with `DeveloperOptionsScreen`, which switches every shell
+  variation while the app runs and shows the window size and every back stack.
+- Added `toolkitGraph { }` and `toolkitPages()` to `:library:apptoolkit`, which register the
+  Toolkit's pages in an app's graph unless the app registers the key itself.
+- Added a page registration to each feature: `settingsPage()`, `displaySettingsPage()`,
+  `themeSettingsPage()`, `privacySettingsPage()`, `diagnosticsSettingsPage()`,
+  `advancedSettingsPage()`, `aboutPages()`, `licensesPage()`, `helpPage()`, `supportPage()`,
+  `permissionsPage()`, `adsSettingsPage()`, `developerOptionsPage()` and `onboardingPages()`. The
+  settings categories are details of the settings list, so on wide windows they open beside it.
+- Added `StartupRoute` and `OnboardingRoute` as start screens: the first launch runs inside the
+  app's one activity, chosen in `ShellHost(resolveStart = ...)`.
+- Added `PermissionUsageActivity` to `:library:apptoolkit`, declared in its manifest for
+  `VIEW_PERMISSION_USAGE` and `VIEW_PERMISSION_USAGE_FOR_PERIOD`: every app gets the information
+  icon in Android's permission manager and privacy dashboard, which opens the privacy page over the
+  system's settings.
+- Added graphs of pages only to `:library:navigation`: a graph without tabs starts on a page and is
+  left from it. A page's back arrow now leaves the app when that page is the whole stack, as back
+  does.
+- Added `SettingsPreference.destination` and `SettingsPreference.action`: a settings row opens a
+  key, unless the app's action handles the click first.
+- Added `LocalPageSnackbarHostState` and `rememberPageSnackbarHostState()` to `:library:core:ui`, so
+  a page's snackbars sit above the shell's bottom chrome.
+- Added the `IssueReporterSheet` contract to `:library:core:ui`, bound by
+  `:library:feature:issuereporter`, and `ConsentHost(activity)` and `ReviewHost(activity)` builders.
+- Added screenshot tests of the shell's chrome to `:library:shell`, recorded with Roborazzi.
+- Added a column of floating action buttons to the Toolkit's scaffolds: `ToolkitFab` in
+  `:library:core:designsystem` describes one (icon, action, optional label for an extended button,
+  Material 3 size, container colour, expanded, visible), and `ToolkitFabColumn` in
+  `:library:core:ui` draws a list with the Toolkit's sound, haptics, bounce and animated icons.
+  Declare them in the graph with `fabs = { listOf(...) }` on a tab, child or page, or from the
+  screen with `ScaffoldFabs(listOf(...))`; `PageScaffold` takes `fabs` too.
+- Added `DrawerBuilder.footer { }`, entries that always close the drawer, pinned to its bottom edge,
+  and `toolkitFooter(onShowUpdates)` in `:library:apptoolkit`, which puts Settings, Help and
+  feedback, Updates and Share there.
+- Added `ChoicePreferenceItem` to `:library:core:ui`: a settings row that shows the chosen option
+  and opens a radio-list dialog.
+- Added a Developer options row to the advanced settings, shown once the About screen's version
+  easter egg is found.
+- Added the page frame to `:library:core:ui`: `PageScaffold`, `ShellTopAppBar`,
+  `LocalContentPadding` and `contentPadding()`, `ContentWidthBox`, `PanePlaceholder` and
+  `ListPlaceholder`.
+- Added `FabScrollBehavior` to `:library:core:ui`, and an `expanded` parameter to `ToolkitFabColumn`
+  and `ToolkitFloatingActionButton`: `PageScaffold` and the shell's tab scaffold fold extended
+  buttons to their icon while the content scrolls down and unfold them when it scrolls back.
+- Added `placeholder` to `page { }` and `pageIfAbsent { }` in `:library:navigation`: what the detail
+  side of a `PaneRole.List` page shows while no detail is open, `ListPlaceholder` when absent.
+- Added `LocalBesideNavigation` and `isTopLevelPage(key)` to `:library:navigation`, which tell a
+  page whether the rail or permanent drawer opened it.
+- Added a weather effect action to the theme settings' app bar, shown once the About screen's easter
+  egg is found. Its dialog picks Automatic (snow with the Christmas palette, the default), Snow
+  (snow over any palette, all year), Rain (rain over any palette) or Off (the palette without the
+  snow): `WeatherEffect`, `SeasonalThemeState.weatherEffect` and
+  `SeasonalThemeRepository.setWeatherEffect`, stored under a new `seasonal_weather_effect` key.
+- Added `Modifier.rainfall` and `RainfallStyle` to `:library:core:designsystem`: falling rain drawn
+  over any element, with density, colors, streak length and thickness, speed, wind, gusts, showers,
+  splashes and opacity. Drops fall at different depths, lean with the gusting wind, thicken and thin
+  in showers, and splash where they land. Like the snow, it runs in the draw phase only, stops in
+  the background, and lets taps through.
+- Added a settings search to `:library:feature:settings`: a field above the rows that finds the
+  host's rows and the rows of the display, theme, privacy, advanced and About pages, which each
+  register them as a `SettingsSearchProvider` (with `SettingsSearchEntry`, in `:library:core:ui`).
+- Added `dialogIcon` to `ChoicePreferenceItem`, so a row without an icon still gives its dialog one.
+- Added hiding the app bar on scroll, for every style: `ShellSettings.hideTopBarOnScroll`, offered
+  in the developer options, and `HideOnScrollTopBar`, `TopBarHideState` and
+  `LocalHideTopBarOnScroll` in `:library:core:ui`, which `PageScaffold` and the shell's tab scaffold
+  use. A large bar collapses before it slides away.
+- Added `ShellCapabilities` to `:library:navigation`, what an app's declared graph and layout policy
+  can show (`hasTabs`, `hasMultipleTabs`, `usesBottomNavigation`, `usesWideNavigation`,
+  `hasShellTopBars`, `hasContentWidthLimit`, `hasBanner`, `hasPlayer`, `hasAccessories`,
+  `hasMultipleStartOptions`, `hasBackNavigation`), built with `ShellCapabilities.of(graph, policy)`
+  and provided by `ShellHost` as `LocalShellCapabilities`, and `ShellLayoutPolicy.reachesBottomBar`
+  and `reachesWideNavigation`. They describe the app as declared, never the window drawn now or the
+  developer options, so settings decide which rows mean something in the app from one set of rules.
+- Added `DisplaySettingsProvider.startupPageChoices`: how many places the host's startup page dialog
+  offers. The startup page row shows only with more than one; while it is null, as before, with more
+  than one tab.
+- Added `AboutRoute`, `ThemeSettingsRoute`, `DisplaySettingsRoute`, `PrivacySettingsRoute`,
+  `AdvancedSettingsRoute`, `DiagnosticsSettingsRoute`, `DeveloperOptionsRoute`, `StartupRoute` and
+  `OnboardingRoute`, one key per Toolkit page.
+- Added `FrameScrollTint`, `FrameTint`, `FollowScrollWithFrameTint` and
+  `BesideNavigation.scrollTint` to `:library:navigation`, and `TopAppBarScrollBehavior.frameTint` to
+  `:library:core:ui`: while the navigation colour follows scrolling, the app bar on top drives it, a
+  page's as well as a tab's.
+- Added `ScaffoldSnackbars`, `LocalScaffoldSnackbars` and `rememberScaffoldSnackbars()` to
+  `:library:core:ui`: the shell's tab scaffold now draws snackbars too, as `PageScaffold` does, and
+  a screen shows one through the scaffold around it with `post` or `show`, in the normal or error
+  style (`ToolkitSnackbarStyle`), with an action, an icon, its own `ToolkitSnackbarColors`, or drawn
+  by the screen through `content`. `ToolkitSnackbar` and `ToolkitSnackbarDefaults` draw the default
+  look.
+- Added `UiSnackbar.actionLabel` and `DefaultSnackbarHandler(getActionEvent, drawHost)`, and
+  `DefaultSnackbarHandler` now uses the scaffold's host when given none.
+- Added `ShellHost(snackbarHostState)`: an app shows its own messages, such as its activity's view
+  model's, in the tabs' scaffold with every other snackbar, above the bottom bar, its buttons and
+  the player, on any window size.
+- Added `besideNavigationTitle()` and `LocalBesideNavigationTransitions` to `:library:navigation`,
+  and `titleModifier` to `ShellTopAppBar`: beside a rail or drawer, the title of the tab's bar and
+  of the page standing in for it grow or shrink into one another as one replaces the other in place.
+- Added
+  `ThemePreferencesDataSource.savePalette(dynamicColors, dynamicPaletteVariant, staticPaletteId)`,
+  which stores a palette choice in one write. It has a default implementation, so other
+  implementations of the interface keep compiling.
+- Added `ThemePreferencesDataSource.storedPreferences`, every theme value read from one snapshot of
+  storage, which `themePreferencesState()` now follows.
+- Added `UsageAndDiagnosticsPreferencesDataSource.saveAll(...)` and
+  `UsageAndDiagnosticsRepository.setAll(settings)`, which store a whole consent answer in one write.
+  Both have default implementations.
+- Added a `viewModelName` parameter to `LoggedScreenViewModel`, defaulting to `screenName`, which
+  sets the name its breadcrumbs and `vm_op_*` events report.
+- Added the `core.ui.screen` package to `:library:core:ui`, the new way a screen holds and shows its
+  state: `ScreenViewModel<S, E>` and `LoggedScreenViewModel<S, E>` over the feature's own state
+  type, changed with `setState`; `Loadable` for each piece of content that loads (`Loading`, `Ready`
+  with `refreshing` and `stale`, `Empty`, `Failed`); `TrackedStatus` for statuses a screen declares
+  itself; queued `UiMessage`s shown by `MessageHost`; and `ScreenStateHandler` and
+  `TrackScreenState` for a `Loadable`. `LoggedScreenViewModel` sends the same breadcrumbs, events
+  and Crashlytics reports as before. The `core.ui.base` and `core.ui.states` classes stay until
+  every feature has moved. See the [`:library:core:ui` README](core/ui/README.md#screen-state).
+- Added a `message` parameter to `NoDataScreen`, for a message that is not a string resource.
+- Added `NetworkException` and `StorageException` to `:library:core:common`, the failures a
+  repository throws, each with a `reason`. `networkCall { }` in `:library:core:network` and
+  `storageCall { }` in `:library:core:datastore` translate the HTTP client's and the storage
+  library's exceptions into them, keeping the original as the `cause`. `toError()` recognizes both,
+  so code that still reads `Errors` keeps working.
+- Added `collectReport(action, extra, onError) { value -> }` to
+  `core.ui.screen.LoggedScreenViewModel`, the flow counterpart of `launchReport`: it logs the start
+  once, passes every value on, and reports a failure before handing it to `onError`.
+- Added `ClipboardRepository` and `DefaultClipboardRepository` to `:library:core:common`, bound in
+  the foundation modules: a ViewModel copies text through it instead of holding a `Context`, and
+  reads `confirmsCopies` instead of checking the Android version. `copyText` throws when the
+  clipboard rejects the write.
+- Added `toUiText(fallback)`, `toFailed(fallback)`, `toErrorMessage(fallback)` and `isRetryable` to
+  `core.ui.screen`: the text a screen shows for a failure, with the same text everywhere for being
+  offline, a timeout, a busy server, rate limiting and busy or full storage, and the screen's own
+  fallback for anything else.
+- Added `ThemeModePicker` and `ThemePalettePicker` to `core.ui.views.theme`: the theme mode cards
+  and the wallpaper and static palette choice that the theme settings page and the onboarding theme
+  page now both show. The palette picker offers the holiday palettes all year once the seasonal
+  themes are unlocked, and opens each row scrolled to its selection.
+- Added `observeReport(action, extra, onError) { value -> }` to
+  `core.ui.screen.LoggedScreenViewModel`, for a stream that is expensive to keep running, such as
+  location, sensors or a socket: it collects only while the screen collects `state`, stops five
+  seconds after the screen leaves and starts over when it returns, the policy of
+  `SharingStarted.WhileSubscribed(5_000)`. `ScreenViewModel.launchWhileSubscribed { }` exposes the
+  same policy for any work, and `collectInBackground(flow)` in `:library:core:testing` subscribes a
+  test the way a screen does. The Toolkit's own streams stay on `collectReport`, which collects for
+  the ViewModel's lifetime.
+- Added an optional article app bar, as news apps draw over a story: a screen calls
+  `ScaffoldArticleTopBar(title, compact, progress, brand, brandContentDescription)` from
+  `:library:navigation`, and the bar of the scaffold around it shows only its buttons until
+  `compact`, then the title after an optional untinted `brand` painter, with a reading progress line
+  along its bottom edge that keeps the bar's height. It works in `PageScaffold`, in the shell's tabs
+  and children, and in each pane of a list and its detail; a large bar is drawn small while it is
+  declared, a hidden bar stays hidden, and a search field keeps the title's place.
+  `ArticleTopBarHost`, `LocalArticleTopBarHost`, `ArticleTopBarTitle`, `ArticleReadingProgress` and
+  `readingProgress()` for `ScrollState` and `LazyListState` come with it, and `ShellTopAppBar` takes
+  the host as a new optional `article` parameter. The components showcase in the sample opens a demo
+  with and without a brand.
+- Added `settingsSearchProvider(section, destination) { preference(title, summary, destination) }`
+  and `SettingsSearchScope` to `:library:core:ui`, which declare a settings page's rows for the
+  settings search with the page's section and destination given once, a row naming its own
+  destination where it opens another page, and plain Kotlin conditions over the app's `capabilities`
+  and `graph`. A provider's one input is a `SettingsSearchContext`, the app's `ShellGraph` and
+  `ShellCapabilities` from the same `ShellHost` locals the settings pages read, so a page and its
+  search rows follow the same rules; `SettingsSearchProvider { context -> ... }` receives the same
+  context. `SettingsSearchProvider.unregisteredDestinations(context)` lets an app's tests check that
+  every result opens a page its graph registers.
+  The [settings README](feature/settings/README.md#settings-search) shows an app's own page
+  declared, bound and checked end to end.
+- Added report checks to `:library:feature:issuereporter`, against people filing empty or unrelated
+  reports. `ValidateIssueReportUseCase` returns an `IssueReportValidation` holding an
+  `IssueReportFieldError` for each field that cannot be filed: empty, too short or too long, too few
+  letters or digits (counted in any script), one run of characters repeated, a link alone, a
+  description repeating the title, or an invalid email. `IssueReportHistoryRepository`, kept in the
+  app's DataStore, holds any report back for five minutes after the last one and refuses the same
+  report for a day (`IssueReportRefusal`); it stores only a hash of each report and the time it was
+  filed.
+
+### Changed
+
+- `BottomAppBarNativeAdBanner` is disabled by default. Hosts must explicitly pass `enabled = true`;
+  `NoDataScreen` keeps its existing ad default. Review the placement warning and Google guidance in
+  the [ads documentation](integration/ads/README.md#placement-warning-and-explicit-opt-in) before
+  opting in.
+- `ConsentRepository.requestConsent(host, showIfRequired)` suspends until completion and throws
+  `ConsentException` on failure. Replace result-flow collection with a direct suspend call; loading
+  belongs to the caller's UI state.
+- Composables report through the new `LocalTelemetry` instead of a `firebaseController` parameter.
+  `TrackScreenView`, `TrackScreenState`, the buttons, chips, text fields, dropdown items, FABs and
+  every preference row read it themselves, so their `firebaseController` parameter is removed; pass
+  only the `ga4Event`. `ShellHost` provides it, and `ProvideTelemetry { }` provides it to a
+  composition outside `ShellHost`. Where nothing does, as in a preview, it is the new
+  `NoOpTelemetryRepository`, so previews need no fake.
+- Renamed `FirebaseController` to `TelemetryRepository`, in the same package, so the contract names
+  no vendor; the SDKs behind it are its data sources. Its implementation `DefaultFirebaseController`
+  is now `FirebaseTelemetryRepository`, and the test fake `FakeFirebaseController` is
+  `FakeTelemetryRepository`. Every `firebaseController` parameter of a ViewModel, repository or
+  other class is now `telemetryRepository`, so named arguments need the new name.
+  `FirebaseController`, `DefaultFirebaseController` and `FirebaseControllerImpl` remain in their old
+  packages as deprecated aliases. The [3.0.0 migration guide](../docs/migration/3.0.0.md#telemetry)
+  has the mapping.
+- Every `AppToolkitNavKey` is now a plain `@Serializable` `NavKey`, no longer `Parcelable` or a
+  `StableNavKey`. `:library:navigation` exposes `kotlinx-serialization-core` as `api`.
+- `:library:apptoolkit` now exposes `:library:shell`, `:library:feature:developer`,
+  `:library:feature:advanced`, `:library:feature:diagnostics`, `:library:feature:display` and
+  `:library:feature:theme` through `api`.
+- Every Toolkit screen is now a page of the shell instead of an activity. Screens pad by
+  `contentPadding()` and lost their `isEmbedded` and navigation callback parameters:
+  `LicensesScreen()`, `FaqScreen()`, `SupportScreen()`, `PermissionsScreen()`, `AdsSettingsScreen()`
+  and `LibraryExtrasScreen()` take none.
+- Features open one another's pages by key and no longer depend on each other: the privacy page
+  navigates to the permissions, ads and diagnostics keys; the display settings open
+  `ThemeSettingsRoute`; About and Help open `LicensesRoute`; the advanced settings resolve
+  `IssueReporterSheet` from Koin and hide the bug report when it is absent.
+- `PrivacySettingsProvider` supplies only the legal links, and `DisplaySettingsProvider` no longer
+  has `openThemeSettings`.
+- Moved `SettingsConfig`, `SettingsCategory` and `SettingsPreference` to `:library:core:ui`
+  (`core.ui.models.settings`).
+- Moved `FirebaseOnboardingPage` and its strings from `:library:feature:onboarding` to
+  `:library:feature:diagnostics`.
+- `StartupProvider` supplies only `requiredPermissions`, and `OnboardingProvider` only the pages;
+  finishing onboarding enters the shell.
+- Beside a rail, an expanded rail or a permanent drawer, pages now open in the space next to the
+  navigation instead of covering it: the navigation stays, marks the entry whose page is open, and a
+  tab or another entry replaces the open pages. `ShellHost` draws that navigation itself, around its
+  displays.
+- The display settings keep only the person's own preferences: dark theme and dynamic colors, bounce
+  buttons, the startup page, the navigation labels and the language. Every shell override is a
+  developer option: the forced layout, app bar style, hiding the app bar and the bottom bar on
+  scroll, navigation bar style, navigation tint, content width, where the app starts, tab
+  transition, back swipe, animation speed and bottom accessories, under Layout and bars, Navigation,
+  Motion and Accessories. `ShellPreferences.resetDeveloperOptions()` resets every `ShellSettings`
+  value and none of the person's preferences, and the stored keys are unchanged.
+  `:library:feature:display` no longer depends on `:library:shell`.
+- Display rows and developer options show only where they act on something in the app, from
+  `ShellCapabilities`: the navigation labels need more than one tab in a bottom bar the layout
+  policy reaches, the startup page more than one choice, the tab transition more than one tab, the
+  app bar overrides an app bar the shell draws, and the bottom accessory a declared banner or
+  player. The display page and its settings search rows come from one list, `displayRows`, so the
+  startup page is now searchable and the labels row is no longer offered with one tab, where the bar
+  always labels its tab.
+- A page the rail or permanent drawer opens is drawn like a tab: a small app bar without a back
+  button, and, when the navigation and the app bar share a colour, the tab's rounded content card.
+  `PageScaffold` and the list-detail scene both do this.
+- The settings list shows its illustrated card, with a Get help button, beside it on wide windows
+  while no category is open, instead of the generic placeholder.
+- `ChangelogDialog` draws the Toolkit's wavy line between releases, where the Markdown has a rule
+  (`splitAtThematicBreaks`), instead of the Markdown renderer's flat line.
+- Moved the startup screen out of `:library:feature:onboarding` into a new
+  `:library:feature:startup`: `StartupProvider`, `StartupScreen`, `StartupViewModel` and their
+  contracts, now under `feature.startup`, with `startupPage()` registering `StartupRoute` and
+  `startupModule(startupProviderFactory)` binding them. `onboardingPages()` registers only
+  `OnboardingRoute`, and `onboardingModule` is a value without parameters. `toolkitPages()` and
+  `appToolkitModules` include both, and `:library:apptoolkit` exposes the new module.
+- Moved single-owner code out of `:library:core:common` into the module that uses it: `FaqConstants`
+  and `faqCatalogUrl` to `:library:feature:faq`, `extractChangesForVersion` to
+  `:library:feature:changelog`, `GithubToken` and `toToken` to `:library:feature:issuereporter`,
+  `PurchaseResult` and `isValidForBilling` to `:library:integration:billing`,
+  `OnShowAdCompleteListener` to `:library:integration:ads`, and `installingPackageNameOrNull`,
+  `hasPlayStore` and `isInstalledFromPlayStore` to `:library:integration:review`.
+  The [3.0.0 migration guide](../docs/migration/3.0.0.md#moved-apis) lists the new packages.
+- The display settings rows, the developer options rows and the advanced settings' Developer options
+  row no longer draw leading icons, matching the other settings rows. `ChoicePreferenceItem`'s
+  `icon` moved after `modifier` and defaults to none.
+- The content width override shows only when the app's `ShellLayoutPolicy` sets a maximum width, and
+  the developer options offer the player accessory only to an app with a player.
+- A page beside a rail or a permanent drawer keeps square start corners
+  (`rememberDeviceCornerShape(squareStart = true)`), so its app bar is no longer rounded next to the
+  rail on phones with rounded screens, in landscape.
+- `PageSurface`, `PageScaffold`, the list-detail scene and the shell's tab scaffold now provide
+  `LocalContentColor` for the colour they draw on, so text and icons outside a Material `Surface`
+  follow the theme instead of defaulting to black in the dark theme.
+- `DisplaySettingsViewModel`, `ThemeSettingsViewModel` and `OnboardingThemeViewModel` take a
+  `TelemetryRepository`, and a failed preference write is reported and shows an error message
+  instead of being dropped. Their Koin modules pass it already; code that builds them directly must
+  pass one.
+- `LoggedScreenViewModel` no longer reads names from classes, which R8 renames in release builds.
+  The `view_model` breadcrumb key and GA4 parameter use `viewModelName`, which every Toolkit
+  ViewModel sets to its class name, so the reported values stay the same. The event breadcrumb uses
+  the event's source name.
+- `FirebaseTelemetryRepository.reportViewModelError` and `recordNonFatal` attach their keys to that
+  one report instead of setting them with `setCustomKey`, so a later, unrelated crash no longer
+  carries them.
+- `SupportEvent.QueryProductDetails` is a `data object` without the unused `BillingClient`
+  parameter.
+- `Throwable.toError()` maps `IllegalStateException` to `Errors.UseCase.INVALID_STATE` instead of
+  `NO_DATA`.
+- `KtorClient.createClient` builds a new client on every call instead of caching the first, whose
+  logging setting later calls ignored. Debug logging prints headers with `Authorization` masked, and
+  no longer prints bodies.
+- `DefaultUsageAndDiagnosticsRepository` takes a `ConsentRepository` and applies the stored choices
+  to the consent SDKs after every write, and `UsageAndDiagnosticsViewModel` no longer takes one or
+  applies consent itself. A change now reaches the SDKs whether or not the diagnostics screen is
+  still open; opening the screen no longer re-applies consent, which the host applies at startup
+  with `ConsentRepository.applyInitialConsent()`.
+- `DefaultAboutRepository` and `DefaultCacheRepository` take a `DispatcherProvider`, defaulting to
+  `StandardDispatchers()`, and run their package manager lookup and cache delete on IO themselves,
+  so both are safe to call from the main thread.
+- `:library:feature:about` is the first feature on `core.ui.screen`. `AboutViewModel` no longer
+  takes a `DispatcherProvider`, a `Context` or an `sdkIntProvider`; it takes a
+  `ClipboardRepository`, exposes `state` (an `AboutUiState` whose `items` is a `Loadable`) and
+  queued `messages`, and `AboutEvent.DismissSnackbar` and `AboutAction` are removed. `AboutScreen`
+  now only wires the ViewModel, tracking, messages and navigation, and the list renders in a
+  stateless, previewable `AboutScreenContent`. Its load and copy failures go through `toFailed` and
+  `toErrorMessage`, so a storage or network failure shows its own text and a failure that would
+  repeat offers no Retry.
+- `:library:feature:settings` is on `core.ui.screen`. `SettingsViewModel` no longer takes a
+  `DispatcherProvider` and exposes `state`, a `SettingsUiState` whose `config` is a `Loadable`: a
+  provider with no category is `Loadable.Empty`, whose "No settings found" the empty page now shows
+  (the old snackbar error was never displayed), and a provider that throws is `Loadable.Failed`.
+  `SettingsAction` is removed, and `SettingsEvent` no longer extends `UiEvent`. `SettingsScreen`
+  wires the ViewModel, the search query and index, tracking and navigation, and the list renders in
+  the stateless `SettingsScreenContent`. Both live in `SettingsScreen.kt`, and `SettingsList` keeps
+  its signature.
+- `:library:feature:permissions` is on `core.ui.screen`.
+  `PermissionsRepository.getPermissionsConfig()` returns the `SettingsConfig` instead of a `Flow`,
+  and `DefaultPermissionsRepository` and `PermissionsViewModel` no longer take a
+  `DispatcherProvider`, since reading string resources is main-safe. `PermissionsViewModel` exposes
+  `state`, a `PermissionsUiState` whose `config` is a `Loadable`. `PermissionsAction` is removed,
+  and `PermissionsEvent` no longer extends `UiEvent`. `PermissionsScreen` wires the ViewModel and
+  tracking, and the catalog renders in the stateless `PermissionsScreenContent`. Both live in
+  `PermissionsScreen.kt`, and `PermissionsContent` keeps its signature.
+- `:library:feature:licenses` is on `core.ui.screen`. `LicensesViewModel` exposes `state`, an
+  `LicensesUiState` whose `libraryCount` is a `Loadable`, and `LicensesAction` is removed.
+  `LicensesScreen` wires the ViewModel, the metadata producer and tracking, and the list renders in
+  the stateless `LicensesScreenContent`.
+- `:library:feature:changelog` is on `core.ui.screen`.
+  `ChangelogRepository.fetchChangelog(): Flow<DataState<…>>` is now
+  `suspend fun getChangelog(packageName): String`, which throws a `NetworkException`, and
+  `GetChangelogUseCase` is a `suspend` call returning the Markdown. `ChangelogViewModel` no longer
+  takes a `DispatcherProvider` and exposes `state`, an `ChangelogUiState` whose `markdown` is a
+  `Loadable`. `ChangelogEvent.Retry` is merged into `ChangelogEvent.Load`, and `ChangelogAction` is
+  removed. `ChangelogDialog` moved from `feature.changelog.ui.views.dialogs` to
+  `feature.changelog.ui`, and the sheet's body renders in the stateless `ChangelogDialogContent`. An
+  offline device now sees the offline text, and a failure a retry cannot fix offers Done instead of
+  Try again.
+- `:library:feature:faq` is on `core.ui.screen`. `FaqRepository.fetchFaq(): Flow<DataState<…>>` is
+  now `suspend fun getFaq(): List<FaqItem>`, which throws a `NetworkException` when the catalog
+  failed and there are no bundled questions. `FaqViewModel` no longer takes a `DispatcherProvider`
+  and exposes `state`, an `FaqUiState` whose `questions` is a `Loadable`, with `openStoreListing`
+  for the review fallback. `FaqEvent.LoadFaq` is `FaqEvent.Load`, `DismissSnackbar` and
+  `OpenFeatureRequestForm` are removed (the screen opens the form itself), `StoreListingOpened` is
+  added, and `FaqAction` is removed. `FaqScreenContent` moved from `ui.views.content` into
+  `FaqScreen.kt` and is internal and stateless; `FaqScreen` logs the same GA4 events as before.
+- `:library:feature:advanced` is on `core.ui.screen`.
+  `CacheRepository.clearCache(): Flow<DataState<…>>` is now a `suspend` function that throws a
+  `StorageException`, and `AdvancedSettingsViewModel` no longer takes a `DispatcherProvider`. It
+  exposes `state`, an `AdvancedSettingsUiState` with a `CacheClearStatus` and
+  `developerOptionsUnlocked` (replacing the separate `developerOptionsUnlocked` flow), and queued
+  `messages`. `AdvancedSettingsEvent.MessageShown` and `AdvancedSettingsAction` are removed, and
+  `AdvancedSettingsEvent` no longer extends `UiEvent`. Clearing the cache confirms with a snackbar
+  instead of a toast. `AdvancedSettingsScreen` no longer takes `paddingValues`, and the rows render
+  in the stateless `AdvancedSettingsScreenContent` in the same file.
+- `:library:feature:privacy` is on `core.ui.screen`. `PrivacyViewModel` exposes `state`, a
+  `PrivacyUiState` whose `items` is a `Loadable`. `PrivacyAction` is removed: `PrivacyScreen` opens
+  a row's link and navigates to the permissions, ads and diagnostics keys itself. `PrivacyEvent` no
+  longer extends `UiEvent`. `PrivacyScreen` no longer takes `paddingValues`, and the list renders in
+  the stateless `PrivacyScreenContent` in the same file.
+- `:library:feature:diagnostics` is on `core.ui.screen`. `UsageAndDiagnosticsViewModel` no longer
+  takes a `DispatcherProvider` and exposes `state`, a `UsageAndDiagnosticsUiState` whose `settings`
+  is a `Loadable<UsageAndDiagnosticsSettings>`, and queued `messages`.
+  `UsageAndDiagnosticsEvent.Initialize` is `Load`, `UsageAndDiagnosticsEvent` no longer extends
+  `UiEvent`, and `UsageAndDiagnosticsAction` is removed. `FirebaseConsentDialog` and `DetailsPage`
+  take `settings: UsageAndDiagnosticsSettings` instead of the UI state. `UsageAndDiagnosticsScreen`
+  no longer takes `paddingValues`, and the page renders in the stateless
+  `UsageAndDiagnosticsScreenContent` in the same file. `FirebaseOnboardingPage` keeps its signature
+  and renders in `FirebaseOnboardingPageContent`.
+- `:library:feature:display` is on `core.ui.screen`. `DisplaySettingsViewModel` is a
+  `LoggedScreenViewModel` and exposes `state`, a `DisplaySettingsUiState` whose `settings` is a
+  `Loadable` of the new `DisplaySettings`, which carries the start page route, and queued
+  `messages`. `DisplaySettingsViewModel.startupRoute(defaultRoute)` is removed,
+  `DisplaySettingsEvent.Initialize` is `Load`, and `DisplaySettingsEvent` no longer extends
+  `UiEvent`. Each preference write is reported as its own operation (`setThemeMode`,
+  `setDynamicColors`, `setBouncyButtons`, `setShowBottomBarLabels`, `setLanguage`,
+  `setStartupPage`). `DisplaySettingsScreen` no longer takes `paddingValues`, and the list renders
+  in the stateless `DisplaySettingsScreenContent` in the same file. GA4 events are unchanged.
+- `:library:feature:theme` is on `core.ui.screen`. `ThemeSettingsViewModel` and
+  `SeasonalThemeOverlayViewModel` extend `LoggedScreenViewModel` and expose `state` instead of
+  `uiState`. `ThemeSettingsUiState` is a data class whose `preferences` is a
+  `Loadable<ThemePreferencesState>`. `ThemeSettingsEvent.Initialize` is `Load`, and
+  `ThemeSettingsEvent` and `SeasonalThemeOverlayEvent` no longer extend `UiEvent`. A preference
+  write is the `persistThemeSetting` operation, with the setting in its `setting` parameter.
+  `ThemeSettingsScreen` no longer takes `paddingValues`, and the page renders in the stateless
+  `ThemeSettingsScreenContent` in the same file. The palette pager's pages and the theme mode and
+  tab lists are no longer rebuilt on every recomposition.
+- `:library:feature:support` is on `core.ui.screen`. `SupportViewModel` exposes `state`, a
+  `SupportUiState` whose `donationOptions` is a `Loadable` of `DonationOption` (formerly
+  `DonationOptionUiState`, now in `feature.support.ui.models`), and queued `messages`.
+  `SupportScreenUiState` is `SupportUiState`, without its `error` field. `SupportAction`,
+  `SupportEvent.SetUpBilling`, `SupportEvent.DismissSnackbar` and `setupBilling()` are removed,
+  `SupportEvent` no longer extends `UiEvent`, and a donation is
+  `SupportEvent.Donate(productId, activity)` instead of `onDonateClicked`. The page renders in the
+  stateless, now internal `SupportScreenContent` in `SupportScreen.kt`, and the screen logs the same
+  GA4 events as before.
+- `:library:feature:onboarding` is on `core.ui.screen`. `OnboardingViewModel` no longer takes a
+  `DispatcherProvider`; it takes a `ConsentRepository` and asks for consent itself with the
+  `ConsentHost` in `OnboardingEvent.RequestConsent(host)`. It exposes `state`, an
+  `OnboardingUiState` whose `completion` is an `OnboardingCompletion`, and queued `messages`.
+  `OnboardingEvent.UpdateCurrentTab` is `PageSelected`, and `ObserveCompletion`, `DismissSnackbar`
+  and `OnboardingAction` are removed. `OnboardingScreen` enters the shell once completion is saved,
+  and the pager renders in the stateless `OnboardingScreenContent` in the same file. Pages show
+  their messages through the onboarding screen's snackbar host. `OnboardingThemeViewModel` is a
+  `LoggedScreenViewModel` exposing `state`, an `OnboardingThemeUiState`, and
+  `OnboardingThemeEvent.Initialize` is removed.
+  `DefaultOnboardingRepository.setOnboardingCompleted()` throws a `StorageException` when the write
+  fails.
+- `:library:feature:startup` is on `core.ui.screen`. `StartupViewModel` takes a `ConsentRepository`
+  and asks for consent itself with the `ConsentHost` in `StartupEvent.RequestConsent(host)`,
+  settling on any answer, on a failure or after 15 seconds as before. It exposes `state`, a
+  `StartupUiState` whose `consent` is a `ConsentRequestStatus`. `StartupEvent.ConsentFormLoaded`,
+  `StartupEvent.Continue` and `StartupAction` are removed. `StartupScreen()` takes no parameters and
+  owns the permission request, consent and navigation, and its body renders in the stateless
+  `StartupScreenContent` in the same file.
+- `DefaultUsageAndDiagnosticsRepository` no longer takes a `DispatcherProvider`, since DataStore is
+  main-safe, and its reads and writes fail with a `StorageException`. `AdsCoreManager` reads the ads
+  preferences without a dispatcher switch and still initializes the Mobile Ads SDK on IO, and
+  `DefaultBillingRepository` no longer switches dispatchers around its product and purchase queries,
+  whose callbacks Play Billing already delivers asynchronously.
+- Feature modules no longer keep their own copies of strings `:library:core:ui` provides, and read
+  them from `core.ui.R` instead: the theme mode, palette and AMOLED labels in
+  `:library:feature:theme` and `:library:feature:onboarding`, and `done_button_content_description`,
+  `go_back`, `content_description_more_options`, `try_again`, `support_us`, `learn_more` and
+  `startup_page` in About, Diagnostics, Startup, Display, Support and the ads integration. An app
+  that overrode one of those copies by name overrides the `:library:core:ui` string instead.
+- The onboarding theme page uses the same theme mode and palette pickers as the theme settings page
+  instead of its own copy, so it now offers the holiday palettes all year once they are unlocked and
+  opens on the selected palette. `OnboardingThemeViewModel` takes a `SeasonalThemeRepository`, and
+  `OnboardingThemeUiState` gains `seasonalThemesUnlocked`. `OnboardingThemeChoice` is removed.
+- `PermissionsViewModel` loads the permission catalog once, when it is created, instead of each time
+  the page is shown; the catalog does not change while the app runs.
+- `:library:integration:ads`'s settings page is on `core.ui.screen`. `AdsSettingsRepository` reads
+  fail with a `StorageException` from their flows and `setAdsEnabled` and `setReduceAds` throw one
+  instead of returning `DataState`, and `defaultAdsEnabled` is gone from the contract: the store's
+  default applies. `AdsSettingsViewModel` no longer takes a `DispatcherProvider` and exposes
+  `state`, an `AdsSettingsUiState` whose `preferences` is a `Loadable<AdsPreferences>`, and queued
+  `messages`; a failed write keeps the switch where it was and shows an error message.
+  `AdsSettingsAction` is removed, and `AdsSettingsEvent` no longer extends `UiEvent`. The page
+  renders in the stateless `AdsSettingsScreenContent` in `AdsSettingsScreen.kt`.
+- `:library:feature:issuereporter` is on `core.ui.screen`. `IssueReporterRepository.sendReport`
+  returns the created issue's URL instead of an `IssueReportResult`, and throws an
+  `IssueReportRejectedException` (with a `reason`) for GitHub's 401, 403, 410 and 422 answers, or a
+  `NetworkException` for any other failure. `DefaultIssueReporterRepository` and
+  `IssueReporterViewModel` no longer take a `DispatcherProvider`, and the ViewModel calls the
+  repository directly. `IssueReporterViewModel` exposes `state`, an `IssueReporterUiState` whose
+  `deviceInfo` is a `Loadable`, and queued `messages`. `IssueSubmissionState` gains `Failed`.
+  `IssueReporterEvent` no longer extends `UiEvent`, and `DismissSnackbar` is removed. The sheet
+  renders in the stateless `IssueReporterBottomSheetContent` in `IssueReporterBottomSheet.kt`, and
+  logs the same GA4 events as before.
+- The display, theme, privacy, About and advanced pages declare their settings search rows with
+  `settingsSearchProvider`. The theme, privacy, About and advanced rows are as before; the display
+  rows are those `displayRows` gives the page.
+- The issue reporter requires an email, a title of 10 to 120 characters and a description of 40 to
+  5,000 characters, and trims all three before filing. The sheet looks as before and Send stays
+  enabled: an invalid field shows its error beneath it, and a report held back by the cooldown or as
+  a duplicate shows a message. `IssueReporterViewModel` takes an `IssueReportHistoryRepository` and
+  a `ValidateIssueReportUseCase`, and `IssueReporterUiState` gains `fieldErrors`. The `send_issue`
+  event is now logged by the ViewModel, once per attempt, with `validation_failure` (such as
+  `title_too_short`, `email_invalid`, `cooldown`, `duplicate`, or `none` for a report handed to
+  GitHub) in place of `has_email`; no report text or email is ever logged. The
+  `issue_email_optional_placeholder` and `error_invalid_report` strings are removed.
+- Shake-to-report needs a deliberate, repeated shake: `ShakeDetector` counts distinct shakes and by
+  default asks for six, three back-and-forth movements, over at least 800 ms, instead of four
+  readings over 300 ms. The new `minimumShakes` parameter sets the count.
+
+### Improved
+
+- `AnimatedIconButtonDirection` crossfades its glyph when `icon` changes, so one button can turn
+  from a menu button into a back arrow without popping.
+- A navigation no longer recomposes every tab screen: the shell keeps its callbacks and the static
+  `LocalShellChrome` controller across recompositions. The chrome and the player overlay no longer
+  recompose on every frame the player moves.
+- A page beside the rail or permanent drawer keeps its tab-like app bar while another entry replaces
+  it, instead of showing a back button for the length of its exit.
+- Beside a rail or a permanent drawer, the tabs and the page the navigation opened replace one
+  another with a fade in place (`TabTransitions.inPlace(back)`), instead of the page sliding in like
+  a new window under a navigation already on screen. Only the one on top fades, over one that stays
+  opaque, so the display's grey backdrop no longer flashes between them.
+- The expanded rail starts collapsed and collapses again when the layout changes, such as on
+  rotation.
+- A back swipe from the detail's own edge of a list and detail shrinks the detail in place,
+  following the finger, instead of sliding the separator away from it.
+- Switching between two tabs that both search keeps the search field in place instead of fading it
+  out and in.
+- The startup and onboarding pages keep to a 640dp column centred on tablets and wide windows
+  instead of stretching across them.
+- Improved the shell's performance without changing how it looks or moves: the list-detail
+  separator, its back gesture and the hiding bottom bar no longer recompose the panes or the mini
+  player on each frame; the rail and the permanent drawer no longer recompose on every navigation; a
+  screen's floating action buttons redraw only when they change, and their hosts leave with their
+  screens; the settings search builds its index on the first search instead of when the settings
+  open.
+- Improved snowfall and rainfall, which now share one frame node (`ParticleEffectNode`): the frame
+  loop is cancelled on detach and requests no frames while there is nothing to move, and the rain's
+  gusts and showers stay smooth however long it falls.
+- The shell's player no longer recomposes itself or the app's player content on each frame while it
+  is dragged, expands or collapses: its size, corners and shadow follow the drag in layout and
+  drawing.
+- Changing the bouncy buttons, bottom bar labels or ads setting now recomposes only the parts that
+  read it (`LocalBouncyAnimationsEnabled`, `LocalShowBottomBarLabels`, `LocalAdsEnabled`), instead
+  of everything under `AppTheme`.
+- Choosing a palette, and the holiday theme applying or restoring itself, now store dynamic colors
+  and the palette in one write, so a process death in between can no longer keep only half the
+  choice. `AppTheme` also receives that write as one state, so the app no longer flashes the wrong
+  palette in between.
 
 ### Removed
 
-- Removed the old navigation from `:library:navigation`: the `animations`, `backstack`, `data`, `models` and `ui` packages (`BottomNavigationBar`, `LeftNavigationRail`, `NavigationDrawerSheet`, `NavigationDrawerHeader`, `HideOnScrollBottomBar`, `BottomBarItem`, `NavigationDrawerItem`, `StableNavKey`, `NavigationRepository` and the back-stack helpers) and `NavigationDrawerRoutes`. Use `shellGraph { }` or `toolkitGraph { }` with `ShellHost`.
-- Removed `:library:core:ui`'s `navigation` package (`NavigationState`, `NavigationEntryBuilder`, `NavigationAnimations`) and `startupDestinationFlow`. Use `ShellNavigator`, and `startupValueFlow` from `:library:core:datastore`.
-- Removed `appToolkitNavigationEntryBuilders`, replaced by `toolkitGraph { }`, and `handleNavigationItemClick` with the `DefaultNavigationRepository` binding from `:library:feature:about`; drawer entries are declared in the graph.
-- Removed the Toolkit's activities and their manifest entries: `SettingsActivity`, `GeneralSettingsActivity`, `FaqActivity`, `SupportActivity`, `PermissionsActivity`, `AdsSettingsActivity`, `LicensesActivity`, `StartupActivity` and `OnboardingActivity`. Navigate to their keys instead.
-- Removed `GeneralSettingsRoute`, `GeneralSettingsScreen`, `GeneralSettingsContentProvider`, `GeneralSettingsRepository` and `SettingsContent`; each settings category is its own page.
-- Removed `BaseActivity` from `:library:core:ui`, `Context.openActivity` from `:library:core:common`, and `GmsHostFactory` from `:library:feature:about`.
-- Removed the dependencies between feature modules, and `ALLOWED_LIBRARY_FEATURE_EDGES` with them: `checkModuleBoundaries` now rejects every feature-to-feature edge.
-- Removed the previous screen contracts, now that every Toolkit feature and the sample are on `core.ui.screen`: `core.ui.base` (`BaseViewModel`, its `ScreenViewModel` and `LoggedScreenViewModel`, `UiEvent`, `ActionEvent`, `UiState`), `core.ui.states` (`UiStateScreen`, `ScreenState`, `UiSnackbar` and their helpers), `core.ui.views.layouts.ScreenStateHandler` and `TrackScreenState` (the `UiStateScreen` versions), `DefaultSnackbarHandler`, `ComponentActivity.observeActions`, and `ScreenMessageType` and `ScreenDataStatus` from `:library:core:common`. Use `core.ui.screen` and `MessageHost`.
-- Removed `DataState`, `Error`, `Errors`, `Throwable.toError()` and `Errors.asUiText()` from `:library:core:network`, with its error strings. Repositories throw `NetworkException` or `StorageException`, and screens map them with `toUiText`, `toFailed` and `toErrorMessage`.
-- Removed `SendIssueReportUseCase`, `IssueReportResult`, `IssueReporterAction` and the public `IssueReporterContent` from `:library:feature:issuereporter`. Hosts show `IssueReporterBottomSheet` or call `IssueReporterLauncher.show`.
-- Removed the `XAction` contracts of the features moved to `core.ui.screen`: `AdvancedSettingsAction`, `PrivacyAction`, `UsageAndDiagnosticsAction`, `SupportAction`, `OnboardingAction` and `StartupAction`, with `AdvancedSettingsEvent.MessageShown`, `SupportEvent.DismissSnackbar` and `OnboardingEvent.DismissSnackbar`.
-- Removed the banner style setting: `BannerStyle`, `ShellSettings.bannerStyle`, `ShellPreferences.setBannerStyle` and its display settings row. The banner now shows only docked on the bottom navigation bar, and not at all beside a rail or drawer. A value already stored under `banner_style` is ignored.
+- Removed the old navigation from `:library:navigation`: the `animations`, `backstack`, `data`,
+  `models` and `ui` packages (`BottomNavigationBar`, `LeftNavigationRail`, `NavigationDrawerSheet`,
+  `NavigationDrawerHeader`, `HideOnScrollBottomBar`, `BottomBarItem`, `NavigationDrawerItem`,
+  `StableNavKey`, `NavigationRepository` and the back-stack helpers) and `NavigationDrawerRoutes`.
+  Use `shellGraph { }` or `toolkitGraph { }` with `ShellHost`.
+- Removed `:library:core:ui`'s `navigation` package (`NavigationState`, `NavigationEntryBuilder`,
+  `NavigationAnimations`) and `startupDestinationFlow`. Use `ShellNavigator`, and `startupValueFlow`
+  from `:library:core:datastore`.
+- Removed `appToolkitNavigationEntryBuilders`, replaced by `toolkitGraph { }`, and
+  `handleNavigationItemClick` with the `DefaultNavigationRepository` binding from
+  `:library:feature:about`; drawer entries are declared in the graph.
+- Removed the Toolkit's activities and their manifest entries: `SettingsActivity`,
+  `GeneralSettingsActivity`, `FaqActivity`, `SupportActivity`, `PermissionsActivity`,
+  `AdsSettingsActivity`, `LicensesActivity`, `StartupActivity` and `OnboardingActivity`. Navigate to
+  their keys instead.
+- Removed `GeneralSettingsRoute`, `GeneralSettingsScreen`, `GeneralSettingsContentProvider`,
+  `GeneralSettingsRepository` and `SettingsContent`; each settings category is its own page.
+- Removed `BaseActivity` from `:library:core:ui`, `Context.openActivity` from
+  `:library:core:common`, and `GmsHostFactory` from `:library:feature:about`.
+- Removed the dependencies between feature modules, and `ALLOWED_LIBRARY_FEATURE_EDGES` with them:
+  `checkModuleBoundaries` now rejects every feature-to-feature edge.
+- Removed the previous screen contracts, now that every Toolkit feature and the sample are on
+  `core.ui.screen`: `core.ui.base` (`BaseViewModel`, its `ScreenViewModel` and
+  `LoggedScreenViewModel`, `UiEvent`, `ActionEvent`, `UiState`), `core.ui.states` (`UiStateScreen`,
+  `ScreenState`, `UiSnackbar` and their helpers), `core.ui.views.layouts.ScreenStateHandler` and
+  `TrackScreenState` (the `UiStateScreen` versions), `DefaultSnackbarHandler`,
+  `ComponentActivity.observeActions`, and `ScreenMessageType` and `ScreenDataStatus` from
+  `:library:core:common`. Use `core.ui.screen` and `MessageHost`.
+- Removed `DataState`, `Error`, `Errors`, `Throwable.toError()` and `Errors.asUiText()` from
+  `:library:core:network`, with its error strings. Repositories throw `NetworkException` or
+  `StorageException`, and screens map them with `toUiText`, `toFailed` and `toErrorMessage`.
+- Removed `SendIssueReportUseCase`, `IssueReportResult`, `IssueReporterAction` and the public
+  `IssueReporterContent` from `:library:feature:issuereporter`. Hosts show
+  `IssueReporterBottomSheet` or call `IssueReporterLauncher.show`.
+- Removed the `XAction` contracts of the features moved to `core.ui.screen`:
+  `AdvancedSettingsAction`, `PrivacyAction`, `UsageAndDiagnosticsAction`, `SupportAction`,
+  `OnboardingAction` and `StartupAction`, with `AdvancedSettingsEvent.MessageShown`,
+  `SupportEvent.DismissSnackbar` and `OnboardingEvent.DismissSnackbar`.
+- Removed the banner style setting: `BannerStyle`, `ShellSettings.bannerStyle`,
+  `ShellPreferences.setBannerStyle` and its display settings row. The banner now shows only docked
+  on the bottom navigation bar, and not at all beside a rail or drawer. A value already stored under
+  `banner_style` is ignored.
 
 ### Fixed
 
-- Fixed the advanced settings' Developer options row sitting alone without a title and with its own spacing: it is in a Developer group, titled and spaced like the other groups.
-- Fixed the theme settings and the holiday greeting showing English in Vietnamese and Traditional Chinese: `:library:feature:theme` now has both translations, like every other module.
-- The Help native ad keeps its advertiser icon centred inside the shaped badge instead of covering the shape. `NativeAdStyle.iconInsetDp` lets a host set the same inset on its own placement without cropping the icon.
-- Startup and onboarding use the suspend consent API again. Startup still allows continuing after success, failure, or 15 seconds without an answer.
-- Fixed a failed cache clear replacing the advanced settings page with an error screen it could not leave: the rows stay, and a snackbar shows the failure, with its own text when storage is full or busy.
+- Fixed the advanced settings' Developer options row sitting alone without a title and with its own
+  spacing: it is in a Developer group, titled and spaced like the other groups.
+- Fixed the theme settings and the holiday greeting showing English in Vietnamese and Traditional
+  Chinese: `:library:feature:theme` now has both translations, like every other module.
+- The Help native ad keeps its advertiser icon centred inside the shaped badge instead of covering
+  the shape. `NativeAdStyle.iconInsetDp` lets a host set the same inset on its own placement without
+  cropping the icon.
+- Startup and onboarding use the suspend consent API again. Startup still allows continuing after
+  success, failure, or 15 seconds without an answer.
+- Fixed a failed cache clear replacing the advanced settings page with an error screen it could not
+  leave: the rows stay, and a snackbar shows the failure, with its own text when storage is full or
+  busy.
 - Fixed the privacy page staying blank when its provider threw: it shows the failure with Retry.
-- Fixed the display settings page crashing the app when its preferences could not be read: it shows a failure with Retry, and a failed write keeps the setting on screen and shows an error snackbar.
-- Fixed the usage and diagnostics page showing every choice as off when the stored choices could not be read: it shows a failure with Retry. A failed write now shows its error snackbar, on the settings page and on the onboarding page.
-- Fixed a failure reading the theme preferences or the seasonal state crashing the app from the theme page or the seasonal overlay: the theme page shows a failure with Retry, and the overlay reports it.
-- Fixed the support page showing a generic error when the product query failed offline: it shows the offline text. A failed purchase launch shows a translated message instead of the exception's text.
-- Fixed the onboarding screen reporting `screen_state` as `loading` for as long as it was open: it reports `success` while the pages show, `loading` while completion is saved, and `error` after a failed save.
-- Fixed the issue reporter showing GitHub's raw response body or an exception's message when a send failed: it shows the shared text for the failure, such as no internet or a timeout, or "Failed to send report".
-- Fixed the issue reporter crashing when the device details for its panel could not be read: the panel shows the failure and tries again the next time it opens.
+- Fixed the display settings page crashing the app when its preferences could not be read: it shows
+  a failure with Retry, and a failed write keeps the setting on screen and shows an error snackbar.
+- Fixed the usage and diagnostics page showing every choice as off when the stored choices could not
+  be read: it shows a failure with Retry. A failed write now shows its error snackbar, on the
+  settings page and on the onboarding page.
+- Fixed a failure reading the theme preferences or the seasonal state crashing the app from the
+  theme page or the seasonal overlay: the theme page shows a failure with Retry, and the overlay
+  reports it.
+- Fixed the support page showing a generic error when the product query failed offline: it shows the
+  offline text. A failed purchase launch shows a translated message instead of the exception's text.
+- Fixed the onboarding screen reporting `screen_state` as `loading` for as long as it was open: it
+  reports `success` while the pages show, `loading` while completion is saved, and `error` after a
+  failed save.
+- Fixed the issue reporter showing GitHub's raw response body or an exception's message when a send
+  failed: it shows the shared text for the failure, such as no internet or a timeout, or "Failed to
+  send report".
+- Fixed the issue reporter crashing when the device details for its panel could not be read: the
+  panel shows the failure and tries again the next time it opens.
 - Fixed the help page reporting each review request twice as `vm_op_start`.
-- Fixed the holiday greeting's checkbox sitting against its label and its press ripple being cut off: the row is rounded and padded, with room between the box and the text.
-- Fixed the display settings' and developer options' choice dialogs losing their top icon along with their rows' icons.
-- Fixed the tabs' floating action buttons sitting over the gesture bar once the bottom bar had hidden on scroll: they now rise by the part of the navigation bar's inset the hiding bar no longer covers.
-- Fixed clicking the tab already shown replaying its icon: an icon used for both states and set to `ToolkitIconReplayMode.Reverse` travelled back to its unselected frame while the tab stayed selected. The bar, rail and drawers no longer replay the selected tab's icon, and `AnimatedToolkitIcon` keeps a selected component on its selected frame.
-- Fixed the navigation colour not following scrolling (`NavigationTint.OnScroll`) on pages opened beside a rail or drawer, such as settings and its list-detail pages.
-- Fixed rain replacing the snow of the Christmas theme: during the Christmas season, while the Christmas palette is worn, snow falls even with the Rain weather effect, and the rain comes back after the season.
-- Fixed `DefaultSnackbarHost` drawing nothing for snackbars without `CustomSnackbarVisuals` and never drawing an action: every snackbar now shows, with its action when it has one.
+- Fixed the holiday greeting's checkbox sitting against its label and its press ripple being cut
+  off: the row is rounded and padded, with room between the box and the text.
+- Fixed the display settings' and developer options' choice dialogs losing their top icon along with
+  their rows' icons.
+- Fixed the tabs' floating action buttons sitting over the gesture bar once the bottom bar had
+  hidden on scroll: they now rise by the part of the navigation bar's inset the hiding bar no longer
+  covers.
+- Fixed clicking the tab already shown replaying its icon: an icon used for both states and set to
+  `ToolkitIconReplayMode.Reverse` travelled back to its unselected frame while the tab stayed
+  selected. The bar, rail and drawers no longer replay the selected tab's icon, and
+  `AnimatedToolkitIcon` keeps a selected component on its selected frame.
+- Fixed the navigation colour not following scrolling (`NavigationTint.OnScroll`) on pages opened
+  beside a rail or drawer, such as settings and its list-detail pages.
+- Fixed rain replacing the snow of the Christmas theme: during the Christmas season, while the
+  Christmas palette is worn, snow falls even with the Rain weather effect, and the rain comes back
+  after the season.
+- Fixed `DefaultSnackbarHost` drawing nothing for snackbars without `CustomSnackbarVisuals` and
+  never drawing an action: every snackbar now shows, with its action when it has one.
 - Fixed the ads settings page never showing its consent failures.
-- Fixed `LargeTopAppBarWithScaffold` creating a new snackbar host on every recomposition, which dropped the snackbar showing, and drawing Material's plain snackbars: it keeps one host, draws the Toolkit's, and gives the screen inside `rememberScaffoldSnackbars()`.
-- Fixed a snackbar shown through `ShellHost(snackbarHostState)` waiting, unseen, while a start screen or a page covered the tabs: the shell now shows it at the bottom of the window until the tabs are back.
-- Fixed subscriptions bought through `BillingRepository.launchSubscriptionFlow` never being acknowledged, which made Play refund them after three days: subscriptions are now acknowledged instead of consumed, and `processPastPurchases` recovers unacknowledged subscriptions as well as unconsumed one-time purchases.
-- Fixed `AdBanner` leaking its `AdView`, and with it the activity, each time the banner left the screen or was rebuilt: the view is now destroyed when it is replaced or leaves composition.
-- Fixed a damaged shell settings file crashing the app on every launch: the shell now falls back to its default settings.
-- Fixed `extractChangesForVersion` returning only the version heading for Keep a Changelog style notes: the section now ends at the next heading of the same or a higher level, so `### Added` and similar sub-headings stay in it.
-- Fixed a `BaseCoreManager` subclass that overrides `dispatchers` crashing on start, and `BaseCoreManager.isAppLoaded` possibly staying `false` for readers on the main thread.
-- Fixed the consent form reporting success when it closed with an error: the request now fails, as it does when the form cannot load.
-- Fixed the issue reporter sheet staying in its sending state when sending threw: it returns to the form and shows the failure.
+- Fixed `LargeTopAppBarWithScaffold` creating a new snackbar host on every recomposition, which
+  dropped the snackbar showing, and drawing Material's plain snackbars: it keeps one host, draws the
+  Toolkit's, and gives the screen inside `rememberScaffoldSnackbars()`.
+- Fixed a snackbar shown through `ShellHost(snackbarHostState)` waiting, unseen, while a start
+  screen or a page covered the tabs: the shell now shows it at the bottom of the window until the
+  tabs are back.
+- Fixed subscriptions bought through `BillingRepository.launchSubscriptionFlow` never being
+  acknowledged, which made Play refund them after three days: subscriptions are now acknowledged
+  instead of consumed, and `processPastPurchases` recovers unacknowledged subscriptions as well as
+  unconsumed one-time purchases.
+- Fixed `AdBanner` leaking its `AdView`, and with it the activity, each time the banner left the
+  screen or was rebuilt: the view is now destroyed when it is replaced or leaves composition.
+- Fixed a damaged shell settings file crashing the app on every launch: the shell now falls back to
+  its default settings.
+- Fixed `extractChangesForVersion` returning only the version heading for Keep a Changelog style
+  notes: the section now ends at the next heading of the same or a higher level, so `### Added` and
+  similar sub-headings stay in it.
+- Fixed a `BaseCoreManager` subclass that overrides `dispatchers` crashing on start, and
+  `BaseCoreManager.isAppLoaded` possibly staying `false` for readers on the main thread.
+- Fixed the consent form reporting success when it closed with an error: the request now fails, as
+  it does when the form cannot load.
+- Fixed the issue reporter sheet staying in its sending state when sending threw: it returns to the
+  form and shows the failure.
 - Fixed toggling one ads setting cancelling the other's save while both were in flight.
-- Fixed the seasonal theme overlay silently swallowing failures, including cancellation, while restoring the everyday theme or answering the holiday greeting: failures are now reported as non-fatals.
-- Fixed a failed or declined purchase on the support page replacing the whole page with "failed to load SKU details": the donation options stay and a snackbar shows the error. When the products themselves cannot be loaded, the error page now has a Retry button.
+- Fixed the seasonal theme overlay silently swallowing failures, including cancellation, while
+  restoring the everyday theme or answering the holiday greeting: failures are now reported as
+  non-fatals.
+- Fixed a failed or declined purchase on the support page replacing the whole page with "failed to
+  load SKU details": the donation options stay and a snackbar shows the error. When the products
+  themselves cannot be loaded, the error page now has a Retry button.
 - Fixed billing launch failures being reported to Crashlytics as `SupportViewModel` errors.
-- Fixed a cancelled in-app update request still opening the update screen when Play answered afterwards.
-- Fixed a consent request from a new screen, such as after a rotation, joining a request whose screen had been destroyed and whose form would show on that dead window. It now waits briefly for that request to end, then starts its own.
-- Fixed "Allow all" and "Allow essential" in the diagnostics settings handing the consent SDKs several mixed states while saving: the whole answer is stored in one write.
-- Fixed the review flow asking Play twice per review: the request made to check availability is reused to launch the review. Review failures are logged instead of dropped, and cancellation is no longer swallowed.
+- Fixed a cancelled in-app update request still opening the update screen when Play answered
+  afterwards.
+- Fixed a consent request from a new screen, such as after a rotation, joining a request whose
+  screen had been destroyed and whose form would show on that dead window. It now waits briefly for
+  that request to end, then starts its own.
+- Fixed "Allow all" and "Allow essential" in the diagnostics settings handing the consent SDKs
+  several mixed states while saving: the whole answer is stored in one write.
+- Fixed the review flow asking Play twice per review: the request made to check availability is
+  reused to launch the review. Review failures are logged instead of dropped, and cancellation is no
+  longer swallowed.
 - Fixed `DefaultBillingRepository.getInstance` returning a closed repository after `close()`.
-- Fixed the settings illustration (`rememberPaletteImageVector`) keeping stale grass, leg and background tree colors when only those theme colors changed.
-- Fixed `BaseViewModel.updateSuccessState` possibly dropping a state change made at the same moment by another update: it now reads and writes the state in one atomic update.
-- Fixed the About screen going blank when its entries failed to load: it now shows the failure with a Retry button.
-- Fixed a settings search result crashing the app when it opened a page the app's graph does not register. Such a result is now left out, with a warning in the log; a root row with an action keeps its action in the results but loses the unregistered fallback page, and the settings list itself is unchanged.
+- Fixed the settings illustration (`rememberPaletteImageVector`) keeping stale grass, leg and
+  background tree colors when only those theme colors changed.
+- Fixed `BaseViewModel.updateSuccessState` possibly dropping a state change made at the same moment
+  by another update: it now reads and writes the state in one atomic update.
+- Fixed the About screen going blank when its entries failed to load: it now shows the failure with
+  a Retry button.
+- Fixed a settings search result crashing the app when it opened a page the app's graph does not
+  register. Such a result is now left out, with a warning in the log; a root row with an action
+  keeps its action in the results but loses the unregistered fallback page, and the settings list
+  itself is unchanged.
 
 ---
 
@@ -205,19 +697,34 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 
 ### Changed
 
-- Changed the dark Android palette to pair Android green with Android's navy and light blue on blue-gray surfaces, so it no longer looks like the green palette. The light scheme is unchanged.
-- Changed `MaterialYouCircleSwatch` back to a swatch without divider lines or a ring. The selection check is drawn in the swatch's primary on a darker or lighter disc of the same hue, so it stays visible on every palette without taking colors from the app's theme.
-- Changed `themePreferencesState()` to take only `themeModeDefault` and `staticPaletteIdDefault`. The removed `dynamicColorsDefault`, `amoledModeDefault`, and `dynamicPaletteVariantDefault` only shaped the placeholder first emission; the stored values, with the data source's own defaults for missing keys, were used right after.
+- Changed the dark Android palette to pair Android green with Android's navy and light blue on
+  blue-gray surfaces, so it no longer looks like the green palette. The light scheme is unchanged.
+- Changed `MaterialYouCircleSwatch` back to a swatch without divider lines or a ring. The selection
+  check is drawn in the swatch's primary on a darker or lighter disc of the same hue, so it stays
+  visible on every palette without taking colors from the app's theme.
+- Changed `themePreferencesState()` to take only `themeModeDefault` and `staticPaletteIdDefault`.
+  The removed `dynamicColorsDefault`, `amoledModeDefault`, and `dynamicPaletteVariantDefault` only
+  shaped the placeholder first emission; the stored values, with the data source's own defaults for
+  missing keys, were used right after.
 
 ### Fixed
 
-- Fixed the theme settings palette rows not opening on the palette in use. `themePreferencesState()` emitted placeholder defaults (wallpaper colors on, default palette) before the stored values, so the rows were positioned on the default palette and stayed there. Its first emission is now the stored state, and each row is created positioned on the selection, then centers it.
+- Fixed the theme settings palette rows not opening on the palette in use. `themePreferencesState()`
+  emitted placeholder defaults (wallpaper colors on, default palette) before the stored values, so
+  the rows were positioned on the default palette and stayed there. Its first emission is now the
+  stored state, and each row is created positioned on the selection, then centers it.
 
 ### Removed
 
-- Removed `GeneralSettingsContentProvider.ProvideActions`, whose only action was the seasonal themes one.
-- Removed `SeasonalThemesAction`, `SeasonalThemesDialog`, `SeasonalThemesViewModel`, `SeasonalThemesEvent`, and `SeasonalThemesUiState` from `:library:feature:theme`.
-- Removed the seasonal all-year and snowfall switches from `:library:core:datastore` and `:library:core:common`: `SeasonalThemeRepository.setSeasonalThemesAllYear` and `setSnowfallEnabled`, the matching `SeasonalThemePreferencesDataSource` members, `SeasonalThemeState.allYear` and `snowfallEnabled`, and the `DATA_STORE_SEASONAL_THEMES_ALL_YEAR` and `DATA_STORE_SNOWFALL_ENABLED` keys. Values already stored under those keys are ignored.
+- Removed `GeneralSettingsContentProvider.ProvideActions`, whose only action was the seasonal themes
+  one.
+- Removed `SeasonalThemesAction`, `SeasonalThemesDialog`, `SeasonalThemesViewModel`,
+  `SeasonalThemesEvent`, and `SeasonalThemesUiState` from `:library:feature:theme`.
+- Removed the seasonal all-year and snowfall switches from `:library:core:datastore` and
+  `:library:core:common`: `SeasonalThemeRepository.setSeasonalThemesAllYear` and
+  `setSnowfallEnabled`, the matching `SeasonalThemePreferencesDataSource` members,
+  `SeasonalThemeState.allYear` and `snowfallEnabled`, and the `DATA_STORE_SEASONAL_THEMES_ALL_YEAR`
+  and `DATA_STORE_SNOWFALL_ENABLED` keys. Values already stored under those keys are ignored.
 - Removed the `dividerColor` parameter from `MaterialYouCircleSwatch`.
 
 ---
@@ -228,49 +735,124 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 
 ### Added
 
-- Added purple and orange static palettes (`purple`, `orange`), each with light and dark schemes. Orange is an everyday palette with soft peach containers, separate from the Halloween pumpkin and purple.
-- Added `Modifier.snowfall` and `SnowfallStyle` to `:library:core:designsystem`: falling snow drawn over any element, with density, colors, flake size, speed, wind, opacity, and shape (dots, crystals, or both). It runs in the draw phase only, so nothing recomposes while snow falls, it stops while the app is in the background, and taps go through it.
-- Added seasonal themes to `:library:feature:theme`. Once a host calls `SeasonalThemeManager.install()`, the first screen opened during Christmas (December 24 to January 7) or Halloween (October 31 to November 2) greets the holiday and offers its theme with a checkbox. The greeting appears once per holiday. An accepted holiday theme is taken off when the holiday ends, bringing back the palette and wallpaper-colors setting from before, unless another palette was picked during the holiday. Snow falls over every screen while the Christmas theme is on, and is skipped when animations are turned off system-wide.
-- Added a seasonal themes easter egg. Tapping the build version five times on the About screen now also unlocks a top app bar action on the theme settings page. Its dialog keeps the Christmas and Halloween palettes in the palette list all year and turns snowfall on or off.
-- Added `SeasonalThemeRepository` to `:library:core:datastore`, which stores the seasonal themes state and owns the rules for applying and restoring a holiday theme.
-- Added `Context.isSystemAnimationDisabled()` to `:library:core:common`, and `isAppInDarkTheme(themeMode)` and `ColorScheme.toSwatchColors()` to `:library:core:designsystem`.
-- Added `GeneralSettingsContentProvider.ProvideActions`, which lets a settings page contribute top app bar actions. On tablets they appear in the settings bar while that page is open in the detail pane.
-- Added `NativeAdCache` and `rememberNativeAdCache` to `:library:core:ui`. `NativeAdSlot`, `rememberNativeAd`, and `rememberNativeAdState` take a `cache` and `cacheKey`, so an ad in a lazy list or grid survives its item scrolling out of view instead of being destroyed and requested again. An ad older than an hour is replaced, and every ad is destroyed when the cache leaves composition.
-- Added `HorizontalWavyDivider` and `VerticalWavyDivider` to `:library:core:ui`, drawing `il_wavy_line` as a divider. The wave scales with the divider and fits a whole number of half-waves into any length, so it ends cleanly at any size. It takes the colour of Material's plain dividers by default.
+- Added purple and orange static palettes (`purple`, `orange`), each with light and dark schemes.
+  Orange is an everyday palette with soft peach containers, separate from the Halloween pumpkin and
+  purple.
+- Added `Modifier.snowfall` and `SnowfallStyle` to `:library:core:designsystem`: falling snow drawn
+  over any element, with density, colors, flake size, speed, wind, opacity, and shape (dots,
+  crystals, or both). It runs in the draw phase only, so nothing recomposes while snow falls, it
+  stops while the app is in the background, and taps go through it.
+- Added seasonal themes to `:library:feature:theme`. Once a host calls
+  `SeasonalThemeManager.install()`, the first screen opened during Christmas (December 24 to January
+  7) or Halloween (October 31 to November 2) greets the holiday and offers its theme with a
+  checkbox. The greeting appears once per holiday. An accepted holiday theme is taken off when the
+  holiday ends, bringing back the palette and wallpaper-colors setting from before, unless another
+  palette was picked during the holiday. Snow falls over every screen while the Christmas theme is
+  on, and is skipped when animations are turned off system-wide.
+- Added a seasonal themes easter egg. Tapping the build version five times on the About screen now
+  also unlocks a top app bar action on the theme settings page. Its dialog keeps the Christmas and
+  Halloween palettes in the palette list all year and turns snowfall on or off.
+- Added `SeasonalThemeRepository` to `:library:core:datastore`, which stores the seasonal themes
+  state and owns the rules for applying and restoring a holiday theme.
+- Added `Context.isSystemAnimationDisabled()` to `:library:core:common`, and
+  `isAppInDarkTheme(themeMode)` and `ColorScheme.toSwatchColors()` to `:library:core:designsystem`.
+- Added `GeneralSettingsContentProvider.ProvideActions`, which lets a settings page contribute top
+  app bar actions. On tablets they appear in the settings bar while that page is open in the detail
+  pane.
+- Added `NativeAdCache` and `rememberNativeAdCache` to `:library:core:ui`. `NativeAdSlot`,
+  `rememberNativeAd`, and `rememberNativeAdState` take a `cache` and `cacheKey`, so an ad in a lazy
+  list or grid survives its item scrolling out of view instead of being destroyed and requested
+  again. An ad older than an hour is replaced, and every ad is destroyed when the cache leaves
+  composition.
+- Added `HorizontalWavyDivider` and `VerticalWavyDivider` to `:library:core:ui`, drawing
+  `il_wavy_line` as a divider. The wave scales with the divider and fits a whole number of
+  half-waves into any length, so it ends cleanly at any size. It takes the colour of Material's
+  plain dividers by default.
 
 ### Improved
 
-- Added baseline profiles to `:library:core:designsystem`, `:library:core:ui`, `:library:navigation`, and `:library:feature:theme`. A host's release build merges them, so the classes a cold launch runs before its first frame (the theme and default palette, the icon slot, navigation state, the drawer and bottom bar, and the seasonal overlay) are compiled ahead of time on install. Before, no toolkit code was in the app's profile. The lists are hand-picked and not yet measured; a generated profile from a startup benchmark is the intended replacement.
-- Improved `AppTheme` so it rebuilds its color scheme only when a theme setting changes, and builds the wallpaper-based schemes only when dynamic colors are on. It used to build both wallpaper schemes on every recomposition.
-- Improved the seasonal overlay so it composes no second app theme over every activity; it borrows a theme only while the holiday greeting is on screen.
+- Added baseline profiles to `:library:core:designsystem`, `:library:core:ui`,
+  `:library:navigation`, and `:library:feature:theme`. A host's release build merges them, so the
+  classes a cold launch runs before its first frame (the theme and default palette, the icon slot,
+  navigation state, the drawer and bottom bar, and the seasonal overlay) are compiled ahead of time
+  on install. Before, no toolkit code was in the app's profile. The lists are hand-picked and not
+  yet measured; a generated profile from a startup benchmark is the intended replacement.
+- Improved `AppTheme` so it rebuilds its color scheme only when a theme setting changes, and builds
+  the wallpaper-based schemes only when dynamic colors are on. It used to build both wallpaper
+  schemes on every recomposition.
+- Improved the seasonal overlay so it composes no second app theme over every activity; it borrows a
+  theme only while the holiday greeting is on screen.
 - Improved snowfall drawing so it allocates nothing per frame.
-- Improved the theme settings page so each palette row opens scrolled to the palette in use, centered, instead of at the start of the row.
-- Improved palette swatches in the theme picker and onboarding. They show each palette's most colorful variant of every accent, follow the theme the app is actually drawn in rather than the system setting, draw from one cached drawing node instead of eight nested layouts, and draw the selection check in black or white on the swatch's own color so it no longer disappears on dark palettes.
-- Improved `AppTheme` so it no longer re-subscribes to the theme preferences on every recomposition. Each re-subscription replayed the defaults, which could briefly swap the whole app's color scheme and recompose everything under it.
-- Improved `DisplaySettingsScreen` so it no longer restarts its startup-page subscription on every recomposition.
-- Improved `VersionInfoAlertDialogContent` so it uses Coil's shared image loader instead of building a new one, with its own caches, on every recomposition.
-- Improved `Modifier.animateVisibility` so `index` is optional. Without it, elements shown together still cascade, in the order they appear, so a `Column` or a group of cards needs no index. With an index the cascade is unchanged. The motion also runs in the draw phase instead of re-laying out the element on every frame, and is skipped when the system's animations are turned off.
+- Improved the theme settings page so each palette row opens scrolled to the palette in use,
+  centered, instead of at the start of the row.
+- Improved palette swatches in the theme picker and onboarding. They show each palette's most
+  colorful variant of every accent, follow the theme the app is actually drawn in rather than the
+  system setting, draw from one cached drawing node instead of eight nested layouts, and draw the
+  selection check in black or white on the swatch's own color so it no longer disappears on dark
+  palettes.
+- Improved `AppTheme` so it no longer re-subscribes to the theme preferences on every recomposition.
+  Each re-subscription replayed the defaults, which could briefly swap the whole app's color scheme
+  and recompose everything under it.
+- Improved `DisplaySettingsScreen` so it no longer restarts its startup-page subscription on every
+  recomposition.
+- Improved `VersionInfoAlertDialogContent` so it uses Coil's shared image loader instead of building
+  a new one, with its own caches, on every recomposition.
+- Improved `Modifier.animateVisibility` so `index` is optional. Without it, elements shown together
+  still cascade, in the order they appear, so a `Column` or a group of cards needs no index. With an
+  index the cascade is unchanged. The motion also runs in the draw phase instead of re-laying out
+  the element on every frame, and is skipped when the system's animations are turned off.
 
 ### Fixed
 
-- Fixed unreadable text in several static palettes. In light mode, Android green, yellow, skin, Halloween, and green used their bright brand color as `primary`, so text buttons, links, switches, and selected icons drawn in it fell as low as 1.35:1 against the background. Palettes keep their authored colors wherever contrast allows: on fills only the text color is adjusted, and a color moves only when it is the text on a surface and cannot pass there, to the nearest readable tone of the same hue. Those bright brand colors now appear exactly as the light `primaryContainer` or `tertiaryContainer` (floating action buttons, tonal buttons, selected chips). Dark schemes keep their authored accents. Snackbar actions (`inversePrimary`) are readable in every scheme, and monochrome's outline is visible against raised surfaces.
-- Fixed error roles out of step with their containers: error, error container, and their foregrounds now come from the same tonal palette in every static scheme.
-- Fixed static palettes showing Material's baseline purple in their fixed roles (`primaryFixed`, `secondaryFixed`, `tertiaryFixed` and their `on` roles). Every palette now defines them from its own colors.
-- Fixed the Christmas palette using red for every accent. It now pairs festive red with evergreen green and gold.
-- Fixed the build version row on the About screen copying the version to the clipboard on every tap, which buried the five-tap konfetti under clipboard confirmations. The other rows still copy their value.
-- Fixed a damaged settings file crashing every app built on the toolkit at launch. The shared `settings` DataStore now replaces a file it can no longer read with empty preferences, so values fall back to their defaults instead of every read throwing `CorruptionException`.
-- Fixed `AppTheme` crashing with `ClassCastException` when composed under a context that wraps its activity, such as a dialog's. It now finds the activity through the wrapper and leaves the status bar alone when there is none.
-- Fixed a completed donation sometimes being followed by a failed purchase message. `DefaultBillingRepository` could consume the same purchase twice when the purchase callback and a purchase check on resume arrived together, and the second attempt reported `Item is not owned`.
+- Fixed unreadable text in several static palettes. In light mode, Android green, yellow, skin,
+  Halloween, and green used their bright brand color as `primary`, so text buttons, links, switches,
+  and selected icons drawn in it fell as low as 1.35:1 against the background. Palettes keep their
+  authored colors wherever contrast allows: on fills only the text color is adjusted, and a color
+  moves only when it is the text on a surface and cannot pass there, to the nearest readable tone of
+  the same hue. Those bright brand colors now appear exactly as the light `primaryContainer` or
+  `tertiaryContainer` (floating action buttons, tonal buttons, selected chips). Dark schemes keep
+  their authored accents. Snackbar actions (`inversePrimary`) are readable in every scheme, and
+  monochrome's outline is visible against raised surfaces.
+- Fixed error roles out of step with their containers: error, error container, and their foregrounds
+  now come from the same tonal palette in every static scheme.
+- Fixed static palettes showing Material's baseline purple in their fixed roles (`primaryFixed`,
+  `secondaryFixed`, `tertiaryFixed` and their `on` roles). Every palette now defines them from its
+  own colors.
+- Fixed the Christmas palette using red for every accent. It now pairs festive red with evergreen
+  green and gold.
+- Fixed the build version row on the About screen copying the version to the clipboard on every tap,
+  which buried the five-tap konfetti under clipboard confirmations. The other rows still copy their
+  value.
+- Fixed a damaged settings file crashing every app built on the toolkit at launch. The shared
+  `settings` DataStore now replaces a file it can no longer read with empty preferences, so values
+  fall back to their defaults instead of every read throwing `CorruptionException`.
+- Fixed `AppTheme` crashing with `ClassCastException` when composed under a context that wraps its
+  activity, such as a dialog's. It now finds the activity through the wrapper and leaves the status
+  bar alone when there is none.
+- Fixed a completed donation sometimes being followed by a failed purchase message.
+  `DefaultBillingRepository` could consume the same purchase twice when the purchase callback and a
+  purchase check on resume arrived together, and the second attempt reported `Item is not owned`.
 
 ### Changed
 
-- Changed `AppTheme` so battery saver no longer forces the dark theme over an explicit Light choice. Light and Dark now mean what they say; "follow system" still goes dark in battery saver, because the system switches its own dark theme on there.
-- Changed `AboutViewModel` to take a `SeasonalThemeRepository` (`seasonalThemes`), which records the easter egg unlock. `aboutModule` passes it; hosts that construct the ViewModel themselves pass `get()` from the graph.
-- Renamed `DefaultDiagnosticsPreferencesDataSource` in `:library:core:datastore` to `DefaultUsageAndDiagnosticsPreferencesDataSource`, matching the `UsageAndDiagnosticsPreferencesDataSource` contract it implements. `CommonDataStore.diagnosticsPreferences` keeps its name and now has the renamed type. Hosts that name the class directly update the import.
+- Changed `AppTheme` so battery saver no longer forces the dark theme over an explicit Light choice.
+  Light and Dark now mean what they say; "follow system" still goes dark in battery saver, because
+  the system switches its own dark theme on there.
+- Changed `AboutViewModel` to take a `SeasonalThemeRepository` (`seasonalThemes`), which records the
+  easter egg unlock. `aboutModule` passes it; hosts that construct the ViewModel themselves pass
+  `get()` from the graph.
+- Renamed `DefaultDiagnosticsPreferencesDataSource` in `:library:core:datastore` to
+  `DefaultUsageAndDiagnosticsPreferencesDataSource`, matching the
+  `UsageAndDiagnosticsPreferencesDataSource` contract it implements.
+  `CommonDataStore.diagnosticsPreferences` keeps its name and now has the renamed type. Hosts that
+  name the class directly update the import.
 
 ### Removed
 
-- Removed the forwarding `appToolkitNavigationEntryBuilders` in `feature.about.ui.navigation` from `:library:apptoolkit`. It put a package owned by `:library:feature:about` inside another module. Hosts import `appToolkitNavigationEntryBuilders` from `app.main.ui.navigation` instead, with the same signature, destinations, and route keys.
+- Removed the forwarding `appToolkitNavigationEntryBuilders` in `feature.about.ui.navigation` from
+  `:library:apptoolkit`. It put a package owned by `:library:feature:about` inside another module.
+  Hosts import `appToolkitNavigationEntryBuilders` from `app.main.ui.navigation` instead, with the
+  same signature, destinations, and route keys.
 
 ---
 
@@ -280,13 +862,19 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 
 ### Changed
 
-- Changed the `SearchTopAppBar` title to animate between values the way `MainTopAppBar`'s does, instead of swapping instantly.
+- Changed the `SearchTopAppBar` title to animate between values the way `MainTopAppBar`'s does,
+  instead of swapping instantly.
 
 ### Fixed
 
-- Fixed `SearchTopAppBar` jumping as it swapped between its title and the search field. The slot followed the height of whichever was showing, so the title snapped up and slid back when search closed, and the field grew out of its centre, sliding the placeholder across the title. Both states now share one fixed-height slot and crossfade in place.
-- Fixed the `SearchTopAppBar` title sitting above the navigation icon instead of centred beside it, where `MainTopAppBar` puts it.
-- Fixed `SearchTopAppBar` never showing its title when its first composition was already searching. A host whose first screen searches no longer gets a blank title on its other screens.
+- Fixed `SearchTopAppBar` jumping as it swapped between its title and the search field. The slot
+  followed the height of whichever was showing, so the title snapped up and slid back when search
+  closed, and the field grew out of its centre, sliding the placeholder across the title. Both
+  states now share one fixed-height slot and crossfade in place.
+- Fixed the `SearchTopAppBar` title sitting above the navigation icon instead of centred beside it,
+  where `MainTopAppBar` puts it.
+- Fixed `SearchTopAppBar` never showing its title when its first composition was already searching.
+  A host whose first screen searches no longer gets a blank title on its other screens.
 
 ---
 
@@ -296,23 +884,56 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 
 ### Added
 
-- Added `SearchTopAppBar` to `:library:core:ui`, a top app bar whose title crossfades into a search field while `showSearch` is true. The query and the searching state stay with the caller, so one piece of state drives both the bar and the filtering underneath it. Filters are optional and sit inside the field through the `filters` slot, with `SearchFilterAction` as the ready-made toggle: tonal while a filter is applied, text while it is not. The search placeholder and clear-button description are translated across all 25 supported locales, so a host that has nothing to say about them passes nothing.
-- Added `NavigationDrawerHeader` and `NavigationDrawerBranding` to `:library:navigation`, drawing an app's logo beside its name at the top of a drawer. `NavigationDrawerSheet` takes it through `branding`, which is null by default and draws no header, so an existing drawer is unchanged until a host opts in. The logo is a `ToolkitIcon`, the same slot every other toolkit component takes, and is drawn untinted unless `logoTint` says otherwise, so a multi-colour brand mark arrives intact. It is sized to the title's line height rather than to a fixed dimension, so the pair stays balanced as the person scales their font up.
-- Added `NavigationDrawerRoutes.StandardRoutes`, naming the Settings, Help, Support, Updates, and Share entries every toolkit host has.
-- Added `centerTitle` to `MainTopAppBar`, defaulting to `false`. Left off, the bar is the small top app bar it has always been; turned on, it becomes a centre-aligned one.
+- Added `SearchTopAppBar` to `:library:core:ui`, a top app bar whose title crossfades into a search
+  field while `showSearch` is true. The query and the searching state stay with the caller, so one
+  piece of state drives both the bar and the filtering underneath it. Filters are optional and sit
+  inside the field through the `filters` slot, with `SearchFilterAction` as the ready-made toggle:
+  tonal while a filter is applied, text while it is not. The search placeholder and clear-button
+  description are translated across all 25 supported locales, so a host that has nothing to say
+  about them passes nothing.
+- Added `NavigationDrawerHeader` and `NavigationDrawerBranding` to `:library:navigation`, drawing an
+  app's logo beside its name at the top of a drawer. `NavigationDrawerSheet` takes it through
+  `branding`, which is null by default and draws no header, so an existing drawer is unchanged until
+  a host opts in. The logo is a `ToolkitIcon`, the same slot every other toolkit component takes,
+  and is drawn untinted unless `logoTint` says otherwise, so a multi-colour brand mark arrives
+  intact. It is sized to the title's line height rather than to a fixed dimension, so the pair stays
+  balanced as the person scales their font up.
+- Added `NavigationDrawerRoutes.StandardRoutes`, naming the Settings, Help, Support, Updates, and
+  Share entries every toolkit host has.
+- Added `centerTitle` to `MainTopAppBar`, defaulting to `false`. Left off, the bar is the small top
+  app bar it has always been; turned on, it becomes a centre-aligned one.
 
 ### Removed
 
-- Removed the twelve `anim_device_*_off` drawables and `anim_media_pause` from `:library:core:designsystem`, and renamed the surviving `anim_device_*_on` drawables to drop the suffix: `anim_device_light_on` is now `anim_device_light`. Each removed drawable was the same animation as the one it was paired with, authored backwards: the same path morphs with `valueFrom` and `valueTo` swapped, and the delayed segment moved to the front. `ToolkitIconReplayMode.Reverse` already plays that direction, so nothing is lost and the same motion is no longer shipped twice. A host on a removed or renamed drawable moves to the new name and sets `replayMode = ToolkitIconReplayMode.Reverse` where it needs the opposite direction.
+- Removed the twelve `anim_device_*_off` drawables and `anim_media_pause` from
+  `:library:core:designsystem`, and renamed the surviving `anim_device_*_on` drawables to drop the
+  suffix: `anim_device_light_on` is now `anim_device_light`. Each removed drawable was the same
+  animation as the one it was paired with, authored backwards: the same path morphs with `valueFrom`
+  and `valueTo` swapped, and the delayed segment moved to the front. `ToolkitIconReplayMode.Reverse`
+  already plays that direction, so nothing is lost and the same motion is no longer shipped twice. A
+  host on a removed or renamed drawable moves to the new name and sets
+  `replayMode = ToolkitIconReplayMode.Reverse` where it needs the opposite direction.
 
 ### Fixed
 
-- Fixed `RequestInAppReviewUseCase` launching the Play review flow without checking availability first. An eligible user on an install Play cannot serve (sideloaded, no Play Store, a debug build run from the IDE) now reports `ReviewOutcome.Unavailable` instead of `ReviewOutcome.Failed`, which said a launch had failed when no launch was ever possible. The prompt flag stays unset either way, so the user still gets their one prompt once Play can serve it.
-- Fixed `DefaultReviewRepository` running `launchReviewFlow` on whichever dispatcher its caller happened to be on. The call puts a dialog in front of the host activity, so it now runs on the main thread regardless, and the availability check, which reads the package manager over binder, runs on IO. Callers no longer decide where the dialog is shown.
+- Fixed `RequestInAppReviewUseCase` launching the Play review flow without checking availability
+  first. An eligible user on an install Play cannot serve (sideloaded, no Play Store, a debug build
+  run from the IDE) now reports `ReviewOutcome.Unavailable` instead of `ReviewOutcome.Failed`, which
+  said a launch had failed when no launch was ever possible. The prompt flag stays unset either way,
+  so the user still gets their one prompt once Play can serve it.
+- Fixed `DefaultReviewRepository` running `launchReviewFlow` on whichever dispatcher its caller
+  happened to be on. The call puts a dialog in front of the host activity, so it now runs on the
+  main thread regardless, and the availability check, which reads the package manager over binder,
+  runs on IO. Callers no longer decide where the dialog is shown.
 
 ### Changed
 
-- Changed `NavigationDrawerSheet` so a host's own destinations take the top of the drawer and the standard Settings, Help, Updates, and Share entries drop to its bottom edge. A drawer holding nothing but the standard entries renders exactly as before. `pinStandardRoutes` turns this off and defaults to true, and `pinnedRoutes` names the entries it moves, defaulting to `NavigationDrawerRoutes.StandardRoutes`. The split itself is `navigationDrawerPlan`, which is unit tested.
+- Changed `NavigationDrawerSheet` so a host's own destinations take the top of the drawer and the
+  standard Settings, Help, Updates, and Share entries drop to its bottom edge. A drawer holding
+  nothing but the standard entries renders exactly as before. `pinStandardRoutes` turns this off and
+  defaults to true, and `pinnedRoutes` names the entries it moves, defaulting to
+  `NavigationDrawerRoutes.StandardRoutes`. The split itself is `navigationDrawerPlan`, which is unit
+  tested.
 
 ---
 
@@ -322,32 +943,76 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 
 ### Added
 
-- Added 30 reusable animated vector drawables to `:library:core:designsystem`, including paired on/off animations for blinds, cameras, fans, garage doors, lights, locks, outlets, security systems, switches, thermostats, TVs, and vacuums, plus playback, volume, sound bar, and container animations.
-- Added shared root settings labels to `:library:feature:settings`, translated across all 25 supported locales, so hosts no longer need to define their own labels and summaries for destinations already provided by `SettingsContent`.
-- Added shake-to-report support to `:library:feature:issuereporter`, configurable through `IssueReporterConfig(shakeToReportEnabled = true)` and `IssueReporterShakeManager`.
-- Added App Toolkit and Google Play services version information to the About screen, translated across all 25 supported locales.
-- Added unit test coverage for `NavigationBackStackActions`, including top-level navigation, single-top deduplication, and back-stack popping.
-- Added unit test coverage for `DefaultFirebaseController`, including consent settings, analytics events, screen views, user properties, and error reporting.
+- Added 30 reusable animated vector drawables to `:library:core:designsystem`, including paired
+  on/off animations for blinds, cameras, fans, garage doors, lights, locks, outlets, security
+  systems, switches, thermostats, TVs, and vacuums, plus playback, volume, sound bar, and container
+  animations.
+- Added shared root settings labels to `:library:feature:settings`, translated across all 25
+  supported locales, so hosts no longer need to define their own labels and summaries for
+  destinations already provided by `SettingsContent`.
+- Added shake-to-report support to `:library:feature:issuereporter`, configurable through
+  `IssueReporterConfig(shakeToReportEnabled = true)` and `IssueReporterShakeManager`.
+- Added App Toolkit and Google Play services version information to the About screen, translated
+  across all 25 supported locales.
+- Added unit test coverage for `NavigationBackStackActions`, including top-level navigation,
+  single-top deduplication, and back-stack popping.
+- Added unit test coverage for `DefaultFirebaseController`, including consent settings, analytics
+  events, screen views, user properties, and error reporting.
 
 ### Changed
 
-- Replaced the standalone issue reporter activity with a bottom-sheet implementation using `IssueReporterBottomSheet`, `IssueReporterLauncher.show(activity)`, and `IssueReporterContent`. Advanced settings now opens the reporter over the current screen, while `IssueReporterActivity`, its manifest entry, `Theme.AppToolkit.IssueReporter`, `AdvancedSettingsProvider`, and the unused `bugReportUrl` were removed.
-- Improved issue reporter submission feedback by replacing the form after a successful report with a compact confirmation state containing a check indicator, `Report submitted`, and a `Done` button. Failed submissions preserve the entered report, successful reports are cleared when the sheet is dismissed, results are surfaced through toasts, and the previous `Open issue` action, analytics event, and `open_button_label` resources were removed.
-- Updated the AGP 9+ release configuration by removing the legacy `proguardFiles(...)` setup from `:library:apptoolkit` and the sample application, with the sample now using AGP 9 unified R8 optimization through `optimization { enable = true }`.
+- Replaced the standalone issue reporter activity with a bottom-sheet implementation using
+  `IssueReporterBottomSheet`, `IssueReporterLauncher.show(activity)`, and `IssueReporterContent`.
+  Advanced settings now opens the reporter over the current screen, while `IssueReporterActivity`,
+  its manifest entry, `Theme.AppToolkit.IssueReporter`, `AdvancedSettingsProvider`, and the unused
+  `bugReportUrl` were removed.
+- Improved issue reporter submission feedback by replacing the form after a successful report with a
+  compact confirmation state containing a check indicator, `Report submitted`, and a `Done` button.
+  Failed submissions preserve the entered report, successful reports are cleared when the sheet is
+  dismissed, results are surfaced through toasts, and the previous `Open issue` action, analytics
+  event, and `open_button_label` resources were removed.
+- Updated the AGP 9+ release configuration by removing the legacy `proguardFiles(...)` setup from
+  `:library:apptoolkit` and the sample application, with the sample now using AGP 9 unified R8
+  optimization through `optimization { enable = true }`.
 - Updated Ktor from `3.5.2` to `3.6.0` and Robolectric from `4.16.1` to `4.17`.
-- Reworked About screen copy handling so the application name, build version, App Toolkit version, Google Play services version, and device information can all be copied through the generic `AboutItemAction.CopyToClipboard`. Clipboard operations now live in `AboutViewModel`, `AboutRepository.copyDeviceInfo` and `CopyDeviceInfoUseCase` were removed, version taps use `AboutItem.Preference.countsVersionTap`, copy requests run independently on the main thread, and localized success and failure feedback is provided across all 25 supported locales.
-- Split licenses, privacy, and changelog functionality out of `:library:feature:about` into the dedicated `:library:feature:licenses`, `:library:feature:privacy`, and `:library:feature:changelog` modules, moving their screens, resources, repositories, ViewModels, use cases, and providers to their matching packages. `PrivacySettingsList` is now `PrivacyScreen` with a data-driven `PrivacyItem` model, while `LicensesScreen` now exposes its state through `LicensesViewModel`.
-- Replaced `:library:feature:help` with `:library:feature:faq`, moving the FAQ screen, activity, repository, data sources, UI components, native ad slot, overflow menu, and catalog into the new feature. Help-specific classes and constants were renamed to their FAQ equivalents, `helpModule` became `faqModule(hostBuildConfig)`, `GetFaqUseCase` was removed, `FaqMappers` moved to `data/remote/mappers`, `FaqItem` and `FaqId` moved to `data/models`, and the sample FAQ resources moved to `:sample:feature:faq`. The user-facing `Help & feedback` destination, `HelpRoute`, `HELP_NATIVE_AD` qualifier, and GA4 screen name remain unchanged.
+- Reworked About screen copy handling so the application name, build version, App Toolkit version,
+  Google Play services version, and device information can all be copied through the generic
+  `AboutItemAction.CopyToClipboard`. Clipboard operations now live in `AboutViewModel`,
+  `AboutRepository.copyDeviceInfo` and `CopyDeviceInfoUseCase` were removed, version taps use
+  `AboutItem.Preference.countsVersionTap`, copy requests run independently on the main thread, and
+  localized success and failure feedback is provided across all 25 supported locales.
+- Split licenses, privacy, and changelog functionality out of `:library:feature:about` into the
+  dedicated `:library:feature:licenses`, `:library:feature:privacy`, and
+  `:library:feature:changelog` modules, moving their screens, resources, repositories, ViewModels,
+  use cases, and providers to their matching packages. `PrivacySettingsList` is now `PrivacyScreen`
+  with a data-driven `PrivacyItem` model, while `LicensesScreen` now exposes its state through
+  `LicensesViewModel`.
+- Replaced `:library:feature:help` with `:library:feature:faq`, moving the FAQ screen, activity,
+  repository, data sources, UI components, native ad slot, overflow menu, and catalog into the new
+  feature. Help-specific classes and constants were renamed to their FAQ equivalents, `helpModule`
+  became `faqModule(hostBuildConfig)`, `GetFaqUseCase` was removed, `FaqMappers` moved to
+  `data/remote/mappers`, `FaqItem` and `FaqId` moved to `data/models`, and the sample FAQ resources
+  moved to `:sample:feature:faq`. The user-facing `Help & feedback` destination, `HelpRoute`,
+  `HELP_NATIVE_AD` qualifier, and GA4 screen name remain unchanged.
 - Moved `AboutInfo` from `domain/models` to `data/models`.
-- Moved `DefaultNavigationRepository` and its drawer labels from `:library:feature:about` to `:library:navigation`.
-- Moved `MainTopAppBar` from `:library:feature:about` to `:library:core:ui` and made its Support action depend on the host-provided `onSupportClick` callback instead of directly opening `SupportActivity`.
-- Renamed `DisplaySettingsList` to `DisplaySettingsScreen`, `ThemeSettingsList` to `ThemeSettingsScreen`, `AdvancedSettingsList` to `AdvancedSettingsScreen`, and `UsageAndDiagnosticsList` to `UsageAndDiagnosticsScreen`.
-- Renamed `FirebaseControllerImpl` to `DefaultFirebaseController` while keeping a backward-compatible typealias.
-- Moved `DefaultInAppUpdateRepositoryTest` from `:library:feature:about` to `:library:integration:update` and applied the unit-test convention plugin to `:library:integration:update` and `:library:integration:firebase`.
+- Moved `DefaultNavigationRepository` and its drawer labels from `:library:feature:about` to
+  `:library:navigation`.
+- Moved `MainTopAppBar` from `:library:feature:about` to `:library:core:ui` and made its Support
+  action depend on the host-provided `onSupportClick` callback instead of directly opening
+  `SupportActivity`.
+- Renamed `DisplaySettingsList` to `DisplaySettingsScreen`, `ThemeSettingsList` to
+  `ThemeSettingsScreen`, `AdvancedSettingsList` to `AdvancedSettingsScreen`, and
+  `UsageAndDiagnosticsList` to `UsageAndDiagnosticsScreen`.
+- Renamed `FirebaseControllerImpl` to `DefaultFirebaseController` while keeping a
+  backward-compatible typealias.
+- Moved `DefaultInAppUpdateRepositoryTest` from `:library:feature:about` to
+  `:library:integration:update` and applied the unit-test convention plugin to
+  `:library:integration:update` and `:library:integration:firebase`.
 
 ### Fixed
 
-- Fixed remote FAQ catalogs containing only blank entries rendering empty rows instead of falling back to the bundled FAQ content.
+- Fixed remote FAQ catalogs containing only blank entries rendering empty rows instead of falling
+  back to the bundled FAQ content.
 
 ---
 
@@ -422,22 +1087,22 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
   a length-preserving transformation, and `Editor` adds the formatting bar for bold, italic, inline
   code, code blocks, bulleted and numbered lists, quotes and links, which edits the Markdown source
   and places the caret. The bar is cut and filled to match the field above it. `onMarkdownFormat`
-  reports the action used as a `MarkdownFormatAction` carrying a stable `analyticsName`.
-  The issue reporter's form and description field are now this component; the Markdown pieces moved
-  from that feature into `:library:core:ui`, where `MarkdownVisualTransformation` and
+  reports the action used as a `MarkdownFormatAction` carrying a stable `analyticsName`. The issue
+  reporter's form and description field are now this component; the Markdown pieces moved from that
+  feature into `:library:core:ui`, where `MarkdownVisualTransformation` and
   `rememberMarkdownVisualTransformation` now live in
   `core.ui.views.fields.markdown`.
 
 ### Changed
 
 - The **Usage and diagnostics** screen is the ads screen's layout: the reporting switch over a
-  single
-  **Advanced privacy settings** preference that opens the privacy choices dialog, the same dialog
-  the onboarding flow shows. The four granular consents no longer sit on the screen as an expandable
-  block of switch cards, which was a plainer second copy of what that dialog's Details tab explains.
+  single **Advanced privacy settings** preference that opens the privacy choices dialog, the same
+  dialog the onboarding flow shows. The four granular consents no longer sit on the screen as an
+  expandable block of switch cards, which was a plainer second copy of what that dialog's Details
+  tab explains.
   `FirebaseConsentDialog` moved from `:library:feature:onboarding` to
-  `:library:feature:diagnostics`,
-  whose state it reads and writes, and its strings moved with it as `privacy_choices_*`.
+  `:library:feature:diagnostics`, whose state it reads and writes, and its strings moved with it as
+  `privacy_choices_*`.
   `UsageAndDiagnosticsEvent.AllowAllConsent` and `AllowEssentialConsent` carry the dialog's
   whole-bundle answers, so what "everything" and "essentials" cover is decided once rather than at
   each call site. `ConsentToggleCard`, `ConsentSectionHeader` and `ExpandableConsentSectionHeader`
@@ -486,8 +1151,8 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
   padding, icon spacing, and label typography all follow the selected size, so callers pick a size
   instead of restating the specification, `iconSize` included.
 - Added an `animatedIcon` constructor to bottom-bar and drawer items: one AVD or Lottie icon can
-  cover both navigation states, including reverse replay, without separate icon arguments.
-  Without `animatedIcon`, callers must now supply both `icon` and `selectedIcon` explicitly.
+  cover both navigation states, including reverse replay, without separate icon arguments. Without
+  `animatedIcon`, callers must now supply both `icon` and `selectedIcon` explicitly.
 - Added reusable Check, Clock, and Grid AVDs to DesignSystem and moved Settings/Share there.
   Consumers must import these drawable resources from `core.designsystem.R`. Private animation
   resources are now inline; the unused Success animation and imported dummy color were removed.
@@ -502,11 +1167,10 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 - Added animated Settings and Share drawer icons, used by the standard drawer entries.
 - Added `NavigationDrawerSheet`, a reusable navigation drawer component that renders
   `ModalDrawerSheet` with navigation drawer items, selection state, click handling, and dividers.
-- Added core common's AppVersionMetadata and getVersionMetadata for package version lookup without
-  a UI dependency, and core DataStore's startupValueFlow for caller-defined startup mapping.
+- Added core common's AppVersionMetadata and getVersionMetadata for package version lookup without a
+  UI dependency, and core DataStore's startupValueFlow for caller-defined startup mapping.
 - Exposed toolkit destination builders from app.main.ui.navigation in the main toolkit module. The
-  historical
-  About-package entry point, UI helpers, and AppVersionInfo remain compatible.
+  historical About-package entry point, UI helpers, and AppVersionInfo remain compatible.
 
 ### Changed
 
@@ -553,10 +1217,10 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
   adaptive
   `GeneralButton` with five styles, including Elevated. Removed the separate APIs without deprecated
   aliases. Icon-only content uses the matching Material icon button (a compact elevated button for
-  Elevated); all forms share feedback, analytics, replay, icon position, and color overrides.
-  Rename `iconContentDescription` to `contentDescription` and replace `ButtonColors` with
-  `containerColor` / `contentColor`. `contentDescription` is optional, and icons
-  beside labels no longer repeat the label. Migration is documented in the DesignSystem README.
+  Elevated); all forms share feedback, analytics, replay, icon position, and color overrides. Rename
+  `iconContentDescription` to `contentDescription` and replace `ButtonColors` with
+  `containerColor` / `contentColor`. `contentDescription` is optional, and icons beside labels no
+  longer repeat the label. Migration is documented in the DesignSystem README.
 - Navigation item icons and every `General*Button` now take a single `ToolkitIcon` instead of
   separate `ImageVector` and `Painter` parameters. Callers passing `vectorIcon = someIcon` to a
   button must pass `icon = ToolkitIcon.Vector(someIcon)`, and `NavigationIcon` is now `ToolkitIcon`
@@ -567,8 +1231,7 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
   roots; consumers must update imports to the new packages.
 - Moved library dependency-injection bindings into the owning feature/integration modules and
   exposed the datastore module from `core.datastore.di`; the main toolkit module now only composes
-  those
-  modules.
+  those modules.
 - Moved `ThemePreferencesState`, `BaseCoreManager`, and `FirebaseControllerImpl` into their
   layer-specific packages; consumers must update imports to `core.common.domain.models.theme`,
   `core.common.data.managers`, and `integration.firebase.data.repositories`.
@@ -608,10 +1271,10 @@ This release replaces the Toolkit's navigation with a one-activity shell. It rem
 
 ### Fixed
 
-- Fixed the issue reporter's device-info section. Its expansion was held in a process-wide
-  property shared by every instance, so the panel reopened by itself on a later visit; it is now
-  per-instance state that survives configuration changes. The section expands vertically instead of
-  also unfolding sideways, the header no longer reacts to taps anywhere along the row, and only its
+- Fixed the issue reporter's device-info section. Its expansion was held in a process-wide property
+  shared by every instance, so the panel reopened by itself on a later visit; it is now per-instance
+  state that survives configuration changes. The section expands vertically instead of also
+  unfolding sideways, the header no longer reacts to taps anywhere along the row, and only its
   arrow, now a `GeneralButton`, toggles it.
 - Fixed Help and Settings menu buttons that still passed ImageVector values to the migrated icon API
   and prevented the sample app from compiling.

@@ -2,6 +2,14 @@
 
 ---
 
+# Unreleased
+
+### Improved
+
+- Opening an app from the Apps list no longer checks installed packages on the main thread.
+
+---
+
 # October 03, 2026
 
 **Version:** `26.10.31` (`137261031`)
@@ -26,60 +34,39 @@
 
 ### Improved
 
-- Opening an app from the Apps list no longer checks installed packages on the main thread.
 - Every quick tool reports its actions and any failure in them, so problems with the compass, level, breathing, SOS, Morse, flash dimmer, counter and reaction test can be traced.
 - The menu button turns into a back arrow when you open a screen, instead of popping in and out, and the navigation icons animate when you tap them.
 - The welcome and onboarding pages keep a comfortable width on tablets.
 - On tablets and wide windows, a page opened from the side navigation looks like a tab, without a back button.
 - The labelled floating action buttons shrink to their icon while you scroll down and grow back when you scroll up.
 - Settings on a tablet shows its illustration and a Get help button beside the list until you open a category.
-- Text is no longer black on some screens in the dark theme.
-- Display settings and developer options look like the rest of the settings, and only offer options that change something in this app.
-- On tablets, switching between pages from the side navigation no longer flashes a back button, and moving around the app does less work.
 - On tablets and in landscape, Help and the other pages from the side navigation fade in place instead of sliding in, the side rail starts collapsed after a rotation, and the app bar next to the rail has square corners.
 - Switching between Quick tools and Apps no longer makes the search bar flicker, and a back swipe from the right edge on a tablet's settings detail follows your finger.
 - What's new now separates releases with a wavy line.
 - Search the settings from the top of the settings list, down to single options such as dark theme or the app bar.
-- Moving between Components, Settings and the tabs on a tablet or in landscape no longer flashes grey.
 - The app bar can hide as you scroll too, in Display settings, so the whole screen makes room for the content.
-- Messages such as a consent form failing to load now appear above the navigation bar instead of not at all.
 - Rolling the dice does less work on each frame of the animation.
 - The apps widget loads its icons at the same time instead of one after another, and reuses the icons the app has already downloaded.
 - The apps widget shows the apps it loaded last time straight away and refreshes them once the network answers, instead of waiting on the network.
 - Starring an app no longer redraws every app card.
 - Opening the Quick Settings panel no longer saves the quick tools' tile state each time.
 
-### Removed
-
-- The banner setting is gone.
-
 ### Fixed
 
 - The native ad on Help shows its icon inside the shaped badge.
-- The main screen uses the suspend consent API, keeping its once-per-session request and the error message when consent fails.
 - If the quick tools cannot load, the tab says why and offers Retry.
 - Offline, the apps list shows the apps it saved last time, with a message and a Try again button.
 - A favorite that cannot be saved now shows a message instead of hiding the apps list.
 - Tapping favorites on two apps quickly now saves both.
-- The review prompt is counted once per request in the app's analytics, not twice.
 - Copying an app's package name no longer shows a duplicate toast on Android 13 and newer. Older versions keep the copy confirmation.
-- The holiday greeting's checkbox no longer sits against its text, and its ripple is no longer cut off.
 - The favourite star in an app's details now fills and empties as you tap it, as it does on the app's card.
-- The display settings dialogs have their icons again.
-- The floating button no longer slips under the gesture bar when the bottom bar hides as you scroll.
 - Tapping the tab you are already on no longer plays its icon backwards or shows it unselected.
-- On tablets, the side navigation now takes its colour as you scroll on Settings, Components and every other page, not only on the tabs, when set to change colour on scroll.
-- The Christmas theme brings its snow even if you picked rain, and the rain comes back after the holidays.
 - The compass tile no longer crashes on phones whose sensors report an invalid reading.
-- On tablets, moving between Components, Settings and the tabs now resizes the app bar title smoothly instead of swapping it.
-- Messages about ad consent failing now appear on the ads settings page.
-- Messages about ad consent failing when the app starts now appear above the bottom bar on phones and at the bottom of the screen on tablets, instead of at a fixed height.
 - Without a connection, the Apps tab now shows the apps it loaded last time, with a message saying they could not be refreshed, instead of an error screen.
 - Retry on the Apps tab works again after a failed load.
 - Removing your last favourite no longer leaves the Apps tab on an empty Favourites filter with no chip to leave it: it goes back to All.
 - The Apps tab shows freshly loaded apps even when saving them for offline use fails.
 - The compass and the level stop using their sensors while the app is in the background, even with the tool open.
-- A declined or failed donation keeps the donation options on the Support page and shows the error in a message, and the page offers Retry when the donations cannot be loaded.
 
 ---
 
@@ -87,7 +74,7 @@
 
 **Version:** `26.09.22` (`137260922`)
 
-### Added
+### Fixed
 
 - Fixed some Google Play Store issues.
 

@@ -94,7 +94,7 @@ internal class RainfallSimulation(
     private val showerPhases = FloatArray(2)
 
     /** Sideways pixels per pixel fallen, gusts included: the lean every streak shares right now. */
-    var windSlant: Float = baseSlant()
+    var windSlant: Float = baseSlant() + style.gusts * MAX_GUST_SLANT * wave(gustPhases)
         private set
 
     /** The share of drops that fall visibly right now, from `1 - showers` to `1`. */
