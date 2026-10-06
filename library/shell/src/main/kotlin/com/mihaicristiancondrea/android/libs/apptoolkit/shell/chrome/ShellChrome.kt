@@ -46,6 +46,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -137,6 +138,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellNavigato
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellSearch
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.DestinationKind
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.DrawerEntry
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.LocalShellCapabilities
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
@@ -370,15 +372,20 @@ internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
                 ) {
                     Box(Modifier.fillMaxSize()) {
                         body {
-                            Column {
-                                BannerSlot(banner, visible = !playerActive)
-                                ShellNavigationBar(
-                                    tabs = graph.tabs,
-                                    selectedIndex = highlightedTab,
-                                    callbacks = callbacks,
-                                    short = settings.navigationBarStyle == NavigationBarStyle.Short,
-                                    alwaysShowLabels = LocalShowBottomBarLabels.current,
-                                )
+                            if (LocalShellCapabilities.current.hasBottomNavigationTabs) {
+                                Column {
+                                    BannerSlot(banner, visible = !playerActive)
+                                    ShellNavigationBar(
+                                        tabs = graph.tabs,
+                                        selectedIndex = highlightedTab,
+                                        callbacks = callbacks,
+                                        short = settings.navigationBarStyle == NavigationBarStyle.Short,
+                                        alwaysShowLabels = LocalShowBottomBarLabels.current,
+                                    )
+                                }
+                            } else {
+                                // Keep the content, FAB and player clear of Android's navigation area.
+                                Box(Modifier.windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)))
                             }
                         }
                         playerOverlay()
@@ -461,7 +468,7 @@ private fun ShellBody(
     val bottomScroll = BottomAppBarDefaults.exitAlwaysScrollBehavior()
     // Extended buttons fold to their icon while the content scrolls down.
     val fabScroll = rememberFabScrollBehavior()
-    val hideOnScroll = settings.hideBottomBarOnScroll && !playerActive
+    val hideOnScroll = settings.hideBottomBarOnScroll && !playerActive && LocalShellCapabilities.current.hasBottomNavigationTabs
     // The app bar slides away too, whatever its style, when the settings ask for it.
     val hideTopBar = settings.hideTopBarOnScroll
     val topHide = rememberTopBarHideState()

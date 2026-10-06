@@ -42,6 +42,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellL
  * @property layoutReachesWideNavigation Whether the layout policy resolves to a rail or permanent
  * drawer on some window.
  * @property hasContentWidthLimit Whether the layout policy limits how wide content grows.
+ * @property hideSingleTabBottomBar Whether the host omits a single tab's bottom bar.
  */
 @Immutable
 data class ShellCapabilities(
@@ -54,6 +55,7 @@ data class ShellCapabilities(
     val layoutReachesBottomBar: Boolean,
     val layoutReachesWideNavigation: Boolean,
     val hasContentWidthLimit: Boolean,
+    val hideSingleTabBottomBar: Boolean = false,
 ) {
     /** Whether the app navigates between tabs, so the shell draws navigation chrome. */
     val hasTabs: Boolean
@@ -63,9 +65,13 @@ data class ShellCapabilities(
     val hasMultipleTabs: Boolean
         get() = tabCount > 1
 
+    /** Whether the declared tabs need a bottom bar, including in a forced phone layout. */
+    val hasBottomNavigationTabs: Boolean
+        get() = hasTabs && (!hideSingleTabBottomBar || hasMultipleTabs)
+
     /** Whether the app shows its tabs in a bottom navigation bar on some window. */
     val usesBottomNavigation: Boolean
-        get() = hasTabs && layoutReachesBottomBar
+        get() = hasBottomNavigationTabs && layoutReachesBottomBar
 
     /** Whether the app shows its tabs in a rail or permanent drawer on some window. */
     val usesWideNavigation: Boolean
@@ -77,7 +83,7 @@ data class ShellCapabilities(
 
     /** Whether the banner can be shown: it is declared, and docks on the tabs' navigation bar. */
     val hasBanner: Boolean
-        get() = hasTabs && declaresBanner
+        get() = hasBottomNavigationTabs && declaresBanner
 
     /** Whether the player can be shown: it is declared, and docks in the tabs' chrome. */
     val hasPlayer: Boolean
@@ -103,6 +109,7 @@ data class ShellCapabilities(
             layoutReachesBottomBar = policy.reachesBottomBar,
             layoutReachesWideNavigation = policy.reachesWideNavigation,
             hasContentWidthLimit = policy.contentMaxWidth.isSpecified,
+            hideSingleTabBottomBar = policy.hideSingleTabBottomBar,
         )
     }
 }

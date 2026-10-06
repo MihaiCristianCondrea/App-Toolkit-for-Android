@@ -125,3 +125,6 @@ The screen moved from `core.ui.base` to `core.ui.screen`. `DeveloperAppsReposito
 returns `DataState`: its calls are `suspend` and throw, and `AppErrors` and `HomeAction` are gone.
 `AppsListScreen()` takes no parameters; it pads by `contentPadding()` and reads the window size
 class itself. The ViewModel no longer takes a `DispatcherProvider`.
+
+Navigation keys and the complete graph live in `:sample:app` under `app/navigation`.
+Features expose callbacks rather than importing app-owned route keys.

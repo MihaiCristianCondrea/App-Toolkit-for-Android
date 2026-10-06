@@ -212,11 +212,14 @@ layout policy and nothing else; `ShellHost` builds it once and provides it as
 | Property | True when |
 |---|---|
 | `hasTabs`, `hasMultipleTabs` | the graph declares one, or more than one, tab |
-| `usesBottomNavigation` | there are tabs and the policy resolves to the bottom bar on some window (`reachesBottomBar`) |
+| `hasBottomNavigationTabs` | there are tabs, excluding a single tab when `hideSingleTabBottomBar` is enabled |
+| `usesBottomNavigation` | `hasBottomNavigationTabs` and the policy resolves to the bottom bar on some window (`reachesBottomBar`) |
 | `usesWideNavigation` | there are tabs and the policy resolves to a rail or permanent drawer on some window (`reachesWideNavigation`) |
 | `hasShellTopBars` | the shell draws an app bar: the tabs', or a page drawn in the page frame with a title |
 | `hasContentWidthLimit` | the policy sets `contentMaxWidth` |
-| `hasBanner`, `hasPlayer`, `hasAccessories` | the graph declares them and has tabs, whose chrome shows them |
+| `hasBanner` | a banner is declared and `hasBottomNavigationTabs`, so it has a bar to dock on |
+| `hasPlayer` | a player is declared and the graph has tabs |
+| `hasAccessories` | `hasBanner` or `hasPlayer` |
 | `hasMultipleStartOptions` | the app can start in more than one place, tabs and start screens |
 | `hasBackNavigation` | the graph has more than one destination |
 

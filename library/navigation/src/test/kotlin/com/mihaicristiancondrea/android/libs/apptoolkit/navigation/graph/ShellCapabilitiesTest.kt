@@ -106,6 +106,42 @@ class ShellCapabilitiesTest {
     }
 
     @Test
+    fun `hiding a single tab bottom bar retains wide navigation and the player`() {
+        val graph = shellGraph(appTitle = 0) {
+            tabs(1)
+            child<Article>(title = { "Article" }) {}
+            page<Welcome>(title = { "Welcome" }) {}
+            banner {}
+            player(ShellPlayer(isActive = { true }, mini = {}, expanded = {}))
+        }
+        val capabilities = ShellCapabilities.of(graph, ShellLayoutPolicy(hideSingleTabBottomBar = true))
+
+        assertTrue(capabilities.hasTabs)
+        assertTrue(capabilities.layoutReachesBottomBar, "the phone still uses the modal drawer layout")
+        assertFalse(capabilities.hasBottomNavigationTabs)
+        assertFalse(capabilities.usesBottomNavigation)
+        assertTrue(capabilities.usesWideNavigation)
+        assertTrue(capabilities.hasShellTopBars)
+        assertTrue(capabilities.hasBackNavigation, "child and settings pages do not count as tabs")
+        assertTrue(capabilities.declaresBanner)
+        assertFalse(capabilities.hasBanner, "a banner needs its bottom bar to dock on")
+        assertTrue(capabilities.hasPlayer)
+    }
+
+    @Test
+    fun `the bar and its banner return automatically when a second tab is declared`() {
+        val graph = shellGraph(appTitle = 0) {
+            tabs(2)
+            banner {}
+        }
+        val capabilities = ShellCapabilities.of(graph, ShellLayoutPolicy(hideSingleTabBottomBar = true))
+
+        assertTrue(capabilities.hasBottomNavigationTabs)
+        assertTrue(capabilities.usesBottomNavigation)
+        assertTrue(capabilities.hasBanner)
+    }
+
+    @Test
     fun `app D, several tabs with a banner and a player`() {
         val graph = shellGraph(appTitle = 0) {
             tabs(4)

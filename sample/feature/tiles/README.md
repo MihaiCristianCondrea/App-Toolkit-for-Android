@@ -14,7 +14,7 @@ Quick tools: the in-app tool catalogue and the Quick Settings tile services behi
   `SosRepository`, and `CounterRepository`, which remain the data-layer entry points and own
   coordination or runtime state.
 - UI catalogue models and mappers, the screen and dedicated tool ViewModels, tool composables,
-  `ToolkitTilesRoute`, this feature's tab key, and the Quick Settings services.
+  the Quick Settings services. `ToolkitTilesRoute` belongs to app/navigation.
 - Localized Quick Tools strings and plurals, and the Quick Settings tile and coin icons.
 - Feature-owned manifest permissions for haptics and flashlight access. The feature
   declares no foreground service and no wake locks.
@@ -164,3 +164,6 @@ The open tool sheet refreshes after pin requests.
 
 No tool here runs in the background. Every tool works while its sheet is open, which keeps the
 feature free of foreground services, wake locks, and the Play Console declarations they carry.
+
+Navigation keys and the complete graph live in `:sample:app` under `app/navigation`.
+Features expose callbacks rather than importing app-owned route keys.

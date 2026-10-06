@@ -18,7 +18,8 @@ be restarted into a variation. The person's own preferences are display settings
   | | One stack per tab | per tab |
   | Layout and bars | Forced layout | the app has tabs |
   | | App bar style, hide the app bar on scroll | the shell draws an app bar (`hasShellTopBars`) |
-  | | Navigation bar style, hide the bottom bar on scroll, navigation tint | the app has tabs |
+  | | Navigation tint | the app has tabs |
+  | | Navigation bar style, hide the bottom bar on scroll | the app has bottom navigation tabs (`hasBottomNavigationTabs`) |
   | | Limit content width | the layout policy sets a maximum width |
   | Navigation | Where the app starts | more than one start option |
   | | Tab transition | more than one tab |
@@ -64,7 +65,9 @@ be restarted into a variation. The person's own preferences are display settings
   shell's implementation choices.
 - **Overrides count what a forced layout reaches.** Display rows follow the app's declared layout
   policy; these follow what the page itself can force. An app with tabs gets the bottom bar's and
-  the rail's overrides whatever its policy, since the forced layout row can show either. Rows that
+  the rail's overrides whatever its width thresholds, since the forced layout row can show either.
+  A host that enables `hideSingleTabBottomBar` keeps its one-tab bottom bar hidden even in a forced
+  phone layout, so its bottom bar overrides are left out. Rows that
   have nothing to act on (a tab transition with one tab, a width limit the app never sets,
   accessories it does not declare) are left out.
 - **Not searchable.** The settings search does not list these overrides: the page is reached once

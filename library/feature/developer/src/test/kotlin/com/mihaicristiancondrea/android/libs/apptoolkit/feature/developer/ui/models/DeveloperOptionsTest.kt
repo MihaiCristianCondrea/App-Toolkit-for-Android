@@ -78,6 +78,19 @@ class DeveloperOptionsTest {
     }
 
     @Test
+    fun `a hidden single tab bar has no bar or banner options but retains the layout option`() {
+        val declared = capabilities(tabs = 1).copy(declaresBanner = true, hideSingleTabBottomBar = true)
+        val options = developerOptions(declared)
+
+        assertFalse(DeveloperOption.NavigationBarStyle in options)
+        assertFalse(DeveloperOption.HideBottomBarOnScroll in options)
+        assertFalse(DeveloperOption.BottomAccessory in options)
+        assertTrue(DeveloperOption.Layout in options)
+        assertTrue(DeveloperOption.NavigationTint in options)
+        assertTrue(DeveloperOption.NavigationBarStyle in developerOptions(declared.copy(tabCount = 2)))
+    }
+
+    @Test
     fun `app C with framed pages can still force their app bars`() {
         val options = developerOptions(capabilities(tabs = 0, startOptions = 1, framedPages = true))
 

@@ -29,7 +29,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.navigation.ArticleDemoRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseHeader
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSection
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSurface
@@ -38,15 +37,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
 
 /** Opens the article app bar demo, with and without the sample publisher's mark. */
 @Composable
 fun ArticleBarShowcase(
     onLogEvent: (String, String?) -> Ga4EventData,
+    onOpenArticleDemo: (Boolean) -> Unit,
 ) {
     val telemetryRepository = LocalTelemetry.current
-    val navigator = LocalShellNavigator.current
 
     ShowcaseHeader(
         title = stringResource(id = R.string.components_section_article_bar),
@@ -61,7 +59,7 @@ fun ArticleBarShowcase(
                 OutlinedButton(
                     onClick = {
                         telemetryRepository.logGa4Event(onLogEvent("article_bar", "plain"))
-                        navigator.navigate(ArticleDemoRoute(branded = false))
+                        onOpenArticleDemo(false)
                     },
                     modifier = Modifier.weight(1f),
                 ) {
@@ -70,7 +68,7 @@ fun ArticleBarShowcase(
                 FilledTonalButton(
                     onClick = {
                         telemetryRepository.logGa4Event(onLogEvent("article_bar", "brand"))
-                        navigator.navigate(ArticleDemoRoute(branded = true))
+                        onOpenArticleDemo(true)
                     },
                     modifier = Modifier.weight(1f),
                 ) {

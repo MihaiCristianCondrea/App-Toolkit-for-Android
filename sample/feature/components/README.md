@@ -7,7 +7,7 @@ The hidden components showcase and the unlock gesture that reveals it.
 ## Owns
 
 - The concrete `ComponentsShowcaseRepository`, which owns the unlock flag.
-- `ComponentsRoute`, `ComponentsScreen`, and the unlock threshold behavior.
+- `ComponentsScreen` and the unlock threshold behavior. `ComponentsRoute` belongs to app/navigation.
 - Localized strings for the component showcase.
 - The article app bar demo: `ArticleBarShowcase` opens `ArticleDemoRoute`, a made-up article
   (`ArticleDemoScreen`) that declares `ScaffoldArticleTopBar`, without a brand or with
@@ -83,3 +83,6 @@ host bridge changes discoverability even though the feature itself remains indep
 
 `ComponentsShowcaseRepository` is concrete because the sample has one DataStore implementation. It
 serializes threshold writes and is the sole owner of the persisted unlock mutation.
+
+Navigation keys and the complete graph live in `:sample:app` under `app/navigation`.
+Features expose callbacks rather than importing app-owned route keys.

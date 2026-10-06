@@ -32,7 +32,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarS
  *
  * | Mode | Tabs | Drawer entries | Menu button |
  * |---|---|---|---|
- * | [BottomBar] | Navigation bar | Modal drawer | In the app bar, opens the drawer |
+ * | [BottomBar] | Navigation bar, unless the host hides its single tab bar | Modal drawer | In the app bar, opens the drawer |
  * | [Rail] | Collapsed rail | Same rail, scrollable | Top of the rail, opens the rail expanded over the content |
  * | [ExpandedRail] | Expanded rail beside the content | Same rail, scrollable | Top of the rail, collapses and expands it in place |
  * | [PermanentDrawer] | Always-open drawer | Same drawer | None |
@@ -48,8 +48,9 @@ enum class ShellLayoutMode {
 
 /**
  * The window widths at which [ShellLayoutMode.Auto] moves to the next mode, and at which list and
- * detail pages start sharing the window. The defaults are Material's window size class
- * breakpoints: medium at 600dp, expanded at 840dp and large at 1200dp.
+ * detail pages start sharing the window, with an opt-in to hide a single tab's bottom bar.
+ * The default widths are Material's window size class breakpoints: medium at 600dp, expanded
+ * at 840dp and large at 1200dp.
  */
 @Immutable
 data class ShellLayoutPolicy(
@@ -65,6 +66,12 @@ data class ShellLayoutPolicy(
     val contentMaxWidth: Dp = Dp.Unspecified,
     /** Below this window height a large app bar would take too much of the screen; a small one is drawn. */
     val largeTopBarFrom: Dp = 480.dp,
+    /**
+     * Omits the bottom navigation bar when the graph has exactly one tab. The phone's menu
+     * and modal drawer, and every wide navigation layout, remain available. A second tab
+     * restores the bar automatically. Defaults to false to preserve existing hosts.
+     */
+    val hideSingleTabBottomBar: Boolean = false,
 ) {
     fun resolve(requested: ShellLayoutMode, width: Dp): ShellLayoutMode = when {
         requested != ShellLayoutMode.Auto -> requested

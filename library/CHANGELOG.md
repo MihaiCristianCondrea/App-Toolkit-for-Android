@@ -2,7 +2,15 @@
 
 ---
 
-# Unreleased
+# October 06, 2026
+
+**Version:** `3.0.0-pre23`
+
+### Added
+
+- `ShellLayoutPolicy(hideSingleTabBottomBar = true)` hides a single tab's phone bottom bar while
+  keeping the menu, rail and drawer. A second tab restores the bar automatically. Existing hosts
+  keep their current behavior by default.
 
 ### Fixed
 

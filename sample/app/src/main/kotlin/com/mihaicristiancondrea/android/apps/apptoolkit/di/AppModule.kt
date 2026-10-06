@@ -18,8 +18,8 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.di
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.navigation.AppsListRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ToolkitTilesRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.AppsListRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.ToolkitTilesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
 import org.koin.android.ext.koin.androidContext
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.usecases.RequestInAppReviewUseCase

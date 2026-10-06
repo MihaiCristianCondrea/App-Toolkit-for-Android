@@ -38,16 +38,17 @@ internal enum class DeveloperOption(val category: DeveloperCategory) {
 
 /**
  * The overrides that act on something in this app. Unlike the display settings they count what a
- * forced layout can reach: an app with tabs gets the bottom bar's and the rail's options, whatever
- * its layout policy, since [DeveloperOption.Layout] can force either.
+ * forced layout can reach: [DeveloperOption.Layout] can force a rail or the phone's modal drawer
+ * layout. Bottom bar options still require tabs that the host allows in that bar.
  */
 internal fun developerOptions(capabilities: ShellCapabilities): List<DeveloperOption> =
     DeveloperOption.entries.filter { option ->
         when (option) {
             DeveloperOption.Layout,
-            DeveloperOption.NavigationBarStyle,
-            DeveloperOption.HideBottomBarOnScroll,
             DeveloperOption.NavigationTint -> capabilities.hasTabs
+
+            DeveloperOption.NavigationBarStyle,
+            DeveloperOption.HideBottomBarOnScroll -> capabilities.hasBottomNavigationTabs
 
             DeveloperOption.TopBarStyle, DeveloperOption.HideTopBarOnScroll -> capabilities.hasShellTopBars
             DeveloperOption.ContentWidth -> capabilities.hasContentWidthLimit

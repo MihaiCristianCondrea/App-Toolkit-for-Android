@@ -102,6 +102,26 @@ setContent {
 The activity is declared `launchMode="singleTop"` or `singleTask`, so intents that arrive while it
 runs reach `onNewIntent` and the shell instead of a second activity.
 
+### Apps with one main screen
+
+Keep the main screen registered as a tab, then opt in at the host:
+
+```kotlin
+ShellHost(
+    graph = graph,
+    layoutPolicy = ShellLayoutPolicy(hideSingleTabBottomBar = true),
+)
+```
+
+With exactly one tab, the phone keeps its app bar, menu and modal drawer but omits the bottom
+navigation bar and its docked banner. The tab still appears in the rail, expanded rail and
+permanent drawer. Floating action buttons, snackbars, pages, back navigation and the player keep
+their existing hosts. Adding a second tab restores the bar and banner automatically.
+
+The flag defaults to `false`, preserving existing hosts. It counts tabs, not settings, child pages
+or onboarding screens, and still applies when developer options force the bottom bar layout or
+select the short bar. Bottom bar developer options are omitted while the single tab bar is hidden.
+
 ## Pages beside the navigation
 
 Below the rail's width the chrome is part of the shell's own screen: a bottom bar and a modal

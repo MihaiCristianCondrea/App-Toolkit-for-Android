@@ -13,6 +13,7 @@ libraries with the host's own feature modules.
 - `sampleAppModules`, the single source of truth used by runtime startup and DI graph tests.
 - App-only bridges that intentionally connect otherwise independent features, such as the About
   version-tap callback to the Components unlock repository.
+- Serializable route keys, grouped in `app/navigation/NavigationRoutes.kt` with explicit serialized identities.
 - `appGraph`, the one declaration that names every host feature: the Tiles and Apps tabs, the
   components page, the drawer, the overflow menu and the settings shortcut's deep link, on top of
   the Toolkit's pages from `toolkitGraph { }`. `startKeyFor` maps the stored start page to its tab.
@@ -42,8 +43,6 @@ libraries with the host's own feature modules.
   Apps tab's selected icon.
 - Advertising configuration, including the sample's AdMob application ID and merged-manifest
   declaration, owned by [`:sample:integration:ads`](../integration/ads/README.md).
-- Route keys, owned by the feature each belongs to (`ToolkitTilesRoute`, `AppsListRoute`,
-  `ComponentsRoute`).
 - The chrome and navigation, owned by [`:library:shell`](../../library/shell/README.md) and
   [`:library:navigation`](../../library/navigation/README.md).
 
@@ -170,3 +169,6 @@ Android platform source, has no alternate implementation, and does not cross a m
 Pass-through use cases were removed throughout. Where one wrapped a data source rather than a
 repository, a repository was introduced instead of deleting it outright, so no ViewModel ends up
 holding `DataStoreInterface` directly.
+
+Navigation keys and the complete graph live in `:sample:app` under `app/navigation`.
+Features expose callbacks rather than importing app-owned route keys.

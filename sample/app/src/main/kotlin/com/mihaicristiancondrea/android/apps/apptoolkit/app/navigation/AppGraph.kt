@@ -18,7 +18,6 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TabSearch
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.views.AboutSettingsContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.BottomAppBarNativeAdBanner
@@ -31,14 +30,15 @@ import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.apps.apptoolkit.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.AppsListScreen
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.navigation.AppsListRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ArticleDemoScreen
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ComponentsScreen
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.navigation.ArticleDemoRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.navigation.ComponentsRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ToolkitTilesScreen
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ToolkitTilesRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.AppsListScreen
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ComponentsScreen
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ArticleDemoScreen
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.views.AboutSettingsContent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R as TilesR
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R as AppsR
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R as ComponentsR
+
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.toolkitFooter
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.toolkitGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
@@ -46,9 +46,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R as AppsR
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R as ComponentsR
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R as TilesR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
 
 /** The launcher shortcut's action: it opens the settings page. */
@@ -61,8 +58,8 @@ const val ACTION_OPEN_SETTINGS: String = "com.d4rk.android.apps.apptoolkit.actio
  * `toolkitGraph` adds the Toolkit's own pages (settings, help, support, the first-launch start
  * screens and the rest).
  *
- * This is the one place that knows the full feature set, which is why it stays in `:sample:app`:
- * each feature provides its screens, and the graph decides where they appear.
+ * Routes and the graph belong to `:sample:app` under app/navigation. Features expose callbacks
+ * rather than importing app route keys.
  *
  * @param showComponents Whether the drawer offers the components showcase: in debug builds, or once
  * it has been unlocked.
@@ -99,7 +96,8 @@ fun appGraph(
         AppsListScreen()
     }
     page<ComponentsRoute>(title = { stringResource(ComponentsR.string.components_title) }) {
-        ComponentsScreen()
+        val navigator = com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator.current
+        ComponentsScreen(onOpenArticleDemo = { navigator.navigate(ArticleDemoRoute(it)) })
     }
     page<ArticleDemoRoute>(
         topBar = TopBarStyle.Small,

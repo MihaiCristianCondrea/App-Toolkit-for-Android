@@ -63,6 +63,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as ToolkitR
 @Composable
 fun ComponentsScreen(
     paddingValues: PaddingValues = contentPadding(),
+    onOpenArticleDemo: (Boolean) -> Unit = {},
 ) {
     val trackedScreen = AppScreenTracking.Screens.COMPONENTS
 
@@ -152,6 +153,7 @@ fun ComponentsScreen(
             item {
                 ArticleBarShowcase(
                     onLogEvent = ::ga4Event,
+                    onOpenArticleDemo = onOpenArticleDemo,
                 )
             }
 
