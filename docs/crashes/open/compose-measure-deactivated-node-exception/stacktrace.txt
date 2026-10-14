@@ -1,0 +1,13 @@
+Fatal Exception: java.lang.IllegalArgumentException: measure is called on a deactivated node
+       at tq3.a(r8-map-id-26bba04e034a85e1a8b05826a43cfd9d6bdb8ca505b2ad4571d1a1b59d0617fb:3)
+       at gn4.v0(r8-map-id-26bba04e034a85e1a8b05826a43cfd9d6bdb8ca505b2ad4571d1a1b59d0617fb:13)
+       at gn4.D(r8-map-id-26bba04e034a85e1a8b05826a43cfd9d6bdb8ca505b2ad4571d1a1b59d0617fb:65)
+       at gn4.q0(r8-map-id-26bba04e034a85e1a8b05826a43cfd9d6bdb8ca505b2ad4571d1a1b59d0617fb:84)
+       at zq3.R0(r8-map-id-26bba04e034a85e1a8b05826a43cfd9d6bdb8ca505b2ad4571d1a1b59d0617fb:12)
+       at cn4.X(r8-map-id-26bba04e034a85e1a8b05826a43cfd9d6bdb8ca505b2ad4571d1a1b59d0617fb:9)
+       at ht5.o(r8-map-id-26bba04e034a85e1a8b05826a43cfd9d6bdb8ca505b2ad4571d1a1b59d0617fb:29)
+       at d76.invoke(r8-map-id-26bba04e034a85e1a8b05826a43cfd9d6bdb8ca505b2ad4571d1a1b59d0617fb:849)
+       at a30.d(r8-map-id-26bba04e034a85e1a8b05826a43cfd9d6bdb8ca505b2ad4571d1a1b59d0617fb:14)
+       at android.view.ViewRootImpl.doTraversal(ViewRootImpl.java:3306)
+       at android.view.Choreographer.doFrame(Choreographer.java:1043)
+       at android.app.ActivityThread.main(ActivityThread.java:9500)
