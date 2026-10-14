@@ -1,0 +1,782 @@
+{
+  "title": "Crashlytics - Custom logs",
+  "bundle_identifier": "com.d4rk.android.apps.apptoolkit",
+  "platform": "android",
+  "display_version": "26.10.31",
+  "build_version": "137261031",
+  "issue_id": "011e39c9c0421f6aeb85cf272c2f2a51",
+  "session_id": "6ACDAB7A00B800016D5E04C40337AECA_DNE_0_v2",
+  "event_timestamp": "Tue Oct 13 2026 06:55:21 GMT+0300 (Eastern European Summer Time)",
+  "logs_and_breadcrumbs": [
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_init | screen=Main, viewModel=MainViewModel, step=init",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=Main, viewModel=MainViewModel, event=ApplyInitialConsent",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=Main, viewModel=MainViewModel, action=applyInitialConsent, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "message": "Applying initial consent",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=Main, viewModel=MainViewModel, event=RequestConsent",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=Main, viewModel=MainViewModel, action=requestConsent, step=start, host=com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainActivity",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "message": "consent_request_state | screen=Main, viewModel=MainViewModel, host=com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainActivity, stage=loading",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "message": "Consent request started | host=com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainActivity, showIfRequired=true",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=Main, viewModel=MainViewModel, event=RequestReview",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=Main, viewModel=MainViewModel, action=requestReview, step=start, host=com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainActivity",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=Main, viewModel=MainViewModel, event=RequestInAppUpdate",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=Main, viewModel=MainViewModel, action=requestInAppUpdate, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_init | screen=SeasonalThemeOverlay, viewModel=SeasonalThemeOverlayViewModel, step=init",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=SeasonalThemeOverlay, viewModel=SeasonalThemeOverlayViewModel, action=restoreThemeAfterHoliday, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=SeasonalThemeOverlay, viewModel=SeasonalThemeOverlayViewModel, action=observeWeather, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "message": "Consent settings applied | usageAndDiagnostics=true, analyticsConsent=true, adStorageConsent=true, adUserDataConsent=true, adPersonalizationConsent=true",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "name": "session_start",
+      "source": "analytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "name": "screen_view",
+      "source": "analytics",
+      "params": {
+        "firebase_screen_class": "MainActivity"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "name": "vm_op_start",
+      "source": "analytics",
+      "params": {
+        "view_model": "MainViewModel",
+        "action": "applyInitialConsent",
+        "screen": "Main",
+        "firebase_screen_class": "MainActivity"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_init | screen=Startup, viewModel=StartupViewModel, step=init",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "name": "vm_op_start",
+      "source": "analytics",
+      "params": {
+        "view_model": "MainViewModel",
+        "host": "com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainActivity",
+        "action": "requestConsent",
+        "screen": "Main",
+        "firebase_screen_class": "MainActivity"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "name": "vm_op_start",
+      "source": "analytics",
+      "params": {
+        "view_model": "MainViewModel",
+        "host": "com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainActivity",
+        "action": "requestReview",
+        "screen": "Main",
+        "firebase_screen_class": "MainActivity"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "name": "vm_op_start",
+      "source": "analytics",
+      "params": {
+        "view_model": "MainViewModel",
+        "action": "requestInAppUpdate",
+        "screen": "Main",
+        "firebase_screen_class": "MainActivity"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "name": "vm_op_start",
+      "source": "analytics",
+      "params": {
+        "view_model": "SeasonalThemeOverlayViewModel",
+        "action": "restoreThemeAfterHoliday",
+        "screen": "SeasonalThemeOverlay",
+        "firebase_screen_class": "MainActivity"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "name": "vm_op_start",
+      "source": "analytics",
+      "params": {
+        "view_model": "SeasonalThemeOverlayViewModel",
+        "action": "observeWeather",
+        "screen": "SeasonalThemeOverlay",
+        "firebase_screen_class": "MainActivity"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=SeasonalThemeOverlay, viewModel=SeasonalThemeOverlayViewModel, action=pendingHolidayGreeting, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "name": "vm_op_start",
+      "source": "analytics",
+      "params": {
+        "view_model": "SeasonalThemeOverlayViewModel",
+        "action": "pendingHolidayGreeting",
+        "screen": "SeasonalThemeOverlay",
+        "firebase_screen_class": "MainActivity"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=Startup, viewModel=StartupViewModel, event=RequestConsent",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=Startup, viewModel=StartupViewModel, action=requestConsent, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "message": "Consent request started | host=com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainActivity, showIfRequired=true",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "message": "Consent request joined an in-flight request | host=com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainActivity",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "name": "vm_op_start",
+      "source": "analytics",
+      "params": {
+        "view_model": "StartupViewModel",
+        "action": "requestConsent",
+        "screen": "Startup",
+        "firebase_screen_class": "MainActivity"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "name": "screen_view",
+      "source": "analytics",
+      "params": {
+        "firebase_screen": "Startup",
+        "firebase_screen_class": "StartupScreen"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "name": "screen_state",
+      "source": "analytics",
+      "params": {
+        "screen": "Startup",
+        "firebase_screen": "Startup",
+        "state": "loading",
+        "firebase_screen_class": "StartupScreen"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:34 GMT+0300 (Eastern European Summer Time)",
+      "message": "review_outcome | screen=Main, viewModel=MainViewModel, host=com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainActivity, outcome=rc6",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:38 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=Main, viewModel=MainViewModel, event=RequestConsent",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:38 GMT+0300 (Eastern European Summer Time)",
+      "message": "consent_request_skipped | screen=Main, viewModel=MainViewModel, host=com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainActivity, reason=already_requested_this_session",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:38 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=Main, viewModel=MainViewModel, event=RequestReview",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:38 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=Main, viewModel=MainViewModel, event=RequestInAppUpdate",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:38 GMT+0300 (Eastern European Summer Time)",
+      "message": "update_request_skipped | screen=Main, viewModel=MainViewModel, reason=already_settled_this_session",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:38 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=Startup, viewModel=StartupViewModel, event=RequestConsent",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:38 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=Startup, viewModel=StartupViewModel, action=requestConsent, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:38 GMT+0300 (Eastern European Summer Time)",
+      "message": "Consent request started | host=com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainActivity, showIfRequired=true",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:38 GMT+0300 (Eastern European Summer Time)",
+      "message": "Consent request joined an in-flight request | host=com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainActivity",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:38 GMT+0300 (Eastern European Summer Time)",
+      "name": "screen_view",
+      "source": "analytics",
+      "params": {
+        "firebase_screen_class": "MainActivity"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:38 GMT+0300 (Eastern European Summer Time)",
+      "name": "vm_op_start",
+      "source": "analytics",
+      "params": {
+        "view_model": "StartupViewModel",
+        "action": "requestConsent",
+        "screen": "Startup",
+        "firebase_screen_class": "MainActivity"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:40 GMT+0300 (Eastern European Summer Time)",
+      "message": "consent_request_state | screen=Main, viewModel=MainViewModel, host=com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainActivity, stage=success",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:40 GMT+0300 (Eastern European Summer Time)",
+      "name": "screen_state",
+      "source": "analytics",
+      "params": {
+        "screen": "Startup",
+        "state": "success",
+        "firebase_screen_class": "MainActivity"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:42 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_init | screen=Onboarding, viewModel=OnboardingViewModel, step=init",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:42 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=Onboarding, viewModel=OnboardingViewModel, action=observeCompletion, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:42 GMT+0300 (Eastern European Summer Time)",
+      "message": "Observe onboarding completion started | source=OnboardingRepository",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:42 GMT+0300 (Eastern European Summer Time)",
+      "name": "tutorial_begin",
+      "source": "analytics",
+      "params": {
+        "firebase_screen_class": "MainActivity"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:42 GMT+0300 (Eastern European Summer Time)",
+      "name": "vm_op_start",
+      "source": "analytics",
+      "params": {
+        "view_model": "OnboardingViewModel",
+        "action": "observeCompletion",
+        "screen": "Onboarding",
+        "firebase_screen_class": "MainActivity"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:42 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=Onboarding, viewModel=OnboardingViewModel, event=PageSelected",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:42 GMT+0300 (Eastern European Summer Time)",
+      "name": "screen_view",
+      "source": "analytics",
+      "params": {
+        "firebase_screen": "Onboarding",
+        "firebase_screen_class": "OnboardingScreen"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:42 GMT+0300 (Eastern European Summer Time)",
+      "name": "screen_state",
+      "source": "analytics",
+      "params": {
+        "screen": "Onboarding",
+        "firebase_screen": "Onboarding",
+        "state": "success",
+        "firebase_screen_class": "OnboardingScreen"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:43 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=Onboarding, viewModel=OnboardingViewModel, event=RequestConsent",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:43 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=Onboarding, viewModel=OnboardingViewModel, action=requestConsent, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:43 GMT+0300 (Eastern European Summer Time)",
+      "message": "Consent request started | host=com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainActivity, showIfRequired=true",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:43 GMT+0300 (Eastern European Summer Time)",
+      "name": "vm_op_start",
+      "source": "analytics",
+      "params": {
+        "view_model": "OnboardingViewModel",
+        "action": "requestConsent",
+        "screen": "Onboarding",
+        "firebase_screen": "Onboarding",
+        "firebase_screen_class": "OnboardingScreen"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:44 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=Onboarding, viewModel=OnboardingViewModel, event=PageSelected",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:44 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_init | screen=Onboarding, viewModel=OnboardingThemeViewModel, step=init",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:44 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=Onboarding, viewModel=OnboardingThemeViewModel, action=observePreferences, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:44 GMT+0300 (Eastern European Summer Time)",
+      "name": "vm_op_start",
+      "source": "analytics",
+      "params": {
+        "view_model": "OnboardingThemeViewModel",
+        "action": "observePreferences",
+        "screen": "Onboarding",
+        "firebase_screen": "Onboarding",
+        "firebase_screen_class": "OnboardingScreen"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:45 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=Onboarding, viewModel=OnboardingViewModel, event=PageSelected",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:45 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=Onboarding, viewModel=OnboardingViewModel, event=PageSelected",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:45 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_init | screen=UsageAndDiagnostics, viewModel=UsageAndDiagnosticsViewModel, step=init",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:45 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=UsageAndDiagnostics, viewModel=UsageAndDiagnosticsViewModel, event=Load",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:45 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=UsageAndDiagnostics, viewModel=UsageAndDiagnosticsViewModel, action=observeConsents, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:45 GMT+0300 (Eastern European Summer Time)",
+      "message": "Usage diagnostics observe | defaultEnabled=true",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:45 GMT+0300 (Eastern European Summer Time)",
+      "name": "vm_op_start",
+      "source": "analytics",
+      "params": {
+        "view_model": "UsageAndDiagnosticsViewModel",
+        "action": "observeConsents",
+        "screen": "UsageAndDiagnostics",
+        "firebase_screen": "Onboarding",
+        "firebase_screen_class": "OnboardingScreen"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:46 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=Onboarding, viewModel=OnboardingViewModel, event=PageSelected",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:48 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=UsageAndDiagnostics, viewModel=UsageAndDiagnosticsViewModel, event=AllowAllConsent",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:48 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=UsageAndDiagnostics, viewModel=UsageAndDiagnosticsViewModel, action=setConsentBundle, step=start, analytics=true, adPersonalization=true",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:48 GMT+0300 (Eastern European Summer Time)",
+      "message": "Usage diagnostics bundle updated | usageAndDiagnostics=true, analyticsConsent=true, adStorageConsent=true, adUserDataConsent=true, adPersonalizationConsent=true",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:48 GMT+0300 (Eastern European Summer Time)",
+      "name": "vm_op_start",
+      "source": "analytics",
+      "params": {
+        "analytics": "true",
+        "view_model": "UsageAndDiagnosticsViewModel",
+        "action": "setConsentBundle",
+        "screen": "UsageAndDiagnostics",
+        "firebase_screen": "Onboarding",
+        "firebase_screen_class": "OnboardingScreen",
+        "adPersonalization": "true"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:48 GMT+0300 (Eastern European Summer Time)",
+      "message": "Usage diagnostics observe | defaultEnabled=true",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:48 GMT+0300 (Eastern European Summer Time)",
+      "message": "Consent settings applied | usageAndDiagnostics=true, analyticsConsent=true, adStorageConsent=true, adUserDataConsent=true, adPersonalizationConsent=true",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:50 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=Onboarding, viewModel=OnboardingViewModel, event=PageSelected",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:51 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=Onboarding, viewModel=OnboardingViewModel, event=CompleteOnboarding",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:51 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=Onboarding, viewModel=OnboardingViewModel, action=completeOnboarding, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:51 GMT+0300 (Eastern European Summer Time)",
+      "name": "vm_op_start",
+      "source": "analytics",
+      "params": {
+        "view_model": "OnboardingViewModel",
+        "action": "completeOnboarding",
+        "screen": "Onboarding",
+        "firebase_screen": "Onboarding",
+        "firebase_screen_class": "OnboardingScreen"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:51 GMT+0300 (Eastern European Summer Time)",
+      "name": "screen_state",
+      "source": "analytics",
+      "params": {
+        "screen": "Onboarding",
+        "firebase_screen": "Onboarding",
+        "state": "loading",
+        "firebase_screen_class": "OnboardingScreen"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:51 GMT+0300 (Eastern European Summer Time)",
+      "name": "tutorial_complete",
+      "source": "analytics",
+      "params": {
+        "firebase_screen": "Onboarding",
+        "firebase_screen_class": "OnboardingScreen"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:51 GMT+0300 (Eastern European Summer Time)",
+      "name": "screen_state",
+      "source": "analytics",
+      "params": {
+        "screen": "Onboarding",
+        "firebase_screen": "Onboarding",
+        "state": "success",
+        "firebase_screen_class": "OnboardingScreen"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:52 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_init | screen=ToolkitTiles, viewModel=ToolkitTilesViewModel, step=init",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:52 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=ToolkitTiles, viewModel=ToolkitTilesViewModel, event=Load",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:52 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=ToolkitTiles, viewModel=ToolkitTilesViewModel, action=loadTiles, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:52 GMT+0300 (Eastern European Summer Time)",
+      "name": "vm_op_start",
+      "source": "analytics",
+      "params": {
+        "view_model": "ToolkitTilesViewModel",
+        "action": "loadTiles",
+        "screen": "ToolkitTiles",
+        "firebase_screen": "Onboarding",
+        "firebase_screen_class": "OnboardingScreen"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:52 GMT+0300 (Eastern European Summer Time)",
+      "name": "screen_view",
+      "source": "analytics",
+      "params": {
+        "firebase_screen": "ToolkitTiles",
+        "firebase_screen_class": "ToolkitTilesScreen"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:52 GMT+0300 (Eastern European Summer Time)",
+      "name": "screen_state",
+      "source": "analytics",
+      "params": {
+        "screen": "ToolkitTiles",
+        "firebase_screen": "ToolkitTiles",
+        "state": "loading",
+        "firebase_screen_class": "ToolkitTilesScreen"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:52 GMT+0300 (Eastern European Summer Time)",
+      "name": "view_item_list",
+      "source": "analytics",
+      "params": {
+        "item_list_id": "all",
+        "item_list_name": "quick_tools_catalog",
+        "firebase_screen": "ToolkitTiles",
+        "firebase_screen_class": "ToolkitTilesScreen"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:52 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=ToolkitTiles, viewModel=ToolkitTilesViewModel, event=AdStatusChanged",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:52 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=ToolkitTiles, viewModel=ToolkitTilesViewModel, event=AdStatusChanged",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:52 GMT+0300 (Eastern European Summer Time)",
+      "name": "screen_state",
+      "source": "analytics",
+      "params": {
+        "screen": "ToolkitTiles",
+        "firebase_screen": "ToolkitTiles",
+        "state": "success",
+        "firebase_screen_class": "ToolkitTilesScreen"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:52 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=ToolkitTiles, viewModel=ToolkitTilesViewModel, event=Refresh",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:54 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=ToolkitTiles, viewModel=ToolkitTilesViewModel, event=AdStatusChanged",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:54 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=ToolkitTiles, viewModel=ToolkitTilesViewModel, event=AdStatusChanged",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:54:55 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=ToolkitTiles, viewModel=ToolkitTilesViewModel, event=AdStatusChanged",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:55:03 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=ToolkitTiles, viewModel=ToolkitTilesViewModel, event=FilterSelected",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:55:03 GMT+0300 (Eastern European Summer Time)",
+      "name": "view_item_list",
+      "source": "analytics",
+      "params": {
+        "item_list_id": "notadded",
+        "item_list_name": "quick_tools_notadded",
+        "firebase_screen": "ToolkitTiles",
+        "firebase_screen_class": "ToolkitTilesScreen"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:55:03 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=ToolkitTiles, viewModel=ToolkitTilesViewModel, event=AdStatusChanged",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:55:04 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=ToolkitTiles, viewModel=ToolkitTilesViewModel, event=AdStatusChanged",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:55:05 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=ToolkitTiles, viewModel=ToolkitTilesViewModel, event=AdStatusChanged",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:55:12 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=ToolkitTiles, viewModel=ToolkitTilesViewModel, event=CategoryToggled",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:55:12 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=ToolkitTiles, viewModel=ToolkitTilesViewModel, action=saveExpandedCategories, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:55:12 GMT+0300 (Eastern European Summer Time)",
+      "name": "select_content",
+      "source": "analytics",
+      "params": {
+        "content_type": "tile_category",
+        "item_id": "system",
+        "firebase_screen": "ToolkitTiles",
+        "firebase_screen_class": "ToolkitTilesScreen"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:55:12 GMT+0300 (Eastern European Summer Time)",
+      "name": "vm_op_start",
+      "source": "analytics",
+      "params": {
+        "view_model": "ToolkitTilesViewModel",
+        "action": "saveExpandedCategories",
+        "screen": "ToolkitTiles",
+        "firebase_screen": "ToolkitTiles",
+        "firebase_screen_class": "ToolkitTilesScreen"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:55:16 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | screen=ToolkitTiles, viewModel=ToolkitTilesViewModel, event=CategoryToggled",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:55:16 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=ToolkitTiles, viewModel=ToolkitTilesViewModel, action=saveExpandedCategories, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:55:16 GMT+0300 (Eastern European Summer Time)",
+      "name": "select_content",
+      "source": "analytics",
+      "params": {
+        "content_type": "tile_category",
+        "item_id": "utilities",
+        "firebase_screen": "ToolkitTiles",
+        "firebase_screen_class": "ToolkitTilesScreen"
+      }
+    },
+    {
+      "timestamp": "Tue Oct 13 2026 06:55:16 GMT+0300 (Eastern European Summer Time)",
+      "name": "vm_op_start",
+      "source": "analytics",
+      "params": {
+        "view_model": "ToolkitTilesViewModel",
+        "action": "saveExpandedCategories",
+        "screen": "ToolkitTiles",
+        "firebase_screen": "ToolkitTiles",
+        "firebase_screen_class": "ToolkitTilesScreen"
+      }
+    }
+  ]
+}

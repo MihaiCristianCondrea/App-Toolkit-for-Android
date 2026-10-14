@@ -1,0 +1,23 @@
+Event summary
+App version:26.10.31 (137261031)
+OS version: android15
+Model:CPH2465
+Date:Oct 13, 2026, 6:55:21 AMLoaded event received at Oct 13, 2026, 6:55:21 AM
+Stack trace
+Keys
+Logs & Breadcrumbs
+Data
+Rollouts
+Device
+Brand: OnePlus
+Model: CPH2465
+Orientation: Portrait
+RAM free: 2.74 GiB
+Disk free: 22.12 GiB
+Operating System
+Version:Android 15
+Orientation: Portrait
+Rooted: No
+Crash
+Date: Oct 13, 2026, 6:55:21 AM
+App version: 26.10.31 (137261031)
