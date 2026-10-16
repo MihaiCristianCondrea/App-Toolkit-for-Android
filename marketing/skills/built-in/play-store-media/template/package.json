@@ -1,0 +1,9 @@
+{
+  "name": "android-insider-play-material-expressive",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/render.mjs --preview",
+    "render": "node scripts/render.mjs"
+  }
+}

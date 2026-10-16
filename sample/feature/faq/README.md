@@ -38,9 +38,8 @@ flowchart TD
 
 ## Architectural decisions
 
-- This module is resource-only and deliberately has no Kotlin. Its whole job is to answer the
-  library's placeholder names, so a new or reworded question is a one-module change that touches no
-  code and no other feature.
+- This module supplies the library's placeholder resources and the host's FAQ product ID.
+  A new or reworded bundled question changes only resources in this module.
 - The content lives here rather than beside the host's toolkit wiring in
   `:sample:core:apptoolkit`: FAQ copy shares nothing with it beyond having once been convenient to
   put there.
@@ -52,7 +51,7 @@ flowchart TD
 
 ## Internal implementations
 
-- None; the module holds no code.
+- `FaqConstants` holds the host product ID passed to Toolkit by the app.
 
 ## Current risks
 

@@ -1,0 +1,80 @@
+{
+  "screenshots": [
+    {
+      "id": "news",
+      "lines": [
+        "Android news,",
+        "in one place"
+      ],
+      "pill": 1,
+      "alt": "News tab with the latest Android stories, each with its topic, date and artwork"
+    },
+    {
+      "id": "guides",
+      "lines": [
+        "Learn how",
+        "Android works"
+      ],
+      "pill": 1,
+      "alt": "Guides tab listing Jetpack Compose guides with topic filters"
+    },
+    {
+      "id": "reader",
+      "lines": [
+        "Guides with",
+        "real Kotlin"
+      ],
+      "pill": 1,
+      "alt": "A guide on parallax scrolling in Jetpack Compose open in the reader"
+    },
+    {
+      "id": "studio-bot",
+      "lines": [
+        "Ask about",
+        "what you read"
+      ],
+      "pill": 1,
+      "alt": "Studio Bot answering a question about parallax scrolling with Kotlin code"
+    },
+    {
+      "id": "attached",
+      "lines": [
+        "Bring the guide",
+        "into the chat"
+      ],
+      "pill": 1,
+      "alt": "Studio Bot with a guide attached and suggested questions about it"
+    },
+    {
+      "id": "search",
+      "lines": [
+        "Find any",
+        "topic fast"
+      ],
+      "pill": 1,
+      "alt": "Search results for Compose in the Guides tab"
+    },
+    {
+      "id": "favorites",
+      "lines": [
+        "Save guides",
+        "for later"
+      ],
+      "pill": 1,
+      "alt": "Guides filtered to favorites, ready to read again"
+    },
+    {
+      "id": "conversations",
+      "lines": [
+        "Pick up any",
+        "conversation"
+      ],
+      "pill": 1,
+      "alt": "Studio Bot conversation history, each chat with its topic and date"
+    }
+  ],
+  "featureGraphic": {
+    "title": "Android Insider",
+    "tagline": "News, guides and Studio Bot for Android developers"
+  }
+}

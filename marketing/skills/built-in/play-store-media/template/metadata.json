@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "3.0",
+  "campaign": {
+    "slug": "play-2026-10-material-expressive",
+    "title": "Google Play listing, October 2026",
+    "releaseDate": "2026-10-16"
+  },
+  "software": "Android Studio",
+  "copy": {
+    "title": "Android Insider on Google Play",
+    "headline": "Android news, guides and Studio Bot",
+    "description": "Google Play listing visuals for Android Insider: Android news, Jetpack Compose guides with real Kotlin, and Studio Bot answers about what you read.",
+    "keywords": [
+      "Android Insider",
+      "Android news",
+      "Jetpack Compose guides",
+      "Kotlin tutorials",
+      "Studio Bot",
+      "Android developer app"
+    ],
+    "hashtags": []
+  },
+  "files": {
+    "../listing/en-US/graphics/phone-screenshots/1-news.png": {
+      "title": "Android Insider: Android news, in one place",
+      "altText": "News tab with the latest Android stories, each with its topic, date and artwork"
+    },
+    "../listing/en-US/graphics/phone-screenshots/2-guides.png": {
+      "title": "Android Insider: Learn how Android works",
+      "altText": "Guides tab listing Jetpack Compose guides with topic filters"
+    },
+    "../listing/en-US/graphics/phone-screenshots/3-reader.png": {
+      "title": "Android Insider: Guides with real Kotlin",
+      "altText": "A guide on parallax scrolling in Jetpack Compose open in the reader"
+    },
+    "../listing/en-US/graphics/phone-screenshots/4-studio-bot.png": {
+      "title": "Android Insider: Ask about what you read",
+      "altText": "Studio Bot answering a question about parallax scrolling with Kotlin code"
+    },
+    "../listing/en-US/graphics/phone-screenshots/5-attached.png": {
+      "title": "Android Insider: Bring the guide into the chat",
+      "altText": "Studio Bot with a guide attached and suggested questions about it"
+    },
+    "../listing/en-US/graphics/phone-screenshots/6-search.png": {
+      "title": "Android Insider: Find any topic fast",
+      "altText": "Search results for Compose in the Guides tab"
+    },
+    "../listing/en-US/graphics/phone-screenshots/7-favorites.png": {
+      "title": "Android Insider: Save guides for later",
+      "altText": "Guides filtered to favorites, ready to read again"
+    },
+    "../listing/en-US/graphics/phone-screenshots/8-conversations.png": {
+      "title": "Android Insider: Pick up any conversation",
+      "altText": "Studio Bot conversation history, each chat with its topic and date"
+    },
+    "../listing/en-US/graphics/feature-graphic/feature-graphic.png": {
+      "title": "Android Insider",
+      "altText": "Android Insider: news, guides and Studio Bot for Android developers"
+    },
+    "../listing/en-US/graphics/icon/icon.png": {
+      "title": "Android Insider app icon",
+      "altText": "The Android Insider icon: the Android robot over an open book"
+    }
+  }
+}
