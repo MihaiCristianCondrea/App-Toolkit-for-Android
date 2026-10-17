@@ -28,14 +28,29 @@ WorkManager checks for API 34+ (Android 14) and invokes `JobScheduler34.forNames
 
 ## Affected Area
 
-* **Module:** `:library:core:workmanager` (or WorkManager startup dependency `androidx.work:work-runtime`)
+* **Dependency:** `androidx.work:work-runtime`; there is no `:library:core:workmanager` module.
 * **Component:** `androidx.startup.InitializationProvider`, `androidx.work.impl.background.systemjob.JobScheduler34`
 
 ## Guidance & Open Questions
 
 1. Check whether updating `androidx.work:work-runtime` dependency version includes fallback handling for devices missing `JobScheduler.forNamespace`.
-2. Verify if ProGuard / R8 keep rules or optimization flags affected `JobScheduler` or WorkManager class verification on API 34.
+2. Obtain the actual device build fingerprint, SDK level and framework implementation. App R8 rules cannot restore a missing Android framework method.
 3. Test startup behavior on API 34+ physical devices or custom ROMs to verify if manual WorkManager initialization or safety checks are required.
+
+## Investigation: October 17, 2026
+
+`debugRuntimeClasspath` resolves WorkManager 2.12.0. The Toolkit declares it in the `androidx-core`
+bundle and Glance 1.2.0 also requires it transitively. No application-owned workers were found, but
+removing WorkManager or its initializer blindly would risk Glance widget work.
+
+[`JobScheduler.forNamespace`](https://developer.android.com/reference/android/app/job/JobScheduler#forNamespace(java.lang.String))
+is an Android API 34 method. The report's Android 14 label and missing method are inconsistent with
+that contract. A device/framework mismatch is a hypothesis, not a confirmed diagnosis. The same
+signature is indexed in [upstream issue 556304570](https://issuetracker.google.com/issues/556304570);
+its full discussion requires sign-in and no upstream resolution was verified.
+
+Keep open pending a reproducing device or an upstream fallback verified in the resolved artifact.
+Moving initialization later would only defer this failure when Glance first requests work.
 
 ## References
 

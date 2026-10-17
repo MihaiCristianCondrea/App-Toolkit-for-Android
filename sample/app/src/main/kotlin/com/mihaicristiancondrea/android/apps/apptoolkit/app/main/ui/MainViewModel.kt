@@ -25,6 +25,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.exceptions.ConsentException
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewHost
@@ -37,8 +38,9 @@ import kotlinx.coroutines.Job
 /**
  * Runs consent, review, and update requests raised on activity resume. Guards live in this
  * ViewModel so configuration changes do not repeat completed requests. Review and consent run
- * once per ViewModel session; an interrupted immediate update remains eligible for a later
- * resume. The repositories are main-safe, and the update flow talks to Play on the main thread.
+ * once per ViewModel session; consent with an unavailable host and an interrupted immediate update
+ * remain eligible for a later resume. The repositories are main-safe, and the update flow talks
+ * to Play on the main thread.
  */
 class MainViewModel(
     private val consentRepository: ConsentRepository,
@@ -92,7 +94,7 @@ class MainViewModel(
         }
     }
 
-    /** Asks once per session; a resume while the round trip runs, or after it ended, is skipped. */
+    /** Asks once per session, retrying on a later resume if the host became unavailable. */
     private fun requestConsent(host: ConsentHost) {
         if (hasRequestedConsent) {
             breadcrumb(
@@ -126,7 +128,19 @@ class MainViewModel(
                     message = "consent_request_state",
                     attributes = hostAttributes + (ExtraKeys.STAGE to "loading"),
                 )
-                consentRepository.requestConsent(host = host)
+                try {
+                    consentRepository.requestConsent(host = host)
+                } catch (error: ConsentException) {
+                    if (error.reason != ConsentException.Reason.HOST_UNAVAILABLE) {
+                        throw error
+                    }
+                    hasRequestedConsent = false
+                    breadcrumb(
+                        message = "consent_request_state",
+                        attributes = hostAttributes + (ExtraKeys.STAGE to "host_unavailable"),
+                    )
+                    return@launchReport
+                }
                 breadcrumb(
                     message = "consent_request_state",
                     attributes = hostAttributes + (ExtraKeys.STAGE to "success"),

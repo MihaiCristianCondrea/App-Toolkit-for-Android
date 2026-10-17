@@ -1,6 +1,6 @@
 # Incident Report: AdSlotLoadException Network Error Non-Fatal
 
-* **Status:** Open (Unresolved)
+* **Status:** Fixed (reporting policy verified by JVM tests)
 * **Issue ID:** `f7ff488bb8b207d12e438303b7d2c9e6`
 * **Application:** `com.d4rk.android.apps.apptoolkit` version `26.10.31` (`137261031`)
 * **Date:** October 14, 2026 at 05:56:31 EEST
@@ -26,14 +26,21 @@ When requesting ad units (native ad slots), AdMob fails to retrieve SDK core HTM
 
 ## Affected Area
 
-* **Module:** `:library:ui` / ad integration infrastructure
+* **Module:** `:library:core:ui` / ad integration infrastructure
 * **Component:** `AdLoadReporter`, `NativeAdHolder`, `AdSlotLoadException`
 
-## Guidance & Open Questions
+## Fix and Verification: October 17, 2026
 
-1. This is a non-fatal telemetry recording of network-level ad load failures (e.g., ad blockers, device offline, DNS filtering, or doubleclick server connectivity issues).
-2. Verify if `AdSlotLoadException` logging in `AdLoadReporter` is intended to record expected network-level ad failures or if non-fatal reporting threshold should be tuned for routine network errors.
-3. Keep as **Open / Unresolved** until decision on non-fatal ad error telemetry filters is finalized.
+The SDK correctly delivered `NETWORK_ERROR`; `AdLoadReporter` converted every error except no-fill
+into a nonfatal exception. A refused ad-server connection is not an application defect. The reporter
+now retains Logcat and breadcrumb details for network failures, including a `network_error`
+attribute, without creating a nonfatal. Other SDK failures and requests that cannot start still
+report nonfatals. This does not repair device networking or guarantee ad availability.
+
+All 69 `:library:core:ui:testDebugUnitTest` tests pass, including the reporter's three cases for
+expected failures, unexpected SDK errors, and requests that cannot start. Consent tests (15), app
+tests (26), and `checkModuleBoundaries` also pass. Live ad-server failure injection was not performed.
+Consumer apps receive this behavior when using a library release containing the change.
 
 ## References
 

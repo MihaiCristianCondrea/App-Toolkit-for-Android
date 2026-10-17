@@ -25,6 +25,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.StandardDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.exceptions.ConsentException
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewHost
@@ -142,6 +143,31 @@ class MainViewModelTest {
             }
 
             assertEquals(1, consentRepository.requestCount)
+        }
+
+    @Test
+    fun `an unavailable consent host is silent and a later resume retries`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            var unavailable = true
+            val repository = CountingConsentRepository(request = {
+                if (unavailable) throw ConsentException(
+                    reason = ConsentException.Reason.HOST_UNAVAILABLE,
+                    message = "Activity stopped during the request",
+                )
+            })
+            val viewModel = createViewModel(consentRepository = repository)
+
+            viewModel.onEvent(MainEvent.RequestConsent(host = consentHost))
+            advance()
+            assertTrue(viewModel.messages.value.isEmpty())
+            assertTrue(telemetryRepository.loggedEvents.none { it.name == "vm_op_error" })
+
+            unavailable = false
+            viewModel.onEvent(MainEvent.RequestConsent(host = consentHost))
+            advance()
+            viewModel.onEvent(MainEvent.RequestConsent(host = consentHost))
+            advance()
+            assertEquals(2, repository.requestCount)
         }
 
     @Test

@@ -4,6 +4,11 @@
 
 # Unreleased
 
+### Fixed
+
+- Unavailable ad servers and refused network connections no longer generate ad-slot nonfatal
+  exceptions. Diagnostic breadcrumbs remain available.
+
 ### Improved
 
 - Carousel scaling and FAQ expansion arrows update their graphics layers without recomposing on

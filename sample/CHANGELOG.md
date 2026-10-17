@@ -4,9 +4,16 @@
 
 # Unreleased
 
+### Fixed
+
+- Automatic consent requests interrupted by an unavailable activity retry on a later resume without
+  showing an error message or reporting a nonfatal exception. Consumer apps with their own main
+  ViewModel should adopt the handling documented in `sample/app/README.md`.
+
 ### Improved
 
 - Opening an app from the Apps list no longer checks installed packages on the main thread.
+- Release builds use startup and scrolling profiles generated from the sample app's catalog journeys.
 - Breathing and SOS animations update their graphics layers without recomposing on every frame.
   The Quick Tools catalog distinguishes category and ad rows when reusing lazy items.
 

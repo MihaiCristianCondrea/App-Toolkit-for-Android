@@ -90,6 +90,8 @@ flowchart TD
 
 ## Architectural decisions
 
+- Ad slots keep no-fill and network failures in Logcat and telemetry breadcrumbs without recording
+  nonfatal exceptions. Other SDK failures and requests that cannot start remain nonfatal reports.
 - `ScreenViewModel` owns unidirectional event-to-state processing; feature composables render data
   and forward user intent rather than reaching repositories.
 - A screen's state is the feature's own type. The Toolkit puts the status on each piece of content

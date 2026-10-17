@@ -87,6 +87,14 @@ flowchart TD
 
 ## Architectural decisions
 
+- Automatic consent requests run once per ViewModel session. If `requestConsent` throws
+  `ConsentException` with `Reason.HOST_UNAVAILABLE`, clear the session guard and record a breadcrumb
+  inside the `launchReport` block, then return without an error message or nonfatal report. The next
+  activity resume can retry with a live `ConsentHost`. Keep request and form failures on the normal
+  `launchReport` error path. Consumer apps that own their main ViewModel must adopt this handling;
+  upgrading the library alone does not change their session guards. See
+  [`MainViewModel`](src/main/kotlin/com/mihaicristiancondrea/android/apps/apptoolkit/app/main/ui/MainViewModel.kt)
+  and its `an unavailable consent host is silent and a later resume retries` regression test.
 - The application module is the only place that knows the complete runtime graph, final manifest,
   and destination set; feature modules remain unaware of their siblings.
 - Host-to-toolkit module ordering is isolated in `:sample:core:apptoolkit`, while this module

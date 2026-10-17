@@ -56,7 +56,8 @@ class AdLoadReporter(
      *
      * [errorCode] and [errorMessage] come from the SDK's `LoadAdError`. No fill is ordinary and is
      * logged but never recorded as a non-fatal: on a small app, or a device Google has no inventory
-     * for, it is the expected answer and would otherwise drown the console.
+     * for, it is the expected answer and would otherwise drown the console. Network errors also
+     * remain breadcrumbs: unavailable ad servers and blocked connections are not application bugs.
      */
     fun onAdFailedToLoad(
         slotName: String,
@@ -65,6 +66,7 @@ class AdLoadReporter(
         errorMessage: String,
     ) {
         val isNoFill = errorCode.contains(other = NO_FILL_CODE, ignoreCase = true)
+        val isNetworkError = errorCode.contains(other = NETWORK_ERROR_CODE, ignoreCase = true)
         Log.w(
             LOG_TAG,
             "Ad slot '$slotName' got no ad for unit '$adUnitId'. code=$errorCode ($errorMessage)",
@@ -78,10 +80,11 @@ class AdLoadReporter(
                 "error_code" to errorCode,
                 "error_message" to errorMessage,
                 "no_fill" to isNoFill.toString(),
+                "network_error" to isNetworkError.toString(),
             ),
         )
 
-        if (!isNoFill) {
+        if (!isNoFill && !isNetworkError) {
             telemetryRepository.recordNonFatal(
                 throwable = AdSlotLoadException(
                     slotName = slotName,
@@ -127,10 +130,11 @@ class AdLoadReporter(
          * adds or renames codes, and matched loosely because the value arrives already stringified.
          */
         const val NO_FILL_CODE: String = "NO_FILL"
+        const val NETWORK_ERROR_CODE: String = "NETWORK_ERROR"
     }
 }
 
-/** Non-fatal marker for an ad request the SDK answered with an error other than no fill. */
+/** Non-fatal marker for an ad failure other than no fill or a network error. */
 class AdSlotLoadException(
     slotName: String,
     adUnitId: String,

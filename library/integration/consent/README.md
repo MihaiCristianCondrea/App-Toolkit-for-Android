@@ -63,6 +63,11 @@ flowchart TD
   satisfied by a weaker conditional request.
 - Host validity is checked both before SDK work and immediately before form display; asynchronous
   callbacks must not retain permission to use a destroyed activity.
+- `HOST_UNAVAILABLE` leaves consent unresolved. Automatic activity-resume callers should keep a
+  breadcrumb and allow a later resume to retry, rather than recording the lifecycle interruption
+  as a nonfatal or permanently marking the session complete. The sample's
+  [`MainViewModel`](../../../sample/app/README.md#architectural-decisions) demonstrates this policy.
+  Explicit privacy-form actions retain their own user-visible error handling.
 - Persistence records the resolved choice, while UMP remains the authority for whether a form is
   currently available or required.
 

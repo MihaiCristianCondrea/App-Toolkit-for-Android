@@ -28,6 +28,13 @@ When running application version `26.10.31` on Android 15 (Samsung SM-A055F), a 
 2. Inspect recent usage of Kotlin `value class` or inline class validation checks across feature modules.
 3. Watch Firebase Crashlytics for additional session events, breadcrumbs, or user actions preceding the crash.
 
+## Investigation: October 17, 2026
+
+The supplied stack contains only the exception type and helper frame, with no message or caller.
+It does not identify which inline value or precondition failed. No session export accompanies this
+report. Keep open until the full retraced stack, matching release mapping and triggering screen or
+inputs are available. Adding clamps, catches or changing value classes would be speculative.
+
 ## References
 
 * [`docs/crashes/README.md`](../../README.md)
