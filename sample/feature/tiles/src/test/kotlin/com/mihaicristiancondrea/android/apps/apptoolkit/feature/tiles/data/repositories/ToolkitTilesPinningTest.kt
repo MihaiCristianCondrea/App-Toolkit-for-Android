@@ -22,8 +22,10 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.TorchCapabilities
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.TorchState
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -31,20 +33,20 @@ import kotlin.test.assertTrue
 
 class ToolkitTilesPinningTest {
     @Test
-    fun `only unpinned tile services are marked not added on supported Android versions`() {
+    fun `only unpinned tile services are marked not added on supported Android versions`() = runTest {
         val tiles = repository(supportsPinning = true).currentTileCategories().flatMap { it.tiles }
         assertEquals(4, tiles.count { it.status == ToolkitTileStatus.NotAdded })
         assertTrue(tiles.filter { it.requestKey == null }.all { it.status == ToolkitTileStatus.Available })
     }
 
     @Test
-    fun `older Android versions do not advertise adding tiles`() {
+    fun `older Android versions do not advertise adding tiles`() = runTest {
         val tiles = repository(supportsPinning = false).currentTileCategories().flatMap { it.tiles }
         assertTrue(tiles.all { it.status == ToolkitTileStatus.Available })
     }
 
     @Test
-    fun `already added service stays added on either Android version`() {
+    fun `already added service stays added on either Android version`() = runTest {
         for (supportsPinning in listOf(false, true)) {
             val tiles = repository(supportsPinning, setOf("coin_flip")).currentTileCategories().flatMap { it.tiles }
             assertEquals(ToolkitTileStatus.Added, tiles.single { it.requestKey == "coin_flip" }.status)
@@ -54,7 +56,7 @@ class ToolkitTilesPinningTest {
     private fun repository(supportsPinning: Boolean, active: Set<String> = emptySet()): DefaultToolkitTilesRepository {
         val quickSettings = mockk<QuickSettingsTilesLocalDataSource> {
             every { supportsAddTileRequest } returns supportsPinning
-            every { activeTileComponents() } returns active
+            coEvery { activeTileComponents() } returns active
             every { componentName(any()) } answers { firstArg<String>() }
         }
         val torch = mockk<TorchRepository> {

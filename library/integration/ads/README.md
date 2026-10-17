@@ -65,6 +65,8 @@ flowchart TD
 
 - Persisted ads enablement is the single source of truth for settings, initialization, and UI
   requests. No consumer chooses a local default.
+- That shared source stays disabled until storage answers, including when the host default is
+  enabled. SDK initialization and requests must not infer a saved choice from a placeholder value.
 - Release builds expose the reduce-ads setting, while debug builds expose display-ads for testing.
   Display ads continues to gate all ad surfaces; reduce ads gates only App Open display.
 - Both preferences start in the same place in every build: display ads on, reduce ads off. A fresh

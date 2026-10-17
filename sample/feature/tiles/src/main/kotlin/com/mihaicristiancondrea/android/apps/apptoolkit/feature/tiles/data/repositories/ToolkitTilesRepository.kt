@@ -50,5 +50,5 @@ interface ToolkitTilesRepository {
     suspend fun saveExpandedCategoryIds(categoryIds: Set<String>)
 
     /** Re-reads Quick Settings and returns the catalogue with refreshed statuses. */
-    fun currentTileCategories(): ImmutableList<ToolkitTileCategoryData>
+    suspend fun currentTileCategories(): ImmutableList<ToolkitTileCategoryData>
 }

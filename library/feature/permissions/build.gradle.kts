@@ -31,6 +31,7 @@ val versioning = extensions.getByType<VersioningExtension>()
 android {
     namespace = "com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions"
     compileSdk = versioning.compileSdk
+    compileSdkMinor = versioning.compileSdkMinor
 
     defaultConfig {
         minSdk = versioning.minSdk
@@ -44,7 +45,6 @@ android {
 dependencies {
     testImplementation(project(":library:core:testing"))
     api(project(":library:core:common"))
-    api(project(":library:core:network"))
     api(project(":library:core:ui"))
     api(project(":library:navigation"))
 }

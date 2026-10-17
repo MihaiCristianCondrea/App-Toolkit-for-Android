@@ -50,6 +50,7 @@ plugins {
 rootProject.name = "App-Toolkit-for-Android"
 
 include(":sample:app")
+include(":sample:baselineprofile")
 include(":sample:core:analytics")
 include(":sample:core:apptoolkit")
 include(":sample:core:datastore")

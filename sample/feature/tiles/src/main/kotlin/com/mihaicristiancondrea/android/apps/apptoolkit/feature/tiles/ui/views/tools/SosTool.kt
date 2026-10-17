@@ -39,7 +39,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ResultPill
@@ -77,7 +77,7 @@ fun SosTool(
     ) {
         ResultPill(
             label = if (isActive) "SOS ACTIVE" else "SOS Ready",
-            modifier = Modifier.alpha(alpha)
+            modifier = Modifier.graphicsLayer { this.alpha = alpha }
         )
 
         Box(

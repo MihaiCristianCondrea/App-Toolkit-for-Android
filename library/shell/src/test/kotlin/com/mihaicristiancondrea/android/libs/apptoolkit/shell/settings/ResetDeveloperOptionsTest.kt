@@ -36,7 +36,7 @@ class ResetDeveloperOptionsTest {
         hideBottomBarOnScroll = false,
         limitContentWidth = false,
         animationSpeed = AnimationSpeed.Slow,
-        backEdgeStyle = BackEdgeStyle.System,
+        backEdgeStyle = BackEdgeStyle.FollowFinger,
         startOverride = 1,
         navigationBarStyle = NavigationBarStyle.Short,
         navigationTint = NavigationTint.None,

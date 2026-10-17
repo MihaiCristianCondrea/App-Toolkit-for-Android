@@ -71,8 +71,22 @@ catch asynchronous framework crashes occurring inside Google's `ProxyBillingActi
    is visible.
 3. Check whether crash reports originate from Play pre-launch crawlers or automated intent probes.
 
+## Investigation: October 17, 2026
+
+The current library manifest still expands `configChanges` for Google's proxy activities and claims
+that recreation loses pending-intent extras. That rationale conflicts with the bytecode assessment
+above. Treat the override as unproven compatibility debt, not as a resolved crash fix. It has not
+been broadened in this investigation. Removing it needs licensed purchase-flow validation, which
+the supplied report and local emulator do not provide.
+
+The report comes from Net Probe, so verify that host's resolved Billing version and launch
+breadcrumbs rather than assuming the current App Toolkit dependency matches the affected APK.
+
 ## References
 
+* [Resolved AAR audit, October 17](../../aar-audit-2026-10-17.md): confirmed the unchecked null
+  pending-intent path in Billing `9.1.0` and documented the validation required for a narrowly
+  guarded activity-alias mitigation.
 * [`library/integration/billing/README.md`](../../../../library/integration/billing/README.md)
 
 ## Artifacts

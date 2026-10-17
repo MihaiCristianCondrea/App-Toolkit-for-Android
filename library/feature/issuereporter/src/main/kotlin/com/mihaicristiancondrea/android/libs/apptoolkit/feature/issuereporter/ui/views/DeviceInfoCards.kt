@@ -46,7 +46,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
@@ -146,7 +146,7 @@ private fun DeviceInfoHeaderCard(
                 style = GeneralButtonStyle.Text,
                 icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.ExpandMore),
                 contentDescription = stringResource(id = R.string.cd_expand_device_info),
-                modifier = Modifier.rotate(degrees = arrowRotation),
+                modifier = Modifier.graphicsLayer { rotationZ = arrowRotation },
             )
         }
     }

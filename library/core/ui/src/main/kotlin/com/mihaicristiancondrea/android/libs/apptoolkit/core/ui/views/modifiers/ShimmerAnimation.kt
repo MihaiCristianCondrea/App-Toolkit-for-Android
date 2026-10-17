@@ -30,6 +30,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.graphics.drawscope.translate
 
 /**
  * A shimmer effect modifier for Jetpack Compose UI elements.
@@ -77,18 +79,20 @@ fun Modifier.shimmerEffect(): Modifier {
     )
 
     return this.drawWithCache {
+        val brush = Brush.linearGradient(
+            colors = shimmerColors,
+            start = Offset.Zero,
+            end = Offset(size.width, size.height),
+        )
         onDrawBehind {
             val width = size.width
-            val height = size.height
             val startX = (-2f * width) + (4f * width * progress.value)
-
-            drawRect(
-                brush = Brush.linearGradient(
-                    colors = shimmerColors,
-                    start = Offset(startX, 0f),
-                    end = Offset(startX + width, height)
-                )
-            )
+            // Move the shader while keeping the painted rectangle and its size fixed in the viewport.
+            clipRect {
+                translate(left = startX) {
+                    drawRect(brush = brush, topLeft = Offset(-startX, 0f), size = size)
+                }
+            }
         }
     }
 }

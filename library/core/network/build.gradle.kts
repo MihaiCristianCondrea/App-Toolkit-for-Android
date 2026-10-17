@@ -30,6 +30,7 @@ val versioning = extensions.getByType<VersioningExtension>()
 android {
     namespace = "com.mihaicristiancondrea.android.libs.apptoolkit.core.network"
     compileSdk = versioning.compileSdk
+    compileSdkMinor = versioning.compileSdkMinor
 
     defaultConfig {
         minSdk = versioning.minSdk

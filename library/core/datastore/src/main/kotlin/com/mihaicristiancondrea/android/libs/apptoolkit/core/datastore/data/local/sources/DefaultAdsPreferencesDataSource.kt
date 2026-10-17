@@ -19,6 +19,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources
 
 import androidx.datastore.core.DataStore
+import android.util.Log
+import java.io.IOException
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -29,6 +31,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.loca
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.retryWhen
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -60,11 +65,24 @@ class DefaultAdsPreferencesDataSource(
             preferences[adsKey] ?: default
         }.distinctUntilChanged()
 
-    override val adsEnabled: StateFlow<Boolean> = ads(default = defaultAdsEnabled).stateIn(
-        scope = scope,
-        started = SharingStarted.Eagerly,
-        initialValue = defaultAdsEnabled,
-    )
+    override val adsEnabled: StateFlow<Boolean> = ads(default = defaultAdsEnabled)
+        .retryWhen { failure, attempt ->
+            if (failure !is IOException) return@retryWhen false
+            Log.w("AdsPreferences", "Cannot read ads preference; disabling ads until storage recovers.", failure)
+            emit(false)
+            delay(1_000L * (1L shl attempt.coerceAtMost(5).toInt()).coerceAtMost(30))
+            true
+        }
+        .catch { failure ->
+            Log.e("AdsPreferences", "Cannot observe ads preference; ads remain disabled.", failure)
+            emit(false)
+        }
+        .stateIn(
+            scope = scope,
+            started = SharingStarted.Eagerly,
+            // A configured default applies only after a successful read confirms the key is absent.
+            initialValue = false,
+        )
 
     override val reduceAds: Flow<Boolean> = dataStore.data.map { preferences: Preferences ->
         preferences[reduceAdsKey] ?: false

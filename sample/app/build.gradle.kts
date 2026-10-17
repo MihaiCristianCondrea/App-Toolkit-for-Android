@@ -21,6 +21,7 @@ import java.util.Properties
 
 plugins {
     alias(notation = libs.plugins.android.application)
+    alias(libs.plugins.androidx.baselineprofile)
     alias(notation = libs.plugins.kotlin.compose)
     alias(notation = libs.plugins.kotlin.parcelize)
     alias(notation = libs.plugins.kotlin.serialization)
@@ -86,6 +87,7 @@ val appVersion = versioning.phoneVersion()
 android {
     namespace = "com.mihaicristiancondrea.android.apps.apptoolkit"
     compileSdk = appVersion.compileSdk
+    compileSdkMinor = versioning.compileSdkMinor
 
     defaultConfig {
         applicationId = releasedApplicationId
@@ -204,6 +206,7 @@ android {
 }
 
 dependencies {
+    baselineProfile(project(":sample:baselineprofile"))
     testImplementation(project(":library:core:testing"))
     implementation(project(":sample:core:analytics"))
     implementation(project(":sample:core:datastore"))
@@ -244,4 +247,23 @@ dependencies {
     // Instrumentation Tests
     androidTestImplementation(dependencyNotation = libs.bundles.instrumentationTest)
     debugImplementation(dependencyNotation = libs.androidx.compose.ui.test.manifest)
+}
+
+baselineProfile {
+    automaticGenerationDuringBuild = false
+    saveInSrc = true
+}
+
+androidComponents {
+    finalizeDsl { extension ->
+        // The profile plugin's legacy minify flag does not override AGP's unified optimization DSL.
+        extension.buildTypes.filter { it.name.startsWith("nonMinified") }.forEach { buildType ->
+            buildType.optimization { enable = false }
+        }
+        extension.buildTypes.filter {
+            it.name.startsWith("nonMinified") || it.name.startsWith("benchmark")
+        }.forEach { buildType ->
+            buildType.signingConfig = extension.signingConfigs.getByName("debug")
+        }
+    }
 }

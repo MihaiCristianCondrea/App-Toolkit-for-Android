@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.StateFlow
  */
 interface AdsPreferencesDataSource {
 
-    /** Hot, always-current ads preference carrying the configured build default. */
+    /** Shared ads preference. Disabled until storage answers and while its read is failing. */
     val adsEnabled: StateFlow<Boolean>
 
     /** Emits whether App Open ads should be suppressed. */

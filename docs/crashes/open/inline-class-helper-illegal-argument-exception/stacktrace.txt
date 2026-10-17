@@ -1,0 +1,2 @@
+Fatal Exception: java.lang.IllegalArgumentException
+       at kotlin.jvm.internal.InlineClassHelperKt.throwIllegalArgumentException(InlineClassHelper.kt)

@@ -41,7 +41,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -136,7 +136,7 @@ fun QuestionCard(
                     contentDescription = title,
                     iconSize = SizeConstants.ButtonIconSize,
                     icon = ToolkitIcon.Vector(imageVector = Icons.Filled.ExpandMore),
-                    modifier = Modifier.rotate(degrees = expandIconRotation),
+                    modifier = Modifier.graphicsLayer { rotationZ = expandIconRotation },
                 )
             }
             if (isExpanded) {

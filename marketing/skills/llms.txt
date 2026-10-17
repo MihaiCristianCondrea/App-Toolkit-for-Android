@@ -1,0 +1,42 @@
+# Marketing skills
+
+Start with ../STARTUP.md: it routes each task to these skills in order.
+
+# Built-in (edit here)
+built-in/marketing-startup: Entry point. Reads the product, sets up marketing/ and a campaign in marketing/social-campaigns/<campaign-slug>/, writes the campaign README.
+built-in/writing-style: The writing rules for every word: no em or en dashes, no emojis, no AI cliches. Other skills link here instead of repeating them.
+built-in/marketing-ui: Build a marketing hub in any repo: the app's screens as Lit and Material Web components in marketing/ui, with captures, an embed API for videos, and a parity check.
+built-in/motion-video: Code-built videos with Remotion, Python sound and one timeline, in the Pixel and Material You motion style, with reference films, technical rules and a fidelity gate.
+built-in/metadata: Writes SEO, rights and accessibility metadata into every finished file (images, audio, video, SVG, HTML, PDF, sidecars) and verifies nothing else changed. Runs at the end of every task.
+built-in/play-store-media: Google Play visuals from the app's real screens: 8 screenshots cut from one continuous panorama, feature graphic and icon, per language and per custom listing, checked against Play's rules.
+built-in/store-listing: The Google Play listing in marketing/store/google-play: live text and graphics, every design with its source, custom listings with status and a bin, keywords, history of past listings, and a validator for Play's rules.
+built-in/social-captions: Paste-ready post text, one file per platform (YouTube, Instagram, X, LinkedIn, TikTok, Facebook, Threads), with templates, examples and audience-first keywords in references/. Asks which platforms first.
+
+built-in/material-ui: Material Design 3 for Jetpack Compose and the web (m3) with the m3.material.io documentation snapshot (m3-documentation).
+
+# Social media (installed; do not edit)
+social-media/tiktok/tt-audience-insights: Read a TikTok niche and audience from real data: top videos, hooks and sounds for a hashtag.
+social-media/tiktok/tt-caption-writer: TikTok caption under 2,200 characters with a 3 to 5 hashtag set.
+social-media/tiktok/tt-content-planner: Weekly TikTok posting plan from a niche, audience and content pillars.
+social-media/tiktok/tt-hook-scripter: The first 1 to 3 seconds of a TikTok: spoken line, on-screen text and opening visual.
+social-media/tiktok/tt-humanizer: Remove AI-script tells from a TikTok script and caption.
+social-media/tiktok/tt-profile-optimizer: Audit and rewrite a TikTok profile.
+social-media/tiktok/tt-repurposer: Rebuild a post from another platform as a native TikTok script and caption.
+social-media/tiktok/tt-trend-mapper: Map a trending TikTok sound or format to a niche.
+
+# Google (installed; do not edit)
+google/stitch-skill: Google Stitch-compatible semantic design rules for AI UI generation.
+
+# Design taste (installed; do not edit)
+design-taste/taste-skill: The default design skill (v2 experimental). Read the brief, infer the design language, tune three dials (VARIANCE / MOTION / DENSITY), and ship landing pages, portfolios, and redesigns that do not look templated.
+design-taste/taste-skill-v1: The original v1 of taste-skill, preserved for projects depending on its exact behavior.
+design-taste/gpt-tasteskill: Elite Awwwards-level frontend design and GSAP motion skill for premium, deterministic, anti-slop UI generation.
+design-taste/image-to-code-skill: Image-first frontend skill for generating premium website references, deeply analyzing them, and implementing code to match.
+design-taste/imagegen-frontend-web: Image-generation-only skill for creating premium website design reference images.
+design-taste/imagegen-frontend-mobile: Image-generation-only skill for creating premium mobile app screen concepts and flows.
+design-taste/brandkit: Image-generation-only skill for creating premium brand-kit overview images with logo concepts, identity systems, color palettes, typography, and mockups.
+design-taste/redesign-skill: For upgrading existing projects by auditing and fixing design problems.
+design-taste/soft-skill: Focuses on an expensive, soft UI look with premium fonts, whitespace, depth, and smooth animations.
+design-taste/output-skill: Prevents AI from being lazy, skipping code blocks, or using placeholder comments.
+design-taste/minimalist-skill: Enforces clean, editorial-style interfaces (Notion/Linear style) with strict monochrome palettes.
+design-taste/brutalist-skill: Raw mechanical interfaces, Swiss typography, extreme scale contrast. (Beta)

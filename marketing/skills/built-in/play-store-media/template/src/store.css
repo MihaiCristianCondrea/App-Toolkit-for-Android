@@ -1,0 +1,43 @@
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--md-sys-color-surface-container); font-family: 'Google Sans Flex', sans-serif; }
+#store { display: flex; flex-wrap: wrap; gap: 40px; padding: 40px; align-items: flex-start; }
+html[data-export] #store { padding: 0; gap: 0; display: block; }
+
+.shape { position: absolute; display: block; background: var(--c); -webkit-mask: var(--m) center / contain no-repeat; mask: var(--m) center / contain no-repeat; }
+
+/* Phone screenshots: 1080 x 1920 each (9:16, Play's recommended size), cut from one panorama with a single ground and
+   shapes centred on the seams, so the set reads as one strip. A caption in the top band (under 20% of the image), the
+   app's real screen in the Pixel 9 Pro XL frame below it. */
+.pano { position: relative; height: 1920px; overflow: hidden; background: color-mix(in srgb, var(--md-sys-color-primary-container) 30%, #fff); color: var(--md-sys-color-on-primary-container);
+  --pill: var(--md-sys-color-primary); --on-pill: var(--md-sys-color-on-primary); }
+.seam { z-index: 0; }
+.wave { position: absolute; color: var(--md-sys-color-primary); }
+.dots { position: absolute; fill: var(--md-sys-color-outline); }
+.shot { position: absolute; top: 0; width: 1080px; height: 1920px; }
+.caption { position: absolute; left: 80px; right: 80px; top: 92px; margin: 0; z-index: 2;
+  font-size: 92px; line-height: 1; letter-spacing: -3px; font-weight: 700; }
+.caption .line { display: block; }
+.caption .line--pill { margin-top: 10px; }
+.caption .line--pill b { display: inline-block; font-weight: 700; padding: 0 .22em .08em; border-radius: 999px; background: var(--pill); color: var(--on-pill); }
+
+/* The kit's Pixel 9 Pro XL frame (469 x 992 CSS px), scaled; it runs off the bottom edge. */
+.phone { position: absolute; left: 50%; top: 404px; width: 469px; height: 992px; transform: translateX(-50%) scale(1.48); transform-origin: 50% 0; z-index: 1;
+  filter: drop-shadow(0 40px 60px rgba(0, 33, 17, .22)); }
+.phone > * { width: 469px; height: 992px; }
+
+/* Feature graphic: 1024 x 500. Text centred (the part Play never crops), app screens at the sides, no device frame. */
+.feature { position: relative; width: 1024px; height: 500px; overflow: hidden; background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); }
+.feature .f1 { --c: color-mix(in srgb, var(--md-sys-color-on-primary) 12%, transparent); width: 620px; height: 620px; left: 202px; top: -60px; }
+.feature .f2 { --c: var(--md-sys-color-primary-container); width: 150px; height: 150px; right: 300px; top: 30px; }
+.feature .f3 { --c: var(--md-sys-color-tertiary-container); width: 120px; height: 120px; left: 300px; bottom: 26px; }
+.feature__text { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 520px; text-align: center; z-index: 2; }
+.feature__text h1 { margin: 0; font-size: 64px; line-height: 1; letter-spacing: -2px; font-weight: 700; }
+.feature__text p { margin: 18px auto 0; max-width: 420px; text-wrap: balance; font-size: 24px; line-height: 1.3; font-weight: 500; }
+.feature__ui { position: absolute; width: 430px; height: 957px; transform-origin: 0 0; border-radius: 28px; overflow: hidden; z-index: 1;
+  box-shadow: 0 30px 50px rgba(0, 0, 0, .28); }
+.feature__ui > * { width: 430px; height: 957px; }
+.feature__ui--left { left: -40px; top: 60px; transform: scale(.62) rotate(-6deg); }
+.feature__ui--right { left: 800px; top: 40px; transform: scale(.62) rotate(6deg); }
+
+.icon { width: 512px; height: 512px; }
+.icon svg { display: block; }

@@ -75,6 +75,11 @@ flowchart TD
   one occurrence.
 - Ads enablement is eagerly shared by one process-scoped instance because initialization and every
   ad surface must observe the same default and subsequent changes.
+- The shared ads value starts disabled until storage supplies the first value. The configured
+  default applies only when that read finds no saved key. An `IOException` disables ads and retries
+  with exponential delays capped at 30 seconds; unexpected failures are logged and leave ads disabled
+  until the source is recreated. Cancellation still stops the collector. Cold preference reads used
+  by settings continue to throw storage failures to their caller.
 - Reduce ads defaults to `false` and suppresses only App Open ads; it does not alter SDK
   initialization or banner/native ad enablement.
 - A `settings` file that can no longer be parsed is replaced with empty preferences, which resets
@@ -118,6 +123,10 @@ would need a `DataMigration` for installed apps and has not been done.
 
 `DefaultAdsPreferencesDataSource` starts an eager collector, so exactly one instance may exist per
 process. Reach it through the graph rather than constructing it.
+
+`AdsPreferenceRecoveryTest` covers delayed saved opt-out, defaults after a successful read, transient
+IO recovery and unexpected-failure logging. An unexpected failure intentionally leaves the shared
+value disabled until the source is recreated, rather than guessing that ads may be enabled.
 
 ## Migration notes
 

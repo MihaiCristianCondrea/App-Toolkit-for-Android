@@ -46,6 +46,7 @@ open class VersioningExtension(project: Project) {
     val minSdk: Int get() = intProperty("MIN_SDK")
     val targetSdk: Int get() = intProperty("TARGET_SDK")
     val compileSdk: Int get() = intProperty("COMPILE_SDK")
+    val compileSdkMinor: Int get() = intProperty("COMPILE_SDK_MINOR")
 
     fun phoneVersion(): VersionInfo {
         val minSdk = minSdk

@@ -38,7 +38,7 @@ import kotlinx.collections.immutable.mutate
 import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 
 /**
  * Coordinates the static Toolkit Tiles catalog, filtering, and add-tile requests. Building the UI
@@ -94,9 +94,10 @@ class ToolkitTilesViewModel(
                 toolkitTilesRepository.tileCategories(),
                 toolkitTilesRepository.expandedCategoryIds,
             ) { categories, expandedCategoryIds ->
-                categories.toUiModels() to expandedCategoryIds.toPersistentSet()
+                withContext(dispatchers.default) {
+                    categories.toUiModels() to expandedCategoryIds.toPersistentSet()
+                }
             }
-                .flowOn(dispatchers.default)
                 .collectReport(
                     action = Actions.LOAD_TILES,
                     onError = { error -> setState { copy(categories = error.toFailed(fallback = LoadFailedText)) } },

@@ -65,7 +65,7 @@ class DefaultToolkitTilesRepository(
         preferencesDataSource.saveExpandedCategoryIds(categoryIds)
     }
 
-    override fun currentTileCategories(): ImmutableList<ToolkitTileCategoryData> {
+    override suspend fun currentTileCategories(): ImmutableList<ToolkitTileCategoryData> {
         val activeTiles = quickSettingsDataSource.activeTileComponents()
         return filterUnavailableTorchTools(
             categories = catalogue,

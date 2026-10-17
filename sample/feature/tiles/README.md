@@ -71,6 +71,9 @@ flowchart TD
   services do not call sensor, torch, haptics, or settings sources directly.
 - The catalog is source-neutral. Resource IDs, icons, descriptions, and ad styling are mapped in the
   UI layer after availability filtering.
+- `currentTileCategories()` is suspend and safe to call from the main thread. The Quick Settings
+  source moves its Settings provider and preference snapshot reads to injected IO; the ViewModel
+  switches only its own UI-model mapping to Default.
 - Torch state is shared because in-app tools and system-created services can operate concurrently.
   One Morse playback job serializes patterned output, and SOS delegates to it.
 - Each tool with behavior of its own has a dedicated ViewModel, one class per file in `ui/`, with
