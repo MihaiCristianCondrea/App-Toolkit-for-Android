@@ -29,6 +29,7 @@ val versioning = extensions.getByType<VersioningExtension>()
 android {
     namespace = "com.mihaicristiancondrea.android.apps.apptoolkit.baselineprofile"
     compileSdk = versioning.compileSdk
+    compileSdkMinor = versioning.compileSdkMinor
     targetProjectPath = ":sample:app"
     experimentalProperties["android.experimental.self-instrumenting"] = true
 

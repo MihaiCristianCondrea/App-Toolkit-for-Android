@@ -54,6 +54,8 @@ Moving initialization later would only defer this failure when Glance first requ
 
 ## References
 
+* [Resolved AAR audit, October 17](../../aar-audit-2026-10-17.md): WorkManager `2.12.0` still has
+  no namespace fallback. Its initialization exception handler does not guard scheduler creation.
 * [`docs/crashes/README.md`](../../README.md)
 
 ## Artifacts

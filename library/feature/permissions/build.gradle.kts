@@ -31,6 +31,7 @@ val versioning = extensions.getByType<VersioningExtension>()
 android {
     namespace = "com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions"
     compileSdk = versioning.compileSdk
+    compileSdkMinor = versioning.compileSdkMinor
 
     defaultConfig {
         minSdk = versioning.minSdk

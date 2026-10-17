@@ -87,6 +87,7 @@ val appVersion = versioning.phoneVersion()
 android {
     namespace = "com.mihaicristiancondrea.android.apps.apptoolkit"
     compileSdk = appVersion.compileSdk
+    compileSdkMinor = versioning.compileSdkMinor
 
     defaultConfig {
         applicationId = releasedApplicationId

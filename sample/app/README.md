@@ -87,6 +87,11 @@ flowchart TD
 
 ## Architectural decisions
 
+The sample compiles against Android SDK 37.2, selected by `COMPILE_SDK=37` and
+`COMPILE_SDK_MINOR=1` in `release.properties`. Consumer apps following this build setup must pass
+both values to AGP (`compileSdk` and `compileSdkMinor`) and install `platforms/android-37.2`.
+The target SDK remains 37 and the minimum SDK remains 26.
+
 - Host apps should use the Toolkit's shared ads preference rather than seeding a local enabled
   value. It starts disabled until persisted storage answers and retries transient read failures.
   The Permissions page is now static Compose UI: keep `permissionsPage()`/`PermissionsScreen()`,

@@ -84,6 +84,9 @@ breadcrumbs rather than assuming the current App Toolkit dependency matches the 
 
 ## References
 
+* [Resolved AAR audit, October 17](../../aar-audit-2026-10-17.md): confirmed the unchecked null
+  pending-intent path in Billing `9.1.0` and documented the validation required for a narrowly
+  guarded activity-alias mitigation.
 * [`library/integration/billing/README.md`](../../../../library/integration/billing/README.md)
 
 ## Artifacts

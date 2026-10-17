@@ -65,8 +65,24 @@ but the exact action at the later crash time was not captured. It predates the a
 and does not establish their current process crashed. Keep the issue open and use this stack to
 guide a deterministic reproduction.
 
+## Follow-up reproduction check: October 17, 2026
+
+The APK containing the architecture fixes was exercised in a fresh API 37 process (`17401`):
+20 cycles alternated All tools/Not added and toggled the first category (80 taps), followed by five
+background/resume cycles. The process remained alive and its filtered crash buffer stayed empty.
+Local action and crash logs are `build/compose-crash-reproduction-steps.log` and
+`build/compose-crash-reproduction.log`. This check does not invalidate the earlier captured crash
+or establish a fix; the failing timing is still not deterministic.
+
+Older upstream issues use the same exception wording, but that alone does not identify an
+applicable patch for this report. No dependency upgrade, layout-animation removal, or exception
+swallowing was applied based on those matches.
+
 ## References
 
+* [Resolved AAR audit, October 17](../../aar-audit-2026-10-17.md): `1.13.0-beta01` contains verified
+  queue cleanup absent from `1.12.1`. This is an upstream fix candidate, pending an aligned upgrade
+  and runtime validation. The beta also requires compile SDK 37.2.
 * [`docs/crashes/README.md`](../../README.md)
 
 ## Artifacts

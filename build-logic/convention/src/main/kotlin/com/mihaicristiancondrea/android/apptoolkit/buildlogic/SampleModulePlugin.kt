@@ -40,6 +40,7 @@ class SampleModulePlugin : Plugin<Project> {
         val versioning = extensions.getByType<VersioningExtension>()
         extensions.getByType<LibraryExtension>().apply {
             compileSdk = versioning.compileSdk
+            compileSdkMinor = versioning.compileSdkMinor
             defaultConfig.minSdk = versioning.minSdk
             buildFeatures.compose = true
             buildFeatures.buildConfig = true

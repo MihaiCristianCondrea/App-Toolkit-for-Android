@@ -50,6 +50,10 @@ flowchart TD
 
 ## Architectural decisions
 
+- `COMPILE_SDK` and `COMPILE_SDK_MINOR` in `release.properties` select the major and minor
+  compile platform. Every Android module uses both through `VersioningExtension`, including the
+  sample-module convention and baseline-profile test module. The current platform is SDK 37.2;
+  `MIN_SDK` and `TARGET_SDK` remain separate integer values.
 - Convention plugins use the repository-neutral `com.mihaicristiancondrea.android.apptoolkit`
   namespace. The `apps` and `libs` segments distinguish runtime sample and library code and do not
   apply to build-time Gradle plugins.

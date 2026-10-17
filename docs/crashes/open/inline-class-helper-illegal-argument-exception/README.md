@@ -20,12 +20,13 @@ When running application version `26.10.31` on Android 15 (Samsung SM-A055F), a 
 
 ## Affected Area
 
-* **Component:** Kotlin runtime / inline value class validation helper (`InlineClassHelperKt`)
+* **Component:** Unconfirmed validation helper (`InlineClassHelperKt`); the exported frame does
+  not establish Kotlin runtime ownership.
 
 ## Guidance & Open Questions
 
 1. Keep this issue classified as **Open / Unresolved** until a full stack trace identifying the specific caller site is obtained.
-2. Inspect recent usage of Kotlin `value class` or inline class validation checks across feature modules.
+2. Use the full retraced caller stack to identify the failed precondition before changing value classes.
 3. Watch Firebase Crashlytics for additional session events, breadcrumbs, or user actions preceding the crash.
 
 ## Investigation: October 17, 2026
@@ -37,6 +38,9 @@ inputs are available. Adding clamps, catches or changing value classes would be 
 
 ## References
 
+* [Resolved AAR audit, October 17](../../aar-audit-2026-10-17.md): the resolved Kotlin stdlib has
+  no such class; Compose UI has a helper with this name in a different package. This is a lead,
+  not proof that this report duplicates the Compose layout crash.
 * [`docs/crashes/README.md`](../../README.md)
 
 ## Artifacts
