@@ -19,6 +19,8 @@ plugins {
     id("com.mihaicristiancondrea.android.apptoolkit.module-boundaries")
     alias(notation = libs.plugins.android.application) apply false
     alias(notation = libs.plugins.android.library) apply false
+    alias(libs.plugins.android.test) apply false
+    alias(libs.plugins.androidx.baselineprofile) apply false
     alias(notation = libs.plugins.kotlin.compose) apply false
     alias(notation = libs.plugins.kotlin.serialization) apply false
     alias(notation = libs.plugins.google.mobile.services) apply false

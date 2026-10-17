@@ -7,6 +7,14 @@ build/
 /gradle/gradle/gradle-daemon-jvm.properties
 generated/
 
+# Release profiles are generated on a device and retained for ordinary release builds.
+!sample/app/src/release/generated/
+sample/app/src/release/generated/*
+!sample/app/src/release/generated/baselineProfiles/
+sample/app/src/release/generated/baselineProfiles/*
+!sample/app/src/release/generated/baselineProfiles/baseline-prof.txt
+!sample/app/src/release/generated/baselineProfiles/startup-prof.txt
+
 # Ignore generated binaries and other typical build artifacts
 bin/
 gen/

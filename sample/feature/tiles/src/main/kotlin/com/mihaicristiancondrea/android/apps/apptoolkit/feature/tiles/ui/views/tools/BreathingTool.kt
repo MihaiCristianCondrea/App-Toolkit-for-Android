@@ -35,7 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.domain.models.BreathingPhase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.domain.models.BreathingState
@@ -65,7 +65,10 @@ fun BreathingTool(state: BreathingState) {
         Box(
             modifier = Modifier
                 .size(SizeConstants.TwoHundredSize)
-                .scale(scale)
+                .graphicsLayer {
+                    scaleX = scale
+                    scaleY = scale
+                }
                 .background(
                     when (state.phase) {
                         BreathingPhase.INHALE -> MaterialTheme.colorScheme.primaryContainer

@@ -22,6 +22,7 @@ import android.widget.TextView
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -59,6 +60,7 @@ fun HtmlText(
 ) {
     val context = LocalContext.current
     val color = MaterialTheme.colorScheme.onSurface
+    val parsedText = remember(text) { HtmlCompat.fromHtml(text, HtmlCompat.FROM_HTML_MODE_COMPACT) }
     val fontSize =
         if (style.fontSize.isSpecified) style.fontSize.value else MaterialTheme.typography.bodyMedium.fontSize.value
     AndroidView(
@@ -69,7 +71,10 @@ fun HtmlText(
             }
         },
         update = { textView: TextView ->
-            textView.text = HtmlCompat.fromHtml(text, HtmlCompat.FROM_HTML_MODE_COMPACT)
+            if (textView.tag != text) {
+                textView.setText(parsedText, TextView.BufferType.SPANNABLE)
+                textView.tag = text
+            }
             textView.setTextColor(color.toArgb())
             textView.textSize = fontSize
         }

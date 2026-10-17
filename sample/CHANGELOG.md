@@ -7,6 +7,8 @@
 ### Improved
 
 - Opening an app from the Apps list no longer checks installed packages on the main thread.
+- Breathing and SOS animations update their graphics layers without recomposing on every frame.
+  The Quick Tools catalog distinguishes category and ad rows when reusing lazy items.
 
 ---
 

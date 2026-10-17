@@ -272,22 +272,28 @@ private fun ToolkitTilesCatalog(
                 bottom = contentPadding.calculateBottomPadding() + SizeConstants.LargeSize,
             ),
         ) {
-            item {
+            item(key = "filters", contentType = "filters") {
                 TilesFilters(
                     categories = categories,
                     selectedFilter = state.selectedFilter,
                     onFilterSelected = { filter -> onEvent(ToolkitTilesEvent.FilterSelected(filter)) },
                 )
             }
-            item { Spacer(modifier = Modifier.height(SizeConstants.SmallSize)) }
+            item(key = "top_spacing", contentType = "spacing") { Spacer(modifier = Modifier.height(SizeConstants.SmallSize)) }
             if (listItems.isEmpty()) {
-                item {
+                item(key = "empty", contentType = "empty") {
                     EmptyFilterCard()
                 }
             } else {
                 itemsIndexed(
                     items = visibleListItems,
                     key = { _, positionedItem -> "${state.selectedFilter}_${positionedItem.item.stableKey}" },
+                    contentType = { _, positionedItem ->
+                        when (positionedItem.item) {
+                            is ToolkitTilesListItem.Category -> "category"
+                            is ToolkitTilesListItem.Ad -> "ad"
+                        }
+                    },
                 ) { index, positionedItem ->
                     val item = positionedItem.item
                     val position = positionedItem.position
@@ -336,11 +342,11 @@ private fun ToolkitTilesCatalog(
                     }
                 }
             }
-            item { Spacer(modifier = Modifier.height(SizeConstants.SmallSize)) }
-            item {
+            item(key = "bottom_spacing", contentType = "spacing") { Spacer(modifier = Modifier.height(SizeConstants.SmallSize)) }
+            item(key = "instructions", contentType = "instructions") {
                 HowToAddTilesCard()
             }
-            item {
+            item(key = "navigation_spacing", contentType = "navigation_spacing") {
                 NavigationBarSpacer()
             }
         }

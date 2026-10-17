@@ -22,9 +22,12 @@ import androidx.compose.animation.core.Transition
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -67,28 +70,33 @@ fun DotsIndicator(
     val transition: Transition<Int> =
         updateTransition(targetState = selectedIndex, label = "Dot Transition")
 
-    LazyRow(
-        modifier = modifier
-            .wrapContentWidth()
-            .height(dotSize), verticalAlignment = Alignment.CenterVertically
-    ) {
-        items(count = totalDots, key = { index -> index }) { index ->
-            val animatedDotSize: Dp by transition.animateDp(transitionSpec = {
-                tween(durationMillis = animationDuration, easing = FastOutSlowInEasing)
-            }, label = "Dot Size Animation") {
-                if (it == index) dotSize else dotSize / 1.4f
-            }
+    val dot: @Composable (Int) -> Unit = { index ->
+        val animatedDotSize: Dp by transition.animateDp(transitionSpec = {
+            tween(durationMillis = animationDuration, easing = FastOutSlowInEasing)
+        }, label = "Dot Size Animation") {
+            if (it == index) dotSize else dotSize / 1.4f
+        }
 
-            val isSelected: Boolean = index == selectedIndex
-            val size: Dp = if (isSelected) animatedDotSize else animatedDotSize
+        val isSelected: Boolean = index == selectedIndex
+        IndicatorDot(
+            color = if (isSelected) selectedColor else unSelectedColor, size = animatedDotSize
+        )
 
-            IndicatorDot(
-                color = if (isSelected) selectedColor else unSelectedColor, size = size
-            )
-
-            if (index != totalDots - 1) {
-                ExtraTinyHorizontalSpacer()
-            }
+        if (index != totalDots - 1) {
+            ExtraTinyHorizontalSpacer()
+        }
+    }
+    val rowModifier = modifier.wrapContentWidth().height(dotSize)
+    if (totalDots <= 10) {
+        Row(
+            modifier = rowModifier.horizontalScroll(rememberScrollState()),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            repeat(totalDots) { dot(it) }
+        }
+    } else {
+        LazyRow(modifier = rowModifier, verticalAlignment = Alignment.CenterVertically) {
+            items(count = totalDots, key = { it }, contentType = { "dot" }) { dot(it) }
         }
     }
 }

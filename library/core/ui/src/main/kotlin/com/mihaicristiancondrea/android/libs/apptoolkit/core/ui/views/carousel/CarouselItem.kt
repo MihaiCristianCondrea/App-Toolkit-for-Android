@@ -39,11 +39,11 @@ fun <T> CarouselItem(
     itemContent: @Composable (item: T) -> Unit,
 ) {
     val stableItem by rememberUpdatedState(newValue = item)
-    val scale = animateFloatAsState(
+    val scale by animateFloatAsState(
         targetValue = lerp(0.95f, 1f, 1f - pageOffset.coerceIn(0f, 1f)),
         animationSpec = tween(250),
         label = "Carousel Item Scale for Page $pageOffset"
-    ).value
+    )
 
     val alpha = lerp(0.5f, 1f, 1f - pageOffset.coerceIn(0f, 1f))
 

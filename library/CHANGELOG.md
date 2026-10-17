@@ -2,6 +2,17 @@
 
 ---
 
+# Unreleased
+
+### Improved
+
+- Carousel scaling and FAQ expansion arrows update their graphics layers without recomposing on
+  every animation frame. Small carousel dot indicators avoid lazy-layout overhead.
+- Shimmer placeholders reuse their gradient while animating. HTML text retains its parsed content
+  when only its styling changes.
+
+---
+
 # October 06, 2026
 
 **Version:** `3.0.0-pre23`
