@@ -2,7 +2,9 @@
 
 ---
 
-# Unreleased
+# October 17, 2026
+
+**Version:** `26.10.32` (`137261032`)
 
 ### Fixed
 
