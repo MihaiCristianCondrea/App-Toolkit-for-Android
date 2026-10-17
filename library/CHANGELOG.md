@@ -6,11 +6,18 @@
 
 ### Fixed
 
+- Ad initialization waits for storage instead of treating the enabled default as a saved choice.
+  Transient preference read failures disable ads and retry automatically.
+- Permissions descriptions update with the current locale without retaining previously loaded text.
+- Back gestures use Android's system style by default. The optional follow-finger style remains
+  available in developer options.
 - Unavailable ad servers and refused network connections no longer generate ad-slot nonfatal
   exceptions. Diagnostic breadcrumbs remain available.
 
 ### Improved
 
+- The static Permissions page no longer requires a repository, ViewModel or Koin module. Hosts
+  assembling feature modules manually should remove `permissionsModule`; see the 3.0 migration guide.
 - Carousel scaling and FAQ expansion arrows update their graphics layers without recomposing on
   every animation frame. Small carousel dot indicators avoid lazy-layout overhead.
 - Shimmer placeholders reuse their gradient while animating. HTML text retains its parsed content

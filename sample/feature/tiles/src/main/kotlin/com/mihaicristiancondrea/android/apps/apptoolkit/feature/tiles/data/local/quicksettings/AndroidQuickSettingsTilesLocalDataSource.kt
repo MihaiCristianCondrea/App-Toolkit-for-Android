@@ -23,16 +23,22 @@ import android.os.Build
 import android.provider.Settings
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.core.content.edit
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
+import kotlinx.coroutines.withContext
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services.getTileServiceRequests
 
 class AndroidQuickSettingsTilesLocalDataSource(
     private val context: Context,
+    private val dispatchers: DispatcherProvider = StandardDispatchers(),
 ) : QuickSettingsTilesLocalDataSource {
     @get:ChecksSdkIntAtLeast(api = Build.VERSION_CODES.TIRAMISU)
     override val supportsAddTileRequest: Boolean
         get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
 
-    private val addedTiles = context.getSharedPreferences("quick_settings_tiles", Context.MODE_PRIVATE)
+    private val addedTiles by lazy {
+        context.getSharedPreferences("quick_settings_tiles", Context.MODE_PRIVATE)
+    }
 
     /**
      * Records whether [component] is in Quick Settings.
@@ -46,10 +52,12 @@ class AndroidQuickSettingsTilesLocalDataSource(
         addedTiles.edit { putBoolean(key, added) }
     }
 
-    override fun activeTileComponents(): Set<String> = mergeActiveTileComponents(
-        systemTiles = readSystemTiles(),
-        recorded = addedTiles.all,
-    )
+    override suspend fun activeTileComponents(): Set<String> = withContext(dispatchers.io) {
+        mergeActiveTileComponents(
+            systemTiles = readSystemTiles(),
+            recorded = addedTiles.all,
+        )
+    }
 
     private fun readSystemTiles(): Set<String>? = try {
         Settings.Secure.getString(context.contentResolver, SYSUI_QS_TILES)?.let { specs ->

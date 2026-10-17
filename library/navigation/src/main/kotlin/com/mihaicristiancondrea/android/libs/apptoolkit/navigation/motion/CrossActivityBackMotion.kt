@@ -93,7 +93,7 @@ class CrossActivityBackMotion internal constructor(
      * finger to the left edge and the page underneath waits on the right; the default. False plays
      * Android's own animation, which shrinks the page in place for a swipe from the right.
      */
-    var mirrorRightEdge: Boolean = true
+    var mirrorRightEdge: Boolean = false
 
     /** The gesture under way came from the right edge and is drawn as a mirrored left swipe. */
     private var mirrored = false

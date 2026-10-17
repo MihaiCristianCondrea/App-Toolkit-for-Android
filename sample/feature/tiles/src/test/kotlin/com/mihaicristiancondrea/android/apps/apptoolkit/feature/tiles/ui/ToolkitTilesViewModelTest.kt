@@ -47,7 +47,7 @@ class ToolkitTilesViewModelTest {
         @RegisterExtension
         val dispatcherExtension = UnconfinedDispatcherExtension()
 
-        private const val CATEGORY_ID: String = "decisions"
+        private const val CATEGORY_ID: String = "utilities"
     }
 
     private val telemetryRepository = FakeTelemetryRepository()
@@ -191,6 +191,6 @@ class ToolkitTilesViewModelTest {
             expandedIds.value = categoryIds
         }
 
-        override fun currentTileCategories(): ImmutableList<ToolkitTileCategoryData> = catalogue
+        override suspend fun currentTileCategories(): ImmutableList<ToolkitTileCategoryData> = catalogue
     }
 }

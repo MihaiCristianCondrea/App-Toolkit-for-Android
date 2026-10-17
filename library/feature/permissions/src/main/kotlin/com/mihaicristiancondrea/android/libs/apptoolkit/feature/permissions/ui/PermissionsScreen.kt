@@ -22,101 +22,82 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsCategory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsPreference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.contracts.PermissionsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.states.PermissionsUiState
-import org.koin.compose.viewmodel.koinViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.R
 
-private const val PERMISSIONS_SCREEN_NAME = "Permissions"
-private const val PERMISSIONS_SCREEN_CLASS = "PermissionsScreen"
-
-/**
- * Descriptive permission catalog registered by `permissionsPage()`. It explains why permissions
- * are used rather than reporting their current grant state. Owns [PermissionsViewModel] and
- * screen tracking; [PermissionsScreenContent] handles rendering.
- */
+/** Describes permissions. Text resolves against the current UI locale on every configuration change. */
 @Composable
 fun PermissionsScreen() {
-    val viewModel: PermissionsViewModel = koinViewModel()
-    val state: PermissionsUiState by viewModel.state.collectAsStateWithLifecycle()
-
-    TrackScreenView(
-        screenName = PERMISSIONS_SCREEN_NAME,
-        screenClass = PERMISSIONS_SCREEN_CLASS,
-    )
-    TrackScreenState(
-        screenName = PERMISSIONS_SCREEN_NAME,
-        state = state.config,
-    )
-
-    PermissionsScreenContent(
-        state = state,
-        contentPadding = contentPadding(),
-        onRetry = { viewModel.onEvent(PermissionsEvent.Load) },
-    )
+    TrackScreenView(screenName = "Permissions", screenClass = "PermissionsScreen")
+    val config = permissionsConfig()
+    TrackScreenState(screenName = "Permissions", state = Loadable.Ready(config))
+    PermissionsContent(paddingValues = contentPadding(), settingsConfig = config)
 }
 
-/**
- * The stateless half of [PermissionsScreen]: the catalog, or its loading, empty or failure state.
- *
- * @param onRetry The empty or failure state's retry was tapped.
- */
 @Composable
-internal fun PermissionsScreenContent(
-    state: PermissionsUiState,
-    contentPadding: PaddingValues,
-    onRetry: () -> Unit,
-) {
-    ScreenStateHandler(
-        state = state.config,
-        contentPadding = contentPadding,
-        onRetry = onRetry,
-        onEmpty = { empty ->
-            NoDataScreen(
-                icon = Icons.Outlined.Settings,
-                message = empty.message?.asString(),
-                showRetry = true,
-                onRetry = onRetry,
-                paddingValues = contentPadding,
-            )
-        },
-        onError = { failed ->
-            NoDataScreen(
-                icon = Icons.Outlined.Settings,
-                message = failed.message.asString(),
-                isError = true,
-                showRetry = failed.retryable,
-                onRetry = onRetry,
-                paddingValues = contentPadding,
-            )
-        },
-        onSuccess = { ready ->
-            PermissionsContent(
-                paddingValues = contentPadding,
-                settingsConfig = ready.value,
-            )
-        },
+internal fun permissionsConfig(): SettingsConfig {
+    return SettingsConfig(
+        title = stringResource(R.string.permissions),
+        categories = listOf(
+            SettingsCategory(
+                title = stringResource(R.string.normal),
+                preferences = listOf(
+                    SettingsPreference(
+                        title = stringResource(R.string.access_network_state),
+                        summary = stringResource(R.string.summary_preference_permissions_access_network_state),
+                    ),
+                    SettingsPreference(
+                        title = stringResource(R.string.ad_id),
+                        summary = stringResource(R.string.summary_preference_permissions_ad_id),
+                    ),
+                    SettingsPreference(
+                        title = stringResource(R.string.billing),
+                        summary = stringResource(R.string.summary_preference_permissions_billing),
+                    ),
+                    SettingsPreference(
+                        title = stringResource(R.string.check_license),
+                        summary = stringResource(R.string.summary_preference_permissions_check_license),
+                    ),
+                    SettingsPreference(
+                        title = stringResource(R.string.foreground_service),
+                        summary = stringResource(R.string.summary_preference_permissions_foreground_service),
+                    ),
+                    SettingsPreference(
+                        title = stringResource(R.string.internet),
+                        summary = stringResource(R.string.summary_preference_permissions_internet),
+                    ),
+                    SettingsPreference(
+                        title = stringResource(R.string.wake_lock),
+                        summary = stringResource(R.string.summary_preference_permissions_wake_lock),
+                    ),
+                ),
+            ),
+            SettingsCategory(
+                title = stringResource(R.string.runtime),
+                preferences = listOf(
+                    SettingsPreference(
+                        title = stringResource(R.string.post_notifications),
+                        summary = stringResource(R.string.summary_preference_permissions_post_notifications),
+                    ),
+                ),
+            ),
+        ),
     )
 }
 
@@ -168,58 +149,11 @@ fun PermissionsContent(
     }
 }
 
-// Only the loaded and loading states have previews: the empty and failure states draw
-// `NoDataScreen`, which resolves its ad unit through Koin.
-@Preview(showBackground = true)
-@Composable
-private fun PermissionsScreenContentPreview() {
-    MaterialTheme {
-        PermissionsScreenContent(
-            state = PermissionsUiState(
-                config = Loadable.Ready(
-                    SettingsConfig(
-                        title = "Permissions",
-                        categories = listOf(
-                            SettingsCategory(
-                                title = "Normal",
-                                preferences = listOf(
-                                    SettingsPreference(
-                                        title = "Internet",
-                                        summary = "Loads the changelog and help pages.",
-                                    ),
-                                    SettingsPreference(
-                                        title = "Billing",
-                                        summary = "Lets you support the app.",
-                                    ),
-                                ),
-                            ),
-                            SettingsCategory(
-                                title = "Runtime",
-                                preferences = listOf(
-                                    SettingsPreference(
-                                        title = "Notifications",
-                                        summary = "Shows reminders you ask for.",
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-            contentPadding = PaddingValues(),
-            onRetry = {},
-        )
-    }
-}
 
 @Preview(showBackground = true)
 @Composable
-private fun PermissionsScreenContentLoadingPreview() {
+private fun PermissionsContentPreview() {
     MaterialTheme {
-        PermissionsScreenContent(
-            state = PermissionsUiState(config = Loadable.Loading),
-            contentPadding = PaddingValues(),
-            onRetry = {},
-        )
+        PermissionsContent(paddingValues = PaddingValues(), settingsConfig = permissionsConfig())
     }
 }

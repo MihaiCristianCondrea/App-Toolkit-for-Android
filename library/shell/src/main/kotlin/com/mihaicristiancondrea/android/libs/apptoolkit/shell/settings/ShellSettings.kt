@@ -67,7 +67,7 @@ enum class NavigationTint {
 /** How a back swipe from the right edge moves the page. */
 enum class BackEdgeStyle {
     /**
-     * The default: a swipe from the right mirrors one from the left, so the page follows the
+     * A swipe from the right mirrors one from the left, so the page follows the
      * finger to the left edge.
      */
     FollowFinger,
@@ -104,7 +104,7 @@ data class ShellSettings(
     /** Whether content keeps to the layout policy's maximum width on large windows. */
     val limitContentWidth: Boolean = true,
     val animationSpeed: AnimationSpeed = AnimationSpeed.Normal,
-    val backEdgeStyle: BackEdgeStyle = BackEdgeStyle.FollowFinger,
+    val backEdgeStyle: BackEdgeStyle = BackEdgeStyle.System,
     /** Where the next launch opens, as an index into the graph's start options; -1 as declared. */
     val startOverride: Int = -1,
     val navigationBarStyle: NavigationBarStyle = NavigationBarStyle.Standard,

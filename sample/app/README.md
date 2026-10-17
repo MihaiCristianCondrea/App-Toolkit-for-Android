@@ -87,6 +87,12 @@ flowchart TD
 
 ## Architectural decisions
 
+- Host apps should use the Toolkit's shared ads preference rather than seeding a local enabled
+  value. It starts disabled until persisted storage answers and retries transient read failures.
+  The Permissions page is now static Compose UI: keep `permissionsPage()`/`PermissionsScreen()`,
+  and remove manual `permissionsModule` registration and references to its former loading ViewModel.
+  The standard `appToolkitModules` graph already reflects this change. Shell defaults use
+  `BackEdgeStyle.System`; explicit developer choices remain in effect until reset.
 - Automatic consent requests run once per ViewModel session. If `requestConsent` throws
   `ConsentException` with `Reason.HOST_UNAVAILABLE`, clear the session guard and record a breadcrumb
   inside the `launchReport` block, then return without an error message or nonfatal report. The next

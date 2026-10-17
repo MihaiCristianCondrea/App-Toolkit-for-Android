@@ -25,6 +25,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.model
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.TorchCapabilities
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.TorchState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.domain.utils.ToolkitTileIds
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,7 +44,7 @@ class ToolkitTilesRefreshTest {
         val active = MutableStateFlow<Set<String>>(emptySet())
         val quickSettings = mockk<QuickSettingsTilesLocalDataSource> {
             every { supportsAddTileRequest } returns true
-            every { activeTileComponents() } answers { active.value }
+            coEvery { activeTileComponents() } answers { active.value }
             every { componentName(any()) } answers { firstArg<String>() }
         }
         val torch = mockk<TorchRepository> {

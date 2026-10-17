@@ -62,7 +62,7 @@ val tilesModule: Module = module {
         AndroidBreathingHapticsDataSource(context = androidContext())
     }
     single<QuickSettingsTilesLocalDataSource> {
-        AndroidQuickSettingsTilesLocalDataSource(context = androidContext())
+        AndroidQuickSettingsTilesLocalDataSource(context = androidContext(), dispatchers = get())
     }
     single<TorchRepository> { DefaultTorchRepository(dataSource = get(), dispatchers = get()) }
     single<ToolkitTilesPreferencesDataSource> {

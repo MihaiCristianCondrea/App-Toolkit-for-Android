@@ -87,7 +87,7 @@ val Context.commonDataStore: DataStore<Preferences> by preferencesDataStore(
  * nothing about the consumers the delegates exist for. Delete one only as a deliberate breaking
  * change.
  *
- * @property defaultAdsEnabled value [adsEnabledFlow] carries until the preference is set.
+ * @property defaultAdsEnabled value used when a successful preference read finds no saved choice.
  */
 open class CommonDataStore(
     context: Context,

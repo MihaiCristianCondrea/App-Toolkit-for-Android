@@ -37,7 +37,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.di
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReporterConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.di.licensesModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.di.onboardingModule
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.di.permissionsModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.di.privacyModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.di.startupModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.providers.StartupProvider
@@ -66,7 +65,6 @@ fun appToolkitFeatureModules(
     licensesModule,
     privacyModule,
     issueReporterModule(hostBuildConfig = hostBuildConfig, config = issueReporterConfig),
-    permissionsModule,
     reviewModule,
 )
 

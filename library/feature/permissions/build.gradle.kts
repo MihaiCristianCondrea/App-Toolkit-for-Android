@@ -44,7 +44,6 @@ android {
 dependencies {
     testImplementation(project(":library:core:testing"))
     api(project(":library:core:common"))
-    api(project(":library:core:network"))
     api(project(":library:core:ui"))
     api(project(":library:navigation"))
 }

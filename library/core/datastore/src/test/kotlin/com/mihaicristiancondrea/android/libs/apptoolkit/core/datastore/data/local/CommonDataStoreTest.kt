@@ -296,6 +296,7 @@ class CommonDataStoreTest {
         val dataStore = createDataStore(testScheduler)
 
         assertTrue(dataStore.ads(default = true).first())
+        advanceUntilIdle()
         assertTrue(dataStore.adsEnabledFlow.value)
 
         dataStore.saveAds(false)

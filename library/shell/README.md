@@ -251,6 +251,8 @@ JUnit 5. They start Koin with a `CommonDataStore`, which `AppTheme` reads.
   person's preferences, such as the navigation labels, live in the common store and are not
   touched. `ShellHost(preferences = ...)` takes any `ShellPreferences`, and tests pass an
   `InMemoryShellPreferences`.
+  `BackEdgeStyle.System` is the default for unset values and after a reset. Explicitly stored
+  `FollowFinger` overrides remain available for comparison.
 - **Capabilities are computed once.** `ShellHost` builds `ShellCapabilities` from the graph and
   `layoutPolicy` and provides them as `LocalShellCapabilities`, for the settings pages and the
   settings search.

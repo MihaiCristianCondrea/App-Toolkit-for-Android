@@ -34,16 +34,16 @@ class ShellMotion internal constructor(
     val durationScale: Float,
     /**
      * Whether a back swipe from the right edge mirrors one from the left, following the finger,
-     * as it does by default, instead of Android's shrink in place.
+     * instead of Android's default shrink in place.
      */
-    val followFingerFromRight: Boolean = true,
+    val followFingerFromRight: Boolean = false,
 )
 
 @Composable
 fun rememberShellMotion(
     tabStyle: TabTransitionStyle,
     durationScale: Float,
-    followFingerFromRight: Boolean = true,
+    followFingerFromRight: Boolean = false,
 ): ShellMotion {
     val density = LocalDensity.current
     val direction = if (LocalLayoutDirection.current == LayoutDirection.Rtl) -1 else 1

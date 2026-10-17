@@ -350,13 +350,14 @@ centred, and never moves it sideways with the finger, which is why it feels less
 swipe from the left. This is unchanged in Android 16 (checked against LineageOS 23.2, which
 tracks Android 16 QPR2); `BackTouchTracker` computes progress the same way from both edges.
 
-The shell departs from Android here, on purpose, and by default draws a swipe from the right as
-the mirror image of one from the left (`CrossActivityBackMotion.mirrorRightEdge`): the page rests
+The shell uses Android's shrink-in-place behavior by default (`BackEdgeStyle.System`). The optional
+`BackEdgeStyle.FollowFinger` draws a swipe from the right as the mirror image of one from the left
+(`CrossActivityBackMotion.mirrorRightEdge`): the page rests
 against the left edge, following the finger, and the page underneath waits on the right, with
 every AOSP value unchanged. Screens that use a seeked transition, such as `ScreenTransition.Slide`,
-are mirrored the same way. Setting `mirrorRightEdge` to false (`BackEdgeStyle.System` in the
-developer options of [`:library:feature:developer`](../feature/developer/README.md)) restores
-Android's shrink in place.
+are mirrored the same way. Developer options in
+[`:library:feature:developer`](../feature/developer/README.md) retain both styles. Resetting developer
+options returns to `System`; explicitly stored choices are preserved.
 
 ### How the shell reproduces it
 

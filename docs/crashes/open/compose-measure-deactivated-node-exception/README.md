@@ -56,6 +56,15 @@ The current debug APK passed a limited API 37 smoke check using the Not added fi
 Utilities category toggles and background/resume, with no app crash. This does not reproduce the
 OnePlus Android 15 environment or establish that the crash is fixed.
 
+Later inspection of the same emulator's crash buffer found the earlier APK/process (`31415`)
+failed at 15:42:06 EEST on October 17, after that bounded smoke check. The original diagnostic
+capture is preserved as [emulator-logcat-2026-10-17.txt](emulator-logcat-2026-10-17.txt).
+It identifies `androidx.compose.ui.node.LookaheadPassDelegate.remeasure`, followed by lookahead
+placement and graphics-layer frames. This supplies a readable stack on API 37 without an R8 map,
+but the exact action at the later crash time was not captured. It predates the architecture fixes
+and does not establish their current process crashed. Keep the issue open and use this stack to
+guide a deterministic reproduction.
+
 ## References
 
 * [`docs/crashes/README.md`](../../README.md)

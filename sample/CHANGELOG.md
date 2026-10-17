@@ -12,6 +12,8 @@
 
 ### Improved
 
+- Quick Settings catalogue reads own their IO dispatching, so callers no longer need to move
+  repository work off the main thread.
 - Opening an app from the Apps list no longer checks installed packages on the main thread.
 - Release builds use startup and scrolling profiles generated from the sample app's catalog journeys.
 - Breathing and SOS animations update their graphics layers without recomposing on every frame.

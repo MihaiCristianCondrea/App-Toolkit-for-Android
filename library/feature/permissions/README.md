@@ -6,82 +6,69 @@ Displays a localized explanation of the permissions used by AppToolkit hosts.
 
 ## Owns
 
-- `PermissionsScreen`, `PermissionsViewModel`, `PermissionsUiState` (whose `config` is a
-  `Loadable`) and `PermissionsEvent.Load`.
-- `PermissionsScreenContent`, the stateless catalog with its loading, empty and failure states, and
-  `PermissionsContent`, the catalog's rows.
+- `PermissionsScreen`, the static permission catalogue and screen tracking.
+- `permissionsConfig()`, an internal composable that resolves existing resource IDs against the
+  current configuration, and `PermissionsContent`, the stateless grouped catalogue renderer.
 - `permissionsPage()`, the registration of `PermissionsRoute`.
-- `PermissionsRepository` and its resource-backed implementation, which builds the normal/runtime
-  permission catalog.
 
 ## Does not own
 
 - The privacy page that links here, owned by [`:library:feature:privacy`](../privacy/README.md).
-- The screen Android's permission manager opens for the app. That is the privacy page, opened by
-  `PermissionUsageActivity` in [`:library:apptoolkit`](../../apptoolkit/README.md), which links
-  here.
-- Generic permission helpers/constants, owned by `:library:core:common`.
-- Runtime grant inspection or system-settings actions; this screen is descriptive and does not
+- The screen Android's permission manager opens, owned by `PermissionUsageActivity` in
+  [`:library:apptoolkit`](../../apptoolkit/README.md).
+- Runtime grant inspection or system-settings actions. This page is descriptive and does not
   claim to report current grant state.
 
 ## Depends on
 
-- `:library:core:common`, `:library:core:network`, and `:library:core:ui` for platform helpers,
-  telemetry, and presentation foundations.
-- [`:library:navigation`](../../navigation/README.md) for the key and the graph builder.
-- No other feature module. The catalog is described with the settings models of
-  [`:library:core:ui`](../../core/ui/README.md).
+- `:library:core:common` and `:library:core:ui` for presentation models, tracking and shared rows.
+- [`:library:navigation`](../../navigation/README.md) for the route and graph builder.
+- No other feature module.
 
 ## Used by
 
-- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `permissionsPage()` from
-  `toolkitPages()`.
+- `:library:apptoolkit`, which calls `permissionsPage()` from `toolkitPages()`.
 
 ## Flow chart
 
 ```mermaid
 flowchart TD
-    Privacy[Privacy page] -->|navigate| Page[permissionsPage: PermissionsRoute]
-    Page --> Screen[PermissionsScreen]
-    Screen -->|load| VM[PermissionsViewModel]
-    Screen --> Content[PermissionsScreenContent]
-    VM --> Repo[PermissionsRepository]
-    Repo --> Resources[Localized permission names and summaries]
-    Resources --> Normal[Normal permission category]
-    Resources --> Runtime[Runtime permission category]
-    Normal --> Config[SettingsConfig]
-    Runtime --> Config
-    Config --> VM
-    VM --> State[Loadable: Loading / Empty / Ready / Failed]
-    State --> Content
+    Page[permissionsPage] --> Screen[PermissionsScreen]
+    Screen --> Resources[Current locale resources]
+    Resources --> Config[SettingsConfig]
+    Config --> Content[PermissionsContent]
 ```
 
 ## Architectural decisions
 
-- The page is `PaneRole.None`: it opens from the privacy page, itself a detail beside the settings
-  list, and a detail opened from a detail would replace it instead of stacking on it.
-- This feature intentionally has no `domain` package: its ViewModel consumes one repository and
-  contains no reusable business rule or repository coordination that would justify a use case.
-- The screen is a disclosure catalog, not a permission checker. It does not query `PackageManager`
-  or infer whether a runtime permission is currently granted.
-- Resource-backed catalog assembly stays in the repository so the ViewModel handles only
-  loading/error state and the composable renders the shared settings models.
-- The page is on `core.ui.screen`. `getPermissionsConfig()` returns the catalog directly: reading
-  string resources is main-safe, so neither the repository nor the ViewModel takes a dispatcher. A
-  catalog with no category is `Loadable.Empty`; a repository that throws is `Loadable.Failed`,
-  reported to telemetry, with a retry.
+- The page is `PaneRole.None`: opening it from the privacy detail stacks a page rather than
+  replacing the privacy pane.
+- The catalogue is presentation data. No repository, ViewModel, loading state, retry job or
+  dependency-injection module is needed to render fixed resource-backed descriptions.
+- `stringResource` runs in composition, so a configuration change resolves the new language
+  without relying on a retained ViewModel to reload strings.
+- Screen-view tracking and the ready screen-state event keep the existing Permissions identity.
+- The public `PermissionsContent` still accepts a host-built `SettingsConfig`.
 
 ## Public contracts
 
-- `PermissionsRepository`, `PermissionsScreen`, `PermissionsContent`, `permissionsPage()`,
-  `PermissionsViewModel`, `PermissionsUiState` and `PermissionsEvent`. `PermissionsScreenContent` is
-  internal.
+- `PermissionsScreen`, `PermissionsContent`, and `permissionsPage()`.
 
 ## Internal implementations
 
-- Localized catalog assembly and screen rendering.
+- Localized catalogue assembly and grouped row rendering, in `ui/PermissionsScreen.kt`.
+- `PermissionsLocaleTest` in `:sample:app` verifies English-to-Romanian resource updates without
+  recreating the screen. It passed on the API 37 emulator.
 
 ## Current risks
 
-The catalog is descriptive and fixed at build time: a permission added to the app's manifest
-appears here only once its name and summary are added to the resources.
+The catalogue is descriptive and fixed at build time: adding a manifest permission requires updating
+its descriptions separately. It is not an inventory of the host's actual manifest.
+
+## Migration notes
+
+`PermissionsRepository`, `DefaultPermissionsRepository`, `PermissionsViewModel`, `PermissionsUiState`,
+`PermissionsEvent` and `permissionsModule` were removed. Hosts using `appToolkitModules` need no
+registration change. Hosts assembling the graph manually must remove `permissionsModule` and call
+`PermissionsScreen()` through the existing page registration. See the
+[3.0 migration guide](../../../docs/migration/3.0.0.md).
