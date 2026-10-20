@@ -29,6 +29,10 @@
   flow, the way `ScreenStateHandler` does for a `Loadable`. An enum value, `Boolean`, number or
   string is a case of its own; anything else is a case by its class. The startup page and the issue
   reporter switch through it, with the same animations as before.
+- `topBarScrollMode = TopBarScrollMode.Static` on `tab`, `child`, `page` and `pageIfAbsent` keeps
+  the destination's app bar expanded, visible and untinted while its content scrolls, ignoring the
+  hide-on-scroll setting. `PageScaffold` follows it through `LocalTopBarScrollMode`. The default
+  keeps today's behavior.
 - `ScreenHost(fabs = ...)` declares the screen's floating action buttons for its current state.
   The help page's feedback button and the sample's random-app button moved there.
 
@@ -46,6 +50,9 @@
   return from another tab, a page or the background does, and both panes of a list-detail layout
   report their own. A repeated identical `screen_state` is no longer sent, and the Permissions page
   no longer reports one.
+- Extended floating action buttons fold on the scroll a collapsing or hiding app bar takes, so the
+  help page's feedback button, and any on a page too short to scroll far, folds as the bar
+  collapses. `FabScrollBehavior.observing` does the same for a scaffold of an app's own.
 - `NoDataScreen` resolves its ad unit through Koin only while its ad shows, so with `showAd = false`
   it renders in a preview or a test without Koin.
 - Developer options remember explicit choices, even one equal to the current default, so an app

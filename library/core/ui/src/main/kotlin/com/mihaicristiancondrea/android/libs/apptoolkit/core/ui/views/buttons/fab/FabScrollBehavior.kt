@@ -26,13 +26,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.unit.Velocity
 
 /**
  * Collapses extended FAB labels when content scrolls forward and expands them on reverse
  * scrolling. Only consumed motion counts, so overscroll at either end does not change
  * [expanded].
  *
- * Attach [nestedScrollConnection] to content and pass [expanded] to [ToolkitFabColumn].
+ * Attach [nestedScrollConnection] to content and pass [expanded] to [ToolkitFabColumn]. An app bar
+ * that collapses or hides above the content takes the scroll before the content sees it, so attach
+ * its connection through [observing] too: on a page short enough that the bar takes the whole
+ * swipe, the buttons still fold.
  */
 @Stable
 class FabScrollBehavior {
@@ -41,11 +45,29 @@ class FabScrollBehavior {
 
     val nestedScrollConnection: NestedScrollConnection = object : NestedScrollConnection {
         override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
-            when {
-                consumed.y < -ScrollThreshold -> expanded = false
-                consumed.y > ScrollThreshold -> expanded = true
-            }
+            follow(consumed.y)
             return Offset.Zero
+        }
+    }
+
+    /** [connection], unchanged, with the scroll it consumes also folding and unfolding the buttons. */
+    fun observing(connection: NestedScrollConnection): NestedScrollConnection = object : NestedScrollConnection {
+        override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset =
+            connection.onPreScroll(available, source).also { follow(it.y) }
+
+        override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset =
+            connection.onPostScroll(consumed, available, source).also { follow(it.y) }
+
+        override suspend fun onPreFling(available: Velocity): Velocity = connection.onPreFling(available)
+
+        override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity =
+            connection.onPostFling(consumed, available)
+    }
+
+    private fun follow(consumedY: Float) {
+        when {
+            consumedY < -ScrollThreshold -> expanded = false
+            consumedY > ScrollThreshold -> expanded = true
         }
     }
 }

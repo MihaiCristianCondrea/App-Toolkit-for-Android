@@ -13,7 +13,8 @@ it in the activity; this module has no chrome of its own.
 
 - The graph and its builder DSL: `ShellGraph`, `ShellGraphBuilder`, `DrawerBuilder`,
   `DeepLinkBuilder`, `Destination`, `DestinationKind`, `ShellTab`, `DrawerEntry`, `PaneRole`,
-  `TopBarStyle`, `ContentWidth` and `ShellPlayer`, in the `graph` package, and `shellGraph { }`.
+  `TopBarStyle`, `TopBarScrollMode`, `ContentWidth` and `ShellPlayer`, in the `graph` package, and
+  `shellGraph { }`.
 - `ShellNavigator`, `rememberShellNavigator`, `ShellHomeRoute`, `ShellNavDisplay`,
   `ShellBackHandler` and `ShellSearch`, in the root package.
 - The page and list-detail scenes and their strategies, in `scenes`.
@@ -240,6 +241,26 @@ layout policy and nothing else; `ShellHost` builds it once and provides it as
 - **Semantic, so rules are written once.** Settings ask `hasMultipleTabs` or `usesBottomNavigation`
   instead of counting `graph.tabs` or reading the layout, so the display settings, their search
   and the developer options cannot each apply a slightly different rule.
+
+## Static app bars
+
+`tab`, `child`, `page` and `pageIfAbsent` take `topBarScrollMode = TopBarScrollMode.Static` for a
+bar that does not follow the content's scrolling. The default keeps today's behavior. A static bar
+stays expanded, visible and untinted, beside the navigation too, and ignores the hide-on-scroll
+setting for that destination; a large bar stays expanded even as `TopBarStyle.LargeCollapsed`. A
+small window still shrinks it, and an article's reading progress still moves.
+
+A page that draws its own `PageScaffold` follows the destination's mode through
+`LocalTopBarScrollMode`, or passes one to the scaffold. In a list-detail scene that draws one bar
+across both panes, only a pane that follows the scroll tints it.
+
+```kotlin
+child<ReviewRoute>(
+    title = { "Review" },
+    topBar = TopBarStyle.CenterAligned,
+    topBarScrollMode = TopBarScrollMode.Static,
+) { ReviewScreen() }
+```
 
 ## Article app bar
 

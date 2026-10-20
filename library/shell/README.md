@@ -150,6 +150,15 @@ The flag defaults to `false`, preserving existing hosts. It counts tabs, not set
 or onboarding screens, and still applies when developer options force the bottom bar layout or
 select the short bar. Bottom bar developer options are omitted while the single tab bar is hidden.
 
+## Destination app bar scrolling
+
+A destination's `topBarScrollMode` changes how the shell's own bar answers scrolling, without
+replacing its scaffold or putting a bar inside the destination's content. `TopBarScrollMode.Default`
+keeps the collapse, tint and hide settings. `TopBarScrollMode.Static` keeps the bar expanded and
+visible and the navigation's frame untinted by scrolling; the bottom bar and the content keep their
+own scrolling. The mode reaches pages the shell frames, pages with a `PageScaffold` of their own and
+each pane of a list-detail scene.
+
 ## Pages beside the navigation
 
 Below the rail's width the chrome is part of the shell's own screen: a bottom bar and a modal

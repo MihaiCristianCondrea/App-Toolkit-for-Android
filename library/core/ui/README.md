@@ -287,6 +287,13 @@ app bar, such as tabs, call `PageScaffold` themselves.
   bar becomes a small one on a window too short for it, and inside a list-detail pane the frame
   draws no bar at all, because the scene draws one across both panes.
   `LocalTopBarStyleOverride` lets the developer options try one style across the app.
+- **A bar can stay static.** `PageScaffold(topBarScrollMode = TopBarScrollMode.Static)` keeps the
+  bar expanded and visible, without scroll tint or frame tint, whatever the hide-on-scroll setting.
+  The default follows `LocalTopBarScrollMode`, which the destination sets; the content, the
+  buttons and an article's reading progress still follow the scroll.
+- **Extended buttons fold on scroll,** including the scroll a collapsing or hiding bar takes before
+  the content moves, so they fold on a page too short to scroll far. A scaffold of its own attaches
+  its bar's connection through `FabScrollBehavior.observing`.
 - **The bar can hide on scroll.** With `LocalHideTopBarOnScroll`, which the shell sets from its
   settings, the bar slides away as content scrolls down and returns as soon as it scrolls up,
   whatever its style; a large bar collapses first. `HideOnScrollTopBar` lays the bar out less the

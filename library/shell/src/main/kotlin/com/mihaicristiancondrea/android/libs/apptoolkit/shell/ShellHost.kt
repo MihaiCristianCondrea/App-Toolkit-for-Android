@@ -76,6 +76,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalS
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutPolicy
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.LocalShellCapabilities
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.LocalTopBarScrollMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellCapabilities
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.rememberShellLayoutInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.LocalShellMotion
@@ -332,6 +333,7 @@ private fun pageEntry(graph: ShellGraph, navigator: ShellNavigator, key: NavKey)
             title = { title(key) },
             actions = destination.actions?.let { actions -> { actions(this, key) } },
             key = key,
+            topBarScrollMode = destination.topBarScrollMode,
         ).toMetadata()
     } else {
         emptyMap()
@@ -342,7 +344,10 @@ private fun pageEntry(graph: ShellGraph, navigator: ShellNavigator, key: NavKey)
         metadata = ShellEntryInfo(DestinationKind.Page, tabIndex = -1, destination.paneRole, destination.transition).toMetadata() +
             placeholder + chrome,
     ) { pageKey ->
-        CompositionLocalProvider(LocalPageKey provides pageKey) {
+        CompositionLocalProvider(
+            LocalPageKey provides pageKey,
+            LocalTopBarScrollMode provides destination.topBarScrollMode,
+        ) {
             if (destination.scaffold && title != null) {
                 PageScaffold(
                     title = title(pageKey),

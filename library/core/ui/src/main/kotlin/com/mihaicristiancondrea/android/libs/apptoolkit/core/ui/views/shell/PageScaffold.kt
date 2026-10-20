@@ -68,14 +68,20 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNav
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.LocalTopBarScrollMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarScrollMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FollowScrollWithFrameTint
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FrameTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalShellLayout
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.LocalPaneRole
 
 /**
  * The frame of a page: an app bar with a back button, and a body under it.
+ *
+ * [topBarScrollMode] comes from the destination by default. `TopBarScrollMode.Static` keeps the bar
+ * expanded and visible without scroll tint, even when the shell hides bars on scroll.
  *
  * The back button closes the page, and any detail open beside it, through the shell navigator.
  * Inside a list-detail pane the frame draws no app bar at all: the scene draws one bar across both
@@ -109,6 +115,7 @@ fun PageScaffold(
     floatingActionButton: @Composable () -> Unit = {},
     fabs: List<ToolkitFab> = emptyList(),
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    topBarScrollMode: TopBarScrollMode = LocalTopBarScrollMode.current,
     content: @Composable () -> Unit,
 ) {
     val navigator = LocalShellNavigator.current
@@ -125,8 +132,9 @@ fun PageScaffold(
     } else {
         TopBarStyle.Hidden
     }
-    val scrollBehavior = rememberTopBarScrollBehavior(resolvedStyle)
-    val hideTopBar = LocalHideTopBarOnScroll.current && pane == PaneRole.None
+    val reactsToScroll = topBarScrollMode != TopBarScrollMode.Static
+    val scrollBehavior = rememberTopBarScrollBehavior(if (reactsToScroll) resolvedStyle else TopBarStyle.Small)
+    val hideTopBar = reactsToScroll && LocalHideTopBarOnScroll.current && pane == PaneRole.None
     val topHide = rememberTopBarHideState()
     val fabHost = remember { FabHost() }
     val snackbarScope = rememberCoroutineScope()
@@ -134,7 +142,7 @@ fun PageScaffold(
     val fabScroll = rememberFabScrollBehavior()
     // Keep the shared navigation color synchronized with the active page's scroll state.
     if (beside != null && pane == PaneRole.None) {
-        FollowScrollWithFrameTint { scrollBehavior.frameTint(resolvedStyle) }
+        FollowScrollWithFrameTint { if (reactsToScroll) scrollBehavior.frameTint(resolvedStyle) else FrameTint.None }
     }
     val contentInsets = when (pane) {
         PaneRole.None -> WindowInsets.safeDrawing
@@ -144,9 +152,10 @@ fun PageScaffold(
     Scaffold(
         modifier = modifier
             .then(if (carded) Modifier.drawBehind { drawRect(beside.frameColor()) } else Modifier)
-            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            // The buttons fold on the scroll the bar takes too, as on a page too short to scroll far.
+            .then(if (reactsToScroll) Modifier.nestedScroll(fabScroll.observing(scrollBehavior.nestedScrollConnection)) else Modifier)
             // After the bar's own behaviour, so a large bar collapses before it slides away.
-            .then(if (hideTopBar) Modifier.nestedScroll(topHide.nestedScrollConnection) else Modifier)
+            .then(if (hideTopBar) Modifier.nestedScroll(fabScroll.observing(topHide.nestedScrollConnection)) else Modifier)
             .nestedScroll(fabScroll.nestedScrollConnection),
         topBar = {
             HideOnScrollTopBar(topHide, enabled = hideTopBar) {
@@ -163,7 +172,7 @@ fun PageScaffold(
                         }
                     },
                     actions = actions,
-                    scrollBehavior = scrollBehavior,
+                    scrollBehavior = scrollBehavior.takeIf { reactsToScroll },
                     titleModifier = if (topLevel) besideNavigationTitle() else Modifier,
                     colors = if (carded) {
                         TopAppBarDefaults.topAppBarColors(

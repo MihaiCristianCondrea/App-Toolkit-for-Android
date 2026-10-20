@@ -95,6 +95,8 @@ class Destination<K : NavKey> @PublishedApi internal constructor(
      * the shell's own placeholder.
      */
     val placeholder: (@Composable () -> Unit)? = null,
+    /** How the app bar the shell draws for this destination answers scrolling; see [TopBarScrollMode]. */
+    val topBarScrollMode: TopBarScrollMode = TopBarScrollMode.Default,
 )
 
 /**

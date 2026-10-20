@@ -184,6 +184,7 @@ class ShellGraphBuilder(
         noinline actions: (@Composable RowScope.(K) -> Unit)? = null,
         noinline fab: (@Composable (K) -> Unit)? = null,
         noinline fabs: (@Composable (K) -> List<ToolkitFab>)? = null,
+        topBarScrollMode: TopBarScrollMode = TopBarScrollMode.Default,
         noinline content: @Composable (K) -> Unit,
     ) {
         tabs += ShellTab(
@@ -201,6 +202,7 @@ class ShellGraphBuilder(
                 keyClass = K::class,
                 kind = DestinationKind.Tab,
                 topBar = topBar ?: defaults.tabTopBarStyle,
+                topBarScrollMode = topBarScrollMode,
                 paneRole = paneRole,
                 contentWidth = contentWidth,
                 scaffold = false,
@@ -223,6 +225,7 @@ class ShellGraphBuilder(
         transition: ScreenTransition? = null,
         noinline fab: (@Composable (K) -> Unit)? = null,
         noinline fabs: (@Composable (K) -> List<ToolkitFab>)? = null,
+        topBarScrollMode: TopBarScrollMode = TopBarScrollMode.Default,
         noinline content: @Composable (K) -> Unit,
     ) {
         register(
@@ -230,6 +233,7 @@ class ShellGraphBuilder(
                 keyClass = K::class,
                 kind = DestinationKind.Child,
                 topBar = topBar ?: defaults.childTopBarStyle,
+                topBarScrollMode = topBarScrollMode,
                 paneRole = paneRole,
                 contentWidth = contentWidth,
                 scaffold = false,
@@ -260,6 +264,7 @@ class ShellGraphBuilder(
         noinline fab: (@Composable (K) -> Unit)? = null,
         noinline fabs: (@Composable (K) -> List<ToolkitFab>)? = null,
         noinline placeholder: (@Composable () -> Unit)? = null,
+        topBarScrollMode: TopBarScrollMode = TopBarScrollMode.Default,
         noinline content: @Composable (K) -> Unit,
     ) {
         register(
@@ -267,6 +272,7 @@ class ShellGraphBuilder(
                 keyClass = K::class,
                 kind = DestinationKind.Page,
                 topBar = topBar ?: defaults.pageTopBarStyle,
+                topBarScrollMode = topBarScrollMode,
                 paneRole = paneRole,
                 contentWidth = contentWidth,
                 scaffold = title != null,
@@ -294,11 +300,13 @@ class ShellGraphBuilder(
         noinline actions: (@Composable RowScope.(K) -> Unit)? = null,
         noinline fabs: (@Composable (K) -> List<ToolkitFab>)? = null,
         noinline placeholder: (@Composable () -> Unit)? = null,
+        topBarScrollMode: TopBarScrollMode = TopBarScrollMode.Default,
         noinline content: @Composable (K) -> Unit,
     ) {
         if (K::class !in destinations) {
             page(
                 topBar = topBar,
+                topBarScrollMode = topBarScrollMode,
                 paneRole = paneRole,
                 title = title,
                 actions = actions,
