@@ -27,6 +27,11 @@
     <string name="shell_dev_bottom_accessory">Acima da barra de navegação</string>
     <string name="shell_dev_motion">Movimento</string>
     <string name="shell_dev_animation_speed">Velocidade da animação</string>
+    <string name="shell_dev_entrance_style">Animação de entrada</string>
+    <string name="shell_entrance_slide">Esmaecer e subir</string>
+    <string name="shell_entrance_scale">Esmaecer e crescer</string>
+    <string name="shell_entrance_fade">Esmaecer</string>
+    <string name="shell_entrance_none">Nenhuma</string>
     <string name="shell_dev_reset">Redefinir opções do desenvolvedor</string>
     <string name="shell_dev_reset_summary">Voltar ao que o app declara</string>
     <string name="shell_layout_auto">Automático, pela largura da janela</string>

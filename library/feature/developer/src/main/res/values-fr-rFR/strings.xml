@@ -27,6 +27,11 @@
     <string name="shell_dev_bottom_accessory">Au-dessus de la barre de navigation</string>
     <string name="shell_dev_motion">Mouvement</string>
     <string name="shell_dev_animation_speed">Vitesse d\'animation</string>
+    <string name="shell_dev_entrance_style">Animation d\'apparition</string>
+    <string name="shell_entrance_slide">Fondu et montée</string>
+    <string name="shell_entrance_scale">Fondu et agrandissement</string>
+    <string name="shell_entrance_fade">Fondu</string>
+    <string name="shell_entrance_none">Aucune</string>
     <string name="shell_dev_reset">Réinitialiser les options pour les développeurs</string>
     <string name="shell_dev_reset_summary">Revenir à ce que l\'application déclare</string>
     <string name="shell_layout_auto">Automatique, selon la largeur de la fenêtre</string>

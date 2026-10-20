@@ -2,7 +2,9 @@
 
 ---
 
-# Unreleased
+# October 21, 2026
+
+**Version:** `3.0.0-pre25`
 
 ### Added
 
@@ -38,7 +40,6 @@
   hide-on-scroll setting. `PageScaffold` follows it through `LocalTopBarScrollMode`. The default
   keeps today's behavior.
 - `ScreenHost(fabs = ...)` declares the screen's floating action buttons for its current state.
-  The help page's feedback button and the sample's random-app button moved there.
 
 ### Changed
 
@@ -48,8 +49,6 @@
   screen. It moves on `MaterialTheme.motionScheme` springs, which pick up where they are if
   interrupted, and rises 20 dp, the same on every screen density. `invisibleOffsetY` and
   `animationDuration` are gone, since the springs set both.
-- Builds with Gradle 9.8.2, and depends on kotlinx-serialization 1.12.0, Konfetti 2.2.0 and
-  compose-markdown 0.7.3.
 - Telemetry is split by responsibility in `core.common.telemetry`: `AnalyticsReporter`,
   `DiagnosticsReporter` and `TelemetryCollection`, which `TelemetryRepository` combines for the UI
   layer. Repositories report breadcrumbs and failures through `DiagnosticsReporter` and never send
@@ -62,9 +61,6 @@
   return from another tab, a page or the background does, and both panes of a list-detail layout
   report their own. A repeated identical `screen_state` is no longer sent, and the Permissions page
   no longer reports one.
-- Extended floating action buttons fold on the scroll a collapsing or hiding app bar takes, so the
-  help page's feedback button, and any on a page too short to scroll far, folds as the bar
-  collapses. `FabScrollBehavior.observing` does the same for a scaffold of an app's own.
 - `NoDataScreen` resolves its ad unit through Koin only while its ad shows, so with `showAd = false`
   it renders in a preview or a test without Koin.
 - Developer options remember explicit choices, even one equal to the current default, so an app
@@ -77,6 +73,9 @@
 
 ### Fixed
 
+- Extended floating action buttons fold on the scroll a collapsing or hiding app bar takes, so the
+  help page's feedback button, and any on a page too short to scroll far, folds as the bar
+  collapses. `FabScrollBehavior.observing` does the same for a scaffold of an app's own.
 - Screen readers name an extended floating action button by its label, expanded or folded.
   Material keeps the label's text out of accessibility, and the Toolkit left the icon without a
   description beside a label, so the button announced no name.

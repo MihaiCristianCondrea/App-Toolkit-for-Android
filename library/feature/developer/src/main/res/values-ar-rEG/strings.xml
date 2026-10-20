@@ -27,6 +27,11 @@
     <string name="shell_dev_bottom_accessory">فوق شريط التنقل</string>
     <string name="shell_dev_motion">الحركة</string>
     <string name="shell_dev_animation_speed">سرعة الرسوم المتحركة</string>
+    <string name="shell_dev_entrance_style">حركة الظهور</string>
+    <string name="shell_entrance_slide">تلاشٍ وارتفاع</string>
+    <string name="shell_entrance_scale">تلاشٍ وتكبير</string>
+    <string name="shell_entrance_fade">تلاشٍ</string>
+    <string name="shell_entrance_none">بلا</string>
     <string name="shell_dev_reset">إعادة ضبط خيارات المطورين</string>
     <string name="shell_dev_reset_summary">العودة إلى ما يحدده التطبيق</string>
     <string name="shell_layout_auto">تلقائي، حسب عرض النافذة</string>

@@ -163,6 +163,33 @@ ScreenStateHandler(
   dismiss callback (`showFeedbackSheet`, `onFeedbackSheetDismissed`), so the content stays
   stateless and can be previewed open.
 
+## Entrance animation
+
+```kotlin
+LazyColumn {
+    itemsIndexed(rows, key = { _, row -> row.id }) { index, row ->
+        RowCard(row, modifier = Modifier.animateItem().animateVisibility(index = index))
+    }
+}
+```
+
+- `Modifier.animateVisibility(index)` brings an element in the first time it is shown. Give list
+  items their `index`; elements without one cascade in the order they appear.
+- The cascade counts from what is shown, not from the top of the list: a screen's first items
+  arrive one after another, and an item scrolled in later starts at once. Do not offset `index` to
+  fake this, and do not add delays of your own.
+- The entrance starts when the element is first placed, so items a lazy list prefetches still
+  enter on screen. Once started it stays revealed, saved with the item.
+- The style is the app's, from `LocalEntranceStyle` (`Slide`, `Scale`, `Fade`, `None`). Set it once
+  with `appToolkitDefaults { shell { entranceStyle = ... } }`; pass `style` only for one element
+  that must differ. The motion follows `MaterialTheme.motionScheme`, so never pass durations or
+  offsets.
+- An element that comes and goes, such as a hint or a filter's result, uses
+  `Modifier.animateVisibility(visible)`. It keeps its place in the layout while hidden; to take it
+  out of the layout use `AnimatedVisibility` instead.
+- Put `animateItem()` before `animateVisibility` on the item's root, never inside an
+  `AnimatedVisibility` or another wrapper of the item.
+
 ## Previews
 
 ```kotlin

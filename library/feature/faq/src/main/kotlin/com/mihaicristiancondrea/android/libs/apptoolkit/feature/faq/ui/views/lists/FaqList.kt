@@ -133,6 +133,12 @@ internal fun FaqList(
             item(key = "show_more_questions") {
                 AnimatedVisibility(
                     visible = !showAllQuestions,
+                    modifier = Modifier.animateItem(
+                        placementSpec = spring(
+                            dampingRatio = Spring.DampingRatioLowBouncy,
+                            stiffness = Spring.StiffnessLow,
+                        )
+                    ),
                     exit = slideOutVertically(
                         targetOffsetY = { it },
                         animationSpec = tween(durationMillis = 500),
@@ -145,12 +151,6 @@ internal fun FaqList(
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .animateItem(
-                                placementSpec = spring(
-                                    dampingRatio = Spring.DampingRatioLowBouncy,
-                                    stiffness = Spring.StiffnessLow,
-                                )
-                            )
                             .groupedCorners(
                                 position = groupedItemPosition(
                                     index = popularGroupItemCount - 1,

@@ -27,6 +27,11 @@
     <string name="shell_dev_bottom_accessory">Di atas panel navigasi</string>
     <string name="shell_dev_motion">Gerakan</string>
     <string name="shell_dev_animation_speed">Kecepatan animasi</string>
+    <string name="shell_dev_entrance_style">Animasi kemunculan</string>
+    <string name="shell_entrance_slide">Pudar dan naik</string>
+    <string name="shell_entrance_scale">Pudar dan membesar</string>
+    <string name="shell_entrance_fade">Pudar</string>
+    <string name="shell_entrance_none">Tidak ada</string>
     <string name="shell_dev_reset">Reset opsi developer</string>
     <string name="shell_dev_reset_summary">Kembali ke yang ditetapkan aplikasi</string>
     <string name="shell_layout_auto">Otomatis, dari lebar jendela</string>
