@@ -38,6 +38,8 @@
 
 ### Changed
 
+- Builds with Gradle 9.8.2, and depends on kotlinx-serialization 1.12.0, Konfetti 2.2.0 and
+  compose-markdown 0.7.3.
 - Telemetry is split by responsibility in `core.common.telemetry`: `AnalyticsReporter`,
   `DiagnosticsReporter` and `TelemetryCollection`, which `TelemetryRepository` combines for the UI
   layer. Repositories report breadcrumbs and failures through `DiagnosticsReporter` and never send
