@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings
 
 import androidx.compose.runtime.Immutable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.EntranceStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.NavigationDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutPolicy
@@ -86,6 +87,7 @@ class ShellDefaultsBuilder internal constructor(private val from: ShellSettings)
     var limitContentWidth: Boolean = from.limitContentWidth
     var navigationBarStyle: NavigationBarStyle = from.navigationBarStyle
     var navigationTint: NavigationTint = from.navigationTint
+    var entranceStyle: EntranceStyle = from.entranceStyle
 
     internal fun build(): ShellSettings = from.copy(
         tabTransition = tabTransition,
@@ -95,6 +97,7 @@ class ShellDefaultsBuilder internal constructor(private val from: ShellSettings)
         limitContentWidth = limitContentWidth,
         navigationBarStyle = navigationBarStyle,
         navigationTint = navigationTint,
+        entranceStyle = entranceStyle,
     )
 }
 

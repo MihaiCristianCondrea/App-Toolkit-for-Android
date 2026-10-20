@@ -28,6 +28,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.EntranceStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.TabTransitionStyle
 import java.io.IOException
@@ -92,6 +93,7 @@ internal class DataStoreShellPreferences(
     override suspend fun setStartOverride(value: Int) = choose(Keys.startOverride, value)
     override suspend fun setNavigationBarStyle(value: NavigationBarStyle) = choose(Keys.navigationBarStyle, value.name)
     override suspend fun setNavigationTint(value: NavigationTint) = choose(Keys.navigationTint, value.name)
+    override suspend fun setEntranceStyle(value: EntranceStyle) = choose(Keys.entranceStyle, value.name)
 
     override suspend fun resetDeveloperOptions() {
         dataStore.edit { preferences -> Stored.all.forEach { it.forget(preferences) } }
@@ -115,6 +117,7 @@ internal class DataStoreShellPreferences(
         navigationBarStyle = enum(Keys.navigationBarStyle, defaults.navigationBarStyle),
         navigationTint = enum(Keys.navigationTint, defaults.navigationTint),
         hideTopBarOnScroll = this[Keys.hideTopBarOnScroll] ?: defaults.hideTopBarOnScroll,
+        entranceStyle = enum(Keys.entranceStyle, defaults.entranceStyle),
     )
 
     private inline fun <reified E : Enum<E>> Preferences.enum(key: Preferences.Key<String>, default: E): E =
@@ -156,6 +159,7 @@ internal class DataStoreShellPreferences(
                 enum(Keys.navigationBarStyle) { it.navigationBarStyle },
                 enum(Keys.navigationTint) { it.navigationTint },
                 flag(Keys.hideTopBarOnScroll) { it.hideTopBarOnScroll },
+                enum(Keys.entranceStyle) { it.entranceStyle },
             )
         }
     }
@@ -174,6 +178,7 @@ internal class DataStoreShellPreferences(
         val navigationBarStyle = stringPreferencesKey("navigation_bar_style")
         val navigationTint = stringPreferencesKey("navigation_tint")
         val hideTopBarOnScroll = booleanPreferencesKey("hide_top_bar_on_scroll")
+        val entranceStyle = stringPreferencesKey("entrance_style")
     }
 
     private companion object {

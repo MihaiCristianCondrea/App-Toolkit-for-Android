@@ -31,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.NavKey
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.EntranceStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.ChoicePreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.R
@@ -173,6 +174,16 @@ internal fun DeveloperOptionItem(
             modifier = modifier,
         )
 
+        DeveloperOption.EntranceStyle -> ChoicePreferenceItem(
+            title = stringResource(R.string.shell_dev_entrance_style),
+            options = EntranceStyle.entries,
+            selected = settings.entranceStyle,
+            optionLabel = { entranceStyleLabel(it) },
+            onSelect = { write { setEntranceStyle(it) } },
+            dialogIcon = Icons.Outlined.Animation,
+            modifier = modifier,
+        )
+
         DeveloperOption.BottomAccessory -> ChoicePreferenceItem(
             title = stringResource(R.string.shell_dev_bottom_accessory),
             options = accessoryModes(capabilities),
@@ -277,3 +288,13 @@ private fun startLabelOf(graph: ShellGraph, key: NavKey): String {
     val title = graph.destination(key).title?.invoke(key) ?: key.toString().substringAfterLast('.')
     return stringResource(R.string.shell_start_screen, title)
 }
+
+@Composable
+private fun entranceStyleLabel(value: EntranceStyle): String = stringResource(
+    when (value) {
+        EntranceStyle.Slide -> R.string.shell_entrance_slide
+        EntranceStyle.Scale -> R.string.shell_entrance_scale
+        EntranceStyle.Fade -> R.string.shell_entrance_fade
+        EntranceStyle.None -> R.string.shell_entrance_none
+    },
+)

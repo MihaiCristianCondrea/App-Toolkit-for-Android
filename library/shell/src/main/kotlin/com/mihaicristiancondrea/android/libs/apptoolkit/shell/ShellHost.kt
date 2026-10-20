@@ -59,6 +59,7 @@ import androidx.navigation3.scene.Scene
 import androidx.navigationevent.NavigationEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.rememberTelemetry
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.LocalEntranceStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.ContentWidthBox
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.ListPlaceholder
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalHideTopBarOnScroll
@@ -207,6 +208,7 @@ fun ShellHost(
         LocalShellMotion provides motion,
         LocalTopBarStyleOverride provides current.topBarOverride.style,
         LocalHideTopBarOnScroll provides current.hideTopBarOnScroll,
+        LocalEntranceStyle provides current.entranceStyle,
         LocalShellSnackbarHost provides shellSnackbarHost,
         // Text drawn outside any Material surface takes the theme's colour instead of black.
         LocalContentColor provides MaterialTheme.colorScheme.onBackground,

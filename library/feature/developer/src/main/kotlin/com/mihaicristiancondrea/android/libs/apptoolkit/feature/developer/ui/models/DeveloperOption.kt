@@ -33,6 +33,7 @@ internal enum class DeveloperOption(val category: DeveloperCategory) {
     TabTransition(DeveloperCategory.Navigation),
     BackEdge(DeveloperCategory.Navigation),
     AnimationSpeed(DeveloperCategory.Motion),
+    EntranceStyle(DeveloperCategory.Motion),
     BottomAccessory(DeveloperCategory.Accessories),
 }
 
@@ -55,7 +56,7 @@ internal fun developerOptions(capabilities: ShellCapabilities): List<DeveloperOp
             DeveloperOption.StartOverride -> capabilities.hasMultipleStartOptions
             DeveloperOption.TabTransition -> capabilities.hasMultipleTabs
             DeveloperOption.BackEdge -> capabilities.hasBackNavigation
-            DeveloperOption.AnimationSpeed -> true
+            DeveloperOption.AnimationSpeed, DeveloperOption.EntranceStyle -> true
             DeveloperOption.BottomAccessory -> capabilities.hasAccessories
         }
     }

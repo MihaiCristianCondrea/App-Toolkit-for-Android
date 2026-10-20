@@ -149,11 +149,15 @@ flowchart TD
   and out of a lazy layout. `NativeAdSlot`, `rememberNativeAd`, and `rememberNativeAdState` take a
   `cache` and a `cacheKey`; without both they keep the uncached behaviour of destroying the ad on
   disposal. See [Ads inside a lazy list or grid](../../integration/ads/README.md#ads-inside-a-lazy-list-or-grid).
-- `Modifier.animateVisibility` fades and slides every element in the first time it appears, in a
-  cascade. With an `index` each position waits `staggerDelay` more, up to `maxStaggeredItems`, so a
-  list keeps arriving from the top. `index` is optional: without it elements that appear together
-  cascade in the order they appear, grouped by the app-wide `VisibilityCascade`, which is unit
-  tested.
+- `Modifier.animateVisibility` brings every element in the first time it is shown, in a cascade.
+  The cascade counts from what is shown: the items a screen opens with arrive one after another,
+  each `staggerDelay` after the one before, and an item scrolled in later starts at once. The
+  entrance starts when the element is first placed, so items a lazy list composes ahead of time
+  still enter on screen. The motion is `MaterialTheme.motionScheme`'s springs in the style of
+  `LocalEntranceStyle` (`Slide`, `Scale`, `Fade` or `None`), which the shell provides from
+  `appToolkitDefaults { shell { entranceStyle = ... } }` or the developer options.
+  `animateVisibility(visible)` animates an element in and out as it comes and goes. Both run in a
+  `Modifier.Node`, without recomposing per frame; the cascade is `VisibilityCascade`, unit tested.
 - `HorizontalWavyDivider`, `VerticalWavyDivider`, and `WavyDividerDefaults` draw the design
   system's `il_wavy_line` as a divider. The wave is drawn rather than tiled from the drawable, so it
   scales with the divider's band and fits a whole number of half-waves into any length; the fitting

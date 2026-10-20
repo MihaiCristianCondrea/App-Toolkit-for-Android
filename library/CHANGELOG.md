@@ -6,6 +6,10 @@
 
 ### Added
 
+- `EntranceStyle` and `LocalEntranceStyle` choose how `animateVisibility` brings elements in:
+  `Slide`, `Scale`, `Fade` or `None`. An app sets its own with
+  `appToolkitDefaults { shell { entranceStyle = ... } }`, and the developer options offer it under
+  Motion. `Modifier.animateVisibility(visible)` animates an element in and out as it comes and goes.
 - `appToolkitDefaults { shell { } navigation { } }` declares an app's own defaults once: its back
   style, tab transition, scroll and tint behavior, app bar styles per kind of destination, and
   layout policy. Pass `defaults.navigation` to `toolkitGraph` or `shellGraph` and `defaults.shell` to
@@ -38,6 +42,12 @@
 
 ### Changed
 
+- `animateVisibility` cascades from what is shown instead of from the top of the list, so an item
+  scrolled into view starts at once rather than waiting up to 1.3 seconds behind the items above
+  it, and it starts when the element is first placed, so a prefetched item no longer plays off
+  screen. It moves on `MaterialTheme.motionScheme` springs, which pick up where they are if
+  interrupted, and rises 20 dp, the same on every screen density. `invisibleOffsetY` and
+  `animationDuration` are gone, since the springs set both.
 - Builds with Gradle 9.8.2, and depends on kotlinx-serialization 1.12.0, Konfetti 2.2.0 and
   compose-markdown 0.7.3.
 - Telemetry is split by responsibility in `core.common.telemetry`: `AnalyticsReporter`,
