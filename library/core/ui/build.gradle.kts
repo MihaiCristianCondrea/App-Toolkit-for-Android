@@ -40,6 +40,19 @@ android {
     buildFeatures {
         compose = true
     }
+
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+        unitTests.all { test ->
+            // Robolectric reaches into these JDK internals; newer JDKs close them by default.
+            test.jvmArgs(
+                "--add-opens=java.base/java.io=ALL-UNNAMED",
+                "--add-opens=java.base/java.lang=ALL-UNNAMED",
+                "--add-opens=java.base/java.util=ALL-UNNAMED",
+                "--add-exports=java.base/jdk.internal.access=ALL-UNNAMED",
+            )
+        }
+    }
 }
 
 composeCompiler {
@@ -49,6 +62,12 @@ composeCompiler {
 
 dependencies {
     testImplementation(project(":library:core:testing"))
+    // ScreenHost and the settings rows are tested in a real composition: Robolectric drives an
+    // activity under JUnit 4, which runs on the vintage engine beside JUnit 5.
+    testImplementation(libs.androidx.compose.ui.test.junit4)
+    testImplementation(libs.androidx.test.ext.junit)
+    testRuntimeOnly(libs.test.junit.vintage.engine)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
     api(project(":library:core:common"))
     // Declared directly rather than relied on transitively through :library:core:designsystem.
     // Modifiers and ad helpers in this module reference CommonDataStore by type.

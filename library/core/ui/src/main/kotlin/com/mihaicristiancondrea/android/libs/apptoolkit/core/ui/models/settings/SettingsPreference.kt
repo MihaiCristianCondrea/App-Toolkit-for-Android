@@ -20,7 +20,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings
 import androidx.compose.runtime.Immutable
 import androidx.navigation3.runtime.NavKey
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 
 /**
@@ -45,35 +44,6 @@ data class SettingsPreference(
     val summary: String? = null,
     val destination: NavKey? = null,
     val action: (() -> Boolean)? = null,
-) {
-    @Deprecated(
-        message = "Pass a ToolkitIcon.",
-        replaceWith = ReplaceWith(
-            "SettingsPreference(key, ToolkitIcon.Vector(icon), useIconContainer, iconColor, iconContainerColor, " +
-                "title, summary, destination, action)",
-            "com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon",
-        ),
-    )
-    constructor(
-        key: String? = null,
-        icon: ImageVector,
-        useIconContainer: Boolean = false,
-        iconColor: Color? = null,
-        iconContainerColor: Color? = null,
-        title: String? = null,
-        summary: String? = null,
-        destination: NavKey? = null,
-        action: (() -> Boolean)? = null,
-    ) : this(
-        key = key,
-        icon = ToolkitIcon.Vector(icon),
-        useIconContainer = useIconContainer,
-        iconColor = iconColor,
-        iconContainerColor = iconContainerColor,
-        title = title,
-        summary = summary,
-        destination = destination,
-        action = action,
-    )
-}
+)
+
 

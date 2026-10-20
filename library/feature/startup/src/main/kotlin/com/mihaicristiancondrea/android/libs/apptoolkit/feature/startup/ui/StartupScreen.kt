@@ -59,13 +59,13 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedExtendedFloatingActionButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.TopAppBarScaffold
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.R
@@ -82,6 +82,8 @@ import org.koin.compose.viewmodel.koinViewModel
 
 private const val STARTUP_SCREEN_NAME = "Startup"
 private const val STARTUP_SCREEN_CLASS = "StartupScreen"
+private val STARTUP_SCREEN: TrackedScreen =
+    TrackedScreen(name = STARTUP_SCREEN_NAME, className = STARTUP_SCREEN_CLASS)
 
 /** How wide the screen grows on a large window, as onboarding's pages do; it is centred in the rest. */
 private val StartupContentMaxWidth: Dp = 640.dp
@@ -110,16 +112,6 @@ fun StartupScreen() {
     ) { }
     var hasRequestedPermissions by rememberSaveable { mutableStateOf(false) }
 
-    TrackScreenView(
-        screenName = STARTUP_SCREEN_NAME,
-        screenClass = STARTUP_SCREEN_CLASS,
-    )
-
-    TrackScreenState(
-        screenName = STARTUP_SCREEN_NAME,
-        state = state.consent,
-    )
-
     LifecycleResumeEffect(Unit) {
         if (!hasRequestedPermissions && provider.requiredPermissions.isNotEmpty()) {
             hasRequestedPermissions = true
@@ -129,10 +121,12 @@ fun StartupScreen() {
         onPauseOrDispose { }
     }
 
-    StartupScreenContent(
-        state = state,
-        onContinue = { navigator.continueStart(OnboardingRoute) },
-    )
+    ScreenHost(screen = STARTUP_SCREEN, status = state.consent) {
+        StartupScreenContent(
+            state = state,
+            onContinue = { navigator.continueStart(OnboardingRoute) },
+        )
+    }
 }
 
 /**

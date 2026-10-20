@@ -36,15 +36,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
@@ -60,6 +59,8 @@ import org.koin.compose.viewmodel.koinViewModel
 
 private const val USAGE_DIAGNOSTICS_SCREEN_NAME = "UsageAndDiagnostics"
 private const val USAGE_DIAGNOSTICS_SCREEN_CLASS = "UsageAndDiagnosticsScreen"
+private val USAGE_DIAGNOSTICS_SCREEN: TrackedScreen =
+    TrackedScreen(name = USAGE_DIAGNOSTICS_SCREEN_NAME, className = USAGE_DIAGNOSTICS_SCREEN_CLASS)
 
 private object UsageAndDiagnosticsPreferenceKeys {
     const val USAGE_AND_DIAGNOSTICS: String = "usage_and_diagnostics"
@@ -78,23 +79,13 @@ fun UsageAndDiagnosticsScreen() {
     val viewModel: UsageAndDiagnosticsViewModel = koinViewModel()
     val state: UsageAndDiagnosticsUiState by viewModel.state.collectAsStateWithLifecycle()
 
-    TrackScreenView(
-        screenName = USAGE_DIAGNOSTICS_SCREEN_NAME,
-        screenClass = USAGE_DIAGNOSTICS_SCREEN_CLASS,
-    )
-
-    TrackScreenState(
-        screenName = USAGE_DIAGNOSTICS_SCREEN_NAME,
-        state = state.settings,
-    )
-
-    UsageAndDiagnosticsScreenContent(
-        state = state,
-        onEvent = viewModel::onEvent,
-        contentPadding = contentPadding(),
-    )
-
-    MessageHost(viewModel = viewModel)
+    ScreenHost(screen = USAGE_DIAGNOSTICS_SCREEN, status = state.settings, viewModel = viewModel) {
+        UsageAndDiagnosticsScreenContent(
+            state = state,
+            onEvent = viewModel::onEvent,
+            contentPadding = contentPadding(),
+        )
+    }
 }
 
 /**

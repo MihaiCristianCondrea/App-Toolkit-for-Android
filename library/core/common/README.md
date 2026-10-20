@@ -17,8 +17,8 @@ Android utility abstractions shared across the toolkit.
   `AnalyticsReporter` (GA4 events, screen views, user properties), `DiagnosticsReporter`
   (breadcrumbs and non-fatal reports) and `TelemetryCollection` (the consent-driven collection
   switches). `TelemetryRepository` is all three, for the UI layer; `telemetryModule` binds the
-  three to the app's one `TelemetryRepository`. The analytics models are in `telemetry.models`.
-  `TelemetryRepository` and `FirebaseController` stay in `data.repositories` as deprecated aliases.
+  three to the app's one `TelemetryRepository`. The analytics models are in `telemetry.models`,
+  with `TrackedScreen`, the stable name and class of a screen that `ScreenHost` reports.
 - `BillingCore`, dispatcher, build-info, app-info, permissions, and ad-SDK contracts.
 - Host DI configuration (`AppToolkitHostBuildConfig`, qualifiers, and constants).
 - Small platform and Kotlin extensions used across modules. An extension or constant that one
@@ -91,8 +91,8 @@ flowchart TD
 
 AppVersionMetadata and PackageManager.getVersionMetadata expose nullable version names and long
 version codes without a UI model. Issue Reporter and the sample installed-app source share this
-lookup. Unavailable, hidden, or unreadable packages return null. The legacy UI getVersionInfo
-extension maps this result into its unchanged AppVersionInfo class.
+lookup. Unavailable, hidden, or unreadable packages return null. `getVersionMetadata` is a
+blocking `PackageManager` call, so data-layer callers switch to `dispatchers.io` around it.
 
 ## Public contracts
 

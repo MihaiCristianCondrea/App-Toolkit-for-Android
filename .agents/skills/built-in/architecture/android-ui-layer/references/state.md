@@ -50,13 +50,13 @@ data class DashboardUiState(
 )
 ```
 
-The content draws one `ScreenStateHandler` per section. `TrackScreenState` takes the field that
-decides whether the screen worked, usually the main one.
+The content draws one `ScreenStateHandler` per section. `ScreenHost`'s `status` takes the field
+that decides whether the screen worked, usually the main one.
 
 ## Custom statuses
 
 When the screen's phases are not loading phases, the feature declares its own sealed type and
-implements `TrackedStatus`, so `TrackScreenState` still reports it:
+implements `TrackedStatus`, so `ScreenHost` still reports it:
 
 ```kotlin
 @Immutable

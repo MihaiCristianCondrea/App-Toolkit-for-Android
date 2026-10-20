@@ -44,6 +44,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
@@ -52,13 +53,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.data.models.DonationProductIds
@@ -75,6 +74,8 @@ import org.koin.core.qualifier.named
 
 private const val SUPPORT_SCREEN_NAME = "Support"
 private const val SUPPORT_SCREEN_CLASS = "SupportComposable"
+private val SUPPORT_SCREEN: TrackedScreen =
+    TrackedScreen(name = SUPPORT_SCREEN_NAME, className = SUPPORT_SCREEN_CLASS)
 
 private object SupportPreferenceKeys {
     const val DONATE_LOW: String = "donate_low"
@@ -107,28 +108,18 @@ fun SupportScreen() {
     val activity: Activity? = LocalActivity.current
     val adsConfig: AdsConfig = koinInject(qualifier = named(name = AdsQualifiers.SUPPORT_NATIVE_AD))
 
-    TrackScreenView(
-        screenName = SUPPORT_SCREEN_NAME,
-        screenClass = SUPPORT_SCREEN_CLASS,
-    )
-
-    TrackScreenState(
-        screenName = SUPPORT_SCREEN_NAME,
-        state = state.donationOptions,
-    )
-
-    SupportScreenContent(
-        state = state,
-        onEvent = viewModel::onEvent,
-        onDonate = { productId ->
-            activity?.let { host -> viewModel.onEvent(SupportEvent.Donate(productId = productId, activity = host)) }
-        },
-        onOpenWebAd = { context.openUrl(ShortenLinkConstants.LINKVERTISE_APP_DIRECT_LINK) },
-        contentPadding = contentPadding(),
-        adUnitId = adsConfig.bannerAdUnitId,
-    )
-
-    MessageHost(viewModel = viewModel)
+    ScreenHost(screen = SUPPORT_SCREEN, status = state.donationOptions, viewModel = viewModel) {
+        SupportScreenContent(
+            state = state,
+            onEvent = viewModel::onEvent,
+            onDonate = { productId ->
+                activity?.let { host -> viewModel.onEvent(SupportEvent.Donate(productId = productId, activity = host)) }
+            },
+            onOpenWebAd = { context.openUrl(ShortenLinkConstants.LINKVERTISE_APP_DIRECT_LINK) },
+            contentPadding = contentPadding(),
+            adUnitId = adsConfig.bannerAdUnitId,
+        )
+    }
 }
 
 /**

@@ -21,8 +21,6 @@ import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.packagemanager.getVersionMetadata
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.packagemanager.getVersionInfo
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -33,7 +31,7 @@ import org.junit.runner.RunWith
 class PackageVersionMetadataInstrumentationTest {
     @Suppress("DEPRECATION")
     @Test
-    fun installedPackageAndCompatibilityAdapterMatchPlatform() {
+    fun installedPackageMetadataMatchesPlatform() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val manager = context.packageManager
         val info = manager.getPackageInfo(context.packageName, 0)
@@ -42,8 +40,6 @@ class PackageVersionMetadataInstrumentationTest {
         assertNotNull(metadata)
         assertEquals(info.versionName, metadata!!.versionName)
         assertEquals(expectedCode, metadata.versionCode)
-        assertEquals(AppVersionInfo(info.versionName, expectedCode), manager.getVersionInfo(context.packageName))
         assertNull(manager.getVersionMetadata("invalid.missing.architecture.test.package"))
-        assertNull(manager.getVersionInfo("invalid.missing.architecture.test.package"))
     }
 }

@@ -58,13 +58,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ScaffoldFabs
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.rememberWindowWidthSizeClass
@@ -113,16 +111,6 @@ fun AppsListScreen() {
     }
     val currentState: AppListUiState by rememberUpdatedState(state)
 
-    TrackScreenView(
-        screenName = AppScreenTracking.Screens.APPS_LIST.name,
-        screenClass = AppScreenTracking.Screens.APPS_LIST.className,
-    )
-
-    TrackScreenState(
-        screenName = AppScreenTracking.Screens.APPS_LIST.name,
-        state = state.apps,
-    )
-
     val randomAppToOpen: AppInfo? = state.randomAppToOpen
     LaunchedEffect(randomAppToOpen) {
         if (randomAppToOpen != null) {
@@ -149,37 +137,39 @@ fun AppsListScreen() {
         }
     }
 
-    AppsListScreenContent(
-        state = state,
-        onEvent = viewModel::onEvent,
-        onFavoriteToggle = onFavoriteToggle,
-        onShareClick = { app ->
-            telemetry.logShare(
-                method = "system_share",
-                contentType = "app",
-                itemId = app.packageName,
-            )
-            shareApp(app)
-        },
-        onDetailsClosed = { app ->
-            telemetry.logAppInteraction(
-                source = APPS_LIST_INTERACTION_SOURCE,
-                appInfo = app,
-                interaction = AppInteractionType.CloseDetailsBottomSheet,
-            )
-        },
-        detailsActionLauncher = detailsActionLauncher,
-        windowWidthSizeClass = rememberWindowWidthSizeClass(),
-        contentPadding = contentPadding(),
-        searchQuery = LocalShellSearch.current?.query.orEmpty(),
-        listAdUnitId = listAdsConfig.bannerAdUnitId.takeIf { adsEnabled && it.isNotBlank() },
-        detailsAdsConfig = detailsAdsConfig,
-    )
-
-    MessageHost(
+    ScreenHost(
+        screen = AppScreenTracking.Screens.APPS_LIST,
+        status = state.apps,
         viewModel = viewModel,
-        onAction = { viewModel.onEvent(HomeEvent.Load) },
-    )
+        onMessageAction = { viewModel.onEvent(HomeEvent.Load) },
+    ) {
+        AppsListScreenContent(
+            state = state,
+            onEvent = viewModel::onEvent,
+            onFavoriteToggle = onFavoriteToggle,
+            onShareClick = { app ->
+                telemetry.logShare(
+                    method = "system_share",
+                    contentType = "app",
+                    itemId = app.packageName,
+                )
+                shareApp(app)
+            },
+            onDetailsClosed = { app ->
+                telemetry.logAppInteraction(
+                    source = APPS_LIST_INTERACTION_SOURCE,
+                    appInfo = app,
+                    interaction = AppInteractionType.CloseDetailsBottomSheet,
+                )
+            },
+            detailsActionLauncher = detailsActionLauncher,
+            windowWidthSizeClass = rememberWindowWidthSizeClass(),
+            contentPadding = contentPadding(),
+            searchQuery = LocalShellSearch.current?.query.orEmpty(),
+            listAdUnitId = listAdsConfig.bannerAdUnitId.takeIf { adsEnabled && it.isNotBlank() },
+            detailsAdsConfig = detailsAdsConfig,
+        )
+    }
 }
 
 /**

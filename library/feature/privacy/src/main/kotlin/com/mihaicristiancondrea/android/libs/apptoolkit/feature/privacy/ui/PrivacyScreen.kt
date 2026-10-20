@@ -31,15 +31,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
@@ -59,6 +59,8 @@ import org.koin.compose.viewmodel.koinViewModel
 
 private const val PRIVACY_SCREEN_NAME = "Privacy"
 private const val PRIVACY_SCREEN_CLASS = "PrivacyScreen"
+private val PRIVACY_SCREEN: TrackedScreen =
+    TrackedScreen(name = PRIVACY_SCREEN_NAME, className = PRIVACY_SCREEN_CLASS)
 
 /**
  * The privacy and legal rows the host's `PrivacySettingsProvider` supplies: policy links, and the
@@ -74,25 +76,17 @@ fun PrivacyScreen() {
     val context: Context = LocalContext.current
     val navigator = LocalShellNavigator.current
 
-    TrackScreenView(
-        screenName = PRIVACY_SCREEN_NAME,
-        screenClass = PRIVACY_SCREEN_CLASS,
-    )
-
-    TrackScreenState(
-        screenName = PRIVACY_SCREEN_NAME,
-        state = state.items,
-    )
-
-    PrivacyScreenContent(
-        state = state,
-        onEvent = viewModel::onEvent,
-        onOpenUrl = { url -> context.openUrl(url) },
-        onOpenPermissions = { navigator.navigate(PermissionsRoute) },
-        onOpenAds = { navigator.navigate(AdsSettingsRoute) },
-        onOpenUsageAndDiagnostics = { navigator.navigate(DiagnosticsSettingsRoute) },
-        contentPadding = contentPadding(),
-    )
+    ScreenHost(screen = PRIVACY_SCREEN, status = state.items) {
+        PrivacyScreenContent(
+            state = state,
+            onEvent = viewModel::onEvent,
+            onOpenUrl = { url -> context.openUrl(url) },
+            onOpenPermissions = { navigator.navigate(PermissionsRoute) },
+            onOpenAds = { navigator.navigate(AdsSettingsRoute) },
+            onOpenUsageAndDiagnostics = { navigator.navigate(DiagnosticsSettingsRoute) },
+            contentPadding = contentPadding(),
+        )
+    }
 }
 
 /**

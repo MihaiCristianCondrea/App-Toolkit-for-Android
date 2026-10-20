@@ -8,8 +8,7 @@ service wiring.
 ## Owns
 
 - `data.repositories.FirebaseTelemetryRepository` for analytics events, breadcrumbs, and crash
-  reporting. The old names `DefaultFirebaseController` and `FirebaseControllerImpl` stay beside it
-  as deprecated aliases.
+  reporting.
 - `firebaseModule` Koin bindings.
 - `data.notifications.FirebaseNotificationsService` and its notification/wake-lock manifest
   permissions.

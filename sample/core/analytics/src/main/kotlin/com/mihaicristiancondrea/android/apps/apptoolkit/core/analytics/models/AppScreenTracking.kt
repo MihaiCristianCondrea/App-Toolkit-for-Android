@@ -17,11 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models
 
-/** Stable name/class pair emitted for a sample screen. */
-data class TrackedScreen(
-    val name: String,
-    val className: String,
-)
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 
 /** Single source of truth for sample-app screen telemetry identifiers. */
 object AppScreenTracking {

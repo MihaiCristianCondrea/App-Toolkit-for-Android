@@ -252,7 +252,7 @@ class ModuleBoundariesPlugin : Plugin<Project> {
      * repository returns its outcome and the screen that asked reports it.
      *
      * The telemetry transport is the deliberate exception: it implements analytics, so it has to
-     * name them. [ANALYTICS_INFRASTRUCTURE_MODULES] and [ANALYTICS_INFRASTRUCTURE_FILES] list it.
+     * name them. [ANALYTICS_INFRASTRUCTURE_MODULES] lists it.
      */
     private fun checkAnalyticsOwnership(
         root: File,
@@ -261,8 +261,6 @@ class ModuleBoundariesPlugin : Plugin<Project> {
     ) {
         sourceFiles.filter { "/src/main/" in it.invariantSeparatorsPath }.forEach { file ->
             if (modulePath(root, file) in ANALYTICS_INFRASTRUCTURE_MODULES) return@forEach
-            val relative = file.relativeTo(root).invariantSeparatorsPath
-            if (ANALYTICS_INFRASTRUCTURE_FILES.any(relative::endsWith)) return@forEach
             val text = file.readText()
             val packageName = PACKAGE_REGEX.find(text)?.groupValues?.get(1) ?: return@forEach
             val layer = packageName.split('.').firstOrNull { it == "data" || it == "domain" } ?: return@forEach
@@ -349,17 +347,10 @@ class ModuleBoundariesPlugin : Plugin<Project> {
         /** Modules that implement telemetry, and so may name analytics from their data layer. */
         val ANALYTICS_INFRASTRUCTURE_MODULES = setOf(":library:integration:firebase")
 
-        /** Deprecated aliases kept at the contract's previous location in `core.common.data.repositories`. */
-        val ANALYTICS_INFRASTRUCTURE_FILES = setOf(
-            "core/common/data/repositories/TelemetryRepositoryAlias.kt",
-            "core/common/data/repositories/FirebaseController.kt",
-        )
-
         /** The analytics contracts, events, GA4 helpers, UI analytics and the analytics SDK. */
         val ANALYTICS_REFERENCE_REGEX = Regex(
             "com\\.mihaicristiancondrea\\.android\\.libs\\.apptoolkit\\.(" +
                 "core\\.common\\.telemetry\\.(TelemetryRepository|AnalyticsReporter|models)\\b|" +
-                "core\\.common\\.data\\.repositories\\.(TelemetryRepository|FirebaseController)\\b|" +
                 "core\\.common\\.utils\\.extensions\\.analytics\\b|" +
                 "core\\.ui\\.(views|models)\\.analytics\\b)" +
                 "|com\\.google\\.firebase\\.analytics\\b",

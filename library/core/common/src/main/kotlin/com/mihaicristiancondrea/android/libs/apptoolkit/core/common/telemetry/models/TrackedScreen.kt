@@ -15,15 +15,21 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.packagemanager
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models
 
-import android.content.pm.PackageManager
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.packagemanager.getVersionMetadata
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
+import androidx.compose.runtime.Immutable
 
 /**
- * Returns version metadata for [packageName], or null when unavailable.
- * Retained for hosts using the UI model; platform consumers can use [getVersionMetadata] directly.
+ * A screen as analytics names it.
+ *
+ * [name] becomes the GA4 `screen_name` and the `screen` of its `screen_state` events, and
+ * [className] the `screen_class`. Both are identifiers dashboards group by, so they never change
+ * once shipped, and they are written as literals: R8 renames classes, so a name read from a class
+ * is unreadable in release reports. Declare each app's screens once, in one place, as the sample's
+ * `AppScreenTracking` does.
  */
-fun PackageManager.getVersionInfo(packageName: String): AppVersionInfo? =
-    getVersionMetadata(packageName)?.let { AppVersionInfo(it.versionName, it.versionCode) }
+@Immutable
+data class TrackedScreen(
+    val name: String,
+    val className: String? = null,
+)

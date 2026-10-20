@@ -26,8 +26,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.contracts.LicensesEvent
@@ -40,6 +40,8 @@ import org.koin.compose.viewmodel.koinViewModel
 
 private const val LICENSES_SCREEN_NAME = "Licenses"
 private const val LICENSES_SCREEN_CLASS = "LicensesScreen"
+private val LICENSES_SCREEN: TrackedScreen =
+    TrackedScreen(name = LICENSES_SCREEN_NAME, className = LICENSES_SCREEN_CLASS)
 
 /**
  * Lists the open-source libraries bundled with the host application.
@@ -55,26 +57,18 @@ fun LicensesScreen() {
     val state: LicensesUiState by viewModel.state.collectAsStateWithLifecycle()
     val libraries: Libs? by produceLibraries(resId = R.raw.aboutlibraries)
 
-    TrackScreenView(
-        screenName = LICENSES_SCREEN_NAME,
-        screenClass = LICENSES_SCREEN_CLASS,
-    )
-
-    TrackScreenState(
-        screenName = LICENSES_SCREEN_NAME,
-        state = state.libraryCount,
-    )
-
     LaunchedEffect(libraries) {
         libraries?.let { loaded ->
             viewModel.onEvent(LicensesEvent.LibrariesLoaded(libraryCount = loaded.libraries.size))
         }
     }
 
-    LicensesScreenContent(
-        libraries = libraries,
-        contentPadding = contentPadding(),
-    )
+    ScreenHost(screen = LICENSES_SCREEN, status = state.libraryCount) {
+        LicensesScreenContent(
+            libraries = libraries,
+            contentPadding = contentPadding(),
+        )
+    }
 }
 
 /**

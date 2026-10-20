@@ -19,8 +19,9 @@ When the host app uses App Toolkit:
 1. Reuse `TelemetryRepository`.
 2. Reuse `AnalyticsEvent` and `AnalyticsValue`.
 3. Reuse `Ga4EventData` for Toolkit UI components that support it.
-4. Reuse `TrackScreenView` for explicit Compose screen views.
-5. Reuse `TrackScreenState` only when screen states have analytical value.
+4. Wrap each Compose destination in `ScreenHost` for its screen views.
+5. Pass `ScreenHost` a `status` only when screen states have analytical value, never one built
+   just to have something to report.
 6. Reuse `LoggedScreenViewModel` operation telemetry instead of duplicating operation start and
    error events manually.
 7. Keep product-specific event contracts in the host application.

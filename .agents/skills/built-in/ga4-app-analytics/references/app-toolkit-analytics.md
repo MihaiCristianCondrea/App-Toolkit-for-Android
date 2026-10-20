@@ -107,14 +107,14 @@ when that behavior matters to the host app.
 
 ## Screen tracking
 
-`TrackScreenView` is the normal App Toolkit helper for explicit Compose screen tracking.
+`ScreenHost(screen, status, viewModel) { content }` is App Toolkit's screen boundary. It sends a
+screen view through `logScreenView()` for each visit, once the destination is visible and active,
+and shows the ViewModel's messages. `screen` is a `TrackedScreen` from `core.common.telemetry.models`,
+with a stable name and class.
 
-It sends a screen view through `TelemetryRepository.logScreenView()` when the stable screen name
-changes.
+Use it at meaningful destinations, and around a sheet or dialog that is a screen of its own.
 
-Use it at meaningful top-level destinations.
-
-`TrackScreenState` can additionally report bounded states such as:
+Its `status` can additionally report bounded states such as:
 
 ```text
 loading

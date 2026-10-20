@@ -27,13 +27,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsCategory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsPreference
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
@@ -44,11 +43,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.R
 /** Describes permissions. Text resolves against the current UI locale on every configuration change. */
 @Composable
 fun PermissionsScreen() {
-    TrackScreenView(screenName = "Permissions", screenClass = "PermissionsScreen")
-    val config = permissionsConfig()
-    TrackScreenState(screenName = "Permissions", state = Loadable.Ready(config))
-    PermissionsContent(paddingValues = contentPadding(), settingsConfig = config)
+    // A fixed catalogue: nothing loads, so the screen reports its visits and no status.
+    ScreenHost(screen = PERMISSIONS_SCREEN) {
+        PermissionsContent(paddingValues = contentPadding(), settingsConfig = permissionsConfig())
+    }
 }
+
+private val PERMISSIONS_SCREEN: TrackedScreen = TrackedScreen(name = "Permissions", className = "PermissionsScreen")
 
 @Composable
 internal fun permissionsConfig(): SettingsConfig {

@@ -3,10 +3,9 @@ name: android-ui-layer
 description: >
   Design, implement, review, and migrate App Toolkit screens on the core.ui.screen setup: a
   ScreenViewModel or LoggedScreenViewModel, a feature-owned state data class with Loadable fields,
-  an event contract, UiMessage queues shown by MessageHost, ScreenStateHandler, TrackScreenState,
-  the split between a stateful XScreen and a stateless, previewable XScreenContent in the same
-  file, and the
-  mapping of thrown failures to error text. Use when creating a screen or ViewModel, adding
+  an event contract, UiMessage queues, ScreenHost (screen visits, status and messages),
+  ScreenStateHandler, the split between a stateful XScreen and a stateless, previewable
+  XScreenContent in the same file, and the mapping of thrown failures to error text. Use when creating a screen or ViewModel, adding
   loading, empty, error or custom statuses, deciding what a failure shows, showing snackbars from
   a ViewModel, wiring a ViewModel in Koin, testing a ViewModel or screen content, or moving a
   screen off core.ui.base, core.ui.states or DataState.
@@ -100,7 +99,7 @@ their own queue.
 - Choose the starting value on purpose: `Loading` when a spinner is right, `Empty` when the screen
   should show nothing until the data arrives.
 - When `Loadable` does not fit, declare a feature sealed type implementing `TrackedStatus`, so
-  `TrackScreenState` still reports it.
+  `ScreenHost` still reports it.
 - Use `ImmutableList` and the other `kotlinx.collections.immutable` types, so Compose treats the
   state as stable and skips rows that did not change.
 - Hold text the app writes as `UiTextHelper`, so it resolves in the UI against the current locale
@@ -138,8 +137,14 @@ their own queue.
   then the content, then the content's private helpers and previews. Never give the content a file
   of its own.
 - `XScreen` is the public entry point. It gets the ViewModel, collects `state` with
-  `collectAsStateWithLifecycle()`, calls `TrackScreenView` and `TrackScreenState`, hosts
-  `MessageHost(viewModel)`, owns navigation, and calls `XScreenContent`.
+  `collectAsStateWithLifecycle()`, owns navigation, and calls `XScreenContent` inside
+  `ScreenHost(screen, status, viewModel) { }`, the screen's only tracking call. `ScreenHost`
+  reports each visit once the screen is visible and active, reports the status, and shows the
+  ViewModel's messages; it adds no layout and renders no `Loadable`.
+- A static screen calls `ScreenHost(screen = X_SCREEN) { }` with no status and no ViewModel. Never
+  build a `Loadable.Ready` only to have something to report.
+- A composable that logs an interaction of its own reads `val telemetry = LocalTelemetry.current`
+  once and calls it from a callback.
 - `XScreenContent` takes the state, `onEvent`, one callback per navigation target, `modifier` and
   `contentPadding`. It has no ViewModel, no injection, no navigator and no flow collection, so it
   renders in a preview and a test with plain values.

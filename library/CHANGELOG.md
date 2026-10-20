@@ -14,6 +14,10 @@
 - `tab(badgeText = { ... })` shows a badge that follows state, such as an unread count. Null hides
   it and an empty string shows a dot; the fixed `badge` is unchanged.
 - Settings rows take any `ToolkitIcon`, including animated and Lottie icons.
+- `ScreenHost(screen, status, viewModel) { content }` is every screen's boundary: it reports the
+  screen's visits and status and shows its ViewModel's messages, without adding layout. `screen` is
+  a `TrackedScreen` from `core.common.telemetry.models`, so analytics contract modules need no UI
+  dependency.
 
 ### Changed
 
@@ -23,8 +27,12 @@
   product analytics; `checkModuleBoundaries` rejects analytics in `data` and `domain` code. Add
   `telemetryModule` when assembling Koin modules without `appToolkitModules`; see the 3.0 migration
   guide.
-- `SettingsPreference.icon` is a `ToolkitIcon`. Passing an `ImageVector` still compiles through a
-  deprecated constructor; wrap it in `ToolkitIcon.Vector` to migrate.
+- `SettingsPreference.icon` is a `ToolkitIcon`; wrap an `ImageVector` in `ToolkitIcon.Vector`.
+- Screen views are reported when a screen becomes visible and active, not when it enters
+  composition. Transition frames, rotation and a cancelled back gesture no longer add views; each
+  return from another tab, a page or the background does, and both panes of a list-detail layout
+  report their own. A repeated identical `screen_state` is no longer sent, and the Permissions page
+  no longer reports one.
 - Developer options remember explicit choices, even one equal to the current default, so an app
   that changes its defaults in a later release only affects people who never chose. Resetting the
   developer options returns to the app's defaults instead of the Toolkit's.
@@ -32,6 +40,15 @@
   `:library:core:common`, billing, consent, update, diagnostics and support. The issue reporter's
   `presentation` and `shake` packages moved under `ui`, and the consent data sources out of
   `data.remote.datasource`. Only imports change; see the 3.0 migration guide.
+
+### Removed
+
+- `TrackScreenView` and `TrackScreenState`; wrap the screen in `ScreenHost` instead.
+- The deprecated aliases `FirebaseController`, `core.common.data.repositories.TelemetryRepository`,
+  `DefaultFirebaseController` and `FirebaseControllerImpl`; use
+  `core.common.telemetry.TelemetryRepository` and `FirebaseTelemetryRepository`.
+- The deprecated `SettingsPreference(icon: ImageVector)` constructor and `NativeAdViewHost`, and the
+  `getVersionInfo` adapter in `:library:core:ui`; use `getVersionMetadata` off the main thread.
 
 ---
 

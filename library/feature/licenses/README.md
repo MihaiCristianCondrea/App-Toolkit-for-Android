@@ -50,7 +50,7 @@ flowchart TD
 
 - Metadata is parsed by the AboutLibraries Compose producer, which is inherently a composition-side
   API. The screen reports when parsing finishes and `LicensesViewModel` turns that into a
-  `Loadable` library count, the state `TrackScreenState` reports, instead of the screen building
+  `Loadable` library count, the status `ScreenHost` reports, instead of the screen building
   one inline. The list itself is drawn straight from the producer's result, which
   `LibrariesContainer` already shows as loading while it is `null`.
 - The module carries the AboutLibraries plugin so the generated metadata resource stays next to the

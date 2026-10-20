@@ -57,17 +57,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.markdown.MarkdownFormatAction
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportFieldError
@@ -85,6 +85,8 @@ import kotlinx.collections.immutable.ImmutableList
 import org.koin.compose.viewmodel.koinViewModel
 
 private const val ISSUE_REPORTER_SCREEN_CLASS = "IssueReporterContent"
+private val ISSUE_REPORTER_SCREEN: TrackedScreen =
+    TrackedScreen(name = ISSUE_REPORTER_SCREEN_NAME, className = ISSUE_REPORTER_SCREEN_CLASS)
 
 /**
  * Shared report sheet for Compose hosts and
@@ -115,15 +117,6 @@ fun IssueReporterBottomSheet(
         enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
     )
 
-    TrackScreenView(
-        screenName = ISSUE_REPORTER_SCREEN_NAME,
-        screenClass = ISSUE_REPORTER_SCREEN_CLASS,
-    )
-    TrackScreenState(
-        screenName = ISSUE_REPORTER_SCREEN_NAME,
-        state = state.submissionState,
-    )
-
     DisposableEffect(Unit) {
         IssueReporterPresence.onShown()
         onDispose { IssueReporterPresence.onHidden() }
@@ -134,34 +127,37 @@ fun IssueReporterBottomSheet(
         onDismissRequest()
     }
 
-    ModalBottomSheet(
-        onDismissRequest = dismiss,
-        sheetState = sheetState,
-        modifier = modifier,
-    ) {
-        IssueReporterBottomSheetContent(
-            state = state,
-            onEvent = viewModel::onEvent,
-            onSend = { viewModel.onEvent(IssueReporterEvent.Send) },
-            onDeviceInfoExpandedChange = { expanded ->
-                if (expanded) viewModel.onEvent(IssueReporterEvent.RequestDeviceInfo)
-                telemetry.logEvent(
-                    issueReporterActionEvent(
-                        actionName = IssueReporterActionNames.TOGGLE_DEVICE_INFO,
-                        params = mapOf("expanded" to AnalyticsValue.Bool(expanded)),
-                    ),
-                )
-            },
-            onMarkdownFormat = { action ->
-                telemetry.logEvent(
-                    issueReporterActionEvent(
-                        actionName = IssueReporterActionNames.FORMAT_DESCRIPTION,
-                        params = mapOf("format" to AnalyticsValue.Str(action.analyticsName)),
-                    ),
-                )
-            },
-            onDone = dismiss,
-        )
+    // A sheet over the current screen is a screen of its own: it reports its visits and its status.
+    ScreenHost(screen = ISSUE_REPORTER_SCREEN, status = state.submissionState) {
+        ModalBottomSheet(
+            onDismissRequest = dismiss,
+            sheetState = sheetState,
+            modifier = modifier,
+        ) {
+            IssueReporterBottomSheetContent(
+                state = state,
+                onEvent = viewModel::onEvent,
+                onSend = { viewModel.onEvent(IssueReporterEvent.Send) },
+                onDeviceInfoExpandedChange = { expanded ->
+                    if (expanded) viewModel.onEvent(IssueReporterEvent.RequestDeviceInfo)
+                    telemetry.logEvent(
+                        issueReporterActionEvent(
+                            actionName = IssueReporterActionNames.TOGGLE_DEVICE_INFO,
+                            params = mapOf("expanded" to AnalyticsValue.Bool(expanded)),
+                        ),
+                    )
+                },
+                onMarkdownFormat = { action ->
+                    telemetry.logEvent(
+                        issueReporterActionEvent(
+                            actionName = IssueReporterActionNames.FORMAT_DESCRIPTION,
+                            params = mapOf("format" to AnalyticsValue.Str(action.analyticsName)),
+                        ),
+                    )
+                },
+                onDone = dismiss,
+            )
+        }
     }
 
     MessageToasts(

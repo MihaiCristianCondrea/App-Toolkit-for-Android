@@ -48,6 +48,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.ThemePreferencesState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
@@ -56,12 +57,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openDisplaySettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.drawable.rememberPaletteImageVector
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
@@ -75,6 +74,8 @@ import org.koin.compose.viewmodel.koinViewModel
 
 private const val THEME_SCREEN_NAME = "Theme"
 private const val THEME_SCREEN_CLASS = "ThemeSettingsScreen"
+private val THEME_SCREEN: TrackedScreen =
+    TrackedScreen(name = THEME_SCREEN_NAME, className = THEME_SCREEN_CLASS)
 
 /**
  * The theme settings page: the color palette, the theme mode, AMOLED, and a link to the system
@@ -90,49 +91,39 @@ fun ThemeSettingsScreen() {
     val telemetry = LocalTelemetry.current
     val context: Context = LocalContext.current
 
-    TrackScreenView(
-        screenName = THEME_SCREEN_NAME,
-        screenClass = THEME_SCREEN_CLASS,
-    )
-
-    TrackScreenState(
-        screenName = THEME_SCREEN_NAME,
-        state = state.preferences,
-    )
-
-    ThemeSettingsScreenContent(
-        state = state,
-        onEvent = viewModel::onEvent,
-        onPaletteTabSelected = { page ->
-            telemetry.logEvent(paletteTabSelectEvent(page = page))
-        },
-        onDynamicPaletteSelected = { variant ->
-            telemetry.logEvent(dynamicPaletteSelectEvent(variant = variant))
-            viewModel.onEvent(ThemeSettingsEvent.SelectDynamicPalette(variant))
-        },
-        onStaticPaletteSelected = { id, seasonal ->
-            telemetry.logEvent(staticPaletteSelectEvent(id = id, seasonal = seasonal))
-            viewModel.onEvent(ThemeSettingsEvent.SelectStaticPalette(id))
-        },
-        onThemeModeSelected = { mode ->
-            telemetry.logEvent(themeModeSelectEvent(mode = mode))
-            viewModel.onEvent(ThemeSettingsEvent.SelectThemeMode(mode))
-        },
-        onAmoledModeChanged = { enabled ->
-            telemetry.logEvent(amoledToggleEvent(enabled = enabled))
-            viewModel.onEvent(ThemeSettingsEvent.SetAmoledMode(enabled))
-        },
-        onOpenDisplaySettings = {
-            val opened: Boolean = context.openDisplaySettings()
-            telemetry.logEvent(openDisplaySettingsEvent(opened = opened))
-            if (!opened) {
-                Log.w(THEME_SETTINGS_LOG_TAG, "Failed to open display settings from theme page")
-            }
-        },
-        contentPadding = contentPadding(),
-    )
-
-    MessageHost(viewModel = viewModel)
+    ScreenHost(screen = THEME_SCREEN, status = state.preferences, viewModel = viewModel) {
+        ThemeSettingsScreenContent(
+            state = state,
+            onEvent = viewModel::onEvent,
+            onPaletteTabSelected = { page ->
+                telemetry.logEvent(paletteTabSelectEvent(page = page))
+            },
+            onDynamicPaletteSelected = { variant ->
+                telemetry.logEvent(dynamicPaletteSelectEvent(variant = variant))
+                viewModel.onEvent(ThemeSettingsEvent.SelectDynamicPalette(variant))
+            },
+            onStaticPaletteSelected = { id, seasonal ->
+                telemetry.logEvent(staticPaletteSelectEvent(id = id, seasonal = seasonal))
+                viewModel.onEvent(ThemeSettingsEvent.SelectStaticPalette(id))
+            },
+            onThemeModeSelected = { mode ->
+                telemetry.logEvent(themeModeSelectEvent(mode = mode))
+                viewModel.onEvent(ThemeSettingsEvent.SelectThemeMode(mode))
+            },
+            onAmoledModeChanged = { enabled ->
+                telemetry.logEvent(amoledToggleEvent(enabled = enabled))
+                viewModel.onEvent(ThemeSettingsEvent.SetAmoledMode(enabled))
+            },
+            onOpenDisplaySettings = {
+                val opened: Boolean = context.openDisplaySettings()
+                telemetry.logEvent(openDisplaySettingsEvent(opened = opened))
+                if (!opened) {
+                    Log.w(THEME_SETTINGS_LOG_TAG, "Failed to open display settings from theme page")
+                }
+            },
+            contentPadding = contentPadding(),
+        )
+    }
 }
 
 /**

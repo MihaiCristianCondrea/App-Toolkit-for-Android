@@ -12,8 +12,7 @@ Reference: `AboutScreen.kt` in `:library:feature:about`, and `FaqScreen.kt` in
 | `koinViewModel`, `koinInject`                    | yes       | no               |
 | `LocalTelemetry.current` for its own events      | yes       | no               |
 | collecting flows                                 | yes       | no               |
-| `TrackScreenView`, `TrackScreenState`            | yes       | no               |
-| `MessageHost`                                    | yes       | no               |
+| `ScreenHost` (visits, status, messages)          | yes       | no               |
 | navigator calls                                  | yes       | no, a callback   |
 | `contentPadding()` from the shell                | yes       | no, a parameter  |
 | `ScreenStateHandler` and the layout              | no        | yes              |
@@ -30,31 +29,57 @@ fun XScreen() {
     val state: XUiState by viewModel.state.collectAsStateWithLifecycle()
     val navigator = LocalShellNavigator.current
 
-    TrackScreenView(screenName = X_SCREEN_NAME, screenClass = X_SCREEN_CLASS)
-    TrackScreenState(screenName = X_SCREEN_NAME, state = state.items)
-
-    XScreenContent(
-        state = state,
-        onEvent = viewModel::onEvent,
-        onOpenDetails = { id -> navigator.navigate(XDetailsRoute(id)) },
-        contentPadding = contentPadding(),
-    )
-
-    MessageHost(viewModel = viewModel)
+    ScreenHost(screen = X_SCREEN, status = state.items, viewModel = viewModel) {
+        XScreenContent(
+            state = state,
+            onEvent = viewModel::onEvent,
+            onOpenDetails = { id -> navigator.navigate(XDetailsRoute(id)) },
+            contentPadding = contentPadding(),
+        )
+    }
 }
 ```
 
 - Its parameters are what the host passes in, such as `onVersionTap` on `AboutScreen`. It takes no
   state.
-- `TrackScreenState` gets the field that decides whether the screen worked; see `state.md`.
-- Telemetry comes from `LocalTelemetry`, which `ShellHost` provides. `TrackScreenView`,
-  `TrackScreenState` and the design-system components read it themselves. A screen that logs an
-  event of its own reads it once, `val telemetryRepository = LocalTelemetry.current`, and calls it in its
-  callbacks; it never injects `TelemetryRepository` with `koinInject`.
+- `ScreenHost` is the screen's boundary and its only tracking call. It reports a visit when the
+  screen becomes visible and active, reports `status` at the start of each visit and when its label
+  changes, and shows `viewModel`'s messages. It adds no layout, renders no `Loadable` and owns no
+  navigation. See "ScreenHost" below.
+- `status` gets the field that decides whether the screen worked; see `state.md`.
+- Telemetry comes from `LocalTelemetry`, which `ShellHost` provides. `ScreenHost` and the
+  design-system components read it themselves. A screen that logs an interaction of its own reads
+  it once, `val telemetry = LocalTelemetry.current`, and calls it in its callbacks; it never
+  injects `TelemetryRepository` with `koinInject`.
 - `TelemetryRepository` is the only repository composables use directly. A screen view or a tap is
   a UI event, so routing it through the ViewModel would add an event per tap and change nothing
   reported. Every other repository is reached through the ViewModel.
 - Keep it this short. Logic that grows here belongs in the ViewModel, and layout in the content.
+
+## ScreenHost
+
+One recipe for every kind of screen. `screen` is a `TrackedScreen`, the stable name and class from
+`core.common.telemetry.models`, declared once per screen.
+
+| Screen                                  | Call                                                                      |
+|-----------------------------------------|---------------------------------------------------------------------------|
+| static, nothing loads, no ViewModel     | `ScreenHost(screen = X_SCREEN) { XContent() }`                            |
+| one loading section                     | `ScreenHost(screen = X_SCREEN, status = state.items, viewModel = viewModel) { ... }` |
+| several loading sections                | `status` is the section that says how the screen is doing, or a status of its own |
+| a custom workflow                       | `status` is the feature's sealed type implementing `TrackedStatus`        |
+| a sheet or dialog with a name of its own | `ScreenHost` around the sheet, inside the screen that opens it           |
+| a reusable piece inside a screen        | no `ScreenHost`: it is part of its screen's visit                         |
+
+- Each `Loadable` section renders through its own `ScreenStateHandler` inside the content;
+  `ScreenHost` never renders one.
+- `onMessageAction` is called when a message's action is pressed, such as Retry.
+- A screen whose messages show in a snackbar host of its own, or as toasts, passes no `viewModel`
+  and shows them itself.
+- A visit is not a composition. A screen that only animates in or out, is kept for a back
+  gesture, or sits under an overlay is not reported; rotating keeps the visit; coming back from
+  another tab, a page or the background is a new one; both panes of a list-detail layout report
+  their own. Do not add a `LaunchedEffect` that logs `logScreenView`.
+- Never manufacture a status, such as `Loadable.Ready(config)` for a fixed list, only to report one.
 
 ## XScreenContent
 

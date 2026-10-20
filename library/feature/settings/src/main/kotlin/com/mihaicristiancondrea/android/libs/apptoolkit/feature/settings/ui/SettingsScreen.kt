@@ -45,6 +45,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
@@ -54,14 +55,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsPreference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextField
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextFieldStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
@@ -77,6 +77,8 @@ import org.koin.compose.viewmodel.koinViewModel
 
 private const val SETTINGS_SCREEN_NAME = "Settings"
 private const val SETTINGS_SCREEN_CLASS = "SettingsScreen"
+private val SETTINGS_SCREEN: TrackedScreen =
+    TrackedScreen(name = SETTINGS_SCREEN_NAME, className = SETTINGS_SCREEN_CLASS)
 
 private object SettingsActionNames {
     const val RETRY_LOAD: String = "retry_load"
@@ -98,15 +100,6 @@ fun SettingsScreen() {
     val navigator = LocalShellNavigator.current
     val telemetry = LocalTelemetry.current
 
-    TrackScreenView(
-        screenName = SETTINGS_SCREEN_NAME,
-        screenClass = SETTINGS_SCREEN_CLASS,
-    )
-    TrackScreenState(
-        screenName = SETTINGS_SCREEN_NAME,
-        state = state.config,
-    )
-
     LaunchedEffect(Unit) {
         viewModel.onEvent(event = SettingsEvent.Load)
     }
@@ -119,24 +112,26 @@ fun SettingsScreen() {
     }
     ShellBackHandler(enabled = config != null && query.isNotEmpty()) { query = "" }
 
-    SettingsScreenContent(
-        state = state,
-        contentPadding = contentPadding(),
-        query = query,
-        onQueryChange = { query = it },
-        results = results,
-        onPreferenceClick = { preference ->
-            if (preference.action?.invoke() != true) {
-                preference.destination?.let(navigator::navigate)
-            }
-        },
-        onRetry = {
-            telemetry.logGa4Event(
-                ga4Event = settingsActionGa4Event(actionName = SettingsActionNames.RETRY_LOAD),
-            )
-            viewModel.onEvent(event = SettingsEvent.Load)
-        },
-    )
+    ScreenHost(screen = SETTINGS_SCREEN, status = state.config) {
+        SettingsScreenContent(
+            state = state,
+            contentPadding = contentPadding(),
+            query = query,
+            onQueryChange = { query = it },
+            results = results,
+            onPreferenceClick = { preference ->
+                if (preference.action?.invoke() != true) {
+                    preference.destination?.let(navigator::navigate)
+                }
+            },
+            onRetry = {
+                telemetry.logGa4Event(
+                    ga4Event = settingsActionGa4Event(actionName = SettingsActionNames.RETRY_LOAD),
+                )
+                viewModel.onEvent(event = SettingsEvent.Load)
+            },
+        )
+    }
 }
 
 private fun settingsActionGa4Event(actionName: String): Ga4EventData {

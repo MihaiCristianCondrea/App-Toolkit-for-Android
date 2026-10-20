@@ -63,6 +63,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
@@ -75,15 +76,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.mod
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ScaffoldFabs
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists.GroupedAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists.GroupedActionList
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
@@ -111,6 +110,8 @@ import org.koin.core.qualifier.named
  */
 private const val FAQ_SCREEN_NAME: String = "Help"
 private const val FAQ_SCREEN_CLASS: String = "FaqScreen"
+private val FAQ_SCREEN: TrackedScreen =
+    TrackedScreen(name = FAQ_SCREEN_NAME, className = FAQ_SCREEN_CLASS)
 
 private object FaqPreferenceKeys {
     const val FEEDBACK: String = "feedback"
@@ -144,16 +145,6 @@ fun FaqScreen() {
     val activity = LocalActivity.current
     val reviewHost: ReviewHost? = remember(activity) { activity?.let(::ReviewHost) }
 
-    TrackScreenView(
-        screenName = FAQ_SCREEN_NAME,
-        screenClass = FAQ_SCREEN_CLASS,
-    )
-
-    TrackScreenState(
-        screenName = FAQ_SCREEN_NAME,
-        state = state.questions,
-    )
-
     LaunchedEffect(state.openStoreListing) {
         if (state.openStoreListing) {
             context.openPlayStoreForApp(context.packageName)
@@ -161,50 +152,50 @@ fun FaqScreen() {
         }
     }
 
-    FaqScreenContent(
-        state = state,
-        onRetry = {
-            telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.RETRY_LOAD))
-            viewModel.onEvent(FaqEvent.Load)
-        },
-        onFeedbackOpened = {
-            telemetry.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.FEEDBACK))
-            telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_OPENED))
-        },
-        onRequestFeature = {
-            telemetry.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.REQUEST_FEATURE))
-            context.openUrl(AppLinks.FEATURE_REQUESTS_FORM)
-        },
-        onLeaveReview = {
-            telemetry.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.LEAVE_REVIEW))
-            reviewHost?.let { host -> viewModel.onEvent(FaqEvent.RequestReview(host = host)) }
-        },
-        onQuestionToggled = { question, position, expanded ->
-            telemetry.logGa4Event(
-                faqPreferenceTapEvent(
-                    preferenceKey = FaqPreferenceKeys.FAQ_ITEM,
-                    faqId = question.id.value,
-                    faqPosition = position,
-                    expanded = expanded,
+    ScreenHost(screen = FAQ_SCREEN, status = state.questions, viewModel = viewModel) {
+        FaqScreenContent(
+            state = state,
+            onRetry = {
+                telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.RETRY_LOAD))
+                viewModel.onEvent(FaqEvent.Load)
+            },
+            onFeedbackOpened = {
+                telemetry.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.FEEDBACK))
+                telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_OPENED))
+            },
+            onRequestFeature = {
+                telemetry.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.REQUEST_FEATURE))
+                context.openUrl(AppLinks.FEATURE_REQUESTS_FORM)
+            },
+            onLeaveReview = {
+                telemetry.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.LEAVE_REVIEW))
+                reviewHost?.let { host -> viewModel.onEvent(FaqEvent.RequestReview(host = host)) }
+            },
+            onQuestionToggled = { question, position, expanded ->
+                telemetry.logGa4Event(
+                    faqPreferenceTapEvent(
+                        preferenceKey = FaqPreferenceKeys.FAQ_ITEM,
+                        faqId = question.id.value,
+                        faqPosition = position,
+                        expanded = expanded,
+                    )
                 )
-            )
-        },
-        onShowMoreQuestions = {
-            telemetry.logGa4Event(
-                faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.SHOW_MORE_QUESTIONS)
-            )
-        },
-        onContactUs = {
-            telemetry.logEvent(
-                faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.CONTACT_US).toAnalyticsEvent()
-            )
-            context.sendEmailToDeveloper(applicationNameRes = CommonR.string.app_name)
-        },
-        contentPadding = contentPadding(),
-        adUnitId = adsConfig.bannerAdUnitId.takeIf { adsEnabled && it.isNotBlank() },
-    )
-
-    MessageHost(viewModel = viewModel)
+            },
+            onShowMoreQuestions = {
+                telemetry.logGa4Event(
+                    faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.SHOW_MORE_QUESTIONS)
+                )
+            },
+            onContactUs = {
+                telemetry.logEvent(
+                    faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.CONTACT_US).toAnalyticsEvent()
+                )
+                context.sendEmailToDeveloper(applicationNameRes = CommonR.string.app_name)
+            },
+            contentPadding = contentPadding(),
+            adUnitId = adsConfig.bannerAdUnitId.takeIf { adsEnabled && it.isNotBlank() },
+        )
+    }
 }
 
 private fun faqPreferenceTapEvent(

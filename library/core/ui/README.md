@@ -8,8 +8,8 @@ page frame, state handling, analytics hooks, and shared components.
 ## Owns
 
 - The screen contracts, in `screen`: `ScreenViewModel`, `LoggedScreenViewModel`, `Loadable`,
-  `TrackedStatus`, `UiMessage`, `ScreenStateHandler`, `TrackScreenState` and `MessageHost`. See
-  [Screen state](#screen-state).
+  `TrackedStatus`, `UiMessage`, `ScreenHost`, `ScreenStateHandler` and `MessageHost`. See
+  [Screen state](#screen-state) and [Screen visits](#screen-visits).
 - The shell's page frame, in `views/shell`: `PageScaffold`, `ShellTopAppBar` and
   `rememberTopBarScrollBehavior`, the app bar's search field, `LocalContentPadding` and
   `contentPadding`, `ContentWidthBox`, the pane placeholders, and the page's snackbar host
@@ -105,12 +105,6 @@ flowchart TD
 - Global UI preferences arrive through the design-system root. Reusable components must not start
   their own persistence collectors unless a documented adapter still requires it.
 
-## Compatibility adapters
-
-The existing getVersionInfo extension delegates to core common's getVersionMetadata and returns the
-unchanged AppVersionInfo class. Its original package, function signature, and JVM file name remain
-available; data-layer callers should use the lower-level API.
-
 ## Public contracts
 
 - `GeneralButton` is the action-button entry point for all five styles and labelled/icon-only content.
@@ -173,9 +167,8 @@ available; data-layer callers should use the lower-level API.
   `TelemetryRepository`, never a `Context`. Product analytics are reported here, in the UI layer;
   repositories report only diagnostics.
 - Composables report through `LocalTelemetry` (`core.ui.views.analytics`), never a `TelemetryRepository`
-  parameter. `TrackScreenView`, `TrackScreenState` and every component with a `ga4Event` read it
-  themselves; a screen that logs its own events reads it once as
-  `val telemetry = LocalTelemetry.current`.
+  parameter. `ScreenHost` and every component with a `ga4Event` read it themselves; a screen that
+  logs its own interactions reads it once as `val telemetry = LocalTelemetry.current`.
   `ShellHost` provides it. A composition started outside `ShellHost`, such as a sheet in its own
   window, wraps itself in `ProvideTelemetry { }`. Where nothing provides it, as in a preview, it is
   `NoOpTelemetryRepository` and events are dropped.
@@ -381,11 +374,11 @@ class AboutViewModel(/* ... */) : LoggedScreenViewModel<AboutUiState, AboutEvent
     }
 }
 
-// AboutScreen, stateful: ViewModel, tracking, messages, navigation.
+// AboutScreen, stateful: ViewModel, the screen's boundary, navigation.
 val state by viewModel.state.collectAsStateWithLifecycle()
-TrackScreenState(screenName = "About", state = state.items)
-AboutScreenContent(state, onEvent = viewModel::onEvent, onOpenLicenses = { navigator.navigate(LicensesRoute) })
-MessageHost(viewModel)
+ScreenHost(screen = ABOUT_SCREEN, status = state.items, viewModel = viewModel) {
+    AboutScreenContent(state, onEvent = viewModel::onEvent, onOpenLicenses = { navigator.navigate(LicensesRoute) })
+}
 
 // AboutScreenContent, stateless and previewable: renders the state, reports through callbacks.
 ScreenStateHandler(state.items, contentPadding = padding, onRetry = { onEvent(AboutEvent.Load) }) { ready ->
@@ -402,7 +395,7 @@ The full setup, with the file tree, templates and the migration steps, is the
 - **`Loadable.Ready` can be `refreshing` or `stale`,** for a newer copy loading behind the shown one
   or a saved copy shown offline, without a case of its own.
 - **Other statuses** are a sealed type the feature declares. Implementing `TrackedStatus` has them
-  reported by `TrackScreenState` like `Loadable`'s `loading`, `success`, `no_data` and `error`.
+  reported by `ScreenHost` like `Loadable`'s `loading`, `success`, `no_data` and `error`.
 - **Messages** go through `showMessage(UiMessage(...))` and `MessageHost`, which shows them one at a
   time and removes each once it has left. A screen needs no dismiss event.
 - **`LoggedScreenViewModel`** logs `vm_init` and `vm_event` itself; `launchReport`,
@@ -420,6 +413,32 @@ The full setup, with the file tree, templates and the migration steps, is the
   maps them first and passes the rest on.
 - **There is no action stream.** One-off effects such as navigation are added with the first screen
   that needs them; messages, the common case, are state.
+
+## Screen visits
+
+`ScreenHost(screen, status, viewModel, onMessageAction) { content }` is every screen's boundary,
+the only screen tracking a screen calls. It reports visits, reports the status, and hosts the
+ViewModel's messages. It adds no layout, renders no `Loadable` (each section goes through
+`ScreenStateHandler` inside `content`), owns no navigation and injects nothing. A static screen
+passes no `status` and no `viewModel`; a screen with several loading sections passes the one that
+says how the screen is doing, or a `TrackedStatus` of its own. `TrackedScreen`, the stable name and
+class, is in `:library:core:common`'s `telemetry.models`, so an analytics contract module needs no
+UI dependency.
+
+- **A visit starts when the screen is visible and active,** when its `LocalLifecycleOwner` reaches
+  `RESUMED`. Navigation 3 caps each scene's lifecycle at `STARTED` until its transition settles and
+  while an overlay covers it, and the shell's tabs inherit the pages' cap, so a screen that only
+  animates, is kept for a back gesture or sits under an overlay is not reported. A cancelled back
+  gesture or a dismissed overlay returns to the same visit.
+- **A visit ends when the screen leaves composition or the app is stopped.** Switching tabs, a page
+  over the shell, popping and backgrounding all end it; the next `RESUMED` is a new visit. Both
+  panes of a list-detail scene are separate destinations and report separately.
+- **A configuration change keeps the visit; process death does not.** The visit lives in a small
+  holder in the destination's `ViewModelStoreOwner`, which survives rotation and not process death.
+  Outside a destination it falls back to the activity's store, and in a preview to the
+  composition.
+- **`screen_state`** is reported at the start of each visit and when the label changes, never twice
+  in a row for the same label. The event and its `screen` and `state` parameters are unchanged.
 
 ## Internal implementations
 

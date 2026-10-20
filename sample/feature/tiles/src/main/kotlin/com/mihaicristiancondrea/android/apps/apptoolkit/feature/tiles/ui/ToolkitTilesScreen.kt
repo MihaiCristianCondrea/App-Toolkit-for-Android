@@ -72,13 +72,12 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constant
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.LocalNativeAdViewFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
@@ -103,15 +102,6 @@ fun ToolkitTilesScreen() {
     val messages: ImmutableList<UiMessage> by viewModel.messages.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-
-    TrackScreenView(
-        screenName = TilesScreen.name,
-        screenClass = TilesScreen.className,
-    )
-    TrackScreenState(
-        screenName = TilesScreen.name,
-        state = state.categories,
-    )
 
     DisposableEffect(viewModel, lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
@@ -139,15 +129,17 @@ fun ToolkitTilesScreen() {
 
     MessageToasts(messages = messages, onShown = viewModel::messageShown)
 
-    CompositionLocalProvider(
-        LocalNativeAdViewFactory provides remember { ToolkitTilesNativeAdViewFactory() }
-    ) {
-        ToolkitTilesScreenContent(
-            state = state,
-            contentPadding = contentPadding(),
-            onEvent = viewModel::onEvent,
-            searchQuery = LocalShellSearch.current?.query.orEmpty(),
-        )
+    ScreenHost(screen = TilesScreen, status = state.categories) {
+        CompositionLocalProvider(
+            LocalNativeAdViewFactory provides remember { ToolkitTilesNativeAdViewFactory() }
+        ) {
+            ToolkitTilesScreenContent(
+                state = state,
+                contentPadding = contentPadding(),
+                onEvent = viewModel::onEvent,
+                searchQuery = LocalShellSearch.current?.query.orEmpty(),
+            )
+        }
     }
 }
 

@@ -82,9 +82,11 @@ helpers, constants and extension functions may share the file that uses them.
 place; the content never gets a file of its own. A dialog or sheet follows the same rule:
 `ChangelogDialog` and `ChangelogDialogContent` share `ChangelogDialog.kt`.
 
-The screen name passed to `TrackScreenView`, `TrackScreenState` and the ViewModel's `screenName` is
-the same literal. Declare it once at the top of `XScreen.kt` as `private const val X_SCREEN_NAME`;
-the content in the same file reports with it too.
+The screen's `TrackedScreen`, passed to `ScreenHost`, and the ViewModel's `screenName` use the same
+literal name. Declare it once at the top of `XScreen.kt` as
+`private val X_SCREEN = TrackedScreen(name = "X", className = "XScreen")`, or in the app's
+analytics contract module when it has one; the content in the same file reports with
+`X_SCREEN.name` too.
 
 A `views/` file holds a composable the content uses, such as a row or a card. `XScreenContent`
 itself stays in `XScreen.kt`, because it is the screen's body, not a reusable piece.

@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4Contract
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4ContractValidator
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.AppScreenTracking
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.TrackedScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -43,7 +43,7 @@ class AppAnalyticsContractTest {
         assertEquals(names.size, names.toSet().size)
         assertEquals(classes.size, classes.toSet().size)
         assertTrue(names.none(String::isBlank))
-        assertTrue(classes.none(String::isBlank))
+        assertTrue(classes.none { it.isNullOrBlank() })
     }
 
     @Test
