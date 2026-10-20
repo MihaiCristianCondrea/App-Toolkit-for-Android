@@ -43,6 +43,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extens
 import kotlin.math.min
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 /** How an element enters with [animateVisibility]. */
 enum class EntranceStyle {
@@ -228,7 +229,7 @@ private class EntranceNode(
                     index = position.index,
                     staggerDelayMillis = position.staggerDelayMillis,
                     maxStaggeredItems = position.maxStaggeredItems,
-                ),
+                ).milliseconds,
             )
             // Marked as it starts, so an element that leaves halfway through comes back whole
             // rather than playing again.
