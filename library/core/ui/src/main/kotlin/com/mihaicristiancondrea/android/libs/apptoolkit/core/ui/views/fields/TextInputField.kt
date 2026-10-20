@@ -53,7 +53,7 @@ fun DropdownMenuBox(
     modifier: Modifier = Modifier,
     ga4Event: Ga4EventData? = null,
 ) {
-    val telemetryRepository = LocalTelemetry.current
+    val telemetry = LocalTelemetry.current
     var expanded: Boolean by rememberSaveable { mutableStateOf(false) }
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
@@ -63,7 +63,7 @@ fun DropdownMenuBox(
         onExpandedChange = { next ->
             view.playSoundEffect(SoundEffectConstants.CLICK)
             hapticFeedback.performHapticFeedback(HapticFeedbackType.VirtualKey)
-            telemetryRepository.logGa4Event(ga4Event)
+            telemetry.logGa4Event(ga4Event)
             expanded = next
         },
         modifier = modifier.fillMaxWidth(),

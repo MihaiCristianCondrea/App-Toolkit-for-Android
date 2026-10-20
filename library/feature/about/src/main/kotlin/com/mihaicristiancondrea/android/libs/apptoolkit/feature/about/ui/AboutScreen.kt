@@ -37,16 +37,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
@@ -73,6 +72,8 @@ import org.koin.compose.viewmodel.koinViewModel
 
 private const val ABOUT_SCREEN_NAME = "About"
 private const val ABOUT_SCREEN_CLASS = "AboutScreen"
+private val ABOUT_SCREEN: TrackedScreen =
+    TrackedScreen(name = ABOUT_SCREEN_NAME, className = ABOUT_SCREEN_CLASS)
 
 /**
  * The "About" screen: information about the application and the device.
@@ -96,25 +97,15 @@ fun AboutScreen(
     val state: AboutUiState by viewModel.state.collectAsStateWithLifecycle()
     val navigator = LocalShellNavigator.current
 
-    TrackScreenView(
-        screenName = ABOUT_SCREEN_NAME,
-        screenClass = ABOUT_SCREEN_CLASS,
-    )
-
-    TrackScreenState(
-        screenName = ABOUT_SCREEN_NAME,
-        state = state.items,
-    )
-
-    AboutScreenContent(
-        state = state,
-        onEvent = viewModel::onEvent,
-        onOpenLicenses = { navigator.navigate(LicensesRoute) },
-        contentPadding = contentPadding(),
-        onVersionTap = onVersionTap,
-    )
-
-    MessageHost(viewModel = viewModel)
+    ScreenHost(screen = ABOUT_SCREEN, status = state.items, viewModel = viewModel) {
+        AboutScreenContent(
+            state = state,
+            onEvent = viewModel::onEvent,
+            onOpenLicenses = { navigator.navigate(LicensesRoute) },
+            contentPadding = contentPadding(),
+            onVersionTap = onVersionTap,
+        )
+    }
 }
 
 /** Taps on the version row that launch the konfetti and report the easter egg. */

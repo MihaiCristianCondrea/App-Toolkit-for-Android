@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.networkCall
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.mappers.toCreateIssueRequest
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.remote.IssueReporterRemoteDataSource
@@ -34,7 +34,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.do
 class DefaultIssueReporterRepository(
     private val remoteDataSource: IssueReporterRemoteDataSource,
     private val deviceInfoProvider: DeviceInfoProvider,
-    private val telemetryRepository: TelemetryRepository,
+    private val diagnostics: DiagnosticsReporter,
 ) : IssueReporterRepository {
 
     override suspend fun captureDeviceInfo(): DeviceInfo = deviceInfoProvider.capture()
@@ -45,7 +45,7 @@ class DefaultIssueReporterRepository(
         target: GithubTarget,
         token: String?,
     ): String {
-        telemetryRepository.logBreadcrumb(
+        diagnostics.logBreadcrumb(
             message = "Issue report sending",
             attributes = mapOf(
                 "targetRepo" to target.repository,

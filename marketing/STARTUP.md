@@ -17,7 +17,7 @@ Before any task, read `marketing/README.md` (with its "Project metadata" block),
 | Set up marketing in a new repository | [`marketing-startup`](skills/built-in/marketing-startup/SKILL.md), [`marketing-ui`](skills/built-in/marketing-ui/SKILL.md) (bootstrap the hub), [`metadata`](skills/built-in/metadata/SKILL.md) (project block) |
 | Promo video, trailer or short | `marketing-startup` (campaign), `marketing-ui` (screens, parity), [`motion-video`](skills/built-in/motion-video/SKILL.md), `metadata`, [`social-captions`](skills/built-in/social-captions/SKILL.md) |
 | Instagram carousel or single post | `marketing-startup`, `marketing-ui` (screens, captures), a look from `design-taste/` if the brief asks for one, `metadata`, `social-captions` |
-| Play Store visuals: screenshots, feature graphic, icon | [`play-store-media`](skills/built-in/play-store-media/SKILL.md), `marketing-ui` (screens), a `design-taste/` style, [`store-listing`](skills/built-in/store-listing/SKILL.md) (publish, history), `metadata` |
+| Play Store visuals: phone, tablet and desktop screenshots, feature graphic, icon | [`play-store-media`](skills/built-in/play-store-media/SKILL.md), `marketing-ui` (screens), a `design-taste/` style, [`store-listing`](skills/built-in/store-listing/SKILL.md) (publish, replaced uploads), `metadata` |
 | Play Store listing text, custom listings, keywords | [`store-listing`](skills/built-in/store-listing/SKILL.md), `writing-style` |
 | Add or fix a screen in the UI kit | `marketing-ui` |
 | Brand kit or visual identity concepts | `marketing-startup` (briefs), [`brandkit`](skills/design-taste/brandkit/SKILL.md), `metadata` |

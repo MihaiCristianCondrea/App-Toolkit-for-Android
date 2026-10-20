@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStoreInterface
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.toStorageException
 import kotlinx.coroutines.flow.Flow
@@ -31,12 +31,12 @@ import kotlinx.coroutines.flow.onStart
  */
 class DefaultFavoritesRepository(
     private val dataStore: DataStoreInterface,
-    private val telemetryRepository: TelemetryRepository,
+    private val diagnostics: DiagnosticsReporter,
 ) : FavoritesRepository {
 
     override fun observeFavorites(): Flow<Set<String>> = dataStore.favoriteApps
         .onStart {
-            telemetryRepository.logBreadcrumb(
+            diagnostics.logBreadcrumb(
                 message = "Favorites observe",
                 attributes = mapOf("source" to "DefaultFavoritesRepository"),
             )
@@ -44,7 +44,7 @@ class DefaultFavoritesRepository(
         .catch { failure -> throw failure.toStorageException() ?: failure }
 
     override suspend fun toggleFavorite(packageName: String) {
-        telemetryRepository.logBreadcrumb(
+        diagnostics.logBreadcrumb(
             message = "Favorite toggled",
             attributes = mapOf("packageName" to packageName),
         )

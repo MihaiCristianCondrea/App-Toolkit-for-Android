@@ -128,6 +128,6 @@ class DefaultChangelogRepositoryTest {
             client = HttpClient(engine),
             apiBaseUrl = "https://metadata.example",
             legacyChangelogUrl = "https://legacy.example/changelog.md",
-            telemetryRepository = FakeTelemetryRepository(),
+            diagnostics = FakeTelemetryRepository(),
         )
 }

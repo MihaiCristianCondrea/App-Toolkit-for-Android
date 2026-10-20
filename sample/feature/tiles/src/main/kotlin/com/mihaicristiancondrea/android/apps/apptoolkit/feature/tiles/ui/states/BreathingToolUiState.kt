@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states
 
 import androidx.compose.runtime.Immutable
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.domain.models.BreathingState
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.BreathingState
 
 /**
  * State rendered by the Breathing tool.

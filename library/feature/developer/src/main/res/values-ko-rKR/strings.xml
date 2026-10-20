@@ -27,6 +27,11 @@
     <string name="shell_dev_bottom_accessory">탐색 바 위</string>
     <string name="shell_dev_motion">모션</string>
     <string name="shell_dev_animation_speed">애니메이션 속도</string>
+    <string name="shell_dev_entrance_style">등장 애니메이션</string>
+    <string name="shell_entrance_slide">페이드 및 상승</string>
+    <string name="shell_entrance_scale">페이드 및 확대</string>
+    <string name="shell_entrance_fade">페이드</string>
+    <string name="shell_entrance_none">없음</string>
     <string name="shell_dev_reset">개발자 옵션 초기화</string>
     <string name="shell_dev_reset_summary">앱이 선언한 값으로 되돌리기</string>
     <string name="shell_layout_auto">자동, 창 너비 기준</string>

@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.providers
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.utils.constants.SettingsConstants
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutRoute
@@ -56,7 +57,7 @@ class AppSettingsProvider(context: Context) : SettingsProvider {
                     preferences = listOf(
                         SettingsPreference(
                             key = SettingsConstants.KEY_SETTINGS_NOTIFICATION,
-                            icon = Icons.Outlined.Notifications,
+                            icon = ToolkitIcon.Vector(Icons.Outlined.Notifications),
                             useIconContainer = true,
                             iconColor = Color(0xFF8D0154),
                             iconContainerColor = Color(0xFFFFD8EF),
@@ -67,7 +68,7 @@ class AppSettingsProvider(context: Context) : SettingsProvider {
                         ),
                         SettingsPreference(
                             key = SettingsConstants.KEY_SETTINGS_DISPLAY,
-                            icon = Icons.Outlined.Palette,
+                            icon = ToolkitIcon.Vector(Icons.Outlined.Palette),
                             useIconContainer = true,
                             iconColor = Color(0xFF763504),
                             iconContainerColor = Color(0xFFFFDCC3),
@@ -81,7 +82,7 @@ class AppSettingsProvider(context: Context) : SettingsProvider {
                     preferences = listOf(
                         SettingsPreference(
                             key = SettingsConstants.KEY_SETTINGS_SECURITY_AND_PRIVACY,
-                            icon = Icons.Outlined.Security,
+                            icon = ToolkitIcon.Vector(Icons.Outlined.Security),
                             useIconContainer = true,
                             iconColor = Color(0xFF014E69),
                             iconContainerColor = Color(0xFFBDE9FF),
@@ -91,7 +92,7 @@ class AppSettingsProvider(context: Context) : SettingsProvider {
                         ),
                         SettingsPreference(
                             key = SettingsConstants.KEY_SETTINGS_ADVANCED,
-                            icon = Icons.Outlined.Build,
+                            icon = ToolkitIcon.Vector(Icons.Outlined.Build),
                             useIconContainer = true,
                             iconColor = Color(0xFF572AA4),
                             iconContainerColor = Color(0xFFEEDCFE),
@@ -101,7 +102,7 @@ class AppSettingsProvider(context: Context) : SettingsProvider {
                         ),
                         SettingsPreference(
                             key = SettingsConstants.KEY_SETTINGS_ABOUT,
-                            icon = Icons.Outlined.Info,
+                            icon = ToolkitIcon.Vector(Icons.Outlined.Info),
                             useIconContainer = true,
                             iconColor = Color(0xFF484848),
                             iconContainerColor = Color(0xFFE3E3E3),

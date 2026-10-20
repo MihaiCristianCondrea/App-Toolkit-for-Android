@@ -28,6 +28,9 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.EntranceStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.TabTransitionStyle
 import java.io.IOException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -41,22 +44,26 @@ import kotlinx.coroutines.flow.onEach
  * A file that can no longer be parsed is replaced with empty preferences, which puts every shell
  * setting back to its default.
  */
-private val Context.shellDataStore: DataStore<Preferences> by preferencesDataStore(
+internal val Context.shellDataStore: DataStore<Preferences> by preferencesDataStore(
     name = "shell_settings",
     corruptionHandler = ReplaceFileCorruptionHandler { emptyPreferences() },
 )
 
 /**
- * Stores shell settings in the application-shared `shell_settings` DataStore. Default-valued
- * choices are omitted so future defaults reach users who have not overridden them. Unknown enum
- * names fall back to defaults.
+ * Stores shell settings in the application-shared `shell_settings` DataStore.
+ *
+ * Only choices are stored: a setter saves its value even when it equals the current default, and a
+ * setting nobody chose has no key and reads as [defaults]. That keeps a later change to the app's
+ * defaults from overwriting what someone chose, while reaching everyone who did not.
+ * [resetDeveloperOptions] removes every key. Unknown enum names read as the default.
  *
  * Corruption replaces the file with empty preferences; IO read failures use defaults for that
  * collection so the root composition can still start.
  */
-internal class DataStoreShellPreferences(context: Context) : ShellPreferences {
-
-    private val dataStore = context.applicationContext.shellDataStore
+internal class DataStoreShellPreferences(
+    private val dataStore: DataStore<Preferences>,
+    override val defaults: ShellSettings,
+) : ShellPreferences {
 
     override val settings: Flow<ShellSettings> = dataStore.data
         .catch { throwable -> if (throwable is IOException) emit(emptyPreferences()) else throw throwable }
@@ -65,6 +72,7 @@ internal class DataStoreShellPreferences(context: Context) : ShellPreferences {
 
     override val lastKnown: ShellSettings? get() = lastRead
 
+    /** Saves the settings [transform] changes; the ones it leaves alone stay unchosen. */
     override suspend fun update(transform: (ShellSettings) -> ShellSettings) {
         dataStore.edit { preferences ->
             val current = preferences.read()
@@ -73,23 +81,44 @@ internal class DataStoreShellPreferences(context: Context) : ShellPreferences {
         }
     }
 
-    private fun Preferences.read(): ShellSettings {
-        val defaults = Defaults
-        return ShellSettings(
-            layoutMode = enum(Keys.layoutMode, defaults.layoutMode),
-            topBarOverride = enum(Keys.topBarOverride, defaults.topBarOverride),
-            tabTransition = enum(Keys.tabTransition, defaults.tabTransition),
-            accessoryMode = enum(Keys.accessoryMode, defaults.accessoryMode),
-            hideBottomBarOnScroll = this[Keys.hideBottomBarOnScroll] ?: defaults.hideBottomBarOnScroll,
-            limitContentWidth = this[Keys.limitContentWidth] ?: defaults.limitContentWidth,
-            animationSpeed = enum(Keys.animationSpeed, defaults.animationSpeed),
-            backEdgeStyle = enum(Keys.backEdgeStyle, defaults.backEdgeStyle),
-            startOverride = this[Keys.startOverride] ?: defaults.startOverride,
-            navigationBarStyle = enum(Keys.navigationBarStyle, defaults.navigationBarStyle),
-            navigationTint = enum(Keys.navigationTint, defaults.navigationTint),
-            hideTopBarOnScroll = this[Keys.hideTopBarOnScroll] ?: defaults.hideTopBarOnScroll,
-        )
+    override suspend fun setLayoutMode(value: ShellLayoutMode) = choose(Keys.layoutMode, value.name)
+    override suspend fun setTopBarOverride(value: TopBarOverride) = choose(Keys.topBarOverride, value.name)
+    override suspend fun setTabTransition(value: TabTransitionStyle) = choose(Keys.tabTransition, value.name)
+    override suspend fun setAccessoryMode(value: AccessoryMode) = choose(Keys.accessoryMode, value.name)
+    override suspend fun setHideBottomBarOnScroll(value: Boolean) = choose(Keys.hideBottomBarOnScroll, value)
+    override suspend fun setHideTopBarOnScroll(value: Boolean) = choose(Keys.hideTopBarOnScroll, value)
+    override suspend fun setLimitContentWidth(value: Boolean) = choose(Keys.limitContentWidth, value)
+    override suspend fun setAnimationSpeed(value: AnimationSpeed) = choose(Keys.animationSpeed, value.name)
+    override suspend fun setBackEdgeStyle(value: BackEdgeStyle) = choose(Keys.backEdgeStyle, value.name)
+    override suspend fun setStartOverride(value: Int) = choose(Keys.startOverride, value)
+    override suspend fun setNavigationBarStyle(value: NavigationBarStyle) = choose(Keys.navigationBarStyle, value.name)
+    override suspend fun setNavigationTint(value: NavigationTint) = choose(Keys.navigationTint, value.name)
+    override suspend fun setEntranceStyle(value: EntranceStyle) = choose(Keys.entranceStyle, value.name)
+
+    override suspend fun resetDeveloperOptions() {
+        dataStore.edit { preferences -> Stored.all.forEach { it.forget(preferences) } }
     }
+
+    /** Saves [value] as a choice, whether or not it equals the current setting. */
+    private suspend fun <S : Any> choose(key: Preferences.Key<S>, value: S) {
+        dataStore.edit { it[key] = value }
+    }
+
+    private fun Preferences.read(): ShellSettings = ShellSettings(
+        layoutMode = enum(Keys.layoutMode, defaults.layoutMode),
+        topBarOverride = enum(Keys.topBarOverride, defaults.topBarOverride),
+        tabTransition = enum(Keys.tabTransition, defaults.tabTransition),
+        accessoryMode = enum(Keys.accessoryMode, defaults.accessoryMode),
+        hideBottomBarOnScroll = this[Keys.hideBottomBarOnScroll] ?: defaults.hideBottomBarOnScroll,
+        limitContentWidth = this[Keys.limitContentWidth] ?: defaults.limitContentWidth,
+        animationSpeed = enum(Keys.animationSpeed, defaults.animationSpeed),
+        backEdgeStyle = enum(Keys.backEdgeStyle, defaults.backEdgeStyle),
+        startOverride = this[Keys.startOverride] ?: defaults.startOverride,
+        navigationBarStyle = enum(Keys.navigationBarStyle, defaults.navigationBarStyle),
+        navigationTint = enum(Keys.navigationTint, defaults.navigationTint),
+        hideTopBarOnScroll = this[Keys.hideTopBarOnScroll] ?: defaults.hideTopBarOnScroll,
+        entranceStyle = enum(Keys.entranceStyle, defaults.entranceStyle),
+    )
 
     private inline fun <reified E : Enum<E>> Preferences.enum(key: Preferences.Key<String>, default: E): E =
         this[key]?.let { name -> enumValues<E>().firstOrNull { it.name == name } } ?: default
@@ -100,11 +129,14 @@ internal class DataStoreShellPreferences(context: Context) : ShellPreferences {
         val of: (ShellSettings) -> T,
         val encode: (T) -> S,
     ) {
-        /** Writes the setting if it changed, and removes it once it is back at its default. */
+        /** Saves the setting if [next] changed it. */
         fun write(preferences: MutablePreferences, current: ShellSettings, next: ShellSettings) {
             val value = of(next)
-            if (value == of(current)) return
-            if (value == of(Defaults)) preferences.remove(key) else preferences[key] = encode(value)
+            if (value != of(current)) preferences[key] = encode(value)
+        }
+
+        fun forget(preferences: MutablePreferences) {
+            preferences.remove(key)
         }
 
         companion object {
@@ -127,10 +159,12 @@ internal class DataStoreShellPreferences(context: Context) : ShellPreferences {
                 enum(Keys.navigationBarStyle) { it.navigationBarStyle },
                 enum(Keys.navigationTint) { it.navigationTint },
                 flag(Keys.hideTopBarOnScroll) { it.hideTopBarOnScroll },
+                enum(Keys.entranceStyle) { it.entranceStyle },
             )
         }
     }
 
+    /** The key names are persisted: renaming one forgets that choice on update. */
     private object Keys {
         val layoutMode = stringPreferencesKey("layout_mode")
         val topBarOverride = stringPreferencesKey("top_bar_override")
@@ -144,11 +178,10 @@ internal class DataStoreShellPreferences(context: Context) : ShellPreferences {
         val navigationBarStyle = stringPreferencesKey("navigation_bar_style")
         val navigationTint = stringPreferencesKey("navigation_tint")
         val hideTopBarOnScroll = booleanPreferencesKey("hide_top_bar_on_scroll")
+        val entranceStyle = stringPreferencesKey("entrance_style")
     }
 
     private companion object {
-        val Defaults = ShellSettings()
-
         /** Shared by every instance, since they share the store. */
         @Volatile
         var lastRead: ShellSettings? = null

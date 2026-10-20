@@ -62,8 +62,10 @@ Ga4EventData
 logEvent
 logGa4Event
 logScreenView
-TrackScreenView
-TrackScreenState
+ScreenHost
+TrackedScreen
+TrackScreenView (removed in App Toolkit 3.0.0-pre25)
+TrackScreenState (removed in App Toolkit 3.0.0-pre25)
 LoggedScreenViewModel
 FirebaseAnalytics
 setUserProperty

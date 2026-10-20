@@ -29,12 +29,12 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.models.AppSummaryDto
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.models.AppsListDataDto
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.models.AppsListResponseDto
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppCategory
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppDeviceType
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppSummary
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppCategory
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppDeviceType
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockRequestHandleScope
@@ -328,7 +328,7 @@ class DefaultDeveloperAppsRepositoryTest {
                 client = client,
                 baseUrl = "https://example.com",
             ),
-            telemetryRepository = telemetryRepository,
+            diagnostics = telemetryRepository,
             localDataSource = local,
         )
 

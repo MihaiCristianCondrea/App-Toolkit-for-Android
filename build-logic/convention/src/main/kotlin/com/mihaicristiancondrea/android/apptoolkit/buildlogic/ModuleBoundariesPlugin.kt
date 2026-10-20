@@ -49,7 +49,7 @@ class ModuleBoundariesPlugin : Plugin<Project> {
     private fun registerRepositoryCheck(rootProject: Project) {
         rootProject.tasks.register(CHECK_TASK_NAME) {
             group = "verification"
-            description = "Checks sample and library source ownership, package separation, and telemetry conventions."
+            description = "Checks sample and library source ownership, package separation, tree conventions, analytics ownership, and telemetry conventions."
 
             doLast {
                 val sampleRoot = rootProject.layout.projectDirectory.dir("sample").asFile
@@ -69,6 +69,10 @@ class ModuleBoundariesPlugin : Plugin<Project> {
                 checkAppOwnership(sampleRoot, sourceFiles, violations)
                 checkSampleCore(sampleRoot, sourceFiles, violations)
                 checkScreenTracking(sampleRoot, sourceFiles, violations)
+                checkTreeConventions(sampleRoot, sourceFiles, violations)
+                checkTreeConventions(libraryRoot, librarySourceFiles, violations)
+                checkAnalyticsOwnership(sampleRoot, sourceFiles, violations)
+                checkAnalyticsOwnership(libraryRoot, librarySourceFiles, violations)
 
                 if (violations.isNotEmpty()) {
                     throw GradleException(
@@ -177,15 +181,93 @@ class ModuleBoundariesPlugin : Plugin<Project> {
         }
     }
 
-    /** The sample's core modules sit under its features, so none may import one. */
+    /**
+     * The sample's core modules sit under its features, so none may import one. The features are
+     * read from `sample/feature/`, so a new feature module is covered without editing this rule.
+     */
     private fun checkSampleCore(
         sampleRoot: File,
         sourceFiles: Set<File>,
         violations: MutableList<String>,
     ) {
+        val features = sampleRoot.resolve("feature").listFiles(File::isDirectory).orEmpty().map { it.name }
+        if (features.isEmpty()) return
+        val featureImport = Regex(
+            "(?m)^import\\s+com\\.mihaicristiancondrea\\.android\\.apps\\.apptoolkit\\.feature\\." +
+                "(${features.joinToString("|") { Regex.escape(it) }})(\\.|$)",
+        )
         sourceFiles.filter { modulePath(sampleRoot, it).startsWith(":sample:core:") }.forEach { file ->
-            if (FEATURE_IMPORT_REGEX.containsMatchIn(file.readText())) {
+            if (featureImport.containsMatchIn(file.readText())) {
                 violations += "${file.relativeTo(sampleRoot)} imports a product feature"
+            }
+        }
+    }
+
+    /**
+     * The objective part of the `layered-tree-review` skill: package names, where the standard
+     * file kinds live, and mapper names. Judgement calls, such as whether a mapper or a use case
+     * is worth having, stay in the skill.
+     */
+    private fun checkTreeConventions(
+        root: File,
+        sourceFiles: Set<File>,
+        violations: MutableList<String>,
+    ) {
+        val mainFiles = sourceFiles.filter { "/src/main/" in it.invariantSeparatorsPath }
+        val packagesByModule = mutableMapOf<String, MutableSet<String>>()
+        mainFiles.forEach { file ->
+            val text = file.readText()
+            val packageName = PACKAGE_REGEX.find(text)?.groupValues?.get(1) ?: return@forEach
+            val module = modulePath(root, file)
+            packagesByModule.getOrPut(module, ::mutableSetOf).add(packageName)
+            val where = "${file.relativeTo(root)}"
+            val segments = packageName.split('.')
+
+            segments.firstOrNull { it in BANNED_PACKAGE_SEGMENTS }?.let { segment ->
+                violations += "$where is in a `$segment` package; ${BANNED_PACKAGE_SEGMENTS.getValue(segment)}"
+            }
+            FILE_PLACEMENT.forEach { (suffix, rule) ->
+                if (file.name.endsWith(suffix) && !rule.allows(packageName)) {
+                    violations += "$where: ${rule.message}"
+                }
+            }
+            VAGUE_MAPPER_REGEX.find(text)?.let { match ->
+                violations += "$where declares `${match.groupValues[1]}()`; name a mapper after the type it returns"
+            }
+        }
+
+        packagesByModule.forEach { (module, packages) ->
+            packages.mapNotNull { DOMAIN_ROOT_REGEX.find(it)?.value }.toSet().forEach { domainRoot ->
+                if ("$domainRoot.usecases" !in packages) {
+                    violations += "$module: `$domainRoot` holds no use cases; move its models to `data.models`"
+                }
+            }
+        }
+    }
+
+    /**
+     * Product analytics belong to the UI layer. Code under `data` and `domain` packages may take
+     * `DiagnosticsReporter` for breadcrumbs and non-fatal reports, and `TelemetryCollection` where
+     * it applies consent, but never the analytics contracts, events, GA4 helpers or SDK. A
+     * repository returns its outcome and the screen that asked reports it.
+     *
+     * The telemetry transport is the deliberate exception: it implements analytics, so it has to
+     * name them. [ANALYTICS_INFRASTRUCTURE_MODULES] lists it.
+     */
+    private fun checkAnalyticsOwnership(
+        root: File,
+        sourceFiles: Set<File>,
+        violations: MutableList<String>,
+    ) {
+        sourceFiles.filter { "/src/main/" in it.invariantSeparatorsPath }.forEach { file ->
+            if (modulePath(root, file) in ANALYTICS_INFRASTRUCTURE_MODULES) return@forEach
+            val text = file.readText()
+            val packageName = PACKAGE_REGEX.find(text)?.groupValues?.get(1) ?: return@forEach
+            val layer = packageName.split('.').firstOrNull { it == "data" || it == "domain" } ?: return@forEach
+            ANALYTICS_REFERENCE_REGEX.find(text)?.let { match ->
+                violations += "${file.relativeTo(root)} reports analytics from the $layer layer (" +
+                    "${match.value.substringAfterLast('.')}); return the outcome and report it from the UI, " +
+                    "or use DiagnosticsReporter for a breadcrumb or failure"
             }
         }
     }
@@ -221,8 +303,57 @@ class ModuleBoundariesPlugin : Plugin<Project> {
         val APP_OWNED_IMPORT_REGEX = Regex(
             "(?m)^import\\s+com\\.mihaicristiancondrea\\.android\\.apps\\.apptoolkit\\.app\\.(main|integration|navigation)(\\.|$)",
         )
-        val FEATURE_IMPORT_REGEX = Regex(
-            "(?m)^import\\s+com\\.mihaicristiancondrea\\.android\\.apps\\.apptoolkit\\.feature\\.(apps|components|onboarding|settings|tiles)(\\.|$)",
+
+        /** Package names outside the tree's vocabulary, with the name to use instead. */
+        val BANNED_PACKAGE_SEGMENTS = mapOf(
+            "presentation" to "UI code lives in `ui`",
+            "datasource" to "data sources live directly in `data/local` or `data/remote`",
+            "datasources" to "data sources live directly in `data/local` or `data/remote`",
+            "usecase" to "use `domain.usecases`",
+            "repository" to "use `data.repositories`",
+            "mapper" to "use `mappers`",
+            "model" to "use `models`",
+            "state" to "use `states`",
+            "view" to "use `views`",
+            "contract" to "use `contracts`",
+            "util" to "use `utils`",
+            "helper" to "use `utils`",
+            "helpers" to "use `utils`",
+            "base" to "shared screen parts live in `core.ui.screen`",
+        )
+
+        class Placement(val message: String, val allows: (String) -> Boolean)
+
+        /** Where the file kinds named by their suffix must live. */
+        val FILE_PLACEMENT = mapOf(
+            "Dto.kt" to Placement("a DTO lives in `data.remote.models`") { it.endsWith(".data.remote.models") },
+            "UseCase.kt" to Placement("a use case lives in `domain.usecases`") { it.endsWith(".domain.usecases") },
+            "UiState.kt" to Placement("a UI state lives in a `ui` package's `states`") {
+                it.endsWith(".states") && ".ui" in it
+            },
+            "ViewModel.kt" to Placement("a ViewModel lives in a `ui` package, outside `views`") {
+                ".ui" in it && ".views" !in it
+            },
+            // TelemetryRepository keeps its published name in the telemetry package: it is a
+            // cross-cutting contract, not application data.
+            "Repository.kt" to Placement("a repository lives in `data.repositories`") {
+                it.endsWith(".data.repositories") || it.endsWith(".core.testing") ||
+                    it.endsWith(".core.common.telemetry")
+            },
+        )
+
+        val VAGUE_MAPPER_REGEX = Regex("(?m)^\\s*(?:\\w+\\s+)*fun\\s+(?:<[^>]+>\\s*)?[\\w.<>?, ]+\\.(toDomain|toModel|toData|toUi|toEntity|toDto)\\(")
+        val DOMAIN_ROOT_REGEX = Regex("^.*?\\.domain(?=\\.|$)")
+        /** Modules that implement telemetry, and so may name analytics from their data layer. */
+        val ANALYTICS_INFRASTRUCTURE_MODULES = setOf(":library:integration:firebase")
+
+        /** The analytics contracts, events, GA4 helpers, UI analytics and the analytics SDK. */
+        val ANALYTICS_REFERENCE_REGEX = Regex(
+            "com\\.mihaicristiancondrea\\.android\\.libs\\.apptoolkit\\.(" +
+                "core\\.common\\.telemetry\\.(TelemetryRepository|AnalyticsReporter|models)\\b|" +
+                "core\\.common\\.utils\\.extensions\\.analytics\\b|" +
+                "core\\.ui\\.(views|models)\\.analytics\\b)" +
+                "|com\\.google\\.firebase\\.analytics\\b",
         )
         val INLINE_SCREEN_NAME_REGEX = Regex("screenName\\s*=\\s*\"")
     }

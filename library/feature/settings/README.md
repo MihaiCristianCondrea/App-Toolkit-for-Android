@@ -220,7 +220,7 @@ and is checked the same way.
   them can be opened. A result for an unregistered page is left out with a warning rather than a
   crash, the way `ShellGraph.keyFor` drops an intent's unregistered key: the providers are bound
   app-wide, and an app may legitimately leave a page out of a graph.
-- Layers follow ownership, as described in [the architecture rules](../../../.agents/skills/architecture/layered-tree-review/references/android-tree-rules.md).
+- Layers follow ownership, as described in [the architecture rules](../../../.agents/skills/built-in/architecture/layered-tree-review/references/android-tree-rules.md).
 
 ## Public contracts
 

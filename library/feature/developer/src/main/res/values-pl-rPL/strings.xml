@@ -27,6 +27,11 @@
     <string name="shell_dev_bottom_accessory">Nad paskiem nawigacji</string>
     <string name="shell_dev_motion">Ruch</string>
     <string name="shell_dev_animation_speed">Szybkość animacji</string>
+    <string name="shell_dev_entrance_style">Animacja pojawiania się</string>
+    <string name="shell_entrance_slide">Przenikanie i uniesienie</string>
+    <string name="shell_entrance_scale">Przenikanie i powiększenie</string>
+    <string name="shell_entrance_fade">Przenikanie</string>
+    <string name="shell_entrance_none">Brak</string>
     <string name="shell_dev_reset">Resetuj opcje programisty</string>
     <string name="shell_dev_reset_summary">Powrót do tego, co deklaruje aplikacja</string>
     <string name="shell_layout_auto">Automatycznie, według szerokości okna</string>

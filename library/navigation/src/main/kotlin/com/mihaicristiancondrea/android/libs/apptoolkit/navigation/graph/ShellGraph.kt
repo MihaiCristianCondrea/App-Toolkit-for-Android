@@ -65,6 +65,8 @@ class ShellGraph internal constructor(
     val start: NavKey,
     /** The start screens a start screen choice offers besides the tabs. */
     val startScreens: List<NavKey>,
+    /** The app's defaults the graph was built with; `ShellHost` takes its layout policy from them. */
+    val defaults: NavigationDefaults,
     /** Turns intents the app receives into destinations; see [ShellGraphBuilder.deepLinks]. */
     private val deepLinks: List<(Intent) -> NavKey?>,
     private val destinations: Map<KClass<out NavKey>, Destination<*>>,
@@ -135,10 +137,13 @@ class ShellGraph internal constructor(
 /**
  * Collects an app's destinations. The host creates it, lets each feature and the app register
  * their destinations, and calls [build].
+ *
+ * A destination registered without a `topBar` takes the style [defaults] gives its kind.
  */
 class ShellGraphBuilder(
     @param:StringRes private val appTitle: Int,
     private val appIcon: ToolkitIcon? = null,
+    val defaults: NavigationDefaults = NavigationDefaults(),
 ) {
 
     @PublishedApi
@@ -169,23 +174,35 @@ class ShellGraphBuilder(
         @StringRes label: Int,
         icon: ToolkitIcon,
         selectedIcon: ToolkitIcon = icon,
-        topBar: TopBarStyle = TopBarStyle.Small,
+        topBar: TopBarStyle? = null,
         contentWidth: ContentWidth = ContentWidth.Default,
         badge: String? = null,
+        noinline badgeText: (@Composable () -> String?)? = null,
         search: TabSearch? = null,
         @StringRes shortLabel: Int? = null,
         paneRole: PaneRole = PaneRole.None,
         noinline actions: (@Composable RowScope.(K) -> Unit)? = null,
         noinline fab: (@Composable (K) -> Unit)? = null,
         noinline fabs: (@Composable (K) -> List<ToolkitFab>)? = null,
+        topBarScrollMode: TopBarScrollMode = TopBarScrollMode.Default,
         noinline content: @Composable (K) -> Unit,
     ) {
-        tabs += ShellTab(key = key, label = label, icon = icon, selectedIcon = selectedIcon, badge = badge, search = search, shortLabel = shortLabel)
+        tabs += ShellTab(
+            key = key,
+            label = label,
+            icon = icon,
+            selectedIcon = selectedIcon,
+            badge = badge,
+            badgeText = badgeText,
+            search = search,
+            shortLabel = shortLabel,
+        )
         register(
             Destination(
                 keyClass = K::class,
                 kind = DestinationKind.Tab,
-                topBar = topBar,
+                topBar = topBar ?: defaults.tabTopBarStyle,
+                topBarScrollMode = topBarScrollMode,
                 paneRole = paneRole,
                 contentWidth = contentWidth,
                 scaffold = false,
@@ -200,7 +217,7 @@ class ShellGraphBuilder(
 
     /** Adds a destination pushed inside the current tab, keeping the navigation bar. */
     inline fun <reified K : NavKey> child(
-        topBar: TopBarStyle = TopBarStyle.Small,
+        topBar: TopBarStyle? = null,
         paneRole: PaneRole = PaneRole.None,
         contentWidth: ContentWidth = ContentWidth.Default,
         noinline title: @Composable (K) -> String,
@@ -208,13 +225,15 @@ class ShellGraphBuilder(
         transition: ScreenTransition? = null,
         noinline fab: (@Composable (K) -> Unit)? = null,
         noinline fabs: (@Composable (K) -> List<ToolkitFab>)? = null,
+        topBarScrollMode: TopBarScrollMode = TopBarScrollMode.Default,
         noinline content: @Composable (K) -> Unit,
     ) {
         register(
             Destination(
                 keyClass = K::class,
                 kind = DestinationKind.Child,
-                topBar = topBar,
+                topBar = topBar ?: defaults.childTopBarStyle,
+                topBarScrollMode = topBarScrollMode,
                 paneRole = paneRole,
                 contentWidth = contentWidth,
                 scaffold = false,
@@ -236,7 +255,7 @@ class ShellGraphBuilder(
      * need tabs or a search field under their app bar.
      */
     inline fun <reified K : NavKey> page(
-        topBar: TopBarStyle = TopBarStyle.Large,
+        topBar: TopBarStyle? = null,
         paneRole: PaneRole = PaneRole.None,
         contentWidth: ContentWidth = ContentWidth.Default,
         noinline title: (@Composable (K) -> String)? = null,
@@ -245,13 +264,15 @@ class ShellGraphBuilder(
         noinline fab: (@Composable (K) -> Unit)? = null,
         noinline fabs: (@Composable (K) -> List<ToolkitFab>)? = null,
         noinline placeholder: (@Composable () -> Unit)? = null,
+        topBarScrollMode: TopBarScrollMode = TopBarScrollMode.Default,
         noinline content: @Composable (K) -> Unit,
     ) {
         register(
             Destination(
                 keyClass = K::class,
                 kind = DestinationKind.Page,
-                topBar = topBar,
+                topBar = topBar ?: defaults.pageTopBarStyle,
+                topBarScrollMode = topBarScrollMode,
                 paneRole = paneRole,
                 contentWidth = contentWidth,
                 scaffold = title != null,
@@ -275,15 +296,17 @@ class ShellGraphBuilder(
     inline fun <reified K : NavKey> pageIfAbsent(
         paneRole: PaneRole,
         noinline title: (@Composable (K) -> String)?,
-        topBar: TopBarStyle = TopBarStyle.Large,
+        topBar: TopBarStyle? = null,
         noinline actions: (@Composable RowScope.(K) -> Unit)? = null,
         noinline fabs: (@Composable (K) -> List<ToolkitFab>)? = null,
         noinline placeholder: (@Composable () -> Unit)? = null,
+        topBarScrollMode: TopBarScrollMode = TopBarScrollMode.Default,
         noinline content: @Composable (K) -> Unit,
     ) {
         if (K::class !in destinations) {
             page(
                 topBar = topBar,
+                topBarScrollMode = topBarScrollMode,
                 paneRole = paneRole,
                 title = title,
                 actions = actions,
@@ -385,6 +408,7 @@ class ShellGraphBuilder(
         banner = banner,
         player = player,
         transitions = transitions,
+        defaults = defaults,
         start = start ?: requireNotNull(tabs.firstOrNull()?.key) {
             "A graph without tabs needs start(page)."
         },
@@ -418,8 +442,9 @@ class ShellGraphBuilder(
 fun shellGraph(
     @StringRes appTitle: Int,
     appIcon: ToolkitIcon? = null,
+    defaults: NavigationDefaults = NavigationDefaults(),
     builder: ShellGraphBuilder.() -> Unit,
-): ShellGraph = ShellGraphBuilder(appTitle, appIcon).apply(builder).build()
+): ShellGraph = ShellGraphBuilder(appTitle, appIcon, defaults).apply(builder).build()
 
 /** Collects [ShellGraphBuilder.deepLinks]. The first link that returns a key wins. */
 class DeepLinkBuilder internal constructor() {

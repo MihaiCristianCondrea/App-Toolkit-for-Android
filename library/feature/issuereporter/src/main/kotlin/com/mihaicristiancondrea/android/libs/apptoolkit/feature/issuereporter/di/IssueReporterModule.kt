@@ -20,7 +20,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.d
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.sheets.IssueReporterSheet
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterBottomSheet
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.di.GithubToken
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.github.GithubConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.utils.extensions.toToken
@@ -35,7 +34,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.do
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.providers.DeviceInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.usecases.ValidateIssueReportUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.shake.IssueReporterShakeManager
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.shake.IssueReporterShakeManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.Module
@@ -66,7 +65,7 @@ fun issueReporterModule(
         DefaultIssueReporterRepository(
             remoteDataSource = get(),
             deviceInfoProvider = get(),
-            telemetryRepository = get(),
+            diagnostics = get(),
         )
     }
     single<IssueReportHistoryRepository> {

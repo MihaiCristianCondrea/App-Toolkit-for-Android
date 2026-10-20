@@ -17,13 +17,13 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.UsageAndDiagnosticsPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.domain.models.UsageAndDiagnosticsSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.models.UsageAndDiagnosticsSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentSettings
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -96,7 +96,7 @@ class DefaultUsageAndDiagnosticsRepositoryTest {
             val repository = DefaultUsageAndDiagnosticsRepository(
                 dataSource = dataSource,
                 configProvider = FakeBuildInfoProvider(),
-                telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
+                diagnostics = mockk<TelemetryRepository>(relaxed = true),
                 consentRepository = consentRepository,
             )
 
@@ -115,7 +115,7 @@ class DefaultUsageAndDiagnosticsRepositoryTest {
             val repository = DefaultUsageAndDiagnosticsRepository(
                 dataSource = FakeUsageAndDiagnosticsPreferencesDataSource(),
                 configProvider = FakeBuildInfoProvider(),
-                telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
+                diagnostics = mockk<TelemetryRepository>(relaxed = true),
                 consentRepository = consentRepository,
             )
             val essentialOnly = UsageAndDiagnosticsSettings(

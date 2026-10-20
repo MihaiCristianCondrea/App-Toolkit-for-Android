@@ -3,10 +3,9 @@ name: android-ui-layer
 description: >
   Design, implement, review, and migrate App Toolkit screens on the core.ui.screen setup: a
   ScreenViewModel or LoggedScreenViewModel, a feature-owned state data class with Loadable fields,
-  an event contract, UiMessage queues shown by MessageHost, ScreenStateHandler, TrackScreenState,
-  the split between a stateful XScreen and a stateless, previewable XScreenContent in the same
-  file, and the
-  mapping of thrown failures to error text. Use when creating a screen or ViewModel, adding
+  an event contract, UiMessage queues, ScreenHost (screen visits, status and messages),
+  ScreenStateHandler, the split between a stateful XScreen and a stateless, previewable
+  XScreenContent in the same file, and the mapping of thrown failures to error text. Use when creating a screen or ViewModel, adding
   loading, empty, error or custom statuses, deciding what a failure shows, showing snackbars from
   a ViewModel, wiring a ViewModel in Koin, testing a ViewModel or screen content, or moving a
   screen off core.ui.base, core.ui.states or DataState.
@@ -100,7 +99,7 @@ their own queue.
 - Choose the starting value on purpose: `Loading` when a spinner is right, `Empty` when the screen
   should show nothing until the data arrives.
 - When `Loadable` does not fit, declare a feature sealed type implementing `TrackedStatus`, so
-  `TrackScreenState` still reports it.
+  `ScreenHost` still reports it.
 - Use `ImmutableList` and the other `kotlinx.collections.immutable` types, so Compose treats the
   state as stable and skips rows that did not change.
 - Hold text the app writes as `UiTextHelper`, so it resolves in the UI against the current locale
@@ -138,17 +137,33 @@ their own queue.
   then the content, then the content's private helpers and previews. Never give the content a file
   of its own.
 - `XScreen` is the public entry point. It gets the ViewModel, collects `state` with
-  `collectAsStateWithLifecycle()`, calls `TrackScreenView` and `TrackScreenState`, hosts
-  `MessageHost(viewModel)`, owns navigation, and calls `XScreenContent`.
+  `collectAsStateWithLifecycle()`, owns navigation, and calls `XScreenContent` inside
+  `ScreenHost(screen, status, viewModel) { }`, the screen's only tracking call. `ScreenHost`
+  reports each visit once the screen is visible and active, reports the status, and shows the
+  ViewModel's messages; it adds no layout and renders no `Loadable`.
+- A static screen calls `ScreenHost(screen = X_SCREEN) { }` with no status and no ViewModel. Never
+  build a `Loadable.Ready` only to have something to report.
+- A composable that logs an interaction of its own reads `val telemetry = LocalTelemetry.current`
+  once and calls it from a callback.
 - `XScreenContent` takes the state, `onEvent`, one callback per navigation target, `modifier` and
   `contentPadding`. It has no ViewModel, no injection, no navigator and no flow collection, so it
   renders in a preview and a test with plain values.
 - `XScreenContent` may hold visual element state with `remember` or `rememberSaveable`, such as tap
   counters, animations, or scroll position.
 - Make `XScreenContent` `internal` in library features unless a host needs to reuse it.
-- Render each `Loadable` field through `ScreenStateHandler`.
+- Render each `Loadable` field through `ScreenStateHandler`. Customize it with `icon`,
+  `retryWhenEmpty` and `showAd` before replacing a case; never copy `NoDataScreen` into `onEmpty`
+  or `onError` to change one of those.
+- Bring list items and cards in with `Modifier.animateVisibility(index)`, in the app's
+  `EntranceStyle`; never with hand-written delays, durations or offsets.
+- Switch on any other state, such as a flow's phases, with `StateContent`, and declare the
+  screen's floating action buttons on `ScreenHost(fabs = ...)`, never with `ScaffoldFabs` inside
+  the content.
+- Keep `XScreen.kt` to the screen and its content. A list with its own visual state, a sheet and
+  the screen's analytics builders go in files of their own: `views/lists/`, `views/sheets/` and
+  `analytics/`.
 - Preview `XScreenContent` in its Ready state. The default empty and failure screens inject an ad
-  unit through Koin and do not render in a preview.
+  unit through Koin while their ad shows, so preview them with `showAd = false`.
 
 ### Wiring and tests
 

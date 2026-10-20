@@ -7,8 +7,8 @@ Firebase transport or Compose tracking APIs.
 
 ## Owns
 
-- `domain.models.AppScreenTracking`, the canonical name/class pairs for sample-owned screens.
-- `domain.contracts.AppGa4Contract`, event names, parameter names, required schemas, and forbidden
+- `models.AppScreenTracking`, the sample's screens as `TrackedScreen`s, passed to `ScreenHost`.
+- `contracts.AppGa4Contract`, event names, parameter names, required schemas, and forbidden
   parameter keys.
 - Contract tests that reject invalid event names, duplicate screens, and unsafe required fields.
 
@@ -20,6 +20,8 @@ Firebase transport or Compose tracking APIs.
 
 ## Depends on
 
+- [`:library:core:common`](../../../library/core/common/README.md) for `TrackedScreen`, the
+  library's UI-free screen descriptor that `ScreenHost` reports.
 - Compose runtime only because all sample library modules currently apply the shared Compose
   convention plugin.
 

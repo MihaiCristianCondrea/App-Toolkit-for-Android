@@ -46,7 +46,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.
 fun FabShowcase(
     onLogEvent: (String, String?) -> Ga4EventData,
 ) {
-    val telemetryRepository = LocalTelemetry.current
+    val telemetry = LocalTelemetry.current
     val iconContentDescription = stringResource(id = R.string.components_icon_content_description)
 
     ShowcaseHeader(
@@ -82,7 +82,7 @@ fun FabShowcase(
                     contentDescription = iconContentDescription,
                     onClick = {},
                     onLogClick = {
-                        telemetryRepository.logGa4Event(
+                        telemetry.logGa4Event(
                             onLogEvent("fab", "small"),
                         )
                     },

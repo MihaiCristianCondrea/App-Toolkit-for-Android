@@ -23,40 +23,40 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.models.AppLinkDto
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.models.AppScreenshotDto
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.models.AppSummaryDto
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppCategory
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppDetails
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppDeviceType
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppLatestVersion
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppLink
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppScreenshot
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppSummary
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppCategory
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppDetails
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppDeviceType
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppLatestVersion
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppLink
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppScreenshot
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.string.sanitizeUrlOrNull
 
 private const val DEFAULT_ICON_URL = "https://c.clc2l.com/t/g/o/google-playstore-Iauj7q.png"
 
-fun AppSummaryDto.toDomain(): AppSummary = AppSummary(
+fun AppSummaryDto.toAppSummary(): AppSummary = AppSummary(
     name = name,
     packageName = packageName,
     iconUrl = iconUrl.sanitizeUrlOrNull() ?: DEFAULT_ICON_URL,
     shortDescription = shortDescription.orEmpty(),
-    category = category?.toDomain(),
+    category = category?.toAppCategory(),
 )
 
-fun AppDetailsDto.toDomain(): AppDetails = AppDetails(
+fun AppDetailsDto.toAppDetails(): AppDetails = AppDetails(
     name = name,
     packageName = packageName,
     iconUrl = iconUrl.sanitizeUrlOrNull() ?: DEFAULT_ICON_URL,
     description = description,
     shortDescription = shortDescription.orEmpty(),
-    category = category?.toDomain(),
-    screenshots = screenshots.mapNotNull(AppScreenshotDto::toDomain),
-    links = links.mapNotNull(AppLinkDto::toDomain),
-    latestVersion = latestVersion?.toDomain(),
+    category = category?.toAppCategory(),
+    screenshots = screenshots.mapNotNull(AppScreenshotDto::toAppScreenshot),
+    links = links.mapNotNull(AppLinkDto::toAppLink),
+    latestVersion = latestVersion?.toAppLatestVersion(),
 )
 
-private fun AppCategoryDto.toDomain(): AppCategory = AppCategory(label = label, id = categoryId)
+private fun AppCategoryDto.toAppCategory(): AppCategory = AppCategory(label = label, id = categoryId)
 
-private fun AppScreenshotDto.toDomain(): AppScreenshot? = AppScreenshot(
+private fun AppScreenshotDto.toAppScreenshot(): AppScreenshot? = AppScreenshot(
     url = url.sanitizeUrlOrNull() ?: return null,
     aspectRatio = aspectRatio,
     deviceType = when (deviceType.lowercase()) {
@@ -68,12 +68,12 @@ private fun AppScreenshotDto.toDomain(): AppScreenshot? = AppScreenshot(
     },
 )
 
-private fun AppLinkDto.toDomain(): AppLink? = AppLink(
+private fun AppLinkDto.toAppLink(): AppLink? = AppLink(
     label = label.trim().takeIf(String::isNotEmpty) ?: return null,
     url = url.sanitizeUrlOrNull() ?: return null,
 )
 
-private fun AppLatestVersionDto.toDomain(): AppLatestVersion = AppLatestVersion(
+private fun AppLatestVersionDto.toAppLatestVersion(): AppLatestVersion = AppLatestVersion(
     versionName = versionName,
     versionCode = versionCode,
     releasedAt = releasedAt,

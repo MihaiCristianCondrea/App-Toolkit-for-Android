@@ -19,9 +19,9 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repos
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.DeveloperAppsLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.DeveloperAppsRemoteDataSource
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppDetails
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppSummary
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppDetails
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.networkCall
@@ -36,12 +36,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote
  */
 class DefaultDeveloperAppsRepository(
     private val remoteDataSource: DeveloperAppsRemoteDataSource,
-    private val telemetryRepository: TelemetryRepository,
+    private val diagnostics: DiagnosticsReporter,
     private val localDataSource: DeveloperAppsLocalDataSource,
 ) : DeveloperAppsRepository {
 
     override suspend fun fetchDeveloperApps(): List<AppSummary> {
-        telemetryRepository.logBreadcrumb(
+        diagnostics.logBreadcrumb(
             message = "Developer apps fetch",
         )
         val apps = networkCall { remoteDataSource.fetchDeveloperApps() }
@@ -56,7 +56,7 @@ class DefaultDeveloperAppsRepository(
 
     override suspend fun fetchAppDetails(packageName: String): AppDetails {
         require(packageName.isNotBlank()) { "An app's details need its package name" }
-        telemetryRepository.logBreadcrumb(
+        diagnostics.logBreadcrumb(
             message = "Developer app details fetch",
             attributes = mapOf("packageName" to packageName),
         )
@@ -70,7 +70,7 @@ class DefaultDeveloperAppsRepository(
     private suspend fun writeCache(apps: List<AppSummary>) {
         runSuspendCatching { localDataSource.write(apps) }
             .onFailure { throwable ->
-                telemetryRepository.recordNonFatal(
+                diagnostics.recordNonFatal(
                     throwable = throwable,
                     attributes = mapOf("operation" to "writeDeveloperAppsCache"),
                 )

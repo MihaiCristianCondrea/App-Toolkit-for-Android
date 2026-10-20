@@ -38,13 +38,14 @@ const pngSize = (file) => {
 
 for (const f of ["default-language.txt", "contact-website.txt"]) if (!existsSync(join(root, f))) errors.push(`missing ${f}`);
 // Every listing (listings/default and listings/custom/<id>) has source/ (what renders it) and listing/<locale>/ (what is
-// uploaded). Each listing/<locale>/ is checked; custom listings may also carry keywords.txt.
+// uploaded). Each listing/<locale>/ is checked; custom listings may also carry keywords.txt. Retired listings
+// (listings/<name>/ beside default/) are records of what was uploaded and are not checked.
 const listingsRoot = join(root, "listings");
 const isDir = (p) => existsSync(p) && statSync(p).isDirectory();
 const targets = [];
 if (isDir(join(listingsRoot, "default", "listing"))) targets.push(["default", join(listingsRoot, "default")]);
 const customRoot = join(listingsRoot, "custom");
-if (isDir(customRoot)) for (const id of readdirSync(customRoot).filter((d) => d !== "removed" && isDir(join(customRoot, d)))) targets.push([`custom/${id}`, join(customRoot, id)]);
+if (isDir(customRoot)) for (const id of readdirSync(customRoot).filter((d) => isDir(join(customRoot, d)))) targets.push([`custom/${id}`, join(customRoot, id)]);
 
 for (const [name, dir] of targets) {
   const listing = join(dir, "listing");

@@ -11,12 +11,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
 // Pages a feature opens are keys in :library:navigation, such as routes.LicensesRoute.
@@ -28,15 +27,16 @@ import <base>.feature.x.ui.views.XRow
 import kotlinx.collections.immutable.persistentListOf
 import org.koin.compose.viewmodel.koinViewModel
 
-private const val X_SCREEN_NAME = "X"
-private const val X_SCREEN_CLASS = "XScreen"
+// Literals: R8 renames classes, so a name read from one is unreadable in release reports. An app
+// with an analytics contract module declares its screens there instead, as AppScreenTracking does.
+private val X_SCREEN = TrackedScreen(name = "X", className = "XScreen")
 
 /**
- * The X screen. Owns the [XViewModel], tracking, messages and navigation, and hands the rendering
- * to [XScreenContent].
+ * The X screen. Owns the [XViewModel] and navigation, and hands the rendering to [XScreenContent]
+ * inside its [ScreenHost], which reports the screen's visits and status and shows its messages.
  *
- * Tracking reports through `LocalTelemetry`, which `ShellHost` provides. To log an event of its
- * own, the screen reads `val telemetry = LocalTelemetry.current` and calls it from a callback.
+ * To log an interaction of its own, the screen reads `val telemetry = LocalTelemetry.current` and
+ * calls it from a callback.
  */
 @Composable
 fun XScreen() {
@@ -44,24 +44,14 @@ fun XScreen() {
     val state: XUiState by viewModel.state.collectAsStateWithLifecycle()
     val navigator = LocalShellNavigator.current
 
-    TrackScreenView(
-        screenName = X_SCREEN_NAME,
-        screenClass = X_SCREEN_CLASS,
-    )
-
-    TrackScreenState(
-        screenName = X_SCREEN_NAME,
-        state = state.items,
-    )
-
-    XScreenContent(
-        state = state,
-        onEvent = viewModel::onEvent,
-        onOpenDetails = { id -> navigator.navigate(XDetailsRoute(id)) },
-        contentPadding = contentPadding(),
-    )
-
-    MessageHost(viewModel = viewModel)
+    ScreenHost(screen = X_SCREEN, status = state.items, viewModel = viewModel) {
+        XScreenContent(
+            state = state,
+            onEvent = viewModel::onEvent,
+            onOpenDetails = { id -> navigator.navigate(XDetailsRoute(id)) },
+            contentPadding = contentPadding(),
+        )
+    }
 }
 
 /**

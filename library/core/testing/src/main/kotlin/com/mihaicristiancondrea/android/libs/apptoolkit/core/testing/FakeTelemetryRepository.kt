@@ -17,15 +17,33 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.testing
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
 
 /**
- * Telemetry test double that discards events and reports.
+ * Telemetry test double that records what it is given, for any of the narrower contracts too:
+ * pass it where a `DiagnosticsReporter`, an `AnalyticsReporter` or a `TelemetryCollection` is
+ * expected.
  */
 class FakeTelemetryRepository : TelemetryRepository {
     val loggedEvents: MutableList<AnalyticsEvent> = mutableListOf()
     val loggedScreenViews: MutableList<Pair<String, String?>> = mutableListOf()
+    val breadcrumbs: MutableList<Pair<String, Map<String, String>>> = mutableListOf()
+    val nonFatals: MutableList<Throwable> = mutableListOf()
+    val viewModelErrors: MutableList<Throwable> = mutableListOf()
+
+    /**
+     * The last consent given to [updateConsent]: analytics, ad storage, ad user data and ad
+     * personalization, in that order.
+     */
+    var consent: List<Boolean>? = null
+        private set
+    var analyticsEnabled: Boolean? = null
+        private set
+    var crashlyticsEnabled: Boolean? = null
+        private set
+    var performanceEnabled: Boolean? = null
+        private set
 
     override fun updateConsent(
         analyticsGranted: Boolean,
@@ -33,18 +51,23 @@ class FakeTelemetryRepository : TelemetryRepository {
         adUserDataGranted: Boolean,
         adPersonalizationGranted: Boolean,
     ) {
+        consent = listOf(analyticsGranted, adStorageGranted, adUserDataGranted, adPersonalizationGranted)
     }
 
     override fun setAnalyticsEnabled(enabled: Boolean) {
+        analyticsEnabled = enabled
     }
 
     override fun setCrashlyticsEnabled(enabled: Boolean) {
+        crashlyticsEnabled = enabled
     }
 
     override fun setPerformanceEnabled(enabled: Boolean) {
+        performanceEnabled = enabled
     }
 
     override fun logBreadcrumb(message: String, attributes: Map<String, String>) {
+        breadcrumbs.add(message to attributes)
     }
 
     override fun reportViewModelError(
@@ -53,9 +76,11 @@ class FakeTelemetryRepository : TelemetryRepository {
         throwable: Throwable,
         extraKeys: Map<String, String>,
     ) {
+        viewModelErrors.add(throwable)
     }
 
     override fun recordNonFatal(throwable: Throwable, attributes: Map<String, String>) {
+        nonFatals.add(throwable)
     }
 
     override fun logEvent(event: AnalyticsEvent) {

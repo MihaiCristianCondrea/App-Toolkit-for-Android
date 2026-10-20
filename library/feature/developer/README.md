@@ -72,9 +72,12 @@ be restarted into a variation. The person's own preferences are display settings
   accessories it does not declare) are left out.
 - **Not searchable.** The settings search does not list these overrides: the page is reached once
   unlocked, and a result would go around the unlock.
-- **Reset is complete.** `ShellPreferences.resetDeveloperOptions()` puts every `ShellSettings`
-  value back to its default, so the shell is again exactly as the app declares it. The person's
-  preferences live in the common store and are not touched.
+- **Reset is complete.** `ShellPreferences.resetDeveloperOptions()` forgets every saved
+  `ShellSettings` choice, so the shell is again exactly as the app declares it in its
+  `appToolkitDefaults { }`, or as the Toolkit's defaults without one. The person's preferences live
+  in the common store and are not touched.
+- **Every row saves a choice.** Picking a value saves it even when it equals the current default,
+  so a later change to the app's defaults does not move it.
 - The page reads the shell's composition locals (`LocalShellSettings`, `LocalShellPreferences`,
   `LocalShellLayout`, `LocalShellCapabilities`, `LocalShellNavigator`, `LocalShellGraph`), so it
   only works as a page of a `ShellHost`. It keeps no view model: the settings store is its state.

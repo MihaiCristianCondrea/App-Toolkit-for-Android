@@ -27,6 +27,7 @@ import androidx.navigation3.runtime.metadata
 import androidx.navigation3.scene.Scene
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.DestinationKind
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarScrollMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.ScreenTransition
 
 /**
@@ -64,6 +65,8 @@ class PageChrome(
     val actions: (@Composable RowScope.() -> Unit)? = null,
     /** The page's key, to tell whether it stands in for a tab beside the navigation. */
     val key: Any? = null,
+    /** How the bar answers the page's scrolling; a static page does not tint the bar across both panes. */
+    val topBarScrollMode: TopBarScrollMode = TopBarScrollMode.Default,
 ) {
     object Key : NavMetadataKey<PageChrome>
 

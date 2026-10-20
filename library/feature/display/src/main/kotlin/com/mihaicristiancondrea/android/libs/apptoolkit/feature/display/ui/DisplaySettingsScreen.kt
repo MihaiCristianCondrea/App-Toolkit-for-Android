@@ -42,19 +42,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.startActivitySafely
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItem
@@ -79,6 +78,8 @@ import org.koin.compose.viewmodel.koinViewModel
 
 private const val DISPLAY_SETTINGS_SCREEN_NAME = "DisplaySettings"
 private const val DISPLAY_SETTINGS_SCREEN_CLASS = "DisplaySettingsScreen"
+private val DISPLAY_SETTINGS_SCREEN: TrackedScreen =
+    TrackedScreen(name = DISPLAY_SETTINGS_SCREEN_NAME, className = DISPLAY_SETTINGS_SCREEN_CLASS)
 
 private object DisplayPreferenceKeys {
     const val THEME_SETTINGS: String = "theme_settings"
@@ -107,21 +108,11 @@ private object DisplayActionNames {
 fun DisplaySettingsScreen() {
     val provider: DisplaySettingsProvider = koinInject()
     val navigator = LocalShellNavigator.current
-    val telemetryRepository = LocalTelemetry.current
+    val telemetry = LocalTelemetry.current
     val viewModel: DisplaySettingsViewModel = koinViewModel()
     val state: DisplaySettingsUiState by viewModel.state.collectAsStateWithLifecycle()
     val settings: DisplaySettings? = (state.settings as? Loadable.Ready)?.value
     val context: Context = LocalContext.current
-
-    TrackScreenView(
-        screenName = DISPLAY_SETTINGS_SCREEN_NAME,
-        screenClass = DISPLAY_SETTINGS_SCREEN_CLASS,
-    )
-
-    TrackScreenState(
-        screenName = DISPLAY_SETTINGS_SCREEN_NAME,
-        state = state.settings,
-    )
 
     var showLanguageDialog: Boolean by rememberSaveable { mutableStateOf(false) }
     var showStartupDialog: Boolean by rememberSaveable { mutableStateOf(false) }
@@ -129,51 +120,53 @@ fun DisplaySettingsScreen() {
     val capabilities = LocalShellCapabilities.current
     val rows = remember(capabilities, provider) { displayRows(capabilities, provider) }
 
-    DisplaySettingsScreenContent(
-        state = state,
-        onEvent = viewModel::onEvent,
-        rows = rows,
-        onDarkThemeChanged = { isChecked ->
-            val targetMode =
-                if (isChecked) DataStoreNamesConstants.THEME_MODE_DARK
-                else DataStoreNamesConstants.THEME_MODE_LIGHT
-            telemetryRepository.logEvent(
-                AnalyticsEvent(
-                    name = SettingsAnalytics.Events.THEME_SWITCH,
-                    params = mapOf(
-                        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(DISPLAY_SETTINGS_SCREEN_NAME),
-                        SettingsAnalytics.Params.THEME_MODE to AnalyticsValue.Str(targetMode),
-                    ),
+    ScreenHost(screen = DISPLAY_SETTINGS_SCREEN, status = state.settings, viewModel = viewModel) {
+        DisplaySettingsScreenContent(
+            state = state,
+            onEvent = viewModel::onEvent,
+            rows = rows,
+            onDarkThemeChanged = { isChecked ->
+                val targetMode =
+                    if (isChecked) DataStoreNamesConstants.THEME_MODE_DARK
+                    else DataStoreNamesConstants.THEME_MODE_LIGHT
+                telemetry.logEvent(
+                    AnalyticsEvent(
+                        name = SettingsAnalytics.Events.THEME_SWITCH,
+                        params = mapOf(
+                            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(DISPLAY_SETTINGS_SCREEN_NAME),
+                            SettingsAnalytics.Params.THEME_MODE to AnalyticsValue.Str(targetMode),
+                        ),
+                    )
                 )
-            )
-            viewModel.onEvent(DisplaySettingsEvent.ThemeModeChanged(targetMode))
-        },
-        onOpenThemeSettings = {
-            telemetryRepository.logEvent(
-                displayActionEvent(
-                    actionName = DisplayActionNames.OPEN_THEME_SETTINGS,
-                    preferenceKey = DisplayPreferenceKeys.THEME_SETTINGS,
-                    value = DisplayActionNames.THEME_REDIRECT,
+                viewModel.onEvent(DisplaySettingsEvent.ThemeModeChanged(targetMode))
+            },
+            onOpenThemeSettings = {
+                telemetry.logEvent(
+                    displayActionEvent(
+                        actionName = DisplayActionNames.OPEN_THEME_SETTINGS,
+                        preferenceKey = DisplayPreferenceKeys.THEME_SETTINGS,
+                        value = DisplayActionNames.THEME_REDIRECT,
+                    )
                 )
-            )
-            navigator.navigate(ThemeSettingsRoute)
-        },
-        onOpenStartupPage = { showStartupDialog = true },
-        onOpenLanguage = {
-            val destination: String = context.openLanguageSettings()
-            telemetryRepository.logEvent(
-                displayActionEvent(
-                    actionName = DisplayActionNames.OPEN_LANGUAGE_SETTINGS,
-                    preferenceKey = DisplayPreferenceKeys.LANGUAGE,
-                    value = destination,
+                navigator.navigate(ThemeSettingsRoute)
+            },
+            onOpenStartupPage = { showStartupDialog = true },
+            onOpenLanguage = {
+                val destination: String = context.openLanguageSettings()
+                telemetry.logEvent(
+                    displayActionEvent(
+                        actionName = DisplayActionNames.OPEN_LANGUAGE_SETTINGS,
+                        preferenceKey = DisplayPreferenceKeys.LANGUAGE,
+                        value = destination,
+                    )
                 )
-            )
-            if (destination == LanguageDestinations.IN_APP_DIALOG) {
-                showLanguageDialog = true
-            }
-        },
-        contentPadding = contentPadding(),
-    )
+                if (destination == LanguageDestinations.IN_APP_DIALOG) {
+                    showLanguageDialog = true
+                }
+            },
+            contentPadding = contentPadding(),
+        )
+    }
 
     if (showStartupDialog) {
         provider.StartupPageDialog(
@@ -181,7 +174,7 @@ fun DisplaySettingsScreen() {
             onDismiss = { showStartupDialog = false },
         ) { selectedDestination: String ->
             viewModel.onEvent(DisplaySettingsEvent.StartupRouteChanged(selectedDestination))
-            telemetryRepository.logEvent(
+            telemetry.logEvent(
                 displayActionEvent(
                     actionName = DisplayActionNames.CHANGE_STARTUP_DESTINATION,
                     preferenceKey = DisplayPreferenceKeys.STARTUP_PAGE,
@@ -198,7 +191,7 @@ fun DisplaySettingsScreen() {
             onLanguageSelected = { newLanguageCode: String ->
                 viewModel.onEvent(DisplaySettingsEvent.LanguageChanged(newLanguageCode))
                 showLanguageDialog = false
-                telemetryRepository.logEvent(
+                telemetry.logEvent(
                     displayActionEvent(
                         actionName = DisplayActionNames.CHANGE_LANGUAGE,
                         preferenceKey = DisplayPreferenceKeys.LANGUAGE,
@@ -211,8 +204,6 @@ fun DisplaySettingsScreen() {
             }
         )
     }
-
-    MessageHost(viewModel = viewModel)
 }
 
 /** The `value` the `open_language_settings` action reports: where the language row led. */

@@ -35,7 +35,7 @@ val billingModule: Module = module {
         DefaultBillingRepository.getInstance(
             context = get(),
             dispatchers = dispatchers,
-            telemetryRepository = get(),
+            diagnostics = get(),
             externalScope = CoroutineScope(SupervisorJob() + dispatchers.io),
         )
     }

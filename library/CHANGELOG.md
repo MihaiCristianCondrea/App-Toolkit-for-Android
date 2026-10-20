@@ -2,6 +2,98 @@
 
 ---
 
+# October 21, 2026
+
+**Version:** `3.0.0-pre25`
+
+### Added
+
+- `EntranceStyle` and `LocalEntranceStyle` choose how `animateVisibility` brings elements in:
+  `Slide`, `Scale`, `Fade` or `None`. An app sets its own with
+  `appToolkitDefaults { shell { entranceStyle = ... } }`, and the developer options offer it under
+  Motion. `Modifier.animateVisibility(visible)` animates an element in and out as it comes and goes.
+- `appToolkitDefaults { shell { } navigation { } }` declares an app's own defaults once: its back
+  style, tab transition, scroll and tint behavior, app bar styles per kind of destination, and
+  layout policy. Pass `defaults.navigation` to `toolkitGraph` or `shellGraph` and `defaults.shell` to
+  `ShellHost`. The Toolkit's own pages follow the app's app bar styles; a destination's own `topBar`
+  still wins.
+- `tab(badgeText = { ... })` shows a badge that follows state, such as an unread count. Null hides
+  it and an empty string shows a dot; the fixed `badge` is unchanged.
+- Settings rows take any `ToolkitIcon`, including animated and Lottie icons.
+- `ScreenHost(screen, status, viewModel) { content }` is every screen's boundary: it reports the
+  screen's visits and status and shows its ViewModel's messages, without adding layout. `screen` is
+  a `TrackedScreen` from `core.common.telemetry.models`, so analytics contract modules need no UI
+  dependency.
+- `ScreenStateHandler` takes `icon`, `retryWhenEmpty` and `showAd`, so a screen no longer copies
+  `NoDataScreen` into `onEmpty` or `onError` to change its icon, offer a retry on an empty result or
+  hide the ad. Ads still show by default. `icon`, here and on `NoDataScreen`, is any `ToolkitIcon`
+  (a drawable, a bitmap, an animated or Lottie icon) or an `ImageVector`.
+- `ScreenStates` and `LocalScreenStates` let an app draw its own loading, empty and failed content,
+  and its own transition between them, once for every screen; a section's own slot still wins. The
+  defaults are the current ones.
+- `StateContent(state) { ... }` animates between the cases of any state, such as the phases of a
+  flow, the way `ScreenStateHandler` does for a `Loadable`. An enum value, `Boolean`, number or
+  string is a case of its own; anything else is a case by its class. The startup page and the issue
+  reporter switch through it, with the same animations as before.
+- `topBarScrollMode = TopBarScrollMode.Static` on `tab`, `child`, `page` and `pageIfAbsent` keeps
+  the destination's app bar expanded, visible and untinted while its content scrolls, ignoring the
+  hide-on-scroll setting. `PageScaffold` follows it through `LocalTopBarScrollMode`. The default
+  keeps today's behavior.
+- `ScreenHost(fabs = ...)` declares the screen's floating action buttons for its current state.
+
+### Changed
+
+- `animateVisibility` cascades from what is shown instead of from the top of the list, so an item
+  scrolled into view starts at once rather than waiting up to 1.3 seconds behind the items above
+  it, and it starts when the element is first placed, so a prefetched item no longer plays off
+  screen. It moves on `MaterialTheme.motionScheme` springs, which pick up where they are if
+  interrupted, and rises 20 dp, the same on every screen density. `invisibleOffsetY` and
+  `animationDuration` are gone, since the springs set both.
+- Telemetry is split by responsibility in `core.common.telemetry`: `AnalyticsReporter`,
+  `DiagnosticsReporter` and `TelemetryCollection`, which `TelemetryRepository` combines for the UI
+  layer. Repositories report breadcrumbs and failures through `DiagnosticsReporter` and never send
+  product analytics; `checkModuleBoundaries` rejects analytics in `data` and `domain` code. Add
+  `telemetryModule` when assembling Koin modules without `appToolkitModules`; see the 3.0 migration
+  guide.
+- `SettingsPreference.icon` is a `ToolkitIcon`; wrap an `ImageVector` in `ToolkitIcon.Vector`.
+- Screen views are reported when a screen becomes visible and active, not when it enters
+  composition. Transition frames, rotation and a cancelled back gesture no longer add views; each
+  return from another tab, a page or the background does, and both panes of a list-detail layout
+  report their own. A repeated identical `screen_state` is no longer sent, and the Permissions page
+  no longer reports one.
+- `NoDataScreen` resolves its ad unit through Koin only while its ad shows, so with `showAd = false`
+  it renders in a preview or a test without Koin.
+- Developer options remember explicit choices, even one equal to the current default, so an app
+  that changes its defaults in a later release only affects people who never chose. Resetting the
+  developer options returns to the app's defaults instead of the Toolkit's.
+- Packages that held only models moved from `domain.models` to `data.models` in
+  `:library:core:common`, billing, consent, update, diagnostics and support. The issue reporter's
+  `presentation` and `shake` packages moved under `ui`, and the consent data sources out of
+  `data.remote.datasource`. Only imports change; see the 3.0 migration guide.
+
+### Fixed
+
+- Extended floating action buttons fold on the scroll a collapsing or hiding app bar takes, so the
+  help page's feedback button, and any on a page too short to scroll far, folds as the bar
+  collapses. `FabScrollBehavior.observing` does the same for a scaffold of an app's own.
+- Screen readers name an extended floating action button by its label, expanded or folded.
+  Material keeps the label's text out of accessibility, and the Toolkit left the icon without a
+  description beside a label, so the button announced no name.
+- `ShellHost` turns off pausing lazy items while they are prefetched, for the whole app. With it on,
+  Compose foundation 1.12 could crash with "measure is called on a deactivated node" while a
+  shared transition laid out a list ([issue 469669851](https://issuetracker.google.com/issues/469669851)).
+
+### Removed
+
+- `TrackScreenView` and `TrackScreenState`; wrap the screen in `ScreenHost` instead.
+- The deprecated aliases `FirebaseController`, `core.common.data.repositories.TelemetryRepository`,
+  `DefaultFirebaseController` and `FirebaseControllerImpl`; use
+  `core.common.telemetry.TelemetryRepository` and `FirebaseTelemetryRepository`.
+- The deprecated `SettingsPreference(icon: ImageVector)` constructor and `NativeAdViewHost`, and the
+  `getVersionInfo` adapter in `:library:core:ui`; use `getVersionMetadata` off the main thread.
+
+---
+
 # October 17, 2026
 
 **Version:** `3.0.0-pre24`

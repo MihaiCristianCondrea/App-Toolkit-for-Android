@@ -17,8 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.di
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.remote.datasource.ConsentRemoteDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.remote.datasource.UmpConsentRemoteDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.remote.ConsentRemoteDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.remote.UmpConsentRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.DefaultConsentRepository
 import org.koin.core.module.Module
@@ -32,7 +32,8 @@ fun consentModule(): Module = module {
             remote = get(),
             local = get(),
             configProvider = get(),
-            telemetryRepository = get(),
+            diagnostics = get(),
+            collection = get(),
         )
     }
 }

@@ -44,7 +44,7 @@ fun ArticleBarShowcase(
     onLogEvent: (String, String?) -> Ga4EventData,
     onOpenArticleDemo: (Boolean) -> Unit,
 ) {
-    val telemetryRepository = LocalTelemetry.current
+    val telemetry = LocalTelemetry.current
 
     ShowcaseHeader(
         title = stringResource(id = R.string.components_section_article_bar),
@@ -58,7 +58,7 @@ fun ArticleBarShowcase(
             ) {
                 OutlinedButton(
                     onClick = {
-                        telemetryRepository.logGa4Event(onLogEvent("article_bar", "plain"))
+                        telemetry.logGa4Event(onLogEvent("article_bar", "plain"))
                         onOpenArticleDemo(false)
                     },
                     modifier = Modifier.weight(1f),
@@ -67,7 +67,7 @@ fun ArticleBarShowcase(
                 }
                 FilledTonalButton(
                     onClick = {
-                        telemetryRepository.logGa4Event(onLogEvent("article_bar", "brand"))
+                        telemetry.logGa4Event(onLogEvent("article_bar", "brand"))
                         onOpenArticleDemo(true)
                     },
                     modifier = Modifier.weight(1f),

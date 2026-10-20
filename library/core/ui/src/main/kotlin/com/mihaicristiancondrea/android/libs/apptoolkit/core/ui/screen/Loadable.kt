@@ -21,7 +21,7 @@ import androidx.compose.runtime.Immutable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 
 /**
- * A status that [TrackScreenState] can report in the `screen_state` analytics event.
+ * A status that [ScreenHost] reports in the `screen_state` analytics event.
  *
  * [Loadable] implements it. A screen with statuses of its own implements it too, to have them
  * tracked like the Toolkit's.

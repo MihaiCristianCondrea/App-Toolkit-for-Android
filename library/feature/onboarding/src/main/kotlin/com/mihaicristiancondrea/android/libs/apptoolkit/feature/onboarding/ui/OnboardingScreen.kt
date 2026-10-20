@@ -58,12 +58,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.hapticPagerSwipe
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalPageSnackbarHostState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHost
@@ -75,7 +75,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.st
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.controls.OnboardingFooter
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.default.DefaultOnboardingPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -87,6 +87,8 @@ import org.koin.compose.viewmodel.koinViewModel
 
 private const val ONBOARDING_SCREEN_NAME = "Onboarding"
 private const val ONBOARDING_SCREEN_CLASS = "OnboardingScreen"
+private val ONBOARDING_SCREEN: TrackedScreen =
+    TrackedScreen(name = ONBOARDING_SCREEN_NAME, className = ONBOARDING_SCREEN_CLASS)
 
 /** How wide an onboarding page grows on a large window; it is centred in the rest. */
 internal val OnboardingContentMaxWidth: Dp = 640.dp
@@ -111,16 +113,6 @@ fun OnboardingScreen() {
     }
     val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
 
-    TrackScreenView(
-        screenName = ONBOARDING_SCREEN_NAME,
-        screenClass = ONBOARDING_SCREEN_CLASS,
-    )
-
-    TrackScreenState(
-        screenName = ONBOARDING_SCREEN_NAME,
-        state = state.completion,
-    )
-
     LifecycleResumeEffect(Unit) {
         activity?.let { viewModel.onEvent(OnboardingEvent.RequestConsent(host = ConsentHost(activity = it))) }
         onPauseOrDispose { }
@@ -130,12 +122,14 @@ fun OnboardingScreen() {
         if (state.completion == OnboardingCompletion.Saved) navigator.enterShell()
     }
 
-    OnboardingScreenContent(
-        state = state,
-        pages = pages,
-        onEvent = viewModel::onEvent,
-        snackbarHostState = snackbarHostState,
-    )
+    ScreenHost(screen = ONBOARDING_SCREEN, status = state.completion) {
+        OnboardingScreenContent(
+            state = state,
+            pages = pages,
+            onEvent = viewModel::onEvent,
+            snackbarHostState = snackbarHostState,
+        )
+    }
 
     MessageHost(
         viewModel = viewModel,

@@ -20,12 +20,13 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings
 import androidx.compose.runtime.Immutable
 import androidx.navigation3.runtime.NavKey
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 
 /**
  * One row of a settings list.
  *
  * @property key Identifies the row for analytics and as the list item key.
+ * @property icon Any [ToolkitIcon], the same icon type the shell's navigation takes.
  * @property destination The page the row opens, such as `DisplaySettingsRoute`. In a list page it
  *   opens beside the list on wide windows when the page is a detail.
  * @property action Something the row does outside the app, such as opening the system's
@@ -35,7 +36,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 @Immutable
 data class SettingsPreference(
     val key: String? = null,
-    val icon: ImageVector? = null,
+    val icon: ToolkitIcon? = null,
     val useIconContainer: Boolean = false,
     val iconColor: Color? = null,
     val iconContainerColor: Color? = null,
@@ -44,4 +45,5 @@ data class SettingsPreference(
     val destination: NavKey? = null,
     val action: (() -> Boolean)? = null,
 )
+
 

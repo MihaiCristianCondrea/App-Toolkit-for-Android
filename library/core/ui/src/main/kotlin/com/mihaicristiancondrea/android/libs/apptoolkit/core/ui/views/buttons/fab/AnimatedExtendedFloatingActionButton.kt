@@ -110,7 +110,7 @@ fun AnimatedExtendedFloatingActionButton(
     feedback: ButtonFeedback = ButtonFeedback(),
     ga4Event: Ga4EventData? = null,
 ) {
-    val telemetryRepository = LocalTelemetry.current
+    val telemetry = LocalTelemetry.current
     val animatedScale: Float by animateFloatAsState(
         targetValue = if (visible) 1f else 0f,
         animationSpec = tween(durationMillis = 400, easing = FastOutSlowInEasing),
@@ -135,7 +135,7 @@ fun AnimatedExtendedFloatingActionButton(
                 onClick = {
                     if (enabled) {
                         feedback.performClick(view = view, hapticFeedback = hapticFeedback)
-                        telemetryRepository.logGa4Event(ga4Event)
+                        telemetry.logGa4Event(ga4Event)
                         onClick()
                     }
                 },

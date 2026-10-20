@@ -33,10 +33,18 @@ class VisibilityCascadeTest {
     }
 
     @Test
-    fun `an item deep in a list keeps the full cascade delay`() {
+    fun `an item scrolled into view alone starts at once`() {
+        (0 until 8).forEach { index -> delayFor(index = index) }
         now += 5_000L
 
-        assertEquals(20L * 64L, delayFor(index = 80))
+        assertEquals(0L, delayFor(index = 80))
+    }
+
+    @Test
+    fun `a screen opened deep in a list cascades from its first item shown`() {
+        val delays = (30 until 34).map { index -> delayFor(index = index) }
+
+        assertEquals(listOf(0L, 64L, 128L, 192L), delays)
     }
 
     @Test

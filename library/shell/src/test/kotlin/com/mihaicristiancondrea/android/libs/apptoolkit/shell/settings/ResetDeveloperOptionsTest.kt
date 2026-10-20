@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.EntranceStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.TabTransitionStyle
 import kotlinx.coroutines.flow.first
@@ -41,6 +42,7 @@ class ResetDeveloperOptionsTest {
         navigationBarStyle = NavigationBarStyle.Short,
         navigationTint = NavigationTint.None,
         hideTopBarOnScroll = true,
+        entranceStyle = EntranceStyle.None,
     )
 
     @Test
@@ -63,5 +65,15 @@ class ResetDeveloperOptionsTest {
         preferences.resetDeveloperOptions()
 
         assertEquals(ShellSettings(), preferences.settings.first())
+    }
+
+    @Test
+    fun `reset returns to the app's defaults, not the Toolkit's`() = runTest {
+        val appDefaults = ShellSettings(backEdgeStyle = BackEdgeStyle.FollowFinger, navigationTint = NavigationTint.OnScroll)
+        val preferences = InMemoryShellPreferences(everythingChanged, defaults = appDefaults)
+
+        preferences.resetDeveloperOptions()
+
+        assertEquals(appDefaults, preferences.settings.first())
     }
 }

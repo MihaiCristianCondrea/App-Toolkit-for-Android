@@ -27,6 +27,11 @@
     <string name="shell_dev_bottom_accessory">Над панеллю навігації</string>
     <string name="shell_dev_motion">Рух</string>
     <string name="shell_dev_animation_speed">Швидкість анімації</string>
+    <string name="shell_dev_entrance_style">Анімація появи</string>
+    <string name="shell_entrance_slide">Проявлення зі зсувом угору</string>
+    <string name="shell_entrance_scale">Проявлення зі збільшенням</string>
+    <string name="shell_entrance_fade">Проявлення</string>
+    <string name="shell_entrance_none">Немає</string>
     <string name="shell_dev_reset">Скинути параметри розробника</string>
     <string name="shell_dev_reset_summary">Повернути те, що задає застосунок</string>
     <string name="shell_layout_auto">Автоматично, за шириною вікна</string>

@@ -9,9 +9,14 @@ is frequently necessary.
 
 ## App Toolkit
 
-For App Toolkit hosts, prefer `TrackScreenView` for meaningful top-level Compose destinations.
+For App Toolkit hosts, wrap every meaningful destination in `ScreenHost(screen = ...)`, with the
+screen's stable `TrackedScreen`. It is the one screen-tracking call.
 
-The helper sends the screen view when the stable screen name changes.
+It reports a screen view per visit: when the destination becomes visible and active (its
+lifecycle reaches `RESUMED`), not when it enters composition. A screen that only animates, is
+kept for a back gesture, or sits under an overlay is not reported; rotating keeps the visit;
+returning from another tab, a page or the background starts a new one; each pane of a list-detail
+layout reports its own visits.
 
 ## Track destinations, not recompositions
 
@@ -91,7 +96,8 @@ Look for:
 
 ## Screen state
 
-App Toolkit's `TrackScreenState` can report bounded states such as:
+App Toolkit's `ScreenHost(status = ...)` reports bounded states, at the start of each visit and
+when the label changes, such as:
 
 ```text
 loading

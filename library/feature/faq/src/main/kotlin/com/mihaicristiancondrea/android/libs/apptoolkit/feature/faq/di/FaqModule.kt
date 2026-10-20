@@ -45,7 +45,7 @@ fun faqModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
                 isDebugBuild = hostBuildConfig.isDebugBuild,
             ),
             productId = hostBuildConfig.faqProductId,
-            telemetryRepository = get(),
+            diagnostics = get(),
         )
     }
     viewModel {

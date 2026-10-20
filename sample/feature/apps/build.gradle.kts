@@ -24,10 +24,29 @@ plugins {
 
 android {
     namespace = "com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps"
+
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+        unitTests.all { test ->
+            // Robolectric reaches into these JDK internals; newer JDKs close them by default.
+            test.jvmArgs(
+                "--add-opens=java.base/java.io=ALL-UNNAMED",
+                "--add-opens=java.base/java.lang=ALL-UNNAMED",
+                "--add-opens=java.base/java.util=ALL-UNNAMED",
+                "--add-exports=java.base/jdk.internal.access=ALL-UNNAMED",
+            )
+        }
+    }
 }
 
 dependencies {
     testImplementation(project(":library:core:testing"))
+    // AppsListScreenTest composes the real screen, the reference ScreenHost migration, under
+    // Robolectric, which runs on JUnit 4 beside JUnit 5.
+    testImplementation(libs.androidx.compose.ui.test.junit4)
+    testImplementation(libs.androidx.test.ext.junit)
+    testRuntimeOnly(libs.test.junit.vintage.engine)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
     implementation(project(":sample:core:analytics"))
     api(project(":sample:integration:ads"))
     api(project(":sample:core:datastore"))

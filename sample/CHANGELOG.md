@@ -2,6 +2,17 @@
 
 ---
 
+# Unreleased
+
+### Fixed
+
+- Unlocking the components showcase reports the achievement only once the unlock is saved, and
+  never again on later taps.
+- Screen views count real visits: each screen is reported once it is shown and settled, not during
+  transitions, rotations or a cancelled back gesture.
+
+---
+
 # October 17, 2026
 
 **Version:** `26.10.32` (`137261032`)

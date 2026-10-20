@@ -31,13 +31,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
@@ -54,6 +53,8 @@ import org.koin.compose.viewmodel.koinViewModel
 
 private const val ADVANCED_SETTINGS_SCREEN_NAME = "AdvancedSettings"
 private const val ADVANCED_SETTINGS_SCREEN_CLASS = "AdvancedSettingsScreen"
+private val ADVANCED_SETTINGS_SCREEN: TrackedScreen =
+    TrackedScreen(name = ADVANCED_SETTINGS_SCREEN_NAME, className = ADVANCED_SETTINGS_SCREEN_CLASS)
 
 private object AdvancedPreferenceKeys {
     const val BUG_REPORT: String = "bug_report"
@@ -77,30 +78,24 @@ fun AdvancedSettingsScreen() {
     val issueReporterSheet: IssueReporterSheet? = getKoin().getOrNull()
     var showIssueReporter: Boolean by rememberSaveable { mutableStateOf(value = false) }
 
-    TrackScreenView(
-        screenName = ADVANCED_SETTINGS_SCREEN_NAME,
-        screenClass = ADVANCED_SETTINGS_SCREEN_CLASS,
-    )
-
-    TrackScreenState(
-        screenName = ADVANCED_SETTINGS_SCREEN_NAME,
-        state = state.cacheClear,
-    )
-
-    AdvancedSettingsScreenContent(
-        state = state,
-        onEvent = viewModel::onEvent,
-        onReportBug = { showIssueReporter = true },
-        onOpenDeveloperOptions = { navigator.navigate(DeveloperOptionsRoute) },
-        contentPadding = contentPadding(),
-        showBugReport = issueReporterSheet != null,
-    )
+    ScreenHost(
+        screen = ADVANCED_SETTINGS_SCREEN,
+        status = state.cacheClear,
+        viewModel = viewModel,
+    ) {
+        AdvancedSettingsScreenContent(
+            state = state,
+            onEvent = viewModel::onEvent,
+            onReportBug = { showIssueReporter = true },
+            onOpenDeveloperOptions = { navigator.navigate(DeveloperOptionsRoute) },
+            contentPadding = contentPadding(),
+            showBugReport = issueReporterSheet != null,
+        )
+    }
 
     if (showIssueReporter) {
         issueReporterSheet?.Show(onDismissRequest = { showIssueReporter = false })
     }
-
-    MessageHost(viewModel = viewModel)
 }
 
 /**

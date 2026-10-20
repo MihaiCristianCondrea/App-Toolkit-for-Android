@@ -9,7 +9,8 @@ on production runtime classpaths.
 
 - `TestDispatchers`, which maps every `DispatcherProvider` lane to one test dispatcher.
 - JUnit 5 extensions for installing standard or unconfined test dispatchers as `Dispatchers.Main`.
-- `FakeTelemetryRepository`, a no-op implementation for tests that exercise logged ViewModels.
+- `FakeTelemetryRepository`, which records events, screen views, breadcrumbs, non-fatal reports
+  and collection switches. It stands in for any of the telemetry contracts.
 
 ## Does not own
 

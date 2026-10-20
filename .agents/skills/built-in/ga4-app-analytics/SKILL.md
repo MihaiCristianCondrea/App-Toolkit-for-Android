@@ -56,8 +56,8 @@ Review enough of the project to understand:
 - Application purpose and major user journeys.
 - Navigation destinations and meaningful screens.
 - Existing analytics modules, contracts, constants, tests, and helper functions.
-- App Toolkit usage, especially `TelemetryRepository`, `LoggedScreenViewModel`, `TrackScreenView`,
-  `TrackScreenState`, `AnalyticsEvent`, `AnalyticsValue`, `Ga4EventData`, and reusable UI components
+- App Toolkit usage, especially `TelemetryRepository`, `LoggedScreenViewModel`, `ScreenHost`,
+  `TrackedScreen`, `AnalyticsEvent`, `AnalyticsValue`, `Ga4EventData`, and reusable UI components
   with GA4 support.
 - Existing Firebase Analytics, Crashlytics, Performance, consent, AdMob, mediation, purchases,
   authentication, onboarding, search, content browsing, sharing, subscriptions, and Remote Config
@@ -297,10 +297,14 @@ When the host uses App Toolkit:
 
 - App Toolkit owns Firebase transport and common analytics helpers.
 - The host application owns its product-specific event vocabulary and screen identifiers.
-- `TelemetryRepository` is the normal path for event delivery.
+- `TelemetryRepository` is the normal path for event delivery, from the UI layer: a ViewModel
+  takes it and a composable reads `val telemetry = LocalTelemetry.current`.
+- Events are reported where the action happens, never from a repository or use case. A data
+  operation returns its outcome and the UI reports the event once it succeeded. Repositories
+  report only diagnostics, through `DiagnosticsReporter`.
 - `LoggedScreenViewModel` provides standardized operation and error telemetry.
-- `TrackScreenView` handles explicit screen views for Compose destinations.
-- `TrackScreenState` can record bounded screen state transitions.
+- `ScreenHost` reports one screen view per visit to a Compose destination, once it is visible and
+  active, and its optional `status` records bounded screen state transitions.
 - Reusable Toolkit UI components may already support `Ga4EventData` and direct interaction logging.
 
 Always inspect existing component analytics support before adding another manual event around the

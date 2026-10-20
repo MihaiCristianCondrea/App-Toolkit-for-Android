@@ -17,15 +17,16 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryCollection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.ConsentPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.exceptions.ConsentException
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.remote.datasource.ConsentRemoteDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.isAlive
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.remote.ConsentRemoteDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.isAlive
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -45,6 +46,9 @@ import kotlin.time.Duration.Companion.milliseconds
 /**
  * Implementation of [ConsentRepository] that delegates UMP work to a remote data source.
  *
+ * @param diagnostics breadcrumbs that trace the consent lifecycle; the repository reports no
+ * analytics events.
+ * @param collection applies the person's consent to the telemetry SDKs' collection switches.
  * @param requestScope scope that owns the shared, process-wide consent round trip. It defaults to
  * the immediate main dispatcher because UMP requires its entry points to be called from the main
  * thread.
@@ -53,7 +57,8 @@ class DefaultConsentRepository(
     private val remote: ConsentRemoteDataSource,
     private val local: ConsentPreferencesDataSource,
     private val configProvider: BuildInfoProvider,
-    private val telemetryRepository: TelemetryRepository,
+    private val diagnostics: DiagnosticsReporter,
+    private val collection: TelemetryCollection,
     private val requestScope: CoroutineScope =
         CoroutineScope(context = SupervisorJob() + Dispatchers.Main.immediate),
 ) : ConsentRepository {
@@ -76,7 +81,7 @@ class DefaultConsentRepository(
         showIfRequired: Boolean,
     ) {
         val hostName: String = host.activity::class.java.name
-        telemetryRepository.logBreadcrumb(
+        diagnostics.logBreadcrumb(
             message = "Consent request started",
             attributes = mapOf(
                 "host" to hostName,
@@ -84,7 +89,7 @@ class DefaultConsentRepository(
             ),
         )
         if (!host.isAlive) {
-            telemetryRepository.logBreadcrumb(
+            diagnostics.logBreadcrumb(
                 message = "Consent request skipped for a finishing host",
                 attributes = mapOf("host" to hostName),
             )
@@ -98,7 +103,7 @@ class DefaultConsentRepository(
             inFlightRequest?.takeIf { !it.host.isAlive }
         }
         if (staleRequest != null) {
-            telemetryRepository.logBreadcrumb(
+            diagnostics.logBreadcrumb(
                 message = "Consent request waiting for a request from a finished host",
                 attributes = mapOf("host" to hostName),
             )
@@ -109,7 +114,7 @@ class DefaultConsentRepository(
             inFlightRequest
                 ?.takeIf { it.showIfRequired == showIfRequired && it.host.isAlive }
                 ?.also {
-                    telemetryRepository.logBreadcrumb(
+                    diagnostics.logBreadcrumb(
                         message = "Consent request joined an in-flight request",
                         attributes = mapOf("host" to hostName),
                     )
@@ -175,13 +180,13 @@ class DefaultConsentRepository(
     )
 
     override suspend fun applyInitialConsent() {
-        telemetryRepository.logBreadcrumb(message = "Applying initial consent")
+        diagnostics.logBreadcrumb(message = "Applying initial consent")
         val settings = readPersistedSettings()
         applyConsentSettings(settings)
     }
 
     override suspend fun applyConsentSettings(settings: ConsentSettings) {
-        telemetryRepository.logBreadcrumb(
+        diagnostics.logBreadcrumb(
             message = "Consent settings applied",
             attributes = mapOf(
                 "usageAndDiagnostics" to settings.usageAndDiagnostics.toString(),
@@ -191,15 +196,15 @@ class DefaultConsentRepository(
                 "adPersonalizationConsent" to settings.adPersonalizationConsent.toString(),
             ),
         )
-        telemetryRepository.updateConsent(
+        collection.updateConsent(
             analyticsGranted = settings.analyticsConsent,
             adStorageGranted = settings.adStorageConsent,
             adUserDataGranted = settings.adUserDataConsent,
             adPersonalizationGranted = settings.adPersonalizationConsent,
         )
-        telemetryRepository.setAnalyticsEnabled(settings.usageAndDiagnostics)
-        telemetryRepository.setCrashlyticsEnabled(settings.usageAndDiagnostics)
-        telemetryRepository.setPerformanceEnabled(settings.usageAndDiagnostics)
+        collection.setAnalyticsEnabled(settings.usageAndDiagnostics)
+        collection.setCrashlyticsEnabled(settings.usageAndDiagnostics)
+        collection.setPerformanceEnabled(settings.usageAndDiagnostics)
     }
 
     /** Reads every stored choice at once. Unset choices are granted in release builds only. */

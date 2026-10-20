@@ -27,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.BasicAlertDialog
@@ -51,7 +52,7 @@ fun <T> ChoicePreferenceItem(
     var open by rememberSaveable { mutableStateOf(false) }
     SettingsPreferenceItem(
         modifier = modifier,
-        icon = icon,
+        icon = icon?.let(ToolkitIcon::Vector),
         title = title,
         summary = optionLabel(selected),
         onClick = { open = true },

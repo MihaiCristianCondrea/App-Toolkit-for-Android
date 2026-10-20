@@ -27,6 +27,11 @@
     <string name="shell_dev_bottom_accessory">Над лентата за навигация</string>
     <string name="shell_dev_motion">Движение</string>
     <string name="shell_dev_animation_speed">Скорост на анимацията</string>
+    <string name="shell_dev_entrance_style">Анимация при поява</string>
+    <string name="shell_entrance_slide">Преливане и издигане</string>
+    <string name="shell_entrance_scale">Преливане и уголемяване</string>
+    <string name="shell_entrance_fade">Преливане</string>
+    <string name="shell_entrance_none">Няма</string>
     <string name="shell_dev_reset">Нулиране на опциите за програмисти</string>
     <string name="shell_dev_reset_summary">Връщане към зададеното от приложението</string>
     <string name="shell_layout_auto">Автоматично, според ширината на прозореца</string>

@@ -18,9 +18,6 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation
 
 import android.content.Intent
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.AppsListRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.ComponentsRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.ToolkitTilesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchContext
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider

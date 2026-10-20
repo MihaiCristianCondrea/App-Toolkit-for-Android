@@ -17,8 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.update.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.update.domain.models.InAppUpdateHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.update.domain.models.InAppUpdateResult
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.update.data.models.InAppUpdateHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.update.data.models.InAppUpdateResult
 import kotlinx.coroutines.flow.Flow
 
 /**

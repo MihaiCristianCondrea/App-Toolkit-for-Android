@@ -23,9 +23,12 @@ import kotlinx.coroutines.flow.update
 
 /**
  * [ShellPreferences] kept in memory, for tests, previews, and apps that do not persist the
- * shell's settings. Starts from [initial].
+ * shell's settings. Starts from [initial], and a reset returns to [defaults].
  */
-class InMemoryShellPreferences(initial: ShellSettings = ShellSettings()) : ShellPreferences {
+class InMemoryShellPreferences(
+    initial: ShellSettings = ShellSettings(),
+    override val defaults: ShellSettings = ShellSettings(),
+) : ShellPreferences {
 
     private val state = MutableStateFlow(initial)
 

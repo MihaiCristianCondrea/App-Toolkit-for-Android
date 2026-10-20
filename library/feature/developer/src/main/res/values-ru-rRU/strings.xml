@@ -27,6 +27,11 @@
     <string name="shell_dev_bottom_accessory">Над панелью навигации</string>
     <string name="shell_dev_motion">Движение</string>
     <string name="shell_dev_animation_speed">Скорость анимации</string>
+    <string name="shell_dev_entrance_style">Анимация появления</string>
+    <string name="shell_entrance_slide">Проявление со сдвигом вверх</string>
+    <string name="shell_entrance_scale">Проявление с увеличением</string>
+    <string name="shell_entrance_fade">Проявление</string>
+    <string name="shell_entrance_none">Нет</string>
     <string name="shell_dev_reset">Сбросить параметры разработчика</string>
     <string name="shell_dev_reset_summary">Вернуть то, что задаёт приложение</string>
     <string name="shell_layout_auto">Автоматически, по ширине окна</string>

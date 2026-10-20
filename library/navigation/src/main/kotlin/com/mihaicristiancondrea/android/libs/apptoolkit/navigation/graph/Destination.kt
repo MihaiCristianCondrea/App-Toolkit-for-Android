@@ -95,6 +95,8 @@ class Destination<K : NavKey> @PublishedApi internal constructor(
      * the shell's own placeholder.
      */
     val placeholder: (@Composable () -> Unit)? = null,
+    /** How the app bar the shell draws for this destination answers scrolling; see [TopBarScrollMode]. */
+    val topBarScrollMode: TopBarScrollMode = TopBarScrollMode.Default,
 )
 
 /**
@@ -103,6 +105,9 @@ class Destination<K : NavKey> @PublishedApi internal constructor(
  * [icon] and [selectedIcon] take any [ToolkitIcon]: an animated vector drawable or a Lottie icon
  * plays when the tab is clicked or becomes selected, as in the Toolkit's other navigation items.
  * Pass the same animated icon for both to play one animation for both states.
+ *
+ * A tab shows [badge], a fixed label, or [badgeText], read in composition so it follows state such
+ * as an unread count. Either one returning null shows no badge, and an empty string shows a dot.
  */
 @Immutable
 class ShellTab(
@@ -111,6 +116,7 @@ class ShellTab(
     val icon: ToolkitIcon,
     val selectedIcon: ToolkitIcon = icon,
     val badge: String? = null,
+    val badgeText: (@Composable () -> String?)? = null,
     /** When set, the tab's app bar holds a search field in place of the title. */
     val search: TabSearch? = null,
     /**
@@ -118,7 +124,11 @@ class ShellTab(
      * collapsed rail. [label] is used everywhere else, and there too when this is null.
      */
     @param:StringRes val shortLabel: Int? = null,
-)
+) {
+    init {
+        require(badge == null || badgeText == null) { "A tab takes a badge or a badgeText, not both." }
+    }
+}
 
 /**
  * A search field in a tab's app bar, where the title would be.

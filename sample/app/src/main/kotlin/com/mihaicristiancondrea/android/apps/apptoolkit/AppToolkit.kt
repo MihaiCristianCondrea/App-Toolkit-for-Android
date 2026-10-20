@@ -32,7 +32,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.sty
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ColorPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ThemePaletteProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.managers.AdsCoreManager
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.shake.IssueReporterShakeManager
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.shake.IssueReporterShakeManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.SeasonalThemeManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repositories.BillingRepository
 import kotlinx.coroutines.launch

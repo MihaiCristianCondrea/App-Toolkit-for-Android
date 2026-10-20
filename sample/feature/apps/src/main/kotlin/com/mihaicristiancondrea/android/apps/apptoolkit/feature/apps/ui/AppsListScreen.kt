@@ -37,9 +37,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.models.AppScreenTracking
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInfo
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.HomeEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppListUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.AndroidAppActionLauncher
@@ -58,13 +58,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ScaffoldFabs
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.rememberWindowWidthSizeClass
@@ -81,7 +78,8 @@ private const val APP_DETAILS_INTERACTION_SOURCE: String = "app_details"
 
 /**
  * The Apps tab: the catalogue grid, searched from the app bar, with native ad cards, the details
- * sheet and the random-app button.
+ * sheet and the random-app button, which the tab's scaffold draws and scales out while there is no
+ * app to open.
  *
  * Logs each card and sheet tap, and opens and shares apps, since both need a `Context`. A share
  * logs only the recommended `share` event, because a second `app_card_interaction` for it would
@@ -92,7 +90,7 @@ private const val APP_DETAILS_INTERACTION_SOURCE: String = "app_details"
 fun AppsListScreen() {
     val viewModel: AppsListViewModel = koinViewModel()
     val state: AppListUiState by viewModel.state.collectAsStateWithLifecycle()
-    val telemetryRepository = LocalTelemetry.current
+    val telemetry = LocalTelemetry.current
     val context = LocalContext.current
     val adsEnabled: Boolean = rememberAdsEnabled()
     val listAdsConfig: AdsConfig = koinInject(qualifier = named(AppAdsQualifiers.APPS_LIST_NATIVE_AD))
@@ -101,27 +99,17 @@ fun AppsListScreen() {
     val shareApp: (AppInfo) -> Unit = buildOnShareClick()
     val appActionLauncher = remember(context) { AndroidAppActionLauncher(context) }
     val selectedApp: AppInfo? = state.selectedApp
-    val detailsActionLauncher: AppActionLauncher = remember(appActionLauncher, telemetryRepository, selectedApp) {
+    val detailsActionLauncher: AppActionLauncher = remember(appActionLauncher, telemetry, selectedApp) {
         selectedApp?.let { app ->
             AnalyticsAppActionLauncher(
                 delegate = appActionLauncher,
-                telemetryRepository = telemetryRepository,
+                telemetryRepository = telemetry,
                 appInfo = app,
                 source = APP_DETAILS_INTERACTION_SOURCE,
             )
         } ?: appActionLauncher
     }
     val currentState: AppListUiState by rememberUpdatedState(state)
-
-    TrackScreenView(
-        screenName = AppScreenTracking.Screens.APPS_LIST.name,
-        screenClass = AppScreenTracking.Screens.APPS_LIST.className,
-    )
-
-    TrackScreenState(
-        screenName = AppScreenTracking.Screens.APPS_LIST.name,
-        state = state.apps,
-    )
 
     val randomAppToOpen: AppInfo? = state.randomAppToOpen
     LaunchedEffect(randomAppToOpen) {
@@ -131,11 +119,11 @@ fun AppsListScreen() {
         }
     }
 
-    val onFavoriteToggle: (String) -> Unit = remember(viewModel, telemetryRepository) {
+    val onFavoriteToggle: (String) -> Unit = remember(viewModel, telemetry) {
         { packageName ->
             val current = currentState
             current.loadedApps.firstOrNull { it.packageName == packageName }?.let { app ->
-                telemetryRepository.logAppInteraction(
+                telemetry.logAppInteraction(
                     source = APPS_LIST_INTERACTION_SOURCE,
                     appInfo = app,
                     interaction = if (packageName in current.favorites) {
@@ -149,42 +137,51 @@ fun AppsListScreen() {
         }
     }
 
-    AppsListScreenContent(
-        state = state,
-        onEvent = viewModel::onEvent,
-        onFavoriteToggle = onFavoriteToggle,
-        onShareClick = { app ->
-            telemetryRepository.logShare(
-                method = "system_share",
-                contentType = "app",
-                itemId = app.packageName,
-            )
-            shareApp(app)
-        },
-        onDetailsClosed = { app ->
-            telemetryRepository.logAppInteraction(
-                source = APPS_LIST_INTERACTION_SOURCE,
-                appInfo = app,
-                interaction = AppInteractionType.CloseDetailsBottomSheet,
-            )
-        },
-        detailsActionLauncher = detailsActionLauncher,
-        windowWidthSizeClass = rememberWindowWidthSizeClass(),
-        contentPadding = contentPadding(),
-        searchQuery = LocalShellSearch.current?.query.orEmpty(),
-        listAdUnitId = listAdsConfig.bannerAdUnitId.takeIf { adsEnabled && it.isNotBlank() },
-        detailsAdsConfig = detailsAdsConfig,
-    )
-
-    MessageHost(
+    ScreenHost(
+        screen = AppScreenTracking.Screens.APPS_LIST,
+        status = state.apps,
         viewModel = viewModel,
-        onAction = { viewModel.onEvent(HomeEvent.Load) },
-    )
+        onMessageAction = { viewModel.onEvent(HomeEvent.Load) },
+        fabs = listOf(
+            ToolkitFab(
+                icon = ToolkitIcon.Vector(Icons.Outlined.Casino),
+                onClick = { viewModel.onEvent(HomeEvent.OpenRandomApp) },
+                label = stringResource(R.string.open_random_app),
+                visible = state.canOpenRandomApp,
+            ),
+        ),
+    ) {
+        AppsListScreenContent(
+            state = state,
+            onEvent = viewModel::onEvent,
+            onFavoriteToggle = onFavoriteToggle,
+            onShareClick = { app ->
+                telemetry.logShare(
+                    method = "system_share",
+                    contentType = "app",
+                    itemId = app.packageName,
+                )
+                shareApp(app)
+            },
+            onDetailsClosed = { app ->
+                telemetry.logAppInteraction(
+                    source = APPS_LIST_INTERACTION_SOURCE,
+                    appInfo = app,
+                    interaction = AppInteractionType.CloseDetailsBottomSheet,
+                )
+            },
+            detailsActionLauncher = detailsActionLauncher,
+            windowWidthSizeClass = rememberWindowWidthSizeClass(),
+            contentPadding = contentPadding(),
+            searchQuery = LocalShellSearch.current?.query.orEmpty(),
+            listAdUnitId = listAdsConfig.bannerAdUnitId.takeIf { adsEnabled && it.isNotBlank() },
+            detailsAdsConfig = detailsAdsConfig,
+        )
+    }
 }
 
 /**
- * Renders [state]: the grid with its filter chips, the details sheet of the selected app, and the
- * random-app button, which the tab's scaffold draws and scales out while there is no app to open.
+ * Renders [state]: the grid with its filter chips and the details sheet of the selected app.
  * Holds no ViewModel, injects nothing and opens nothing, so it renders in a preview with plain
  * values.
  *
@@ -217,17 +214,6 @@ internal fun AppsListScreenContent(
 ) {
     val sheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
-
-    ScaffoldFabs(
-        listOf(
-            ToolkitFab(
-                icon = ToolkitIcon.Vector(Icons.Outlined.Casino),
-                onClick = { onEvent(HomeEvent.OpenRandomApp) },
-                label = stringResource(R.string.open_random_app),
-                visible = state.canOpenRandomApp,
-            ),
-        ),
-    )
 
     ScreenStateHandler(
         state = state.apps,

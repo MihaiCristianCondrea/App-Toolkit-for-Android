@@ -110,7 +110,14 @@ Prefer a skill set in this repository:
 
 ```text
 .agents/skills/
+├── built-in/          # project family skills: architecture, data, UI, build, localization
+├── android-official/  # Google's Android skills
+└── kotlin-official/   # JetBrains' Kotlin skills
 ```
+
+`built-in/` and `marketing/skills/` are copies of the `android-skills` repository, which is their
+source of truth. Change a shared skill there first, then copy it into each repository that carries
+it, so the copies never drift.
 
 For a consumer application that does not contain its own skill set, App Toolkit may provide the
 shared skills from a sibling checkout:
@@ -142,40 +149,31 @@ Skills are guidance for the work, not documentation that must be reproduced in e
 
 The following are common entry points. This list is not exhaustive.
 
-| Work                                                            | Skill                                                       |
-|-----------------------------------------------------------------|-------------------------------------------------------------|
-| Build validation, Gradle checks, SDK setup                      | `.agents/skills/android-build-validation/SKILL.md`          |
-| Repository, data source, model, threading and caching decisions | `.agents/skills/architecture/android-data-layer/SKILL.md`   |
-| Domain layer and use-case decisions                             | `.agents/skills/architecture/android-domain-layer/SKILL.md` |
-| Screens, ViewModels, UI state, events and messages              | `.agents/skills/architecture/android-ui-layer/SKILL.md`     |
-| Module and package placement                                    | `.agents/skills/architecture/layered-tree-review/SKILL.md`  |
-| Navigation 3                                                    | `.agents/skills/navigation/navigation-3/SKILL.md`           |
-| Navigation events                                               | `.agents/skills/navigation/navigation-event/SKILL.md`       |
-| Adaptive Compose layouts                                        | `.agents/skills/jetpack-compose/adaptive/SKILL.md`          |
-| Compose styles and theming                                      | `.agents/skills/jetpack-compose/theming/styles/SKILL.md`    |
-| Edge-to-edge and system UI                                      | `.agents/skills/system/edge-to-edge/SKILL.md`               |
-| DataStore                                                       | `.agents/skills/android-datastore/SKILL.md`                 |
-| WorkManager                                                     | `.agents/skills/android-workmanager/SKILL.md`               |
-| Notifications                                                   | `.agents/skills/android-notification-views/SKILL.md`        |
-| Glance widgets                                                  | `.agents/skills/glance-widget/SKILL.md`                     |
-| Analytics and Firebase telemetry                                | `.agents/skills/ga4-app-analytics/SKILL.md`                 |
-| Localization                                                    | `.agents/skills/localization/SKILL.md`                      |
-| Testing                                                         | `.agents/skills/testing/testing-setup/SKILL.md`             |
-| R8 and keep rules                                               | `.agents/skills/performance/r8-analyzer/SKILL.md`           |
-| Intent and component security                                   | `.agents/skills/security/android-intent-security/SKILL.md`  |
-| Changelog updates                                               | `.agents/skills/changelog/SKILL.md`                         |
+| Work                                                            | Skill                                                                       |
+|-----------------------------------------------------------------|-----------------------------------------------------------------------------|
+| Build validation, Gradle checks, SDK setup                      | `.agents/skills/built-in/android-build-validation/SKILL.md`                 |
+| Repository, data source, model, threading and caching decisions | `.agents/skills/built-in/architecture/android-data-layer/SKILL.md`          |
+| Domain layer and use-case decisions                             | `.agents/skills/built-in/architecture/android-domain-layer/SKILL.md`        |
+| Screens, ViewModels, UI state, events and messages              | `.agents/skills/built-in/architecture/android-ui-layer/SKILL.md`            |
+| Module and package placement                                    | `.agents/skills/built-in/architecture/layered-tree-review/SKILL.md`         |
+| Navigation 3                                                    | `.agents/skills/android-official/navigation/navigation-3/SKILL.md`          |
+| Navigation events                                               | `.agents/skills/android-official/navigation/navigation-event/SKILL.md`      |
+| Adaptive Compose layouts                                        | `.agents/skills/android-official/jetpack-compose/adaptive/SKILL.md`         |
+| Compose styles and theming                                      | `.agents/skills/android-official/jetpack-compose/theming/styles/SKILL.md`   |
+| Edge-to-edge and system UI                                      | `.agents/skills/android-official/system/edge-to-edge/SKILL.md`              |
+| DataStore                                                       | `.agents/skills/built-in/android-datastore/SKILL.md`                        |
+| WorkManager                                                     | `.agents/skills/built-in/android-workmanager/SKILL.md`                      |
+| Notifications                                                   | `.agents/skills/built-in/android-notification-views/SKILL.md`               |
+| Glance widgets                                                  | `.agents/skills/built-in/glance-widget/SKILL.md`                            |
+| Analytics and Firebase telemetry                                | `.agents/skills/built-in/ga4-app-analytics/SKILL.md`                        |
+| Localization                                                    | `.agents/skills/built-in/localization/SKILL.md`                             |
+| Testing                                                         | `.agents/skills/android-official/testing/testing-setup/SKILL.md`            |
+| R8 and keep rules                                               | `.agents/skills/android-official/performance/r8-analyzer/SKILL.md`          |
+| Intent and component security                                   | `.agents/skills/android-official/security/android-intent-security/SKILL.md` |
+| Changelog updates                                               | `.agents/skills/built-in/changelog/SKILL.md`                                |
 
-Additional specialized skills exist under areas such as:
-
-```text
-build-system/
-device-ai/
-devtools/
-kotlin/
-play/
-profilers/
-wear/
-```
+Additional specialized skills exist under `android-official/` (such as `build-system/`,
+`device-ai/`, `devtools/`, `play/`, `profilers/` and `wear/`) and under `kotlin-official/`.
 
 Discover the available `SKILL.md` files instead of assuming this table contains every skill.
 
@@ -738,6 +736,16 @@ Its library rules include:
   `:library:core:ui` and Koin (as `IssueReporterSheet` does); only `:library:apptoolkit` names every
   feature
 * packages in the library must not be split across modules
+
+Its rules for both the sample and the library include:
+
+* the package vocabulary and file placement of the `layered-tree-review` skill: no `presentation`,
+  `datasource` or singular layer packages, DTOs, use cases, UI states, ViewModels and repositories
+  in their packages, no `domain` package without a use case, and no mapper named after a layer
+* no product analytics in `data` or `domain` code: those layers take `DiagnosticsReporter` for
+  breadcrumbs and failures, and `TelemetryCollection` where they apply consent, never
+  `TelemetryRepository`, `AnalyticsReporter`, analytics events or the analytics SDK.
+  `:library:integration:firebase`, the telemetry transport, is the one exception
 
 These rules are build-enforced inside App Toolkit.
 

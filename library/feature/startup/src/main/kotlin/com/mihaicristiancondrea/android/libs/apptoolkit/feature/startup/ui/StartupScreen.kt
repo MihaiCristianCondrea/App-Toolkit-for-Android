@@ -20,12 +20,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ContentTransform
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -59,13 +53,14 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.StateContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedExtendedFloatingActionButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.TopAppBarScaffold
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.R
@@ -74,7 +69,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.contr
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.providers.StartupProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.states.ConsentRequestStatus
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.states.StartupUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.OnboardingRoute
 import org.koin.compose.koinInject
@@ -82,13 +77,11 @@ import org.koin.compose.viewmodel.koinViewModel
 
 private const val STARTUP_SCREEN_NAME = "Startup"
 private const val STARTUP_SCREEN_CLASS = "StartupScreen"
+private val STARTUP_SCREEN: TrackedScreen =
+    TrackedScreen(name = STARTUP_SCREEN_NAME, className = STARTUP_SCREEN_CLASS)
 
 /** How wide the screen grows on a large window, as onboarding's pages do; it is centred in the rest. */
 private val StartupContentMaxWidth: Dp = 640.dp
-
-private val ConsentFade: ContentTransform =
-    fadeIn(animationSpec = tween(durationMillis = 300)) togetherWith
-        fadeOut(animationSpec = tween(durationMillis = 300))
 
 /**
  * The startup start screen: the welcome illustration, the terms and privacy notice, and Agree,
@@ -110,16 +103,6 @@ fun StartupScreen() {
     ) { }
     var hasRequestedPermissions by rememberSaveable { mutableStateOf(false) }
 
-    TrackScreenView(
-        screenName = STARTUP_SCREEN_NAME,
-        screenClass = STARTUP_SCREEN_CLASS,
-    )
-
-    TrackScreenState(
-        screenName = STARTUP_SCREEN_NAME,
-        state = state.consent,
-    )
-
     LifecycleResumeEffect(Unit) {
         if (!hasRequestedPermissions && provider.requiredPermissions.isNotEmpty()) {
             hasRequestedPermissions = true
@@ -129,10 +112,12 @@ fun StartupScreen() {
         onPauseOrDispose { }
     }
 
-    StartupScreenContent(
-        state = state,
-        onContinue = { navigator.continueStart(OnboardingRoute) },
-    )
+    ScreenHost(screen = STARTUP_SCREEN, status = state.consent) {
+        StartupScreenContent(
+            state = state,
+            onContinue = { navigator.continueStart(OnboardingRoute) },
+        )
+    }
 }
 
 /**
@@ -146,12 +131,7 @@ internal fun StartupScreenContent(
     onContinue: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    AnimatedContent(
-        targetState = state.consent,
-        modifier = modifier,
-        transitionSpec = { ConsentFade },
-        label = "StartupConsent",
-    ) { consent ->
+    StateContent(state = state.consent, modifier = modifier, label = "StartupConsent") { consent ->
         when (consent) {
             ConsentRequestStatus.Pending -> LoadingScreen()
 

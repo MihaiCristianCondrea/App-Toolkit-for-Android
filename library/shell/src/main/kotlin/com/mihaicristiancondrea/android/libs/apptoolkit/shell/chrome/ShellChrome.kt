@@ -163,6 +163,9 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.LocalTopBarScrollMode
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarScrollMode
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FrameTint
 
 /**
  * What a screen inside the shell can ask of the chrome around it: whether the navigation hides in
@@ -464,13 +467,15 @@ private fun ShellBody(
     val isChild = destination.kind == DestinationKind.Child
     val article = remember(tabIndex, topKey) { entryHosts.articleHostFor(tabEntryKey(tabIndex, topKey)) }
     val style = layout.topBarFor(LocalTopBarStyleOverride.current ?: destination.topBar).forArticle(article)
-    val topScroll = rememberTopBarScrollBehavior(style)
+    // A static bar keeps its style but gets a scroll behavior that never collapses it.
+    val reactsToScroll = destination.topBarScrollMode != TopBarScrollMode.Static
+    val topScroll = rememberTopBarScrollBehavior(if (reactsToScroll) style else TopBarStyle.Small)
     val bottomScroll = BottomAppBarDefaults.exitAlwaysScrollBehavior()
     // Extended buttons fold to their icon while the content scrolls down.
     val fabScroll = rememberFabScrollBehavior()
     val hideOnScroll = settings.hideBottomBarOnScroll && !playerActive && LocalShellCapabilities.current.hasBottomNavigationTabs
     // The app bar slides away too, whatever its style, when the settings ask for it.
-    val hideTopBar = settings.hideTopBarOnScroll
+    val hideTopBar = reactsToScroll && settings.hideTopBarOnScroll
     val topHide = rememberTopBarHideState()
     // The bottom bar's height as laid out now, which shrinks as it hides.
     var bottomBarHeight by remember { mutableIntStateOf(0) }
@@ -481,14 +486,14 @@ private fun ShellBody(
     LaunchedEffect(topKey, hideOnScroll, hideTopBar) {
         fabScroll.expanded = true
         topHide.show()
-        launch { topScroll.resetTo(collapsed = style == TopBarStyle.LargeCollapsed) }
+        if (reactsToScroll) launch { topScroll.resetTo(collapsed = style == TopBarStyle.LargeCollapsed) }
         val offset = bottomScroll.state.heightOffset
         if (offset != 0f) animate(offset, 0f) { value, _ -> bottomScroll.state.heightOffset = value }
     }
 
     // Beside the navigation, the shared frame colour can follow this bar; a page the navigation
     // opens takes over from it while shown.
-    FollowScrollWithFrameTint(underneath = true) { topScroll.frameTint(style) }
+    FollowScrollWithFrameTint(underneath = true) { if (reactsToScroll) topScroll.frameTint(style) else FrameTint.None }
 
     val title = when {
         isChild -> destination.title?.invoke(topKey).orEmpty()
@@ -520,9 +525,10 @@ private fun ShellBody(
 
     Scaffold(
         modifier = Modifier
-            .nestedScroll(topScroll.nestedScrollConnection)
+            // The buttons fold on the scroll the bar takes too, as on a page too short to scroll far.
+            .then(if (reactsToScroll) Modifier.nestedScroll(fabScroll.observing(topScroll.nestedScrollConnection)) else Modifier)
             // After the bar's own behaviour, so a large bar collapses before it slides away.
-            .then(if (hideTopBar) Modifier.nestedScroll(topHide.nestedScrollConnection) else Modifier)
+            .then(if (hideTopBar) Modifier.nestedScroll(fabScroll.observing(topHide.nestedScrollConnection)) else Modifier)
             .nestedScroll(fabScroll.nestedScrollConnection)
             .then(if (hideOnScroll) Modifier.nestedScroll(bottomScroll.nestedScrollConnection) else Modifier),
         topBar = {
@@ -550,7 +556,7 @@ private fun ShellBody(
                         destination.actions?.invoke(this, topKey)
                         OverflowMenu(graph.overflow, callbacks, visible = !isChild)
                     },
-                    scrollBehavior = topScroll,
+                    scrollBehavior = topScroll.takeIf { reactsToScroll },
                     // Beside the navigation, a page opened from it takes over this title in place.
                     titleModifier = if (isChild) Modifier else besideNavigationTitle(),
                     windowInsets = barInsets,
@@ -771,6 +777,7 @@ private fun tabEntry(
         val provided = if (graph.tabs[tabIndex].search != null) search else null
         CompositionLocalProvider(
             LocalShellSearch provides provided,
+            LocalTopBarScrollMode provides destination.topBarScrollMode,
             LocalFabHost provides fabHost,
             LocalArticleTopBarHost provides articleHost,
         ) {

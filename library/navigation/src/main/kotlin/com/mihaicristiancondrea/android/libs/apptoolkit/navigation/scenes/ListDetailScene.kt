@@ -111,6 +111,7 @@ import androidx.navigationevent.compose.rememberNavigationEventState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarScrollMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleReadingProgress
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleTopBarHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleTopBarTitle
@@ -324,8 +325,12 @@ private fun <T : Any> ListDetailLayout(
             detailArticles.keys.retainAll(setOfNotNull(detailEntry?.contentKey))
         }
         if (framed) {
+            // A static pane keeps the bar as it is; only a pane that follows the scroll tints it.
+            val listTints = listEntry.pageChrome?.topBarScrollMode != TopBarScrollMode.Static
+            val detailTints = detailEntry?.pageChrome?.topBarScrollMode != TopBarScrollMode.Static
             FollowScrollWithFrameTint {
-                if (listScroll.scrolledUnder || detailScroll.scrolledUnder) FrameTint.Full else FrameTint.None
+                val scrolledUnder = (listTints && listScroll.scrolledUnder) || (detailTints && detailScroll.scrolledUnder)
+                if (scrolledUnder) FrameTint.Full else FrameTint.None
             }
         }
         Column(

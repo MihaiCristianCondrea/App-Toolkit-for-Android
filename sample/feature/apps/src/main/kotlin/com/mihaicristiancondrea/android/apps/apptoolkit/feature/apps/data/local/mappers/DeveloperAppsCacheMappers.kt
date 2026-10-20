@@ -21,10 +21,10 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.models.CachedAppSummary
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.models.DeveloperAppsCache
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.models.DeveloperAppsCacheData
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppCategory
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppSummary
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppCategory
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
 
-fun DeveloperAppsCache.toDomain(): List<AppSummary> = data.apps.map { cached ->
+fun DeveloperAppsCache.toAppSummaries(): List<AppSummary> = data.apps.map { cached ->
     AppSummary(
         name = cached.name,
         packageName = cached.packageName,

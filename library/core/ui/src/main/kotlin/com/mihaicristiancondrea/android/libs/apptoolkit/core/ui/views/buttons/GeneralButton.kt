@@ -107,7 +107,7 @@ fun GeneralButton(
     feedback: ButtonFeedback = ButtonFeedback(),
     ga4Event: Ga4EventData? = null,
 ) {
-    val telemetryRepository = LocalTelemetry.current
+    val telemetry = LocalTelemetry.current
     val hasLabel = !label.isNullOrBlank()
     require(hasLabel || icon != null) { "GeneralButton requires a nonblank label or an icon." }
     val hapticFeedback = LocalHapticFeedback.current
@@ -116,7 +116,7 @@ fun GeneralButton(
     val click = {
         clickCount++
         feedback.performClick(view = view, hapticFeedback = hapticFeedback)
-        telemetryRepository.logGa4Event(ga4Event)
+        telemetry.logGa4Event(ga4Event)
         onClick()
     }
     val buttonModifier = modifier.bounceClick(animationEnabled = enabled)

@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings
 
 import androidx.compose.runtime.Immutable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.EntranceStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.TabTransitionStyle
@@ -115,4 +116,6 @@ data class ShellSettings(
      * the status bar too, so content scrolls on beneath it.
      */
     val hideTopBarOnScroll: Boolean = false,
+    /** How elements with `animateVisibility` enter: the style every screen's cascade follows. */
+    val entranceStyle: EntranceStyle = EntranceStyle.Slide,
 )

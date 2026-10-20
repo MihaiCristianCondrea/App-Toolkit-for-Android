@@ -60,6 +60,38 @@
     "../listing/en-US/graphics/icon/icon.png": {
       "title": "Android Insider app icon",
       "altText": "The Android Insider icon: the Android robot over an open book"
+    },
+    "../listing/en-US/graphics/tablet-screenshots/1-news.png": {
+      "title": "Android Insider: News on a foldable",
+      "altText": "News on a foldable: a lead story beside three more, with the navigation rail at the side"
+    },
+    "../listing/en-US/graphics/tablet-screenshots/2-guides.png": {
+      "title": "Android Insider: Guides on a foldable",
+      "altText": "Guides on a foldable in two columns, the featured guide across the top"
+    },
+    "../listing/en-US/graphics/tablet-screenshots/3-reader.png": {
+      "title": "Android Insider: Reader on a foldable",
+      "altText": "A guide open beside the Guides list on a foldable, with its headline and summary"
+    },
+    "../listing/en-US/graphics/tablet-screenshots/4-studio-bot.png": {
+      "title": "Android Insider: Studio Bot on a foldable",
+      "altText": "Studio Bot on a foldable: the conversation list beside an answer with Kotlin code"
+    },
+    "../listing/en-US/graphics/desktop-screenshots/1-news.png": {
+      "title": "Android Insider: News on a Chromebook",
+      "altText": "News on a desktop window: the lead story beside two more, then three columns of stories"
+    },
+    "../listing/en-US/graphics/desktop-screenshots/2-guides.png": {
+      "title": "Android Insider: Guides on a Chromebook",
+      "altText": "Guides on a desktop window in three columns, with the navigation drawer open at the side"
+    },
+    "../listing/en-US/graphics/desktop-screenshots/3-reader.png": {
+      "title": "Android Insider: Reader on a Chromebook",
+      "altText": "A guide open beside the Guides list on a desktop window, with its headline and summary"
+    },
+    "../listing/en-US/graphics/desktop-screenshots/4-studio-bot.png": {
+      "title": "Android Insider: Studio Bot on a Chromebook",
+      "altText": "Studio Bot on a desktop window: the conversation list beside an answer with Kotlin code"
     }
   }
 }

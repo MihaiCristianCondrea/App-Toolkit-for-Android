@@ -41,3 +41,11 @@ html[data-export] #store { padding: 0; gap: 0; display: block; }
 
 .icon { width: 512px; height: 512px; }
 .icon svg { display: block; }
+
+/* Tablet and desktop screenshots: 1920 x 1080 CSS px each at 2x (3840 x 2160, 16:9), cut from one strip per set with
+   the phone set's ground. The kit's device (the Pixel 9 Pro Fold, or the Pixelbook Go) is centred in each, unscaled,
+   so the 2x capture renders the app's text crisp. */
+.strip { position: relative; height: 1080px; overflow: hidden; background: color-mix(in srgb, var(--md-sys-color-primary-container) 30%, #fff); }
+.wide-shot { position: absolute; top: 0; width: 1920px; height: 1080px; }
+.wide-device { position: absolute; z-index: 1; }
+.strip--tablet .wide-device { filter: drop-shadow(0 30px 50px rgba(0, 33, 17, .22)); }

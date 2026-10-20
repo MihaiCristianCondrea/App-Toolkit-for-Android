@@ -24,6 +24,8 @@ android {
 }
 
 dependencies {
+    // The sample's screens are the library's TrackedScreen, from the UI-free telemetry models.
+    api(project(":library:core:common"))
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.runtime)
 

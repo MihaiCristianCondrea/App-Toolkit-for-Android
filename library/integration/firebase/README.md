@@ -8,8 +8,7 @@ service wiring.
 ## Owns
 
 - `data.repositories.FirebaseTelemetryRepository` for analytics events, breadcrumbs, and crash
-  reporting. The old names `DefaultFirebaseController` and `FirebaseControllerImpl` stay beside it
-  as deprecated aliases.
+  reporting.
 - `firebaseModule` Koin bindings.
 - `data.notifications.FirebaseNotificationsService` and its notification/wake-lock manifest
   permissions.
@@ -48,10 +47,14 @@ flowchart TD
 
 ## Architectural decisions
 
-- Features depend on the SDK-neutral `TelemetryRepository`; only this module imports concrete
-  Firebase products.
-- Consent updates are applied through the same repository as analytics/crash/performance calls so
-  enablement policy does not leak into every feature.
+- Features depend on the SDK-neutral contracts in `core.common.telemetry`; only this module imports
+  concrete Firebase products. `FirebaseTelemetryRepository` implements all of them as one
+  `TelemetryRepository`, bound once, and `telemetryModule` hands the same instance out as
+  `AnalyticsReporter`, `DiagnosticsReporter` and `TelemetryCollection`, so Firebase is set up once.
+- Consent updates reach the SDKs through `TelemetryCollection`, applied by the consent owners
+  only, so enablement policy does not leak into every feature.
+- This module is the deliberate exception to the rule that `data/` code reports no analytics:
+  it is the transport that sends them. `checkModuleBoundaries` names it as such.
 - Messaging remains a framework-created service and is wired through the manifest rather than the
   Koin-created repository lifecycle.
 

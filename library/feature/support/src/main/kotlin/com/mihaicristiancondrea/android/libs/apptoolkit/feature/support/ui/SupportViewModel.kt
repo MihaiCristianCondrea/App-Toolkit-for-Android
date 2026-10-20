@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui
 
 import android.app.Activity
 import com.android.billingclient.api.ProductDetails
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.GenericErrorText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
@@ -28,7 +28,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.domain.models.DonationProductIds
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.data.models.DonationProductIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.contracts.SupportEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.mappers.toDonationOptions
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.models.DonationOption
@@ -37,7 +37,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.utils
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.utils.beginCheckoutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.utils.donationResultEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repositories.BillingRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.domain.models.PurchaseResult
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.models.PurchaseResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.utils.extensions.isValidForBilling
 import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.Job

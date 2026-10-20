@@ -65,7 +65,7 @@ fun SwitchCardItem(
     ga4Event: Ga4EventData? = null,
     ga4EventProvider: ((Boolean) -> Ga4EventData?)? = null,
 ) {
-    val telemetryRepository = LocalTelemetry.current
+    val telemetry = LocalTelemetry.current
     val view: View = LocalView.current
     Card(
         enabled = enabled,
@@ -76,7 +76,7 @@ fun SwitchCardItem(
             if (!enabled) return@Card
             val updatedValue = !switchState.value
             view.playSoundEffect(SoundEffectConstants.CLICK)
-            telemetryRepository.logGa4Event(ga4EventProvider?.invoke(updatedValue) ?: ga4Event)
+            telemetry.logGa4Event(ga4EventProvider?.invoke(updatedValue) ?: ga4Event)
             onSwitchToggled(updatedValue)
         }
     ) {
@@ -106,7 +106,7 @@ fun SwitchCardItem(
                 checked = switchState.value,
                 enabled = enabled,
                 onCheckedChange = { isChecked ->
-                    telemetryRepository.logGa4Event(ga4EventProvider?.invoke(isChecked) ?: ga4Event)
+                    telemetry.logGa4Event(ga4EventProvider?.invoke(isChecked) ?: ga4Event)
                     onSwitchToggled(isChecked)
                 },
                 checkIcon = checkIcon

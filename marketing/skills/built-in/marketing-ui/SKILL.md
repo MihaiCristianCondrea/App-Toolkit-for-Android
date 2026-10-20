@@ -46,7 +46,7 @@ marketing/ui/
 ├── screen.html              # one screen, full size, state from the URL
 ├── src/
 │   ├── theme/               # tokens generated from the app's theme (colors, type, shapes)
-│   ├── kit/                 # shell: status bar, app bars, navigation, device frame
+│   ├── kit/                 # shell: status bar, app bars, navigation (bar, rail, drawer), panes, device frames; layout.js: windows and adaptive rules
 │   ├── screens/             # one Lit element per app screen
 │   ├── parts/               # pieces of screens a film can mount alone (a card, a row, a button)
 │   └── embed.js             # mount(el, id, state, options) and mountPart(el, id, state)
@@ -116,12 +116,18 @@ Rules:
 - **Real content and real states.** Load the app's real strings and sample data. Show only states the app can show (an empty card that the app would hide must be hidden here too).
 - **Edge to edge.** Status bar 24 dp and gesture bar over the content, as Android draws them.
 - **Every screen renders from state.** No timers or random values inside a screen; videos set the state per frame.
+- **Large screens come from the Android code, not from guesses.** Tablets, foldables and desktop windows take the app's own adaptive rules, so port them, constant for constant, into one module (`kit/layout.js`) with a comment naming each source file: the window size breakpoints and navigation mode (bottom bar, rail, expanded rail, permanent drawer; App Toolkit apps: `ShellLayoutPolicy` in `ShellLayout.kt`, widths in `NavigationSurfaces.kt`), list and detail panes (`ListDetailScene.kt`: list fraction, separator), and the feed grid (the app's `listingLayout()`-style function: minimum cell width, column cap, when a banner stacks). Screens read the layout from a `window` in their state (`{ width, height, system }`, with presets such as `phone`, `fold` and `desktop`); `mount()`, the host and the capture script pass it. Also port how the wide shell is painted, not only where things go (for App Toolkit: the navigation and app bar share surface-container, and a tab's content is a surface card with a 24 dp top-start corner). When the app's library is a dependency, read its source at the exact version the app uses (clone the library at that tag, or disassemble the cached AAR with `javap -c` for the constants) before writing CSS.
+- **Device frames per window.** The phone frame for phone windows; for a tablet window the Pixel 9 Pro Fold open (`assets/device-frames/pixel_9_pro_fold/default`: a 2204 x 2274 frame around a 2076 x 2152 display at 62, 62, which is 852 x 883 dp at 2.4375). Size the frame so its display is exactly the window in CSS px, measure the display's corner radius from `mask.webp`, and keep the status icons clear of the camera cutout. For a desktop window, Google's device art for the Pixelbook Go (from the Android Developers Device Art Generator, `device-art-resources/pixelbook_go/land_back.png`, `land_shadow.png`, `land_fore.png`): find the screen as the transparent rectangle in `land_back.png` (1826 x 1079 px at 181, 159), and size the desktop window to it (1218 x 720 dp at 1.5). A desktop window has no system bars.
+- **Check every window.** After a change, capture each screen at every window (`npm run capture -- <id> --window=fold`) and look: wide layouts break differently (a flex row without `min-width: 0` lets a pane overflow; content capped at 800 dp needs centring; long lists need an end).
+- **The served layout, not a guess at it.** Snapshot what the API serves for each screen, not only the items: for a composed feed, every group (featured, curated, topics, latest) with each article's style in its group and its ad positions. The kit draws that composition the way the app does, styles on every group the contract allows. When the kit, the app and an admin preview disagree, the contract decides; fix all three, then refresh the snapshot.
+- **One look for every mock.** Where a backend console previews the app (a feed preview, an ad stand-in), it draws the kit's components with the same structure and copy, so the console, the kit and the app agree. Change the kit first, then the console.
+- **Ads off by default.** Screens take `showAds` (off); the gallery has a Show ads switch to check ad layouts. Marketing media (store screenshots, posts, videos) never shows ad UI.
 - **Expose parts.** When a film needs one piece of a screen, factor it into a function the screen also calls, register it in `parts/`, and check that the screen still renders identically.
 
 ## 3. Use it
 
 - **Gallery:** `marketing/ui/open-marketing-ui.cmd` (Windows) or `./marketing/ui/open-marketing-ui.sh`.
-- **Captures:** `npm run capture -- <screen-id> --scale=3` writes PNGs for store graphics and posts. Run [`metadata`](../metadata/SKILL.md) on them before they leave the repository.
+- **Captures:** `npm run capture -- <screen-id> --scale=3` writes PNGs for store graphics and posts; `--window=fold|desktop` renders the large-screen layout and `--frame=device` the window's device. Run [`metadata`](../metadata/SKILL.md) on them before they leave the repository.
 - **Videos:** Remotion mounts screens and parts through `embed.js` (a `LitScreen` component that calls `mount()` with a state derived from the frame). See [`motion-video`](../motion-video/SKILL.md).
 
 ```tsx

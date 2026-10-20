@@ -77,7 +77,7 @@ fun AnimatedFloatingActionButton(
     feedback: ButtonFeedback = ButtonFeedback(),
     ga4Event: Ga4EventData? = null,
 ) {
-    val telemetryRepository = LocalTelemetry.current
+    val telemetry = LocalTelemetry.current
     val haptics = LocalHapticFeedback.current
     val view = LocalView.current
     val checkedState = rememberSaveable { mutableStateOf(false) }
@@ -94,7 +94,7 @@ fun AnimatedFloatingActionButton(
             onCheckedChange = { newChecked ->
                 clickCount++
                 feedback.performClick(view = view, hapticFeedback = haptics)
-                telemetryRepository.logGa4Event(ga4Event)
+                telemetry.logGa4Event(ga4Event)
                 checkedState.value = newChecked
                 onClick()
             },

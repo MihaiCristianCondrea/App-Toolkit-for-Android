@@ -8,8 +8,9 @@ page frame, state handling, analytics hooks, and shared components.
 ## Owns
 
 - The screen contracts, in `screen`: `ScreenViewModel`, `LoggedScreenViewModel`, `Loadable`,
-  `TrackedStatus`, `UiMessage`, `ScreenStateHandler`, `TrackScreenState` and `MessageHost`. See
-  [Screen state](#screen-state).
+  `TrackedStatus`, `UiMessage`, `ScreenHost`, `ScreenStateHandler`, `ScreenStates`, `StateContent`
+  and `MessageHost`. See
+  [Screen state](#screen-state) and [Screen visits](#screen-visits).
 - The shell's page frame, in `views/shell`: `PageScaffold`, `ShellTopAppBar` and
   `rememberTopBarScrollBehavior`, the app bar's search field, `LocalContentPadding` and
   `contentPadding`, `ContentWidthBox`, the pane placeholders, and the page's snackbar host
@@ -100,16 +101,13 @@ flowchart TD
   declares a sealed type of its own.
 - Messages are queued state, not one-off events, so a configuration change cannot lose one, and
   every screen shows them the same way through `MessageHost`.
-- `ScreenStateHandler` gives every case but the content a design-system default, so a failure
-  always shows something.
+- `ScreenStateHandler` draws every case but the content with the app's `ScreenStates`, so a failure
+  always shows something. A screen passes only what differs: `icon`, `retryWhenEmpty`, `showAd`,
+  or a case of its own for that one section. An app draws its own cases, or its own transition,
+  once with `LocalScreenStates`, and `StateContent` switches on any other state, such as a flow's
+  phases, the same way.
 - Global UI preferences arrive through the design-system root. Reusable components must not start
   their own persistence collectors unless a documented adapter still requires it.
-
-## Compatibility adapters
-
-The existing getVersionInfo extension delegates to core common's getVersionMetadata and returns the
-unchanged AppVersionInfo class. Its original package, function signature, and JVM file name remain
-available; data-layer callers should use the lower-level API.
 
 ## Public contracts
 
@@ -123,7 +121,9 @@ available; data-layer callers should use the lower-level API.
   `PanePlaceholder`, `ListPlaceholder`, `LocalPageSnackbarHostState` and
   `rememberPageSnackbarHostState`; see [Page frame](#page-frame).
 - `SettingsConfig`, `SettingsCategory` and `SettingsPreference`. A row opens its `destination` key
-  unless its `action` returns `true`.
+  unless its `action` returns `true`. Its `icon` is a `ToolkitIcon`, so a row can show an animated,
+  Lottie or drawable icon as the navigation does; the `ImageVector` constructor is deprecated.
+  `PreferenceItem` and `SettingsPreferenceItem` take either.
 - `SettingsSearchEntry` and `SettingsSearchProvider`, the settings search's contract: each settings
   page's module binds a provider in Koin listing its rows (title, the page they live on, the key
   they open), and the settings list collects them all with `getAll`, depending on none of the
@@ -149,11 +149,15 @@ available; data-layer callers should use the lower-level API.
   and out of a lazy layout. `NativeAdSlot`, `rememberNativeAd`, and `rememberNativeAdState` take a
   `cache` and a `cacheKey`; without both they keep the uncached behaviour of destroying the ad on
   disposal. See [Ads inside a lazy list or grid](../../integration/ads/README.md#ads-inside-a-lazy-list-or-grid).
-- `Modifier.animateVisibility` fades and slides every element in the first time it appears, in a
-  cascade. With an `index` each position waits `staggerDelay` more, up to `maxStaggeredItems`, so a
-  list keeps arriving from the top. `index` is optional: without it elements that appear together
-  cascade in the order they appear, grouped by the app-wide `VisibilityCascade`, which is unit
-  tested.
+- `Modifier.animateVisibility` brings every element in the first time it is shown, in a cascade.
+  The cascade counts from what is shown: the items a screen opens with arrive one after another,
+  each `staggerDelay` after the one before, and an item scrolled in later starts at once. The
+  entrance starts when the element is first placed, so items a lazy list composes ahead of time
+  still enter on screen. The motion is `MaterialTheme.motionScheme`'s springs in the style of
+  `LocalEntranceStyle` (`Slide`, `Scale`, `Fade` or `None`), which the shell provides from
+  `appToolkitDefaults { shell { entranceStyle = ... } }` or the developer options.
+  `animateVisibility(visible)` animates an element in and out as it comes and goes. Both run in a
+  `Modifier.Node`, without recomposing per frame; the cascade is `VisibilityCascade`, unit tested.
 - `HorizontalWavyDivider`, `VerticalWavyDivider`, and `WavyDividerDefaults` draw the design
   system's `il_wavy_line` as a divider. The wave is drawn rather than tiled from the drawable, so it
   scales with the divider's band and fits a whole number of half-waves into any length; the fitting
@@ -168,10 +172,11 @@ available; data-layer callers should use the lower-level API.
   `observeReport` (an expensive stream, collected only while the screen collects `state`, as
   `WhileSubscribed(5_000)` does) or `catchReport` (a flow that keeps going), which report failures
   and pass cancellation through. ViewModels take repositories, use cases and
-  `TelemetryRepository`, never a `Context`.
+  `TelemetryRepository`, never a `Context`. Product analytics are reported here, in the UI layer;
+  repositories report only diagnostics.
 - Composables report through `LocalTelemetry` (`core.ui.views.analytics`), never a `TelemetryRepository`
-  parameter. `TrackScreenView`, `TrackScreenState` and every component with a `ga4Event` read it
-  themselves; a screen that logs its own events reads it once with `LocalTelemetry.current`.
+  parameter. `ScreenHost` and every component with a `ga4Event` read it themselves; a screen that
+  logs its own interactions reads it once as `val telemetry = LocalTelemetry.current`.
   `ShellHost` provides it. A composition started outside `ShellHost`, such as a sheet in its own
   window, wraps itself in `ProvideTelemetry { }`. Where nothing provides it, as in a preview, it is
   `NoOpTelemetryRepository` and events are dropped.
@@ -286,6 +291,13 @@ app bar, such as tabs, call `PageScaffold` themselves.
   bar becomes a small one on a window too short for it, and inside a list-detail pane the frame
   draws no bar at all, because the scene draws one across both panes.
   `LocalTopBarStyleOverride` lets the developer options try one style across the app.
+- **A bar can stay static.** `PageScaffold(topBarScrollMode = TopBarScrollMode.Static)` keeps the
+  bar expanded and visible, without scroll tint or frame tint, whatever the hide-on-scroll setting.
+  The default follows `LocalTopBarScrollMode`, which the destination sets; the content, the
+  buttons and an article's reading progress still follow the scroll.
+- **Extended buttons fold on scroll,** including the scroll a collapsing or hiding bar takes before
+  the content moves, so they fold on a page too short to scroll far. A scaffold of its own attaches
+  its bar's connection through `FabScrollBehavior.observing`.
 - **The bar can hide on scroll.** With `LocalHideTopBarOnScroll`, which the shell sets from its
   settings, the bar slides away as content scrolls down and returns as soon as it scrolls up,
   whatever its style; a large bar collapses first. `HideOnScrollTopBar` lays the bar out less the
@@ -377,11 +389,11 @@ class AboutViewModel(/* ... */) : LoggedScreenViewModel<AboutUiState, AboutEvent
     }
 }
 
-// AboutScreen, stateful: ViewModel, tracking, messages, navigation.
+// AboutScreen, stateful: ViewModel, the screen's boundary, navigation.
 val state by viewModel.state.collectAsStateWithLifecycle()
-TrackScreenState(screenName = "About", state = state.items)
-AboutScreenContent(state, onEvent = viewModel::onEvent, onOpenLicenses = { navigator.navigate(LicensesRoute) })
-MessageHost(viewModel)
+ScreenHost(screen = ABOUT_SCREEN, status = state.items, viewModel = viewModel) {
+    AboutScreenContent(state, onEvent = viewModel::onEvent, onOpenLicenses = { navigator.navigate(LicensesRoute) })
+}
 
 // AboutScreenContent, stateless and previewable: renders the state, reports through callbacks.
 ScreenStateHandler(state.items, contentPadding = padding, onRetry = { onEvent(AboutEvent.Load) }) { ready ->
@@ -390,7 +402,7 @@ ScreenStateHandler(state.items, contentPadding = padding, onRetry = { onEvent(Ab
 ```
 
 The full setup, with the file tree, templates and the migration steps, is the
-[`android-ui-layer` skill](../../../.agents/skills/architecture/android-ui-layer/SKILL.md).
+[`android-ui-layer` skill](../../../.agents/skills/built-in/architecture/android-ui-layer/SKILL.md).
 
 - **The state is the feature's own type.** Content that is there from the start needs no status.
   Content that loads gets a `Loadable` field, and nothing makes it start at `Loading`: a screen that
@@ -398,7 +410,7 @@ The full setup, with the file tree, templates and the migration steps, is the
 - **`Loadable.Ready` can be `refreshing` or `stale`,** for a newer copy loading behind the shown one
   or a saved copy shown offline, without a case of its own.
 - **Other statuses** are a sealed type the feature declares. Implementing `TrackedStatus` has them
-  reported by `TrackScreenState` like `Loadable`'s `loading`, `success`, `no_data` and `error`.
+  reported by `ScreenHost` like `Loadable`'s `loading`, `success`, `no_data` and `error`.
 - **Messages** go through `showMessage(UiMessage(...))` and `MessageHost`, which shows them one at a
   time and removes each once it has left. A screen needs no dismiss event.
 - **`LoggedScreenViewModel`** logs `vm_init` and `vm_event` itself; `launchReport`,
@@ -414,8 +426,36 @@ The full setup, with the file tree, templates and the migration steps, is the
   the same text for the failures a user can act on (offline, timeout, busy server, full storage)
   and the screen's own `fallback` for the rest, bugs included. A screen with failures of its own
   maps them first and passes the rest on.
+- **Floating action buttons follow the state** through `ScreenHost(fabs = ...)`, declared once for
+  the screen rather than inside the cases of a `StateContent`.
 - **There is no action stream.** One-off effects such as navigation are added with the first screen
   that needs them; messages, the common case, are state.
+
+## Screen visits
+
+`ScreenHost(screen, status, viewModel, onMessageAction) { content }` is every screen's boundary,
+the only screen tracking a screen calls. It reports visits, reports the status, and hosts the
+ViewModel's messages. It adds no layout, renders no `Loadable` (each section goes through
+`ScreenStateHandler` inside `content`), owns no navigation and injects nothing. A static screen
+passes no `status` and no `viewModel`; a screen with several loading sections passes the one that
+says how the screen is doing, or a `TrackedStatus` of its own. `TrackedScreen`, the stable name and
+class, is in `:library:core:common`'s `telemetry.models`, so an analytics contract module needs no
+UI dependency.
+
+- **A visit starts when the screen is visible and active,** when its `LocalLifecycleOwner` reaches
+  `RESUMED`. Navigation 3 caps each scene's lifecycle at `STARTED` until its transition settles and
+  while an overlay covers it, and the shell's tabs inherit the pages' cap, so a screen that only
+  animates, is kept for a back gesture or sits under an overlay is not reported. A cancelled back
+  gesture or a dismissed overlay returns to the same visit.
+- **A visit ends when the screen leaves composition or the app is stopped.** Switching tabs, a page
+  over the shell, popping and backgrounding all end it; the next `RESUMED` is a new visit. Both
+  panes of a list-detail scene are separate destinations and report separately.
+- **A configuration change keeps the visit; process death does not.** The visit lives in a small
+  holder in the destination's `ViewModelStoreOwner`, which survives rotation and not process death.
+  Outside a destination it falls back to the activity's store, and in a preview to the
+  composition.
+- **`screen_state`** is reported at the start of each visit and when the label changes, never twice
+  in a row for the same label. The event and its `screen` and `state` parameters are unchanged.
 
 ## Internal implementations
 

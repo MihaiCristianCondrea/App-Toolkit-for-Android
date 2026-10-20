@@ -91,7 +91,6 @@ flowchart TD
 
 - `observeSettings()` combines one flow per key, so a whole-bundle write can show a mixed state for
   a frame. One snapshot of storage would remove it.
-- `UsageAndDiagnosticsSettings` lives in a `domain/` package that holds only this model, and
-  duplicates `ConsentSettings` from `:library:integration:consent`.
+- `UsageAndDiagnosticsSettings` duplicates `ConsentSettings` from `:library:integration:consent`.
 - Changes affect both settings and onboarding, and must keep the consent defaults, the stored
   values and the order in which the SDKs receive them.

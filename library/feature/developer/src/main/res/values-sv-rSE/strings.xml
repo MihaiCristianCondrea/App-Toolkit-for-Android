@@ -27,6 +27,11 @@
     <string name="shell_dev_bottom_accessory">Ovanför navigeringsfältet</string>
     <string name="shell_dev_motion">Rörelse</string>
     <string name="shell_dev_animation_speed">Animationshastighet</string>
+    <string name="shell_dev_entrance_style">Animering vid visning</string>
+    <string name="shell_entrance_slide">Tona in och glid upp</string>
+    <string name="shell_entrance_scale">Tona in och väx</string>
+    <string name="shell_entrance_fade">Tona in</string>
+    <string name="shell_entrance_none">Ingen</string>
     <string name="shell_dev_reset">Återställ utvecklaralternativ</string>
     <string name="shell_dev_reset_summary">Tillbaka till det appen anger</string>
     <string name="shell_layout_auto">Automatiskt, efter fönsterbredd</string>

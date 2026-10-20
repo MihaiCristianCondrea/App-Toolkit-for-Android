@@ -27,6 +27,11 @@
     <string name="shell_dev_bottom_accessory">Über der Navigationsleiste</string>
     <string name="shell_dev_motion">Bewegung</string>
     <string name="shell_dev_animation_speed">Animationsgeschwindigkeit</string>
+    <string name="shell_dev_entrance_style">Einblendanimation</string>
+    <string name="shell_entrance_slide">Einblenden und aufsteigen</string>
+    <string name="shell_entrance_scale">Einblenden und vergrößern</string>
+    <string name="shell_entrance_fade">Einblenden</string>
+    <string name="shell_entrance_none">Keine</string>
     <string name="shell_dev_reset">Entwickleroptionen zurücksetzen</string>
     <string name="shell_dev_reset_summary">Zurück zu den Vorgaben der App</string>
     <string name="shell_layout_auto">Automatisch, nach Fensterbreite</string>
