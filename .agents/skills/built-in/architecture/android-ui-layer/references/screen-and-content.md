@@ -131,17 +131,34 @@ ScreenStateHandler(
     state = state.items,
     contentPadding = contentPadding,
     onRetry = { onEvent(XEvent.Load) },
-    onEmpty = { empty -> XEmptyState(message = empty.message) },
+    icon = Icons.Outlined.Folder,
 ) { ready ->
     XList(items = ready.value, refreshing = ready.refreshing)
 }
 ```
 
-- Every case except `Ready` has a design-system default, so pass only what differs: `onLoading`,
-  `onEmpty`, `onError`.
-- The default failure screen shows Retry when `onRetry` is given and the failure is `retryable`.
-- It fades between cases, not between two `Ready` values, so updating the content does not flash.
+- Every case except `Ready` is drawn by the app's `ScreenStates`, so pass only what differs, as
+  parameters rather than a copy of `NoDataScreen`:
+
+  | Need | Pass |
+  |---|---|
+  | The screen's icon on the empty and failure content | `icon = Icons.Outlined.X` |
+  | Retry on an empty result too (a catalog that may update) | `retryWhenEmpty = true` |
+  | No native ad on the empty and failure content | `showAd = false` |
+  | A layout of its own for this section, such as a skeleton | `onLoading`, `onEmpty`, `onError` |
+
+- The default failure content shows Retry when `onRetry` is given and the failure is `retryable`.
+- It animates between cases, not between two `Ready` values, so updating the content does not flash.
 - A screen with several `Loadable` fields draws one handler per field.
+- An app draws its own loading, empty and failed content, or its own transition, once:
+  `CompositionLocalProvider(LocalScreenStates provides ScreenStates(...))` around its content.
+  Every handler follows it; a section's own `onLoading`, `onEmpty` or `onError` still wins.
+- A state that is not a `Loadable`, such as the phases of a flow (idle, cleaning, done), switches
+  through `StateContent(state) { when (it) { ... } }`, which animates the same way. Keep the phase a
+  sealed type or enum of the feature's; derive its `TrackedStatus` for `ScreenHost` from it.
+- The screen's floating action buttons for its current state go on `ScreenHost(fabs = ...)`, once
+  for the screen, not inside the cases: two cases that both declare buttons while one fades into
+  the other fight over them.
 
 ## Previews
 
@@ -162,9 +179,8 @@ private fun XScreenContentPreview() {
 - Wrap previews in `MaterialTheme`. The Toolkit's `AppTheme` reads the theme settings from Koin,
   which a preview does not have.
 - Use `UiTextHelper.DynamicString` for sample text, so the preview needs no resources.
-- Preview `Ready` and `Loading`. The default `Empty` and `Failed` screens are `NoDataScreen`, which
-  calls `koinInject` for its ad unit even when no ad shows, so they fail in a preview. Cover them
-  in a Compose test with Koin started (`testing.md`), or preview a screen-specific `onEmpty` or
-  `onError` slot that does not use `NoDataScreen`.
+- Preview `Ready` and `Loading`. The default `Empty` and `Failed` content resolves its ad unit
+  through Koin while its ad shows, so preview those with `showAd = false`, or cover them in a
+  Compose test with Koin started (`testing.md`).
 - Add one preview per meaningful layout of the ready content: an empty search, a long list, a
   selected row.

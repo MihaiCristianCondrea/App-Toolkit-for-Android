@@ -61,7 +61,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextField
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextFieldStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
@@ -171,25 +170,8 @@ internal fun SettingsScreenContent(
         state = state.config,
         contentPadding = contentPadding,
         onRetry = onRetry,
-        onEmpty = { empty ->
-            NoDataScreen(
-                icon = Icons.Outlined.Settings,
-                message = empty.message?.asString(),
-                showRetry = true,
-                onRetry = onRetry,
-                paddingValues = contentPadding,
-            )
-        },
-        onError = { failed ->
-            NoDataScreen(
-                icon = Icons.Outlined.Settings,
-                message = failed.message.asString(),
-                isError = true,
-                showRetry = failed.retryable,
-                onRetry = onRetry,
-                paddingValues = contentPadding,
-            )
-        },
+        retryWhenEmpty = true,
+        icon = Icons.Outlined.Settings,
         onSuccess = { ready ->
             SettingsList(
                 paddingValues = contentPadding,

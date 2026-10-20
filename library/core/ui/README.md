@@ -8,7 +8,8 @@ page frame, state handling, analytics hooks, and shared components.
 ## Owns
 
 - The screen contracts, in `screen`: `ScreenViewModel`, `LoggedScreenViewModel`, `Loadable`,
-  `TrackedStatus`, `UiMessage`, `ScreenHost`, `ScreenStateHandler` and `MessageHost`. See
+  `TrackedStatus`, `UiMessage`, `ScreenHost`, `ScreenStateHandler`, `ScreenStates`, `StateContent`
+  and `MessageHost`. See
   [Screen state](#screen-state) and [Screen visits](#screen-visits).
 - The shell's page frame, in `views/shell`: `PageScaffold`, `ShellTopAppBar` and
   `rememberTopBarScrollBehavior`, the app bar's search field, `LocalContentPadding` and
@@ -100,8 +101,11 @@ flowchart TD
   declares a sealed type of its own.
 - Messages are queued state, not one-off events, so a configuration change cannot lose one, and
   every screen shows them the same way through `MessageHost`.
-- `ScreenStateHandler` gives every case but the content a design-system default, so a failure
-  always shows something.
+- `ScreenStateHandler` draws every case but the content with the app's `ScreenStates`, so a failure
+  always shows something. A screen passes only what differs: `icon`, `retryWhenEmpty`, `showAd`,
+  or a case of its own for that one section. An app draws its own cases, or its own transition,
+  once with `LocalScreenStates`, and `StateContent` switches on any other state, such as a flow's
+  phases, the same way.
 - Global UI preferences arrive through the design-system root. Reusable components must not start
   their own persistence collectors unless a documented adapter still requires it.
 
@@ -411,6 +415,8 @@ The full setup, with the file tree, templates and the migration steps, is the
   the same text for the failures a user can act on (offline, timeout, busy server, full storage)
   and the screen's own `fallback` for the rest, bugs included. A screen with failures of its own
   maps them first and passes the rest on.
+- **Floating action buttons follow the state** through `ScreenHost(fabs = ...)`, declared once for
+  the screen rather than inside the cases of a `StateContent`.
 - **There is no action stream.** One-off effects such as navigation are added with the first screen
   that needs them; messages, the common case, are state.
 

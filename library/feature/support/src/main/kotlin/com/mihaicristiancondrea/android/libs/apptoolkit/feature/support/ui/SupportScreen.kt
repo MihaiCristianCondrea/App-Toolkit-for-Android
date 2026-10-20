@@ -57,7 +57,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHos
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.data.models.DonationProductIds
@@ -149,16 +148,7 @@ internal fun SupportScreenContent(
         modifier = modifier,
         contentPadding = contentPadding,
         onRetry = { onEvent(SupportEvent.QueryProductDetails) },
-        onError = { failed ->
-            NoDataScreen(
-                message = failed.message.asString(),
-                icon = Icons.Outlined.MoneyOff,
-                isError = true,
-                showRetry = failed.retryable,
-                onRetry = { onEvent(SupportEvent.QueryProductDetails) },
-                paddingValues = contentPadding,
-            )
-        },
+        icon = Icons.Outlined.MoneyOff,
     ) { ready ->
         SupportList(
             donationOptions = ready.value,

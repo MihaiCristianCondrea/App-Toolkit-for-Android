@@ -75,8 +75,9 @@ sealed interface CheckoutStatus : TrackedStatus {
 }
 ```
 
-Labels are snake_case literals, like `Loadable`'s. Render a custom status with a `when`;
-`ScreenStateHandler` is for `Loadable`.
+Labels are snake_case literals, like `Loadable`'s. Render a custom status, or a flow's phases,
+with `StateContent(state) { when (it) { ... } }`, which animates between cases like
+`ScreenStateHandler` does; `ScreenStateHandler` is for `Loadable`.
 
 ## Derived values
 

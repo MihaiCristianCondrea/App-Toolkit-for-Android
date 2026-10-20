@@ -82,7 +82,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememb
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ScaffoldFabs
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists.GroupedAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists.GroupedActionList
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
@@ -284,14 +283,7 @@ internal fun FaqScreenContent(
         contentPadding = contentPadding,
         onRetry = onRetry,
         // Nothing to show is still worth another try: the catalog may have been updated.
-        onEmpty = { empty ->
-            NoDataScreen(
-                message = empty.message?.asString(),
-                showRetry = true,
-                onRetry = onRetry,
-                paddingValues = contentPadding,
-            )
-        },
+        retryWhenEmpty = true,
     ) { ready ->
         FaqList(
             questions = ready.value,

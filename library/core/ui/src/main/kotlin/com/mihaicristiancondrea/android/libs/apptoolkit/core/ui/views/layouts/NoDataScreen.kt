@@ -82,9 +82,6 @@ fun NoDataScreen(
     paddingValues: PaddingValues = PaddingValues(),
     message: String? = null,
 ) {
-    val adUnitId = koinInject<AdsConfig>(
-        qualifier = named(name = AdsQualifiers.NO_DATA_NATIVE_AD)
-    ).bannerAdUnitId
     Column(
         modifier = Modifier
             .padding(paddingValues)
@@ -127,9 +124,10 @@ fun NoDataScreen(
 
         LargeVerticalSpacer()
 
+        // Only an ad that shows needs the ads configuration, so without one this renders without Koin.
         if (showAd) {
             NoDataNativeAdCard(
-                adUnitId = adUnitId,
+                adUnitId = koinInject<AdsConfig>(qualifier = named(name = AdsQualifiers.NO_DATA_NATIVE_AD)).bannerAdUnitId,
                 modifier = Modifier
                     .padding(all = SizeConstants.MediumSize),
             )

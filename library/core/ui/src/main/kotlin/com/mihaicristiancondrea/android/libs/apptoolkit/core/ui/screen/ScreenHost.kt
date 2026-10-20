@@ -35,6 +35,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.An
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ScaffoldFabs
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /**
@@ -49,8 +51,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.
  * ```
  *
  * It adds no layout and draws nothing of its own: no scaffold, no app bar, no padding, and it does
- * not render [status]. [content] renders the state, each `Loadable` section through
- * [ScreenStateHandler]. Navigation and the ViewModel stay with the caller.
+ * not render [status]; its [fabs] are drawn by the scaffold around it. [content] renders the
+ * state, each `Loadable` section through [ScreenStateHandler]. Navigation and the ViewModel stay
+ * with the caller.
  *
  * **Visits.** A visit is reported as a GA4 screen view when the screen becomes visible and
  * active: when its [LocalLifecycleOwner] reaches `RESUMED`. In the shell that is once its
@@ -71,6 +74,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.
  * @param viewModel whose queued messages are shown through the surrounding Toolkit scaffold. A
  * screen that shows its messages in a snackbar host of its own calls [MessageHost] itself.
  * @param onMessageAction called when a message's action is pressed.
+ * @param fabs the screen's floating action buttons for its state now, drawn by the surrounding
+ * Toolkit scaffold like [ScaffoldFabs]; null declares none, leaving the destination's own. Declared
+ * here, once for the screen, they follow its state without the cases of a [StateContent] both
+ * declaring buttons while one fades into the other.
  */
 @Composable
 fun ScreenHost(
@@ -78,9 +85,13 @@ fun ScreenHost(
     status: TrackedStatus? = null,
     viewModel: ScreenViewModel<*, *>? = null,
     onMessageAction: (UiMessage) -> Unit = {},
+    fabs: List<ToolkitFab>? = null,
     content: @Composable () -> Unit,
 ) {
     TrackScreenVisits(screen = screen, status = status)
+    if (fabs != null) {
+        ScaffoldFabs(fabs)
+    }
     content()
     if (viewModel != null) {
         MessageHost(viewModel = viewModel, onAction = onMessageAction)

@@ -18,6 +18,15 @@
   screen's visits and status and shows its ViewModel's messages, without adding layout. `screen` is
   a `TrackedScreen` from `core.common.telemetry.models`, so analytics contract modules need no UI
   dependency.
+- `ScreenStateHandler` takes `icon`, `retryWhenEmpty` and `showAd`, so a screen no longer copies
+  `NoDataScreen` into `onEmpty` or `onError` to change its icon, offer a retry on an empty result or
+  hide the ad. Ads still show by default.
+- `ScreenStates` and `LocalScreenStates` let an app draw its own loading, empty and failed content,
+  and its own transition between them, once for every screen; a section's own slot still wins. The
+  defaults are the current ones.
+- `StateContent(state) { ... }` animates between the cases of any state, such as the phases of a
+  flow, the way `ScreenStateHandler` does for a `Loadable`.
+- `ScreenHost(fabs = ...)` declares the screen's floating action buttons for its current state.
 
 ### Changed
 
@@ -33,6 +42,8 @@
   return from another tab, a page or the background does, and both panes of a list-detail layout
   report their own. A repeated identical `screen_state` is no longer sent, and the Permissions page
   no longer reports one.
+- `NoDataScreen` resolves its ad unit through Koin only while its ad shows, so with `showAd = false`
+  it renders in a preview or a test without Koin.
 - Developer options remember explicit choices, even one equal to the current default, so an app
   that changes its defaults in a later release only affects people who never chose. Resetting the
   developer options returns to the app's defaults instead of the Toolkit's.

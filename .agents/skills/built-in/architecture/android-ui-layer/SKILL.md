@@ -151,9 +151,13 @@ their own queue.
 - `XScreenContent` may hold visual element state with `remember` or `rememberSaveable`, such as tap
   counters, animations, or scroll position.
 - Make `XScreenContent` `internal` in library features unless a host needs to reuse it.
-- Render each `Loadable` field through `ScreenStateHandler`.
+- Render each `Loadable` field through `ScreenStateHandler`. Customize it with `icon`,
+  `retryWhenEmpty` and `showAd` before replacing a case; never copy `NoDataScreen` into `onEmpty`
+  or `onError` to change one of those.
+- Switch on any other state, such as a flow's phases, with `StateContent`, and declare the
+  screen's floating action buttons on `ScreenHost(fabs = ...)`.
 - Preview `XScreenContent` in its Ready state. The default empty and failure screens inject an ad
-  unit through Koin and do not render in a preview.
+  unit through Koin while their ad shows, so preview them with `showAd = false`.
 
 ### Wiring and tests
 
