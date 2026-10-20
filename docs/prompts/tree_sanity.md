@@ -4,13 +4,13 @@ I want to review and sanitize the current project architecture and structure.
 
 Use the project architecture skills:
 
-[`architecture`](../../.agents/skills/architecture)
+[`architecture`](../../.agents/skills/built-in/architecture)
 
 Treat the skills, `AGENTS.md`, relevant project documentation, and existing module READMEs as the
 guidance for this review.
 
 Apply
-the [module structure rules](../../.agents/skills/architecture/layered-tree-review/references/android-tree-rules.md),
+the [module structure rules](../../.agents/skills/built-in/architecture/layered-tree-review/references/android-tree-rules.md),
 including optional layers and
 resource-only modules, when assessing completeness.
 

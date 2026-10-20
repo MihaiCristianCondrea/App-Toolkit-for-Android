@@ -390,7 +390,7 @@ ScreenStateHandler(state.items, contentPadding = padding, onRetry = { onEvent(Ab
 ```
 
 The full setup, with the file tree, templates and the migration steps, is the
-[`android-ui-layer` skill](../../../.agents/skills/architecture/android-ui-layer/SKILL.md).
+[`android-ui-layer` skill](../../../.agents/skills/built-in/architecture/android-ui-layer/SKILL.md).
 
 - **The state is the feature's own type.** Content that is there from the start needs no status.
   Content that loads gets a `Loadable` field, and nothing makes it start at `Loading`: a screen that
