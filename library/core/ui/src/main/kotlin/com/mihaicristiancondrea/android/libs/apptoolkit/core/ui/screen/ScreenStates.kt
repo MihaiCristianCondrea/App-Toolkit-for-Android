@@ -26,7 +26,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.graphics.vector.ImageVector
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 
@@ -41,7 +41,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.No
 @Immutable
 data class StateSlot(
     val contentPadding: PaddingValues,
-    val icon: ImageVector,
+    val icon: ToolkitIcon,
     val onRetry: (() -> Unit)?,
     val showAd: Boolean,
 )

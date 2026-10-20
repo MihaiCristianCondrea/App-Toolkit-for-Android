@@ -20,13 +20,17 @@
   dependency.
 - `ScreenStateHandler` takes `icon`, `retryWhenEmpty` and `showAd`, so a screen no longer copies
   `NoDataScreen` into `onEmpty` or `onError` to change its icon, offer a retry on an empty result or
-  hide the ad. Ads still show by default.
+  hide the ad. Ads still show by default. `icon`, here and on `NoDataScreen`, is any `ToolkitIcon`
+  (a drawable, a bitmap, an animated or Lottie icon) or an `ImageVector`.
 - `ScreenStates` and `LocalScreenStates` let an app draw its own loading, empty and failed content,
   and its own transition between them, once for every screen; a section's own slot still wins. The
   defaults are the current ones.
 - `StateContent(state) { ... }` animates between the cases of any state, such as the phases of a
-  flow, the way `ScreenStateHandler` does for a `Loadable`.
+  flow, the way `ScreenStateHandler` does for a `Loadable`. An enum value, `Boolean`, number or
+  string is a case of its own; anything else is a case by its class. The startup page and the issue
+  reporter switch through it, with the same animations as before.
 - `ScreenHost(fabs = ...)` declares the screen's floating action buttons for its current state.
+  The help page's feedback button and the sample's random-app button moved there.
 
 ### Changed
 

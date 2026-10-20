@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen
 
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.Text
@@ -164,6 +165,45 @@ class ScreenStateHandlerTest {
         shown = false
         compose.waitForIdle()
         assertEquals(emptyList<String?>(), host.fabs.map { it.label })
+    }
+
+    @Test
+    fun `state content switches between true and false`() {
+        var submitted by mutableStateOf(false)
+        compose.setContent {
+            StateContent(state = submitted) { Text(if (it) "Sent" else "Editing") }
+        }
+        compose.onNodeWithText("Editing").assertExists()
+
+        submitted = true
+        compose.waitForIdle()
+        compose.onNodeWithText("Sent").assertExists()
+        compose.onNodeWithText("Editing").assertDoesNotExist()
+    }
+
+    @Test
+    fun `an icon can be any toolkit icon or an image vector, with the section's own slots`() {
+        var vectorState: Loadable<String> by mutableStateOf(Loadable.Loading)
+        compose.setContent {
+            Column {
+                ScreenStateHandler(
+                    state = Loadable.Failed(text("Resource failed")),
+                    icon = ToolkitIcon.Resource(android.R.drawable.ic_dialog_info),
+                    showAd = false,
+                ) {}
+                ScreenStateHandler(
+                    state = vectorState,
+                    icon = Icons.Outlined.Add,
+                    showAd = false,
+                    onLoading = { Text("Vector skeleton") },
+                ) {}
+            }
+        }
+        compose.onNodeWithText("Resource failed").assertExists()
+        compose.onNodeWithText("Vector skeleton").assertExists()
+
+        vectorState = Loadable.Empty(text("Vector empty"))
+        compose.onNodeWithText("Vector empty").assertExists()
     }
 
     private enum class Phase { Idle, Cleaning }

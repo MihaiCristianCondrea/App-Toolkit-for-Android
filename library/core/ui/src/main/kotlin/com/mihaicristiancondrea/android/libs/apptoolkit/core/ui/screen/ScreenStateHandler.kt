@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 
 /**
  * Draws [state], animating between its cases with the app's [ScreenStates].
@@ -46,7 +47,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
  * @param onRetry What the failure content's retry button does; without it there is none.
  * @param retryWhenEmpty Whether the empty content offers [onRetry] too, for a result that may
  * change, such as a catalog that may have been updated.
- * @param icon The icon of the empty and failure content.
+ * @param icon The icon of the empty and failure content: any [ToolkitIcon], such as a drawable or
+ * an animated icon. An overload takes an [ImageVector].
  * @param showAd Whether the empty and failure content show their native ad.
  * @param onLoading Replaces the loading content for this section only, such as with a skeleton of
  * its layout.
@@ -62,18 +64,14 @@ fun <T> ScreenStateHandler(
     contentPadding: PaddingValues = PaddingValues(),
     onRetry: (() -> Unit)? = null,
     retryWhenEmpty: Boolean = false,
-    icon: ImageVector = Icons.Default.Info,
+    icon: ToolkitIcon = ToolkitIcon.Vector(Icons.Default.Info),
     showAd: Boolean = true,
-    onLoading: @Composable () -> Unit = {
-        LocalScreenStates.current.loading(StateSlot(contentPadding, icon, onRetry = null, showAd))
-    },
+    onLoading: @Composable () -> Unit = { DefaultLoading(contentPadding, icon, showAd) },
     onEmpty: @Composable (Loadable.Empty) -> Unit = { empty ->
-        val retry = onRetry.takeIf { retryWhenEmpty }
-        LocalScreenStates.current.empty(StateSlot(contentPadding, icon, retry, showAd), empty)
+        DefaultEmpty(empty, contentPadding, icon, onRetry.takeIf { retryWhenEmpty }, showAd)
     },
     onError: @Composable (Loadable.Failed) -> Unit = { failed ->
-        val retry = onRetry.takeIf { failed.retryable }
-        LocalScreenStates.current.failed(StateSlot(contentPadding, icon, retry, showAd), failed)
+        DefaultFailed(failed, contentPadding, icon, onRetry.takeIf { failed.retryable }, showAd)
     },
     onSuccess: @Composable (Loadable.Ready<T>) -> Unit,
 ) {
@@ -85,4 +83,61 @@ fun <T> ScreenStateHandler(
             is Loadable.Ready -> onSuccess(current)
         }
     }
+}
+
+/** [ScreenStateHandler] with an [ImageVector] [icon]. */
+@Composable
+fun <T> ScreenStateHandler(
+    state: Loadable<T>,
+    icon: ImageVector,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
+    onRetry: (() -> Unit)? = null,
+    retryWhenEmpty: Boolean = false,
+    showAd: Boolean = true,
+    onLoading: @Composable () -> Unit = { DefaultLoading(contentPadding, ToolkitIcon.Vector(icon), showAd) },
+    onEmpty: @Composable (Loadable.Empty) -> Unit = { empty ->
+        DefaultEmpty(empty, contentPadding, ToolkitIcon.Vector(icon), onRetry.takeIf { retryWhenEmpty }, showAd)
+    },
+    onError: @Composable (Loadable.Failed) -> Unit = { failed ->
+        DefaultFailed(failed, contentPadding, ToolkitIcon.Vector(icon), onRetry.takeIf { failed.retryable }, showAd)
+    },
+    onSuccess: @Composable (Loadable.Ready<T>) -> Unit,
+) {
+    ScreenStateHandler(
+        state = state,
+        modifier = modifier,
+        contentPadding = contentPadding,
+        onLoading = onLoading,
+        onEmpty = onEmpty,
+        onError = onError,
+        onSuccess = onSuccess,
+    )
+}
+
+@Composable
+private fun DefaultLoading(contentPadding: PaddingValues, icon: ToolkitIcon, showAd: Boolean) {
+    LocalScreenStates.current.loading(StateSlot(contentPadding, icon, onRetry = null, showAd))
+}
+
+@Composable
+private fun DefaultEmpty(
+    empty: Loadable.Empty,
+    contentPadding: PaddingValues,
+    icon: ToolkitIcon,
+    onRetry: (() -> Unit)?,
+    showAd: Boolean,
+) {
+    LocalScreenStates.current.empty(StateSlot(contentPadding, icon, onRetry, showAd), empty)
+}
+
+@Composable
+private fun DefaultFailed(
+    failed: Loadable.Failed,
+    contentPadding: PaddingValues,
+    icon: ToolkitIcon,
+    onRetry: (() -> Unit)?,
+    showAd: Boolean,
+) {
+    LocalScreenStates.current.failed(StateSlot(contentPadding, icon, onRetry, showAd), failed)
 }

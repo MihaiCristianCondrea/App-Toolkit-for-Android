@@ -30,7 +30,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.LoadingIndicatorDefaults
 import androidx.compose.material3.MaterialTheme
@@ -44,6 +43,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIconContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NoDataNativeAdCard
@@ -61,7 +61,8 @@ import org.koin.core.qualifier.named
  *
  * @param text Label for the retry action button.
  * @param textMessage Message describing the empty state.
- * @param icon Icon rendered at the center of the indicator.
+ * @param icon Icon rendered at the center of the indicator: any [ToolkitIcon], such as a drawable
+ * or an animated icon. An overload takes an [ImageVector].
  * @param showRetry Whether to display the retry button.
  * @param onRetry Callback invoked when the retry button is pressed.
  * @param showAd Whether a [NoDataNativeAdCard] should be displayed.
@@ -74,7 +75,7 @@ import org.koin.core.qualifier.named
 fun NoDataScreen(
     text: Int = R.string.try_again,
     textMessage: Int = R.string.try_again,
-    icon: ImageVector = Icons.Default.Info,
+    icon: ToolkitIcon = ToolkitIcon.Vector(Icons.Default.Info),
     showRetry: Boolean = false,
     onRetry: () -> Unit = {},
     showAd: Boolean = true,
@@ -99,8 +100,8 @@ fun NoDataScreen(
                 color = if (isError) MaterialTheme.colorScheme.errorContainer else LoadingIndicatorDefaults.indicatorColor
             )
 
-            Icon(
-                imageVector = icon,
+            ToolkitIconContent(
+                icon = icon,
                 contentDescription = null,
                 modifier = Modifier
                     .size(size = SizeConstants.LauncherIconSize + SizeConstants.SmallSize + SizeConstants.ExtraTinySize),
@@ -135,4 +136,30 @@ fun NoDataScreen(
 
         LargeVerticalSpacer()
     }
+}
+
+/** [NoDataScreen] with an [ImageVector] [icon]. */
+@Composable
+fun NoDataScreen(
+    icon: ImageVector,
+    text: Int = R.string.try_again,
+    textMessage: Int = R.string.try_again,
+    showRetry: Boolean = false,
+    onRetry: () -> Unit = {},
+    showAd: Boolean = true,
+    isError: Boolean = false,
+    paddingValues: PaddingValues = PaddingValues(),
+    message: String? = null,
+) {
+    NoDataScreen(
+        text = text,
+        textMessage = textMessage,
+        icon = ToolkitIcon.Vector(icon),
+        showRetry = showRetry,
+        onRetry = onRetry,
+        showAd = showAd,
+        isError = isError,
+        paddingValues = paddingValues,
+        message = message,
+    )
 }

@@ -19,7 +19,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.u
 
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
@@ -62,6 +61,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.StateContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
@@ -202,9 +202,9 @@ internal fun IssueReporterBottomSheetContent(
                 bottom = SizeConstants.LargeSize,
             ),
     ) {
-        AnimatedContent(
-            targetState = submissionState is IssueSubmissionState.Submitted,
-            transitionSpec = { fadeIn() togetherWith fadeOut() },
+        StateContent(
+            state = submissionState is IssueSubmissionState.Submitted,
+            transition = fadeIn() togetherWith fadeOut(),
             label = "IssueReporterSubmission",
         ) { submitted: Boolean ->
             if (submitted) {

@@ -62,7 +62,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHos
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ScaffoldFabs
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.rememberWindowWidthSizeClass
@@ -79,7 +78,8 @@ private const val APP_DETAILS_INTERACTION_SOURCE: String = "app_details"
 
 /**
  * The Apps tab: the catalogue grid, searched from the app bar, with native ad cards, the details
- * sheet and the random-app button.
+ * sheet and the random-app button, which the tab's scaffold draws and scales out while there is no
+ * app to open.
  *
  * Logs each card and sheet tap, and opens and shares apps, since both need a `Context`. A share
  * logs only the recommended `share` event, because a second `app_card_interaction` for it would
@@ -142,6 +142,14 @@ fun AppsListScreen() {
         status = state.apps,
         viewModel = viewModel,
         onMessageAction = { viewModel.onEvent(HomeEvent.Load) },
+        fabs = listOf(
+            ToolkitFab(
+                icon = ToolkitIcon.Vector(Icons.Outlined.Casino),
+                onClick = { viewModel.onEvent(HomeEvent.OpenRandomApp) },
+                label = stringResource(R.string.open_random_app),
+                visible = state.canOpenRandomApp,
+            ),
+        ),
     ) {
         AppsListScreenContent(
             state = state,
@@ -173,8 +181,7 @@ fun AppsListScreen() {
 }
 
 /**
- * Renders [state]: the grid with its filter chips, the details sheet of the selected app, and the
- * random-app button, which the tab's scaffold draws and scales out while there is no app to open.
+ * Renders [state]: the grid with its filter chips and the details sheet of the selected app.
  * Holds no ViewModel, injects nothing and opens nothing, so it renders in a preview with plain
  * values.
  *
@@ -207,17 +214,6 @@ internal fun AppsListScreenContent(
 ) {
     val sheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
-
-    ScaffoldFabs(
-        listOf(
-            ToolkitFab(
-                icon = ToolkitIcon.Vector(Icons.Outlined.Casino),
-                onClick = { onEvent(HomeEvent.OpenRandomApp) },
-                label = stringResource(R.string.open_random_app),
-                visible = state.canOpenRandomApp,
-            ),
-        ),
-    )
 
     ScreenStateHandler(
         state = state.apps,

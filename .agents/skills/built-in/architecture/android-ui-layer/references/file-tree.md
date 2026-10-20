@@ -16,6 +16,8 @@ feature/x/
     │   ├── di/
     │   │   └── XModule.kt                # val xModule: repositories and the ViewModel
     │   └── ui/
+    │       ├── analytics/
+    │       │   └── XAnalytics.kt         # the screen's event builders and keys, when it logs its own
     │       ├── contracts/
     │       │   └── XEvent.kt             # sealed interface of user events
     │       ├── mappers/
@@ -26,7 +28,9 @@ feature/x/
     │       ├── navigation/               # routes and page registration
     │       ├── states/
     │       │   └── XUiState.kt           # @Immutable data class with Loadable fields
-    │       ├── views/                    # stateless pieces used inside the content
+    │       ├── views/                    # pieces used inside the content
+    │       │   ├── lists/XList.kt        # a list with visual state of its own (expanded rows)
+    │       │   └── sheets/XSheet.kt      # a sheet the content draws while XScreen says so
     │       ├── XScreen.kt                # XScreen, then XScreenContent and its @Previews
     │       └── XViewModel.kt
     └── test/kotlin/<base>/feature/x/

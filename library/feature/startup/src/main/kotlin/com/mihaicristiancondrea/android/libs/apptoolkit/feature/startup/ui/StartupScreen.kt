@@ -20,12 +20,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ContentTransform
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -64,6 +58,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.StateContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedExtendedFloatingActionButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
@@ -87,10 +82,6 @@ private val STARTUP_SCREEN: TrackedScreen =
 
 /** How wide the screen grows on a large window, as onboarding's pages do; it is centred in the rest. */
 private val StartupContentMaxWidth: Dp = 640.dp
-
-private val ConsentFade: ContentTransform =
-    fadeIn(animationSpec = tween(durationMillis = 300)) togetherWith
-        fadeOut(animationSpec = tween(durationMillis = 300))
 
 /**
  * The startup start screen: the welcome illustration, the terms and privacy notice, and Agree,
@@ -140,12 +131,7 @@ internal fun StartupScreenContent(
     onContinue: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    AnimatedContent(
-        targetState = state.consent,
-        modifier = modifier,
-        transitionSpec = { ConsentFade },
-        label = "StartupConsent",
-    ) { consent ->
+    StateContent(state = state.consent, modifier = modifier, label = "StartupConsent") { consent ->
         when (consent) {
             ConsentRequestStatus.Pending -> LoadingScreen()
 

@@ -142,7 +142,7 @@ ScreenStateHandler(
 
   | Need | Pass |
   |---|---|
-  | The screen's icon on the empty and failure content | `icon = Icons.Outlined.X` |
+  | The screen's icon on the empty and failure content | `icon = Icons.Outlined.X`, or any `ToolkitIcon` |
   | Retry on an empty result too (a catalog that may update) | `retryWhenEmpty = true` |
   | No native ad on the empty and failure content | `showAd = false` |
   | A layout of its own for this section, such as a skeleton | `onLoading`, `onEmpty`, `onError` |
@@ -158,7 +158,10 @@ ScreenStateHandler(
   sealed type or enum of the feature's; derive its `TrackedStatus` for `ScreenHost` from it.
 - The screen's floating action buttons for its current state go on `ScreenHost(fabs = ...)`, once
   for the screen, not inside the cases: two cases that both declare buttons while one fades into
-  the other fight over them.
+  the other fight over them. A button that opens something the content draws, such as a sheet,
+  keeps that flag in `XScreen` with `rememberSaveable` and passes it to the content with its
+  dismiss callback (`showFeedbackSheet`, `onFeedbackSheetDismissed`), so the content stays
+  stateless and can be previewed open.
 
 ## Previews
 

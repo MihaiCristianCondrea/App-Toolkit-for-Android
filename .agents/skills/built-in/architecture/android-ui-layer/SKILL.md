@@ -155,7 +155,11 @@ their own queue.
   `retryWhenEmpty` and `showAd` before replacing a case; never copy `NoDataScreen` into `onEmpty`
   or `onError` to change one of those.
 - Switch on any other state, such as a flow's phases, with `StateContent`, and declare the
-  screen's floating action buttons on `ScreenHost(fabs = ...)`.
+  screen's floating action buttons on `ScreenHost(fabs = ...)`, never with `ScaffoldFabs` inside
+  the content.
+- Keep `XScreen.kt` to the screen and its content. A list with its own visual state, a sheet and
+  the screen's analytics builders go in files of their own: `views/lists/`, `views/sheets/` and
+  `analytics/`.
 - Preview `XScreenContent` in its Ready state. The default empty and failure screens inject an ad
   unit through Koin while their ad shows, so preview them with `showAd = false`.
 

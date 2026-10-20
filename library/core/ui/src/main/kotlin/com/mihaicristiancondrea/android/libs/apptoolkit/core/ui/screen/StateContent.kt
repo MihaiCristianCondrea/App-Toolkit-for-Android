@@ -25,8 +25,10 @@ import androidx.compose.ui.Modifier
 /**
  * Draws [state] with [content], animating with [transition] when its case changes.
  *
- * The case is [contentKey] of the state: by default an enum's value or a sealed type's subclass, so
- * moving from `Idle` to `Cleaning` animates while new data inside the same case does not. Use it
+ * The case is [contentKey] of the state. By default a value of an enum, a `Boolean`, a number or a
+ * string is a case of its own, and any other value is a case by its class, such as a sealed type's
+ * subclass: moving from `Idle` to `Cleaning` animates, while new data inside the same case does
+ * not. Use it
  * for any state a screen switches on, such as the phases of a flow; [ScreenStateHandler] uses it
  * for a [Loadable].
  *
@@ -62,5 +64,7 @@ fun <S> StateContent(
     }
 }
 
-/** Every value of an enum is a case of its own; any other value is a case by its class. */
-private fun caseOf(state: Any?): Any? = if (state is Enum<*>) state else state?.let { it::class }
+private fun caseOf(state: Any?): Any? = when (state) {
+    null, is Enum<*>, is Boolean, is Number, is CharSequence, is Char -> state
+    else -> state::class
+}
