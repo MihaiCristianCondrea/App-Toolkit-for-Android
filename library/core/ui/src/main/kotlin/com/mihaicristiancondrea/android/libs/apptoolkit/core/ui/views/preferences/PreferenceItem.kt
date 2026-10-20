@@ -29,7 +29,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -51,6 +50,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.colorscheme.darken
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIconContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
@@ -60,12 +61,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.
  * Stateless preference row with Toolkit click feedback and analytics. Supply display-ready
  * text, with [title] meaningful on its own and [summary] adding context.
  *
+ * @param icon Any [ToolkitIcon]; an overload takes an [ImageVector].
  * @param ga4EventProvider Resolves analytics at click time, taking precedence over [ga4Event]
  * when it returns an event.
  */
 @Composable
 fun PreferenceItem(
-    icon: ImageVector? = null,
+    icon: ToolkitIcon? = null,
     title: String? = null,
     summary: String? = null,
     useIconContainer: Boolean = false,
@@ -104,8 +106,8 @@ fun PreferenceItem(
                     color = containerColor
                 ) {
                     Box(contentAlignment = Alignment.Center) {
-                        Icon(
-                            imageVector = it,
+                        ToolkitIconContent(
+                            icon = it,
                             contentDescription = null,
                             modifier = Modifier.size(24.dp),
                             tint = if (iconColor == null && iconContainerColor == null) MaterialTheme.colorScheme.onSecondaryContainer else tint
@@ -113,7 +115,7 @@ fun PreferenceItem(
                     }
                 }
             } else {
-                Icon(imageVector = it, contentDescription = null)
+                ToolkitIconContent(icon = it, contentDescription = null, modifier = Modifier.size(24.dp))
             }
         }
         Column(
@@ -140,13 +142,43 @@ fun PreferenceItem(
     }
 }
 
+/** [PreferenceItem] with an [ImageVector] icon. */
+@Composable
+fun PreferenceItem(
+    icon: ImageVector,
+    title: String? = null,
+    summary: String? = null,
+    useIconContainer: Boolean = false,
+    iconColor: Color? = null,
+    iconContainerColor: Color? = null,
+    enabled: Boolean = true,
+    rippleEffectDp: Dp = SizeConstants.LargeSize,
+    onClick: () -> Unit = {},
+    ga4Event: Ga4EventData? = null,
+    ga4EventProvider: (() -> Ga4EventData?)? = null,
+) {
+    PreferenceItem(
+        icon = ToolkitIcon.Vector(icon),
+        title = title,
+        summary = summary,
+        useIconContainer = useIconContainer,
+        iconColor = iconColor,
+        iconContainerColor = iconContainerColor,
+        enabled = enabled,
+        rippleEffectDp = rippleEffectDp,
+        onClick = onClick,
+        ga4Event = ga4Event,
+        ga4EventProvider = ga4EventProvider,
+    )
+}
+
 /**
  * Card container for [PreferenceItem], with the same click feedback and analytics contract.
  */
 @Composable
 fun SettingsPreferenceItem(
     modifier: Modifier = Modifier,
-    icon: ImageVector? = null,
+    icon: ToolkitIcon? = null,
     title: String? = null,
     summary: String? = null,
     useIconContainer: Boolean = false,
@@ -177,4 +209,34 @@ fun SettingsPreferenceItem(
             ga4EventProvider = ga4EventProvider,
         )
     }
+}
+
+/** [SettingsPreferenceItem] with an [ImageVector] icon. */
+@Composable
+fun SettingsPreferenceItem(
+    icon: ImageVector,
+    modifier: Modifier = Modifier,
+    title: String? = null,
+    summary: String? = null,
+    useIconContainer: Boolean = false,
+    iconColor: Color? = null,
+    iconContainerColor: Color? = null,
+    rippleEffectDp: Dp = SizeConstants.ExtraTinySize,
+    onClick: () -> Unit = {},
+    ga4Event: Ga4EventData? = null,
+    ga4EventProvider: (() -> Ga4EventData?)? = null,
+) {
+    SettingsPreferenceItem(
+        modifier = modifier,
+        icon = ToolkitIcon.Vector(icon),
+        title = title,
+        summary = summary,
+        useIconContainer = useIconContainer,
+        iconColor = iconColor,
+        iconContainerColor = iconContainerColor,
+        rippleEffectDp = rippleEffectDp,
+        onClick = onClick,
+        ga4Event = ga4Event,
+        ga4EventProvider = ga4EventProvider,
+    )
 }

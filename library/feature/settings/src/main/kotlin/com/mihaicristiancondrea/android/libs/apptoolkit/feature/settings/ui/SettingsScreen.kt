@@ -359,13 +359,13 @@ private fun SettingsScreenContentPreview() {
                                 preferences = listOf(
                                     SettingsPreference(
                                         key = "notifications",
-                                        icon = Icons.Outlined.Notifications,
+                                        icon = ToolkitIcon.Vector(Icons.Outlined.Notifications),
                                         title = "Notifications",
                                         summary = "Alerts and reminders",
                                     ),
                                     SettingsPreference(
                                         key = "display",
-                                        icon = Icons.Outlined.Settings,
+                                        icon = ToolkitIcon.Vector(Icons.Outlined.Settings),
                                         title = "Display",
                                         summary = "Layout and text size",
                                     ),

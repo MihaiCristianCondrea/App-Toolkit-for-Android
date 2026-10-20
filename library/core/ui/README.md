@@ -123,7 +123,9 @@ available; data-layer callers should use the lower-level API.
   `PanePlaceholder`, `ListPlaceholder`, `LocalPageSnackbarHostState` and
   `rememberPageSnackbarHostState`; see [Page frame](#page-frame).
 - `SettingsConfig`, `SettingsCategory` and `SettingsPreference`. A row opens its `destination` key
-  unless its `action` returns `true`.
+  unless its `action` returns `true`. Its `icon` is a `ToolkitIcon`, so a row can show an animated,
+  Lottie or drawable icon as the navigation does; the `ImageVector` constructor is deprecated.
+  `PreferenceItem` and `SettingsPreferenceItem` take either.
 - `SettingsSearchEntry` and `SettingsSearchProvider`, the settings search's contract: each settings
   page's module binds a provider in Koin listing its rows (title, the page they live on, the key
   they open), and the settings list collects them all with `getAll`, depending on none of the

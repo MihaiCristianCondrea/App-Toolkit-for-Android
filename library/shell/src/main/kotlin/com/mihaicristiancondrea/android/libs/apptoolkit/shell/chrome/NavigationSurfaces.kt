@@ -326,7 +326,7 @@ internal fun ColumnScope.ShellDrawerContent(
                         icon = tab.icon,
                         selectedIcon = tab.selectedIcon,
                         selected = index == selectedIndex,
-                        badge = tab.badge,
+                        badge = tab.currentBadge(),
                         onClick = { callbacks.onTabClick(index) },
                     )
                 }
@@ -388,12 +388,22 @@ private fun TabIcon(tab: ShellTab, selected: Boolean, clicks: Int) {
                 .bounceClick(),
         )
     }
-    val badge = tab.badge
+    val badge = tab.currentBadge()
     if (badge != null) {
-        BadgedBox(badge = { Badge { Text(badge) } }) { icon() }
+        BadgedBox(badge = { TabBadge(badge) }) { icon() }
     } else {
         icon()
     }
+}
+
+/** The tab's badge now: its [ShellTab.badgeText] read in composition, or its fixed [ShellTab.badge]. */
+@Composable
+private fun ShellTab.currentBadge(): String? = badgeText?.invoke() ?: badge
+
+/** A count or label, or a dot for an empty one. */
+@Composable
+private fun TabBadge(text: String) {
+    if (text.isEmpty()) Badge() else Badge { Text(text) }
 }
 
 @Composable
@@ -490,7 +500,7 @@ private fun DrawerRow(
                 modifier = Modifier.size(SizeConstants.TwentyFourSize),
             )
         },
-        badge = badge?.let { text -> { Badge { Text(text) } } },
+        badge = badge?.let { text -> { TabBadge(text) } },
         modifier = Modifier
             .padding(NavigationDrawerItemDefaults.ItemPadding)
             .bounceClick(),

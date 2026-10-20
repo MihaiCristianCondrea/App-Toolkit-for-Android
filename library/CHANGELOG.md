@@ -11,9 +11,14 @@
   layout policy. Pass `defaults.navigation` to `toolkitGraph` or `shellGraph` and `defaults.shell` to
   `ShellHost`. The Toolkit's own pages follow the app's app bar styles; a destination's own `topBar`
   still wins.
+- `tab(badgeText = { ... })` shows a badge that follows state, such as an unread count. Null hides
+  it and an empty string shows a dot; the fixed `badge` is unchanged.
+- Settings rows take any `ToolkitIcon`, including animated and Lottie icons.
 
 ### Changed
 
+- `SettingsPreference.icon` is a `ToolkitIcon`. Passing an `ImageVector` still compiles through a
+  deprecated constructor; wrap it in `ToolkitIcon.Vector` to migrate.
 - Developer options remember explicit choices, even one equal to the current default, so an app
   that changes its defaults in a later release only affects people who never chose. Resetting the
   developer options returns to the app's defaults instead of the Toolkit's.

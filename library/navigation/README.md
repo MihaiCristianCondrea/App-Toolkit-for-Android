@@ -187,6 +187,8 @@ Screens then call `LocalShellNavigator.current.navigate(key)` with any registere
 
 - The graph DSL and `ShellGraph`, including `contains`, `destination`, `keyFor`, `startOptions`,
   `tabIndexOf` and `defaults`.
+- `ShellTab`, whose badge is a fixed `badge` or a `badgeText` read in composition, such as an
+  unread count from state: null shows none and an empty string a dot.
 - `NavigationDefaults` and `ShellGraphBuilder(appTitle, appIcon, defaults)`. A null `topBar` on
   `tab`, `child`, `page` and `pageIfAbsent` means the default for that kind of destination.
 - `ShellNavigator` (`navigate`, `close`, `goBack`, `selectTab`, `continueStart`, `enterShell`, the

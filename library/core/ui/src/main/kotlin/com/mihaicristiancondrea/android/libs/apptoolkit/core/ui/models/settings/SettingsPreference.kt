@@ -21,11 +21,13 @@ import androidx.compose.runtime.Immutable
 import androidx.navigation3.runtime.NavKey
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 
 /**
  * One row of a settings list.
  *
  * @property key Identifies the row for analytics and as the list item key.
+ * @property icon Any [ToolkitIcon], the same icon type the shell's navigation takes.
  * @property destination The page the row opens, such as `DisplaySettingsRoute`. In a list page it
  *   opens beside the list on wide windows when the page is a detail.
  * @property action Something the row does outside the app, such as opening the system's
@@ -35,7 +37,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 @Immutable
 data class SettingsPreference(
     val key: String? = null,
-    val icon: ImageVector? = null,
+    val icon: ToolkitIcon? = null,
     val useIconContainer: Boolean = false,
     val iconColor: Color? = null,
     val iconContainerColor: Color? = null,
@@ -43,5 +45,35 @@ data class SettingsPreference(
     val summary: String? = null,
     val destination: NavKey? = null,
     val action: (() -> Boolean)? = null,
-)
+) {
+    @Deprecated(
+        message = "Pass a ToolkitIcon.",
+        replaceWith = ReplaceWith(
+            "SettingsPreference(key, ToolkitIcon.Vector(icon), useIconContainer, iconColor, iconContainerColor, " +
+                "title, summary, destination, action)",
+            "com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon",
+        ),
+    )
+    constructor(
+        key: String? = null,
+        icon: ImageVector,
+        useIconContainer: Boolean = false,
+        iconColor: Color? = null,
+        iconContainerColor: Color? = null,
+        title: String? = null,
+        summary: String? = null,
+        destination: NavKey? = null,
+        action: (() -> Boolean)? = null,
+    ) : this(
+        key = key,
+        icon = ToolkitIcon.Vector(icon),
+        useIconContainer = useIconContainer,
+        iconColor = iconColor,
+        iconContainerColor = iconContainerColor,
+        title = title,
+        summary = summary,
+        destination = destination,
+        action = action,
+    )
+}
 

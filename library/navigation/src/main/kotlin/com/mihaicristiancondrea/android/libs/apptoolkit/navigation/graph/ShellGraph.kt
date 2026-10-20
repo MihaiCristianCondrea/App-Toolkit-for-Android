@@ -177,6 +177,7 @@ class ShellGraphBuilder(
         topBar: TopBarStyle? = null,
         contentWidth: ContentWidth = ContentWidth.Default,
         badge: String? = null,
+        noinline badgeText: (@Composable () -> String?)? = null,
         search: TabSearch? = null,
         @StringRes shortLabel: Int? = null,
         paneRole: PaneRole = PaneRole.None,
@@ -185,7 +186,16 @@ class ShellGraphBuilder(
         noinline fabs: (@Composable (K) -> List<ToolkitFab>)? = null,
         noinline content: @Composable (K) -> Unit,
     ) {
-        tabs += ShellTab(key = key, label = label, icon = icon, selectedIcon = selectedIcon, badge = badge, search = search, shortLabel = shortLabel)
+        tabs += ShellTab(
+            key = key,
+            label = label,
+            icon = icon,
+            selectedIcon = selectedIcon,
+            badge = badge,
+            badgeText = badgeText,
+            search = search,
+            shortLabel = shortLabel,
+        )
         register(
             Destination(
                 keyClass = K::class,
