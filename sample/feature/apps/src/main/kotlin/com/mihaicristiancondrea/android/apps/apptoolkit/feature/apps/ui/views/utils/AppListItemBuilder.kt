@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.utils
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInfo
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.models.AppListItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList

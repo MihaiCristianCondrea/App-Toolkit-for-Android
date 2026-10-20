@@ -18,9 +18,9 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.mappers.toCache
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.mappers.toDomain
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.mappers.toAppSummaries
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.models.DeveloperAppsCache
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppSummary
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
@@ -36,7 +36,7 @@ class DefaultDeveloperAppsLocalDataSource(
     override suspend fun read(): List<AppSummary>? = withContext(dispatchers.io) {
         if (!cacheFile.isFile) return@withContext null
         runCatching {
-            json.decodeFromString<DeveloperAppsCache>(cacheFile.readText()).toDomain()
+            json.decodeFromString<DeveloperAppsCache>(cacheFile.readText()).toAppSummaries()
         }.getOrElse {
             cacheFile.delete()
             null

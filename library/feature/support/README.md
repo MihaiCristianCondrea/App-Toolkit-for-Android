@@ -56,7 +56,7 @@ flowchart TD
 
 ## Architectural decisions
 
-- Donation catalog policy lives in `domain`, billing-SDK mapping lives in `data`, presentation
+- Donation product IDs live in `data/models`, billing-SDK mapping lives in `data`, presentation
   constants and rendering live in `ui`, and feature bindings live in `di`.
 - The support feature depends on the billing contract, not `BillingClient`. `BillingRepository`
   exposes Play's `ProductDetails`, so `SupportViewModel` keeps them privately for the launch and

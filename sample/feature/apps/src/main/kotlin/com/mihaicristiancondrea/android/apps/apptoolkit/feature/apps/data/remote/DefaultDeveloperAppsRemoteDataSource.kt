@@ -17,11 +17,12 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.mappers.toDomain
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.mappers.toAppDetails
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.mappers.toAppSummary
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.models.AppDetailsResponseDto
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.models.AppsListResponseDto
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppDetails
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppSummary
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppDetails
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.api.ApiHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.toNetworkException
 import io.ktor.client.HttpClient
@@ -36,13 +37,13 @@ class DefaultDeveloperAppsRemoteDataSource(
 
     override suspend fun fetchDeveloperApps(): List<AppSummary> {
         val response = client.get(ApiHost.appsUrl(baseUrl)).requireSuccess()
-        return response.body<AppsListResponseDto>().data.apps.map { it.toDomain() }
+        return response.body<AppsListResponseDto>().data.apps.map { it.toAppSummary() }
     }
 
     override suspend fun fetchAppDetails(packageName: String): AppDetails {
         val response = client.get(ApiHost.appDetailsUrl(packageName = packageName, baseUrl = baseUrl))
             .requireSuccess()
-        return response.body<AppDetailsResponseDto>().data.app.toDomain()
+        return response.body<AppDetailsResponseDto>().data.app.toAppDetails()
     }
 }
 

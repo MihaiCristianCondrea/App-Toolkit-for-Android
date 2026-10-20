@@ -9,7 +9,7 @@ Platform (UMP).
 
 - `di.consentModule()` binds the consent repository and UMP remote source; foundation providers and
   preferences are supplied by the composing host graph.
-- Consent domain models and the repository contract covering apply/request.
+- Consent models in `data/models` and the repository contract covering apply/request.
 - `DefaultConsentRepository` and the UMP remote data source abstraction/implementation.
 - Mapping host availability into consent behavior.
 

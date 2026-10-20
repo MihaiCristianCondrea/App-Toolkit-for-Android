@@ -29,8 +29,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingCompletion
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentSettings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow

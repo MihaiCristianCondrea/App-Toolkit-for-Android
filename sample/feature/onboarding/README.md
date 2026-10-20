@@ -10,7 +10,7 @@ completion logic to the App Toolkit's onboarding infrastructure.
 - `AppOnboardingProvider`, which defines the set of pages shown to the user (Welcome,
   Personalization, Theme, Features, Crashlytics, Finish). The Crashlytics page is
   `FirebaseOnboardingPage` from `:library:feature:diagnostics`.
-- Stable onboarding page identifiers in `domain/models`.
+- Stable onboarding page identifiers in `data/models`.
 - Onboarding-specific strings and keys.
 - `OnboardingFeatureModule`, which connects the sample's provider to the library's
   `OnboardingViewModel`.

@@ -19,7 +19,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils
 
 import android.app.StatusBarManager
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.contracts.AppGa4Contract.TileRequestOutcome
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4Contract.TileRequestOutcome
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.quicksettings.AndroidQuickSettingsTilesLocalDataSource
 import android.content.Context
 import android.graphics.drawable.Icon

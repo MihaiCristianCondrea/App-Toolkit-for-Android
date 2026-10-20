@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.testing
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsEvent
 
 /**
  * Telemetry test double that discards events and reports.

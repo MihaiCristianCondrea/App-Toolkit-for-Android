@@ -74,7 +74,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.contr
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.providers.StartupProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.states.ConsentRequestStatus
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.states.StartupUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.OnboardingRoute
 import org.koin.compose.koinInject

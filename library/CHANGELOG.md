@@ -2,6 +2,17 @@
 
 ---
 
+# Unreleased
+
+### Changed
+
+- Packages that held only models moved from `domain.models` to `data.models` in
+  `:library:core:common`, billing, consent, update, diagnostics and support. The issue reporter's
+  `presentation` and `shake` packages moved under `ui`, and the consent data sources out of
+  `data.remote.datasource`. Only imports change; see the 3.0 migration guide.
+
+---
+
 # October 17, 2026
 
 **Version:** `3.0.0-pre24`

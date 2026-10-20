@@ -75,7 +75,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.st
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.controls.OnboardingFooter
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.default.DefaultOnboardingPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf

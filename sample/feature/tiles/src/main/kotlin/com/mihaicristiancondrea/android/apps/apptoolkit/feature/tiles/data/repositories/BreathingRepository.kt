@@ -18,8 +18,8 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.haptics.BreathingHapticsDataSource
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.domain.models.BreathingPhase
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.domain.models.BreathingState
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.BreathingPhase
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.BreathingState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

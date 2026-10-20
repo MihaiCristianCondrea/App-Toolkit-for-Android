@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.installed
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInstallInfo
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppInstallInfo
 
 /**
  * Android platform source for installed package metadata.

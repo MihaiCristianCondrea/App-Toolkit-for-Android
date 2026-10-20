@@ -23,7 +23,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.contr
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.states.ConsentRequestStatus
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.states.StartupUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.time.Duration

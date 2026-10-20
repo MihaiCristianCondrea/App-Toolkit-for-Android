@@ -17,8 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppDetails
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppSummary
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppDetails
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 

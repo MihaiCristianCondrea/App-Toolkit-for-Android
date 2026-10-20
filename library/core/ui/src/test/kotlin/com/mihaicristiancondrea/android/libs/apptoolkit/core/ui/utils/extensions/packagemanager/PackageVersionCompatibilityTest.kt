@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.packagemanager
 
 import android.content.pm.PackageManager
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.platform.AppVersionMetadata
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.platform.AppVersionMetadata
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.packagemanager.getVersionMetadata
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
 import io.mockk.every

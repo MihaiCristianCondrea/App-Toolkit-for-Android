@@ -26,8 +26,9 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.models
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.mappers.toDomain
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppDeviceType
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.mappers.toAppDetails
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.mappers.toAppSummary
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppDeviceType
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
@@ -63,18 +64,18 @@ class AppInfoDtoTest {
             ),
         )
 
-        val domain = dto.toDomain()
+        val details = dto.toAppDetails()
 
-        assertEquals("https://example.com/icon.png", domain.iconUrl)
+        assertEquals("https://example.com/icon.png", details.iconUrl)
         assertEquals(
             listOf("https://example.com/phone.png", "https://example.com/tablet.png"),
-            domain.screenshots.map { it.url },
+            details.screenshots.map { it.url },
         )
         assertEquals(
             listOf(AppDeviceType.Phone, AppDeviceType.Tablet),
-            domain.screenshots.map { it.deviceType },
+            details.screenshots.map { it.deviceType },
         )
-        assertEquals(listOf("Play Store"), domain.links.map { it.label })
+        assertEquals(listOf("Play Store"), details.links.map { it.label })
     }
 
     @Test
@@ -86,10 +87,10 @@ class AppInfoDtoTest {
             shortDescription = "Tools",
         )
 
-        val domain = dto.toDomain()
+        val summary = dto.toAppSummary()
 
-        assertEquals("https://c.clc2l.com/t/g/o/google-playstore-Iauj7q.png", domain.iconUrl)
-        assertEquals("Tools", domain.shortDescription)
-        assertEquals(domain.category, null)
+        assertEquals("https://c.clc2l.com/t/g/o/google-playstore-Iauj7q.png", summary.iconUrl)
+        assertEquals("Tools", summary.shortDescription)
+        assertEquals(null, summary.category)
     }
 }

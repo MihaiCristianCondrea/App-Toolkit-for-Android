@@ -17,9 +17,9 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.update.domain.models.InAppUpdateHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.update.data.models.InAppUpdateHost
 
 /** What the main activity asks its ViewModel to do. */
 sealed interface MainEvent {

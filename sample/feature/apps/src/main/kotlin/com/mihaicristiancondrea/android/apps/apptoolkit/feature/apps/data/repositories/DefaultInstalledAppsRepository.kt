@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.installed.InstalledAppsLocalDataSource
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInstallInfo
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppInstallInfo
 
 /** Repository entry point for installed application metadata. */
 class DefaultInstalledAppsRepository(

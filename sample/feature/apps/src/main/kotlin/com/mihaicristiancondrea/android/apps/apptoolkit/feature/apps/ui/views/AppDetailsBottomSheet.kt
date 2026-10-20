@@ -63,9 +63,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import coil3.compose.AsyncImage
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppDetails
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppInfo
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppVersionInfo
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppDetails
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppInfo
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppVersionInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.models.AppInfoChipUi
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon

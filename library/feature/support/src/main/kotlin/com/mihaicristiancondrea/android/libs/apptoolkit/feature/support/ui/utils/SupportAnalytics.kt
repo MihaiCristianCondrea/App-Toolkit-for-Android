@@ -18,8 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.utils
 
 import com.android.billingclient.api.ProductDetails
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.data.mappers.primaryOneTimePurchaseOffer
 
 /**

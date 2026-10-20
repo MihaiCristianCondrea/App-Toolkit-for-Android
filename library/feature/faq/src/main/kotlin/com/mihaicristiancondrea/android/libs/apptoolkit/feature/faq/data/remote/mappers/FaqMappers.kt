@@ -21,9 +21,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqId
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
 
-internal fun Iterable<FaqQuestionDto>.toFaqItems(): List<FaqItem> = map(FaqQuestionDto::toDomain)
+internal fun Iterable<FaqQuestionDto>.toFaqItems(): List<FaqItem> = map(FaqQuestionDto::toFaqItem)
 
-internal fun FaqQuestionDto.toDomain(): FaqItem =
+internal fun FaqQuestionDto.toFaqItem(): FaqItem =
     FaqItem(
         id = FaqId(id),
         question = question,

@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories
 
 import androidx.compose.runtime.Stable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsEvent
 
 /**
  * The app's telemetry: analytics events and screen views, crash breadcrumbs and error reports, and

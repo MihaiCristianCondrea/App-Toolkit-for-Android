@@ -86,7 +86,7 @@ extension maps this result into its unchanged AppVersionInfo class.
 
 - `TelemetryRepository`, `BillingCore`, `DispatcherProvider`, and provider/helper interfaces.
 - `AppToolkitHostBuildConfig`, DI qualifiers, common result/value models, and stable constants.
-- `core.common.domain.models.theme.ThemePreferencesState`, the immutable application-facing
+- `core.common.data.models.theme.ThemePreferencesState`, the immutable application-facing
   representation shared by persistence and theme UI.
 
 ## Internal implementations

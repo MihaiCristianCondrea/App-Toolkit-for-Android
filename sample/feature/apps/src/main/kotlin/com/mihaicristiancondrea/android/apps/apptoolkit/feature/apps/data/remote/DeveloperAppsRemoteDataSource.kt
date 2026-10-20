@@ -17,8 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppDetails
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppSummary
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppDetails
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
 
 /**
  * Network source for the developer-app catalogue and package details.
