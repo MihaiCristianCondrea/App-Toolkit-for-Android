@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.repositories
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.toStorageException
@@ -33,13 +33,13 @@ import kotlinx.coroutines.flow.onStart
  */
 class DefaultAdsSettingsRepository(
     private val dataStore: CommonDataStore,
-    private val telemetryRepository: TelemetryRepository,
+    private val diagnostics: DiagnosticsReporter,
 ) : AdsSettingsRepository {
 
     override fun observeAdsEnabled(): Flow<Boolean> =
         dataStore.ads(default = dataStore.defaultAdsEnabled)
             .onStart {
-                telemetryRepository.logBreadcrumb(
+                diagnostics.logBreadcrumb(
                     message = "Ads settings observe",
                     attributes = mapOf("defaultAdsEnabled" to dataStore.defaultAdsEnabled.toString()),
                 )
@@ -63,7 +63,7 @@ class DefaultAdsSettingsRepository(
         enabled: Boolean,
         save: suspend () -> Unit,
     ) {
-        telemetryRepository.logBreadcrumb(
+        diagnostics.logBreadcrumb(
             message = breadcrumb,
             attributes = mapOf("enabled" to enabled.toString()),
         )

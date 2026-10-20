@@ -24,7 +24,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analyti
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.MorseToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.MorseInputError
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.MorseToolUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import java.util.Locale
 

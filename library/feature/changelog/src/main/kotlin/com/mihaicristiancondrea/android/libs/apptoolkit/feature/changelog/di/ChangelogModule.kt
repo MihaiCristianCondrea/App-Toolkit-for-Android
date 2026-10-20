@@ -37,7 +37,7 @@ val changelogModule: Module = module {
             legacyChangelogUrl = get(
                 qualifier = named(AppToolkitDiConstants.GITHUB_CHANGELOG),
             ),
-            telemetryRepository = get(),
+            diagnostics = get(),
         )
     }
     single<ChangelogRepository> { get<DefaultChangelogRepository>() }

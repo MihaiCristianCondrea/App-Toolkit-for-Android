@@ -57,7 +57,7 @@ fun CommonDropdownMenuItem(
     icon: ImageVector? = null,
     ga4Event: Ga4EventData? = null,
 ) {
-    val telemetryRepository = LocalTelemetry.current
+    val telemetry = LocalTelemetry.current
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
     DropdownMenuItem(
@@ -66,7 +66,7 @@ fun CommonDropdownMenuItem(
         onClick = {
             view.playSoundEffect(SoundEffectConstants.CLICK)
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-            telemetryRepository.logGa4Event(ga4Event)
+            telemetry.logGa4Event(ga4Event)
             onClick()
         },
         modifier = modifier

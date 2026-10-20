@@ -17,8 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.HolidaySeason
 
 /** GA4 vocabulary for the seasonal themes: the holiday greeting. */

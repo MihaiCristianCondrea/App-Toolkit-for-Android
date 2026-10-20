@@ -82,7 +82,7 @@ class DefaultFaqRepositoryTest {
             remoteDataSource = remote,
             catalogUrl = CATALOG_URL,
             productId = PRODUCT_ID,
-            telemetryRepository = mockk(relaxed = true),
+            diagnostics = mockk(relaxed = true),
         )
     }
 

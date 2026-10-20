@@ -32,7 +32,8 @@ fun consentModule(): Module = module {
             remote = get(),
             local = get(),
             configProvider = get(),
-            telemetryRepository = get(),
+            diagnostics = get(),
+            collection = get(),
         )
     }
 }

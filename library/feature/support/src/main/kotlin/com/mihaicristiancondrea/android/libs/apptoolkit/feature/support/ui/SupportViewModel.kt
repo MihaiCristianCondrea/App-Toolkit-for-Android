@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui
 
 import android.app.Activity
 import com.android.billingclient.api.ProductDetails
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.GenericErrorText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable

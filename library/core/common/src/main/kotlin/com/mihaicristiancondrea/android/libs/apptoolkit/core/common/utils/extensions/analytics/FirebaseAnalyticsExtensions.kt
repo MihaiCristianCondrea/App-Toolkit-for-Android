@@ -17,12 +17,12 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.AnalyticsReporter
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 
 /**
- * Standard GA4 recommended event helpers on [TelemetryRepository].
+ * Standard GA4 recommended event helpers on [AnalyticsReporter], for the UI layer only.
  *
  * Provides typed extensions for Google Analytics recommended events and parameters:
  * - tutorial_begin / tutorial_complete
@@ -34,17 +34,17 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.
  */
 
 /** Logs standard GA4 `tutorial_begin` event. */
-fun TelemetryRepository.logTutorialBegin() {
+fun AnalyticsReporter.logTutorialBegin() {
     logEvent(AnalyticsEvent(name = "tutorial_begin"))
 }
 
 /** Logs standard GA4 `tutorial_complete` event. */
-fun TelemetryRepository.logTutorialComplete() {
+fun AnalyticsReporter.logTutorialComplete() {
     logEvent(AnalyticsEvent(name = "tutorial_complete"))
 }
 
 /** Logs standard GA4 `search` event with parameter `search_term`. */
-fun TelemetryRepository.logSearch(searchTerm: String) {
+fun AnalyticsReporter.logSearch(searchTerm: String) {
     if (searchTerm.isBlank()) return
     logEvent(
         AnalyticsEvent(
@@ -55,7 +55,7 @@ fun TelemetryRepository.logSearch(searchTerm: String) {
 }
 
 /** Logs standard GA4 `select_content` event with parameters `content_type` and `item_id`. */
-fun TelemetryRepository.logSelectContent(contentType: String, itemId: String) {
+fun AnalyticsReporter.logSelectContent(contentType: String, itemId: String) {
     logEvent(
         AnalyticsEvent(
             name = "select_content",
@@ -68,7 +68,7 @@ fun TelemetryRepository.logSelectContent(contentType: String, itemId: String) {
 }
 
 /** Logs standard GA4 `share` event with parameters `method`, `content_type`, and `item_id`. */
-fun TelemetryRepository.logShare(
+fun AnalyticsReporter.logShare(
     method: String,
     contentType: String,
     itemId: String,
@@ -86,7 +86,7 @@ fun TelemetryRepository.logShare(
 }
 
 /** Logs standard GA4 `view_item` event with parameters `item_id`, `item_name`, and optional `item_category`. */
-fun TelemetryRepository.logViewItem(
+fun AnalyticsReporter.logViewItem(
     itemId: String,
     itemName: String,
     itemCategory: String? = null,
@@ -106,7 +106,7 @@ fun TelemetryRepository.logViewItem(
 }
 
 /** Logs standard GA4 `view_item_list` event with optional parameters `item_list_id` and `item_list_name`. */
-fun TelemetryRepository.logViewItemList(
+fun AnalyticsReporter.logViewItemList(
     itemListId: String? = null,
     itemListName: String? = null,
 ) {
@@ -126,7 +126,7 @@ fun TelemetryRepository.logViewItemList(
 }
 
 /** Logs standard GA4 `unlock_achievement` event with parameter `achievement_id`. */
-fun TelemetryRepository.logUnlockAchievement(achievementId: String) {
+fun AnalyticsReporter.logUnlockAchievement(achievementId: String) {
     logEvent(
         AnalyticsEvent(
             name = "unlock_achievement",

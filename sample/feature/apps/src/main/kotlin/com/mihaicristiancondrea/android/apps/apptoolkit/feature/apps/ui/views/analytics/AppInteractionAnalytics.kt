@@ -19,9 +19,9 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.a
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4Contract
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 
 /**
  * App list interaction types reported to GA4.

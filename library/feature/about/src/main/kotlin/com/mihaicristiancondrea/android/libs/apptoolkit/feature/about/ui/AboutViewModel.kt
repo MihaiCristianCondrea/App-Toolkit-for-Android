@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.ClipboardRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logUnlockAchievement
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository

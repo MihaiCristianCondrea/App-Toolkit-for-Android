@@ -18,9 +18,10 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.ConsentPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.exceptions.ConsentException
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.remote.ConsentRemoteDataSource
@@ -67,7 +68,8 @@ class DefaultConsentRepositoryTest {
         remote = remote,
         local = local,
         configProvider = FakeBuildInfoProvider(isDebugBuild = isDebugBuild),
-        telemetryRepository = telemetryRepository,
+        diagnostics = telemetryRepository,
+        collection = telemetryRepository,
         requestScope = requestScope,
     )
 
@@ -319,6 +321,40 @@ class DefaultConsentRepositoryTest {
                 telemetryRepository.setCrashlyticsEnabled(false)
                 telemetryRepository.setPerformanceEnabled(false)
             }
+        }
+
+    @Test
+    fun `consent switches go to the collection contract and breadcrumbs to diagnostics`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val diagnostics = FakeTelemetryRepository()
+            val collection = FakeTelemetryRepository()
+            val repository = DefaultConsentRepository(
+                remote = CountingConsentRemoteDataSource(),
+                local = FakeConsentPreferencesDataSource(),
+                configProvider = FakeBuildInfoProvider(isDebugBuild = true),
+                diagnostics = diagnostics,
+                collection = collection,
+                requestScope = backgroundScope,
+            )
+
+            repository.applyConsentSettings(
+                ConsentSettings(
+                    usageAndDiagnostics = true,
+                    analyticsConsent = true,
+                    adStorageConsent = false,
+                    adUserDataConsent = true,
+                    adPersonalizationConsent = false,
+                )
+            )
+
+            assertEquals(listOf(true, false, true, false), collection.consent)
+            assertEquals(true, collection.analyticsEnabled)
+            assertEquals(true, collection.crashlyticsEnabled)
+            assertEquals(true, collection.performanceEnabled)
+            assertTrue(collection.breadcrumbs.isEmpty())
+            assertEquals(null, diagnostics.consent)
+            assertEquals(listOf("Consent settings applied"), diagnostics.breadcrumbs.map { it.first })
+            assertTrue(diagnostics.loggedEvents.isEmpty() && collection.loggedEvents.isEmpty())
         }
 
     @Test

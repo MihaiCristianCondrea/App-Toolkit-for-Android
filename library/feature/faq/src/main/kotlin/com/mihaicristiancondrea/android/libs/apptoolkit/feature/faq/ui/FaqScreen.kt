@@ -61,8 +61,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
@@ -137,7 +137,7 @@ private object FaqActionNames {
 fun FaqScreen() {
     val viewModel: FaqViewModel = koinViewModel()
     val state: FaqUiState by viewModel.state.collectAsStateWithLifecycle()
-    val telemetryRepository = LocalTelemetry.current
+    val telemetry = LocalTelemetry.current
     val adsConfig: AdsConfig = koinInject(qualifier = named(AdsQualifiers.HELP_NATIVE_AD))
     val adsEnabled: Boolean = rememberAdsEnabled()
     val context = LocalContext.current
@@ -164,23 +164,23 @@ fun FaqScreen() {
     FaqScreenContent(
         state = state,
         onRetry = {
-            telemetryRepository.logEvent(faqActionEvent(actionName = FaqActionNames.RETRY_LOAD))
+            telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.RETRY_LOAD))
             viewModel.onEvent(FaqEvent.Load)
         },
         onFeedbackOpened = {
-            telemetryRepository.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.FEEDBACK))
-            telemetryRepository.logEvent(faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_OPENED))
+            telemetry.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.FEEDBACK))
+            telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_OPENED))
         },
         onRequestFeature = {
-            telemetryRepository.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.REQUEST_FEATURE))
+            telemetry.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.REQUEST_FEATURE))
             context.openUrl(AppLinks.FEATURE_REQUESTS_FORM)
         },
         onLeaveReview = {
-            telemetryRepository.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.LEAVE_REVIEW))
+            telemetry.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.LEAVE_REVIEW))
             reviewHost?.let { host -> viewModel.onEvent(FaqEvent.RequestReview(host = host)) }
         },
         onQuestionToggled = { question, position, expanded ->
-            telemetryRepository.logGa4Event(
+            telemetry.logGa4Event(
                 faqPreferenceTapEvent(
                     preferenceKey = FaqPreferenceKeys.FAQ_ITEM,
                     faqId = question.id.value,
@@ -190,12 +190,12 @@ fun FaqScreen() {
             )
         },
         onShowMoreQuestions = {
-            telemetryRepository.logGa4Event(
+            telemetry.logGa4Event(
                 faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.SHOW_MORE_QUESTIONS)
             )
         },
         onContactUs = {
-            telemetryRepository.logEvent(
+            telemetry.logEvent(
                 faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.CONTACT_US).toAnalyticsEvent()
             )
             context.sendEmailToDeveloper(applicationNameRes = CommonR.string.app_name)

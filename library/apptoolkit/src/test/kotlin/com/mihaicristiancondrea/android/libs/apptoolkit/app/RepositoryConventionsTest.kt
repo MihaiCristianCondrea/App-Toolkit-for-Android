@@ -97,7 +97,9 @@ class RepositoryConventionsTest {
         const val MAIN_SOURCE_SET = "/src/main/"
         const val KOTLIN_EXTENSION = "kt"
 
-        val DATA_REPOSITORY_PACKAGES = listOf("/data/repositories")
+        // TelemetryRepository keeps its published name in core.common.telemetry: it is a
+        // cross-cutting contract, not application data. checkModuleBoundaries allows the same.
+        val DATA_REPOSITORY_PACKAGES = listOf("/data/repositories", "/core/common/telemetry")
         const val REPOSITORY_FILE_SUFFIX = "Repository.kt"
         const val REPOSITORY_IMPL = "RepositoryImpl"
 

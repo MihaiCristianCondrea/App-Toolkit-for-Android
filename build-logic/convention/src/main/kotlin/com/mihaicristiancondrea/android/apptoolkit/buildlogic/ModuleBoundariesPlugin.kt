@@ -49,7 +49,7 @@ class ModuleBoundariesPlugin : Plugin<Project> {
     private fun registerRepositoryCheck(rootProject: Project) {
         rootProject.tasks.register(CHECK_TASK_NAME) {
             group = "verification"
-            description = "Checks sample and library source ownership, package separation, tree conventions, and telemetry conventions."
+            description = "Checks sample and library source ownership, package separation, tree conventions, analytics ownership, and telemetry conventions."
 
             doLast {
                 val sampleRoot = rootProject.layout.projectDirectory.dir("sample").asFile
@@ -71,6 +71,8 @@ class ModuleBoundariesPlugin : Plugin<Project> {
                 checkScreenTracking(sampleRoot, sourceFiles, violations)
                 checkTreeConventions(sampleRoot, sourceFiles, violations)
                 checkTreeConventions(libraryRoot, librarySourceFiles, violations)
+                checkAnalyticsOwnership(sampleRoot, sourceFiles, violations)
+                checkAnalyticsOwnership(libraryRoot, librarySourceFiles, violations)
 
                 if (violations.isNotEmpty()) {
                     throw GradleException(
@@ -243,6 +245,35 @@ class ModuleBoundariesPlugin : Plugin<Project> {
         }
     }
 
+    /**
+     * Product analytics belong to the UI layer. Code under `data` and `domain` packages may take
+     * `DiagnosticsReporter` for breadcrumbs and non-fatal reports, and `TelemetryCollection` where
+     * it applies consent, but never the analytics contracts, events, GA4 helpers or SDK. A
+     * repository returns its outcome and the screen that asked reports it.
+     *
+     * The telemetry transport is the deliberate exception: it implements analytics, so it has to
+     * name them. [ANALYTICS_INFRASTRUCTURE_MODULES] and [ANALYTICS_INFRASTRUCTURE_FILES] list it.
+     */
+    private fun checkAnalyticsOwnership(
+        root: File,
+        sourceFiles: Set<File>,
+        violations: MutableList<String>,
+    ) {
+        sourceFiles.filter { "/src/main/" in it.invariantSeparatorsPath }.forEach { file ->
+            if (modulePath(root, file) in ANALYTICS_INFRASTRUCTURE_MODULES) return@forEach
+            val relative = file.relativeTo(root).invariantSeparatorsPath
+            if (ANALYTICS_INFRASTRUCTURE_FILES.any(relative::endsWith)) return@forEach
+            val text = file.readText()
+            val packageName = PACKAGE_REGEX.find(text)?.groupValues?.get(1) ?: return@forEach
+            val layer = packageName.split('.').firstOrNull { it == "data" || it == "domain" } ?: return@forEach
+            ANALYTICS_REFERENCE_REGEX.find(text)?.let { match ->
+                violations += "${file.relativeTo(root)} reports analytics from the $layer layer (" +
+                    "${match.value.substringAfterLast('.')}); return the outcome and report it from the UI, " +
+                    "or use DiagnosticsReporter for a breadcrumb or failure"
+            }
+        }
+    }
+
     private fun checkScreenTracking(
         sampleRoot: File,
         sourceFiles: Set<File>,
@@ -305,13 +336,34 @@ class ModuleBoundariesPlugin : Plugin<Project> {
             "ViewModel.kt" to Placement("a ViewModel lives in a `ui` package, outside `views`") {
                 ".ui" in it && ".views" !in it
             },
+            // TelemetryRepository keeps its published name in the telemetry package: it is a
+            // cross-cutting contract, not application data.
             "Repository.kt" to Placement("a repository lives in `data.repositories`") {
-                it.endsWith(".data.repositories") || it.endsWith(".core.testing")
+                it.endsWith(".data.repositories") || it.endsWith(".core.testing") ||
+                    it.endsWith(".core.common.telemetry")
             },
         )
 
         val VAGUE_MAPPER_REGEX = Regex("(?m)^\\s*(?:\\w+\\s+)*fun\\s+(?:<[^>]+>\\s*)?[\\w.<>?, ]+\\.(toDomain|toModel|toData|toUi|toEntity|toDto)\\(")
         val DOMAIN_ROOT_REGEX = Regex("^.*?\\.domain(?=\\.|$)")
+        /** Modules that implement telemetry, and so may name analytics from their data layer. */
+        val ANALYTICS_INFRASTRUCTURE_MODULES = setOf(":library:integration:firebase")
+
+        /** Deprecated aliases kept at the contract's previous location in `core.common.data.repositories`. */
+        val ANALYTICS_INFRASTRUCTURE_FILES = setOf(
+            "core/common/data/repositories/TelemetryRepositoryAlias.kt",
+            "core/common/data/repositories/FirebaseController.kt",
+        )
+
+        /** The analytics contracts, events, GA4 helpers, UI analytics and the analytics SDK. */
+        val ANALYTICS_REFERENCE_REGEX = Regex(
+            "com\\.mihaicristiancondrea\\.android\\.libs\\.apptoolkit\\.(" +
+                "core\\.common\\.telemetry\\.(TelemetryRepository|AnalyticsReporter|models)\\b|" +
+                "core\\.common\\.data\\.repositories\\.(TelemetryRepository|FirebaseController)\\b|" +
+                "core\\.common\\.utils\\.extensions\\.analytics\\b|" +
+                "core\\.ui\\.(views|models)\\.analytics\\b)" +
+                "|com\\.google\\.firebase\\.analytics\\b",
+        )
         val INLINE_SCREEN_NAME_REGEX = Regex("screenName\\s*=\\s*\"")
     }
 }

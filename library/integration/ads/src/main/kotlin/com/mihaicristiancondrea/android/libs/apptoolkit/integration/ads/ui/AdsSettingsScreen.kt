@@ -36,8 +36,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
@@ -85,7 +85,7 @@ private object AdsPreferenceKeys {
 fun AdsSettingsScreen() {
     val viewModel: AdsSettingsViewModel = koinViewModel()
     val state: AdsSettingsUiState by viewModel.state.collectAsStateWithLifecycle()
-    val telemetryRepository = LocalTelemetry.current
+    val telemetry = LocalTelemetry.current
     val buildInfoProvider: BuildInfoProvider = koinInject()
     val context: Context = LocalContext.current
     val activity = LocalActivity.current
@@ -109,7 +109,7 @@ fun AdsSettingsScreen() {
             consentHost?.let { host -> viewModel.onEvent(AdsSettingsEvent.RequestConsent(host)) }
         },
         onLearnMore = {
-            telemetryRepository.logEvent(
+            telemetry.logEvent(
                 AnalyticsEvent(
                     name = SettingsAnalytics.Events.PREFERENCE_VIEW,
                     params = adsPreferenceParams(preferenceKey = AdsPreferenceKeys.LEARN_MORE),

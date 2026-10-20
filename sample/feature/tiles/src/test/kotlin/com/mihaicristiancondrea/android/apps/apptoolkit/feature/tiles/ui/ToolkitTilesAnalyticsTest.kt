@@ -24,7 +24,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repos
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ToolkitTilesEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ToolkitTilesFilter
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension

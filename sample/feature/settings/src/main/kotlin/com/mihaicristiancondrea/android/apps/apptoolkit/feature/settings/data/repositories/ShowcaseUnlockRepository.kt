@@ -19,8 +19,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.data.r
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStoreInterface
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.BuildConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logUnlockAchievement
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -37,23 +36,31 @@ import kotlinx.coroutines.sync.withLock
  */
 class ShowcaseUnlockRepository(
     private val dataStore: DataStoreInterface,
-    private val telemetryRepository: TelemetryRepository,
+    private val diagnostics: DiagnosticsReporter,
     private val isDebugBuild: Boolean = BuildConfig.DEBUG,
 ) {
     private val unlockMutex = Mutex()
 
-    /** Persists the unlock once [tapCount] reaches the threshold. Repeat calls are no-ops. */
-    suspend fun unlockAfterVersionTaps(tapCount: Int) {
-        if (isDebugBuild || tapCount < UNLOCK_TAP_THRESHOLD) return
+    /**
+     * Saves the unlock once [tapCount] reaches the threshold.
+     *
+     * Returns true only from the call that saved a new unlock, so its caller can report the
+     * achievement exactly once and only after it is stored. Returns false in a debug build, below
+     * the threshold, and once the showcase is already unlocked. A failed save throws and leaves the
+     * flag unset, so a later tap can try again; cancellation propagates. Reports no analytics: the
+     * screen that asked decides what to report.
+     */
+    suspend fun unlockAfterVersionTaps(tapCount: Int): Boolean {
+        if (isDebugBuild || tapCount < UNLOCK_TAP_THRESHOLD) return false
 
-        unlockMutex.withLock {
-            if (dataStore.componentsShowcaseUnlocked.first()) return
-            telemetryRepository.logBreadcrumb(
+        return unlockMutex.withLock {
+            if (dataStore.componentsShowcaseUnlocked.first()) return@withLock false
+            dataStore.saveComponentsShowcaseUnlocked(isUnlocked = true)
+            diagnostics.logBreadcrumb(
                 message = "Components showcase unlocked",
                 attributes = mapOf("source" to "ShowcaseUnlockRepository"),
             )
-            telemetryRepository.logUnlockAchievement("showcase_unlocked")
-            dataStore.saveComponentsShowcaseUnlocked(isUnlocked = true)
+            true
         }
     }
 

@@ -17,6 +17,12 @@
 
 ### Changed
 
+- Telemetry is split by responsibility in `core.common.telemetry`: `AnalyticsReporter`,
+  `DiagnosticsReporter` and `TelemetryCollection`, which `TelemetryRepository` combines for the UI
+  layer. Repositories report breadcrumbs and failures through `DiagnosticsReporter` and never send
+  product analytics; `checkModuleBoundaries` rejects analytics in `data` and `domain` code. Add
+  `telemetryModule` when assembling Koin modules without `appToolkitModules`; see the 3.0 migration
+  guide.
 - `SettingsPreference.icon` is a `ToolkitIcon`. Passing an `ImageVector` still compiles through a
   deprecated constructor; wrap it in `ToolkitIcon.Vector` to migrate.
 - Developer options remember explicit choices, even one equal to the current default, so an app

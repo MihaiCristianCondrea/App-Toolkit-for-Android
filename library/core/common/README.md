@@ -13,8 +13,12 @@ Android utility abstractions shared across the toolkit.
 - The failures the data layer throws: `NetworkException` and `StorageException`, each with a
   `reason`. Translating into them belongs to `:library:core:network` and `:library:core:datastore`,
   and the text a screen shows for them to `:library:core:ui`.
-- `TelemetryRepository` (`core.common.data.repositories`), the vendor-neutral contract for analytics, breadcrumbs and
-  error reports. `FirebaseController` stays in `data.repositories` as a deprecated alias of it.
+- The vendor-neutral telemetry contracts in `core.common.telemetry`, split by responsibility:
+  `AnalyticsReporter` (GA4 events, screen views, user properties), `DiagnosticsReporter`
+  (breadcrumbs and non-fatal reports) and `TelemetryCollection` (the consent-driven collection
+  switches). `TelemetryRepository` is all three, for the UI layer; `telemetryModule` binds the
+  three to the app's one `TelemetryRepository`. The analytics models are in `telemetry.models`.
+  `TelemetryRepository` and `FirebaseController` stay in `data.repositories` as deprecated aliases.
 - `BillingCore`, dispatcher, build-info, app-info, permissions, and ad-SDK contracts.
 - Host DI configuration (`AppToolkitHostBuildConfig`, qualifiers, and constants).
 - Small platform and Kotlin extensions used across modules. An extension or constant that one
@@ -66,6 +70,14 @@ flowchart TD
 
 ## Architectural decisions
 
+- **Analytics belong to the UI layer; diagnostics belong everywhere.** Code under `data/` and
+  `domain/` takes `DiagnosticsReporter`, and `TelemetryCollection` where it applies consent, never
+  `AnalyticsReporter` or `TelemetryRepository`. A repository returns its outcome, and the screen or
+  ViewModel that asked reports the product event. Breadcrumbs and non-fatal reports stay in
+  repositories, because a background failure that never reaches a screen still has to be seen.
+  `checkModuleBoundaries` enforces this, with `:library:integration:firebase` as the one module
+  allowed to name analytics from its data layer, because it implements them.
+
 - `common` is the lowest shared production boundary, so it defines narrow SDK-neutral contracts
   while concrete Firebase, Billing, persistence, and UI implementations live above it.
 - Android helpers remain behind small interfaces when tests or host substitution need a boundary;
@@ -84,7 +96,8 @@ extension maps this result into its unchanged AppVersionInfo class.
 
 ## Public contracts
 
-- `TelemetryRepository`, `BillingCore`, `DispatcherProvider`, and provider/helper interfaces.
+- `TelemetryRepository`, `AnalyticsReporter`, `DiagnosticsReporter`, `TelemetryCollection`,
+  `telemetryModule`, `BillingCore`, `DispatcherProvider`, and provider/helper interfaces.
 - `AppToolkitHostBuildConfig`, DI qualifiers, common result/value models, and stable constants.
 - `core.common.data.models.theme.ThemePreferencesState`, the immutable application-facing
   representation shared by persistence and theme UI.
@@ -125,7 +138,7 @@ metrics error response has an empty body. `ConsentSdkCrashGuard` is installed by
 immediately after Firebase initialization so it wraps the Crashlytics handler. It suppresses only a
 non-main-thread `NoSuchElementException` whose stack contains both `java.util.Scanner` and
 `com.google.android.gms.internal.consent_sdk`; every other throwable is delegated unchanged. The
-suppressed telemetry failure is recorded through `TelemetryRepository.recordNonFatal`.
+suppressed telemetry failure is recorded through `DiagnosticsReporter.recordNonFatal`.
 
 Hosts may opt out by overriding `installsConsentSdkCrashGuard` with `false`. Do not broaden the
 guard predicate, and do not remove the guard until the affected UMP artifact behavior is verified as

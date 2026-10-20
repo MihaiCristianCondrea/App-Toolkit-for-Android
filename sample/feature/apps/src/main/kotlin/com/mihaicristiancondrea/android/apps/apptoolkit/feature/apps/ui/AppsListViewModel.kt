@@ -33,7 +33,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.A
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.isAvailable
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.analytics.AppInteractionType
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.analytics.logAppInteraction
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logSelectContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItemList

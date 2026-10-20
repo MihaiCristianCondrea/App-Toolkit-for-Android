@@ -15,9 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
 
 /**
  * A [TelemetryRepository] that drops everything it is given.

@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repo
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.BuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.providers.GooglePlayServicesVersionProvider
@@ -43,14 +43,14 @@ import kotlinx.coroutines.withContext
 class DefaultAboutRepository(
     private val deviceProvider: AboutSettingsProvider,
     private val buildInfoProvider: BuildInfoProvider,
-    private val telemetryRepository: TelemetryRepository,
+    private val diagnostics: DiagnosticsReporter,
     private val gmsVersionProvider: GooglePlayServicesVersionProvider,
     private val toolkitVersionProvider: () -> String = { BuildConfig.APP_TOOLKIT_VERSION },
     private val dispatchers: DispatcherProvider = StandardDispatchers(),
 ) : AboutRepository {
 
     override suspend fun getAboutInfo(): AboutInfo {
-        telemetryRepository.logBreadcrumb(
+        diagnostics.logBreadcrumb(
             message = "About info load started",
             attributes = mapOf("source" to "AboutRepository"),
         )

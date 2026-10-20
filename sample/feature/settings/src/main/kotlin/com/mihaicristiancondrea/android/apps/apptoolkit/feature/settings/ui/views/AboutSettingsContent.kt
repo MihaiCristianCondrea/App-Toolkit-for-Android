@@ -20,33 +20,48 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.vie
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.data.repositories.ShowcaseUnlockRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logUnlockAchievement
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.AboutScreen
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
+
+/** The achievement id the showcase unlock reports. Dashboards group by it, so it never changes. */
+internal const val SHOWCASE_ACHIEVEMENT_ID: String = "showcase_unlocked"
 
 /** The About surface for this app: the toolkit screen plus the hidden version-tap unlock. */
 @Composable
 fun AboutSettingsContent() {
     val showcaseUnlockRepository: ShowcaseUnlockRepository = koinInject()
-    val telemetryRepository = LocalTelemetry.current
+    val telemetry = LocalTelemetry.current
     val coroutineScope = rememberCoroutineScope()
 
     AboutScreen(
         onVersionTap = { tapCount ->
-            coroutineScope.launch {
-                // Leaving the screen cancels this scope; runSuspendCatching lets that cancellation
-                // through instead of recording it as a failure.
-                runSuspendCatching {
-                    showcaseUnlockRepository.unlockAfterVersionTaps(tapCount = tapCount)
-                }.onFailure { throwable ->
-                    telemetryRepository.recordNonFatal(
-                        throwable = throwable,
-                        attributes = mapOf("operation" to "unlock_components_showcase"),
-                    )
-                }
-            }
+            // Leaving the screen cancels this scope, and the unlock with it.
+            coroutineScope.launch { unlockShowcase(showcaseUnlockRepository, tapCount, telemetry) }
         },
     )
+}
+
+/**
+ * Asks [repository] to unlock the showcase for [tapCount], then reports what happened: the
+ * `unlock_achievement` event only once a new unlock is saved, and a failed save as a non-fatal.
+ * Cancellation propagates and reports neither.
+ */
+internal suspend fun unlockShowcase(
+    repository: ShowcaseUnlockRepository,
+    tapCount: Int,
+    telemetry: TelemetryRepository,
+) {
+    runSuspendCatching { repository.unlockAfterVersionTaps(tapCount = tapCount) }
+        .onSuccess { unlocked -> if (unlocked) telemetry.logUnlockAchievement(SHOWCASE_ACHIEVEMENT_ID) }
+        .onFailure { throwable ->
+            telemetry.recordNonFatal(
+                throwable = throwable,
+                attributes = mapOf("operation" to "unlock_components_showcase"),
+            )
+        }
 }

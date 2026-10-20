@@ -55,7 +55,7 @@ class DefaultAdsSettingsRepositoryTest {
         every { dataStore.defaultAdsEnabled } returns storeDefaultAdsEnabled
         return DefaultAdsSettingsRepository(
             dataStore = dataStore,
-            telemetryRepository = FakeTelemetryRepository(),
+            diagnostics = FakeTelemetryRepository(),
         )
     }
 

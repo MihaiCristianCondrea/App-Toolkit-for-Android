@@ -657,10 +657,10 @@ private fun rememberFieldTransformation(
 private fun Modifier.logFocusGain(
     ga4Event: Ga4EventData?,
 ): Modifier {
-    val telemetryRepository = LocalTelemetry.current
+    val telemetry = LocalTelemetry.current
     var focused: Boolean by remember { mutableStateOf(value = false) }
     return onFocusChanged { state ->
-        if (state.isFocused && !focused) telemetryRepository.logGa4Event(ga4Event = ga4Event)
+        if (state.isFocused && !focused) telemetry.logGa4Event(ga4Event = ga4Event)
         focused = state.isFocused
     }
 }

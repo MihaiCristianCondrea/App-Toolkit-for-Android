@@ -19,8 +19,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 /**
@@ -32,10 +32,10 @@ fun TrackScreenState(
     screenName: String,
     state: TrackedStatus,
 ) {
-    val telemetryRepository = LocalTelemetry.current
+    val telemetry = LocalTelemetry.current
     val label: String = state.trackingLabel
     LaunchedEffect(screenName, label) {
-        telemetryRepository.logEvent(
+        telemetry.logEvent(
             AnalyticsEvent(
                 name = "screen_state",
                 params = mapOf(

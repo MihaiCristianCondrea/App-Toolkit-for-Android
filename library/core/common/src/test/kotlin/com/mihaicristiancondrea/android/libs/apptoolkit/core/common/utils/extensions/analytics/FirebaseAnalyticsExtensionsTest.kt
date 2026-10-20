@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

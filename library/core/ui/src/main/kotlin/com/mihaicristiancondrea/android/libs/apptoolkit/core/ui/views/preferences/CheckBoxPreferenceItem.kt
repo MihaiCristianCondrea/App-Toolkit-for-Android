@@ -61,7 +61,7 @@ fun CheckBoxPreferenceItem(
     onCheckedChange: (Boolean) -> Unit,
     ga4Event: Ga4EventData? = null,
 ) {
-    val telemetryRepository = LocalTelemetry.current
+    val telemetry = LocalTelemetry.current
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
     Card(
@@ -74,7 +74,7 @@ fun CheckBoxPreferenceItem(
                 .clickable {
                     view.playSoundEffect(SoundEffectConstants.CLICK)
                     hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                    telemetryRepository.logGa4Event(ga4Event)
+                    telemetry.logGa4Event(ga4Event)
                     onCheckedChange(!checked)
                 },
             verticalAlignment = Alignment.CenterVertically,
@@ -105,7 +105,7 @@ fun CheckBoxPreferenceItem(
                 onCheckedChange = { isChecked: Boolean ->
                     view.playSoundEffect(SoundEffectConstants.CLICK)
                     hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                    telemetryRepository.logGa4Event(ga4Event)
+                    telemetry.logGa4Event(ga4Event)
                     onCheckedChange(isChecked)
                 },
                 modifier = Modifier.padding(start = SizeConstants.LargeSize),

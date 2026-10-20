@@ -21,8 +21,17 @@ FirebaseTelemetryRepository
 Firebase Analytics
 ```
 
-`TelemetryRepository` lives in App Toolkit core common code. Host features depend on this contract
-instead of importing the Firebase Analytics SDK directly.
+`TelemetryRepository` lives in App Toolkit's `core.common.telemetry`. Host features depend on this
+contract instead of importing the Firebase Analytics SDK directly. It combines three narrower
+contracts, each with its own owner:
+
+| Contract              | Covers                                        | Used by                             |
+|-----------------------|-----------------------------------------------|-------------------------------------|
+| `AnalyticsReporter`   | GA4 events, screen views, user properties     | the UI layer only                   |
+| `DiagnosticsReporter` | breadcrumbs, ViewModel errors, non-fatals     | any layer, repositories included    |
+| `TelemetryCollection` | consent and the collection switches           | the code that owns consent          |
+
+`telemetryModule` binds all three to the app's one `TelemetryRepository`.
 
 The Firebase integration provides the concrete implementation through dependency injection.
 

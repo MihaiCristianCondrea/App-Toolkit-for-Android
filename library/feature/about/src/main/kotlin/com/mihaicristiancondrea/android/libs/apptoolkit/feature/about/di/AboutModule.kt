@@ -36,7 +36,7 @@ val aboutModule: Module = module {
         DefaultAboutRepository(
             deviceProvider = get(),
             buildInfoProvider = get(),
-            telemetryRepository = get(),
+            diagnostics = get(),
             gmsVersionProvider = get(),
             dispatchers = get(),
         )

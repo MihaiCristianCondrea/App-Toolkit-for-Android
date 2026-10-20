@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.providers.GooglePlayServicesVersionProvider
@@ -59,7 +59,7 @@ class TestDefaultAboutRepository {
         DefaultAboutRepository(
             deviceProvider = deviceProvider,
             buildInfoProvider = buildInfoProvider,
-            telemetryRepository = mockk<TelemetryRepository>(relaxed = true),
+            diagnostics = mockk<TelemetryRepository>(relaxed = true),
             gmsVersionProvider = gmsVersionProvider,
             toolkitVersionProvider = toolkitVersionProvider,
         )

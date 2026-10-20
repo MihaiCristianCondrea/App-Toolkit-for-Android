@@ -23,7 +23,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analyti
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.CoinFlipToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.CoinSide
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.CoinFlipToolUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import kotlin.random.Random
 

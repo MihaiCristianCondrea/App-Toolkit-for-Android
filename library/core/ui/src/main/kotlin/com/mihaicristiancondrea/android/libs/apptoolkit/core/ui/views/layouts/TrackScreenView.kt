@@ -34,9 +34,9 @@ fun TrackScreenView(
     screenName: String,
     screenClass: String? = null,
 ) {
-    val telemetryRepository = LocalTelemetry.current
+    val telemetry = LocalTelemetry.current
     LaunchedEffect(screenName) {
-        telemetryRepository.logScreenView(
+        telemetry.logScreenView(
             screenName = screenName,
             screenClass = screenClass,
         )

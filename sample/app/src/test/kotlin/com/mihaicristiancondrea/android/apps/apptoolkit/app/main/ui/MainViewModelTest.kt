@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui
 
 import android.app.Activity
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.MainEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.apps.apptoolkit.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository

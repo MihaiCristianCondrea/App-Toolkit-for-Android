@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logTutorialBegin
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logTutorialComplete
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper

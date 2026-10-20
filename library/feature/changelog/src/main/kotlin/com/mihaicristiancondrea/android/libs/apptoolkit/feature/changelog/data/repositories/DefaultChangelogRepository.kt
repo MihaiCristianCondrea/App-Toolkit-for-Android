@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.repositories
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.api.ApiHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.networkCall
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.toNetworkException
@@ -41,7 +41,7 @@ class DefaultChangelogRepository(
     private val client: HttpClient,
     private val apiBaseUrl: String,
     private val legacyChangelogUrl: String,
-    private val telemetryRepository: TelemetryRepository,
+    private val diagnostics: DiagnosticsReporter,
 ) : ChangelogRepository {
 
     override suspend fun getChangelog(packageName: String): String {
@@ -55,7 +55,7 @@ class DefaultChangelogRepository(
     }
 
     private suspend fun getLegacyChangelog(reason: String, packageName: String): String {
-        telemetryRepository.logBreadcrumb(
+        diagnostics.logBreadcrumb(
             message = "Changelog legacy fallback",
             attributes = mapOf(
                 "packageName" to packageName,
@@ -67,7 +67,7 @@ class DefaultChangelogRepository(
 
     /** The response to [url], whatever its status; a failure to get one is a [NetworkException]. */
     private suspend fun fetchMarkdown(url: String): MarkdownResponse {
-        telemetryRepository.logBreadcrumb(
+        diagnostics.logBreadcrumb(
             message = "Changelog fetch",
             attributes = mapOf("url" to url),
         )

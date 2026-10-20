@@ -70,7 +70,7 @@ class DefaultIssueReporterRepositoryTest {
         DefaultIssueReporterRepository(
             remoteDataSource = IssueReporterRemoteDataSource(client = HttpClient(MockEngine(handler))),
             deviceInfoProvider = { deviceInfo() },
-            telemetryRepository = FakeTelemetryRepository(),
+            diagnostics = FakeTelemetryRepository(),
         )
 
     private fun report(email: String? = null): Report = Report(

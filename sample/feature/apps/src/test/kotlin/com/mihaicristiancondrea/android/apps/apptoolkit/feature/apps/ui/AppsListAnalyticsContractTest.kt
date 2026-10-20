@@ -23,8 +23,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.HomeEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppsListFilter
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import kotlinx.coroutines.test.runTest

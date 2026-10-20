@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.SeasonalThemeState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.ThemePreferencesState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.WeatherEffect

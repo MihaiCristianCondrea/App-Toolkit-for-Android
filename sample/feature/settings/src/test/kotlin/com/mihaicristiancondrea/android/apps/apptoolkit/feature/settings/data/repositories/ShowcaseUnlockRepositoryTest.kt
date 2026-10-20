@@ -18,52 +18,113 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.data.repositories
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStoreInterface
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import java.io.IOException
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class ShowcaseUnlockRepositoryTest {
 
     private val dataStore = mockk<DataStoreInterface>()
-    private val telemetryRepository = mockk<TelemetryRepository>(relaxed = true)
+    private val diagnostics = FakeTelemetryRepository()
+    private val unlocked = MutableStateFlow(false)
 
-    @Test
-    fun `release build unlocks at seven taps only once`() = runTest {
-        val unlocked = MutableStateFlow(false)
+    private fun repository(isDebugBuild: Boolean = false) = ShowcaseUnlockRepository(
+        dataStore = dataStore,
+        diagnostics = diagnostics,
+        isDebugBuild = isDebugBuild,
+    )
+
+    private fun saving() {
         every { dataStore.componentsShowcaseUnlocked } returns unlocked
-        coEvery { dataStore.saveComponentsShowcaseUnlocked(any()) } coAnswers {
-            unlocked.value = firstArg()
-        }
-        val repository = ShowcaseUnlockRepository(
-            dataStore = dataStore,
-            telemetryRepository = telemetryRepository,
-            isDebugBuild = false,
-        )
-
-        repository.unlockAfterVersionTaps(tapCount = 6)
-        repository.unlockAfterVersionTaps(tapCount = 7)
-        repository.unlockAfterVersionTaps(tapCount = 8)
-
-        coVerify(exactly = 1) { dataStore.saveComponentsShowcaseUnlocked(isUnlocked = true) }
-        coVerify(exactly = 1) { telemetryRepository.logEvent(match { it.name == "unlock_achievement" }) }
+        coEvery { dataStore.saveComponentsShowcaseUnlocked(any()) } coAnswers { unlocked.value = firstArg() }
     }
 
     @Test
-    fun `debug build does not persist an unlock flag`() = runTest {
-        every { dataStore.componentsShowcaseUnlocked } returns MutableStateFlow(false)
-        val repository = ShowcaseUnlockRepository(
-            dataStore = dataStore,
-            telemetryRepository = telemetryRepository,
-            isDebugBuild = true,
-        )
+    fun `only the tap that saves a new unlock returns true`() = runTest {
+        saving()
+        val repository = repository()
 
-        repository.unlockAfterVersionTaps(tapCount = 7)
+        assertFalse(repository.unlockAfterVersionTaps(tapCount = 6))
+        assertTrue(repository.unlockAfterVersionTaps(tapCount = 7))
+        assertFalse(repository.unlockAfterVersionTaps(tapCount = 8))
+
+        coVerify(exactly = 1) { dataStore.saveComponentsShowcaseUnlocked(isUnlocked = true) }
+        assertEquals(listOf("Components showcase unlocked"), diagnostics.breadcrumbs.map { it.first })
+    }
+
+    @Test
+    fun `the repository reports no analytics`() = runTest {
+        saving()
+
+        repository().unlockAfterVersionTaps(tapCount = 7)
+
+        assertTrue(diagnostics.loggedEvents.isEmpty())
+    }
+
+    @Test
+    fun `an installation that is already unlocked returns false and saves nothing`() = runTest {
+        saving()
+        unlocked.value = true
+
+        assertFalse(repository().unlockAfterVersionTaps(tapCount = 7))
 
         coVerify(exactly = 0) { dataStore.saveComponentsShowcaseUnlocked(any()) }
+        assertTrue(diagnostics.breadcrumbs.isEmpty())
+    }
+
+    @Test
+    fun `a debug build returns false and saves nothing`() = runTest {
+        saving()
+
+        assertFalse(repository(isDebugBuild = true).unlockAfterVersionTaps(tapCount = 7))
+
+        coVerify(exactly = 0) { dataStore.saveComponentsShowcaseUnlocked(any()) }
+    }
+
+    @Test
+    fun `a failed save throws and a later tap tries again`() = runTest {
+        every { dataStore.componentsShowcaseUnlocked } returns unlocked
+        coEvery { dataStore.saveComponentsShowcaseUnlocked(any()) } throws IOException("disk full") andThen Unit
+        val repository = repository()
+
+        assertThrows<IOException> { repository.unlockAfterVersionTaps(tapCount = 7) }
+        assertTrue(diagnostics.breadcrumbs.isEmpty())
+
+        assertTrue(repository.unlockAfterVersionTaps(tapCount = 8))
+    }
+
+    @Test
+    fun `cancellation during the save propagates and releases the lock`() = runTest {
+        every { dataStore.componentsShowcaseUnlocked } returns unlocked
+        val saveStarted = CompletableDeferred<Unit>()
+        coEvery { dataStore.saveComponentsShowcaseUnlocked(any()) } coAnswers {
+            saveStarted.complete(Unit)
+            CompletableDeferred<Unit>().await()
+        }
+        val repository = repository()
+
+        val tap = async { repository.unlockAfterVersionTaps(tapCount = 7) }
+        runCurrent()
+        saveStarted.await()
+        tap.cancel()
+
+        assertThrows<CancellationException> { tap.await() }
+        assertTrue(diagnostics.breadcrumbs.isEmpty())
+        coEvery { dataStore.saveComponentsShowcaseUnlocked(any()) } coAnswers { unlocked.value = firstArg() }
+        assertTrue(repository.unlockAfterVersionTaps(tapCount = 8))
     }
 }

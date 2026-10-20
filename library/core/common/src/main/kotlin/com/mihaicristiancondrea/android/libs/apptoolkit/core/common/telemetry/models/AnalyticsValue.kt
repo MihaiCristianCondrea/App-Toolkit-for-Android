@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models
 
 sealed interface AnalyticsValue {
     data class Str(val value: String) : AnalyticsValue

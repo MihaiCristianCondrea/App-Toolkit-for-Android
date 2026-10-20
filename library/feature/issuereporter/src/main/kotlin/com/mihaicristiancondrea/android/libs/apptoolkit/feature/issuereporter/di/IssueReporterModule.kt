@@ -65,7 +65,7 @@ fun issueReporterModule(
         DefaultIssueReporterRepository(
             remoteDataSource = get(),
             deviceInfoProvider = get(),
-            telemetryRepository = get(),
+            diagnostics = get(),
         )
     }
     single<IssueReportHistoryRepository> {

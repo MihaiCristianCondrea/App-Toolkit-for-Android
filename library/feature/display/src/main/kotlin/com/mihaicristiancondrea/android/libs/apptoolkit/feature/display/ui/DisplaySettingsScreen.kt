@@ -42,8 +42,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
@@ -107,7 +107,7 @@ private object DisplayActionNames {
 fun DisplaySettingsScreen() {
     val provider: DisplaySettingsProvider = koinInject()
     val navigator = LocalShellNavigator.current
-    val telemetryRepository = LocalTelemetry.current
+    val telemetry = LocalTelemetry.current
     val viewModel: DisplaySettingsViewModel = koinViewModel()
     val state: DisplaySettingsUiState by viewModel.state.collectAsStateWithLifecycle()
     val settings: DisplaySettings? = (state.settings as? Loadable.Ready)?.value
@@ -137,7 +137,7 @@ fun DisplaySettingsScreen() {
             val targetMode =
                 if (isChecked) DataStoreNamesConstants.THEME_MODE_DARK
                 else DataStoreNamesConstants.THEME_MODE_LIGHT
-            telemetryRepository.logEvent(
+            telemetry.logEvent(
                 AnalyticsEvent(
                     name = SettingsAnalytics.Events.THEME_SWITCH,
                     params = mapOf(
@@ -149,7 +149,7 @@ fun DisplaySettingsScreen() {
             viewModel.onEvent(DisplaySettingsEvent.ThemeModeChanged(targetMode))
         },
         onOpenThemeSettings = {
-            telemetryRepository.logEvent(
+            telemetry.logEvent(
                 displayActionEvent(
                     actionName = DisplayActionNames.OPEN_THEME_SETTINGS,
                     preferenceKey = DisplayPreferenceKeys.THEME_SETTINGS,
@@ -161,7 +161,7 @@ fun DisplaySettingsScreen() {
         onOpenStartupPage = { showStartupDialog = true },
         onOpenLanguage = {
             val destination: String = context.openLanguageSettings()
-            telemetryRepository.logEvent(
+            telemetry.logEvent(
                 displayActionEvent(
                     actionName = DisplayActionNames.OPEN_LANGUAGE_SETTINGS,
                     preferenceKey = DisplayPreferenceKeys.LANGUAGE,
@@ -181,7 +181,7 @@ fun DisplaySettingsScreen() {
             onDismiss = { showStartupDialog = false },
         ) { selectedDestination: String ->
             viewModel.onEvent(DisplaySettingsEvent.StartupRouteChanged(selectedDestination))
-            telemetryRepository.logEvent(
+            telemetry.logEvent(
                 displayActionEvent(
                     actionName = DisplayActionNames.CHANGE_STARTUP_DESTINATION,
                     preferenceKey = DisplayPreferenceKeys.STARTUP_PAGE,
@@ -198,7 +198,7 @@ fun DisplaySettingsScreen() {
             onLanguageSelected = { newLanguageCode: String ->
                 viewModel.onEvent(DisplaySettingsEvent.LanguageChanged(newLanguageCode))
                 showLanguageDialog = false
-                telemetryRepository.logEvent(
+                telemetry.logEvent(
                     displayActionEvent(
                         actionName = DisplayActionNames.CHANGE_LANGUAGE,
                         preferenceKey = DisplayPreferenceKeys.LANGUAGE,

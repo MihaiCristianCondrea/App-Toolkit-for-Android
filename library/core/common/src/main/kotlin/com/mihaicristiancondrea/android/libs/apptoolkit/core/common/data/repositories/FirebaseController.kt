@@ -17,13 +17,12 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories
 
-
-/** The previous name of [TelemetryRepository], kept so existing imports still compile. */
+/** An older name of `TelemetryRepository`, kept so existing imports still compile. */
 @Deprecated(
-    message = "Renamed to TelemetryRepository, in core.common.data.repositories.",
+    message = "Renamed to TelemetryRepository, in core.common.telemetry.",
     replaceWith = ReplaceWith(
         expression = "TelemetryRepository",
-        "com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository",
+        "com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository",
     ),
 )
-typealias FirebaseController = TelemetryRepository
+typealias FirebaseController = com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository

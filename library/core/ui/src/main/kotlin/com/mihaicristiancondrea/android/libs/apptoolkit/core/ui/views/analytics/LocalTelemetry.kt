@@ -21,8 +21,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.NoOpTelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.NoOpTelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import org.koin.core.context.GlobalContext
 
 /**
@@ -34,6 +34,13 @@ import org.koin.core.context.GlobalContext
  * nothing provides it, as in a preview, it is [NoOpTelemetryRepository] and everything is dropped, so a
  * composition the host starts outside `ShellHost`, such as its own dialog window, calls
  * [ProvideTelemetry] to be reported.
+ *
+ * Read it once at the top of a composable, the way Compose code reads `LocalContext`:
+ *
+ * ```
+ * val telemetry = LocalTelemetry.current
+ * telemetry.logEvent(...)
+ * ```
  *
  * Static because it is set once at the root and never changes, so reading it costs nothing.
  */

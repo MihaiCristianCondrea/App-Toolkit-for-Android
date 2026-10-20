@@ -737,6 +737,16 @@ Its library rules include:
   feature
 * packages in the library must not be split across modules
 
+Its rules for both the sample and the library include:
+
+* the package vocabulary and file placement of the `layered-tree-review` skill: no `presentation`,
+  `datasource` or singular layer packages, DTOs, use cases, UI states, ViewModels and repositories
+  in their packages, no `domain` package without a use case, and no mapper named after a layer
+* no product analytics in `data` or `domain` code: those layers take `DiagnosticsReporter` for
+  breadcrumbs and failures, and `TelemetryCollection` where they apply consent, never
+  `TelemetryRepository`, `AnalyticsReporter`, analytics events or the analytics SDK.
+  `:library:integration:firebase`, the telemetry transport, is the one exception
+
 These rules are build-enforced inside App Toolkit.
 
 Consumer applications should follow the equivalent architectural rules, but do not claim they are

@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage

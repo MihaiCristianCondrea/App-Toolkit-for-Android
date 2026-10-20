@@ -2,6 +2,15 @@
 
 ---
 
+# Unreleased
+
+### Fixed
+
+- Unlocking the components showcase reports the achievement only once the unlock is saved, and
+  never again on later taps.
+
+---
+
 # October 17, 2026
 
 **Version:** `26.10.32` (`137261032`)

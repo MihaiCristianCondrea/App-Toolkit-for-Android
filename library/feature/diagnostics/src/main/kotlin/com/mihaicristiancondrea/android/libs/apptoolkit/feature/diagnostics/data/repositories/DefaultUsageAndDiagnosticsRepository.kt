@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.dat
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.models.UsageAndDiagnosticsSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.toStorageException
@@ -43,7 +43,7 @@ import kotlinx.coroutines.flow.onStart
 class DefaultUsageAndDiagnosticsRepository(
     private val dataSource: UsageAndDiagnosticsPreferencesDataSource,
     private val configProvider: BuildInfoProvider,
-    private val telemetryRepository: TelemetryRepository,
+    private val diagnostics: DiagnosticsReporter,
     private val consentRepository: ConsentRepository,
 ) : UsageAndDiagnosticsRepository {
 
@@ -64,7 +64,7 @@ class DefaultUsageAndDiagnosticsRepository(
             )
         }
             .onStart {
-                telemetryRepository.logBreadcrumb(
+                diagnostics.logBreadcrumb(
                     message = "Usage diagnostics observe",
                     attributes = mapOf("defaultEnabled" to (!configProvider.isDebugBuild).toString()),
                 )
@@ -124,7 +124,7 @@ class DefaultUsageAndDiagnosticsRepository(
         attributes: Map<String, String>,
         write: suspend () -> Unit,
     ) {
-        telemetryRepository.logBreadcrumb(message = message, attributes = attributes)
+        diagnostics.logBreadcrumb(message = message, attributes = attributes)
         storageCall { write() }
         val stored: UsageAndDiagnosticsSettings = observeSettings().first()
         consentRepository.applyConsentSettings(

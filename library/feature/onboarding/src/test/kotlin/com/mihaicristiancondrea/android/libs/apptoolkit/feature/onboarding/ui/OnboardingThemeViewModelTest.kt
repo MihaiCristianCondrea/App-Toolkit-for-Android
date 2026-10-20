@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.HolidaySeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.SeasonalThemeState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.ThemePreferencesState

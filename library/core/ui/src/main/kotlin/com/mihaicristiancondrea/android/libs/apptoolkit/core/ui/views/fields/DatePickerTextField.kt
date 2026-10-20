@@ -65,7 +65,7 @@ fun DatePickerTextField(
     textFieldEnabled: Boolean = false,
     ga4Event: Ga4EventData? = null,
 ) {
-    val telemetryRepository = LocalTelemetry.current
+    val telemetry = LocalTelemetry.current
     val configuration = LocalConfiguration.current
     val locale = remember(configuration) { configuration.locales[0] }
     val formatter = remember(locale) { SimpleDateFormat("dd.MM.yyyy", locale) }
@@ -106,7 +106,7 @@ fun DatePickerTextField(
             ) {
                 view.playSoundEffect(SoundEffectConstants.CLICK)
                 hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
-                telemetryRepository.logGa4Event(ga4Event)
+                telemetry.logGa4Event(ga4Event)
                 showDialog = true
             }
     ) {

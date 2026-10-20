@@ -198,6 +198,18 @@ callers receive a `NetworkException` or `StorageException` with a `reason` inste
 own exception. A feature's own exceptions live in its `data/exceptions/`. The text each failure
 shows is the UI layer's: see the `android-ui-layer` skill, `references/errors.md`.
 
+## Telemetry
+
+The data and domain layers report no product analytics: no GA4 events, screen views or user
+properties. A repository returns the outcome, such as whether an unlock was saved, and the screen
+or ViewModel that asked reports the event, so an event never fires for work that failed.
+
+Diagnostics stay: a repository may log breadcrumbs and report non-fatal failures, because a
+failure that never reaches a screen still has to be seen. In App Toolkit, take
+`DiagnosticsReporter` for that, and `TelemetryCollection` only where the repository applies the
+person's consent to the SDKs; never `TelemetryRepository` or `AnalyticsReporter`. App Toolkit's
+`checkModuleBoundaries` enforces this, with the telemetry transport as the one exception.
+
 ## Source of truth
 
 Determine a single source of truth for each important type of application

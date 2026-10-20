@@ -18,8 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics
 
 import androidx.compose.runtime.Immutable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 
 /**
  * UI-friendly GA4 event payload that can be reused by reusable App Toolkit components.

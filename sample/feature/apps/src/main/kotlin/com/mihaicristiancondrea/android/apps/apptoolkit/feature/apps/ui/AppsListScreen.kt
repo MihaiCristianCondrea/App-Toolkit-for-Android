@@ -92,7 +92,7 @@ private const val APP_DETAILS_INTERACTION_SOURCE: String = "app_details"
 fun AppsListScreen() {
     val viewModel: AppsListViewModel = koinViewModel()
     val state: AppListUiState by viewModel.state.collectAsStateWithLifecycle()
-    val telemetryRepository = LocalTelemetry.current
+    val telemetry = LocalTelemetry.current
     val context = LocalContext.current
     val adsEnabled: Boolean = rememberAdsEnabled()
     val listAdsConfig: AdsConfig = koinInject(qualifier = named(AppAdsQualifiers.APPS_LIST_NATIVE_AD))
@@ -101,11 +101,11 @@ fun AppsListScreen() {
     val shareApp: (AppInfo) -> Unit = buildOnShareClick()
     val appActionLauncher = remember(context) { AndroidAppActionLauncher(context) }
     val selectedApp: AppInfo? = state.selectedApp
-    val detailsActionLauncher: AppActionLauncher = remember(appActionLauncher, telemetryRepository, selectedApp) {
+    val detailsActionLauncher: AppActionLauncher = remember(appActionLauncher, telemetry, selectedApp) {
         selectedApp?.let { app ->
             AnalyticsAppActionLauncher(
                 delegate = appActionLauncher,
-                telemetryRepository = telemetryRepository,
+                telemetryRepository = telemetry,
                 appInfo = app,
                 source = APP_DETAILS_INTERACTION_SOURCE,
             )
@@ -131,11 +131,11 @@ fun AppsListScreen() {
         }
     }
 
-    val onFavoriteToggle: (String) -> Unit = remember(viewModel, telemetryRepository) {
+    val onFavoriteToggle: (String) -> Unit = remember(viewModel, telemetry) {
         { packageName ->
             val current = currentState
             current.loadedApps.firstOrNull { it.packageName == packageName }?.let { app ->
-                telemetryRepository.logAppInteraction(
+                telemetry.logAppInteraction(
                     source = APPS_LIST_INTERACTION_SOURCE,
                     appInfo = app,
                     interaction = if (packageName in current.favorites) {
@@ -154,7 +154,7 @@ fun AppsListScreen() {
         onEvent = viewModel::onEvent,
         onFavoriteToggle = onFavoriteToggle,
         onShareClick = { app ->
-            telemetryRepository.logShare(
+            telemetry.logShare(
                 method = "system_share",
                 contentType = "app",
                 itemId = app.packageName,
@@ -162,7 +162,7 @@ fun AppsListScreen() {
             shareApp(app)
         },
         onDetailsClosed = { app ->
-            telemetryRepository.logAppInteraction(
+            telemetry.logAppInteraction(
                 source = APPS_LIST_INTERACTION_SOURCE,
                 appInfo = app,
                 interaction = AppInteractionType.CloseDetailsBottomSheet,

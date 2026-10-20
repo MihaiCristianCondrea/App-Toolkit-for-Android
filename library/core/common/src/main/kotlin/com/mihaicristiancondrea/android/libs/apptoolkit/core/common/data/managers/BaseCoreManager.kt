@@ -30,7 +30,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.d
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.CommonDataStoreCore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BillingCore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.crash.ConsentSdkCrashGuard
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -54,7 +54,7 @@ open class BaseCoreManager : MultiDexApplication(), Application.ActivityLifecycl
     LifecycleObserver {
 
     protected val billingRepository: BillingCore by inject()
-    private val telemetryRepository: TelemetryRepository by inject()
+    private val diagnostics: DiagnosticsReporter by inject()
     protected val dataStore: CommonDataStoreCore by inject()
     protected open val dispatchers: DispatcherProvider = StandardDispatchers()
 
@@ -113,7 +113,7 @@ open class BaseCoreManager : MultiDexApplication(), Application.ActivityLifecycl
     private fun installConsentSdkCrashGuard() {
         if (!installsConsentSdkCrashGuard) return
         ConsentSdkCrashGuard.install { throwable, attributes ->
-            telemetryRepository.recordNonFatal(throwable = throwable, attributes = attributes)
+            diagnostics.recordNonFatal(throwable = throwable, attributes = attributes)
         }
     }
 
@@ -130,7 +130,7 @@ open class BaseCoreManager : MultiDexApplication(), Application.ActivityLifecycl
         } catch (cancellation: CancellationException) {
             throw cancellation
         } catch (throwable: Throwable) {
-            telemetryRepository.recordNonFatal(
+            diagnostics.recordNonFatal(
                 throwable = throwable,
                 attributes = mapOf("phase" to "onInitializeApp"),
             )

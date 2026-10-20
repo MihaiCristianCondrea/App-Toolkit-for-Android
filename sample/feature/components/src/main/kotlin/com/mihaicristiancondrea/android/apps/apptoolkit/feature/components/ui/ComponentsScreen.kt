@@ -46,7 +46,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.vi
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.LayoutShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.PreferenceShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.TextFieldShowcase
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView

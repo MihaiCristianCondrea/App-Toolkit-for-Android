@@ -44,7 +44,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
@@ -96,7 +96,7 @@ fun SettingsScreen() {
     val viewModel: SettingsViewModel = koinViewModel()
     val state: SettingsUiState by viewModel.state.collectAsStateWithLifecycle()
     val navigator = LocalShellNavigator.current
-    val telemetryRepository = LocalTelemetry.current
+    val telemetry = LocalTelemetry.current
 
     TrackScreenView(
         screenName = SETTINGS_SCREEN_NAME,
@@ -131,7 +131,7 @@ fun SettingsScreen() {
             }
         },
         onRetry = {
-            telemetryRepository.logGa4Event(
+            telemetry.logGa4Event(
                 ga4Event = settingsActionGa4Event(actionName = SettingsActionNames.RETRY_LOAD),
             )
             viewModel.onEvent(event = SettingsEvent.Load)

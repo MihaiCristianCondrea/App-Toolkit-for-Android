@@ -50,7 +50,7 @@ val appsModule: Module = module {
     single<DeveloperAppsRepository> {
         DefaultDeveloperAppsRepository(
             remoteDataSource = get(),
-            telemetryRepository = get(),
+            diagnostics = get(),
             localDataSource = get(),
         )
     }
@@ -79,7 +79,7 @@ val appsModule: Module = module {
     single<FavoritesRepository> {
         DefaultFavoritesRepository(
             dataStore = get(),
-            telemetryRepository = get()
+            diagnostics = get()
         )
     }
 }

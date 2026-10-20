@@ -45,8 +45,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.ThemePreferencesState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
@@ -87,7 +87,7 @@ private const val THEME_SCREEN_CLASS = "ThemeSettingsScreen"
 fun ThemeSettingsScreen() {
     val viewModel: ThemeSettingsViewModel = koinViewModel()
     val state: ThemeSettingsUiState by viewModel.state.collectAsStateWithLifecycle()
-    val telemetryRepository = LocalTelemetry.current
+    val telemetry = LocalTelemetry.current
     val context: Context = LocalContext.current
 
     TrackScreenView(
@@ -104,27 +104,27 @@ fun ThemeSettingsScreen() {
         state = state,
         onEvent = viewModel::onEvent,
         onPaletteTabSelected = { page ->
-            telemetryRepository.logEvent(paletteTabSelectEvent(page = page))
+            telemetry.logEvent(paletteTabSelectEvent(page = page))
         },
         onDynamicPaletteSelected = { variant ->
-            telemetryRepository.logEvent(dynamicPaletteSelectEvent(variant = variant))
+            telemetry.logEvent(dynamicPaletteSelectEvent(variant = variant))
             viewModel.onEvent(ThemeSettingsEvent.SelectDynamicPalette(variant))
         },
         onStaticPaletteSelected = { id, seasonal ->
-            telemetryRepository.logEvent(staticPaletteSelectEvent(id = id, seasonal = seasonal))
+            telemetry.logEvent(staticPaletteSelectEvent(id = id, seasonal = seasonal))
             viewModel.onEvent(ThemeSettingsEvent.SelectStaticPalette(id))
         },
         onThemeModeSelected = { mode ->
-            telemetryRepository.logEvent(themeModeSelectEvent(mode = mode))
+            telemetry.logEvent(themeModeSelectEvent(mode = mode))
             viewModel.onEvent(ThemeSettingsEvent.SelectThemeMode(mode))
         },
         onAmoledModeChanged = { enabled ->
-            telemetryRepository.logEvent(amoledToggleEvent(enabled = enabled))
+            telemetry.logEvent(amoledToggleEvent(enabled = enabled))
             viewModel.onEvent(ThemeSettingsEvent.SetAmoledMode(enabled))
         },
         onOpenDisplaySettings = {
             val opened: Boolean = context.openDisplaySettings()
-            telemetryRepository.logEvent(openDisplaySettingsEvent(opened = opened))
+            telemetry.logEvent(openDisplaySettingsEvent(opened = opened))
             if (!opened) {
                 Log.w(THEME_SETTINGS_LOG_TAG, "Failed to open display settings from theme page")
             }

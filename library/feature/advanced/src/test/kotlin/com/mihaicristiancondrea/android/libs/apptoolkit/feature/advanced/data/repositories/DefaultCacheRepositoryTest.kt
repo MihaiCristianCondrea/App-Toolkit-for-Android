@@ -52,7 +52,7 @@ class DefaultCacheRepositoryTest {
         val dir3 = tempDirectory().also { File(it, "c.txt").writeText("x") }
         val repository = DefaultCacheRepository(
             context = context(cacheDir = dir1, codeCacheDir = dir2, externalCacheDir = dir3),
-            telemetryRepository = FakeTelemetryRepository(),
+            diagnostics = FakeTelemetryRepository(),
         )
 
         repository.clearCache()
@@ -68,7 +68,7 @@ class DefaultCacheRepositoryTest {
         val dir2 = tempDirectory()
         val repository = DefaultCacheRepository(
             context = context(cacheDir = dir1, codeCacheDir = dir2, externalCacheDir = null),
-            telemetryRepository = FakeTelemetryRepository(),
+            diagnostics = FakeTelemetryRepository(),
         )
 
         repository.clearCache()
@@ -85,7 +85,7 @@ class DefaultCacheRepositoryTest {
                 codeCacheDir = tempDirectory().also { it.deleteRecursively() },
                 externalCacheDir = tempDirectory().also { it.deleteRecursively() },
             ),
-            telemetryRepository = FakeTelemetryRepository(),
+            diagnostics = FakeTelemetryRepository(),
         )
 
         repository.clearCache()
@@ -98,7 +98,7 @@ class DefaultCacheRepositoryTest {
         val dir3 = tempDirectory()
         val repository = DefaultCacheRepository(
             context = context(cacheDir = dir1, codeCacheDir = failing, externalCacheDir = dir3),
-            telemetryRepository = FakeTelemetryRepository(),
+            diagnostics = FakeTelemetryRepository(),
             deleteRecursively = { file -> if (file == failing) false else file.deleteRecursively() },
         )
 
@@ -116,7 +116,7 @@ class DefaultCacheRepositoryTest {
         every { context.cacheDir } throws SecurityException("denied")
         val repository = DefaultCacheRepository(
             context = context,
-            telemetryRepository = FakeTelemetryRepository(),
+            diagnostics = FakeTelemetryRepository(),
         )
 
         val error = assertFailsWith<StorageException> { repository.clearCache() }
@@ -129,7 +129,7 @@ class DefaultCacheRepositoryTest {
     fun `a delete that throws a security failure throws an unavailable storage failure`() = runTest {
         val repository = DefaultCacheRepository(
             context = context(cacheDir = tempDirectory(), codeCacheDir = tempDirectory(), externalCacheDir = null),
-            telemetryRepository = FakeTelemetryRepository(),
+            diagnostics = FakeTelemetryRepository(),
             deleteRecursively = { throw SecurityException("denied") },
         )
 
@@ -142,7 +142,7 @@ class DefaultCacheRepositoryTest {
     fun `a delete that throws an IO failure throws a failed storage failure`() = runTest {
         val repository = DefaultCacheRepository(
             context = context(cacheDir = tempDirectory(), codeCacheDir = tempDirectory(), externalCacheDir = null),
-            telemetryRepository = FakeTelemetryRepository(),
+            diagnostics = FakeTelemetryRepository(),
             deleteRecursively = { throw IOException("disk") },
         )
 

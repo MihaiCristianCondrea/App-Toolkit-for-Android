@@ -34,7 +34,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockRequestHandleScope
@@ -328,7 +328,7 @@ class DefaultDeveloperAppsRepositoryTest {
                 client = client,
                 baseUrl = "https://example.com",
             ),
-            telemetryRepository = telemetryRepository,
+            diagnostics = telemetryRepository,
             localDataSource = local,
         )
 

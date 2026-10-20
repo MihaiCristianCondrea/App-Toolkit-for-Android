@@ -22,7 +22,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.sear
 import org.koin.core.qualifier.named
 import kotlinx.coroutines.flow.map
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.data.repositories.CacheRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.data.repositories.DefaultCacheRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.AdvancedSettingsViewModel
@@ -39,7 +39,7 @@ val advancedSettingsModule: Module = module {
     single<CacheRepository> {
         DefaultCacheRepository(
             context = get(),
-            telemetryRepository = get<TelemetryRepository>(),
+            diagnostics = get<TelemetryRepository>(),
             dispatchers = get(),
         )
     }

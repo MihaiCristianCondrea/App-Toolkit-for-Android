@@ -12,7 +12,8 @@ and the hidden version-tap gesture that content hosts.
 - `AboutSettingsContent`, the sample's About page content, which `:sample:app` registers with
   `aboutPages { AboutSettingsContent() }`.
 - `ShowcaseUnlockRepository`: the version-tap threshold and the write that persists the unlock,
-  bound by `settingsModule`.
+  bound by `settingsModule`. `unlockAfterVersionTaps` returns true only from the call that saved
+  a new unlock.
 
 ## Does not own
 
@@ -59,6 +60,9 @@ flowchart TD
 - The About gesture lives with the settings that host it. It reaches the Components showcase
   through the shared flag in `:sample:core:datastore` rather than through the feature, so neither
   feature depends on its sibling and no registration contract is needed.
+- The repository reports no analytics. `AboutSettingsContent` logs `unlock_achievement` through
+  `LocalTelemetry` only after the repository returns true, so a failed save, a repeat tap or an
+  already unlocked install never reports one; a failed save is a non-fatal report instead.
 - The About content reaches the graph as an argument of `aboutPages`, not through a Koin binding,
   so there is no single binding a second module could silently override.
 

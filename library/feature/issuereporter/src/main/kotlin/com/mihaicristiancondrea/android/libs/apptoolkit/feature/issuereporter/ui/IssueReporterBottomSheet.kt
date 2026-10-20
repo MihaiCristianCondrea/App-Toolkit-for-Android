@@ -56,7 +56,7 @@ import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
@@ -108,7 +108,7 @@ fun IssueReporterBottomSheet(
     val viewModel: IssueReporterViewModel = koinViewModel()
     val state: IssueReporterUiState by viewModel.state.collectAsStateWithLifecycle()
     val messages: ImmutableList<UiMessage> by viewModel.messages.collectAsStateWithLifecycle()
-    val telemetryRepository = LocalTelemetry.current
+    val telemetry = LocalTelemetry.current
 
     val sheetState = rememberBottomSheetState(
         initialValue = SheetValue.Hidden,
@@ -145,7 +145,7 @@ fun IssueReporterBottomSheet(
             onSend = { viewModel.onEvent(IssueReporterEvent.Send) },
             onDeviceInfoExpandedChange = { expanded ->
                 if (expanded) viewModel.onEvent(IssueReporterEvent.RequestDeviceInfo)
-                telemetryRepository.logEvent(
+                telemetry.logEvent(
                     issueReporterActionEvent(
                         actionName = IssueReporterActionNames.TOGGLE_DEVICE_INFO,
                         params = mapOf("expanded" to AnalyticsValue.Bool(expanded)),
@@ -153,7 +153,7 @@ fun IssueReporterBottomSheet(
                 )
             },
             onMarkdownFormat = { action ->
-                telemetryRepository.logEvent(
+                telemetry.logEvent(
                     issueReporterActionEvent(
                         actionName = IssueReporterActionNames.FORMAT_DESCRIPTION,
                         params = mapOf("format" to AnalyticsValue.Str(action.analyticsName)),

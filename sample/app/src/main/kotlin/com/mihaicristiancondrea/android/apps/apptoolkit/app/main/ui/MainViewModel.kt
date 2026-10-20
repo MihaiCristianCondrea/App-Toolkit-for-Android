@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.MainEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.states.MainUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.AppScreenTracking
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.apps.apptoolkit.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel

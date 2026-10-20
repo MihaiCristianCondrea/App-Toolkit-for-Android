@@ -25,7 +25,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.cons
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.ToolUsageTracker
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.FlashDimmerToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.FlashDimmerToolUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 
 /**

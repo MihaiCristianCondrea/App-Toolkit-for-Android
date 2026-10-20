@@ -208,7 +208,7 @@ private fun ToolkitTilesCatalog(
     searchQuery: String,
 ) {
     val showAds = rememberAdsEnabled()
-    val telemetryRepository = LocalTelemetry.current
+    val telemetry = LocalTelemetry.current
     var selectedTile by remember { mutableStateOf<ToolkitTile?>(null) }
     var quickToolDialog by remember { mutableStateOf<ToolkitQuickTool?>(null) }
     val resources = LocalContext.current.resources
@@ -312,7 +312,7 @@ private fun ToolkitTilesCatalog(
                                 selectedFilter = state.selectedFilter,
                                 onToggle = { onEvent(ToolkitTilesEvent.CategoryToggled(category.id)) },
                                 onPreviewTile = { tile ->
-                                    telemetryRepository.logViewItem(
+                                    telemetry.logViewItem(
                                         itemId = tile.id,
                                         itemName = tile.id,
                                         itemCategory = category.id,

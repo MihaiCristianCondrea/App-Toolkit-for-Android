@@ -170,10 +170,12 @@ available; data-layer callers should use the lower-level API.
   `observeReport` (an expensive stream, collected only while the screen collects `state`, as
   `WhileSubscribed(5_000)` does) or `catchReport` (a flow that keeps going), which report failures
   and pass cancellation through. ViewModels take repositories, use cases and
-  `TelemetryRepository`, never a `Context`.
+  `TelemetryRepository`, never a `Context`. Product analytics are reported here, in the UI layer;
+  repositories report only diagnostics.
 - Composables report through `LocalTelemetry` (`core.ui.views.analytics`), never a `TelemetryRepository`
   parameter. `TrackScreenView`, `TrackScreenState` and every component with a `ga4Event` read it
-  themselves; a screen that logs its own events reads it once with `LocalTelemetry.current`.
+  themselves; a screen that logs its own events reads it once as
+  `val telemetry = LocalTelemetry.current`.
   `ShellHost` provides it. A composition started outside `ShellHost`, such as a sheet in its own
   window, wraps itself in `ProvideTelemetry { }`. Where nothing provides it, as in a preview, it is
   `NoOpTelemetryRepository` and events are dropped.

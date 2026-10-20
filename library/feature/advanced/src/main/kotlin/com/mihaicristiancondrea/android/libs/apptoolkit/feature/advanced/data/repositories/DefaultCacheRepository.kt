@@ -21,7 +21,7 @@ import android.content.Context
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -35,13 +35,13 @@ import java.io.File
  */
 class DefaultCacheRepository(
     private val context: Context,
-    private val telemetryRepository: TelemetryRepository,
+    private val diagnostics: DiagnosticsReporter,
     private val deleteRecursively: (File) -> Boolean = File::deleteRecursively,
     private val dispatchers: DispatcherProvider = StandardDispatchers(),
 ) : CacheRepository {
 
     override suspend fun clearCache() {
-        telemetryRepository.logBreadcrumb(
+        diagnostics.logBreadcrumb(
             message = "Cache clear requested",
             attributes = mapOf("source" to "DefaultCacheRepository"),
         )
@@ -49,7 +49,7 @@ class DefaultCacheRepository(
             storageCall { deleteCacheDirectories() }
         }
         if (failed.isNotEmpty()) {
-            telemetryRepository.logBreadcrumb(
+            diagnostics.logBreadcrumb(
                 message = "Cache clear incomplete",
                 attributes = mapOf("failedDirectories" to failed.size.toString()),
             )
