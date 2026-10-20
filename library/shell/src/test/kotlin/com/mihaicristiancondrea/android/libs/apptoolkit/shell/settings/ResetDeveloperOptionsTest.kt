@@ -64,4 +64,14 @@ class ResetDeveloperOptionsTest {
 
         assertEquals(ShellSettings(), preferences.settings.first())
     }
+
+    @Test
+    fun `reset returns to the app's defaults, not the Toolkit's`() = runTest {
+        val appDefaults = ShellSettings(backEdgeStyle = BackEdgeStyle.FollowFinger, navigationTint = NavigationTint.OnScroll)
+        val preferences = InMemoryShellPreferences(everythingChanged, defaults = appDefaults)
+
+        preferences.resetDeveloperOptions()
+
+        assertEquals(appDefaults, preferences.settings.first())
+    }
 }

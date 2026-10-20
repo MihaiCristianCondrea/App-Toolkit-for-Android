@@ -4,8 +4,19 @@
 
 # Unreleased
 
+### Added
+
+- `appToolkitDefaults { shell { } navigation { } }` declares an app's own defaults once: its back
+  style, tab transition, scroll and tint behavior, app bar styles per kind of destination, and
+  layout policy. Pass `defaults.navigation` to `toolkitGraph` or `shellGraph` and `defaults.shell` to
+  `ShellHost`. The Toolkit's own pages follow the app's app bar styles; a destination's own `topBar`
+  still wins.
+
 ### Changed
 
+- Developer options remember explicit choices, even one equal to the current default, so an app
+  that changes its defaults in a later release only affects people who never chose. Resetting the
+  developer options returns to the app's defaults instead of the Toolkit's.
 - Packages that held only models moved from `domain.models` to `data.models` in
   `:library:core:common`, billing, consent, update, diagnostics and support. The issue reporter's
   `presentation` and `shake` packages moved under `ui`, and the consent data sources out of

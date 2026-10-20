@@ -98,6 +98,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.BackEdgeS
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellPreferences
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellPreferences
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellSettings
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 /**
@@ -123,13 +124,16 @@ import kotlinx.coroutines.flow.distinctUntilChanged
  * the person has seen it once. Nothing is drawn until it returns; null keeps [start]. Keep the
  * splash screen up until [onReady].
  * @param preferences Where the shell keeps its settings. By default a DataStore of its own; an app
- * with a settings store supplies its own implementation.
+ * with a settings store supplies its own implementation, which then owns its `defaults`.
+ * @param defaults The app's own shell defaults, usually `appToolkitDefaults { }.shell`: what a
+ * setting nobody chose in the developer options reads as, and what a reset returns to. Only used
+ * for the shell's own store, when [preferences] is null.
  * @param onReady Called once the first frame of the app is composed, the settings and the start
  * decided: the moment to let the splash screen go.
  * @param onDestinationChanged Called with the destination on top whenever it changes, first with
  * the one the app opens on: for analytics and the like.
  * @param layoutPolicy The window widths at which the navigation changes form, and how wide content
- * may grow on large windows.
+ * may grow on large windows. The graph's `NavigationDefaults.layoutPolicy` unless given.
  * @param snackbarHostState Where the tabs' scaffold shows its snackbars. Pass one to show messages
  * that belong to the whole app, such as those of the activity's own view model, above the bottom
  * bar with the rest: `MessageHost(viewModel, snackbarHostState = it, drawHost = false)`.
@@ -143,15 +147,16 @@ fun ShellHost(
     start: NavKey? = null,
     resolveStart: (suspend () -> NavKey?)? = null, // FIXME: Parameter 'start' has runtime-determined stability
     preferences: ShellPreferences? = null, // FIXME: Parameter 'preferences' has runtime-determined stability
+    defaults: ShellSettings = ShellSettings(),
     onReady: () -> Unit = {},
     onDestinationChanged: (NavKey) -> Unit = {},
-    layoutPolicy: ShellLayoutPolicy = ShellLayoutPolicy(),
+    layoutPolicy: ShellLayoutPolicy = graph.defaults.layoutPolicy,
     snackbarHostState: SnackbarHostState? = null,
 ) {
     val context = LocalContext.current
     val shellSnackbars = snackbarHostState ?: remember { SnackbarHostState() }
     val shellSnackbarHost = remember(shellSnackbars) { ShellSnackbarHost(shellSnackbars) }
-    val store = preferences ?: remember(context) { ShellPreferences(context) }
+    val store = preferences ?: remember(context, defaults) { ShellPreferences(context, defaults) }
     // A cold start waits a frame for the stored settings rather than drawing a layout it would
     // replace a frame later.
     val settings by store.settings.collectAsStateWithLifecycle(initialValue = store.lastKnown)

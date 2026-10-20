@@ -35,6 +35,9 @@ drawer and transition the graph describes. It is the chrome around the navigatio
   `LocalShellChrome` let a page's own frame open the navigation.
 - The shell's developer overrides, in `settings`: `ShellSettings`, `ShellPreferences`, its DataStore
   and `InMemoryShellPreferences` for tests.
+- An app's defaults for the Toolkit, in `settings`: `AppToolkitDefaults` and its
+  `appToolkitDefaults { }` builder, which hold the app's `ShellSettings` and its
+  `NavigationDefaults`.
 - The strings the chrome adds: open, expand and collapse navigation.
 
 ## Does not own
@@ -98,6 +101,31 @@ setContent {
     }
 }
 ```
+
+### App defaults
+
+An app declares how it behaves out of the box once, and gives each half to the place that uses it:
+
+```kotlin
+val defaults = appToolkitDefaults {
+    shell {
+        backEdgeStyle = BackEdgeStyle.FollowFinger
+        navigationTint = NavigationTint.OnScroll
+    }
+    navigation {
+        pageTopBarStyle = TopBarStyle.LargeCollapsed
+        layoutPolicy = ShellLayoutPolicy(permanentDrawerFrom = 1200.dp)
+    }
+}
+
+val graph = toolkitGraph(appTitle = R.string.app_name, defaults = defaults.navigation) { ... }
+ShellHost(graph = graph, defaults = defaults.shell)
+```
+
+Each shell setting resolves as the saved developer option, then the app's default, then the
+Toolkit's. A destination's own `topBar` wins over `NavigationDefaults`; only the developer options'
+top bar override replaces it. With a custom `preferences`, the store's own `defaults` apply and
+`ShellHost`'s are not used.
 
 The activity is declared `launchMode="singleTop"` or `singleTask`, so intents that arrive while it
 runs reach `onNewIntent` and the shell instead of a second activity.
@@ -247,12 +275,15 @@ JUnit 5. They start Koin with a `CommonDataStore`, which `AppTheme` reads.
 - **The shell keeps its own store.** Its settings are developer overrides of the shell, so they
   live in a DataStore of their own rather than in `:library:core:datastore`; that also keeps the
   datastore module free of navigation types. Every value is a developer option, and
-  `resetDeveloperOptions()` puts all of them back, leaving the shell as the app declares it. The
+  `resetDeveloperOptions()` removes all of them, leaving the shell as the app declares it. The
   person's preferences, such as the navigation labels, live in the common store and are not
   touched. `ShellHost(preferences = ...)` takes any `ShellPreferences`, and tests pass an
   `InMemoryShellPreferences`.
-  `BackEdgeStyle.System` is the default for unset values and after a reset. Explicitly stored
-  `FollowFinger` overrides remain available for comparison.
+- **The store keeps choices, not values.** A setting someone chose is saved even when it equals the
+  current default, and a setting nobody chose is not saved at all. A later release that changes the
+  app's defaults therefore reaches the people who never chose, and leaves alone the ones who did.
+  Before 3.0.0-pre25 a choice equal to the Toolkit's default was not saved, so those people follow
+  the app's defaults now.
 - **Capabilities are computed once.** `ShellHost` builds `ShellCapabilities` from the graph and
   `layoutPolicy` and provides them as `LocalShellCapabilities`, for the settings pages and the
   settings search.
@@ -263,10 +294,12 @@ JUnit 5. They start Koin with a `CommonDataStore`, which `AppTheme` reads.
 
 ## Public contracts
 
-- `ShellHost(graph, modifier, start, resolveStart, preferences, onReady, onDestinationChanged,
-  layoutPolicy)`.
+- `ShellHost(graph, modifier, start, resolveStart, preferences, defaults, onReady,
+  onDestinationChanged, layoutPolicy)`. `layoutPolicy` defaults to the graph's
+  `NavigationDefaults.layoutPolicy`.
+- `AppToolkitDefaults`, `appToolkitDefaults { }` and its `shell { }` and `navigation { }` builders.
 - `ShellChromeController` and `LocalShellChrome`.
-- `ShellSettings` and its enums, `ShellPreferences`, `ShellPreferences(context)`,
+- `ShellSettings` and its enums, `ShellPreferences` and its `defaults`, `ShellPreferences(context, defaults)`,
   `InMemoryShellPreferences`, `LocalShellPreferences` and `LocalShellSettings`. The DataStore's key
   names are persisted: renaming one resets that option on update.
 

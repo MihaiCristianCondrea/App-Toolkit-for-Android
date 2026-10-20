@@ -44,6 +44,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.appGraph
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.startKeyFor
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStoreInterface
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.data.repositories.ComponentsShowcaseRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.AppDefaults
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.ToolkitTilesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppTheme
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
@@ -121,6 +122,7 @@ class MainActivity : AppCompatActivity() {
                                     ).first()
                                 }
                             },
+                            defaults = AppDefaults.shell,
                             onReady = { keepSplashVisible = false },
                             snackbarHostState = shellSnackbars,
                         )

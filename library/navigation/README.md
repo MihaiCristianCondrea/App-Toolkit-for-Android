@@ -104,6 +104,13 @@ val graph = shellGraph(appTitle = R.string.app_name) {
 }
 ```
 
+A destination that names no `topBar` takes the app's `NavigationDefaults`: small bars on tabs and
+children and large ones on pages unless the app chose otherwise, through
+`shellGraph(appTitle, defaults = NavigationDefaults(pageTopBarStyle = TopBarStyle.LargeCollapsed))`
+or `toolkitGraph(defaults = ...)`. The Toolkit's own pages name none, so they follow the app. A
+destination's own `topBar` always wins. The graph carries the defaults, and `ShellHost` takes its
+layout policy from them when the host passes none.
+
 An app built on the whole Toolkit calls `toolkitGraph { }` instead, which adds the Toolkit's pages.
 Screens then call `LocalShellNavigator.current.navigate(key)` with any registered key, and
 `close(key)` or `goBack()` to leave it.
@@ -178,8 +185,10 @@ Screens then call `LocalShellNavigator.current.navigate(key)` with any registere
 
 ## Public contracts
 
-- The graph DSL and `ShellGraph`, including `contains`, `destination`, `keyFor`, `startOptions`
-  and `tabIndexOf`.
+- The graph DSL and `ShellGraph`, including `contains`, `destination`, `keyFor`, `startOptions`,
+  `tabIndexOf` and `defaults`.
+- `NavigationDefaults` and `ShellGraphBuilder(appTitle, appIcon, defaults)`. A null `topBar` on
+  `tab`, `child`, `page` and `pageIfAbsent` means the default for that kind of destination.
 - `ShellNavigator` (`navigate`, `close`, `goBack`, `selectTab`, `continueStart`, `enterShell`, the
   page and tab stacks) and `rememberShellNavigator`.
 - `ShellNavDisplay`, `ShellBackHandler`, `ShellHomeRoute`, the scenes and their strategies,

@@ -28,11 +28,18 @@ import kotlinx.coroutines.flow.Flow
  *
  * `ShellHost` takes an implementation from the app, so an app that keeps its settings elsewhere
  * adapts that store instead of keeping two, and tests pass an [InMemoryShellPreferences]. Without
- * one, `ShellHost` uses [ShellPreferences] (`context`), a DataStore of its own.
+ * one, `ShellHost` uses [ShellPreferences] (`context`, `defaults`), a DataStore of its own.
  *
  * An implementation provides [settings] and [update]; every setter below is written on [update].
+ * A setting nobody chose reads as [defaults].
  */
 interface ShellPreferences {
+
+    /**
+     * The app's defaults: what a setting nobody chose reads as, and what [resetDeveloperOptions]
+     * returns to. The Toolkit's own defaults unless the app declared its own.
+     */
+    val defaults: ShellSettings get() = ShellSettings()
 
     /** The current settings, then every change. */
     val settings: Flow<ShellSettings>
@@ -60,15 +67,20 @@ interface ShellPreferences {
     suspend fun setNavigationTint(value: NavigationTint) = update { it.copy(navigationTint = value) }
 
     /**
-     * Puts every developer option back to its default, so the shell is again as the app
-     * declares it. Every [ShellSettings] value is a developer option; the person's own
-     * preferences live elsewhere and are not touched.
+     * Forgets every developer option, so the shell is again as the app declares it in [defaults].
+     * Every [ShellSettings] value is a developer option; the person's own preferences live
+     * elsewhere and are not touched.
      */
-    suspend fun resetDeveloperOptions() = update { ShellSettings() }
+    suspend fun resetDeveloperOptions() = update { defaults }
 }
 
-/** The shell's own store: a DataStore shared by every instance built from the same application. */
-fun ShellPreferences(context: Context): ShellPreferences = DataStoreShellPreferences(context)
+/**
+ * The shell's own store: a DataStore shared by every instance built from the same application.
+ * It saves the settings someone chose and reads the rest as [defaults], so changing [defaults] in a
+ * later release reaches only the people who never chose.
+ */
+fun ShellPreferences(context: Context, defaults: ShellSettings = ShellSettings()): ShellPreferences =
+    DataStoreShellPreferences(context.applicationContext.shellDataStore, defaults)
 
 val LocalShellPreferences = staticCompositionLocalOf<ShellPreferences> {
     error("ShellPreferences is only available inside ShellHost.")

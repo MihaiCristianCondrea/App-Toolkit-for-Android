@@ -34,6 +34,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.navi
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.navigation.supportPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.navigation.themeSettingsPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.navigation.adsSettingsPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.NavigationDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
 
@@ -47,6 +48,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGr
  * `aboutPages { ... }`, takes its arguments. The app still decides where each page is offered: in
  * the drawer, the overflow menu or from a screen.
  *
+ * [defaults] set the app bar of every destination that names none, the Toolkit's pages included,
+ * and the layout policy `ShellHost` uses; see `appToolkitDefaults { }`.
+ *
  * ```
  * val graph = toolkitGraph(appTitle = R.string.app_name) {
  *     tab(HomeRoute, R.string.home, ToolkitIcon.Vector(Icons.Outlined.Home)) { HomeScreen() }
@@ -58,8 +62,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGr
 fun toolkitGraph(
     @StringRes appTitle: Int,
     appIcon: ToolkitIcon? = null,
+    defaults: NavigationDefaults = NavigationDefaults(),
     builder: ShellGraphBuilder.() -> Unit,
-): ShellGraph = ShellGraphBuilder(appTitle, appIcon).apply {
+): ShellGraph = ShellGraphBuilder(appTitle, appIcon, defaults).apply {
     builder()
     toolkitPages()
 }.build()

@@ -71,6 +71,7 @@ fun appGraph(
 ): ShellGraph = toolkitGraph(
     appTitle = R.string.app_name,
     appIcon = ToolkitIcon.Resource(R.drawable.app_logo),
+    defaults = AppDefaults.navigation,
 ) {
     tab(
         key = ToolkitTilesRoute,

@@ -133,7 +133,9 @@ modules they compose.
 
 `toolkitGraph { }` lives in `app.main.ui.navigation`. It runs the app's builder first and then
 `toolkitPages()`, which calls each feature's own registration. Every registration uses
-`pageIfAbsent`, so a key the app registered itself keeps the app's page:
+`pageIfAbsent`, so a key the app registered itself keeps the app's page. None of them names a
+`topBar`, so `toolkitGraph(defaults = ...)` sets the app bar of every Toolkit page along with the
+app's own; see the shell README's [App defaults](../shell/README.md#app-defaults):
 
 | Registration | Module | Keys | Pane role |
 |---|---|---|---|
