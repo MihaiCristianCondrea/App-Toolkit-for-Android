@@ -76,5 +76,41 @@
   "featureGraphic": {
     "title": "Android Insider",
     "tagline": "News, guides and Studio Bot for Android developers"
-  }
+  },
+  "tabletScreenshots": [
+    {
+      "id": "news",
+      "alt": "News on a foldable: a lead story beside three more, with the navigation rail at the side"
+    },
+    {
+      "id": "guides",
+      "alt": "Guides on a foldable in two columns, the featured guide across the top"
+    },
+    {
+      "id": "reader",
+      "alt": "A guide open beside the Guides list on a foldable, with its headline and summary"
+    },
+    {
+      "id": "studio-bot",
+      "alt": "Studio Bot on a foldable: the conversation list beside an answer with Kotlin code"
+    }
+  ],
+  "desktopScreenshots": [
+    {
+      "id": "news",
+      "alt": "News on a desktop window: the lead story beside two more, then three columns of stories"
+    },
+    {
+      "id": "guides",
+      "alt": "Guides on a desktop window in three columns, with the navigation drawer open at the side"
+    },
+    {
+      "id": "reader",
+      "alt": "A guide open beside the Guides list on a desktop window, with its headline and summary"
+    },
+    {
+      "id": "studio-bot",
+      "alt": "Studio Bot on a desktop window: the conversation list beside an answer with Kotlin code"
+    }
+  ]
 }

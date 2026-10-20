@@ -8,8 +8,8 @@ const context = { id: '20', title: 'Implementing Parallax Scrolling in Jetpack C
 const SCREENS = {
   news: ['home-feed', { section: 'news', filter: 'all', query: '' }],
   guides: ['home-feed', { section: 'guides', filter: 'all', query: '' }],
-  reader: ['article-detail', { articleId: '20' }],
-  'studio-bot': ['studio-bot', {}],
+  reader: ['article-detail', { articleId: '20', section: 'guides' }],
+  'studio-bot': ['studio-bot', { conversationId: 1 }],
   attached: ['studio-bot', { messages: [], articleContext: context, returnArticleState: {}, draft: '' }],
   search: ['home-feed', { section: 'guides', query: 'Compose', filter: 'all' }],
   favorites: ['home-feed', { section: 'guides', filter: 'favorites', query: '' }],
@@ -49,9 +49,9 @@ if (!only || only === 'icon') {
   const icon = document.createElement('article');
   icon.className = 'icon';
   icon.dataset.shot = 'icon';
-  // The app's adaptive icon: white background (colorLauncherBackground) and the launcher foreground vector
-  // (app/src/main/res/drawable-anydpi/ic_launcher_foreground.xml), full bleed; Google Play applies the mask.
-  icon.innerHTML = `<svg viewBox="0 0 432 432" width="512" height="512"><rect width="432" height="432" fill="#FFFFFF"/>
+  // The app's launcher foreground vector (app/src/main/res/drawable-anydpi/ic_launcher_foreground.xml) on a transparent
+  // ground: Google Play keeps the alpha, and the robot over the book stands on its own without the launcher's white.
+  icon.innerHTML = `<svg viewBox="0 0 432 432" width="512" height="512">
     <g transform="translate(123.6 108.3) scale(0.5)">
       <path fill="#00A86B" d="M22.8,253.9c0,-10 5,-13.7 15,-11l127,35c8,2 12,8.3 12,19v123c0,9.3 -4.7,12.7 -14,10l-122,-33c-12,-3.3 -18,-10.7 -18,-22L22.8,253.9z"/>
       <path fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-width="16" d="M54.8,345.9l83,22"/>
@@ -65,6 +65,8 @@ if (!only || only === 'icon') {
 // The phone screenshots are cut from one panorama (8 x 1080 px wide): one ground, and shapes placed across the seams,
 // so the images read as one continuous strip when Play shows them side by side.
 const WIDTH = 1080;
+// Where the framed phone sits in each screenshot (store.css .phone: 469 x 992 at scale 1.48, centred, from y 404).
+const PHONE = { x0: 540 - (469 * 1.48) / 2, x1: 540 + (469 * 1.48) / 2, y0: 404 };
 const SEAMS = [
   // [shape, size, y, colour token, rotation]: shapes centred on the seams between two screenshots, a large one low and a
   // small one high, alternating, so every pair of neighbours shares a shape.
@@ -86,7 +88,8 @@ if (shots.length) {
   let seed = 7;
   const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
   const NAMES = ['diamond', 'cookie_4sided', 'gem', 'triangle', 'semi_circle', 'slanted', 'cookie_6sided', 'fan', 'boom', 'pill', 'sunny', 'arch', 'clam_shell'];
-  const COLORS = ['primary', 'primary-container', 'inverse-primary', 'secondary', 'secondary-container', 'on-primary-container'];
+  // No near-black tone (on-primary-container): small dark shapes read as holes in the ground.
+  const COLORS = ['primary', 'primary-container', 'inverse-primary', 'secondary', 'secondary-container'];
   const captionClear = (x, y, size) => { const lx = x % WIDTH; return !(y + size > 60 && y < 330 && lx + size > 40 && lx < 860); };
   // Shapes never overlap: every placed shape (seam shapes, waves, dot grids, the scatter) is an obstacle, measured as a
   // circle around its centre with a margin.
@@ -103,6 +106,11 @@ if (shots.length) {
     const x = rand() * (strings.screenshots.length * WIDTH) - size / 2;
     const y = rand() * 1920 - size / 2;
     if (!captionClear(x, y, size)) continue;
+    // A scattered shape sits whole inside one screenshot (only seam shapes cross a seam or an edge) and never touches
+    // the phone: a shape half hidden behind the device or cut by the image's edge looks like a mistake.
+    const lx = x - Math.floor((x + size / 2) / WIDTH) * WIDTH;
+    if (lx < 24 || lx + size > WIDTH - 24 || y < 24 || y + size > 1920 - 24) continue;
+    if (lx + size > PHONE.x0 - 32 && lx < PHONE.x1 + 32 && y + size > PHONE.y0 - 32) continue;
     const c = { x: x + size / 2, y: y + size / 2, r: size / 2 };
     if (taken.some((o) => Math.hypot(o.x - c.x, o.y - c.y) < o.r + c.r + 40)) continue;
     taken.push(c);
@@ -124,6 +132,68 @@ if (shots.length) {
   for (const [index, s] of strings.screenshots.entries()) {
     const [id, state] = SCREENS[s.id];
     await mount(pano.querySelectorAll('[data-product]')[index], id, { ...noop, ...state }, { frame: true });
+  }
+}
+
+// Tablet and desktop screenshots: the app's wide layout (kit windows "fold" and "desktop") in its device, the Pixel 9
+// Pro Fold open or the Pixelbook Go, centred and unscaled on 1920 x 1080 canvases captured at 2x (3840 x 2160, 16:9).
+// Each set is cut from one strip like the phone set: one ground, shapes on the seams, and a seeded scatter that sits
+// whole inside one image, clear of the device and of every other shape. No captions: Play wants large-screen
+// screenshots to show the app itself.
+const CANVAS = { w: 1920, h: 1080 };
+const STRIPS = {
+  tablet: { list: strings.tabletScreenshots ?? [], window: 'fold', device: [904.53, 933.27], seed: 11 },
+  desktop: { list: strings.desktopScreenshots ?? [], window: 'desktop', device: [1459.47, 973.2], seed: 23 },
+};
+const SHAPE_NAMES = ['diamond', 'cookie_4sided', 'gem', 'triangle', 'semi_circle', 'slanted', 'cookie_6sided', 'fan', 'pill', 'sunny', 'arch', 'clam_shell'];
+const SHAPE_COLORS = ['primary', 'primary-container', 'inverse-primary', 'secondary', 'secondary-container'];
+for (const [kind, set] of Object.entries(STRIPS)) {
+  if ((only && only !== kind) || !set.list.length) continue;
+  const n = set.list.length;
+  const [dw, dh] = set.device;
+  const dx = (CANVAS.w - dw) / 2;
+  const dy = (CANVAS.h - dh) / 2;
+  let seed = set.seed;
+  const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  // Seam shapes fill the gap between two devices, a large one and a small one, never reaching a device.
+  const gap = CANVAS.w - dw;
+  const seams = Array.from({ length: n - 1 }, (_, i) => {
+    const big = Math.min(640, gap - 80);
+    return [
+      { x: (i + 1) * CANVAS.w, y: i % 2 ? 300 : 760, size: big, name: ['cookie_12sided', 'clover_8leaf', 'soft_burst'][i % 3], color: i % 2 ? 'primary' : 'secondary-container', rot: 10 * (i + 1) },
+      { x: (i + 1) * CANVAS.w + (i % 2 ? 40 : -60), y: i % 2 ? 880 : 170, size: Math.min(220, gap / 2 - 40), name: ['flower', 'puffy', 'burst'][i % 3], color: 'surface', rot: -12 },
+    ];
+  }).flat();
+  const devices = set.list.map((_, i) => ({ x0: i * CANVAS.w + dx - 32, x1: i * CANVAS.w + dx + dw + 32, y0: dy - 32, y1: dy + dh + 32 }));
+  const taken = seams.map((o) => ({ x: o.x, y: o.y, r: o.size / 2 }));
+  const scatter = [];
+  for (let k = 0; scatter.length < n * 6 && k < 6000; k++) {
+    const size = 80 + rand() * 160;
+    const x = rand() * n * CANVAS.w - size / 2;
+    const y = rand() * CANVAS.h - size / 2;
+    const lx = x - Math.floor((x + size / 2) / CANVAS.w) * CANVAS.w;
+    if (lx < 24 || lx + size > CANVAS.w - 24 || y < 24 || y + size > CANVAS.h - 24) continue;
+    const c = { x: x + size / 2, y: y + size / 2, r: size / 2 };
+    if (devices.some((d) => c.x + c.r > d.x0 && c.x - c.r < d.x1 && c.y + c.r > d.y0 && c.y - c.r < d.y1)) continue;
+    if (taken.some((o) => Math.hypot(o.x - c.x, o.y - c.y) < o.r + c.r + 40)) continue;
+    taken.push(c);
+    scatter.push({ x, y, size, name: SHAPE_NAMES[scatter.length % SHAPE_NAMES.length], color: SHAPE_COLORS[(scatter.length * 3) % SHAPE_COLORS.length], rot: rand() * 360 });
+  }
+  const piece = (o, centred = false) => html`<i class="shape ${centred ? 'seam' : ''}" style="--m:url('/assets/shapes/${o.name}.svg');--c:var(--md-sys-color-${o.color});width:${o.size}px;height:${o.size}px;left:${o.x - (centred ? o.size / 2 : 0)}px;top:${o.y - (centred ? o.size / 2 : 0)}px;transform:rotate(${o.rot}deg)"></i>`;
+  const strip = document.createElement('section');
+  strip.className = `strip strip--${kind}`;
+  strip.style.width = `${n * CANVAS.w}px`;
+  render(html`
+    ${scatter.map((o) => piece(o))}
+    ${seams.map((o) => piece(o, true))}
+    ${set.list.map((t, index) => html`
+      <article class="wide-shot" data-shot=${`${kind}-${index + 1}`} data-id=${t.id} style="left:${index * CANVAS.w}px">
+        <div class="wide-device" style="left:${dx}px;top:${dy}px"><div data-product></div></div>
+      </article>`)}`, strip);
+  target.append(strip);
+  for (const [index, t] of set.list.entries()) {
+    const [id, state] = SCREENS[t.id];
+    await mount(strip.querySelectorAll('[data-product]')[index], id, { ...noop, ...state, conversations: SCREENS.conversations[1].conversations }, { frame: true, window: set.window });
   }
 }
 
