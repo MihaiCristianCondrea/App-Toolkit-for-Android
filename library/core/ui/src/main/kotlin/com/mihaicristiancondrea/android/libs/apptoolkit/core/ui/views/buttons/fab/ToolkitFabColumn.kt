@@ -130,8 +130,9 @@ fun ToolkitFloatingActionButton(
         AnimatedToolkitIcon(
             icon = fab.icon,
             clickCount = clickCount,
-            // An extended button's label already names it.
-            contentDescription = if (fab.label != null) null else fab.contentDescription,
+            // Material keeps an extended button's label out of accessibility, so the icon names the
+            // button, expanded or folded; the description defaults to the label.
+            contentDescription = fab.contentDescription,
             modifier = if (iconSize != null) Modifier.size(iconSize) else Modifier,
         )
     }

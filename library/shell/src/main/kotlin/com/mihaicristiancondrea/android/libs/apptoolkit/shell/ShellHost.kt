@@ -20,6 +20,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.shell
 import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivity
+import androidx.compose.foundation.ComposeFoundationFlags
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -154,6 +156,7 @@ fun ShellHost(
     layoutPolicy: ShellLayoutPolicy = graph.defaults.layoutPolicy,
     snackbarHostState: SnackbarHostState? = null,
 ) {
+    remember { disablePausablePrefetch() }
     val context = LocalContext.current
     val shellSnackbars = snackbarHostState ?: remember { SnackbarHostState() }
     val shellSnackbarHost = remember(shellSnackbars) { ShellSnackbarHost(shellSnackbars) }
@@ -365,4 +368,17 @@ private fun pageEntry(graph: ShellGraph, navigator: ShellNavigator, key: NavKey)
             }
         }
     }
+}
+
+/**
+ * Turns off pausing a lazy list item's composition while it is prefetched, for the whole process.
+ *
+ * With it on, foundation 1.12 can measure a recycled lazy item during the lookahead pass of the
+ * shell's shared transitions, crashing with "measure is called on a deactivated node"
+ * (https://issuetracker.google.com/issues/469669851). Prefetch itself keeps running; only its
+ * pausing stops. Remove this once a foundation release fixes the issue.
+ */
+@OptIn(ExperimentalFoundationApi::class)
+private fun disablePausablePrefetch() {
+    ComposeFoundationFlags.isPausableCompositionInPrefetchEnabled = false
 }

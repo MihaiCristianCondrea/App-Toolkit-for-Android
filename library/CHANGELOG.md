@@ -63,6 +63,15 @@
   `presentation` and `shake` packages moved under `ui`, and the consent data sources out of
   `data.remote.datasource`. Only imports change; see the 3.0 migration guide.
 
+### Fixed
+
+- Screen readers name an extended floating action button by its label, expanded or folded.
+  Material keeps the label's text out of accessibility, and the Toolkit left the icon without a
+  description beside a label, so the button announced no name.
+- `ShellHost` turns off pausing lazy items while they are prefetched, for the whole app. With it on,
+  Compose foundation 1.12 could crash with "measure is called on a deactivated node" while a
+  shared transition laid out a list ([issue 469669851](https://issuetracker.google.com/issues/469669851)).
+
 ### Removed
 
 - `TrackScreenView` and `TrackScreenState`; wrap the screen in `ScreenHost` instead.
