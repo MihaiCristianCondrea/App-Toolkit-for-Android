@@ -19,20 +19,25 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
@@ -44,6 +49,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics
  * crossfade in place without replaying the entrance. Click feedback, playback, and analytics
  * follow [GeneralButton].
  *
+ * Its place in the row grows as it appears and narrows as it leaves, so the buttons beside it
+ * glide over instead of jumping once it is gone. The motion follows `MaterialTheme.motionScheme`,
+ * the app's motion tempo.
+ *
+ * @param durationMillis A fixed duration for the entrance and exit, in place of the motion
+ * scheme's springs; null follows the motion tempo.
  * @param autoAnimate Reveals a hidden button when [visible] becomes `true`. Disabling this
  * leaves a hidden button hidden.
  * @param fromRight Selects the physical right edge; `false` selects the left edge.
@@ -57,7 +68,7 @@ fun AnimatedIconButtonDirection(
     icon: ToolkitIcon,
     contentDescription: String? = null,
     onClick: () -> Unit,
-    durationMillis: Int = 500,
+    durationMillis: Int? = null,
     autoAnimate: Boolean = true,
     feedback: ButtonFeedback = ButtonFeedback(),
     fromRight: Boolean = false,
@@ -75,32 +86,33 @@ fun AnimatedIconButtonDirection(
         }
     }
 
+    val motion = MaterialTheme.motionScheme
+    fun <T> spatial(): FiniteAnimationSpec<T> = durationMillis?.let { tween(durationMillis = it) } ?: motion.defaultSpatialSpec()
+    fun <T> effects(): FiniteAnimationSpec<T> = durationMillis?.let { tween(durationMillis = it) } ?: motion.defaultEffectsSpec()
+    val edge: Alignment.Horizontal = if (fromRight) Alignment.End else Alignment.Start
+
     AnimatedVisibility(
         visible = animatedVisibility.value && visible,
-        enter = fadeIn(animationSpec = tween(durationMillis = durationMillis)) +
+        enter = fadeIn(animationSpec = effects()) +
                 slideInHorizontally(
                     initialOffsetX = { if (fromRight) it else -it },
-                    animationSpec = tween(durationMillis = durationMillis)
+                    animationSpec = spatial(),
                 ) +
-                scaleIn(
-                    initialScale = 0.8f,
-                    animationSpec = tween(durationMillis = durationMillis)
-                ),
-        exit = fadeOut(animationSpec = tween(durationMillis = durationMillis)) +
+                scaleIn(initialScale = 0.8f, animationSpec = spatial()) +
+                expandHorizontally(expandFrom = edge, animationSpec = spatial(), clip = false),
+        exit = fadeOut(animationSpec = effects()) +
                 slideOutHorizontally(
                     targetOffsetX = { if (fromRight) it else -it },
-                    animationSpec = tween(durationMillis = durationMillis)
+                    animationSpec = spatial(),
                 ) +
-                scaleOut(
-                    targetScale = 0.8f,
-                    animationSpec = tween(durationMillis = durationMillis)
-                )
+                scaleOut(targetScale = 0.8f, animationSpec = spatial()) +
+                shrinkHorizontally(shrinkTowards = edge, animationSpec = spatial(), clip = false),
     ) {
         AnimatedContent(
             targetState = icon to contentDescription,
             transitionSpec = {
-                (fadeIn(tween(220, delayMillis = 90)) + scaleIn(tween(220, delayMillis = 90), initialScale = 0.92f))
-                    .togetherWith(fadeOut(tween(90)))
+                (fadeIn(motion.fastEffectsSpec()) + scaleIn(motion.fastSpatialSpec(), initialScale = 0.92f))
+                    .togetherWith(fadeOut(motion.fastEffectsSpec()))
             },
             label = "AnimatedIconButtonDirectionIcon",
         ) { (targetIcon, targetDescription) ->

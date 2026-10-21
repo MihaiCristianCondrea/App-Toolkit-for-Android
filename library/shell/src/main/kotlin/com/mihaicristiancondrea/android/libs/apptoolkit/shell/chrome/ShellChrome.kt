@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.expandVertically
@@ -37,6 +38,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -553,7 +555,23 @@ private fun ShellBody(
                         )
                     },
                     actions = {
-                        destination.actions?.invoke(this, topKey)
+                        // One destination's actions cross-fade into the next and the row's width
+                        // follows, so the buttons that stay glide into place instead of jumping.
+                        val motion = MaterialTheme.motionScheme
+                        AnimatedContent(
+                            targetState = topKey,
+                            contentKey = { graph.destination(it) },
+                            transitionSpec = {
+                                (fadeIn(motion.defaultEffectsSpec()) + scaleIn(motion.defaultSpatialSpec(), initialScale = 0.8f))
+                                    .togetherWith(fadeOut(motion.defaultEffectsSpec()) + scaleOut(motion.defaultSpatialSpec(), targetScale = 0.8f))
+                                    .using(SizeTransform(clip = false))
+                            },
+                            label = "ShellActions",
+                        ) { key ->
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                graph.destination(key).actions?.invoke(this, key)
+                            }
+                        }
                         OverflowMenu(graph.overflow, callbacks, visible = !isChild)
                     },
                     scrollBehavior = topScroll.takeIf { reactsToScroll },
