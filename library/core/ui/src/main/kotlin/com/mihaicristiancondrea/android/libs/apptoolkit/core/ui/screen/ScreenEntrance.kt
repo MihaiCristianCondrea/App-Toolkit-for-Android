@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen
 
+import android.view.View
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,10 +43,11 @@ val LocalEntranceReplay = staticCompositionLocalOf { EntranceReplay.EveryVisit }
 
 /**
  * One screen's entrance, provided by [ScreenHost]: its own cascade, so two screens never share a
- * wave, the [id] its elements save once they have played, and whether the screen has [settled].
+ * wave, the [id] its elements save once they have played, whether the screen has [settled], and
+ * the [view] its window draws in, so a dialog or a sheet over it can tell it is elsewhere.
  */
 @Stable
-internal class ScreenEntrance(val id: Long) {
+internal class ScreenEntrance(val id: Long, val view: View? = null) {
     /** Whether the screen is shown and active, its transition over and nothing covering it. */
     var settled: Boolean by mutableStateOf(false)
 

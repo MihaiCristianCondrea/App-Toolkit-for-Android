@@ -33,6 +33,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsPreference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
@@ -116,7 +117,7 @@ fun PermissionsContent(
         settingsConfig.categories.forEachIndexed { categoryIndex, category ->
             val categoryKey = category.title ?: "category_$categoryIndex"
 
-            item(
+            animatedItem(
                 key = "permission_category_$categoryKey",
                 contentType = "permission_category",
             ) {

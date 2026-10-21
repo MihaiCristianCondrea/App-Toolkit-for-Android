@@ -45,6 +45,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.componentEntrance
 
 /**
  * Checkbox preference with caller-owned [checked] state. Row and checkbox taps emit
@@ -65,7 +66,7 @@ fun CheckBoxPreferenceItem(
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
     Card(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.componentEntrance().fillMaxWidth(),
         shape = RectangleShape,
     ) {
         Row(

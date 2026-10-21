@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.Dp
 import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAd
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.componentEntrance
 import org.koin.compose.koinInject
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 
@@ -119,7 +120,7 @@ fun NativeAdSlot(
     }
 
     NativeAdSurface(
-        modifier = modifier,
+        modifier = modifier.componentEntrance(),
         position = position,
         showContainer = showContainer,
         cornerRadius = cornerRadius,

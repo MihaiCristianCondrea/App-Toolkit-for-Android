@@ -61,6 +61,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextField
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextFieldStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
@@ -207,7 +208,7 @@ fun SettingsList(
         verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
     ) {
         if (onQueryChange != null) {
-            item(key = "settings_search") {
+            animatedItem(key = "settings_search") {
                 GeneralTextField(
                     value = query,
                     onValueChange = onQueryChange,
@@ -231,7 +232,7 @@ fun SettingsList(
         }
         settingsConfig.categories.forEachIndexed { categoryIndex: Int, category: SettingsCategory ->
             if (category.preferences.isNotEmpty()) {
-                item(key = "settings_category_spacing_$categoryIndex") {
+                animatedItem(key = "settings_category_spacing_$categoryIndex") {
                     LargeVerticalSpacer()
                 }
 
@@ -285,9 +286,9 @@ private fun LazyListScope.searchResults(
     results: List<SettingsPreference>,
     onPreferenceClick: (SettingsPreference) -> Unit,
 ) {
-    item(key = "settings_search_spacing") { LargeVerticalSpacer() }
+    animatedItem(key = "settings_search_spacing") { LargeVerticalSpacer() }
     if (results.isEmpty()) {
-        item(key = "settings_search_empty") {
+        animatedItem(key = "settings_search_empty") {
             Text(
                 text = stringResource(R.string.no_settings_found),
                 style = MaterialTheme.typography.bodyLarge,

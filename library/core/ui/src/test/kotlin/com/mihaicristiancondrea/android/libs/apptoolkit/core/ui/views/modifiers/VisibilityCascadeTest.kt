@@ -48,6 +48,15 @@ class VisibilityCascadeTest {
     }
 
     @Test
+    fun `filters above a grid lead, then its items follow in order`() {
+        val chips = List(size = 3) { delayFor(index = null) }
+        val cards = (0 until 3).map { index -> delayFor(index = index) }
+
+        assertEquals(listOf(0L, 64L, 128L), chips)
+        assertEquals(listOf(192L, 256L, 320L), cards)
+    }
+
+    @Test
     fun `indexed positions past the cap wait no longer than the cap`() {
         val delays = (0 until 6).map { index -> delayFor(index = index, maxStaggeredItems = 3) }
 

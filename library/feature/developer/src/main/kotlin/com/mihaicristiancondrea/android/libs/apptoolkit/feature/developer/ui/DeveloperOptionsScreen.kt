@@ -38,6 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
@@ -109,12 +110,12 @@ fun DeveloperOptionsScreen() {
         modifier = Modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
     ) {
-        item { PreferenceCategoryItem(title = categoryLiveState) }
+        animatedItem { PreferenceCategoryItem(title = categoryLiveState) }
         itemsIndexed(liveState) { index, line ->
             StateItem(line, Modifier.grouped(groupedItemPosition(index, liveState.size)))
         }
         categories.forEach { (category, options) ->
-            item(key = "category_${category.name}") { PreferenceCategoryItem(title = stringResource(category.title)) }
+            animatedItem(key = "category_${category.name}") { PreferenceCategoryItem(title = stringResource(category.title)) }
             itemsIndexed(options, key = { _, option -> "option_${option.name}" }) { index, option ->
                 DeveloperOptionItem(
                     option = option,
@@ -127,7 +128,7 @@ fun DeveloperOptionsScreen() {
                 )
             }
         }
-        item {
+        animatedItem {
             SettingsPreferenceItem(
                 modifier = Modifier
                     .padding(top = SizeConstants.LargeSize)

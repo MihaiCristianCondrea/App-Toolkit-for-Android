@@ -38,6 +38,7 @@ import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.node.LayoutModifierNode
 import androidx.compose.ui.node.ModifierNodeElement
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.isSystemAnimationDisabled
@@ -138,6 +139,20 @@ fun Modifier.animateVisibility(
         effectsSpec = motion.slowEffectsSpec(),
         onStarted = onStarted,
     )
+}
+
+/**
+ * The entrance a Toolkit component gives itself: [animateVisibility] in the screen's cascade,
+ * unless the element is not part of a screen (outside a `ScreenHost`, or in a dialog, a sheet or a
+ * popup, which draw in windows of their own), or it or an item around it already enters.
+ */
+@Composable
+internal fun Modifier.componentEntrance(): Modifier {
+    val entrance: ScreenEntrance = LocalScreenEntrance.current ?: return this
+    if (LocalInsideEntrance.current) return this
+    if (LocalView.current !== entrance.view) return this
+    if (any { it is EntranceElement }) return this
+    return animateVisibility()
 }
 
 /** Saved by an element that has not played its entrance yet. */
@@ -298,8 +313,8 @@ private class EntranceNode(
  * Decides how long each element waits before its entrance, so elements arrive in a cascade.
  *
  * Elements that start entering close together form a wave: everything within
- * [WAVE_WINDOW_MILLIS] of the wave's first element. Each waits by its place in the wave, its
- * [index] less the wave's first index when it has one, its arrival order otherwise. The entrances of
+ * [WAVE_WINDOW_MILLIS] of the wave's first element. Each waits by its place in the wave: its index
+ * less the wave's first index while every element of the wave has one, its arrival order otherwise. The entrances of
  * the elements placed in one frame start within a few milliseconds of each other, so a screen's
  * first items cascade from the top of what is shown, and an item scrolled in alone starts at once.
  *
@@ -311,6 +326,7 @@ internal class VisibilityCascade(private val clock: () -> Long = SystemClock::up
     private var waveStartedAt: Long = NOT_STARTED
     private var arrivalsInWave: Int = 0
     private var firstIndexInWave: Int? = null
+    private var waveAllIndexed: Boolean = true
 
     /**
      * How long an element that is about to enter waits: its place in the current wave, capped at
@@ -322,10 +338,14 @@ internal class VisibilityCascade(private val clock: () -> Long = SystemClock::up
             waveStartedAt = now
             arrivalsInWave = 0
             firstIndexInWave = index
+            waveAllIndexed = true
         }
+        if (index == null) waveAllIndexed = false
         val arrival = arrivalsInWave++
-        val first = firstIndexInWave ?: index.also { firstIndexInWave = it }
-        val position: Int = if (index != null && first != null) index - first else arrival
+        val first = firstIndexInWave
+        // A wave of list items keeps their positions; a wave that mixes them with other elements,
+        // such as a row of filters above a grid, goes by the order they are placed in.
+        val position: Int = if (waveAllIndexed && index != null && first != null) index - first else arrival
         return min(position.coerceAtLeast(0), maxStaggeredItems.coerceAtLeast(0)) * staggerDelayMillis
     }
 

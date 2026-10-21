@@ -56,6 +56,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.componentEntrance
 
 /**
  * Stateless preference row with Toolkit click feedback and analytics. Supply display-ready
@@ -190,7 +191,7 @@ fun SettingsPreferenceItem(
     ga4EventProvider: (() -> Ga4EventData?)? = null,
 ) {
     Card(
-        modifier = modifier
+        modifier = modifier.componentEntrance()
             .fillMaxWidth(),
         shape = RectangleShape,
     ) {
@@ -227,7 +228,7 @@ fun SettingsPreferenceItem(
     ga4EventProvider: (() -> Ga4EventData?)? = null,
 ) {
     SettingsPreferenceItem(
-        modifier = modifier,
+        modifier = modifier.componentEntrance(),
         icon = ToolkitIcon.Vector(icon),
         title = title,
         summary = summary,

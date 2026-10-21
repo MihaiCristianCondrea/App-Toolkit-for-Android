@@ -27,7 +27,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Apps
@@ -55,7 +54,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememb
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.ads.AppsListNativeAdCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.FilterChipItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.TopListFilters
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItemsIndexed
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import kotlinx.collections.immutable.ImmutableList
@@ -184,7 +183,7 @@ private fun AppsGrid(
             )
         }
 
-        itemsIndexed(
+        animatedItemsIndexed(
             items = items,
             key = { index, item ->
                 appListItemKey(selectedFilter = selectedFilter, index = index, item = item)
@@ -209,9 +208,6 @@ private fun AppsGrid(
                     AppCardItem(
                         item = item,
                         isFavorite = isFavorite,
-                        modifier = Modifier
-                            .animateItem()
-                            .animateVisibility(index = index),
                         onFavoriteToggle = onFavoriteToggle,
                         onAppClick = onAppClick,
                         onShareClick = onShareClick
@@ -227,9 +223,6 @@ private fun AppsGrid(
                             index = index,
                             item = item,
                         ),
-                        modifier = Modifier
-                            .animateItem()
-                            .animateVisibility(index = index),
                     )
                 }
             }

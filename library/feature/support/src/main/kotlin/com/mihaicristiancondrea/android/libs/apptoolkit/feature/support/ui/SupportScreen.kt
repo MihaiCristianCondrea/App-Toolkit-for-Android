@@ -57,6 +57,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHos
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.data.models.DonationProductIds
@@ -171,7 +172,7 @@ private fun SupportList(
     adUnitId: String?,
 ) {
     LazyColumn(contentPadding = contentPadding) {
-        item {
+        animatedItem {
             Text(
                 text = stringResource(id = R.string.paid_support),
                 modifier = Modifier.padding(
@@ -181,7 +182,7 @@ private fun SupportList(
                 style = MaterialTheme.typography.titleLarge,
             )
         }
-        item {
+        animatedItem {
             OutlinedCard(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -244,14 +245,14 @@ private fun SupportList(
                 }
             }
         }
-        item {
+        animatedItem {
             Text(
                 text = stringResource(id = R.string.non_paid_support),
                 modifier = Modifier.padding(start = SizeConstants.LargeSize),
                 style = MaterialTheme.typography.titleLarge,
             )
         }
-        item {
+        animatedItem {
             GeneralButton(
                 style = GeneralButtonStyle.Tonal,
                 modifier = Modifier
@@ -267,7 +268,7 @@ private fun SupportList(
             )
         }
         if (adUnitId != null) {
-            item {
+            animatedItem {
                 SupportNativeAdCard(
                     modifier = Modifier
                         .padding(all = SizeConstants.LargeSize)

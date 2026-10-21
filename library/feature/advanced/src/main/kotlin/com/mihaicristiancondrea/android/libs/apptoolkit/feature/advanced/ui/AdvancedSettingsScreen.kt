@@ -37,6 +37,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
@@ -125,11 +126,11 @@ internal fun AdvancedSettingsScreenContent(
         verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
     ) {
         if (showBugReport) {
-            item {
+            animatedItem {
                 PreferenceCategoryItem(title = stringResource(id = R.string.error_reporting))
             }
 
-            item {
+            animatedItem {
                 SettingsPreferenceItem(
                     title = stringResource(id = R.string.bug_report),
                     summary = stringResource(id = R.string.summary_preference_settings_bug_report),
@@ -143,11 +144,11 @@ internal fun AdvancedSettingsScreenContent(
             }
         }
 
-        item {
+        animatedItem {
             PreferenceCategoryItem(title = stringResource(id = R.string.cache_management))
         }
 
-        item {
+        animatedItem {
             SettingsPreferenceItem(
                 title = stringResource(id = R.string.clear_cache),
                 summary = stringResource(id = R.string.summary_preference_settings_clear_cache),
@@ -161,11 +162,11 @@ internal fun AdvancedSettingsScreenContent(
         }
 
         if (state.developerOptionsUnlocked) {
-            item {
+            animatedItem {
                 PreferenceCategoryItem(title = stringResource(id = R.string.developer))
             }
 
-            item {
+            animatedItem {
                 SettingsPreferenceItem(
                     title = stringResource(id = R.string.developer_options),
                     summary = stringResource(id = R.string.summary_preference_settings_developer_options),

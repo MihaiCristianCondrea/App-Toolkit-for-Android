@@ -55,6 +55,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.contracts.AdsSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.models.AdsPreferences
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.states.AdsSettingsUiState
@@ -167,7 +168,7 @@ private fun AdsSettingsList(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(space = SizeConstants.LargeSize),
     ) {
-        item {
+        animatedItem {
             SwitchCardItem(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -195,7 +196,7 @@ private fun AdsSettingsList(
             )
         }
 
-        item {
+        animatedItem {
             Box(modifier = Modifier.padding(horizontal = SizeConstants.SmallSize)) {
                 PreferenceItem(
                     title = stringResource(id = R.string.personalized_ads),
@@ -210,7 +211,7 @@ private fun AdsSettingsList(
             }
         }
 
-        item {
+        animatedItem {
             InfoMessageSection(
                 modifier = Modifier
                     .fillMaxWidth()

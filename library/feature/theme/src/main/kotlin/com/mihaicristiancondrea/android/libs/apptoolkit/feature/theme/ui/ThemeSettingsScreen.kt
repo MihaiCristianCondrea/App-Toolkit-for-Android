@@ -62,6 +62,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenSta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.drawable.rememberPaletteImageVector
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.ThemeModePicker
@@ -195,7 +196,7 @@ private fun ThemeSettingsList(
         verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
         modifier = Modifier.fillMaxSize(),
     ) {
-        item {
+        animatedItem {
             Image(
                 imageVector = rememberPaletteImageVector(),
                 contentDescription = null,
@@ -206,11 +207,11 @@ private fun ThemeSettingsList(
             )
         }
 
-        item { SectionDivider() }
+        animatedItem { SectionDivider() }
 
-        item { SectionTitle(title = R.string.color_palette) }
+        animatedItem { SectionTitle(title = R.string.color_palette) }
 
-        item {
+        animatedItem {
             ThemePalettePicker(
                 preferences = preferences,
                 seasonalThemesUnlocked = seasonalThemesUnlocked,
@@ -221,11 +222,11 @@ private fun ThemeSettingsList(
             )
         }
 
-        item { SectionDivider() }
+        animatedItem { SectionDivider() }
 
-        item { SectionTitle(title = R.string.theme_mode) }
+        animatedItem { SectionTitle(title = R.string.theme_mode) }
 
-        item {
+        animatedItem {
             ThemeModePicker(
                 selectedMode = preferences.themeMode,
                 onSelected = onThemeModeSelected,
@@ -233,7 +234,7 @@ private fun ThemeSettingsList(
             )
         }
 
-        item {
+        animatedItem {
             SwitchCardItem(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -246,7 +247,7 @@ private fun ThemeSettingsList(
             )
         }
 
-        item {
+        animatedItem {
             InfoMessageSection(
                 modifier = Modifier
                     .fillMaxWidth()

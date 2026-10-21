@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.componentEntrance
 
 /**
  * Category heading for preference rows, using the current theme's primary color.
@@ -35,7 +36,7 @@ fun PreferenceCategoryItem(title: String) {
         text = title,
         color = MaterialTheme.colorScheme.primary,
         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-        modifier = Modifier.padding(start = SizeConstants.LargeSize, top = SizeConstants.LargeSize),
+        modifier = Modifier.componentEntrance().padding(start = SizeConstants.LargeSize, top = SizeConstants.LargeSize),
         maxLines = 1,
         overflow = TextOverflow.Ellipsis
     )

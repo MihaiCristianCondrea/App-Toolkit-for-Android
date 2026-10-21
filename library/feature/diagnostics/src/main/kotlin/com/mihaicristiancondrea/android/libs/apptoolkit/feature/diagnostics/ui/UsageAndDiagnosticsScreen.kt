@@ -51,6 +51,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.cont
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.models.UsageAndDiagnosticsSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.contracts.UsageAndDiagnosticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.states.UsageAndDiagnosticsUiState
@@ -162,11 +163,11 @@ private fun UsageAndDiagnosticsList(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
     ) {
-        item {
+        animatedItem {
             LargeVerticalSpacer()
         }
 
-        item {
+        animatedItem {
             SwitchCardItem(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -193,7 +194,7 @@ private fun UsageAndDiagnosticsList(
             )
         }
 
-        item {
+        animatedItem {
             Box(modifier = Modifier.padding(horizontal = SizeConstants.SmallSize)) {
                 PreferenceItem(
                     title = stringResource(id = R.string.advanced_privacy_settings),
@@ -214,7 +215,7 @@ private fun UsageAndDiagnosticsList(
             }
         }
 
-        item {
+        animatedItem {
             InfoMessageSection(
                 modifier = Modifier
                     .fillMaxWidth()

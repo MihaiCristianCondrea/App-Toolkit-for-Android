@@ -37,6 +37,7 @@ import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
@@ -48,6 +49,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.mo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.componentEntrance
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -76,8 +78,8 @@ class ScreenEntranceTest {
         override val viewModelStore = ViewModelStore()
     }
 
-    private fun shown(): Float {
-        val bitmap = compose.onNodeWithTag("frame").captureToImage().asAndroidBitmap()
+    private fun shown(tag: String = "frame"): Float {
+        val bitmap = compose.onNodeWithTag(tag).captureToImage().asAndroidBitmap()
         return 1f - android.graphics.Color.green(bitmap.getPixel(bitmap.width / 2, bitmap.height / 2)) / 255f
     }
 
@@ -184,5 +186,36 @@ class ScreenEntranceTest {
         compose.mainClock.advanceTimeByFrame()
         compose.mainClock.advanceTimeByFrame()
         assertTrue("Replayed within the visit: ${shown()}", shown() > 0.98f)
+    }
+
+    @Test
+    fun `a Toolkit component enters with its screen and appears at once in a dialog`() {
+        compose.mainClock.autoAdvance = false
+        compose.setContent {
+            MaterialTheme {
+                CompositionLocalProvider(
+                    LocalTelemetry provides FakeTelemetryRepository(),
+                    LocalViewModelStoreOwner provides destination,
+                ) {
+                    ScreenHost(screen = TrackedScreen(name = "Settings")) {
+                        Box(Modifier.testTag("frame").size(80.dp).background(Color.White)) {
+                            Box(Modifier.componentEntrance().size(80.dp).background(Color.Red))
+                        }
+                        Dialog(onDismissRequest = {}) {
+                            Box(Modifier.testTag("dialog").size(80.dp).background(Color.White)) {
+                                Box(Modifier.componentEntrance().size(80.dp).background(Color.Red))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        compose.mainClock.advanceTimeByFrame()
+        compose.mainClock.advanceTimeByFrame()
+        assertTrue("The screen's component did not start hidden: ${shown()}", shown() < 0.5f)
+        assertTrue("The dialog's component animated: ${shown("dialog")}", shown("dialog") > 0.98f)
+
+        settle()
+        assertTrue("The screen's component did not enter: ${shown()}", shown() > 0.98f)
     }
 }

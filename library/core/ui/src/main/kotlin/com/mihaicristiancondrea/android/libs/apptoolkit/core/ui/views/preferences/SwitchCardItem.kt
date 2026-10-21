@@ -45,6 +45,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches.CustomSwitch
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.componentEntrance
 
 /**
  * Switch card with caller-owned [switchState]. Card and switch taps emit [onSwitchToggled];
@@ -71,7 +72,7 @@ fun SwitchCardItem(
         enabled = enabled,
         shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
-        modifier = modifier,
+        modifier = modifier.componentEntrance(),
         onClick = {
             if (!enabled) return@Card
             val updatedValue = !switchState.value

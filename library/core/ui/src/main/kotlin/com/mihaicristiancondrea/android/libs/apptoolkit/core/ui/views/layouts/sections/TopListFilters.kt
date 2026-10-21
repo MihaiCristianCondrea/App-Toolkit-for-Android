@@ -42,6 +42,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.chip.CommonFilterChip
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.componentEntrance
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -137,7 +138,7 @@ fun <T> TopListFilters(
                         }
                     },
                     label = item.label,
-                    modifier = if (hasAnimation) Modifier.animateItem() else Modifier,
+                    modifier = (if (hasAnimation) Modifier.animateItem() else Modifier).componentEntrance(),
                     icon = item.icon,
                     hasAnimation = hasAnimation,
                     ga4Event = ga4EventProvider?.invoke(item.value),

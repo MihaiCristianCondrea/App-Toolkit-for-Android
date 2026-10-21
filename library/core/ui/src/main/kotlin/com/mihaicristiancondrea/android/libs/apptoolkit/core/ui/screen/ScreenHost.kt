@@ -26,6 +26,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.platform.LocalView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ViewModel
@@ -97,7 +98,8 @@ fun ScreenHost(
     content: @Composable () -> Unit,
 ) {
     val tracker: ScreenVisitTracker = rememberScreenVisitTracker(screen)
-    val entrance: ScreenEntrance = remember(tracker.entranceId) { ScreenEntrance(tracker.entranceId) }
+    val view = LocalView.current
+    val entrance: ScreenEntrance = remember(tracker.entranceId, view) { ScreenEntrance(tracker.entranceId, view) }
     TrackScreenVisits(tracker = tracker, entrance = entrance, status = status)
     if (fabs != null) {
         ScaffoldFabs(fabs)

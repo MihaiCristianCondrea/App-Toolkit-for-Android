@@ -40,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.componentEntrance
 import kotlinx.collections.immutable.ImmutableList
 
 /**
@@ -81,7 +82,7 @@ fun GroupedActionList(
     if (actions.isEmpty()) return
 
     Card(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.componentEntrance().fillMaxWidth(),
         shape = MaterialTheme.shapes.extraLarge,
         colors = CardDefaults.cardColors(containerColor = containerColor),
     ) {
@@ -114,7 +115,7 @@ fun GroupedActionList(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Card(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.componentEntrance().fillMaxWidth(),
         shape = MaterialTheme.shapes.extraLarge,
         colors = CardDefaults.cardColors(containerColor = containerColor),
     ) {

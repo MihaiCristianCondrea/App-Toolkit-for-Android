@@ -54,6 +54,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItem
@@ -339,7 +340,7 @@ private fun DisplaySettingsList(
         verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
     ) {
         categories.forEach { (category, categoryRows) ->
-            item(key = "category_${category.name}") {
+            animatedItem(key = "category_${category.name}") {
                 PreferenceCategoryItem(title = stringResource(id = category.title))
             }
             itemsIndexed(categoryRows, key = { _, row -> "row_${row.name}" }) { index, row ->

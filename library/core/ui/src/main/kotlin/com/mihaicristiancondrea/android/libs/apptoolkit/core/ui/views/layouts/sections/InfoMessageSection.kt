@@ -44,6 +44,7 @@ import androidx.compose.ui.text.withStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.INFO_MESSAGE_LOG_TAG
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.componentEntrance
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.text.LearnMoreText
 
@@ -90,7 +91,7 @@ fun InfoMessageSection(
     val hasLearnMore =
         !learnMoreText.isNullOrEmpty() && (learnMoreAction != null || !learnMoreUrl.isNullOrEmpty())
 
-    Column(modifier = modifier) {
+    Column(modifier = modifier.componentEntrance()) {
         Icon(
             imageVector = Icons.Outlined.Info,
             contentDescription = stringResource(id = R.string.about)

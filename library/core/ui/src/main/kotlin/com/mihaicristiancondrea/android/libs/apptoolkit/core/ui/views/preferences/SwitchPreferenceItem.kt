@@ -45,6 +45,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches.CustomSwitch
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.componentEntrance
 
 /**
  * Switch preference with caller-owned [checked] state. Row and switch taps emit
@@ -64,7 +65,7 @@ fun SwitchPreferenceItem(
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
     Card(
-        modifier = modifier
+        modifier = modifier.componentEntrance()
             .fillMaxWidth(),
         shape = RectangleShape,
     ) {

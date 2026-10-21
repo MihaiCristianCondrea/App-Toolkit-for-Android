@@ -48,6 +48,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NoDataNativeAdCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.componentEntrance
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
@@ -85,6 +86,7 @@ fun NoDataScreen(
 ) {
     Column(
         modifier = Modifier
+            .componentEntrance()
             .padding(paddingValues)
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
