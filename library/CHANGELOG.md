@@ -11,9 +11,11 @@
   `appToolkitDefaults { shell { motionTempo = ... } }` or under Motion in the developer options.
 - Each screen inside `ScreenHost` owns its entrance: its elements wait until the screen settles,
   then cascade in from the top of what is shown. `EntranceReplay` chooses when it plays: `OnOpen`,
-  the default, each time a screen is opened, but not on going back to it or switching back to its
-  tab; `EveryVisit` on every return as well; `FirstVisit` only for the first copy of each screen
-  while the app runs. Set it with `appToolkitDefaults { shell { entranceReplay = ... } }` or the developer options.
+  the default, each time a screen is opened or its tab is picked from the navigation, but not on
+  going back to it; `EveryVisit` on every return as well; `FirstVisit` only for the first copy of
+  each screen while the app runs. Set it with `appToolkitDefaults { shell { entranceReplay = ... } }`
+  or the developer options. `LocalScreenOpening` tells a screen it was opened again while it stayed
+  in its back stack; the shell provides it for each tab.
 - `ChangelogDialog(releasesUrl = ...)` shows an info button beside the title that opens more
   release notes, such as `GithubConstants.APP_TOOLKIT_RELEASES`, App Toolkit's GitHub releases.
   Without a URL the sheet is unchanged.

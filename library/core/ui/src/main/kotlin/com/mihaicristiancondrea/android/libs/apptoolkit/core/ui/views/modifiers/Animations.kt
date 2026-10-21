@@ -124,7 +124,7 @@ fun Modifier.animateVisibility(
     val animates: Boolean = remember {
         val due = when (replay) {
             EntranceReplay.EveryVisit -> playedIn != entranceId
-            EntranceReplay.OnOpen -> playedIn == NOT_PLAYED
+            EntranceReplay.OnOpen -> playedIn == NOT_PLAYED || playedIn < (entrance?.openedAt ?: NOT_PLAYED)
             EntranceReplay.FirstVisit -> playedIn == NOT_PLAYED && entrance?.firstInRun != false
         }
         due && style != EntranceStyle.None && !context.isSystemAnimationDisabled()

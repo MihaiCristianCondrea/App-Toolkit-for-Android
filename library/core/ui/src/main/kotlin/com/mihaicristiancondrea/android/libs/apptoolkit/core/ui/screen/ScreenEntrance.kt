@@ -32,12 +32,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.
  * rotation, or for an item scrolled back into view within the visit.
  */
 enum class EntranceReplay {
-    /** Each time the screen is shown by navigation, including going back to it or switching tabs. */
+    /** Each time the screen is shown by navigation, including going back to it. */
     EveryVisit,
 
     /**
-     * Each time the screen is opened: a screen opened again after it was closed enters anew, while
-     * going back to it or switching back to its tab does not.
+     * Each time the screen is opened: a screen opened again after it was closed, or a tab picked
+     * from the navigation, enters anew, while going back to it does not.
      */
     OnOpen,
 
@@ -53,13 +53,28 @@ enum class EntranceReplay {
 val LocalEntranceReplay = staticCompositionLocalOf { EntranceReplay.OnOpen }
 
 /**
+ * How many times the screen here has been opened again while it stayed in its back stack, such as
+ * a tab picked again from the navigation bar or rail. The shell provides it around each tab's
+ * screens. When it changes, [EntranceReplay.OnOpen] plays the screen's entrance again; going back
+ * to the screen leaves it as it is, so it does not.
+ */
+val LocalScreenOpening = staticCompositionLocalOf { 0 }
+
+/**
  * One screen's entrance, provided by [ScreenHost]: its own cascade, so two screens never share a
  * wave, the [id] its elements save once they have played, whether the screen has [settled], the
  * [view] its window draws in, so a dialog or a sheet over it can tell it is elsewhere, and whether
- * this is the [firstInRun] copy of the screen, the one [EntranceReplay.FirstVisit] plays in.
+ * this is the [firstInRun] copy of the screen, the one [EntranceReplay.FirstVisit] plays in. An
+ * element that played before [openedAt], the entrance the screen was last opened in, plays again
+ * under [EntranceReplay.OnOpen].
  */
 @Stable
-internal class ScreenEntrance(val id: Long, val view: View? = null, val firstInRun: Boolean = true) {
+internal class ScreenEntrance(
+    val id: Long,
+    val view: View? = null,
+    val firstInRun: Boolean = true,
+    val openedAt: Long = id,
+) {
     /** Whether the screen is shown and active, its transition over and nothing covering it. */
     var settled: Boolean by mutableStateOf(false)
 

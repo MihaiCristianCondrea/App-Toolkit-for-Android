@@ -73,6 +73,7 @@ class ScreenEntranceTest {
     private var onScreen by mutableStateOf(true)
     private var boxShown by mutableStateOf(true)
     private var replay by mutableStateOf(EntranceReplay.EveryVisit)
+    private var opening by mutableStateOf(0)
 
     /** Which copy of the screen is open: a new copy is the screen opened again after it closed. */
     private var copy by mutableStateOf(0)
@@ -111,6 +112,7 @@ class ScreenEntranceTest {
                     LocalViewModelStoreOwner provides destination(copy),
                     LocalLifecycleOwner provides rememberLifecycleOwner(maxLifecycle = cap),
                     LocalEntranceReplay provides replay,
+                    LocalScreenOpening provides opening,
                 ) {
                     Box(Modifier.testTag("frame").size(80.dp).background(Color.White)) {
                         if (onScreen) {
@@ -201,6 +203,29 @@ class ScreenEntranceTest {
         assertTrue("Shown at once when opened again: ${shown()}", shown() < 0.5f)
         settle()
         assertTrue("Did not enter when opened again: ${shown()}", shown() > 0.98f)
+    }
+
+    @Test
+    fun `on open, a tab picked again enters again while going back to it does not`() {
+        replay = EntranceReplay.OnOpen
+        setContent()
+        settle()
+
+        // Picked again from the navigation: the same copy, opened anew.
+        set { onScreen = false }
+        settle()
+        set {
+            opening += 1
+            onScreen = true
+        }
+        compose.mainClock.advanceTimeByFrame()
+        compose.mainClock.advanceTimeByFrame()
+        assertTrue("Shown at once when the tab was picked again: ${shown()}", shown() < 0.5f)
+        settle()
+        assertTrue("Did not enter when the tab was picked again: ${shown()}", shown() > 0.98f)
+
+        goBackToIt()
+        assertTrue("Played again on going back: ${shown()}", shown() > 0.98f)
     }
 
     @Test

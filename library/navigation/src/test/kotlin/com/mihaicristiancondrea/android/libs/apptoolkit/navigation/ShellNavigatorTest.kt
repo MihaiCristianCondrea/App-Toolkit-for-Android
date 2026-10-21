@@ -152,6 +152,22 @@ class ShellNavigatorTest {
     }
 
     @Test
+    fun `picking a tab from another counts as opening it, going back to it does not`() {
+        navigator.navigate(Second)
+        navigator.navigate(First)
+        assertEquals(1, navigator.timesOpened(0))
+        assertEquals(1, navigator.timesOpened(1))
+
+        navigator.navigate(Second)
+        navigator.goBack()
+        assertEquals(1, navigator.timesOpened(0))
+        assertEquals(2, navigator.timesOpened(1))
+
+        navigator.selectTab(0)
+        assertEquals(1, navigator.timesOpened(0))
+    }
+
+    @Test
     fun `a child is pushed on the current tab only`() {
         navigator.navigate(Second)
         navigator.navigate(Child(1))

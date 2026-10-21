@@ -133,6 +133,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.with
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.LocalScaffoldSnackbars
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.ScaffoldSnackbars
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LocalScreenOpening
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellSearch
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellBackHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellNavDisplay
@@ -714,6 +715,7 @@ private fun TabsNavDisplay(
                     search = searches[tabIndex],
                     fabHost = entryHosts.fabHostFor(entryKey),
                     articleHost = entryHosts.articleHostFor(entryKey),
+                    timesOpened = { navigator.timesOpened(tabIndex) },
                 )
             },
         )
@@ -784,6 +786,7 @@ private fun tabEntry(
     search: ShellSearch,
     fabHost: FabHost,
     articleHost: ArticleTopBarHost,
+    timesOpened: () -> Int,
 ): NavEntry<NavKey> {
     val destination = graph.destination(key)
     return NavEntry(
@@ -798,6 +801,8 @@ private fun tabEntry(
             LocalTopBarScrollMode provides destination.topBarScrollMode,
             LocalFabHost provides fabHost,
             LocalArticleTopBarHost provides articleHost,
+            // Picking the tab again opens its screens again, for their entrance.
+            LocalScreenOpening provides timesOpened(),
         ) {
             ContentWidthBox(
                 maxWidth = LocalShellLayout.current.maxWidthFor(destination.contentWidth),

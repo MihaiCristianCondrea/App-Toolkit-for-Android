@@ -66,11 +66,13 @@ class ShellNavigator internal constructor(
     private val pageStack: MutableList<NavKey>,
     private val tabStacks: List<MutableList<NavKey>>,
     private val tabHistory: MutableList<Int>,
+    private val tabOpenings: MutableList<Int> = MutableList(tabStacks.size) { 0 },
     private val onExit: () -> Unit,
 ) {
     init {
         require(tabStacks.size == graph.tabs.size) { "Every tab needs a back stack." }
         if (tabHistory.isEmpty()) tabHistory += 0
+        while (tabOpenings.size < tabStacks.size) tabOpenings += 0
     }
 
     /** The index of the selected tab in [ShellGraph.tabs]. */
@@ -94,6 +96,12 @@ class ShellNavigator internal constructor(
     val currentTabStack: List<NavKey> get() = tabStacks[currentTabIndex]
 
     fun tabStack(index: Int): List<NavKey> = tabStacks[index]
+
+    /**
+     * How many times tab [index] has been picked from another tab. Back to a tab does not count, so
+     * a screen can tell being opened again from being returned to.
+     */
+    fun timesOpened(index: Int): Int = tabOpenings[index]
 
     /**
      * The tabs whose stacks the inner display holds, in the order back will return through them,
@@ -153,6 +161,7 @@ class ShellNavigator internal constructor(
             else -> {
                 tabHistory.remove(index)
                 tabHistory += index
+                tabOpenings[index] += 1
             }
         }
     }
@@ -262,9 +271,12 @@ fun rememberShellNavigator(graph: ShellGraph, onExit: () -> Unit, start: NavKey 
     val tabHistory = rememberSaveable(
         saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() }),
     ) { mutableStateListOf(if (startsOnTab) graph.tabIndexOf(start) else 0) }
+    val tabOpenings = rememberSaveable(
+        saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() }),
+    ) { MutableList(graph.tabs.size) { 0 }.toMutableStateList() }
     val currentOnExit by rememberUpdatedState(onExit)
     return remember(graph, pageStack, tabStacks) {
-        ShellNavigator(graph, pageStack, tabStacks, tabHistory) { currentOnExit() }
+        ShellNavigator(graph, pageStack, tabStacks, tabHistory, tabOpenings) { currentOnExit() }
     }
 }
 

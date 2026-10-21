@@ -191,8 +191,8 @@ LazyColumn {
   enter once, during the transition, and never replay.
 - An element outside a lazy list that needs an entrance uses `Modifier.animateVisibility(index)`,
   its root's own modifier. Outside a `ScreenHost` it enters once, in an app-wide cascade.
-- By default (`EntranceReplay.OnOpen`) the entrance plays each time a screen is opened, and not on
-  going back to it or switching back to its tab. `EveryVisit` replays it on every return;
+- By default (`EntranceReplay.OnOpen`) the entrance plays each time a screen is opened or its tab
+  is picked from the navigation, and not on going back to it. `EveryVisit` replays it on every return;
   `FirstVisit` plays it only for the first copy of each screen while the app runs. Background,
   rotation and scrolling back within a visit never replay it. An app that wants the other default sets it once with
   `appToolkitDefaults { shell { entranceReplay = ... } }`.

@@ -4,7 +4,7 @@
 
 # October 21, 2026
 
-**Version:** `26.10.35` (`137261035`)
+**Version:** `26.10.36` (`137261036`)
 
 ### Added
 
@@ -13,8 +13,8 @@
 
 ### Improved
 
-- Screens move at a calmer pace and bring their content in as they open. Going back to a screen
-  or switching tabs keeps it as it was. The developer options can play it on every visit or only
+- Screens move at a calmer pace and bring their content in as they open, including Apps and
+  Quick Tools when picked from the navigation. Going back to a screen keeps it as it was. The developer options can play it on every visit or only
   the first time. See App Toolkit's releases for the details.
 - The Apps list brings in its filter chips, then its cards.
 - The Components, Quick Tools and article demo screens enter the way the Toolkit's screens do,

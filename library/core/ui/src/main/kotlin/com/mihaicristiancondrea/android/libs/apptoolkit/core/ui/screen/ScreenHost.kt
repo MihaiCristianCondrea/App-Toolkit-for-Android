@@ -99,8 +99,9 @@ fun ScreenHost(
 ) {
     val tracker: ScreenVisitTracker = rememberScreenVisitTracker(screen)
     val view = LocalView.current
-    val entrance: ScreenEntrance = remember(tracker.entranceId, view) {
-        ScreenEntrance(tracker.entranceId, view, tracker.firstInRun)
+    val opening: Int = LocalScreenOpening.current
+    val entrance: ScreenEntrance = remember(tracker.entranceId, view, opening) {
+        ScreenEntrance(tracker.entranceId, view, tracker.firstInRun, tracker.openedAt(opening))
     }
     TrackScreenVisits(tracker = tracker, entrance = entrance, status = status)
     if (fabs != null) {
@@ -198,6 +199,24 @@ internal class ScreenVisitTracker(private val screen: TrackedScreen) {
      * as its destination, so going back to the screen keeps it and opening the screen anew does not.
      */
     val firstInRun: Boolean = OpenedScreens.claim(screen)
+
+    /** The [LocalScreenOpening] the screen was last opened with, null before its first entrance. */
+    private var lastOpening: Int? = null
+
+    /** The entrance the screen was last opened in. */
+    private var openedIn: Long = entranceId
+
+    /**
+     * The entrance the screen was last opened in, [entranceId] once [opening] differs from the one
+     * it was last opened with: a tab picked again opens its screen, going back to it does not.
+     */
+    fun openedAt(opening: Int): Long {
+        if (opening != lastOpening) {
+            lastOpening = opening
+            openedIn = entranceId
+        }
+        return openedIn
+    }
 
     /** The status label last reported in this visit. */
     private var reportedLabel: String? = null

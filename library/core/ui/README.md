@@ -171,9 +171,10 @@ flowchart TD
   do. The one exception is an item holding only filter chips or a native ad slot: keep it a plain
   `item`, so the chips cascade one by one and the ad enters when it loads.
 - `EntranceReplay` and `LocalEntranceReplay` decide when a screen's entrance plays: `OnOpen`, the
-  default, each time a screen is opened, but not on going back to it or switching back to its tab;
-  `EveryVisit` on every return as well; `FirstVisit` only for the first copy of each screen while
-  the app runs.
+  default, each time a screen is opened or its tab is picked from the navigation, but not on going
+  back to it; `EveryVisit` on every return as well; `FirstVisit` only for the first copy of each
+  screen while the app runs. A host that opens a screen again while keeping it in its back stack,
+  as the shell does for a tab picked again, raises `LocalScreenOpening` around it.
   Returning from the background, rotating or scrolling back within a visit never replays it. An app
   picks its own default with `appToolkitDefaults { shell { entranceReplay = ... } }`, and the
   developer options override it.
