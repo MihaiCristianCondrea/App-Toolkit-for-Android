@@ -104,7 +104,7 @@ flowchart TD
 - `ScreenStateHandler` draws every case but the content with the app's `ScreenStates`, so a failure
   always shows something. A screen passes only what differs: `icon`, `retryWhenEmpty`, `showAd`,
   or a case of its own for that one section. An app draws its own cases, or its own transition,
-  once with `LocalScreenStates`, and `StateContent` switches on any other state, such as a flow's
+  once with `LocalScreenStates`; without one, cases cross-fade on the app's motion scheme, and `StateContent` switches on any other state, such as a flow's
   phases, the same way.
 - Global UI preferences arrive through the design-system root. Reusable components must not start
   their own persistence collectors unless a documented adapter still requires it.
@@ -149,15 +149,28 @@ flowchart TD
   and out of a lazy layout. `NativeAdSlot`, `rememberNativeAd`, and `rememberNativeAdState` take a
   `cache` and a `cacheKey`; without both they keep the uncached behaviour of destroying the ad on
   disposal. See [Ads inside a lazy list or grid](../../integration/ads/README.md#ads-inside-a-lazy-list-or-grid).
-- `Modifier.animateVisibility` brings every element in the first time it is shown, in a cascade.
-  The cascade counts from what is shown: the items a screen opens with arrive one after another,
-  each `staggerDelay` after the one before, and an item scrolled in later starts at once. The
-  entrance starts when the element is first placed, so items a lazy list composes ahead of time
-  still enter on screen. The motion is `MaterialTheme.motionScheme`'s springs in the style of
-  `LocalEntranceStyle` (`Slide`, `Scale`, `Fade` or `None`), which the shell provides from
-  `appToolkitDefaults { shell { entranceStyle = ... } }` or the developer options.
-  `animateVisibility(visible)` animates an element in and out as it comes and goes. Both run in a
-  `Modifier.Node`, without recomposing per frame; the cascade is `VisibilityCascade`, unit tested.
+- `Modifier.animateVisibility` brings an element in as its screen is shown, in a cascade. Inside a
+  `ScreenHost` the screen owns the cascade: elements wait until the screen settles, then arrive one
+  after another from the top of what is shown, each `staggerDelay` (50 ms) after the one before. An
+  item scrolled in later starts at once. The entrance starts when the element is first placed, so
+  items a lazy list composes ahead of time still enter on screen. The motion is
+  `MaterialTheme.motionScheme`'s springs in the style of `LocalEntranceStyle` (`Slide`, `Scale`,
+  `Fade` or `None`), which the shell provides from `appToolkitDefaults { shell { entranceStyle = ... } }`
+  or the developer options. `animateVisibility(visible)` animates an element in and out as it comes
+  and goes. Both run in a `Modifier.Node`, without recomposing per frame; the cascade is
+  `VisibilityCascade`, unit tested.
+- **Toolkit components enter on their own.** Preference rows, switch cards, grouped action lists,
+  info messages, filter chips, `NoDataScreen` and native ad slots join their screen's cascade
+  without a modifier. A component skips its own entrance outside a `ScreenHost`, inside a dialog,
+  sheet or popup (another window), inside an item that already enters, or when its modifier
+  already holds an entrance, so nothing enters twice. Do not wrap them in `animateVisibility`.
+- `animatedItems`, `animatedItemsIndexed` and `animatedItem` on `LazyListScope` and
+  `LazyGridScope` are `items` with the entrance and `animateItem()` built in, ordered by their index.
+  Use them for an app's own rows and cards; a Toolkit component inside one does not enter again.
+- `EntranceReplay` and `LocalEntranceReplay` decide when a screen's entrance plays: `EveryVisit`
+  (the default) on every return to the screen, `FirstVisit` only the first time. Returning from the
+  background, rotating or scrolling back within a visit never replays it. The shell provides it from
+  `appToolkitDefaults { shell { entranceReplay = ... } }` or the developer options.
 - `HorizontalWavyDivider`, `VerticalWavyDivider`, and `WavyDividerDefaults` draw the design
   system's `il_wavy_line` as a divider. The wave is drawn rather than tiled from the drawable, so it
   scales with the divider's band and fits a whole number of half-waves into any length; the fitting
@@ -454,6 +467,10 @@ UI dependency.
   holder in the destination's `ViewModelStoreOwner`, which survives rotation and not process death.
   Outside a destination it falls back to the activity's store, and in a preview to the
   composition.
+- **The visit also times the screen's entrance.** Elements with `animateVisibility`, Toolkit
+  components and `animatedItems` wait until the screen is `RESUMED`, its transition over, and then
+  cascade in. A new visit is a new entrance unless `LocalEntranceReplay` is `FirstVisit`; a
+  configuration change keeps the current one.
 - **`screen_state`** is reported at the start of each visit and when the label changes, never twice
   in a row for the same label. The event and its `screen` and `state` parameters are unchanged.
 

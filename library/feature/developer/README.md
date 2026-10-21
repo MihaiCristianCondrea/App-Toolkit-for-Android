@@ -24,7 +24,7 @@ be restarted into a variation. The person's own preferences are display settings
   | Navigation | Where the app starts | more than one start option |
   | | Tab transition | more than one tab |
   | | Back swipe from the right | more than one destination |
-  | Motion | Animation speed | always |
+  | Motion | Animation speed, entrance style, motion tempo, entrance replay | always |
   | Accessories | Bottom accessory | a banner or a player the tabs can show; all four choices with both, otherwise shown or hidden |
 
   A heading without a row is left out, and Reset is always last.

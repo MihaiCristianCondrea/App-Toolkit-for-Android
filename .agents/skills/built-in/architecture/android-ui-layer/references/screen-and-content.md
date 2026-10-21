@@ -167,28 +167,39 @@ ScreenStateHandler(
 
 ```kotlin
 LazyColumn {
-    itemsIndexed(rows, key = { _, row -> row.id }) { index, row ->
-        RowCard(row, modifier = Modifier.animateItem().animateVisibility(index = index))
+    animatedItem { TopListFilters(filters, onSelect) }
+    animatedItemsIndexed(rows, key = { _, row -> row.id }) { index, row ->
+        RowCard(row)
     }
 }
 ```
 
-- `Modifier.animateVisibility(index)` brings an element in the first time it is shown. Give list
-  items their `index`; elements without one cascade in the order they appear.
-- The cascade counts from what is shown, not from the top of the list: a screen's first items
-  arrive one after another, and an item scrolled in later starts at once. Do not offset `index` to
-  fake this, and do not add delays of your own.
-- The entrance starts when the element is first placed, so items a lazy list prefetches still
-  enter on screen. Once started it stays revealed, saved with the item.
-- The style is the app's, from `LocalEntranceStyle` (`Slide`, `Scale`, `Fade`, `None`). Set it once
-  with `appToolkitDefaults { shell { entranceStyle = ... } }`; pass `style` only for one element
-  that must differ. The motion follows `MaterialTheme.motionScheme`, so never pass durations or
-  offsets.
+- Each screen inside `ScreenHost` owns its entrance. Its elements wait until the screen settles,
+  its transition over, then cascade in from the top of what is shown; an item scrolled in later
+  starts at once. Do not offset an index to fake this, and do not add delays of your own.
+- Lazy rows and cards use `animatedItems`, `animatedItemsIndexed` or `animatedItem` (lists and
+  grids): `items` with the entrance and `animateItem()` built in, ordered by index. Put the items in
+  the order they should arrive, such as filter chips before the cards.
+- Toolkit components (preference rows, switch cards, grouped action lists, info messages, filter
+  chips, `NoDataScreen`, native ad slots) enter on their own. Never wrap them in
+  `animateVisibility`; inside an `animatedItem` they do not enter again, and in a dialog, sheet or
+  popup they do not enter at all.
+- An element outside a lazy list that needs an entrance uses `Modifier.animateVisibility(index)`,
+  its root's own modifier. Outside a `ScreenHost` it enters once, in an app-wide cascade.
+- The entrance replays on every return to the screen by default; `EntranceReplay.FirstVisit` plays
+  it only the first time. Background, rotation and scrolling back within a visit never replay it.
+  Set it once with `appToolkitDefaults { shell { entranceReplay = ... } }`.
+- The style is the app's, from `LocalEntranceStyle` (`Slide`, `Scale`, `Fade`, `None`), and the
+  pace is the app's `MotionTempo` (`Calm` by default, `Standard`, `Brisk`), set with
+  `appToolkitDefaults { shell { entranceStyle = ...; motionTempo = ... } }`. Pass `style` only for
+  one element that must differ. Every animation reads `MaterialTheme.motionScheme`, so never pass
+  durations, offsets or hand-written `tween`s; use its `default`/`fast`/`slow` spatial and effects
+  specs.
 - An element that comes and goes, such as a hint or a filter's result, uses
   `Modifier.animateVisibility(visible)`. It keeps its place in the layout while hidden; to take it
   out of the layout use `AnimatedVisibility` instead.
-- Put `animateItem()` before `animateVisibility` on the item's root, never inside an
-  `AnimatedVisibility` or another wrapper of the item.
+- With plain `items`, put `animateItem()` before `animateVisibility` on the item's root, never
+  inside an `AnimatedVisibility` or another wrapper of the item.
 
 ## Previews
 

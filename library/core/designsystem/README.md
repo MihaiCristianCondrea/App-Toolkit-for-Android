@@ -83,6 +83,11 @@ flowchart TD
 - `ToolkitIcon`, `ToolkitIconReplayMode`, `resolveToolkitIcon`, `ToolkitIconContent`, and
   `AnimatedToolkitIcon`. See [the Toolkit Icon API](#toolkit-icon-api) below.
 - `ToolkitFab`, `FabSize` and `FabColor`.
+- `MotionTempo` (`Calm`, `Standard`, `Brisk`) and `MotionTempo.motionScheme()`, the pace of the
+  app's springs. `Standard` is Material's expressive scheme; `Calm`, the shell's default, uses
+  softer, slower springs for a calmer feel. The shell installs the scheme through
+  `MaterialExpressiveTheme`, so every animation that reads `MaterialTheme.motionScheme`
+  (entrances, app bar buttons, title and search swaps, `bounceClick`, state cross-fades) follows it.
 
 ## Toolkit Icon API
 

@@ -154,8 +154,10 @@ their own queue.
 - Render each `Loadable` field through `ScreenStateHandler`. Customize it with `icon`,
   `retryWhenEmpty` and `showAd` before replacing a case; never copy `NoDataScreen` into `onEmpty`
   or `onError` to change one of those.
-- Bring list items and cards in with `Modifier.animateVisibility(index)`, in the app's
-  `EntranceStyle`; never with hand-written delays, durations or offsets.
+- Bring lazy rows and cards in with `animatedItems`, `animatedItemsIndexed` or `animatedItem`, and
+  other elements with `Modifier.animateVisibility(index)`. Toolkit components enter on their own;
+  never wrap them. The screen times the cascade, the app's `EntranceStyle`, `MotionTempo` and
+  `EntranceReplay` shape it; never add delays, durations, offsets or `tween`s of your own.
 - Switch on any other state, such as a flow's phases, with `StateContent`, and declare the
   screen's floating action buttons on `ScreenHost(fabs = ...)`, never with `ScaffoldFabs` inside
   the content.

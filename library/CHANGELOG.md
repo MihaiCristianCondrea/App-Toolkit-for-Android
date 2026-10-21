@@ -2,6 +2,42 @@
 
 ---
 
+# Unreleased
+
+### Added
+
+- `MotionTempo` (`Calm`, `Standard`, `Brisk`) sets the pace of every animation that follows
+  `MaterialTheme.motionScheme`. The shell installs it with `MaterialExpressiveTheme`; set it with
+  `appToolkitDefaults { shell { motionTempo = ... } }` or under Motion in the developer options.
+- Each screen inside `ScreenHost` owns its entrance: its elements wait until the screen settles,
+  then cascade in from the top of what is shown. `EntranceReplay` chooses whether it plays on every
+  return to the screen (`EveryVisit`, the default) or only the first time (`FirstVisit`), from
+  `appToolkitDefaults { shell { entranceReplay = ... } }` or the developer options.
+- `animatedItems`, `animatedItemsIndexed` and `animatedItem` for lazy lists and grids: `items` with
+  the entrance and `animateItem()` built in.
+- Preference rows, switch cards, grouped action lists, info messages, filter chips, `NoDataScreen`
+  and native ad slots enter on their own in their screen's cascade. They skip it in dialogs, sheets
+  and popups, and inside an item that already enters.
+
+### Changed
+
+- The default tempo is `Calm`, slower and softer than before. Choose `Standard` to keep Material's
+  expressive pace.
+- `animateVisibility` cascades 50 ms apart, rises 32 dp with a slight scale and fades on the slow
+  effects spring. Inside a `ScreenHost` it waits for the screen to settle and replays per
+  `EntranceReplay`.
+- `ScreenStates.transition` is nullable and null by default: `StateContent` and
+  `ScreenStateHandler` then cross-fade on the motion scheme instead of a fixed 300 ms fade.
+
+### Improved
+
+- App bar action buttons slide and shrink away when a destination drops them, and the remaining
+  buttons glide into place instead of jumping. The actions of two destinations cross-fade.
+- The app bar title, the search field swap, `bounceClick` and app bar icon swaps follow the motion
+  tempo.
+
+---
+
 # October 21, 2026
 
 **Version:** `3.0.0-pre25`

@@ -4,6 +4,10 @@
 
 # Unreleased
 
+### Improved
+
+- The Apps list brings in its filter chips, then its cards, each time you open it.
+
 ### Fixed
 
 - Unlocking the components showcase reports the achievement only once the unlock is saved, and
