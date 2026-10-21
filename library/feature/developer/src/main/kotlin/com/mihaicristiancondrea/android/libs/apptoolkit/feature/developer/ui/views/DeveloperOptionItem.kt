@@ -31,6 +31,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.NavKey
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.MotionTempo
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.EntranceReplay
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.EntranceStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.ChoicePreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItem
@@ -184,6 +186,26 @@ internal fun DeveloperOptionItem(
             modifier = modifier,
         )
 
+        DeveloperOption.MotionTempo -> ChoicePreferenceItem(
+            title = stringResource(R.string.shell_dev_motion_tempo),
+            options = MotionTempo.entries,
+            selected = settings.motionTempo,
+            optionLabel = { motionTempoLabel(it) },
+            onSelect = { write { setMotionTempo(it) } },
+            dialogIcon = Icons.Outlined.Animation,
+            modifier = modifier,
+        )
+
+        DeveloperOption.EntranceReplay -> ChoicePreferenceItem(
+            title = stringResource(R.string.shell_dev_entrance_replay),
+            options = EntranceReplay.entries,
+            selected = settings.entranceReplay,
+            optionLabel = { entranceReplayLabel(it) },
+            onSelect = { write { setEntranceReplay(it) } },
+            dialogIcon = Icons.Outlined.Animation,
+            modifier = modifier,
+        )
+
         DeveloperOption.BottomAccessory -> ChoicePreferenceItem(
             title = stringResource(R.string.shell_dev_bottom_accessory),
             options = accessoryModes(capabilities),
@@ -296,5 +318,22 @@ private fun entranceStyleLabel(value: EntranceStyle): String = stringResource(
         EntranceStyle.Scale -> R.string.shell_entrance_scale
         EntranceStyle.Fade -> R.string.shell_entrance_fade
         EntranceStyle.None -> R.string.shell_entrance_none
+    },
+)
+
+@Composable
+private fun motionTempoLabel(value: MotionTempo): String = stringResource(
+    when (value) {
+        MotionTempo.Calm -> R.string.shell_tempo_calm
+        MotionTempo.Standard -> R.string.shell_tempo_standard
+        MotionTempo.Brisk -> R.string.shell_tempo_brisk
+    },
+)
+
+@Composable
+private fun entranceReplayLabel(value: EntranceReplay): String = stringResource(
+    when (value) {
+        EntranceReplay.EveryVisit -> R.string.shell_replay_every_visit
+        EntranceReplay.FirstVisit -> R.string.shell_replay_first_visit
     },
 )

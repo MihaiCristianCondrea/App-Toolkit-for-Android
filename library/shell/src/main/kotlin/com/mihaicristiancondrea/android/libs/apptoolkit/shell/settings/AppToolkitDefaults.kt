@@ -18,6 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings
 
 import androidx.compose.runtime.Immutable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.MotionTempo
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.EntranceReplay
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.EntranceStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.NavigationDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
@@ -88,6 +90,8 @@ class ShellDefaultsBuilder internal constructor(private val from: ShellSettings)
     var navigationBarStyle: NavigationBarStyle = from.navigationBarStyle
     var navigationTint: NavigationTint = from.navigationTint
     var entranceStyle: EntranceStyle = from.entranceStyle
+    var motionTempo: MotionTempo = from.motionTempo
+    var entranceReplay: EntranceReplay = from.entranceReplay
 
     internal fun build(): ShellSettings = from.copy(
         tabTransition = tabTransition,
@@ -98,6 +102,8 @@ class ShellDefaultsBuilder internal constructor(private val from: ShellSettings)
         navigationBarStyle = navigationBarStyle,
         navigationTint = navigationTint,
         entranceStyle = entranceStyle,
+        motionTempo = motionTempo,
+        entranceReplay = entranceReplay,
     )
 }
 

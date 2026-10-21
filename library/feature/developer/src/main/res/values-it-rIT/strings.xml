@@ -32,6 +32,13 @@
     <string name="shell_entrance_scale">Dissolvenza e ingrandimento</string>
     <string name="shell_entrance_fade">Dissolvenza</string>
     <string name="shell_entrance_none">Nessuna</string>
+    <string name="shell_dev_motion_tempo">Ritmo delle animazioni</string>
+    <string name="shell_tempo_calm">Calmo</string>
+    <string name="shell_tempo_standard">Standard</string>
+    <string name="shell_tempo_brisk">Rapido</string>
+    <string name="shell_dev_entrance_replay">Ripeti la comparsa</string>
+    <string name="shell_replay_every_visit">A ogni visita</string>
+    <string name="shell_replay_first_visit">Solo alla prima visita</string>
     <string name="shell_dev_reset">Ripristina le opzioni sviluppatore</string>
     <string name="shell_dev_reset_summary">Torna a quanto dichiarato dall\'app</string>
     <string name="shell_layout_auto">Automatico, in base alla larghezza della finestra</string>

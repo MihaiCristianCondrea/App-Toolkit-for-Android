@@ -32,6 +32,13 @@
     <string name="shell_entrance_scale">Fade at paglaki</string>
     <string name="shell_entrance_fade">Fade</string>
     <string name="shell_entrance_none">Wala</string>
+    <string name="shell_dev_motion_tempo">Bilis ng galaw</string>
+    <string name="shell_tempo_calm">Mahinahon</string>
+    <string name="shell_tempo_standard">Karaniwan</string>
+    <string name="shell_tempo_brisk">Mabilis</string>
+    <string name="shell_dev_entrance_replay">Pag-ulit ng paglitaw</string>
+    <string name="shell_replay_every_visit">Sa bawat pagbisita</string>
+    <string name="shell_replay_first_visit">Sa unang pagbisita lang</string>
     <string name="shell_dev_reset">I-reset ang mga opsyon ng developer</string>
     <string name="shell_dev_reset_summary">Ibalik sa itinakda ng app</string>
     <string name="shell_layout_auto">Awtomatiko, batay sa lapad ng window</string>

@@ -32,6 +32,13 @@
     <string name="shell_entrance_scale">Tona in och väx</string>
     <string name="shell_entrance_fade">Tona in</string>
     <string name="shell_entrance_none">Ingen</string>
+    <string name="shell_dev_motion_tempo">Rörelsetempo</string>
+    <string name="shell_tempo_calm">Lugnt</string>
+    <string name="shell_tempo_standard">Standard</string>
+    <string name="shell_tempo_brisk">Snabbt</string>
+    <string name="shell_dev_entrance_replay">Upprepa visning</string>
+    <string name="shell_replay_every_visit">Vid varje besök</string>
+    <string name="shell_replay_first_visit">Bara vid första besöket</string>
     <string name="shell_dev_reset">Återställ utvecklaralternativ</string>
     <string name="shell_dev_reset_summary">Tillbaka till det appen anger</string>
     <string name="shell_layout_auto">Automatiskt, efter fönsterbredd</string>

@@ -128,4 +128,25 @@ class ScreenVisitTrackerTest {
         assertEquals(true, visits.trackerFor(list) === visits.trackerFor(TrackedScreen(name = "List")))
         assertEquals(false, visits.trackerFor(list) === visits.trackerFor(screen))
     }
+
+    @Test
+    fun `leaving by navigation starts a new entrance`() {
+        val first = tracker.entranceId
+
+        tracker.onLeft(changingConfigurations = false)
+        tracker.onDisposed(changingConfigurations = false)
+
+        assertEquals(false, tracker.entranceId == first)
+    }
+
+    @Test
+    fun `a configuration change and the background keep the entrance`() {
+        val first = tracker.entranceId
+
+        tracker.onLeft(changingConfigurations = true)
+        tracker.onDisposed(changingConfigurations = true)
+        tracker.onLeft(changingConfigurations = false)
+
+        assertEquals(first, tracker.entranceId)
+    }
 }

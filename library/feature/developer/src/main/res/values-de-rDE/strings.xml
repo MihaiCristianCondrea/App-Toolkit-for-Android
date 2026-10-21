@@ -32,6 +32,13 @@
     <string name="shell_entrance_scale">Einblenden und vergrößern</string>
     <string name="shell_entrance_fade">Einblenden</string>
     <string name="shell_entrance_none">Keine</string>
+    <string name="shell_dev_motion_tempo">Bewegungstempo</string>
+    <string name="shell_tempo_calm">Ruhig</string>
+    <string name="shell_tempo_standard">Standard</string>
+    <string name="shell_tempo_brisk">Zügig</string>
+    <string name="shell_dev_entrance_replay">Einblendung wiederholen</string>
+    <string name="shell_replay_every_visit">Bei jedem Besuch</string>
+    <string name="shell_replay_first_visit">Nur beim ersten Besuch</string>
     <string name="shell_dev_reset">Entwickleroptionen zurücksetzen</string>
     <string name="shell_dev_reset_summary">Zurück zu den Vorgaben der App</string>
     <string name="shell_layout_auto">Automatisch, nach Fensterbreite</string>

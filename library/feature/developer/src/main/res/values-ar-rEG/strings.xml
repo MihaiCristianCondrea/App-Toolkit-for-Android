@@ -32,6 +32,13 @@
     <string name="shell_entrance_scale">تلاشٍ وتكبير</string>
     <string name="shell_entrance_fade">تلاشٍ</string>
     <string name="shell_entrance_none">بلا</string>
+    <string name="shell_dev_motion_tempo">إيقاع الحركة</string>
+    <string name="shell_tempo_calm">هادئ</string>
+    <string name="shell_tempo_standard">قياسي</string>
+    <string name="shell_tempo_brisk">سريع</string>
+    <string name="shell_dev_entrance_replay">إعادة حركة الظهور</string>
+    <string name="shell_replay_every_visit">في كل زيارة</string>
+    <string name="shell_replay_first_visit">في الزيارة الأولى فقط</string>
     <string name="shell_dev_reset">إعادة ضبط خيارات المطورين</string>
     <string name="shell_dev_reset_summary">العودة إلى ما يحدده التطبيق</string>
     <string name="shell_layout_auto">تلقائي، حسب عرض النافذة</string>

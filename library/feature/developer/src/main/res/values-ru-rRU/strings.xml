@@ -32,6 +32,13 @@
     <string name="shell_entrance_scale">Проявление с увеличением</string>
     <string name="shell_entrance_fade">Проявление</string>
     <string name="shell_entrance_none">Нет</string>
+    <string name="shell_dev_motion_tempo">Темп движения</string>
+    <string name="shell_tempo_calm">Спокойный</string>
+    <string name="shell_tempo_standard">Стандартный</string>
+    <string name="shell_tempo_brisk">Быстрый</string>
+    <string name="shell_dev_entrance_replay">Повтор появления</string>
+    <string name="shell_replay_every_visit">При каждом посещении</string>
+    <string name="shell_replay_first_visit">Только при первом посещении</string>
     <string name="shell_dev_reset">Сбросить параметры разработчика</string>
     <string name="shell_dev_reset_summary">Вернуть то, что задаёт приложение</string>
     <string name="shell_layout_auto">Автоматически, по ширине окна</string>

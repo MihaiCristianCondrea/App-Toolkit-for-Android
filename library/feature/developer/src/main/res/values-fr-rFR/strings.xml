@@ -32,6 +32,13 @@
     <string name="shell_entrance_scale">Fondu et agrandissement</string>
     <string name="shell_entrance_fade">Fondu</string>
     <string name="shell_entrance_none">Aucune</string>
+    <string name="shell_dev_motion_tempo">Rythme des animations</string>
+    <string name="shell_tempo_calm">Posé</string>
+    <string name="shell_tempo_standard">Standard</string>
+    <string name="shell_tempo_brisk">Vif</string>
+    <string name="shell_dev_entrance_replay">Répéter l\'apparition</string>
+    <string name="shell_replay_every_visit">À chaque visite</string>
+    <string name="shell_replay_first_visit">Seulement à la première visite</string>
     <string name="shell_dev_reset">Réinitialiser les options pour les développeurs</string>
     <string name="shell_dev_reset_summary">Revenir à ce que l\'application déclare</string>
     <string name="shell_layout_auto">Automatique, selon la largeur de la fenêtre</string>

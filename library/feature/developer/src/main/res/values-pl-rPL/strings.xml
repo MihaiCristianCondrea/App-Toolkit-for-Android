@@ -32,6 +32,13 @@
     <string name="shell_entrance_scale">Przenikanie i powiększenie</string>
     <string name="shell_entrance_fade">Przenikanie</string>
     <string name="shell_entrance_none">Brak</string>
+    <string name="shell_dev_motion_tempo">Tempo ruchu</string>
+    <string name="shell_tempo_calm">Spokojne</string>
+    <string name="shell_tempo_standard">Standardowe</string>
+    <string name="shell_tempo_brisk">Żwawe</string>
+    <string name="shell_dev_entrance_replay">Powtarzanie pojawiania się</string>
+    <string name="shell_replay_every_visit">Przy każdej wizycie</string>
+    <string name="shell_replay_first_visit">Tylko przy pierwszej wizycie</string>
     <string name="shell_dev_reset">Resetuj opcje programisty</string>
     <string name="shell_dev_reset_summary">Powrót do tego, co deklaruje aplikacja</string>
     <string name="shell_layout_auto">Automatycznie, według szerokości okna</string>

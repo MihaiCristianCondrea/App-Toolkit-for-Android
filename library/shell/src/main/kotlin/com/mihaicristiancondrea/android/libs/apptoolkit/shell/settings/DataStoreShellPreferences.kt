@@ -28,6 +28,8 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.MotionTempo
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.EntranceReplay
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.EntranceStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.TabTransitionStyle
@@ -94,6 +96,8 @@ internal class DataStoreShellPreferences(
     override suspend fun setNavigationBarStyle(value: NavigationBarStyle) = choose(Keys.navigationBarStyle, value.name)
     override suspend fun setNavigationTint(value: NavigationTint) = choose(Keys.navigationTint, value.name)
     override suspend fun setEntranceStyle(value: EntranceStyle) = choose(Keys.entranceStyle, value.name)
+    override suspend fun setMotionTempo(value: MotionTempo) = choose(Keys.motionTempo, value.name)
+    override suspend fun setEntranceReplay(value: EntranceReplay) = choose(Keys.entranceReplay, value.name)
 
     override suspend fun resetDeveloperOptions() {
         dataStore.edit { preferences -> Stored.all.forEach { it.forget(preferences) } }
@@ -118,6 +122,8 @@ internal class DataStoreShellPreferences(
         navigationTint = enum(Keys.navigationTint, defaults.navigationTint),
         hideTopBarOnScroll = this[Keys.hideTopBarOnScroll] ?: defaults.hideTopBarOnScroll,
         entranceStyle = enum(Keys.entranceStyle, defaults.entranceStyle),
+        motionTempo = enum(Keys.motionTempo, defaults.motionTempo),
+        entranceReplay = enum(Keys.entranceReplay, defaults.entranceReplay),
     )
 
     private inline fun <reified E : Enum<E>> Preferences.enum(key: Preferences.Key<String>, default: E): E =
@@ -160,6 +166,8 @@ internal class DataStoreShellPreferences(
                 enum(Keys.navigationTint) { it.navigationTint },
                 flag(Keys.hideTopBarOnScroll) { it.hideTopBarOnScroll },
                 enum(Keys.entranceStyle) { it.entranceStyle },
+                enum(Keys.motionTempo) { it.motionTempo },
+                enum(Keys.entranceReplay) { it.entranceReplay },
             )
         }
     }
@@ -179,6 +187,8 @@ internal class DataStoreShellPreferences(
         val navigationTint = stringPreferencesKey("navigation_tint")
         val hideTopBarOnScroll = booleanPreferencesKey("hide_top_bar_on_scroll")
         val entranceStyle = stringPreferencesKey("entrance_style")
+        val motionTempo = stringPreferencesKey("motion_tempo")
+        val entranceReplay = stringPreferencesKey("entrance_replay")
     }
 
     private companion object {

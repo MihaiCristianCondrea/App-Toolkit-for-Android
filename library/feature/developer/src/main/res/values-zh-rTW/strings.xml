@@ -32,6 +32,13 @@
     <string name="shell_entrance_scale">淡入並放大</string>
     <string name="shell_entrance_fade">淡入</string>
     <string name="shell_entrance_none">無</string>
+    <string name="shell_dev_motion_tempo">動態節奏</string>
+    <string name="shell_tempo_calm">從容</string>
+    <string name="shell_tempo_standard">標準</string>
+    <string name="shell_tempo_brisk">輕快</string>
+    <string name="shell_dev_entrance_replay">重播進場動畫</string>
+    <string name="shell_replay_every_visit">每次造訪</string>
+    <string name="shell_replay_first_visit">僅首次造訪</string>
     <string name="shell_dev_reset">重設開發人員選項</string>
     <string name="shell_dev_reset_summary">恢復為應用程式宣告的設定</string>
     <string name="shell_layout_auto">自動，依視窗寬度</string>

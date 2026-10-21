@@ -18,6 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings
 
 import androidx.compose.runtime.Immutable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.MotionTempo
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.EntranceReplay
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.EntranceStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
@@ -118,4 +120,8 @@ data class ShellSettings(
     val hideTopBarOnScroll: Boolean = false,
     /** How elements with `animateVisibility` enter: the style every screen's cascade follows. */
     val entranceStyle: EntranceStyle = EntranceStyle.Slide,
+    /** How quickly everything moves: the springs of the theme's motion scheme. */
+    val motionTempo: MotionTempo = MotionTempo.Calm,
+    /** Whether a screen's elements enter again each time it is returned to, or only the first time. */
+    val entranceReplay: EntranceReplay = EntranceReplay.EveryVisit,
 )

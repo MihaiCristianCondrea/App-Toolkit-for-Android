@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.MotionTempo
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.EntranceReplay
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.EntranceStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.TabTransitionStyle
@@ -43,6 +45,8 @@ class ResetDeveloperOptionsTest {
         navigationTint = NavigationTint.None,
         hideTopBarOnScroll = true,
         entranceStyle = EntranceStyle.None,
+        motionTempo = MotionTempo.Brisk,
+        entranceReplay = EntranceReplay.FirstVisit,
     )
 
     @Test

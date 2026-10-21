@@ -73,7 +73,16 @@ class DeveloperOptionsTest {
     fun `app C, pages only with custom frames, has no navigation or bar overrides`() {
         val options = developerOptions(capabilities(tabs = 0, startOptions = 1, framedPages = false, banner = true))
 
-        assertEquals(listOf(DeveloperOption.BackEdge, DeveloperOption.AnimationSpeed, DeveloperOption.EntranceStyle), options)
+        assertEquals(
+            listOf(
+                DeveloperOption.BackEdge,
+                DeveloperOption.AnimationSpeed,
+                DeveloperOption.EntranceStyle,
+                DeveloperOption.MotionTempo,
+                DeveloperOption.EntranceReplay,
+            ),
+            options,
+        )
         assertEquals(listOf(DeveloperCategory.Navigation, DeveloperCategory.Motion), categoriesOf(options))
     }
 

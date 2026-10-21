@@ -32,6 +32,13 @@
     <string name="shell_entrance_scale">Esmaecer e crescer</string>
     <string name="shell_entrance_fade">Esmaecer</string>
     <string name="shell_entrance_none">Nenhuma</string>
+    <string name="shell_dev_motion_tempo">Ritmo do movimento</string>
+    <string name="shell_tempo_calm">Calmo</string>
+    <string name="shell_tempo_standard">Padrão</string>
+    <string name="shell_tempo_brisk">Ágil</string>
+    <string name="shell_dev_entrance_replay">Repetir a entrada</string>
+    <string name="shell_replay_every_visit">A cada visita</string>
+    <string name="shell_replay_first_visit">Só na primeira visita</string>
     <string name="shell_dev_reset">Redefinir opções do desenvolvedor</string>
     <string name="shell_dev_reset_summary">Voltar ao que o app declara</string>
     <string name="shell_layout_auto">Automático, pela largura da janela</string>

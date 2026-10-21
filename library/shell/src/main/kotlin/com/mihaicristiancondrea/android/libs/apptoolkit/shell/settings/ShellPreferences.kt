@@ -19,6 +19,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings
 
 import android.content.Context
 import androidx.compose.runtime.staticCompositionLocalOf
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.MotionTempo
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.EntranceReplay
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.EntranceStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.TabTransitionStyle
@@ -67,6 +69,8 @@ interface ShellPreferences {
     suspend fun setNavigationBarStyle(value: NavigationBarStyle) = update { it.copy(navigationBarStyle = value) }
     suspend fun setNavigationTint(value: NavigationTint) = update { it.copy(navigationTint = value) }
     suspend fun setEntranceStyle(value: EntranceStyle) = update { it.copy(entranceStyle = value) }
+    suspend fun setMotionTempo(value: MotionTempo) = update { it.copy(motionTempo = value) }
+    suspend fun setEntranceReplay(value: EntranceReplay) = update { it.copy(entranceReplay = value) }
 
     /**
      * Forgets every developer option, so the shell is again as the app declares it in [defaults].

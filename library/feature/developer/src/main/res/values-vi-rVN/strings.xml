@@ -32,6 +32,13 @@
     <string name="shell_entrance_scale">Hiện dần và phóng to</string>
     <string name="shell_entrance_fade">Hiện dần</string>
     <string name="shell_entrance_none">Không có</string>
+    <string name="shell_dev_motion_tempo">Nhịp chuyển động</string>
+    <string name="shell_tempo_calm">Thong thả</string>
+    <string name="shell_tempo_standard">Tiêu chuẩn</string>
+    <string name="shell_tempo_brisk">Nhanh nhẹn</string>
+    <string name="shell_dev_entrance_replay">Phát lại hiệu ứng xuất hiện</string>
+    <string name="shell_replay_every_visit">Mỗi lần truy cập</string>
+    <string name="shell_replay_first_visit">Chỉ lần đầu</string>
     <string name="shell_dev_reset">Đặt lại tùy chọn nhà phát triển</string>
     <string name="shell_dev_reset_summary">Trở về như ứng dụng khai báo</string>
     <string name="shell_layout_auto">Tự động, theo chiều rộng cửa sổ</string>

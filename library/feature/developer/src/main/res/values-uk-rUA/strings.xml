@@ -32,6 +32,13 @@
     <string name="shell_entrance_scale">Проявлення зі збільшенням</string>
     <string name="shell_entrance_fade">Проявлення</string>
     <string name="shell_entrance_none">Немає</string>
+    <string name="shell_dev_motion_tempo">Темп руху</string>
+    <string name="shell_tempo_calm">Спокійний</string>
+    <string name="shell_tempo_standard">Стандартний</string>
+    <string name="shell_tempo_brisk">Швидкий</string>
+    <string name="shell_dev_entrance_replay">Повтор появи</string>
+    <string name="shell_replay_every_visit">Під час кожного відвідування</string>
+    <string name="shell_replay_first_visit">Лише під час першого відвідування</string>
     <string name="shell_dev_reset">Скинути параметри розробника</string>
     <string name="shell_dev_reset_summary">Повернути те, що задає застосунок</string>
     <string name="shell_layout_auto">Автоматично, за шириною вікна</string>

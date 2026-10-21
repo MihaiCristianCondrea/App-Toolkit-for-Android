@@ -32,6 +32,13 @@
     <string name="shell_entrance_scale">Fundido y crecimiento</string>
     <string name="shell_entrance_fade">Fundido</string>
     <string name="shell_entrance_none">Ninguna</string>
+    <string name="shell_dev_motion_tempo">Ritmo del movimiento</string>
+    <string name="shell_tempo_calm">Pausado</string>
+    <string name="shell_tempo_standard">Estándar</string>
+    <string name="shell_tempo_brisk">Ágil</string>
+    <string name="shell_dev_entrance_replay">Repetir la entrada</string>
+    <string name="shell_replay_every_visit">En cada visita</string>
+    <string name="shell_replay_first_visit">Solo en la primera visita</string>
     <string name="shell_dev_reset">Restablecer opciones para desarrolladores</string>
     <string name="shell_dev_reset_summary">Volver a lo que declara la app</string>
     <string name="shell_layout_auto">Automático, según el ancho de la ventana</string>

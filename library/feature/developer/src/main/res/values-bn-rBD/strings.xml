@@ -32,6 +32,13 @@
     <string name="shell_entrance_scale">ফেড ও বড় হওয়া</string>
     <string name="shell_entrance_fade">ফেড</string>
     <string name="shell_entrance_none">কোনোটি নয়</string>
+    <string name="shell_dev_motion_tempo">গতির ছন্দ</string>
+    <string name="shell_tempo_calm">ধীরস্থির</string>
+    <string name="shell_tempo_standard">সাধারণ</string>
+    <string name="shell_tempo_brisk">দ্রুত</string>
+    <string name="shell_dev_entrance_replay">প্রবেশের পুনরাবৃত্তি</string>
+    <string name="shell_replay_every_visit">প্রতিবার দেখার সময়</string>
+    <string name="shell_replay_first_visit">শুধু প্রথমবার</string>
     <string name="shell_dev_reset">ডেভেলপার বিকল্প রিসেট করুন</string>
     <string name="shell_dev_reset_summary">অ্যাপ যা ঘোষণা করে সেখানে ফিরে যান</string>
     <string name="shell_layout_auto">স্বয়ংক্রিয়, উইন্ডোর প্রস্থ অনুযায়ী</string>

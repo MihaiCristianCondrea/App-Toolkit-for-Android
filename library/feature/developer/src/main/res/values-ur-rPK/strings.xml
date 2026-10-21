@@ -32,6 +32,13 @@
     <string name="shell_entrance_scale">فیڈ اور بڑا ہونا</string>
     <string name="shell_entrance_fade">فیڈ</string>
     <string name="shell_entrance_none">کوئی نہیں</string>
+    <string name="shell_dev_motion_tempo">حرکت کی رفتار</string>
+    <string name="shell_tempo_calm">پُرسکون</string>
+    <string name="shell_tempo_standard">معیاری</string>
+    <string name="shell_tempo_brisk">تیز</string>
+    <string name="shell_dev_entrance_replay">نمودار ہونے کا اعادہ</string>
+    <string name="shell_replay_every_visit">ہر بار دیکھنے پر</string>
+    <string name="shell_replay_first_visit">صرف پہلی بار</string>
     <string name="shell_dev_reset">ڈیولپر اختیارات ری سیٹ کریں</string>
     <string name="shell_dev_reset_summary">ایپ جو مقرر کرتی ہے اس پر واپس جائیں</string>
     <string name="shell_layout_auto">خودکار، ونڈو کی چوڑائی کے مطابق</string>

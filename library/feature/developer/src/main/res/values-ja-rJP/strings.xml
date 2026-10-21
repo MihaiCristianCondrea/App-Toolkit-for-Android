@@ -32,6 +32,13 @@
     <string name="shell_entrance_scale">フェードしながら拡大</string>
     <string name="shell_entrance_fade">フェード</string>
     <string name="shell_entrance_none">なし</string>
+    <string name="shell_dev_motion_tempo">動きのテンポ</string>
+    <string name="shell_tempo_calm">ゆったり</string>
+    <string name="shell_tempo_standard">標準</string>
+    <string name="shell_tempo_brisk">きびきび</string>
+    <string name="shell_dev_entrance_replay">表示アニメーションの再生</string>
+    <string name="shell_replay_every_visit">表示するたび</string>
+    <string name="shell_replay_first_visit">初回のみ</string>
     <string name="shell_dev_reset">開発者向けオプションをリセット</string>
     <string name="shell_dev_reset_summary">アプリの宣言どおりに戻す</string>
     <string name="shell_layout_auto">自動（ウィンドウ幅に応じて）</string>

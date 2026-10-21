@@ -32,6 +32,13 @@
     <string name="shell_entrance_scale">फ़ेड और बड़ा होना</string>
     <string name="shell_entrance_fade">फ़ेड</string>
     <string name="shell_entrance_none">कोई नहीं</string>
+    <string name="shell_dev_motion_tempo">गति की लय</string>
+    <string name="shell_tempo_calm">शांत</string>
+    <string name="shell_tempo_standard">मानक</string>
+    <string name="shell_tempo_brisk">तेज़</string>
+    <string name="shell_dev_entrance_replay">प्रवेश दोहराएं</string>
+    <string name="shell_replay_every_visit">हर बार देखने पर</string>
+    <string name="shell_replay_first_visit">सिर्फ़ पहली बार</string>
     <string name="shell_dev_reset">डेवलपर विकल्प रीसेट करें</string>
     <string name="shell_dev_reset_summary">ऐप जो तय करता है, उस पर वापस जाएँ</string>
     <string name="shell_layout_auto">अपने-आप, विंडो की चौड़ाई से</string>

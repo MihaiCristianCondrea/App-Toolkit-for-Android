@@ -32,6 +32,13 @@
     <string name="shell_entrance_scale">จางเข้าและขยาย</string>
     <string name="shell_entrance_fade">จางเข้า</string>
     <string name="shell_entrance_none">ไม่มี</string>
+    <string name="shell_dev_motion_tempo">จังหวะการเคลื่อนไหว</string>
+    <string name="shell_tempo_calm">ผ่อนคลาย</string>
+    <string name="shell_tempo_standard">มาตรฐาน</string>
+    <string name="shell_tempo_brisk">ฉับไว</string>
+    <string name="shell_dev_entrance_replay">เล่นภาพเคลื่อนไหวเมื่อปรากฏซ้ำ</string>
+    <string name="shell_replay_every_visit">ทุกครั้งที่เข้าชม</string>
+    <string name="shell_replay_first_visit">เฉพาะครั้งแรก</string>
     <string name="shell_dev_reset">รีเซ็ตตัวเลือกสำหรับนักพัฒนาแอป</string>
     <string name="shell_dev_reset_summary">กลับไปตามที่แอปกำหนด</string>
     <string name="shell_layout_auto">อัตโนมัติ ตามความกว้างของหน้าต่าง</string>

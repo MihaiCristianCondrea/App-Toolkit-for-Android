@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen
 import android.app.Activity
 import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,6 +39,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.mo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ScaffoldFabs
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
+import java.util.concurrent.atomic.AtomicLong
 
 /**
  * The boundary of one screen: reports each visit to it, reports its [status], and shows its
@@ -78,6 +80,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.
  * Toolkit scaffold like [ScaffoldFabs]; null declares none, leaving the destination's own. Declared
  * here, once for the screen, they follow its state without the cases of a [StateContent] both
  * declaring buttons while one fades into the other.
+ *
+ * **Entrances.** The screen's `animateVisibility` elements cascade in once it settles, the visit's
+ * first frame without a transition or an overlay, in the order they are shown. Each time the
+ * screen is returned to by navigation they play again, or only the first time with
+ * `EntranceReplay.FirstVisit`; coming back from the background, rotating or scrolling within the
+ * visit does not replay them.
  */
 @Composable
 fun ScreenHost(
@@ -88,22 +96,23 @@ fun ScreenHost(
     fabs: List<ToolkitFab>? = null,
     content: @Composable () -> Unit,
 ) {
-    TrackScreenVisits(screen = screen, status = status)
+    val tracker: ScreenVisitTracker = rememberScreenVisitTracker(screen)
+    val entrance: ScreenEntrance = remember(tracker.entranceId) { ScreenEntrance(tracker.entranceId) }
+    TrackScreenVisits(tracker = tracker, entrance = entrance, status = status)
     if (fabs != null) {
         ScaffoldFabs(fabs)
     }
-    content()
+    CompositionLocalProvider(LocalScreenEntrance provides entrance, content = content)
     if (viewModel != null) {
         MessageHost(viewModel = viewModel, onAction = onMessageAction)
     }
 }
 
 @Composable
-private fun TrackScreenVisits(screen: TrackedScreen, status: TrackedStatus?) {
+private fun TrackScreenVisits(tracker: ScreenVisitTracker, entrance: ScreenEntrance, status: TrackedStatus?) {
     val telemetry: AnalyticsReporter = LocalTelemetry.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val activity: Activity? = LocalActivity.current
-    val tracker: ScreenVisitTracker = rememberScreenVisitTracker(screen)
     val label: String? = status?.trackingLabel
     val currentLabel by rememberUpdatedState(label)
     val currentTelemetry by rememberUpdatedState(telemetry)
@@ -112,7 +121,11 @@ private fun TrackScreenVisits(screen: TrackedScreen, status: TrackedStatus?) {
         val changingConfigurations = { activity?.isChangingConfigurations == true }
         val observer = LifecycleEventObserver { _, event ->
             when (event) {
-                Lifecycle.Event.ON_RESUME -> tracker.onResumed(currentLabel, currentTelemetry)
+                Lifecycle.Event.ON_RESUME -> {
+                    tracker.onResumed(currentLabel, currentTelemetry)
+                    entrance.settled = true
+                }
+                Lifecycle.Event.ON_PAUSE -> entrance.settled = false
                 Lifecycle.Event.ON_STOP -> tracker.onLeft(changingConfigurations())
                 else -> Unit
             }
@@ -123,6 +136,7 @@ private fun TrackScreenVisits(screen: TrackedScreen, status: TrackedStatus?) {
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
             tracker.onLeft(changingConfigurations())
+            tracker.onDisposed(changingConfigurations())
         }
     }
     LaunchedEffect(tracker, label) { tracker.onStatus(label, currentTelemetry) }
@@ -167,6 +181,14 @@ internal class ScreenVisitTracker(private val screen: TrackedScreen) {
     var inVisit: Boolean = false
         private set
 
+    /**
+     * Which entrance the screen is on: it changes once the screen leaves composition by navigation,
+     * so returning plays the entrance again, and stays through the background and a configuration
+     * change. Unique across processes, since elements save the one they played in.
+     */
+    var entranceId: Long = nextEntranceId()
+        private set
+
     /** The status label last reported in this visit. */
     private var reportedLabel: String? = null
 
@@ -190,6 +212,11 @@ internal class ScreenVisitTracker(private val screen: TrackedScreen) {
         if (!changingConfigurations) inVisit = false
     }
 
+    /** The screen left composition; unless only its configuration changed, it enters anew. */
+    fun onDisposed(changingConfigurations: Boolean) {
+        if (!changingConfigurations) entranceId = nextEntranceId()
+    }
+
     private fun reportStatus(label: String?, telemetry: AnalyticsReporter) {
         if (label == null || label == reportedLabel) return
         reportedLabel = label
@@ -211,3 +238,8 @@ internal class ScreenVisitTracker(private val screen: TrackedScreen) {
         const val STATE_PARAM: String = "state"
     }
 }
+
+/** Seeded from the clock, so an id saved before process death never matches one issued after. */
+private val entranceIds = AtomicLong(System.nanoTime())
+
+private fun nextEntranceId(): Long = entranceIds.incrementAndGet()

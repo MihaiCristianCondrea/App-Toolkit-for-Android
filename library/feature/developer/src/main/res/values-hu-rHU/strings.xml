@@ -32,6 +32,13 @@
     <string name="shell_entrance_scale">Áttűnés és nagyítás</string>
     <string name="shell_entrance_fade">Áttűnés</string>
     <string name="shell_entrance_none">Nincs</string>
+    <string name="shell_dev_motion_tempo">Mozgás tempója</string>
+    <string name="shell_tempo_calm">Nyugodt</string>
+    <string name="shell_tempo_standard">Normál</string>
+    <string name="shell_tempo_brisk">Fürge</string>
+    <string name="shell_dev_entrance_replay">Megjelenés ismétlése</string>
+    <string name="shell_replay_every_visit">Minden látogatáskor</string>
+    <string name="shell_replay_first_visit">Csak az első látogatáskor</string>
     <string name="shell_dev_reset">Fejlesztői beállítások visszaállítása</string>
     <string name="shell_dev_reset_summary">Vissza ahhoz, amit az alkalmazás megad</string>
     <string name="shell_layout_auto">Automatikus, az ablak szélessége szerint</string>
