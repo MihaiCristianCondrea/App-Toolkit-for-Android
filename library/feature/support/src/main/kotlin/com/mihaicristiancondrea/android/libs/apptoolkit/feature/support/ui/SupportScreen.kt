@@ -268,7 +268,8 @@ private fun SupportList(
             )
         }
         if (adUnitId != null) {
-            animatedItem {
+            // A native ad enters on its own once it loads, so its item does not.
+            item {
                 SupportNativeAdCard(
                     modifier = Modifier
                         .padding(all = SizeConstants.LargeSize)

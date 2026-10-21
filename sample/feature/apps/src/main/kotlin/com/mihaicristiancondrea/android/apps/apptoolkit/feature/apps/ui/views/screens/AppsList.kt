@@ -173,6 +173,7 @@ private fun AppsGrid(
         verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
         horizontalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
     ) {
+        // The chips enter one after another on their own, ahead of the cards.
         item(span = { GridItemSpan(columnCount) }, contentType = "filters") {
             AppsListFilters(
                 allAppsCount = allAppsCount,

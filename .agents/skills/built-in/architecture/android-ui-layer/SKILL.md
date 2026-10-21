@@ -155,7 +155,8 @@ their own queue.
   `retryWhenEmpty` and `showAd` before replacing a case; never copy `NoDataScreen` into `onEmpty`
   or `onError` to change one of those.
 - Bring lazy rows and cards in with `animatedItems`, `animatedItemsIndexed` or `animatedItem`, and
-  other elements with `Modifier.animateVisibility(index)`. Toolkit components enter on their own;
+  other elements with `Modifier.animateVisibility(index)`, every item of the list alike; only an item
+  of filter chips or a native ad stays a plain `item`. Toolkit components enter on their own;
   never wrap them. The screen times the cascade, the app's `EntranceStyle`, `MotionTempo` and
   `EntranceReplay` shape it; never add delays, durations, offsets or `tween`s of your own.
 - Switch on any other state, such as a flow's phases, with `StateContent`, and declare the

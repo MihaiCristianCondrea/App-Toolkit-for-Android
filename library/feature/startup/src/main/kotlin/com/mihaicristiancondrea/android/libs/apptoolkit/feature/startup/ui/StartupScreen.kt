@@ -60,6 +60,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.sty
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.StateContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedExtendedFloatingActionButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.TopAppBarScaffold
@@ -190,11 +191,13 @@ private fun StartupWelcome(
             verticalArrangement = Arrangement.spacedBy(space = SizeConstants.LargeSize),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            item {
+            animatedItem {
                 AsyncImage(
                     model = R.drawable.il_startup,
                     contentDescription = null,
                 )
+            }
+            animatedItem {
                 InfoMessageSection(
                     message = stringResource(R.string.summary_browse_terms_of_service_and_privacy_policy),
                     learnMoreText = stringResource(CoreUiR.string.learn_more),

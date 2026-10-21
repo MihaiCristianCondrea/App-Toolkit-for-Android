@@ -50,6 +50,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.mo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import kotlinx.collections.immutable.persistentListOf
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as ToolkitR
@@ -131,26 +132,26 @@ fun ComponentsScreen(
             contentPadding = innerPadding,
             verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
         ) {
-            item {
+            animatedItem {
                 ButtonShowcase(
                     onLogEvent = ::ga4Event,
                 )
             }
 
-            item {
+            animatedItem {
                 FabShowcase(
                     onLogEvent = ::ga4Event,
                 )
             }
 
-            item {
+            animatedItem {
                 ArticleBarShowcase(
                     onLogEvent = ::ga4Event,
                     onOpenArticleDemo = onOpenArticleDemo,
                 )
             }
 
-            item {
+            animatedItem {
                 InputShowcase(
                     onLogEvent = ::ga4Event,
                     dateMillis = selectedDateMillis,
@@ -161,13 +162,13 @@ fun ComponentsScreen(
                 )
             }
 
-            item {
+            animatedItem {
                 TextFieldShowcase(
                     onLogEvent = ::ga4Event,
                 )
             }
 
-            item {
+            animatedItem {
                 PreferenceShowcase(
                     onLogEvent = ::ga4Event,
                     switchEnabled = switchEnabled,
@@ -184,16 +185,16 @@ fun ComponentsScreen(
                 )
             }
 
-            item {
+            animatedItem {
                 LayoutShowcase(
                     dropdownOptions = dropdownOptions,
                     carouselState = carouselState,
                 )
             }
 
-            item { GridShowcase() }
+            animatedItem { GridShowcase() }
 
-            item {
+            animatedItem {
                 FilterShowcase(
                     onLogEvent = ::ga4Event,
                     filters = filters,
@@ -202,9 +203,9 @@ fun ComponentsScreen(
                 )
             }
 
-            item(key = "animations") { AnimationShowcase() }
+            animatedItem(key = "animations") { AnimationShowcase() }
 
-            item(key = "dividers") { DividerShowcase() }
+            animatedItem(key = "dividers") { DividerShowcase() }
         }
     }
 

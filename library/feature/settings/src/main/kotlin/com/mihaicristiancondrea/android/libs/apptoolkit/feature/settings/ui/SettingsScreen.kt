@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Notifications
@@ -61,6 +60,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextField
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextFieldStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItemsIndexed
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
@@ -236,7 +236,7 @@ fun SettingsList(
                     LargeVerticalSpacer()
                 }
 
-                itemsIndexed(
+                animatedItemsIndexed(
                     items = category.preferences,
                     key = { index: Int, preference: SettingsPreference ->
                         preference.key?.let { key ->
@@ -301,7 +301,7 @@ private fun LazyListScope.searchResults(
         }
         return
     }
-    itemsIndexed(
+    animatedItemsIndexed(
         items = results,
         key = { index: Int, preference: SettingsPreference -> "settings_search_${preference.key ?: index}_$index" },
     ) { index: Int, preference: SettingsPreference ->

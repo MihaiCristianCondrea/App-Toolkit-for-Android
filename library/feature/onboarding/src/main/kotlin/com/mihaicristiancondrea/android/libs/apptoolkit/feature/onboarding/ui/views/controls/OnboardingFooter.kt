@@ -18,8 +18,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.controls
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
@@ -34,6 +32,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FlexibleBottomAppBar
@@ -60,6 +59,7 @@ fun OnboardingFooter(
     onNextClicked: () -> Unit,
     onBackClicked: () -> Unit
 ) {
+    val motion = MaterialTheme.motionScheme
     FlexibleBottomAppBar(
         contentPadding = PaddingValues(
             horizontal = SizeConstants.LargeSize,
@@ -77,18 +77,12 @@ fun OnboardingFooter(
                 visible = pagerState.currentPage > 0,
                 enter = slideInHorizontally(
                     initialOffsetX = { -it },
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                        stiffness = Spring.StiffnessLow
-                    )
-                ) + fadeIn(animationSpec = spring(stiffness = Spring.StiffnessLow)),
+                    animationSpec = motion.defaultSpatialSpec()
+                ) + fadeIn(animationSpec = motion.defaultEffectsSpec()),
                 exit = slideOutHorizontally(
                     targetOffsetX = { -it },
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                        stiffness = Spring.StiffnessLow
-                    )
-                ) + fadeOut(animationSpec = spring(stiffness = Spring.StiffnessLow))
+                    animationSpec = motion.defaultSpatialSpec()
+                ) + fadeOut(animationSpec = motion.fastEffectsSpec())
             ) {
                 GeneralButton(
                     style = GeneralButtonStyle.Outlined,

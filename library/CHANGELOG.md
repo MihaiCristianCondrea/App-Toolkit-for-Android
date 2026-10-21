@@ -18,6 +18,10 @@
 - Preference rows, switch cards, grouped action lists, info messages, filter chips, `NoDataScreen`
   and native ad slots enter on their own in their screen's cascade. They skip it in dialogs, sheets
   and popups, and inside an item that already enters.
+- Every Toolkit screen enters the same way: About, Privacy, Help, Startup, Settings, Display,
+  Permissions and the developer options bring in their headers, cards and rows with the screen,
+  instead of only some of them. Help's Show more and the onboarding buttons and page dots move on
+  the motion tempo.
 
 ### Changed
 
@@ -26,6 +30,8 @@
 - `animateVisibility` cascades 50 ms apart, rises 32 dp with a slight scale and fades on the slow
   effects spring. Inside a `ScreenHost` it waits for the screen to settle and replays per
   `EntranceReplay`.
+- The developer options page is a `ScreenHost`: it waits for its transition, follows
+  `EntranceReplay`, and reports its visits as `DeveloperOptions`.
 - `ScreenStates.transition` is nullable and null by default: `StateContent` and
   `ScreenStateHandler` then cross-fade on the motion scheme instead of a fixed 300 ms fade.
 

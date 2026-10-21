@@ -18,9 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.controls
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -55,10 +53,7 @@ fun PageIndicatorDots(
             val isSelected = pagerState.currentPage == index
             val animatedScaleFactor by animateFloatAsState(
                 targetValue = if (isSelected) 1.4f else 1f,
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                    stiffness = Spring.StiffnessLow
-                ),
+                animationSpec = MaterialTheme.motionScheme.defaultSpatialSpec(),
                 label = "DotScaleFactor"
             )
             val color = if (isSelected) MaterialTheme.colorScheme.primary

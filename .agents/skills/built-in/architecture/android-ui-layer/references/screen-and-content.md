@@ -167,7 +167,7 @@ ScreenStateHandler(
 
 ```kotlin
 LazyColumn {
-    animatedItem { TopListFilters(filters, onSelect) }
+    item { TopListFilters(filters, onSelect) } // the chips cascade on their own
     animatedItemsIndexed(rows, key = { _, row -> row.id }) { index, row ->
         RowCard(row)
     }
@@ -184,6 +184,11 @@ LazyColumn {
   chips, `NoDataScreen`, native ad slots) enter on their own. Never wrap them in
   `animateVisibility`; inside an `animatedItem` they do not enter again, and in a dialog, sheet or
   popup they do not enter at all.
+- Every item of a screen's list is an `animatedItem(s)`, headers and cards alike, so the whole
+  screen arrives together. The exception is an item holding only filter chips or a native ad slot:
+  keep it a plain `item`, so the chips cascade one by one and the ad enters when it loads.
+- Every screen, including a developer or demo page, is a `ScreenHost`; without one its elements
+  enter once, during the transition, and never replay.
 - An element outside a lazy list that needs an entrance uses `Modifier.animateVisibility(index)`,
   its root's own modifier. Outside a `ScreenHost` it enters once, in an app-wide cascade.
 - The entrance replays on every return to the screen by default; `EntranceReplay.FirstVisit` plays

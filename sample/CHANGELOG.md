@@ -7,6 +7,9 @@
 ### Improved
 
 - The Apps list brings in its filter chips, then its cards, each time you open it.
+- The Components, Quick Tools and article demo screens enter the way the Toolkit's screens do,
+  each section or card in turn.
+- The article demo reports its visits as `ArticleDemo`.
 
 ### Fixed
 

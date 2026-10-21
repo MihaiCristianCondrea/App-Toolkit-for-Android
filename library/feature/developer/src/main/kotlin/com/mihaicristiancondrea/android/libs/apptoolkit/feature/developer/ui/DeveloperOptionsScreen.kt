@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -37,8 +36,11 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation3.runtime.NavKey
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItemsIndexed
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
@@ -68,7 +70,8 @@ import kotlin.math.roundToInt
  *
  * It reads the shell's own locals, so it only works as a page of a `ShellHost`. The page comes with
  * `developerOptionsPage()`, which `toolkitGraph { }` in `:library:apptoolkit` calls. The settings
- * search does not list these options: the page is reached once unlocked.
+ * search does not list these options: the page is reached once unlocked. Like every screen, it is a
+ * `ScreenHost`, so it enters with the app's entrance once its transition settles.
  */
 @Composable
 fun DeveloperOptionsScreen() {
@@ -105,41 +108,45 @@ fun DeveloperOptionsScreen() {
     val resetTitle = stringResource(R.string.shell_dev_reset)
     val resetSummary = stringResource(R.string.shell_dev_reset_summary)
 
-    LazyColumn(
-        contentPadding = contentPadding(PaddingValues(bottom = SizeConstants.LargeSize)),
-        modifier = Modifier.fillMaxHeight(),
-        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
-    ) {
-        animatedItem { PreferenceCategoryItem(title = categoryLiveState) }
-        itemsIndexed(liveState) { index, line ->
-            StateItem(line, Modifier.grouped(groupedItemPosition(index, liveState.size)))
-        }
-        categories.forEach { (category, options) ->
-            animatedItem(key = "category_${category.name}") { PreferenceCategoryItem(title = stringResource(category.title)) }
-            itemsIndexed(options, key = { _, option -> "option_${option.name}" }) { index, option ->
-                DeveloperOptionItem(
-                    option = option,
-                    settings = settings,
-                    preferences = preferences,
-                    scope = scope,
-                    graph = graph,
-                    capabilities = capabilities,
-                    modifier = Modifier.grouped(groupedItemPosition(index, options.size)),
+    ScreenHost(screen = DEVELOPER_OPTIONS_SCREEN) {
+        LazyColumn(
+            contentPadding = contentPadding(PaddingValues(bottom = SizeConstants.LargeSize)),
+            modifier = Modifier.fillMaxHeight(),
+            verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
+        ) {
+            animatedItem { PreferenceCategoryItem(title = categoryLiveState) }
+            animatedItemsIndexed(liveState) { index, line ->
+                StateItem(line, Modifier.grouped(groupedItemPosition(index, liveState.size)))
+            }
+            categories.forEach { (category, options) ->
+                animatedItem(key = "category_${category.name}") { PreferenceCategoryItem(title = stringResource(category.title)) }
+                animatedItemsIndexed(options, key = { _, option -> "option_${option.name}" }) { index, option ->
+                    DeveloperOptionItem(
+                        option = option,
+                        settings = settings,
+                        preferences = preferences,
+                        scope = scope,
+                        graph = graph,
+                        capabilities = capabilities,
+                        modifier = Modifier.grouped(groupedItemPosition(index, options.size)),
+                    )
+                }
+            }
+            animatedItem {
+                SettingsPreferenceItem(
+                    modifier = Modifier
+                        .padding(top = SizeConstants.LargeSize)
+                        .grouped(GroupedItemPosition.SINGLE),
+                    title = resetTitle,
+                    summary = resetSummary,
+                    onClick = { scope.launch { preferences.resetDeveloperOptions() } },
                 )
             }
         }
-        animatedItem {
-            SettingsPreferenceItem(
-                modifier = Modifier
-                    .padding(top = SizeConstants.LargeSize)
-                    .grouped(GroupedItemPosition.SINGLE),
-                title = resetTitle,
-                summary = resetSummary,
-                onClick = { scope.launch { preferences.resetDeveloperOptions() } },
-            )
-        }
     }
 }
+
+private val DEVELOPER_OPTIONS_SCREEN = TrackedScreen(name = "DeveloperOptions", className = "DeveloperOptionsScreen")
 
 private fun Modifier.grouped(position: GroupedItemPosition): Modifier =
     groupedPreferenceItem(position = position, outerRadius = SizeConstants.LargeMediumSize)

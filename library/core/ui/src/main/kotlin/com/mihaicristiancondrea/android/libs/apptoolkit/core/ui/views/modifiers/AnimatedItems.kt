@@ -17,17 +17,18 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridItemScope
 import androidx.compose.foundation.lazy.grid.LazyGridItemSpanScope
 import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.Layout
 
 /**
  * [items] whose every item enters with the screen's cascade, in list order, and moves with
@@ -65,7 +66,7 @@ fun <T> LazyListScope.animatedItemsIndexed(
         contentType = { index -> contentType(index, items[index]) },
     ) { index ->
         val scope: LazyItemScope = this
-        EnteringItem(Modifier.animateItem().animateVisibility(index = index)) { scope.itemContent(index, items[index]) }
+        EnteringItem(scope.itemMotion(index = index)) { scope.itemContent(index, items[index]) }
     }
 }
 
@@ -98,7 +99,7 @@ fun <T> LazyGridScope.animatedItemsIndexed(
         contentType = { index -> contentType(index, items[index]) },
     ) { index ->
         val scope: LazyGridItemScope = this
-        EnteringItem(Modifier.animateItem().animateVisibility(index = index)) { scope.itemContent(index, items[index]) }
+        EnteringItem(scope.itemMotion(index = index)) { scope.itemContent(index, items[index]) }
     }
 }
 
@@ -113,7 +114,7 @@ fun LazyListScope.animatedItem(
 ) {
     item(key = key, contentType = contentType) {
         val scope: LazyItemScope = this
-        EnteringItem(Modifier.animateItem().animateVisibility()) { scope.content() }
+        EnteringItem(scope.itemMotion(index = null)) { scope.content() }
     }
 }
 
@@ -126,15 +127,51 @@ fun LazyGridScope.animatedItem(
 ) {
     item(key = key, span = span, contentType = contentType) {
         val scope: LazyGridItemScope = this
-        EnteringItem(Modifier.animateItem().animateVisibility()) { scope.content() }
+        EnteringItem(scope.itemMotion(index = null)) { scope.content() }
     }
 }
 
-/** An item that brings [content] in, telling the Toolkit components inside not to enter again. */
+/**
+ * An item's entrance and its moves, on the app's motion scheme: it enters with [animateVisibility],
+ * which also fades it in, so `animateItem` only places it and fades it out.
+ */
+@Composable
+private fun LazyItemScope.itemMotion(index: Int?): Modifier {
+    val motion = MaterialTheme.motionScheme
+    return Modifier
+        .animateItem(fadeInSpec = null, placementSpec = motion.defaultSpatialSpec(), fadeOutSpec = motion.fastEffectsSpec())
+        .animateVisibility(index = index)
+}
+
+/** [LazyItemScope.itemMotion] for a grid item. */
+@Composable
+private fun LazyGridItemScope.itemMotion(index: Int?): Modifier {
+    val motion = MaterialTheme.motionScheme
+    return Modifier
+        .animateItem(fadeInSpec = null, placementSpec = motion.defaultSpatialSpec(), fadeOutSpec = motion.fastEffectsSpec())
+        .animateVisibility(index = index)
+}
+
+/**
+ * An item that brings [content] in, telling the Toolkit components inside not to enter again. Its
+ * children stack top to bottom with the item's constraints, as a lazy item's own children do.
+ */
 @Composable
 private fun EnteringItem(modifier: Modifier, content: @Composable () -> Unit) {
-    Box(modifier, propagateMinConstraints = true) {
-        CompositionLocalProvider(LocalInsideEntrance provides true, content = content)
+    Layout(
+        content = { CompositionLocalProvider(LocalInsideEntrance provides true, content = content) },
+        modifier = modifier,
+    ) { measurables, constraints ->
+        val placeables = measurables.map { it.measure(constraints) }
+        val width = maxOf(placeables.maxOfOrNull { it.width } ?: 0, constraints.minWidth)
+        val height = (placeables.sumOf { it.height }).coerceIn(constraints.minHeight, constraints.maxHeight)
+        layout(width, height) {
+            var y = 0
+            placeables.forEach { placeable ->
+                placeable.place(x = 0, y = y)
+                y += placeable.height
+            }
+        }
     }
 }
 

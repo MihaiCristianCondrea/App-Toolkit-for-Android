@@ -18,9 +18,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.lists
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideOutVertically
@@ -48,7 +45,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraLargeVerticalSpacer
@@ -84,6 +81,7 @@ internal fun FaqList(
     val hasHiddenQuestions = questions.size > INITIAL_VISIBLE_QUESTION_COUNT
     val popularGroupItemCount = visibleQuestions.size + if (hasHiddenQuestions) 1 else 0
     val supportGroupItemCount = 1 + if (adUnitId != null && isAdLoaded) 1 else 0
+    val motion = MaterialTheme.motionScheme
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -95,12 +93,12 @@ internal fun FaqList(
         ),
         verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
     ) {
-        item {
+        animatedItem {
             Text(text = stringResource(id = R.string.popular_help_resources))
         }
 
         visibleQuestions.forEachIndexed { index: Int, question: FaqItem ->
-            item(key = question.id.value) {
+            animatedItem(key = question.id.value) {
                 var isExpanded by rememberSaveable(question.id.value) {
                     mutableStateOf(value = false)
                 }
@@ -117,35 +115,21 @@ internal fun FaqList(
                         onQuestionToggled(question, index, expanded)
                         isExpanded = expanded
                     },
-                    modifier = Modifier
-                        .animateItem(
-                            placementSpec = spring(
-                                dampingRatio = Spring.DampingRatioLowBouncy,
-                                stiffness = Spring.StiffnessLow,
-                            )
-                        )
-                        .animateVisibility(index = index),
                 )
             }
         }
 
         if (hasHiddenQuestions) {
-            item(key = "show_more_questions") {
+            animatedItem(key = "show_more_questions") {
                 AnimatedVisibility(
                     visible = !showAllQuestions,
-                    modifier = Modifier.animateItem(
-                        placementSpec = spring(
-                            dampingRatio = Spring.DampingRatioLowBouncy,
-                            stiffness = Spring.StiffnessLow,
-                        )
-                    ),
                     exit = slideOutVertically(
                         targetOffsetY = { it },
-                        animationSpec = tween(durationMillis = 500),
+                        animationSpec = motion.defaultSpatialSpec(),
                     ) + fadeOut(
-                        animationSpec = tween(durationMillis = 300),
+                        animationSpec = motion.fastEffectsSpec(),
                     ) + shrinkVertically(
-                        animationSpec = tween(durationMillis = 500),
+                        animationSpec = motion.defaultSpatialSpec(),
                     ),
                 ) {
                     Card(
@@ -157,8 +141,7 @@ internal fun FaqList(
                                     size = popularGroupItemCount,
                                 ),
                                 outerRadius = SizeConstants.ExtraLargeIncreasedSize,
-                            )
-                            .animateVisibility(index = popularGroupItemCount - 1),
+                            ),
                         shape = RectangleShape,
                         onClick = {
                             onShowMoreQuestions()
@@ -190,7 +173,7 @@ internal fun FaqList(
             }
         }
 
-        item {
+        animatedItem {
             Text(text = stringResource(id = R.string.need_more_help))
         }
 
@@ -208,7 +191,7 @@ internal fun FaqList(
             }
         }
 
-        item {
+        animatedItem {
             ContactUsCard(
                 groupedPosition = groupedItemPosition(
                     index = supportGroupItemCount - 1,

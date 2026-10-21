@@ -31,8 +31,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItems
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ScaffoldArticleTopBar
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.readingProgress
@@ -48,33 +52,35 @@ fun ArticleDemoScreen(branded: Boolean) {
     val headline = stringResource(id = R.string.components_article_headline)
     val paragraph = stringResource(id = R.string.components_article_paragraph)
     val brand = if (branded) painterResource(id = R.drawable.components_article_brand) else null
-    ScaffoldArticleTopBar(
-        title = headline,
-        compact = { listState.firstVisibleItemIndex > 0 },
-        progress = listState::readingProgress,
-        brand = brand,
-        brandContentDescription = if (branded) stringResource(id = R.string.components_article_brand) else null,
-    )
-    LazyColumn(state = listState, contentPadding = contentPadding()) {
-        item(key = "headline") {
-            Column(
-                modifier = Modifier.padding(all = SizeConstants.LargeSize),
-                verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
-            ) {
-                if (brand != null) {
-                    Image(painter = brand, contentDescription = null, modifier = Modifier.height(32.dp))
+    ScreenHost(screen = AppScreenTracking.Screens.ARTICLE_DEMO) {
+        ScaffoldArticleTopBar(
+            title = headline,
+            compact = { listState.firstVisibleItemIndex > 0 },
+            progress = listState::readingProgress,
+            brand = brand,
+            brandContentDescription = if (branded) stringResource(id = R.string.components_article_brand) else null,
+        )
+        LazyColumn(state = listState, contentPadding = contentPadding()) {
+            animatedItem(key = "headline") {
+                Column(
+                    modifier = Modifier.padding(all = SizeConstants.LargeSize),
+                    verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+                ) {
+                    if (brand != null) {
+                        Image(painter = brand, contentDescription = null, modifier = Modifier.height(32.dp))
+                    }
+                    Text(text = headline, style = MaterialTheme.typography.headlineMedium)
                 }
-                Text(text = headline, style = MaterialTheme.typography.headlineMedium)
             }
-        }
-        items(count = ParagraphCount) {
-            Text(
-                text = paragraph,
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(horizontal = SizeConstants.LargeSize, vertical = SizeConstants.SmallSize),
-            )
+            animatedItems(items = Paragraphs) {
+                Text(
+                    text = paragraph,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(horizontal = SizeConstants.LargeSize, vertical = SizeConstants.SmallSize),
+                )
+            }
         }
     }
 }
 
-private const val ParagraphCount = 16
+private val Paragraphs: List<Int> = List(size = 16) { it }

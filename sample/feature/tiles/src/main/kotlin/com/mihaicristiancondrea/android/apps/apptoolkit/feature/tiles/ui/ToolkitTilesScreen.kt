@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -78,7 +77,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.LocalNativeAdViewFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItemsIndexed
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
@@ -264,6 +264,7 @@ private fun ToolkitTilesCatalog(
                 bottom = contentPadding.calculateBottomPadding() + SizeConstants.LargeSize,
             ),
         ) {
+            // The chips enter one after another on their own, ahead of the categories.
             item(key = "filters", contentType = "filters") {
                 TilesFilters(
                     categories = categories,
@@ -273,11 +274,11 @@ private fun ToolkitTilesCatalog(
             }
             item(key = "top_spacing", contentType = "spacing") { Spacer(modifier = Modifier.height(SizeConstants.SmallSize)) }
             if (listItems.isEmpty()) {
-                item(key = "empty", contentType = "empty") {
+                animatedItem(key = "empty", contentType = "empty") {
                     EmptyFilterCard()
                 }
             } else {
-                itemsIndexed(
+                animatedItemsIndexed(
                     items = visibleListItems,
                     key = { _, positionedItem -> "${state.selectedFilter}_${positionedItem.item.stableKey}" },
                     contentType = { _, positionedItem ->
@@ -286,7 +287,7 @@ private fun ToolkitTilesCatalog(
                             is ToolkitTilesListItem.Ad -> "ad"
                         }
                     },
-                ) { index, positionedItem ->
+                ) { _, positionedItem ->
                     val item = positionedItem.item
                     val position = positionedItem.position
 
@@ -298,9 +299,6 @@ private fun ToolkitTilesCatalog(
                                 category = category,
                                 position = position,
                                 expanded = expanded,
-                                modifier = Modifier
-                                    .animateItem()
-                                    .animateVisibility(index = index),
                                 selectedFilter = state.selectedFilter,
                                 onToggle = { onEvent(ToolkitTilesEvent.CategoryToggled(category.id)) },
                                 onPreviewTile = { tile ->
@@ -320,9 +318,6 @@ private fun ToolkitTilesCatalog(
 
                         is ToolkitTilesListItem.Ad -> {
                             QuickToolsNativeAdCard(
-                                modifier = Modifier
-                                    .animateItem()
-                                    .animateVisibility(index = index),
                                 adUnitId = item.adUnitId,
                                 position = position,
                                 initiallyLoaded = item.id in state.loadedAdIds,
@@ -335,7 +330,7 @@ private fun ToolkitTilesCatalog(
                 }
             }
             item(key = "bottom_spacing", contentType = "spacing") { Spacer(modifier = Modifier.height(SizeConstants.SmallSize)) }
-            item(key = "instructions", contentType = "instructions") {
+            animatedItem(key = "instructions", contentType = "instructions") {
                 HowToAddTilesCard()
             }
             item(key = "navigation_spacing", contentType = "navigation_spacing") {

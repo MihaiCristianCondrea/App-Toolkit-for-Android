@@ -167,6 +167,9 @@ flowchart TD
 - `animatedItems`, `animatedItemsIndexed` and `animatedItem` on `LazyListScope` and
   `LazyGridScope` are `items` with the entrance and `animateItem()` built in, ordered by their index.
   Use them for an app's own rows and cards; a Toolkit component inside one does not enter again.
+  Items move on `MaterialTheme.motionScheme` too, and an item's children stack as a plain item's
+  do. The one exception is an item holding only filter chips or a native ad slot: keep it a plain
+  `item`, so the chips cascade one by one and the ad enters when it loads.
 - `EntranceReplay` and `LocalEntranceReplay` decide when a screen's entrance plays: `EveryVisit`
   (the default) on every return to the screen, `FirstVisit` only the first time. Returning from the
   background, rotating or scrolling back within a visit never replays it. The shell provides it from
