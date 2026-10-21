@@ -122,6 +122,9 @@ data class ShellSettings(
     val entranceStyle: EntranceStyle = EntranceStyle.Slide,
     /** How quickly everything moves: the springs of the theme's motion scheme. */
     val motionTempo: MotionTempo = MotionTempo.Calm,
-    /** Whether a screen's elements enter again each time it is returned to, or only the first time. */
-    val entranceReplay: EntranceReplay = EntranceReplay.EveryVisit,
+    /**
+     * Whether a screen's elements enter only the first time it shows them, the default, or again
+     * each time it is returned to.
+     */
+    val entranceReplay: EntranceReplay = EntranceReplay.FirstVisit,
 )

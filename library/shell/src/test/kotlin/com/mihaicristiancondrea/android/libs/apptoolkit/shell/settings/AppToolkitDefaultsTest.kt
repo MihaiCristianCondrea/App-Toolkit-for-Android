@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.EntranceReplay
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.NavigationDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
@@ -73,6 +74,15 @@ class AppToolkitDefaultsTest {
             ),
             defaults.navigation,
         )
+    }
+
+    @Test
+    fun `entrances play once by default, and an app can replay them on every visit`() {
+        assertEquals(EntranceReplay.FirstVisit, appToolkitDefaults { }.shell.entranceReplay)
+
+        val defaults = appToolkitDefaults { shell { entranceReplay = EntranceReplay.EveryVisit } }
+
+        assertEquals(EntranceReplay.EveryVisit, defaults.shell.entranceReplay)
     }
 
     @Test

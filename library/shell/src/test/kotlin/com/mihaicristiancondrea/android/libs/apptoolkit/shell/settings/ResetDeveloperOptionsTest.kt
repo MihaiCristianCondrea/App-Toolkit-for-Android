@@ -46,7 +46,7 @@ class ResetDeveloperOptionsTest {
         hideTopBarOnScroll = true,
         entranceStyle = EntranceStyle.None,
         motionTempo = MotionTempo.Brisk,
-        entranceReplay = EntranceReplay.FirstVisit,
+        entranceReplay = EntranceReplay.EveryVisit,
     )
 
     @Test

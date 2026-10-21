@@ -170,10 +170,11 @@ flowchart TD
   Items move on `MaterialTheme.motionScheme` too, and an item's children stack as a plain item's
   do. The one exception is an item holding only filter chips or a native ad slot: keep it a plain
   `item`, so the chips cascade one by one and the ad enters when it loads.
-- `EntranceReplay` and `LocalEntranceReplay` decide when a screen's entrance plays: `EveryVisit`
-  (the default) on every return to the screen, `FirstVisit` only the first time. Returning from the
-  background, rotating or scrolling back within a visit never replays it. The shell provides it from
-  `appToolkitDefaults { shell { entranceReplay = ... } }` or the developer options.
+- `EntranceReplay` and `LocalEntranceReplay` decide when a screen's entrance plays: `FirstVisit`
+  (the default) only the first time the screen shows its elements, `EveryVisit` on every return.
+  Returning from the background, rotating or scrolling back within a visit never replays it. An app
+  picks its own default with `appToolkitDefaults { shell { entranceReplay = ... } }`, and the
+  developer options override it.
 - `HorizontalWavyDivider`, `VerticalWavyDivider`, and `WavyDividerDefaults` draw the design
   system's `il_wavy_line` as a divider. The wave is drawn rather than tiled from the drawable, so it
   scales with the divider's band and fits a whole number of half-waves into any length; the fitting
@@ -472,7 +473,7 @@ UI dependency.
   composition.
 - **The visit also times the screen's entrance.** Elements with `animateVisibility`, Toolkit
   components and `animatedItems` wait until the screen is `RESUMED`, its transition over, and then
-  cascade in. A new visit is a new entrance unless `LocalEntranceReplay` is `FirstVisit`; a
+  cascade in. With `LocalEntranceReplay` at `EveryVisit` a new visit is a new entrance; a
   configuration change keeps the current one.
 - **`screen_state`** is reported at the start of each visit and when the label changes, never twice
   in a row for the same label. The event and its `screen` and `state` parameters are unchanged.

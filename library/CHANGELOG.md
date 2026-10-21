@@ -10,8 +10,8 @@
   `MaterialTheme.motionScheme`. The shell installs it with `MaterialExpressiveTheme`; set it with
   `appToolkitDefaults { shell { motionTempo = ... } }` or under Motion in the developer options.
 - Each screen inside `ScreenHost` owns its entrance: its elements wait until the screen settles,
-  then cascade in from the top of what is shown. `EntranceReplay` chooses whether it plays on every
-  return to the screen (`EveryVisit`, the default) or only the first time (`FirstVisit`), from
+  then cascade in from the top of what is shown. `EntranceReplay` chooses whether it plays only the
+  first time (`FirstVisit`, the default) or on every return to the screen (`EveryVisit`), from
   `appToolkitDefaults { shell { entranceReplay = ... } }` or the developer options.
 - `animatedItems`, `animatedItemsIndexed` and `animatedItem` for lazy lists and grids: `items` with
   the entrance and `animateItem()` built in.

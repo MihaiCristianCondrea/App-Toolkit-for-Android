@@ -81,9 +81,10 @@ val LocalEntranceStyle = staticCompositionLocalOf { EntranceStyle.Slide }
  * transition over, then arrive one after another in their order on screen. Give list items their
  * [index] and each waits [staggerDelay] per position after the first item shown, up to
  * [maxStaggeredItems] positions; leave it out and elements cascade in the order they appear. An
- * item scrolled into view later starts at once. Each return to the screen plays the entrance
- * again, or only the first time with `EntranceReplay.FirstVisit` (see `LocalEntranceReplay`);
- * returning from the background, rotating or scrolling back within the visit does not.
+ * item scrolled into view later starts at once. By default an element enters only the first time
+ * its screen shows it; with `EntranceReplay.EveryVisit` (see `LocalEntranceReplay`) each return
+ * to the screen plays it again. Returning from the background, rotating or scrolling back within
+ * the visit never does.
  *
  * ```kotlin
  * LazyColumn {

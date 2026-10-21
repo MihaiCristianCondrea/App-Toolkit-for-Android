@@ -35,11 +35,11 @@ enum class EntranceReplay {
 }
 
 /**
- * The app's [EntranceReplay]. The shell provides the app's choice,
+ * The app's [EntranceReplay], [EntranceReplay.FirstVisit] unless the app picks another. The shell provides the app's choice,
  * `appToolkitDefaults { shell { entranceReplay = ... } }`, or the one picked in the developer
  * options.
  */
-val LocalEntranceReplay = staticCompositionLocalOf { EntranceReplay.EveryVisit }
+val LocalEntranceReplay = staticCompositionLocalOf { EntranceReplay.FirstVisit }
 
 /**
  * One screen's entrance, provided by [ScreenHost]: its own cascade, so two screens never share a
