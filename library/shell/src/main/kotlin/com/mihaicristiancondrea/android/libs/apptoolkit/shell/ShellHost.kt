@@ -160,7 +160,7 @@ fun ShellHost(
     layoutPolicy: ShellLayoutPolicy = graph.defaults.layoutPolicy,
     snackbarHostState: SnackbarHostState? = null,
 ) {
-    remember { disablePausablePrefetch() }
+    PausablePrefetch.disable()
     val context = LocalContext.current
     val shellSnackbars = snackbarHostState ?: remember { SnackbarHostState() }
     val shellSnackbarHost = remember(shellSnackbars) { ShellSnackbarHost(shellSnackbars) }
@@ -394,6 +394,11 @@ private fun pageEntry(graph: ShellGraph, navigator: ShellNavigator, key: NavKey)
  * pausing stops. Remove this once a foundation release fixes the issue.
  */
 @OptIn(ExperimentalFoundationApi::class)
-private fun disablePausablePrefetch() {
-    ComposeFoundationFlags.isPausableCompositionInPrefetchEnabled = false
+private object PausablePrefetch {
+    init {
+        ComposeFoundationFlags.isPausableCompositionInPrefetchEnabled = false
+    }
+
+    /** Sets the flag the first time it is called, before the shell's first composition, and is free after. */
+    fun disable() = Unit
 }
