@@ -21,6 +21,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +37,8 @@ fun Modifier.bounceClick(animationEnabled: Boolean = true): Modifier {
     val pressed = remember { mutableStateOf(false) }
     val scale by animateFloatAsState(
         targetValue = if (pressed.value) 0.96f else 1f,
+        // A press answers at once, at the app's tempo.
+        animationSpec = MaterialTheme.motionScheme.fastSpatialSpec(),
         label = "Button Press Scale Animation",
     )
 

@@ -20,11 +20,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigatio
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.icons.Icons
@@ -91,16 +86,10 @@ fun MainTopAppBar(
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
 ) {
     val titleSlot: @Composable () -> Unit = {
+        val motion = MaterialTheme.motionScheme
         AnimatedContent(
             targetState = title,
-            transitionSpec = {
-                (fadeIn(animationSpec = tween(durationMillis = 220, delayMillis = 90)) +
-                        scaleIn(
-                            initialScale = 0.92f,
-                            animationSpec = tween(durationMillis = 220, delayMillis = 90),
-                        ))
-                    .togetherWith(fadeOut(animationSpec = tween(durationMillis = 90)))
-            },
+            transitionSpec = { motion.textSwap() },
             label = "MainTopAppBarTitleAnimation",
         ) { targetTitle ->
             Text(

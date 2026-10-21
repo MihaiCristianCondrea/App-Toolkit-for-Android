@@ -21,8 +21,6 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
@@ -47,16 +45,15 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.staticCompositionLocalOf
 import kotlinx.coroutines.flow.first
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.textSwap
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleReadingProgress
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleTopBarHost
@@ -174,6 +171,7 @@ fun ShellTopAppBar(
     val textModifier = if (resolvedStyle.isLarge) Modifier else titleModifier
     val titleAlignment = if (centred) Alignment.Center else Alignment.CenterStart
     val titleContent: @Composable () -> Unit = {
+        val motion = MaterialTheme.motionScheme
         // Fix the slot height so search transitions do not move the bar or its actions.
         AnimatedContent(
             targetState = TitleSlot(search, title, showsArticle),
@@ -193,9 +191,7 @@ fun ShellTopAppBar(
                 if (initialState.article != targetState.article) {
                     EnterTransition.None togetherWith ExitTransition.None
                 } else {
-                    (fadeIn(tween(200, delayMillis = 60)) + scaleIn(initialScale = 0.96f))
-                        .togetherWith(fadeOut(tween(90)) + scaleOut(targetScale = 0.98f))
-                        .using(sizeTransform = null)
+                    motion.textSwap(initialScale = 0.96f, targetScale = 0.98f).using(sizeTransform = null)
                 }
             },
             label = "TopBarTitle",

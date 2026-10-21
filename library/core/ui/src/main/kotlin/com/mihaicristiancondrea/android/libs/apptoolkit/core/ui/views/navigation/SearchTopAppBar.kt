@@ -27,7 +27,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
@@ -130,6 +129,7 @@ fun SearchTopAppBar(
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
 ) {
     val titleSlot: @Composable () -> Unit = {
+        val motion = MaterialTheme.motionScheme
         // Keep both states at the field's height to prevent the title jumping after search closes.
         AnimatedContent(
             targetState = showSearch,
@@ -138,24 +138,7 @@ fun SearchTopAppBar(
                 .height(height = SearchFieldHeight),
             contentAlignment = if (centerTitle) Alignment.Center else Alignment.CenterStart,
             // Fade within fixed bounds so the placeholder stays aligned with its final position.
-            transitionSpec = {
-                (fadeIn(animationSpec = tween(durationMillis = 200, delayMillis = 60)) +
-                        scaleIn(
-                            initialScale = 0.96f,
-                            animationSpec = spring(
-                                dampingRatio = Spring.DampingRatioNoBouncy,
-                                stiffness = Spring.StiffnessMediumLow,
-                            ),
-                        ))
-                    .togetherWith(
-                        fadeOut(animationSpec = tween(durationMillis = 90)) +
-                                scaleOut(
-                                    targetScale = 0.98f,
-                                    animationSpec = tween(durationMillis = 90),
-                                ),
-                    )
-                    .using(sizeTransform = null)
-            },
+            transitionSpec = { motion.textSwap(initialScale = 0.96f, targetScale = 0.98f).using(sizeTransform = null) },
             label = "SearchTopAppBarTitleOrSearch",
         ) { searching ->
             if (searching) {
@@ -242,16 +225,10 @@ fun SearchTopAppBar(
  */
 @Composable
 private fun SearchTopAppBarTitle(title: String, centerTitle: Boolean) {
+    val motion = MaterialTheme.motionScheme
     AnimatedContent(
         targetState = title,
-        transitionSpec = {
-            (fadeIn(animationSpec = tween(durationMillis = 220, delayMillis = 90)) +
-                    scaleIn(
-                        initialScale = 0.92f,
-                        animationSpec = tween(durationMillis = 220, delayMillis = 90),
-                    ))
-                .togetherWith(fadeOut(animationSpec = tween(durationMillis = 90)))
-        },
+        transitionSpec = { motion.textSwap() },
         contentAlignment = if (centerTitle) Alignment.Center else Alignment.CenterStart,
         label = "SearchTopAppBarTitle",
     ) { targetTitle ->

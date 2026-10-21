@@ -18,10 +18,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen
 
 import androidx.compose.animation.ContentTransform
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -61,7 +57,10 @@ data class StateSlot(
  * ```
  *
  * The defaults are the Toolkit's: [LoadingScreen], and [NoDataScreen] with the slot's icon, retry
- * and ad, faded over 300 ms.
+ * and ad, cross-faded on the app's motion scheme.
+ *
+ * @property transition How one case replaces another; null cross-fades on
+ * `MaterialTheme.motionScheme`, so it follows the app's motion tempo.
  */
 @Immutable
 class ScreenStates(
@@ -87,12 +86,8 @@ class ScreenStates(
             paddingValues = slot.contentPadding,
         )
     },
-    val transition: ContentTransform = StateFade,
+    val transition: ContentTransform? = null,
 )
 
 /** The [ScreenStates] screens draw with here. */
 val LocalScreenStates = staticCompositionLocalOf { ScreenStates() }
-
-private val StateFade: ContentTransform =
-    fadeIn(animationSpec = tween(durationMillis = 300)) togetherWith
-        fadeOut(animationSpec = tween(durationMillis = 300))

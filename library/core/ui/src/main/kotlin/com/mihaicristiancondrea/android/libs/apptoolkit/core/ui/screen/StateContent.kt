@@ -19,6 +19,10 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
@@ -42,21 +46,25 @@ import androidx.compose.ui.Modifier
  * }
  * ```
  *
- * @param transition How one case replaces another; by default the app's [ScreenStates.transition].
+ * @param transition How one case replaces another; by default the app's [ScreenStates.transition],
+ * or a cross-fade on the app's motion scheme when it sets none.
  */
 @Composable
 fun <S> StateContent(
     state: S,
     modifier: Modifier = Modifier,
     contentKey: (S) -> Any? = ::caseOf,
-    transition: ContentTransform = LocalScreenStates.current.transition,
+    transition: ContentTransform? = LocalScreenStates.current.transition,
     label: String = "StateContent",
     content: @Composable (S) -> Unit,
 ) {
+    val motion = MaterialTheme.motionScheme
     AnimatedContent(
         targetState = state,
         modifier = modifier,
-        transitionSpec = { transition },
+        transitionSpec = {
+            transition ?: (fadeIn(motion.defaultEffectsSpec()) togetherWith fadeOut(motion.fastEffectsSpec()))
+        },
         contentKey = contentKey,
         label = label,
     ) { current ->
