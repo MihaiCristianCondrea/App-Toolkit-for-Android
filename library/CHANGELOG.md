@@ -18,10 +18,6 @@
 - Preference rows, switch cards, grouped action lists, info messages, filter chips, `NoDataScreen`
   and native ad slots enter on their own in their screen's cascade. They skip it in dialogs, sheets
   and popups, and inside an item that already enters.
-- Every Toolkit screen enters the same way: About, Privacy, Help, Startup, Settings, Display,
-  Permissions and the developer options bring in their headers, cards and rows with the screen,
-  instead of only some of them. Help's Show more and the onboarding buttons and page dots move on
-  the motion tempo.
 
 ### Changed
 
@@ -37,6 +33,10 @@
 
 ### Improved
 
+- Every Toolkit screen enters the same way: About, Privacy, Help, Startup, Settings, Display,
+  Permissions and the developer options bring in their headers, cards and rows with the screen,
+  instead of only some of them. Help's Show more and the onboarding buttons and page dots move on
+  the motion tempo.
 - App bar action buttons slide and shrink away when a destination drops them, and the remaining
   buttons glide into place instead of jumping. The actions of two destinations cross-fade.
 - The app bar title, the search field swap, `bounceClick` and app bar icon swaps follow the motion
