@@ -38,6 +38,7 @@
     <string name="shell_tempo_brisk">Бърз</string>
     <string name="shell_dev_entrance_replay">Повторение на появата</string>
     <string name="shell_replay_every_visit">При всяко посещение</string>
+    <string name="shell_replay_on_open">При отваряне</string>
     <string name="shell_replay_first_visit">Само при първото посещение</string>
     <string name="shell_dev_reset">Нулиране на опциите за програмисти</string>
     <string name="shell_dev_reset_summary">Връщане към зададеното от приложението</string>

@@ -22,6 +22,9 @@ object GithubConstants {
     const val GITHUB_BASE: String = "https://github.com/$GITHUB_USER/"
     const val GITHUB_ISSUES_SUFFIX: String = "/issues/new"
     const val GITHUB_RAW: String = "https://raw.githubusercontent.com/$GITHUB_USER"
+
+    /** App Toolkit's releases, with the library's notes for every version. */
+    const val APP_TOOLKIT_RELEASES: String = "${GITHUB_BASE}App-Toolkit-for-Android/releases"
     fun githubChangelog(repository: String): String =
         "$GITHUB_RAW/$repository/refs/heads/master/CHANGELOG.md"
 }

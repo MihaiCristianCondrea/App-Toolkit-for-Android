@@ -16,5 +16,6 @@
   -->
 <resources>
     <string name="changelog_title">Catatan perubahan aplikasi</string>
+    <string name="changelog_all_releases">Semua rilis</string>
     <string name="no_new_updates_message">Tidak ada pembaruan baru yang tersedia.</string>
 </resources>

@@ -16,5 +16,6 @@
   -->
 <resources>
     <string name="changelog_title">Дневник на промените</string>
+    <string name="changelog_all_releases">Всички версии</string>
     <string name="no_new_updates_message">Няма налични нови актуализации.</string>
 </resources>

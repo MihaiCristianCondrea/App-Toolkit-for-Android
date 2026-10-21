@@ -38,6 +38,7 @@
     <string name="shell_tempo_brisk">Mabilis</string>
     <string name="shell_dev_entrance_replay">Pag-ulit ng paglitaw</string>
     <string name="shell_replay_every_visit">Sa bawat pagbisita</string>
+    <string name="shell_replay_on_open">Kapag binuksan</string>
     <string name="shell_replay_first_visit">Sa unang pagbisita lang</string>
     <string name="shell_dev_reset">I-reset ang mga opsyon ng developer</string>
     <string name="shell_dev_reset_summary">Ibalik sa itinakda ng app</string>

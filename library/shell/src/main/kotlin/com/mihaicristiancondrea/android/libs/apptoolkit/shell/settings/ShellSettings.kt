@@ -123,8 +123,8 @@ data class ShellSettings(
     /** How quickly everything moves: the springs of the theme's motion scheme. */
     val motionTempo: MotionTempo = MotionTempo.Calm,
     /**
-     * Whether a screen's elements enter only the first time it shows them, the default, or again
-     * each time it is returned to.
+     * When a screen's elements enter: each time it is opened, the default, on every return to it,
+     * or only for the first copy of each screen while the app runs.
      */
-    val entranceReplay: EntranceReplay = EntranceReplay.FirstVisit,
+    val entranceReplay: EntranceReplay = EntranceReplay.OnOpen,
 )

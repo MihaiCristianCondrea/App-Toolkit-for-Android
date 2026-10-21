@@ -16,5 +16,6 @@
   -->
 <resources>
     <string name="changelog_title">অ্যাপ চেঞ্জলগ</string>
+    <string name="changelog_all_releases">সব রিলিজ</string>
     <string name="no_new_updates_message">কোনো নতুন আপডেট উপলব্ধ নেই।</string>
 </resources>

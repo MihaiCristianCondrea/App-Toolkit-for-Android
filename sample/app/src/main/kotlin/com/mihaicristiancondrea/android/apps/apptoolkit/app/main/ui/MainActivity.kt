@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.ui.Modifier
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.github.GithubConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.ProvideTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.StartupRoute
@@ -129,7 +130,10 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     if (showChangelog) {
-                        ChangelogDialog(onDismiss = { showChangelog = false })
+                        ChangelogDialog(
+                            onDismiss = { showChangelog = false },
+                            releasesUrl = GithubConstants.APP_TOOLKIT_RELEASES,
+                        )
                     }
                 }
             }

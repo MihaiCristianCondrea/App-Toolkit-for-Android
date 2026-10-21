@@ -16,5 +16,6 @@
   -->
 <resources>
     <string name="changelog_title">سجل تغييرات التطبيق</string>
+    <string name="changelog_all_releases">كل الإصدارات</string>
     <string name="no_new_updates_message">لا توجد تحديثات جديدة متاحة.</string>
 </resources>

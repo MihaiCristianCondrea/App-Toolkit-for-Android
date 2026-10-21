@@ -38,6 +38,7 @@
     <string name="shell_tempo_brisk">Alert</string>
     <string name="shell_dev_entrance_replay">Repetarea apariției</string>
     <string name="shell_replay_every_visit">La fiecare vizită</string>
+    <string name="shell_replay_on_open">La deschidere</string>
     <string name="shell_replay_first_visit">Doar la prima vizită</string>
     <string name="shell_dev_reset">Resetează opțiunile pentru dezvoltatori</string>
     <string name="shell_dev_reset_summary">Înapoi la ce declară aplicația</string>

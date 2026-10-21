@@ -38,6 +38,7 @@
     <string name="shell_tempo_brisk">Zügig</string>
     <string name="shell_dev_entrance_replay">Einblendung wiederholen</string>
     <string name="shell_replay_every_visit">Bei jedem Besuch</string>
+    <string name="shell_replay_on_open">Beim Öffnen</string>
     <string name="shell_replay_first_visit">Nur beim ersten Besuch</string>
     <string name="shell_dev_reset">Entwickleroptionen zurücksetzen</string>
     <string name="shell_dev_reset_summary">Zurück zu den Vorgaben der App</string>

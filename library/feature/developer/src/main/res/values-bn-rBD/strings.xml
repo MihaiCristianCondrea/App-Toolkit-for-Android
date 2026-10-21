@@ -38,6 +38,7 @@
     <string name="shell_tempo_brisk">দ্রুত</string>
     <string name="shell_dev_entrance_replay">প্রবেশের পুনরাবৃত্তি</string>
     <string name="shell_replay_every_visit">প্রতিবার দেখার সময়</string>
+    <string name="shell_replay_on_open">খোলার সময়</string>
     <string name="shell_replay_first_visit">শুধু প্রথমবার</string>
     <string name="shell_dev_reset">ডেভেলপার বিকল্প রিসেট করুন</string>
     <string name="shell_dev_reset_summary">অ্যাপ যা ঘোষণা করে সেখানে ফিরে যান</string>

@@ -170,8 +170,10 @@ flowchart TD
   Items move on `MaterialTheme.motionScheme` too, and an item's children stack as a plain item's
   do. The one exception is an item holding only filter chips or a native ad slot: keep it a plain
   `item`, so the chips cascade one by one and the ad enters when it loads.
-- `EntranceReplay` and `LocalEntranceReplay` decide when a screen's entrance plays: `FirstVisit`
-  (the default) only the first time the screen shows its elements, `EveryVisit` on every return.
+- `EntranceReplay` and `LocalEntranceReplay` decide when a screen's entrance plays: `OnOpen`, the
+  default, each time a screen is opened, but not on going back to it or switching back to its tab;
+  `EveryVisit` on every return as well; `FirstVisit` only for the first copy of each screen while
+  the app runs.
   Returning from the background, rotating or scrolling back within a visit never replays it. An app
   picks its own default with `appToolkitDefaults { shell { entranceReplay = ... } }`, and the
   developer options override it.
@@ -473,8 +475,10 @@ UI dependency.
   composition.
 - **The visit also times the screen's entrance.** Elements with `animateVisibility`, Toolkit
   components and `animatedItems` wait until the screen is `RESUMED`, its transition over, and then
-  cascade in. With `LocalEntranceReplay` at `EveryVisit` a new visit is a new entrance; a
-  configuration change keeps the current one.
+  cascade in. A screen opened anew enters again; going back to it does not, unless
+  `LocalEntranceReplay` is `EveryVisit`. `FirstVisit` remembers each screen opened while the app
+  runs, by its `TrackedScreen`, and plays only its first copy. A configuration change keeps the
+  current entrance.
 - **`screen_state`** is reported at the start of each visit and when the label changes, never twice
   in a row for the same label. The event and its `screen` and `state` parameters are unchanged.
 

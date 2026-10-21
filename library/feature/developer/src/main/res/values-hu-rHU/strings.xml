@@ -38,6 +38,7 @@
     <string name="shell_tempo_brisk">Fürge</string>
     <string name="shell_dev_entrance_replay">Megjelenés ismétlése</string>
     <string name="shell_replay_every_visit">Minden látogatáskor</string>
+    <string name="shell_replay_on_open">Megnyitáskor</string>
     <string name="shell_replay_first_visit">Csak az első látogatáskor</string>
     <string name="shell_dev_reset">Fejlesztői beállítások visszaállítása</string>
     <string name="shell_dev_reset_summary">Vissza ahhoz, amit az alkalmazás megad</string>

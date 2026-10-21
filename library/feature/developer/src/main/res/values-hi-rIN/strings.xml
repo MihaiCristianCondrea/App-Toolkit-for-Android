@@ -38,6 +38,7 @@
     <string name="shell_tempo_brisk">तेज़</string>
     <string name="shell_dev_entrance_replay">प्रवेश दोहराएं</string>
     <string name="shell_replay_every_visit">हर बार देखने पर</string>
+    <string name="shell_replay_on_open">खोलने पर</string>
     <string name="shell_replay_first_visit">सिर्फ़ पहली बार</string>
     <string name="shell_dev_reset">डेवलपर विकल्प रीसेट करें</string>
     <string name="shell_dev_reset_summary">ऐप जो तय करता है, उस पर वापस जाएँ</string>

@@ -51,6 +51,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.componentEntrance
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -73,10 +74,20 @@ class ScreenEntranceTest {
     private var boxShown by mutableStateOf(true)
     private var replay by mutableStateOf(EntranceReplay.EveryVisit)
 
-    /** The destination's store, which outlives the screen leaving composition, as in the shell. */
-    private val destination = object : ViewModelStoreOwner {
-        override val viewModelStore = ViewModelStore()
+    /** Which copy of the screen is open: a new copy is the screen opened again after it closed. */
+    private var copy by mutableStateOf(0)
+
+    /** Each copy's destination store, which outlives the screen leaving composition, as in the shell. */
+    private val destinations = mutableMapOf<Int, ViewModelStoreOwner>()
+
+    private fun destination(copy: Int): ViewModelStoreOwner = destinations.getOrPut(copy) {
+        object : ViewModelStoreOwner {
+            override val viewModelStore = ViewModelStore()
+        }
     }
+
+    @Before
+    fun startRun() = OpenedScreens.forget()
 
     private fun shown(tag: String = "frame"): Float {
         val bitmap = compose.onNodeWithTag(tag).captureToImage().asAndroidBitmap()
@@ -97,13 +108,13 @@ class ScreenEntranceTest {
             MaterialTheme {
                 CompositionLocalProvider(
                     LocalTelemetry provides FakeTelemetryRepository(),
-                    LocalViewModelStoreOwner provides destination,
+                    LocalViewModelStoreOwner provides destination(copy),
                     LocalLifecycleOwner provides rememberLifecycleOwner(maxLifecycle = cap),
                     LocalEntranceReplay provides replay,
                 ) {
                     Box(Modifier.testTag("frame").size(80.dp).background(Color.White)) {
                         if (onScreen) {
-                            saveable.SaveableStateProvider("news") {
+                            saveable.SaveableStateProvider("news_$copy") {
                                 ScreenHost(screen = TrackedScreen(name = "News")) {
                                     // Saved by key, as a lazy list saves each item it scrolls away.
                                     if (boxShown) saveable.SaveableStateProvider("item") { RedBox() }
@@ -149,18 +160,68 @@ class ScreenEntranceTest {
         assertTrue("Did not enter on return: ${shown()}", shown() > 0.98f)
     }
 
-    @Test
-    fun `with first visit only, a return shows the element at once`() {
-        replay = EntranceReplay.FirstVisit
-        setContent()
-        settle()
-
+    /** Leaves the screen and comes back to the same copy, as going back to it does. */
+    private fun goBackToIt() {
         set { onScreen = false }
         settle()
         set { onScreen = true }
         compose.mainClock.advanceTimeByFrame()
         compose.mainClock.advanceTimeByFrame()
-        assertTrue("Played again on return: ${shown()}", shown() > 0.98f)
+    }
+
+    /** Closes the screen and opens a new copy of it. */
+    private fun openAgain() {
+        set { onScreen = false }
+        settle()
+        set {
+            copy += 1
+            onScreen = true
+        }
+        compose.mainClock.advanceTimeByFrame()
+        compose.mainClock.advanceTimeByFrame()
+    }
+
+    @Test
+    fun `on open, going back to the screen shows the element at once`() {
+        replay = EntranceReplay.OnOpen
+        setContent()
+        settle()
+
+        goBackToIt()
+        assertTrue("Played again on going back: ${shown()}", shown() > 0.98f)
+    }
+
+    @Test
+    fun `on open, a screen opened again enters again`() {
+        replay = EntranceReplay.OnOpen
+        setContent()
+        settle()
+
+        openAgain()
+        assertTrue("Shown at once when opened again: ${shown()}", shown() < 0.5f)
+        settle()
+        assertTrue("Did not enter when opened again: ${shown()}", shown() > 0.98f)
+    }
+
+    @Test
+    fun `with first visit only, going back shows the element at once`() {
+        replay = EntranceReplay.FirstVisit
+        setContent()
+        settle()
+
+        goBackToIt()
+        assertTrue("Played again on going back: ${shown()}", shown() > 0.98f)
+    }
+
+    @Test
+    fun `with first visit only, a screen opened again shows the element at once`() {
+        replay = EntranceReplay.FirstVisit
+        setContent()
+        settle()
+        assertTrue("The first copy did not enter: ${shown()}", shown() > 0.98f)
+
+        openAgain()
+        assertTrue("Played again in a new copy: ${shown()}", shown() > 0.98f)
     }
 
     @Test
@@ -195,7 +256,7 @@ class ScreenEntranceTest {
             MaterialTheme {
                 CompositionLocalProvider(
                     LocalTelemetry provides FakeTelemetryRepository(),
-                    LocalViewModelStoreOwner provides destination,
+                    LocalViewModelStoreOwner provides destination(copy),
                 ) {
                     ScreenHost(screen = TrackedScreen(name = "Settings")) {
                         Box(Modifier.testTag("frame").size(80.dp).background(Color.White)) {

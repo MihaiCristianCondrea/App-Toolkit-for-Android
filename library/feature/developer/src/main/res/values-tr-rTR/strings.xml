@@ -38,6 +38,7 @@
     <string name="shell_tempo_brisk">Hızlı</string>
     <string name="shell_dev_entrance_replay">Girişi tekrarla</string>
     <string name="shell_replay_every_visit">Her ziyarette</string>
+    <string name="shell_replay_on_open">Açıldığında</string>
     <string name="shell_replay_first_visit">Yalnızca ilk ziyarette</string>
     <string name="shell_dev_reset">Geliştirici seçeneklerini sıfırla</string>
     <string name="shell_dev_reset_summary">Uygulamanın belirlediğine geri dön</string>

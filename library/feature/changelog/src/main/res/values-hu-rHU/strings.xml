@@ -16,5 +16,6 @@
   -->
 <resources>
     <string name="changelog_title">Alkalmazás változásnapló</string>
+    <string name="changelog_all_releases">Összes kiadás</string>
     <string name="no_new_updates_message">Nincs új frissítés elérhető.</string>
 </resources>

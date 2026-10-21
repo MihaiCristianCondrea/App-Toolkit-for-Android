@@ -77,12 +77,12 @@ class AppToolkitDefaultsTest {
     }
 
     @Test
-    fun `entrances play once by default, and an app can replay them on every visit`() {
-        assertEquals(EntranceReplay.FirstVisit, appToolkitDefaults { }.shell.entranceReplay)
+    fun `entrances play when a screen opens by default, and an app can pick another`() {
+        assertEquals(EntranceReplay.OnOpen, appToolkitDefaults { }.shell.entranceReplay)
 
-        val defaults = appToolkitDefaults { shell { entranceReplay = EntranceReplay.EveryVisit } }
+        val defaults = appToolkitDefaults { shell { entranceReplay = EntranceReplay.FirstVisit } }
 
-        assertEquals(EntranceReplay.EveryVisit, defaults.shell.entranceReplay)
+        assertEquals(EntranceReplay.FirstVisit, defaults.shell.entranceReplay)
     }
 
     @Test

@@ -38,6 +38,7 @@
     <string name="shell_tempo_brisk">Nhanh nhẹn</string>
     <string name="shell_dev_entrance_replay">Phát lại hiệu ứng xuất hiện</string>
     <string name="shell_replay_every_visit">Mỗi lần truy cập</string>
+    <string name="shell_replay_on_open">Khi mở</string>
     <string name="shell_replay_first_visit">Chỉ lần đầu</string>
     <string name="shell_dev_reset">Đặt lại tùy chọn nhà phát triển</string>
     <string name="shell_dev_reset_summary">Trở về như ứng dụng khai báo</string>

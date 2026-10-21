@@ -38,6 +38,7 @@
     <string name="shell_tempo_brisk">Rapido</string>
     <string name="shell_dev_entrance_replay">Ripeti la comparsa</string>
     <string name="shell_replay_every_visit">A ogni visita</string>
+    <string name="shell_replay_on_open">All’apertura</string>
     <string name="shell_replay_first_visit">Solo alla prima visita</string>
     <string name="shell_dev_reset">Ripristina le opzioni sviluppatore</string>
     <string name="shell_dev_reset_summary">Torna a quanto dichiarato dall\'app</string>

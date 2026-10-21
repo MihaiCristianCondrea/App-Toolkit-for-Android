@@ -38,6 +38,7 @@
     <string name="shell_tempo_brisk">تیز</string>
     <string name="shell_dev_entrance_replay">نمودار ہونے کا اعادہ</string>
     <string name="shell_replay_every_visit">ہر بار دیکھنے پر</string>
+    <string name="shell_replay_on_open">کھولنے پر</string>
     <string name="shell_replay_first_visit">صرف پہلی بار</string>
     <string name="shell_dev_reset">ڈیولپر اختیارات ری سیٹ کریں</string>
     <string name="shell_dev_reset_summary">ایپ جو مقرر کرتی ہے اس پر واپس جائیں</string>

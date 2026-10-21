@@ -16,5 +16,6 @@
   -->
 <resources>
     <string name="changelog_title">Dziennik zmian aplikacji</string>
+    <string name="changelog_all_releases">Wszystkie wydania</string>
     <string name="no_new_updates_message">Brak nowych aktualizacji.</string>
 </resources>

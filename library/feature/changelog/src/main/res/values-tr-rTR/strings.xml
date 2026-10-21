@@ -16,5 +16,6 @@
   -->
 <resources>
     <string name="changelog_title">Uygulama değişiklik günlüğü</string>
+    <string name="changelog_all_releases">Tüm sürümler</string>
     <string name="no_new_updates_message">Yeni güncelleme yok.</string>
 </resources>

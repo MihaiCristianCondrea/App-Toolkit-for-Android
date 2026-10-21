@@ -38,6 +38,7 @@
     <string name="shell_tempo_brisk">Żwawe</string>
     <string name="shell_dev_entrance_replay">Powtarzanie pojawiania się</string>
     <string name="shell_replay_every_visit">Przy każdej wizycie</string>
+    <string name="shell_replay_on_open">Przy otwarciu</string>
     <string name="shell_replay_first_visit">Tylko przy pierwszej wizycie</string>
     <string name="shell_dev_reset">Resetuj opcje programisty</string>
     <string name="shell_dev_reset_summary">Powrót do tego, co deklaruje aplikacja</string>

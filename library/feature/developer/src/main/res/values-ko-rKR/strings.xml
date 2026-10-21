@@ -38,6 +38,7 @@
     <string name="shell_tempo_brisk">빠르게</string>
     <string name="shell_dev_entrance_replay">등장 애니메이션 반복</string>
     <string name="shell_replay_every_visit">방문할 때마다</string>
+    <string name="shell_replay_on_open">열 때마다</string>
     <string name="shell_replay_first_visit">첫 방문 시에만</string>
     <string name="shell_dev_reset">개발자 옵션 초기화</string>
     <string name="shell_dev_reset_summary">앱이 선언한 값으로 되돌리기</string>

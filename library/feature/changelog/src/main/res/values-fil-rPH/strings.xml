@@ -16,5 +16,6 @@
   -->
 <resources>
     <string name="changelog_title">Changelog ng app</string>
+    <string name="changelog_all_releases">Lahat ng release</string>
     <string name="no_new_updates_message">Walang bagong update na available.</string>
 </resources>

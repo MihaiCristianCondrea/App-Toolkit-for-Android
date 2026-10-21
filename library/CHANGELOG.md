@@ -10,9 +10,13 @@
   `MaterialTheme.motionScheme`. The shell installs it with `MaterialExpressiveTheme`; set it with
   `appToolkitDefaults { shell { motionTempo = ... } }` or under Motion in the developer options.
 - Each screen inside `ScreenHost` owns its entrance: its elements wait until the screen settles,
-  then cascade in from the top of what is shown. `EntranceReplay` chooses whether it plays only the
-  first time (`FirstVisit`, the default) or on every return to the screen (`EveryVisit`), from
-  `appToolkitDefaults { shell { entranceReplay = ... } }` or the developer options.
+  then cascade in from the top of what is shown. `EntranceReplay` chooses when it plays: `OnOpen`,
+  the default, each time a screen is opened, but not on going back to it or switching back to its
+  tab; `EveryVisit` on every return as well; `FirstVisit` only for the first copy of each screen
+  while the app runs. Set it with `appToolkitDefaults { shell { entranceReplay = ... } }` or the developer options.
+- `ChangelogDialog(releasesUrl = ...)` shows an info button beside the title that opens more
+  release notes, such as `GithubConstants.APP_TOOLKIT_RELEASES`, App Toolkit's GitHub releases.
+  Without a URL the sheet is unchanged.
 - `animatedItems`, `animatedItemsIndexed` and `animatedItem` for lazy lists and grids: `items` with
   the entrance and `animateItem()` built in.
 - Preference rows, switch cards, grouped action lists, info messages, filter chips, `NoDataScreen`

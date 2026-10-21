@@ -38,6 +38,7 @@
     <string name="shell_tempo_brisk">ฉับไว</string>
     <string name="shell_dev_entrance_replay">เล่นภาพเคลื่อนไหวเมื่อปรากฏซ้ำ</string>
     <string name="shell_replay_every_visit">ทุกครั้งที่เข้าชม</string>
+    <string name="shell_replay_on_open">เมื่อเปิด</string>
     <string name="shell_replay_first_visit">เฉพาะครั้งแรก</string>
     <string name="shell_dev_reset">รีเซ็ตตัวเลือกสำหรับนักพัฒนาแอป</string>
     <string name="shell_dev_reset_summary">กลับไปตามที่แอปกำหนด</string>

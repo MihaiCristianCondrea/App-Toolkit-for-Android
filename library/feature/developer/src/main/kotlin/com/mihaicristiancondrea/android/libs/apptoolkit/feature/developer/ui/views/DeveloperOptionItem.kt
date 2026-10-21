@@ -334,6 +334,7 @@ private fun motionTempoLabel(value: MotionTempo): String = stringResource(
 private fun entranceReplayLabel(value: EntranceReplay): String = stringResource(
     when (value) {
         EntranceReplay.EveryVisit -> R.string.shell_replay_every_visit
+        EntranceReplay.OnOpen -> R.string.shell_replay_on_open
         EntranceReplay.FirstVisit -> R.string.shell_replay_first_visit
     },
 )

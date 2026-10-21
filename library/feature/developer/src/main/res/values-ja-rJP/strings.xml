@@ -38,6 +38,7 @@
     <string name="shell_tempo_brisk">きびきび</string>
     <string name="shell_dev_entrance_replay">表示アニメーションの再生</string>
     <string name="shell_replay_every_visit">表示するたび</string>
+    <string name="shell_replay_on_open">開くたび</string>
     <string name="shell_replay_first_visit">初回のみ</string>
     <string name="shell_dev_reset">開発者向けオプションをリセット</string>
     <string name="shell_dev_reset_summary">アプリの宣言どおりに戻す</string>

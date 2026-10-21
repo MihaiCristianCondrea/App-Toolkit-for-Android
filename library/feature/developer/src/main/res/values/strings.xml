@@ -38,6 +38,7 @@
     <string name="shell_tempo_brisk">Brisk</string>
     <string name="shell_dev_entrance_replay">Entrance replay</string>
     <string name="shell_replay_every_visit">Every visit</string>
+    <string name="shell_replay_on_open">When opened</string>
     <string name="shell_replay_first_visit">First visit only</string>
     <string name="shell_dev_reset">Reset developer options</string>
     <string name="shell_dev_reset_summary">Back to what the app declares</string>

@@ -16,7 +16,9 @@ and the bottom sheet that renders it.
 - `ChangelogDialog`, in `feature.changelog.ui`, the modal bottom sheet the host shows from its drawer,
   and the stateless `ChangelogDialogContent` it draws inside the sheet. The content draws each part of
   the Markdown on its own and the Toolkit's `HorizontalWavyDivider` where the Markdown has a rule
-  (`splitAtThematicBreaks`), in place of the renderer's flat line.
+  (`splitAtThematicBreaks`), in place of the renderer's flat line. `ChangelogDialog(releasesUrl)`
+  adds an info button beside the title that opens that page, such as
+  `GithubConstants.APP_TOOLKIT_RELEASES`; without one the sheet shows no button.
 
 ## Does not own
 

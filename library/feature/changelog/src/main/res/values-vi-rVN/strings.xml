@@ -16,5 +16,6 @@
   -->
 <resources>
     <string name="changelog_title">Nhật ký thay đổi ứng dụng</string>
+    <string name="changelog_all_releases">Tất cả bản phát hành</string>
     <string name="no_new_updates_message">Không có bản cập nhật mới.</string>
 </resources>

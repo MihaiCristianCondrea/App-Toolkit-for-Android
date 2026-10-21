@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.NewReleases
 import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -43,15 +44,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dividers.HorizontalWavyDivider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.R
@@ -67,12 +72,18 @@ import org.koin.compose.viewmodel.koinViewModel
  * This is the stateful half. It owns the [ChangelogViewModel], which decides the network source
  * and the fallback, and the sheet itself, and hands what the sheet shows to
  * [ChangelogDialogContent].
+ *
+ * @param releasesUrl A page with more release notes, such as
+ * `GithubConstants.APP_TOOLKIT_RELEASES`, opened from an info button beside the title; null shows
+ * no button.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChangelogDialog(
     onDismiss: () -> Unit,
+    releasesUrl: String? = null,
 ) {
+    val context = LocalContext.current
     val viewModel: ChangelogViewModel = koinViewModel()
     val state: ChangelogUiState by viewModel.state.collectAsStateWithLifecycle()
     val sheetState = rememberBottomSheetState(
@@ -89,6 +100,7 @@ fun ChangelogDialog(
             state = state,
             onRetry = { viewModel.onEvent(ChangelogEvent.Load) },
             onDismiss = onDismiss,
+            onOpenReleases = releasesUrl?.let { url -> { context.openUrl(url) } },
         )
     }
 }
@@ -103,6 +115,8 @@ fun ChangelogDialog(
  *
  * @param onRetry Loads the changelog again.
  * @param onDismiss Closes the sheet.
+ * @param onOpenReleases Opens more release notes from an info button beside the title; null shows
+ * no button.
  */
 @Composable
 internal fun ChangelogDialogContent(
@@ -110,6 +124,7 @@ internal fun ChangelogDialogContent(
     onRetry: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
+    onOpenReleases: (() -> Unit)? = null,
 ) {
     val markdown: Loadable<String> = state.markdown
     val canRetry: Boolean = markdown is Loadable.Failed && markdown.retryable
@@ -129,7 +144,16 @@ internal fun ChangelogDialogContent(
             Text(
                 text = stringResource(id = R.string.changelog_title),
                 style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.weight(1f),
             )
+            if (onOpenReleases != null) {
+                GeneralButton(
+                    style = GeneralButtonStyle.Text,
+                    onClick = onOpenReleases,
+                    icon = ToolkitIcon.Vector(Icons.Outlined.Info),
+                    contentDescription = stringResource(id = R.string.changelog_all_releases),
+                )
+            }
         }
         Box(
             modifier = Modifier

@@ -16,5 +16,6 @@
   -->
 <resources>
     <string name="changelog_title">Jurnal de modificări al aplicației</string>
+    <string name="changelog_all_releases">Toate versiunile</string>
     <string name="no_new_updates_message">Nu există actualizări noi disponibile.</string>
 </resources>

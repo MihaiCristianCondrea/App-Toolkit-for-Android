@@ -83,10 +83,10 @@ import java.util.concurrent.atomic.AtomicLong
  * declaring buttons while one fades into the other.
  *
  * **Entrances.** The screen's `animateVisibility` elements cascade in once it settles, the visit's
- * first frame without a transition or an overlay, in the order they are shown. Each time the
- * screen is returned to by navigation they play again, or only the first time with
- * `EntranceReplay.FirstVisit`; coming back from the background, rotating or scrolling within the
- * visit does not replay them.
+ * first frame without a transition or an overlay, in the order they are shown. They play each
+ * time the screen is opened, not on going back to it, unless `LocalEntranceReplay` says every
+ * visit (`EntranceReplay.EveryVisit`) or only the first copy in a run (`EntranceReplay.FirstVisit`);
+ * coming back from the background, rotating or scrolling within the visit never replays them.
  */
 @Composable
 fun ScreenHost(
@@ -99,7 +99,9 @@ fun ScreenHost(
 ) {
     val tracker: ScreenVisitTracker = rememberScreenVisitTracker(screen)
     val view = LocalView.current
-    val entrance: ScreenEntrance = remember(tracker.entranceId, view) { ScreenEntrance(tracker.entranceId, view) }
+    val entrance: ScreenEntrance = remember(tracker.entranceId, view) {
+        ScreenEntrance(tracker.entranceId, view, tracker.firstInRun)
+    }
     TrackScreenVisits(tracker = tracker, entrance = entrance, status = status)
     if (fabs != null) {
         ScaffoldFabs(fabs)
@@ -190,6 +192,12 @@ internal class ScreenVisitTracker(private val screen: TrackedScreen) {
      */
     var entranceId: Long = nextEntranceId()
         private set
+
+    /**
+     * Whether this is the first copy of [screen] opened while the app runs. A tracker lives as long
+     * as its destination, so going back to the screen keeps it and opening the screen anew does not.
+     */
+    val firstInRun: Boolean = OpenedScreens.claim(screen)
 
     /** The status label last reported in this visit. */
     private var reportedLabel: String? = null

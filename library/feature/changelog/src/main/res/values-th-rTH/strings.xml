@@ -16,5 +16,6 @@
   -->
 <resources>
     <string name="changelog_title">บันทึกการเปลี่ยนแปลง</string>
+    <string name="changelog_all_releases">รุ่นทั้งหมด</string>
     <string name="no_new_updates_message">ไม่มีการอัปเดตใหม่.</string>
 </resources>

@@ -2,11 +2,21 @@
 
 ---
 
-# Unreleased
+# October 21, 2026
+
+**Version:** `26.10.35` (`137261035`)
+
+### Added
+
+- The app changelog has an info button that opens App Toolkit's releases on GitHub, for the
+  library's notes behind each version.
 
 ### Improved
 
-- The Apps list brings in its filter chips, then its cards, each time you open it.
+- Screens move at a calmer pace and bring their content in as they open. Going back to a screen
+  or switching tabs keeps it as it was. The developer options can play it on every visit or only
+  the first time. See App Toolkit's releases for the details.
+- The Apps list brings in its filter chips, then its cards.
 - The Components, Quick Tools and article demo screens enter the way the Toolkit's screens do,
   each section or card in turn.
 - The article demo reports its visits as `ArticleDemo`.

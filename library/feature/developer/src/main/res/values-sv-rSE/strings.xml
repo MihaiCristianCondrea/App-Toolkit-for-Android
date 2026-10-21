@@ -38,6 +38,7 @@
     <string name="shell_tempo_brisk">Snabbt</string>
     <string name="shell_dev_entrance_replay">Upprepa visning</string>
     <string name="shell_replay_every_visit">Vid varje besök</string>
+    <string name="shell_replay_on_open">När den öppnas</string>
     <string name="shell_replay_first_visit">Bara vid första besöket</string>
     <string name="shell_dev_reset">Återställ utvecklaralternativ</string>
     <string name="shell_dev_reset_summary">Tillbaka till det appen anger</string>

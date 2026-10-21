@@ -38,6 +38,7 @@
     <string name="shell_tempo_brisk">Швидкий</string>
     <string name="shell_dev_entrance_replay">Повтор появи</string>
     <string name="shell_replay_every_visit">Під час кожного відвідування</string>
+    <string name="shell_replay_on_open">Під час відкриття</string>
     <string name="shell_replay_first_visit">Лише під час першого відвідування</string>
     <string name="shell_dev_reset">Скинути параметри розробника</string>
     <string name="shell_dev_reset_summary">Повернути те, що задає застосунок</string>

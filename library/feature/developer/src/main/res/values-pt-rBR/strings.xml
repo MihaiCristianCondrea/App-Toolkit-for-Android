@@ -38,6 +38,7 @@
     <string name="shell_tempo_brisk">Ágil</string>
     <string name="shell_dev_entrance_replay">Repetir a entrada</string>
     <string name="shell_replay_every_visit">A cada visita</string>
+    <string name="shell_replay_on_open">Ao abrir</string>
     <string name="shell_replay_first_visit">Só na primeira visita</string>
     <string name="shell_dev_reset">Redefinir opções do desenvolvedor</string>
     <string name="shell_dev_reset_summary">Voltar ao que o app declara</string>

@@ -38,6 +38,7 @@
     <string name="shell_tempo_brisk">سريع</string>
     <string name="shell_dev_entrance_replay">إعادة حركة الظهور</string>
     <string name="shell_replay_every_visit">في كل زيارة</string>
+    <string name="shell_replay_on_open">عند الفتح</string>
     <string name="shell_replay_first_visit">في الزيارة الأولى فقط</string>
     <string name="shell_dev_reset">إعادة ضبط خيارات المطورين</string>
     <string name="shell_dev_reset_summary">العودة إلى ما يحدده التطبيق</string>

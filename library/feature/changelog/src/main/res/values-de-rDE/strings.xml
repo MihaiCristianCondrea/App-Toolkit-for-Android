@@ -16,5 +16,6 @@
   -->
 <resources>
     <string name="changelog_title">Änderungsprotokoll</string>
+    <string name="changelog_all_releases">Alle Versionen</string>
     <string name="no_new_updates_message">Keine neuen Updates verfügbar.</string>
 </resources>

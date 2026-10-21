@@ -16,5 +16,6 @@
   -->
 <resources>
     <string name="changelog_title">應用程式變更紀錄</string>
+    <string name="changelog_all_releases">所有版本</string>
     <string name="no_new_updates_message">沒有新的更新可用。</string>
 </resources>

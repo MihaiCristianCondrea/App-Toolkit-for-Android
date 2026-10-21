@@ -81,9 +81,10 @@ val LocalEntranceStyle = staticCompositionLocalOf { EntranceStyle.Slide }
  * transition over, then arrive one after another in their order on screen. Give list items their
  * [index] and each waits [staggerDelay] per position after the first item shown, up to
  * [maxStaggeredItems] positions; leave it out and elements cascade in the order they appear. An
- * item scrolled into view later starts at once. By default an element enters only the first time
- * its screen shows it; with `EntranceReplay.EveryVisit` (see `LocalEntranceReplay`) each return
- * to the screen plays it again. Returning from the background, rotating or scrolling back within
+ * item scrolled into view later starts at once. By default an element enters each time its screen
+ * is opened, and not on going back to it; `LocalEntranceReplay` can replay it on every return
+ * (`EntranceReplay.EveryVisit`) or play it only for the first copy of each screen in a run
+ * (`EntranceReplay.FirstVisit`). Returning from the background, rotating or scrolling back within
  * the visit never does.
  *
  * ```kotlin
@@ -114,7 +115,7 @@ fun Modifier.animateVisibility(
     maxStaggeredItems: Int = 16,
 ): Modifier {
     val entrance: ScreenEntrance? = LocalScreenEntrance.current
-    val replay: EntranceReplay = if (entrance == null) EntranceReplay.FirstVisit else LocalEntranceReplay.current
+    val replay: EntranceReplay = if (entrance == null) EntranceReplay.OnOpen else LocalEntranceReplay.current
     val entranceId: Long = entrance?.id ?: OUTSIDE_SCREEN
     // The entrance this element last played in, saved with it, so a configuration change or an item
     // scrolled back within the visit does not play it again.
@@ -123,7 +124,8 @@ fun Modifier.animateVisibility(
     val animates: Boolean = remember {
         val due = when (replay) {
             EntranceReplay.EveryVisit -> playedIn != entranceId
-            EntranceReplay.FirstVisit -> playedIn == NOT_PLAYED
+            EntranceReplay.OnOpen -> playedIn == NOT_PLAYED
+            EntranceReplay.FirstVisit -> playedIn == NOT_PLAYED && entrance?.firstInRun != false
         }
         due && style != EntranceStyle.None && !context.isSystemAnimationDisabled()
     }

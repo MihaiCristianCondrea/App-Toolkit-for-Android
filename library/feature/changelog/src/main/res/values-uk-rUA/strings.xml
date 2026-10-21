@@ -16,5 +16,6 @@
   -->
 <resources>
     <string name="changelog_title">Журнал змін</string>
+    <string name="changelog_all_releases">Усі випуски</string>
     <string name="no_new_updates_message">Немає нових оновлень.</string>
 </resources>
