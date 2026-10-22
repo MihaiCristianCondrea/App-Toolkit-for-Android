@@ -104,8 +104,8 @@ flowchart TD
 - `ScreenStateHandler` draws every case but the content with the app's `ScreenStates`, so a failure
   always shows something. A screen passes only what differs: `icon`, `retryWhenEmpty`, `showAd`,
   or a case of its own for that one section. An app draws its own cases, or its own transition,
-  once with `LocalScreenStates`; without one, cases cross-fade on the app's motion scheme, and `StateContent` switches on any other state, such as a flow's
-  phases, the same way.
+  once with `LocalScreenStates`; without one, cases cross-fade on the app's motion scheme.
+  `StateContent` switches on any other state, such as a flow's phases, the same way.
 - Global UI preferences arrive through the design-system root. Reusable components must not start
   their own persistence collectors unless a documented adapter still requires it.
 
@@ -475,8 +475,16 @@ UI dependency.
   Outside a destination it falls back to the activity's store, and in a preview to the
   composition.
 - **The visit also times the screen's entrance.** Elements with `animateVisibility`, Toolkit
-  components and `animatedItems` wait until the screen is `RESUMED`, its transition over, and then
-  cascade in. A screen opened anew enters again; going back to it does not, unless
+  components and `animatedItems` wait until the screen settles, then cascade in. It settles when
+  it is `RESUMED`, or before that, while it is `STARTED`, once its `LocalEntranceCue` is reached:
+  the shell reaches it 60% into the transition bringing a page or tab in, so content arrives as
+  the screen lands instead of after a blank half-second. After its first resume only resuming
+  settles it, so nothing starts entering under an overlay.
+- **The loading content hands over to the entrance.** A `ScreenStateHandler` showing its loading
+  case keeps it while the screen has not settled, so a result that arrives during the transition
+  waits behind it and the loading fades as the result's elements enter. A slow result replaces it
+  as soon as it arrives. Put a screen's loading in `onLoading` or the app's `ScreenStates`, not
+  beside the handler, to get this. A screen opened anew enters again; going back to it does not, unless
   `LocalEntranceReplay` is `EveryVisit`. `FirstVisit` remembers each screen opened while the app
   runs, by its `TrackedScreen`, and plays only its first copy. A configuration change keeps the
   current entrance.

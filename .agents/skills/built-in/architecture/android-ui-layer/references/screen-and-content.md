@@ -196,6 +196,10 @@ LazyColumn {
   `FirstVisit` plays it only for the first copy of each screen while the app runs. Background,
   rotation and scrolling back within a visit never replay it. An app that wants the other default sets it once with
   `appToolkitDefaults { shell { entranceReplay = ... } }`.
+- The entrance begins once the screen settles: resumed, or 60% into the shell's transition through
+  `LocalEntranceCue`. Draw loading only through `ScreenStateHandler` (`onLoading` or the app's
+  `ScreenStates.loading`), never beside it: the handler keeps it until the content can enter, so
+  the screen is never blank between the two.
 - The style is the app's, from `LocalEntranceStyle` (`Slide`, `Scale`, `Fade`, `None`), and the
   pace is the app's `MotionTempo` (`Calm` by default, `Standard`, `Brisk`), set with
   `appToolkitDefaults { shell { entranceStyle = ...; motionTempo = ... } }`. Pass `style` only for

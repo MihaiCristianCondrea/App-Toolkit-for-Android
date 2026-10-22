@@ -153,7 +153,8 @@ their own queue.
 - Make `XScreenContent` `internal` in library features unless a host needs to reuse it.
 - Render each `Loadable` field through `ScreenStateHandler`. Customize it with `icon`,
   `retryWhenEmpty` and `showAd` before replacing a case; never copy `NoDataScreen` into `onEmpty`
-  or `onError` to change one of those.
+  or `onError` to change one of those. Draw a section's loading in `onLoading`, never beside the
+  handler, so it stays until the content can enter.
 - Bring lazy rows and cards in with `animatedItems`, `animatedItemsIndexed` or `animatedItem`, and
   other elements with `Modifier.animateVisibility(index)`, every item of the list alike; only an item
   of filter chips or a native ad stays a plain `item`. Toolkit components enter on their own;

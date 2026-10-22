@@ -26,8 +26,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.platform.LocalView
 import androidx.lifecycle.Lifecycle
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -82,8 +85,10 @@ import java.util.concurrent.atomic.AtomicLong
  * here, once for the screen, they follow its state without the cases of a [StateContent] both
  * declaring buttons while one fades into the other.
  *
- * **Entrances.** The screen's `animateVisibility` elements cascade in once it settles, the visit's
- * first frame without a transition or an overlay, in the order they are shown. They play each
+ * **Entrances.** The screen's `animateVisibility` elements cascade in once it settles, in the
+ * order they are shown: once it is resumed, or earlier, while it is started, when its
+ * [LocalEntranceCue] is reached, which the shell does well into the transition bringing it in, so
+ * its content arrives as it lands. A loading case of [ScreenStateHandler] stays until then. They play each
  * time the screen is opened, not on going back to it, unless `LocalEntranceReplay` says every
  * visit (`EntranceReplay.EveryVisit`) or only the first copy in a run (`EntranceReplay.FirstVisit`);
  * coming back from the background, rotating or scrolling within the visit never replays them.
@@ -128,6 +133,7 @@ private fun TrackScreenVisits(tracker: ScreenVisitTracker, entrance: ScreenEntra
             when (event) {
                 Lifecycle.Event.ON_RESUME -> {
                     tracker.onResumed(currentLabel, currentTelemetry)
+                    entrance.resumed = true
                     entrance.settled = true
                 }
                 Lifecycle.Event.ON_PAUSE -> entrance.settled = false
@@ -145,6 +151,20 @@ private fun TrackScreenVisits(tracker: ScreenVisitTracker, entrance: ScreenEntra
         }
     }
     LaunchedEffect(tracker, label) { tracker.onStatus(label, currentTelemetry) }
+    val cue: EntranceCue? = LocalEntranceCue.current
+    if (cue != null) {
+        // The entrance may begin before the transition ends: once the screen is started and the
+        // cue reached, its content arrives as the screen lands. After the first resume, resuming
+        // alone settles it, so a screen under an overlay does not start entering.
+        LaunchedEffect(lifecycleOwner, cue, entrance) {
+            lifecycleOwner.lifecycle.currentStateFlow.collectLatest { state ->
+                if (!entrance.resumed && state.isAtLeast(Lifecycle.State.STARTED)) {
+                    snapshotFlow { cue.reached() }.first { it }
+                    entrance.settled = true
+                }
+            }
+        }
+    }
 }
 
 /**

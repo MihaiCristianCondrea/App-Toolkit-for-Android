@@ -804,11 +804,13 @@ private fun tabEntry(
             // Picking the tab again opens its screens again, for their entrance.
             LocalScreenOpening provides timesOpened(),
         ) {
-            ContentWidthBox(
-                maxWidth = LocalShellLayout.current.maxWidthFor(destination.contentWidth),
-                modifier = Modifier.background(MaterialTheme.colorScheme.surface),
-            ) {
-                destination.content(entryKey)
+            ProvideEntranceCue {
+                ContentWidthBox(
+                    maxWidth = LocalShellLayout.current.maxWidthFor(destination.contentWidth),
+                    modifier = Modifier.background(MaterialTheme.colorScheme.surface),
+                ) {
+                    destination.content(entryKey)
+                }
             }
         }
     }

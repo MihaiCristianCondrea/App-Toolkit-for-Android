@@ -21,9 +21,14 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.isSystemAnimationDisabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.EntranceStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.LocalEntranceStyle
 
 /**
  * Draws [state], animating between its cases with the app's [ScreenStates].
@@ -33,6 +38,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
  * shows. A failure always shows something, with a retry button when [onRetry] is given and the
  * failure is retryable. The animation runs when the case changes, not when the content inside
  * [Loadable.Ready] does.
+ *
+ * Inside a [ScreenHost], the loading content stays until the screen's entrance can begin: a result
+ * that arrives while the screen is still sliding in waits there, then the loading content fades as
+ * the result's elements enter, so the screen is never blank between the two.
  *
  * ```
  * ScreenStateHandler(state = state.config, icon = Icons.Outlined.Settings, onRetry = onRetry) { ready ->
@@ -75,7 +84,7 @@ fun <T> ScreenStateHandler(
     },
     onSuccess: @Composable (Loadable.Ready<T>) -> Unit,
 ) {
-    StateContent(state = state, modifier = modifier, label = "ScreenStateHandler") { current ->
+    StateContent(state = heldWhileEntering(state), modifier = modifier, label = "ScreenStateHandler") { current ->
         when (current) {
             Loadable.Loading -> onLoading()
             is Loadable.Empty -> onEmpty(current)
@@ -113,6 +122,32 @@ fun <T> ScreenStateHandler(
         onError = onError,
         onSuccess = onSuccess,
     )
+}
+
+/**
+ * [state], or [Loadable.Loading] while loading content is showing and the screen's entrance cannot
+ * begin yet, so the result does not replace it with content still hidden for its entrance.
+ */
+@Composable
+private fun <T> heldWhileEntering(state: Loadable<T>): Loadable<T> {
+    val entrance: ScreenEntrance? = LocalScreenEntrance.current
+    val style: EntranceStyle = LocalEntranceStyle.current
+    val context = LocalContext.current
+    val shown = remember { LoadingShown() }
+    val holds = shown.loading &&
+        state !is Loadable.Loading &&
+        entrance != null &&
+        !entrance.settled &&
+        style != EntranceStyle.None &&
+        !context.isSystemAnimationDisabled()
+    val result: Loadable<T> = if (holds) Loadable.Loading else state
+    shown.loading = result is Loadable.Loading
+    return result
+}
+
+/** Whether the loading content was the last case shown. */
+private class LoadingShown {
+    var loading: Boolean = false
 }
 
 @Composable

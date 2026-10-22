@@ -94,6 +94,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.ListDe
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.PageChrome
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.PageSceneStrategy
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.ShellEntryInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.ProvideEntranceCue
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.LocalShellSnackbarHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.ShellChrome
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.ShellFrame
@@ -160,7 +161,7 @@ fun ShellHost(
     layoutPolicy: ShellLayoutPolicy = graph.defaults.layoutPolicy,
     snackbarHostState: SnackbarHostState? = null,
 ) {
-    PausablePrefetch.disable()
+    disablePausablePrefetch()
     val context = LocalContext.current
     val shellSnackbars = snackbarHostState ?: remember { SnackbarHostState() }
     val shellSnackbarHost = remember(shellSnackbars) { ShellSnackbarHost(shellSnackbars) }
@@ -334,7 +335,7 @@ private fun pageEntry(graph: ShellGraph, navigator: ShellNavigator, key: NavKey)
             contentKey = key.toString(),
             metadata = ShellEntryInfo(DestinationKind.Page, tabIndex = -1, PaneRole.None).toMetadata(),
         ) {
-            ShellChrome(graph, navigator)
+            ProvideEntranceCue { ShellChrome(graph, navigator) }
         }
     }
     val destination = graph.destination(key)
@@ -366,20 +367,22 @@ private fun pageEntry(graph: ShellGraph, navigator: ShellNavigator, key: NavKey)
             LocalPageKey provides pageKey,
             LocalTopBarScrollMode provides destination.topBarScrollMode,
         ) {
-            if (destination.scaffold && title != null) {
-                PageScaffold(
-                    title = title(pageKey),
-                    style = destination.topBar,
-                    actions = { destination.actions?.invoke(this, pageKey) },
-                    floatingActionButton = { destination.floatingActionButton?.invoke(pageKey) },
-                    fabs = destination.floatingActionButtons?.invoke(pageKey).orEmpty(),
-                ) {
-                    ContentWidthBox(maxWidth = LocalShellLayout.current.maxWidthFor(destination.contentWidth)) {
-                        destination.content(pageKey)
+            ProvideEntranceCue {
+                if (destination.scaffold && title != null) {
+                    PageScaffold(
+                        title = title(pageKey),
+                        style = destination.topBar,
+                        actions = { destination.actions?.invoke(this, pageKey) },
+                        floatingActionButton = { destination.floatingActionButton?.invoke(pageKey) },
+                        fabs = destination.floatingActionButtons?.invoke(pageKey).orEmpty(),
+                    ) {
+                        ContentWidthBox(maxWidth = LocalShellLayout.current.maxWidthFor(destination.contentWidth)) {
+                            destination.content(pageKey)
+                        }
                     }
+                } else {
+                    destination.content(pageKey)
                 }
-            } else {
-                destination.content(pageKey)
             }
         }
     }
@@ -394,11 +397,8 @@ private fun pageEntry(graph: ShellGraph, navigator: ShellNavigator, key: NavKey)
  * pausing stops. Remove this once a foundation release fixes the issue.
  */
 @OptIn(ExperimentalFoundationApi::class)
-private object PausablePrefetch {
-    init {
-        ComposeFoundationFlags.isPausableCompositionInPrefetchEnabled = false
-    }
-
-    /** Sets the flag the first time it is called, before the shell's first composition, and is free after. */
-    fun disable() = Unit
+private fun disablePausablePrefetch() {
+    // Set on every composition of the shell, before its lists compose: a plain write, and it stays
+    // off even if something turned it back on.
+    ComposeFoundationFlags.isPausableCompositionInPrefetchEnabled = false
 }

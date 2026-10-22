@@ -61,6 +61,22 @@ val LocalEntranceReplay = staticCompositionLocalOf { EntranceReplay.OnOpen }
 val LocalScreenOpening = staticCompositionLocalOf { 0 }
 
 /**
+ * Tells a screen that the transition bringing it in is far enough along for its entrance to begin,
+ * so its content arrives as the screen lands rather than after it. [reached] is read inside a
+ * snapshot, so it should read state. The shell provides one for each page and tab.
+ */
+fun interface EntranceCue {
+    /** Whether the screen's entrance may begin. */
+    fun reached(): Boolean
+}
+
+/**
+ * The [EntranceCue] of the screen here. Without one, a screen's entrance begins once it is
+ * resumed, its transition over.
+ */
+val LocalEntranceCue = staticCompositionLocalOf<EntranceCue?> { null }
+
+/**
  * One screen's entrance, provided by [ScreenHost]: its own cascade, so two screens never share a
  * wave, the [id] its elements save once they have played, whether the screen has [settled], the
  * [view] its window draws in, so a dialog or a sheet over it can tell it is elsewhere, and whether
@@ -75,8 +91,14 @@ internal class ScreenEntrance(
     val firstInRun: Boolean = true,
     val openedAt: Long = id,
 ) {
-    /** Whether the screen is shown and active, its transition over and nothing covering it. */
+    /**
+     * Whether the screen's entrance may run: it is resumed, or, before its first resume, its
+     * [EntranceCue] was reached while it was started.
+     */
     var settled: Boolean by mutableStateOf(false)
+
+    /** Whether the screen has been resumed in this entrance, after which only resuming settles it. */
+    var resumed: Boolean = false
 
     val cascade: VisibilityCascade = VisibilityCascade()
 }

@@ -74,6 +74,8 @@ class ScreenEntranceTest {
     private var boxShown by mutableStateOf(true)
     private var replay by mutableStateOf(EntranceReplay.EveryVisit)
     private var opening by mutableStateOf(0)
+    private var cueReached by mutableStateOf(false)
+    private var cue: EntranceCue? = null
 
     /** Which copy of the screen is open: a new copy is the screen opened again after it closed. */
     private var copy by mutableStateOf(0)
@@ -113,6 +115,7 @@ class ScreenEntranceTest {
                     LocalLifecycleOwner provides rememberLifecycleOwner(maxLifecycle = cap),
                     LocalEntranceReplay provides replay,
                     LocalScreenOpening provides opening,
+                    LocalEntranceCue provides cue,
                 ) {
                     Box(Modifier.testTag("frame").size(80.dp).background(Color.White)) {
                         if (onScreen) {
@@ -145,6 +148,38 @@ class ScreenEntranceTest {
         set { cap = Lifecycle.State.RESUMED }
         settle()
         assertTrue("Did not enter once settled: ${shown()}", shown() > 0.98f)
+    }
+
+    @Test
+    fun `the entrance cue starts the entrance before the transition ends`() {
+        cue = EntranceCue { cueReached }
+        cap = Lifecycle.State.STARTED
+        setContent()
+        settle()
+        assertTrue("Entered before the cue: ${shown()}", shown() < 0.05f)
+
+        set { cueReached = true }
+        settle()
+        assertTrue("Did not enter on the cue: ${shown()}", shown() > 0.98f)
+    }
+
+    @Test
+    fun `after the first resume, a started screen under an overlay waits to be resumed again`() {
+        cue = EntranceCue { true }
+        boxShown = false
+        setContent()
+        settle()
+
+        // An overlay covers the screen, then something new appears under it.
+        set { cap = Lifecycle.State.STARTED }
+        settle()
+        set { boxShown = true }
+        settle()
+        assertTrue("Entered under the overlay: ${shown()}", shown() < 0.05f)
+
+        set { cap = Lifecycle.State.RESUMED }
+        settle()
+        assertTrue("Did not enter once uncovered: ${shown()}", shown() > 0.98f)
     }
 
     @Test

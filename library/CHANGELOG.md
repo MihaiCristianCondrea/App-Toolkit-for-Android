@@ -16,6 +16,9 @@
   each screen while the app runs. Set it with `appToolkitDefaults { shell { entranceReplay = ... } }`
   or the developer options. `LocalScreenOpening` tells a screen it was opened again while it stayed
   in its back stack; the shell provides it for each tab.
+- `EntranceCue` and `LocalEntranceCue` let a screen's entrance begin before its transition ends.
+  The shell gives every page and tab one, reached 60% into the transition bringing it in, so its
+  content arrives as the screen lands instead of after a blank half-second.
 - `ChangelogDialog(releasesUrl = ...)` shows an info button beside the title that opens more
   release notes, such as `GithubConstants.APP_TOOLKIT_RELEASES`, App Toolkit's GitHub releases.
   Without a URL the sheet is unchanged.
@@ -39,6 +42,10 @@
 
 ### Improved
 
+- `ScreenStateHandler` keeps its loading content until the screen's entrance can begin: a result
+  that arrives while the screen is still sliding in waits behind it, and the loading fades as the
+  result's elements enter, so the screen is never blank in between. A slow result replaces it as
+  soon as it arrives.
 - Every Toolkit screen enters the same way: About, Privacy, Help, Startup, Settings, Display,
   Permissions and the developer options bring in their headers, cards and rows with the screen,
   instead of only some of them. Help's Show more and the onboarding buttons and page dots move on

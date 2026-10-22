@@ -2,6 +2,15 @@
 
 ---
 
+# Unreleased
+
+### Improved
+
+- Opening a screen no longer shows a blank page first: its content starts arriving while the page
+  slides in, and the Apps list keeps its loading cards until its apps take their place.
+
+---
+
 # October 21, 2026
 
 **Version:** `26.10.35` (`137261035`)
