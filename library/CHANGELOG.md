@@ -2,7 +2,9 @@
 
 ---
 
-# Unreleased
+# October 22, 2026
+
+**Version:** `3.0.0-pre26`
 
 ### Added
 
@@ -13,8 +15,8 @@
   then cascade in from the top of what is shown. `EntranceReplay` chooses when it plays: `OnOpen`,
   the default, each time a screen is opened or its tab is picked from the navigation, but not on
   going back to it; `EveryVisit` on every return as well; `FirstVisit` only for the first copy of
-  each screen while the app runs. Set it with `appToolkitDefaults { shell { entranceReplay = ... } }`
-  or the developer options. `LocalScreenOpening` tells a screen it was opened again while it stayed
+  each screen while the app runs. Set it with
+  `appToolkitDefaults { shell { entranceReplay = ... } }` or the developer options. `LocalScreenOpening` tells a screen it was opened again while it stayed
   in its back stack; the shell provides it for each tab.
 - `EntranceCue` and `LocalEntranceCue` let a screen's entrance begin before its transition ends.
   The shell gives every page and tab one, reached 60% into the transition bringing it in, so its

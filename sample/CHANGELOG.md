@@ -4,17 +4,6 @@
 
 # Unreleased
 
-### Improved
-
-- Opening a screen no longer shows a blank page first: its content starts arriving while the page
-  slides in, and the Apps list keeps its loading cards until its apps take their place.
-
----
-
-# October 21, 2026
-
-**Version:** `26.10.35` (`137261035`)
-
 ### Added
 
 - The app changelog has an info button that opens App Toolkit's releases on GitHub, for the
@@ -23,8 +12,11 @@
 ### Improved
 
 - Screens move at a calmer pace and bring their content in as they open, including Apps and
-  Quick Tools when picked from the navigation. Going back to a screen keeps it as it was. The developer options can play it on every visit or only
-  the first time. See App Toolkit's releases for the details.
+  Quick Tools when picked from the navigation. Going back to a screen keeps it as it was. The
+  developer options can play it on every visit or only the first time. See App Toolkit's releases
+  for the details.
+- Opening a screen no longer shows a blank page first: its content starts arriving while the page
+  slides in, and the Apps list keeps its loading cards until its apps take their place.
 - The Apps list brings in its filter chips, then its cards.
 - The Components, Quick Tools and article demo screens enter the way the Toolkit's screens do,
   each section or card in turn.
