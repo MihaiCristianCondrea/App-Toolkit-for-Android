@@ -14,8 +14,17 @@ feature-name/
 ├── data/       # optional: a feature served by shared repositories has none
 ├── domain/     # optional: only when it holds a use case
 ├── di/         # optional: the module's bindings
+├── workers/    # optional: WorkManager workers the module schedules
+├── services/   # optional: services, tiles and AppFunctions the system starts
+├── receivers/  # optional: broadcast receivers
 └── ui/
 ```
+
+`workers/`, `services/` and `receivers/` hold framework entry points: classes the system creates
+and calls, the way it opens a screen. Like a screen, an entry point asks the data and domain layers
+for the work and reports what came of it, product analytics included. It holds no business logic
+and no storage of its own. A class that only wraps a platform API for a repository, such as a
+WorkManager scheduler or a cleanup engine, is a data source and stays in `data/`.
 
 A core or integration module uses the same layer packages when it has layers. A module that only
 holds a shared vocabulary, such as analytics event names, may keep flat `models/` and `contracts/`
@@ -55,6 +64,9 @@ banned names below.
 | `ui/views/`               | stateless composables the screen uses                              |
 | `ui/utils/`               | UI-only helpers                                                    |
 | `ui/features/<name>/`     | a parent-owned surface with its own ViewModel (see below)          |
+| `workers/`                | WorkManager workers: framework entry points                        |
+| `services/`               | services, tile services and AppFunctions: framework entry points   |
+| `receivers/`              | broadcast receivers: framework entry points                        |
 | `utils/extensions/`       | extensions reused across the module's layers                       |
 | `utils/constants/`        | constants reused across the module's layers                        |
 
@@ -93,6 +105,8 @@ Classify by responsibility first and Kotlin syntax second.
 | Screen              | `ui/`, with its content in one file   | see `android-ui-layer`                                        |
 | Stateless piece     | `ui/views/`                           | no ViewModel, repository or lifecycle owner                   |
 | DI bindings         | `di/`                                 |                                                               |
+| Worker              | `workers/`                            | an entry point; may report analytics on its outcome           |
+| Service or receiver | `services/` or `receivers/`           | an entry point; may report analytics on its outcome           |
 | Feature resources   | the feature's `src/main/res`          | shared modules only for genuinely shared text                 |
 
 ## Mappers
