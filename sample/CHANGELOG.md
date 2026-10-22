@@ -33,7 +33,7 @@
 
 # October 17, 2026
 
-**Version:** `26.10.32` (`137261032`)
+**Version:** `26.10.32`
 
 ### Fixed
 
@@ -54,7 +54,7 @@
 
 # October 03, 2026
 
-**Version:** `26.10.31` (`137261031`)
+**Version:** `26.10.31`
 
 ### Added
 
@@ -114,7 +114,7 @@
 
 # September 24, 2026
 
-**Version:** `26.09.22` (`137260922`)
+**Version:** `26.09.22`
 
 ### Fixed
 
@@ -124,7 +124,7 @@
 
 # September 24, 2026
 
-**Version:** `26.09.21` (`137260921`)
+**Version:** `26.09.21`
 
 ### Changed
 
@@ -139,7 +139,7 @@
 
 # September 23, 2026
 
-**Version:** `26.09.20` (`137260920`)
+**Version:** `26.09.20`
 
 ### Added
 
@@ -168,7 +168,7 @@
 
 # September 20, 2026
 
-**Version:** `26.09.18` (`137260918`), `26.09.19` (`137260919`)
+**Version:** `26.09.18`, `26.09.19`
 
 ### Changed
 
@@ -191,7 +191,7 @@
 
 # September 20, 2026
 
-**Version:** `26.09.17` (`137260917`)
+**Version:** `26.09.17`
 
 ### Added
 
@@ -209,7 +209,7 @@
 
 # September 10, 2026
 
-**Version:** `26.09.16` (`1370016`)
+**Version:** `26.09.16`
 
 ### Added
 
@@ -240,7 +240,7 @@
 
 # August 28, 2026
 
-**Version:** `28.08.13` (`1370013`)
+**Version:** `28.08.13`
 
 ### Added
 
@@ -258,7 +258,7 @@
 
 # August 24, 2026
 
-**Version:** `26.08.9` (`1370009`)
+**Version:** `26.08.9`
 
 Reliability-focused release with major improvements to startup, onboarding, Quick Tools, and the way
 App Toolkit communicates one-time UI actions.
@@ -284,7 +284,7 @@ App Toolkit communicates one-time UI actions.
 
 # August 20, 2026
 
-**Version:** `26.08.8` (`1370008`)
+**Version:** `26.08.8`
 
 Major structural update that separated reusable App Toolkit responsibilities from Sample
 App-specific features much more clearly.
@@ -325,7 +325,7 @@ App-specific features much more clearly.
 
 # July 8, 2026
 
-**Version:** `26.07.2` (`1370002`)
+**Version:** `26.07.2`
 
 Feature-heavy Sample App release alongside continued refinement of App Toolkit's reusable navigation
 and UI foundations.
@@ -370,7 +370,7 @@ and UI foundations.
 
 # March 30, 2026
 
-**Version:** `2.0.11` (`114`)
+**Version:** `2.0.11`
 
 ### Improved
 
@@ -384,7 +384,7 @@ and UI foundations.
 
 # March 24, 2026
 
-**Version:** `2.0.9` (`112`)
+**Version:** `2.0.9`
 
 ### Improved
 
@@ -394,13 +394,13 @@ and UI foundations.
 
 # March 7, 2026
 
-**Version:** `2.0.7` (`109`)
+**Version:** `2.0.7`
 
 ---
 
 # March 6, 2026
 
-**Version:** `2.0.6` (`108`)
+**Version:** `2.0.6`
 
 ### Added
 
@@ -410,7 +410,7 @@ and UI foundations.
 
 # February 21, 2026
 
-**Version:** `2.0.5` (`106`)
+**Version:** `2.0.5`
 
 ### Added
 
@@ -424,7 +424,7 @@ and UI foundations.
 
 # February 3, 2026
 
-**Version:** `2.0.1` (`101`)
+**Version:** `2.0.1`
 
 ### Improved
 
@@ -434,7 +434,7 @@ and UI foundations.
 
 # December 21, 2025
 
-**Version:** `1.1.5` (`85`)
+**Version:** `1.1.5`
 
 ### Added
 
@@ -467,7 +467,7 @@ and UI foundations.
 
 # September 15, 2025
 
-**Version:** `1.1.2` (`65`)
+**Version:** `1.1.2`
 
 ### Improved
 
@@ -478,7 +478,7 @@ and UI foundations.
 
 # August 21, 2025
 
-**Version:** `1.1.1` (`52`)
+**Version:** `1.1.1`
 
 ### Added
 
@@ -492,7 +492,7 @@ and UI foundations.
 
 # July 18, 2025
 
-**Version:** `1.0.8` (`41`)
+**Version:** `1.0.8`
 
 ### Improved
 
@@ -502,7 +502,7 @@ and UI foundations.
 
 # July 10, 2025
 
-**Version:** `1.0.7` (`39`)
+**Version:** `1.0.7`
 
 ### Improved
 
@@ -516,7 +516,7 @@ and UI foundations.
 
 # June 25, 2025
 
-**Version:** `1.0.6` (`37`)
+**Version:** `1.0.6`
 
 ### Changed
 
@@ -526,7 +526,7 @@ and UI foundations.
 
 # June 20, 2025
 
-**Version:** `1.0.5` (`36`)
+**Version:** `1.0.5`
 
 ### Added
 
@@ -540,7 +540,7 @@ and UI foundations.
 
 # June 17, 2025
 
-**Version:** `1.0.3` (`32`), `1.0.4` (`33`)
+**Version:** `1.0.3`, `1.0.4`
 
 ### Added
 
@@ -550,7 +550,7 @@ and UI foundations.
 
 # June 12, 2025
 
-**Version:** `1.0.2` (`29`)
+**Version:** `1.0.2`
 
 ### Changed
 
@@ -561,7 +561,7 @@ and UI foundations.
 
 # June 10, 2025
 
-**Version:** `1.0.1` (`27`)
+**Version:** `1.0.1`
 
 ### Improved
 
@@ -572,7 +572,7 @@ and UI foundations.
 
 # June 6, 2025
 
-**Version:** `1.0.0` (`25`)
+**Version:** `1.0.0`
 
 ### Added
 
