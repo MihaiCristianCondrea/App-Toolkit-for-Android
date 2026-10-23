@@ -99,6 +99,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R as NavigationR
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
 
 /**
  * Renders the shell's chrome in every navigation layout, against the Toolkit's theme, and the

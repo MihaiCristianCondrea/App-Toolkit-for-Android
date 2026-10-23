@@ -58,6 +58,7 @@ import org.koin.dsl.module
 import org.robolectric.annotation.Config
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R as NavigationR
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
 
 /**
  * The capabilities `ShellHost` gives the settings pages describe the app as declared: a layout the

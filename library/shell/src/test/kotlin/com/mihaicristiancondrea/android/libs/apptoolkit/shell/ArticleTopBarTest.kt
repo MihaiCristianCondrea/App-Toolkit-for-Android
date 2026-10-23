@@ -86,6 +86,8 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R as NavigationR
+import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
 
 /**
  * The article app bar a screen declares with `ScaffoldArticleTopBar`: in a tab's child, on a page

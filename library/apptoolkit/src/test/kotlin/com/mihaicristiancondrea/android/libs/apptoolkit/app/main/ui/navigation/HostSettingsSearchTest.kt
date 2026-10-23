@@ -81,6 +81,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.R as Dis
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.R as PrivacyR
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.R as SupportR
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R as NavigationR
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.settingsSearchProvider
 
 /**
  * An app's own settings page in the Toolkit's settings search, declared the way a host declares
