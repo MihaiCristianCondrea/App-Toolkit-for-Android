@@ -121,6 +121,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.Hide
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalContentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalPageSnackbarHostState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalTopBarStyleOverride
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalTopBarTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.ShellTopAppBar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.TopBarSearch
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.forArticle
@@ -498,6 +499,13 @@ private fun ShellBody(
     // opens takes over from it while shown.
     FollowScrollWithFrameTint(underneath = true) { if (reactsToScroll) topScroll.frameTint(style) else FrameTint.None }
 
+    // Tabs under the bar take its colour; over a tinted frame the bar is see-through and has none.
+    val topBarTint: (() -> FrameTint)? = if (reactsToScroll && !tinted) {
+        remember(topScroll, style) { { topScroll.frameTint(style) } }
+    } else {
+        null
+    }
+
     val title = when {
         isChild -> destination.title?.invoke(topKey).orEmpty()
         navigationNamesApp -> stringResource(tab.label)
@@ -676,6 +684,7 @@ private fun ShellBody(
                 LocalContentPadding provides PaddingValues(bottom = padding.calculateBottomPadding() + playerReserve),
                 LocalPageSnackbarHostState provides snackbarHostState,
                 LocalScaffoldSnackbars provides snackbars,
+                LocalTopBarTint provides topBarTint,
             ) {
                 TabsNavDisplay(graph, navigator, searches, entryHosts)
             }
