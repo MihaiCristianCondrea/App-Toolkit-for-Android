@@ -2,7 +2,9 @@
 
 ---
 
-# Unreleased
+# October 23, 2026
+
+**Version:** `26.10.35`
 
 ### Added
 
@@ -32,7 +34,6 @@
 
 - Opening an installed app can fall back to its Settings page when Android denies the launcher
   lookup, rather than letting the lookup failure escape.
-
 - Stopping or replacing Morse and SOS playback waits for in-flight torch commands, keeping the
   flashlight off after stopping.
 - Counter storage failures are handled instead of escaping the action, while accepted writes
