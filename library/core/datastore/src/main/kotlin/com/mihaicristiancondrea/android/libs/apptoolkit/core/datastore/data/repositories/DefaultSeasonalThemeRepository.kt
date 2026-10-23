@@ -47,11 +47,7 @@ class DefaultSeasonalThemeRepository(
 
     override suspend fun setWeatherEffect(effect: WeatherEffect) = seasonal.saveWeatherEffect(effect)
 
-    override suspend fun unlockSeasonalThemes(): Boolean {
-        if (seasonal.seasonalThemesUnlocked.first()) return false
-        seasonal.saveSeasonalThemesUnlocked(true)
-        return true
-    }
+    override suspend fun unlockSeasonalThemes(): Boolean = seasonal.unlockSeasonalThemes()
 
     override suspend fun pendingHolidayGreeting(today: LocalDate): HolidaySeason? {
         val season = today.holidaySeason ?: return null

@@ -26,10 +26,10 @@ import androidx.core.content.edit
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
 import kotlinx.coroutines.withContext
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services.getTileServiceRequests
 
 class AndroidQuickSettingsTilesLocalDataSource(
     private val context: Context,
+    private val tileComponents: Map<String, String>,
     private val dispatchers: DispatcherProvider = StandardDispatchers(),
 ) : QuickSettingsTilesLocalDataSource {
     @get:ChecksSdkIntAtLeast(api = Build.VERSION_CODES.TIRAMISU)
@@ -41,13 +41,13 @@ class AndroidQuickSettingsTilesLocalDataSource(
     }
 
     /**
-     * Records whether [component] is in Quick Settings.
+     * Records whether [componentName] is in Quick Settings.
      *
      * A tile reports this every time System UI starts listening, which is every time the shade
      * opens, so the value is only written when it changes.
      */
-    fun recordTileAdded(component: ComponentName, added: Boolean) {
-        val key = component.flattenToString()
+    override fun recordTileAdded(componentName: String, added: Boolean) {
+        val key = componentName
         if (addedTiles.contains(key) && addedTiles.getBoolean(key, !added) == added) return
         addedTiles.edit { putBoolean(key, added) }
     }
@@ -71,7 +71,7 @@ class AndroidQuickSettingsTilesLocalDataSource(
     }
 
     override fun componentName(requestKey: String): String? =
-        getTileServiceRequests()[requestKey]?.componentName(context)?.flattenToString()
+        tileComponents[requestKey]
 
     private companion object {
         const val SYSUI_QS_TILES = "sysui_qs_tiles"

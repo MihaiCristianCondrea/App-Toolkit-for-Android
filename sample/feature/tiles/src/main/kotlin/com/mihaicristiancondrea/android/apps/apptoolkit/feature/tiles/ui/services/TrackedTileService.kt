@@ -21,7 +21,12 @@ import android.content.ComponentName
 import android.os.Build
 import android.service.quicksettings.TileService
 import androidx.annotation.CallSuper
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.quicksettings.AndroidQuickSettingsTilesLocalDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.ToolkitTilesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
@@ -36,7 +41,9 @@ import kotlinx.coroutines.flow.onEach
  * lets a tile follow shared state only while System UI is listening, so changes made elsewhere
  * (the in-app tool, another tile, the system flashlight) show up while the panel is open.
  */
-abstract class TrackedTileService : TileService() {
+abstract class TrackedTileService : TileService(), KoinComponent {
+    private val tilesRepository: ToolkitTilesRepository by inject()
+    private val diagnostics: DiagnosticsReporter by inject()
     private val serviceScope = MainScope()
     private var listeningJob: Job? = null
 
@@ -88,9 +95,21 @@ abstract class TrackedTileService : TileService() {
         tile.updateTile()
     }
 
+    /** Reports an action failure without letting it escape the service's coroutine scope. */
+    protected fun launchTileAction(action: String, block: suspend () -> Unit) {
+        serviceScope.launch {
+            try {
+                block()
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (error: Exception) {
+                diagnostics.recordNonFatal(error, attributes = mapOf("action" to action))
+            }
+        }
+    }
+
     private fun recordMembership(added: Boolean) {
-        AndroidQuickSettingsTilesLocalDataSource(this)
-            .recordTileAdded(ComponentName(this, javaClass), added)
+        tilesRepository.recordTileMembership(ComponentName(this, javaClass).flattenToString(), added)
     }
 }
 

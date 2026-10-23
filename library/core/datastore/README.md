@@ -51,7 +51,8 @@ instance from the graph using `get(qualifier = named(DataStoreQualifiers.SETTING
 - `SeasonalThemeRepository` owns holiday palette application and restoration across the shared
   theme and seasonal preferences. Its source atomically reads and updates appearance and snapshot
   keys with `updateHolidayTheme`, so a concurrent user choice survives restoration.
-  Existing snapshots, occurrence keys and weather-effect values persist.
+  Existing snapshots, occurrence keys and weather-effect values persist. Seasonal unlocking also
+  checks and writes in one source transaction, so only one concurrent caller announces the unlock.
 
 ## Public contracts
 

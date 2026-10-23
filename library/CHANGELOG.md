@@ -12,6 +12,9 @@
 
 ### Changed
 
+- Custom consent preference sources must expose `settings(default)` as one complete snapshot.
+  `UsageAndDiagnosticsPreferencesDataSource` extends that contract and requires atomic `saveAll`.
+  Custom seasonal preference sources must implement the atomic `unlockSeasonalThemes()` operation.
 - The Toolkit settings binding uses `named(DataStoreQualifiers.SETTINGS)` so an app can register
   its own `DataStore<Preferences>` without replacing Toolkit settings. Custom source bindings
   must request the qualifier.
@@ -24,6 +27,10 @@
 
 ### Fixed
 
+- Consent requests with different modes run sequentially. A stalled request from a destroyed host
+  no longer permits another SDK request after the wait times out.
+- Consent and diagnostics read all choices from one stored snapshot, preserving atomic bulk changes.
+- Concurrent seasonal unlock requests announce the achievement only once.
 - Holiday theme restoration preserves appearance changes committed concurrently by the user.
   Applying a holiday palette and saving its restoration snapshot now happen in one transaction.
 - App-open ad callbacks and lifecycle state use the injected main dispatcher, including when SDK

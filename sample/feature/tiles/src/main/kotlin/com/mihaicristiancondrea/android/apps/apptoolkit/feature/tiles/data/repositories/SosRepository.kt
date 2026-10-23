@@ -32,7 +32,7 @@ class SosRepository(
     /** Emits [isActive] now and on every change, so a custom Morse message never reads as SOS. */
     fun observeActive(): Flow<Boolean> = state.map { playback -> playback.isSos() }.distinctUntilChanged()
 
-    fun toggle() {
+    suspend fun toggle() {
         if (isActive) {
             stop()
         } else {
@@ -40,7 +40,7 @@ class SosRepository(
         }
     }
 
-    fun stop() {
+    suspend fun stop() {
         if (isActive) morseRepository.stop()
     }
 

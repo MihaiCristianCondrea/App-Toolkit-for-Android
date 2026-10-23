@@ -28,6 +28,7 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -39,35 +40,33 @@ import kotlin.test.assertTrue
 
 private class FakeUsageAndDiagnosticsPreferencesDataSource :
     UsageAndDiagnosticsPreferencesDataSource {
-    private val usage = MutableStateFlow(true)
-    private val analytics = MutableStateFlow(true)
-    private val adStorage = MutableStateFlow(true)
-    private val adUserData = MutableStateFlow(true)
-    private val adPersonalization = MutableStateFlow(true)
-
-    override fun usageAndDiagnostics(default: Boolean) = usage
+    private val stored = MutableStateFlow(ConsentSettings(true, true, true, true, true))
+    override fun settings(default: Boolean) = stored
+    override fun usageAndDiagnostics(default: Boolean) = stored.map { it.usageAndDiagnostics }
+    override fun analyticsConsent(default: Boolean) = stored.map { it.analyticsConsent }
+    override fun adStorageConsent(default: Boolean) = stored.map { it.adStorageConsent }
+    override fun adUserDataConsent(default: Boolean) = stored.map { it.adUserDataConsent }
+    override fun adPersonalizationConsent(default: Boolean) = stored.map { it.adPersonalizationConsent }
     override suspend fun saveUsageAndDiagnostics(isChecked: Boolean) {
-        usage.emit(isChecked)
+        stored.value = stored.value.copy(usageAndDiagnostics = isChecked)
     }
-
-    override fun analyticsConsent(default: Boolean) = analytics
     override suspend fun saveAnalyticsConsent(isGranted: Boolean) {
-        analytics.emit(isGranted)
+        stored.value = stored.value.copy(analyticsConsent = isGranted)
     }
-
-    override fun adStorageConsent(default: Boolean) = adStorage
     override suspend fun saveAdStorageConsent(isGranted: Boolean) {
-        adStorage.emit(isGranted)
+        stored.value = stored.value.copy(adStorageConsent = isGranted)
     }
-
-    override fun adUserDataConsent(default: Boolean) = adUserData
     override suspend fun saveAdUserDataConsent(isGranted: Boolean) {
-        adUserData.emit(isGranted)
+        stored.value = stored.value.copy(adUserDataConsent = isGranted)
     }
-
-    override fun adPersonalizationConsent(default: Boolean) = adPersonalization
     override suspend fun saveAdPersonalizationConsent(isGranted: Boolean) {
-        adPersonalization.emit(isGranted)
+        stored.value = stored.value.copy(adPersonalizationConsent = isGranted)
+    }
+    override suspend fun saveAll(
+        usageAndDiagnostics: Boolean, analyticsConsent: Boolean, adStorageConsent: Boolean,
+        adUserDataConsent: Boolean, adPersonalizationConsent: Boolean,
+    ) {
+        stored.value = ConsentSettings(usageAndDiagnostics, analyticsConsent, adStorageConsent, adUserDataConsent, adPersonalizationConsent)
     }
 }
 

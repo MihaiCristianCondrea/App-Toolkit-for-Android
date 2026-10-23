@@ -24,6 +24,10 @@
 
 ### Fixed
 
+- Stopping or replacing Morse and SOS playback waits for in-flight torch commands, keeping the
+  flashlight off after stopping.
+- Counter storage failures are handled instead of escaping the action, while accepted writes
+  still finish if the Quick Settings service disappears.
 - Unlocking the components showcase reports the achievement only once the unlock is saved, and
   never again on later taps.
 - Screen views count real visits: each screen is reported once it is shown and settled, not during

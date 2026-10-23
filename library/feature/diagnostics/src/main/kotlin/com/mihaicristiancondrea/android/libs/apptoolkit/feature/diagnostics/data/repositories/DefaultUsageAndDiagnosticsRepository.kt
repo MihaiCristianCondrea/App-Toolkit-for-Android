@@ -28,7 +28,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentSettings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onStart
 
@@ -48,19 +48,13 @@ class DefaultUsageAndDiagnosticsRepository(
 ) : UsageAndDiagnosticsRepository {
 
     override fun observeSettings(): Flow<UsageAndDiagnosticsSettings> =
-        combine(
-            dataSource.usageAndDiagnostics(default = !buildInfoRepository.isDebugBuild),
-            dataSource.analyticsConsent(default = !buildInfoRepository.isDebugBuild),
-            dataSource.adStorageConsent(default = !buildInfoRepository.isDebugBuild),
-            dataSource.adUserDataConsent(default = !buildInfoRepository.isDebugBuild),
-            dataSource.adPersonalizationConsent(default = !buildInfoRepository.isDebugBuild),
-        ) { usage, analytics, adStorage, adUserData, adPersonalization ->
+        dataSource.settings(default = !buildInfoRepository.isDebugBuild).map { settings ->
             UsageAndDiagnosticsSettings(
-                usageAndDiagnostics = usage,
-                analyticsConsent = analytics,
-                adStorageConsent = adStorage,
-                adUserDataConsent = adUserData,
-                adPersonalizationConsent = adPersonalization,
+                usageAndDiagnostics = settings.usageAndDiagnostics,
+                analyticsConsent = settings.analyticsConsent,
+                adStorageConsent = settings.adStorageConsent,
+                adUserDataConsent = settings.adUserDataConsent,
+                adPersonalizationConsent = settings.adPersonalizationConsent,
             )
         }
             .onStart {

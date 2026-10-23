@@ -76,6 +76,17 @@ class DefaultSeasonalThemePreferencesDataSource(
         dataStore.edit { preferences: MutablePreferences -> preferences[unlockedKey] = unlocked }
     }
 
+    override suspend fun unlockSeasonalThemes(): Boolean {
+        var changed = false
+        dataStore.edit { preferences ->
+            if (preferences[unlockedKey] != true) {
+                preferences[unlockedKey] = true
+                changed = true
+            }
+        }
+        return changed
+    }
+
     override suspend fun saveWeatherEffect(effect: WeatherEffect) {
         dataStore.edit { preferences: MutablePreferences -> preferences[weatherEffectKey] = effect.name }
     }

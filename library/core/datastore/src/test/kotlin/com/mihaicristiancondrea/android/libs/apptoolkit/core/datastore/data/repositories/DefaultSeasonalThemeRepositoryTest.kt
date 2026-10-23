@@ -170,4 +170,26 @@ class DefaultSeasonalThemeRepositoryTest {
         assertEquals(StaticPaletteIds.ROSE, theme.staticPaletteId.first())
         assertNull(repository.state.first().holidayThemeInUse)
     }
+
+    @Test
+    fun `concurrent unlocks announce only the first successful writer`() = runTest {
+        val stored = FakePreferencesDataStore()
+        val release = CompletableDeferred<Unit>()
+        val gate = object : androidx.datastore.core.DataStore<androidx.datastore.preferences.core.Preferences> {
+            override val data = stored.data
+            override suspend fun updateData(
+                transform: suspend (androidx.datastore.preferences.core.Preferences) -> androidx.datastore.preferences.core.Preferences,
+            ): androidx.datastore.preferences.core.Preferences {
+                release.await()
+                return stored.updateData(transform)
+            }
+        }
+        val firstRepository = DefaultSeasonalThemeRepository(DefaultSeasonalThemePreferencesDataSource(gate))
+        val secondRepository = DefaultSeasonalThemeRepository(DefaultSeasonalThemePreferencesDataSource(gate))
+        val first = async(start = CoroutineStart.UNDISPATCHED) { firstRepository.unlockSeasonalThemes() }
+        val second = async(start = CoroutineStart.UNDISPATCHED) { secondRepository.unlockSeasonalThemes() }
+        release.complete(Unit)
+        assertEquals(1, listOf(first.await(), second.await()).count { it })
+        assertTrue(firstRepository.state.first().unlocked)
+    }
 }

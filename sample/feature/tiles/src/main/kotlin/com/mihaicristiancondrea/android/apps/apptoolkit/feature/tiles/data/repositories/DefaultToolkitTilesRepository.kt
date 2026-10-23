@@ -54,6 +54,11 @@ class DefaultToolkitTilesRepository(
         refreshRequests.tryEmit(Unit)
     }
 
+    override fun recordTileMembership(componentName: String, added: Boolean) {
+        quickSettingsDataSource.recordTileAdded(componentName, added)
+        refreshTileCategories()
+    }
+
     override val expandedCategoryIds: Flow<Set<String>> =
         preferencesDataSource.expandedCategoryIds.map { persistedIds ->
             persistedIds ?: catalogue

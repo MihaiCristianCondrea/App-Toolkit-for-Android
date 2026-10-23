@@ -44,9 +44,11 @@ class FlashDimmerTileService : TrackedTileService(), KoinComponent {
 
     override fun onClick() {
         super.onClick()
-        morseRepository.stop()
-        torchRepository.cyclePreset()
-        renderTorchState(torchRepository.state.value)
+        launchTileAction("cycleTorchPreset") {
+            morseRepository.stop()
+            torchRepository.cyclePreset()
+            renderTorchState(torchRepository.state.value)
+        }
     }
 
     private fun renderTorchState(state: TorchState) {

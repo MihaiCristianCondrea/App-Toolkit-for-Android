@@ -21,7 +21,7 @@ analytics and advertising consents behind it, on a settings page and on an onboa
 
 ## Does not own
 
-- Persistence, owned by [`:library:core:datastore`](../../core/datastore/README.md)
+- Consent persistence, owned by [`:library:integration:consent`](../../integration/consent/README.md)
   (`UsageAndDiagnosticsPreferencesDataSource`).
 - The consent SDK calls, owned by `:library:integration:consent` (`ConsentRepository`).
 - The onboarding flow and its pager, owned by [`:library:feature:onboarding`](../onboarding/README.md);
@@ -90,8 +90,8 @@ flowchart TD
 
 ## Current risks
 
-- `observeSettings()` combines one flow per key, so a whole-bundle write can show a mixed state for
-  a frame. One snapshot of storage would remove it.
+- `observeSettings()` maps one complete consent snapshot. Bulk writes cannot expose a mixture of
+  old and new choices to the screen or the consent SDKs.
 - `UsageAndDiagnosticsSettings` duplicates `ConsentSettings` from `:library:integration:consent`.
 - Changes affect both settings and onboarding, and must keep the consent defaults, the stored
   values and the order in which the SDKs receive them.

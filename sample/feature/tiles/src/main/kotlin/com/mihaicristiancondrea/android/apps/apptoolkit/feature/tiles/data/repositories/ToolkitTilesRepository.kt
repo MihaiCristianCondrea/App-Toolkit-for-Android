@@ -43,6 +43,9 @@ interface ToolkitTilesRepository {
     /** Makes [tileCategories] re-read Quick Settings and emit. No-op when nobody is collecting. */
     fun refreshTileCategories()
 
+    /** Records system-confirmed membership and refreshes the catalogue. */
+    fun recordTileMembership(componentName: String, added: Boolean)
+
     /** Category IDs the user last left expanded, or catalogue defaults on first use. */
     val expandedCategoryIds: Flow<Set<String>>
 

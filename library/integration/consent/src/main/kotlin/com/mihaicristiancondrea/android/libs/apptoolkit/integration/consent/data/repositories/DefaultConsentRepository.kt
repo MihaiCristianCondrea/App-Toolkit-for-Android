@@ -33,8 +33,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -73,8 +71,9 @@ class DefaultConsentRepository(
      *
      * The flight is keyed on [showIfRequired], so an explicit request for the form never takes the
      * answer of one that shows it only when required. A caller joins only a request whose host is
-     * still alive; a request from a host that has gone is waited for, at most
-     * [STALE_REQUEST_WAIT_MS], and then a new one starts.
+     * still alive. Incompatible requests wait for the active SDK operation before starting.
+     * A stale host is waited for at most [STALE_REQUEST_WAIT_MS]; a timeout fails the new caller
+     * and leaves the active operation tracked, so it cannot overlap another SDK request.
      */
     override suspend fun requestConsent(
         host: ConsentHost,
@@ -99,30 +98,42 @@ class DefaultConsentRepository(
             )
         }
 
-        val staleRequest: InFlightConsentRequest? = requestMutex.withLock {
-            inFlightRequest?.takeIf { !it.host.isAlive }
-        }
-        if (staleRequest != null) {
-            diagnostics.logBreadcrumb(
-                message = "Consent request waiting for a request from a finished host",
-                attributes = mapOf("host" to hostName),
-            )
-            withTimeoutOrNull(STALE_REQUEST_WAIT_MS.milliseconds) { staleRequest.result.join() }
-        }
+        while (true) {
+            if (!host.isAlive) {
+                throw ConsentException(
+                    reason = ConsentException.Reason.HOST_UNAVAILABLE,
+                    message = "Consent host is finishing or destroyed.",
+                )
+            }
+            val (request, canJoin) = requestMutex.withLock {
+                val current = inFlightRequest?.takeUnless { it.result.isCompleted }
+                if (current == null) {
+                    startRequest(host = host, showIfRequired = showIfRequired) to true
+                } else {
+                    current to (current.showIfRequired == showIfRequired && current.host.isAlive)
+                }
+            }
+            if (canJoin) {
+                request.result.await()
+                return
+            }
 
-        val request: InFlightConsentRequest = requestMutex.withLock {
-            inFlightRequest
-                ?.takeIf { it.showIfRequired == showIfRequired && it.host.isAlive }
-                ?.also {
-                    diagnostics.logBreadcrumb(
-                        message = "Consent request joined an in-flight request",
-                        attributes = mapOf("host" to hostName),
+            // A distinct request needs its own result, but must wait for the active SDK operation.
+            if (request.host.isAlive) {
+                request.result.join()
+            } else {
+                val finished = withTimeoutOrNull(STALE_REQUEST_WAIT_MS.milliseconds) {
+                    request.result.join()
+                    true
+                } ?: false
+                if (!finished) {
+                    throw ConsentException(
+                        reason = ConsentException.Reason.REQUEST_FAILED,
+                        message = "The previous consent request has not completed.",
                     )
                 }
-                ?: startRequest(host = host, showIfRequired = showIfRequired)
+            }
         }
-
-        request.result.await()
     }
 
     /**
@@ -207,27 +218,11 @@ class DefaultConsentRepository(
         collection.setPerformanceEnabled(settings.usageAndDiagnostics)
     }
 
-    /** Reads every stored choice at once. Unset choices are granted in release builds only. */
+    /** Reads every choice from one Preferences emission. Unset choices are granted in release only. */
     private suspend fun readPersistedSettings(): ConsentSettings = storageCall {
-        coroutineScope {
-            val defaultGranted = !buildInfoRepository.isDebugBuild
-            val usageDeferred = async { local.usageAndDiagnostics(default = defaultGranted).first() }
-            val analyticsDeferred = async { local.analyticsConsent(default = defaultGranted).first() }
-            val adStorageDeferred = async { local.adStorageConsent(default = defaultGranted).first() }
-            val adUserDataDeferred = async { local.adUserDataConsent(default = defaultGranted).first() }
-            val adPersonalizationDeferred = async {
-                local.adPersonalizationConsent(default = defaultGranted).first()
-            }
-
-            ConsentSettings(
-                usageAndDiagnostics = usageDeferred.await(),
-                analyticsConsent = analyticsDeferred.await(),
-                adStorageConsent = adStorageDeferred.await(),
-                adUserDataConsent = adUserDataDeferred.await(),
-                adPersonalizationConsent = adPersonalizationDeferred.await(),
-            )
-        }
+        local.settings(default = !buildInfoRepository.isDebugBuild).first()
     }
+
 }
 
 /**

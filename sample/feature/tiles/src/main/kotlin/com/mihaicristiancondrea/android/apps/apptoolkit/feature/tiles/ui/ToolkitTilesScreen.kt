@@ -88,6 +88,8 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.compose.koinInject
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.ToolkitTilesRepository
 
 private val TilesScreen = AppScreenTracking.Screens.TOOLKIT_TILES
 
@@ -98,6 +100,7 @@ private val TilesScreen = AppScreenTracking.Screens.TOOLKIT_TILES
 @Composable
 fun ToolkitTilesScreen() {
     val viewModel: ToolkitTilesViewModel = koinViewModel()
+    val repository: ToolkitTilesRepository = koinInject()
     val state: ToolkitTilesUiState by viewModel.state.collectAsStateWithLifecycle()
     val messages: ImmutableList<UiMessage> by viewModel.messages.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -120,6 +123,7 @@ fun ToolkitTilesScreen() {
         requestQuickSettingsTile(
             context = context,
             requestKey = requestKey,
+            repository = repository,
             onResult = { outcome ->
                 viewModel.onEvent(ToolkitTilesEvent.TileRequestFinished(requestKey = requestKey, outcome = outcome))
             },

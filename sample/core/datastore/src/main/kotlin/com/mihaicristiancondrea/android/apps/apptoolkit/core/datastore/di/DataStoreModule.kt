@@ -29,8 +29,6 @@ val dataStoreModule: Module = module {
     single<AppPreferencesDataSource> {
         DefaultAppPreferencesDataSource(
             dataStore = get(qualifier = named(DataStoreQualifiers.SETTINGS)),
-            displayPreferences = get(),
-            onboardingRepository = get(),
         )
     }
 }

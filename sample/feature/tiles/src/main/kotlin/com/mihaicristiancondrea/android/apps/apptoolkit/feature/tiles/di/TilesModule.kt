@@ -48,6 +48,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.Reactio
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SosToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ToolkitTilesViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.di.DataStoreQualifiers
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services.getTileServiceRequests
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
@@ -63,7 +64,13 @@ val tilesModule: Module = module {
         AndroidBreathingHapticsDataSource(context = androidContext())
     }
     single<QuickSettingsTilesLocalDataSource> {
-        AndroidQuickSettingsTilesLocalDataSource(context = androidContext(), dispatchers = get())
+        AndroidQuickSettingsTilesLocalDataSource(
+            context = androidContext(),
+            tileComponents = getTileServiceRequests().mapValues { (_, request) ->
+                request.componentName(androidContext()).flattenToString()
+            },
+            dispatchers = get(),
+        )
     }
     single<TorchRepository> { DefaultTorchRepository(dataSource = get(), dispatchers = get()) }
     single<ToolkitTilesPreferencesDataSource> {

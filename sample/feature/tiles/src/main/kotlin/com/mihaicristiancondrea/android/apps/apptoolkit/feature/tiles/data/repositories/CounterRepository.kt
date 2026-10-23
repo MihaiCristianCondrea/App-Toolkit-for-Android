@@ -22,14 +22,16 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.d
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
 
 /**
  * The one running count shared by the in-app Counter tool and its Quick Settings tile.
  *
  * The count is persisted because System UI unbinds tile services freely and the process may die
  * between taps. Writes run in this repository's own scope, so a tap is kept even when the tile
- * service that received it is destroyed straight afterwards.
+ * service that received it is destroyed straight afterwards. Active callers await completion and
+ * receive storage failures; cancelling their wait does not cancel an accepted write.
  */
 class CounterRepository(
     private val preferencesDataSource: ToolkitTilesPreferencesDataSource,
@@ -39,11 +41,11 @@ class CounterRepository(
 
     val count: Flow<Int> = preferencesDataSource.counterValue
 
-    fun increment() {
-        scope.launch { preferencesDataSource.incrementCounter() }
+    suspend fun increment() {
+        scope.async { storageCall { preferencesDataSource.incrementCounter() } }.await()
     }
 
-    fun reset() {
-        scope.launch { preferencesDataSource.resetCounter() }
+    suspend fun reset() {
+        scope.async { storageCall { preferencesDataSource.resetCounter() } }.await()
     }
 }

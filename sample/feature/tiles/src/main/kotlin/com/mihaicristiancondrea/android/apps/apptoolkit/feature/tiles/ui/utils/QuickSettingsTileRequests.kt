@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils
 
 import android.app.StatusBarManager
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4Contract.TileRequestOutcome
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.quicksettings.AndroidQuickSettingsTilesLocalDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.ToolkitTilesRepository
 import android.content.Context
 import android.graphics.drawable.Icon
 import android.os.Build
@@ -37,6 +37,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.service
 internal fun requestQuickSettingsTile(
     context: Context,
     requestKey: String,
+    repository: ToolkitTilesRepository,
     onResult: (outcome: String) -> Unit = {},
 ) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
@@ -68,8 +69,7 @@ internal fun requestQuickSettingsTile(
             if (result == StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ADDED ||
                 result == StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ALREADY_ADDED
             ) {
-                AndroidQuickSettingsTilesLocalDataSource(context)
-                    .recordTileAdded(request.componentName(context), true)
+                repository.recordTileMembership(request.componentName(context).flattenToString(), true)
             }
             onResult(
                 when (result) {

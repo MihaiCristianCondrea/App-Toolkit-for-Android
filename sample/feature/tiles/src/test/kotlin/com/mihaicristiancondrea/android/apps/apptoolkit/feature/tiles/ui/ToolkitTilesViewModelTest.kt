@@ -183,6 +183,7 @@ class ToolkitTilesViewModelTest {
         }
 
         override fun refreshTileCategories() = Unit
+        override fun recordTileMembership(componentName: String, added: Boolean) = Unit
 
         override val expandedCategoryIds: Flow<Set<String>> = expandedIds
 

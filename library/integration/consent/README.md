@@ -57,6 +57,8 @@ flowchart TD
 
 ## Architectural decisions
 
+- `ConsentPreferencesDataSource.settings(default)` reads every choice from one Preferences
+  emission. Diagnostics uses the same snapshot contract, and bulk writes must be atomic.
 - Matching callers await the same consent round trip. `requestConsent()` completes after the
   request succeeds or throws its failure, without emitting loading or result states.
 - `showIfRequired` is part of the in-flight key because an explicit privacy-form request cannot be
@@ -86,9 +88,9 @@ flowchart TD
 Consent behavior spans persistence, host callbacks, UMP state, Firebase toggles, and ads consumers;
 changes require coordinated validation across those boundaries.
 
-Requests with different `showIfRequired` values start separate round trips. A new host also starts
-another after the five-second stale-host wait even if the old request has not answered. Serializing
-these incompatible requests remains an open risk.
+Requests with different `showIfRequired` values wait for the current round trip before starting
+another. A stale-host wait is limited to five seconds; a timeout fails the waiting caller without
+starting overlapping SDK work. The active operation stays tracked until it answers.
 
 ## Migration notes
 

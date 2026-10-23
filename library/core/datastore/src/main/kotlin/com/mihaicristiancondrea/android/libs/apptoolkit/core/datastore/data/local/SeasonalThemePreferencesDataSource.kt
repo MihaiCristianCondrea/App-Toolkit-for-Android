@@ -39,6 +39,9 @@ interface SeasonalThemePreferencesDataSource {
 
     suspend fun saveSeasonalThemesUnlocked(unlocked: Boolean)
 
+    /** Atomically unlocks the controls and returns true only for the first successful writer. */
+    suspend fun unlockSeasonalThemes(): Boolean
+
     suspend fun saveWeatherEffect(effect: WeatherEffect)
 
     suspend fun saveLastHolidayGreeting(occurrenceKey: String)

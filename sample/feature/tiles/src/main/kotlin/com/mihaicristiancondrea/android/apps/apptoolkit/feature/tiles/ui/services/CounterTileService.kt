@@ -35,7 +35,7 @@ class CounterTileService : TrackedTileService(), KoinComponent {
 
     override fun onClick() {
         super.onClick()
-        counterRepository.increment()
+        launchTileAction("incrementCounter") { counterRepository.increment() }
     }
 
     private fun renderCount(count: Int) {
