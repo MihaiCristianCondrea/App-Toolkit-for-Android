@@ -35,6 +35,9 @@ sealed interface ToolkitTilesEvent {
 
     /** Android answered a request to add [requestKey]; [outcome] is a `TileRequestOutcome`. */
     data class TileRequestFinished(val requestKey: String, val outcome: String) : ToolkitTilesEvent
+
+    /** Android confirmed the tile behind [componentName] is in Quick Settings. */
+    data class TileAdded(val componentName: String) : ToolkitTilesEvent
     data class TileSetupClicked(val tileId: String) : ToolkitTilesEvent
     data class AdStatusChanged(val adId: String, val isLoaded: Boolean) : ToolkitTilesEvent
 }

@@ -20,7 +20,6 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils
 
 import android.app.StatusBarManager
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4Contract.TileRequestOutcome
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.ToolkitTilesRepository
 import android.content.Context
 import android.graphics.drawable.Icon
 import android.os.Build
@@ -32,12 +31,13 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.service
  * Asks Android to add the quick tool behind [requestKey] to Quick Settings.
  *
  * [onResult] receives how the request ended, as one of [TileRequestOutcome], whether Android
- * answered the prompt or the request could not be made at all.
+ * answered the prompt or the request could not be made at all. [onTileAdded] receives the tile's
+ * component when Android confirms it is in Quick Settings.
  */
 internal fun requestQuickSettingsTile(
     context: Context,
     requestKey: String,
-    repository: ToolkitTilesRepository,
+    onTileAdded: (componentName: String) -> Unit = {},
     onResult: (outcome: String) -> Unit = {},
 ) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
@@ -69,7 +69,7 @@ internal fun requestQuickSettingsTile(
             if (result == StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ADDED ||
                 result == StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ALREADY_ADDED
             ) {
-                repository.recordTileMembership(request.componentName(context).flattenToString(), true)
+                onTileAdded(request.componentName(context).flattenToString())
             }
             onResult(
                 when (result) {

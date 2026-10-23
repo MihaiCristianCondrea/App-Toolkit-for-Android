@@ -32,6 +32,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.mo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertEquals
@@ -123,7 +124,7 @@ class PlatformToolViewModelsTest {
             morseRepository = morse,
             telemetryRepository = telemetryRepository,
         )
-        morse.start("SOS")
+        runBlocking { morse.start("SOS") }
 
         viewModel.onEvent(FlashDimmerToolEvent.PresetSelected(TorchPreset.Half))
 

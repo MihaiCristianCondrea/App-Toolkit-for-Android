@@ -61,6 +61,10 @@ import java.util.concurrent.atomic.AtomicLong
  * state, each `Loadable` section through [ScreenStateHandler]. Navigation and the ViewModel stay
  * with the caller.
  *
+ * A screen that draws its own `PageScaffold` puts `ScreenHost` inside it, as the page's content.
+ * Wrapped around the page instead, its [fabs] and messages go to the scaffold around the page,
+ * where a page has none, so they never show.
+ *
  * **Visits.** A visit is reported as a GA4 screen view when the screen becomes visible and
  * active: when its [LocalLifecycleOwner] reaches `RESUMED`. In the shell that is once its
  * transition settles and nothing covers it, so a screen that is only animating in or out, kept for

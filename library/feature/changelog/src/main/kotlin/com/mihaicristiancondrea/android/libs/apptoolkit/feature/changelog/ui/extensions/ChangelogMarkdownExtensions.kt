@@ -1,5 +1,5 @@
 /*
- * Copyright (Γö¼ΓîÉ) 2026 Mihai-Cristian Condrea
+ * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ internal fun String.splitAtThematicBreaks(): List<String> {
     lineSequence().forEach { line ->
         val trimmed = line.trim()
         val fenced = fence.consume(line)
-        if (!fenced && previousBlank && Regex("""^ {0,3}([-*_])(?:\s*\1){2,}\s*$""").matches(line)) {
+        if (!fenced && previousBlank && ThematicBreak.matches(line)) {
             parts += current.toString()
             current.clear()
         } else {
@@ -47,3 +47,6 @@ internal fun String.splitAtThematicBreaks(): List<String> {
     parts += current.toString()
     return parts.map { it.trim() }.filter { it.isNotEmpty() }
 }
+
+/** Three or more of the same `-`, `*` or `_`, spaces allowed between, indented at most three. */
+private val ThematicBreak = Regex("""^ {0,3}([-*_])(?:\s*\1){2,}\s*$""")
