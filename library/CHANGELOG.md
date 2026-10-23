@@ -2,7 +2,9 @@
 
 ---
 
-# Unreleased
+# October 23, 2026
+
+**Version:** `3.0.0-pre29`
 
 ### Added
 
@@ -18,6 +20,11 @@
 
 - Custom `InstalledAppsRepository` implementations must also implement `getInstalledPackages`,
   `getInstallInfo` and `getLaunchIntentSender`. `AppInstallInfo` uses the shared `AppVersionMetadata`.
+
+### Fixed
+
+- An app bar's new title or search field now fades in once the old title has faded out, so the
+  bar's buttons settle first instead of the search field arriving ahead of them.
 
 ---
 
