@@ -29,7 +29,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.d
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logSelectContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItemList
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
@@ -202,7 +202,7 @@ class ToolkitTilesViewModel(
     }
 
     private companion object {
-        val LoadFailedText = UiTextHelper.StringResource(R.string.tiles_error_failed_to_load)
-        val NoTileText = UiTextHelper.StringResource(R.string.tiles_no_tile_message)
+        val LoadFailedText = UiText.StringResource(R.string.tiles_error_failed_to_load)
+        val NoTileText = UiText.StringResource(R.string.tiles_no_tile_message)
     }
 }

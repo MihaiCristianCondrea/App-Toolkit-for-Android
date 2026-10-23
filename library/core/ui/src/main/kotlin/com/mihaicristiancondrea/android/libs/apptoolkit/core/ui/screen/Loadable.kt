@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen
 
 import androidx.compose.runtime.Immutable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 
 /**
  * A status that [ScreenHost] reports in the `screen_state` analytics event.
@@ -65,13 +65,13 @@ sealed interface Loadable<out T> : TrackedStatus {
     }
 
     /** There is nothing to show. [message], if any, says why. */
-    data class Empty(val message: UiTextHelper? = null) : Loadable<Nothing> {
+    data class Empty(val message: UiText? = null) : Loadable<Nothing> {
         override val trackingLabel: String get() = "no_data"
     }
 
     /** Loading failed with [message]; [retryable] when trying again can help. */
     data class Failed(
-        val message: UiTextHelper,
+        val message: UiText,
         val retryable: Boolean = true,
     ) : Loadable<Nothing> {
         override val trackingLabel: String get() = "error"

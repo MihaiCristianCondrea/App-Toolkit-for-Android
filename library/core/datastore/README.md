@@ -136,7 +136,7 @@ value disabled until the source is recreated, rather than guessing that ads may 
 ### Ads initialization must share the UI preference source
 
 An earlier initialization path sampled the ads preference with a debug-dependent default while the
-Compose ad surfaces used `true`. In a debug build with no stored preference, `AdsCoreManager`
+Compose ad surfaces used `true`. In a debug build with no stored preference, `AppOpenAdController`
 skipped
 `MobileAds.initialize` while native/banner views attempted SDK requests. Those SDK entry points can
 throw synchronously, including from composition. A removed host-side unconditional initialization
@@ -145,8 +145,8 @@ had previously masked the disagreement.
 Preserve these invariants:
 
 - `CommonDataStore.adsEnabledFlow`, including its host-configured `defaultAdsEnabled`, is the single
-  source of truth for both `AdsCoreManager` and ad UI. Callers must not supply local defaults.
-- The integration-owned `AdsCoreManager` observes the flow instead of sampling it once, so enabling ads at runtime starts
+  source of truth for both `AppOpenAdController` and ad UI. Callers must not supply local defaults.
+- The integration-owned `AppOpenAdController` observes the flow instead of sampling it once, so enabling ads at runtime starts
   initialization without a process restart.
 - Initialization is idempotent and mutex-protected, uses the validated host-manifest AdMob app ID,
   and is skipped when no valid ID exists.
@@ -155,7 +155,7 @@ Preserve these invariants:
 - The integration-owned `AdsSdkInitializer` remains the test seam around the SDK's non-mock-friendly
   initialization API.
 
-The JUnit 5 `AdsCoreManagerInitializationTest` in `:library:integration:ads` is the executable
+The JUnit 5 `AppOpenAdControllerInitializationTest` in `:library:integration:ads` is the executable
 regression suite for these rules.
-Do not rely on the legacy JUnit 4 `TestAdsCoreManager`: the module uses the JUnit Platform without a
+Do not rely on the legacy JUnit 4 `TestAppOpenAdController`: the module uses the JUnit Platform without a
 Vintage engine, so that class compiles but is not executed.

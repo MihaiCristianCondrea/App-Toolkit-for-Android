@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui
 
 import android.app.Activity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
@@ -71,7 +71,7 @@ class OnboardingViewModelTest {
         get() = telemetryRepository.loggedEvents.map { it.name }
 
     private val UiMessage.resourceId: Int
-        get() = (text as UiTextHelper.StringResource).resourceId
+        get() = (text as UiText.StringResource).resourceId
 
     @Test
     fun `the first load shows the first page, pending, and begins the tutorial`() =

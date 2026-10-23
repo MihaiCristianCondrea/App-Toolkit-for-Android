@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.ClipboardRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logUnlockAchievement
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
@@ -90,7 +90,7 @@ open class AboutViewModel(
             launchReport(
                 action = Actions.LOAD_ABOUT_INFO,
                 onError = { error ->
-                    setState { copy(items = error.toFailed(fallback = UiTextHelper.StringResource(R.string.snack_device_info_failed))) }
+                    setState { copy(items = error.toFailed(fallback = UiText.StringResource(R.string.snack_device_info_failed))) }
                 },
             ) {
                 setState { copy(items = Loadable.Loading) }
@@ -107,19 +107,19 @@ open class AboutViewModel(
     private fun copyToClipboard(
         label: String,
         text: String,
-        successMessage: UiTextHelper?,
+        successMessage: UiText?,
     ) {
         launchReport(
             action = Actions.COPY_TO_CLIPBOARD,
             extra = mapOf(ExtraKeys.LABEL to label),
             onError = { error ->
-                showMessage(error.toErrorMessage(fallback = UiTextHelper.StringResource(R.string.snack_copy_failed)))
+                showMessage(error.toErrorMessage(fallback = UiText.StringResource(R.string.snack_copy_failed)))
             },
         ) {
             clipboardRepository.copyText(label = label, text = text)
             if (!clipboardRepository.confirmsCopies) {
                 showMessage(
-                    UiMessage(successMessage ?: UiTextHelper.StringResource(R.string.snack_copied_to_clipboard)),
+                    UiMessage(successMessage ?: UiText.StringResource(R.string.snack_copied_to_clipboard)),
                 )
             }
         }
@@ -133,7 +133,7 @@ open class AboutViewModel(
         launchReport(action = Actions.UNLOCK_SEASONAL_THEMES) {
             if (seasonalThemes.unlockSeasonalThemes()) {
                 telemetryRepository.logUnlockAchievement(achievementId = SEASONAL_THEMES_ACHIEVEMENT)
-                showMessage(UiMessage(UiTextHelper.StringResource(R.string.snack_seasonal_themes_unlocked)))
+                showMessage(UiMessage(UiText.StringResource(R.string.snack_seasonal_themes_unlocked)))
             }
         }
     }

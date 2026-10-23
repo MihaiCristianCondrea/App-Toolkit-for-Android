@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.exten
 
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.platform.AppVersionMetadata
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.AppVersionMetadata
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Test

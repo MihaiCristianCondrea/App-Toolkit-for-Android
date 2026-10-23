@@ -24,7 +24,6 @@ import androidx.datastore.preferences.core.emptyPreferences
 import app.cash.turbine.test
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.sources.DefaultAdsPreferencesDataSource
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic

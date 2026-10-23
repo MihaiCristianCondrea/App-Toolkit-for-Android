@@ -102,7 +102,7 @@ their own queue.
   `ScreenHost` still reports it.
 - Use `ImmutableList` and the other `kotlinx.collections.immutable` types, so Compose treats the
   state as stable and skips rows that did not change.
-- Hold text the app writes as `UiTextHelper`, so it resolves in the UI against the current locale
+- Hold text the app writes as `UiText`, so it resolves in the UI against the current locale
   and configuration. Text the user typed stays a `String`.
 
 ### Events and messages

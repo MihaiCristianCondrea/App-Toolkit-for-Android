@@ -17,7 +17,7 @@ Reference: `AboutScreen.kt` in `:library:feature:about`, and `FaqScreen.kt` in
 | `contentPadding()` from the shell                | yes       | no, a parameter  |
 | `ScreenStateHandler` and the layout              | no        | yes              |
 | visual element state (`remember`, animations)    | no        | yes              |
-| resolving `UiTextHelper` with `LocalContext`     | no        | yes              |
+| resolving `UiText` with `LocalContext`     | no        | yes              |
 | `@Preview`                                       | no        | yes              |
 
 ## XScreen
@@ -230,7 +230,7 @@ private fun XScreenContentPreview() {
 
 - Wrap previews in `MaterialTheme`. The Toolkit's `AppTheme` reads the theme settings from Koin,
   which a preview does not have.
-- Use `UiTextHelper.DynamicString` for sample text, so the preview needs no resources.
+- Use `UiText.DynamicString` for sample text, so the preview needs no resources.
 - Preview `Ready` and `Loading`. The default `Empty` and `Failed` content resolves its ad unit
   through Koin while its ad shows, so preview those with `showAd = false`, or cover them in a
   Compose test with Koin started (`testing.md`).

@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui
 
 import android.app.Activity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
@@ -71,7 +71,7 @@ class FaqViewModelTest {
     private fun advance() = dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
     private val Loadable.Failed.resourceId: Int
-        get() = (message as UiTextHelper.StringResource).resourceId
+        get() = (message as UiText.StringResource).resourceId
 
     @Test
     fun `the first load shows the questions`() = runTest(dispatcherExtension.testDispatcher) {

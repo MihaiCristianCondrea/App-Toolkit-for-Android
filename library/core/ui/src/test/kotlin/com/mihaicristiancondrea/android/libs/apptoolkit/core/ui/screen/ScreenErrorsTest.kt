@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -28,24 +28,24 @@ import kotlin.test.assertTrue
 
 class ScreenErrorsTest {
 
-    private val fallback = UiTextHelper.DynamicString("Could not load the list")
+    private val fallback = UiText.DynamicString("Could not load the list")
 
     @Test
     fun `failures the user can act on get their own text`() {
         assertEquals(
-            UiTextHelper.StringResource(R.string.screen_error_no_internet),
+            UiText.StringResource(R.string.screen_error_no_internet),
             NetworkException(NetworkException.Reason.NO_INTERNET).toUiText(fallback),
         )
         assertEquals(
-            UiTextHelper.StringResource(R.string.screen_error_timeout),
+            UiText.StringResource(R.string.screen_error_timeout),
             NetworkException(NetworkException.Reason.TIMEOUT).toUiText(fallback),
         )
         assertEquals(
-            UiTextHelper.StringResource(R.string.screen_error_server),
+            UiText.StringResource(R.string.screen_error_server),
             NetworkException(NetworkException.Reason.SERVER).toUiText(fallback),
         )
         assertEquals(
-            UiTextHelper.StringResource(R.string.screen_error_storage_full),
+            UiText.StringResource(R.string.screen_error_storage_full),
             StorageException(StorageException.Reason.FULL).toUiText(fallback),
         )
     }
@@ -75,6 +75,6 @@ class ScreenErrorsTest {
         val message = NetworkException(NetworkException.Reason.NO_INTERNET).toErrorMessage(fallback)
 
         assertTrue(message.isError)
-        assertEquals(UiTextHelper.StringResource(R.string.screen_error_no_internet), message.text)
+        assertEquals(UiText.StringResource(R.string.screen_error_no_internet), message.text)
     }
 }

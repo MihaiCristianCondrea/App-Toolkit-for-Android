@@ -109,7 +109,7 @@ blocking `PackageManager` call, so data-layer callers switch to `dispatchers.io`
 
 ## Internal implementations
 
-- `StandardDispatchers`, `data.managers.BaseCoreManager`, small Android adapters, extensions, and
+- `StandardDispatchers`, `AppToolkitApplication`, small Android adapters, extensions, and
   crash guards.
 
 ## Current risks
@@ -135,11 +135,11 @@ publisher account. The current contract deliberately prevents that regression:
   `ca-app-pub-[0-9]{16}~[0-9]{10}`, and returns `null` for missing or malformed values.
 - There must be no library fallback AdMob application ID. The sample/demo ID belongs only to the
   sample application.
-- Hosts should let the `:library:integration:ads` `AdsCoreManager` initialize Mobile Ads; separate initialization with another ID
+- Hosts should let the `:library:integration:ads` `AppOpenAdController` initialize Mobile Ads; separate initialization with another ID
   can recreate the mismatch.
 
 UMP 4.0.0 can also throw `NoSuchElementException` from `Scanner.next()` on its executor when a
-metrics error response has an empty body. `ConsentSdkCrashGuard` is installed by `BaseCoreManager`
+metrics error response has an empty body. `ConsentSdkCrashGuard` is installed by `AppToolkitApplication`
 immediately after Firebase initialization so it wraps the Crashlytics handler. It suppresses only a
 non-main-thread `NoSuchElementException` whose stack contains both `java.util.Scanner` and
 `com.google.android.gms.internal.consent_sdk`; every other throwable is delegated unchanged. The

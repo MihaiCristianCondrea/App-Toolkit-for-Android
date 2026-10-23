@@ -521,7 +521,7 @@ Compose effect and kill the host process, reported as
 with `NativeAdLoader.load` under `DisposableEffectImpl.onRemembered`. Preserve the current behavior:
 
 - `rememberAdsEnabled` observes the same `CommonDataStore.adsEnabledFlow` used by
-  `AdsCoreManager`; it must not choose its own default.
+  `AppOpenAdController`; it must not choose its own default.
 - Ad slots take their unit id from a host-bound `AdsConfig` resolved by Koin qualifier, and
   `NoDataScreen` injects `NO_DATA_NATIVE_AD` without a fallback, a host that has not bound it
   crashes on the empty state rather than rendering without an ad. The host checklist lives in

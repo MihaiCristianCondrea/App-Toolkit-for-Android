@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen
 
 import androidx.compose.runtime.Immutable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import java.util.concurrent.atomic.AtomicLong
 
 /**
@@ -32,9 +32,9 @@ import java.util.concurrent.atomic.AtomicLong
  */
 @Immutable
 data class UiMessage(
-    val text: UiTextHelper,
+    val text: UiText,
     val isError: Boolean = false,
-    val actionLabel: UiTextHelper? = null,
+    val actionLabel: UiText? = null,
     val id: Long = nextId.incrementAndGet(),
 ) {
     private companion object {

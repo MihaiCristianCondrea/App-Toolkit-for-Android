@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 
 /**
  * User driven events from the About screen UI.
@@ -37,7 +37,7 @@ sealed interface AboutEvent {
     data class CopyToClipboard(
         val label: String,
         val text: String,
-        val successMessage: UiTextHelper? = null,
+        val successMessage: UiText? = null,
     ) : AboutEvent
 
     /** The version was tapped enough times to set off the easter egg. */

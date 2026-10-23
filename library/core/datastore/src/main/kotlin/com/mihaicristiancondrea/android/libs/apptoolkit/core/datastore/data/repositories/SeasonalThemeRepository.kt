@@ -17,9 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.WeatherEffect
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.HolidaySeason
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.SeasonalThemeState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.WeatherEffect
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.HolidaySeason
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.SeasonalThemeState
 import java.time.LocalDate
 import kotlinx.coroutines.flow.Flow
 

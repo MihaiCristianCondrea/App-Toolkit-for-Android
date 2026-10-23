@@ -17,11 +17,11 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.api.ApiHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.toNetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.remote.ChangelogRemoteDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.remote.extensions.bodyOrThrow
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.remote.models.MarkdownResponse
 import io.ktor.http.HttpStatusCode
 
 /**
@@ -58,6 +58,11 @@ class DefaultChangelogRepository(
             ),
         )
         return remoteDataSource.fetchMarkdown(url = legacyChangelogUrl).bodyOrThrow()
+    }
+
+    private fun MarkdownResponse.bodyOrThrow(): String {
+        status.toNetworkException()?.let { failure -> throw failure }
+        return body
     }
 
     private object LegacyReason {

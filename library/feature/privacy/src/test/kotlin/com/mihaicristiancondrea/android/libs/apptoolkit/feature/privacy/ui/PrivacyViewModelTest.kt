@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
@@ -72,7 +72,7 @@ class PrivacyViewModelTest {
             val items = assertIs<Loadable.Failed>(viewModel.state.value.items)
             assertEquals(
                 CoreUiR.string.screen_error_generic,
-                (items.message as UiTextHelper.StringResource).resourceId,
+                (items.message as UiText.StringResource).resourceId,
             )
             assertTrue(items.retryable)
             assertTrue(telemetryRepository.loggedEvents.any { it.name == "vm_op_error" })

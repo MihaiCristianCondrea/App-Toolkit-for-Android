@@ -40,5 +40,7 @@ android {
 dependencies {
     api(project(":library:core:common"))
     testImplementation(project(":library:core:testing"))
+    // The repository is tested under Robolectric with JUnit 4, which this artifact brings in.
+    testImplementation(libs.androidx.test.ext.junit)
     testRuntimeOnly(libs.test.junit.vintage.engine)
 }

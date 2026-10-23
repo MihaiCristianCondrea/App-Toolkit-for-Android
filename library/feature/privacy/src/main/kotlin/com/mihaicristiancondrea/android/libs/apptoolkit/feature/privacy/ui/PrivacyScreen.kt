@@ -35,7 +35,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
@@ -167,19 +167,19 @@ private fun PrivacyScreenContentPreview() {
                     persistentListOf(
                         PrivacyItem.Header(
                             key = PrivacyItemKey.HEADER_PRIVACY,
-                            title = UiTextHelper.DynamicString("Privacy"),
+                            title = UiText.DynamicString("Privacy"),
                         ),
                         PrivacyItem.Preference(
                             key = PrivacyItemKey.PRIVACY_POLICY,
-                            title = UiTextHelper.DynamicString("Privacy policy"),
-                            summary = UiTextHelper.DynamicString("How the app handles your data"),
+                            title = UiText.DynamicString("Privacy policy"),
+                            summary = UiText.DynamicString("How the app handles your data"),
                             position = GroupedItemPosition.FIRST,
                             action = PrivacyItemAction.OpenUrl(url = "https://example.com/privacy"),
                         ),
                         PrivacyItem.Preference(
                             key = PrivacyItemKey.PERMISSIONS,
-                            title = UiTextHelper.DynamicString("Permissions"),
-                            summary = UiTextHelper.DynamicString("What the app asks for and why"),
+                            title = UiText.DynamicString("Permissions"),
+                            summary = UiText.DynamicString("What the app asks for and why"),
                             position = GroupedItemPosition.LAST,
                             action = PrivacyItemAction.OpenPermissions,
                         ),

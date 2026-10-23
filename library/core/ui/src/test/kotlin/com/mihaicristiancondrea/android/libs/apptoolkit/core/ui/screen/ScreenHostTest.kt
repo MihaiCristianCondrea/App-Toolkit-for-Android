@@ -36,7 +36,7 @@ import androidx.lifecycle.compose.rememberLifecycleOwner
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import org.junit.Assert.assertEquals
@@ -105,7 +105,7 @@ class ScreenHostTest {
         compose.waitForIdle()
         status = Loadable.Ready("second", refreshing = true)
         compose.waitForIdle()
-        status = Loadable.Failed(UiTextHelper.DynamicString("offline"), retryable = true)
+        status = Loadable.Failed(UiText.DynamicString("offline"), retryable = true)
         compose.waitForIdle()
 
         assertEquals(1, views())
@@ -169,7 +169,7 @@ class ScreenHostTest {
     private class MessagesViewModel : ScreenViewModel<Unit, Unit>(Unit) {
         override fun handleEvent(event: Unit) = Unit
 
-        fun say(text: String) = showMessage(UiMessage(UiTextHelper.DynamicString(text)))
+        fun say(text: String) = showMessage(UiMessage(UiText.DynamicString(text)))
     }
 }
 

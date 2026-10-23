@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.ClipboardRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
@@ -84,7 +84,7 @@ class AboutViewModelTest {
     private fun AboutViewModel.onlyMessage(): UiMessage = messages.value.single()
 
     private val UiMessage.resourceId: Int
-        get() = (text as UiTextHelper.StringResource).resourceId
+        get() = (text as UiText.StringResource).resourceId
 
     @Test
     fun `initial load shows the entries`() = runTest(dispatcherExtension.testDispatcher) {
@@ -120,7 +120,7 @@ class AboutViewModelTest {
                 AboutEvent.CopyToClipboard(
                     label = "label",
                     text = "device-info",
-                    successMessage = UiTextHelper.StringResource(R.string.snack_device_info_copied),
+                    successMessage = UiText.StringResource(R.string.snack_device_info_copied),
                 )
             )
             advance()
@@ -244,7 +244,7 @@ class AboutViewModelTest {
             advance()
 
             val items = viewModel.state.value.items as Loadable.Failed
-            assertEquals(R.string.snack_device_info_failed, (items.message as UiTextHelper.StringResource).resourceId)
+            assertEquals(R.string.snack_device_info_failed, (items.message as UiText.StringResource).resourceId)
             assertTrue(items.retryable)
             assertContains(telemetryRepository.loggedEvents.map { it.name }, "vm_op_error")
         }
@@ -263,7 +263,7 @@ class AboutViewModelTest {
             val items = viewModel.state.value.items as Loadable.Failed
             assertEquals(
                 CoreUiR.string.screen_error_storage_busy,
-                (items.message as UiTextHelper.StringResource).resourceId,
+                (items.message as UiText.StringResource).resourceId,
             )
             assertTrue(items.retryable)
         }
@@ -280,7 +280,7 @@ class AboutViewModelTest {
             advance()
 
             val items = viewModel.state.value.items as Loadable.Failed
-            assertEquals(R.string.snack_device_info_failed, (items.message as UiTextHelper.StringResource).resourceId)
+            assertEquals(R.string.snack_device_info_failed, (items.message as UiText.StringResource).resourceId)
             assertFalse(items.retryable)
         }
 

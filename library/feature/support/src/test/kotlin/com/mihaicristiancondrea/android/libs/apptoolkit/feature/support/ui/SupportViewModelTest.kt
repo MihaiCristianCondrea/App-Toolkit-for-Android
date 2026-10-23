@@ -22,7 +22,7 @@ import com.android.billingclient.api.ProductDetails
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
@@ -78,7 +78,7 @@ class SupportViewModelTest {
         onEvent(SupportEvent.Donate(productId = DonationProductIds.LOW_DONATION, activity = activity))
 
     private val UiMessage.resourceId: Int
-        get() = (text as UiTextHelper.StringResource).resourceId
+        get() = (text as UiText.StringResource).resourceId
 
     private fun events(name: String): List<AnalyticsEvent> =
         telemetryRepository.loggedEvents.filter { it.name == name }
@@ -151,7 +151,7 @@ class SupportViewModelTest {
             advance()
 
             val failed = assertIs<Loadable.Failed>(viewModel.state.value.donationOptions)
-            assertEquals(UiTextHelper.StringResource(R.string.error_failed_to_load_sku_details), failed.message)
+            assertEquals(UiText.StringResource(R.string.error_failed_to_load_sku_details), failed.message)
             assertTrue(failed.retryable)
             assertTrue(viewModel.messages.value.isEmpty())
             assertTrue(events("vm_op_error").any { it.params["action"] == AnalyticsValue.Str("queryProductDetails") })
@@ -167,7 +167,7 @@ class SupportViewModelTest {
         advance()
 
         val failed = assertIs<Loadable.Failed>(viewModel.state.value.donationOptions)
-        assertEquals(UiTextHelper.StringResource(CoreUiR.string.screen_error_no_internet), failed.message)
+        assertEquals(UiText.StringResource(CoreUiR.string.screen_error_no_internet), failed.message)
     }
 
     @Test
@@ -180,7 +180,7 @@ class SupportViewModelTest {
             billing.purchaseResults.emit(PurchaseResult.Failed("Billing service unavailable"))
 
             val failed = assertIs<Loadable.Failed>(viewModel.state.value.donationOptions)
-            assertEquals(UiTextHelper.StringResource(R.string.error_failed_to_load_sku_details), failed.message)
+            assertEquals(UiText.StringResource(R.string.error_failed_to_load_sku_details), failed.message)
             assertTrue(failed.retryable)
             assertTrue(viewModel.messages.value.isEmpty())
         }
@@ -218,7 +218,7 @@ class SupportViewModelTest {
 
             assertTrue(viewModel.readyOptions().isNotEmpty())
             val message = viewModel.onlyMessage()
-            assertEquals(UiTextHelper.DynamicString("Card declined"), message.text)
+            assertEquals(UiText.DynamicString("Card declined"), message.text)
             assertTrue(message.isError)
         }
 

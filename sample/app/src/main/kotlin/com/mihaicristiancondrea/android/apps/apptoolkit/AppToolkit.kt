@@ -27,13 +27,13 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.di.initializeKoin
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.managers.BaseCoreManager
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.AppToolkitApplication
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppThemeConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ColorPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ThemePaletteProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.managers.AdsCoreManager
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.shake.IssueReporterShakeManager
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal.SeasonalThemeManager
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.utils.AppOpenAdController
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.IssueReporterShakeManager
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.features.seasonal.SeasonalThemeManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repositories.BillingRepository
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
@@ -41,19 +41,19 @@ import org.koin.android.ext.android.getKoin
 
 /**
  * Sample composition root for Koin and process-lifetime integrations: app-open ads, billing
- * recovery, activity tracking, shake reporting, and the seasonal overlay. [BaseCoreManager]
+ * recovery, activity tracking, shake reporting, and the seasonal overlay. [AppToolkitApplication]
  * owns core startup and activity-callback registration.
  */
-class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
+class AppToolkit : AppToolkitApplication(), DefaultLifecycleObserver {
     private var currentActivity: Activity? = null
 
-    private val adsCoreManager: AdsCoreManager by lazy { getKoin().get<AdsCoreManager>() }
+    private val adsCoreManager: AppOpenAdController by lazy { getKoin().get<AppOpenAdController>() }
 
     override fun onCreate() {
         initializeKoin(context = this)
         applyDefaultColorPalette()
-        // BaseCoreManager registers activity callbacks; registering here again would deliver them twice.
-        super<BaseCoreManager>.onCreate()
+        // AppToolkitApplication registers activity callbacks; registering here again would deliver them twice.
+        super<AppToolkitApplication>.onCreate()
         getKoin().get<IssueReporterShakeManager>().install()
         getKoin().get<SeasonalThemeManager>().install()
         ProcessLifecycleOwner.get().lifecycle.addObserver(observer = this)

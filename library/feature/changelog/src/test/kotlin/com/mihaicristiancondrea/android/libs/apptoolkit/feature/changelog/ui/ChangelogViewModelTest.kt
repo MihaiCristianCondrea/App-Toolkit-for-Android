@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
@@ -54,7 +54,7 @@ class ChangelogViewModelTest {
     private fun advance() = dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
     private val Loadable.Failed.resourceId: Int
-        get() = (message as UiTextHelper.StringResource).resourceId
+        get() = (message as UiText.StringResource).resourceId
 
     @Test
     fun `the first load shows the current version's notes`() = runTest(dispatcherExtension.testDispatcher) {

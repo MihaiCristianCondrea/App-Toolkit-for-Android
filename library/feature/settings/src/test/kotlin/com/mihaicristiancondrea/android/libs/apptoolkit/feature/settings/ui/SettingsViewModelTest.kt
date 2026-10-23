@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsCategory
@@ -86,7 +86,7 @@ class SettingsViewModelTest {
             val config = assertIs<Loadable.Empty>(viewModel.state.value.config)
             assertEquals(
                 R.string.error_no_settings_found,
-                (config.message as UiTextHelper.StringResource).resourceId,
+                (config.message as UiText.StringResource).resourceId,
             )
         }
 

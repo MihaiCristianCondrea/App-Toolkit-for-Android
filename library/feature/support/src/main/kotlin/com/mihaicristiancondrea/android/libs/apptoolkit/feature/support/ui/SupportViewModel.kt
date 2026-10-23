@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui
 import android.app.Activity
 import com.android.billingclient.api.ProductDetails
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.GenericErrorText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
@@ -200,10 +200,10 @@ class SupportViewModel(
         reportDonationResult(outcome = result.toOutcome())
         endBillingLaunch()
         when (result) {
-            PurchaseResult.Pending -> showMessage(UiMessage(UiTextHelper.StringResource(R.string.purchase_pending)))
-            PurchaseResult.Success -> showMessage(UiMessage(UiTextHelper.StringResource(R.string.purchase_thank_you)))
+            PurchaseResult.Pending -> showMessage(UiMessage(UiText.StringResource(R.string.purchase_pending)))
+            PurchaseResult.Success -> showMessage(UiMessage(UiText.StringResource(R.string.purchase_thank_you)))
             PurchaseResult.UserCancelled ->
-                showMessage(UiMessage(UiTextHelper.StringResource(R.string.purchase_cancelled)))
+                showMessage(UiMessage(UiText.StringResource(R.string.purchase_cancelled)))
 
             is PurchaseResult.Failed -> showPurchaseFailure(error = result.error)
         }
@@ -218,7 +218,7 @@ class SupportViewModel(
             Loadable.Loading -> setState { copy(donationOptions = Loadable.Failed(message = LoadFailedText)) }
             is Loadable.Failed -> Unit
             is Loadable.Empty, is Loadable.Ready ->
-                showMessage(UiMessage(text = UiTextHelper.DynamicString(error), isError = true))
+                showMessage(UiMessage(text = UiText.DynamicString(error), isError = true))
         }
     }
 
@@ -275,8 +275,8 @@ class SupportViewModel(
         val BillingLaunchTimeout: Duration = 20.seconds
 
         /** Shown for a failure with no text of its own; see `toUiText` for the ones that have one. */
-        val LoadFailedText = UiTextHelper.StringResource(R.string.error_failed_to_load_sku_details)
+        val LoadFailedText = UiText.StringResource(R.string.error_failed_to_load_sku_details)
 
-        val OfferUnavailableText = UiTextHelper.StringResource(R.string.support_offer_unavailable)
+        val OfferUnavailableText = UiText.StringResource(R.string.support_offer_unavailable)
     }
 }

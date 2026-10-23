@@ -80,7 +80,7 @@ flowchart TD
 - `AboutItemAction.CopyToClipboard` carries the label, the exact text, and an optional confirmation
   message, so any row becomes copyable without a new event, and the clipboard receives what the row
   displays rather than a second lookup resolved under a different configuration. Both texts are
-  `UiTextHelper`, so a row whose value is a string resource copies as readily as one holding a
+  `UiText`, so a row whose value is a string resource copies as readily as one holding a
   formatted value.
 - Every row that displays a value copies it on tap, with two exceptions. Open source licenses
   navigates. The build version row copies nothing: it is where the easter egg lives, people tap it

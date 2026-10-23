@@ -72,8 +72,8 @@ private fun save() {
 }
 
 private companion object {
-    val LoadFailedText = UiTextHelper.StringResource(R.string.x_load_failed)
-    val SaveFailedText = UiTextHelper.StringResource(R.string.x_save_failed)
+    val LoadFailedText = UiText.StringResource(R.string.x_load_failed)
+    val SaveFailedText = UiText.StringResource(R.string.x_save_failed)
 }
 ```
 
@@ -91,8 +91,8 @@ defaults:
 ```kotlin
 // ui/mappers/XErrorMappers.kt
 internal fun Throwable.toXFailed(): Loadable.Failed = when (this) {
-    is XUnavailableException -> Loadable.Failed(UiTextHelper.StringResource(R.string.x_unavailable), retryable = false)
-    else -> toFailed(fallback = UiTextHelper.StringResource(R.string.x_load_failed))
+    is XUnavailableException -> Loadable.Failed(UiText.StringResource(R.string.x_unavailable), retryable = false)
+    else -> toFailed(fallback = UiText.StringResource(R.string.x_load_failed))
 }
 ```
 

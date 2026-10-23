@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.di
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.managers.AdsCoreManager
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.utils.AppOpenAdController
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.repositories.AdsSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.repositories.DefaultAdsSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.AdsSettingsViewModel
@@ -30,8 +30,8 @@ import org.koin.dsl.module
  * placement configuration separately.
  */
 fun adsIntegrationModule(): Module = module {
-    single<AdsCoreManager> {
-        AdsCoreManager(
+    single<AppOpenAdController> {
+        AppOpenAdController(
             context = get(),
             buildInfoRepository = get(),
             dispatchers = get(),

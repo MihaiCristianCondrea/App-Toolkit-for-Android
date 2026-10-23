@@ -59,7 +59,7 @@ private fun load() {
   calls `onError`. Cancellation passes through and is never reported.
 - `onError` receives the failure and maps it into state or a message with `toFailed` or
   `toErrorMessage` (`errors.md`). `LoadFailedText` is the screen's fallback text, a
-  `UiTextHelper` constant. Leaving it empty is right only when the user has nothing to see
+  `UiText` constant. Leaving it empty is right only when the user has nothing to see
   or do, as with the About easter egg write.
 - `restart` cancels the previous job before starting the next, so a retry never races the load it
   replaces. An operation where every call must complete, such as a copy or a save, launches without
@@ -145,7 +145,7 @@ source directly. In practice:
 
 | A ViewModel never takes                                | Instead                                          |
 |--------------------------------------------------------|--------------------------------------------------|
-| `Context`, `Activity`, `Resources`                     | `UiTextHelper` for text; a repository for the platform |
+| `Context`, `Activity`, `Resources`                     | `UiText` for text; a repository for the platform |
 | a data source, a DAO, an `HttpClient`                  | the repository that owns it                      |
 | a bare platform wrapper (clipboard, package manager)   | a repository over that platform API              |
 

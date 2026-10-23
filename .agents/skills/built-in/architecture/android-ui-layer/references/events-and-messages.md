@@ -22,18 +22,18 @@ sealed interface XEvent {
   typed, never reaches a report.
 - One `Load` event serves the first load and every retry. The ViewModel sends it to itself from
   `init`.
-- Resolve a `UiTextHelper` to a `String` in the content before it goes into an event when the
+- Resolve a `UiText` to a `String` in the content before it goes into an event when the
   ViewModel needs the exact text the user saw, as About does for the clipboard.
 
 ## Messages
 
 ```kotlin
-showMessage(UiMessage(UiTextHelper.StringResource(R.string.x_saved)))
-showMessage(error.toErrorMessage(fallback = UiTextHelper.StringResource(R.string.x_save_failed)))
+showMessage(UiMessage(UiText.StringResource(R.string.x_saved)))
+showMessage(error.toErrorMessage(fallback = UiText.StringResource(R.string.x_save_failed)))
 showMessage(
     UiMessage(
-        text = UiTextHelper.StringResource(R.string.x_deleted),
-        actionLabel = UiTextHelper.StringResource(R.string.x_undo),
+        text = UiText.StringResource(R.string.x_deleted),
+        actionLabel = UiText.StringResource(R.string.x_undo),
     ),
 )
 ```

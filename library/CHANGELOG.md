@@ -2,23 +2,6 @@
 
 ---
 
-# Unreleased
-
-### Added
-
-- `:library:integration:gms` exposes `GooglePlayServicesRepository` for installed Google Play services metadata. The Toolkit graph supplies its binding, and About uses it for the version row.
-- `BuildInfoRepository` exposes the host application's build values. `InstalledAppsRepository` provides main-safe installed-package and launcher-intent queries, and core UI's `AppLauncher` owns launching and failure feedback.
-
-### Changed
-
-- `BuildInfoProvider` and `AppInfoHelper` are replaced by the new repositories and UI launcher. Host implementations and direct constructor calls must use the new contracts.
-- `AdMobAppIdDataSource` and `ManifestAdMobAppIdDataSource` replace the AdMob ID providers under `data/local`. Reading the ID is suspending so manifest access runs on the source's IO dispatcher.
-- About's host device text now comes from `data.local.AboutDeviceInfoDataSource`. Issue Reporter's capture contract is `data.local.DeviceInfoDataSource`, and `rememberCommonDataStore` moved to `core.designsystem.ui.utils`.
-- Direct construction of `DefaultAboutRepository` takes `GooglePlayServicesRepository` instead of `GooglePlayServicesVersionProvider`. The GMS repository owns the dispatcher switch; unexpected platform failures reach the screen instead of appearing as an absent installation.
-- Changelog Markdown parsing belongs to its use case and dialog; the old public extension imports are removed. Direct construction of `DefaultChangelogRepository` takes `ChangelogRemoteDataSource`.
-
----
-
 # October 23, 2026
 
 **Version:** `3.0.0-pre27`
@@ -29,6 +12,42 @@
   page's app bar while keeping its title and actions, for a task the person finishes with a button
   of its own, such as a cleanup that ends in Done. System back still reaches the screen, so it can
   handle back the way its own button does.
+- `:library:integration:gms` exposes `GooglePlayServicesRepository` for installed Google Play
+  services metadata. The Toolkit graph supplies its binding, and About uses it for the version row.
+- `BuildInfoRepository` exposes the host application's build values. `InstalledAppsRepository`
+  provides main-safe installed-package and launcher-intent queries, and core UI's `AppLauncher`
+  owns launching and failure feedback.
+
+### Changed
+
+- `BuildInfoProvider` and `AppInfoHelper` are replaced by the new repositories and UI launcher.
+  Host implementations and direct constructor calls must use the new contracts.
+- `AdMobAppIdDataSource` and `ManifestAdMobAppIdDataSource` replace the AdMob ID providers under
+  `data/local`. Reading the ID is suspending so manifest access runs on the source's IO dispatcher.
+- About's host device text now comes from `data.local.AboutDeviceInfoDataSource`. Issue Reporter's
+  capture contract is `data.local.DeviceInfoDataSource`, and `rememberCommonDataStore` moved to
+  `core.designsystem.ui.utils`.
+- Direct construction of `DefaultAboutRepository` takes `GooglePlayServicesRepository` instead of
+  `GooglePlayServicesVersionProvider`. The GMS repository owns the dispatcher switch; unexpected
+  platform failures reach the screen instead of appearing as an absent installation.
+- Changelog Markdown parsing belongs to its use case and dialog; the old public extension imports
+  are removed. Direct construction of `DefaultChangelogRepository` takes
+  `ChangelogRemoteDataSource`.
+- `UiTextHelper` is now `UiText`, in `core.common.utils`. Its `DynamicString`, `StringResource`
+  and `PluralResource` cases and `asString` are unchanged.
+- `BaseCoreManager` is now `AppToolkitApplication`, in `core.common`. Extend it the same way.
+- `AdsCoreManager` is now `AppOpenAdController`, in `integration.ads.ui.utils`: it shows the app
+  open ad, so it belongs to the UI layer. `OnShowAdCompleteListener` moved to
+  `integration.ads.ui.contracts` and `AdsSdkInitializer` to `integration.ads.data.remote`.
+- Packages follow the layer vocabulary: the data store's `data.local.interfaces`, `sources` and
+  `migrations` are one `data.local`; `core.common.data.models.platform` and `theme` are
+  `core.common.data.models`; `core.common.utils.platform` is `core.common.utils`; the seasonal
+  theme overlay is under `feature.theme.ui.features.seasonal`; shake detection is in
+  `feature.issuereporter.ui.utils`. Only imports change; see the migration guide.
+
+### Removed
+
+- `PermissionsHelper`, which nothing called. Request permissions with the Activity Result API.
 
 ---
 
@@ -572,7 +591,7 @@ every removed API to its replacement.
   `LicensesScreen` wires the ViewModel, the metadata producer and tracking, and the list renders in
   the stateless `LicensesScreenContent`.
 - `:library:feature:changelog` is on `core.ui.screen`.
-  `ChangelogRepository.fetchChangelog(): Flow<DataState<ΓÇª>>` is now
+  `ChangelogRepository.fetchChangelog(): Flow<DataState<…>>` is now
   `suspend fun getChangelog(packageName): String`, which throws a `NetworkException`, and
   `GetChangelogUseCase` is a `suspend` call returning the Markdown. `ChangelogViewModel` no longer
   takes a `DispatcherProvider` and exposes `state`, an `ChangelogUiState` whose `markdown` is a
@@ -581,7 +600,7 @@ every removed API to its replacement.
   `feature.changelog.ui`, and the sheet's body renders in the stateless `ChangelogDialogContent`. An
   offline device now sees the offline text, and a failure a retry cannot fix offers Done instead of
   Try again.
-- `:library:feature:faq` is on `core.ui.screen`. `FaqRepository.fetchFaq(): Flow<DataState<ΓÇª>>` is
+- `:library:feature:faq` is on `core.ui.screen`. `FaqRepository.fetchFaq(): Flow<DataState<…>>` is
   now `suspend fun getFaq(): List<FaqItem>`, which throws a `NetworkException` when the catalog
   failed and there are no bundled questions. `FaqViewModel` no longer takes a `DispatcherProvider`
   and exposes `state`, an `FaqUiState` whose `questions` is a `Loadable`, with `openStoreListing`
@@ -590,7 +609,7 @@ every removed API to its replacement.
   added, and `FaqAction` is removed. `FaqScreenContent` moved from `ui.views.content` into
   `FaqScreen.kt` and is internal and stateless; `FaqScreen` logs the same GA4 events as before.
 - `:library:feature:advanced` is on `core.ui.screen`.
-  `CacheRepository.clearCache(): Flow<DataState<ΓÇª>>` is now a `suspend` function that throws a
+  `CacheRepository.clearCache(): Flow<DataState<…>>` is now a `suspend` function that throws a
   `StorageException`, and `AdvancedSettingsViewModel` no longer takes a `DispatcherProvider`. It
   exposes `state`, an `AdvancedSettingsUiState` with a `CacheClearStatus` and
   `developerOptionsUnlocked` (replacing the separate `developerOptionsUnlocked` flow), and queued

@@ -11,7 +11,7 @@ Owns ad enablement settings and Google Mobile Ads integration UI used by AppTool
   module composes it; hosts supply their placement configuration and foundation providers.
 - Ads settings repository, ViewModel and screen, and `adsSettingsPage()`, the registration of
   `AdsSettingsRoute` (opened from the privacy page).
-- `AdsCoreManager`, `AdsSdkInitializer`, and Google Mobile Ads SDK initialization.
+- `AppOpenAdController`, `AdsSdkInitializer`, and Google Mobile Ads SDK initialization.
 - `OnShowAdCompleteListener`, called once an app-open ad has been shown.
 - App-open ad lifecycle; the `INTERNET`, `ACCESS_NETWORK_STATE`, and `AD_ID` permissions required by
   the SDK; and default Mobile Ads initialization/loading metadata.
@@ -45,7 +45,7 @@ flowchart TD
     VM --> Repo[AdsSettingsRepository]
     Repo -->|persist display and reduce settings| Store[CommonDataStore ad preferences]
     Repo -->|apply privacy choice| Consent[ConsentRepository]
-    Store --> Manager[AdsCoreManager]
+    Store --> Manager[AppOpenAdController]
     Manifest[Host manifest AdMob application ID] --> Id[AdMobAppIdDataSource]
     Id --> Manager
     Manager --> Gate{Enabled and valid ID?}
@@ -93,7 +93,7 @@ differently.
     android:value="@string/ad_mob_app_id" />
 ```
 
-`ManifestAdMobAppIdDataSource` reads it from there and nowhere else, and `AdsCoreManager` refuses to
+`ManifestAdMobAppIdDataSource` reads it from there and nowhere else, and `AppOpenAdController` refuses to
 initialize the SDK without a valid one rather than falling back to a sample id. Declare the string
 in the **host**, never in a library module: a library-owned `ad_mob_app_id` is inherited by every
 consumer app that does not declare the same name, silently pointing that app's consent request and
@@ -138,7 +138,7 @@ no fill rather than an error.
 
 ### App Open
 
-`AdsCoreManager.initializeAds(appOpenUnitId = ...)` takes the id directly; there is no qualifier.
+`AppOpenAdController.initializeAds(appOpenUnitId = ...)` takes the id directly; there is no qualifier.
 The
 host decides whether it wants the ad at all, see the toggle table above.
 
@@ -574,7 +574,7 @@ so none of them need a `NativeAdView`.
 
 - `AdsSettingsScreen`, `adsSettingsPage()`, the repository contract, and the UI event, action and
   state contracts.
-- `AdsCoreManager` and its replaceable `AdsSdkInitializer` test seam.
+- `AppOpenAdController` and its replaceable `AdsSdkInitializer` test seam.
 
 ## Internal implementations
 
@@ -617,7 +617,7 @@ throw happened during composition, so it took the process down instead of failin
 
 Two independent causes, both fixed:
 
-- The ads-enabled preference had two sources with different defaults. `AdsCoreManager` gated SDK
+- The ads-enabled preference had two sources with different defaults. `AppOpenAdController` gated SDK
   initialization on one and the ad views read the other, so in a debug build the views could believe
   ads were on while the SDK had never been initialized. Both now read
   `CommonDataStore.adsEnabledFlow`, and only the default is shared.

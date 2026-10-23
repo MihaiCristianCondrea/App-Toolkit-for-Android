@@ -38,7 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
@@ -242,18 +242,18 @@ private fun AboutScreenContentPreview() {
                     persistentListOf(
                         AboutItem.Header(
                             key = AboutItemKey.HEADER_APP_INFO,
-                            title = UiTextHelper.DynamicString("App information"),
+                            title = UiText.DynamicString("App information"),
                         ),
                         AboutItem.Preference(
                             key = AboutItemKey.APP_NAME,
-                            title = UiTextHelper.DynamicString("App name"),
-                            summary = UiTextHelper.DynamicString("App Toolkit Sample"),
+                            title = UiText.DynamicString("App name"),
+                            summary = UiText.DynamicString("App Toolkit Sample"),
                             position = GroupedItemPosition.FIRST,
                         ),
                         AboutItem.Preference(
                             key = AboutItemKey.APP_BUILD_VERSION,
-                            title = UiTextHelper.DynamicString("Version"),
-                            summary = UiTextHelper.DynamicString("1.0.0 (100)"),
+                            title = UiText.DynamicString("Version"),
+                            summary = UiText.DynamicString("1.0.0 (100)"),
                             position = GroupedItemPosition.LAST,
                             countsVersionTap = true,
                         ),

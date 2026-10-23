@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui
 
 import android.app.Activity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
@@ -67,8 +67,8 @@ class AdsSettingsViewModelTest {
 
     private fun advance() = dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
-    private val UiTextHelper.resourceId: Int
-        get() = (this as UiTextHelper.StringResource).resourceId
+    private val UiText.resourceId: Int
+        get() = (this as UiText.StringResource).resourceId
 
     @Test
     fun `the first load shows the stored preferences`() = runTest(dispatcherExtension.testDispatcher) {
