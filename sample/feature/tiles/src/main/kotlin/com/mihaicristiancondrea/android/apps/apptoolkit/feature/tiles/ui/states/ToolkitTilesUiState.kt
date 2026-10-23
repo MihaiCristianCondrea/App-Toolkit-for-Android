@@ -39,17 +39,3 @@ data class ToolkitTilesUiState(
     val loadedAdIds: PersistentSet<String> = persistentSetOf(),
     val pendingTileRequest: String? = null,
 )
-
-enum class ToolkitTilesFilter {
-    All,
-    Added,
-
-    /** Tools whose Quick Settings tile is not in the panel. Adding it is optional. */
-    NotAdded,
-    Unsupported;
-
-    /**
-     * The explicit companion owns the filter-mapping extension.
-     */
-    companion object
-}

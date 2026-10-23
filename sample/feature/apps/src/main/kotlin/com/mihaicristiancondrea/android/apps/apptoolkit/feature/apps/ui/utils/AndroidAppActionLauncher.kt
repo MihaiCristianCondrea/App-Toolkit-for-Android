@@ -22,21 +22,21 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.net.Uri
-import android.os.Build
 import android.provider.Settings
 import android.widget.Toast
 import androidx.core.net.toUri
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.AppActionLauncher
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.ClipboardRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.DefaultClipboardRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.InstalledAppsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
 
 /** Android implementation of [AppActionLauncher] backed by public intents and safe fallbacks. */
 class AndroidAppActionLauncher(
     private val context: Context,
-    private val clipboardRepository: ClipboardRepository = DefaultClipboardRepository(context),
+    private val clipboardRepository: ClipboardRepository,
+    private val installedApps: InstalledAppsRepository,
 ) : AppActionLauncher {
 
     companion object {
@@ -47,7 +47,7 @@ class AndroidAppActionLauncher(
             "android.provider.extra.APP_PACKAGE"
     }
 
-    override fun openApp(packageName: String): Boolean {
+    override suspend fun openApp(packageName: String): Boolean {
         if (!packageName.isProbablyValidPackageName()) return false
 
         return openAppWithIntentSender(packageName) ||
@@ -159,88 +159,9 @@ class AndroidAppActionLauncher(
 
     override fun openUrl(url: String): Boolean = context.openUrl(url)
 
-    override fun openNotificationChannel(packageName: String, channelId: String): Boolean {
-        if (!packageName.isProbablyValidPackageName()) return false
-        if (channelId.isBlank()) return openNotifications(packageName)
-
-        val channelIntent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
-            putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
-            putExtra(Settings.EXTRA_CHANNEL_ID, channelId)
-        }
-
-        val appNotificationIntent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
-            putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
-        }
-
-        return startFirstAvailable(
-            channelIntent,
-            appNotificationIntent,
-            appInfoIntent(packageName),
-        )
-    }
-
-    override fun openByDefault(packageName: String): Boolean {
-        if (!packageName.isProbablyValidPackageName()) return false
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-            return openAppInfo(packageName)
-        }
-
-        return startFirstAvailable(
-            Intent(
-                Settings.ACTION_APP_OPEN_BY_DEFAULT_SETTINGS,
-                packageName.toPackageUri(),
-            ),
-            appInfoIntent(packageName),
-        )
-    }
-
-    override fun openAppLocale(packageName: String): Boolean {
-        if (!packageName.isProbablyValidPackageName()) return false
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-            return openAppInfo(packageName)
-        }
-
-        return startFirstAvailable(
-            Intent(
-                Settings.ACTION_APP_LOCALE_SETTINGS,
-                packageName.toPackageUri(),
-            ),
-            appInfoIntent(packageName),
-        )
-    }
-
-    override fun openAllFilesAccess(packageName: String): Boolean {
-        if (!packageName.isProbablyValidPackageName()) return false
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-            return openAppInfo(packageName)
-        }
-
-        return startFirstAvailable(
-            Intent(
-                Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
-                packageName.toPackageUri(),
-            ),
-            Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION),
-            appInfoIntent(packageName),
-        )
-    }
-
-    override fun openIgnoreBatteryOptimizationsList(): Boolean {
-        return startFirstAvailable(
-            Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS),
-            Intent(Settings.ACTION_BATTERY_SAVER_SETTINGS),
-            Intent(Settings.ACTION_SETTINGS),
-        )
-    }
-
-    private fun openAppWithIntentSender(packageName: String): Boolean {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return false
-
+    private suspend fun openAppWithIntentSender(packageName: String): Boolean {
+        val sender = installedApps.getLaunchIntentSender(packageName) ?: return false
         return try {
-            val sender = context.packageManager.getLaunchIntentSenderForPackage(packageName)
             context.startIntentSender(sender, null, 0, 0, 0)
             true
         } catch (_: IntentSender.SendIntentException) {
@@ -256,9 +177,8 @@ class AndroidAppActionLauncher(
         }
     }
 
-    private fun openAppWithLaunchIntent(packageName: String): Boolean {
-        val launchIntent = context.packageManager
-            .getLaunchIntentForPackage(packageName)
+    private suspend fun openAppWithLaunchIntent(packageName: String): Boolean {
+        val launchIntent = installedApps.getLaunchIntent(packageName)
             ?.asExternalActivityIntent()
 
         return launchIntent != null && startFirstAvailable(launchIntent)

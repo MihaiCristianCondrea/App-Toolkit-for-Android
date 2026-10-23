@@ -95,7 +95,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.LocalP
  * than stopping at a band above it. The top and the sides are padded here.
  *
  * Pages registered with a title get this frame from the shell; pages that need something under
- * their app bar, such as tabs, call it themselves.
+ * their app bar, such as tabs, call it themselves, and give it `topBarContainerColor()` so it
+ * changes colour with the bar as content scrolls under them.
  *
  * Snackbars shown through `rememberScaffoldSnackbars()`, `MessageHost` or
  * [LocalPageSnackbarHostState] appear above the system bars and the buttons, in the Toolkit's
@@ -147,6 +148,12 @@ fun PageScaffold(
     // Keep the shared navigation color synchronized with the active page's scroll state.
     if (beside != null && pane == PaneRole.None) {
         FollowScrollWithFrameTint { if (reactsToScroll) scrollBehavior.frameTint(resolvedStyle) else FrameTint.None }
+    }
+    // What sits flush under the bar, such as tabs, takes its colour; a see-through bar has none.
+    val topBarTint: (() -> FrameTint)? = if (reactsToScroll && !carded && pane == PaneRole.None) {
+        remember(scrollBehavior, resolvedStyle) { { scrollBehavior.frameTint(resolvedStyle) } }
+    } else {
+        null
     }
     val contentInsets = when (pane) {
         PaneRole.None -> WindowInsets.safeDrawing
@@ -213,6 +220,7 @@ fun PageScaffold(
                 LocalPageSnackbarHostState provides snackbarHostState,
                 LocalScaffoldSnackbars provides snackbars,
                 LocalFabHost provides fabHost,
+                LocalTopBarTint provides topBarTint,
                 LocalArticleTopBarHost provides if (pane == PaneRole.None) article else LocalArticleTopBarHost.current,
                 content = content,
             )

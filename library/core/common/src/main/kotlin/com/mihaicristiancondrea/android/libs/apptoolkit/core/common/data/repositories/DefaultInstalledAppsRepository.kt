@@ -19,7 +19,11 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.reposi
 
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
+import android.os.Build
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.AppInstallInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.packagemanager.getVersionMetadata
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.packagemanager.isAppInstalled
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.withContext
@@ -34,6 +38,21 @@ class DefaultInstalledAppsRepository(
         packageName.isNotBlank() && appContext.isAppInstalled(packageName)
     }
 
+    override suspend fun getInstalledPackages(packageNames: Collection<String>): Set<String> =
+        withContext(dispatchers.io) {
+            packageNames.filter { it.isNotBlank() && appContext.isAppInstalled(it) }.toSet()
+        }
+
+    override suspend fun getInstallInfo(packageName: String): AppInstallInfo {
+        if (packageName.isBlank()) return AppInstallInfo(isInstalled = false, versionInfo = null)
+        return withContext(dispatchers.io) {
+            AppInstallInfo(
+                isInstalled = appContext.isAppInstalled(packageName),
+                versionInfo = appContext.packageManager.getVersionMetadata(packageName),
+            )
+        }
+    }
+
     override suspend fun getLaunchIntent(packageName: String): Intent? = withContext(dispatchers.io) {
         if (packageName.isBlank()) return@withContext null
         try {
@@ -42,6 +61,19 @@ class DefaultInstalledAppsRepository(
             throw cancelled
         } catch (_: Exception) {
             null
+        }
+    }
+
+    override suspend fun getLaunchIntentSender(packageName: String): IntentSender? {
+        if (packageName.isBlank() || Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return null
+        return withContext(dispatchers.io) {
+            try {
+                appContext.packageManager.getLaunchIntentSenderForPackage(packageName)
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (_: Exception) {
+                null
+            }
         }
     }
 }

@@ -2,7 +2,9 @@
 
 ---
 
-# Unreleased
+# October 23, 2026
+
+**Version:** `26.10.35`
 
 ### Added
 
@@ -11,6 +13,8 @@
 
 ### Changed
 
+- Existing app-icons widgets may need to be added again because their receiver component name
+  changed during the sample architecture cleanup.
 - Existing Quick Settings tiles may need to be removed and added again after this update because
   their service component names changed.
 
@@ -25,18 +29,17 @@
 - The Apps list brings in its filter chips, then its cards.
 - The Components, Quick Tools and article demo screens enter the way the Toolkit's screens do,
   each section or card in turn.
-- The article demo reports its visits as `ArticleDemo`.
 
 ### Fixed
 
+- Opening an installed app can fall back to its Settings page when Android denies the launcher
+  lookup, rather than letting the lookup failure escape.
 - Stopping or replacing Morse and SOS playback waits for in-flight torch commands, keeping the
   flashlight off after stopping.
 - Counter storage failures are handled instead of escaping the action, while accepted writes
   still finish if the Quick Settings service disappears.
 - Unlocking the components showcase reports the achievement only once the unlock is saved, and
   never again on later taps.
-- Screen views count real visits: each screen is reported once it is shown and settled, not during
-  transitions, rotations or a cancelled back gesture.
 
 ---
 

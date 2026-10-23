@@ -15,29 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models
-
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
-
-internal data class PositionedToolkitTilesListItem(
-    val item: ToolkitTilesListItem,
-    val position: GroupedItemPosition,
-)
-
-internal val ToolkitTilesListItem.stableKey: String
-    get() = when (this) {
-        is ToolkitTilesListItem.Category -> category.id
-        is ToolkitTilesListItem.Ad -> id
-    }
-
-internal fun ToolkitTilesListItem.isVisible(
-    loadedAdIds: Set<String>,
-    showAds: Boolean,
-): Boolean = when (this) {
-    is ToolkitTilesListItem.Category -> true
-    is ToolkitTilesListItem.Ad -> showAds && id in loadedAdIds
-}
 
 internal sealed class ToolkitTilesListItem {
     data class Category(val category: ToolkitTileCategory) : ToolkitTilesListItem()

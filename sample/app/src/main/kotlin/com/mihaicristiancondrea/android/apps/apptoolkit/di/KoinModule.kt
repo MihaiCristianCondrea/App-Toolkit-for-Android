@@ -20,17 +20,18 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.di
 import android.content.Context
 import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.di.appToolkitHostModules
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.faq.utils.constants.FaqConstants
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.di.dataStoreModule
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.about.di.aboutModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.di.appsModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.di.componentsModule
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.display.di.displayModule
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.faq.utils.constants.FaqConstants
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.di.onboardingModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.di.settingsModule
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.about.di.aboutModule
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.display.di.displayModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.startup.ui.providers.AppStartupProvider
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.di.tilesModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.di.adsIntegrationModule
+import com.mihaicristiancondrea.android.apps.apptoolkit.widget.di.widgetModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -43,6 +44,7 @@ fun sampleAppModules(hostBuildConfig: AppToolkitHostBuildConfig): List<Module> =
     add(appModule)
     add(tilesModule)
     add(appsModule)
+    add(widgetModule)
     add(componentsModule)
     add(adsIntegrationModule)
     add(onboardingModule)

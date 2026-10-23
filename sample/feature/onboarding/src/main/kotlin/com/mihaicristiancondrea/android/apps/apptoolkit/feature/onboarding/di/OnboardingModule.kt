@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.di
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.ui.AppOnboardingProvider
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.ui.providers.AppOnboardingProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.OnboardingViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers.OnboardingProvider
 import org.koin.core.module.Module

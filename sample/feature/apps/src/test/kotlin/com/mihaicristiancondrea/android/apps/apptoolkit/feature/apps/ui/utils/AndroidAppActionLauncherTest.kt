@@ -21,6 +21,7 @@ import android.content.Context
 import android.widget.Toast
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.ClipboardRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.InstalledAppsRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -37,6 +38,7 @@ import org.junit.jupiter.api.Test
 class AndroidAppActionLauncherTest {
 
     private val context = mockk<Context>()
+    private val installedApps = mockk<InstalledAppsRepository>()
     private val toast = mockk<Toast>(relaxed = true)
 
     @BeforeEach
@@ -55,7 +57,7 @@ class AndroidAppActionLauncherTest {
     @Test
     fun `a successful copy uses only the system confirmation when available`() {
         val clipboard = FakeClipboardRepository(confirmsCopies = true)
-        val launcher = AndroidAppActionLauncher(context = context, clipboardRepository = clipboard)
+        val launcher = AndroidAppActionLauncher(context = context, clipboardRepository = clipboard, installedApps = installedApps)
 
         assertTrue(launcher.copyPackageName("com.example.app"))
 
@@ -67,7 +69,7 @@ class AndroidAppActionLauncherTest {
     @Test
     fun `a successful copy shows one toast when the system does not confirm it`() {
         val clipboard = FakeClipboardRepository(confirmsCopies = false)
-        val launcher = AndroidAppActionLauncher(context = context, clipboardRepository = clipboard)
+        val launcher = AndroidAppActionLauncher(context = context, clipboardRepository = clipboard, installedApps = installedApps)
 
         assertTrue(launcher.copyPackageName("com.example.app"))
 
@@ -79,7 +81,7 @@ class AndroidAppActionLauncherTest {
     @Test
     fun `an invalid package is not copied or confirmed`() {
         val clipboard = FakeClipboardRepository(confirmsCopies = false)
-        val launcher = AndroidAppActionLauncher(context = context, clipboardRepository = clipboard)
+        val launcher = AndroidAppActionLauncher(context = context, clipboardRepository = clipboard, installedApps = installedApps)
 
         assertFalse(launcher.copyPackageName(""))
 
@@ -93,7 +95,7 @@ class AndroidAppActionLauncherTest {
             confirmsCopies = false,
             failure = IllegalStateException("Clipboard rejected the write"),
         )
-        val launcher = AndroidAppActionLauncher(context = context, clipboardRepository = clipboard)
+        val launcher = AndroidAppActionLauncher(context = context, clipboardRepository = clipboard, installedApps = installedApps)
 
         assertFailsWith<IllegalStateException> { launcher.copyPackageName("com.example.app") }
 

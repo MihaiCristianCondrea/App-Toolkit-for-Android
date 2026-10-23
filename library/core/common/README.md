@@ -9,8 +9,9 @@ Android utility abstractions shared across the toolkit.
 
 - `AdsSettingsRepository` and `OnboardingRepository`, SDK-neutral contracts consumed across modules.
 - `BuildInfoRepository` and its `DefaultBuildInfoRepository`, backed by the host build configuration.
-- `InstalledAppsRepository` and its system-backed default for installed-package checks and launcher
-  intent lookup. Both operations are main-safe; the repository owns the IO switch.
+- `InstalledAppsRepository` and its system-backed default own single/batch installation checks,
+  `AppInstallInfo` with shared `AppVersionMetadata`, launcher intents, and API 33+ launch tokens.
+  Every lookup is main-safe; the repository owns the IO switch and keeps cancellation intact.
 - `AdMobAppIdDataSource` and `ManifestAdMobAppIdDataSource` in `data/local`: the shared host
   manifest contract and its cached, main-safe platform implementation.
 - Analytics and billing value models, and the application-facing theme preference model.

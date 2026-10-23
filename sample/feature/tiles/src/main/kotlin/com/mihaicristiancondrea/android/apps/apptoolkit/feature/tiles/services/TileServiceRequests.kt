@@ -17,24 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.services
 
-import android.content.ComponentName
-import android.content.Context
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
-
-/**
- * Quick Settings registration details for one [android.service.quicksettings.TileService].
- *
- * This is platform wiring rather than a domain model: it names a concrete service class and the
- * label/icon resources the system shows in the add-tile prompt.
- */
-data class TileServiceRequest(
-    val serviceClass: Class<*>,
-    val labelResId: Int,
-    val iconResId: Int,
-) {
-    fun componentName(context: Context): ComponentName = ComponentName(context, serviceClass)
-}
 
 /** Registry of tiles this app can ask the system to add, keyed by `ToolkitTile.requestKey`. */
 fun getTileServiceRequests(): Map<String, TileServiceRequest> = mapOf(

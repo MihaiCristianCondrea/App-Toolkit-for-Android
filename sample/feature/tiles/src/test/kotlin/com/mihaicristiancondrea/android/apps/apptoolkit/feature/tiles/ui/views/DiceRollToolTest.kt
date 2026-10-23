@@ -17,8 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.DiceCubeFace
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.ConstantFaceNumbers
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.DiceCubeFace
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.DiceFaceDefinitions
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.targetAnglesFor
 import org.junit.jupiter.api.Assertions.assertEquals

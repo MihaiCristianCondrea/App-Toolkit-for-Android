@@ -15,14 +15,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,8 +30,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AddCircleOutline
+import androidx.compose.material.icons.outlined.Block
+import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.ExpandLess
 import androidx.compose.material.icons.outlined.ExpandMore
+import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -49,9 +52,9 @@ import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ToolkitTilesEvent
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.items
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileCategory
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTilesFilterItem
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTilesListItem
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ToolkitTilesFilter
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ads.QuickToolsNativeAdCard
@@ -66,6 +69,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
@@ -96,7 +100,7 @@ internal fun TilesFilters(
         val allTiles = categories.flatMap { it.tiles }
         val statuses = allTiles.map { it.status }.toSet()
 
-        ToolkitTilesFilter.items().filter { item ->
+        ToolkitTilesFilterItems.filter { item ->
             when (item.filter) {
                 ToolkitTilesFilter.All -> true
                 ToolkitTilesFilter.Added -> statuses.contains(ToolkitTileStatus.Added)
@@ -248,3 +252,27 @@ internal fun ToolkitTileCard(
         }
     }
 }
+
+/** Returns stable UI chip metadata for every Toolkit Tiles filter. */
+private val ToolkitTilesFilterItems: ImmutableList<ToolkitTilesFilterItem> = persistentListOf(
+    ToolkitTilesFilterItem(
+        ToolkitTilesFilter.All,
+        R.string.tiles_filter_all,
+        Icons.Outlined.GridView
+    ),
+    ToolkitTilesFilterItem(
+        ToolkitTilesFilter.Added,
+        R.string.tiles_filter_added,
+        Icons.Outlined.CheckCircle
+    ),
+    ToolkitTilesFilterItem(
+        ToolkitTilesFilter.NotAdded,
+        R.string.tiles_filter_not_added,
+        Icons.Outlined.AddCircleOutline
+    ),
+    ToolkitTilesFilterItem(
+        ToolkitTilesFilter.Unsupported,
+        R.string.tiles_filter_unsupported,
+        Icons.Outlined.Block
+    ),
+)

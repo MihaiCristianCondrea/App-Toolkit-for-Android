@@ -54,6 +54,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.DiceCubeFace
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.DiceFaceDefinition
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.Vec3
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
@@ -66,21 +69,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun DiceRollTool(result: Int, rollRequest: Int, onRoll: () -> Unit) {
-    DiceRollerApp(result = result, rollRequest = rollRequest, onRoll = onRoll)
-}
-
-@Composable
-fun DiceRollerApp(result: Int, rollRequest: Int, onRoll: () -> Unit) {
-    DiceWithButtonAndProceduralDice(
-        result = result,
-        rollRequest = rollRequest,
-        onRoll = onRoll,
-    )
-}
-
-@Composable
-fun DiceWithButtonAndProceduralDice(
+fun DiceRollTool(
     modifier: Modifier = Modifier,
     result: Int,
     rollRequest: Int,
@@ -648,33 +637,12 @@ private fun Float.toRadians(): Double {
     return this.toDouble() * PI / 180.0
 }
 
-internal enum class DiceCubeFace {
-    Front,
-    Back,
-    Left,
-    Right,
-    Top,
-    Bottom,
-}
-
 private data class ProceduralDiceColors(
     val frontFaceColor: Color,
     val sideFaceColor: Color,
     val topFaceColor: Color,
     val edgeColor: Color,
     val pipColor: Color,
-)
-
-internal data class Vec3(
-    val x: Float,
-    val y: Float,
-    val z: Float,
-)
-
-internal data class DiceFaceDefinition(
-    val face: DiceCubeFace,
-    val vertices: List<Vec3>,
-    val normal: Vec3,
 )
 
 private data class RenderedDiceFace(

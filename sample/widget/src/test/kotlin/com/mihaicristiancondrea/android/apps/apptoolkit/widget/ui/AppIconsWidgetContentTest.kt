@@ -21,6 +21,7 @@ import androidx.glance.appwidget.testing.unit.runGlanceAppWidgetUnitTest
 import androidx.glance.testing.unit.assertHasClickAction
 import androidx.glance.testing.unit.assertHasText
 import androidx.glance.testing.unit.hasText
+import com.mihaicristiancondrea.android.apps.apptoolkit.widget.ui.models.WidgetStrings
 import org.junit.jupiter.api.Test
 
 class AppIconsWidgetContentTest {

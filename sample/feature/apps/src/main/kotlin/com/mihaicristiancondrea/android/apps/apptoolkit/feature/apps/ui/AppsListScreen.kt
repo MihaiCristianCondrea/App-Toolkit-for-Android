@@ -17,18 +17,18 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui
 
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Casino
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
@@ -38,8 +38,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.AppScreenTracking
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.analytics.AppInteractionType
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.analytics.logAppInteraction
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.AppActionLauncher
@@ -47,12 +47,15 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contract
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppListUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.utils.AnalyticsAppActionLauncher
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.utils.AndroidAppActionLauncher
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.utils.rememberOpenAppAction
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.utils.rememberShareAppAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.AppDetailsBottomSheet
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.buildOnAppClick
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.buildOnShareClick
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.screens.AppsList
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.lists.AppsList
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.screens.loading.HomeLoadingScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AppAdsQualifiers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.ClipboardRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.InstalledAppsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logShare
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
@@ -60,6 +63,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsCo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.AppLauncher
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
@@ -95,9 +99,13 @@ fun AppsListScreen() {
     val adsEnabled: Boolean = rememberAdsEnabled()
     val listAdsConfig: AdsConfig = koinInject(qualifier = named(AppAdsQualifiers.APPS_LIST_NATIVE_AD))
     val detailsAdsConfig: AdsConfig = koinInject(qualifier = named(AppAdsQualifiers.APP_DETAILS_NATIVE_AD))
-    val openApp: (AppSummary) -> Unit = buildOnAppClick()
-    val shareApp: (AppSummary) -> Unit = buildOnShareClick()
-    val appActionLauncher = remember(context) { AndroidAppActionLauncher(context) }
+    val installedApps: InstalledAppsRepository = koinInject()
+    val dispatchers: DispatcherProvider = koinInject()
+    val clipboard: ClipboardRepository = koinInject()
+    val launcher = remember(installedApps, dispatchers) { AppLauncher(installedApps, dispatchers) }
+    val openApp: (AppSummary) -> Unit = rememberOpenAppAction(launcher, installedApps::isInstalled)
+    val shareApp: (AppSummary) -> Unit = rememberShareAppAction()
+    val appActionLauncher = remember(context, clipboard, installedApps) { AndroidAppActionLauncher(context, clipboard, installedApps) }
     val selectedApp: AppSummary? = state.selectedApp
     val detailsActionLauncher: AppActionLauncher = remember(appActionLauncher, telemetry, selectedApp) {
         selectedApp?.let { app ->
@@ -303,7 +311,7 @@ private fun AppsListScreenContentPreview() {
             onFavoriteToggle = {},
             onShareClick = {},
             onDetailsClosed = {},
-            detailsActionLauncher = remember(context) { AndroidAppActionLauncher(context) },
+            detailsActionLauncher = remember(context) { AndroidAppActionLauncher(context, PreviewClipboardRepository, PreviewInstalledAppsRepository) },
             windowWidthSizeClass = AppWindowWidthSizeClass.Compact,
         )
     }
@@ -320,8 +328,23 @@ private fun AppsListScreenContentLoadingPreview() {
             onFavoriteToggle = {},
             onShareClick = {},
             onDetailsClosed = {},
-            detailsActionLauncher = remember(context) { AndroidAppActionLauncher(context) },
+            detailsActionLauncher = remember(context) { AndroidAppActionLauncher(context, PreviewClipboardRepository, PreviewInstalledAppsRepository) },
             windowWidthSizeClass = AppWindowWidthSizeClass.Compact,
         )
     }
+}
+
+/** Preview actions never write to the system clipboard. */
+private object PreviewClipboardRepository : ClipboardRepository {
+    override val confirmsCopies: Boolean = true
+    override fun copyText(label: String, text: String, isSensitive: Boolean) = Unit
+}
+
+private object PreviewInstalledAppsRepository : InstalledAppsRepository {
+    override suspend fun isInstalled(packageName: String): Boolean = false
+    override suspend fun getInstalledPackages(packageNames: Collection<String>): Set<String> = emptySet()
+    override suspend fun getInstallInfo(packageName: String) =
+        com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.AppInstallInfo(false, null)
+    override suspend fun getLaunchIntent(packageName: String): android.content.Intent? = null
+    override suspend fun getLaunchIntentSender(packageName: String): android.content.IntentSender? = null
 }

@@ -50,6 +50,8 @@ fun QuickToolsNativeAdCard(
     var isFirstReport: Boolean by remember(adUnitId) { mutableStateOf(value = true) }
 
     val style = NativeAdStyle(
+        badgeCornerRadiusDp = 22,
+        iconInsetDp = 8,
         headlineBold = false,
         bodyMaxLines = 2,
         callToAction = NativeAdCallToActionStyle.Text,
