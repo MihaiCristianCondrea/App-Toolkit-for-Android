@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.di
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.local.DefaultIssueReportHistoryDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.local.IssueReportHistoryDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.sheets.IssueReporterSheet
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterBottomSheet
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
@@ -25,7 +27,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.utils.extensions.toToken
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.local.DeviceInfoLocalDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.remote.IssueReporterRemoteDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.DefaultIssueReportHistoryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.DefaultIssueReporterRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReportHistoryRepository
@@ -68,9 +69,8 @@ fun issueReporterModule(
             diagnostics = get(),
         )
     }
-    single<IssueReportHistoryRepository> {
-        DefaultIssueReportHistoryRepository(dataStore = get<CommonDataStore>().dataStore)
-    }
+    single<IssueReportHistoryDataSource> { DefaultIssueReportHistoryDataSource(dataStore = get()) }
+    single<IssueReportHistoryRepository> { DefaultIssueReportHistoryRepository(preferences = get()) }
     single<ValidateIssueReportUseCase> { ValidateIssueReportUseCase() }
     single<GithubTarget> {
         GithubTarget(

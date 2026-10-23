@@ -40,19 +40,19 @@ import kotlinx.coroutines.withContext
  * IPC, so that one goes to IO.
  */
 class DefaultReviewRepository(
-    private val dataStore: ReviewPreferencesDataSource,
+    private val preferences: ReviewPreferencesDataSource,
     private val dispatchers: DispatcherProvider,
 ) : ReviewRepository {
-    override fun sessionCount(): Flow<Int> = dataStore.sessionCount
+    override fun sessionCount(): Flow<Int> = preferences.sessionCount
 
-    override fun hasPromptedReview(): Flow<Boolean> = dataStore.hasPromptedReview
+    override fun hasPromptedReview(): Flow<Boolean> = preferences.hasPromptedReview
 
     override suspend fun incrementSessionCount() {
-        dataStore.incrementSessionCount()
+        preferences.incrementSessionCount()
     }
 
     override suspend fun setHasPromptedReview(value: Boolean) {
-        dataStore.setHasPromptedReview(value = value)
+        preferences.setHasPromptedReview(value = value)
     }
 
     /**

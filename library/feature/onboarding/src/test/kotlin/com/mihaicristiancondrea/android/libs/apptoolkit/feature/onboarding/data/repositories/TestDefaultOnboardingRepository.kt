@@ -54,7 +54,7 @@ class TestDefaultOnboardingRepository {
     fun `observeOnboardingCompletion reflects data source state`() =
         runTest(dispatcherExtension.testDispatcher) {
             val dataSource = FakeOnboardingPreferencesDataSource()
-            val repository = DefaultOnboardingRepository(dataStore = dataSource)
+            val repository = DefaultOnboardingRepository(preferences = dataSource)
 
             assertFalse(repository.observeOnboardingCompletion().first())
 
@@ -66,7 +66,7 @@ class TestDefaultOnboardingRepository {
     fun `setOnboardingCompleted updates data source`() =
         runTest(dispatcherExtension.testDispatcher) {
             val dataSource = FakeOnboardingPreferencesDataSource()
-            val repository = DefaultOnboardingRepository(dataStore = dataSource)
+            val repository = DefaultOnboardingRepository(preferences = dataSource)
 
             repository.setOnboardingCompleted()
             advanceUntilIdle()
@@ -78,7 +78,7 @@ class TestDefaultOnboardingRepository {
     @Test
     fun `a failed completion write throws a storage failure`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val repository = DefaultOnboardingRepository(dataStore = FailingOnboardingPreferencesDataSource())
+            val repository = DefaultOnboardingRepository(preferences = FailingOnboardingPreferencesDataSource())
 
             val failure = assertFailsWith<StorageException> { repository.setOnboardingCompleted() }
 

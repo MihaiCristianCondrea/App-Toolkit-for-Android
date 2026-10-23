@@ -17,8 +17,10 @@ Collects device/report data and submits structured issues to a configured GitHub
   configuration that enables it.
 - Report, device-info, GitHub-target, and host configuration models.
 - The report checks: `ValidateIssueReportUseCase`, `IssueReportValidation`,
-  `IssueReportFieldError`, and `IssueReportHistoryRepository` with its DataStore-backed default,
-  which holds back a report during the cooldown or as a duplicate (`IssueReportRefusal`).
+  `IssueReportFieldError`, and `IssueReportHistoryRepository` with its default, which holds back a
+  report during the cooldown or as a duplicate (`IssueReportRefusal`).
+- `IssueReportHistoryDataSource`, the filing history under the reporter's own keys in the shared
+  settings file, as `IssueReportHistory` and `FiledIssueReport`.
 - `IssueReporterRepository` and its default implementation, `IssueReportRejectedException`, the
   device-info provider contract, the GitHub remote source, the local device source, the request DTO,
   and its mapper.
@@ -67,7 +69,7 @@ flowchart TD
     Validate -->|field errors| Form
     Validate -->|valid| History[IssueReportHistoryRepository]
     History -->|cooldown or duplicate| VM
-    History --> Store[Hashes and times in the app DataStore]
+    History --> Store[IssueReportHistoryDataSource: hashes and times]
     VM -->|sendReport, then recordSubmission| Repo
     Repo --> Remote[GitHub remote data source in networkCall]
     Remote --> DTO[GitHub issue request DTO]

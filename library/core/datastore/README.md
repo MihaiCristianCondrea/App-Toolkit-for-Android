@@ -10,9 +10,9 @@ Capability-specific sources live with their owning features or integrations.
 - The single `settings` Preferences DataStore instance, exposed by `Context.commonDataStore`.
 - Its existing migrations and corruption handler. Corrupt preferences are replaced with empty
   preferences, retaining the existing reset-to-default behavior.
-- Shared theme, seasonal-theme, display, consent, diagnostics, app-state and favorites sources.
-- `CommonDataStore`, the adapter for those shared sources.
+- The theme, seasonal-theme and display sources, which several modules read.
 - Theme, display and seasonal-theme repository implementations and bindings.
+- `startupValueFlow`, which maps the stored startup route through a caller-supplied function.
 - Storage error translation through `storageCall` and `toStorageException`.
 - The `DataStore<Preferences>` Koin binding consumed by feature-owned sources.
 
@@ -21,6 +21,9 @@ Capability-specific sources live with their owning features or integrations.
 - Ads sources and their eagerly shared enablement state, owned by `:library:integration:ads`.
 - Review sources, owned by `:library:integration:review`.
 - Onboarding and changelog sources, owned by their respective feature modules.
+- Consent and usage-diagnostics sources, owned by `:library:integration:consent`.
+- Issue report history, owned by `:library:feature:issuereporter`.
+- An app's own preferences, such as the sample's favorites and showcase flag, owned by the app.
 - Compose collection and rendering, owned by the design system and UI modules.
 
 ## Depends on
@@ -40,15 +43,17 @@ instance from the graph.
 - Shared appearance remains in core because onboarding, About, design-system UI and theme settings
   need it without sibling feature dependencies.
 - Consent and diagnostics retain one shared implementation because their keys overlap and bulk
-  consent writes must remain atomic. Integration code cannot depend on the diagnostics feature.
-- Favorites and app-state preferences remain shared APIs; they are not owned by the sample app.
+  consent writes must remain atomic. It lives in `:library:integration:consent`, which the
+  diagnostics feature already depends on; integration code cannot depend on the feature.
+- A preference stays here only when more than one module reads it. One owner keeps its source,
+  with its keys, in its own `data/local`.
 - Repositories expose application data to UI. UI must not read sources directly.
 - `SeasonalThemeRepository` owns holiday palette application and restoration across the shared
   theme and seasonal sources. Existing snapshots, occurrence keys and weather-effect values persist.
 
 ## Public contracts
 
-- `commonDataStore`, `CommonDataStore` and `dataStoreModule`.
+- `commonDataStore` and `dataStoreModule`.
 - Shared preference-source interfaces, and theme, seasonal-theme and display repositories.
 - The graph's `DataStore<Preferences>` binding for sources owned by other modules.
 - `startupValueFlow` maps stored startup identifiers through a caller-supplied function. The caller
@@ -61,11 +66,11 @@ Never create another DataStore instance pointing to that file.
 
 ## Migration notes
 
-Ads, review, onboarding and changelog methods and source properties are removed from
-`CommonDataStore`. Use the owning sources from repositories, and use repository contracts from UI.
-`CommonDataStore` no longer takes dispatchers or an ads default and has no `close()` method.
-Its removed `CommonDataStoreCore` lifecycle contract is no longer needed. The ads source owns its
-collector, and its Koin binding closes it when the graph closes.
+`CommonDataStore` is removed. Ask the graph for `DataStore<Preferences>` and keep a source over it
+for your own keys, or use the owning module's repository: `ThemePreferencesRepository`,
+`DisplayPreferencesRepository`, `AdsSettingsRepository`, `OnboardingRepository`. The ads source
+owns its collector, and its Koin binding closes it when the graph closes. `startupValueFlow` is an
+extension of `DisplayPreferencesRepository` in `core.datastore.utils.extensions`.
 
 `AdsSettingsRepository` and `OnboardingRepository` contracts now live in
 `core.common.data.repositories`. Their implementations remain in the owning integration or feature.

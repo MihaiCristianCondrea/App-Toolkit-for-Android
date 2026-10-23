@@ -15,17 +15,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.utils
-
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
-
-import androidx.compose.runtime.Composable
-import org.koin.compose.koinInject
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models
 
 /**
- * Returns the process-wide [CommonDataStore], remembered by the current composition.
+ * The stored issue report history: the time of the last filed report, if any, and the reports
+ * that can still refuse a duplicate.
  */
-@Composable
-fun rememberCommonDataStore(): CommonDataStore {
-    return koinInject()
-}
+data class IssueReportHistory(
+    val lastSubmittedAt: Long? = null,
+    val reports: List<FiledIssueReport> = emptyList(),
+)

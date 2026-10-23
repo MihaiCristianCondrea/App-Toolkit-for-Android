@@ -48,7 +48,7 @@ fun adsIntegrationModule(): Module = module {
     }
     single<AdsSettingsRepository> {
         DefaultAdsSettingsRepository(
-            dataStore = get(),
+            preferences = get(),
             diagnostics = get(),
         )
     }

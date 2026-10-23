@@ -34,31 +34,31 @@ import kotlinx.coroutines.flow.onStart
  * eagerly started [adsEnabled], so a read failure reaches the caller as a [StorageException].
  */
 class DefaultAdsSettingsRepository(
-    private val dataStore: AdsPreferencesDataSource,
+    private val preferences: AdsPreferencesDataSource,
     private val diagnostics: DiagnosticsReporter,
 ) : AdsSettingsRepository {
-    override val adsEnabled: StateFlow<Boolean> get() = dataStore.adsEnabled
+    override val adsEnabled: StateFlow<Boolean> get() = preferences.adsEnabled
 
     override fun observeAdsEnabled(): Flow<Boolean> =
-        dataStore.ads(default = dataStore.defaultAdsEnabled)
+        preferences.ads(default = preferences.defaultAdsEnabled)
             .onStart {
                 diagnostics.logBreadcrumb(
                     message = "Ads settings observe",
-                    attributes = mapOf("defaultAdsEnabled" to dataStore.defaultAdsEnabled.toString()),
+                    attributes = mapOf("defaultAdsEnabled" to preferences.defaultAdsEnabled.toString()),
                 )
             }
             .asStorageFlow()
 
-    override fun observeReduceAds(): Flow<Boolean> = dataStore.reduceAds.asStorageFlow()
+    override fun observeReduceAds(): Flow<Boolean> = preferences.reduceAds.asStorageFlow()
 
     override suspend fun setAdsEnabled(enabled: Boolean) =
         persistPreference(breadcrumb = "Ads settings updated", enabled = enabled) {
-            dataStore.saveAds(isChecked = enabled)
+            preferences.saveAds(isChecked = enabled)
         }
 
     override suspend fun setReduceAds(enabled: Boolean) =
         persistPreference(breadcrumb = "Reduce ads setting updated", enabled = enabled) {
-            dataStore.saveReduceAds(isChecked = enabled)
+            preferences.saveReduceAds(isChecked = enabled)
         }
 
     private suspend fun persistPreference(

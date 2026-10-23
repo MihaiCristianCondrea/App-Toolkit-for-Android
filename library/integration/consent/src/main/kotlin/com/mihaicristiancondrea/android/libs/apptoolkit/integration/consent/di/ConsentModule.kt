@@ -17,6 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.di
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.local.ConsentPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.local.DefaultUsageAndDiagnosticsPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.local.UsageAndDiagnosticsPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.remote.ConsentRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.remote.UmpConsentRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
@@ -24,8 +27,17 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-/** Binds consent persistence coordination and the UMP remote source. Requires foundation providers. */
+/**
+ * Binds the stored consent choices, consent persistence coordination and the UMP remote source.
+ * Requires foundation providers.
+ *
+ * One source holds the choices: the consent flow reads them through [ConsentPreferencesDataSource],
+ * and the diagnostics settings write them through [UsageAndDiagnosticsPreferencesDataSource].
+ */
 fun consentModule(): Module = module {
+    single { DefaultUsageAndDiagnosticsPreferencesDataSource(dataStore = get()) }
+    single<ConsentPreferencesDataSource> { get<DefaultUsageAndDiagnosticsPreferencesDataSource>() }
+    single<UsageAndDiagnosticsPreferencesDataSource> { get<DefaultUsageAndDiagnosticsPreferencesDataSource>() }
     single<ConsentRemoteDataSource> { UmpConsentRemoteDataSource(adMobAppIdDataSource = get()) }
     single<ConsentRepository> {
         DefaultConsentRepository(

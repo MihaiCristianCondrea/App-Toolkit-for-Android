@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation
 
 import android.content.Intent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DisplayPreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchContext
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.unregisteredDestinations
@@ -27,7 +27,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.di.adva
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.di.displaySettingsModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.di.privacyModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.di.themeSettingsModule
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.startupValueFlow
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.utils.extensions.startupValueFlow
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.DrawerEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
@@ -90,8 +90,8 @@ class AppGraphTest {
     @Test
     fun `the stored start page maps to its tab`() = runTest {
         suspend fun startFor(stored: String): Any {
-            val dataStore = mockk<CommonDataStore>()
-            every { dataStore.getStartupPage(default = ToolkitTilesRoute.ROUTE_ID) } returns flowOf(stored)
+            val dataStore = mockk<DisplayPreferencesRepository>()
+            every { dataStore.startupPage(default = ToolkitTilesRoute.ROUTE_ID) } returns flowOf(stored)
             return dataStore.startupValueFlow(ToolkitTilesRoute.ROUTE_ID, ::startKeyFor).first()
         }
 

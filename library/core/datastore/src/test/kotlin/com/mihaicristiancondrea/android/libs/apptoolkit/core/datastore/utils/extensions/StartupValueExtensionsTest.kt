@@ -15,9 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.utils.extensions
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DisplayPreferencesRepository
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
@@ -29,8 +29,8 @@ import kotlin.test.assertEquals
 class StartupValueExtensionsTest {
     @Test
     fun mapsDefaultsAndLegacyRoutesAndDeduplicatesMappedValues() = runTest {
-        val store = mockk<CommonDataStore>()
-        every { store.getStartupPage(default = "home") } returns
+        val store = mockk<DisplayPreferencesRepository>()
+        every { store.startupPage(default = "home") } returns
             flowOf("", " ", "home", "apps", "apps", "legacy", "unknown", "apps")
         val received = mutableListOf<String>()
         val values = store.startupValueFlow(defaultRoute = "home") { route ->

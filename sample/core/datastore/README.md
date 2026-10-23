@@ -7,18 +7,20 @@ stores.
 
 ## Owns
 
-- `DataStoreInterface` and its implementation, covering the components-showcase unlock flag,
-  favorites, and the host's startup destination.
+- `AppPreferencesDataSource` and `DefaultAppPreferencesDataSource`, covering the components-showcase
+  unlock flag, which two sample features share, and the host's startup state and destination.
 
 ## Does not own
 
 - Toolkit preferences, owned by their shared core, feature or integration modules.
 - Any decision about what the stored values mean; that belongs to the repositories that read them.
+- Favorites, owned by `:sample:feature:apps`, the only feature that reads them.
 
 ## Depends on
 
 - [`:library:core:datastore`](../../../library/core/datastore/README.md) for shared preferences.
-- Core common's `OnboardingRepository` contract for startup completion, with no feature dependency.
+- Core common's `OnboardingRepository` contract for startup completion, and core DataStore's
+  `DisplayPreferencesRepository` for the stored start page, with no feature dependency.
 - [`:library:navigation`](../../../library/navigation/README.md) for Navigation 3's `NavKey`, the
   type the stored start page maps to. Startup projection uses core DataStore directly; this module
   has no direct core:ui dependency.
@@ -31,22 +33,21 @@ stores.
 
 ```mermaid
 flowchart TD
-    Repos[Host repositories] --> Contract[DataStoreInterface]
+    Repos[Host repositories] --> Contract[AppPreferencesDataSource]
     App[Application startup] --> Contract
-    Contract --> Adapter[Sample DataStore adapter]
-    Adapter --> Common[Toolkit CommonDataStore]
-    Common --> Store["shared settings Preferences DataStore"]
-    Store -->|startup / unlock / favorites Flow| Adapter
-    Adapter -->|typed values and NavKey mapping| Contract
+    Contract --> Source[DefaultAppPreferencesDataSource]
+    Source -->|showcase key| Store["shared settings DataStore&lt;Preferences&gt;"]
+    Source -->|start page| Display[DisplayPreferencesRepository]
+    Source -->|completion| Onboarding[OnboardingRepository]
+    Source -->|typed values and NavKey mapping| Contract
     Contract --> Repos
     Repos -->|suspend mutations| Contract
-    Contract -->|delegate edit| Common
 ```
 
 ## Architectural decisions
 
-- The sample reuses the toolkit's single preferences file and exposes only host-required values
-  through `DataStoreInterface`; feature repositories do not depend on `CommonDataStore` directly.
+- The sample keeps its own keys in the toolkit's single preferences file, through the graph's
+  `DataStore<Preferences>`, and exposes them through `AppPreferencesDataSource`.
 - Persisted routes remain strings at the storage boundary and are mapped to `NavKey` values by
   a caller-supplied function, keeping host route knowledge out of the toolkit DataStore.
 - The contract groups sample-wide preference access because there is one implementation and one
@@ -57,7 +58,7 @@ mapping; `:sample:app`'s `startKeyFor` maps each stored value to a tab.
 
 ## Public contracts
 
-- `DataStoreInterface`.
+- `AppPreferencesDataSource`.
 
 ## Internal implementations
 
@@ -65,8 +66,4 @@ mapping; `:sample:app`'s `startKeyFor` maps each stored value to a tab.
 
 ## Current risks
 
-`DataStoreTest` is `@Disabled`. It needs Robolectric's runner for `ApplicationProvider`, and this
-build runs the JUnit platform with no vintage engine, so `@RunWith` is never honoured, the test has
-never executed. It was silently skipped while the sample was one module and only surfaced when it
-became this module's only test. Re-enabling it needs either a Robolectric JUnit 5 integration or a
-constructor that takes the DataStore file path so no Android context is required.
+The showcase key shares the settings file with the toolkit's keys; keep its name stable.

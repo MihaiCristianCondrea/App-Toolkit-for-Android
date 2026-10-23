@@ -15,17 +15,27 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local
+package com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local
 
+import androidx.navigation3.runtime.NavKey
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Persisted set of favorited application package names.
+ * The sample's own preferences, kept with its own keys in the Toolkit's shared settings file, and
+ * the startup state the main activity reads before the first frame.
  */
-interface FavoritesPreferencesDataSource {
+interface AppPreferencesDataSource {
 
-    val favoriteApps: Flow<Set<String>>
+    /** Emits true until onboarding is completed. */
+    val startup: Flow<Boolean>
 
-    /** Adds the package name when absent, removes it when present. */
-    suspend fun toggleFavoriteApp(packageName: String)
+    val componentsShowcaseUnlocked: Flow<Boolean>
+
+    /** The stored startup route mapped to a key, falling back to [defaultRoute]. */
+    fun <T : NavKey> startupDestinationFlow(
+        defaultRoute: String,
+        mapToKey: (String) -> T,
+    ): Flow<T>
+
+    suspend fun saveComponentsShowcaseUnlocked(isUnlocked: Boolean)
 }

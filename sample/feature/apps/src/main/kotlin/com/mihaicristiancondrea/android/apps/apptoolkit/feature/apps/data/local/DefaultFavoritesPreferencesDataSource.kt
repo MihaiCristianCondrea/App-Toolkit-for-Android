@@ -15,37 +15,36 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local
+package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local
 
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringSetPreferencesKey
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
-/** Favorited package names stored in the shared `settings` Preferences DataStore. */
+/** Keeps the favorites in [dataStore] under the apps list's own key. */
 class DefaultFavoritesPreferencesDataSource(
     private val dataStore: DataStore<Preferences>,
 ) : FavoritesPreferencesDataSource {
 
-    private val favoriteAppsKey =
-        stringSetPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_FAVORITE_APPS)
-
-    override val favoriteApps: Flow<Set<String>> = dataStore.data.map { preferences: Preferences ->
-        preferences[favoriteAppsKey] ?: emptySet()
-    }.distinctUntilChanged()
+    override val favoriteApps: Flow<Set<String>> = dataStore.data
+        .map { preferences -> preferences[Keys.favoriteApps].orEmpty() }
+        .distinctUntilChanged()
 
     override suspend fun toggleFavoriteApp(packageName: String) {
-        dataStore.edit { preferences: MutablePreferences ->
-            val current = preferences[favoriteAppsKey]?.toMutableSet() ?: mutableSetOf()
+        dataStore.edit { preferences ->
+            val current: MutableSet<String> = preferences[Keys.favoriteApps]?.toMutableSet() ?: mutableSetOf()
             if (!current.add(packageName)) {
                 current.remove(packageName)
             }
-            preferences[favoriteAppsKey] = current
+            preferences[Keys.favoriteApps] = current
         }
+    }
+
+    private object Keys {
+        val favoriteApps = stringSetPreferencesKey("favorite_apps")
     }
 }

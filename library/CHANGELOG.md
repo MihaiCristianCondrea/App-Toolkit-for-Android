@@ -2,19 +2,6 @@
 
 ---
 
-# Unreleased
-
-### Changed
-
-- Preference sources for ads, review, onboarding and changelog now belong to their owning modules.
-  Custom graphs must include those modules and update source imports. The stored settings file,
-  keys and defaults are unchanged.
-- `AdsSettingsRepository` and `OnboardingRepository` contracts move to core common. The moved
-  capability delegates and lifecycle hooks are removed from `CommonDataStore`. Ad initialization
-  and design-system UI use repository bindings. See the 3.0.0 migration guide for constructor changes.
-
----
-
 # October 23, 2026
 
 **Version:** `3.0.0-pre27`
@@ -57,10 +44,28 @@
   `core.common.data.models`; `core.common.utils.platform` is `core.common.utils`; the seasonal
   theme overlay is under `feature.theme.ui.features.seasonal`; shake detection is in
   `feature.issuereporter.ui.utils`. Only imports change; see the migration guide.
+- Each preference belongs to the module that reads it, over the one settings file, with the same
+  keys and defaults. Ads, review, onboarding and changelog keep their sources in their modules;
+  consent and usage diagnostics in `:library:integration:consent`; the issue reporter's history
+  in `IssueReportHistoryDataSource`. Theme, seasonal themes and display stay in
+  `:library:core:datastore`, which several modules read. Custom graphs must include the owning
+  modules.
+- `dataStoreModule` binds the settings file as `DataStore<Preferences>`, which every module's
+  source receives. `AdsSettingsRepository` and `OnboardingRepository` contracts move to core
+  common, and ad initialization and the design system read repositories.
+- `startupValueFlow` extends `DisplayPreferencesRepository`, in `core.datastore.utils.extensions`.
+- Repositories take their preference source as `preferences`: `DefaultAdsSettingsRepository`,
+  `DefaultReviewRepository`, `DefaultOnboardingRepository` and
+  `DefaultIssueReportHistoryRepository`.
 
 ### Removed
 
 - `PermissionsHelper`, which nothing called. Request permissions with the Activity Result API.
+- `CommonDataStore`, `CommonDataStoreCore` and `rememberCommonDataStore`. Read a module's
+  repository, or keep your own keys in a source over `DataStore<Preferences>`; the migration guide
+  maps every former member.
+- The app-state and favorites preferences. `lastUsed` and `settingsInteracted` had no reader; the
+  sample keeps favorites and the components showcase flag in its own sources, under the same keys.
 
 ---
 

@@ -15,25 +15,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.local
 
-import kotlinx.coroutines.flow.Flow
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.IssueReportHistory
 
-/**
- * One-shot app-state flags and timestamps that do not belong to a single feature.
- */
-interface AppStatePreferencesDataSource {
+/** The issue reporter's own keys in the shared settings file. */
+interface IssueReportHistoryDataSource {
 
-    /** Emits the last-used timestamp, or 0 when the app has never recorded one. */
-    val lastUsed: Flow<Long>
+    /** The stored history, or an empty one when the file cannot be read. */
+    suspend fun read(): IssueReportHistory
 
-    val settingsInteracted: Flow<Boolean>
-
-    val componentsShowcaseUnlocked: Flow<Boolean>
-
-    suspend fun saveLastUsed(timestamp: Long)
-
-    suspend fun markSettingsInteracted()
-
-    suspend fun saveComponentsShowcaseUnlocked(isUnlocked: Boolean)
+    /**
+     * Replaces the history with what [transform] makes of the stored one, in one transaction.
+     *
+     * @throws java.io.IOException when the file cannot be written.
+     */
+    suspend fun update(transform: (IssueReportHistory) -> IssueReportHistory)
 }

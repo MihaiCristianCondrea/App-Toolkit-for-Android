@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.views
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStoreInterface
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.AppPreferencesDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.data.repositories.ShowcaseUnlockRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
@@ -40,7 +40,7 @@ import org.junit.jupiter.api.assertThrows
 
 class ShowcaseUnlockReportingTest {
 
-    private val dataStore = mockk<DataStoreInterface>()
+    private val dataStore = mockk<AppPreferencesDataSource>()
     private val unlocked = MutableStateFlow(false)
     private val repository = ShowcaseUnlockRepository(
         dataStore = dataStore,

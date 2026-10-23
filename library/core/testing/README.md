@@ -8,6 +8,8 @@ on production runtime classpaths.
 ## Owns
 
 - `FakeAdsSettingsRepository`, in-memory settings for tests that render Toolkit UI.
+- `FakePreferencesDataStore`, an in-memory Preferences DataStore for testing the preference data
+  sources each module keeps over the shared settings file.
 - `TestDispatchers`, which maps every `DispatcherProvider` lane to one test dispatcher.
 - JUnit 5 extensions for installing standard or unconfined test dispatchers as `Dispatchers.Main`.
 - `FakeTelemetryRepository`, which records events, screen views, breadcrumbs, non-fatal reports
@@ -23,6 +25,7 @@ on production runtime classpaths.
 
 - [`:library:core:common`](../common/README.md) for `DispatcherProvider` and
   `TelemetryRepository`.
+- AndroidX DataStore Preferences, for `FakePreferencesDataStore`.
 - Coroutine-test and JUnit 5 APIs, exposed because consumers compile against these fixtures.
 
 ## Used by
@@ -55,6 +58,8 @@ flowchart LR
 ## Public contracts
 
 - `FakeAdsSettingsRepository`, in-memory settings for tests that render Toolkit UI.
+- `FakePreferencesDataStore`, an in-memory Preferences DataStore for testing the preference data
+  sources each module keeps over the shared settings file.
 - `TestDispatchers`, `StandardDispatcherExtension`, `UnconfinedDispatcherExtension`, and
   `FakeTelemetryRepository`.
 

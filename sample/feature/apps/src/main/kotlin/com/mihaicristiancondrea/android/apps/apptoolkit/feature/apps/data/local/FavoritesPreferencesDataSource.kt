@@ -15,22 +15,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local
+package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local
 
 import kotlinx.coroutines.flow.Flow
 
-/**
- * Abstraction over persisted consent preferences used by the consent feature.
- */
-interface ConsentPreferencesDataSource {
+/** The package names the person marked as favorites in the apps list. */
+interface FavoritesPreferencesDataSource {
 
-    fun usageAndDiagnostics(default: Boolean): Flow<Boolean>
+    val favoriteApps: Flow<Set<String>>
 
-    fun analyticsConsent(default: Boolean): Flow<Boolean>
-
-    fun adStorageConsent(default: Boolean): Flow<Boolean>
-
-    fun adUserDataConsent(default: Boolean): Flow<Boolean>
-
-    fun adPersonalizationConsent(default: Boolean): Flow<Boolean>
+    /** Adds [packageName] to the favorites, or removes it when it is one already. */
+    suspend fun toggleFavoriteApp(packageName: String)
 }

@@ -10,6 +10,8 @@ The developer's app catalogue: listing, details, favorites, and install state.
   keeps its Play Store fallback when a package is absent or cannot be launched.
 - `DeveloperAppsRepository`, `InstalledAppsRepository`, `FavoritesRepository` and their `Default`
   implementations.
+- `FavoritesPreferencesDataSource`, the favorited package names under the `favorite_apps` key of
+  the shared settings file.
 - `DeveloperAppsRemoteDataSource`, which owns Ktor requests and DTO decoding, and throws a
   `NetworkException` for an error status.
 - `DeveloperAppsLocalDataSource`, which persists the last successfully downloaded compact
@@ -57,7 +59,7 @@ flowchart TD
     VM --> Installed[InstalledAppsRepository]
     Installed --> Packages[PackageManager local source]
     VM --> Favorites[FavoritesRepository]
-    Favorites --> Store[DataStoreInterface]
+    Favorites --> Store[FavoritesPreferencesDataSource]
     VM -->|AppListUiState| Screen
     Screen --> Content[AppsListScreenContent: grid, ads, sheet]
     Content --> Actions[Launch app / store / share]

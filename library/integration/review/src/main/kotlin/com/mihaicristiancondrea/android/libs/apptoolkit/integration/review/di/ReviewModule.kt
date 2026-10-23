@@ -28,7 +28,7 @@ import org.koin.dsl.module
 
 val reviewModule: Module = module {
     single<ReviewPreferencesDataSource> { DefaultReviewPreferencesDataSource(dataStore = get()) }
-    single<ReviewRepository> { DefaultReviewRepository(dataStore = get(), dispatchers = get()) }
+    single<ReviewRepository> { DefaultReviewRepository(preferences = get(), dispatchers = get()) }
     single<RequestInAppReviewUseCase> { RequestInAppReviewUseCase(reviewRepository = get()) }
     single<ForceInAppReviewUseCase> { ForceInAppReviewUseCase(reviewRepository = get()) }
 }

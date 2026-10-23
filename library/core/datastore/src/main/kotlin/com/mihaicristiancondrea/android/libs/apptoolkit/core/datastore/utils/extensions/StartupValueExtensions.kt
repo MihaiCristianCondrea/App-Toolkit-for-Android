@@ -15,9 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.utils.extensions
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DisplayPreferencesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -28,9 +28,9 @@ import kotlinx.coroutines.flow.map
  * Blank routes use [defaultRoute]; callers decide how to handle unknown or legacy routes.
  * Consecutive equal mapped values are emitted only once.
  */
-fun <T> CommonDataStore.startupValueFlow(
+fun <T> DisplayPreferencesRepository.startupValueFlow(
     defaultRoute: String,
     mapToValue: (String) -> T,
-): Flow<T> = getStartupPage(default = defaultRoute)
+): Flow<T> = startupPage(default = defaultRoute)
     .map { route -> mapToValue(route.ifBlank { defaultRoute }) }
     .distinctUntilChanged()

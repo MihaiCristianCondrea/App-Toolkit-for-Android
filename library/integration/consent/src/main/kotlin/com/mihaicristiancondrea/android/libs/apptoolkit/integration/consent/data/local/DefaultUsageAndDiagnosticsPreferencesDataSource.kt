@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local
+package com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.local
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.MutablePreferences

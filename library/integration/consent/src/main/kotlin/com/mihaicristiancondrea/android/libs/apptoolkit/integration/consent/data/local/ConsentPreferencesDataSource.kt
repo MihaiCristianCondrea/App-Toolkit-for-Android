@@ -15,26 +15,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local
+package com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.local
 
-import androidx.navigation3.runtime.NavKey
 import kotlinx.coroutines.flow.Flow
 
 /**
- * App-owned datastore contract consumed by host app data/domain layers.
- *
- * This boundary prevents app features from depending on the shared [CommonDataStore] concrete type.
+ * Abstraction over persisted consent preferences used by the consent feature.
  */
-interface DataStoreInterface {
-    val startup: Flow<Boolean>
-    val componentsShowcaseUnlocked: Flow<Boolean>
-    val favoriteApps: Flow<Set<String>>
+interface ConsentPreferencesDataSource {
 
-    fun <T : NavKey> startupDestinationFlow(
-        defaultRoute: String,
-        mapToKey: (String) -> T
-    ): Flow<T>
+    fun usageAndDiagnostics(default: Boolean): Flow<Boolean>
 
-    suspend fun saveComponentsShowcaseUnlocked(isUnlocked: Boolean)
-    suspend fun toggleFavoriteApp(packageName: String)
+    fun analyticsConsent(default: Boolean): Flow<Boolean>
+
+    fun adStorageConsent(default: Boolean): Flow<Boolean>
+
+    fun adUserDataConsent(default: Boolean): Flow<Boolean>
+
+    fun adPersonalizationConsent(default: Boolean): Flow<Boolean>
 }

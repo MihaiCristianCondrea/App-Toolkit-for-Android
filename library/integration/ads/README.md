@@ -43,7 +43,7 @@ Owns ad enablement settings and Google Mobile Ads integration UI used by AppTool
 flowchart TD
     Settings[AdsSettingsScreen] --> VM[AdsSettingsViewModel]
     VM --> Repo[AdsSettingsRepository]
-    Repo -->|persist display and reduce settings| Store[CommonDataStore ad preferences]
+    Repo -->|persist display and reduce settings| Store[AdsPreferencesDataSource]
     Repo -->|apply privacy choice| Consent[ConsentRepository]
     Store --> Manager[AppOpenAdController]
     Manifest[Host manifest AdMob application ID] --> Id[AdMobAppIdDataSource]

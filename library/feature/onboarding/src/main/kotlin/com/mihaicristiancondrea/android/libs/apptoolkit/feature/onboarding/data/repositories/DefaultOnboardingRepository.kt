@@ -25,15 +25,15 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 class DefaultOnboardingRepository(
-    private val dataStore: OnboardingPreferencesDataSource,
+    private val preferences: OnboardingPreferencesDataSource,
 ) : OnboardingRepository {
 
     override fun observeOnboardingCompletion(): Flow<Boolean> =
-        dataStore.startup
+        preferences.startup
             .map { isFirstTime -> !isFirstTime }
             .distinctUntilChanged()
 
     override suspend fun setOnboardingCompleted() {
-        storageCall { dataStore.saveStartup(isFirstTime = false) }
+        storageCall { preferences.saveStartup(isFirstTime = false) }
     }
 }

@@ -28,6 +28,6 @@ import org.koin.dsl.module
 
 val onboardingModule: Module = module {
     single<OnboardingPreferencesDataSource> { DefaultOnboardingPreferencesDataSource(dataStore = get()) }
-    single<OnboardingRepository> { DefaultOnboardingRepository(dataStore = get()) }
+    single<OnboardingRepository> { DefaultOnboardingRepository(preferences = get()) }
     viewModel { OnboardingThemeViewModel(preferences = get(), seasonal = get(), telemetryRepository = get()) }
 }

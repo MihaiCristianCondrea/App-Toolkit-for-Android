@@ -51,9 +51,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsCo
 /**
  * A Composable function that displays a banner ad from Google AdMob.
  *
- * This component handles the entire lifecycle of an `AdView`. It observes whether ads are
- * enabled (via a `CommonDataStore`) and only attempts to load an ad if they are. The banner's
- * visibility is animated, expanding when an ad is loaded and shrinking when it's hidden or fails
+ * This component handles the entire lifecycle of an `AdView`. It reads whether ads are enabled
+ * from [rememberAdsEnabled] and only attempts to load an ad if they are. The banner's visibility
+ * is animated, expanding when an ad is loaded and shrinking when it's hidden or fails
  * to load.
  *
  * The `AdView` is created with the composition's context, which is normally the Activity. It is

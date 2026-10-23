@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.data.repositories
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStoreInterface
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.AppPreferencesDataSource
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.Flow
  * feature observes its own availability without owning the surface that reveals it.
  */
 class ComponentsShowcaseRepository(
-    dataStore: DataStoreInterface,
+    dataStore: AppPreferencesDataSource,
 ) {
     val isUnlocked: Flow<Boolean> = dataStore.componentsShowcaseUnlocked
 }

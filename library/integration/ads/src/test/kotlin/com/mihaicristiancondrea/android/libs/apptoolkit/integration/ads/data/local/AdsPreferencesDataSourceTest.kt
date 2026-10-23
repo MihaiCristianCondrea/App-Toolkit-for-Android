@@ -17,17 +17,12 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.local
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.emptyPreferences
 import app.cash.turbine.test
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import kotlinx.coroutines.CoroutineDispatcher
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakePreferencesDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestCoroutineScheduler
@@ -72,33 +67,15 @@ class AdsPreferencesDataSourceTest {
     }
 
     private fun createDataStore(scheduler: TestCoroutineScheduler): DefaultAdsPreferencesDataSource =
-        DefaultAdsPreferencesDataSource(dataStore = FakePreferencesDataStore(), dispatchers = TestDispatcherProvider(StandardTestDispatcher(scheduler)), defaultAdsEnabled = true)
+        DefaultAdsPreferencesDataSource(
+            dataStore = FakePreferencesDataStore(),
+            dispatchers = TestDispatchers(StandardTestDispatcher(scheduler)),
+            defaultAdsEnabled = true,
+        )
 
     private fun DefaultAdsPreferencesDataSource.extractScope(): CoroutineScope {
         val field = DefaultAdsPreferencesDataSource::class.java.getDeclaredField("scope")
         field.isAccessible = true
         return field.get(this) as CoroutineScope
     }
-
-    private class FakePreferencesDataStore : DataStore<Preferences> {
-        private val state = MutableStateFlow(emptyPreferences())
-
-        override val data: Flow<Preferences> = state
-
-        override suspend fun updateData(transform: suspend (t: Preferences) -> Preferences): Preferences {
-            val updated = transform(state.value)
-            state.value = updated
-            return updated
-        }
-    }
-
-    private class TestDispatcherProvider(
-        private val dispatcher: CoroutineDispatcher,
-    ) : DispatcherProvider {
-        override val main: CoroutineDispatcher get() = dispatcher
-        override val io: CoroutineDispatcher get() = dispatcher
-        override val default: CoroutineDispatcher get() = dispatcher
-        override val unconfined: CoroutineDispatcher get() = dispatcher
-    }
-
 }
