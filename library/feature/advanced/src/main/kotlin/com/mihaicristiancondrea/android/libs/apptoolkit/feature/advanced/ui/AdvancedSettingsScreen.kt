@@ -17,6 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics.ADVANCED_SETTINGS_SCREEN_NAME
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics.AdvancedPreferenceKeys
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics.advancedPreferenceTapEvent
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -31,11 +35,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
@@ -52,16 +53,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.Develo
 import org.koin.compose.getKoin
 import org.koin.compose.viewmodel.koinViewModel
 
-private const val ADVANCED_SETTINGS_SCREEN_NAME = "AdvancedSettings"
+
 private const val ADVANCED_SETTINGS_SCREEN_CLASS = "AdvancedSettingsScreen"
 private val ADVANCED_SETTINGS_SCREEN: TrackedScreen =
     TrackedScreen(name = ADVANCED_SETTINGS_SCREEN_NAME, className = ADVANCED_SETTINGS_SCREEN_CLASS)
 
-private object AdvancedPreferenceKeys {
-    const val BUG_REPORT: String = "bug_report"
-    const val CLEAR_CACHE: String = "clear_cache"
-    const val DEVELOPER_OPTIONS: String = "developer_options"
-}
+
 
 /**
  * The advanced settings page: the bug report, clearing the cache, and the developer options once
@@ -182,15 +179,7 @@ internal fun AdvancedSettingsScreenContent(
     }
 }
 
-private fun advancedPreferenceTapEvent(preferenceKey: String): Ga4EventData {
-    return Ga4EventData(
-        name = SettingsAnalytics.Events.PREFERENCE_VIEW,
-        params = mapOf(
-            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(ADVANCED_SETTINGS_SCREEN_NAME),
-            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
-        ),
-    )
-}
+
 
 @Preview(showBackground = true)
 @Composable

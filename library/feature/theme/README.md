@@ -8,6 +8,7 @@ screen's easter egg unlocks.
 
 ## Owns
 
+- Feature event builders and their bounded keys in `ui/analytics`; screens only report events.
 - `ThemeSettingsScreen`, `ThemeSettingsViewModel`, `ThemeSettingsUiState` (whose `preferences` is a
   `Loadable`) and `ThemeSettingsEvent`.
 - `ThemeSettingsScreenContent`, the stateless page with its loading and failure states, in

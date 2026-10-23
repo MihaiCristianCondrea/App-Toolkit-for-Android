@@ -20,8 +20,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.ma
 import android.content.Context
 import android.util.Log
 import com.google.android.libraries.ads.mobile.sdk.initialization.InitializationConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.AdMobAppIdProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.AdMobAppIdDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import io.mockk.every
@@ -45,7 +45,7 @@ import org.junit.jupiter.api.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class AdsCoreManagerInitializationTest {
 
-    private val adMobAppIdProvider = AdMobAppIdProvider { "ca-app-pub-1234567890123456~1234567890" }
+    private val adMobAppIdDataSource = AdMobAppIdDataSource { "ca-app-pub-1234567890123456~1234567890" }
 
     /** Counts initializations instead of touching the real SDK. */
     private class RecordingAdsSdkInitializer : AdsSdkInitializer {
@@ -149,7 +149,7 @@ class AdsCoreManagerInitializationTest {
         every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
         val manager = managerWith(
             dataStore = dataStore,
-            adMobAppIdProvider = { null },
+            adMobAppIdDataSource = { null },
         )
 
         manager.initializeAds(appOpenUnitId = "unit")
@@ -159,7 +159,7 @@ class AdsCoreManagerInitializationTest {
 
     private fun managerWith(
         dataStore: CommonDataStore,
-        adMobAppIdProvider: AdMobAppIdProvider = this.adMobAppIdProvider,
+        adMobAppIdDataSource: AdMobAppIdDataSource = this.adMobAppIdDataSource,
     ): AdsCoreManager {
         val context = mockk<Context>()
         every { context.applicationContext } returns context
@@ -167,9 +167,9 @@ class AdsCoreManagerInitializationTest {
         setCommonDataStoreSingleton(instance = dataStore)
         return AdsCoreManager(
             context,
-            mockk<BuildInfoProvider>(),
+            mockk<BuildInfoRepository>(),
             TestDispatchers(UnconfinedTestDispatcher()),
-            adMobAppIdProvider,
+            adMobAppIdDataSource,
             initializer,
         )
     }

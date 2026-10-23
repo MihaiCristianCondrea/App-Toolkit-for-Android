@@ -33,9 +33,9 @@ fun adsIntegrationModule(): Module = module {
     single<AdsCoreManager> {
         AdsCoreManager(
             context = get(),
-            buildInfoProvider = get(),
+            buildInfoRepository = get(),
             dispatchers = get(),
-            adMobAppIdProvider = get(),
+            adMobAppIdDataSource = get(),
             dataStore = get(),
         )
     }

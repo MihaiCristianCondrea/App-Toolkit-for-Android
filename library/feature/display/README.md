@@ -9,6 +9,7 @@ it means something in the app. The shell's own variations are developer options,
 
 ## Owns
 
+- Feature event builders and their bounded keys in `ui/analytics`; screens only report events.
 - `DisplaySettingsScreen`, `DisplaySettingsViewModel`, `DisplaySettingsUiState` (whose `settings`
   is a `Loadable` of `DisplaySettings`) and `DisplaySettingsEvent`.
 - `DisplaySettingsScreenContent`, the stateless list with its loading and failure states.

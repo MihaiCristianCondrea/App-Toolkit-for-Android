@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
@@ -47,7 +47,7 @@ class ChangelogViewModelTest {
 
     private fun createViewModel(repository: ChangelogRepository): ChangelogViewModel =
         ChangelogViewModel(
-            getChangelogUseCase = GetChangelogUseCase(repository = repository, buildInfoProvider = BuildInfo),
+            getChangelogUseCase = GetChangelogUseCase(repository = repository, buildInfoRepository = BuildInfo),
             telemetryRepository = telemetryRepository,
         )
 
@@ -109,7 +109,7 @@ class ChangelogViewModelTest {
         assertEquals(Loadable.Ready("# 2.0.0\n- New"), viewModel.state.value.markdown)
     }
 
-    private object BuildInfo : BuildInfoProvider {
+    private object BuildInfo : BuildInfoRepository {
         override val appVersion: String = "2.0.0"
         override val appVersionCode: Int = 20
         override val packageName: String = "com.example.app"

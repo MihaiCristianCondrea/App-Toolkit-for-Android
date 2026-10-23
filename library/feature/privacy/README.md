@@ -7,6 +7,7 @@ and the strings that name them.
 
 ## Owns
 
+- Feature event builders and their bounded keys in `ui/analytics`; screens only report events.
 - `PrivacyScreen`, the data-driven privacy and legal preference list, which opens each row's link
   or page, and `PrivacyScreenContent`, the stateless list with its loading and failure states.
 - Its rows in the settings search, a `settingsSearchProvider` bound as `privacy`: permissions, ads

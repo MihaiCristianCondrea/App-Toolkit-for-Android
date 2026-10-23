@@ -6,6 +6,7 @@ Owns ad enablement settings and Google Mobile Ads integration UI used by AppTool
 
 ## Owns
 
+- Ads settings event builders and keys in `ui/analytics/AdsSettingsAnalytics.kt`.
 - `di.adsIntegrationModule()` binds the ads manager, settings repository, and ViewModel. The main toolkit
   module composes it; hosts supply their placement configuration and foundation providers.
 - Ads settings repository, ViewModel and screen, and `adsSettingsPage()`, the registration of
@@ -45,7 +46,7 @@ flowchart TD
     Repo -->|persist display and reduce settings| Store[CommonDataStore ad preferences]
     Repo -->|apply privacy choice| Consent[ConsentRepository]
     Store --> Manager[AdsCoreManager]
-    Manifest[Host manifest AdMob application ID] --> Id[AdMobAppIdProvider]
+    Manifest[Host manifest AdMob application ID] --> Id[AdMobAppIdDataSource]
     Id --> Manager
     Manager --> Gate{Enabled and valid ID?}
     Gate -->|no| Disabled[SDK remains not ready]
@@ -92,7 +93,7 @@ differently.
     android:value="@string/ad_mob_app_id" />
 ```
 
-`ManifestAdMobAppIdProvider` reads it from there and nowhere else, and `AdsCoreManager` refuses to
+`ManifestAdMobAppIdDataSource` reads it from there and nowhere else, and `AdsCoreManager` refuses to
 initialize the SDK without a valid one rather than falling back to a sample id. Declare the string
 in the **host**, never in a library module: a library-owned `ad_mob_app_id` is inherited by every
 consumer app that does not declare the same name, silently pointing that app's consent request and
@@ -446,7 +447,7 @@ callers want.
 On a debug build, `NativeAdSlot` draws `AdSlotDebugPlaceholder` where an empty slot would be: the
 slot name, whether the request came back without an ad or was never made, and the SDK's own words.
 Release renders nothing, exactly as before. The switch is `AdLoadReporter.showsDebugPlaceholder`,
-which reads `BuildInfoProvider.isDebugBuild`, so the placeholder cannot reach a release build.
+which reads `BuildInfoRepository.isDebugBuild`, so the placeholder cannot reach a release build.
 
 A host drawing its own ad view can use the same placeholder:
 

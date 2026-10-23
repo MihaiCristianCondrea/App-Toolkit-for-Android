@@ -25,8 +25,8 @@ import com.google.android.libraries.ads.mobile.sdk.appopen.AppOpenAdEventCallbac
 import com.google.android.libraries.ads.mobile.sdk.common.AdLoadCallback
 import com.google.android.libraries.ads.mobile.sdk.initialization.InitializationConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.utils.interfaces.OnShowAdCompleteListener
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.AdMobAppIdProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.AdMobAppIdDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import io.mockk.every
@@ -95,14 +95,14 @@ class TestAdsCoreManager {
      */
     private fun managerWith(
         context: Context,
-        provider: BuildInfoProvider,
-        adMobAppIdProvider: AdMobAppIdProvider = this.adMobAppIdProvider,
+        provider: BuildInfoRepository,
+        adMobAppIdDataSource: AdMobAppIdDataSource = this.adMobAppIdDataSource,
         dataStore: CommonDataStore = stubDataStore(adsEnabled = false),
     ): AdsCoreManager = AdsCoreManager(
         context = context,
-        buildInfoProvider = provider,
+        buildInfoRepository = provider,
         dispatchers = eagerDispatchers(),
-        adMobAppIdProvider = adMobAppIdProvider,
+        adMobAppIdDataSource = adMobAppIdDataSource,
         adsSdkInitializer = initializer,
         dataStore = dataStore,
     )
@@ -115,7 +115,7 @@ class TestAdsCoreManager {
     /**
      * Host-manifest AdMob ID fixture for manager initialization.
      */
-    private val adMobAppIdProvider = AdMobAppIdProvider { "ca-app-pub-1234567890123456~1234567890" }
+    private val adMobAppIdDataSource = AdMobAppIdDataSource { "ca-app-pub-1234567890123456~1234567890" }
     private val noopContinuation = object : Continuation<Unit> {
         override val context = EmptyCoroutineContext
         override fun resumeWith(result: Result<Unit>) {
@@ -128,7 +128,7 @@ class TestAdsCoreManager {
         println("🚀 [TEST] initializeAds triggers MobileAds")
         val context = mockk<Context>()
         every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoProvider>()
+        val provider = mockk<BuildInfoRepository>()
         val manager = managerWith(context, provider)
 
         val dataStore = mockk<CommonDataStore>()
@@ -149,8 +149,8 @@ class TestAdsCoreManager {
         println("🚀 [TEST] initializeAds skips MobileAds when the host declares no AdMob app id")
         val context = mockk<Context>()
         every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoProvider>()
-        val manager = managerWith(context, provider, adMobAppIdProvider = { null })
+        val provider = mockk<BuildInfoRepository>()
+        val manager = managerWith(context, provider, adMobAppIdDataSource = { null })
 
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
@@ -173,7 +173,7 @@ class TestAdsCoreManager {
         println("🚀 [TEST] showAdIfAvailable before init does nothing")
         val context = mockk<Context>()
         every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoProvider>()
+        val provider = mockk<BuildInfoRepository>()
         val manager = managerWith(context, provider)
         val activity = mockk<Activity>()
 
@@ -186,7 +186,7 @@ class TestAdsCoreManager {
         println("🚀 [TEST] loadAd does not load when already loading or available")
         val context = mockk<Context>()
         every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoProvider>()
+        val provider = mockk<BuildInfoRepository>()
         val manager = managerWith(context, provider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
@@ -232,7 +232,7 @@ class TestAdsCoreManager {
         println("🚀 [TEST] showAdIfAvailable loads when no ad")
         val context = mockk<Context>()
         every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoProvider>()
+        val provider = mockk<BuildInfoRepository>()
         val manager = managerWith(context, provider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
@@ -273,7 +273,7 @@ class TestAdsCoreManager {
         println("🚀 [TEST] callback dismiss reloads ad")
         val context = mockk<Context>(relaxed = true)
         every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoProvider>()
+        val provider = mockk<BuildInfoRepository>()
         val manager = managerWith(context, provider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
@@ -326,7 +326,7 @@ class TestAdsCoreManager {
         println("🚀 [TEST] ads disabled skips load and show")
         val context = mockk<Context>()
         every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoProvider>()
+        val provider = mockk<BuildInfoRepository>()
         val manager = managerWith(context, provider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(false)
@@ -351,7 +351,7 @@ class TestAdsCoreManager {
         println("🚀 [TEST] load failure resets loading flag")
         val context = mockk<Context>()
         every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoProvider>()
+        val provider = mockk<BuildInfoRepository>()
         val manager = managerWith(context, provider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
@@ -389,7 +389,7 @@ class TestAdsCoreManager {
         println("🚀 [TEST] showAdIfAvailable ignores when already showing")
         val context = mockk<Context>()
         every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoProvider>()
+        val provider = mockk<BuildInfoRepository>()
         val manager = managerWith(context, provider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
@@ -427,7 +427,7 @@ class TestAdsCoreManager {
         println("🚀 [TEST] concurrent load requests chain correctly")
         val context = mockk<Context>()
         every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoProvider>()
+        val provider = mockk<BuildInfoRepository>()
         val manager = managerWith(context, provider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
@@ -480,7 +480,7 @@ class TestAdsCoreManager {
         println("🚀 [TEST] loadAd propagates exceptions from AppOpenAd")
         val context = mockk<Context>()
         every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoProvider>()
+        val provider = mockk<BuildInfoRepository>()
         val manager = managerWith(context, provider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
@@ -513,7 +513,7 @@ class TestAdsCoreManager {
         println("🚀 [TEST] no app open ad is loaded while ads are disabled")
         val context = mockk<Context>()
         every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoProvider>()
+        val provider = mockk<BuildInfoRepository>()
         val manager = managerWith(context, provider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(false)
@@ -537,7 +537,7 @@ class TestAdsCoreManager {
         println("🚀 [TEST] an app open ad is loaded while ads are enabled")
         val context = mockk<Context>()
         every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoProvider>()
+        val provider = mockk<BuildInfoRepository>()
         val manager = managerWith(context, provider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
@@ -557,4 +557,3 @@ class TestAdsCoreManager {
     }
 
 }
-

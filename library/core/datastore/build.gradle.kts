@@ -19,7 +19,6 @@ import com.mihaicristiancondrea.android.apptoolkit.buildlogic.VersioningExtensio
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.compose)
     id("com.mihaicristiancondrea.android.apptoolkit.versioning")
     id("com.mihaicristiancondrea.android.apptoolkit.unit-test")
     id("com.mihaicristiancondrea.android.apptoolkit.jvm-target")
@@ -36,16 +35,10 @@ android {
     defaultConfig {
         minSdk = versioning.minSdk
     }
-
-    buildFeatures {
-        compose = true
-    }
 }
 
 dependencies {
     testImplementation(project(":library:core:testing"))
     api(project(":library:core:common"))
     api(libs.androidx.datastore.preferences)
-    api(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.koin.androidx.compose)
 }

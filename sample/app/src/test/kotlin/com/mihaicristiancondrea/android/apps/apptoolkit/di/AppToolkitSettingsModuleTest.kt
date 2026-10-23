@@ -18,12 +18,12 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.di
 
 import android.content.Context
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.about.ui.providers.AppAboutSettingsProvider
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.about.data.local.AppAboutDeviceInfoDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.display.ui.providers.AppDisplaySettingsProvider
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.providers.AppSettingsProvider
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.startup.ui.providers.AppStartupProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.AboutSettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.local.AboutDeviceInfoDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.providers.DisplaySettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.providers.PrivacySettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.SettingsProvider
@@ -72,14 +72,14 @@ class AppToolkitSettingsModuleTest {
      */
     @Test
     fun `resolves every toolkit settings extension point`() {
-        // Resolving `AboutSettingsProvider` is also what covers the build-config change: it takes
+        // Resolving `AboutDeviceInfoDataSource` is also what covers the build-config change: it takes
         // `hostBuildConfig` by constructor, so a graph that cannot supply one fails here. Its
         // `deviceInfo` output is not asserted, the getter reads `Build.SUPPORTED_ABIS`, which is
         // null off-device, and Robolectric would be a lot of machinery for a formatted string.
         val koin = koin()
         try {
             assertIs<AppSettingsProvider>(koin.get<SettingsProvider>())
-            assertIs<AppAboutSettingsProvider>(koin.get<AboutSettingsProvider>())
+            assertIs<AppAboutDeviceInfoDataSource>(koin.get<AboutDeviceInfoDataSource>())
             assertIs<AppDisplaySettingsProvider>(koin.get<DisplaySettingsProvider>())
             assertIs<AppStartupProvider>(koin.get<StartupProvider>())
             koin.get<PrivacySettingsProvider>()

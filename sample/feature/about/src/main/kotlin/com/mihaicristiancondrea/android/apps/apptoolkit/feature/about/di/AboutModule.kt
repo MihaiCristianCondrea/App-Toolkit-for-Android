@@ -17,14 +17,14 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.about.di
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.about.ui.providers.AppAboutSettingsProvider
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.about.data.local.AppAboutDeviceInfoDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.AboutSettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.local.AboutDeviceInfoDataSource
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
 fun aboutModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
-    single<AboutSettingsProvider> {
-        AppAboutSettingsProvider(context = get(), hostBuildConfig = hostBuildConfig)
+    single<AboutDeviceInfoDataSource> {
+        AppAboutDeviceInfoDataSource(context = get(), hostBuildConfig = hostBuildConfig)
     }
 }

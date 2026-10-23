@@ -144,7 +144,7 @@ flowchart TD
   lazily the first time it opens, as a `Loadable`: a failed capture shows its message in the panel
   and runs again the next time the panel opens.
 - The repository is the only data-layer entry point used by the ViewModel; the source-level
-  `DeviceInfoProvider` remains an internal replacement seam. The repository and the ViewModel take
+  `DeviceInfoDataSource` remains an internal replacement seam. The repository and the ViewModel take
   no dispatcher: Ktor suspends, and the device source moves its own platform reads to IO.
 - Plain-text rendering is an explicit mapper because a data class's generated `toString()` is not a
   user-facing or GitHub-report contract.
@@ -222,7 +222,7 @@ and unavailable versions still produce a null name and version code -1.
   constants.
 - `IssueReporterViewModel`, `IssueReporterUiState`, `IssueSubmissionState`, `IssueReporterEvent`
   and the domain models.
-- `DeviceInfoProvider` is the local data source's own contract, not a caller-facing one. Device
+- `DeviceInfoDataSource` is the local data source's own contract, not a caller-facing one. Device
   capture is reached through `IssueReporterRepository.captureDeviceInfo()`.
 
 ## Internal implementations
@@ -279,3 +279,7 @@ The move to `core.ui.screen` removed `IssueReporterContent`, `SendIssueReportUse
 return `IssueReportResult.Error`. `DefaultIssueReporterRepository` no longer takes a
 `DispatcherProvider`, and `IssueReporterViewModel` takes only the repository, the GitHub target,
 the token and `TelemetryRepository`.
+
+The device-capture contract is `data.local.DeviceInfoDataSource`, beside
+`DeviceInfoLocalDataSource`. It replaces the former `domain.providers.DeviceInfoProvider`;
+the repository remains the caller-facing entry point.

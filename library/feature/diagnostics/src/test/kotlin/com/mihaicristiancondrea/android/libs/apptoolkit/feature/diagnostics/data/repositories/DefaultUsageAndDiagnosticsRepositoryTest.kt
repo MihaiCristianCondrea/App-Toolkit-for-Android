@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.repositories
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.UsageAndDiagnosticsPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.models.UsageAndDiagnosticsSettings
@@ -71,7 +71,7 @@ private class FakeUsageAndDiagnosticsPreferencesDataSource :
     }
 }
 
-private class FakeBuildInfoProvider : BuildInfoProvider {
+private class FakeBuildInfoRepository : BuildInfoRepository {
     override val appVersion: String = ""
     override val appVersionCode: Int = 0
     override val packageName: String = ""
@@ -95,7 +95,7 @@ class DefaultUsageAndDiagnosticsRepositoryTest {
             val dataSource = FakeUsageAndDiagnosticsPreferencesDataSource()
             val repository = DefaultUsageAndDiagnosticsRepository(
                 dataSource = dataSource,
-                configProvider = FakeBuildInfoProvider(),
+                buildInfoRepository = FakeBuildInfoRepository(),
                 diagnostics = mockk<TelemetryRepository>(relaxed = true),
                 consentRepository = consentRepository,
             )
@@ -114,7 +114,7 @@ class DefaultUsageAndDiagnosticsRepositoryTest {
         runTest(dispatcherExtension.testDispatcher) {
             val repository = DefaultUsageAndDiagnosticsRepository(
                 dataSource = FakeUsageAndDiagnosticsPreferencesDataSource(),
-                configProvider = FakeBuildInfoProvider(),
+                buildInfoRepository = FakeBuildInfoRepository(),
                 diagnostics = mockk<TelemetryRepository>(relaxed = true),
                 consentRepository = consentRepository,
             )
@@ -143,5 +143,3 @@ class DefaultUsageAndDiagnosticsRepositoryTest {
             }
         }
 }
-
-

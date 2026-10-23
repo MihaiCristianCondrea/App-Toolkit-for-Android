@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.dat
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.ConsentPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
@@ -67,7 +67,7 @@ class DefaultConsentRepositoryTest {
     ): DefaultConsentRepository = DefaultConsentRepository(
         remote = remote,
         local = local,
-        configProvider = FakeBuildInfoProvider(isDebugBuild = isDebugBuild),
+        buildInfoRepository = FakeBuildInfoRepository(isDebugBuild = isDebugBuild),
         diagnostics = telemetryRepository,
         collection = telemetryRepository,
         requestScope = requestScope,
@@ -331,7 +331,7 @@ class DefaultConsentRepositoryTest {
             val repository = DefaultConsentRepository(
                 remote = CountingConsentRemoteDataSource(),
                 local = FakeConsentPreferencesDataSource(),
-                configProvider = FakeBuildInfoProvider(isDebugBuild = true),
+                buildInfoRepository = FakeBuildInfoRepository(isDebugBuild = true),
                 diagnostics = diagnostics,
                 collection = collection,
                 requestScope = backgroundScope,
@@ -462,9 +462,9 @@ private class FakeConsentPreferencesDataSource(
         readFailure?.let { failure -> flow { throw failure } } ?: flowOf(value)
 }
 
-private class FakeBuildInfoProvider(
+private class FakeBuildInfoRepository(
     override val isDebugBuild: Boolean,
-) : BuildInfoProvider {
+) : BuildInfoRepository {
     override val appVersion: String = "1.0.0-test"
     override val appVersionCode: Int = 1
     override val packageName: String = "com.mihaicristiancondrea.android.libs.apptoolkit.test"

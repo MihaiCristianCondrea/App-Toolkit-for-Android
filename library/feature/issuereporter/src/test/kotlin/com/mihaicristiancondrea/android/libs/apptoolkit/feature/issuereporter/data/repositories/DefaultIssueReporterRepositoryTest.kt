@@ -69,7 +69,7 @@ class DefaultIssueReporterRepositoryTest {
     private fun createRepository(handler: MockRequestHandler): IssueReporterRepository =
         DefaultIssueReporterRepository(
             remoteDataSource = IssueReporterRemoteDataSource(client = HttpClient(MockEngine(handler))),
-            deviceInfoProvider = { deviceInfo() },
+            deviceInfoDataSource = { deviceInfo() },
             diagnostics = FakeTelemetryRepository(),
         )
 

@@ -17,8 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.models
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellCapabilities
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.AccessoryMode
 
 /** A shell override the developer options offer, in the order the page shows them. */
 internal enum class DeveloperOption(val category: DeveloperCategory) {
@@ -38,41 +36,3 @@ internal enum class DeveloperOption(val category: DeveloperCategory) {
     EntranceReplay(DeveloperCategory.Motion),
     BottomAccessory(DeveloperCategory.Accessories),
 }
-
-/**
- * The overrides that act on something in this app. Unlike the display settings they count what a
- * forced layout can reach: [DeveloperOption.Layout] can force a rail or the phone's modal drawer
- * layout. Bottom bar options still require tabs that the host allows in that bar.
- */
-internal fun developerOptions(capabilities: ShellCapabilities): List<DeveloperOption> =
-    DeveloperOption.entries.filter { option ->
-        when (option) {
-            DeveloperOption.Layout,
-            DeveloperOption.NavigationTint -> capabilities.hasTabs
-
-            DeveloperOption.NavigationBarStyle,
-            DeveloperOption.HideBottomBarOnScroll -> capabilities.hasBottomNavigationTabs
-
-            DeveloperOption.TopBarStyle, DeveloperOption.HideTopBarOnScroll -> capabilities.hasShellTopBars
-            DeveloperOption.ContentWidth -> capabilities.hasContentWidthLimit
-            DeveloperOption.StartOverride -> capabilities.hasMultipleStartOptions
-            DeveloperOption.TabTransition -> capabilities.hasMultipleTabs
-            DeveloperOption.BackEdge -> capabilities.hasBackNavigation
-            DeveloperOption.AnimationSpeed,
-            DeveloperOption.EntranceStyle,
-            DeveloperOption.MotionTempo,
-            DeveloperOption.EntranceReplay -> true
-            DeveloperOption.BottomAccessory -> capabilities.hasAccessories
-        }
-    }
-
-/**
- * The accessory choices that mean something: all four with a banner and a player, and otherwise
- * only whether the one the app has is shown.
- */
-internal fun accessoryModes(capabilities: ShellCapabilities): List<AccessoryMode> =
-    if (capabilities.hasBanner && capabilities.hasPlayer) {
-        AccessoryMode.entries
-    } else {
-        listOf(AccessoryMode.AsDeclared, AccessoryMode.None)
-    }

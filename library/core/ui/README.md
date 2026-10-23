@@ -7,6 +7,8 @@ page frame, state handling, analytics hooks, and shared components.
 
 ## Owns
 
+- `utils.AppLauncher`, which uses `InstalledAppsRepository` to look up launcher intents, then
+  launches on the main dispatcher and owns the failure Toast. Package lookup remains in core common.
 - The screen contracts, in `screen`: `ScreenViewModel`, `LoggedScreenViewModel`, `Loadable`,
   `TrackedStatus`, `UiMessage`, `ScreenHost`, `ScreenStateHandler`, `ScreenStates`, `StateContent`
   and `MessageHost`. See

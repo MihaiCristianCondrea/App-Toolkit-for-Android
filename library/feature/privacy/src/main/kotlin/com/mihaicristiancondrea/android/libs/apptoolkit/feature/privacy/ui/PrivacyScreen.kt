@@ -17,6 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.analytics.PRIVACY_SCREEN_NAME
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.analytics.privacyPreferenceTapEvent
+
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -29,13 +32,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
@@ -57,7 +57,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.Permis
 import kotlinx.collections.immutable.persistentListOf
 import org.koin.compose.viewmodel.koinViewModel
 
-private const val PRIVACY_SCREEN_NAME = "Privacy"
+
 private const val PRIVACY_SCREEN_CLASS = "PrivacyScreen"
 private val PRIVACY_SCREEN: TrackedScreen =
     TrackedScreen(name = PRIVACY_SCREEN_NAME, className = PRIVACY_SCREEN_CLASS)
@@ -155,15 +155,7 @@ internal fun PrivacyScreenContent(
     }
 }
 
-private fun privacyPreferenceTapEvent(preferenceKey: String): Ga4EventData {
-    return Ga4EventData(
-        name = SettingsAnalytics.Events.PREFERENCE_VIEW,
-        params = mapOf(
-            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(PRIVACY_SCREEN_NAME),
-            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
-        ),
-    )
-}
+
 
 @Preview(showBackground = true)
 @Composable

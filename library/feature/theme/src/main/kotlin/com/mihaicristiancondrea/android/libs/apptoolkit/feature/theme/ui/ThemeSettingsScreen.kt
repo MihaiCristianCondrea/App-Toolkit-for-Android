@@ -17,6 +17,14 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.THEME_SCREEN_NAME
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.paletteTabSelectEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.dynamicPaletteSelectEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.staticPaletteSelectEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.themeModeSelectEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.amoledToggleEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.openDisplaySettingsEvent
+
 import android.content.Context
 import android.os.Build
 import android.util.Log
@@ -45,11 +53,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.ThemePreferencesState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.THEME_SETTINGS_LOG_TAG
@@ -67,13 +72,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.ThemeModePicker
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.ThemePalettePicker
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.WALLPAPER_PALETTE_PAGE
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.isAmoledAllowed
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.contracts.ThemeSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.states.ThemeSettingsUiState
 import org.koin.compose.viewmodel.koinViewModel
 
-private const val THEME_SCREEN_NAME = "Theme"
+
 private const val THEME_SCREEN_CLASS = "ThemeSettingsScreen"
 private val THEME_SCREEN: TrackedScreen =
     TrackedScreen(name = THEME_SCREEN_NAME, className = THEME_SCREEN_CLASS)
@@ -276,46 +280,6 @@ private fun SectionTitle(@StringRes title: Int) {
     )
 }
 
-private fun themeEvent(name: String, vararg params: Pair<String, String>): AnalyticsEvent = AnalyticsEvent(
-    name = name,
-    params = buildMap<String, AnalyticsValue> {
-        put(SettingsAnalytics.Params.SCREEN, AnalyticsValue.Str(THEME_SCREEN_NAME))
-        params.forEach { (key, value) -> put(key, AnalyticsValue.Str(value)) }
-    },
-)
-
-private fun paletteTabSelectEvent(page: Int): AnalyticsEvent = themeEvent(
-    "theme_tab_select",
-    "tab" to (if (page == WALLPAPER_PALETTE_PAGE) "wallpaper" else "other"),
-)
-
-private fun dynamicPaletteSelectEvent(variant: Int): AnalyticsEvent = themeEvent(
-    "theme_palette_select",
-    "palette_type" to "dynamic",
-    "variant" to variant.toString(),
-)
-
-private fun staticPaletteSelectEvent(id: String, seasonal: Boolean): AnalyticsEvent = themeEvent(
-    "theme_palette_select",
-    "palette_type" to "static",
-    "palette_id" to id,
-    "seasonal" to seasonal.toString(),
-)
-
-private fun themeModeSelectEvent(mode: String): AnalyticsEvent = themeEvent(
-    SettingsAnalytics.Events.THEME_SWITCH,
-    SettingsAnalytics.Params.THEME_MODE to mode,
-)
-
-private fun amoledToggleEvent(enabled: Boolean): AnalyticsEvent = themeEvent(
-    "theme_toggle_amoled",
-    "enabled" to enabled.toString(),
-)
-
-private fun openDisplaySettingsEvent(opened: Boolean): AnalyticsEvent = themeEvent(
-    "theme_open_display_settings",
-    "opened" to opened.toString(),
-)
 
 private val PreviewPreferences = ThemePreferencesState(
     themeMode = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,

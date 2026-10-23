@@ -56,7 +56,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
  *
  * The real fix for the underlying failure is upstream (Google), and the fix for the *cause* is on
  * our side: pointing the consent request at the host app's own AdMob app id (see
- * `AdMobAppIdProvider`) and never running two consent round trips at once (see
+ * `AdMobAppIdDataSource`) and never running two consent round trips at once (see
  * `DefaultConsentRepository`). This guard covers the remainder and should be removed once a
  * `user-messaging-platform` release fixes the read, verified by decompiling, not by release notes.
  */

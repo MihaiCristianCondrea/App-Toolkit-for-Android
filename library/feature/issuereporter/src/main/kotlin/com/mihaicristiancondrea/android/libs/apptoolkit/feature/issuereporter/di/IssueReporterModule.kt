@@ -32,7 +32,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.da
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReporterRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReporterConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.providers.DeviceInfoProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.local.DeviceInfoDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.usecases.ValidateIssueReportUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.shake.IssueReporterShakeManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterViewModel
@@ -60,11 +60,11 @@ fun issueReporterModule(
         IssueReporterSheet { onDismissRequest -> IssueReporterBottomSheet(onDismissRequest = onDismissRequest) }
     }
     single<IssueReporterRemoteDataSource> { IssueReporterRemoteDataSource(client = get()) }
-    single<DeviceInfoProvider> { DeviceInfoLocalDataSource(app = get(), dispatchers = get()) }
+    single<DeviceInfoDataSource> { DeviceInfoLocalDataSource(app = get(), dispatchers = get()) }
     single<IssueReporterRepository> {
         DefaultIssueReporterRepository(
             remoteDataSource = get(),
-            deviceInfoProvider = get(),
+            deviceInfoDataSource = get(),
             diagnostics = get(),
         )
     }

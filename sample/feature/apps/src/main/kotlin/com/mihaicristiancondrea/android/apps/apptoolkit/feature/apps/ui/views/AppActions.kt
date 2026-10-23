@@ -28,30 +28,28 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openPlayStoreForApp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.shareApp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.packagemanager.isAppInstalled
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.AppInfoHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.AppLauncher
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.InstalledAppsRepository
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.koin.compose.koinInject
 
 @Composable
 fun buildOnAppClick(
     dispatchers: DispatcherProvider = koinInject(),
+    installedApps: InstalledAppsRepository = koinInject(),
 ): (AppInfo) -> Unit {
     val context = LocalContext.current
     val currentContext by rememberUpdatedState(newValue = context)
-    val appInfoHelper = remember(dispatchers) { AppInfoHelper(dispatchers) }
+    val appLauncher = remember(installedApps, dispatchers) { AppLauncher(installedApps, dispatchers) }
     val coroutineScope = rememberCoroutineScope()
-    return remember(appInfoHelper, coroutineScope) {
+    return remember(appLauncher, installedApps, coroutineScope) {
         { appInfo ->
             coroutineScope.launch {
                 val context = currentContext
                 if (appInfo.packageName.isNotEmpty()) {
-                    val isInstalled = withContext(dispatchers.io) {
-                        context.isAppInstalled(appInfo.packageName)
-                    }
+                    val isInstalled = installedApps.isInstalled(appInfo.packageName)
                     if (isInstalled) {
-                        if (!appInfoHelper.openApp(context, appInfo.packageName)) {
+                        if (!appLauncher.openApp(context, appInfo.packageName)) {
                             context.openPlayStoreForApp(appInfo.packageName)
                         }
                     } else {

@@ -22,6 +22,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.Accessory
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.utils.availableDeveloperOptions
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.utils.accessoryModes
 import org.junit.jupiter.api.Test
 
 class DeveloperOptionsTest {
@@ -52,7 +54,7 @@ class DeveloperOptionsTest {
 
     @Test
     fun `app A, three tabs with a width limit, offers every override but the accessories`() {
-        val options = developerOptions(capabilities(tabs = 3, widthLimit = true))
+        val options = availableDeveloperOptions(capabilities(tabs = 3, widthLimit = true))
 
         assertEquals(DeveloperOption.entries - DeveloperOption.BottomAccessory, options)
         assertFalse(DeveloperCategory.Accessories in categoriesOf(options))
@@ -60,7 +62,7 @@ class DeveloperOptionsTest {
 
     @Test
     fun `app B, one tab, has no tab transition, width or accessory override`() {
-        val options = developerOptions(capabilities(tabs = 1))
+        val options = availableDeveloperOptions(capabilities(tabs = 1))
 
         assertFalse(DeveloperOption.TabTransition in options)
         assertFalse(DeveloperOption.ContentWidth in options)
@@ -71,7 +73,7 @@ class DeveloperOptionsTest {
 
     @Test
     fun `app C, pages only with custom frames, has no navigation or bar overrides`() {
-        val options = developerOptions(capabilities(tabs = 0, startOptions = 1, framedPages = false, banner = true))
+        val options = availableDeveloperOptions(capabilities(tabs = 0, startOptions = 1, framedPages = false, banner = true))
 
         assertEquals(
             listOf(
@@ -89,19 +91,19 @@ class DeveloperOptionsTest {
     @Test
     fun `a hidden single tab bar has no bar or banner options but retains the layout option`() {
         val declared = capabilities(tabs = 1).copy(declaresBanner = true, hideSingleTabBottomBar = true)
-        val options = developerOptions(declared)
+        val options = availableDeveloperOptions(declared)
 
         assertFalse(DeveloperOption.NavigationBarStyle in options)
         assertFalse(DeveloperOption.HideBottomBarOnScroll in options)
         assertFalse(DeveloperOption.BottomAccessory in options)
         assertTrue(DeveloperOption.Layout in options)
         assertTrue(DeveloperOption.NavigationTint in options)
-        assertTrue(DeveloperOption.NavigationBarStyle in developerOptions(declared.copy(tabCount = 2)))
+        assertTrue(DeveloperOption.NavigationBarStyle in availableDeveloperOptions(declared.copy(tabCount = 2)))
     }
 
     @Test
     fun `app C with framed pages can still force their app bars`() {
-        val options = developerOptions(capabilities(tabs = 0, startOptions = 1, framedPages = true))
+        val options = availableDeveloperOptions(capabilities(tabs = 0, startOptions = 1, framedPages = true))
 
         assertTrue(DeveloperOption.TopBarStyle in options)
         assertTrue(DeveloperOption.HideTopBarOnScroll in options)
@@ -110,7 +112,7 @@ class DeveloperOptionsTest {
 
     @Test
     fun `app D, several tabs with a banner and a player, offers every override`() {
-        val options = developerOptions(capabilities(tabs = 4, banner = true, player = true, widthLimit = true))
+        val options = availableDeveloperOptions(capabilities(tabs = 4, banner = true, player = true, widthLimit = true))
 
         assertEquals(DeveloperOption.entries, options)
         assertEquals(DeveloperCategory.entries, categoriesOf(options))
@@ -118,7 +120,7 @@ class DeveloperOptionsTest {
 
     @Test
     fun `app F, tabs whose policy never shows a bottom bar, keeps the bottom bar overrides a forced layout reaches`() {
-        val options = developerOptions(capabilities(tabs = 3, bottomBar = false, wide = true))
+        val options = availableDeveloperOptions(capabilities(tabs = 3, bottomBar = false, wide = true))
 
         assertTrue(DeveloperOption.NavigationBarStyle in options)
         assertTrue(DeveloperOption.HideBottomBarOnScroll in options)
@@ -127,20 +129,20 @@ class DeveloperOptionsTest {
 
     @Test
     fun `the start override needs more than one place to start`() {
-        assertFalse(DeveloperOption.StartOverride in developerOptions(capabilities(tabs = 1, startOptions = 1)))
-        assertTrue(DeveloperOption.StartOverride in developerOptions(capabilities(tabs = 1, startOptions = 3)))
+        assertFalse(DeveloperOption.StartOverride in availableDeveloperOptions(capabilities(tabs = 1, startOptions = 1)))
+        assertTrue(DeveloperOption.StartOverride in availableDeveloperOptions(capabilities(tabs = 1, startOptions = 3)))
     }
 
     @Test
     fun `accessory choices follow what the app declares`() {
-        assertFalse(DeveloperOption.BottomAccessory in developerOptions(capabilities(tabs = 2)))
+        assertFalse(DeveloperOption.BottomAccessory in availableDeveloperOptions(capabilities(tabs = 2)))
 
         val banner = capabilities(tabs = 2, banner = true)
         val player = capabilities(tabs = 2, player = true)
         val both = capabilities(tabs = 2, banner = true, player = true)
         val onOff = listOf(AccessoryMode.AsDeclared, AccessoryMode.None)
 
-        assertTrue(DeveloperOption.BottomAccessory in developerOptions(banner))
+        assertTrue(DeveloperOption.BottomAccessory in availableDeveloperOptions(banner))
         assertEquals(onOff, accessoryModes(banner))
         assertEquals(onOff, accessoryModes(player))
         assertEquals(AccessoryMode.entries, accessoryModes(both))
@@ -148,7 +150,7 @@ class DeveloperOptionsTest {
 
     @Test
     fun `options keep the page's order, grouped under their headings`() {
-        val categories = developerOptions(capabilities(tabs = 4, banner = true, player = true, widthLimit = true)).map { it.category }
+        val categories = availableDeveloperOptions(capabilities(tabs = 4, banner = true, player = true, widthLimit = true)).map { it.category }
 
         assertEquals(categories.sortedBy { it.ordinal }, categories)
     }

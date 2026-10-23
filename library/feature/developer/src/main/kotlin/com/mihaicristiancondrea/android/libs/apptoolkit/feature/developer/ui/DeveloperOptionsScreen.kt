@@ -1,5 +1,5 @@
 /*
- * Copyright (©) 2026 Mihai-Cristian Condrea
+ * Copyright (┬⌐) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,23 +18,17 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
@@ -50,15 +44,24 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.cont
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.models.DeveloperCategory
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.models.DeveloperOption
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.models.developerOptions
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.utils.availableDeveloperOptions
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.views.DeveloperOptionItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.views.layoutModeLabel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.utils.layoutModeLabel
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.LocalShellCapabilities
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalShellLayout
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellPreferences
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.contracts.DeveloperOptionChange
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.models.DeveloperStateLine
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.views.DeveloperStateItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellCapabilities
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.navigation.developerOptionsPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DeveloperOptionsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellSettings
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -90,58 +93,99 @@ fun DeveloperOptionsScreen() {
         layoutModeLabel(layout.mode),
     )
     val tabStacks = graph.tabs.mapIndexed { index, tab ->
-        StateLine(
+        DeveloperStateLine(
             title = stringResource(R.string.shell_dev_tab_stack, stringResource(tab.label)),
-            summary = navigator.tabStack(index).describe(),
+            summary = navigator.tabStack(index).describeNavigationStack(),
             selected = index == navigator.currentTabIndex,
         )
     }
     val liveState = listOf(
-        StateLine(stringResource(R.string.shell_dev_window), windowSummary),
-        StateLine(stringResource(R.string.shell_dev_page_stack), navigator.pages.describe()),
+        DeveloperStateLine(stringResource(R.string.shell_dev_window), windowSummary),
+        DeveloperStateLine(stringResource(R.string.shell_dev_page_stack), navigator.pages.describeNavigationStack()),
     ) + tabStacks
+    ScreenHost(screen = DEVELOPER_OPTIONS_SCREEN) {
+        DeveloperOptionsScreenContent(
+            settings = settings,
+            graph = graph,
+            capabilities = capabilities,
+            liveState = liveState,
+            contentPadding = contentPadding(PaddingValues(bottom = SizeConstants.LargeSize)),
+            onReset = { scope.launch { preferences.resetDeveloperOptions() } },
+            onChange = { change ->
+                scope.launch {
+                    when (change) {
+                        is DeveloperOptionChange.SetLayout -> preferences.setLayoutMode(change.value)
+                        is DeveloperOptionChange.SetTopBarStyle -> preferences.setTopBarOverride(change.value)
+                        is DeveloperOptionChange.SetHideTopBarOnScroll -> preferences.setHideTopBarOnScroll(change.value)
+                        is DeveloperOptionChange.SetNavigationBarStyle -> preferences.setNavigationBarStyle(change.value)
+                        is DeveloperOptionChange.SetHideBottomBarOnScroll -> preferences.setHideBottomBarOnScroll(change.value)
+                        is DeveloperOptionChange.SetNavigationTint -> preferences.setNavigationTint(change.value)
+                        is DeveloperOptionChange.SetContentWidth -> preferences.setLimitContentWidth(change.value)
+                        is DeveloperOptionChange.SetStartOverride -> preferences.setStartOverride(change.value)
+                        is DeveloperOptionChange.SetTabTransition -> preferences.setTabTransition(change.value)
+                        is DeveloperOptionChange.SetBackEdge -> preferences.setBackEdgeStyle(change.value)
+                        is DeveloperOptionChange.SetAnimationSpeed -> preferences.setAnimationSpeed(change.value)
+                        is DeveloperOptionChange.SetEntranceStyle -> preferences.setEntranceStyle(change.value)
+                        is DeveloperOptionChange.SetMotionTempo -> preferences.setMotionTempo(change.value)
+                        is DeveloperOptionChange.SetEntranceReplay -> preferences.setEntranceReplay(change.value)
+                        is DeveloperOptionChange.SetBottomAccessory -> preferences.setAccessoryMode(change.value)
+                    }
+                }
+            },
+        )
+    }
+}
+
+@Composable
+internal fun DeveloperOptionsScreenContent(
+    settings: ShellSettings,
+    graph: ShellGraph,
+    capabilities: ShellCapabilities,
+    liveState: List<DeveloperStateLine>,
+    onChange: (DeveloperOptionChange) -> Unit,
+    onReset: () -> Unit,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
+) {
     val categories: List<Pair<DeveloperCategory, List<DeveloperOption>>> = remember(capabilities) {
-        developerOptions(capabilities).groupBy { it.category }.toList()
+        availableDeveloperOptions(capabilities).groupBy { it.category }.toList()
     }
 
     val categoryLiveState = stringResource(R.string.shell_dev_live_state)
     val resetTitle = stringResource(R.string.shell_dev_reset)
     val resetSummary = stringResource(R.string.shell_dev_reset_summary)
 
-    ScreenHost(screen = DEVELOPER_OPTIONS_SCREEN) {
-        LazyColumn(
-            contentPadding = contentPadding(PaddingValues(bottom = SizeConstants.LargeSize)),
-            modifier = Modifier.fillMaxHeight(),
-            verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
-        ) {
-            animatedItem { PreferenceCategoryItem(title = categoryLiveState) }
-            animatedItemsIndexed(liveState) { index, line ->
-                StateItem(line, Modifier.grouped(groupedItemPosition(index, liveState.size)))
-            }
-            categories.forEach { (category, options) ->
-                animatedItem(key = "category_${category.name}") { PreferenceCategoryItem(title = stringResource(category.title)) }
-                animatedItemsIndexed(options, key = { _, option -> "option_${option.name}" }) { index, option ->
-                    DeveloperOptionItem(
-                        option = option,
-                        settings = settings,
-                        preferences = preferences,
-                        scope = scope,
-                        graph = graph,
-                        capabilities = capabilities,
-                        modifier = Modifier.grouped(groupedItemPosition(index, options.size)),
-                    )
-                }
-            }
-            animatedItem {
-                SettingsPreferenceItem(
-                    modifier = Modifier
-                        .padding(top = SizeConstants.LargeSize)
-                        .grouped(GroupedItemPosition.SINGLE),
-                    title = resetTitle,
-                    summary = resetSummary,
-                    onClick = { scope.launch { preferences.resetDeveloperOptions() } },
+    LazyColumn(
+        contentPadding = contentPadding,
+        modifier = modifier.fillMaxHeight(),
+        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
+    ) {
+        animatedItem { PreferenceCategoryItem(title = categoryLiveState) }
+        animatedItemsIndexed(liveState) { index, line ->
+            DeveloperStateItem(line, Modifier.grouped(groupedItemPosition(index, liveState.size)))
+        }
+        categories.forEach { (category, options) ->
+            animatedItem(key = "category_${category.name}") { PreferenceCategoryItem(title = stringResource(category.title)) }
+            animatedItemsIndexed(options, key = { _, option -> "option_${option.name}" }) { index, option ->
+                DeveloperOptionItem(
+                    option = option,
+                    settings = settings,
+                    onChange = onChange,
+                    graph = graph,
+                    capabilities = capabilities,
+                    modifier = Modifier.grouped(groupedItemPosition(index, options.size)),
                 )
             }
+        }
+        animatedItem {
+            SettingsPreferenceItem(
+                modifier = Modifier
+                    .padding(top = SizeConstants.LargeSize)
+                    .grouped(GroupedItemPosition.SINGLE),
+                title = resetTitle,
+                summary = resetSummary,
+                onClick = onReset,
+            )
         }
     }
 }
@@ -151,31 +195,37 @@ private val DEVELOPER_OPTIONS_SCREEN = TrackedScreen(name = "DeveloperOptions", 
 private fun Modifier.grouped(position: GroupedItemPosition): Modifier =
     groupedPreferenceItem(position = position, outerRadius = SizeConstants.LargeMediumSize)
 
-/** One read-only line of the live state; [selected] marks the tab on screen. */
-private data class StateLine(val title: String, val summary: String, val selected: Boolean = false)
-
-@Composable
-private fun StateItem(line: StateLine, modifier: Modifier) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RectangleShape,
-        colors = if (line.selected) {
-            CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
-        } else {
-            CardDefaults.cardColors()
-        },
-    ) {
-        Column(modifier = Modifier.padding(all = SizeConstants.LargeSize)) {
-            Text(
-                text = line.title,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-            )
-            Text(text = line.summary, style = MaterialTheme.typography.bodyMedium)
-        }
-    }
+private fun List<NavKey>.describeNavigationStack(): String = joinToString(separator = "  \u203A  ") { key ->
+    key.toString().substringAfterLast('.').substringBefore('@').substringBefore('(')
 }
 
-private fun List<NavKey>.describe(): String = joinToString(separator = "  ›  ") { key ->
-    key.toString().substringAfterLast('.').substringBefore('@').substringBefore('(')
+@Preview(showBackground = true)
+@Composable
+private fun DeveloperOptionsScreenContentPreview() {
+    val graph = remember {
+        ShellGraphBuilder(appTitle = R.string.shell_developer_options).apply {
+            developerOptionsPage()
+            start(DeveloperOptionsRoute)
+        }.build()
+    }
+    MaterialTheme {
+        DeveloperOptionsScreenContent(
+            settings = ShellSettings(),
+            graph = graph,
+            capabilities = ShellCapabilities(
+                tabCount = 0,
+                startOptionCount = 1,
+                declaresBanner = false,
+                declaresPlayer = false,
+                hasFramedPages = true,
+                hasBackNavigation = false,
+                layoutReachesBottomBar = false,
+                layoutReachesWideNavigation = false,
+                hasContentWidthLimit = false,
+            ),
+            liveState = listOf(DeveloperStateLine(title = "Window", summary = "Phone")),
+            onChange = {},
+            onReset = {},
+        )
+    }
 }

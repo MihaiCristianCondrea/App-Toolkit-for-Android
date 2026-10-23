@@ -6,6 +6,7 @@ Presents donation/support products and coordinates purchases through the billing
 
 ## Owns
 
+- Feature event builders and their bounded keys in `ui/analytics`; screens only report events.
 - `SupportScreen` and the stateless `SupportScreenContent`, `SupportViewModel`, and their state
   (`SupportUiState`, `DonationOption`) and event (`SupportEvent`) contracts.
 - `supportPage()`, the registration of `SupportRoute`, which the overflow menu's `supportUs()`

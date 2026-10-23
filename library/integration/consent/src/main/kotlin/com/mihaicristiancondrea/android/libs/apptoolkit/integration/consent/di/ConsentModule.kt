@@ -26,12 +26,12 @@ import org.koin.dsl.module
 
 /** Binds consent persistence coordination and the UMP remote source. Requires foundation providers. */
 fun consentModule(): Module = module {
-    single<ConsentRemoteDataSource> { UmpConsentRemoteDataSource(adMobAppIdProvider = get()) }
+    single<ConsentRemoteDataSource> { UmpConsentRemoteDataSource(adMobAppIdDataSource = get()) }
     single<ConsentRepository> {
         DefaultConsentRepository(
             remote = get(),
             local = get(),
-            configProvider = get(),
+            buildInfoRepository = get(),
             diagnostics = get(),
             collection = get(),
         )

@@ -36,12 +36,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
@@ -51,6 +48,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.analytics.aboutPreferenceTapEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItemAction
@@ -70,10 +68,8 @@ import nl.dionsegijn.konfetti.core.Spread
 import nl.dionsegijn.konfetti.core.emitter.Emitter
 import org.koin.compose.viewmodel.koinViewModel
 
-private const val ABOUT_SCREEN_NAME = "About"
-private const val ABOUT_SCREEN_CLASS = "AboutScreen"
 private val ABOUT_SCREEN: TrackedScreen =
-    TrackedScreen(name = ABOUT_SCREEN_NAME, className = ABOUT_SCREEN_CLASS)
+    TrackedScreen(name = "About", className = "AboutScreen")
 
 /**
  * The "About" screen: information about the application and the device.
@@ -234,16 +230,6 @@ internal fun AboutScreenContent(
             )
         }
     }
-}
-
-private fun aboutPreferenceTapEvent(preferenceKey: String): Ga4EventData {
-    return Ga4EventData(
-        name = SettingsAnalytics.Events.PREFERENCE_VIEW,
-        params = mapOf(
-            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(ABOUT_SCREEN_NAME),
-            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
-        ),
-    )
 }
 
 @Preview(showBackground = true)

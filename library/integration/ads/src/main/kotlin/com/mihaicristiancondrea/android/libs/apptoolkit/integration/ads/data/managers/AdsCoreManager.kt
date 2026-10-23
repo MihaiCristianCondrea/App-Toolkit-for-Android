@@ -30,9 +30,9 @@ import com.google.android.libraries.ads.mobile.sdk.initialization.Initialization
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.ads.AdsSdkState
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.utils.interfaces.OnShowAdCompleteListener
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.AdMobAppIdProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.ManifestAdMobAppIdProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.AdMobAppIdDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.ManifestAdMobAppIdDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -58,9 +58,9 @@ private val APP_OPEN_AD_LIFETIME: Duration = 4.hours
  */
 open class AdsCoreManager(
     protected val context: Context,
-    val buildInfoProvider: BuildInfoProvider,
+    val buildInfoRepository: BuildInfoRepository,
     private val dispatchers: DispatcherProvider,
-    private val adMobAppIdProvider: AdMobAppIdProvider = ManifestAdMobAppIdProvider(context = context),
+    private val adMobAppIdDataSource: AdMobAppIdDataSource = ManifestAdMobAppIdDataSource(context = context, dispatchers = dispatchers),
     private val adsSdkInitializer: AdsSdkInitializer = AdsSdkInitializer.Default,
     private val dataStore: CommonDataStore = CommonDataStore.getInstance(context = context),
 ) {
@@ -74,7 +74,7 @@ open class AdsCoreManager(
     private var isSdkInitialized: Boolean = false
 
     /**
-     * Initializes ads from the host-manifest [AdMobAppIdProvider] and observes the shared
+     * Initializes ads from the host-manifest [AdMobAppIdDataSource] and observes the shared
      * [CommonDataStore.adsEnabledFlow], so enabling ads later can initialize the SDK without a
      * process restart. Missing or invalid app IDs skip initialization; no fallback publisher ID
      * is supplied.
@@ -130,11 +130,11 @@ open class AdsCoreManager(
         return initializationMutex.withLock {
             if (isSdkInitialized) return@withLock true
 
-            val adMobAppId: String = adMobAppIdProvider.adMobAppId() ?: run {
+            val adMobAppId: String = adMobAppIdDataSource.adMobAppId() ?: run {
                 Log.e(
                     LOG_TAG,
                     "Skipping Mobile Ads initialization: the host app declares no valid " +
-                            "${AdMobAppIdProvider.MANIFEST_METADATA_KEY} meta-data.",
+                            "${AdMobAppIdDataSource.MANIFEST_METADATA_KEY} meta-data.",
                 )
                 return@withLock false
             }
@@ -253,4 +253,3 @@ open class AdsCoreManager(
         const val LOG_TAG: String = "AdsCoreManager"
     }
 }
-

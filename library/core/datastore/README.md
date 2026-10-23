@@ -20,6 +20,9 @@ used by onboarding, consent, ads, diagnostics, review, and theming.
 
 ## Does not own
 
+- Compose adapters, including `rememberCommonDataStore`, now owned by
+  `core.designsystem.ui.utils`. This module requires no Compose compiler or lifecycle-compose dependency.
+
 - Feature business decisions about consent, reviews, onboarding, or diagnostics.
 - Mobile Ads SDK initialization and app-open ad lifecycle, owned by
   [`:library:integration:ads`](../../integration/ads/README.md).

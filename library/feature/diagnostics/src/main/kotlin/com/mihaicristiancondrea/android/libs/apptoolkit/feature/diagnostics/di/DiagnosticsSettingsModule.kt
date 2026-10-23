@@ -29,7 +29,7 @@ val diagnosticsSettingsModule: Module = module {
     single<UsageAndDiagnosticsRepository> {
         DefaultUsageAndDiagnosticsRepository(
             dataSource = get<CommonDataStore>(),
-            configProvider = get(),
+            buildInfoRepository = get(),
             diagnostics = get(),
             consentRepository = get(),
         )

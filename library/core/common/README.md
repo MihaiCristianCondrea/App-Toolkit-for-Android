@@ -7,6 +7,11 @@ Android utility abstractions shared across the toolkit.
 
 ## Owns
 
+- `BuildInfoRepository` and its `DefaultBuildInfoRepository`, backed by the host build configuration.
+- `InstalledAppsRepository` and its system-backed default for installed-package checks and launcher
+  intent lookup. Both operations are main-safe; the repository owns the IO switch.
+- `AdMobAppIdDataSource` and `ManifestAdMobAppIdDataSource` in `data/local`: the shared host
+  manifest contract and its cached, main-safe platform implementation.
 - Analytics and billing value models, and the application-facing theme preference model.
 - `ClipboardRepository` and its system-backed `DefaultClipboardRepository`, so a ViewModel copies
   text without holding a `Context`. It also says whether the system confirms copies itself.
@@ -126,7 +131,7 @@ publisher account. The current contract deliberately prevents that regression:
 
 - `com.google.android.gms.ads.APPLICATION_ID` in the host application's manifest is the single
   source of truth. The referenced resource may have any name.
-- `ManifestAdMobAppIdProvider` reads application metadata through `PackageManager`, accepts only
+- `ManifestAdMobAppIdDataSource` reads application metadata through `PackageManager`, accepts only
   `ca-app-pub-[0-9]{16}~[0-9]{10}`, and returns `null` for missing or malformed values.
 - There must be no library fallback AdMob application ID. The sample/demo ID belongs only to the
   sample application.
@@ -142,4 +147,16 @@ suppressed telemetry failure is recorded through `DiagnosticsReporter.recordNonF
 
 Hosts may opt out by overriding `installsConsentSdkCrashGuard` with `false`. Do not broaden the
 guard predicate, and do not remove the guard until the affected UMP artifact behavior is verified as
-fixed. `AdMobAppIdProviderTest` and `ConsentSdkCrashGuardTest` protect these contracts.
+fixed. `AdMobAppIdDataSourceTest` and `ConsentSdkCrashGuardTest` protect these contracts.
+
+## Data API migration
+
+`BuildInfoProvider` is replaced by `data.repositories.BuildInfoRepository`; its properties still
+represent the host's fixed build values, with no platform I/O. The Toolkit graph supplies the default.
+
+`AdMobAppIdProvider` and its manifest implementation are replaced by `data.local.AdMobAppIdDataSource`
+and `ManifestAdMobAppIdDataSource`. Reading the ID is now suspending so the source can own the IO
+switch. Hosts providing a replacement update their binding directly.
+
+`AppInfoHelper` is removed. Use `InstalledAppsRepository` for data queries and core UI's
+`AppLauncher` when launching with the Toolkit's failure feedback.

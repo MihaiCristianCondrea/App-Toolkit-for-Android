@@ -7,6 +7,7 @@ options entry once it is unlocked.
 
 ## Owns
 
+- Feature event builders and their bounded keys in `ui/analytics`; screens only report events.
 - `AdvancedSettingsScreen`, which wires the ViewModel, tracking, messages, the issue reporter sheet
   and navigation, and `AdvancedSettingsScreenContent`, the stateless list of rows.
 - `AdvancedSettingsViewModel`, `AdvancedSettingsUiState`, `CacheClearStatus` and

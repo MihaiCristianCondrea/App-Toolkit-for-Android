@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.seasonal
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.holidayGreetingAnsweredEvent
+
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.HolidaySeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.WeatherEffect

@@ -18,12 +18,12 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.providers.GooglePlayServicesVersionProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.gms.data.repositories.GooglePlayServicesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.models.AboutInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.AboutSettingsProvider
-import io.mockk.every
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.local.AboutDeviceInfoDataSource
+import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -39,11 +39,11 @@ class TestDefaultAboutRepository {
         val dispatcherExtension = UnconfinedDispatcherExtension()
     }
 
-    private val deviceProvider = object : AboutSettingsProvider {
+    private val deviceInfoDataSource = object : AboutDeviceInfoDataSource {
         override val deviceInfo: String = "device-info"
     }
 
-    private val buildInfoProvider = object : BuildInfoProvider {
+    private val buildInfoRepository = object : BuildInfoRepository {
         override val appVersion: String = "1.0"
         override val appVersionCode: Int = 1
         override val packageName: String = "pkg"
@@ -51,16 +51,16 @@ class TestDefaultAboutRepository {
     }
 
     private fun repository(
-        gmsVersionProvider: GooglePlayServicesVersionProvider = mockk {
-            every { getVersion() } returns "24.01.12"
+        googlePlayServices: GooglePlayServicesRepository = mockk {
+            coEvery { getVersion() } returns "24.01.12"
         },
         toolkitVersionProvider: () -> String = { "3.0.0-test" },
     ): DefaultAboutRepository =
         DefaultAboutRepository(
-            deviceProvider = deviceProvider,
-            buildInfoProvider = buildInfoProvider,
+            deviceInfoDataSource = deviceInfoDataSource,
+            buildInfoRepository = buildInfoRepository,
             diagnostics = mockk<TelemetryRepository>(relaxed = true),
-            gmsVersionProvider = gmsVersionProvider,
+            googlePlayServices = googlePlayServices,
             toolkitVersionProvider = toolkitVersionProvider,
         )
 
@@ -77,7 +77,7 @@ class TestDefaultAboutRepository {
                     appVersionCode = 1,
                     appToolkitVersion = "3.0.0-test",
                     googlePlayServicesVersion = "24.01.12",
-                    deviceInfo = deviceProvider.deviceInfo,
+                    deviceInfo = deviceInfoDataSource.deviceInfo,
                 ),
                 result,
             )
@@ -86,10 +86,10 @@ class TestDefaultAboutRepository {
     @Test
     fun `getAboutInfo reports absent google play services as null`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val gmsProvider = mockk<GooglePlayServicesVersionProvider> {
-                every { getVersion() } returns null
+            val gmsProvider = mockk<GooglePlayServicesRepository> {
+                coEvery { getVersion() } returns null
             }
-            val repo = repository(gmsVersionProvider = gmsProvider)
+            val repo = repository(googlePlayServices = gmsProvider)
 
             val result: AboutInfo = repo.getAboutInfo()
 

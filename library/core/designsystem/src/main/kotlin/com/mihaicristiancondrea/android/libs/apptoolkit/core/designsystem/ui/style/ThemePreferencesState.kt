@@ -24,7 +24,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.themePreferencesState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.rememberCommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.utils.rememberCommonDataStore
 
 /**
  * Collects the application-facing theme preference model at the design-system boundary.

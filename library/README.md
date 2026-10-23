@@ -37,7 +37,7 @@ flowchart TD
     Core --> Foundations["common / datastore / network / designsystem / ui"]
     Core --> Testing["testing (test-only helpers)"]
     Features --> ReusableScreens["about / help / issue reporter / onboarding / permissions / settings / support / developer"]
-    Integrations --> SDKs["ads / billing / consent / Firebase / review / update"]
+    Integrations --> SDKs["ads / billing / consent / Firebase / GMS / review / update"]
     AppToolkit -->|api dependencies| Foundations
     AppToolkit -->|api dependencies| Navigation
     AppToolkit -->|api dependencies| Shell

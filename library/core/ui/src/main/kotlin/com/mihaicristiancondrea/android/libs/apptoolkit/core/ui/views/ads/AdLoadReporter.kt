@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads
 
 import android.util.Log
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
 
 /** Why an ad slot has nothing to show. */
 enum class AdSlotFailure {
@@ -44,11 +44,11 @@ enum class AdSlotFailure {
  * an issue on every scroll.
  *
  * @property telemetry where breadcrumbs and non-fatals go.
- * @property buildInfoProvider used to decide how loudly to report; debug builds get more.
+ * @property buildInfoRepository used to decide how loudly to report; debug builds get more.
  */
 class AdLoadReporter(
     private val telemetryRepository: TelemetryRepository,
-    private val buildInfoProvider: BuildInfoProvider,
+    private val buildInfoRepository: BuildInfoRepository,
 ) {
 
     /**
@@ -118,7 +118,7 @@ class AdLoadReporter(
     }
 
     /** True when an empty slot should explain itself on screen. Debug builds only. */
-    val showsDebugPlaceholder: Boolean get() = buildInfoProvider.isDebugBuild
+    val showsDebugPlaceholder: Boolean get() = buildInfoRepository.isDebugBuild
 
     private companion object {
         const val LOG_TAG: String = "AdSlot"

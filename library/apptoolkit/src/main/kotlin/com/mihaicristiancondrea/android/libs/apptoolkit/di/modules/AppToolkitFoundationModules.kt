@@ -26,9 +26,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolki
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.telemetryModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.api.ApiHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.AdMobAppIdProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.ManifestAdMobAppIdProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.AdMobAppIdDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.ManifestAdMobAppIdDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.di.dataStoreModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.client.KtorClient
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.di.adsIntegrationModule
@@ -36,10 +36,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.di.c
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.update.di.updateModule
 import org.koin.core.module.Module
 import org.koin.core.qualifier.named
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.DefaultBuildInfoRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.InstalledAppsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.DefaultInstalledAppsRepository
 import org.koin.dsl.module
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.gms.di.googlePlayServicesModule
 
 /**
- * Assembles shared providers, networking, and ads, consent, and update integrations for the
+ * Assembles shared providers, networking, and ads, consent, GMS, and update integrations for the
  * host graph. Preference bindings come once from `:library:core:datastore`, and shared ad
  * reporting is supplied here rather than required from each host.
  */
@@ -53,6 +57,7 @@ fun appToolkitFoundationModules(hostBuildConfig: AppToolkitHostBuildConfig): Lis
         mainSharedModule(),
         adsIntegrationModule(),
         updateModule(),
+        googlePlayServicesModule,
     )
 
 private fun dispatchersModule(): Module = module {
@@ -60,18 +65,12 @@ private fun dispatchersModule(): Module = module {
 }
 
 private fun corePlatformModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
-    single<AdMobAppIdProvider> { ManifestAdMobAppIdProvider(context = get()) }
+    single<InstalledAppsRepository> { DefaultInstalledAppsRepository(context = get(), dispatchers = get()) }
+    single<AdMobAppIdDataSource> { ManifestAdMobAppIdDataSource(context = get(), dispatchers = get()) }
     single<ClipboardRepository> { DefaultClipboardRepository(context = get()) }
-    single { AdLoadReporter(telemetryRepository = get(), buildInfoProvider = get()) }
+    single { AdLoadReporter(telemetryRepository = get(), buildInfoRepository = get()) }
     single { KtorClient.createClient(enableLogging = hostBuildConfig.isDebugBuild) }
-    single<BuildInfoProvider> {
-        object : BuildInfoProvider {
-            override val appVersion: String = hostBuildConfig.versionName
-            override val appVersionCode: Int = hostBuildConfig.versionCode.toInt()
-            override val packageName: String = hostBuildConfig.applicationId
-            override val isDebugBuild: Boolean = hostBuildConfig.isDebugBuild
-        }
-    }
+    single<BuildInfoRepository> { DefaultBuildInfoRepository(config = hostBuildConfig) }
 }
 
 private fun mainSharedModule(): Module = module {
@@ -79,5 +78,3 @@ private fun mainSharedModule(): Module = module {
         ApiHost.BASE_URL
     }
 }
-
-

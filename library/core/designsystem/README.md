@@ -7,6 +7,8 @@ theme-selection visuals, and the shared icon slot used by navigation items and b
 
 ## Owns
 
+- `ui/utils/ComposeDataStoreExtensions.kt`, the composition-owned `rememberCommonDataStore`
+  adapter used by the theme. DataStore exposes data APIs rather than composables.
 - `AppTheme`, theme configuration, typography, and palette selection.
 - Static, seasonal, monochrome, rose, and Material You color definitions.
 - `ColorPalette`, `ThemeSettingOption`, and wallpaper swatch models.

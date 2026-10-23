@@ -17,6 +17,15 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.analytics.displayThemeModeEvent
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.analytics.DISPLAY_SETTINGS_SCREEN_NAME
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.analytics.DisplayPreferenceKeys
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.analytics.DisplayActionNames
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.analytics.LanguageDestinations
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.analytics.displayActionGa4Event
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.analytics.displayActionEvent
+
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -41,14 +50,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.startActivitySafely
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
@@ -77,25 +82,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.ThemeS
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
-private const val DISPLAY_SETTINGS_SCREEN_NAME = "DisplaySettings"
+
 private const val DISPLAY_SETTINGS_SCREEN_CLASS = "DisplaySettingsScreen"
 private val DISPLAY_SETTINGS_SCREEN: TrackedScreen =
     TrackedScreen(name = DISPLAY_SETTINGS_SCREEN_NAME, className = DISPLAY_SETTINGS_SCREEN_CLASS)
 
-private object DisplayPreferenceKeys {
-    const val THEME_SETTINGS: String = "theme_settings"
-    const val STARTUP_PAGE: String = "startup_page"
-    const val LANGUAGE: String = "language"
-}
 
-private object DisplayActionNames {
-    const val OPEN_THEME_SETTINGS: String = "open_theme_settings"
-    const val THEME_REDIRECT: String = "theme_redirect"
-    const val OPEN_STARTUP_DIALOG: String = "open_startup_dialog"
-    const val CHANGE_STARTUP_DESTINATION: String = "change_startup_destination"
-    const val OPEN_LANGUAGE_SETTINGS: String = "open_language_settings"
-    const val CHANGE_LANGUAGE: String = "change_language"
-}
+
+
 
 /**
  * Displays the person's appearance, interaction, navigation and language preferences. Works only
@@ -131,13 +125,7 @@ fun DisplaySettingsScreen() {
                     if (isChecked) DataStoreNamesConstants.THEME_MODE_DARK
                     else DataStoreNamesConstants.THEME_MODE_LIGHT
                 telemetry.logEvent(
-                    AnalyticsEvent(
-                        name = SettingsAnalytics.Events.THEME_SWITCH,
-                        params = mapOf(
-                            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(DISPLAY_SETTINGS_SCREEN_NAME),
-                            SettingsAnalytics.Params.THEME_MODE to AnalyticsValue.Str(targetMode),
-                        ),
-                    )
+                    displayThemeModeEvent(targetMode)
                 )
                 viewModel.onEvent(DisplaySettingsEvent.ThemeModeChanged(targetMode))
             },
@@ -208,11 +196,7 @@ fun DisplaySettingsScreen() {
 }
 
 /** The `value` the `open_language_settings` action reports: where the language row led. */
-private object LanguageDestinations {
-    const val SYSTEM_LOCALE: String = "system_locale"
-    const val APP_DETAILS: String = "app_details"
-    const val IN_APP_DIALOG: String = "in_app_dialog"
-}
+
 
 /**
  * Opens the system's per-app language settings, or the app's details page where those are
@@ -233,35 +217,9 @@ private fun Context.openLanguageSettings(): String {
     }
 }
 
-private fun displayActionGa4Event(actionName: String, preferenceKey: String): Ga4EventData {
-    return Ga4EventData(
-        name = SettingsAnalytics.Events.ACTION,
-        params = mapOf(
-            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(DISPLAY_SETTINGS_SCREEN_NAME),
-            SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(actionName),
-            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
-        ),
-    )
-}
 
-private fun displayActionEvent(
-    actionName: String,
-    preferenceKey: String,
-    value: String? = null,
-): AnalyticsEvent {
-    val base = mutableMapOf<String, AnalyticsValue>(
-        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(DISPLAY_SETTINGS_SCREEN_NAME),
-        SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(actionName),
-        SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
-    )
-    if (value != null) {
-        base["value"] = AnalyticsValue.Str(value)
-    }
-    return AnalyticsEvent(
-        name = SettingsAnalytics.Events.ACTION,
-        params = base,
-    )
-}
+
+
 
 /**
  * The display settings for [state], or their loading or failure state: the [rows] that mean

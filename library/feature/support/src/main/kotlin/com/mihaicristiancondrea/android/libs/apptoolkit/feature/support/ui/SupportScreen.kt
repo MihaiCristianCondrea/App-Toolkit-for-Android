@@ -17,6 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.analytics.SUPPORT_SCREEN_NAME
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.analytics.SupportPreferenceKeys
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.analytics.supportPreferenceTapEvent
+
 import android.app.Activity
 import android.content.Context
 import androidx.activity.compose.LocalActivity
@@ -43,15 +47,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
@@ -72,20 +73,12 @@ import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
 
-private const val SUPPORT_SCREEN_NAME = "Support"
+
 private const val SUPPORT_SCREEN_CLASS = "SupportComposable"
 private val SUPPORT_SCREEN: TrackedScreen =
     TrackedScreen(name = SUPPORT_SCREEN_NAME, className = SUPPORT_SCREEN_CLASS)
 
-private object SupportPreferenceKeys {
-    const val DONATE_LOW: String = "donate_low"
-    const val DONATE_NORMAL: String = "donate_normal"
-    const val DONATE_HIGH: String = "donate_high"
-    const val DONATE_EXTREME: String = "donate_extreme"
-    const val WEB_AD: String = "web_ad"
-    const val PRODUCT_ID: String = "product_id"
-    const val DESTINATION: String = "destination"
-}
+
 
 @Composable
 fun SupportComposable() {
@@ -310,21 +303,7 @@ private fun DonationButton(
     )
 }
 
-private fun supportPreferenceTapEvent(
-    preferenceKey: String,
-    productId: String? = null,
-    destination: String? = null,
-): Ga4EventData {
-    return Ga4EventData(
-        name = SettingsAnalytics.Events.PREFERENCE_VIEW,
-        params = buildMap {
-            put(SettingsAnalytics.Params.SCREEN, AnalyticsValue.Str(SUPPORT_SCREEN_NAME))
-            put(SettingsAnalytics.Params.PREFERENCE_KEY, AnalyticsValue.Str(preferenceKey))
-            productId?.let { put(SupportPreferenceKeys.PRODUCT_ID, AnalyticsValue.Str(it)) }
-            destination?.let { put(SupportPreferenceKeys.DESTINATION, AnalyticsValue.Str(it)) }
-        },
-    )
-}
+
 
 @Preview(showBackground = true)
 @Composable

@@ -38,7 +38,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.models.DeveloperOption
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.models.accessoryModes
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.utils.accessoryModes
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.utils.layoutModeLabel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.contracts.DeveloperOptionChange
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellCapabilities
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
@@ -48,36 +50,29 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.Animation
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.BackEdgeStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationTint
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellPreferences
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.TopBarOverride
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 /**
- * One shell override: it reads [settings] and writes through [preferences], so the change applies
+ * One shell override: it renders [settings] and reports changes through [onChange], so the change applies
  * to the whole app at once and persists.
  */
 @Composable
 internal fun DeveloperOptionItem(
     option: DeveloperOption,
     settings: ShellSettings,
-    preferences: ShellPreferences,
-    scope: CoroutineScope,
+    onChange: (DeveloperOptionChange) -> Unit,
     graph: ShellGraph,
     capabilities: ShellCapabilities,
     modifier: Modifier,
 ) {
-    fun write(change: suspend ShellPreferences.() -> Unit) {
-        scope.launch { preferences.change() }
-    }
     when (option) {
         DeveloperOption.Layout -> ChoicePreferenceItem(
             title = stringResource(R.string.shell_dev_layout),
             options = ShellLayoutMode.entries,
             selected = settings.layoutMode,
             optionLabel = { layoutModeLabel(it) },
-            onSelect = { write { setLayoutMode(it) } },
+            onSelect = { onChange(DeveloperOptionChange.SetLayout(it)) },
             dialogIcon = Icons.Outlined.Dashboard,
             modifier = modifier,
         )
@@ -87,7 +82,7 @@ internal fun DeveloperOptionItem(
             options = TopBarOverride.entries,
             selected = settings.topBarOverride,
             optionLabel = { topBarLabel(it) },
-            onSelect = { write { setTopBarOverride(it) } },
+            onSelect = { onChange(DeveloperOptionChange.SetTopBarStyle(it)) },
             dialogIcon = Icons.Outlined.Web,
             modifier = modifier,
         )
@@ -97,7 +92,7 @@ internal fun DeveloperOptionItem(
             title = stringResource(R.string.shell_hide_top_bar),
             summary = stringResource(R.string.shell_hide_top_bar_summary),
             checked = settings.hideTopBarOnScroll,
-            onCheckedChange = { write { setHideTopBarOnScroll(it) } },
+            onCheckedChange = { onChange(DeveloperOptionChange.SetHideTopBarOnScroll(it)) },
         )
 
         DeveloperOption.NavigationBarStyle -> ChoicePreferenceItem(
@@ -105,7 +100,7 @@ internal fun DeveloperOptionItem(
             options = NavigationBarStyle.entries,
             selected = settings.navigationBarStyle,
             optionLabel = { navigationBarLabel(it) },
-            onSelect = { write { setNavigationBarStyle(it) } },
+            onSelect = { onChange(DeveloperOptionChange.SetNavigationBarStyle(it)) },
             dialogIcon = Icons.Outlined.CallToAction,
             modifier = modifier,
         )
@@ -115,7 +110,7 @@ internal fun DeveloperOptionItem(
             title = stringResource(R.string.shell_hide_bottom_bar),
             summary = stringResource(R.string.shell_hide_bottom_bar_summary),
             checked = settings.hideBottomBarOnScroll,
-            onCheckedChange = { write { setHideBottomBarOnScroll(it) } },
+            onCheckedChange = { onChange(DeveloperOptionChange.SetHideBottomBarOnScroll(it)) },
         )
 
         DeveloperOption.NavigationTint -> ChoicePreferenceItem(
@@ -123,7 +118,7 @@ internal fun DeveloperOptionItem(
             options = NavigationTint.entries,
             selected = settings.navigationTint,
             optionLabel = { navigationTintLabel(it) },
-            onSelect = { write { setNavigationTint(it) } },
+            onSelect = { onChange(DeveloperOptionChange.SetNavigationTint(it)) },
             dialogIcon = Icons.Outlined.FormatColorFill,
             modifier = modifier,
         )
@@ -133,7 +128,7 @@ internal fun DeveloperOptionItem(
             title = stringResource(R.string.shell_limit_width),
             summary = stringResource(R.string.shell_limit_width_summary),
             checked = settings.limitContentWidth,
-            onCheckedChange = { write { setLimitContentWidth(it) } },
+            onCheckedChange = { onChange(DeveloperOptionChange.SetContentWidth(it)) },
         )
 
         DeveloperOption.StartOverride -> ChoicePreferenceItem(
@@ -141,7 +136,7 @@ internal fun DeveloperOptionItem(
             options = listOf(-1) + graph.startOptions.indices,
             selected = settings.startOverride.takeIf { it in graph.startOptions.indices } ?: -1,
             optionLabel = { index -> startLabel(graph, index) },
-            onSelect = { write { setStartOverride(it) } },
+            onSelect = { onChange(DeveloperOptionChange.SetStartOverride(it)) },
             dialogIcon = Icons.Outlined.RocketLaunch,
             modifier = modifier,
         )
@@ -151,7 +146,7 @@ internal fun DeveloperOptionItem(
             options = TabTransitionStyle.entries,
             selected = settings.tabTransition,
             optionLabel = { tabTransitionLabel(it) },
-            onSelect = { write { setTabTransition(it) } },
+            onSelect = { onChange(DeveloperOptionChange.SetTabTransition(it)) },
             dialogIcon = Icons.Outlined.SwapHoriz,
             modifier = modifier,
         )
@@ -161,7 +156,7 @@ internal fun DeveloperOptionItem(
             options = BackEdgeStyle.entries,
             selected = settings.backEdgeStyle,
             optionLabel = { backEdgeLabel(it) },
-            onSelect = { write { setBackEdgeStyle(it) } },
+            onSelect = { onChange(DeveloperOptionChange.SetBackEdge(it)) },
             dialogIcon = Icons.Outlined.Swipe,
             modifier = modifier,
         )
@@ -171,7 +166,7 @@ internal fun DeveloperOptionItem(
             options = AnimationSpeed.entries,
             selected = settings.animationSpeed,
             optionLabel = { animationSpeedLabel(it) },
-            onSelect = { write { setAnimationSpeed(it) } },
+            onSelect = { onChange(DeveloperOptionChange.SetAnimationSpeed(it)) },
             dialogIcon = Icons.Outlined.Animation,
             modifier = modifier,
         )
@@ -181,7 +176,7 @@ internal fun DeveloperOptionItem(
             options = EntranceStyle.entries,
             selected = settings.entranceStyle,
             optionLabel = { entranceStyleLabel(it) },
-            onSelect = { write { setEntranceStyle(it) } },
+            onSelect = { onChange(DeveloperOptionChange.SetEntranceStyle(it)) },
             dialogIcon = Icons.Outlined.Animation,
             modifier = modifier,
         )
@@ -191,7 +186,7 @@ internal fun DeveloperOptionItem(
             options = MotionTempo.entries,
             selected = settings.motionTempo,
             optionLabel = { motionTempoLabel(it) },
-            onSelect = { write { setMotionTempo(it) } },
+            onSelect = { onChange(DeveloperOptionChange.SetMotionTempo(it)) },
             dialogIcon = Icons.Outlined.Animation,
             modifier = modifier,
         )
@@ -201,7 +196,7 @@ internal fun DeveloperOptionItem(
             options = EntranceReplay.entries,
             selected = settings.entranceReplay,
             optionLabel = { entranceReplayLabel(it) },
-            onSelect = { write { setEntranceReplay(it) } },
+            onSelect = { onChange(DeveloperOptionChange.SetEntranceReplay(it)) },
             dialogIcon = Icons.Outlined.Animation,
             modifier = modifier,
         )
@@ -211,23 +206,12 @@ internal fun DeveloperOptionItem(
             options = accessoryModes(capabilities),
             selected = settings.accessoryMode,
             optionLabel = { accessoryLabel(it) },
-            onSelect = { write { setAccessoryMode(it) } },
+            onSelect = { onChange(DeveloperOptionChange.SetBottomAccessory(it)) },
             dialogIcon = Icons.Outlined.SmartDisplay,
             modifier = modifier,
         )
     }
 }
-
-@Composable
-internal fun layoutModeLabel(mode: ShellLayoutMode): String = stringResource(
-    when (mode) {
-        ShellLayoutMode.Auto -> R.string.shell_layout_auto
-        ShellLayoutMode.BottomBar -> R.string.shell_layout_bottom_bar
-        ShellLayoutMode.Rail -> R.string.shell_layout_rail
-        ShellLayoutMode.ExpandedRail -> R.string.shell_layout_expanded_rail
-        ShellLayoutMode.PermanentDrawer -> R.string.shell_layout_permanent_drawer
-    },
-)
 
 @Composable
 private fun topBarLabel(value: TopBarOverride): String = stringResource(

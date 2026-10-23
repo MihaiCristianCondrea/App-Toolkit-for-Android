@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.dat
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryCollection
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.ConsentPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.exceptions.ConsentException
@@ -56,7 +56,7 @@ import kotlin.time.Duration.Companion.milliseconds
 class DefaultConsentRepository(
     private val remote: ConsentRemoteDataSource,
     private val local: ConsentPreferencesDataSource,
-    private val configProvider: BuildInfoProvider,
+    private val buildInfoRepository: BuildInfoRepository,
     private val diagnostics: DiagnosticsReporter,
     private val collection: TelemetryCollection,
     private val requestScope: CoroutineScope =
@@ -210,7 +210,7 @@ class DefaultConsentRepository(
     /** Reads every stored choice at once. Unset choices are granted in release builds only. */
     private suspend fun readPersistedSettings(): ConsentSettings = storageCall {
         coroutineScope {
-            val defaultGranted = !configProvider.isDebugBuild
+            val defaultGranted = !buildInfoRepository.isDebugBuild
             val usageDeferred = async { local.usageAndDiagnostics(default = defaultGranted).first() }
             val analyticsDeferred = async { local.analyticsConsent(default = defaultGranted).first() }
             val adStorageDeferred = async { local.adStorageConsent(default = defaultGranted).first() }

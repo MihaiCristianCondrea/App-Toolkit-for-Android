@@ -6,6 +6,8 @@ The developer's app catalogue: listing, details, favorites, and install state.
 
 ## Owns
 
+- App-card launching through the Toolkit's `InstalledAppsRepository` and `AppLauncher`; the sample
+  keeps its Play Store fallback when a package is absent or cannot be launched.
 - `DeveloperAppsRepository`, `InstalledAppsRepository`, `FavoritesRepository` and their `Default`
   implementations.
 - `DeveloperAppsRemoteDataSource`, which owns Ktor requests and DTO decoding, and throws a

@@ -17,6 +17,13 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.analytics.diagnosticsPrivacyChoicesEvent
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.analytics.diagnosticsToggleEvent
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.analytics.USAGE_DIAGNOSTICS_SCREEN_NAME
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.analytics.UsageAndDiagnosticsPreferenceKeys
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -35,12 +42,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
@@ -58,15 +62,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.s
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs.FirebaseConsentDialog
 import org.koin.compose.viewmodel.koinViewModel
 
-private const val USAGE_DIAGNOSTICS_SCREEN_NAME = "UsageAndDiagnostics"
+
 private const val USAGE_DIAGNOSTICS_SCREEN_CLASS = "UsageAndDiagnosticsScreen"
 private val USAGE_DIAGNOSTICS_SCREEN: TrackedScreen =
     TrackedScreen(name = USAGE_DIAGNOSTICS_SCREEN_NAME, className = USAGE_DIAGNOSTICS_SCREEN_CLASS)
 
-private object UsageAndDiagnosticsPreferenceKeys {
-    const val USAGE_AND_DIAGNOSTICS: String = "usage_and_diagnostics"
-    const val PRIVACY_CHOICES: String = "advanced_privacy_settings"
-}
+
 
 /**
  * Usage and diagnostics settings: the reporting switch, and a row that opens
@@ -178,18 +179,7 @@ private fun UsageAndDiagnosticsList(
                     onEvent(UsageAndDiagnosticsEvent.SetUsageAndDiagnostics(isChecked))
                 },
                 ga4EventProvider = { isChecked ->
-                    Ga4EventData(
-                        name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
-                        params = mapOf(
-                            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
-                                USAGE_DIAGNOSTICS_SCREEN_NAME
-                            ),
-                            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
-                                UsageAndDiagnosticsPreferenceKeys.USAGE_AND_DIAGNOSTICS
-                            ),
-                            SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(isChecked.toString()),
-                        ),
-                    )
+                    diagnosticsToggleEvent(isChecked)
                 }
             )
         }
@@ -200,17 +190,7 @@ private fun UsageAndDiagnosticsList(
                     title = stringResource(id = R.string.advanced_privacy_settings),
                     summary = stringResource(id = R.string.summary_advanced_privacy_settings),
                     onClick = onOpenPrivacyChoices,
-                    ga4Event = Ga4EventData(
-                        name = SettingsAnalytics.Events.PREFERENCE_VIEW,
-                        params = mapOf(
-                            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
-                                USAGE_DIAGNOSTICS_SCREEN_NAME
-                            ),
-                            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
-                                UsageAndDiagnosticsPreferenceKeys.PRIVACY_CHOICES
-                            ),
-                        ),
-                    )
+                    ga4Event = diagnosticsPrivacyChoicesEvent()
                 )
             }
         }

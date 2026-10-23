@@ -33,9 +33,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.contr
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.mappers.toDonationOptions
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.models.DonationOption
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.states.SupportUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.utils.SupportAnalytics
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.utils.beginCheckoutEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.utils.donationResultEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.analytics.SupportAnalytics
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.analytics.beginCheckoutEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.analytics.donationResultEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repositories.BillingRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.models.PurchaseResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.utils.extensions.isValidForBilling

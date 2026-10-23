@@ -17,6 +17,15 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.analytics.adsPrivacyPreferenceEvent
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.analytics.adsToggleEvent
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.analytics.adsLearnMoreEvent
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.analytics.ADS_SETTINGS_SCREEN_NAME
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.analytics.AdsPreferenceKeys
+
 import android.content.Context
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
@@ -36,15 +45,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
@@ -63,17 +68,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
-private const val ADS_SETTINGS_SCREEN_NAME = "AdsSettings"
 private const val ADS_SETTINGS_SCREEN_CLASS = "AdsSettingsScreen"
 private val ADS_SETTINGS_SCREEN: TrackedScreen =
     TrackedScreen(name = ADS_SETTINGS_SCREEN_NAME, className = ADS_SETTINGS_SCREEN_CLASS)
-
-private object AdsPreferenceKeys {
-    const val DISPLAY_ADS: String = "display_ads"
-    const val REDUCE_ADS: String = "reduce_ads"
-    const val PERSONALIZED_ADS: String = "personalized_ads"
-    const val LEARN_MORE: String = "learn_more"
-}
 
 /**
  * The ad preferences page, which `adsSettingsPage()` registers and the privacy page opens. Debug
@@ -88,7 +85,7 @@ fun AdsSettingsScreen() {
     val viewModel: AdsSettingsViewModel = koinViewModel()
     val state: AdsSettingsUiState by viewModel.state.collectAsStateWithLifecycle()
     val telemetry = LocalTelemetry.current
-    val buildInfoProvider: BuildInfoProvider = koinInject()
+    val buildInfoRepository: BuildInfoRepository = koinInject()
     val context: Context = LocalContext.current
     val activity = LocalActivity.current
     val consentHost: ConsentHost? = remember(activity) { activity?.let(::ConsentHost) }
@@ -97,16 +94,13 @@ fun AdsSettingsScreen() {
         AdsSettingsScreenContent(
             state = state,
             onEvent = viewModel::onEvent,
-            showDisplayAdsSwitch = buildInfoProvider.isDebugBuild,
+            showDisplayAdsSwitch = buildInfoRepository.isDebugBuild,
             onOpenPrivacyForm = {
                 consentHost?.let { host -> viewModel.onEvent(AdsSettingsEvent.RequestConsent(host)) }
             },
             onLearnMore = {
                 telemetry.logEvent(
-                    AnalyticsEvent(
-                        name = SettingsAnalytics.Events.PREFERENCE_VIEW,
-                        params = adsPreferenceParams(preferenceKey = AdsPreferenceKeys.LEARN_MORE),
-                    )
+                    adsLearnMoreEvent()
                 )
                 context.openUrl(url = AppLinks.ADS_HELP_CENTER)
             },
@@ -187,11 +181,7 @@ private fun AdsSettingsList(
                     )
                 },
                 ga4EventProvider = { isChecked ->
-                    Ga4EventData(
-                        name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
-                        params = adsPreferenceParams(preferenceKey = switchKey) +
-                            (SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(isChecked.toString())),
-                    )
+                    adsToggleEvent(isChecked, switchKey)
                 },
             )
         }
@@ -203,10 +193,7 @@ private fun AdsSettingsList(
                     enabled = preferences.adsEnabled,
                     summary = stringResource(id = R.string.summary_ads_personalized_ads),
                     onClick = onOpenPrivacyForm,
-                    ga4Event = Ga4EventData(
-                        name = SettingsAnalytics.Events.PREFERENCE_VIEW,
-                        params = adsPreferenceParams(preferenceKey = AdsPreferenceKeys.PERSONALIZED_ADS),
-                    ),
+                    ga4Event = adsPrivacyPreferenceEvent(),
                 )
             }
         }
@@ -223,12 +210,6 @@ private fun AdsSettingsList(
         }
     }
 }
-
-/** The `screen` and `preference_key` parameters every ads settings GA4 event carries. */
-private fun adsPreferenceParams(preferenceKey: String): Map<String, AnalyticsValue> = mapOf(
-    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(ADS_SETTINGS_SCREEN_NAME),
-    SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
-)
 
 @Preview(showBackground = true)
 @Composable
