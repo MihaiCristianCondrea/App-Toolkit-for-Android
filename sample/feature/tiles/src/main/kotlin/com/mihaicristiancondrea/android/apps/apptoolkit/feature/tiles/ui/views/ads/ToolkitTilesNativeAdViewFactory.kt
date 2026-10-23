@@ -18,116 +18,28 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ads
 
 import android.content.Context
-import android.view.Gravity
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.DefaultNativeAdViewFactory
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.ICON_PADDING_DP
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdPresentation
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdViewFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdViewHolder
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.SMALL_SPACING_DP
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.SPACING_DP
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.advertiserView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.bodyView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.callToActionView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.headlineView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.iconFrameView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.nativeAdRoot
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.sponsoredLabelView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.verticalContent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.withTopMargin
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.roundedOutline
 
-/**
- * Specialized ad factory for the Toolkit Tiles screen.
- *
- * It implements the "Quick Tools" look: circular 44dp badge icons with internal padding
- * and specific card alignment.
- */
+/** Keeps the shared Compact arrangement with the Quick Tools row's spacing and badge size. */
 class ToolkitTilesNativeAdViewFactory : NativeAdViewFactory {
     private val defaultFactory = DefaultNativeAdViewFactory()
 
-    override fun createViewHolder(
-        context: Context,
-        presentation: NativeAdPresentation
-    ): NativeAdViewHolder {
-        return if (presentation is NativeAdPresentation.Compact) {
-            createTilesCompact(context)
-        } else {
-            defaultFactory.createViewHolder(context, presentation)
+    override fun createViewHolder(context: Context, presentation: NativeAdPresentation): NativeAdViewHolder {
+        val holder = defaultFactory.createViewHolder(context, presentation)
+        if (presentation != NativeAdPresentation.Compact) return holder
+
+        holder.content.setPadding(context.dp(16), context.dp(12), context.dp(16), context.dp(12))
+        holder.iconFrame?.apply {
+            layoutParams.width = context.dp(44)
+            layoutParams.height = context.dp(44)
+            outlineProvider = roundedOutline(radiusPx = context.dp(22))
         }
-    }
-
-    private fun createTilesCompact(context: Context): NativeAdViewHolder {
-        val root = nativeAdRoot(context = context)
-        val content = verticalContent(context = context, padding = 0).apply {
-            val horizontalPadding = context.dp(16)
-            val verticalPadding = context.dp(12)
-            setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
-        }
-        val label = sponsoredLabelView(context = context)
-
-        val row = LinearLayout(context).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-            layoutParams = LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-            ).apply { topMargin = context.dp(SMALL_SPACING_DP) }
-        }
-
-        val iconFrame = iconFrameView(
-            context = context,
-            sizeDp = 44,
-            radiusDp = 22,
-            paddingDp = 8
-        )
-        val icon = iconFrame.getChildAt(0) as ImageView
-
-        val texts = LinearLayout(context).apply {
-            orientation = LinearLayout.VERTICAL
-            layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
-                .apply {
-                    marginStart = context.dp(SPACING_DP)
-                    marginEnd = context.dp(SMALL_SPACING_DP)
-                }
-        }
-        // The weight, the body's line cap and the call to action are set by the card's
-        // NativeAdStyle, because they are properties of views rather than of the arrangement.
-        val headline = headlineView(context = context, maxLines = 2)
-        val body = bodyView(context = context, maxLines = 3)
-            .withTopMargin(context.dp(ICON_PADDING_DP))
-        val advertiser = advertiserView(context = context)
-            .withTopMargin(context.dp(ICON_PADDING_DP))
-        texts.addView(headline)
-        texts.addView(body)
-        texts.addView(advertiser)
-
-        val callToAction = callToActionView(context = context)
-
-        row.addView(iconFrame)
-        row.addView(texts)
-        row.addView(callToAction)
-
-        content.addView(label)
-        content.addView(row)
-        root.addView(content)
-
-        return NativeAdViewHolder(
-            presentation = NativeAdPresentation.Compact,
-            root = root,
-            content = content,
-            label = label,
-            media = null,
-            mediaFrame = null,
-            icon = icon,
-            iconFrame = iconFrame,
-            headline = headline,
-            body = body,
-            advertiser = advertiser,
-            callToAction = callToAction,
-        )
+        holder.headline.maxLines = 2
+        return holder
     }
 }

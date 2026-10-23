@@ -20,20 +20,28 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.reposi
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.AppVersionMetadata
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.packagemanager.getVersionMetadata
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.packagemanager.isAppInstalled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
+import kotlin.test.assertSame
+import kotlin.test.assertTrue
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.async
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNull
-import kotlin.test.assertSame
 
 @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 class DefaultInstalledAppsRepositoryTest {
@@ -80,4 +88,48 @@ class DefaultInstalledAppsRepositoryTest {
         assertEquals(false, repository.isInstalled(""))
         verify(exactly = 0) { manager.getLaunchIntentForPackage(any()) }
     }
+
+    @Test
+    fun batchLookupFiltersBlankAndMissingPackages() = runTest {
+        val extensions = "com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.packagemanager.PackageManagerExtensionsKt"
+        mockkStatic(extensions)
+        try {
+            every { context.isAppInstalled("example.installed") } returns true
+            every { context.isAppInstalled("example.missing") } returns false
+            val repository = DefaultInstalledAppsRepository(context, TestDispatchers(StandardTestDispatcher(testScheduler)))
+            assertEquals(
+                setOf("example.installed"),
+                repository.getInstalledPackages(listOf("", "example.installed", "example.missing", "example.installed")),
+            )
+            verify(exactly = 0) { context.isAppInstalled("") }
+        } finally {
+            unmockkStatic(extensions)
+        }
+    }
+
+    @Test
+    fun installInfoKeepsTheSharedVersionMetadata() = runTest {
+        val extensions = "com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.packagemanager.PackageManagerExtensionsKt"
+        mockkStatic(extensions)
+        try {
+            val version = AppVersionMetadata(versionName = "1.2", versionCode = 12)
+            every { context.isAppInstalled("example.app") } returns true
+            every { manager.getVersionMetadata("example.app") } returns version
+            val repository = DefaultInstalledAppsRepository(context, TestDispatchers(StandardTestDispatcher(testScheduler)))
+            val info = repository.getInstallInfo("example.app")
+            assertTrue(info.isInstalled)
+            assertEquals(version, info.versionInfo)
+            assertEquals(null, repository.getInstallInfo("").versionInfo)
+        } finally {
+            unmockkStatic(extensions)
+        }
+    }
+
+    @Test
+    fun cancelledLauncherLookupPropagates() = runTest {
+        every { manager.getLaunchIntentForPackage("example.app") } throws CancellationException("cancelled")
+        val repository = DefaultInstalledAppsRepository(context, TestDispatchers(StandardTestDispatcher(testScheduler)))
+        assertFailsWith<CancellationException> { repository.getLaunchIntent("example.app") }
+    }
+
 }

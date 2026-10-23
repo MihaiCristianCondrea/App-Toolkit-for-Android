@@ -15,10 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models
 
-/** Package-manager install metadata for a catalog app. */
+/** Installation visibility and version metadata for a package. */
 data class AppInstallInfo(
     val isInstalled: Boolean,
-    val versionInfo: AppVersionInfo?,
+    val versionInfo: AppVersionMetadata?,
 )

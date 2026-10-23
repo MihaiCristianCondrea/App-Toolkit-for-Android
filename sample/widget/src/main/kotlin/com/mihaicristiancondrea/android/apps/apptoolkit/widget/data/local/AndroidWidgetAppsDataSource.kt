@@ -18,7 +18,6 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.widget.data.local
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
@@ -31,10 +30,6 @@ internal class AndroidWidgetAppsDataSource(
     private val context: Context,
     private val dispatchers: DispatcherProvider,
 ) {
-    suspend fun launchIntent(packageName: String): Intent? = withContext(dispatchers.io) {
-        context.packageManager.getLaunchIntentForPackage(packageName)
-    }
-
     suspend fun installedIcon(packageName: String, sizePx: Int): Bitmap? {
         val drawable = withContext(dispatchers.io) {
             try {

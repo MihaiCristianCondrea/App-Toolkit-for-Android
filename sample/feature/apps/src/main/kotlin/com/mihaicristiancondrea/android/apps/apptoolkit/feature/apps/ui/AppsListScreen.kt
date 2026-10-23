@@ -105,7 +105,7 @@ fun AppsListScreen() {
     val launcher = remember(installedApps, dispatchers) { AppLauncher(installedApps, dispatchers) }
     val openApp: (AppSummary) -> Unit = rememberOpenAppAction(launcher, installedApps::isInstalled)
     val shareApp: (AppSummary) -> Unit = rememberShareAppAction()
-    val appActionLauncher = remember(context, clipboard) { AndroidAppActionLauncher(context, clipboard) }
+    val appActionLauncher = remember(context, clipboard, installedApps) { AndroidAppActionLauncher(context, clipboard, installedApps) }
     val selectedApp: AppSummary? = state.selectedApp
     val detailsActionLauncher: AppActionLauncher = remember(appActionLauncher, telemetry, selectedApp) {
         selectedApp?.let { app ->
@@ -311,7 +311,7 @@ private fun AppsListScreenContentPreview() {
             onFavoriteToggle = {},
             onShareClick = {},
             onDetailsClosed = {},
-            detailsActionLauncher = remember(context) { AndroidAppActionLauncher(context, PreviewClipboardRepository) },
+            detailsActionLauncher = remember(context) { AndroidAppActionLauncher(context, PreviewClipboardRepository, PreviewInstalledAppsRepository) },
             windowWidthSizeClass = AppWindowWidthSizeClass.Compact,
         )
     }
@@ -328,7 +328,7 @@ private fun AppsListScreenContentLoadingPreview() {
             onFavoriteToggle = {},
             onShareClick = {},
             onDetailsClosed = {},
-            detailsActionLauncher = remember(context) { AndroidAppActionLauncher(context, PreviewClipboardRepository) },
+            detailsActionLauncher = remember(context) { AndroidAppActionLauncher(context, PreviewClipboardRepository, PreviewInstalledAppsRepository) },
             windowWidthSizeClass = AppWindowWidthSizeClass.Compact,
         )
     }
@@ -338,4 +338,13 @@ private fun AppsListScreenContentLoadingPreview() {
 private object PreviewClipboardRepository : ClipboardRepository {
     override val confirmsCopies: Boolean = true
     override fun copyText(label: String, text: String, isSensitive: Boolean) = Unit
+}
+
+private object PreviewInstalledAppsRepository : InstalledAppsRepository {
+    override suspend fun isInstalled(packageName: String): Boolean = false
+    override suspend fun getInstalledPackages(packageNames: Collection<String>): Set<String> = emptySet()
+    override suspend fun getInstallInfo(packageName: String) =
+        com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.AppInstallInfo(false, null)
+    override suspend fun getLaunchIntent(packageName: String): android.content.Intent? = null
+    override suspend fun getLaunchIntentSender(packageName: String): android.content.IntentSender? = null
 }

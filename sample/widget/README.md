@@ -74,9 +74,10 @@ flowchart TD
 
 ## Internal implementations
 
-- `data/local/AndroidWidgetAppsDataSource`: package lookups on IO and icon drawing on Default.
+- `data/local/AndroidWidgetAppsDataSource`: package icon lookups on IO and icon drawing on Default.
 - `data/remote/CoilWidgetIconDataSource`: shared Coil cache/network loading and software bitmaps.
-- `data/repositories/DefaultWidgetAppsRepository`: bounds icon loading to nine entries.
+- `data/repositories/DefaultWidgetAppsRepository`: bounds icon loading to the requested capacity
+  and reuses the Toolkit's `InstalledAppsRepository` for launcher lookup.
 - `ui/mappers/WidgetAppMappers`: loaded data to render entries and launch/store destinations.
 - Render models in `ui/models/`, state in `ui/states/`, receiver in `receivers/`.
 - Glance unit tests for standalone state content and retry presentation.

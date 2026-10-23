@@ -22,6 +22,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories.DeveloperAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.widget.data.local.AndroidWidgetAppsDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.widget.data.remote.CoilWidgetIconDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.InstalledAppsRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -37,12 +38,13 @@ class DefaultWidgetAppsRepositoryTest {
     private val catalog = mockk<DeveloperAppsRepository>()
     private val local = mockk<AndroidWidgetAppsDataSource>()
     private val remote = mockk<CoilWidgetIconDataSource>()
-    private val repository = DefaultWidgetAppsRepository(catalog, local, remote)
+    private val installedApps = mockk<InstalledAppsRepository>()
+    private val repository = DefaultWidgetAppsRepository(catalog, local, remote, installedApps)
     private val app = AppSummary(name = "App", packageName = "example.app", iconUrl = "https://example.test/icon.png", shortDescription = "")
     private val icon = mockk<Bitmap>()
 
     init {
-        coEvery { local.launchIntent(any()) } returns null
+        coEvery { installedApps.getLaunchIntent(any()) } returns null
         coEvery { local.installedIcon(any(), any()) } returns null
         coEvery { remote.icon(any(), any()) } returns null
         coEvery { local.fallbackIcon(any()) } returns icon

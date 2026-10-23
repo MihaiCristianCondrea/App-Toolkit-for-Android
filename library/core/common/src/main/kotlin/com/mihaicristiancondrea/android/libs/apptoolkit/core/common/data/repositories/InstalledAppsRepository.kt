@@ -18,12 +18,18 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories
 
 import android.content.Intent
+import android.content.IntentSender
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.AppInstallInfo
 
-/** Installed-package queries, safe to call from the main thread. */
+/** Installed-package queries, safe to call from the main thread. Android package visibility applies. */
 interface InstalledAppsRepository {
-    /** Whether the host can see an installed package with this name. */
     suspend fun isInstalled(packageName: String): Boolean
+    suspend fun getInstalledPackages(packageNames: Collection<String>): Set<String>
+    suspend fun getInstallInfo(packageName: String): AppInstallInfo
 
-    /** A fresh launcher intent, or null when the package has no accessible launcher. */
+    /** A fresh launcher intent, or null when lookup fails or no launcher is accessible. */
     suspend fun getLaunchIntent(packageName: String): Intent?
+
+    /** API 33+ launch token, or null when unsupported or unavailable. */
+    suspend fun getLaunchIntentSender(packageName: String): IntentSender?
 }

@@ -60,6 +60,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.mo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageToastHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.StateContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
@@ -160,7 +161,7 @@ fun IssueReporterBottomSheet(
         }
     }
 
-    MessageToasts(
+    MessageToastHost(
         messages = messages,
         onShown = viewModel::messageShown,
     )
@@ -293,29 +294,6 @@ private fun SubmissionSucceeded(submissionState: IssueSubmissionState) {
         keyboardController?.hide()
         focusManager.clearFocus(force = true)
         hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.Confirm)
-    }
-}
-
-/**
- * Shows [messages] as toasts, oldest first, and calls [onShown] with each one's id once its toast
- * is posted. A toast is the system's own window, so it never covers the sheet's send button.
- */
-@Composable
-private fun MessageToasts(
-    messages: ImmutableList<UiMessage>,
-    onShown: (id: Long) -> Unit,
-) {
-    val context: Context = LocalContext.current
-    val next: UiMessage? = messages.firstOrNull()
-
-    LaunchedEffect(next?.id) {
-        val message: UiMessage = next ?: return@LaunchedEffect
-        Toast.makeText(
-            context.applicationContext,
-            message.text.asString(context = context),
-            if (message.isError) Toast.LENGTH_LONG else Toast.LENGTH_SHORT,
-        ).show()
-        onShown(message.id)
     }
 }
 

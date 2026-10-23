@@ -9,22 +9,22 @@ The developer's app catalogue: listing, details, favorites, and install state.
 - App interaction event builders in `ui/analytics`, and the reporting launcher in `ui/utils`.
 - App-card launching through the Toolkit's `InstalledAppsRepository` and `AppLauncher`; the sample
   keeps its Play Store fallback when a package is absent or cannot be launched.
-- `DeveloperAppsRepository`, `InstalledAppsRepository`, `FavoritesRepository` and their `Default`
-  implementations.
+- `DeveloperAppsRepository`, `FavoritesRepository` and their `Default` implementations.
+  Installed-package queries use the Toolkit's `InstalledAppsRepository`.
 - `FavoritesPreferencesDataSource`, the favorited package names under the `favorite_apps` key of
   the shared settings file.
 - `DeveloperAppsRemoteDataSource`, which owns Ktor requests and DTO decoding, and throws a
   `NetworkException` for an error status.
 - `DeveloperAppsLocalDataSource`, which persists the last successfully downloaded compact
-  catalogue as an atomic JSON file, plus `InstalledAppsLocalDataSource` for PackageManager access.
+  catalogue as an atomic JSON file. PackageManager access belongs to the Toolkit repository.
 - `AppsListViewModel`, `AppListUiState`, `HomeEvent`, `AppsListScreen` with its stateless
   `AppsListScreenContent`, the detail sheet, and the native-ad placement in the list.
 - Localized app-catalogue strings, and `ui/mappers/AppsListErrorMappers.kt`, which gives each
   failure the shared `toUiText` text or the feature's fallback.
-- `AppsListRoute`, this feature's tab key.
+- `AppsListRoute` is supplied by `:sample:app`, which owns the navigation graph.
 - The Get it on Google Play badge the detail sheet shows.
-- The random-app button, declared by `AppsListScreenContent` with `ScaffoldFabs` so the tab's
-  scaffold draws it; it scales out while there is no app to open.
+- The random-app button, declared by `AppsListScreen` through `ScreenHost(fabs)`; it scales out
+  while there is no app to open.
 - Filtering the grid by the tab's search field (`LocalShellSearch`): an app matches by name,
   package or description, after the filter chips.
 
@@ -91,9 +91,10 @@ flowchart TD
 
 ## Installed-package metadata
 
-AndroidInstalledAppsLocalDataSource shares core common's getVersionMetadata lookup with Issue
-Reporter, then maps into the feature's existing AppVersionInfo. Blank names, package visibility,
-and unavailable version behavior are unchanged; the feature still owns install-state decisions.
+The Toolkit's `InstalledAppsRepository` supplies batch installation checks and `AppInstallInfo`.
+Version details stay in the existing `AppVersionMetadata` form, with no sample-only copy or mapper.
+The details launcher also uses this repository for launch intents and API 33+ launch tokens, then
+opens Android activities on the UI coroutine. A missing or denied lookup keeps the Settings fallback.
 
 ## Public contracts
 

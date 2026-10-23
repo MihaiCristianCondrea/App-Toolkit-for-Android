@@ -17,20 +17,16 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.di
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.DefaultFavoritesPreferencesDataSource
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.FavoritesPreferencesDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.DefaultDeveloperAppsLocalDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.DefaultFavoritesPreferencesDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.DeveloperAppsLocalDataSource
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.installed.AndroidInstalledAppsLocalDataSource
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.installed.InstalledAppsLocalDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.FavoritesPreferencesDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.DefaultDeveloperAppsRemoteDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.DeveloperAppsRemoteDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories.DefaultDeveloperAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories.DefaultFavoritesRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories.DefaultInstalledAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories.DeveloperAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories.FavoritesRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories.InstalledAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.AppsListViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.di.DataStoreQualifiers
@@ -64,11 +60,6 @@ val appsModule: Module = module {
             baseUrl = get(qualifier = named(name = AppToolkitDiConstants.ANDROID_APPS_METADATA_API_BASE_URL)),
         )
     }
-
-    single<InstalledAppsLocalDataSource> {
-        AndroidInstalledAppsLocalDataSource(context = androidContext(), dispatchers = get())
-    }
-    single<InstalledAppsRepository> { DefaultInstalledAppsRepository(localDataSource = get()) }
 
     viewModel {
         AppsListViewModel(

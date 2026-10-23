@@ -31,7 +31,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extens
  */
 @Stable
 interface AppActionLauncher {
-    fun openApp(packageName: String): Boolean
+    suspend fun openApp(packageName: String): Boolean
     fun openAppInfo(packageName: String): Boolean
     fun openNotifications(packageName: String): Boolean
     fun openPermissions(packageName: String): Boolean
@@ -42,9 +42,4 @@ interface AppActionLauncher {
     fun copyPackageName(packageName: String): Boolean
     fun openUrl(url: String): Boolean
 
-    fun openNotificationChannel(packageName: String, channelId: String): Boolean
-    fun openByDefault(packageName: String): Boolean
-    fun openAppLocale(packageName: String): Boolean
-    fun openAllFilesAccess(packageName: String): Boolean
-    fun openIgnoreBatteryOptimizationsList(): Boolean
 }

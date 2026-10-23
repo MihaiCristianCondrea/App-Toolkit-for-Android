@@ -42,7 +42,7 @@ class AnalyticsAppActionLauncher(
     private val source: String,
 ) : AppActionLauncher by delegate {
 
-    override fun openApp(packageName: String): Boolean {
+    override suspend fun openApp(packageName: String): Boolean {
         telemetryRepository.logAppInteraction(
             source = source,
             appInfo = appInfo,

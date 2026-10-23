@@ -69,6 +69,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constant
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageToastHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
@@ -126,7 +127,7 @@ fun ToolkitTilesScreen() {
         viewModel.onEvent(ToolkitTilesEvent.TileRequestLaunched)
     }
 
-    MessageToasts(messages = messages, onShown = viewModel::messageShown)
+    MessageToastHost(messages = messages, onShown = viewModel::messageShown, errorDuration = Toast.LENGTH_SHORT)
 
     ScreenHost(screen = TilesScreen, status = state.categories) {
         CompositionLocalProvider(
@@ -139,26 +140,6 @@ fun ToolkitTilesScreen() {
                 searchQuery = LocalShellSearch.current?.query.orEmpty(),
             )
         }
-    }
-}
-
-/**
- * Shows [messages] as toasts, oldest first, and calls [onShown] with each one's id once its toast
- * is posted. The messages come while a tool's bottom sheet is open, which would cover a snackbar.
- */
-@Composable
-private fun MessageToasts(
-    messages: ImmutableList<UiMessage>,
-    onShown: (id: Long) -> Unit,
-) {
-    val context: Context = LocalContext.current
-    val next: UiMessage? = messages.firstOrNull()
-
-    LaunchedEffect(next?.id) {
-        val message: UiMessage = next ?: return@LaunchedEffect
-        Toast.makeText(context.applicationContext, message.text.asString(context = context), Toast.LENGTH_SHORT)
-            .show()
-        onShown(message.id)
     }
 }
 

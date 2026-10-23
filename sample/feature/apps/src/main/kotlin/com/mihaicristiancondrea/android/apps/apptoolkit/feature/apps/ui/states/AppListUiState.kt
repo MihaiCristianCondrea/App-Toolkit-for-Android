@@ -19,8 +19,8 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states
 
 import androidx.compose.runtime.Immutable
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppDetails
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppInstallInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.AppInstallInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet

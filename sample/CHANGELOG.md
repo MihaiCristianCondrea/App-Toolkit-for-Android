@@ -13,7 +13,6 @@
 
 - Existing app-icons widgets may need to be added again because their receiver component name
   changed during the sample architecture cleanup.
-
 - Existing Quick Settings tiles may need to be removed and added again after this update because
   their service component names changed.
 
@@ -30,6 +29,9 @@
   each section or card in turn.
 
 ### Fixed
+
+- Opening an installed app can fall back to its Settings page when Android denies the launcher
+  lookup, rather than letting the lookup failure escape.
 
 - Stopping or replacing Morse and SOS playback waits for in-flight torch commands, keeping the
   flashlight off after stopping.

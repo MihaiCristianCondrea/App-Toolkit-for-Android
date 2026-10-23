@@ -6,9 +6,18 @@
 
 ### Added
 
+- `InstalledAppsRepository` now provides batch installed-package checks, installation/version
+  metadata and API 33+ launch tokens. The sample Apps feature and widget reuse this capability.
+- `MessageToastHost` presents queued `UiMessage` values above sheets, with configurable error
+  duration and acknowledgment after posting.
 - `topBarContainerColor()` returns the colour the app bar above is drawn in right now. A tab row
   under a `PageScaffold` bar or a shell tab's bar passes it as `containerColor`, so the bar and the
   tabs change colour together as content scrolls under them.
+
+### Changed
+
+- Custom `InstalledAppsRepository` implementations must also implement `getInstalledPackages`,
+  `getInstallInfo` and `getLaunchIntentSender`. `AppInstallInfo` uses the shared `AppVersionMetadata`.
 
 ---
 

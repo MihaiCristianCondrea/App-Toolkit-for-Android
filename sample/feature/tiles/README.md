@@ -182,3 +182,11 @@ Features expose callbacks rather than importing app-owned route keys.
 Quick Settings entry points live in the feature services package. Their manifest component names
 changed from ui.services to services in pre28. Remove and re-add any sample tiles pinned before
 that update. Tile IDs and preference keys are unchanged; tile text models live in ui/models.
+
+## Shared presentation
+
+- `DiceRollTool` is the only public dice entry point; its renderer stays private.
+- `MessageToastHost` from core UI presents queued tool messages with short errors, preserving the
+  sheet behavior without a local copy of the host.
+- `ToolkitTilesNativeAdViewFactory` adapts the default Compact holder's padding, icon size and
+  headline cap. `NativeAdStyle` owns the round badge, inset and text-action appearance.

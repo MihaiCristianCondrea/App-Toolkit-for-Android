@@ -17,13 +17,17 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories.InstalledAppsRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppInstallInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.AppInstallInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.InstalledAppsRepository
 
 class FakeInstalledAppsRepository(
     private val installedPackages: Set<String> = emptySet(),
     private val installInfoMap: Map<String, AppInstallInfo> = emptyMap(),
 ) : InstalledAppsRepository {
+    override suspend fun isInstalled(packageName: String): Boolean = packageName in installedPackages
+    override suspend fun getLaunchIntent(packageName: String): android.content.Intent? = null
+    override suspend fun getLaunchIntentSender(packageName: String): android.content.IntentSender? = null
+
     override suspend fun getInstalledPackages(packageNames: Collection<String>): Set<String> {
         return packageNames.filter { it in installedPackages }.toSet()
     }

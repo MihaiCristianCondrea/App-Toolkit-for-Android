@@ -22,6 +22,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.reposi
 import com.mihaicristiancondrea.android.apps.apptoolkit.widget.data.local.AndroidWidgetAppsDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.widget.data.models.WidgetApp
 import com.mihaicristiancondrea.android.apps.apptoolkit.widget.data.remote.CoilWidgetIconDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.InstalledAppsRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -31,6 +32,7 @@ internal class DefaultWidgetAppsRepository(
     private val developerApps: DeveloperAppsRepository,
     private val local: AndroidWidgetAppsDataSource,
     private val remote: CoilWidgetIconDataSource,
+    private val installedApps: InstalledAppsRepository,
 ) : WidgetAppsRepository {
     override suspend fun savedApps(limit: Int): List<WidgetApp>? = developerApps.savedDeveloperApps()?.loadIcons(limit)
 
@@ -44,7 +46,7 @@ internal class DefaultWidgetAppsRepository(
                     icon = local.installedIcon(app.packageName, ICON_SIZE_PX)
                         ?: remote.icon(app.iconUrl, ICON_SIZE_PX)
                         ?: local.fallbackIcon(ICON_SIZE_PX),
-                    launchIntent = local.launchIntent(app.packageName),
+                    launchIntent = installedApps.getLaunchIntent(app.packageName),
                 )
             }
         }.awaitAll()

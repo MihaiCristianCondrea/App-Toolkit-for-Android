@@ -27,6 +27,6 @@ val widgetModule = module {
     single { AndroidWidgetAppsDataSource(context = get(), dispatchers = get()) }
     single { CoilWidgetIconDataSource(context = get(), dispatchers = get()) }
     single<WidgetAppsRepository> {
-        DefaultWidgetAppsRepository(developerApps = get(), local = get(), remote = get())
+        DefaultWidgetAppsRepository(developerApps = get(), local = get(), remote = get(), installedApps = get())
     }
 }

@@ -11,7 +11,8 @@ page frame, state handling, analytics hooks, and shared components.
   launches on the main dispatcher and owns the failure Toast. Package lookup remains in core common.
 - The screen contracts, in `screen`: `ScreenViewModel`, `LoggedScreenViewModel`, `Loadable`,
   `TrackedStatus`, `UiMessage`, `ScreenHost`, `ScreenStateHandler`, `ScreenStates`, `StateContent`
-  and `MessageHost`. See
+  and `MessageHost`. `MessageToastHost` presents the same queue above modal sheets when a
+  snackbar would be obscured. Toasts have no actions; errors default to a long duration. See
   [Screen state](#screen-state) and [Screen visits](#screen-visits).
 - The shell's page frame, in `views/shell`: `PageScaffold`, `ShellTopAppBar` and
   `rememberTopBarScrollBehavior`, the app bar's search field, `LocalContentPadding` and
