@@ -1,5 +1,5 @@
 /*
- * Copyright (©) 2026 Mihai-Cristian Condrea
+ * Copyright (┬⌐) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,14 +15,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local
+package com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.data.local
+
+import kotlinx.coroutines.flow.Flow
 
 /**
- * Lifecycle contract for the host-owned preference store.
+ * Persisted counters backing the in-app review eligibility rules.
  */
-interface CommonDataStoreCore {
-    /**
-     * Cleans up resources.
-     */
-    fun close()
+interface ReviewPreferencesDataSource {
+
+    val sessionCount: Flow<Int>
+
+    val hasPromptedReview: Flow<Boolean>
+
+    suspend fun incrementSessionCount()
+
+    suspend fun setHasPromptedReview(value: Boolean)
 }

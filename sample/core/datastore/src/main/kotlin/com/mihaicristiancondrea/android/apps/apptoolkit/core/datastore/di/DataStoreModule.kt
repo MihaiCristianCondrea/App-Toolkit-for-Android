@@ -26,6 +26,6 @@ import org.koin.dsl.module
  * Host datastore bindings.
  */
 val dataStoreModule: Module = module {
-    single<DataStore> { DataStore(commonDataStore = get()) }
+    single<DataStore> { DataStore(commonDataStore = get(), onboardingRepository = get()) }
     single<DataStoreInterface> { get<DataStore>() }
 }

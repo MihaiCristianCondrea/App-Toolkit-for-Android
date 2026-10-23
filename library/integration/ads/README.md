@@ -376,7 +376,7 @@ some of them. `NativeAdRenderer` is that logic, once.
   `create*` function per presentation out of the shared `headlineView`/`bodyView`/`iconFrameView`/
   `callToActionView` builders. A new shape is a new entry there, not a new component.
 - `NativeAdViewHolder` holds strong references to every bound view, so `bind` never searches for
-  one. It also assigns the SDK's asset slots (`root.headlineView = …`) and makes the single
+  one. It also assigns the SDK's asset slots (`root.headlineView = ΓÇª`) and makes the single
   `registerNativeAd(nativeAd, mediaView)` call that attributes impressions and clicks.
 - The tree is created once per presentation in the `AndroidView` **factory**, keyed on the
   presentation. `applyPalette` and `bind` run in **update**, so a theme change or a new ad repaints
@@ -499,12 +499,12 @@ Compose on the outside, views underneath. In
 `NativeComposeUtility.kt` nests them:
 
 ```
-AndroidView                       ← Compose hosts a view
-└── NativeAdView (FrameLayout)    ← the SDK's container, registered
-    └── ComposeView               ← a view hosting Compose again
-        ├── NativeAdHeadlineView  ← AndroidView { ComposeView } → nativeAdView.headlineView = it
-        ├── NativeAdIconView      ← AndroidView { ComposeView } → nativeAdView.iconView = it
-        └── NativeAdMediaView     ← the SDK's real MediaView, never Compose
+AndroidView                       ΓåÉ Compose hosts a view
+ΓööΓöÇΓöÇ NativeAdView (FrameLayout)    ΓåÉ the SDK's container, registered
+    ΓööΓöÇΓöÇ ComposeView               ΓåÉ a view hosting Compose again
+        Γö£ΓöÇΓöÇ NativeAdHeadlineView  ΓåÉ AndroidView { ComposeView } ΓåÆ nativeAdView.headlineView = it
+        Γö£ΓöÇΓöÇ NativeAdIconView      ΓåÉ AndroidView { ComposeView } ΓåÆ nativeAdView.iconView = it
+        ΓööΓöÇΓöÇ NativeAdMediaView     ΓåÉ the SDK's real MediaView, never Compose
 ```
 
 Each asset wrapper creates a `ComposeView`, assigns **that view** to the SDK slot, and calls
@@ -557,7 +557,7 @@ Three ways out, in order of preference:
 
 1. `composeView.setParentCompositionContext(rememberCompositionContext())`, which links the
    compositions so locals flow through.
-2. Re-apply the app theme inside `setContent { AppTheme { … } }`.
+2. Re-apply the app theme inside `setContent { AppTheme { ΓÇª } }`.
 3. Resolve the colours in the outer composition and pass them in, which is exactly
    what `NativeAdPalette` is.
 
@@ -597,7 +597,7 @@ The rendering primitives belong here, not in `:library:core:ui`. Two things pin 
    without demoting that dependency to the modules that need it only hides the problem.
 
 Untangling it means inverting both call sites so the layout takes the ad as a slot rather than an
-ad unit id. That is `NoDataScreen(adContent = { … })` instead of `showAd`, and the same for
+ad unit id. That is `NoDataScreen(adContent = { ΓÇª })` instead of `showAd`, and the same for
 `GroupedGrid`. After that the primitives can move here and `:library:core:ui` can drop the SDK
 entirely. Both are
 breaking changes to published APIs, so they are worth doing in one deliberate pass rather than
@@ -620,7 +620,7 @@ Two independent causes, both fixed:
 - The ads-enabled preference had two sources with different defaults. `AppOpenAdController` gated SDK
   initialization on one and the ad views read the other, so in a debug build the views could believe
   ads were on while the SDK had never been initialized. Both now read
-  `CommonDataStore.adsEnabledFlow`, and only the default is shared.
+  `AdsSettingsRepository.adsEnabled`, and only the default is shared.
 - Even with one source, initialization is asynchronous. An ad slot composed during startup could
   request before the SDK was up. Requests now wait on `AdsSdkState.isReady` and re-key when
   readiness
@@ -649,3 +649,13 @@ The separately reported `HsdpShimActivity` failure (`targetPackageName is null`)
 and is not covered by those initialization fixes. See the
 [SDK activity crash investigation](../../../docs/crashes/open/billing-proxy-activity-null-intent/README.md) before applying
 workarounds or describing it as fixed in consuming apps.
+
+## Preference storage ownership
+
+The ads integration owns `AdsPreferencesDataSource` and `DefaultAdsPreferencesDataSource` in
+`data/local`. `adsIntegrationModule` creates one source over the shared settings file and closes
+its collector when Koin closes. `AdsSettingsRepository` is a core common contract implemented here.
+UI and `AppOpenAdController` read its shared `adsEnabled` state; settings use cold reads so storage
+failures can reach the screen. A pending or failed read keeps shared ads disabled. IO failures retry
+with delays capped at 30 seconds; unexpected failures remain disabled until the source is recreated.
+`defaultAdsEnabled` applies only after a successful read finds no saved key.

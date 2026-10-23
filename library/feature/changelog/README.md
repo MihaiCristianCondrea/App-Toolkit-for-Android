@@ -7,6 +7,7 @@ and the bottom sheet that renders it.
 
 ## Owns
 
+- `ChangelogPreferencesDataSource` and its default in `data/local`, using the shared settings file.
 - `ChangelogRepository` and `DefaultChangelogRepository`, including selection of the Android App Metadata API
   call and the legacy GitHub fallback.
 - `GetChangelogUseCase`, which picks the current-version section or the full history, and
@@ -70,6 +71,7 @@ flowchart TD
 
 ## Public contracts
 
+- `ChangelogPreferencesDataSource` and its default in `data/local`, using the shared settings file.
 - `ChangelogRepository`, `GetChangelogUseCase`, `ChangelogViewModel`, `ChangelogUiState`,
   `ChangelogEvent`, `ChangelogDialog`, and `changelogModule`. `ChangelogDialogContent` is internal.
 
@@ -85,8 +87,8 @@ metadata API, a 404 silently changes which document the user reads.
 
 ## Markdown ownership
 
-Version-section parsing lives beside `GetChangelogUseCase`; thematic-break parsing lives beside
-`ChangelogDialog`. The former `utils/extensions/ChangelogExtensions.kt` is removed.
+Version-section parsing lives beside `GetChangelogUseCase`; thematic-break parsing lives in
+`ui/extensions/ChangelogMarkdownExtensions.kt`. The former `utils/extensions/ChangelogExtensions.kt` is removed.
 `DefaultChangelogRepository` takes `ChangelogRemoteDataSource` directly instead of an HttpClient.
 Callers constructing the repository directly must update that argument; the feature's Koin module
 supplies it automatically.

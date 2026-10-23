@@ -2,6 +2,19 @@
 
 ---
 
+# Unreleased
+
+### Changed
+
+- Preference sources for ads, review, onboarding and changelog now belong to their owning modules.
+  Custom graphs must include those modules and update source imports. The stored settings file,
+  keys and defaults are unchanged.
+- `AdsSettingsRepository` and `OnboardingRepository` contracts move to core common. The moved
+  capability delegates and lifecycle hooks are removed from `CommonDataStore`. Ad initialization
+  and design-system UI use repository bindings. See the 3.0.0 migration guide for constructor changes.
+
+---
+
 # October 23, 2026
 
 **Version:** `3.0.0-pre27`

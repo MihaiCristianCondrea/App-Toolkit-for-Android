@@ -19,6 +19,8 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.loc
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.startupValueFlow
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.OnboardingRepository
+import kotlinx.coroutines.flow.map
 import androidx.navigation3.runtime.NavKey
 import kotlinx.coroutines.flow.Flow
 
@@ -27,8 +29,9 @@ import kotlinx.coroutines.flow.Flow
  */
 class DataStore(
     private val commonDataStore: CommonDataStore,
+    private val onboardingRepository: OnboardingRepository,
 ) : DataStoreInterface {
-    override val startup: Flow<Boolean> = commonDataStore.startup
+    override val startup: Flow<Boolean> = onboardingRepository.observeOnboardingCompletion().map { completed -> !completed }
     override val componentsShowcaseUnlocked: Flow<Boolean> =
         commonDataStore.componentsShowcaseUnlocked
     override val favoriteApps: Flow<Set<String>> = commonDataStore.favoriteApps

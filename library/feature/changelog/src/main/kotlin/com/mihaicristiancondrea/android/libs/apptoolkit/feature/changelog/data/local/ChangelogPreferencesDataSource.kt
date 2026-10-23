@@ -1,5 +1,5 @@
 /*
- * Copyright (©) 2026 Mihai-Cristian Condrea
+ * Copyright (┬⌐) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,16 +15,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.repositories
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.local
 
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Abstraction for onboarding-related data operations.
+ * Persisted changelog state: the last version the user saw and its cached Markdown.
  */
-interface OnboardingRepository {
-    fun observeOnboardingCompletion(): Flow<Boolean>
-
-    /** Stores that onboarding is done. A failed write throws `StorageException`. */
-    suspend fun setOnboardingCompleted()
+interface ChangelogPreferencesDataSource {
+    fun lastSeenVersion(default: String = ""): Flow<String>
+    fun cachedChangelog(default: String = ""): Flow<String>
+    suspend fun saveLastSeenVersion(version: String)
+    suspend fun saveCachedChangelog(changelog: String)
 }

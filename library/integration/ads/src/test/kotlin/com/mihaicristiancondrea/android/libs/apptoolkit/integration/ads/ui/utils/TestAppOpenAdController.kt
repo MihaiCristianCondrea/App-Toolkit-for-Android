@@ -28,7 +28,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.rem
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.contracts.OnShowAdCompleteListener
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.AdMobAppIdDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.AdsSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import io.mockk.every
 import io.mockk.justRun
@@ -98,19 +98,19 @@ class TestAppOpenAdController {
         context: Context,
         provider: BuildInfoRepository,
         adMobAppIdDataSource: AdMobAppIdDataSource = this.adMobAppIdDataSource,
-        dataStore: CommonDataStore = stubDataStore(adsEnabled = false),
+        dataStore: AdsSettingsRepository = stubDataStore(adsEnabled = false),
     ): AppOpenAdController = AppOpenAdController(
         context = context,
         buildInfoRepository = provider,
         dispatchers = eagerDispatchers(),
         adMobAppIdDataSource = adMobAppIdDataSource,
         adsSdkInitializer = initializer,
-        dataStore = dataStore,
+        adsSettingsRepository = dataStore,
     )
 
     /** Ads off by default, so a manager built without an explicit store initializes nothing. */
-    private fun stubDataStore(adsEnabled: Boolean): CommonDataStore = mockk {
-        every { adsEnabledFlow } returns MutableStateFlow(adsEnabled)
+    private fun stubDataStore(adsEnabled: Boolean): AdsSettingsRepository = mockk {
+        every { this@mockk.adsEnabled } returns MutableStateFlow(adsEnabled)
     }
 
     /**
@@ -132,10 +132,10 @@ class TestAppOpenAdController {
         val provider = mockk<BuildInfoRepository>()
         val manager = managerWith(context, provider)
 
-        val dataStore = mockk<CommonDataStore>()
-        every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
-        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
-        val storeField = AppOpenAdController::class.java.getDeclaredField("dataStore")
+        val dataStore = mockk<AdsSettingsRepository>()
+        every { dataStore.adsEnabled } returns MutableStateFlow(true)
+        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
+        val storeField = AppOpenAdController::class.java.getDeclaredField("adsSettingsRepository")
         storeField.isAccessible = true
         storeField.set(manager, dataStore)
 
@@ -153,10 +153,10 @@ class TestAppOpenAdController {
         val provider = mockk<BuildInfoRepository>()
         val manager = managerWith(context, provider, adMobAppIdDataSource = { null })
 
-        val dataStore = mockk<CommonDataStore>()
-        every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
-        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
-        val storeField = AppOpenAdController::class.java.getDeclaredField("dataStore")
+        val dataStore = mockk<AdsSettingsRepository>()
+        every { dataStore.adsEnabled } returns MutableStateFlow(true)
+        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
+        val storeField = AppOpenAdController::class.java.getDeclaredField("adsSettingsRepository")
         storeField.isAccessible = true
         storeField.set(manager, dataStore)
 
@@ -189,10 +189,10 @@ class TestAppOpenAdController {
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoRepository>()
         val manager = managerWith(context, provider)
-        val dataStore = mockk<CommonDataStore>()
-        every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
-        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
-        val storeField = AppOpenAdController::class.java.getDeclaredField("dataStore")
+        val dataStore = mockk<AdsSettingsRepository>()
+        every { dataStore.adsEnabled } returns MutableStateFlow(true)
+        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
+        val storeField = AppOpenAdController::class.java.getDeclaredField("adsSettingsRepository")
         storeField.isAccessible = true
         storeField.set(manager, dataStore)
         runBlocking { manager.initializeAds("unit") }
@@ -235,10 +235,10 @@ class TestAppOpenAdController {
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoRepository>()
         val manager = managerWith(context, provider)
-        val dataStore = mockk<CommonDataStore>()
-        every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
-        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
-        val storeField = AppOpenAdController::class.java.getDeclaredField("dataStore")
+        val dataStore = mockk<AdsSettingsRepository>()
+        every { dataStore.adsEnabled } returns MutableStateFlow(true)
+        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
+        val storeField = AppOpenAdController::class.java.getDeclaredField("adsSettingsRepository")
         storeField.isAccessible = true
         storeField.set(manager, dataStore)
         runBlocking { manager.initializeAds("unit") }
@@ -276,10 +276,10 @@ class TestAppOpenAdController {
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoRepository>()
         val manager = managerWith(context, provider)
-        val dataStore = mockk<CommonDataStore>()
-        every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
-        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
-        val storeField = AppOpenAdController::class.java.getDeclaredField("dataStore")
+        val dataStore = mockk<AdsSettingsRepository>()
+        every { dataStore.adsEnabled } returns MutableStateFlow(true)
+        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
+        val storeField = AppOpenAdController::class.java.getDeclaredField("adsSettingsRepository")
         storeField.isAccessible = true
         storeField.set(manager, dataStore)
         runBlocking { manager.initializeAds("unit") }
@@ -329,10 +329,10 @@ class TestAppOpenAdController {
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoRepository>()
         val manager = managerWith(context, provider)
-        val dataStore = mockk<CommonDataStore>()
-        every { dataStore.adsEnabledFlow } returns MutableStateFlow(false)
-        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
-        val storeField = AppOpenAdController::class.java.getDeclaredField("dataStore")
+        val dataStore = mockk<AdsSettingsRepository>()
+        every { dataStore.adsEnabled } returns MutableStateFlow(false)
+        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
+        val storeField = AppOpenAdController::class.java.getDeclaredField("adsSettingsRepository")
         storeField.isAccessible = true
         storeField.set(manager, dataStore)
         runBlocking { manager.initializeAds("unit") }
@@ -354,10 +354,10 @@ class TestAppOpenAdController {
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoRepository>()
         val manager = managerWith(context, provider)
-        val dataStore = mockk<CommonDataStore>()
-        every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
-        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
-        val storeField = AppOpenAdController::class.java.getDeclaredField("dataStore")
+        val dataStore = mockk<AdsSettingsRepository>()
+        every { dataStore.adsEnabled } returns MutableStateFlow(true)
+        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
+        val storeField = AppOpenAdController::class.java.getDeclaredField("adsSettingsRepository")
         storeField.isAccessible = true
         storeField.set(manager, dataStore)
         runBlocking { manager.initializeAds("unit") }
@@ -392,10 +392,10 @@ class TestAppOpenAdController {
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoRepository>()
         val manager = managerWith(context, provider)
-        val dataStore = mockk<CommonDataStore>()
-        every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
-        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
-        val storeField = AppOpenAdController::class.java.getDeclaredField("dataStore")
+        val dataStore = mockk<AdsSettingsRepository>()
+        every { dataStore.adsEnabled } returns MutableStateFlow(true)
+        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
+        val storeField = AppOpenAdController::class.java.getDeclaredField("adsSettingsRepository")
         storeField.isAccessible = true
         storeField.set(manager, dataStore)
         runBlocking { manager.initializeAds("unit") }
@@ -430,10 +430,10 @@ class TestAppOpenAdController {
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoRepository>()
         val manager = managerWith(context, provider)
-        val dataStore = mockk<CommonDataStore>()
-        every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
-        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
-        val storeField = AppOpenAdController::class.java.getDeclaredField("dataStore")
+        val dataStore = mockk<AdsSettingsRepository>()
+        every { dataStore.adsEnabled } returns MutableStateFlow(true)
+        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
+        val storeField = AppOpenAdController::class.java.getDeclaredField("adsSettingsRepository")
         storeField.isAccessible = true
         storeField.set(manager, dataStore)
         runBlocking { manager.initializeAds("unit") }
@@ -483,10 +483,10 @@ class TestAppOpenAdController {
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoRepository>()
         val manager = managerWith(context, provider)
-        val dataStore = mockk<CommonDataStore>()
-        every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
-        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
-        val storeField = AppOpenAdController::class.java.getDeclaredField("dataStore")
+        val dataStore = mockk<AdsSettingsRepository>()
+        every { dataStore.adsEnabled } returns MutableStateFlow(true)
+        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
+        val storeField = AppOpenAdController::class.java.getDeclaredField("adsSettingsRepository")
         storeField.isAccessible = true
         storeField.set(manager, dataStore)
         runBlocking { manager.initializeAds("unit") }
@@ -516,10 +516,10 @@ class TestAppOpenAdController {
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoRepository>()
         val manager = managerWith(context, provider)
-        val dataStore = mockk<CommonDataStore>()
-        every { dataStore.adsEnabledFlow } returns MutableStateFlow(false)
-        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
-        val storeField = AppOpenAdController::class.java.getDeclaredField("dataStore")
+        val dataStore = mockk<AdsSettingsRepository>()
+        every { dataStore.adsEnabled } returns MutableStateFlow(false)
+        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
+        val storeField = AppOpenAdController::class.java.getDeclaredField("adsSettingsRepository")
         storeField.isAccessible = true
         storeField.set(manager, dataStore)
         runBlocking { manager.initializeAds("unit") }
@@ -540,10 +540,10 @@ class TestAppOpenAdController {
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoRepository>()
         val manager = managerWith(context, provider)
-        val dataStore = mockk<CommonDataStore>()
-        every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
-        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
-        val storeField = AppOpenAdController::class.java.getDeclaredField("dataStore")
+        val dataStore = mockk<AdsSettingsRepository>()
+        every { dataStore.adsEnabled } returns MutableStateFlow(true)
+        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
+        val storeField = AppOpenAdController::class.java.getDeclaredField("adsSettingsRepository")
         storeField.isAccessible = true
         storeField.set(manager, dataStore)
         runBlocking { manager.initializeAds("unit") }

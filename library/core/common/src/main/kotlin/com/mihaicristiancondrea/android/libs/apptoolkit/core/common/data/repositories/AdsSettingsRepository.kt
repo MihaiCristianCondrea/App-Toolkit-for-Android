@@ -1,5 +1,5 @@
 /*
- * Copyright (©) 2026 Mihai-Cristian Condrea
+ * Copyright (┬⌐) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,10 +15,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.repositories
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 /**
  * The stored ad preferences: whether ads show at all, and whether App Open ads are reduced.
@@ -27,6 +28,9 @@ import kotlinx.coroutines.flow.Flow
  * cannot be read or written. Every function is safe to call from the main thread.
  */
 interface AdsSettingsRepository {
+
+    /** Shared enablement for SDK initialization and UI, false until storage answers. */
+    val adsEnabled: StateFlow<Boolean>
 
     /** Whether ads show, with the store's default until the person changes it. */
     fun observeAdsEnabled(): Flow<Boolean>

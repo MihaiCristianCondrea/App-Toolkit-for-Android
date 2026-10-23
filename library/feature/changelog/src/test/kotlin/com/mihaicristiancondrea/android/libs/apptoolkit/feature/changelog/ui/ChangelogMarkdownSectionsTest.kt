@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.extensions.splitAtThematicBreaks
+
 import kotlin.test.assertEquals
 import org.junit.jupiter.api.Test
 

@@ -18,23 +18,14 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.ThemePreferencesState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.themePreferencesState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.utils.rememberCommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
+import org.koin.compose.koinInject
 
-/**
- * Collects the application-facing theme preference model at the design-system boundary.
- *
- * The combined flow is remembered because `collectAsStateWithLifecycle` restarts collection
- * whenever it receives a different flow instance. Built inline, every recomposition of the theme
- * root would re-subscribe to DataStore and fall back to the initial value, briefly swapping the
- * whole app's color scheme and recomposing everything under it. The defaults here only fill that
- * initial value, for the frames before the stored preferences arrive.
- */
+/** Collects the repository's stable appearance flow at the design-system boundary. */
 @Composable
 internal fun rememberThemePreferencesState(
     themeModeDefault: String = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
@@ -43,14 +34,8 @@ internal fun rememberThemePreferencesState(
     dynamicPaletteVariantDefault: Int = 0,
     staticPaletteIdDefault: String = StaticPaletteIds.DEFAULT,
 ): ThemePreferencesState {
-    val dataStore = rememberCommonDataStore()
-    val themePreferences = remember(dataStore, themeModeDefault, staticPaletteIdDefault) {
-        dataStore.themePreferences.themePreferencesState(
-            themeModeDefault = themeModeDefault,
-            staticPaletteIdDefault = staticPaletteIdDefault,
-        )
-    }
-    return themePreferences.collectAsStateWithLifecycle(
+    val repository: ThemePreferencesRepository = koinInject()
+    return repository.preferencesState.collectAsStateWithLifecycle(
         initialValue = ThemePreferencesState(
             themeMode = themeModeDefault,
             dynamicColors = dynamicColorsDefault,

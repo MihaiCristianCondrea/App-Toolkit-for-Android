@@ -18,25 +18,32 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.di
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.utils.AppOpenAdController
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.repositories.AdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.AdsSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.repositories.DefaultAdsSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.AdsSettingsViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.local.AdsPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.local.DefaultAdsPreferencesDataSource
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
+import org.koin.dsl.onClose
 
 /**
- * Binds ad settings and the manager to the same [CommonDataStore] instance. Hosts supply
+ * Binds ad settings and the controller to one shared ads source. Hosts supply
  * placement configuration separately.
  */
 fun adsIntegrationModule(): Module = module {
+    single<AdsPreferencesDataSource>(createdAtStart = true) {
+        DefaultAdsPreferencesDataSource(dataStore = get(), dispatchers = get(), defaultAdsEnabled = true)
+    } onClose { source -> source?.close() }
+
     single<AppOpenAdController> {
         AppOpenAdController(
             context = get(),
             buildInfoRepository = get(),
             dispatchers = get(),
             adMobAppIdDataSource = get(),
-            dataStore = get(),
+            adsSettingsRepository = get(),
         )
     }
     single<AdsSettingsRepository> {

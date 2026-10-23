@@ -34,7 +34,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.contr
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.AdMobAppIdDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.ManifestAdMobAppIdDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.AdsSettingsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -53,7 +53,7 @@ private val APP_OPEN_AD_LIFETIME: Duration = 4.hours
 /**
  * Manager responsible for configuring and displaying App Open ads.
  *
- * It checks user preferences stored in [CommonDataStore] to determine
+ * It checks user preferences stored in [AdsSettingsRepository] to determine
  * whether ads should be shown and manages the lifecycle of an
  * [AppOpenAd] instance.
  */
@@ -63,7 +63,7 @@ open class AppOpenAdController(
     private val dispatchers: DispatcherProvider,
     private val adMobAppIdDataSource: AdMobAppIdDataSource = ManifestAdMobAppIdDataSource(context = context, dispatchers = dispatchers),
     private val adsSdkInitializer: AdsSdkInitializer = AdsSdkInitializer.Default,
-    private val dataStore: CommonDataStore = CommonDataStore.getInstance(context = context),
+    private val adsSettingsRepository: AdsSettingsRepository,
 ) {
     private var appOpenAdManager: AppOpenAdManager? = null
 
@@ -76,7 +76,7 @@ open class AppOpenAdController(
 
     /**
      * Initializes ads from the host-manifest [AdMobAppIdDataSource] and observes the shared
-     * [CommonDataStore.adsEnabledFlow], so enabling ads later can initialize the SDK without a
+     * [AdsSettingsRepository.adsEnabled], so enabling ads later can initialize the SDK without a
      * process restart. Missing or invalid app IDs skip initialization; no fallback publisher ID
      * is supplied.
      *
@@ -84,7 +84,7 @@ open class AppOpenAdController(
      * [disableNativeValidator] to configure native-ad validation.
      */
     suspend fun initializeAds(appOpenUnitId: String, disableNativeValidator: Boolean = false) {
-        val isAdsChecked: Boolean = dataStore.adsEnabledFlow.first()
+        val isAdsChecked: Boolean = adsSettingsRepository.adsEnabled.first()
         if (isAdsChecked) {
             startAds(appOpenUnitId = appOpenUnitId, disableNativeValidator = disableNativeValidator)
         }
@@ -100,7 +100,7 @@ open class AppOpenAdController(
     private fun observeAdsPreference(appOpenUnitId: String, disableNativeValidator: Boolean) {
         if (adsPreferenceJob != null) return
         adsPreferenceJob = managerScope.launch {
-            dataStore.adsEnabledFlow.collect { isEnabled ->
+            adsSettingsRepository.adsEnabled.collect { isEnabled ->
                 if (isEnabled) {
                     startAds(
                         appOpenUnitId = appOpenUnitId,
@@ -214,8 +214,8 @@ open class AppOpenAdController(
         suspend fun showAdIfAvailable(
             activity: Activity, onShowAdCompleteListener: OnShowAdCompleteListener
         ) {
-            val isAdsChecked: Boolean = dataStore.adsEnabledFlow.first()
-            val shouldReduceAds: Boolean = dataStore.reduceAds.first()
+            val isAdsChecked: Boolean = adsSettingsRepository.adsEnabled.first()
+            val shouldReduceAds: Boolean = adsSettingsRepository.observeReduceAds().first()
 
             if (isShowingAd || !isAdsChecked || shouldReduceAds) {
                 return

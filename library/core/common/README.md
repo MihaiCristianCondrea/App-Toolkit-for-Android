@@ -7,6 +7,7 @@ Android utility abstractions shared across the toolkit.
 
 ## Owns
 
+- `AdsSettingsRepository` and `OnboardingRepository`, SDK-neutral contracts consumed across modules.
 - `BuildInfoRepository` and its `DefaultBuildInfoRepository`, backed by the host build configuration.
 - `InstalledAppsRepository` and its system-backed default for installed-package checks and launcher
   intent lookup. Both operations are main-safe; the repository owns the IO switch.

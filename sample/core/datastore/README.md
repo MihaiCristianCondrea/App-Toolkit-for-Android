@@ -12,13 +12,13 @@ stores.
 
 ## Does not own
 
-- Toolkit preferences (ads enabled, consent, onboarding completion), owned by
-  [`:library:core:datastore`](../../../library/core/datastore/README.md).
+- Toolkit preferences, owned by their shared core, feature or integration modules.
 - Any decision about what the stored values mean; that belongs to the repositories that read them.
 
 ## Depends on
 
-- [`:library:core:datastore`](../../../library/core/datastore/README.md) for `CommonDataStore`.
+- [`:library:core:datastore`](../../../library/core/datastore/README.md) for shared preferences.
+- Core common's `OnboardingRepository` contract for startup completion, with no feature dependency.
 - [`:library:navigation`](../../../library/navigation/README.md) for Navigation 3's `NavKey`, the
   type the stored start page maps to. Startup projection uses core DataStore directly; this module
   has no direct core:ui dependency.

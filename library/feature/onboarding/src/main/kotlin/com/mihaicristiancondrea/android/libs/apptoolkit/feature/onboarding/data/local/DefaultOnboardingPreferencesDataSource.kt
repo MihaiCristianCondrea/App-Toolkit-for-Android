@@ -1,5 +1,5 @@
 /*
- * Copyright (©) 2026 Mihai-Cristian Condrea
+ * Copyright (┬⌐) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.local
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.MutablePreferences

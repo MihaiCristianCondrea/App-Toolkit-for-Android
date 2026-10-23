@@ -6,7 +6,7 @@ Encapsulates Google Play in-app review eligibility, prompting, and persisted req
 
 ## Owns
 
-- Review repository contract/implementation and review outcome/host models.
+- Review repository contract/implementation, review outcome/host models, and `data/local` review sources.
 - Normal and forced in-app-review use cases.
 - Activity extension helpers for the Play review flow, and the install source checks
   (`installingPackageNameOrNull`, `hasPlayStore`, `isInstalledFromPlayStore`) that decide whether
@@ -15,7 +15,7 @@ Encapsulates Google Play in-app review eligibility, prompting, and persisted req
 ## Does not own
 
 - UI decisions about when to ask for a review, owned by consuming features.
-- Preference storage implementation, owned by `:library:core:datastore`.
+- The shared settings file and its migrations, owned by `:library:core:datastore`.
 
 ## Depends on
 

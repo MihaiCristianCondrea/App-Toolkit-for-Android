@@ -1,5 +1,5 @@
 /*
- * Copyright (©) 2026 Mihai-Cristian Condrea
+ * Copyright (┬⌐) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,47 +15,47 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.local
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.longPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
-/** In-app review counters stored in the shared `settings` Preferences DataStore. */
-class DefaultReviewPreferencesDataSource(
+/** Changelog state stored in the shared `settings` Preferences DataStore. */
+class DefaultChangelogPreferencesDataSource(
     private val dataStore: DataStore<Preferences>,
-) : ReviewPreferencesDataSource {
+) : ChangelogPreferencesDataSource {
 
-    private val sessionCountKey =
-        longPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_SESSION_COUNT)
-    private val reviewPromptedKey =
-        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_REVIEW_PROMPTED)
+    private val lastSeenVersionKey =
+        stringPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_LAST_SEEN_VERSION)
+    private val cachedChangelogKey =
+        stringPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_CACHED_CHANGELOG)
 
-    override val sessionCount: Flow<Int> = dataStore.data.map { preferences: Preferences ->
-        (preferences[sessionCountKey] ?: 0L).toInt()
-    }.distinctUntilChanged()
+    override fun lastSeenVersion(default: String): Flow<String> =
+        dataStore.data.map { preferences: Preferences ->
+            preferences[lastSeenVersionKey] ?: default
+        }.distinctUntilChanged()
 
-    override val hasPromptedReview: Flow<Boolean> = dataStore.data.map { preferences: Preferences ->
-        preferences[reviewPromptedKey] == true
-    }.distinctUntilChanged()
+    override fun cachedChangelog(default: String): Flow<String> =
+        dataStore.data.map { preferences: Preferences ->
+            preferences[cachedChangelogKey] ?: default
+        }.distinctUntilChanged()
 
-    override suspend fun incrementSessionCount() {
+    override suspend fun saveLastSeenVersion(version: String) {
         dataStore.edit { preferences: MutablePreferences ->
-            val current: Long = preferences[sessionCountKey] ?: 0L
-            preferences[sessionCountKey] = current + 1L
+            preferences[lastSeenVersionKey] = version
         }
     }
 
-    override suspend fun setHasPromptedReview(value: Boolean) {
+    override suspend fun saveCachedChangelog(changelog: String) {
         dataStore.edit { preferences: MutablePreferences ->
-            preferences[reviewPromptedKey] = value
+            preferences[cachedChangelogKey] = changelog
         }
     }
 }

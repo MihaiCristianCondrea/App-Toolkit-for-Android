@@ -1,5 +1,5 @@
 /*
- * Copyright (©) 2026 Mihai-Cristian Condrea
+ * Copyright (┬⌐) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local
+package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.local
 
 import androidx.datastore.core.DataStore
 import android.util.Log
@@ -49,7 +49,7 @@ import kotlinx.coroutines.flow.stateIn
 class DefaultAdsPreferencesDataSource(
     private val dataStore: DataStore<Preferences>,
     dispatchers: DispatcherProvider,
-    defaultAdsEnabled: Boolean,
+    override val defaultAdsEnabled: Boolean,
 ) : AdsPreferencesDataSource {
 
     private val scope = CoroutineScope(SupervisorJob() + dispatchers.io)

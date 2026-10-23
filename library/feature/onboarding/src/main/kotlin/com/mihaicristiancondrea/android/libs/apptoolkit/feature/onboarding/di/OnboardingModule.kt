@@ -18,10 +18,16 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.di
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.OnboardingThemeViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.local.OnboardingPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.local.DefaultOnboardingPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.OnboardingRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.repositories.DefaultOnboardingRepository
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val onboardingModule: Module = module {
+    single<OnboardingPreferencesDataSource> { DefaultOnboardingPreferencesDataSource(dataStore = get()) }
+    single<OnboardingRepository> { DefaultOnboardingRepository(dataStore = get()) }
     viewModel { OnboardingThemeViewModel(preferences = get(), seasonal = get(), telemetryRepository = get()) }
 }

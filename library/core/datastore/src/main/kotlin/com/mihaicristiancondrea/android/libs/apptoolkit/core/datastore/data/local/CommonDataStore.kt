@@ -23,19 +23,14 @@ import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.CommonDataStoreCore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 
 /**
  * Process-safe delegate for the toolkit's single `settings` Preferences DataStore file.
  *
  * Migrations run here rather than as work a data source does when constructed, so they finish
- * before the first read is served. `AppOpenAdController` samples the ads preference once at startup and
- * would otherwise race them.
+ * before the first read is served, including reads from sources owned by other modules.
  *
  * A file that can no longer be parsed is replaced with empty preferences, so every value falls back
  * to its default and the user sees first-run state again. Without the handler DataStore throws
@@ -48,30 +43,10 @@ val Context.commonDataStore: DataStore<Preferences> by preferencesDataStore(
     produceMigrations = { commonDataStoreMigrations() },
 )
 
-/**
- * Unified wrapper over the toolkit's preference data sources.
- *
- * Every value lives in the single `settings` Preferences DataStore, which is what
- * [Context.commonDataStore] hands out; the preferences are grouped into cohesive data sources
- * rather than split across files so that no stored key moves and existing installs keep their
- * data. Each group is exposed here and registered in the Koin graph, so new code can depend on the
- * narrow contract it needs, [ThemePreferencesDataSource], [ReviewPreferencesDataSource], and so
- * on, instead of on this whole surface.
- *
- * The members below delegate to those sources and exist so that callers written against the
- * previous single-class API keep compiling. Several have no caller left inside this repository and
- * are marked `@Suppress("unused")` for that reason: this module is published, so "unused here" says
- * nothing about the consumers the delegates exist for. Delete one only as a deliberate breaking
- * change.
- *
- * @property defaultAdsEnabled value used when a successful preference read finds no saved choice.
- */
+/** Shared appearance, consent, app-state and favorites preferences over the single settings file. */
 open class CommonDataStore(
     context: Context,
-    dispatchers: DispatcherProvider = StandardDispatchers(),
-    val defaultAdsEnabled: Boolean = true,
-) : OnboardingPreferencesDataSource, UsageAndDiagnosticsPreferencesDataSource,
-    ConsentPreferencesDataSource, CommonDataStoreCore {
+) : UsageAndDiagnosticsPreferencesDataSource, ConsentPreferencesDataSource {
 
     val dataStore: DataStore<Preferences> = context.commonDataStore
 
@@ -87,28 +62,9 @@ open class CommonDataStore(
     val displayPreferences: DisplayPreferencesDataSource =
         DefaultDisplayPreferencesDataSource(dataStore = dataStore)
 
-    /** First-run state. */
-    val onboardingPreferences: OnboardingPreferencesDataSource =
-        DefaultOnboardingPreferencesDataSource(dataStore = dataStore)
-
     /** Consent and usage-diagnostics toggles. */
     val diagnosticsPreferences: DefaultUsageAndDiagnosticsPreferencesDataSource =
         DefaultUsageAndDiagnosticsPreferencesDataSource(dataStore = dataStore)
-
-    /** Ads preference, including the shared eagerly started [adsEnabledFlow]. */
-    val adsPreferences: AdsPreferencesDataSource = DefaultAdsPreferencesDataSource(
-        dataStore = dataStore,
-        dispatchers = dispatchers,
-        defaultAdsEnabled = defaultAdsEnabled,
-    )
-
-    /** In-app review counters. */
-    val reviewPreferences: ReviewPreferencesDataSource =
-        DefaultReviewPreferencesDataSource(dataStore = dataStore)
-
-    /** Last seen changelog version and its cached Markdown. */
-    val changelogPreferences: ChangelogPreferencesDataSource =
-        DefaultChangelogPreferencesDataSource(dataStore = dataStore)
 
     /** One-shot app-state flags and timestamps. */
     val appStatePreferences: AppStatePreferencesDataSource =
@@ -122,31 +78,16 @@ open class CommonDataStore(
         @Volatile
         private var instance: CommonDataStore? = null
 
-        /**
-         * Returns the process-wide instance, capturing [defaultAdsEnabled] on first construction.
-         *
-         * Prefer dependency injection in production. This cannot change the ads default after an
-         * instance exists, so `dataStoreModule` calls it eagerly at Koin start with the host's real
-         * default and every later caller, `rememberCommonDataStore()` included, receives that
-         * same object. Callers must not construct a parallel preference graph: two stores
-         * disagreeing about the ads default is how ad slots once believed ads were on while the SDK
-         * had never been initialized for them.
-         */
+        /** Returns the process-wide shared preference adapter. */
         fun getInstance(
             context: Context,
-            defaultAdsEnabled: Boolean = true,
         ): CommonDataStore {
             return instance ?: synchronized(lock = this) {
                 instance ?: CommonDataStore(
                     context = context.applicationContext,
-                    defaultAdsEnabled = defaultAdsEnabled,
                 ).also { instance = it }
             }
         }
-    }
-
-    override fun close() {
-        adsPreferences.close()
     }
 
     // region App state
@@ -165,16 +106,6 @@ open class CommonDataStore(
 
     suspend fun saveComponentsShowcaseUnlocked(isUnlocked: Boolean) =
         appStatePreferences.saveComponentsShowcaseUnlocked(isUnlocked)
-
-    // endregion
-
-    // region Onboarding
-
-    override val startup: Flow<Boolean> get() = onboardingPreferences.startup
-
-    /** Stores whether the app has completed its first-time startup flow. */
-    override suspend fun saveStartup(isFirstTime: Boolean) =
-        onboardingPreferences.saveStartup(isFirstTime)
 
     // endregion
 
@@ -267,38 +198,10 @@ open class CommonDataStore(
         diagnosticsPreferences.saveAdPersonalizationConsent(isGranted)
     // endregion
 
-    // region Ads
-    fun ads(default: Boolean): Flow<Boolean> = adsPreferences.ads(default = default)
-    val adsEnabledFlow: StateFlow<Boolean> get() = adsPreferences.adsEnabled
-    suspend fun saveAds(isChecked: Boolean) = adsPreferences.saveAds(isChecked)
-    val reduceAds: Flow<Boolean> get() = adsPreferences.reduceAds
-    suspend fun saveReduceAds(isChecked: Boolean) = adsPreferences.saveReduceAds(isChecked)
-    // endregion
-
     // region Favorites
     val favoriteApps: Flow<Set<String>> get() = favoritesPreferences.favoriteApps
     suspend fun toggleFavoriteApp(packageName: String) =
         favoritesPreferences.toggleFavoriteApp(packageName)
     // endregion
 
-    // region Review
-    val sessionCount: Flow<Int> get() = reviewPreferences.sessionCount
-    val hasPromptedReview: Flow<Boolean> get() = reviewPreferences.hasPromptedReview
-    suspend fun incrementSessionCount() = reviewPreferences.incrementSessionCount()
-    suspend fun setHasPromptedReview(value: Boolean) = reviewPreferences.setHasPromptedReview(value)
-    // endregion
-
-    // region Changelog
-    fun getLastSeenVersion(default: String = ""): Flow<String> =
-        changelogPreferences.lastSeenVersion(default = default)
-
-    suspend fun saveLastSeenVersion(version: String) =
-        changelogPreferences.saveLastSeenVersion(version)
-
-    fun getCachedChangelog(default: String = ""): Flow<String> =
-        changelogPreferences.cachedChangelog(default = default)
-
-    suspend fun saveCachedChangelog(changelog: String) =
-        changelogPreferences.saveCachedChangelog(changelog)
-    // endregion
 }

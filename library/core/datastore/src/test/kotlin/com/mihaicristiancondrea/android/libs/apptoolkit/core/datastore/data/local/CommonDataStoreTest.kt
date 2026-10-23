@@ -22,22 +22,16 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import app.cash.turbine.test
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -80,26 +74,11 @@ class CommonDataStoreTest {
         assertSame(fakeStore, first.dataStore)
         verify(exactly = 0) { context.commonDataStore }
         verify(atLeast = 1) { appContext.commonDataStore }
-
-        first.close()
-    }
-
-    @Test
-    fun `close cancels internal coroutine scope`() = runTest {
-        val dataStore = createDataStore(testScheduler)
-        val scope = dataStore.extractScope()
-        val job = scope.coroutineContext[Job]
-
-        assertEquals(job?.isActive, true)
-
-        dataStore.close()
-
-        assertEquals(job?.isCancelled, true)
     }
 
     @Test
     fun `lastUsed defaults to zero and persists provided timestamp`() = runTest {
-        val dataStore = createDataStore(testScheduler)
+        val dataStore = createDataStore()
 
         assertEquals(0L, dataStore.lastUsed.first())
 
@@ -107,26 +86,11 @@ class CommonDataStoreTest {
         dataStore.saveLastUsed(expected)
 
         assertEquals(expected, dataStore.lastUsed.first())
-
-        dataStore.close()
-    }
-
-    @Test
-    fun `startup defaults to true and persists explicit false`() = runTest {
-        val dataStore = createDataStore(testScheduler)
-
-        assertTrue(dataStore.startup.first())
-
-        dataStore.saveStartup(isFirstTime = false)
-
-        assertFalse(dataStore.startup.first())
-
-        dataStore.close()
     }
 
     @Test
     fun `startup page emits default when absent then updates on save`() = runTest {
-        val dataStore = createDataStore(testScheduler)
+        val dataStore = createDataStore()
         val defaultRoute = "default"
         val updatedRoute = "updated"
 
@@ -136,13 +100,11 @@ class CommonDataStoreTest {
             assertEquals(updatedRoute, awaitItem())
             cancelAndIgnoreRemainingEvents()
         }
-
-        dataStore.close()
     }
 
     @Test
     fun `theme mode defaults to follow system and persists new selection`() = runTest {
-        val dataStore = createDataStore(testScheduler)
+        val dataStore = createDataStore()
 
         assertEquals(DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM, dataStore.themeMode.first())
 
@@ -150,65 +112,55 @@ class CommonDataStoreTest {
         dataStore.saveThemeMode(expected)
 
         assertEquals(expected, dataStore.themeMode.first())
-
-        dataStore.close()
     }
 
     @Test
     fun `amoled mode defaults to false and toggles`() = runTest {
-        val dataStore = createDataStore(testScheduler)
+        val dataStore = createDataStore()
 
         assertFalse(dataStore.amoledMode.first())
 
         dataStore.saveAmoledMode(true)
 
         assertTrue(dataStore.amoledMode.first())
-
-        dataStore.close()
     }
 
     @Test
     fun `dynamic colors default to true and persist`() = runTest {
-        val dataStore = createDataStore(testScheduler)
+        val dataStore = createDataStore()
 
         assertTrue(dataStore.dynamicColors.first())
 
         dataStore.saveDynamicColors(false)
 
         assertFalse(dataStore.dynamicColors.first())
-
-        dataStore.close()
     }
 
     @Test
     fun `bouncy buttons default to true and persist`() = runTest {
-        val dataStore = createDataStore(testScheduler)
+        val dataStore = createDataStore()
 
         assertTrue(dataStore.bouncyButtons.first())
 
         dataStore.saveBouncyButtons(false)
 
         assertFalse(dataStore.bouncyButtons.first())
-
-        dataStore.close()
     }
 
     @Test
     fun `bottom bar labels default to true and persist`() = runTest {
-        val dataStore = createDataStore(testScheduler)
+        val dataStore = createDataStore()
 
         assertTrue(dataStore.getShowBottomBarLabels().first())
 
         dataStore.saveShowLabelsOnBottomBar(false)
 
         assertFalse(dataStore.getShowBottomBarLabels().first())
-
-        dataStore.close()
     }
 
     @Test
     fun `language defaults to English and persists`() = runTest {
-        val dataStore = createDataStore(testScheduler)
+        val dataStore = createDataStore()
 
         assertEquals("en", dataStore.getLanguage().first())
 
@@ -216,13 +168,11 @@ class CommonDataStoreTest {
         dataStore.saveLanguage(expected)
 
         assertEquals(expected, dataStore.getLanguage().first())
-
-        dataStore.close()
     }
 
     @Test
     fun `usage and diagnostics uses provided default then persists`() = runTest {
-        val dataStore = createDataStore(testScheduler)
+        val dataStore = createDataStore()
         val default = false
 
         assertFalse(dataStore.usageAndDiagnostics(default).first())
@@ -230,13 +180,11 @@ class CommonDataStoreTest {
         dataStore.saveUsageAndDiagnostics(true)
 
         assertTrue(dataStore.usageAndDiagnostics(default).first())
-
-        dataStore.close()
     }
 
     @Test
     fun `analytics consent uses default and persists`() = runTest {
-        val dataStore = createDataStore(testScheduler)
+        val dataStore = createDataStore()
         val default = true
 
         assertTrue(dataStore.analyticsConsent(default).first())
@@ -244,13 +192,11 @@ class CommonDataStoreTest {
         dataStore.saveAnalyticsConsent(false)
 
         assertFalse(dataStore.analyticsConsent(default).first())
-
-        dataStore.close()
     }
 
     @Test
     fun `ad storage consent uses default and persists`() = runTest {
-        val dataStore = createDataStore(testScheduler)
+        val dataStore = createDataStore()
         val default = true
 
         assertTrue(dataStore.adStorageConsent(default).first())
@@ -258,13 +204,11 @@ class CommonDataStoreTest {
         dataStore.saveAdStorageConsent(false)
 
         assertFalse(dataStore.adStorageConsent(default).first())
-
-        dataStore.close()
     }
 
     @Test
     fun `ad user data consent uses default and persists`() = runTest {
-        val dataStore = createDataStore(testScheduler)
+        val dataStore = createDataStore()
         val default = false
 
         assertFalse(dataStore.adUserDataConsent(default).first())
@@ -272,13 +216,11 @@ class CommonDataStoreTest {
         dataStore.saveAdUserDataConsent(true)
 
         assertTrue(dataStore.adUserDataConsent(default).first())
-
-        dataStore.close()
     }
 
     @Test
     fun `ad personalization consent uses default and persists`() = runTest {
-        val dataStore = createDataStore(testScheduler)
+        val dataStore = createDataStore()
         val default = false
 
         assertFalse(dataStore.adPersonalizationConsent(default).first())
@@ -286,30 +228,11 @@ class CommonDataStoreTest {
         dataStore.saveAdPersonalizationConsent(true)
 
         assertTrue(dataStore.adPersonalizationConsent(default).first())
-
-        dataStore.close()
-    }
-
-    @Test
-    fun `ads flow honors default and updates state`() = runTest {
-        val dataStore = createDataStore(testScheduler)
-
-        assertTrue(dataStore.ads(default = true).first())
-        advanceUntilIdle()
-        assertTrue(dataStore.adsEnabledFlow.value)
-
-        dataStore.saveAds(false)
-        advanceUntilIdle()
-
-        assertFalse(dataStore.ads(default = true).first())
-        assertFalse(dataStore.adsEnabledFlow.value)
-
-        dataStore.close()
     }
 
     @Test
     fun `favorite apps flow emits updated sets when toggled`() = runTest {
-        val dataStore = createDataStore(testScheduler)
+        val dataStore = createDataStore()
 
         dataStore.favoriteApps.test {
             assertEquals(emptySet(), awaitItem())
@@ -328,83 +251,14 @@ class CommonDataStoreTest {
 
             cancelAndIgnoreRemainingEvents()
         }
-
-        dataStore.close()
     }
 
-    @Test
-    fun `session count defaults to zero and increments`() = runTest {
-        val dataStore = createDataStore(testScheduler)
-
-        assertEquals(0, dataStore.sessionCount.first())
-
-        dataStore.incrementSessionCount()
-        dataStore.incrementSessionCount()
-
-        assertEquals(2, dataStore.sessionCount.first())
-
-        dataStore.close()
-    }
-
-    @Test
-    fun `has prompted review defaults to false and persists`() = runTest {
-        val dataStore = createDataStore(testScheduler)
-
-        assertFalse(dataStore.hasPromptedReview.first())
-
-        dataStore.setHasPromptedReview(true)
-
-        assertTrue(dataStore.hasPromptedReview.first())
-
-        dataStore.close()
-    }
-
-    @Test
-    fun `last seen version defaults to empty and persists`() = runTest {
-        val dataStore = createDataStore(testScheduler)
-        val default = ""
-        val expected = "1.0.0"
-
-        assertEquals(default, dataStore.getLastSeenVersion(default).first())
-
-        dataStore.saveLastSeenVersion(expected)
-
-        assertEquals(expected, dataStore.getLastSeenVersion(default).first())
-
-        dataStore.close()
-    }
-
-    @Test
-    fun `cached changelog defaults to empty and persists`() = runTest {
-        val dataStore = createDataStore(testScheduler)
-        val default = ""
-        val expected = "New release"
-
-        assertEquals(default, dataStore.getCachedChangelog(default).first())
-
-        dataStore.saveCachedChangelog(expected)
-
-        assertEquals(expected, dataStore.getCachedChangelog(default).first())
-
-        dataStore.close()
-    }
-
-    private fun createDataStore(scheduler: TestCoroutineScheduler): CommonDataStore {
+    private fun createDataStore(): CommonDataStore {
         val context = mockk<Context>(relaxed = true)
         every { context.applicationContext } returns context
         val fakeStore = FakePreferencesDataStore()
         every { context.commonDataStore } returns fakeStore
-        return CommonDataStore(context, TestDispatcherProvider(StandardTestDispatcher(scheduler)))
-    }
-
-    /**
-     * Closing [CommonDataStore] cancels the ads preference source's sharing scope.
-     */
-    private fun CommonDataStore.extractScope(): CoroutineScope {
-        val adsSource = adsPreferences as DefaultAdsPreferencesDataSource
-        val field = DefaultAdsPreferencesDataSource::class.java.getDeclaredField("scope")
-        field.isAccessible = true
-        return field.get(adsSource) as CoroutineScope
+        return CommonDataStore(context)
     }
 
     private fun resetSingleton() {
@@ -423,14 +277,5 @@ class CommonDataStoreTest {
             state.value = updated
             return updated
         }
-    }
-
-    private class TestDispatcherProvider(
-        private val dispatcher: CoroutineDispatcher,
-    ) : DispatcherProvider {
-        override val main: CoroutineDispatcher get() = dispatcher
-        override val io: CoroutineDispatcher get() = dispatcher
-        override val default: CoroutineDispatcher get() = dispatcher
-        override val unconfined: CoroutineDispatcher get() = dispatcher
     }
 }

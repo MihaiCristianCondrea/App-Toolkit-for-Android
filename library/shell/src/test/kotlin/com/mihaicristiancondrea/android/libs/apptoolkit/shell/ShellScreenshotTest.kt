@@ -70,7 +70,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNav
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.BackEdgeStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.InMemoryShellPreferences
@@ -79,6 +78,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.Navigatio
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.TopBarOverride
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.AdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeAdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DisplayPreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DefaultDisplayPreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DefaultThemePreferencesRepository
 import kotlinx.serialization.Serializable
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -115,7 +120,10 @@ class ShellScreenshotTest {
     @Before
     fun setUpKoin() {
         startKoin {
-            modules(module { single { CommonDataStore(ApplicationProvider.getApplicationContext()) } })
+            modules(module { single { CommonDataStore(ApplicationProvider.getApplicationContext()) }
+                    single<AdsSettingsRepository> { FakeAdsSettingsRepository() }
+                    single<DisplayPreferencesRepository> { DefaultDisplayPreferencesRepository(get<CommonDataStore>().displayPreferences) }
+                    single<ThemePreferencesRepository> { DefaultThemePreferencesRepository(get<CommonDataStore>().themePreferences) } })
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (©) 2026 Mihai-Cristian Condrea
+ * Copyright (┬⌐) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local
+package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.local
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.StateFlow
  * had never been initialized for.
  */
 interface AdsPreferencesDataSource {
+    val defaultAdsEnabled: Boolean
 
     /** Shared ads preference. Disabled until storage answers and while its read is failing. */
     val adsEnabled: StateFlow<Boolean>

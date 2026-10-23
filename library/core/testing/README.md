@@ -7,6 +7,7 @@ on production runtime classpaths.
 
 ## Owns
 
+- `FakeAdsSettingsRepository`, in-memory settings for tests that render Toolkit UI.
 - `TestDispatchers`, which maps every `DispatcherProvider` lane to one test dispatcher.
 - JUnit 5 extensions for installing standard or unconfined test dispatchers as `Dispatchers.Main`.
 - `FakeTelemetryRepository`, which records events, screen views, breadcrumbs, non-fatal reports
@@ -53,6 +54,7 @@ flowchart LR
 
 ## Public contracts
 
+- `FakeAdsSettingsRepository`, in-memory settings for tests that render Toolkit UI.
 - `TestDispatchers`, `StandardDispatcherExtension`, `UnconfinedDispatcherExtension`, and
   `FakeTelemetryRepository`.
 

@@ -29,6 +29,12 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.AdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeAdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DisplayPreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DefaultDisplayPreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DefaultThemePreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.di.privacyModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.providers.PrivacySettingsProvider
 import io.mockk.mockk
@@ -65,6 +71,9 @@ class PermissionUsageActivityTest {
             modules(
                 module {
                     single { CommonDataStore(context) }
+                    single<AdsSettingsRepository> { FakeAdsSettingsRepository() }
+                    single<DisplayPreferencesRepository> { DefaultDisplayPreferencesRepository(get<CommonDataStore>().displayPreferences) }
+                    single<ThemePreferencesRepository> { DefaultThemePreferencesRepository(get<CommonDataStore>().themePreferences) }
                     single<TelemetryRepository> { mockk(relaxed = true) }
                     single<PrivacySettingsProvider> { object : PrivacySettingsProvider {} }
                 },

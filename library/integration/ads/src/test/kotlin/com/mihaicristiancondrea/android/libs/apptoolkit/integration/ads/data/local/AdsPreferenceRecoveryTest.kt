@@ -1,4 +1,4 @@
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local
+package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.local
 
 import android.util.Log
 import androidx.datastore.core.DataStore

@@ -28,7 +28,6 @@ import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderF
 import com.google.firebase.initialize
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.CommonDataStoreCore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BillingCore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.crash.ConsentSdkCrashGuard
@@ -55,7 +54,6 @@ open class AppToolkitApplication : MultiDexApplication(), Application.ActivityLi
 
     protected val billingRepository: BillingCore by inject()
     private val diagnostics: DiagnosticsReporter by inject()
-    protected val dataStore: CommonDataStoreCore by inject()
     protected open val dispatchers: DispatcherProvider = StandardDispatchers()
 
     /**
@@ -161,7 +159,6 @@ open class AppToolkitApplication : MultiDexApplication(), Application.ActivityLi
     override fun onTerminate() {
         super.onTerminate()
         billingRepository.close()
-        dataStore.close()
         applicationScope.cancel()
     }
 }

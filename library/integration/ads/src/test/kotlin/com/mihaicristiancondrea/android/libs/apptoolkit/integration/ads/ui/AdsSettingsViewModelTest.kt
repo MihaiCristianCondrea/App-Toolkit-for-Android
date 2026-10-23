@@ -25,7 +25,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedD
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.repositories.AdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.AdsSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.contracts.AdsSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.models.AdsPreferences
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.exceptions.ConsentException
@@ -34,8 +34,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentSettings
 import io.mockk.mockk
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -209,7 +209,7 @@ class AdsSettingsViewModelTest {
         var readFailure: Throwable? = null,
         private val writeFailure: Throwable? = null,
     ) : AdsSettingsRepository {
-        private val adsEnabled = MutableStateFlow(adsEnabled)
+        override val adsEnabled = MutableStateFlow(adsEnabled)
         private val reduceAds = MutableStateFlow(reduceAds)
 
         override fun observeAdsEnabled(): Flow<Boolean> = observe(adsEnabled)

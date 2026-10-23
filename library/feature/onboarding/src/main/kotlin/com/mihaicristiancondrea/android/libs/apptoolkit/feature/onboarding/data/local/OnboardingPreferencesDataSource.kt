@@ -1,5 +1,5 @@
 /*
- * Copyright (©) 2026 Mihai-Cristian Condrea
+ * Copyright (┬⌐) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,20 +15,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.local
 
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Persisted counters backing the in-app review eligibility rules.
+ * Abstraction over onboarding-related preference operations used by the repositories.
  */
-interface ReviewPreferencesDataSource {
+interface OnboardingPreferencesDataSource {
+    val startup: Flow<Boolean>
 
-    val sessionCount: Flow<Int>
-
-    val hasPromptedReview: Flow<Boolean>
-
-    suspend fun incrementSessionCount()
-
-    suspend fun setHasPromptedReview(value: Boolean)
+    suspend fun saveStartup(isFirstTime: Boolean)
 }

@@ -20,7 +20,8 @@ screen of [`:library:feature:startup`](../startup/README.md).
   choices are `ThemeModePicker` and `ThemePalettePicker` from `:library:core:ui`, the same ones the
   theme settings page shows; only the title, subtitle and AMOLED card are this page's own.
 - The `OnboardingProvider` host extension contract.
-- `OnboardingRepository` and `DefaultOnboardingRepository`, page models, controls, and the default
+- `DefaultOnboardingRepository` and the onboarding preference sources in `data/local`.
+- Page models, controls, and the default
   and finish pages.
 
 ## Does not own
@@ -71,7 +72,7 @@ The host binds the provider, the repository and the onboarding ViewModel, as
 
 ```kotlin
 single<OnboardingProvider> { AppOnboardingProvider() }
-single<OnboardingRepository> { DefaultOnboardingRepository(dataStore = get()) }
+// onboardingModule supplies the source and repository bindings.
 viewModel {
     OnboardingViewModel(
         onboardingRepository = get(),
@@ -156,3 +157,10 @@ flowchart TD
 - `ConsentRepository.requestConsent()` is a suspend call that completes or throws. The ViewModel
   reports a failure without blocking onboarding, and cancelling its wait does not cancel the
   shared UMP round trip owned by the repository.
+
+## Preference ownership
+
+The onboarding module registers its own `data/local` source over the shared settings file and
+`DefaultOnboardingRepository`. The `OnboardingRepository` interface lives in
+`core.common.data.repositories`, allowing host core code to observe completion without importing
+the feature. Hosts no longer duplicate these bindings in their own onboarding module.
