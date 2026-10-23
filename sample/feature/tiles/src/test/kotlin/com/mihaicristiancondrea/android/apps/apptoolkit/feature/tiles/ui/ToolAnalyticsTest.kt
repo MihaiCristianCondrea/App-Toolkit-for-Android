@@ -39,6 +39,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.mo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertEquals
@@ -139,7 +140,7 @@ class ToolAnalyticsTest {
         viewModel.onEvent(SosToolEvent.Dismiss)
         assertFalse(viewModel.state.value.isActive)
 
-        sos.toggle()
+        runBlocking { sos.toggle() }
         assertTrue(viewModel.state.value.isActive)
         viewModel.onEvent(SosToolEvent.Toggle)
 

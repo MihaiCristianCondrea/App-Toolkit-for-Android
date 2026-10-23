@@ -14,7 +14,7 @@ Capability-specific sources live with their owning features or integrations.
 - Theme, display and seasonal-theme repository implementations and bindings.
 - `startupValueFlow`, which maps the stored startup route through a caller-supplied function.
 - Storage error translation through `storageCall` and `toStorageException`.
-- The `DataStore<Preferences>` Koin binding consumed by feature-owned sources.
+- The `DataStore<Preferences>` Koin binding, qualified by `DataStoreQualifiers.SETTINGS`, consumed by feature-owned sources.
 
 ## Does not own
 
@@ -34,7 +34,7 @@ Capability-specific sources live with their owning features or integrations.
 
 Core UI, the design system, feature and integration repositories, and the application composition
 root use this module. A source in another module receives the same `DataStore<Preferences>`
-instance from the graph.
+instance from the graph using `get(qualifier = named(DataStoreQualifiers.SETTINGS))`.
 
 ## Architectural decisions
 
@@ -49,7 +49,10 @@ instance from the graph.
   with its keys, in its own `data/local`.
 - Repositories expose application data to UI. UI must not read sources directly.
 - `SeasonalThemeRepository` owns holiday palette application and restoration across the shared
-  theme and seasonal sources. Existing snapshots, occurrence keys and weather-effect values persist.
+  theme and seasonal preferences. Its source atomically reads and updates appearance and snapshot
+  keys with `updateHolidayTheme`, so a concurrent user choice survives restoration.
+  Existing snapshots, occurrence keys and weather-effect values persist. Seasonal unlocking also
+  checks and writes in one source transaction, so only one concurrent caller announces the unlock.
 
 ## Public contracts
 
@@ -66,7 +69,8 @@ Never create another DataStore instance pointing to that file.
 
 ## Migration notes
 
-`CommonDataStore` is removed. Ask the graph for `DataStore<Preferences>` and keep a source over it
+`CommonDataStore` is removed. Ask the graph for `DataStore<Preferences>` with
+`named(DataStoreQualifiers.SETTINGS)` and keep a source over it
 for your own keys, or use the owning module's repository: `ThemePreferencesRepository`,
 `DisplayPreferencesRepository`, `AdsSettingsRepository`, `OnboardingRepository`. The ads source
 owns its collector, and its Koin binding closes it when the graph closes. `startupValueFlow` is an

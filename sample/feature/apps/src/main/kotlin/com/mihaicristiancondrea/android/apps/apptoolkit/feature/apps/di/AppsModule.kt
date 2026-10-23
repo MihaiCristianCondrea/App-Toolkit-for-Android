@@ -33,6 +33,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.reposi
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories.InstalledAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.AppsListViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.di.DataStoreQualifiers
 import kotlinx.serialization.json.Json
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
@@ -78,7 +79,7 @@ val appsModule: Module = module {
         )
     }
 
-    single<FavoritesPreferencesDataSource> { DefaultFavoritesPreferencesDataSource(dataStore = get()) }
+    single<FavoritesPreferencesDataSource> { DefaultFavoritesPreferencesDataSource(dataStore = get(qualifier = named(DataStoreQualifiers.SETTINGS))) }
     single<FavoritesRepository> {
         DefaultFavoritesRepository(
             preferences = get(),

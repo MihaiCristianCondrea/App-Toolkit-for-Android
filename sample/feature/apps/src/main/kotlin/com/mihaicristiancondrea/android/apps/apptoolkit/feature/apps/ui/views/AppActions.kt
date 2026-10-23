@@ -23,13 +23,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.platform.LocalContext
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.InstalledAppsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openPlayStoreForApp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.shareApp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.AppLauncher
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.InstalledAppsRepository
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
@@ -37,7 +37,7 @@ import org.koin.compose.koinInject
 fun buildOnAppClick(
     dispatchers: DispatcherProvider = koinInject(),
     installedApps: InstalledAppsRepository = koinInject(),
-): (AppInfo) -> Unit {
+): (AppSummary) -> Unit {
     val context = LocalContext.current
     val currentContext by rememberUpdatedState(newValue = context)
     val appLauncher = remember(installedApps, dispatchers) { AppLauncher(installedApps, dispatchers) }
@@ -62,7 +62,7 @@ fun buildOnAppClick(
 }
 
 @Composable
-fun buildOnShareClick(): (AppInfo) -> Unit {
+fun buildOnShareClick(): (AppSummary) -> Unit {
     val context = LocalContext.current
     val currentContext by rememberUpdatedState(newValue = context)
     return remember(currentContext) {

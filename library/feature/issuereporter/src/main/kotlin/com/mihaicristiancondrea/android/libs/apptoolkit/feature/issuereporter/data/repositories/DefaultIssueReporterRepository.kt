@@ -18,13 +18,13 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.networkCall
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.mappers.toCreateIssueRequest
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.remote.IssueReporterRemoteDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.DeviceInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.Report
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.networkCall
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.local.DeviceInfoDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.DeviceInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.GithubTarget
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.Report
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.remote.IssueReporterRemoteDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.remote.mappers.toCreateIssueRequest
 
 /**
  * Sends reports through [remoteDataSource] and captures device details through

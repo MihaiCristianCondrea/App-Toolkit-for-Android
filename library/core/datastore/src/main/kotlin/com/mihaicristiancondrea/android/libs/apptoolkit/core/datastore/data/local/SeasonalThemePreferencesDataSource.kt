@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.WeatherEffect
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.models.HolidayThemePreferences
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.models.HolidayThemeSnapshot
 import kotlinx.coroutines.flow.Flow
 
@@ -38,10 +39,16 @@ interface SeasonalThemePreferencesDataSource {
 
     suspend fun saveSeasonalThemesUnlocked(unlocked: Boolean)
 
+    /** Atomically unlocks the controls and returns true only for the first successful writer. */
+    suspend fun unlockSeasonalThemes(): Boolean
+
     suspend fun saveWeatherEffect(effect: WeatherEffect)
 
     suspend fun saveLastHolidayGreeting(occurrenceKey: String)
 
     /** Persists the appearance to restore after the holiday, or clears it when [snapshot] is null. */
     suspend fun saveHolidayThemeSnapshot(snapshot: HolidayThemeSnapshot?)
+
+    /** Reads and conditionally replaces the palette and snapshot in one serialized transaction. */
+    suspend fun updateHolidayTheme(transform: (HolidayThemePreferences) -> HolidayThemePreferences)
 }

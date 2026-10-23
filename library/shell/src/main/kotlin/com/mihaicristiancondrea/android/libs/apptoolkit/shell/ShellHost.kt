@@ -102,10 +102,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.ShellSnackb
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.keepsNavigationBeside
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.rememberShellFrameState
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome.transition
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.ShellPreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.BackEdgeStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellPreferences
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellPreferences
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellSettings
 import kotlinx.coroutines.flow.distinctUntilChanged
 
@@ -154,7 +154,7 @@ fun ShellHost(
     modifier: Modifier = Modifier,
     start: NavKey? = null,
     resolveStart: (suspend () -> NavKey?)? = null, // FIXME: Parameter 'start' has runtime-determined stability
-    preferences: ShellPreferences? = null, // FIXME: Parameter 'preferences' has runtime-determined stability
+    preferences: ShellPreferencesRepository? = null, // FIXME: Parameter 'preferences' has runtime-determined stability
     defaults: ShellSettings = ShellSettings(),
     onReady: () -> Unit = {},
     onDestinationChanged: (NavKey) -> Unit = {},
@@ -165,7 +165,7 @@ fun ShellHost(
     val context = LocalContext.current
     val shellSnackbars = snackbarHostState ?: remember { SnackbarHostState() }
     val shellSnackbarHost = remember(shellSnackbars) { ShellSnackbarHost(shellSnackbars) }
-    val store = preferences ?: remember(context, defaults) { ShellPreferences(context, defaults) }
+    val store = preferences ?: remember(context, defaults) { ShellPreferencesRepository(context, defaults) }
     // A cold start waits a frame for the stored settings rather than drawing a layout it would
     // replace a frame later.
     val settings by store.settings.collectAsStateWithLifecycle(initialValue = store.lastKnown)

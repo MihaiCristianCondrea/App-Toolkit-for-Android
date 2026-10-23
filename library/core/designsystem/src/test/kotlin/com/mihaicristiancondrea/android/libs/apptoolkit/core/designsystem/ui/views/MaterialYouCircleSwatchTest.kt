@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.vi
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.toSwatchColors
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.mappers.toSwatchColors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ThemePaletteProvider
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test

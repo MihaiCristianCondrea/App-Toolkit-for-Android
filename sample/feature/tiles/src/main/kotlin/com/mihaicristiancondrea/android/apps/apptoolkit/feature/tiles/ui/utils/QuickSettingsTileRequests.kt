@@ -15,28 +15,28 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils
 
 import android.app.StatusBarManager
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4Contract.TileRequestOutcome
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.quicksettings.AndroidQuickSettingsTilesLocalDataSource
 import android.content.Context
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.widget.Toast
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4Contract.TileRequestOutcome
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services.getTileServiceRequests
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.services.getTileServiceRequests
 
 /**
  * Asks Android to add the quick tool behind [requestKey] to Quick Settings.
  *
  * [onResult] receives how the request ended, as one of [TileRequestOutcome], whether Android
- * answered the prompt or the request could not be made at all.
+ * answered the prompt or the request could not be made at all. [onTileAdded] receives the tile's
+ * component when Android confirms it is in Quick Settings.
  */
 internal fun requestQuickSettingsTile(
     context: Context,
     requestKey: String,
+    onTileAdded: (componentName: String) -> Unit = {},
     onResult: (outcome: String) -> Unit = {},
 ) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
@@ -68,8 +68,7 @@ internal fun requestQuickSettingsTile(
             if (result == StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ADDED ||
                 result == StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ALREADY_ADDED
             ) {
-                AndroidQuickSettingsTilesLocalDataSource(context)
-                    .recordTileAdded(request.componentName(context), true)
+                onTileAdded(request.componentName(context).flattenToString())
             }
             onResult(
                 when (result) {

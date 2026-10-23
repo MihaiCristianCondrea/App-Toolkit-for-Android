@@ -17,26 +17,26 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReportHistoryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.GithubTarget
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.IssueReportRefusal
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReporterRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReportHistoryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.di.GithubToken
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.mappers.toPlainText
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportRefusal
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportValidation
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.usecases.ValidateIssueReportUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.ISSUE_REPORTER_SCREEN_NAME
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.IssueReporterActionNames
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.IssueReporterParams
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.analyticsName
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.failureName
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.ISSUE_REPORTER_SCREEN_NAME
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.issueReporterActionEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.IssueReporterActionNames
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.IssueReporterParams
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.contracts.IssueReporterEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers.toDeviceInfoText
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers.toMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers.toReport
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers.toSendFailedMessage
@@ -106,7 +106,7 @@ class IssueReporterViewModel(
                 onError = { error -> setState { copy(deviceInfo = error.toFailed()) } },
             ) {
                 setState { copy(deviceInfo = Loadable.Loading) }
-                val text: String = repository.captureDeviceInfo().toPlainText()
+                val text: String = repository.captureDeviceInfo().toDeviceInfoText()
                 setState { copy(deviceInfo = Loadable.Ready(text)) }
             }
         }

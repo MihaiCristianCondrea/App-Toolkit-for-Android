@@ -17,9 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.di.modules
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.providers.StartupProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReporterConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.IssueReporterConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.providers.StartupProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.di.billingModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.di.firebaseModule
 import org.koin.core.module.Module
@@ -61,6 +61,7 @@ import org.koin.core.module.Module
  * contracts, custom settings content, or a different `TelemetryRepository` without the toolkit
  * needing to know the implementation.
  *
+ * @param defaultAdsEnabled Fresh-install ads default, used only when the settings file has no choice.
  * @param hostBuildConfig Host build values the toolkit cannot read from its own BuildConfig.
  * @param startupProviderFactory Produces the host's startup screen provider.
  * @param issueReporterConfig Opts the host into shake-to-report, which is off by default. A host
@@ -70,8 +71,9 @@ fun appToolkitModules(
     hostBuildConfig: AppToolkitHostBuildConfig,
     startupProviderFactory: () -> StartupProvider,
     issueReporterConfig: IssueReporterConfig = IssueReporterConfig(),
+    defaultAdsEnabled: Boolean = true,
 ): List<Module> = buildList {
-    addAll(appToolkitFoundationModules(hostBuildConfig = hostBuildConfig))
+    addAll(appToolkitFoundationModules(hostBuildConfig = hostBuildConfig, defaultAdsEnabled = defaultAdsEnabled))
     add(firebaseModule)
     add(billingModule)
     addAll(appToolkitSettingsModules())

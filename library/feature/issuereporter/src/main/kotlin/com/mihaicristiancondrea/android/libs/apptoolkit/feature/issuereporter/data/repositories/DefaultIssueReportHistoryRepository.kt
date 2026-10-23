@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.d
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.local.IssueReportHistoryDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.FiledIssueReport
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.IssueReportHistory
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportRefusal
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.IssueReportRefusal
 import java.io.IOException
 import java.security.MessageDigest
 

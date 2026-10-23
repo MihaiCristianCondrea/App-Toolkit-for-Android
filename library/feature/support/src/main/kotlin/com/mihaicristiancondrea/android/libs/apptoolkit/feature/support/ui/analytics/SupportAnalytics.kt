@@ -22,7 +22,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.mo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.data.mappers.primaryOneTimePurchaseOffer
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.utils.primaryOneTimePurchaseOffer
 
 /**
  * The donation funnel's GA4 vocabulary.

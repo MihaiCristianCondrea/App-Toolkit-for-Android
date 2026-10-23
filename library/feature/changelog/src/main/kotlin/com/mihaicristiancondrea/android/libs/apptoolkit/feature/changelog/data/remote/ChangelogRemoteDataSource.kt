@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.networkCall
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.networkCall
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.remote.models.MarkdownResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get

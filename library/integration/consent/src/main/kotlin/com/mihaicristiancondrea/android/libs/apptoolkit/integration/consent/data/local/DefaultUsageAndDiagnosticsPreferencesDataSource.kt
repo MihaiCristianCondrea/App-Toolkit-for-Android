@@ -24,6 +24,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import kotlinx.coroutines.flow.Flow
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentSettings
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
@@ -35,7 +36,7 @@ import kotlinx.coroutines.flow.map
  */
 class DefaultUsageAndDiagnosticsPreferencesDataSource(
     private val dataStore: DataStore<Preferences>,
-) : UsageAndDiagnosticsPreferencesDataSource, ConsentPreferencesDataSource {
+) : UsageAndDiagnosticsPreferencesDataSource {
 
     private val usageAndDiagnosticsKey =
         booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_USAGE_AND_DIAGNOSTICS)
@@ -47,6 +48,16 @@ class DefaultUsageAndDiagnosticsPreferencesDataSource(
         booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_AD_USER_DATA_CONSENT)
     private val adPersonalizationConsentKey =
         booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_AD_PERSONALIZATION_CONSENT)
+
+    override fun settings(default: Boolean): Flow<ConsentSettings> = dataStore.data.map { preferences ->
+        ConsentSettings(
+            usageAndDiagnostics = preferences[usageAndDiagnosticsKey] ?: default,
+            analyticsConsent = preferences[analyticsConsentKey] ?: default,
+            adStorageConsent = preferences[adStorageConsentKey] ?: default,
+            adUserDataConsent = preferences[adUserDataConsentKey] ?: default,
+            adPersonalizationConsent = preferences[adPersonalizationConsentKey] ?: default,
+        )
+    }.distinctUntilChanged()
 
     private fun booleanFlow(key: Preferences.Key<Boolean>, default: Boolean): Flow<Boolean> =
         dataStore.data.map { preferences: Preferences ->

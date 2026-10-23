@@ -24,6 +24,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,7 +41,7 @@ import kotlin.time.Duration.Companion.milliseconds
 /** Owns custom and SOS Morse playback so only one patterned torch job can run at a time. */
 class MorseRepository(
     private val torchRepository: TorchRepository,
-    dispatchers: DispatcherProvider,
+    private val dispatchers: DispatcherProvider,
 ) {
     private val scope = CoroutineScope(SupervisorJob() + dispatchers.default)
     private val mutableState = MutableStateFlow(
@@ -47,14 +50,13 @@ class MorseRepository(
     val state: StateFlow<MorsePlaybackState> = mutableState.asStateFlow()
 
     private var playbackJob: Job? = null
-    private var playbackGeneration: Long = 0
+    private val playbackMutex = Mutex()
 
-    fun start(message: String): Boolean {
+    suspend fun start(message: String): Boolean = playbackMutex.withLock {
         val normalizedMessage = message.trim().uppercase(Locale.ROOT)
-        if (!state.value.isAvailable || !isSupportedMessage(normalizedMessage)) return false
+        if (!state.value.isAvailable || !isSupportedMessage(normalizedMessage)) return@withLock false
 
-        stop()
-        val generation = ++playbackGeneration
+        stopPlayback()
         mutableState.value = MorsePlaybackState(
             isAvailable = true,
             isActive = true,
@@ -67,23 +69,24 @@ class MorseRepository(
                     delay(wordGap)
                 }
             } finally {
-                if (generation == playbackGeneration && mutableState.value.isActive) {
-                    mutableState.value = MorsePlaybackState(isAvailable = true)
-                    playbackJob = null
-                    withContext(NonCancellable) { torchRepository.turnOff() }
+                withContext(NonCancellable) {
+                    torchRepository.turnOff()
+                    mutableState.value = MorsePlaybackState(isAvailable = state.value.isAvailable)
                 }
             }
         }
-        return true
+        true
     }
 
-    fun stop() {
-        if (!state.value.isActive && playbackJob == null) return
-        playbackGeneration++
-        mutableState.value = MorsePlaybackState(isAvailable = state.value.isAvailable)
-        playbackJob?.cancel()
+    /** Waits for an in-flight torch call to finish before completing shutdown. */
+    suspend fun stop() = playbackMutex.withLock { stopPlayback() }
+
+    private suspend fun stopPlayback() = withContext(NonCancellable + dispatchers.default) {
+        val previous = playbackJob
         playbackJob = null
+        previous?.cancelAndJoin()
         torchRepository.turnOff()
+        mutableState.value = MorsePlaybackState(isAvailable = state.value.isAvailable)
     }
 
     private suspend fun flashOnce(message: String) {

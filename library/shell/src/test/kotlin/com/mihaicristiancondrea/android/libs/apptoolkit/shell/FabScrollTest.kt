@@ -55,7 +55,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.cont
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R as NavigationR
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.InMemoryShellPreferences
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.InMemoryShellPreferencesRepository
 import kotlinx.serialization.Serializable
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -112,7 +112,7 @@ class FabScrollTest {
             }
         }
         compose.setContent {
-            AppTheme { ShellHost(graph = graph, start = FabPage, preferences = InMemoryShellPreferences()) }
+            AppTheme { ShellHost(graph = graph, start = FabPage, preferences = InMemoryShellPreferencesRepository()) }
         }
         compose.waitForIdle()
         val extended = fabWidth()

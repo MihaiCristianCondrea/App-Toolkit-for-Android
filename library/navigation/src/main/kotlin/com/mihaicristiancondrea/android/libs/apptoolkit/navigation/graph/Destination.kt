@@ -17,49 +17,13 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph
 
-import android.content.Context
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.navigation3.runtime.NavKey
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.ScreenTransition
 import kotlin.reflect.KClass
-
-/**
- * Where a destination is shown, and therefore how it enters, leaves and answers the back gesture.
- *
- * The shell has two levels. The outer level holds the shell itself and every [Page], and moves
- * between them the way Android moves between activities. The inner level lives inside the shell,
- * under its app bar and above its navigation bar or rail, and holds the [Tab] roots and their
- * [Child] destinations.
- */
-enum class DestinationKind {
-    /** A root of the shell, selected from the bottom bar, the rail or the drawer. */
-    Tab,
-
-    /**
-     * Pushed on top of the current tab, inside the shell. The navigation bar stays; the app bar
-     * shows a back arrow and the child's title.
-     */
-    Child,
-
-    /**
-     * Covers the whole shell, bars included, and leaves with the system back animation, the way a
-     * separate activity would. Settings, help and anything opened from the drawer are pages.
-     */
-    Page,
-}
-
-/**
- * The part a page plays when the window is wide enough to show two pages side by side.
- *
- * A [List] page shows beside the [Detail] page opened from it. Below that width both are plain
- * pages and the detail covers the list.
- */
-enum class PaneRole { None, List, Detail }
 
 /** Everything the shell needs to know to show one kind of [NavKey]. */
 @Immutable
@@ -100,82 +64,3 @@ class Destination<K : NavKey> @PublishedApi internal constructor(
     /** Whether the app bar the shell draws for this page shows a back arrow. Only titled pages use it. */
     val backButton: Boolean = true,
 )
-
-/**
- * A root of the shell, as it appears in the navigation bar, the rail and the permanent drawer.
- *
- * [icon] and [selectedIcon] take any [ToolkitIcon]: an animated vector drawable or a Lottie icon
- * plays when the tab is clicked or becomes selected, as in the Toolkit's other navigation items.
- * Pass the same animated icon for both to play one animation for both states.
- *
- * A tab shows [badge], a fixed label, or [badgeText], read in composition so it follows state such
- * as an unread count. Either one returning null shows no badge, and an empty string shows a dot.
- */
-@Immutable
-class ShellTab(
-    val key: NavKey,
-    @param:StringRes val label: Int,
-    val icon: ToolkitIcon,
-    val selectedIcon: ToolkitIcon = icon,
-    val badge: String? = null,
-    val badgeText: (@Composable () -> String?)? = null,
-    /** When set, the tab's app bar holds a search field in place of the title. */
-    val search: TabSearch? = null,
-    /**
-     * A shorter label for the places with little room under an icon: the navigation bar and the
-     * collapsed rail. [label] is used everywhere else, and there too when this is null.
-     */
-    @param:StringRes val shortLabel: Int? = null,
-) {
-    init {
-        require(badge == null || badgeText == null) { "A tab takes a badge or a badgeText, not both." }
-    }
-}
-
-/**
- * A search field in a tab's app bar, where the title would be.
- *
- * The field is part of the shell's app bar, so moving to the tab only crossfades the title into
- * the field: the navigation button, the bar and its height stay exactly where they were. The
- * query lives in the shell; the tab reads it from
- * [com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellSearch]. Back clears a
- * query before it does anything else.
- */
-@Immutable
-class TabSearch(@param:StringRes val hint: Int)
-
-/**
- * One row of the navigation drawer, or of the rail once it holds more than the tabs, or of the
- * app bar's overflow menu.
- *
- * The drawer lists what the tabs do not: destinations opened as pages and one-off actions such as
- * sharing the app. A [Spacer] splits the list in two and pins everything after it to the bottom
- * edge, the way the drawers of Google's apps keep Settings and Help at the foot.
- */
-@Immutable
-sealed interface DrawerEntry {
-    @Immutable
-    class Link(
-        val key: NavKey,
-        @param:StringRes val label: Int,
-        val icon: ToolkitIcon,
-        @param:StringRes override val shortLabel: Int? = null,
-    ) : DrawerEntry
-
-    /** Runs [onClick] instead of navigating, for entries such as Share that leave the app. */
-    @Immutable
-    class Action(
-        @param:StringRes val label: Int,
-        val icon: ToolkitIcon,
-        val onClick: (Context) -> Unit,
-        @param:StringRes override val shortLabel: Int? = null,
-    ) : DrawerEntry
-
-    data object Spacer : DrawerEntry {
-        override val shortLabel: Int? = null
-    }
-
-    /** A shorter label for the collapsed rail, where the full one would be cut off. */
-    @get:StringRes
-    val shortLabel: Int?
-}

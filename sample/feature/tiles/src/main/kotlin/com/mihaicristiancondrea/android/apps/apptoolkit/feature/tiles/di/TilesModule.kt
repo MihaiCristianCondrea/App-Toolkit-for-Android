@@ -36,6 +36,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repos
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.SosRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.ToolkitTilesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.TorchRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.services.getTileServiceRequests
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.BreathingToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.CoinFlipToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.CompassToolViewModel
@@ -47,9 +48,11 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MorseTo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ReactionTestToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SosToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ToolkitTilesViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.di.DataStoreQualifiers
 import org.koin.android.ext.koin.androidContext
-import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.module.Module
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val tilesModule: Module = module {
@@ -61,12 +64,18 @@ val tilesModule: Module = module {
         AndroidBreathingHapticsDataSource(context = androidContext())
     }
     single<QuickSettingsTilesLocalDataSource> {
-        AndroidQuickSettingsTilesLocalDataSource(context = androidContext(), dispatchers = get())
+        AndroidQuickSettingsTilesLocalDataSource(
+            context = androidContext(),
+            tileComponents = getTileServiceRequests().mapValues { (_, request) ->
+                request.componentName(androidContext()).flattenToString()
+            },
+            dispatchers = get(),
+        )
     }
     single<TorchRepository> { DefaultTorchRepository(dataSource = get(), dispatchers = get()) }
     single<ToolkitTilesPreferencesDataSource> {
         DefaultToolkitTilesPreferencesDataSource(
-            dataStore = get(),
+            dataStore = get(qualifier = named(DataStoreQualifiers.SETTINGS)),
         )
     }
     single<ToolkitTilesRepository> {

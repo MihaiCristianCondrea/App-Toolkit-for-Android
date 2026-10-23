@@ -75,7 +75,12 @@ flowchart TD
   source moves its Settings provider and preference snapshot reads to injected IO; the ViewModel
   switches only its own UI-model mapping to Default.
 - Torch state is shared because in-app tools and system-created services can operate concurrently.
-  One Morse playback job serializes patterned output, and SOS delegates to it.
+  Morse start/stop operations are suspending and serialized. Replacement and shutdown await the
+  previous job's final torch-off command before returning; SOS delegates to the same owner.
+- Counter writes remain process-owned while callers await completion and receive storage failures.
+  Tile services catch and report action failures, and a destroyed caller cannot cancel an accepted write.
+- Membership writes pass through `ToolkitTilesRepository`. DI supplies the request-key-to-component
+  registry to the local source; data code does not import UI service declarations.
 - Each tool with behavior of its own has a dedicated ViewModel, one class per file in `ui/`, with
   its `XToolUiState` in `ui/states/` and its `XToolEvent` in `ui/contracts/`. Every one extends
   `LoggedScreenViewModel` and reports under the `ToolkitTiles` screen name, because the tools open in
@@ -170,3 +175,10 @@ feature free of foreground services, wake locks, and the Play Console declaratio
 
 Navigation keys and the complete graph live in `:sample:app` under `app/navigation`.
 Features expose callbacks rather than importing app-owned route keys.
+
+
+## Service components
+
+Quick Settings entry points live in the feature services package. Their manifest component names
+changed from ui.services to services in pre28. Remove and re-add any sample tiles pinned before
+that update. Tile IDs and preference keys are unchanged; tile text models live in ui/models.

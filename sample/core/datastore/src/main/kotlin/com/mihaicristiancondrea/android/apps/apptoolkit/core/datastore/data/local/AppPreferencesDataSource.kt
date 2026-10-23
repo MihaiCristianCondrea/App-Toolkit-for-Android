@@ -17,25 +17,14 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local
 
-import androidx.navigation3.runtime.NavKey
 import kotlinx.coroutines.flow.Flow
 
 /**
- * The sample's own preferences, kept with its own keys in the Toolkit's shared settings file, and
- * the startup state the main activity reads before the first frame.
+ * The sample's own stored preferences, read and written through feature repositories.
  */
 interface AppPreferencesDataSource {
 
-    /** Emits true until onboarding is completed. */
-    val startup: Flow<Boolean>
-
     val componentsShowcaseUnlocked: Flow<Boolean>
-
-    /** The stored startup route mapped to a key, falling back to [defaultRoute]. */
-    fun <T : NavKey> startupDestinationFlow(
-        defaultRoute: String,
-        mapToKey: (String) -> T,
-    ): Flow<T>
 
     suspend fun saveComponentsShowcaseUnlocked(isUnlocked: Boolean)
 }

@@ -61,7 +61,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNav
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.ShellHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.InMemoryShellPreferences
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.InMemoryShellPreferencesRepository
 import io.mockk.mockk
 import kotlinx.serialization.Serializable
 import org.junit.After
@@ -215,7 +215,7 @@ class HostSettingsSearchTest {
             // Each test starts a new Koin instance; Compose must not reuse a closed default context.
             KoinIsolatedContext(koinApplication) {
                 AppTheme {
-                    ShellHost(graph = HostGraph, preferences = InMemoryShellPreferences())
+                    ShellHost(graph = HostGraph, preferences = InMemoryShellPreferencesRepository())
                 }
             }
         }

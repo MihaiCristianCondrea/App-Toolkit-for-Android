@@ -72,6 +72,8 @@ class ToolkitTilesViewModel(
             ToolkitTilesEvent.TileRequestLaunched -> setState { copy(pendingTileRequest = null) }
             is ToolkitTilesEvent.TileRequestFinished ->
                 handleTileRequestFinished(event.requestKey, event.outcome)
+            is ToolkitTilesEvent.TileAdded ->
+                toolkitTilesRepository.recordTileMembership(event.componentName, added = true)
             is ToolkitTilesEvent.TileSetupClicked -> handleTileSetup(event.tileId)
             is ToolkitTilesEvent.AdStatusChanged -> updateAdStatus(event.adId, event.isLoaded)
         }

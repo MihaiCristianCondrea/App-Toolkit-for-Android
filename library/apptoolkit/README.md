@@ -8,7 +8,8 @@ through Gradle `api` dependencies.
 
 ## Owns
 
-- `appToolkitModules`, the single entry point returning the toolkit's whole Koin graph.
+- `appToolkitModules`, the single entry point returning the toolkit's whole Koin graph. Its
+  `defaultAdsEnabled` argument controls the fresh-install default; stored choices take priority.
 - `appToolkitFoundationModules`, `appToolkitFeatureModules`, and `appToolkitSettingsModules`, the
   granular lists `appToolkitModules` composes.
 - `toolkitGraph { }` and `ShellGraphBuilder.toolkitPages()`, which register the Toolkit's pages in

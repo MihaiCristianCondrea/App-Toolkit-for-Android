@@ -366,6 +366,10 @@ A screen's floating action buttons are described, and the Toolkit's scaffolds dr
 at the bottom end, the last button in the corner, each with the Toolkit's click sound, haptic,
 press bounce and animated icon, scaling in and out on its own.
 
+A screen hands its buttons to the scaffold around it, so a screen that draws its own
+`PageScaffold` declares them inside it: `PageScaffold { ScreenHost(fabs = ...) { ... } }`. A
+`ScreenHost` wrapped around the page sends its buttons and messages past it, and they never show.
+
 ```kotlin
 ScaffoldFabs(
     listOf(

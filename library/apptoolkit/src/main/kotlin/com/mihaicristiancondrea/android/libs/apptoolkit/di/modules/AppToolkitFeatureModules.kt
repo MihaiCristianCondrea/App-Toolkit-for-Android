@@ -33,8 +33,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersio
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.di.aboutModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.di.changelogModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.di.faqModule
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.IssueReporterConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.di.issueReporterModule
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReporterConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.di.licensesModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.di.onboardingModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.di.privacyModule

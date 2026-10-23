@@ -22,9 +22,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.d
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
-import kotlinx.coroutines.withContext
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.storageCall
 import java.io.File
+import kotlinx.coroutines.withContext
 
 /**
  * Clears application cache directories on the IO dispatcher, since the recursive delete blocks.

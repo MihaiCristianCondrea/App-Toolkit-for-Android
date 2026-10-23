@@ -27,6 +27,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.HolidaySeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.models.HolidayThemePreferences
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.models.HolidayThemeSnapshot
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -69,21 +70,21 @@ class DefaultSeasonalThemePreferencesDataSource(
     }.distinctUntilChanged()
 
     override val holidayThemeSnapshot: Flow<HolidayThemeSnapshot?> =
-        dataStore.data.map { preferences ->
-            val season = preferences[holidaySeasonKey]
-                ?.let { name -> HolidaySeason.entries.firstOrNull { it.name == name } }
-                ?: return@map null
-            HolidayThemeSnapshot(
-                season = season,
-                previousPaletteId = StaticPaletteIds.sanitize(
-                    preferences[previousPaletteKey] ?: StaticPaletteIds.DEFAULT,
-                ),
-                previousDynamicColors = preferences[previousDynamicColorsKey] != false,
-            )
-        }.distinctUntilChanged()
+        dataStore.data.map { it.readHolidaySnapshot() }.distinctUntilChanged()
 
     override suspend fun saveSeasonalThemesUnlocked(unlocked: Boolean) {
         dataStore.edit { preferences: MutablePreferences -> preferences[unlockedKey] = unlocked }
+    }
+
+    override suspend fun unlockSeasonalThemes(): Boolean {
+        var changed = false
+        dataStore.edit { preferences ->
+            if (preferences[unlockedKey] != true) {
+                preferences[unlockedKey] = true
+                changed = true
+            }
+        }
+        return changed
     }
 
     override suspend fun saveWeatherEffect(effect: WeatherEffect) {
@@ -97,16 +98,47 @@ class DefaultSeasonalThemePreferencesDataSource(
     }
 
     override suspend fun saveHolidayThemeSnapshot(snapshot: HolidayThemeSnapshot?) {
-        dataStore.edit { preferences: MutablePreferences ->
-            if (snapshot == null) {
-                preferences.remove(holidaySeasonKey)
-                preferences.remove(previousPaletteKey)
-                preferences.remove(previousDynamicColorsKey)
-            } else {
-                preferences[holidaySeasonKey] = snapshot.season.name
-                preferences[previousPaletteKey] = snapshot.previousPaletteId
-                preferences[previousDynamicColorsKey] = snapshot.previousDynamicColors
+        dataStore.edit { it.writeHolidaySnapshot(snapshot) }
+    }
+
+    override suspend fun updateHolidayTheme(transform: (HolidayThemePreferences) -> HolidayThemePreferences) {
+        dataStore.edit { preferences ->
+            val current = HolidayThemePreferences(
+                paletteId = StaticPaletteIds.sanitize(preferences[ThemePreferenceKeys.staticPaletteId] ?: StaticPaletteIds.DEFAULT),
+                dynamicColors = preferences[ThemePreferenceKeys.dynamicColors] != false,
+                snapshot = preferences.readHolidaySnapshot(),
+            )
+            val next = transform(current)
+            if (next.paletteId != current.paletteId) {
+                preferences[ThemePreferenceKeys.staticPaletteId] = StaticPaletteIds.sanitize(next.paletteId)
             }
+            if (next.dynamicColors != current.dynamicColors) {
+                preferences[ThemePreferenceKeys.dynamicColors] = next.dynamicColors
+            }
+            if (next.snapshot != current.snapshot) preferences.writeHolidaySnapshot(next.snapshot)
+        }
+    }
+
+    private fun Preferences.readHolidaySnapshot(): HolidayThemeSnapshot? {
+        val season = this[holidaySeasonKey]
+            ?.let { name -> HolidaySeason.entries.firstOrNull { it.name == name } }
+            ?: return null
+        return HolidayThemeSnapshot(
+            season = season,
+            previousPaletteId = StaticPaletteIds.sanitize(this[previousPaletteKey] ?: StaticPaletteIds.DEFAULT),
+            previousDynamicColors = this[previousDynamicColorsKey] != false,
+        )
+    }
+
+    private fun MutablePreferences.writeHolidaySnapshot(snapshot: HolidayThemeSnapshot?) {
+        if (snapshot == null) {
+            remove(holidaySeasonKey)
+            remove(previousPaletteKey)
+            remove(previousDynamicColorsKey)
+        } else {
+            this[holidaySeasonKey] = snapshot.season.name
+            this[previousPaletteKey] = snapshot.previousPaletteId
+            this[previousDynamicColorsKey] = snapshot.previousDynamicColors
         }
     }
 }

@@ -63,6 +63,9 @@ flowchart TD
 - The package endpoint is authoritative and the legacy URL is a compatibility fallback, used only
   when the package name is blank or the endpoint answers 404, so a host that has not been published
   to the metadata API still shows release notes.
+- Heading selection and thematic-break splitting share a fence scanner. Backtick and tilde fences
+  close only with the same marker, a sufficient run length and a blank suffix. Code examples do
+  not create version boundaries or dividers.
 - The use case prefers the current version's section but falls back to the full history, so a
   version-format mismatch never hides content that was fetched successfully.
 - The sheet keeps its header and action fixed while the body scrolls, so long release notes cannot

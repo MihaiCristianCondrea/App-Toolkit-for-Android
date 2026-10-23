@@ -40,6 +40,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -147,9 +148,12 @@ class DefaultConsentRepositoryTest {
             val implicit = requestAsync(repository)
             val explicit = requestAsync(repository, showIfRequired = false)
             runCurrent()
+            assertEquals(1, remote.requestCount)
             remote.complete()
-
             implicit.await()
+            runCurrent()
+            assertEquals(2, remote.requestCount)
+            remote.complete()
             explicit.await()
             assertEquals(2, remote.requestCount)
         }
@@ -197,6 +201,26 @@ class DefaultConsentRepositoryTest {
         assertTrue(second.await().isSuccess)
         assertEquals(2, remote.requestCount)
     }
+
+    @Test
+    fun `a timed out stale host never permits an overlapping SDK request`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val remote = CountingConsentRemoteDataSource()
+            val repository = createRepository(remote = remote, requestScope = backgroundScope)
+            val oldHost = FakeConsentHost()
+            val first = requestAsync(repository, host = oldHost)
+            runCurrent()
+            oldHost.destroyed = true
+            val next = requestAsync(repository)
+            runCurrent()
+            advanceTimeBy(5_001)
+            runCurrent()
+            val failure = assertIs<ConsentException>(next.await().exceptionOrNull())
+            assertEquals(ConsentException.Reason.REQUEST_FAILED, failure.reason)
+            assertEquals(1, remote.requestCount)
+            remote.complete()
+            first.await()
+        }
 
     @Test
     fun `requests from a finishing host never reach UMP`() = runTest(dispatcherExtension.testDispatcher) {
@@ -448,6 +472,17 @@ private class FakeConsentPreferencesDataSource(
     private val adPersonalizationConsent: Boolean? = null,
     private val readFailure: Throwable? = null,
 ) : ConsentPreferencesDataSource {
+    override fun settings(default: Boolean): Flow<ConsentSettings> =
+        readFailure?.let { failure -> flow { throw failure } } ?: flowOf(
+            ConsentSettings(
+                usageAndDiagnostics = usageAndDiagnostics ?: default,
+                analyticsConsent = analyticsConsent ?: default,
+                adStorageConsent = adStorageConsent ?: default,
+                adUserDataConsent = adUserDataConsent ?: default,
+                adPersonalizationConsent = adPersonalizationConsent ?: default,
+            )
+        )
+
     override fun usageAndDiagnostics(default: Boolean): Flow<Boolean> = read(usageAndDiagnostics ?: default)
 
     override fun analyticsConsent(default: Boolean): Flow<Boolean> = read(analyticsConsent ?: default)

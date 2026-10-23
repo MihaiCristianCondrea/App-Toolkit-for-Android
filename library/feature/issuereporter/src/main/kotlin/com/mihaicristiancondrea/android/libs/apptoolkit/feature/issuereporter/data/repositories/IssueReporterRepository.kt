@@ -19,9 +19,9 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.d
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.exceptions.IssueReportRejectedException
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.DeviceInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.Report
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.DeviceInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.GithubTarget
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.Report
 
 /**
  * The data layer's entry point for issue reports. Both calls are safe from the main thread.

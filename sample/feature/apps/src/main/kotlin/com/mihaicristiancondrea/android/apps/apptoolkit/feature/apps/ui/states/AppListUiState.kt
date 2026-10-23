@@ -19,8 +19,8 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states
 
 import androidx.compose.runtime.Immutable
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppDetails
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppInstallInfo
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
@@ -46,17 +46,17 @@ import kotlinx.collections.immutable.persistentSetOf
  */
 @Immutable
 data class AppListUiState(
-    val apps: Loadable<ImmutableList<AppInfo>> = Loadable.Loading,
+    val apps: Loadable<ImmutableList<AppSummary>> = Loadable.Loading,
     val installedPackages: ImmutableSet<String> = persistentSetOf(),
     val favorites: ImmutableSet<String> = persistentSetOf(),
     val selectedFilter: AppsListFilter = AppsListFilter.All,
-    val selectedApp: AppInfo? = null,
+    val selectedApp: AppSummary? = null,
     val selectedAppDetails: Loadable<AppDetails> = Loadable.Empty(),
     val selectedAppInstallInfo: AppInstallInfo? = null,
-    val randomAppToOpen: AppInfo? = null,
+    val randomAppToOpen: AppSummary? = null,
 ) {
     /** The catalogue being shown, fresh or saved, or an empty list while there is none. */
-    val loadedApps: ImmutableList<AppInfo>
+    val loadedApps: ImmutableList<AppSummary>
         get() = (apps as? Loadable.Ready)?.value ?: persistentListOf()
 
     /** Whether the random-app button has an app to pick. */

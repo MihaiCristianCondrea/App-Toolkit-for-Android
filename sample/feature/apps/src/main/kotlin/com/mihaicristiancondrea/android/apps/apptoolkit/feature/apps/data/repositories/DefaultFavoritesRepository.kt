@@ -19,10 +19,10 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repos
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.FavoritesPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.toStorageException
-import kotlinx.coroutines.flow.Flow
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.mappers.toStorageException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.storageCall
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onStart
 
 /**

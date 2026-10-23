@@ -37,7 +37,7 @@ class QuickSettingsMainSafetyTest {
                 null
             }
 
-            val source = AndroidQuickSettingsTilesLocalDataSource(context, dispatchers)
+            val source = AndroidQuickSettingsTilesLocalDataSource(context = context, tileComponents = emptyMap(), dispatchers = dispatchers)
             assertEquals(emptySet(), source.activeTileComponents())
         } finally {
             unmockkStatic(Settings.Secure::class)

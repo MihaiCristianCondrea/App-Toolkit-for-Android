@@ -120,6 +120,7 @@ fun ToolkitTilesScreen() {
         requestQuickSettingsTile(
             context = context,
             requestKey = requestKey,
+            onTileAdded = { componentName -> viewModel.onEvent(ToolkitTilesEvent.TileAdded(componentName)) },
             onResult = { outcome ->
                 viewModel.onEvent(ToolkitTilesEvent.TileRequestFinished(requestKey = requestKey, outcome = outcome))
             },

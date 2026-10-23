@@ -41,17 +41,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.StatusColors
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
-
-/** Container and content colors used by a tile badge or status chip. */
-internal data class StatusColors(
-    val container: Color,
-    val content: Color,
-)
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 
 internal fun ToolkitTile.previewTextResId(): Int = when (id) {
     ToolkitTileIds.COIN_FLIP -> R.string.tile_preview_coin_result

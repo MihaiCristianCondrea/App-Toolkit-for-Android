@@ -43,7 +43,9 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.MainEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.appGraph
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.startKeyFor
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.AppPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.OnboardingRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DisplayPreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.utils.extensions.startupValueFlow
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.data.repositories.ComponentsShowcaseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.AppDefaults
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.ToolkitTilesRoute
@@ -64,7 +66,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
  */
 class MainActivity : AppCompatActivity() {
 
-    private val dataStore: AppPreferencesDataSource by inject()
+    private val onboardingRepository: OnboardingRepository by inject()
+    private val displayPreferences: DisplayPreferencesRepository by inject()
     private val componentsShowcaseRepository: ComponentsShowcaseRepository by inject()
     private val viewModel: MainViewModel by viewModel()
     private var updateResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
@@ -114,12 +117,12 @@ class MainActivity : AppCompatActivity() {
                             // onboarding is done, then the start page chosen in the display settings.
                             // DataStore reads are main-safe, so no dispatcher switch is needed.
                             resolveStart = {
-                                if (dataStore.startup.first()) {
+                                if (!onboardingRepository.observeOnboardingCompletion().first()) {
                                     StartupRoute
                                 } else {
-                                    dataStore.startupDestinationFlow(
+                                    displayPreferences.startupValueFlow(
                                         defaultRoute = ToolkitTilesRoute.ROUTE_ID,
-                                        mapToKey = ::startKeyFor,
+                                        mapToValue = ::startKeyFor,
                                     ).first()
                                 }
                             },

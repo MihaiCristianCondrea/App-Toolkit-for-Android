@@ -22,10 +22,9 @@ import android.content.Context
 import androidx.annotation.RequiresPermission
 import com.google.android.libraries.ads.mobile.sdk.MobileAds
 import com.google.android.libraries.ads.mobile.sdk.initialization.InitializationConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.utils.AppOpenAdController
 
 /**
- * SDK initialization boundary. [AppOpenAdController] controls one-time initialization with the host
+ * SDK initialization boundary. The ads controller controls one-time initialization with the host
  * ID before any ad is loaded; tests can replace this boundary without invoking the SDK.
  */
 fun interface AdsSdkInitializer {

@@ -34,6 +34,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
 import org.koin.core.module.Module
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 /**
@@ -41,11 +42,20 @@ import org.koin.dsl.module
  * themes and display. Every other module binds its own source over the same `DataStore<Preferences>`.
  */
 fun dataStoreModule(): Module = module {
-    single<DataStore<Preferences>>(createdAtStart = true) { get<Context>().applicationContext.commonDataStore }
+    single<DataStore<Preferences>>(
+        qualifier = named(DataStoreQualifiers.SETTINGS),
+        createdAtStart = true,
+    ) { get<Context>().applicationContext.commonDataStore }
 
-    single<ThemePreferencesDataSource> { DefaultThemePreferencesDataSource(dataStore = get()) }
-    single<SeasonalThemePreferencesDataSource> { DefaultSeasonalThemePreferencesDataSource(dataStore = get()) }
-    single<DisplayPreferencesDataSource> { DefaultDisplayPreferencesDataSource(dataStore = get()) }
+    single<ThemePreferencesDataSource> {
+        DefaultThemePreferencesDataSource(dataStore = get(qualifier = named(DataStoreQualifiers.SETTINGS)))
+    }
+    single<SeasonalThemePreferencesDataSource> {
+        DefaultSeasonalThemePreferencesDataSource(dataStore = get(qualifier = named(DataStoreQualifiers.SETTINGS)))
+    }
+    single<DisplayPreferencesDataSource> {
+        DefaultDisplayPreferencesDataSource(dataStore = get(qualifier = named(DataStoreQualifiers.SETTINGS)))
+    }
 
     single<ThemePreferencesRepository> {
         DefaultThemePreferencesRepository(preferences = get())
@@ -54,6 +64,6 @@ fun dataStoreModule(): Module = module {
         DefaultDisplayPreferencesRepository(preferences = get())
     }
     single<SeasonalThemeRepository> {
-        DefaultSeasonalThemeRepository(seasonal = get(), theme = get())
+        DefaultSeasonalThemeRepository(seasonal = get())
     }
 }

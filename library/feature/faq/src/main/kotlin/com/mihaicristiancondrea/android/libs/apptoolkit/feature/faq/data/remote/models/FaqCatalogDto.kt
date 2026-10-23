@@ -17,8 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.models
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerialName
 
 /**
  * Data transfer object representing the FAQ catalog structure.
@@ -31,19 +31,4 @@ data class FaqCatalogDto(
     @SerialName("schemaVersion")
     val schemaVersion: Int,
     val products: List<FaqProductDto> = emptyList(),
-)
-
-@Serializable
-data class FaqProductDto(
-    val name: String,
-    val productId: String,
-    val key: String,
-    @SerialName("questionSources")
-    val questionSources: List<FaqQuestionSourceDto> = emptyList(),
-)
-
-@Serializable
-data class FaqQuestionSourceDto(
-    val url: String,
-    val category: String,
 )

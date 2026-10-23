@@ -17,55 +17,30 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.local
 
-import kotlinx.coroutines.flow.Flow
-
 /**
  * Abstraction over storage operations for usage and diagnostics related
  * preferences. Implementations are responsible for persisting and
  * exposing the different consent values used by the diagnostics
  * feature.
  */
-interface UsageAndDiagnosticsPreferencesDataSource {
-
-    fun usageAndDiagnostics(default: Boolean): Flow<Boolean>
+interface UsageAndDiagnosticsPreferencesDataSource : ConsentPreferencesDataSource {
 
     suspend fun saveUsageAndDiagnostics(isChecked: Boolean)
 
-    fun analyticsConsent(default: Boolean): Flow<Boolean>
-
     suspend fun saveAnalyticsConsent(isGranted: Boolean)
-
-    fun adStorageConsent(default: Boolean): Flow<Boolean>
 
     suspend fun saveAdStorageConsent(isGranted: Boolean)
 
-    fun adUserDataConsent(default: Boolean): Flow<Boolean>
-
     suspend fun saveAdUserDataConsent(isGranted: Boolean)
-
-    fun adPersonalizationConsent(default: Boolean): Flow<Boolean>
 
     suspend fun saveAdPersonalizationConsent(isGranted: Boolean)
 
-    /**
-     * Persists every value at once, as a whole-bundle answer such as "Allow all" does.
-     *
-     * Separate writes would each reach observers as a mix of old and new choices, and those mixes
-     * would be applied to the consent SDKs. `DefaultUsageAndDiagnosticsPreferencesDataSource` writes
-     * everything in one transaction; this default writes the values one by one so other
-     * implementations keep compiling.
-     */
+    /** Persists every choice in one transaction, without intermediate combinations. */
     suspend fun saveAll(
         usageAndDiagnostics: Boolean,
         analyticsConsent: Boolean,
         adStorageConsent: Boolean,
         adUserDataConsent: Boolean,
         adPersonalizationConsent: Boolean,
-    ) {
-        saveUsageAndDiagnostics(isChecked = usageAndDiagnostics)
-        saveAnalyticsConsent(isGranted = analyticsConsent)
-        saveAdStorageConsent(isGranted = adStorageConsent)
-        saveAdUserDataConsent(isGranted = adUserDataConsent)
-        saveAdPersonalizationConsent(isGranted = adPersonalizationConsent)
-    }
+    )
 }

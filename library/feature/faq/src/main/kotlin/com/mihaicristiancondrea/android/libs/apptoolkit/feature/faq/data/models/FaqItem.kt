@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,12 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models
 
-@JvmInline
-value class FaqId(val value: String)
-
 data class FaqItem(
     val id: FaqId,
     val question: String,
     val answer: String,
 )
-

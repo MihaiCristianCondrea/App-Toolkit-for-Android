@@ -46,7 +46,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakePrefere
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LocalEntranceCue
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.InMemoryShellPreferences
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.InMemoryShellPreferencesRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.Serializable
 import org.junit.After
@@ -108,7 +108,7 @@ class EntranceCueNavigationTest {
             }
         }
         compose.setContent {
-            AppTheme { ShellHost(graph = graph, preferences = InMemoryShellPreferences()) }
+            AppTheme { ShellHost(graph = graph, preferences = InMemoryShellPreferencesRepository()) }
         }
         compose.waitUntil(timeoutMillis = 10_000) {
             compose.onAllNodesWithText("Open page").fetchSemanticsNodes().isNotEmpty()

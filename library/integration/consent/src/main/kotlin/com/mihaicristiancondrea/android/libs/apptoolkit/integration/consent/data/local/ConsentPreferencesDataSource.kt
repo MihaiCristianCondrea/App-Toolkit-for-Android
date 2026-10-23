@@ -18,11 +18,15 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.local
 
 import kotlinx.coroutines.flow.Flow
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentSettings
 
 /**
  * Abstraction over persisted consent preferences used by the consent feature.
  */
 interface ConsentPreferencesDataSource {
+
+    /** Emits every choice from one storage snapshot, including defaults for unset keys. */
+    fun settings(default: Boolean): Flow<ConsentSettings>
 
     fun usageAndDiagnostics(default: Boolean): Flow<Boolean>
 

@@ -45,7 +45,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.LocalSh
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutPolicy
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.InMemoryShellPreferences
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.InMemoryShellPreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellSettings
 import kotlinx.serialization.Serializable
 import org.junit.After
@@ -107,7 +107,7 @@ class ShellCapabilitiesHostTest {
     private fun show(settings: ShellSettings, policy: ShellLayoutPolicy = ShellLayoutPolicy()) {
         compose.setContent {
             AppTheme {
-                ShellHost(graph = CapabilityGraph, preferences = InMemoryShellPreferences(settings), layoutPolicy = policy)
+                ShellHost(graph = CapabilityGraph, preferences = InMemoryShellPreferencesRepository(settings), layoutPolicy = policy)
             }
         }
         compose.waitUntil(timeoutMillis = 10_000) {

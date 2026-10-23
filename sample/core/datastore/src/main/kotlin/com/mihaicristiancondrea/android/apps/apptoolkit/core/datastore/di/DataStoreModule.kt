@@ -19,16 +19,16 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.di
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.AppPreferencesDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DefaultAppPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.di.DataStoreQualifiers
 import org.koin.core.module.Module
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 /** Binds the sample's own preferences over the Toolkit's shared settings file. */
 val dataStoreModule: Module = module {
     single<AppPreferencesDataSource> {
         DefaultAppPreferencesDataSource(
-            dataStore = get(),
-            displayPreferences = get(),
-            onboardingRepository = get(),
+            dataStore = get(qualifier = named(DataStoreQualifiers.SETTINGS)),
         )
     }
 }

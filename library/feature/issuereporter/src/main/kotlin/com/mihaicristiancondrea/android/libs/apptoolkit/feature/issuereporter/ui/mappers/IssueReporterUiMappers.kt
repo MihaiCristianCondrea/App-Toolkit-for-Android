@@ -17,9 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.DeviceInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.Report
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.ExtraInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.DeviceInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.ExtraInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.Report
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueReporterUiState
 
 /**

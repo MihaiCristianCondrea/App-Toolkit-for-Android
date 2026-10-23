@@ -18,15 +18,15 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.repositories
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.local.AdsPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.AdsSettingsRepository
-import kotlinx.coroutines.flow.StateFlow
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.toStorageException
-import kotlinx.coroutines.flow.Flow
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.mappers.toStorageException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.storageCall
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.local.AdsPreferencesDataSource
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.StateFlow
 
 /**
  * Reads and writes the ad preferences in [AdsPreferencesDataSource], with the store's own default, which

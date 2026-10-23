@@ -40,7 +40,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.sty
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakePreferencesDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R as NavigationR
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.InMemoryShellPreferences
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.InMemoryShellPreferencesRepository
 import kotlinx.serialization.Serializable
 import org.junit.After
 import org.junit.Assert.assertFalse
@@ -77,7 +77,7 @@ class PausablePrefetchTest {
         val graph = shellGraph(appTitle = CommonR.string.app_name) {
             tab(PrefetchHome, NavigationR.string.updates, ToolkitIcon.Vector(Icons.Outlined.Home)) { Text("Home") }
         }
-        compose.setContent { AppTheme { ShellHost(graph = graph, preferences = InMemoryShellPreferences()) } }
+        compose.setContent { AppTheme { ShellHost(graph = graph, preferences = InMemoryShellPreferencesRepository()) } }
         compose.waitForIdle()
 
         assertFalse(ComposeFoundationFlags.isPausableCompositionInPrefetchEnabled)

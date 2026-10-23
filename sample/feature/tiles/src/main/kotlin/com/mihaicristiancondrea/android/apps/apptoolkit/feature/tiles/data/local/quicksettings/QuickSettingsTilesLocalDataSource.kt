@@ -23,4 +23,6 @@ interface QuickSettingsTilesLocalDataSource {
     suspend fun activeTileComponents(): Set<String>
 
     fun componentName(requestKey: String): String?
+
+    fun recordTileAdded(componentName: String, added: Boolean)
 }

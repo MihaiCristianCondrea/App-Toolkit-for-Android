@@ -49,7 +49,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.InMemoryShellPreferences
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.InMemoryShellPreferencesRepository
 import kotlinx.serialization.Serializable
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -115,7 +115,7 @@ class ScreenVisitNavigationTest {
         compose.setContent {
             AppTheme {
                 CompositionLocalProvider(LocalTelemetry provides telemetry) {
-                    ShellHost(graph = graph, preferences = InMemoryShellPreferences())
+                    ShellHost(graph = graph, preferences = InMemoryShellPreferencesRepository())
                 }
             }
         }

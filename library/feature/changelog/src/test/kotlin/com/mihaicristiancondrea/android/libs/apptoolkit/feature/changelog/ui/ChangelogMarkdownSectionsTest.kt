@@ -18,7 +18,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.extensions.splitAtThematicBreaks
-
 import kotlin.test.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -40,5 +39,18 @@ class ChangelogMarkdownSectionsTest {
     @Test
     fun `splitAtThematicBreaks drops blank parts`() {
         assertEquals(listOf("# Only"), "---\n\n# Only\n\n---\n".splitAtThematicBreaks())
+    }
+
+    @Test
+    fun `a shorter or mismatched fence never exposes rules inside code`() {
+        val code = "````markdown\n```\n\n---\n~~~\n````"
+        val first = "# Current\n\n$code"
+        assertEquals(listOf(first, "# Older"), "$first\n\n---\n\n# Older".splitAtThematicBreaks())
+    }
+
+    @Test
+    fun `a fence-looking line with trailing text cannot close code`() {
+        val markdown = "```markdown\n```not-a-close\n\n---\n```"
+        assertEquals(listOf(markdown), markdown.splitAtThematicBreaks())
     }
 }

@@ -20,14 +20,14 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -44,14 +44,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHos
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItems
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.analytics.aboutPreferenceTapEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItemKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.AboutUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
@@ -62,10 +62,10 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import nl.dionsegijn.konfetti.compose.KonfettiView
 import nl.dionsegijn.konfetti.core.Angle
+import nl.dionsegijn.konfetti.core.emitter.Emitter
 import nl.dionsegijn.konfetti.core.Party
 import nl.dionsegijn.konfetti.core.Position
 import nl.dionsegijn.konfetti.core.Spread
-import nl.dionsegijn.konfetti.core.emitter.Emitter
 import org.koin.compose.viewmodel.koinViewModel
 
 private val ABOUT_SCREEN: TrackedScreen =

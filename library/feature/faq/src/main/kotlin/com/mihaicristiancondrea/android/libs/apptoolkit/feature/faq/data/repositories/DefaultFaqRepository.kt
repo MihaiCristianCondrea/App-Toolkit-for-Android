@@ -17,14 +17,14 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.local.FaqLocalDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.mappers.toFaqItems
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.FaqRemoteDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.models.FaqQuestionDto
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.networkCall
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.networkCall
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.local.FaqLocalDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.FaqRemoteDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.mappers.toFaqItems
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.models.FaqQuestionDto
 
 /**
  * Implementation of [FaqRepository] that manages the retrieval of FAQ items

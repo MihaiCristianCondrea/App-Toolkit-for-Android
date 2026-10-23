@@ -69,7 +69,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRol
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ScaffoldArticleTopBar
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.readingProgress
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.InMemoryShellPreferences
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.InMemoryShellPreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.TopBarOverride
 import kotlinx.serialization.Serializable
@@ -285,7 +285,7 @@ class ArticleTopBarTest {
     private fun show(settings: ShellSettings = ShellSettings()) {
         compose.setContent {
             AppTheme {
-                ShellHost(graph = ArticleGraph, preferences = InMemoryShellPreferences(settings))
+                ShellHost(graph = ArticleGraph, preferences = InMemoryShellPreferencesRepository(settings))
             }
         }
         compose.waitUntil(timeoutMillis = 10_000) {

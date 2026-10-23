@@ -1,5 +1,5 @@
 /*
- * Copyright (┬⌐) 2026 Mihai-Cristian Condrea
+ * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.reposit
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.OnboardingRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.di.DataStoreQualifiers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakePreferencesDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.local.ChangelogPreferencesDataSource
@@ -37,40 +39,47 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.loc
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.di.adsIntegrationModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.data.local.ReviewPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.di.reviewModule
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
+import org.koin.core.qualifier.named
 import org.koin.dsl.koinApplication
 import org.koin.dsl.module
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
 
+@OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 class PreferenceSourceOwnershipTest {
     @Test
     fun `owner modules share the injected settings file and retain persisted key names`() = runTest {
-        val store = InMemoryPreferences()
+        val store = FakePreferencesDataStore()
+        val hostStore = FakePreferencesDataStore()
         val graph = koinApplication {
             modules(
                 module {
-                    single<DataStore<Preferences>> { store }
+                    single<DataStore<Preferences>>(named(DataStoreQualifiers.SETTINGS)) { store }
+                    single<DataStore<Preferences>> { hostStore }
                     single<DispatcherProvider> { TestDispatchers(StandardTestDispatcher(testScheduler)) }
                     single<DiagnosticsReporter> { FakeTelemetryRepository() }
                 },
-                adsIntegrationModule(), reviewModule, changelogModule, onboardingModule,
+                adsIntegrationModule(defaultAdsEnabled = false), reviewModule, changelogModule, onboardingModule,
             )
         }
         try {
             val ads = graph.koin.get<AdsPreferencesDataSource>()
             val settings = graph.koin.get<AdsSettingsRepository>()
             assertSame(ads.adsEnabled, settings.adsEnabled)
+            assertEquals(false, ads.defaultAdsEnabled)
+            runCurrent()
+            assertEquals(false, settings.adsEnabled.value)
             settings.setAdsEnabled(false)
             graph.koin.get<OnboardingRepository>().setOnboardingCompleted()
             graph.koin.get<ReviewPreferencesDataSource>().incrementSessionCount()
             graph.koin.get<ChangelogPreferencesDataSource>().saveLastSeenVersion("3.0.0")
 
+            assertEquals(emptyPreferences(), hostStore.data.first())
             val saved = store.data.first()
             assertEquals(false, saved[booleanPreferencesKey(DataStoreNamesConstants.DATA_STORE_ADS)])
             assertEquals(false, saved[booleanPreferencesKey(DataStoreNamesConstants.DATA_STORE_STARTUP)])
@@ -81,10 +90,4 @@ class PreferenceSourceOwnershipTest {
         }
     }
 
-    private class InMemoryPreferences : DataStore<Preferences> {
-        private val state = MutableStateFlow(emptyPreferences())
-        override val data: Flow<Preferences> = state
-        override suspend fun updateData(transform: suspend (Preferences) -> Preferences): Preferences =
-            transform(state.value).also { state.value = it }
-    }
 }

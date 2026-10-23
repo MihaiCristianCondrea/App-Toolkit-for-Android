@@ -1,5 +1,5 @@
 /*
- * Copyright (┬⌐) 2026 Mihai-Cristian Condrea
+ * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.extensions
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.utils.MarkdownFence
+
 /**
  * Splits Markdown at its thematic breaks (`---`, `***` or `___` on a line of their own), so each
  * part can be drawn on its own and the breaks as something other than the renderer's plain rule.
@@ -24,16 +26,17 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.ex
  *
  * A break counts only after a blank line, or at the start: under a line of text, `---` underlines
  * a heading instead. Lines inside a fenced code block are never breaks.
+ * Three or more of the same `-`, `*` or `_`, spaces allowed between, indented at most three.
  */
 internal fun String.splitAtThematicBreaks(): List<String> {
     val parts = mutableListOf<String>()
     val current = StringBuilder()
-    var inFence = false
+    val fence = MarkdownFence()
     var previousBlank = true
     lineSequence().forEach { line ->
         val trimmed = line.trim()
-        if (trimmed.startsWith("```") || trimmed.startsWith("~~~")) inFence = !inFence
-        if (!inFence && previousBlank && ThematicBreak.matches(line)) {
+        val fenced = fence.consume(line)
+        if (!fenced && previousBlank && ThematicBreak.matches(line)) {
             parts += current.toString()
             current.clear()
         } else {

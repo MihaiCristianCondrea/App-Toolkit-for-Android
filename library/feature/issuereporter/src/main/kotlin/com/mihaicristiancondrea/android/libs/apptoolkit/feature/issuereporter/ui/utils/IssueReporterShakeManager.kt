@@ -22,7 +22,7 @@ import android.app.Application
 import android.content.Context
 import android.hardware.SensorManager
 import android.os.Bundle
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReporterConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.IssueReporterConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterLauncher
 
 /**
