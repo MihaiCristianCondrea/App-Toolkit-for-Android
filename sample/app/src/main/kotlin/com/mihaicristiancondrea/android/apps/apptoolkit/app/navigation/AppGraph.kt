@@ -17,36 +17,35 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TabSearch
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.BottomAppBarNativeAdBanner
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.navigation.aboutPages
-import org.koin.compose.koinInject
-import org.koin.core.qualifier.named
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Apps
 import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.apps.apptoolkit.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ToolkitTilesScreen
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.AppsListScreen
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ComponentsScreen
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ArticleDemoScreen
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.views.AboutSettingsContent
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R as TilesR
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R as AppsR
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.AppsListScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R as ComponentsR
-
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ArticleDemoScreen
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ComponentsScreen
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.AboutSettingsScreen
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R as TilesR
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ToolkitTilesScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.toolkitFooter
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.toolkitGraph
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIconReplayMode
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.BottomAppBarNativeAdBanner
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.navigation.aboutPages
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TabSearch
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
+import org.koin.compose.koinInject
+import org.koin.core.qualifier.named
 
 /** The launcher shortcut's action: it opens the settings page. */
 const val ACTION_OPEN_SETTINGS: String = "com.d4rk.android.apps.apptoolkit.action.OPEN_SETTINGS"
@@ -106,7 +105,7 @@ fun appGraph(
     ) { key ->
         ArticleDemoScreen(branded = key.branded)
     }
-    aboutPages { AboutSettingsContent() }
+    aboutPages { AboutSettingsScreen() }
     banner {
         val config: AdsConfig = koinInject(qualifier = named(AdsQualifiers.BOTTOM_NAV_BAR_NATIVE_AD))
         BottomAppBarNativeAdBanner(

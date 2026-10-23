@@ -149,15 +149,3 @@ object AppGa4Contract {
 
     fun requiredParams(eventName: String): Set<String> = requiredParamsByEvent[eventName].orEmpty()
 }
-
-object AppGa4ContractValidator {
-    private val eventNameRegex = Regex("^[A-Za-z][A-Za-z0-9_]{0,39}$")
-
-    fun isValidEventName(name: String): Boolean = eventNameRegex.matches(name)
-
-    fun missingRequiredParams(eventName: String, params: Set<String>): Set<String> =
-        AppGa4Contract.requiredParams(eventName) - params
-
-    fun forbiddenParams(params: Set<String>): Set<String> =
-        params.filterTo(mutableSetOf()) { it in AppGa4Contract.forbiddenParamKeys }
-}

@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.screens.search
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.lists.search
 import kotlin.test.assertEquals
 import org.junit.jupiter.api.Test
 

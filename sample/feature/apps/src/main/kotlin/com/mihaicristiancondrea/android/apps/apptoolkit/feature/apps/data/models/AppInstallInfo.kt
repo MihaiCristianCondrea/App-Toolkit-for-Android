@@ -17,14 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models
 
-
 /** Package-manager install metadata for a catalog app. */
 data class AppInstallInfo(
     val isInstalled: Boolean,
     val versionInfo: AppVersionInfo?,
-)
-
-data class AppVersionInfo(
-    val versionName: String?,
-    val versionCode: Long,
 )

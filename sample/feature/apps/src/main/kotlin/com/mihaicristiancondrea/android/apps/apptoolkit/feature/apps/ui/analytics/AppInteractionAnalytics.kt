@@ -19,21 +19,9 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.analyti
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4Contract
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
-
-/**
- * App list interaction types reported to GA4.
- */
-enum class AppInteractionType {
-    AddFavorite,
-    RemoveFavorite,
-    OpenDetailsBottomSheet,
-    OpenInPlayStore,
-    OpenInstalledApp,
-    CloseDetailsBottomSheet,
-}
 
 /**
  * Logs app-card interactions from app list style screens in a consistent GA4 format.

@@ -18,7 +18,7 @@ The home-screen app-icons widget.
 
 ## Depends on
 
-- `:sample:feature:apps` for `DeveloperAppsRepository` and `AppInfo`.
+- `:sample:feature:apps` for `DeveloperAppsRepository` and `AppSummary`.
 - [`:library:apptoolkit`](../../library/apptoolkit/README.md) for Glance.
 
 ## Used by
@@ -31,7 +31,10 @@ The home-screen app-icons widget.
 flowchart TD
     System[AppWidgetManager / Glance] --> Receiver[AppIconsWidgetReceiver]
     Receiver --> Widget[AppIconsWidget]
-    Widget -->|Koin GlobalContext lookup| Repo[DeveloperAppsRepository]
+    Widget -->|Koin boundary lookup| WidgetRepo[WidgetAppsRepository]
+    WidgetRepo --> Repo[DeveloperAppsRepository]
+    WidgetRepo --> Local[AndroidWidgetAppsDataSource]
+    WidgetRepo --> Icons[CoilWidgetIconDataSource]
     Repo -->|savedDeveloperApps| Cache[Persistent catalog snapshot]
     Repo -->|fetchDeveloperApps| Remote[Apps metadata API]
     Cache -->|nothing saved| Loading[Loading content]
@@ -42,13 +45,14 @@ flowchart TD
     Remote -->|throws, nothing saved| Error[Error and retry content]
     Grid --> Launch[Glance activity / store action]
     Error --> Retry[RefreshWidgetAction]
-    Retry --> Repo
+    Retry --> Widget
 ```
 
 ## Architectural decisions
 
-- The widget consumes the same repository and persistent fallback as the apps screen, preventing a
-  second catalog source of truth.
+- `DefaultWidgetAppsRepository` reuses the apps catalog repository and coordinates package/icon
+  sources. The widget maps loaded entries into render models; it performs no package lookups,
+  image requests, or bitmap drawing. No second catalog store is introduced.
 - Framework construction prevents constructor injection, so the repository lookup is isolated at
   the widget boundary and protected by host graph tests.
 - Loading, empty, stale-success, and error states render independently; retry is a Glance action so
@@ -70,8 +74,11 @@ flowchart TD
 
 ## Internal implementations
 
-- Glance layout, explicit loading/empty/error states, bounded icon fetching, and app/store intent
-  selection.
+- `data/local/AndroidWidgetAppsDataSource`: package lookups on IO and icon drawing on Default.
+- `data/remote/CoilWidgetIconDataSource`: shared Coil cache/network loading and software bitmaps.
+- `data/repositories/DefaultWidgetAppsRepository`: bounds icon loading to nine entries.
+- `ui/mappers/WidgetAppMappers`: loaded data to render entries and launch/store destinations.
+- Render models in `ui/models/`, state in `ui/states/`, receiver in `receivers/`.
 - Glance unit tests for standalone state content and retry presentation.
 
 ## Current risks

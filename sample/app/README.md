@@ -13,7 +13,7 @@ libraries with the host's own feature modules.
 - `sampleAppModules`, the single source of truth used by runtime startup and DI graph tests.
 - App-only bridges that intentionally connect otherwise independent features, such as the About
   version-tap callback to the Components unlock repository.
-- Serializable route keys, grouped in `app/navigation/NavigationRoutes.kt` with explicit serialized identities.
+- Serializable route keys, each in its own file under `app/navigation/` with explicit serialized identities.
 - `appGraph`, the one declaration that names every host feature: the Tiles and Apps tabs, the
   components page, the drawer, the overflow menu and the settings shortcut's deep link, on top of
   the Toolkit's pages from `toolkitGraph { }`. `startKeyFor` maps the stored start page to its tab.

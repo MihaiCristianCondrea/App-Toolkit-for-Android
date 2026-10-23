@@ -20,11 +20,6 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.loca
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.TorchCapabilities
 import kotlinx.coroutines.flow.Flow
 
-data class TorchHardwareState(
-    val isEnabled: Boolean,
-    val currentLevel: Int,
-)
-
 /** The single Android platform source used for torch discovery, observation, and commands. */
 interface TorchDataSource {
     val capabilities: TorchCapabilities
@@ -32,4 +27,3 @@ interface TorchDataSource {
 
     fun setLevel(level: Int)
 }
-

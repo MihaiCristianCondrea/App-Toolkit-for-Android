@@ -9,8 +9,8 @@ and the hidden version-tap gesture that content hosts.
 
 - `AppSettingsProvider`, the root settings categories, notification action, and Toolkit page keys.
 - `SettingsConstants`, the stable keys of those rows.
-- `AboutSettingsContent`, the sample's About page content, which `:sample:app` registers with
-  `aboutPages { AboutSettingsContent() }`.
+- `AboutSettingsScreen`, the sample's About page content, which `:sample:app` registers with
+  `aboutPages { AboutSettingsScreen() }`.
 - `ShowcaseUnlockRepository`: the version-tap threshold and the write that persists the unlock,
   bound by `settingsModule`. `unlockAfterVersionTaps` returns true only from the call that saved
   a new unlock.
@@ -36,7 +36,7 @@ and the hidden version-tap gesture that content hosts.
 ## Used by
 
 - `:sample:app`, which passes `settingsModule` to `appToolkitHostModules` and registers
-  `AboutSettingsContent` as the About page.
+  `AboutSettingsScreen` as the About page.
 
 ## Flow chart
 
@@ -46,8 +46,9 @@ flowchart TD
     Module --> Provider[AppSettingsProvider]
     Provider --> Rows[Root settings rows and keys]
     Module --> Unlock
-    App -->|aboutPages| About[AboutSettingsContent]
-    About -->|version taps| Unlock[ShowcaseUnlockRepository]
+    App -->|aboutPages| About[AboutSettingsScreen]
+    About -->|version-tap events| ViewModel[AboutSettingsViewModel]
+    ViewModel --> Unlock[ShowcaseUnlockRepository]
     Unlock --> Store[":sample:core:datastore" unlock flag]
 ```
 
@@ -60,20 +61,22 @@ flowchart TD
 - The About gesture lives with the settings that host it. It reaches the Components showcase
   through the shared flag in `:sample:core:datastore` rather than through the feature, so neither
   feature depends on its sibling and no registration contract is needed.
-- The repository reports no analytics. `AboutSettingsContent` logs `unlock_achievement` through
-  `LocalTelemetry` only after the repository returns true, so a failed save, a repeat tap or an
+- The repository reports no analytics. `AboutSettingsViewModel` logs `unlock_achievement` through
+  its injected telemetry repository only after the repository returns true, so a failed save, a repeat tap or an
   already unlocked install never reports one; a failed save is a non-fatal report instead.
 - The About content reaches the graph as an argument of `aboutPages`, not through a Koin binding,
   so there is no single binding a second module could silently override.
 
 ## Public contracts
 
-- `settingsModule`, `AppSettingsProvider`, `SettingsConstants`, `AboutSettingsContent`,
+- `settingsModule`, `AppSettingsProvider`, `SettingsConstants`, `AboutSettingsScreen`,
   `ShowcaseUnlockRepository`.
 
 ## Internal implementations
 
 - The tap-threshold rule.
+- `AboutSettingsViewModel` owns unlock jobs and reports their outcomes through `ui/analytics/`.
+  The Toolkit About screen owns its own rendered state; the adapter needs no duplicate UI state.
 
 ## Current risks
 

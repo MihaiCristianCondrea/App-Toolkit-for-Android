@@ -17,12 +17,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.mappers
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.models.AppCategoryDto
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.models.AppDetailsDto
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.models.AppLatestVersionDto
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.models.AppLinkDto
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.models.AppScreenshotDto
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.models.AppSummaryDto
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppCategory
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppDetails
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppDeviceType
@@ -30,11 +24,17 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppLink
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppScreenshot
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.models.AppCategoryDto
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.models.AppDetailsDto
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.models.AppLatestVersionDto
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.models.AppLinkDto
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.models.AppScreenshotDto
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.models.AppSummaryDto
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.string.sanitizeUrlOrNull
 
 private const val DEFAULT_ICON_URL = "https://c.clc2l.com/t/g/o/google-playstore-Iauj7q.png"
 
-fun AppSummaryDto.toAppSummary(): AppSummary = AppSummary(
+internal fun AppSummaryDto.toAppSummary(): AppSummary = AppSummary(
     name = name,
     packageName = packageName,
     iconUrl = iconUrl.sanitizeUrlOrNull() ?: DEFAULT_ICON_URL,
@@ -42,7 +42,7 @@ fun AppSummaryDto.toAppSummary(): AppSummary = AppSummary(
     category = category?.toAppCategory(),
 )
 
-fun AppDetailsDto.toAppDetails(): AppDetails = AppDetails(
+internal fun AppDetailsDto.toAppDetails(): AppDetails = AppDetails(
     name = name,
     packageName = packageName,
     iconUrl = iconUrl.sanitizeUrlOrNull() ?: DEFAULT_ICON_URL,

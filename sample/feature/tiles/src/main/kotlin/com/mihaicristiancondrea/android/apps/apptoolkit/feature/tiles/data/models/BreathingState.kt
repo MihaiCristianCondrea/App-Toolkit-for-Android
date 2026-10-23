@@ -23,13 +23,3 @@ data class BreathingState(
     val progress: Float = 0f,
     val secondsLeft: Int = 0,
 )
-
-/** Phases emitted during a guided breathing cycle. */
-enum class BreathingPhase {
-    IDLE,
-    PREPARING,
-    INHALE,
-    HOLD_FULL,
-    EXHALE,
-    HOLD_EMPTY,
-}

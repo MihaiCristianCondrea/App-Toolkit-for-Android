@@ -52,8 +52,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileCategory
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTilesListItem
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.isVisible
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.stableKey
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ToolkitTilesUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils.filterFor
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils.requestQuickSettingsTile
@@ -412,4 +410,18 @@ private fun ToolkitTilesScreenContentLoadingPreview() {
             onEvent = {},
         )
     }
+}
+
+private val ToolkitTilesListItem.stableKey: String
+    get() = when (this) {
+        is ToolkitTilesListItem.Category -> category.id
+        is ToolkitTilesListItem.Ad -> id
+    }
+
+private fun ToolkitTilesListItem.isVisible(
+    loadedAdIds: Set<String>,
+    showAds: Boolean,
+): Boolean = when (this) {
+    is ToolkitTilesListItem.Category -> true
+    is ToolkitTilesListItem.Ad -> showAds && id in loadedAdIds
 }

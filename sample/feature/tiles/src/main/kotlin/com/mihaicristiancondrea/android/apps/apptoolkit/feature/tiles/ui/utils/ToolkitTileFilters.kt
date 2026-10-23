@@ -15,7 +15,6 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
@@ -33,7 +32,7 @@ internal fun ImmutableList<ToolkitTileCategory>.filterFor(
     ToolkitTilesFilter.Unsupported -> filterByStatus(ToolkitTileStatus.Unsupported)
 }
 
-internal fun ImmutableList<ToolkitTileCategory>.filterByStatus(
+private fun ImmutableList<ToolkitTileCategory>.filterByStatus(
     status: ToolkitTileStatus,
 ): List<ToolkitTileCategory> = mapNotNull { category ->
     val tiles = category.tiles.filter { tile -> tile.status == status }

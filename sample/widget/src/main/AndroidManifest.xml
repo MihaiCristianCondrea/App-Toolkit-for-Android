@@ -34,7 +34,7 @@
             android:targetActivity="com.mihaicristiancondrea.android.apps.apptoolkit.widget.ui.SampleInvisibleActionTrampolineActivity"
             android:exported="false" />
         <receiver
-            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.widget.ui.AppIconsWidgetReceiver"
+            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.widget.receivers.AppIconsWidgetReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

@@ -29,14 +29,13 @@ import androidx.core.net.toUri
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.AppActionLauncher
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.ClipboardRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.DefaultClipboardRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
 
 /** Android implementation of [AppActionLauncher] backed by public intents and safe fallbacks. */
 class AndroidAppActionLauncher(
     private val context: Context,
-    private val clipboardRepository: ClipboardRepository = DefaultClipboardRepository(context),
+    private val clipboardRepository: ClipboardRepository,
 ) : AppActionLauncher {
 
     companion object {

@@ -11,6 +11,9 @@
 
 ### Changed
 
+- Existing app-icons widgets may need to be added again because their receiver component name
+  changed during the sample architecture cleanup.
+
 - Existing Quick Settings tiles may need to be removed and added again after this update because
   their service component names changed.
 
@@ -25,7 +28,6 @@
 - The Apps list brings in its filter chips, then its cards.
 - The Components, Quick Tools and article demo screens enter the way the Toolkit's screens do,
   each section or card in turn.
-- The article demo reports its visits as `ArticleDemo`.
 
 ### Fixed
 
@@ -35,8 +37,6 @@
   still finish if the Quick Settings service disappears.
 - Unlocking the components showcase reports the achievement only once the unlock is saved, and
   never again on later taps.
-- Screen views count real visits: each screen is reported once it is shown and settled, not during
-  transitions, rotations or a cancelled back gesture.
 
 ---
 
