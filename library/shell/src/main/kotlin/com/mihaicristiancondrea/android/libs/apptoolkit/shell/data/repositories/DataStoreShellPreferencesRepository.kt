@@ -15,11 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings
+package com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories
 
-import android.content.Context
 import androidx.datastore.core.DataStore
-import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -27,29 +25,23 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.MotionTempo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.EntranceReplay
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.EntranceStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.TabTransitionStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.AccessoryMode
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.AnimationSpeed
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.BackEdgeStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationBarStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationTint
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.TopBarOverride
 import java.io.IOException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-
-/**
- * The shell's settings file.
- *
- * `ShellHost` collects it at the root of the app, so a read that throws would crash every launch.
- * A file that can no longer be parsed is replaced with empty preferences, which puts every shell
- * setting back to its default.
- */
-internal val Context.shellDataStore: DataStore<Preferences> by preferencesDataStore(
-    name = "shell_settings",
-    corruptionHandler = ReplaceFileCorruptionHandler { emptyPreferences() },
-)
 
 /**
  * Stores shell settings in the application-shared `shell_settings` DataStore.
@@ -62,10 +54,10 @@ internal val Context.shellDataStore: DataStore<Preferences> by preferencesDataSt
  * Corruption replaces the file with empty preferences; IO read failures use defaults for that
  * collection so the root composition can still start.
  */
-internal class DataStoreShellPreferences(
+internal class DataStoreShellPreferencesRepository(
     private val dataStore: DataStore<Preferences>,
     override val defaults: ShellSettings,
-) : ShellPreferences {
+) : ShellPreferencesRepository {
 
     override val settings: Flow<ShellSettings> = dataStore.data
         .catch { throwable -> if (throwable is IOException) emit(emptyPreferences()) else throw throwable }

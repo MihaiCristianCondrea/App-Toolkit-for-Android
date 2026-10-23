@@ -41,12 +41,10 @@ class DefaultThemePreferencesDataSource(
         stringPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_THEME_MODE)
     private val amoledModeKey =
         booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_AMOLED_MODE)
-    private val dynamicColorsKey =
-        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_DYNAMIC_COLORS)
+    private val dynamicColorsKey = ThemePreferenceKeys.dynamicColors
     private val dynamicPaletteVariantKey =
         intPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_DYNAMIC_PALETTE_VARIANT)
-    private val staticPaletteIdKey =
-        stringPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_STATIC_PALETTE_ID)
+    private val staticPaletteIdKey = ThemePreferenceKeys.staticPaletteId
 
     override val themeMode: Flow<String> =
         dataStore.data.map { preferences: Preferences -> preferences.themeMode() }.distinctUntilChanged()

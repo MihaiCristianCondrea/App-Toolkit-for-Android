@@ -70,9 +70,11 @@ flowchart TD
   enabled. SDK initialization and requests must not infer a saved choice from a placeholder value.
 - Release builds expose the reduce-ads setting, while debug builds expose display-ads for testing.
   Display ads continues to gate all ad surfaces; reduce ads gates only App Open display.
-- Both preferences start in the same place in every build: display ads on, reduce ads off. A fresh
-  debug install therefore renders ads, which is the point of having the switch there at all. Once
-  either is changed the stored value wins, in every build, forever.
+- Display ads defaults to on and reduce ads to off. Hosts can pass `defaultAdsEnabled = false`
+  through `adsIntegrationModule`, `appToolkitFoundationModules` or `appToolkitModules` for builds
+  that should start without ads. Stored choices always win.
+- App-open lifecycle state and SDK callbacks use the injected main dispatcher. SDK initialization
+  stays on IO. The graph closes the controller to stop preference observation and discard callbacks.
 - SDK initialization is idempotent, mutex-protected, and conditional on a valid host-manifest app
   ID; the toolkit never supplies a fallback publisher ID.
 - Readiness is explicit state because enablement and asynchronous SDK initialization are different

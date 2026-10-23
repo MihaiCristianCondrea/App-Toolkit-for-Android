@@ -15,28 +15,35 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings
+package com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories
 
 import android.content.Context
-import androidx.compose.runtime.staticCompositionLocalOf
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.MotionTempo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.EntranceReplay
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.EntranceStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.TabTransitionStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.local.shellDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.AccessoryMode
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.AnimationSpeed
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.BackEdgeStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationBarStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationTint
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.TopBarOverride
 import kotlinx.coroutines.flow.Flow
 
 /**
  * Where [ShellSettings] live.
  *
  * `ShellHost` takes an implementation from the app, so an app that keeps its settings elsewhere
- * adapts that store instead of keeping two, and tests pass an [InMemoryShellPreferences]. Without
- * one, `ShellHost` uses [ShellPreferences] (`context`, `defaults`), a DataStore of its own.
+ * adapts that store instead of keeping two, and tests pass an [InMemoryShellPreferencesRepository]. Without
+ * one, `ShellHost` uses [ShellPreferencesRepository] (`context`, `defaults`), a DataStore of its own.
  *
  * An implementation provides [settings] and [update]; every setter below is written on [update].
  * A setting nobody chose reads as [defaults].
  */
-interface ShellPreferences {
+interface ShellPreferencesRepository {
 
     /**
      * The app's defaults: what a setting nobody chose reads as, and what [resetDeveloperOptions]
@@ -85,11 +92,5 @@ interface ShellPreferences {
  * It saves the settings someone chose and reads the rest as [defaults], so changing [defaults] in a
  * later release reaches only the people who never chose.
  */
-fun ShellPreferences(context: Context, defaults: ShellSettings = ShellSettings()): ShellPreferences =
-    DataStoreShellPreferences(context.applicationContext.shellDataStore, defaults)
-
-val LocalShellPreferences = staticCompositionLocalOf<ShellPreferences> {
-    error("ShellPreferences is only available inside ShellHost.")
-}
-
-val LocalShellSettings = staticCompositionLocalOf { ShellSettings() }
+fun ShellPreferencesRepository(context: Context, defaults: ShellSettings = ShellSettings()): ShellPreferencesRepository =
+    DataStoreShellPreferencesRepository(context.applicationContext.shellDataStore, defaults)

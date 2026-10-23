@@ -22,6 +22,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.EntranceR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.EntranceStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.TabTransitionStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.InMemoryShellPreferencesRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -64,7 +65,7 @@ class ResetDeveloperOptionsTest {
 
     @Test
     fun `reset puts every shell setting back as the app declares it`() = runTest {
-        val preferences = InMemoryShellPreferences(everythingChanged)
+        val preferences = InMemoryShellPreferencesRepository(everythingChanged)
 
         preferences.resetDeveloperOptions()
 
@@ -74,7 +75,7 @@ class ResetDeveloperOptionsTest {
     @Test
     fun `reset returns to the app's defaults, not the Toolkit's`() = runTest {
         val appDefaults = ShellSettings(backEdgeStyle = BackEdgeStyle.FollowFinger, navigationTint = NavigationTint.OnScroll)
-        val preferences = InMemoryShellPreferences(everythingChanged, defaults = appDefaults)
+        val preferences = InMemoryShellPreferencesRepository(everythingChanged, defaults = appDefaults)
 
         preferences.resetDeveloperOptions()
 

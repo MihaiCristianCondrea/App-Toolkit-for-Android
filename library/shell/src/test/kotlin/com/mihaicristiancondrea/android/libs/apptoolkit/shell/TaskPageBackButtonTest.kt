@@ -44,7 +44,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.Page
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R as NavigationR
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.InMemoryShellPreferences
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.InMemoryShellPreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellSettings
 import kotlinx.serialization.Serializable
 import org.junit.After
@@ -117,7 +117,7 @@ class TaskPageBackButtonTest {
                 ShellHost(
                     graph = graph,
                     start = TaskHome,
-                    preferences = InMemoryShellPreferences(ShellSettings()),
+                    preferences = InMemoryShellPreferencesRepository(ShellSettings()),
                 )
             }
         }

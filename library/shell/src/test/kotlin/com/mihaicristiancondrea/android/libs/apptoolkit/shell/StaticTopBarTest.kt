@@ -61,7 +61,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R as Navigati
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarScrollMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.InMemoryShellPreferences
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.InMemoryShellPreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellSettings
 import kotlinx.serialization.Serializable
 import org.junit.After
@@ -183,7 +183,7 @@ class StaticTopBarTest {
                 ShellHost(
                     graph = graph,
                     start = if (page) StaticReview else StaticHome,
-                    preferences = InMemoryShellPreferences(ShellSettings(hideTopBarOnScroll = true, hideBottomBarOnScroll = false)),
+                    preferences = InMemoryShellPreferencesRepository(ShellSettings(hideTopBarOnScroll = true, hideBottomBarOnScroll = false)),
                 )
             }
         }

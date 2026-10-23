@@ -23,6 +23,5 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 /**
  * Decodes a base64 string into UTF-8 text, returning an empty string on failure.
  */
-@OptIn(ExperimentalEncodingApi::class)
 fun String.toToken(): String =
     runCatching { String(Base64.decode(this), Charsets.UTF_8) }.getOrDefault("")

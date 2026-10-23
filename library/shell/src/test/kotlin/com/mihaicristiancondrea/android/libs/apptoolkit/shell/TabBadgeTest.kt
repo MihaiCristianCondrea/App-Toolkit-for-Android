@@ -38,7 +38,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppTheme
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakePreferencesDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.InMemoryShellPreferences
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.InMemoryShellPreferencesRepository
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -81,7 +81,7 @@ class TabBadgeTest {
             tab(OtherTabKey, NavigationR.string.help_and_feedback, icon) { Text("Second tab content") }
         }
         compose.setContent {
-            AppTheme { ShellHost(graph = graph, preferences = InMemoryShellPreferences()) }
+            AppTheme { ShellHost(graph = graph, preferences = InMemoryShellPreferencesRepository()) }
         }
         compose.waitUntil(timeoutMillis = 10_000) {
             compose.onAllNodesWithText("Inbox content").fetchSemanticsNodes().isNotEmpty()

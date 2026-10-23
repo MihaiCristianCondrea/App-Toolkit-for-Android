@@ -17,14 +17,19 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.WeatherEffect
+import androidx.datastore.preferences.core.preferencesOf
+import androidx.datastore.preferences.core.stringPreferencesKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.HolidaySeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.SeasonalThemePreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.ThemePreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.DefaultSeasonalThemePreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.DefaultThemePreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.models.HolidayThemeSnapshot
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakePreferencesDataStore
 import java.time.LocalDate
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -41,9 +46,12 @@ class DefaultSeasonalThemeRepositoryTest {
     private val halloween = LocalDate.parse("2026-10-31")
     private val summer = LocalDate.parse("2026-07-14")
 
-    private val seasonal = FakeSeasonalPreferences()
-    private val theme = FakeThemePreferences(paletteId = StaticPaletteIds.GOOGLE_BLUE, dynamic = true)
-    private val repository = DefaultSeasonalThemeRepository(seasonal = seasonal, theme = theme)
+    private val preferences = FakePreferencesDataStore(
+        preferencesOf(stringPreferencesKey(DataStoreNamesConstants.DATA_STORE_STATIC_PALETTE_ID) to StaticPaletteIds.GOOGLE_BLUE),
+    )
+    private val seasonal = DefaultSeasonalThemePreferencesDataSource(preferences)
+    private val theme = DefaultThemePreferencesDataSource(preferences)
+    private val repository = DefaultSeasonalThemeRepository(seasonal = seasonal)
 
     @Test
     fun `no greeting is due outside the holidays`() = runTest {
@@ -142,55 +150,24 @@ class DefaultSeasonalThemeRepositoryTest {
         assertTrue(repository.state.first().unlocked)
     }
 
-    private class FakeSeasonalPreferences : SeasonalThemePreferencesDataSource {
-        override val seasonalThemesUnlocked = MutableStateFlow(false)
-        override val lastHolidayGreeting = MutableStateFlow<String?>(null)
-        override val holidayThemeSnapshot = MutableStateFlow<HolidayThemeSnapshot?>(null)
-        override val weatherEffect = MutableStateFlow(WeatherEffect.Automatic)
-
-        override suspend fun saveWeatherEffect(effect: WeatherEffect) {
-            weatherEffect.value = effect
+    @Test
+    fun `a palette choice queued before restoration is preserved`() = runTest {
+        repository.answerHolidayGreeting(HolidaySeason.CHRISTMAS, christmasEve, useHolidayTheme = true)
+        val release = CompletableDeferred<Unit>()
+        val palette = stringPreferencesKey(DataStoreNamesConstants.DATA_STORE_STATIC_PALETTE_ID)
+        val choice = async(start = CoroutineStart.UNDISPATCHED) {
+            preferences.updateData { current ->
+                release.await()
+                current.toMutablePreferences().apply { this[palette] = StaticPaletteIds.ROSE }
+            }
         }
-
-        override suspend fun saveSeasonalThemesUnlocked(unlocked: Boolean) {
-            seasonalThemesUnlocked.value = unlocked
+        val restoration = async(start = CoroutineStart.UNDISPATCHED) {
+            repository.restoreThemeAfterHoliday(afterChristmas)
         }
-
-        override suspend fun saveLastHolidayGreeting(occurrenceKey: String) {
-            lastHolidayGreeting.value = occurrenceKey
-        }
-
-        override suspend fun saveHolidayThemeSnapshot(snapshot: HolidayThemeSnapshot?) {
-            holidayThemeSnapshot.value = snapshot
-        }
-    }
-
-    private class FakeThemePreferences(paletteId: String, dynamic: Boolean) :
-        ThemePreferencesDataSource {
-        override val themeMode = MutableStateFlow("follow_system")
-        override val amoledMode = MutableStateFlow(false)
-        override val dynamicColors = MutableStateFlow(dynamic)
-        override val dynamicPaletteVariant = MutableStateFlow(0)
-        override val staticPaletteId = MutableStateFlow(paletteId)
-
-        override suspend fun saveThemeMode(mode: String) {
-            themeMode.value = mode
-        }
-
-        override suspend fun saveAmoledMode(isChecked: Boolean) {
-            amoledMode.value = isChecked
-        }
-
-        override suspend fun saveDynamicColors(isChecked: Boolean) {
-            dynamicColors.value = isChecked
-        }
-
-        override suspend fun saveDynamicPaletteVariant(variant: Int) {
-            dynamicPaletteVariant.value = variant
-        }
-
-        override suspend fun saveStaticPaletteId(id: String) {
-            staticPaletteId.value = id
-        }
+        release.complete(Unit)
+        choice.await()
+        restoration.await()
+        assertEquals(StaticPaletteIds.ROSE, theme.staticPaletteId.first())
+        assertNull(repository.state.first().holidayThemeInUse)
     }
 }

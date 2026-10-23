@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.di
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.di.DataStoreQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.data.repositories.DefaultReviewRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.data.repositories.ReviewRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.usecases.ForceInAppReviewUseCase
@@ -24,10 +25,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domai
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.data.local.ReviewPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.data.local.DefaultReviewPreferencesDataSource
 import org.koin.core.module.Module
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val reviewModule: Module = module {
-    single<ReviewPreferencesDataSource> { DefaultReviewPreferencesDataSource(dataStore = get()) }
+    single<ReviewPreferencesDataSource> { DefaultReviewPreferencesDataSource(dataStore = get(qualifier = named(DataStoreQualifiers.SETTINGS))) }
     single<ReviewRepository> { DefaultReviewRepository(preferences = get(), dispatchers = get()) }
     single<RequestInAppReviewUseCase> { RequestInAppReviewUseCase(reviewRepository = get()) }
     single<ForceInAppReviewUseCase> { ForceInAppReviewUseCase(reviewRepository = get()) }

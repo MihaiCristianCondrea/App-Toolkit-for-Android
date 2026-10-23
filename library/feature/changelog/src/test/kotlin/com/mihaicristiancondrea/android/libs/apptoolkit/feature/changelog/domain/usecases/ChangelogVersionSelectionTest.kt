@@ -137,4 +137,16 @@ class ChangelogVersionSelectionTest {
 
         assertEquals("## 2.0.0\n- Current release", result)
     }
+    @Test
+    fun `version headings and boundaries inside fenced code are ignored`() {
+        val expected = "# 1.2.3\n\n````markdown\n# Example\n```\n# Another example\n````\n\nActual changes"
+        val history = "```markdown\n# 1.2.3\n```\n\n$expected\n\n# 1.2.2\nOlder"
+        assertEquals(expected, history.extractChangesForVersion("1.2.3"))
+    }
+
+    @Test
+    fun `indented code headings cannot terminate the selected release`() {
+        val expected = "# 1.2.3\n\n    # Example\n\nActual changes"
+        assertEquals(expected, "$expected\n\n# 1.2.2\nOlder".extractChangesForVersion("1.2.3"))
+    }
 }

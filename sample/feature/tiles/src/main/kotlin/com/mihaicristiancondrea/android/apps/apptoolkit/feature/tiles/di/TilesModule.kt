@@ -47,9 +47,11 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MorseTo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ReactionTestToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SosToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ToolkitTilesViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.di.DataStoreQualifiers
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val tilesModule: Module = module {
@@ -66,7 +68,7 @@ val tilesModule: Module = module {
     single<TorchRepository> { DefaultTorchRepository(dataSource = get(), dispatchers = get()) }
     single<ToolkitTilesPreferencesDataSource> {
         DefaultToolkitTilesPreferencesDataSource(
-            dataStore = get(),
+            dataStore = get(qualifier = named(DataStoreQualifiers.SETTINGS)),
         )
     }
     single<ToolkitTilesRepository> {

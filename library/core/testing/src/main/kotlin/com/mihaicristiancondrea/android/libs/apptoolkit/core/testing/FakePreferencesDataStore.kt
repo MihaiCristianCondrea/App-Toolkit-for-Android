@@ -22,16 +22,19 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 /** An in-memory Preferences DataStore for testing the data sources written over one. */
 class FakePreferencesDataStore(initial: Preferences = emptyPreferences()) : DataStore<Preferences> {
     private val state = MutableStateFlow(initial)
+    private val updates = Mutex()
 
     override val data: Flow<Preferences> = state
 
-    override suspend fun updateData(transform: suspend (t: Preferences) -> Preferences): Preferences {
+    override suspend fun updateData(transform: suspend (t: Preferences) -> Preferences): Preferences = updates.withLock {
         val updated = transform(state.value)
         state.value = updated
-        return updated
+        updated
     }
 }

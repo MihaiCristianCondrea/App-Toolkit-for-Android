@@ -33,8 +33,8 @@ drawer and transition the graph describes. It is the chrome around the navigatio
   banner slot, docked on the bottom navigation bar and nowhere else, docked player, and the inner
   display. `ShellChromeController` and
   `LocalShellChrome` let a page's own frame open the navigation.
-- The shell's developer overrides, in `settings`: `ShellSettings`, `ShellPreferences`, its DataStore
-  and `InMemoryShellPreferences` for tests.
+- The shell's developer overrides: `ShellSettings` and Compose locals in `settings`, repositories
+  in `data/repositories`, and the DataStore delegate in `data/local`.
 - An app's defaults for the Toolkit, in `settings`: `AppToolkitDefaults` and its
   `appToolkitDefaults { }` builder, which hold the app's `ShellSettings` and its
   `NavigationDefaults`.
@@ -74,7 +74,7 @@ drawer and transition the graph describes. It is the chrome around the navigatio
 flowchart TD
     App[Activity: setContent] --> Theme[AppTheme]
     Theme --> Host[ShellHost]
-    Host --> Prefs[ShellPreferences]
+    Host --> Prefs[ShellPreferencesRepository]
     Host --> Start[resolveStart, then onReady]
     Host --> Outer[Outer ShellNavDisplay: shell and pages]
     Outer -->|ShellHomeRoute| Chrome[ShellChrome]
@@ -287,8 +287,8 @@ JUnit 5. They start Koin with the theme, display and ads repositories `AppTheme`
   datastore module free of navigation types. Every value is a developer option, and
   `resetDeveloperOptions()` removes all of them, leaving the shell as the app declares it. The
   person's preferences, such as the navigation labels, live in the common store and are not
-  touched. `ShellHost(preferences = ...)` takes any `ShellPreferences`, and tests pass an
-  `InMemoryShellPreferences`.
+  touched. `ShellHost(preferences = ...)` takes any `ShellPreferencesRepository`, and tests pass an
+  `InMemoryShellPreferencesRepository`.
 - **The store keeps choices, not values.** A setting someone chose is saved even when it equals the
   current default, and a setting nobody chose is not saved at all. A later release that changes the
   app's defaults therefore reaches the people who never chose, and leaves alone the ones who did.
@@ -309,8 +309,8 @@ JUnit 5. They start Koin with the theme, display and ads repositories `AppTheme`
   `NavigationDefaults.layoutPolicy`.
 - `AppToolkitDefaults`, `appToolkitDefaults { }` and its `shell { }` and `navigation { }` builders.
 - `ShellChromeController` and `LocalShellChrome`.
-- `ShellSettings` and its enums, `ShellPreferences` and its `defaults`, `ShellPreferences(context, defaults)`,
-  `InMemoryShellPreferences`, `LocalShellPreferences` and `LocalShellSettings`. The DataStore's key
+- `ShellSettings` and its enums, `ShellPreferencesRepository` and its `defaults`, `ShellPreferencesRepository(context, defaults)`,
+  `InMemoryShellPreferencesRepository`, `LocalShellPreferences` and `LocalShellSettings`. The DataStore's key
   names are persisted: renaming one resets that option on update.
 
 ## Current risks

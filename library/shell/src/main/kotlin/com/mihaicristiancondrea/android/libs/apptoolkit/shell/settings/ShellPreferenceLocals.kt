@@ -17,26 +17,11 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings
 
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
+import androidx.compose.runtime.staticCompositionLocalOf
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.ShellPreferencesRepository
 
-/**
- * [ShellPreferences] kept in memory, for tests, previews, and apps that do not persist the
- * shell's settings. Starts from [initial], and a reset returns to [defaults].
- */
-class InMemoryShellPreferences(
-    initial: ShellSettings = ShellSettings(),
-    override val defaults: ShellSettings = ShellSettings(),
-) : ShellPreferences {
-
-    private val state = MutableStateFlow(initial)
-
-    override val settings: StateFlow<ShellSettings> = state
-
-    override val lastKnown: ShellSettings get() = state.value
-
-    override suspend fun update(transform: (ShellSettings) -> ShellSettings) {
-        state.update(transform)
-    }
+val LocalShellPreferences = staticCompositionLocalOf<ShellPreferencesRepository> {
+    error("ShellPreferencesRepository is only available inside ShellHost.")
 }
+
+val LocalShellSettings = staticCompositionLocalOf { ShellSettings() }

@@ -94,7 +94,7 @@ enum class AnimationSpeed(val durationScale: Float) {
  *
  * Every one is a developer option, offered by `:library:feature:developer` once unlocked, to
  * force, compare and exercise the shell's variations. The defaults leave the app exactly as its
- * graph and layout policy declare it, and `ShellPreferences.resetDeveloperOptions` returns to them.
+ * graph and layout policy declare it, and `ShellPreferencesRepository.resetDeveloperOptions` returns to them.
  * The person's own preferences, such as the theme or the navigation labels, are not kept here.
  */
 @Immutable

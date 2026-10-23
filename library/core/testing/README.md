@@ -50,6 +50,8 @@ flowchart LR
 
 - Fixtures live in `src/main` because another module cannot consume this module's `src/test`; the
   dependency configuration, not the source-set name, keeps them test-only for callers.
+- `FakePreferencesDataStore.updateData` serializes transforms, including suspension, and publishes
+  only successful results. Concurrent test writers cannot overwrite each other's updates.
 - Standard and unconfined dispatcher extensions are separate to make eager execution an explicit
   per-test choice.
 - One dispatcher backs all `DispatcherProvider` properties so virtual-time advancement is

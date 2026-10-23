@@ -2,6 +2,37 @@
 
 ---
 
+# Unreleased
+
+### Added
+
+- Hosts can pass `defaultAdsEnabled` to `appToolkitModules`,
+  `appToolkitFoundationModules` or `adsIntegrationModule`. It defaults to true and only applies
+  when no ads preference is stored.
+
+### Changed
+
+- The Toolkit settings binding uses `named(DataStoreQualifiers.SETTINGS)` so an app can register
+  its own `DataStore<Preferences>` without replacing Toolkit settings. Custom source bindings
+  must request the qualifier.
+- Shell preference contracts and implementations are now `ShellPreferencesRepository`,
+  `DataStoreShellPreferencesRepository` and `InMemoryShellPreferencesRepository`, in
+  `shell.data.repositories`. Replace old imports and names directly.
+- Custom `SeasonalThemePreferencesDataSource` implementations must implement
+  `updateHolidayTheme` atomically over appearance and snapshot data. Direct construction of
+  `DefaultSeasonalThemeRepository` now takes only the seasonal source.
+
+### Fixed
+
+- Holiday theme restoration preserves appearance changes committed concurrently by the user.
+  Applying a holiday palette and saving its restoration snapshot now happen in one transaction.
+- App-open ad callbacks and lifecycle state use the injected main dispatcher, including when SDK
+  callbacks arrive on a background thread.
+- Changelog headings and thematic breaks inside fenced code stay literal, including fences whose
+  closing marker is shorter, uses a different character or contains trailing text.
+
+---
+
 # October 23, 2026
 
 **Version:** `3.0.0-pre27`

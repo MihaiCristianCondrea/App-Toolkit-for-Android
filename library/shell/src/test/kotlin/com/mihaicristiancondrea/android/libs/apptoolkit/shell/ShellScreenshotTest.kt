@@ -21,6 +21,7 @@ import androidx.compose.ui.test.swipeDown
 import androidx.compose.ui.test.swipeUp
 import androidx.compose.ui.test.performTouchInput
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakePreferencesDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.InMemoryShellPreferencesRepository
 import org.junit.Assert.assertTrue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ScaffoldFabs
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
@@ -72,7 +73,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGr
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.BackEdgeStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.InMemoryShellPreferences
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellSettings
@@ -430,7 +430,7 @@ class ShellScreenshotTest {
         compose.setContent {
             AppTheme {
                 CompositionLocalProvider(LocalShowBottomBarLabels provides showAllLabels) {
-                    ShellHost(graph = TestGraph, preferences = InMemoryShellPreferences(settings))
+                    ShellHost(graph = TestGraph, preferences = InMemoryShellPreferencesRepository(settings))
                 }
             }
         }

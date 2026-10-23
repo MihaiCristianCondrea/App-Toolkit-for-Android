@@ -23,7 +23,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.holidayOccurrenceKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.holidaySeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.SeasonalThemePreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.ThemePreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.models.HolidayThemeSnapshot
 import java.time.LocalDate
 import kotlinx.coroutines.flow.Flow
@@ -36,7 +35,6 @@ import kotlinx.coroutines.flow.first
  */
 class DefaultSeasonalThemeRepository(
     private val seasonal: SeasonalThemePreferencesDataSource,
-    private val theme: ThemePreferencesDataSource,
 ) : SeasonalThemeRepository {
 
     override val state: Flow<SeasonalThemeState> = combine(
@@ -71,30 +69,30 @@ class DefaultSeasonalThemeRepository(
     }
 
     override suspend fun restoreThemeAfterHoliday(today: LocalDate) {
-        val snapshot = seasonal.holidayThemeSnapshot.first() ?: return
-        if (today.holidaySeason == snapshot.season) return
-
-        if (isWearing(snapshot.season)) {
-            theme.savePalette(
-                dynamicColors = snapshot.previousDynamicColors,
-                staticPaletteId = snapshot.previousPaletteId,
-            )
+        seasonal.updateHolidayTheme { current ->
+            val snapshot = current.snapshot ?: return@updateHolidayTheme current
+            if (today.holidaySeason == snapshot.season) return@updateHolidayTheme current
+            if (!current.dynamicColors && current.paletteId == snapshot.season.paletteId) {
+                current.copy(
+                    paletteId = snapshot.previousPaletteId,
+                    dynamicColors = snapshot.previousDynamicColors,
+                    snapshot = null,
+                )
+            } else {
+                current.copy(snapshot = null)
+            }
         }
-        seasonal.saveHolidayThemeSnapshot(null)
     }
 
     private suspend fun applyHolidayTheme(season: HolidaySeason) {
-        if (isWearing(season)) return
-        val snapshot = seasonal.holidayThemeSnapshot.first()?.copy(season = season)
-            ?: HolidayThemeSnapshot(
+        seasonal.updateHolidayTheme { current ->
+            if (!current.dynamicColors && current.paletteId == season.paletteId) return@updateHolidayTheme current
+            val snapshot = current.snapshot?.copy(season = season) ?: HolidayThemeSnapshot(
                 season = season,
-                previousPaletteId = theme.staticPaletteId.first(),
-                previousDynamicColors = theme.dynamicColors.first(),
+                previousPaletteId = current.paletteId,
+                previousDynamicColors = current.dynamicColors,
             )
-        seasonal.saveHolidayThemeSnapshot(snapshot)
-        theme.savePalette(dynamicColors = false, staticPaletteId = season.paletteId)
+            current.copy(paletteId = season.paletteId, dynamicColors = false, snapshot = snapshot)
+        }
     }
-
-    private suspend fun isWearing(season: HolidaySeason): Boolean =
-        !theme.dynamicColors.first() && theme.staticPaletteId.first() == season.paletteId
 }

@@ -46,8 +46,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.gms.di.googl
  * Assembles shared providers, networking, and ads, consent, GMS, and update integrations for the
  * host graph. Preference bindings come once from `:library:core:datastore`, and shared ad
  * reporting is supplied here rather than required from each host.
+ *
+ * @param defaultAdsEnabled Fresh-install ads default; saved preferences take priority.
  */
-fun appToolkitFoundationModules(hostBuildConfig: AppToolkitHostBuildConfig): List<Module> =
+fun appToolkitFoundationModules(
+    hostBuildConfig: AppToolkitHostBuildConfig,
+    defaultAdsEnabled: Boolean = true,
+): List<Module> =
     listOf(
         dispatchersModule(),
         telemetryModule,
@@ -55,7 +60,7 @@ fun appToolkitFoundationModules(hostBuildConfig: AppToolkitHostBuildConfig): Lis
         corePlatformModule(hostBuildConfig = hostBuildConfig),
         consentModule(),
         mainSharedModule(),
-        adsIntegrationModule(),
+        adsIntegrationModule(defaultAdsEnabled = defaultAdsEnabled),
         updateModule(),
         googlePlayServicesModule,
     )

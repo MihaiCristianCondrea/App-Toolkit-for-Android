@@ -58,7 +58,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellPl
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutPolicy
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.InMemoryShellPreferences
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.InMemoryShellPreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellSettings
 import kotlinx.serialization.Serializable
@@ -238,7 +238,7 @@ class SingleTabShellTest {
             AppTheme {
                 ShellHost(
                     graph = graph,
-                    preferences = InMemoryShellPreferences(settings),
+                    preferences = InMemoryShellPreferencesRepository(settings),
                     layoutPolicy = ShellLayoutPolicy(hideSingleTabBottomBar = hideSingleTabBottomBar),
                 )
             }

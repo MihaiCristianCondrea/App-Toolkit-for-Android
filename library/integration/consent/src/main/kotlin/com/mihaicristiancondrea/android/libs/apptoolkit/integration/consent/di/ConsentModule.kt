@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.di
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.di.DataStoreQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.local.ConsentPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.local.DefaultUsageAndDiagnosticsPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.local.UsageAndDiagnosticsPreferencesDataSource
@@ -25,6 +26,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.DefaultConsentRepository
 import org.koin.core.module.Module
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 /**
@@ -35,7 +37,7 @@ import org.koin.dsl.module
  * and the diagnostics settings write them through [UsageAndDiagnosticsPreferencesDataSource].
  */
 fun consentModule(): Module = module {
-    single { DefaultUsageAndDiagnosticsPreferencesDataSource(dataStore = get()) }
+    single { DefaultUsageAndDiagnosticsPreferencesDataSource(dataStore = get(qualifier = named(DataStoreQualifiers.SETTINGS))) }
     single<ConsentPreferencesDataSource> { get<DefaultUsageAndDiagnosticsPreferencesDataSource>() }
     single<UsageAndDiagnosticsPreferencesDataSource> { get<DefaultUsageAndDiagnosticsPreferencesDataSource>() }
     single<ConsentRemoteDataSource> { UmpConsentRemoteDataSource(adMobAppIdDataSource = get()) }

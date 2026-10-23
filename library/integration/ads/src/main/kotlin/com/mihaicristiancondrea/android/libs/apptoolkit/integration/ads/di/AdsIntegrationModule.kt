@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.di
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.di.DataStoreQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.utils.AppOpenAdController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.AdsSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.repositories.DefaultAdsSettingsRepository
@@ -25,16 +26,19 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.loc
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.local.DefaultAdsPreferencesDataSource
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.dsl.onClose
 
 /**
  * Binds ad settings and the controller to one shared ads source. Hosts supply
  * placement configuration separately.
+ *
+ * @param defaultAdsEnabled Used only when storage contains no ads enablement choice.
  */
-fun adsIntegrationModule(): Module = module {
+fun adsIntegrationModule(defaultAdsEnabled: Boolean = true): Module = module {
     single<AdsPreferencesDataSource>(createdAtStart = true) {
-        DefaultAdsPreferencesDataSource(dataStore = get(), dispatchers = get(), defaultAdsEnabled = true)
+        DefaultAdsPreferencesDataSource(dataStore = get(qualifier = named(DataStoreQualifiers.SETTINGS)), dispatchers = get(), defaultAdsEnabled = defaultAdsEnabled)
     } onClose { source -> source?.close() }
 
     single<AppOpenAdController> {
@@ -45,7 +49,7 @@ fun adsIntegrationModule(): Module = module {
             adMobAppIdDataSource = get(),
             adsSettingsRepository = get(),
         )
-    }
+    } onClose { controller -> controller?.close() }
     single<AdsSettingsRepository> {
         DefaultAdsSettingsRepository(
             preferences = get(),

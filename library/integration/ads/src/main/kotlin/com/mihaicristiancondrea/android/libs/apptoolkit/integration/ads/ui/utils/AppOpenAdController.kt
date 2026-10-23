@@ -38,6 +38,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.reposit
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -51,7 +52,7 @@ import kotlin.time.Duration.Companion.hours
 private val APP_OPEN_AD_LIFETIME: Duration = 4.hours
 
 /**
- * Manager responsible for configuring and displaying App Open ads.
+ * Configures and displays App Open ads. Mutable lifecycle state uses the injected main dispatcher.
  *
  * It checks user preferences stored in [AdsSettingsRepository] to determine
  * whether ads should be shown and manages the lifecycle of an
@@ -67,7 +68,7 @@ open class AppOpenAdController(
 ) {
     private var appOpenAdManager: AppOpenAdManager? = null
 
-    private val managerScope: CoroutineScope = CoroutineScope(SupervisorJob() + dispatchers.io)
+    private val managerScope: CoroutineScope = CoroutineScope(SupervisorJob() + dispatchers.main)
     private val initializationMutex = Mutex()
     private var adsPreferenceJob: Job? = null
 
@@ -80,10 +81,10 @@ open class AppOpenAdController(
      * process restart. Missing or invalid app IDs skip initialization; no fallback publisher ID
      * is supplied.
      *
-     * Hosts must use this manager rather than initializing [MobileAds] separately. Use
+     * Hosts must use this controller rather than initializing the Mobile Ads SDK separately. Use
      * [disableNativeValidator] to configure native-ad validation.
      */
-    suspend fun initializeAds(appOpenUnitId: String, disableNativeValidator: Boolean = false) {
+    suspend fun initializeAds(appOpenUnitId: String, disableNativeValidator: Boolean = false) = withContext(dispatchers.main) {
         val isAdsChecked: Boolean = adsSettingsRepository.adsEnabled.first()
         if (isAdsChecked) {
             startAds(appOpenUnitId = appOpenUnitId, disableNativeValidator = disableNativeValidator)
@@ -159,9 +160,14 @@ open class AppOpenAdController(
      * where the asynchronous work should live.
      */
     fun showAdIfAvailable(activity: Activity, scope: CoroutineScope) {
-        scope.launch {
+        scope.launch(dispatchers.main) {
             appOpenAdManager?.showAdIfAvailable(activity = activity)
         }
+    }
+
+    /** Stops preference observation and drops later SDK callbacks when the owning graph closes. */
+    fun close() {
+        managerScope.cancel()
     }
 
     private inner class AppOpenAdManager(private val appOpenUnitId: String) {
@@ -180,13 +186,17 @@ open class AppOpenAdController(
             AppOpenAd.load(
                 request, object : AdLoadCallback<AppOpenAd> {
                     override fun onAdLoaded(ad: AppOpenAd) {
-                        appOpenAd = ad
-                        isLoadingAd = false
-                        loadTime = Date().time
+                        managerScope.launch {
+                            appOpenAd = ad
+                            isLoadingAd = false
+                            loadTime = Date().time
+                        }
                     }
 
                     override fun onAdFailedToLoad(adError: LoadAdError) {
-                        isLoadingAd = false
+                        managerScope.launch {
+                            isLoadingAd = false
+                        }
                     }
                 })
         }
@@ -228,21 +238,27 @@ open class AppOpenAdController(
 
             appOpenAd?.adEventCallback = object : AppOpenAdEventCallback {
                 override fun onAdDismissedFullScreenContent() {
-                    appOpenAd = null
-                    isShowingAd = false
-                    onShowAdCompleteListener.onShowAdComplete()
-                    loadAd()
+                    managerScope.launch {
+                        appOpenAd = null
+                        isShowingAd = false
+                        onShowAdCompleteListener.onShowAdComplete()
+                        loadAd()
+                    }
                 }
 
                 override fun onAdFailedToShowFullScreenContent(fullScreenContentError: FullScreenContentError) {
-                    appOpenAd = null
-                    isShowingAd = false
-                    onShowAdCompleteListener.onShowAdComplete()
-                    loadAd()
+                    managerScope.launch {
+                        appOpenAd = null
+                        isShowingAd = false
+                        onShowAdCompleteListener.onShowAdComplete()
+                        loadAd()
+                    }
                 }
 
                 override fun onAdShowedFullScreenContent() {
-                    isShowingAd = true
+                    managerScope.launch {
+                        isShowingAd = true
+                    }
                 }
             }
             isShowingAd = true

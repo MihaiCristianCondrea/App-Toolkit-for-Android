@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.di
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.di.DataStoreQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.OnboardingThemeViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.local.OnboardingPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.local.DefaultOnboardingPreferencesDataSource
@@ -24,10 +25,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.reposit
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.repositories.DefaultOnboardingRepository
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val onboardingModule: Module = module {
-    single<OnboardingPreferencesDataSource> { DefaultOnboardingPreferencesDataSource(dataStore = get()) }
+    single<OnboardingPreferencesDataSource> { DefaultOnboardingPreferencesDataSource(dataStore = get(qualifier = named(DataStoreQualifiers.SETTINGS))) }
     single<OnboardingRepository> { DefaultOnboardingRepository(preferences = get()) }
     viewModel { OnboardingThemeViewModel(preferences = get(), seasonal = get(), telemetryRepository = get()) }
 }

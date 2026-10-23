@@ -19,6 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.domai
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.repositories.ChangelogRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.utils.MarkdownFence
 
 /**
  * Loads the host application's changelog and selects the most useful Markdown to display.
@@ -53,22 +54,29 @@ class GetChangelogUseCase(
 internal fun String.extractChangesForVersion(version: String): String {
     if (isBlank() || version.isBlank()) return ""
     val versionHeading = Regex(
-        pattern = """^#{1,6}\s*\[?(?:Version\s+|v)?${Regex.escape(version.trim())}]?(?:\s*[-:].*)?\s*$""",
+        pattern = """^ {0,3}#{1,6}[\t ]+\[?(?:Version\s+|v)?${Regex.escape(version.trim())}]?(?:\s*[-:].*)?\s*$""",
         option = RegexOption.IGNORE_CASE,
     )
-    val lines: List<String> = lines()
-    val start: Int = lines.indexOfFirst { line -> versionHeading.matches(line.trim()) }
-    if (start < 0) return ""
-    val versionLevel: Int = lines[start].trim().takeWhile { it == '#' }.length
-    val end: Int = (start + 1 until lines.size).firstOrNull { index ->
-        val level: Int? = lines[index].headingLevel()
-        level != null && level <= versionLevel
-    } ?: lines.size
-    return lines.subList(start, end).joinToString(separator = "\n").trim()
+    val lines = lines()
+    val fence = MarkdownFence()
+    var start = -1
+    var versionLevel = 0
+    lines.forEachIndexed { index, line ->
+        if (fence.consume(line)) return@forEachIndexed
+        val level = line.headingLevel()
+        if (start < 0) {
+            if (versionHeading.matches(line)) {
+                start = index
+                versionLevel = requireNotNull(level)
+            }
+        } else if (level != null && level <= versionLevel) {
+            return lines.subList(start, index).joinToString("\n").trim()
+        }
+    }
+    return if (start >= 0) lines.subList(start, lines.size).joinToString("\n").trim() else ""
 }
 
-private val markdownHeading = Regex("""^(#{1,6})(?:\s|$)""")
+private val markdownHeading = Regex("""^ {0,3}(#{1,6})(?:[\t ]|$)""")
 
-/** The ATX heading level of this line, or null when it is not a heading. */
-private fun String.headingLevel(): Int? =
-    markdownHeading.find(trimStart())?.groupValues?.get(1)?.length
+/** The ATX heading level of this line, or null for text and indented code. */
+private fun String.headingLevel(): Int? = markdownHeading.find(this)?.groupValues?.get(1)?.length

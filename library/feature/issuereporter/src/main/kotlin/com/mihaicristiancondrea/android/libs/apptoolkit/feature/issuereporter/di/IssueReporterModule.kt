@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.di
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.di.DataStoreQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.local.DefaultIssueReportHistoryDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.local.IssueReportHistoryDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.sheets.IssueReporterSheet
@@ -69,7 +70,7 @@ fun issueReporterModule(
             diagnostics = get(),
         )
     }
-    single<IssueReportHistoryDataSource> { DefaultIssueReportHistoryDataSource(dataStore = get()) }
+    single<IssueReportHistoryDataSource> { DefaultIssueReportHistoryDataSource(dataStore = get(qualifier = named(DataStoreQualifiers.SETTINGS))) }
     single<IssueReportHistoryRepository> { DefaultIssueReportHistoryRepository(preferences = get()) }
     single<ValidateIssueReportUseCase> { ValidateIssueReportUseCase() }
     single<GithubTarget> {

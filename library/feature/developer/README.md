@@ -42,7 +42,7 @@ be restarted into a variation. The person's own preferences are display settings
 ## Does not own
 
 - The settings it edits, owned by [`:library:shell`](../../shell/README.md) (`ShellSettings`,
-  `ShellPreferences`).
+  `ShellPreferencesRepository`).
 - What the app's shell can show, `ShellCapabilities`, owned by
   [`:library:navigation`](../../navigation/README.md) and provided by `ShellHost`.
 - Adding the page to a graph, done by `toolkitPages()` in
@@ -76,7 +76,7 @@ be restarted into a variation. The person's own preferences are display settings
   accessories it does not declare) are left out.
 - **Not searchable.** The settings search does not list these overrides: the page is reached once
   unlocked, and a result would go around the unlock.
-- **Reset is complete.** `ShellPreferences.resetDeveloperOptions()` forgets every saved
+- **Reset is complete.** `ShellPreferencesRepository.resetDeveloperOptions()` forgets every saved
   `ShellSettings` choice, so the shell is again exactly as the app declares it in its
   `appToolkitDefaults { }`, or as the Toolkit's defaults without one. The person's preferences live
   in the common store and are not touched.
