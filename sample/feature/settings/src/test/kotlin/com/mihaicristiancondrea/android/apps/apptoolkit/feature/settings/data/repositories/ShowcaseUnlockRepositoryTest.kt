@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.data.repositories
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStoreInterface
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.AppPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -38,7 +38,7 @@ import org.junit.jupiter.api.assertThrows
 
 class ShowcaseUnlockRepositoryTest {
 
-    private val dataStore = mockk<DataStoreInterface>()
+    private val dataStore = mockk<AppPreferencesDataSource>()
     private val diagnostics = FakeTelemetryRepository()
     private val unlocked = MutableStateFlow(false)
 

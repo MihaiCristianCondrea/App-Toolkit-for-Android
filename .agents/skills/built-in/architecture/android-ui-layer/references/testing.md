@@ -38,7 +38,7 @@ class XViewModelTest {
   current value after `advance()`, with no collector.
 - Cover at least: the first load, a failure, a retry after the failure, and each event's effect on
   state or messages.
-- Test the message, not the snackbar: `messages.value.single().text` is the `UiTextHelper` the
+- Test the message, not the snackbar: `messages.value.single().text` is the `UiText` the
   ViewModel raised. After `messageShown(id)` the queue is empty.
 - `FakeTelemetryRepository.loggedEvents` records GA4 events, so a test can check that a failure sent
   `vm_op_error` with the right `action`. It does not record breadcrumbs or Crashlytics reports.

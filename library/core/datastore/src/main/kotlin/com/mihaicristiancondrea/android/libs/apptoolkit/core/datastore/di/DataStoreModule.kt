@@ -17,19 +17,16 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.di
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.CommonDataStoreCore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.AdsPreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.AppStatePreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.ChangelogPreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.ConsentPreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.DisplayPreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.FavoritesPreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.OnboardingPreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.ReviewPreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.SeasonalThemePreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.ThemePreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.UsageAndDiagnosticsPreferencesDataSource
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.DefaultDisplayPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.DefaultSeasonalThemePreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.DefaultThemePreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.DisplayPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.SeasonalThemePreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.ThemePreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.commonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DefaultDisplayPreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DefaultSeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DefaultThemePreferencesRepository
@@ -40,38 +37,15 @@ import org.koin.core.module.Module
 import org.koin.dsl.module
 
 /**
- * Binds the process-wide preference store and its repositories.
- *
- * Creates [CommonDataStore] eagerly through [CommonDataStore.getInstance] so Koin and Compose
- * share the same instance and ads default. Ads default to enabled in all builds unless a stored
- * choice overrides them.
- *
- * Data-source bindings reuse the store-owned instances, avoiding duplicate sharing coroutines.
- * State holders consume the repository bindings.
+ * Binds the shared settings file and the preferences more than one feature reads: theme, seasonal
+ * themes and display. Every other module binds its own source over the same `DataStore<Preferences>`.
  */
 fun dataStoreModule(): Module = module {
-    single<CommonDataStore>(createdAtStart = true) {
-        CommonDataStore.getInstance(
-            context = get(),
-            defaultAdsEnabled = true,
-        )
-    }
+    single<DataStore<Preferences>>(createdAtStart = true) { get<Context>().applicationContext.commonDataStore }
 
-    single<CommonDataStoreCore> { get<CommonDataStore>() }
-
-    single<ThemePreferencesDataSource> { get<CommonDataStore>().themePreferences }
-    single<SeasonalThemePreferencesDataSource> { get<CommonDataStore>().seasonalThemePreferences }
-    single<DisplayPreferencesDataSource> { get<CommonDataStore>().displayPreferences }
-    single<AdsPreferencesDataSource> { get<CommonDataStore>().adsPreferences }
-    single<ReviewPreferencesDataSource> { get<CommonDataStore>().reviewPreferences }
-    single<ChangelogPreferencesDataSource> { get<CommonDataStore>().changelogPreferences }
-    single<AppStatePreferencesDataSource> { get<CommonDataStore>().appStatePreferences }
-    single<FavoritesPreferencesDataSource> { get<CommonDataStore>().favoritesPreferences }
-    single<OnboardingPreferencesDataSource> { get<CommonDataStore>().onboardingPreferences }
-    single<ConsentPreferencesDataSource> { get<CommonDataStore>().diagnosticsPreferences }
-    single<UsageAndDiagnosticsPreferencesDataSource> {
-        get<CommonDataStore>().diagnosticsPreferences
-    }
+    single<ThemePreferencesDataSource> { DefaultThemePreferencesDataSource(dataStore = get()) }
+    single<SeasonalThemePreferencesDataSource> { DefaultSeasonalThemePreferencesDataSource(dataStore = get()) }
+    single<DisplayPreferencesDataSource> { DefaultDisplayPreferencesDataSource(dataStore = get()) }
 
     single<ThemePreferencesRepository> {
         DefaultThemePreferencesRepository(preferences = get())

@@ -28,7 +28,7 @@ plus the tap-to-copy interaction for the entries it renders and the version-tap 
   actions there.
 - Host main screen and host route keys, owned by `:sample`.
 - Host identity strings, supplied as overridable defaults by `:library:core:common`.
-- The device report itself, supplied by the host through `AboutSettingsProvider`.
+- The device report itself, supplied by the host through `AboutDeviceInfoDataSource`.
 - The consent, review and update hosts. Each integration module builds its own from the activity
   (`ConsentHost`, `ReviewHost`, `InAppUpdateHost`).
 
@@ -38,7 +38,7 @@ plus the tap-to-copy interaction for the entries it renders and the version-tap 
 - [`:library:core:datastore`](../../core/datastore/README.md) for `SeasonalThemeRepository`, which
   stores the easter egg unlock.
 - [`:library:navigation`](../../navigation/README.md) for the keys and the graph builder.
-- No other feature or integration module.
+- `:library:integration:gms` for the main-safe `GooglePlayServicesRepository`.
 
 ## Used by
 
@@ -54,6 +54,7 @@ flowchart TD
     AboutScreen[About screen] --> AboutVM[AboutViewModel]
     AboutVM --> AboutRepo[AboutRepository]
     AboutRepo --> Build[Build and app-info providers]
+    AboutRepo --> Gms[GooglePlayServicesRepository]
     AboutVM --> Mapper[AboutMappers to AboutItem list]
     AboutScreen --> CopyEvent[AboutEvent.CopyToClipboard]
     CopyEvent --> AboutVM
@@ -79,7 +80,7 @@ flowchart TD
 - `AboutItemAction.CopyToClipboard` carries the label, the exact text, and an optional confirmation
   message, so any row becomes copyable without a new event, and the clipboard receives what the row
   displays rather than a second lookup resolved under a different configuration. Both texts are
-  `UiTextHelper`, so a row whose value is a string resource copies as readily as one holding a
+  `UiText`, so a row whose value is a string resource copies as readily as one holding a
   formatted value.
 - Every row that displays a value copies it on tap, with two exceptions. Open source licenses
   navigates. The build version row copies nothing: it is where the easter egg lives, people tap it
@@ -122,7 +123,7 @@ Verify on a physical device, where the preview appears on every tap, or switch o
 
 ## Public contracts
 
-- `AboutSettingsProvider`, `AboutRepository`, `AboutInfo`, `AboutItem`, `AboutItemAction`,
+- `AboutDeviceInfoDataSource`, `AboutRepository`, `AboutInfo`, `AboutItem`, `AboutItemAction`,
   `AboutEvent`, `AboutScreen`, `LibraryExtrasScreen`, and `aboutPages()`.
 
 ## Internal implementations
@@ -132,6 +133,19 @@ Verify on a physical device, where the preview appears on every tap, or switch o
 
 ## Current risks
 
-`AboutSettingsProvider` is a host-facing data contract that still lives under `ui/providers`, where
-the data layer reads it. Moving it would break every host that implements it, so it stays until a
-breaking release.
+`AboutDeviceInfoDataSource` lives in `data/local`; hosts supply their device-information text through this contract.
+
+## Migration notes
+
+Google Play services metadata now comes from `:library:integration:gms`.
+`DefaultAboutRepository` takes `googlePlayServices: GooglePlayServicesRepository` instead of
+`gmsVersionProvider: GooglePlayServicesVersionProvider`, and no longer takes a dispatcher.
+The former feature-owned provider is removed. Hosts constructing the repository directly must
+update that argument. Hosts using the assembled Toolkit graph receive the new binding automatically.
+
+The About tap-event builder lives in `ui/analytics/AboutAnalytics.kt`. Initial loading continues
+through `onEvent(AboutEvent.Load)`, preserving the event breadcrumb.
+
+The host device contract is now `data.local.AboutDeviceInfoDataSource`, replacing
+`ui.providers.AboutSettingsProvider`. Hosts update their implementation and Koin binding directly.
+The sample's `AppAboutDeviceInfoDataSource` lives in its own `data/local` package.

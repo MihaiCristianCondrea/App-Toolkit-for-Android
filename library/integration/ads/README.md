@@ -6,11 +6,12 @@ Owns ad enablement settings and Google Mobile Ads integration UI used by AppTool
 
 ## Owns
 
+- Ads settings event builders and keys in `ui/analytics/AdsSettingsAnalytics.kt`.
 - `di.adsIntegrationModule()` binds the ads manager, settings repository, and ViewModel. The main toolkit
   module composes it; hosts supply their placement configuration and foundation providers.
 - Ads settings repository, ViewModel and screen, and `adsSettingsPage()`, the registration of
   `AdsSettingsRoute` (opened from the privacy page).
-- `AdsCoreManager`, `AdsSdkInitializer`, and Google Mobile Ads SDK initialization.
+- `AppOpenAdController`, `AdsSdkInitializer`, and Google Mobile Ads SDK initialization.
 - `OnShowAdCompleteListener`, called once an app-open ad has been shown.
 - App-open ad lifecycle; the `INTERNET`, `ACCESS_NETWORK_STATE`, and `AD_ID` permissions required by
   the SDK; and default Mobile Ads initialization/loading metadata.
@@ -42,10 +43,10 @@ Owns ad enablement settings and Google Mobile Ads integration UI used by AppTool
 flowchart TD
     Settings[AdsSettingsScreen] --> VM[AdsSettingsViewModel]
     VM --> Repo[AdsSettingsRepository]
-    Repo -->|persist display and reduce settings| Store[CommonDataStore ad preferences]
+    Repo -->|persist display and reduce settings| Store[AdsPreferencesDataSource]
     Repo -->|apply privacy choice| Consent[ConsentRepository]
-    Store --> Manager[AdsCoreManager]
-    Manifest[Host manifest AdMob application ID] --> Id[AdMobAppIdProvider]
+    Store --> Manager[AppOpenAdController]
+    Manifest[Host manifest AdMob application ID] --> Id[AdMobAppIdDataSource]
     Id --> Manager
     Manager --> Gate{Enabled and valid ID?}
     Gate -->|no| Disabled[SDK remains not ready]
@@ -92,7 +93,7 @@ differently.
     android:value="@string/ad_mob_app_id" />
 ```
 
-`ManifestAdMobAppIdProvider` reads it from there and nowhere else, and `AdsCoreManager` refuses to
+`ManifestAdMobAppIdDataSource` reads it from there and nowhere else, and `AppOpenAdController` refuses to
 initialize the SDK without a valid one rather than falling back to a sample id. Declare the string
 in the **host**, never in a library module: a library-owned `ad_mob_app_id` is inherited by every
 consumer app that does not declare the same name, silently pointing that app's consent request and
@@ -137,7 +138,7 @@ no fill rather than an error.
 
 ### App Open
 
-`AdsCoreManager.initializeAds(appOpenUnitId = ...)` takes the id directly; there is no qualifier.
+`AppOpenAdController.initializeAds(appOpenUnitId = ...)` takes the id directly; there is no qualifier.
 The
 host decides whether it wants the ad at all, see the toggle table above.
 
@@ -375,7 +376,7 @@ some of them. `NativeAdRenderer` is that logic, once.
   `create*` function per presentation out of the shared `headlineView`/`bodyView`/`iconFrameView`/
   `callToActionView` builders. A new shape is a new entry there, not a new component.
 - `NativeAdViewHolder` holds strong references to every bound view, so `bind` never searches for
-  one. It also assigns the SDK's asset slots (`root.headlineView = …`) and makes the single
+  one. It also assigns the SDK's asset slots (`root.headlineView = ΓÇª`) and makes the single
   `registerNativeAd(nativeAd, mediaView)` call that attributes impressions and clicks.
 - The tree is created once per presentation in the `AndroidView` **factory**, keyed on the
   presentation. `applyPalette` and `bind` run in **update**, so a theme change or a new ad repaints
@@ -446,7 +447,7 @@ callers want.
 On a debug build, `NativeAdSlot` draws `AdSlotDebugPlaceholder` where an empty slot would be: the
 slot name, whether the request came back without an ad or was never made, and the SDK's own words.
 Release renders nothing, exactly as before. The switch is `AdLoadReporter.showsDebugPlaceholder`,
-which reads `BuildInfoProvider.isDebugBuild`, so the placeholder cannot reach a release build.
+which reads `BuildInfoRepository.isDebugBuild`, so the placeholder cannot reach a release build.
 
 A host drawing its own ad view can use the same placeholder:
 
@@ -498,12 +499,12 @@ Compose on the outside, views underneath. In
 `NativeComposeUtility.kt` nests them:
 
 ```
-AndroidView                       ← Compose hosts a view
-└── NativeAdView (FrameLayout)    ← the SDK's container, registered
-    └── ComposeView               ← a view hosting Compose again
-        ├── NativeAdHeadlineView  ← AndroidView { ComposeView } → nativeAdView.headlineView = it
-        ├── NativeAdIconView      ← AndroidView { ComposeView } → nativeAdView.iconView = it
-        └── NativeAdMediaView     ← the SDK's real MediaView, never Compose
+AndroidView                       ΓåÉ Compose hosts a view
+ΓööΓöÇΓöÇ NativeAdView (FrameLayout)    ΓåÉ the SDK's container, registered
+    ΓööΓöÇΓöÇ ComposeView               ΓåÉ a view hosting Compose again
+        Γö£ΓöÇΓöÇ NativeAdHeadlineView  ΓåÉ AndroidView { ComposeView } ΓåÆ nativeAdView.headlineView = it
+        Γö£ΓöÇΓöÇ NativeAdIconView      ΓåÉ AndroidView { ComposeView } ΓåÆ nativeAdView.iconView = it
+        ΓööΓöÇΓöÇ NativeAdMediaView     ΓåÉ the SDK's real MediaView, never Compose
 ```
 
 Each asset wrapper creates a `ComposeView`, assigns **that view** to the SDK slot, and calls
@@ -556,7 +557,7 @@ Three ways out, in order of preference:
 
 1. `composeView.setParentCompositionContext(rememberCompositionContext())`, which links the
    compositions so locals flow through.
-2. Re-apply the app theme inside `setContent { AppTheme { … } }`.
+2. Re-apply the app theme inside `setContent { AppTheme { ΓÇª } }`.
 3. Resolve the colours in the outer composition and pass them in, which is exactly
    what `NativeAdPalette` is.
 
@@ -573,7 +574,7 @@ so none of them need a `NativeAdView`.
 
 - `AdsSettingsScreen`, `adsSettingsPage()`, the repository contract, and the UI event, action and
   state contracts.
-- `AdsCoreManager` and its replaceable `AdsSdkInitializer` test seam.
+- `AppOpenAdController` and its replaceable `AdsSdkInitializer` test seam.
 
 ## Internal implementations
 
@@ -596,7 +597,7 @@ The rendering primitives belong here, not in `:library:core:ui`. Two things pin 
    without demoting that dependency to the modules that need it only hides the problem.
 
 Untangling it means inverting both call sites so the layout takes the ad as a slot rather than an
-ad unit id. That is `NoDataScreen(adContent = { … })` instead of `showAd`, and the same for
+ad unit id. That is `NoDataScreen(adContent = { ΓÇª })` instead of `showAd`, and the same for
 `GroupedGrid`. After that the primitives can move here and `:library:core:ui` can drop the SDK
 entirely. Both are
 breaking changes to published APIs, so they are worth doing in one deliberate pass rather than
@@ -616,10 +617,10 @@ throw happened during composition, so it took the process down instead of failin
 
 Two independent causes, both fixed:
 
-- The ads-enabled preference had two sources with different defaults. `AdsCoreManager` gated SDK
+- The ads-enabled preference had two sources with different defaults. `AppOpenAdController` gated SDK
   initialization on one and the ad views read the other, so in a debug build the views could believe
   ads were on while the SDK had never been initialized. Both now read
-  `CommonDataStore.adsEnabledFlow`, and only the default is shared.
+  `AdsSettingsRepository.adsEnabled`, and only the default is shared.
 - Even with one source, initialization is asynchronous. An ad slot composed during startup could
   request before the SDK was up. Requests now wait on `AdsSdkState.isReady` and re-key when
   readiness
@@ -648,3 +649,13 @@ The separately reported `HsdpShimActivity` failure (`targetPackageName is null`)
 and is not covered by those initialization fixes. See the
 [SDK activity crash investigation](../../../docs/crashes/open/billing-proxy-activity-null-intent/README.md) before applying
 workarounds or describing it as fixed in consuming apps.
+
+## Preference storage ownership
+
+The ads integration owns `AdsPreferencesDataSource` and `DefaultAdsPreferencesDataSource` in
+`data/local`. `adsIntegrationModule` creates one source over the shared settings file and closes
+its collector when Koin closes. `AdsSettingsRepository` is a core common contract implemented here.
+UI and `AppOpenAdController` read its shared `adsEnabled` state; settings use cold reads so storage
+failures can reach the screen. A pending or failed read keeps shared ads disabled. IO failures retry
+with delays capped at 30 seconds; unexpected failures remain disabled until the source is recreated.
+`defaultAdsEnabled` applies only after a successful read finds no saved key.

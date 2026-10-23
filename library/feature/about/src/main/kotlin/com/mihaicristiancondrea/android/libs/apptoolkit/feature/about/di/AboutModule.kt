@@ -20,7 +20,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.di
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.search.aboutSettingsSearch
 import org.koin.core.qualifier.named
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.providers.GooglePlayServicesVersionProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories.AboutRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories.DefaultAboutRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.AboutViewModel
@@ -30,15 +29,13 @@ import org.koin.dsl.module
 
 val aboutModule: Module = module {
     single<SettingsSearchProvider>(named("about")) { aboutSettingsSearch }
-    single { GooglePlayServicesVersionProvider(context = get()) }
 
     single<DefaultAboutRepository> {
         DefaultAboutRepository(
-            deviceProvider = get(),
-            buildInfoProvider = get(),
+            deviceInfoDataSource = get(),
+            buildInfoRepository = get(),
             diagnostics = get(),
-            gmsVersionProvider = get(),
-            dispatchers = get(),
+            googlePlayServices = get(),
         )
     }
     single<AboutRepository> { get<DefaultAboutRepository>() }

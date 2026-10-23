@@ -25,12 +25,19 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Text
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.navigation3.runtime.NavKey
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.DefaultDisplayPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.DefaultThemePreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.AdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeAdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DisplayPreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DefaultDisplayPreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DefaultThemePreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppTheme
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakePreferencesDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R as NavigationR
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.InMemoryShellPreferences
@@ -56,7 +63,10 @@ class PausablePrefetchTest {
     @Before
     fun setUp() {
         ComposeFoundationFlags.isPausableCompositionInPrefetchEnabled = true
-        startKoin { modules(module { single { CommonDataStore(ApplicationProvider.getApplicationContext()) } }) }
+        startKoin { modules(module {
+                    single<AdsSettingsRepository> { FakeAdsSettingsRepository() }
+                    single<DisplayPreferencesRepository> { DefaultDisplayPreferencesRepository(DefaultDisplayPreferencesDataSource(FakePreferencesDataStore())) }
+                    single<ThemePreferencesRepository> { DefaultThemePreferencesRepository(DefaultThemePreferencesDataSource(FakePreferencesDataStore())) } }) }
     }
 
     @After

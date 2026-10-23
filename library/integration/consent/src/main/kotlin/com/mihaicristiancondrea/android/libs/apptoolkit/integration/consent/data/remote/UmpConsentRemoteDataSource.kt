@@ -23,7 +23,7 @@ import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.FormError
 import com.google.android.ump.UserMessagingPlatform
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.CONSENT_LOG_TAG
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.AdMobAppIdProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.AdMobAppIdDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.exceptions.ConsentException
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.canShowConsentForm
@@ -37,47 +37,50 @@ import kotlin.coroutines.resumeWithException
  * Every UMP callback ends the round trip once: with success, or with a [ConsentException] whose
  * reason says which step failed. A form dismissed with a [FormError] is a failure, not a success.
  *
- * @param adMobAppIdProvider resolves the *host* app's AdMob application id. Passing a foreign id to
+ * @param adMobAppIdDataSource resolves the *host* app's AdMob application id. Passing a foreign id to
  * UMP produces consent requests against a publisher account that does not own the running app,
  * which is the failure mode that precedes the SDK's metrics-ping crash.
  */
 class UmpConsentRemoteDataSource(
-    private val adMobAppIdProvider: AdMobAppIdProvider,
+    private val adMobAppIdDataSource: AdMobAppIdDataSource,
 ) : ConsentRemoteDataSource {
 
     override suspend fun requestConsent(
         host: ConsentHost,
         showIfRequired: Boolean,
-    ): Unit = suspendCancellableCoroutine { continuation ->
-        val finish: (ConsentException?) -> Unit = { failure ->
-            if (continuation.isActive) {
-                if (failure == null) continuation.resume(Unit) else continuation.resumeWithException(failure)
+    ): Unit {
+        val parameters = buildRequestParameters()
+        suspendCancellableCoroutine<Unit> { continuation ->
+            val finish: (ConsentException?) -> Unit = { failure ->
+                if (continuation.isActive) {
+                    if (failure == null) continuation.resume(Unit) else continuation.resumeWithException(failure)
+                }
             }
-        }
 
-        try {
-            val consentInfo = UserMessagingPlatform.getConsentInformation(host.activity)
-            consentInfo.requestConsentInfoUpdate(
-                host.activity,
-                buildRequestParameters(),
-                { showForm(host = host, showIfRequired = showIfRequired, finish = finish) },
-                { requestError: FormError ->
-                    finish(
-                        consentFailure(
-                            reason = ConsentException.Reason.REQUEST_FAILED,
-                            message = "Failed to request consent info: ${requestError.message}",
+            try {
+                val consentInfo = UserMessagingPlatform.getConsentInformation(host.activity)
+                consentInfo.requestConsentInfoUpdate(
+                    host.activity,
+                    parameters,
+                    { showForm(host = host, showIfRequired = showIfRequired, finish = finish) },
+                    { requestError: FormError ->
+                        finish(
+                            consentFailure(
+                                reason = ConsentException.Reason.REQUEST_FAILED,
+                                message = "Failed to request consent info: ${requestError.message}",
+                            )
                         )
-                    )
-                },
-            )
-        } catch (exception: Exception) {
-            finish(
-                consentFailure(
-                    reason = ConsentException.Reason.REQUEST_FAILED,
-                    message = "Failed to request consent info.",
-                    cause = exception,
+                    },
                 )
-            )
+            } catch (exception: Exception) {
+                finish(
+                    consentFailure(
+                        reason = ConsentException.Reason.REQUEST_FAILED,
+                        message = "Failed to request consent info.",
+                        cause = exception,
+                    )
+                )
+            }
         }
     }
 
@@ -173,18 +176,18 @@ class UmpConsentRemoteDataSource(
      * value the Google Mobile Ads SDK reads. Without a valid id, `setAdMobAppId` is skipped rather
      * than falling back to a library constant.
      */
-    private fun buildRequestParameters(): ConsentRequestParameters {
+    private suspend fun buildRequestParameters(): ConsentRequestParameters {
         val builder = ConsentRequestParameters.Builder()
             .setTagForUnderAgeOfConsent(false)
 
-        val appId: String? = adMobAppIdProvider.adMobAppId()
+        val appId: String? = adMobAppIdDataSource.adMobAppId()
         if (appId != null) {
             builder.setAdMobAppId(appId)
         } else {
             Log.w(
                 CONSENT_LOG_TAG,
                 "Requesting consent without an AdMob app id: the host app declares no valid " +
-                        "${AdMobAppIdProvider.MANIFEST_METADATA_KEY} meta-data."
+                        "${AdMobAppIdDataSource.MANIFEST_METADATA_KEY} meta-data."
             )
         }
 

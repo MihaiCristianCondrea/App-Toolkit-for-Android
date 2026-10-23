@@ -17,6 +17,13 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.analytics.settingsPreferenceTapEvent
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.analytics.SETTINGS_SCREEN_NAME
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.analytics.SettingsActionNames
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.analytics.settingsActionGa4Event
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.analytics.UNKNOWN_PREFERENCE_KEY
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -43,13 +50,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsCategory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsPreference
@@ -75,14 +79,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNav
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellBackHandler
 import org.koin.compose.viewmodel.koinViewModel
 
-private const val SETTINGS_SCREEN_NAME = "Settings"
+
 private const val SETTINGS_SCREEN_CLASS = "SettingsScreen"
 private val SETTINGS_SCREEN: TrackedScreen =
     TrackedScreen(name = SETTINGS_SCREEN_NAME, className = SETTINGS_SCREEN_CLASS)
 
-private object SettingsActionNames {
-    const val RETRY_LOAD: String = "retry_load"
-}
+
 
 /**
  * Host-supplied settings categories with search and navigation. A row's external action gets
@@ -134,17 +136,9 @@ fun SettingsScreen() {
     }
 }
 
-private fun settingsActionGa4Event(actionName: String): Ga4EventData {
-    return Ga4EventData(
-        name = SettingsAnalytics.Events.ACTION,
-        params = mapOf(
-            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(SETTINGS_SCREEN_NAME),
-            SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(actionName),
-        ),
-    )
-}
 
-private const val UNKNOWN_PREFERENCE_KEY = "unknown"
+
+
 
 /**
  * The stateless half of [SettingsScreen]: the list, or its loading, empty or failure state.
@@ -257,17 +251,7 @@ fun SettingsList(
                         iconColor = preference.iconColor,
                         iconContainerColor = preference.iconContainerColor,
                         ga4EventProvider = {
-                            Ga4EventData(
-                                name = SettingsAnalytics.Events.PREFERENCE_VIEW,
-                                params = mapOf(
-                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
-                                        SETTINGS_SCREEN_NAME
-                                    ),
-                                    SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
-                                        preference.key ?: UNKNOWN_PREFERENCE_KEY
-                                    ),
-                                ),
-                            )
+                            settingsPreferenceTapEvent(preference.key)
                         },
                         onClick = { onPreferenceClick(preference) },
                         modifier = Modifier.groupedPreferenceItem(

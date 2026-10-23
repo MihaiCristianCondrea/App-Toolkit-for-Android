@@ -32,9 +32,9 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4Contract
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.analytics.componentClickEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.AnimationShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.ArticleBarShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.DividerShowcase
@@ -46,9 +46,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.vi
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.LayoutShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.PreferenceShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.TextFieldShowcase
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
@@ -115,18 +113,6 @@ fun ComponentsScreen(
 
         val switchCardState: State<Boolean> = rememberUpdatedState(switchCardEnabled)
         val carouselState = rememberPagerState { dropdownOptions.size }
-        val screenParam = AnalyticsValue.Str(AppScreenTracking.Screens.COMPONENTS.name)
-
-        fun ga4Event(component: String, variant: String? = null): Ga4EventData {
-            val params = buildMap {
-                put(AppGa4Contract.Param.SCREEN, screenParam)
-                put(AppGa4Contract.Param.COMPONENT, AnalyticsValue.Str(component))
-                variant?.let {
-                    put(AppGa4Contract.Param.VARIANT, AnalyticsValue.Str(it))
-                }
-            }
-            return Ga4EventData(name = AppGa4Contract.EventName.COMPONENTS_CLICK, params = params)
-        }
 
         LazyColumn(
             contentPadding = innerPadding,
@@ -134,26 +120,26 @@ fun ComponentsScreen(
         ) {
             animatedItem {
                 ButtonShowcase(
-                    onLogEvent = ::ga4Event,
+                    onLogEvent = ::componentClickEvent,
                 )
             }
 
             animatedItem {
                 FabShowcase(
-                    onLogEvent = ::ga4Event,
+                    onLogEvent = ::componentClickEvent,
                 )
             }
 
             animatedItem {
                 ArticleBarShowcase(
-                    onLogEvent = ::ga4Event,
+                    onLogEvent = ::componentClickEvent,
                     onOpenArticleDemo = onOpenArticleDemo,
                 )
             }
 
             animatedItem {
                 InputShowcase(
-                    onLogEvent = ::ga4Event,
+                    onLogEvent = ::componentClickEvent,
                     dateMillis = selectedDateMillis,
                     onDateSelected = { selectedDateMillis = it },
                     selectedDropdownOption = selectedDropdownOption,
@@ -164,13 +150,13 @@ fun ComponentsScreen(
 
             animatedItem {
                 TextFieldShowcase(
-                    onLogEvent = ::ga4Event,
+                    onLogEvent = ::componentClickEvent,
                 )
             }
 
             animatedItem {
                 PreferenceShowcase(
-                    onLogEvent = ::ga4Event,
+                    onLogEvent = ::componentClickEvent,
                     switchEnabled = switchEnabled,
                     onSwitchEnabledChanged = { switchEnabled = it },
                     switchWithDividerEnabled = switchWithDividerEnabled,
@@ -196,7 +182,7 @@ fun ComponentsScreen(
 
             animatedItem {
                 FilterShowcase(
-                    onLogEvent = ::ga4Event,
+                    onLogEvent = ::componentClickEvent,
                     filters = filters,
                     selectedFilter = selectedFilter,
                     onFilterSelected = { selectedFilter = it },

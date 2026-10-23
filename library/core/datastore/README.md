@@ -2,157 +2,77 @@
 
 ## Purpose
 
-Provides the toolkit's shared Preferences DataStore implementation and preference-source contracts
-used by onboarding, consent, ads, diagnostics, review, and theming.
+Provides the single Toolkit Preferences DataStore file and preferences shared by several modules.
+Capability-specific sources live with their owning features or integrations.
 
 ## Owns
 
-- The single `settings` Preferences DataStore instance, handed out by `Context.commonDataStore`.
-- Cohesive preference data sources over that instance: theme, seasonal themes, display, onboarding,
-  consent and diagnostics, ads, review, changelog, app state, and favorites.
-- `CommonDataStore`, which owns one instance of each source, exposes them, and keeps the flat
-  pre-split API delegating to them.
-- Persisted theme, review, display-ads, reduce-ads, and consent-related values.
-- Translating storage failures into `StorageException` (from `:library:core:common`):
-  `storageCall { }` and `Throwable.toStorageException()`, for DataStore and SQLite exceptions.
-- The Koin DataStore module at `core.datastore.di`, which is the single place `CommonDataStore` is registered;
-  `appToolkitFoundationModules` includes it rather than defining its own copy.
+- The single `settings` Preferences DataStore instance, exposed by `Context.commonDataStore`.
+- Its existing migrations and corruption handler. Corrupt preferences are replaced with empty
+  preferences, retaining the existing reset-to-default behavior.
+- The theme, seasonal-theme and display sources, which several modules read.
+- Theme, display and seasonal-theme repository implementations and bindings.
+- `startupValueFlow`, which maps the stored startup route through a caller-supplied function.
+- Storage error translation through `storageCall` and `toStorageException`.
+- The `DataStore<Preferences>` Koin binding consumed by feature-owned sources.
 
 ## Does not own
 
-- Feature business decisions about consent, reviews, onboarding, or diagnostics.
-- Mobile Ads SDK initialization and app-open ad lifecycle, owned by
-  [`:library:integration:ads`](../../integration/ads/README.md).
-- Compose theme rendering, owned by `:library:core:designsystem` and `:library:core:ui`.
+- Ads sources and their eagerly shared enablement state, owned by `:library:integration:ads`.
+- Review sources, owned by `:library:integration:review`.
+- Onboarding and changelog sources, owned by their respective feature modules.
+- Consent and usage-diagnostics sources, owned by `:library:integration:consent`.
+- Issue report history, owned by `:library:feature:issuereporter`.
+- An app's own preferences, such as the sample's favorites and showcase flag, owned by the app.
+- Compose collection and rendering, owned by the design system and UI modules.
 
 ## Depends on
 
-- [`:library:core:common`](../common/README.md) for shared contracts, preference constants, and
-  common models.
+- `:library:core:common` for shared contracts, constants, models and failures.
 
 ## Used by
 
-- `:library:apptoolkit` for host DI assembly.
-- `:library:core:designsystem` for persisted theme state, and `:library:core:ui` for the
-  preference-driven modifiers and ad slots.
-- `:library:feature:about`, `:library:feature:faq`, `:library:feature:onboarding`,
-  `:library:feature:settings`, and `:library:feature:theme`.
-- `:library:integration:ads`, `:library:integration:consent`, and `:library:integration:review`.
-
-## Flow chart
-
-```mermaid
-flowchart TD
-    Caller[Feature repository or state holder] --> Narrow["Narrow preference contract"]
-    Legacy[Legacy caller] --> Wrapper[CommonDataStore wrapper]
-    Wrapper --> Narrow
-    Narrow --> Source[Default preference data source]
-    Source -->|read| Store["settings Preferences DataStore"]
-    Caller -->|suspend mutation| Narrow
-    Narrow -->|edit transaction| Store
-    Store -->|preference updates| Source
-    Source -->|typed Flow| Caller
-    Ads[DefaultAdsPreferencesDataSource] -->|eagerly shared| AdsState[adsEnabled StateFlow]
-    Ads --> Reduce[reduceAds Flow]
-    Store --> Ads
-    Module[dataStoreModule] -->|one process instance| CommonDataStore
-    Module --> Narrow
-```
+Core UI, the design system, feature and integration repositories, and the application composition
+root use this module. A source in another module receives the same `DataStore<Preferences>`
+instance from the graph.
 
 ## Architectural decisions
 
-- Cohesive source interfaces split ownership without moving installed data: all keys deliberately
-  remain in one `settings` file.
-- Repositories and state holders depend on the narrow source or repository they need. The broad
-  `CommonDataStore` wrapper remains only for source compatibility with older callers.
-- Reads are observable `Flow`s and mutations are suspend functions; the stored preferences are the
-  source of truth except for explicitly documented UI mirrors.
-- `SeasonalThemeRepository` owns the holiday rules because they span two sources: applying a
-  holiday palette from the greeting saves the palette and wallpaper-colors setting it replaces in
-  the seasonal source, and `restoreThemeAfterHoliday` puts them back once the holiday is over,
-  unless the person picked another palette in the meantime. Each holiday is greeted once per
-  occurrence, keyed like `christmas-2026`, so a Christmas season that runs into January is still
-  one occurrence.
-- Ads enablement is eagerly shared by one process-scoped instance because initialization and every
-  ad surface must observe the same default and subsequent changes.
-- The shared ads value starts disabled until storage supplies the first value. The configured
-  default applies only when that read finds no saved key. An `IOException` disables ads and retries
-  with exponential delays capped at 30 seconds; unexpected failures are logged and leave ads disabled
-  until the source is recreated. Cancellation still stops the collector. Cold preference reads used
-  by settings continue to throw storage failures to their caller.
-- Reduce ads defaults to `false` and suppresses only App Open ads; it does not alter SDK
-  initialization or banner/native ad enablement.
-- A `settings` file that can no longer be parsed is replaced with empty preferences, which resets
-  every value to its default and shows first-run state again. Without the handler every read throws
-  `CorruptionException`, and startup reads run outside any catch, so one damaged file crashed each
-  launch until the app's data was cleared.
-
-## Startup value projection
-
-CommonDataStore.startupValueFlow maps the stored startup string to a caller-selected type without
-depending on navigation or UI. Blank strings use the caller's default; unknown/legacy identifiers
-remain the caller's responsibility. Consecutive equal mapped values are suppressed. This does not
-change stored keys, defaults, or the shared preferences file.
+- Module ownership does not split the stored file. Every moved source retains its existing keys,
+  defaults and transactions in `settings`. No installed-data migration is needed for the moves.
+- Shared appearance remains in core because onboarding, About, design-system UI and theme settings
+  need it without sibling feature dependencies.
+- Consent and diagnostics retain one shared implementation because their keys overlap and bulk
+  consent writes must remain atomic. It lives in `:library:integration:consent`, which the
+  diagnostics feature already depends on; integration code cannot depend on the feature.
+- A preference stays here only when more than one module reads it. One owner keeps its source,
+  with its keys, in its own `data/local`.
+- Repositories expose application data to UI. UI must not read sources directly.
+- `SeasonalThemeRepository` owns holiday palette application and restoration across the shared
+  theme and seasonal sources. Existing snapshots, occurrence keys and weather-effect values persist.
 
 ## Public contracts
 
-- The preference data-source interfaces, their `Default*` implementations, `CommonDataStore`, and
-  `core.datastore.di.dataStoreModule`.
-- New code should depend on the narrow contract it needs (`ThemePreferencesDataSource`,
-  `ReviewPreferencesDataSource`, …), all of which `dataStoreModule` registers. `CommonDataStore`
-  remains for callers written against the earlier single-class API.
-- `SeasonalThemeRepository` and `DefaultSeasonalThemeRepository`, registered by `dataStoreModule`,
-  for the seasonal themes state, the holiday greeting, the easter egg unlock, and the weather
-  effect it unlocks (`setWeatherEffect`, a `WeatherEffect` stored by name under
-  `seasonal_weather_effect`; an unknown name reads as `WeatherEffect.Automatic`).
-- `themePreferencesState()` combines stored theme values into the application-facing
-  `ThemePreferencesState`; Compose collection of that flow belongs to `:library:core:designsystem`.
-  Its first emission is the stored state, never placeholder defaults, so a screen can act on the
-  first state it receives. Each call builds a new flow, so a composable must `remember` it:
-  collecting a fresh instance restarts the subscription from the collector's initial value.
-
-## Internal implementations
-
-- DataStore key access and serialization-free preference mapping.
+- `commonDataStore` and `dataStoreModule`.
+- Shared preference-source interfaces, and theme, seasonal-theme and display repositories.
+- The graph's `DataStore<Preferences>` binding for sources owned by other modules.
+- `startupValueFlow` maps stored startup identifiers through a caller-supplied function. The caller
+  retains ownership of navigation keys and unknown identifiers.
 
 ## Current risks
 
-Every group shares one `settings` preferences file, so key names and default values stay
-compatibility-sensitive across modules even though the API is now split. Splitting the file itself
-would need a `DataMigration` for installed apps and has not been done.
-
-`DefaultAdsPreferencesDataSource` starts an eager collector, so exactly one instance may exist per
-process. Reach it through the graph rather than constructing it.
-
-`AdsPreferenceRecoveryTest` covers delayed saved opt-out, defaults after a successful read, transient
-IO recovery and unexpected-failure logging. An unexpected failure intentionally leaves the shared
-value disabled until the source is recreated, rather than guessing that ads may be enabled.
+All owners share one settings file. Key names, defaults and migrations remain compatibility-sensitive.
+Never create another DataStore instance pointing to that file.
 
 ## Migration notes
 
-### Ads initialization must share the UI preference source
+`CommonDataStore` is removed. Ask the graph for `DataStore<Preferences>` and keep a source over it
+for your own keys, or use the owning module's repository: `ThemePreferencesRepository`,
+`DisplayPreferencesRepository`, `AdsSettingsRepository`, `OnboardingRepository`. The ads source
+owns its collector, and its Koin binding closes it when the graph closes. `startupValueFlow` is an
+extension of `DisplayPreferencesRepository` in `core.datastore.utils.extensions`.
 
-An earlier initialization path sampled the ads preference with a debug-dependent default while the
-Compose ad surfaces used `true`. In a debug build with no stored preference, `AdsCoreManager`
-skipped
-`MobileAds.initialize` while native/banner views attempted SDK requests. Those SDK entry points can
-throw synchronously, including from composition. A removed host-side unconditional initialization
-had previously masked the disagreement.
-
-Preserve these invariants:
-
-- `CommonDataStore.adsEnabledFlow`, including its host-configured `defaultAdsEnabled`, is the single
-  source of truth for both `AdsCoreManager` and ad UI. Callers must not supply local defaults.
-- The integration-owned `AdsCoreManager` observes the flow instead of sampling it once, so enabling ads at runtime starts
-  initialization without a process restart.
-- Initialization is idempotent and mutex-protected, uses the validated host-manifest AdMob app ID,
-  and is skipped when no valid ID exists.
-- `AdsSdkState.isReady` is published after initialization so UI can delay requests until the SDK is
-  usable.
-- The integration-owned `AdsSdkInitializer` remains the test seam around the SDK's non-mock-friendly
-  initialization API.
-
-The JUnit 5 `AdsCoreManagerInitializationTest` in `:library:integration:ads` is the executable
-regression suite for these rules.
-Do not rely on the legacy JUnit 4 `TestAdsCoreManager`: the module uses the JUnit Platform without a
-Vintage engine, so that class compiles but is not executed.
+`AdsSettingsRepository` and `OnboardingRepository` contracts now live in
+`core.common.data.repositories`. Their implementations remain in the owning integration or feature.
+The full Toolkit graph supplies their bindings. Custom graphs must supply these repositories,
+including the appearance repositories consumed by `AppTheme`.

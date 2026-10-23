@@ -18,10 +18,6 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.di
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.ui.AppOnboardingProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.OnboardingPreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.repositories.DefaultOnboardingRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.repositories.OnboardingRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.OnboardingViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers.OnboardingProvider
 import org.koin.core.module.Module
@@ -30,8 +26,6 @@ import org.koin.dsl.module
 
 val onboardingModule: Module = module {
     single<OnboardingProvider> { AppOnboardingProvider() }
-    single<OnboardingPreferencesDataSource> { get<CommonDataStore>() }
-    single<OnboardingRepository> { DefaultOnboardingRepository(dataStore = get()) }
 
     viewModel {
         OnboardingViewModel(

@@ -375,6 +375,7 @@ private fun pageEntry(graph: ShellGraph, navigator: ShellNavigator, key: NavKey)
                         actions = { destination.actions?.invoke(this, pageKey) },
                         floatingActionButton = { destination.floatingActionButton?.invoke(pageKey) },
                         fabs = destination.floatingActionButtons?.invoke(pageKey).orEmpty(),
+                        backButton = destination.backButton,
                     ) {
                         ContentWidthBox(maxWidth = LocalShellLayout.current.maxWidthFor(destination.contentWidth)) {
                             destination.content(pageKey)

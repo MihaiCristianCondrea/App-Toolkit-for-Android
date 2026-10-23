@@ -17,13 +17,13 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.WeatherEffect
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.HolidaySeason
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.SeasonalThemeState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.WeatherEffect
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.HolidaySeason
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.SeasonalThemeState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.holidayOccurrenceKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.holidaySeason
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.SeasonalThemePreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.ThemePreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.SeasonalThemePreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.ThemePreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.models.HolidayThemeSnapshot
 import java.time.LocalDate
 import kotlinx.coroutines.flow.Flow

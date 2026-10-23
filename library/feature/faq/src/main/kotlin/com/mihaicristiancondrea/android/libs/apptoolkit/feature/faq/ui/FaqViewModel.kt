@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
@@ -109,6 +109,6 @@ class FaqViewModel(
     }
 
     private companion object {
-        val LoadFailedText = UiTextHelper.StringResource(R.string.error_failed_to_load_faq)
+        val LoadFailedText = UiText.StringResource(R.string.error_failed_to_load_faq)
     }
 }

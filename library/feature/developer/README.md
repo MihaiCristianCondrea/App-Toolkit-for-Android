@@ -28,9 +28,13 @@ be restarted into a variation. The person's own preferences are display settings
   | Accessories | Bottom accessory | a banner or a player the tabs can show; all four choices with both, otherwise shown or hidden |
 
   A heading without a row is left out, and Reset is always last.
-- `DeveloperOption`, `DeveloperCategory`, `developerOptions(capabilities)` and
+- `DeveloperOption`, `DeveloperCategory`, `availableDeveloperOptions(capabilities)` and
   `accessoryModes(capabilities)`: which overrides act on something in this app.
 - `DeveloperOptionItem`, the row of each override, and its option labels.
+- `DeveloperOptionsScreenContent`, in the screen file, renders explicit values and reports edits
+  through `DeveloperOptionChange`. The screen alone applies and persists those edits.
+- `DeveloperStateLine` in `ui/models` and its `DeveloperStateItem` in `ui/views` render live state.
+- Capability filtering and shared label formatting live in `ui/utils`.
 - `developerOptionsPage()`, the registration of `DeveloperOptionsRoute`.
 - Its strings, in every supported locale, including the page title `shell_developer_options` and
   the override rows' titles and options.

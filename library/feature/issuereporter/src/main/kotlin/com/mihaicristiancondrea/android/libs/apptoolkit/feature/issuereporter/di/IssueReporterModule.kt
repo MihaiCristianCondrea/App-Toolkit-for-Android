@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.di
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.local.DefaultIssueReportHistoryDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.local.IssueReportHistoryDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.sheets.IssueReporterSheet
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterBottomSheet
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
@@ -25,16 +27,15 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.utils.extensions.toToken
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.local.DeviceInfoLocalDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.remote.IssueReporterRemoteDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.DefaultIssueReportHistoryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.DefaultIssueReporterRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReportHistoryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReporterRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReporterConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.providers.DeviceInfoProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.local.DeviceInfoDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.usecases.ValidateIssueReportUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.shake.IssueReporterShakeManager
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.IssueReporterShakeManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.Module
@@ -60,17 +61,16 @@ fun issueReporterModule(
         IssueReporterSheet { onDismissRequest -> IssueReporterBottomSheet(onDismissRequest = onDismissRequest) }
     }
     single<IssueReporterRemoteDataSource> { IssueReporterRemoteDataSource(client = get()) }
-    single<DeviceInfoProvider> { DeviceInfoLocalDataSource(app = get(), dispatchers = get()) }
+    single<DeviceInfoDataSource> { DeviceInfoLocalDataSource(app = get(), dispatchers = get()) }
     single<IssueReporterRepository> {
         DefaultIssueReporterRepository(
             remoteDataSource = get(),
-            deviceInfoProvider = get(),
+            deviceInfoDataSource = get(),
             diagnostics = get(),
         )
     }
-    single<IssueReportHistoryRepository> {
-        DefaultIssueReportHistoryRepository(dataStore = get<CommonDataStore>().dataStore)
-    }
+    single<IssueReportHistoryDataSource> { DefaultIssueReportHistoryDataSource(dataStore = get()) }
+    single<IssueReportHistoryRepository> { DefaultIssueReportHistoryRepository(preferences = get()) }
     single<ValidateIssueReportUseCase> { ValidateIssueReportUseCase() }
     single<GithubTarget> {
         GithubTarget(

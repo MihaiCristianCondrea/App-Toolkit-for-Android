@@ -27,7 +27,7 @@ import org.koin.core.module.Module
 /**
  * Settings-related modules owned by the library.
  *
- * Host apps provide `SettingsProvider`, `AboutSettingsProvider`, `DisplaySettingsProvider`, and
+ * Host apps provide `SettingsProvider`, `AboutDeviceInfoDataSource`, `DisplaySettingsProvider`, and
  * `PrivacySettingsProvider` implementations in modules loaded with these reusable toolkit
  * bindings. Some are resolved from composables rather than constructors, so
  * constructor-only Koin verification cannot discover every requirement.

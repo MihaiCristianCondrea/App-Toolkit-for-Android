@@ -21,7 +21,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.platform.AppVersionMetadata
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.AppVersionMetadata
 
 /**
  * Returns `true` when [packageName] is installed AND visible to the caller.

@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.mappers
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
@@ -26,9 +26,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMe
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toUiText
 
-private val LoadAppsFailedText = UiTextHelper.StringResource(R.string.error_failed_to_load_apps)
-private val UpdateFavoriteFailedText = UiTextHelper.StringResource(R.string.error_failed_to_update_favorite)
-private val TryAgainText = UiTextHelper.StringResource(CoreUiR.string.try_again)
+private val LoadAppsFailedText = UiText.StringResource(R.string.error_failed_to_load_apps)
+private val UpdateFavoriteFailedText = UiText.StringResource(R.string.error_failed_to_update_favorite)
+private val TryAgainText = UiText.StringResource(CoreUiR.string.try_again)
 
 /**
  * This failure as the catalogue's [Loadable.Failed], for a load with no saved catalogue to show.

@@ -18,11 +18,11 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.HolidaySeason
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.SeasonalThemeState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.ThemePreferencesState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.WeatherEffect
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.HolidaySeason
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.SeasonalThemeState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.ThemePreferencesState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.WeatherEffect
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
@@ -147,7 +147,7 @@ class OnboardingThemeViewModelTest {
             val message = viewModel.messages.value.single()
             assertEquals(
                 CoreUiR.string.screen_error_generic,
-                (message.text as UiTextHelper.StringResource).resourceId,
+                (message.text as UiText.StringResource).resourceId,
             )
             assertTrue(message.isError)
             val error = telemetryRepository.loggedEvents.single { it.name == "vm_op_error" }

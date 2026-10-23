@@ -209,7 +209,8 @@ the predictive back gesture from either edge. They run with the unit tests.
 ```
 
 The tests are JUnit 4, so this module, and only this one, adds the JUnit vintage engine beside
-JUnit 5. They start Koin with a `CommonDataStore`, which `AppTheme` reads.
+JUnit 5. They start Koin with the theme, display and ads repositories `AppTheme` reads, over
+`FakePreferencesDataStore`.
 
 ## Architectural decisions
 

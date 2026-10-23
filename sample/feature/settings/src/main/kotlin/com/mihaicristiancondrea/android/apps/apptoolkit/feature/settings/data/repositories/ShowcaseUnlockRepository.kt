@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.data.repositories
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStoreInterface
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.AppPreferencesDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.BuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import kotlinx.coroutines.flow.first
@@ -27,7 +27,7 @@ import kotlinx.coroutines.sync.withLock
 /**
  * Turns the About screen's version taps into the persisted showcase-unlock flag.
  *
- * The flag itself is owned by [DataStoreInterface] in `:sample:core:datastore`, which is what lets
+ * The flag itself is owned by [AppPreferencesDataSource] in `:sample:core:datastore`, which is what lets
  * the gesture live with the Settings surface that hosts it while the showcase feature reads the
  * same flag without either module depending on the other.
  *
@@ -35,7 +35,7 @@ import kotlinx.coroutines.sync.withLock
  * would leak into a later release install of the same app.
  */
 class ShowcaseUnlockRepository(
-    private val dataStore: DataStoreInterface,
+    private val dataStore: AppPreferencesDataSource,
     private val diagnostics: DiagnosticsReporter,
     private val isDebugBuild: Boolean = BuildConfig.DEBUG,
 ) {

@@ -47,7 +47,7 @@ flowchart TD
     Bridge --> Repo[ComponentsShowcaseRepository]
     Repo --> Counter{Unlock threshold reached?}
     Counter -->|no| State[Updated tap progress]
-    Counter -->|yes| Store[DataStoreInterface]
+    Counter -->|yes| Store[AppPreferencesDataSource]
     Store --> Repo[ComponentsShowcaseRepository.isUnlocked]
     Repo --> Drawer[":sample:app" drawer entry, shown when unlocked]
     Drawer --> Page[ComponentsRoute page]

@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.contracts
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.WeatherEffect
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.WeatherEffect
 
 /**
  * What the user can ask the theme settings ViewModel to do.

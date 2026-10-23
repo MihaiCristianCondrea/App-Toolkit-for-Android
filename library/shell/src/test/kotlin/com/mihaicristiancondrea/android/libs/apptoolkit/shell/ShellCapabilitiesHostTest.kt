@@ -29,14 +29,20 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.DefaultDisplayPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.DefaultThemePreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.AdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeAdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DisplayPreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DefaultDisplayPreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DefaultThemePreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppTheme
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakePreferencesDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.LocalShellCapabilities
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutPolicy
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.InMemoryShellPreferences
@@ -53,6 +59,7 @@ import org.koin.dsl.module
 import org.robolectric.annotation.Config
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R as NavigationR
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
 
 /**
  * The capabilities `ShellHost` gives the settings pages describe the app as declared: a layout the
@@ -68,7 +75,10 @@ class ShellCapabilitiesHostTest {
     @Before
     fun setUp() {
         startKoin {
-            modules(module { single { CommonDataStore(ApplicationProvider.getApplicationContext()) } })
+            modules(module {
+                    single<AdsSettingsRepository> { FakeAdsSettingsRepository() }
+                    single<DisplayPreferencesRepository> { DefaultDisplayPreferencesRepository(DefaultDisplayPreferencesDataSource(FakePreferencesDataStore())) }
+                    single<ThemePreferencesRepository> { DefaultThemePreferencesRepository(DefaultThemePreferencesDataSource(FakePreferencesDataStore())) } })
         }
     }
 

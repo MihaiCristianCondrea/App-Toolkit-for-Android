@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
@@ -43,7 +43,7 @@ class IssueReporterErrorMappersTest {
     }
 
     private val UiMessage.resourceId: Int
-        get() = (text as UiTextHelper.StringResource).resourceId
+        get() = (text as UiText.StringResource).resourceId
 
     @ParameterizedTest
     @MethodSource("rejections")

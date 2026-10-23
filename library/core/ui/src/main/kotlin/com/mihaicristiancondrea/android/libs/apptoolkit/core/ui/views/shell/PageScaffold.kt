@@ -84,6 +84,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes.LocalP
  * expanded and visible without scroll tint, even when the shell hides bars on scroll.
  *
  * The back button closes the page, and any detail open beside it, through the shell navigator.
+ * A task the person finishes with a button of its own, such as a cleanup that ends in Done, passes
+ * `backButton = false`: the bar keeps its title and actions, and system back still reaches the
+ * screen, which handles it the way its own button does.
  * Inside a list-detail pane the frame draws no app bar at all: the scene draws one bar across both
  * panes, titled from each page. A large bar becomes a small one on a window too short for it.
  *
@@ -116,6 +119,7 @@ fun PageScaffold(
     fabs: List<ToolkitFab> = emptyList(),
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     topBarScrollMode: TopBarScrollMode = LocalTopBarScrollMode.current,
+    backButton: Boolean = true,
     content: @Composable () -> Unit,
 ) {
     val navigator = LocalShellNavigator.current
@@ -163,7 +167,7 @@ fun PageScaffold(
                     style = resolvedStyle,
                     title = title,
                     navigationIcon = {
-                        if (!topLevel) {
+                        if (backButton && !topLevel) {
                             AnimatedIconButtonDirection(
                                 icon = ToolkitIcon.Vector(Icons.AutoMirrored.Filled.ArrowBack),
                                 contentDescription = stringResource(R.string.go_back),

@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
@@ -75,6 +75,6 @@ class SettingsViewModel(
     }
 
     private companion object {
-        val NoSettingsText = UiTextHelper.StringResource(R.string.error_no_settings_found)
+        val NoSettingsText = UiText.StringResource(R.string.error_no_settings_found)
     }
 }

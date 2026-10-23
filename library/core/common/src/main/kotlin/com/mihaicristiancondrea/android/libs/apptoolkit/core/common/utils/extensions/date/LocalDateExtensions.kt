@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.HolidaySeason
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.HolidaySeason
 import java.time.LocalDate
 import java.time.Month
 import java.time.MonthDay

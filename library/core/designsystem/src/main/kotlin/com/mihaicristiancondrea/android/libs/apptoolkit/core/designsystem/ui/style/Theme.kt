@@ -41,7 +41,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.colorscheme.applyDynamicVariant
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.findActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.rememberCommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.AdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DisplayPreferencesRepository
+import org.koin.compose.koinInject
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ColorPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ThemePaletteProvider.paletteById
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.typography.AppTypography
@@ -119,12 +121,13 @@ fun isAppInDarkTheme(themeMode: String): Boolean = when (themeMode) {
 fun AppTheme(content: @Composable () -> Unit) {
     val context: Context = LocalContext.current
     val themePreferences = rememberThemePreferencesState()
-    val dataStore = rememberCommonDataStore()
-    val bouncyAnimationsEnabled = dataStore.bouncyButtons
+    val displayPreferences: DisplayPreferencesRepository = koinInject()
+    val adsSettings: AdsSettingsRepository = koinInject()
+    val bouncyAnimationsEnabled = displayPreferences.bouncyButtons
         .collectAsStateWithLifecycle(initialValue = true)
-    val showBottomBarLabels = dataStore.getShowBottomBarLabels()
+    val showBottomBarLabels = displayPreferences.showBottomBarLabels
         .collectAsStateWithLifecycle(initialValue = true)
-    val adsEnabled = dataStore.adsEnabledFlow
+    val adsEnabled = adsSettings.adsEnabled
         .collectAsStateWithLifecycle()
 
     val isDarkTheme: Boolean = isAppInDarkTheme(themeMode = themePreferences.themeMode)

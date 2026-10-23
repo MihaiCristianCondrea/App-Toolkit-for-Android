@@ -242,6 +242,14 @@ layout policy and nothing else; `ShellHost` builds it once and provides it as
   instead of counting `graph.tabs` or reading the layout, so the display settings, their search
   and the developer options cannot each apply a slightly different rule.
 
+## Task pages
+
+A page the person finishes with a button of its own, such as a cleanup that ends in **Done**, keeps
+its title and actions but drops the back arrow: `page(title = { ... }, backButton = false)` for a
+page the shell frames, or `PageScaffold(title = ..., backButton = false)` for one that draws its
+own. System back still reaches the screen, which handles it with a `BackHandler` the way its own
+button does, so back and the button never become different operations.
+
 ## Static app bars
 
 `tab`, `child`, `page` and `pageIfAbsent` take `topBarScrollMode = TopBarScrollMode.Static` for a

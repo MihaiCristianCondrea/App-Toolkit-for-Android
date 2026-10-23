@@ -20,11 +20,11 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logTutorialBegin
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logTutorialComplete
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.repositories.OnboardingRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.OnboardingRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingCompletion
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingUiState
@@ -122,6 +122,6 @@ class OnboardingViewModel(
 
     private companion object {
         /** Shown for a failure with no text of its own; see `toUiText` for the ones that have one. */
-        val CompletionFailedText = UiTextHelper.StringResource(R.string.onboarding_completion_failed)
+        val CompletionFailedText = UiText.StringResource(R.string.onboarding_completion_failed)
     }
 }

@@ -10,7 +10,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.domain.usecases
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.repositories.ChangelogRepository
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -34,7 +34,7 @@ class GetChangelogUseCaseTest {
         val history = "# 1.0.0\n- Previous"
         val useCase = GetChangelogUseCase(
             repository = FakeChangelogRepository(markdown = history),
-            buildInfoProvider = buildInfo(version = "2.0.0"),
+            buildInfoRepository = buildInfo(version = "2.0.0"),
         )
 
         assertEquals(history, useCase())
@@ -44,7 +44,7 @@ class GetChangelogUseCaseTest {
     fun `blank response remains blank for the localized no updates state`() = runTest {
         val useCase = GetChangelogUseCase(
             repository = FakeChangelogRepository(markdown = "  "),
-            buildInfoProvider = buildInfo(version = "2.0.0"),
+            buildInfoRepository = buildInfo(version = "2.0.0"),
         )
 
         assertEquals("", useCase())
@@ -55,13 +55,13 @@ class GetChangelogUseCaseTest {
         val failure = NetworkException(NetworkException.Reason.SERVER)
         val useCase = GetChangelogUseCase(
             repository = FakeChangelogRepository(failure = failure),
-            buildInfoProvider = buildInfo(version = "2.0.0"),
+            buildInfoRepository = buildInfo(version = "2.0.0"),
         )
 
         assertSame(failure, runCatching { useCase() }.exceptionOrNull())
     }
 
-    private fun buildInfo(version: String): BuildInfoProvider = object : BuildInfoProvider {
+    private fun buildInfo(version: String): BuildInfoRepository = object : BuildInfoRepository {
         override val appVersion: String = version
         override val appVersionCode: Int = 20
         override val packageName: String = "com.example.app"

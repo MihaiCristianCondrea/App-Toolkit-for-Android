@@ -21,7 +21,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.Ma
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.states.MainUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.AppScreenTracking
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.apps.apptoolkit.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
@@ -205,6 +205,6 @@ class MainViewModel(
     }
 
     private companion object {
-        val ConsentFailedText = UiTextHelper.StringResource(R.string.error_failed_to_load_consent_info)
+        val ConsentFailedText = UiText.StringResource(R.string.error_failed_to_load_consent_info)
     }
 }

@@ -25,7 +25,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.d
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.utils.extensions.hasPlayStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.utils.extensions.isInstalledFromPlayStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.data.local.ReviewPreferencesDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -40,19 +40,19 @@ import kotlinx.coroutines.withContext
  * IPC, so that one goes to IO.
  */
 class DefaultReviewRepository(
-    private val dataStore: CommonDataStore,
+    private val preferences: ReviewPreferencesDataSource,
     private val dispatchers: DispatcherProvider,
 ) : ReviewRepository {
-    override fun sessionCount(): Flow<Int> = dataStore.sessionCount
+    override fun sessionCount(): Flow<Int> = preferences.sessionCount
 
-    override fun hasPromptedReview(): Flow<Boolean> = dataStore.hasPromptedReview
+    override fun hasPromptedReview(): Flow<Boolean> = preferences.hasPromptedReview
 
     override suspend fun incrementSessionCount() {
-        dataStore.incrementSessionCount()
+        preferences.incrementSessionCount()
     }
 
     override suspend fun setHasPromptedReview(value: Boolean) {
-        dataStore.setHasPromptedReview(value = value)
+        preferences.setHasPromptedReview(value = value)
     }
 
     /**

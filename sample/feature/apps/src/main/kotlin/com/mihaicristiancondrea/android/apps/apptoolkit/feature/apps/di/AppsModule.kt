@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.di
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.DefaultFavoritesPreferencesDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.FavoritesPreferencesDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.DefaultDeveloperAppsLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.DeveloperAppsLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.installed.AndroidInstalledAppsLocalDataSource
@@ -76,9 +78,10 @@ val appsModule: Module = module {
         )
     }
 
+    single<FavoritesPreferencesDataSource> { DefaultFavoritesPreferencesDataSource(dataStore = get()) }
     single<FavoritesRepository> {
         DefaultFavoritesRepository(
-            dataStore = get(),
+            preferences = get(),
             diagnostics = get()
         )
     }

@@ -103,6 +103,7 @@ dependencies {
     testRuntimeOnly(dependencyNotation = libs.test.junit.vintage.engine)
     // Internal modules
     api(project(":library:core:common"))
+    api(project(":library:integration:gms"))
     api(project(":library:core:datastore"))
     api(project(":library:core:network"))
     api(project(":library:core:ui"))

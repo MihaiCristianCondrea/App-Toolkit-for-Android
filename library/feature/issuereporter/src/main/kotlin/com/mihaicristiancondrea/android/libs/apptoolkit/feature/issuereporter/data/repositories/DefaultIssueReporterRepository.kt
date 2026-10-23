@@ -24,20 +24,20 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.da
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.DeviceInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.Report
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.providers.DeviceInfoProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.local.DeviceInfoDataSource
 
 /**
  * Sends reports through [remoteDataSource] and captures device details through
- * [deviceInfoProvider], which moves its own platform reads off the main thread. Ktor suspends, so
+ * [deviceInfoDataSource], which moves its own platform reads off the main thread. Ktor suspends, so
  * sending needs no dispatcher.
  */
 class DefaultIssueReporterRepository(
     private val remoteDataSource: IssueReporterRemoteDataSource,
-    private val deviceInfoProvider: DeviceInfoProvider,
+    private val deviceInfoDataSource: DeviceInfoDataSource,
     private val diagnostics: DiagnosticsReporter,
 ) : IssueReporterRepository {
 
-    override suspend fun captureDeviceInfo(): DeviceInfo = deviceInfoProvider.capture()
+    override suspend fun captureDeviceInfo(): DeviceInfo = deviceInfoDataSource.capture()
 
     /** The breadcrumb names the target repository and whether a token is set, never the token. */
     override suspend fun sendReport(

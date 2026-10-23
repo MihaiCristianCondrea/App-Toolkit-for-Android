@@ -189,7 +189,7 @@ Android platform source, has no alternate implementation, and does not cross a m
 
 Pass-through use cases were removed throughout. Where one wrapped a data source rather than a
 repository, a repository was introduced instead of deleting it outright, so no ViewModel ends up
-holding `DataStoreInterface` directly.
+holding `AppPreferencesDataSource` directly.
 
 Navigation keys and the complete graph live in `:sample:app` under `app/navigation`.
 Features expose callbacks rather than importing app-owned route keys.

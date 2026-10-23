@@ -92,6 +92,6 @@ A computation that needs data outside the state belongs in the ViewModel or the 
 
 ## Text
 
-Text the app writes is a `UiTextHelper` (`StringResource`, `PluralResource` or `DynamicString`), so
+Text the app writes is a `UiText` (`StringResource`, `PluralResource` or `DynamicString`), so
 it resolves against the current locale and configuration when it is drawn. Text the user typed, or
 text that has to stay exactly as shown (the About screen's clipboard text), is a `String`.

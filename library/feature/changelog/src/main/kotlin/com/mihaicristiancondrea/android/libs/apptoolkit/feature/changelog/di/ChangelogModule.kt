@@ -22,15 +22,20 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.r
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.repositories.DefaultChangelogRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.domain.usecases.GetChangelogUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.ChangelogViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.local.ChangelogPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.local.DefaultChangelogPreferencesDataSource
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.remote.ChangelogRemoteDataSource
 
 val changelogModule: Module = module {
+    single<ChangelogPreferencesDataSource> { DefaultChangelogPreferencesDataSource(dataStore = get()) }
+    single { ChangelogRemoteDataSource(client = get(), diagnostics = get()) }
     single<DefaultChangelogRepository> {
         DefaultChangelogRepository(
-            client = get(),
+            remoteDataSource = get(),
             apiBaseUrl = get(
                 qualifier = named(AppToolkitDiConstants.ANDROID_APPS_METADATA_API_BASE_URL),
             ),
@@ -45,7 +50,7 @@ val changelogModule: Module = module {
     single<GetChangelogUseCase> {
         GetChangelogUseCase(
             repository = get(),
-            buildInfoProvider = get(),
+            buildInfoRepository = get(),
         )
     }
 

@@ -97,6 +97,8 @@ class Destination<K : NavKey> @PublishedApi internal constructor(
     val placeholder: (@Composable () -> Unit)? = null,
     /** How the app bar the shell draws for this destination answers scrolling; see [TopBarScrollMode]. */
     val topBarScrollMode: TopBarScrollMode = TopBarScrollMode.Default,
+    /** Whether the app bar the shell draws for this page shows a back arrow. Only titled pages use it. */
+    val backButton: Boolean = true,
 )
 
 /**

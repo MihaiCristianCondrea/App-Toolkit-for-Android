@@ -19,8 +19,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.ThemePreferencesState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.ThemePreferencesState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DisplayPreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
@@ -157,7 +157,7 @@ class DisplaySettingsViewModelTest {
         assertFalse(viewModel.readySettings().bouncyButtons)
         val message = viewModel.messages.value.single()
         assertTrue(message.isError)
-        assertEquals(CoreUiR.string.screen_error_generic, (message.text as UiTextHelper.StringResource).resourceId)
+        assertEquals(CoreUiR.string.screen_error_generic, (message.text as UiText.StringResource).resourceId)
         assertTrue(
             telemetryRepository.loggedEvents.any { event ->
                 event.name == "vm_op_error" && event.params["action"] == AnalyticsValue.Str("setBouncyButtons")
@@ -175,7 +175,7 @@ class DisplaySettingsViewModelTest {
         advance()
 
         val message = viewModel.messages.value.single()
-        assertEquals(CoreUiR.string.screen_error_storage_full, (message.text as UiTextHelper.StringResource).resourceId)
+        assertEquals(CoreUiR.string.screen_error_storage_full, (message.text as UiText.StringResource).resourceId)
     }
 
     private class FakeDisplayPreferencesRepository : DisplayPreferencesRepository {

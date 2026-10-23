@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.shell
 import androidx.compose.ui.test.swipeDown
 import androidx.compose.ui.test.swipeUp
 import androidx.compose.ui.test.performTouchInput
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakePreferencesDataStore
 import org.junit.Assert.assertTrue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ScaffoldFabs
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
@@ -59,7 +60,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.navigation3.runtime.NavKey
 import androidx.navigationevent.DirectNavigationEventInput
 import androidx.navigationevent.NavigationEvent
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
@@ -70,7 +70,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNav
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.BackEdgeStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.InMemoryShellPreferences
@@ -78,7 +77,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.Navigatio
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.TopBarOverride
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.DefaultDisplayPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.DefaultThemePreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.AdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeAdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DisplayPreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DefaultDisplayPreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DefaultThemePreferencesRepository
 import kotlinx.serialization.Serializable
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -94,6 +100,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R as NavigationR
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
 
 /**
  * Renders the shell's chrome in every navigation layout, against the Toolkit's theme, and the
@@ -115,7 +122,10 @@ class ShellScreenshotTest {
     @Before
     fun setUpKoin() {
         startKoin {
-            modules(module { single { CommonDataStore(ApplicationProvider.getApplicationContext()) } })
+            modules(module {
+                    single<AdsSettingsRepository> { FakeAdsSettingsRepository() }
+                    single<DisplayPreferencesRepository> { DefaultDisplayPreferencesRepository(DefaultDisplayPreferencesDataSource(FakePreferencesDataStore())) }
+                    single<ThemePreferencesRepository> { DefaultThemePreferencesRepository(DefaultThemePreferencesDataSource(FakePreferencesDataStore())) } })
         }
     }
 

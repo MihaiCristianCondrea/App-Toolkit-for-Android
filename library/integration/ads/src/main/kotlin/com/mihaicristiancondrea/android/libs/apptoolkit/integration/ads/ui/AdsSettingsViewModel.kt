@@ -18,13 +18,13 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.repositories.AdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.AdsSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.contracts.AdsSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.models.AdsPreferences
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.states.AdsSettingsUiState
@@ -144,7 +144,7 @@ class AdsSettingsViewModel(
     }
 
     private companion object {
-        val StorageErrorText = UiTextHelper.StringResource(R.string.error_ads_settings_storage)
-        val ConsentErrorText = UiTextHelper.StringResource(R.string.error_ads_consent_failed)
+        val StorageErrorText = UiText.StringResource(R.string.error_ads_settings_storage)
+        val ConsentErrorText = UiText.StringResource(R.string.error_ads_consent_failed)
     }
 }

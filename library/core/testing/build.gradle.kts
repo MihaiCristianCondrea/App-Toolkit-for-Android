@@ -47,6 +47,7 @@ android {
 // and a test source set cannot be consumed by another module's test source set.
 dependencies {
     api(project(":library:core:common"))
+    api(libs.androidx.datastore.preferences)
 
     api(libs.bundles.unitTest)
 }

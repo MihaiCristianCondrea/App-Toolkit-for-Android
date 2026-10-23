@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 
 /**
@@ -63,14 +63,14 @@ sealed interface PrivacyItem {
     /** A category title separating groups of preference items. */
     data class Header(
         override val key: String,
-        val title: UiTextHelper,
+        val title: UiText,
     ) : PrivacyItem
 
     /** An individual preference entry within a category card. */
     data class Preference(
         override val key: String,
-        val title: UiTextHelper,
-        val summary: UiTextHelper,
+        val title: UiText,
+        val summary: UiText,
         val position: GroupedItemPosition = GroupedItemPosition.MIDDLE,
         val action: PrivacyItemAction,
     ) : PrivacyItem

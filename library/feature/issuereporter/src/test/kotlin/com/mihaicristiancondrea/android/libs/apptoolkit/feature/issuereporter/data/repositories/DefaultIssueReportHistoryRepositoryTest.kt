@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.d
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.local.DefaultIssueReportHistoryDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportRefusal
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
@@ -44,7 +45,7 @@ class DefaultIssueReportHistoryRepositoryTest {
     )
 
     private fun repository(dataStore: DataStore<Preferences>) = DefaultIssueReportHistoryRepository(
-        dataStore = dataStore,
+        preferences = DefaultIssueReportHistoryDataSource(dataStore = dataStore),
         currentTimeMillis = { now },
     )
 

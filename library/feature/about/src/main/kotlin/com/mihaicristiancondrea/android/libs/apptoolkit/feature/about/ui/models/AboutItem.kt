@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 
 /**
@@ -46,7 +46,7 @@ sealed interface AboutItemAction {
      *
      * The text travels with the action so the clipboard receives exactly what the item displays,
      * instead of a second lookup that could resolve under a different configuration. Both are
-     * [UiTextHelper] rather than `String` so a row whose value is a string resource, such as the
+     * [UiText] rather than `String` so a row whose value is a string resource, such as the
      * application name, is as copyable as one holding a formatted value.
      *
      * @property label Clipboard entry label, also used as the copied item's name.
@@ -55,9 +55,9 @@ sealed interface AboutItemAction {
      * falls back to the generic copied-to-clipboard message.
      */
     data class CopyToClipboard(
-        val label: UiTextHelper,
-        val text: UiTextHelper,
-        val successMessage: UiTextHelper? = null,
+        val label: UiText,
+        val text: UiText,
+        val successMessage: UiText? = null,
     ) : AboutItemAction
 }
 
@@ -71,7 +71,7 @@ sealed interface AboutItem {
     /** A category title separating groups of preference items. */
     data class Header(
         override val key: String,
-        val title: UiTextHelper,
+        val title: UiText,
     ) : AboutItem
 
     /**
@@ -83,8 +83,8 @@ sealed interface AboutItem {
      */
     data class Preference(
         override val key: String,
-        val title: UiTextHelper,
-        val summary: UiTextHelper,
+        val title: UiText,
+        val summary: UiText,
         val position: GroupedItemPosition = GroupedItemPosition.MIDDLE,
         val action: AboutItemAction? = null,
         val countsVersionTap: Boolean = false,

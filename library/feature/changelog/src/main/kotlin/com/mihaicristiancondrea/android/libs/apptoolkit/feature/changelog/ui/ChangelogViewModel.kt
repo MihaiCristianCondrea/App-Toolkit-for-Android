@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
@@ -72,6 +72,6 @@ class ChangelogViewModel(
     }
 
     private companion object {
-        val LoadFailedText = UiTextHelper.StringResource(R.string.error_loading_changelog_message)
+        val LoadFailedText = UiText.StringResource(R.string.error_loading_changelog_message)
     }
 }

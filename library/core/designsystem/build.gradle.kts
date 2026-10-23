@@ -44,6 +44,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.koin.androidx.compose)
     testImplementation(project(":library:core:testing"))
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.bundles.instrumentationTest)

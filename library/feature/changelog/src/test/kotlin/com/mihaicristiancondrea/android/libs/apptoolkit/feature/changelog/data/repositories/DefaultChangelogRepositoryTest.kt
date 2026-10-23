@@ -11,6 +11,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.remote.ChangelogRemoteDataSource
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
@@ -125,7 +126,10 @@ class DefaultChangelogRepositoryTest {
 
     private fun createRepository(engine: MockEngine): DefaultChangelogRepository =
         DefaultChangelogRepository(
-            client = HttpClient(engine),
+            remoteDataSource = ChangelogRemoteDataSource(
+                client = HttpClient(engine),
+                diagnostics = FakeTelemetryRepository(),
+            ),
             apiBaseUrl = "https://metadata.example",
             legacyChangelogUrl = "https://legacy.example/changelog.md",
             diagnostics = FakeTelemetryRepository(),

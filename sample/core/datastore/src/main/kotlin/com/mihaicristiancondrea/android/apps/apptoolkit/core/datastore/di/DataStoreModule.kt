@@ -17,15 +17,18 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.di
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStore
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStoreInterface
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.AppPreferencesDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DefaultAppPreferencesDataSource
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-/**
- * Host datastore bindings.
- */
+/** Binds the sample's own preferences over the Toolkit's shared settings file. */
 val dataStoreModule: Module = module {
-    single<DataStore> { DataStore(commonDataStore = get()) }
-    single<DataStoreInterface> { get<DataStore>() }
+    single<AppPreferencesDataSource> {
+        DefaultAppPreferencesDataSource(
+            dataStore = get(),
+            displayPreferences = get(),
+            onboardingRepository = get(),
+        )
+    }
 }

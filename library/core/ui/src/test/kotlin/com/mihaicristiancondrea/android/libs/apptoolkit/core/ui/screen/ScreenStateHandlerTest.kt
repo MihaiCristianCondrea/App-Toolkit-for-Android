@@ -31,7 +31,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
@@ -53,7 +53,7 @@ class ScreenStateHandlerTest {
 
     private val tryAgain: String get() = compose.activity.getString(com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R.string.try_again)
 
-    private fun text(value: String) = UiTextHelper.DynamicString(value)
+    private fun text(value: String) = UiText.DynamicString(value)
 
     @Test
     fun `an empty result offers a retry only when asked to`() {
@@ -96,7 +96,7 @@ class ScreenStateHandlerTest {
         val states = ScreenStates(
             loading = { Text("App loading") },
             empty = { _, _ -> Text("App empty") },
-            failed = { slot, failed -> Text("App failed: ${(failed.message as UiTextHelper.DynamicString).content}, retry ${slot.onRetry != null}") },
+            failed = { slot, failed -> Text("App failed: ${(failed.message as UiText.DynamicString).content}, retry ${slot.onRetry != null}") },
         )
         compose.setContent {
             CompositionLocalProvider(LocalScreenStates provides states) {

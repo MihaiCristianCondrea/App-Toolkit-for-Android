@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.re
 
 import app.cash.turbine.test
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.local.AdsPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import io.mockk.coEvery
@@ -49,19 +49,19 @@ class DefaultAdsSettingsRepositoryTest {
     }
 
     private fun createRepository(
-        dataStore: CommonDataStore,
+        dataStore: AdsPreferencesDataSource,
         storeDefaultAdsEnabled: Boolean = true,
     ): DefaultAdsSettingsRepository {
         every { dataStore.defaultAdsEnabled } returns storeDefaultAdsEnabled
         return DefaultAdsSettingsRepository(
-            dataStore = dataStore,
+            preferences = dataStore,
             diagnostics = FakeTelemetryRepository(),
         )
     }
 
     @Test
     fun `observeAdsEnabled emits the stored value`() = runTest(dispatcherExtension.testDispatcher) {
-        val dataStore = mockk<CommonDataStore>()
+        val dataStore = mockk<AdsPreferencesDataSource>()
         every { dataStore.ads(default = true) } returns flowOf(false)
         val repository = createRepository(dataStore)
 
@@ -73,7 +73,7 @@ class DefaultAdsSettingsRepositoryTest {
 
     @Test
     fun `observeAdsEnabled reads with the store's default`() = runTest(dispatcherExtension.testDispatcher) {
-        val dataStore = mockk<CommonDataStore>()
+        val dataStore = mockk<AdsPreferencesDataSource>()
         every { dataStore.ads(default = false) } returns flowOf(false)
         val repository = createRepository(dataStore, storeDefaultAdsEnabled = false)
 
@@ -86,7 +86,7 @@ class DefaultAdsSettingsRepositoryTest {
     @Test
     fun `observeAdsEnabled fails with a StorageException on a read error`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val dataStore = mockk<CommonDataStore>()
+            val dataStore = mockk<AdsPreferencesDataSource>()
             every { dataStore.ads(default = true) } returns flow { throw IOException("boom") }
             val repository = createRepository(dataStore)
 
@@ -98,7 +98,7 @@ class DefaultAdsSettingsRepositoryTest {
 
     @Test
     fun `observeAdsEnabled passes other failures through`() = runTest(dispatcherExtension.testDispatcher) {
-        val dataStore = mockk<CommonDataStore>()
+        val dataStore = mockk<AdsPreferencesDataSource>()
         every { dataStore.ads(default = true) } returns flow { throw IllegalStateException("bug") }
         val repository = createRepository(dataStore)
 
@@ -109,7 +109,7 @@ class DefaultAdsSettingsRepositoryTest {
 
     @Test
     fun `observeAdsEnabled rethrows cancellation`() = runTest(dispatcherExtension.testDispatcher) {
-        val dataStore = mockk<CommonDataStore>()
+        val dataStore = mockk<AdsPreferencesDataSource>()
         every { dataStore.ads(default = true) } returns flow { throw CancellationException("cancelled") }
         val repository = createRepository(dataStore)
 
@@ -118,7 +118,7 @@ class DefaultAdsSettingsRepositoryTest {
 
     @Test
     fun `observeReduceAds emits the stored value`() = runTest(dispatcherExtension.testDispatcher) {
-        val dataStore = mockk<CommonDataStore>()
+        val dataStore = mockk<AdsPreferencesDataSource>()
         every { dataStore.reduceAds } returns flowOf(true)
         val repository = createRepository(dataStore)
 
@@ -130,7 +130,7 @@ class DefaultAdsSettingsRepositoryTest {
 
     @Test
     fun `setAdsEnabled writes the preference`() = runTest(dispatcherExtension.testDispatcher) {
-        val dataStore = mockk<CommonDataStore>()
+        val dataStore = mockk<AdsPreferencesDataSource>()
         coEvery { dataStore.saveAds(any()) } returns Unit
         val repository = createRepository(dataStore)
 
@@ -142,7 +142,7 @@ class DefaultAdsSettingsRepositoryTest {
     @Test
     fun `setAdsEnabled throws a StorageException when the write fails`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val dataStore = mockk<CommonDataStore>()
+            val dataStore = mockk<AdsPreferencesDataSource>()
             coEvery { dataStore.saveAds(any()) } throws IOException("boom")
             val repository = createRepository(dataStore)
 
@@ -153,7 +153,7 @@ class DefaultAdsSettingsRepositoryTest {
 
     @Test
     fun `setAdsEnabled rethrows cancellation`() = runTest(dispatcherExtension.testDispatcher) {
-        val dataStore = mockk<CommonDataStore>()
+        val dataStore = mockk<AdsPreferencesDataSource>()
         coEvery { dataStore.saveAds(any()) } throws CancellationException("cancelled")
         val repository = createRepository(dataStore)
 
@@ -162,7 +162,7 @@ class DefaultAdsSettingsRepositoryTest {
 
     @Test
     fun `setReduceAds writes the preference`() = runTest(dispatcherExtension.testDispatcher) {
-        val dataStore = mockk<CommonDataStore>()
+        val dataStore = mockk<AdsPreferencesDataSource>()
         coEvery { dataStore.saveReduceAds(any()) } returns Unit
         val repository = createRepository(dataStore)
 
@@ -174,7 +174,7 @@ class DefaultAdsSettingsRepositoryTest {
     @Test
     fun `setReduceAds throws a StorageException when the write fails`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val dataStore = mockk<CommonDataStore>()
+            val dataStore = mockk<AdsPreferencesDataSource>()
             coEvery { dataStore.saveReduceAds(any()) } throws IOException("boom")
             val repository = createRepository(dataStore)
 

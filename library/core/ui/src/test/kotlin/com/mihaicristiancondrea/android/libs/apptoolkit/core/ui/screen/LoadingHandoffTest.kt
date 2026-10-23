@@ -33,7 +33,7 @@ import androidx.lifecycle.compose.rememberLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import org.junit.Rule
@@ -122,7 +122,7 @@ class LoadingHandoffTest {
     @Test
     fun `a failure during the transition waits too`() {
         setContent()
-        state = Loadable.Failed(UiTextHelper.DynamicString("Offline"), retryable = false)
+        state = Loadable.Failed(UiText.DynamicString("Offline"), retryable = false)
         compose.waitForIdle()
         compose.onNodeWithText("Offline").assertDoesNotExist()
 

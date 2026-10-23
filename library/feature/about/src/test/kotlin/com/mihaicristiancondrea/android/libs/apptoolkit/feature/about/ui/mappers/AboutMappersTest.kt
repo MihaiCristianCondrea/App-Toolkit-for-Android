@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.mappers
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.models.AboutInfo
@@ -61,7 +61,7 @@ class AboutMappersTest {
         assertEquals(GroupedItemPosition.FIRST, appName.position)
 
         val buildVersion = items.preference(AboutItemKey.APP_BUILD_VERSION)
-        assertEquals("1.0 (1)", (buildVersion.summary as UiTextHelper.DynamicString).content)
+        assertEquals("1.0 (1)", (buildVersion.summary as UiText.DynamicString).content)
 
         val licenses = items.preference(AboutItemKey.OSS_LICENSES)
         assertEquals(GroupedItemPosition.LAST, licenses.position)
@@ -72,13 +72,13 @@ class AboutMappersTest {
     fun `device info item carries the displayed report as its copy payload`() {
         val deviceInfoItem = aboutInfo.toAboutItems().preference(AboutItemKey.DEVICE_INFO)
 
-        assertEquals("device-info", (deviceInfoItem.summary as UiTextHelper.DynamicString).content)
+        assertEquals("device-info", (deviceInfoItem.summary as UiText.DynamicString).content)
         assertEquals(GroupedItemPosition.SINGLE, deviceInfoItem.position)
         assertEquals(
             AboutItemAction.CopyToClipboard(
-                label = UiTextHelper.StringResource(R.string.device_info),
-                text = UiTextHelper.DynamicString("device-info"),
-                successMessage = UiTextHelper.StringResource(R.string.snack_device_info_copied),
+                label = UiText.StringResource(R.string.device_info),
+                text = UiText.DynamicString("device-info"),
+                successMessage = UiText.StringResource(R.string.snack_device_info_copied),
             ),
             deviceInfoItem.action,
         )
@@ -90,15 +90,15 @@ class AboutMappersTest {
 
         assertEquals(
             AboutItemAction.CopyToClipboard(
-                label = UiTextHelper.StringResource(R.string.app_toolkit_version),
-                text = UiTextHelper.DynamicString("3.0.0-test"),
+                label = UiText.StringResource(R.string.app_toolkit_version),
+                text = UiText.DynamicString("3.0.0-test"),
             ),
             items.preference(AboutItemKey.APP_TOOLKIT_VERSION).action,
         )
         assertEquals(
             AboutItemAction.CopyToClipboard(
-                label = UiTextHelper.StringResource(R.string.google_play_services_version),
-                text = UiTextHelper.DynamicString("24.01.12"),
+                label = UiText.StringResource(R.string.google_play_services_version),
+                text = UiText.DynamicString("24.01.12"),
             ),
             items.preference(AboutItemKey.GOOGLE_PLAY_SERVICES_VERSION).action,
         )
@@ -158,7 +158,7 @@ class AboutMappersTest {
         val buildVersion = aboutInfo.toAboutItems().preference(AboutItemKey.APP_BUILD_VERSION)
 
         assertTrue(buildVersion.countsVersionTap)
-        assertEquals(UiTextHelper.DynamicString("1.0 (1)"), buildVersion.summary)
+        assertEquals(UiText.DynamicString("1.0 (1)"), buildVersion.summary)
         assertNull(buildVersion.action)
     }
 

@@ -18,22 +18,22 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.repositories
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.OnboardingPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.local.OnboardingPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.OnboardingRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 class DefaultOnboardingRepository(
-    private val dataStore: OnboardingPreferencesDataSource,
+    private val preferences: OnboardingPreferencesDataSource,
 ) : OnboardingRepository {
 
     override fun observeOnboardingCompletion(): Flow<Boolean> =
-        dataStore.startup
+        preferences.startup
             .map { isFirstTime -> !isFirstTime }
             .distinctUntilChanged()
 
     override suspend fun setOnboardingCompleted() {
-        storageCall { dataStore.saveStartup(isFirstTime = false) }
+        storageCall { preferences.saveStartup(isFirstTime = false) }
     }
 }
-

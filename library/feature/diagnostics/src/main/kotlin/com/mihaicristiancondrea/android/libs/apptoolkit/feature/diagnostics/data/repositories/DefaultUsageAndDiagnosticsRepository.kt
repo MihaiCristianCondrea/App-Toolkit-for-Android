@@ -20,10 +20,10 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.dat
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.models.UsageAndDiagnosticsSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.toStorageException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.UsageAndDiagnosticsPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.local.UsageAndDiagnosticsPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentSettings
 import kotlinx.coroutines.flow.Flow
@@ -42,18 +42,18 @@ import kotlinx.coroutines.flow.onStart
  */
 class DefaultUsageAndDiagnosticsRepository(
     private val dataSource: UsageAndDiagnosticsPreferencesDataSource,
-    private val configProvider: BuildInfoProvider,
+    private val buildInfoRepository: BuildInfoRepository,
     private val diagnostics: DiagnosticsReporter,
     private val consentRepository: ConsentRepository,
 ) : UsageAndDiagnosticsRepository {
 
     override fun observeSettings(): Flow<UsageAndDiagnosticsSettings> =
         combine(
-            dataSource.usageAndDiagnostics(default = !configProvider.isDebugBuild),
-            dataSource.analyticsConsent(default = !configProvider.isDebugBuild),
-            dataSource.adStorageConsent(default = !configProvider.isDebugBuild),
-            dataSource.adUserDataConsent(default = !configProvider.isDebugBuild),
-            dataSource.adPersonalizationConsent(default = !configProvider.isDebugBuild),
+            dataSource.usageAndDiagnostics(default = !buildInfoRepository.isDebugBuild),
+            dataSource.analyticsConsent(default = !buildInfoRepository.isDebugBuild),
+            dataSource.adStorageConsent(default = !buildInfoRepository.isDebugBuild),
+            dataSource.adUserDataConsent(default = !buildInfoRepository.isDebugBuild),
+            dataSource.adPersonalizationConsent(default = !buildInfoRepository.isDebugBuild),
         ) { usage, analytics, adStorage, adUserData, adPersonalization ->
             UsageAndDiagnosticsSettings(
                 usageAndDiagnostics = usage,
@@ -66,7 +66,7 @@ class DefaultUsageAndDiagnosticsRepository(
             .onStart {
                 diagnostics.logBreadcrumb(
                     message = "Usage diagnostics observe",
-                    attributes = mapOf("defaultEnabled" to (!configProvider.isDebugBuild).toString()),
+                    attributes = mapOf("defaultEnabled" to (!buildInfoRepository.isDebugBuild).toString()),
                 )
             }
             .catch { failure -> throw failure.toStorageException() ?: failure }
@@ -138,5 +138,3 @@ class DefaultUsageAndDiagnosticsRepository(
         )
     }
 }
-
-

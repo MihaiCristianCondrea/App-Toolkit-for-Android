@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.mappers
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -30,8 +30,8 @@ import kotlin.test.assertTrue
 
 class AppsListErrorMappersTest {
 
-    private val UiTextHelper.resourceId: Int
-        get() = (this as UiTextHelper.StringResource).resourceId
+    private val UiText.resourceId: Int
+        get() = (this as UiText.StringResource).resourceId
 
     @Test
     fun `a failure with a shared text keeps it and its retry`() {

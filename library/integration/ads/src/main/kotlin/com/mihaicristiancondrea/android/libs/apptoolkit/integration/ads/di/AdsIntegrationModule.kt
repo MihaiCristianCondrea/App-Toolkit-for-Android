@@ -17,31 +17,38 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.di
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.managers.AdsCoreManager
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.repositories.AdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.utils.AppOpenAdController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.AdsSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.repositories.DefaultAdsSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.AdsSettingsViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.local.AdsPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.local.DefaultAdsPreferencesDataSource
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
+import org.koin.dsl.onClose
 
 /**
- * Binds ad settings and the manager to the same [CommonDataStore] instance. Hosts supply
+ * Binds ad settings and the controller to one shared ads source. Hosts supply
  * placement configuration separately.
  */
 fun adsIntegrationModule(): Module = module {
-    single<AdsCoreManager> {
-        AdsCoreManager(
+    single<AdsPreferencesDataSource>(createdAtStart = true) {
+        DefaultAdsPreferencesDataSource(dataStore = get(), dispatchers = get(), defaultAdsEnabled = true)
+    } onClose { source -> source?.close() }
+
+    single<AppOpenAdController> {
+        AppOpenAdController(
             context = get(),
-            buildInfoProvider = get(),
+            buildInfoRepository = get(),
             dispatchers = get(),
-            adMobAppIdProvider = get(),
-            dataStore = get(),
+            adMobAppIdDataSource = get(),
+            adsSettingsRepository = get(),
         )
     }
     single<AdsSettingsRepository> {
         DefaultAdsSettingsRepository(
-            dataStore = get(),
+            preferences = get(),
             diagnostics = get(),
         )
     }

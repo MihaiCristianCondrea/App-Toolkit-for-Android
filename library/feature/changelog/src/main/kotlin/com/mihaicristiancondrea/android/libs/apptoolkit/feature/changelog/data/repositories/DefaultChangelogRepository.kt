@@ -17,16 +17,11 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.api.ApiHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.networkCall
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.toNetworkException
-import io.ktor.client.HttpClient
-import io.ktor.client.request.get
-import io.ktor.client.request.header
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.HttpHeaders
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.remote.ChangelogRemoteDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.remote.models.MarkdownResponse
 import io.ktor.http.HttpStatusCode
 
 /**
@@ -38,7 +33,7 @@ import io.ktor.http.HttpStatusCode
  * Ktor suspends.
  */
 class DefaultChangelogRepository(
-    private val client: HttpClient,
+    private val remoteDataSource: ChangelogRemoteDataSource,
     private val apiBaseUrl: String,
     private val legacyChangelogUrl: String,
     private val diagnostics: DiagnosticsReporter,
@@ -47,7 +42,7 @@ class DefaultChangelogRepository(
     override suspend fun getChangelog(packageName: String): String {
         if (packageName.isBlank()) return getLegacyChangelog(reason = LegacyReason.BLANK_PACKAGE, packageName)
 
-        val primary = fetchMarkdown(url = ApiHost.appChangelogUrl(packageName = packageName, baseUrl = apiBaseUrl))
+        val primary = remoteDataSource.fetchMarkdown(url = ApiHost.appChangelogUrl(packageName = packageName, baseUrl = apiBaseUrl))
         if (primary.status == HttpStatusCode.NotFound) {
             return getLegacyChangelog(reason = LegacyReason.NOT_FOUND, packageName)
         }
@@ -62,35 +57,16 @@ class DefaultChangelogRepository(
                 "reason" to reason,
             ),
         )
-        return fetchMarkdown(url = legacyChangelogUrl).bodyOrThrow()
+        return remoteDataSource.fetchMarkdown(url = legacyChangelogUrl).bodyOrThrow()
     }
 
-    /** The response to [url], whatever its status; a failure to get one is a [NetworkException]. */
-    private suspend fun fetchMarkdown(url: String): MarkdownResponse {
-        diagnostics.logBreadcrumb(
-            message = "Changelog fetch",
-            attributes = mapOf("url" to url),
-        )
-        return networkCall {
-            val response = client.get(url) {
-                header(HttpHeaders.Accept, "text/markdown, text/plain;q=0.9, */*;q=0.1")
-            }
-            MarkdownResponse(status = response.status, body = response.bodyAsText())
-        }
+    private fun MarkdownResponse.bodyOrThrow(): String {
+        status.toNetworkException()?.let { failure -> throw failure }
+        return body
     }
 
     private object LegacyReason {
         const val BLANK_PACKAGE: String = "blank_package"
         const val NOT_FOUND: String = "not_found"
     }
-}
-
-private data class MarkdownResponse(
-    val status: HttpStatusCode,
-    val body: String,
-)
-
-private fun MarkdownResponse.bodyOrThrow(): String {
-    status.toNetworkException()?.let { failure -> throw failure }
-    return body
 }

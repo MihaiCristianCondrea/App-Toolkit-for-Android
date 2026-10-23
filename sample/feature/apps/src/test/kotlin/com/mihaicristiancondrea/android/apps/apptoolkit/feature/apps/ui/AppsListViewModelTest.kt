@@ -26,7 +26,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.A
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
@@ -83,8 +83,8 @@ class AppsListViewModelTest {
 
     private fun advance() = dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
-    private val UiTextHelper.resourceId: Int
-        get() = (this as UiTextHelper.StringResource).resourceId
+    private val UiText.resourceId: Int
+        get() = (this as UiText.StringResource).resourceId
 
     private fun AppsListViewModel.readyApps(): Loadable.Ready<List<AppInfo>> =
         assertIs<Loadable.Ready<List<AppInfo>>>(state.value.apps)

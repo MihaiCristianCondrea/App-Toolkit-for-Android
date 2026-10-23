@@ -24,7 +24,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.const
 open class DataStoreNamesConstants {
     companion object {
         const val DATA_STORE_SETTINGS = "settings"
-        const val DATA_STORE_LAST_USED = "last_used"
         const val DATA_STORE_STARTUP = "startup"
         const val DATA_STORE_THEME_MODE = "theme_mode"
         const val THEME_MODE_FOLLOW_SYSTEM = "follow_system"
@@ -34,7 +33,6 @@ open class DataStoreNamesConstants {
         const val DATA_STORE_DYNAMIC_PALETTE_VARIANT = "data_store_dynamic_palette_variant"
         const val DATA_STORE_STATIC_PALETTE_ID = "data_store_static_palette_id"
         const val DATA_STORE_DYNAMIC_COLORS = "dynamic_colors"
-        const val DATA_STORE_SETTINGS_INTERACTED = "settings_interacted"
         const val DATA_STORE_BOUNCY_BUTTONS = "bouncy_buttons"
         const val DATA_STORE_SHOW_BOTTOM_BAR_LABELS = "show_bottom_bar_labels"
         const val DATA_STORE_LANGUAGE = "language"
@@ -47,11 +45,9 @@ open class DataStoreNamesConstants {
         const val DATA_STORE_REDUCE_ADS = "reduce_ads"
         const val DATA_STORE_SESSION_COUNT = "session_count"
         const val DATA_STORE_REVIEW_PROMPTED = "review_prompted"
-        const val DATA_STORE_FAVORITE_APPS = "favorite_apps"
         const val DATA_STORE_STARTUP_PAGE = "startup_page"
         const val DATA_STORE_LAST_SEEN_VERSION = "last_seen_version"
         const val DATA_STORE_CACHED_CHANGELOG = "cached_changelog"
-        const val DATA_STORE_COMPONENTS_SHOWCASE_UNLOCKED = "components_showcase_unlocked"
         const val DATA_STORE_SEASONAL_THEMES_UNLOCKED = "seasonal_themes_unlocked"
         /**
          * Stores the weather-effect choice separately from the retired snowfall switch; legacy

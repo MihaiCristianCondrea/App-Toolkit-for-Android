@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.asStateFlow
  * asynchronous and starts during app startup, so an ad surface composed early would otherwise either
  * crash or silently give up and never retry.
  *
- * `AdsCoreManager` is the only writer; ad views observe [isReady] and start their request when, and
+ * `AppOpenAdController` is the only writer; ad views observe [isReady] and start their request when, and
  * only when, it turns `true`.
  */
 object AdsSdkState {
@@ -42,7 +42,7 @@ object AdsSdkState {
     /** `true` once `MobileAds.initialize` has been called for this process. */
     val isReady: StateFlow<Boolean> = readyState.asStateFlow()
 
-    /** Marks the SDK as initialized. Called by `AdsCoreManager` and nothing else. */
+    /** Marks the SDK as initialized. Called by `AppOpenAdController` and nothing else. */
     fun markInitialized() {
         readyState.value = true
     }

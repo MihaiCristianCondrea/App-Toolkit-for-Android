@@ -19,13 +19,13 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 
 /**
  * The text every screen shows for a failure it has nothing more specific to say about.
  */
-val GenericErrorText: UiTextHelper = UiTextHelper.StringResource(R.string.screen_error_generic)
+val GenericErrorText: UiText = UiText.StringResource(R.string.screen_error_generic)
 
 /**
  * The text a screen shows for this failure.
@@ -38,19 +38,19 @@ val GenericErrorText: UiTextHelper = UiTextHelper.StringResource(R.string.screen
  * A screen with failures of its own handles them first and passes the rest here:
  *
  * ```kotlin
- * private fun Throwable.toFaqText(): UiTextHelper = when (this) {
- *     is FaqUnavailableException -> UiTextHelper.StringResource(R.string.faq_unavailable)
- *     else -> toUiText(fallback = UiTextHelper.StringResource(R.string.faq_load_failed))
+ * private fun Throwable.toFaqText(): UiText = when (this) {
+ *     is FaqUnavailableException -> UiText.StringResource(R.string.faq_unavailable)
+ *     else -> toUiText(fallback = UiText.StringResource(R.string.faq_load_failed))
  * }
  * ```
  */
-fun Throwable.toUiText(fallback: UiTextHelper = GenericErrorText): UiTextHelper = when (this) {
+fun Throwable.toUiText(fallback: UiText = GenericErrorText): UiText = when (this) {
     is NetworkException -> when (reason) {
-        NetworkException.Reason.NO_INTERNET -> UiTextHelper.StringResource(R.string.screen_error_no_internet)
-        NetworkException.Reason.CONNECTION -> UiTextHelper.StringResource(R.string.screen_error_connection)
-        NetworkException.Reason.TIMEOUT -> UiTextHelper.StringResource(R.string.screen_error_timeout)
-        NetworkException.Reason.RATE_LIMITED -> UiTextHelper.StringResource(R.string.screen_error_rate_limited)
-        NetworkException.Reason.SERVER -> UiTextHelper.StringResource(R.string.screen_error_server)
+        NetworkException.Reason.NO_INTERNET -> UiText.StringResource(R.string.screen_error_no_internet)
+        NetworkException.Reason.CONNECTION -> UiText.StringResource(R.string.screen_error_connection)
+        NetworkException.Reason.TIMEOUT -> UiText.StringResource(R.string.screen_error_timeout)
+        NetworkException.Reason.RATE_LIMITED -> UiText.StringResource(R.string.screen_error_rate_limited)
+        NetworkException.Reason.SERVER -> UiText.StringResource(R.string.screen_error_server)
         NetworkException.Reason.SSL,
         NetworkException.Reason.CLIENT,
         NetworkException.Reason.UNEXPECTED_RESPONSE,
@@ -58,8 +58,8 @@ fun Throwable.toUiText(fallback: UiTextHelper = GenericErrorText): UiTextHelper 
     }
 
     is StorageException -> when (reason) {
-        StorageException.Reason.FULL -> UiTextHelper.StringResource(R.string.screen_error_storage_full)
-        StorageException.Reason.BUSY -> UiTextHelper.StringResource(R.string.screen_error_storage_busy)
+        StorageException.Reason.FULL -> UiText.StringResource(R.string.screen_error_storage_full)
+        StorageException.Reason.BUSY -> UiText.StringResource(R.string.screen_error_storage_busy)
         StorageException.Reason.CORRUPT,
         StorageException.Reason.UNAVAILABLE,
         StorageException.Reason.FAILED -> fallback
@@ -87,14 +87,14 @@ val Throwable.isRetryable: Boolean
  * and a retry when [retryable].
  */
 fun Throwable.toFailed(
-    fallback: UiTextHelper = GenericErrorText,
+    fallback: UiText = GenericErrorText,
     retryable: Boolean = isRetryable,
 ): Loadable.Failed = Loadable.Failed(message = toUiText(fallback), retryable = retryable)
 
 /**
  * This failure as an error [UiMessage]: [toUiText] with [fallback].
  */
-fun Throwable.toErrorMessage(fallback: UiTextHelper = GenericErrorText): UiMessage =
+fun Throwable.toErrorMessage(fallback: UiText = GenericErrorText): UiMessage =
     UiMessage(text = toUiText(fallback), isError = true)
 
 private val NonRetryableNetworkReasons: Set<NetworkException.Reason> = setOf(

@@ -7,7 +7,7 @@ an organizational container, not a runtime artifact.
 
 ## Owns
 
-- Grouping for ads, billing, consent, Firebase, review, and update integration modules.
+- Grouping for ads, billing, consent, Firebase, Google Play services metadata, review, and update integration modules.
 
 ## Does not own
 

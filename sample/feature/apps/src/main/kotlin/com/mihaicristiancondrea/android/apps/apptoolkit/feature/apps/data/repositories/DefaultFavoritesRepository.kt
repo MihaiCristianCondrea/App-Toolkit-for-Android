@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DataStoreInterface
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.FavoritesPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.toStorageException
@@ -26,15 +26,15 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 
 /**
- * Favorites source of truth backed by the app DataStore, which is the existing local source for
- * this feature. DataStore failures reach callers as `StorageException`.
+ * Favorites backed by the feature's [FavoritesPreferencesDataSource]. DataStore failures reach
+ * callers as `StorageException`.
  */
 class DefaultFavoritesRepository(
-    private val dataStore: DataStoreInterface,
+    private val preferences: FavoritesPreferencesDataSource,
     private val diagnostics: DiagnosticsReporter,
 ) : FavoritesRepository {
 
-    override fun observeFavorites(): Flow<Set<String>> = dataStore.favoriteApps
+    override fun observeFavorites(): Flow<Set<String>> = preferences.favoriteApps
         .onStart {
             diagnostics.logBreadcrumb(
                 message = "Favorites observe",
@@ -48,6 +48,6 @@ class DefaultFavoritesRepository(
             message = "Favorite toggled",
             attributes = mapOf("packageName" to packageName),
         )
-        storageCall { dataStore.toggleFavoriteApp(packageName) }
+        storageCall { preferences.toggleFavoriteApp(packageName) }
     }
 }

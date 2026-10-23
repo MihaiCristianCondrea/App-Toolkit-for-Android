@@ -23,7 +23,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repos
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ToolkitTilesEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ToolkitTilesFilter
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
@@ -78,7 +78,7 @@ class ToolkitTilesViewModelTest {
         val categories = assertIs<Loadable.Failed>(viewModel.state.value.categories)
         assertEquals(
             R.string.tiles_error_failed_to_load,
-            (categories.message as UiTextHelper.StringResource).resourceId,
+            (categories.message as UiText.StringResource).resourceId,
         )
         assertTrue(categories.retryable)
         assertTrue(telemetryRepository.loggedEvents.any { it.name == "vm_op_error" })
@@ -140,7 +140,7 @@ class ToolkitTilesViewModelTest {
         viewModel.onEvent(ToolkitTilesEvent.AddTileClicked(requestKey = null))
 
         val message = viewModel.messages.value.single()
-        assertEquals(R.string.tiles_no_tile_message, (message.text as UiTextHelper.StringResource).resourceId)
+        assertEquals(R.string.tiles_no_tile_message, (message.text as UiText.StringResource).resourceId)
         assertNull(viewModel.state.value.pendingTileRequest)
     }
 

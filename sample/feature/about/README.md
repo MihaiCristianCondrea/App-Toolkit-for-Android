@@ -6,8 +6,8 @@ Supplies sample build and device metadata to the Toolkit About page.
 
 ## Owns
 
-- `AppAboutSettingsProvider`, which formats metadata using Toolkit resources.
-- `aboutModule(hostBuildConfig)`, which binds `AboutSettingsProvider` with the final app's build
+- `AppAboutDeviceInfoDataSource`, which formats metadata using Toolkit resources.
+- `aboutModule(hostBuildConfig)`, which binds `AboutDeviceInfoDataSource` with the final app's build
   configuration.
 
 ## Does not own
@@ -20,7 +20,7 @@ Supplies sample build and device metadata to the Toolkit About page.
 
 ## Depends on
 
-- `:library:feature:about` for its provider contract, resources, and exported dependencies.
+- `:library:feature:about` for its data-source contract, resources, and exported dependencies.
 
 ## Used by
 
@@ -31,7 +31,7 @@ Supplies sample build and device metadata to the Toolkit About page.
 ```mermaid
 flowchart LR
     Config[Final app build configuration] --> Module[aboutModule]
-    Module --> Provider[AppAboutSettingsProvider]
+    Module --> Provider[AppAboutDeviceInfoDataSource]
     Device[Android device metadata] --> Provider
     Provider --> Page[Toolkit About page]
 ```
@@ -44,7 +44,7 @@ It uses the Toolkit About page and does not depend on another sample feature. Th
 
 ## Public contracts
 
-- `aboutModule(hostBuildConfig)` and `AppAboutSettingsProvider`.
+- `aboutModule(hostBuildConfig)` and `AppAboutDeviceInfoDataSource`.
 
 ## Current risks
 

@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers
 
 import androidx.annotation.StringRes
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
@@ -27,7 +27,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.do
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportRefusal
 
 /** Shown for a failed send with no text of its own; see `toUiText` for the ones that have one. */
-private val SendFailedText: UiTextHelper = UiTextHelper.StringResource(R.string.snack_report_failed)
+private val SendFailedText: UiText = UiText.StringResource(R.string.snack_report_failed)
 
 /**
  * A failed send as the error message the sheet shows. GitHub's refusals say what the host has to
@@ -40,7 +40,7 @@ internal fun Throwable.toSendFailedMessage(): UiMessage = when (this) {
 
 /** A report held back by the device's history, as the error message the sheet shows. */
 internal fun IssueReportRefusal.toMessage(): UiMessage = UiMessage(
-    text = UiTextHelper.StringResource(
+    text = UiText.StringResource(
         resourceId = when (this) {
             IssueReportRefusal.COOLDOWN -> R.string.error_report_cooldown
             IssueReportRefusal.DUPLICATE -> R.string.error_report_duplicate
@@ -53,20 +53,20 @@ internal fun IssueReportRefusal.toMessage(): UiMessage = UiMessage(
  * The text shown under a field with this error. Only an empty field is named, through
  * [missingText]; every other error reads the same on any field.
  */
-internal fun IssueReportFieldError.toUiText(@StringRes missingText: Int): UiTextHelper = when (this) {
-    IssueReportFieldError.Missing -> UiTextHelper.StringResource(missingText)
+internal fun IssueReportFieldError.toUiText(@StringRes missingText: Int): UiText = when (this) {
+    IssueReportFieldError.Missing -> UiText.StringResource(missingText)
     is IssueReportFieldError.TooShort ->
-        UiTextHelper.StringResource(R.string.error_too_short, arguments = listOf(minimumLength))
+        UiText.StringResource(R.string.error_too_short, arguments = listOf(minimumLength))
     is IssueReportFieldError.TooLong ->
-        UiTextHelper.StringResource(R.string.error_too_long, arguments = listOf(maximumLength))
-    IssueReportFieldError.TooFewLetters -> UiTextHelper.StringResource(R.string.error_too_few_letters)
-    IssueReportFieldError.Repetitive -> UiTextHelper.StringResource(R.string.error_repetitive)
-    IssueReportFieldError.LinkOnly -> UiTextHelper.StringResource(R.string.error_link_only)
-    IssueReportFieldError.SameAsTitle -> UiTextHelper.StringResource(R.string.error_same_as_title)
-    IssueReportFieldError.InvalidEmail -> UiTextHelper.StringResource(R.string.error_email_invalid)
+        UiText.StringResource(R.string.error_too_long, arguments = listOf(maximumLength))
+    IssueReportFieldError.TooFewLetters -> UiText.StringResource(R.string.error_too_few_letters)
+    IssueReportFieldError.Repetitive -> UiText.StringResource(R.string.error_repetitive)
+    IssueReportFieldError.LinkOnly -> UiText.StringResource(R.string.error_link_only)
+    IssueReportFieldError.SameAsTitle -> UiText.StringResource(R.string.error_same_as_title)
+    IssueReportFieldError.InvalidEmail -> UiText.StringResource(R.string.error_email_invalid)
 }
 
-private fun IssueReportRejectedException.Reason.toUiText(): UiTextHelper = UiTextHelper.StringResource(
+private fun IssueReportRejectedException.Reason.toUiText(): UiText = UiText.StringResource(
     resourceId = when (this) {
         IssueReportRejectedException.Reason.UNAUTHORIZED -> R.string.error_unauthorized
         IssueReportRejectedException.Reason.FORBIDDEN -> R.string.error_forbidden

@@ -2,6 +2,73 @@
 
 ---
 
+# October 23, 2026
+
+**Version:** `3.0.0-pre27`
+
+### Added
+
+- `PageScaffold(backButton = false)` and `page(backButton = false)` leave the back arrow out of a
+  page's app bar while keeping its title and actions, for a task the person finishes with a button
+  of its own, such as a cleanup that ends in Done. System back still reaches the screen, so it can
+  handle back the way its own button does.
+- `:library:integration:gms` exposes `GooglePlayServicesRepository` for installed Google Play
+  services metadata. The Toolkit graph supplies its binding, and About uses it for the version row.
+- `BuildInfoRepository` exposes the host application's build values. `InstalledAppsRepository`
+  provides main-safe installed-package and launcher-intent queries, and core UI's `AppLauncher`
+  owns launching and failure feedback.
+
+### Changed
+
+- `BuildInfoProvider` and `AppInfoHelper` are replaced by the new repositories and UI launcher.
+  Host implementations and direct constructor calls must use the new contracts.
+- `AdMobAppIdDataSource` and `ManifestAdMobAppIdDataSource` replace the AdMob ID providers under
+  `data/local`. Reading the ID is suspending so manifest access runs on the source's IO dispatcher.
+- About's host device text now comes from `data.local.AboutDeviceInfoDataSource`. Issue Reporter's
+  capture contract is `data.local.DeviceInfoDataSource`, and `rememberCommonDataStore` moved to
+  `core.designsystem.ui.utils`.
+- Direct construction of `DefaultAboutRepository` takes `GooglePlayServicesRepository` instead of
+  `GooglePlayServicesVersionProvider`. The GMS repository owns the dispatcher switch; unexpected
+  platform failures reach the screen instead of appearing as an absent installation.
+- Changelog Markdown parsing belongs to its use case and dialog; the old public extension imports
+  are removed. Direct construction of `DefaultChangelogRepository` takes
+  `ChangelogRemoteDataSource`.
+- `UiTextHelper` is now `UiText`, in `core.common.utils`. Its `DynamicString`, `StringResource`
+  and `PluralResource` cases and `asString` are unchanged.
+- `BaseCoreManager` is now `AppToolkitApplication`, in `core.common`. Extend it the same way.
+- `AdsCoreManager` is now `AppOpenAdController`, in `integration.ads.ui.utils`: it shows the app
+  open ad, so it belongs to the UI layer. `OnShowAdCompleteListener` moved to
+  `integration.ads.ui.contracts` and `AdsSdkInitializer` to `integration.ads.data.remote`.
+- Packages follow the layer vocabulary: the data store's `data.local.interfaces`, `sources` and
+  `migrations` are one `data.local`; `core.common.data.models.platform` and `theme` are
+  `core.common.data.models`; `core.common.utils.platform` is `core.common.utils`; the seasonal
+  theme overlay is under `feature.theme.ui.features.seasonal`; shake detection is in
+  `feature.issuereporter.ui.utils`. Only imports change; see the migration guide.
+- Each preference belongs to the module that reads it, over the one settings file, with the same
+  keys and defaults. Ads, review, onboarding and changelog keep their sources in their modules;
+  consent and usage diagnostics in `:library:integration:consent`; the issue reporter's history
+  in `IssueReportHistoryDataSource`. Theme, seasonal themes and display stay in
+  `:library:core:datastore`, which several modules read. Custom graphs must include the owning
+  modules.
+- `dataStoreModule` binds the settings file as `DataStore<Preferences>`, which every module's
+  source receives. `AdsSettingsRepository` and `OnboardingRepository` contracts move to core
+  common, and ad initialization and the design system read repositories.
+- `startupValueFlow` extends `DisplayPreferencesRepository`, in `core.datastore.utils.extensions`.
+- Repositories take their preference source as `preferences`: `DefaultAdsSettingsRepository`,
+  `DefaultReviewRepository`, `DefaultOnboardingRepository` and
+  `DefaultIssueReportHistoryRepository`.
+
+### Removed
+
+- `PermissionsHelper`, which nothing called. Request permissions with the Activity Result API.
+- `CommonDataStore`, `CommonDataStoreCore` and `rememberCommonDataStore`. Read a module's
+  repository, or keep your own keys in a source over `DataStore<Preferences>`; the migration guide
+  maps every former member.
+- The app-state and favorites preferences. `lastUsed` and `settingsInteracted` had no reader; the
+  sample keeps favorites and the components showcase flag in its own sources, under the same keys.
+
+---
+
 # October 22, 2026
 
 **Version:** `3.0.0-pre26`

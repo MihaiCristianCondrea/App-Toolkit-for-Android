@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.mappers
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.models.AboutInfo
@@ -41,12 +41,12 @@ import kotlinx.collections.immutable.toImmutableList
  */
 internal fun AboutInfo.toAboutItems(): ImmutableList<AboutItem> {
     val appInfoPreferences = buildList {
-        val appNameTitle = UiTextHelper.StringResource(CommonR.string.app_full_name)
+        val appNameTitle = UiText.StringResource(CommonR.string.app_full_name)
         add(
             AboutItem.Preference(
                 key = AboutItemKey.APP_NAME,
                 title = appNameTitle,
-                summary = UiTextHelper.StringResource(CommonR.string.copyright),
+                summary = UiText.StringResource(CommonR.string.copyright),
                 action = AboutItemAction.CopyToClipboard(
                     label = appNameTitle,
                     text = appNameTitle,
@@ -56,35 +56,35 @@ internal fun AboutInfo.toAboutItems(): ImmutableList<AboutItem> {
         add(
             AboutItem.Preference(
                 key = AboutItemKey.APP_BUILD_VERSION,
-                title = UiTextHelper.StringResource(R.string.app_build_version),
-                summary = UiTextHelper.DynamicString("$appVersion ($appVersionCode)"),
+                title = UiText.StringResource(R.string.app_build_version),
+                summary = UiText.DynamicString("$appVersion ($appVersionCode)"),
                 countsVersionTap = true,
             )
         )
         if (appToolkitVersion.isNotBlank()) {
-            val title = UiTextHelper.StringResource(R.string.app_toolkit_version)
+            val title = UiText.StringResource(R.string.app_toolkit_version)
             add(
                 AboutItem.Preference(
                     key = AboutItemKey.APP_TOOLKIT_VERSION,
                     title = title,
-                    summary = UiTextHelper.DynamicString(appToolkitVersion),
+                    summary = UiText.DynamicString(appToolkitVersion),
                     action = AboutItemAction.CopyToClipboard(
                         label = title,
-                        text = UiTextHelper.DynamicString(appToolkitVersion),
+                        text = UiText.DynamicString(appToolkitVersion),
                     ),
                 )
             )
         }
         if (!googlePlayServicesVersion.isNullOrBlank()) {
-            val title = UiTextHelper.StringResource(R.string.google_play_services_version)
+            val title = UiText.StringResource(R.string.google_play_services_version)
             add(
                 AboutItem.Preference(
                     key = AboutItemKey.GOOGLE_PLAY_SERVICES_VERSION,
                     title = title,
-                    summary = UiTextHelper.DynamicString(googlePlayServicesVersion),
+                    summary = UiText.DynamicString(googlePlayServicesVersion),
                     action = AboutItemAction.CopyToClipboard(
                         label = title,
-                        text = UiTextHelper.DynamicString(googlePlayServicesVersion),
+                        text = UiText.DynamicString(googlePlayServicesVersion),
                     ),
                 )
             )
@@ -93,8 +93,8 @@ internal fun AboutInfo.toAboutItems(): ImmutableList<AboutItem> {
         add(
             AboutItem.Preference(
                 key = AboutItemKey.OSS_LICENSES,
-                title = UiTextHelper.StringResource(R.string.oss_license_title),
-                summary = UiTextHelper.StringResource(R.string.summary_preference_settings_oss),
+                title = UiText.StringResource(R.string.oss_license_title),
+                summary = UiText.StringResource(R.string.summary_preference_settings_oss),
                 action = AboutItemAction.OpenLicenses,
             )
         )
@@ -102,16 +102,16 @@ internal fun AboutInfo.toAboutItems(): ImmutableList<AboutItem> {
 
     val deviceInfoPreferences = buildList {
         if (deviceInfo.isNotBlank()) {
-            val title = UiTextHelper.StringResource(R.string.device_info)
+            val title = UiText.StringResource(R.string.device_info)
             add(
                 AboutItem.Preference(
                     key = AboutItemKey.DEVICE_INFO,
                     title = title,
-                    summary = UiTextHelper.DynamicString(deviceInfo),
+                    summary = UiText.DynamicString(deviceInfo),
                     action = AboutItemAction.CopyToClipboard(
                         label = title,
-                        text = UiTextHelper.DynamicString(deviceInfo),
-                        successMessage = UiTextHelper.StringResource(
+                        text = UiText.DynamicString(deviceInfo),
+                        successMessage = UiText.StringResource(
                             R.string.snack_device_info_copied,
                         ),
                     ),
@@ -124,7 +124,7 @@ internal fun AboutInfo.toAboutItems(): ImmutableList<AboutItem> {
         add(
             AboutItem.Header(
                 key = AboutItemKey.HEADER_APP_INFO,
-                title = UiTextHelper.StringResource(R.string.app_info),
+                title = UiText.StringResource(R.string.app_info),
             )
         )
         addAll(appInfoPreferences)
@@ -132,7 +132,7 @@ internal fun AboutInfo.toAboutItems(): ImmutableList<AboutItem> {
             add(
                 AboutItem.Header(
                     key = AboutItemKey.HEADER_DEVICE_INFO,
-                    title = UiTextHelper.StringResource(R.string.device_info),
+                    title = UiText.StringResource(R.string.device_info),
                 )
             )
             addAll(deviceInfoPreferences)

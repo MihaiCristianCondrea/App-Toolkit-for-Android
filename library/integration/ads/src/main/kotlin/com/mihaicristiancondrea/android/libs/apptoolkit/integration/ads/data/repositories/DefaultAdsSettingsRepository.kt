@@ -19,7 +19,9 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.re
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.local.AdsPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.AdsSettingsRepository
+import kotlinx.coroutines.flow.StateFlow
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.toStorageException
 import kotlinx.coroutines.flow.Flow
@@ -27,35 +29,36 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 
 /**
- * Reads and writes the ad preferences in [CommonDataStore], with the store's own default, which
+ * Reads and writes the ad preferences in [AdsPreferencesDataSource], with the store's own default, which
  * the ads manager and the ad views share. It reads the cold preference flows rather than the
- * eagerly started `adsEnabledFlow`, so a read failure reaches the caller as a [StorageException].
+ * eagerly started [adsEnabled], so a read failure reaches the caller as a [StorageException].
  */
 class DefaultAdsSettingsRepository(
-    private val dataStore: CommonDataStore,
+    private val preferences: AdsPreferencesDataSource,
     private val diagnostics: DiagnosticsReporter,
 ) : AdsSettingsRepository {
+    override val adsEnabled: StateFlow<Boolean> get() = preferences.adsEnabled
 
     override fun observeAdsEnabled(): Flow<Boolean> =
-        dataStore.ads(default = dataStore.defaultAdsEnabled)
+        preferences.ads(default = preferences.defaultAdsEnabled)
             .onStart {
                 diagnostics.logBreadcrumb(
                     message = "Ads settings observe",
-                    attributes = mapOf("defaultAdsEnabled" to dataStore.defaultAdsEnabled.toString()),
+                    attributes = mapOf("defaultAdsEnabled" to preferences.defaultAdsEnabled.toString()),
                 )
             }
             .asStorageFlow()
 
-    override fun observeReduceAds(): Flow<Boolean> = dataStore.reduceAds.asStorageFlow()
+    override fun observeReduceAds(): Flow<Boolean> = preferences.reduceAds.asStorageFlow()
 
     override suspend fun setAdsEnabled(enabled: Boolean) =
         persistPreference(breadcrumb = "Ads settings updated", enabled = enabled) {
-            dataStore.saveAds(isChecked = enabled)
+            preferences.saveAds(isChecked = enabled)
         }
 
     override suspend fun setReduceAds(enabled: Boolean) =
         persistPreference(breadcrumb = "Reduce ads setting updated", enabled = enabled) {
-            dataStore.saveReduceAds(isChecked = enabled)
+            preferences.saveReduceAds(isChecked = enabled)
         }
 
     private suspend fun persistPreference(

@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.repositories
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.OnboardingPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.local.OnboardingPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -54,7 +54,7 @@ class TestDefaultOnboardingRepository {
     fun `observeOnboardingCompletion reflects data source state`() =
         runTest(dispatcherExtension.testDispatcher) {
             val dataSource = FakeOnboardingPreferencesDataSource()
-            val repository = DefaultOnboardingRepository(dataStore = dataSource)
+            val repository = DefaultOnboardingRepository(preferences = dataSource)
 
             assertFalse(repository.observeOnboardingCompletion().first())
 
@@ -66,7 +66,7 @@ class TestDefaultOnboardingRepository {
     fun `setOnboardingCompleted updates data source`() =
         runTest(dispatcherExtension.testDispatcher) {
             val dataSource = FakeOnboardingPreferencesDataSource()
-            val repository = DefaultOnboardingRepository(dataStore = dataSource)
+            val repository = DefaultOnboardingRepository(preferences = dataSource)
 
             repository.setOnboardingCompleted()
             advanceUntilIdle()
@@ -78,7 +78,7 @@ class TestDefaultOnboardingRepository {
     @Test
     fun `a failed completion write throws a storage failure`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val repository = DefaultOnboardingRepository(dataStore = FailingOnboardingPreferencesDataSource())
+            val repository = DefaultOnboardingRepository(preferences = FailingOnboardingPreferencesDataSource())
 
             val failure = assertFailsWith<StorageException> { repository.setOnboardingCompleted() }
 
@@ -93,4 +93,3 @@ class TestDefaultOnboardingRepository {
         }
     }
 }
-

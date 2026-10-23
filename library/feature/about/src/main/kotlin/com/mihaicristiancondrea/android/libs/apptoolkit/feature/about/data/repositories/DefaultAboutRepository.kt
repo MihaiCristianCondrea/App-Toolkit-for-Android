@@ -17,15 +17,12 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.BuildConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.providers.GooglePlayServicesVersionProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.gms.data.repositories.GooglePlayServicesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.models.AboutInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.AboutSettingsProvider
-import kotlinx.coroutines.withContext
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.local.AboutDeviceInfoDataSource
 
 /**
  * Provides the raw application and device metadata shown on the About screen.
@@ -33,20 +30,17 @@ import kotlinx.coroutines.withContext
  * Turning that metadata into rendered entries is the UI layer's responsibility, and copying it is a
  * presentation interaction owned by the ViewModel, so this repository holds neither.
  *
- * @param deviceProvider Supplies the host-formatted device report.
- * @param buildInfoProvider Supplies the host application version name and code.
- * @param gmsVersionProvider Supplies the installed Google Play services runtime version, if present.
+ * @param deviceInfoDataSource Supplies the host-formatted device report.
+ * @param buildInfoRepository Supplies the host application version name and code.
+ * @param googlePlayServices Supplies the installed Google Play services runtime version, if present.
  * @param toolkitVersionProvider Supplies the App Toolkit library publishing version.
- * @param dispatchers Runs the Google Play services lookup, a PackageManager binder call, on IO, so
- * [getAboutInfo] is safe to call from the main thread.
  */
 class DefaultAboutRepository(
-    private val deviceProvider: AboutSettingsProvider,
-    private val buildInfoProvider: BuildInfoProvider,
+    private val deviceInfoDataSource: AboutDeviceInfoDataSource,
+    private val buildInfoRepository: BuildInfoRepository,
     private val diagnostics: DiagnosticsReporter,
-    private val gmsVersionProvider: GooglePlayServicesVersionProvider,
+    private val googlePlayServices: GooglePlayServicesRepository,
     private val toolkitVersionProvider: () -> String = { BuildConfig.APP_TOOLKIT_VERSION },
-    private val dispatchers: DispatcherProvider = StandardDispatchers(),
 ) : AboutRepository {
 
     override suspend fun getAboutInfo(): AboutInfo {
@@ -54,14 +48,12 @@ class DefaultAboutRepository(
             message = "About info load started",
             attributes = mapOf("source" to "AboutRepository"),
         )
-        val googlePlayServicesVersion: String? =
-            withContext(dispatchers.io) { gmsVersionProvider.getVersion() }
         return AboutInfo(
-            appVersion = buildInfoProvider.appVersion,
-            appVersionCode = buildInfoProvider.appVersionCode,
+            appVersion = buildInfoRepository.appVersion,
+            appVersionCode = buildInfoRepository.appVersionCode,
             appToolkitVersion = toolkitVersionProvider(),
-            googlePlayServicesVersion = googlePlayServicesVersion,
-            deviceInfo = deviceProvider.deviceInfo,
+            googlePlayServicesVersion = googlePlayServices.getVersion(),
+            deviceInfo = deviceInfoDataSource.deviceInfo,
         )
     }
 }

@@ -38,7 +38,7 @@ through Gradle `api` dependencies.
 - Every `:library:feature` module to provision toolkit ViewModels and repositories and to call each
   feature's page registration.
 - `:library:integration:ads`, `:library:integration:billing`, `:library:integration:consent`,
-  `:library:integration:firebase`, `:library:integration:review`, and `:library:integration:update`
+  `:library:integration:firebase`, `:library:integration:gms`, `:library:integration:review`, and `:library:integration:update`
   to connect SDK implementations.
 
 All dependencies are exported with `api`, making this a convenience module rather than an isolation

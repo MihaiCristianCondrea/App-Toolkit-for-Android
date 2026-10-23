@@ -20,22 +20,20 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.ClipboardRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logUnlockAchievement
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.analytics.SEASONAL_THEMES_ACHIEVEMENT
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories.AboutRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.mappers.toAboutItems
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.AboutUiState
 import kotlinx.coroutines.Job
-
-/** Reported as `unlock_achievement` the first time the version-tap easter egg is found. */
-private const val SEASONAL_THEMES_ACHIEVEMENT: String = "seasonal_themes"
 
 /**
  * ViewModel for the About screen, including tap-to-copy of the entries it renders.
@@ -84,15 +82,15 @@ open class AboutViewModel(
     }
 
     /**
-     * Loads the entries. [AboutRepository.getAboutInfo] moves its own package manager lookup off
-     * the main thread, so this needs no dispatcher.
+     * Loads the entries. The GMS repository owns its package lookup's dispatcher switch, so this
+     * ViewModel needs no dispatcher.
      */
     private fun loadAboutInfo() {
         loadJob = loadJob.restart {
             launchReport(
                 action = Actions.LOAD_ABOUT_INFO,
                 onError = { error ->
-                    setState { copy(items = error.toFailed(fallback = UiTextHelper.StringResource(R.string.snack_device_info_failed))) }
+                    setState { copy(items = error.toFailed(fallback = UiText.StringResource(R.string.snack_device_info_failed))) }
                 },
             ) {
                 setState { copy(items = Loadable.Loading) }
@@ -109,19 +107,19 @@ open class AboutViewModel(
     private fun copyToClipboard(
         label: String,
         text: String,
-        successMessage: UiTextHelper?,
+        successMessage: UiText?,
     ) {
         launchReport(
             action = Actions.COPY_TO_CLIPBOARD,
             extra = mapOf(ExtraKeys.LABEL to label),
             onError = { error ->
-                showMessage(error.toErrorMessage(fallback = UiTextHelper.StringResource(R.string.snack_copy_failed)))
+                showMessage(error.toErrorMessage(fallback = UiText.StringResource(R.string.snack_copy_failed)))
             },
         ) {
             clipboardRepository.copyText(label = label, text = text)
             if (!clipboardRepository.confirmsCopies) {
                 showMessage(
-                    UiMessage(successMessage ?: UiTextHelper.StringResource(R.string.snack_copied_to_clipboard)),
+                    UiMessage(successMessage ?: UiText.StringResource(R.string.snack_copied_to_clipboard)),
                 )
             }
         }
@@ -135,7 +133,7 @@ open class AboutViewModel(
         launchReport(action = Actions.UNLOCK_SEASONAL_THEMES) {
             if (seasonalThemes.unlockSeasonalThemes()) {
                 telemetryRepository.logUnlockAchievement(achievementId = SEASONAL_THEMES_ACHIEVEMENT)
-                showMessage(UiMessage(UiTextHelper.StringResource(R.string.snack_seasonal_themes_unlocked)))
+                showMessage(UiMessage(UiText.StringResource(R.string.snack_seasonal_themes_unlocked)))
             }
         }
     }

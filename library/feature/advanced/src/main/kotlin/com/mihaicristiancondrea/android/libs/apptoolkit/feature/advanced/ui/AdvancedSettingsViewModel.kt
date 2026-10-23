@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
@@ -94,9 +94,9 @@ class AdvancedSettingsViewModel(
     }
 
     private companion object {
-        val ClearedText = UiTextHelper.StringResource(R.string.cache_cleared_success)
+        val ClearedText = UiText.StringResource(R.string.cache_cleared_success)
 
         /** Shown for a failure with no text of its own; see `toUiText` for the ones that have one. */
-        val ClearFailedText = UiTextHelper.StringResource(R.string.cache_cleared_error)
+        val ClearFailedText = UiText.StringResource(R.string.cache_cleared_error)
     }
 }

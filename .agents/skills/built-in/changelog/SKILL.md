@@ -5,7 +5,7 @@ description: >
   consumers, sample app users, app users, release notes, or production release history.
 metadata:
   author: Mihai-Cristian Condrea
-  last-updated: '2026-08-28'
+  last-updated: '2026-10-22'
   keywords:
     - changelog
     - releases
@@ -69,24 +69,52 @@ Use existing categories under the relevant section:
 
 Only include categories that contain entries.
 
+## File Format
+
+Every changelog has the same shape: one `# Changelog` title, then its sections, newest first, with
+a `---` divider before each section. `# Unreleased`, when there is new work, is the first section.
+
+```md
+# Changelog
+
+---
+
+# Unreleased
+
+### Added
+
+- ...
+
+---
+
+# October 20, 2026
+
+**Version:** `26.10.16`, `26.10.18`, `26.10.19`
+
+### Fixed
+
+- ...
+
+---
+
+# November 1, 2025
+
+**Version:** `1.2.3`
+```
+
+- Keep a blank line around every heading, version line and divider.
+- `# Unreleased` has no version line, and nothing but its categories sits between its heading and the
+  next divider.
+- Never put a divider between a section's heading and its categories, or two dividers in a row.
+
 ## Unreleased and Releases
 
 New work belongs under `# Unreleased`.
 
-Do not create a release section from source-control versions, version bumps, tags, or library
-prereleases alone.
+Do not create a release section from source-control versions, version bumps, tags, internal or
+testing tracks, or library prereleases alone.
 
-When creating an actual release section:
-
-For App / Sample App releases:
-
-```md
-# Month Day, Year
-
-**Version:** `x.x.x` (`versioncode`)
-```
-
-For Library releases:
+A release section is headed by its release date, then one version line:
 
 ```md
 # Month Day, Year
@@ -94,15 +122,17 @@ For Library releases:
 **Version:** `x.x.x`
 ```
 
-Use the actual release date as the heading.
-
-For App releases, include both `versionName` and `versionCode` when known.
-
-For Library releases, include the published library version.
+- The version line lists version names only (`versionName` for an app, the published version for a
+  library), never version codes or build numbers.
+- Several releases that shipped the same changes, such as a fix uploaded twice in a row, share one
+  section: list their versions on the one line, oldest first, separated by commas
+  (`` `26.10.16`, `26.10.18` ``), and date the section by the last of them.
+- Use the actual release date as the heading.
 
 App release history follows actual Google Play production releases. When production release
-information is available, treat it as the source of truth for version names, version codes, dates,
-and release boundaries.
+information is available, treat it as the source of truth for version names, dates and release
+boundaries. Builds that only reached internal or testing tracks are not releases: their changes stay
+under `# Unreleased` until a production release ships them.
 
 Library release history follows actual published library releases.
 
@@ -115,4 +145,4 @@ release that actually shipped them.
 - **Never use em dashes (`—`)** or overly verbose AI phrasing. Use commas, parentheses, or short direct sentences.
 - Use flat bullet points under the categories above, without nested sub-lists.
 - Combine several implementation commits when they represent one meaningful outcome.
-- Do not invent version codes, release dates, behavior, or release history.
+- Do not invent versions, release dates, behavior, or release history.

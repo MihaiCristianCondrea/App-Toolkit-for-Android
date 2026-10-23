@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
@@ -68,7 +68,7 @@ class UsageAndDiagnosticsViewModelTest {
         assertIs<Loadable.Ready<UsageAndDiagnosticsSettings>>(state.value.settings).value
 
     private val UiMessage.resourceId: Int
-        get() = (text as UiTextHelper.StringResource).resourceId
+        get() = (text as UiText.StringResource).resourceId
 
     @Test
     fun `initial load shows the stored choices`() = runTest(dispatcherExtension.testDispatcher) {
@@ -87,7 +87,7 @@ class UsageAndDiagnosticsViewModelTest {
 
             val failed = assertIs<Loadable.Failed>(viewModel.state.value.settings)
             assertTrue(failed.retryable)
-            assertEquals(R.string.error_an_error_occurred, (failed.message as UiTextHelper.StringResource).resourceId)
+            assertEquals(R.string.error_an_error_occurred, (failed.message as UiText.StringResource).resourceId)
             assertTrue(
                 telemetryRepository.loggedEvents.any { event ->
                     event.name == "vm_op_error" && event.params["action"] == AnalyticsValue.Str("observeConsents")

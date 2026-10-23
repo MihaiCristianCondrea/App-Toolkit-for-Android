@@ -7,6 +7,7 @@ analytics and advertising consents behind it, on a settings page and on an onboa
 
 ## Owns
 
+- Feature event builders and their bounded keys in `ui/analytics`; screens only report events.
 - `UsageAndDiagnosticsScreen`, `UsageAndDiagnosticsViewModel`, `UsageAndDiagnosticsUiState` (whose
   `settings` is a `Loadable`) and `UsageAndDiagnosticsEvent`.
 - `UsageAndDiagnosticsScreenContent`, the stateless switch, privacy choices row and privacy note,

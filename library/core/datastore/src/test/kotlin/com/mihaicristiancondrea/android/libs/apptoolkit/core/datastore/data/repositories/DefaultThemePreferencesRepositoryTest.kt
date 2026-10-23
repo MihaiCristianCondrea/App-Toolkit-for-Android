@@ -18,8 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.ThemePreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.ThemePreferencesState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.ThemePreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.ThemePreferencesState
 import io.mockk.coVerify
 import io.mockk.coVerifyOrder
 import io.mockk.every

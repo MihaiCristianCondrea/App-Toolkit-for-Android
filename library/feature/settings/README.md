@@ -7,6 +7,7 @@ each row opening its destination in the shell.
 
 ## Owns
 
+- Feature event builders and their bounded keys in `ui/analytics`; screens only report events.
 - `SettingsScreen`, `SettingsViewModel`, `SettingsUiState` (whose `config` is a `Loadable`),
   `SettingsEvent.Load`, and the list's overflow menu (`SettingsMenuActions`, which opens Help and
   feedback).

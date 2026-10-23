@@ -202,7 +202,9 @@ shows is the UI layer's: see the `android-ui-layer` skill, `references/errors.md
 
 The data and domain layers report no product analytics: no GA4 events, screen views or user
 properties. A repository returns the outcome, such as whether an unlock was saved, and the screen
-or ViewModel that asked reports the event, so an event never fires for work that failed.
+or ViewModel that asked reports the event, so an event never fires for work that failed. A worker,
+service or receiver the system starts is an entry point like a screen: it lives outside `data/`
+and may report the outcome of the work it asked for.
 
 Diagnostics stay: a repository may log breadcrumbs and report non-fatal failures, because a
 failure that never reaches a screen still has to be seen. In App Toolkit, take

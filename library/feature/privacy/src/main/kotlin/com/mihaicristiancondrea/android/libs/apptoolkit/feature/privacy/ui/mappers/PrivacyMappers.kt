@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.mappers
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItem
@@ -37,38 +37,38 @@ internal fun PrivacySettingsProvider.toPrivacyItems(): ImmutableList<PrivacyItem
     val privacyPreferences = listOf(
         PrivacyItem.Preference(
             key = PrivacyItemKey.PRIVACY_POLICY,
-            title = UiTextHelper.StringResource(R.string.privacy_policy),
-            summary = UiTextHelper.StringResource(R.string.summary_preference_settings_privacy_policy),
+            title = UiText.StringResource(R.string.privacy_policy),
+            summary = UiText.StringResource(R.string.summary_preference_settings_privacy_policy),
             action = PrivacyItemAction.OpenUrl(url = privacyPolicyUrl),
         ),
         PrivacyItem.Preference(
             key = PrivacyItemKey.TERMS_OF_SERVICE,
-            title = UiTextHelper.StringResource(R.string.terms_of_service),
-            summary = UiTextHelper.StringResource(R.string.summary_preference_settings_terms_of_service),
+            title = UiText.StringResource(R.string.terms_of_service),
+            summary = UiText.StringResource(R.string.summary_preference_settings_terms_of_service),
             action = PrivacyItemAction.OpenUrl(url = termsOfServiceUrl),
         ),
         PrivacyItem.Preference(
             key = PrivacyItemKey.CODE_OF_CONDUCT,
-            title = UiTextHelper.StringResource(R.string.code_of_conduct),
-            summary = UiTextHelper.StringResource(R.string.summary_preference_settings_code_of_conduct),
+            title = UiText.StringResource(R.string.code_of_conduct),
+            summary = UiText.StringResource(R.string.summary_preference_settings_code_of_conduct),
             action = PrivacyItemAction.OpenUrl(url = codeOfConductUrl),
         ),
         PrivacyItem.Preference(
             key = PrivacyItemKey.PERMISSIONS,
-            title = UiTextHelper.StringResource(R.string.permissions),
-            summary = UiTextHelper.StringResource(R.string.summary_preference_settings_permissions),
+            title = UiText.StringResource(R.string.permissions),
+            summary = UiText.StringResource(R.string.summary_preference_settings_permissions),
             action = PrivacyItemAction.OpenPermissions,
         ),
         PrivacyItem.Preference(
             key = PrivacyItemKey.ADS,
-            title = UiTextHelper.StringResource(R.string.ads),
-            summary = UiTextHelper.StringResource(R.string.summary_preference_settings_ads),
+            title = UiText.StringResource(R.string.ads),
+            summary = UiText.StringResource(R.string.summary_preference_settings_ads),
             action = PrivacyItemAction.OpenAds,
         ),
         PrivacyItem.Preference(
             key = PrivacyItemKey.USAGE_AND_DIAGNOSTICS,
-            title = UiTextHelper.StringResource(R.string.usage_and_diagnostics),
-            summary = UiTextHelper.StringResource(R.string.summary_preference_settings_usage_and_diagnostics),
+            title = UiText.StringResource(R.string.usage_and_diagnostics),
+            summary = UiText.StringResource(R.string.summary_preference_settings_usage_and_diagnostics),
             action = PrivacyItemAction.OpenUsageAndDiagnostics,
         ),
     ).assignPositions()
@@ -76,14 +76,14 @@ internal fun PrivacySettingsProvider.toPrivacyItems(): ImmutableList<PrivacyItem
     val legalPreferences = listOf(
         PrivacyItem.Preference(
             key = PrivacyItemKey.LEGAL_NOTICES,
-            title = UiTextHelper.StringResource(R.string.legal_notices),
-            summary = UiTextHelper.StringResource(R.string.summary_preference_settings_legal_notices),
+            title = UiText.StringResource(R.string.legal_notices),
+            summary = UiText.StringResource(R.string.summary_preference_settings_legal_notices),
             action = PrivacyItemAction.OpenUrl(url = legalNoticesUrl),
         ),
         PrivacyItem.Preference(
             key = PrivacyItemKey.LICENSE,
-            title = UiTextHelper.StringResource(R.string.license),
-            summary = UiTextHelper.StringResource(R.string.summary_preference_settings_license),
+            title = UiText.StringResource(R.string.license),
+            summary = UiText.StringResource(R.string.summary_preference_settings_license),
             action = PrivacyItemAction.OpenUrl(url = licenseUrl),
         ),
     ).assignPositions()
@@ -92,14 +92,14 @@ internal fun PrivacySettingsProvider.toPrivacyItems(): ImmutableList<PrivacyItem
         add(
             PrivacyItem.Header(
                 key = PrivacyItemKey.HEADER_PRIVACY,
-                title = UiTextHelper.StringResource(R.string.privacy),
+                title = UiText.StringResource(R.string.privacy),
             )
         )
         addAll(privacyPreferences)
         add(
             PrivacyItem.Header(
                 key = PrivacyItemKey.HEADER_LEGAL,
-                title = UiTextHelper.StringResource(R.string.legal),
+                title = UiText.StringResource(R.string.legal),
             )
         )
         addAll(legalPreferences)

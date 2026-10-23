@@ -7,6 +7,8 @@ page frame, state handling, analytics hooks, and shared components.
 
 ## Owns
 
+- `utils.AppLauncher`, which uses `InstalledAppsRepository` to look up launcher intents, then
+  launches on the main dispatcher and owns the failure Toast. Package lookup remains in core common.
 - The screen contracts, in `screen`: `ScreenViewModel`, `LoggedScreenViewModel`, `Loadable`,
   `TrackedStatus`, `UiMessage`, `ScreenHost`, `ScreenStateHandler`, `ScreenStates`, `StateContent`
   and `MessageHost`. See
@@ -518,8 +520,8 @@ Compose effect and kill the host process, reported as
 `IllegalStateException: MobileAds.initialize must be called before using the Google Mobile Ads SDK`
 with `NativeAdLoader.load` under `DisposableEffectImpl.onRemembered`. Preserve the current behavior:
 
-- `rememberAdsEnabled` observes the same `CommonDataStore.adsEnabledFlow` used by
-  `AdsCoreManager`; it must not choose its own default.
+- `rememberAdsEnabled` observes the same `AdsSettingsRepository.adsEnabled` used by
+  `AppOpenAdController`; it must not choose its own default.
 - Ad slots take their unit id from a host-bound `AdsConfig` resolved by Koin qualifier, and
   `NoDataScreen` injects `NO_DATA_NATIVE_AD` without a fallback, a host that has not bound it
   crashes on the empty state rather than rendering without an ad. The host checklist lives in

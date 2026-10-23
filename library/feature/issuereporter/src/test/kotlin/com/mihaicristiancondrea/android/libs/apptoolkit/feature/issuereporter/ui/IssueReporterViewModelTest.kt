@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.u
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
@@ -93,7 +93,7 @@ class IssueReporterViewModelTest {
     private fun IssueReporterViewModel.onlyMessage(): UiMessage = messages.value.single()
 
     private val UiMessage.resourceId: Int
-        get() = (text as UiTextHelper.StringResource).resourceId
+        get() = (text as UiText.StringResource).resourceId
 
     private fun sendAttempts(): List<AnalyticsEvent> = telemetryRepository.loggedEvents.filter { event ->
         event.params["action_name"] == AnalyticsValue.Str("send_issue")

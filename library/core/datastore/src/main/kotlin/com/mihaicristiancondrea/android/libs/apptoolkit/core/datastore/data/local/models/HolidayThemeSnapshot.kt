@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.models
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.theme.HolidaySeason
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.HolidaySeason
 
 /**
  * What the appearance was before a holiday theme was put on, so it can be put back afterwards.
