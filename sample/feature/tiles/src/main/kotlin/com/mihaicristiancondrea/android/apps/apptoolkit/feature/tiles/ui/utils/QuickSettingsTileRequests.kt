@@ -15,17 +15,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils
 
 import android.app.StatusBarManager
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4Contract.TileRequestOutcome
 import android.content.Context
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.widget.Toast
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4Contract.TileRequestOutcome
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services.getTileServiceRequests
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.services.getTileServiceRequests
 
 /**
  * Asks Android to add the quick tool behind [requestKey] to Quick Settings.

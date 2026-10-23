@@ -17,29 +17,29 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryCollection
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.local.ConsentPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.storageCall
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.exceptions.ConsentException
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.remote.ConsentRemoteDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.local.ConsentPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.isAlive
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.remote.ConsentRemoteDataSource
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
-import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Implementation of [ConsentRepository] that delegates UMP work to a remote data source.

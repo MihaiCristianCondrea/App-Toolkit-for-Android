@@ -20,27 +20,27 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.d
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.exceptions.IssueReportRejectedException
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.DeviceInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.ExtraInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.GithubTarget
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.Report
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.remote.IssueReporterRemoteDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.DeviceInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.Report
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.ExtraInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
-import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockRequestHandler
 import io.ktor.client.engine.mock.respond
+import io.ktor.client.HttpClient
 import io.ktor.client.request.HttpRequestData
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
+import java.net.SocketTimeoutException
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertNull
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import java.net.SocketTimeoutException
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
-import kotlin.test.assertNull
 
 class DefaultIssueReporterRepositoryTest {
 

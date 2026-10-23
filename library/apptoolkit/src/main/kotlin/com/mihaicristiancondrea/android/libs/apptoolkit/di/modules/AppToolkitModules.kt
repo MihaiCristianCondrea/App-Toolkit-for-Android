@@ -17,9 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.di.modules
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.providers.StartupProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReporterConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.IssueReporterConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.providers.StartupProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.di.billingModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.di.firebaseModule
 import org.koin.core.module.Module

@@ -22,7 +22,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.Ap
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ColorPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.google.blue.bluePalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitModules
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReporterConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.IssueReporterConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.providers.PrivacySettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.providers.StartupProvider
 import org.koin.core.module.Module

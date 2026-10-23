@@ -18,9 +18,9 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.mappers
 
 import com.android.billingclient.api.ProductDetails
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.data.mappers.hasOneTimePurchaseOffer
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.data.mappers.primaryFormattedPrice
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.models.DonationOption
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.utils.hasOneTimePurchaseOffer
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.utils.primaryFormattedPrice
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toPersistentMap
 

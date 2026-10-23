@@ -12,6 +12,11 @@
 
 ### Changed
 
+- Issue Reporter application models now live in `data/models`. Report values no longer render
+  Markdown themselves; request mapping owns the GitHub body, and UI mapping owns device-panel text.
+- Network and storage call wrappers now live directly in their remote or local data packages.
+  Exception conversions live in the corresponding mappers packages. About and Privacy item actions
+  now live in `ui/contracts`; update imports directly.
 - Custom consent preference sources must expose `settings(default)` as one complete snapshot.
   `UsageAndDiagnosticsPreferencesDataSource` extends that contract and requires atomic `saveAll`.
   Custom seasonal preference sources must implement the atomic `unlockSeasonalThemes()` operation.

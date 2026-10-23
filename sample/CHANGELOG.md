@@ -9,6 +9,11 @@
 - The app changelog has an info button that opens App Toolkit's releases on GitHub, for the
   library's notes behind each version.
 
+### Changed
+
+- Existing Quick Settings tiles may need to be removed and added again after this update because
+  their service component names changed.
+
 ### Improved
 
 - Screens move at a calmer pace and bring their content in as they open, including Apps and
@@ -45,6 +50,11 @@
   showing an error message or reporting a nonfatal exception. Consumer apps with their own main
   ViewModel should adopt the handling documented in `sample/app/README.md`.
 
+### Changed
+
+- Existing Quick Settings tiles may need to be removed and added again after this update because
+  their service component names changed.
+
 ### Improved
 
 - Quick Settings catalogue reads own their IO dispatching, so callers no longer need to move
@@ -77,6 +87,11 @@
 - On tablets and wide windows, Settings, Help and the other pages open beside the side navigation, which stays in place and shows where you are, so you can switch straight to another page or tab.
 - Settings, Help & feedback, Updates and Share are always at the bottom of the navigation drawer.
 - Layout options such as the app bar and bottom bar style, the navigation colour and the back swipe now live in Display settings. Developer options move to Advanced settings, and appear once you find the easter egg on the About screen.
+
+### Changed
+
+- Existing Quick Settings tiles may need to be removed and added again after this update because
+  their service component names changed.
 
 ### Improved
 
@@ -203,6 +218,11 @@
 - Added App Toolkit and Google Play services version details to the About screen.
 - Added 30 new animated device and media icons to the Animation Showcase in Components, featuring smart home devices and audio controls.
 
+### Changed
+
+- Existing Quick Settings tiles may need to be removed and added again after this update because
+  their service component names changed.
+
 ### Improved
 
 - Upgraded the issue reporter into a modern bottom sheet that opens directly over the current screen, with toast status alerts and a streamlined submission confirmation.
@@ -227,6 +247,11 @@
 
 - Removed the Sound Mode, Caffeine, and Lux Meter.
 
+### Changed
+
+- Existing Quick Settings tiles may need to be removed and added again after this update because
+  their service component names changed.
+
 ### Improved
 
 - Streamlined app details quick actions into a clean, grouped layout.
@@ -250,6 +275,11 @@
 
 - Added a **Help & feedback** shortcut to the top app bar on standalone General Settings screens.
 
+### Changed
+
+- Existing Quick Settings tiles may need to be removed and added again after this update because
+  their service component names changed.
+
 ### Improved
 
 - Improved translations and wording across multiple screens.
@@ -272,6 +302,11 @@ App Toolkit communicates one-time UI actions.
 - Reworked Quick Tools architecture to more closely follow the project's current architecture
   conventions.
 - Quick Tools categories now remember whether they were expanded or collapsed.
+
+### Changed
+
+- Existing Quick Settings tiles may need to be removed and added again after this update because
+  their service component names changed.
 
 ### Improved
 
@@ -307,6 +342,11 @@ App-specific features much more clearly.
 - Updated the Sample App to demonstrate the new App Toolkit integration model.
 - Removed battery percentage, battery temperature, and battery Quick Settings tools after moving
   that functionality out of the Sample App.
+
+### Changed
+
+- Existing Quick Settings tiles may need to be removed and added again after this update because
+  their service component names changed.
 
 ### Improved
 
@@ -355,6 +395,11 @@ and UI foundations.
 - Updated the Sample App to demonstrate the newer Navigation 3 architecture.
 - Added centralized Sample App version generation and release metadata.
 
+### Changed
+
+- Existing Quick Settings tiles may need to be removed and added again after this update because
+  their service component names changed.
+
 ### Improved
 
 - Improved transitions between top-level destinations.
@@ -376,6 +421,11 @@ and UI foundations.
 
 **Version:** `2.0.11`
 
+### Changed
+
+- Existing Quick Settings tiles may need to be removed and added again after this update because
+  their service component names changed.
+
 ### Improved
 
 - Improved widget interactions.
@@ -389,6 +439,11 @@ and UI foundations.
 # March 24, 2026
 
 **Version:** `2.0.9`
+
+### Changed
+
+- Existing Quick Settings tiles may need to be removed and added again after this update because
+  their service component names changed.
 
 ### Improved
 
@@ -430,6 +485,11 @@ and UI foundations.
 
 **Version:** `2.0.1`
 
+### Changed
+
+- Existing Quick Settings tiles may need to be removed and added again after this update because
+  their service component names changed.
+
 ### Improved
 
 - Updated the Sample App to demonstrate the expanded theme and navigation systems.
@@ -450,6 +510,11 @@ and UI foundations.
 - Redesigned Theme Settings around the expanded palette system.
 - Increased the minimum supported Android version to Android 8.0.
 - Updated bottom navigation to newer Material 3 components.
+
+### Changed
+
+- Existing Quick Settings tiles may need to be removed and added again after this update because
+  their service component names changed.
 
 ### Improved
 
@@ -473,6 +538,11 @@ and UI foundations.
 
 **Version:** `1.1.2`
 
+### Changed
+
+- Existing Quick Settings tiles may need to be removed and added again after this update because
+  their service component names changed.
+
 ### Improved
 
 - Added several quality-of-life improvements.
@@ -488,6 +558,11 @@ and UI foundations.
 
 - Added a new animated startup experience.
 
+### Changed
+
+- Existing Quick Settings tiles may need to be removed and added again after this update because
+  their service component names changed.
+
 ### Improved
 
 - Integrated the new changelog and startup components.
@@ -498,6 +573,11 @@ and UI foundations.
 
 **Version:** `1.0.8`
 
+### Changed
+
+- Existing Quick Settings tiles may need to be removed and added again after this update because
+  their service component names changed.
+
 ### Improved
 
 - Improved general stability and reliability.
@@ -507,6 +587,11 @@ and UI foundations.
 # July 10, 2025
 
 **Version:** `1.0.7`
+
+### Changed
+
+- Existing Quick Settings tiles may need to be removed and added again after this update because
+  their service component names changed.
 
 ### Improved
 
@@ -535,6 +620,11 @@ and UI foundations.
 ### Added
 
 - Added a dedicated Favorites screen.
+
+### Changed
+
+- Existing Quick Settings tiles may need to be removed and added again after this update because
+  their service component names changed.
 
 ### Improved
 
@@ -566,6 +656,11 @@ and UI foundations.
 # June 10, 2025
 
 **Version:** `1.0.1`
+
+### Changed
+
+- Existing Quick Settings tiles may need to be removed and added again after this update because
+  their service component names changed.
 
 ### Improved
 

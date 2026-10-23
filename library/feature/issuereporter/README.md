@@ -15,14 +15,15 @@ Collects device/report data and submits structured issues to a configured GitHub
   features show it without depending on this module.
 - Shake-to-report: the detector, the application-scoped manager that drives it, and the host
   configuration that enables it.
-- Report, device-info, GitHub-target, and host configuration models.
+- Report, device-info, GitHub-target, and host configuration models in `data/models`.
+  Validation results stay with the validation use case in `domain/models`.
 - The report checks: `ValidateIssueReportUseCase`, `IssueReportValidation`,
   `IssueReportFieldError`, and `IssueReportHistoryRepository` with its default, which holds back a
   report during the cooldown or as a duplicate (`IssueReportRefusal`).
 - `IssueReportHistoryDataSource`, the filing history under the reporter's own keys in the shared
   settings file, as `IssueReportHistory` and `FiledIssueReport`.
 - `IssueReporterRepository` and its default implementation, `IssueReportRejectedException`, the
-  device-info provider contract, the GitHub remote source, the local device source, the request DTO,
+  device-info data-source contract, the GitHub remote source, the local device source, the request DTO,
   and its mapper.
 - The `GithubToken` Koin qualifier and `toToken`, which decodes the host's token.
 - The sheet's localized strings, including the texts for each GitHub refusal and each report check.
@@ -264,11 +265,12 @@ from before the reporter submitted directly, and nothing read it any more.
 itself
 from a `Context` through a `create()` companion, and imported a `core:ui` extension to read the
 package version, a domain model depending on the UI module. It is now a plain data class; capture
-lives in `DeviceInfoLocalDataSource` and the two renderings live in `domain/mappers`.
+lives in `DeviceInfoLocalDataSource`. GitHub rendering belongs to `data/remote/mappers`,
+and device-panel text mapping belongs to `ui/mappers`.
 
 That last part matters more than it looks: the model's `toString()` was the device panel's text, so
 making it a data class would silently have rendered `DeviceInfo(appVersionName=…)` on screen. The
-formatting moved out with it as `toPlainText()`.
+formatting lives in the UI mapper `toDeviceInfoText()`.
 
 The payoff shows up in the tests, which used to `mockk<DeviceInfo>()` because the real thing needed
 a

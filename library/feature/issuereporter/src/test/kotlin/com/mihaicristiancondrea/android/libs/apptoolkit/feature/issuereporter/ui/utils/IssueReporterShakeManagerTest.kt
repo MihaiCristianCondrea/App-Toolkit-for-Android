@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils
 
 import android.app.Application
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReporterConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.IssueReporterConfig
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test

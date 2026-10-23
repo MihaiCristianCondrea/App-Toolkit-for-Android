@@ -27,28 +27,28 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.GenericErrorText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.exceptions.IssueReportRejectedException
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReportHistoryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.DeviceInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.GithubTarget
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.IssueReportRefusal
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.Report
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReporterRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.mappers.toPlainText
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.DeviceInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReportHistoryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportFieldError
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportRefusal
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportValidation
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.Report
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.usecases.ValidateIssueReportUseCase
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.contracts.IssueReporterEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers.toDeviceInfoText
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueReporterUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueSubmissionState
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.extension.RegisterExtension
+import org.junit.jupiter.api.Test
 
 class IssueReporterViewModelTest {
 
@@ -241,8 +241,8 @@ class IssueReporterViewModelTest {
             assertTrue(viewModel.messages.value.isEmpty())
             val report = repository.sentReports.single()
             assertEquals(TITLE, report.title)
-            assertTrue(report.getDescription().contains(DESCRIPTION))
-            assertTrue(report.getDescription().contains("*Reported by [$EMAIL](mailto:$EMAIL)*"))
+            assertEquals(DESCRIPTION, report.description)
+            assertEquals(EMAIL, report.email)
             assertEquals(listOf<String?>("token"), repository.sentTokens)
             assertEquals(listOf(TITLE to DESCRIPTION), history.recorded)
         }
@@ -468,7 +468,7 @@ class IssueReporterViewModelTest {
         viewModel.onEvent(IssueReporterEvent.RequestDeviceInfo)
         advance()
 
-        assertEquals(Loadable.Ready(deviceInfo().toPlainText()), viewModel.state.value.deviceInfo)
+        assertEquals(Loadable.Ready(deviceInfo().toDeviceInfoText()), viewModel.state.value.deviceInfo)
         assertEquals(1, repository.captures)
     }
 
@@ -485,7 +485,7 @@ class IssueReporterViewModelTest {
             repository.captureFailure = null
             viewModel.onEvent(IssueReporterEvent.RequestDeviceInfo)
             advance()
-            assertEquals(Loadable.Ready(deviceInfo().toPlainText()), viewModel.state.value.deviceInfo)
+            assertEquals(Loadable.Ready(deviceInfo().toDeviceInfoText()), viewModel.state.value.deviceInfo)
         }
 
     @Test

@@ -17,17 +17,17 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppInfo
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.screens.search
-import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import org.junit.jupiter.api.Test
 
 class AppsSearchTest {
 
     private val apps = listOf(
-        AppInfo(name = "Smart Cleaner", packageName = "com.example.cleaner", iconUrl = ""),
-        AppInfo(name = "Music", packageName = "com.example.player", iconUrl = "", shortDescription = "Plays offline songs"),
-        AppInfo(name = "Notes", packageName = "com.example.notes", iconUrl = ""),
+        AppSummary(name = "Smart Cleaner", packageName = "com.example.cleaner", iconUrl = ""),
+        AppSummary(name = "Music", packageName = "com.example.player", iconUrl = "", shortDescription = "Plays offline songs"),
+        AppSummary(name = "Notes", packageName = "com.example.notes", iconUrl = ""),
     )
 
     @Test

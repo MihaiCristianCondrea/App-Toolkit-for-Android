@@ -19,8 +19,8 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BatteryFull
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Notifications
@@ -35,12 +35,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppInfo
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.AppActionLauncher
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
@@ -57,7 +58,7 @@ import kotlinx.collections.immutable.toImmutableList
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 internal fun AppDetailsQuickActions(
-    appInfo: AppInfo,
+    appInfo: AppSummary,
     isFavorite: Boolean,
     isAppInstalled: Boolean?,
     actionLauncher: AppActionLauncher,

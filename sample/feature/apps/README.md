@@ -98,7 +98,7 @@ and unavailable version behavior are unchanged; the feature still owns install-s
 ## Public contracts
 
 - The three repositories, `AppsListViewModel`, `AppsListScreen`, `AppsListRoute`,
-  `AppInfo`/`AppSummary`/`AppDetails`.
+  `AppSummary`/`AppDetails`.
 
 ## Internal implementations
 

@@ -20,18 +20,18 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4Contract
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4ContractValidator
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppCategory
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppInfo
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.HomeEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppsListFilter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.extension.RegisterExtension
+import org.junit.jupiter.api.Test
 
 /**
  * Pins the events the apps list emits to the schema `:sample:core:analytics` declares.
@@ -48,7 +48,7 @@ class AppsListAnalyticsContractTest {
         val dispatcherExtension = UnconfinedDispatcherExtension()
 
         private val APPS = listOf(
-            AppInfo(
+            AppSummary(
                 name = "App Toolkit",
                 packageName = "com.mihaicristiancondrea.apptoolkit",
                 iconUrl = "https://example.com/icon.png",

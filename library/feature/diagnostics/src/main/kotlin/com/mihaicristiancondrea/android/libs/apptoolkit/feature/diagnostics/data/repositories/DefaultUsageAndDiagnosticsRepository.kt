@@ -17,19 +17,19 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.models.UsageAndDiagnosticsSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.toStorageException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.mappers.toStorageException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.storageCall
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.models.UsageAndDiagnosticsSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.local.UsageAndDiagnosticsPreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentSettings
-import kotlinx.coroutines.flow.Flow
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
 /**

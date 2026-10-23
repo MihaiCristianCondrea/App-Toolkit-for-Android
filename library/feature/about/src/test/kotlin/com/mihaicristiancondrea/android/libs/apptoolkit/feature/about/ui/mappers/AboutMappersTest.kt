@@ -19,15 +19,15 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.mapper
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.models.AboutInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItemKey
-import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import org.junit.jupiter.api.Test
 
 class AboutMappersTest {
 

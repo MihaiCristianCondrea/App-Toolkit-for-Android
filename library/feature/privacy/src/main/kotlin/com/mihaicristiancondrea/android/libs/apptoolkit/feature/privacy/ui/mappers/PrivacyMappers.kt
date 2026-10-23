@@ -20,8 +20,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.mapp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.contracts.PrivacyItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItemKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.providers.PrivacySettingsProvider
 import kotlinx.collections.immutable.ImmutableList

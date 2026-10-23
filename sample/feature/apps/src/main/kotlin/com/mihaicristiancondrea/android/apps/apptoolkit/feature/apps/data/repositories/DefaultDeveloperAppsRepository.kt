@@ -18,13 +18,13 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.local.DeveloperAppsLocalDataSource
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.DeveloperAppsRemoteDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppDetails
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.DeveloperAppsRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.storageCall
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.networkCall
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.storageCall
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.networkCall
 
 /**
  * Downloads the catalogue and keeps the last successful copy for offline use. Package names are

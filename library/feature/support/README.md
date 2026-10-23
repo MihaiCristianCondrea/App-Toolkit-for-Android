@@ -11,7 +11,7 @@ Presents donation/support products and coordinates purchases through the billing
   (`SupportUiState`, `DonationOption`) and event (`SupportEvent`) contracts.
 - `supportPage()`, the registration of `SupportRoute`, which the overflow menu's `supportUs()`
   entry opens.
-- Donation product IDs, the `ProductDetails` helpers in `data/mappers`, and the mapping of Play's
+- Donation product IDs, the `ProductDetails` helpers in `ui/utils`, and the mapping of Play's
   products to `DonationOption` in `ui/mappers`.
 
 ## Does not own

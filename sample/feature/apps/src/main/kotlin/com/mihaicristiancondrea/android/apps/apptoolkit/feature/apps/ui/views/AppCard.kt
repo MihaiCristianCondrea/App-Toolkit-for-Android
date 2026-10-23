@@ -17,24 +17,20 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views
 
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.selected
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
 import android.view.SoundEffectConstants
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.Card
@@ -42,17 +38,21 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import coil3.compose.AsyncImage
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppInfo
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
@@ -63,11 +63,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.La
 @Composable
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 fun AppCard(
-    appInfo: AppInfo,
+    appInfo: AppSummary,
     isFavorite: Boolean,
     onFavoriteToggle: () -> Unit,
-    onAppClick: (AppInfo) -> Unit,
-    onShareClick: (AppInfo) -> Unit,
+    onAppClick: (AppSummary) -> Unit,
+    onShareClick: (AppSummary) -> Unit,
     modifier: Modifier
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current

@@ -18,18 +18,18 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.remote
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.toNetworkException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.mappers.toNetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.exceptions.IssueReportRejectedException
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.GithubTarget
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.remote.models.CreateIssueRequest
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.GithubTarget
 import io.ktor.client.HttpClient
 import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
+import io.ktor.http.contentType
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.contentType
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive

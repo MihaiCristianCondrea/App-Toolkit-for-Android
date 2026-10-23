@@ -24,16 +24,16 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedD
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.contracts.PrivacyEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.contracts.PrivacyItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItemKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.providers.PrivacySettingsProvider
-import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
+import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.extension.RegisterExtension
+import org.junit.jupiter.api.Test
 
 class PrivacyViewModelTest {
 

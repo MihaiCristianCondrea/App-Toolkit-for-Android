@@ -18,10 +18,10 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.analytics
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4Contract
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 
 /**
  * App list interaction types reported to GA4.
@@ -40,7 +40,7 @@ enum class AppInteractionType {
  */
 fun TelemetryRepository.logAppInteraction(
     source: String,
-    appInfo: AppInfo,
+    appInfo: AppSummary,
     interaction: AppInteractionType,
     interactionContext: String? = null,
 ) {

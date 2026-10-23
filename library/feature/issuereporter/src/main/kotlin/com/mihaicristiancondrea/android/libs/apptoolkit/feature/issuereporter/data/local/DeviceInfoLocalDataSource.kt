@@ -20,10 +20,9 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.d
 import android.annotation.SuppressLint
 import android.app.Application
 import android.os.Build
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.DeviceInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.local.DeviceInfoDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.packagemanager.getVersionMetadata
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.DeviceInfo
 import kotlinx.coroutines.withContext
 
 /**

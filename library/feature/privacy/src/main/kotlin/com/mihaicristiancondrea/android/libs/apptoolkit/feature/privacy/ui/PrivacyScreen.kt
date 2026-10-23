@@ -17,13 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.analytics.PRIVACY_SCREEN_NAME
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.analytics.privacyPreferenceTapEvent
-
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -41,13 +38,15 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHos
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItems
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.analytics.PRIVACY_SCREEN_NAME
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.analytics.privacyPreferenceTapEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.contracts.PrivacyEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.contracts.PrivacyItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItemKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.states.PrivacyUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
@@ -56,7 +55,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.Diagno
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
 import kotlinx.collections.immutable.persistentListOf
 import org.koin.compose.viewmodel.koinViewModel
-
 
 private const val PRIVACY_SCREEN_CLASS = "PrivacyScreen"
 private val PRIVACY_SCREEN: TrackedScreen =
@@ -154,8 +152,6 @@ internal fun PrivacyScreenContent(
         }
     }
 }
-
-
 
 @Preview(showBackground = true)
 @Composable

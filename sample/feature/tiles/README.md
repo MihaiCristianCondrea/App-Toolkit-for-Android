@@ -175,3 +175,10 @@ feature free of foreground services, wake locks, and the Play Console declaratio
 
 Navigation keys and the complete graph live in `:sample:app` under `app/navigation`.
 Features expose callbacks rather than importing app-owned route keys.
+
+
+## Service components
+
+Quick Settings entry points live in the feature services package. Their manifest component names
+changed from ui.services to services in pre28. Remove and re-add any sample tiles pinned before
+that update. Tile IDs and preference keys are unchanged; tile text models live in ui/models.

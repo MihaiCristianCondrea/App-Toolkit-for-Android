@@ -19,12 +19,12 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.u
 
 import androidx.annotation.StringRes
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.exceptions.IssueReportRejectedException
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.IssueReportRefusal
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportFieldError
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportRefusal
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
 
 /** Shown for a failed send with no text of its own; see `toUiText` for the ones that have one. */
 private val SendFailedText: UiText = UiText.StringResource(R.string.snack_report_failed)

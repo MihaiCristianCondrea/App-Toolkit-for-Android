@@ -18,10 +18,10 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.utils
 
 import androidx.compose.runtime.Stable
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.analytics.AppInteractionType
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.analytics.logAppInteraction
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppInfo
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.AppActionLauncher
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.AppActionLauncher
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 
 /**
@@ -38,7 +38,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.Te
 class AnalyticsAppActionLauncher(
     private val delegate: AppActionLauncher,
     private val telemetryRepository: TelemetryRepository,
-    private val appInfo: AppInfo,
+    private val appInfo: AppSummary,
     private val source: String,
 ) : AppActionLauncher by delegate {
 

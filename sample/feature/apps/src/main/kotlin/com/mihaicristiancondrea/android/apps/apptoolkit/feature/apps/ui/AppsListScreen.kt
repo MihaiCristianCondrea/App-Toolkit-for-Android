@@ -17,18 +17,18 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Casino
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetState
+import androidx.compose.material3.SheetValue
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
@@ -38,16 +38,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.AppScreenTracking
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppInfo
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.HomeEvent
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppListUiState
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.AndroidAppActionLauncher
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.AppActionLauncher
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.AppDetailsBottomSheet
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.utils.AnalyticsAppActionLauncher
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.analytics.AppInteractionType
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.analytics.logAppInteraction
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.AppActionLauncher
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.HomeEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppListUiState
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.utils.AnalyticsAppActionLauncher
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.utils.AndroidAppActionLauncher
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.AppDetailsBottomSheet
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.buildOnAppClick
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.buildOnShareClick
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.screens.AppsList
@@ -95,10 +95,10 @@ fun AppsListScreen() {
     val adsEnabled: Boolean = rememberAdsEnabled()
     val listAdsConfig: AdsConfig = koinInject(qualifier = named(AppAdsQualifiers.APPS_LIST_NATIVE_AD))
     val detailsAdsConfig: AdsConfig = koinInject(qualifier = named(AppAdsQualifiers.APP_DETAILS_NATIVE_AD))
-    val openApp: (AppInfo) -> Unit = buildOnAppClick()
-    val shareApp: (AppInfo) -> Unit = buildOnShareClick()
+    val openApp: (AppSummary) -> Unit = buildOnAppClick()
+    val shareApp: (AppSummary) -> Unit = buildOnShareClick()
     val appActionLauncher = remember(context) { AndroidAppActionLauncher(context) }
-    val selectedApp: AppInfo? = state.selectedApp
+    val selectedApp: AppSummary? = state.selectedApp
     val detailsActionLauncher: AppActionLauncher = remember(appActionLauncher, telemetry, selectedApp) {
         selectedApp?.let { app ->
             AnalyticsAppActionLauncher(
@@ -111,7 +111,7 @@ fun AppsListScreen() {
     }
     val currentState: AppListUiState by rememberUpdatedState(state)
 
-    val randomAppToOpen: AppInfo? = state.randomAppToOpen
+    val randomAppToOpen: AppSummary? = state.randomAppToOpen
     LaunchedEffect(randomAppToOpen) {
         if (randomAppToOpen != null) {
             openApp(randomAppToOpen)
@@ -202,8 +202,8 @@ internal fun AppsListScreenContent(
     state: AppListUiState,
     onEvent: (HomeEvent) -> Unit,
     onFavoriteToggle: (packageName: String) -> Unit,
-    onShareClick: (AppInfo) -> Unit,
-    onDetailsClosed: (AppInfo) -> Unit,
+    onShareClick: (AppSummary) -> Unit,
+    onDetailsClosed: (AppSummary) -> Unit,
     detailsActionLauncher: AppActionLauncher,
     windowWidthSizeClass: AppWindowWidthSizeClass,
     modifier: Modifier = Modifier,
@@ -274,13 +274,13 @@ internal fun AppsListScreenContent(
 }
 
 private val PreviewApps = persistentListOf(
-    AppInfo(
+    AppSummary(
         name = "App Toolkit",
         packageName = "com.example.apptoolkit",
         iconUrl = "",
         shortDescription = "Reusable building blocks for Android apps",
     ),
-    AppInfo(
+    AppSummary(
         name = "Smart Cleaner",
         packageName = "com.example.cleaner",
         iconUrl = "",

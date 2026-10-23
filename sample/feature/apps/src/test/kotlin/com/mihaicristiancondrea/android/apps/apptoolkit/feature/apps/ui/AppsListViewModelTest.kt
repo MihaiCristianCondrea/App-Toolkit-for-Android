@@ -17,10 +17,10 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppDetails
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppInstallInfo
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.HomeEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppsListFilter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
@@ -32,15 +32,15 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedD
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
-import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.extension.RegisterExtension
+import org.junit.jupiter.api.Test
 
 class AppsListViewModelTest {
 
@@ -49,14 +49,14 @@ class AppsListViewModelTest {
         @RegisterExtension
         val dispatcherExtension = UnconfinedDispatcherExtension()
 
-        private val FIRST_APP = AppInfo(
+        private val FIRST_APP = AppSummary(
             name = "App",
             packageName = "pkg",
             iconUrl = "url",
             shortDescription = "Description",
         )
 
-        private val SECOND_APP = AppInfo(
+        private val SECOND_APP = AppSummary(
             name = "Other",
             packageName = "other.pkg",
             iconUrl = "url",
@@ -86,8 +86,8 @@ class AppsListViewModelTest {
     private val UiText.resourceId: Int
         get() = (this as UiText.StringResource).resourceId
 
-    private fun AppsListViewModel.readyApps(): Loadable.Ready<List<AppInfo>> =
-        assertIs<Loadable.Ready<List<AppInfo>>>(state.value.apps)
+    private fun AppsListViewModel.readyApps(): Loadable.Ready<List<AppSummary>> =
+        assertIs<Loadable.Ready<List<AppSummary>>>(state.value.apps)
 
     private fun AppsListViewModel.onlyMessage(): UiMessage = messages.value.single()
 
@@ -109,7 +109,7 @@ class AppsListViewModelTest {
     @Test
     fun `first load keeps a large catalogue whole`() = runTest(dispatcherExtension.testDispatcher) {
         val apps = (1..10_000).map { index ->
-            AppInfo(name = "App$index", packageName = "pkg$index", iconUrl = "url$index")
+            AppSummary(name = "App$index", packageName = "pkg$index", iconUrl = "url$index")
         }
         val viewModel = createViewModel(developerAppsRepository = FakeDeveloperAppsRepository(apps = apps))
         advance()
@@ -309,7 +309,7 @@ class AppsListViewModelTest {
         viewModel.onEvent(HomeEvent.FavoriteToggled(packageName = "pkg"))
         advance()
 
-        assertIs<Loadable.Ready<List<AppInfo>>>(viewModel.state.value.apps)
+        assertIs<Loadable.Ready<List<AppSummary>>>(viewModel.state.value.apps)
         val message = viewModel.onlyMessage()
         assertTrue(message.isError)
         assertEquals(R.string.error_failed_to_update_favorite, message.text.resourceId)

@@ -36,6 +36,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repos
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.SosRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.ToolkitTilesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.TorchRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.services.getTileServiceRequests
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.BreathingToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.CoinFlipToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.CompassToolViewModel
@@ -48,10 +49,9 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.Reactio
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SosToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ToolkitTilesViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.di.DataStoreQualifiers
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services.getTileServiceRequests
 import org.koin.android.ext.koin.androidContext
-import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 

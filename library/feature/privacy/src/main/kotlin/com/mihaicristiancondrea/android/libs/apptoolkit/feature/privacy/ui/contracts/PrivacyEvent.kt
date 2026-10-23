@@ -17,8 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.contracts
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItemAction
-
 /**
  * What the user can ask the privacy page's ViewModel to do.
  */

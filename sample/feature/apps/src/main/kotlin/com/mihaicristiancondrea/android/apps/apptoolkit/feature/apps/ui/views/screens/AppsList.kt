@@ -19,10 +19,10 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.s
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
@@ -35,23 +35,23 @@ import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppInfo
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.mappers.buildAppListItems
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.models.AppListItem
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppsListFilter
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.isAvailable
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.ads.AppsListNativeAdCard
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.AppCard
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.utils.buildAppListItems
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdCache
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberNativeAdCache
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.ads.AppsListNativeAdCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.FilterChipItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.TopListFilters
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItemsIndexed
@@ -74,7 +74,7 @@ import kotlinx.collections.immutable.toImmutableList
  */
 @Composable
 fun AppsList(
-    allApps: ImmutableList<AppInfo>,
+    allApps: ImmutableList<AppSummary>,
     selectedFilter: AppsListFilter,
     favorites: ImmutableSet<String>,
     installedPackages: ImmutableSet<String>,
@@ -82,13 +82,13 @@ fun AppsList(
     adUnitId: String?,
     onFilterSelected: (AppsListFilter) -> Unit,
     onFavoriteToggle: (String) -> Unit,
-    onAppClick: (AppInfo) -> Unit,
-    onShareClick: (AppInfo) -> Unit,
+    onAppClick: (AppSummary) -> Unit,
+    onShareClick: (AppSummary) -> Unit,
     windowWidthSizeClass: AppWindowWidthSizeClass,
     adFrequency: Int = AdsConstants.APPS_LIST_AD_FREQUENCY,
     searchQuery: String = "",
 ) {
-    val apps: ImmutableList<AppInfo> = remember(
+    val apps: ImmutableList<AppSummary> = remember(
         allApps,
         selectedFilter,
         installedPackages,
@@ -153,8 +153,8 @@ private fun AppsGrid(
     columnCount: Int,
     listState: LazyGridState,
     onFavoriteToggle: (String) -> Unit,
-    onAppClick: (AppInfo) -> Unit,
-    onShareClick: (AppInfo) -> Unit,
+    onAppClick: (AppSummary) -> Unit,
+    onShareClick: (AppSummary) -> Unit,
     adUnitId: String,
 ) {
     val adCache: NativeAdCache = rememberNativeAdCache()
@@ -303,7 +303,7 @@ private val AppsFilterItems: ImmutableList<AppsFilterItem> = persistentListOf(
 )
 
 /** The apps whose name, package or short description contain [query]; all of them for a blank one. */
-internal fun List<AppInfo>.search(query: String): List<AppInfo> {
+internal fun List<AppSummary>.search(query: String): List<AppSummary> {
     val needle = query.trim()
     if (needle.isEmpty()) return this
     return filter { app ->
@@ -313,11 +313,11 @@ internal fun List<AppInfo>.search(query: String): List<AppInfo> {
     }
 }
 
-private fun ImmutableList<AppInfo>.filterFor(
+private fun ImmutableList<AppSummary>.filterFor(
     filter: AppsListFilter,
     installedPackages: ImmutableSet<String>,
     favorites: ImmutableSet<String>,
-): List<AppInfo> = when (filter) {
+): List<AppSummary> = when (filter) {
     AppsListFilter.All -> this
     AppsListFilter.Installed -> filter { app -> app.packageName in installedPackages }
     AppsListFilter.NotInstalled -> filter { app -> app.packageName !in installedPackages }
@@ -330,8 +330,8 @@ private fun AppCardItem(
     isFavorite: Boolean,
     modifier: Modifier = Modifier,
     onFavoriteToggle: (String) -> Unit,
-    onAppClick: (AppInfo) -> Unit,
-    onShareClick: (AppInfo) -> Unit
+    onAppClick: (AppSummary) -> Unit,
+    onShareClick: (AppSummary) -> Unit
 ) {
     val appInfo = item.appInfo
     AppCard(

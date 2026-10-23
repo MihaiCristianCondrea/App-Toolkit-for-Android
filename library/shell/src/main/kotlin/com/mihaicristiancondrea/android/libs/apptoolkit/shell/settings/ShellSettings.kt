@@ -21,73 +21,8 @@ import androidx.compose.runtime.Immutable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.MotionTempo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.EntranceReplay
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.EntranceStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.TabTransitionStyle
-
-/** Replaces every destination's own app bar style, to try one style across the whole app. */
-enum class TopBarOverride(val style: TopBarStyle?) {
-    AsDeclared(null),
-    Small(TopBarStyle.Small),
-    CenterAligned(TopBarStyle.CenterAligned),
-    Large(TopBarStyle.Large),
-    LargeCollapsed(TopBarStyle.LargeCollapsed),
-    Hidden(TopBarStyle.Hidden),
-}
-
-/** Which of the app's bottom accessories the shell shows. */
-enum class AccessoryMode(val showsBanner: Boolean, val showsPlayer: Boolean) {
-    AsDeclared(showsBanner = true, showsPlayer = true),
-    None(showsBanner = false, showsPlayer = false),
-    BannerOnly(showsBanner = true, showsPlayer = false),
-    PlayerOnly(showsBanner = false, showsPlayer = true),
-}
-
-/** Which Material navigation bar the bottom bar layout uses. */
-enum class NavigationBarStyle {
-    /** Material 3's `NavigationBar`: 80dp, labels under the icons. */
-    Standard,
-
-    /** Material 3 Expressive's `ShortNavigationBar`: 64dp, more compact. */
-    Short,
-}
-
-/**
- * Whether the rail or permanent drawer and the app bar share one container colour on wide
- * windows, framing the content as a card.
- */
-enum class NavigationTint {
-    /** The navigation and app bar are the surface colour; the app bar tints as content scrolls. */
-    None,
-
-    /** Always tinted, with the content in a rounded card beside them. */
-    Always,
-
-    /** Tinted together, rail included, once content scrolls under the app bar. */
-    OnScroll,
-}
-
-/** How a back swipe from the right edge moves the page. */
-enum class BackEdgeStyle {
-    /**
-     * A swipe from the right mirrors one from the left, so the page follows the
-     * finger to the left edge.
-     */
-    FollowFinger,
-
-    /**
-     * Exactly as Android animates activities: from the right edge the page shrinks in place,
-     * without following the finger sideways.
-     */
-    System,
-}
-
-/** Slows every shell transition down, to watch the back animation frame by frame. */
-enum class AnimationSpeed(val durationScale: Float) {
-    Normal(1f),
-    Slow(2f),
-    VerySlow(5f),
-}
 
 /**
  * The shell's persisted overrides: how it lays out, moves and draws its chrome.
