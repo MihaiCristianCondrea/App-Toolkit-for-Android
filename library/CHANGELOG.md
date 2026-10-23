@@ -2,6 +2,19 @@
 
 ---
 
+# October 23, 2026
+
+**Version:** `3.0.0-pre27`
+
+### Added
+
+- `PageScaffold(backButton = false)` and `page(backButton = false)` leave the back arrow out of a
+  page's app bar while keeping its title and actions, for a task the person finishes with a button
+  of its own, such as a cleanup that ends in Done. System back still reaches the screen, so it can
+  handle back the way its own button does.
+
+---
+
 # October 22, 2026
 
 **Version:** `3.0.0-pre26`

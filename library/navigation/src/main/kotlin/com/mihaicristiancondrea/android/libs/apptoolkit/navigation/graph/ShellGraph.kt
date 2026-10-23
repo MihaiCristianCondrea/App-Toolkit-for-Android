@@ -253,6 +253,9 @@ class ShellGraphBuilder(
      * With a [title] the shell draws the page's app bar and back button, and [content] only fills
      * the body. Without one, [content] owns the whole page and draws its own frame, for pages that
      * need tabs or a search field under their app bar.
+     *
+     * [backButton] false leaves the arrow out of that app bar, for a task the person finishes with
+     * a button of its own; system back still closes the page unless [content] handles it.
      */
     inline fun <reified K : NavKey> page(
         topBar: TopBarStyle? = null,
@@ -265,6 +268,7 @@ class ShellGraphBuilder(
         noinline fabs: (@Composable (K) -> List<ToolkitFab>)? = null,
         noinline placeholder: (@Composable () -> Unit)? = null,
         topBarScrollMode: TopBarScrollMode = TopBarScrollMode.Default,
+        backButton: Boolean = true,
         noinline content: @Composable (K) -> Unit,
     ) {
         register(
@@ -282,6 +286,7 @@ class ShellGraphBuilder(
                 floatingActionButton = fab,
                 floatingActionButtons = fabs,
                 placeholder = placeholder,
+                backButton = backButton,
                 transition = transition,
             ),
         )
