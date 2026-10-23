@@ -32,6 +32,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constant
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.AdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.ClipboardRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.InstalledAppsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.DefaultDisplayPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.DefaultThemePreferencesDataSource
@@ -45,6 +47,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakePrefere
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
+import io.mockk.mockk
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -81,15 +84,17 @@ class AppsListScreenTest {
         startKoin {
             modules(
                 module {
+                    single<InstalledAppsRepository> { FakeInstalledAppsRepository() }
+                    single<ClipboardRepository> { mockk(relaxed = true) }
                     viewModel {
                         AppsListViewModel(
                             developerAppsRepository = FakeDeveloperAppsRepository(apps = apps),
-                            installedAppsRepository = FakeInstalledAppsRepository(),
+                            installedAppsRepository = get(),
                             favoritesRepository = FakeFavoritesRepository(),
                             telemetryRepository = telemetry,
                         )
                     }
-                    
+
                     single<AdsSettingsRepository> { FakeAdsSettingsRepository() }
                     single<DisplayPreferencesRepository> { DefaultDisplayPreferencesRepository(DefaultDisplayPreferencesDataSource(FakePreferencesDataStore())) }
                     single<ThemePreferencesRepository> { DefaultThemePreferencesRepository(DefaultThemePreferencesDataSource(FakePreferencesDataStore())) }
