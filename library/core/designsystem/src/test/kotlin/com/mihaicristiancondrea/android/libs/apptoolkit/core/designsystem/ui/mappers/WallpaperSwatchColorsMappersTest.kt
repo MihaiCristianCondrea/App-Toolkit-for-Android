@@ -15,14 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.mappers
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ThemePaletteProvider
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class WallpaperSwatchColorsTest {
+class WallpaperSwatchColorsMappersTest {
 
     @Test
     fun `a light scheme shows its brand color rather than the darker text tone`() {
