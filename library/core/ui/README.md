@@ -313,6 +313,11 @@ app bar, such as tabs, call `PageScaffold` themselves.
   bar becomes a small one on a window too short for it, and inside a list-detail pane the frame
   draws no bar at all, because the scene draws one across both panes.
   `LocalTopBarStyleOverride` lets the developer options try one style across the app.
+- **What sits under the bar changes colour with it.** A tab row flush under the app bar passes
+  `containerColor = topBarContainerColor()`, so the bar and the tabs tint together as content
+  scrolls under them, blending as a large bar collapses. `PageScaffold` and the shell's tabs
+  provide the bar's tint through `LocalTopBarTint`; elsewhere, and beside a tinted rail, where
+  the bar is see-through, it is the bar's resting colour.
 - **A bar can stay static.** `PageScaffold(topBarScrollMode = TopBarScrollMode.Static)` keeps the
   bar expanded and visible, without scroll tint or frame tint, whatever the hide-on-scroll setting.
   The default follows `LocalTopBarScrollMode`, which the destination sets; the content, the

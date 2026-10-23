@@ -2,6 +2,16 @@
 
 ---
 
+# Unreleased
+
+### Added
+
+- `topBarContainerColor()` returns the colour the app bar above is drawn in right now. A tab row
+  under a `PageScaffold` bar or a shell tab's bar passes it as `containerColor`, so the bar and the
+  tabs change colour together as content scrolls under them.
+
+---
+
 # October 23, 2026
 
 **Version:** `3.0.0-pre28`
