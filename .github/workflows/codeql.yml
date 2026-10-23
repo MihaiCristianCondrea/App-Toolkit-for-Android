@@ -1,6 +1,7 @@
 name: "CodeQL Analysis"
 
 on:
+  workflow_dispatch:
   push:
     branches: ["master"]
   pull_request:
@@ -10,6 +11,8 @@ on:
 
 jobs:
   analyze:
+    # Automatic advanced analysis is opt-in while CodeQL catches up with Kotlin.
+    if: ${{ github.event_name == 'workflow_dispatch' || vars.ENABLE_ADVANCED_CODEQL == 'true' }}
     name: Analyze
     runs-on: ubuntu-latest
 

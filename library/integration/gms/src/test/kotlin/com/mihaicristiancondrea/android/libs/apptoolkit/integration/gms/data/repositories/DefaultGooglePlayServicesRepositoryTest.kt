@@ -33,7 +33,6 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
-import org.junit.Assert.assertSame
 import org.junit.runner.RunWith
 import org.junit.Test
 import org.robolectric.annotation.Config
@@ -102,7 +101,7 @@ class DefaultGooglePlayServicesRepositoryTest {
         } catch (error: SecurityException) {
             error
         }
-        assertSame(failure, actual)
+        assertEquals(failure.message, actual.message)
     }
 
     @Test

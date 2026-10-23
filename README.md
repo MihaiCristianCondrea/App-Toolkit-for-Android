@@ -37,6 +37,16 @@ demonstrates the library in a real application.
 Each module has a README describing its responsibilities, dependencies, public contracts, and known
 risks.
 
+## CI
+
+The Android CI workflow runs the build and tests independently of CodeQL.
+
+Advanced CodeQL analysis is optional while its Kotlin support catches up with the project's
+toolchain. Run the CodeQL workflow manually, or set the repository Actions variable
+`ENABLE_ADVANCED_CODEQL` to `true` to enable its automatic runs. Disable GitHub's default CodeQL
+setup before using advanced analysis, because GitHub rejects advanced analysis uploads while
+default setup is enabled. CodeQL failures remain non-blocking and do not change the Kotlin version.
+
 ## Use the library
 
 App Toolkit is published through [JitPack](https://jitpack.io/#MihaiCristianCondrea/App-Toolkit-for-Android).
