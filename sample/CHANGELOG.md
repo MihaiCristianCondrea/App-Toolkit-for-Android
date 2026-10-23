@@ -4,7 +4,7 @@
 
 # October 23, 2026
 
-**Version:** `26.10.35`
+**Version:** `26.10.36`
 
 ### Added
 
