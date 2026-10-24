@@ -81,7 +81,7 @@ val LocalEntranceStyle = staticCompositionLocalOf { EntranceStyle.Slide }
  * transition over, then arrive one after another in their order on screen. Give list items their
  * [index] and each waits [staggerDelay] per position after the first item shown, up to
  * [maxStaggeredItems] positions; leave it out and elements cascade in the order they appear. An
- * item scrolled into view later starts at once. By default an element enters each time its screen
+ * item a scroll brings into view enters at once, on the fast springs, outside the cascade. By default an element enters each time its screen
  * is opened, and not on going back to it; `LocalEntranceReplay` can replay it on every return
  * (`EntranceReplay.EveryVisit`) or play it only for the first copy of each screen in a run
  * (`EntranceReplay.FirstVisit`). Returning from the background, rotating or scrolling back within
@@ -140,6 +140,8 @@ fun Modifier.animateVisibility(
         style = style,
         spatialSpec = motion.defaultSpatialSpec(),
         effectsSpec = motion.slowEffectsSpec(),
+        scrollSpatialSpec = motion.fastSpatialSpec(),
+        scrollEffectsSpec = motion.fastEffectsSpec(),
         onStarted = onStarted,
     )
 }
@@ -186,6 +188,8 @@ fun Modifier.animateVisibility(
         style = if (still) EntranceStyle.Fade else style,
         spatialSpec = if (still) snap() else motion.defaultSpatialSpec(),
         effectsSpec = if (still) snap() else motion.slowEffectsSpec(),
+        scrollSpatialSpec = snap(),
+        scrollEffectsSpec = snap(),
         onStarted = NoOp,
     )
 }
@@ -212,9 +216,13 @@ private data class EntranceElement(
     val style: EntranceStyle,
     val spatialSpec: FiniteAnimationSpec<Float>,
     val effectsSpec: FiniteAnimationSpec<Float>,
+    val scrollSpatialSpec: FiniteAnimationSpec<Float>,
+    val scrollEffectsSpec: FiniteAnimationSpec<Float>,
     val onStarted: () -> Unit,
 ) : ModifierNodeElement<EntranceNode>() {
-    override fun create() = EntranceNode(visible, startHidden, cascade, screen, style, spatialSpec, effectsSpec, onStarted)
+    override fun create() = EntranceNode(
+        visible, startHidden, cascade, screen, style, spatialSpec, effectsSpec, scrollSpatialSpec, scrollEffectsSpec, onStarted,
+    )
 
     override fun update(node: EntranceNode) = node.update(visible, style, spatialSpec, effectsSpec)
 }
@@ -232,6 +240,8 @@ private class EntranceNode(
     private var style: EntranceStyle,
     private var spatialSpec: FiniteAnimationSpec<Float>,
     private var effectsSpec: FiniteAnimationSpec<Float>,
+    private val scrollSpatialSpec: FiniteAnimationSpec<Float>,
+    private val scrollEffectsSpec: FiniteAnimationSpec<Float>,
     private val onStarted: () -> Unit,
 ) : Modifier.Node(), LayoutModifierNode {
 
@@ -271,6 +281,15 @@ private class EntranceNode(
 
     private fun enter() {
         val position = cascade ?: return
+        // A row a scroll or fling brings in enters at once, on the fast springs, outside the
+        // cascade: in a fast fling rows stream in every frame, and as one growing wave each waited
+        // longer than the last on the slow fade, so the list stayed half-faded behind the scroll.
+        if (screen != null && screen.settled && screen.isScrolling()) {
+            onStarted()
+            coroutineScope.launch { effects.animateTo(1f, scrollEffectsSpec) }
+            coroutineScope.launch { spatial.animateTo(1f, scrollSpatialSpec) }
+            return
+        }
         // Its place in the cascade is taken on placement, so the elements a screen opens with keep
         // their order however long the screen takes to settle.
         val wait: Long = (screen?.cascade ?: VisibilityCascade.Shared).delayMillisFor(

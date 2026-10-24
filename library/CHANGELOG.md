@@ -2,6 +2,24 @@
 
 ---
 
+# October 24, 2026
+
+**Version:** `3.0.0-pre30`
+
+### Changed
+
+- `ScreenHost` lays its content out in a `Box` that passes its minimum size on, so it can watch the
+  content's scrolling. A screen with one root element is unaffected; several root elements now
+  stack in that `Box` instead of following the parent's layout, so wrap them in one.
+
+### Fixed
+
+- Rows a fast scroll or fling brings into view no longer stay half-faded. They enter at once on the
+  motion scheme's fast springs, outside the screen's cascade, which kept growing while rows
+  streamed in and made each wait longer than the last.
+
+---
+
 # October 23, 2026
 
 **Version:** `3.0.0-pre29`

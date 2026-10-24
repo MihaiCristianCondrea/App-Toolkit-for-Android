@@ -173,6 +173,9 @@ flowchart TD
   Items move on `MaterialTheme.motionScheme` too, and an item's children stack as a plain item's
   do. The one exception is an item holding only filter chips or a native ad slot: keep it a plain
   `item`, so the chips cascade one by one and the ad enters when it loads.
+- Rows a scroll or fling brings into view still enter, but at once and on the fast springs,
+  outside the screen's cascade. `ScreenHost` watches its content's nested scrolling to tell them
+  from the rows the screen opens with, so a fast fling no longer leaves the list half-faded.
 - `EntranceReplay` and `LocalEntranceReplay` decide when a screen's entrance plays: `OnOpen`, the
   default, each time a screen is opened or its tab is picked from the navigation, but not on going
   back to it; `EveryVisit` on every return as well; `FirstVisit` only for the first copy of each
