@@ -48,6 +48,7 @@ class CounterToolViewModel(
     override fun handleEvent(event: CounterToolEvent) {
         when (event) {
             CounterToolEvent.Increment -> increment()
+            CounterToolEvent.Decrement -> decrement()
             CounterToolEvent.Reset -> reset()
             CounterToolEvent.Dismiss -> usage.endSession()
         }
@@ -66,6 +67,13 @@ class CounterToolViewModel(
         }
     }
 
+    private fun decrement() {
+        launchReport(action = Actions.DECREMENT) {
+            repository.decrement()
+            usage.markUsed()
+        }
+    }
+
     private fun reset() {
         launchReport(action = Actions.RESET) {
             repository.reset()
@@ -75,6 +83,7 @@ class CounterToolViewModel(
     private object Actions {
         const val OBSERVE_COUNT: String = "observeCount"
         const val INCREMENT: String = "incrementCount"
+        const val DECREMENT: String = "decrementCount"
         const val RESET: String = "resetCount"
     }
 }

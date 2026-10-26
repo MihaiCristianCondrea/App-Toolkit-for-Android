@@ -11,8 +11,9 @@ Quick tools: the in-app tool catalogue and the Quick Settings tile services behi
 - Local data sources for preferences, Quick Settings, sensors/display, haptics, and
   torch access.
 - `SensorRepository`, `BreathingRepository`, `TorchRepository`, `MorseRepository`,
-  `SosRepository`, and `CounterRepository`, which remain the data-layer entry points and own
-  coordination or runtime state.
+  `SosRepository`, `CounterRepository`, `UnitConversionRepository`, `BillSplitterRepository`, and
+  `RulerRepository`, which
+  remain the data-layer entry points and own coordination or runtime state.
 - UI catalogue models and mappers, the screen and dedicated tool ViewModels, tool composables,
   the Quick Settings services. `ToolkitTilesRoute` belongs to app/navigation.
 - Localized Quick Tools strings and plurals, and the Quick Settings tile and coin icons.
@@ -84,13 +85,14 @@ flowchart TD
 - Each tool with behavior of its own has a dedicated ViewModel, one class per file in `ui/`, with
   its `XToolUiState` in `ui/states/` and its `XToolEvent` in `ui/contracts/`. Every one extends
   `LoggedScreenViewModel` and reports under the `ToolkitTiles` screen name, because the tools open in
-  that screen's bottom sheet, with the class name as `viewModelName`. One-shot work (a flip, a roll,
-  a counter write, a torch change) runs through `launchReport`, and repository streams (sensor
-  readings, torch and Morse playback state, the stored count) through `collectReport` for the
-  ViewModel's lifetime. The routes in `ToolRoutes.kt` collect `state` and send events: the Compass
-  and Level sensors start and stop with the app's foreground state, and every tool is dismissed when
-  its sheet leaves composition. No tool ViewModel queues messages, so the routes host no
-  `MessageHost`; their failures are only reported.
+  that screen's bottom sheet or full-screen dialog, with the class name as `viewModelName`. One-shot
+  work (a flip, a roll, a counter write, a torch change) runs through `launchReport`, and repository
+  streams (sensor readings, torch and Morse playback state, the stored count) through `collectReport`
+  for the ViewModel's lifetime. The routes in `ToolRoutes.kt` collect `state` and send events: the
+  Compass and Level sensors start and stop with the app's foreground state, Screen Light and Ruler
+  open as full-screen dialogs (putting the ruler graduations flush against the screen edge), and
+  every tool is dismissed when its sheet or dialog leaves composition. No tool ViewModel queues
+  messages, so the routes host no `MessageHost`; their failures are only reported.
 - Material Colors has no ViewModel; its dialog is local UI behavior.
 - The catalogue screen is on `core.ui.screen`. `ToolkitTilesViewModel` exposes `state`, whose
   `categories` is a `Loadable`, and builds the UI models on the default dispatcher, its own CPU work.
@@ -102,8 +104,8 @@ flowchart TD
 ## Public contracts
 
 - `ToolkitTilesRepository`, `TorchRepository`, `MorseRepository`, `CounterRepository`,
-  `ToolkitTilesViewModel`, the
-  dedicated tool ViewModels, `ToolkitTilesScreen`, `ToolkitTilesRoute` and the source-neutral
+  `UnitConversionRepository`, `BillSplitterRepository`, `RulerRepository`, `ToolkitTilesViewModel`,
+  the dedicated tool ViewModels, `ToolkitTilesScreen`, `ToolkitTilesRoute` and the source-neutral
   tile models.
 
 ## Internal implementations
@@ -144,13 +146,27 @@ Tile subtitles exist only from Android 10, below the module's minimum SDK. `Tile
 result into the label on Android 8 and 9, where it would otherwise be invisible. Declining the
 system add-tile prompt is treated as the user's choice, not as a failure.
 
-## Search
+## Search and filtering
 
-The tab declares a search field in its app bar, and `ToolkitTilesScreen` reads its query from
-`LocalShellSearch`. After the filter chips, `search` keeps a whole category whose name matches, or
-only the tiles whose title or summary match; every match is shown expanded, whatever the stored
-expansion. Titles and summaries are string resources, so the query is matched against them in the
-current language. `ToolkitTilesSearchTest` covers the rules.
+The top filter chips narrow the catalogue by category (`All`, `Sensors`, `Utilities`, `System`,
+`Wellbeing`) and automatically expand the selected category. The tab also declares a search field in
+its app bar, and `ToolkitTilesScreen` reads its query from `LocalShellSearch`. After the filter
+chips, `search` keeps a whole category whose name matches, or only the tiles whose title or summary
+match; every match is shown expanded, whatever the stored expansion. Collapse controls are hidden
+while a category filter or search forces sections open, preserving the saved expansion in All tools.
+Titles and summaries are string
+resources, so the query is matched against them in the current language. `ToolkitTilesSearchTest`
+covers both category filtering and search rules.
+
+The four category groups use a regular scrolling column. This bounded catalogue keeps category
+nodes active while expansion changes their height, avoiding lazy-list deactivation during
+lookahead remeasurement. Category and tool entrances, the filters, and saved scroll position remain
+in the feature. `ToolkitTilesScreenTest` exercises repeated scrolling and expansion inside a
+lookahead scope.
+
+The catalogue places one native ad card between the middle category groups. A single-category
+result puts the ad after the tools, and an empty result has no ad. Empty/error state native ads
+are also suppressed.
 
 ## Migration notes
 
@@ -163,7 +179,7 @@ catalogue, filter, expansion, ad and add/setup state.
 
 `NotAdded` means an unpinned Quick Settings service on Android 13+, where the system add-tile
 request is supported. In-app sensor tools remain available. Older versions omit the add action and
-the filter, and retain the Tile-ready tools instructions for manually editing Quick Settings.
+retain the Tile-ready tools instructions for manually editing Quick Settings.
 The helper card reuses those localized instructions rather than describing missing tool functionality.
 
 Membership normalizes Android's custom tile component format. When secure settings are unavailable,
@@ -190,3 +206,28 @@ that update. Tile IDs and preference keys are unchanged; tile text models live i
   sheet behavior without a local copy of the host.
 - `ToolkitTilesNativeAdViewFactory` adapts the default Compact holder's padding, icon size and
   headline cap. `NativeAdStyle` owns the round badge, inset and text-action appearance.
+
+## Counter correction
+
+The in-app Counter includes a decrement button for correcting a miscount without resetting.
+It updates the count shared with the Quick Settings tile and stops at zero.
+
+## Additional offline tools
+
+Protractor uses on-screen alignment from 0 to 180 degrees. Tap or drag its movable arm, or use the
+accessible slider. It needs no camera permission or sensor, and belongs to Sensors & Measurement.
+
+Tip & Bill Splitter and Random Number Picker belong to Utilities & Fun. The splitter accepts a
+non-negative bill with up to two decimal places, tips of 10%, 15% or 20%, and a positive whole number
+of people. `BillSplitterRepository` uses decimal arithmetic, rounds the tip once to two decimal
+places, then rounds each share up so the collected amount covers the total. The UI explains that
+rounding. Tip choices use a segmented control, and people can be typed or adjusted one at a time
+without going below one or overflowing the supported count. The tool uses the same unit as the entered bill; it does not convert currencies.
+
+Random Number Picker animates result digits with the Toolkit's `AnimatedDigit`. Grouping separators
+and signs stay static, long results can wrap, and accessibility reads the complete localized number.
+It draws uniformly from an inclusive signed 64-bit integer range. Equal bounds
+return that number. Presets set 1 to 2, 6, 10 or 100 without generating a result; editing either bound
+or selecting a preset clears the previous result. Invalid, reversed or overflowing bounds clear the result. The numeric tools reuse the
+localized numeric input parser and report use through their dedicated ViewModels. Closing a sheet
+resets its inputs and result, matching the other non-persistent tools.

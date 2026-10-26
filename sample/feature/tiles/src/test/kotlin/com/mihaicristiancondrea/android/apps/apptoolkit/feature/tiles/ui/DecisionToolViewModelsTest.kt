@@ -103,4 +103,17 @@ class DecisionToolViewModelsTest {
 
         assertEquals(1, viewModel.state.value.count)
     }
+    @Test
+    fun `decrement updates the shared count and stops at zero`() {
+        val source = FakeToolkitTilesPreferencesDataSource()
+        val repository = CounterRepository(source, TestDispatchers(dispatcherExtension.testDispatcher))
+        val viewModel = CounterToolViewModel(repository, FakeTelemetryRepository())
+        val otherSheet = CounterToolViewModel(repository, FakeTelemetryRepository())
+        repeat(2) { viewModel.onEvent(CounterToolEvent.Increment) }
+        viewModel.onEvent(CounterToolEvent.Decrement)
+        assertEquals(1, viewModel.state.value.count)
+        assertEquals(1, otherSheet.state.value.count)
+        repeat(3) { viewModel.onEvent(CounterToolEvent.Decrement) }
+        assertEquals(0, source.counterValue.value)
+    }
 }

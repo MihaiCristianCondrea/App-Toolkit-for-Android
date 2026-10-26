@@ -28,4 +28,10 @@ object ToolkitTileIds {
     const val MORSE = "morse"
     const val BREATHING = "breathing"
     const val FLASH_DIMMER = "flash_dimmer"
+    const val UNIT_CONVERTER = "unit_converter"
+    const val RULER = "ruler"
+    const val PROTRACTOR = "protractor"
+    const val BILL_SPLITTER = "bill_splitter"
+    const val RANDOM_NUMBER = "random_number"
+    const val SCREEN_LIGHT = "screen_light"
 }

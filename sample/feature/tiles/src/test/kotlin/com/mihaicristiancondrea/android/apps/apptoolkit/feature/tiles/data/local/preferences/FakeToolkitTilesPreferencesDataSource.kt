@@ -35,6 +35,16 @@ internal class FakeToolkitTilesPreferencesDataSource(
         counterValue.value += 1
     }
 
+    override suspend fun decrementCounter() {
+        counterValue.value = (counterValue.value - 1).coerceAtLeast(0)
+    }
+
+    override val rulerScale = MutableStateFlow(1f)
+
+    override suspend fun saveRulerScale(scale: Float) {
+        rulerScale.value = scale
+    }
+
     override suspend fun resetCounter() {
         counterValue.value = 0
     }

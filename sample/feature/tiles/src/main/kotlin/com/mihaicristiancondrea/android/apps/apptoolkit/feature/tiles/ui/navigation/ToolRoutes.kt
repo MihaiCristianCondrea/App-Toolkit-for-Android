@@ -32,7 +32,10 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.FlashDi
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.LevelToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MorseToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ReactionTestToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.RulerToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ScreenLightToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SosToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.UnitConverterToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.BreathingToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.CoinFlipToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.CompassToolEvent
@@ -42,7 +45,10 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contrac
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.LevelToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.MorseToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ReactionTestToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.RulerToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ScreenLightToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.SosToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.UnitConverterToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.BreathingTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.CoinFlipTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.CompassTool
@@ -52,7 +58,19 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.t
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.LevelTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.MorseTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.ReactionTestTool
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.RulerTool
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.ScreenLightTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.SosTool
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.UnitConverterTool
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ProtractorToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ProtractorToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.ProtractorTool
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.BillSplitterToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.BillSplitterToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.BillSplitterTool
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.RandomNumberToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.RandomNumberToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.RandomNumberTool
 import org.koin.compose.viewmodel.koinViewModel
 
 /*
@@ -92,6 +110,7 @@ internal fun CounterToolRoute(viewModel: CounterToolViewModel = koinViewModel())
     CounterTool(
         count = state.count,
         onIncrement = { viewModel.onEvent(CounterToolEvent.Increment) },
+        onDecrement = { viewModel.onEvent(CounterToolEvent.Decrement) },
         onReset = { viewModel.onEvent(CounterToolEvent.Reset) },
     )
 }
@@ -199,4 +218,49 @@ private fun StartStopTool(start: () -> Unit, stop: () -> Unit) {
 @Composable
 private fun DisposeTool(dispose: () -> Unit) {
     DisposableEffect(Unit) { onDispose(dispose) }
+}
+
+@Composable
+internal fun UnitConverterToolRoute(viewModel: UnitConverterToolViewModel = koinViewModel()) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    DisposeTool { viewModel.onEvent(UnitConverterToolEvent.Dismiss) }
+    UnitConverterTool(state = state, onEvent = viewModel::onEvent)
+}
+
+@Composable
+internal fun RulerToolRoute(onClose: () -> Unit, viewModel: RulerToolViewModel = koinViewModel()) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    DisposeTool { viewModel.onEvent(RulerToolEvent.Dismiss) }
+    RulerTool(state = state, onEvent = viewModel::onEvent, onClose = onClose)
+}
+
+@Composable
+internal fun ScreenLightToolRoute(onClose: () -> Unit, viewModel: ScreenLightToolViewModel = koinViewModel()) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    StartStopTool(
+        start = { viewModel.onEvent(ScreenLightToolEvent.Open) },
+        stop = { viewModel.onEvent(ScreenLightToolEvent.Dismiss) },
+    )
+    ScreenLightTool(state = state, onEvent = viewModel::onEvent, onClose = onClose)
+}
+
+@Composable
+internal fun ProtractorToolRoute(viewModel: ProtractorToolViewModel = koinViewModel()) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    DisposeTool { viewModel.onEvent(ProtractorToolEvent.Dismiss) }
+    ProtractorTool(state = state, onEvent = viewModel::onEvent)
+}
+
+@Composable
+internal fun BillSplitterToolRoute(viewModel: BillSplitterToolViewModel = koinViewModel()) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    DisposeTool { viewModel.onEvent(BillSplitterToolEvent.Dismiss) }
+    BillSplitterTool(state = state, onEvent = viewModel::onEvent)
+}
+
+@Composable
+internal fun RandomNumberToolRoute(viewModel: RandomNumberToolViewModel = koinViewModel()) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    DisposeTool { viewModel.onEvent(RandomNumberToolEvent.Dismiss) }
+    RandomNumberTool(state = state, onEvent = viewModel::onEvent)
 }

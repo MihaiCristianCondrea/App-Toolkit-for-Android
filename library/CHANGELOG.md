@@ -2,12 +2,16 @@
 
 ---
 
-# October 24, 2026
+# Unreleased
 
 **Version:** `3.0.0-pre30`
 
 ### Changed
 
+- Breaking API rename: `FirebaseOnboardingPage` is now `TelemetryOnboardingPage` in
+  `:library:feature:diagnostics` (`ui.onboarding`). Update host imports and calls; there is no
+  deprecated alias. The page covers usage and diagnostics reporting and analytics/advertising
+  consent. Consent behavior and the `isSelected` parameter are unchanged.
 - `ScreenHost` lays its content out in a `Box` that passes its minimum size on, so it can watch the
   content's scrolling. A screen with one root element is unaffected; several root elements now
   stack in that `Box` instead of following the parent's layout, so wrap them in one.

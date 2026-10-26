@@ -21,11 +21,14 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -33,6 +36,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -52,6 +56,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileCategory
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTilesListItem
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ToolkitTilesFilter
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ToolkitTilesUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils.filterFor
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils.requestQuickSettingsTile
@@ -76,8 +81,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.LocalNativeAdViewFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItemsIndexed
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
@@ -160,6 +164,7 @@ internal fun ToolkitTilesScreenContent(
         state = state.categories,
         contentPadding = contentPadding,
         onRetry = { onEvent(ToolkitTilesEvent.Load) },
+        showAd = false,
     ) { ready ->
         ToolkitTilesCatalog(
             categories = ready.value,
@@ -190,20 +195,13 @@ private fun ToolkitTilesCatalog(
     val searching = searchQuery.isNotBlank()
     val listItems = remember(filteredCategories) {
         buildList {
-            filteredCategories.forEachIndexed { index, category ->
+            filteredCategories.forEach { category ->
                 add(ToolkitTilesListItem.Category(category))
-                if ((index + 1) % 2 == 0) {
-                    add(
-                        ToolkitTilesListItem.Ad(
-                            id = "ad_after_${category.id}",
-                            adUnitId = AdsConstants.QUICK_TOOLS_NATIVE_AD_UNIT_ID,
-                        )
-                    )
-                }
             }
-            if (isNotEmpty() && last() !is ToolkitTilesListItem.Ad) {
+            if (isNotEmpty()) {
                 add(
-                    ToolkitTilesListItem.Ad(
+                    index = (filteredCategories.size / 2).coerceAtLeast(1),
+                    element = ToolkitTilesListItem.Ad(
                         id = "ad_trailing",
                         adUnitId = AdsConstants.QUICK_TOOLS_NATIVE_AD_UNIT_ID,
                     )
@@ -234,88 +232,80 @@ private fun ToolkitTilesCatalog(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+        // Four bounded groups do not need lazy reuse while their expanded heights animate.
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(
+                    start = SizeConstants.LargeSize,
+                    top = contentPadding.calculateTopPadding() + SizeConstants.LargeSize,
+                    end = SizeConstants.LargeSize,
+                    bottom = contentPadding.calculateBottomPadding() + SizeConstants.LargeSize,
+                ),
             verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
-            contentPadding = PaddingValues(
-                start = SizeConstants.LargeSize,
-                top = contentPadding.calculateTopPadding() + SizeConstants.LargeSize,
-                end = SizeConstants.LargeSize,
-                bottom = contentPadding.calculateBottomPadding() + SizeConstants.LargeSize,
-            ),
         ) {
-            // The chips enter one after another on their own, ahead of the categories.
-            item(key = "filters", contentType = "filters") {
-                TilesFilters(
-                    categories = categories,
-                    selectedFilter = state.selectedFilter,
-                    onFilterSelected = { filter -> onEvent(ToolkitTilesEvent.FilterSelected(filter)) },
-                )
-            }
-            item(key = "top_spacing", contentType = "spacing") { Spacer(modifier = Modifier.height(SizeConstants.SmallSize)) }
+            TilesFilters(
+                categories = categories,
+                selectedFilter = state.selectedFilter,
+                onFilterSelected = { filter -> onEvent(ToolkitTilesEvent.FilterSelected(filter)) },
+            )
+            Spacer(modifier = Modifier.height(SizeConstants.SmallSize))
             if (listItems.isEmpty()) {
-                animatedItem(key = "empty", contentType = "empty") {
+                Box(modifier = Modifier.animateVisibility(index = 0)) {
                     EmptyFilterCard()
                 }
             } else {
-                animatedItemsIndexed(
-                    items = visibleListItems,
-                    key = { _, positionedItem -> "${state.selectedFilter}_${positionedItem.item.stableKey}" },
-                    contentType = { _, positionedItem ->
-                        when (positionedItem.item) {
-                            is ToolkitTilesListItem.Category -> "category"
-                            is ToolkitTilesListItem.Ad -> "ad"
-                        }
-                    },
-                ) { _, positionedItem ->
+                visibleListItems.forEachIndexed { index, positionedItem ->
                     val item = positionedItem.item
                     val position = positionedItem.position
-
-                    when (item) {
-                        is ToolkitTilesListItem.Category -> {
-                            val category = item.category
-                            val expanded = searching || category.id in state.expandedCategoryIds
-                            TileCategorySection(
-                                category = category,
-                                position = position,
-                                expanded = expanded,
-                                selectedFilter = state.selectedFilter,
-                                onToggle = { onEvent(ToolkitTilesEvent.CategoryToggled(category.id)) },
-                                onPreviewTile = { tile ->
-                                    telemetry.logViewItem(
-                                        itemId = tile.id,
-                                        itemName = tile.id,
-                                        itemCategory = category.id,
-                                    )
-                                    if (tile.quickTool == ToolkitQuickTool.MaterialColors) {
-                                        quickToolDialog = ToolkitQuickTool.MaterialColors
-                                    } else {
-                                        selectedTile = tile
-                                    }
-                                },
-                            )
-                        }
-
-                        is ToolkitTilesListItem.Ad -> {
-                            QuickToolsNativeAdCard(
-                                adUnitId = item.adUnitId,
-                                position = position,
-                                initiallyLoaded = item.id in state.loadedAdIds,
-                                onStatusChanged = { isLoaded ->
-                                    onEvent(ToolkitTilesEvent.AdStatusChanged(item.id, isLoaded))
-                                },
-                            )
+                    key(state.selectedFilter, item.stableKey) {
+                        when (item) {
+                            is ToolkitTilesListItem.Category -> {
+                                val category = item.category
+                                val forcedExpanded = searching || state.selectedFilter != ToolkitTilesFilter.All
+                                val expanded = forcedExpanded || category.id in state.expandedCategoryIds
+                                TileCategorySection(
+                                    category = category,
+                                    position = position,
+                                    expanded = expanded,
+                                    collapsible = !forcedExpanded,
+                                    modifier = Modifier.animateVisibility(index = index),
+                                    selectedFilter = state.selectedFilter,
+                                    onToggle = { onEvent(ToolkitTilesEvent.CategoryToggled(category.id)) },
+                                    onPreviewTile = { tile ->
+                                        telemetry.logViewItem(
+                                            itemId = tile.id,
+                                            itemName = tile.id,
+                                            itemCategory = category.id,
+                                        )
+                                        if (tile.quickTool == ToolkitQuickTool.MaterialColors) {
+                                            quickToolDialog = ToolkitQuickTool.MaterialColors
+                                        } else {
+                                            selectedTile = tile
+                                        }
+                                    },
+                                )
+                            }
+                            is ToolkitTilesListItem.Ad -> {
+                                QuickToolsNativeAdCard(
+                                    adUnitId = item.adUnitId,
+                                    position = position,
+                                    initiallyLoaded = item.id in state.loadedAdIds,
+                                    onStatusChanged = { isLoaded ->
+                                        onEvent(ToolkitTilesEvent.AdStatusChanged(item.id, isLoaded))
+                                    },
+                                )
+                            }
                         }
                     }
                 }
             }
-            item(key = "bottom_spacing", contentType = "spacing") { Spacer(modifier = Modifier.height(SizeConstants.SmallSize)) }
-            animatedItem(key = "instructions", contentType = "instructions") {
+            Spacer(modifier = Modifier.height(SizeConstants.SmallSize))
+            Box(modifier = Modifier.animateVisibility(index = visibleListItems.size)) {
                 HowToAddTilesCard()
             }
-            item(key = "navigation_spacing", contentType = "navigation_spacing") {
-                NavigationBarSpacer()
-            }
+            NavigationBarSpacer()
         }
 
         HiddenAdPreloaders(

@@ -69,7 +69,7 @@ flowchart TD
     Adapter --> AppToolkit[AppToolkit module graph]
     Koin --> HostModules[App-specific data and feature bindings]
     App --> Lifecycle[Process/activity lifecycle]
-    Lifecycle --> Ads[Ads initialization and app-open display]
+    Lifecycle --> Ads[Ads SDK initialization]
     Lifecycle --> Billing[Past-purchase processing]
     Launcher[MainActivity] --> Theme[AppTheme]
     Theme --> Host[ShellHost]
@@ -131,8 +131,8 @@ The target SDK remains 37 and the minimum SDK remains 26.
   when that changes; the back stacks are kept, since they are saved by position, not by graph. The
   drawer ends with `toolkitFooter`, so Settings, Help, Updates and Share stay last; the developer
   options are reached from Advanced settings, not the drawer.
-- Process-lifetime ads, billing recovery, installing the seasonal overlay, and current-activity tracking
-  stay in the application class because their lifetime exceeds any screen ViewModel.
+- Process-lifetime Mobile Ads SDK initialization, billing recovery, and installing the seasonal
+  overlay stay in the application class because their lifetime exceeds any screen ViewModel.
 
 ## Public contracts
 

@@ -15,10 +15,8 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="onboarding_feature1_description">Az App Toolkit alkalmazásválogatást mutat be, amelyek mind az AppToolkit könyvtár különböző aspektusait emelik ki és javítják az Android-élményt. Nézze meg, mi lehetséges az AppToolkit könyvtárral.</string>
-    <string name="onboarding_feature1_title">Fedezze fel az alkalmazásokat</string>
-    <string name="onboarding_personalization_description">Ez az app megmutatja, hogyan hoz létre az AppToolkit könyvtár sokoldalú, felhasználóközpontú alkalmazásokat. Nézze meg a mintalkalmazásokat, hogy különböző funkciókat és megvalósításokat lásson.</string>
-    <string name="onboarding_personalization_title">Az AppToolkit könyvtár működés közben</string>
-    <string name="onboarding_welcome_description">Fedezze fel az AppToolkit könyvtár képességeit. Ismerjen meg olyan alkalmazásokat, amelyek a könyvtár erejét mutatják be, és javítják az Android-fejlesztést és a felhasználói élményt.</string>
+    <string name="onboarding_welcome_description">Mindennapi eszközök, érzékelők és döntést segítő funkciók egy helyen.</string>
     <string name="onboarding_welcome_title">Üdvözöljük az App Toolkitben</string>
+    <string name="onboarding_quick_settings_title">Gyorsbeállítások egy érintéssel</string>
+    <string name="onboarding_quick_settings_description">Adj eszközöket az Android gyorsbeállításaihoz, hogy pénzt dobj fel, állítsd a zseblámpát vagy tárgyakat számolj az alkalmazás megnyitása nélkül.</string>
 </resources>

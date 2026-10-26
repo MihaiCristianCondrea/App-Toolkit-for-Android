@@ -82,14 +82,14 @@ import org.koin.compose.viewmodel.koinViewModel
  * only shows on the selected page.
  */
 @Composable
-fun FirebaseOnboardingPage(isSelected: Boolean) {
+fun TelemetryOnboardingPage(isSelected: Boolean) {
     val viewModel: UsageAndDiagnosticsViewModel = koinViewModel()
     val state: UsageAndDiagnosticsUiState by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState: SnackbarHostState = rememberPageSnackbarHostState()
     val drawsOwnHost: Boolean = snackbarHostState !== LocalPageSnackbarHostState.current
 
     Box(modifier = Modifier.fillMaxSize()) {
-        FirebaseOnboardingPageContent(
+        TelemetryOnboardingPageContent(
             state = state,
             isSelected = isSelected,
             onEvent = viewModel::onEvent,
@@ -118,7 +118,7 @@ fun FirebaseOnboardingPage(isSelected: Boolean) {
  * @param onEvent Receives the events [UsageAndDiagnosticsViewModel] handles.
  */
 @Composable
-internal fun FirebaseOnboardingPageContent(
+internal fun TelemetryOnboardingPageContent(
     state: UsageAndDiagnosticsUiState,
     isSelected: Boolean,
     onEvent: (UsageAndDiagnosticsEvent) -> Unit,
@@ -229,9 +229,9 @@ internal fun FirebaseOnboardingPageContent(
 
 @Preview(showBackground = true)
 @Composable
-private fun FirebaseOnboardingPageContentPreview() {
+private fun TelemetryOnboardingPageContentPreview() {
     MaterialTheme {
-        FirebaseOnboardingPageContent(
+        TelemetryOnboardingPageContent(
             state = UsageAndDiagnosticsUiState(
                 settings = Loadable.Ready(
                     UsageAndDiagnosticsSettings(
@@ -251,9 +251,9 @@ private fun FirebaseOnboardingPageContentPreview() {
 
 @Preview(showBackground = true)
 @Composable
-private fun FirebaseOnboardingPageContentLoadingPreview() {
+private fun TelemetryOnboardingPageContentLoadingPreview() {
     MaterialTheme {
-        FirebaseOnboardingPageContent(
+        TelemetryOnboardingPageContent(
             state = UsageAndDiagnosticsUiState(settings = Loadable.Loading),
             isSelected = false,
             onEvent = {},

@@ -1,0 +1,11 @@
+# ----------------------------------------
+# Audiences: Audience name
+# Account: Default Account for Firebase
+# Property: app-toolkit-for-android
+# ----------------------------------------
+# 
+# All Users
+# Start date: 20260727
+# End date: 20261024
+Audience name,Total users,New users,Sessions,Views per session,Average session duration,Total revenue
+All Users,633,477,1438,8.88038942976356,2136.5895007232266,1.474008

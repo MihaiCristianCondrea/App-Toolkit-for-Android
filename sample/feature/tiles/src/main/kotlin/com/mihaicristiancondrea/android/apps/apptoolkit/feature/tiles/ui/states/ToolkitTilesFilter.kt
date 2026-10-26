@@ -17,11 +17,10 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states
 
-enum class ToolkitTilesFilter {
+enum class ToolkitTilesFilter(val categoryId: String? = null) {
     All,
-    Added,
-
-    /** Tools whose Quick Settings tile is not in the panel. Adding it is optional. */
-    NotAdded,
-    Unsupported
+    Sensors("sensors"),
+    Utilities("utilities"),
+    System("system"),
+    Wellbeing("wellbeing"),
 }

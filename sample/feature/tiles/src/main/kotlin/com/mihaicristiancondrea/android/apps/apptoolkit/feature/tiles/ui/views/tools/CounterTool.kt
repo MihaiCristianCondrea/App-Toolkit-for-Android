@@ -27,6 +27,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.Remove
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -44,7 +45,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.Ge
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.digits.AnimatedDigit
 
 @Composable
-fun CounterTool(count: Int, onIncrement: () -> Unit, onReset: () -> Unit) {
+fun CounterTool(count: Int, onIncrement: () -> Unit, onDecrement: () -> Unit, onReset: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -86,6 +87,14 @@ fun CounterTool(count: Int, onIncrement: () -> Unit, onReset: () -> Unit) {
             horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
         ) {
             GeneralButton(
+                style = GeneralButtonStyle.Outlined,
+                enabled = count > 0,
+                onClick = onDecrement,
+                icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Remove),
+                contentDescription = stringResource(R.string.tool_counter_decrement),
+                measurements = ButtonMeasurements.Medium,
+            )
+            GeneralButton(
                 modifier = Modifier.weight(1f),
                 onClick = onIncrement,
                 measurements = ButtonMeasurements.Medium,
@@ -113,6 +122,7 @@ private fun CounterToolPreview() {
             CounterTool(
                 count = 42,
                 onIncrement = {},
+                onDecrement = {},
                 onReset = {},
             )
         }

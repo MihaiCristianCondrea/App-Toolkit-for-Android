@@ -7,10 +7,11 @@ completion logic to the App Toolkit's onboarding infrastructure.
 
 ## Owns
 
-- `AppOnboardingProvider`, which defines the set of pages shown to the user (Welcome,
-  Personalization, Theme, Features, Crashlytics, Finish). The Crashlytics page is
-  `FirebaseOnboardingPage` from `:library:feature:diagnostics`.
-- Stable onboarding page identifiers in `data/models`.
+- `AppOnboardingProvider`, which defines five pages: Welcome, Theme, Quick Settings, telemetry
+  usage and diagnostics consent, and Finish. The consent page reuses `TelemetryOnboardingPage` from
+  the Toolkit and passes its pager selection state so its dialog opens only when selected.
+  Consent choices also remain available in Settings under Security and Privacy.
+- Stable onboarding page identifiers in `ui/models`.
 - Onboarding-specific strings and keys.
 - `OnboardingFeatureModule`, which connects the sample's provider to the library's
   `OnboardingViewModel`.
@@ -48,3 +49,11 @@ flowchart TD
   so the provider supplies pages only and knows nothing of `:sample:app`.
 - **Toolkit Integration**: This module demonstrates the "Provider Pattern" where the sample app
   supplies implementation details to a generic library feature via Koin injection.
+
+## Migration notes
+
+The five-page sample flow includes the telemetry consent page immediately before Finish.
+`AppOnboardingProvider` uses the `3.0.0-pre30` name `TelemetryOnboardingPage`, replacing
+`FirebaseOnboardingPage` without an alias. The page keeps the stable `crashlytics_options` key
+and passes the pager's `isSelected` value. Consent behavior remains owned by diagnostics.
+See the [3.0.0 migration guide](../../../docs/migration/3.0.0.md#telemetry-onboarding-page-300-pre30).

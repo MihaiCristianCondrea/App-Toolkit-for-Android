@@ -19,8 +19,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit
 
-import android.app.Activity
-import android.os.Bundle
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
@@ -31,21 +29,20 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.AppToolkitAp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppThemeConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ColorPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ThemePaletteProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.utils.AppOpenAdController
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.IssueReporterShakeManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.features.seasonal.SeasonalThemeManager
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.utils.AppOpenAdController
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repositories.BillingRepository
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import org.koin.android.ext.android.getKoin
 
 /**
- * Sample composition root for Koin and process-lifetime integrations: app-open ads, billing
- * recovery, activity tracking, shake reporting, and the seasonal overlay. [AppToolkitApplication]
- * owns core startup and activity-callback registration.
+ * Sample composition root for Koin and process-lifetime integrations: Mobile Ads SDK
+ * initialization, billing recovery, shake reporting, and the seasonal overlay.
+ * [AppToolkitApplication] owns core startup and activity-callback registration.
  */
 class AppToolkit : AppToolkitApplication(), DefaultLifecycleObserver {
-    private var currentActivity: Activity? = null
 
     private val adsCoreManager: AppOpenAdController by lazy { getKoin().get<AppOpenAdController>() }
 
@@ -87,31 +84,9 @@ class AppToolkit : AppToolkitApplication(), DefaultLifecycleObserver {
         ThemePaletteProvider.defaultPalette = colorPalette
     }
 
-    override fun onStart(owner: LifecycleOwner) {
-        currentActivity?.let { adsCoreManager.showAdIfAvailable(it, owner.lifecycleScope) }
-    }
-
     override fun onResume(owner: LifecycleOwner) {
         owner.lifecycleScope.launch {
             getKoin().get<BillingRepository>().processPastPurchases()
-        }
-    }
-
-    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {}
-
-    override fun onActivityStarted(activity: Activity) {
-        currentActivity = activity
-    }
-
-    override fun onActivityStopped(activity: Activity) {
-        if (currentActivity === activity) {
-            currentActivity = null
-        }
-    }
-
-    override fun onActivityDestroyed(activity: Activity) {
-        if (currentActivity === activity) {
-            currentActivity = null
         }
     }
 }

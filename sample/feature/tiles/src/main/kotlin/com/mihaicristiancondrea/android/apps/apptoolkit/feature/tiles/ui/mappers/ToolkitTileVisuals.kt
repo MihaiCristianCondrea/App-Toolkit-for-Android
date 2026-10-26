@@ -27,10 +27,15 @@ import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.FlashlightOn
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.MonetizationOn
 import androidx.compose.material.icons.outlined.MoreHoriz
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Straighten
+import androidx.compose.material.icons.outlined.SwapHoriz
+import androidx.compose.material.icons.outlined.SquareFoot
+import androidx.compose.material.icons.automirrored.outlined.ReceiptLong
+import androidx.compose.material.icons.outlined.Numbers
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -41,8 +46,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.StatusColors
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
@@ -56,6 +61,9 @@ internal fun ToolkitTile.previewTextResId(): Int = when (id) {
 }
 
 internal fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
+    ToolkitTileIcon.Protractor -> Icons.Outlined.SquareFoot
+    ToolkitTileIcon.BillSplitter -> Icons.AutoMirrored.Outlined.ReceiptLong
+    ToolkitTileIcon.RandomNumber -> Icons.Outlined.Numbers
     ToolkitTileIcon.Level -> Icons.Outlined.Straighten
     ToolkitTileIcon.Compass -> Icons.Outlined.Explore
     ToolkitTileIcon.Coin -> Icons.Outlined.MonetizationOn
@@ -67,6 +75,9 @@ internal fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
     ToolkitTileIcon.FlashDimmer -> Icons.Outlined.FlashlightOn
     ToolkitTileIcon.Palette -> Icons.Outlined.Palette
     ToolkitTileIcon.Timer -> Icons.Outlined.Timer
+    ToolkitTileIcon.Converter -> Icons.Outlined.SwapHoriz
+    ToolkitTileIcon.Ruler -> Icons.Outlined.Straighten
+    ToolkitTileIcon.ScreenLight -> Icons.Outlined.LightMode
 }
 
 /**
@@ -113,6 +124,8 @@ internal fun ToolkitTileIcon.iconColors(): StatusColors {
     return when (this) {
         ToolkitTileIcon.Level,
         ToolkitTileIcon.Compass,
+        ToolkitTileIcon.Ruler,
+        ToolkitTileIcon.Protractor,
         ToolkitTileIcon.Timer -> StatusColors(
             container = if (isDark) Color(0xFF006A60) else Color(0xFF00A091),
             content = if (isDark) Color(0xFF74DED1) else Color(0xFF006A60),
@@ -126,11 +139,15 @@ internal fun ToolkitTileIcon.iconColors(): StatusColors {
         ToolkitTileIcon.Coin,
         ToolkitTileIcon.Dice,
         ToolkitTileIcon.Counter,
+        ToolkitTileIcon.Converter,
+        ToolkitTileIcon.BillSplitter,
+        ToolkitTileIcon.RandomNumber,
         ToolkitTileIcon.Morse -> StatusColors(
             container = if (isDark) Color(0xFF6B5E00) else Color(0xFFE2C900),
             content = if (isDark) Color(0xFFFBE44D) else Color(0xFF6B5E00),
         )
 
+        ToolkitTileIcon.ScreenLight,
         ToolkitTileIcon.FlashDimmer -> StatusColors(
             container = if (isDark) Color(0xFF91005A) else Color(0xFFE2008E),
             content = if (isDark) Color(0xFFFFB0D3) else Color(0xFF91005A),

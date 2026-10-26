@@ -68,4 +68,21 @@ class DefaultToolkitTilesPreferencesDataSourceTest {
 
         assertEquals(0, source.counterValue.first())
     }
+    @Test
+    fun `counter decrement persists without going below zero`(@TempDir directory: Path) = runTest {
+        val dataStore = PreferenceDataStoreFactory.create(
+            scope = backgroundScope,
+            produceFile = { directory.resolve("counter.preferences_pb").toFile() },
+        )
+        val source = DefaultToolkitTilesPreferencesDataSource(dataStore)
+        source.decrementCounter()
+        assertEquals(0, source.counterValue.first())
+        repeat(3) { source.incrementCounter() }
+        source.decrementCounter()
+        val reopened = DefaultToolkitTilesPreferencesDataSource(dataStore)
+        assertEquals(2, reopened.counterValue.first())
+        repeat(3) { reopened.decrementCounter() }
+        assertEquals(0, source.counterValue.first())
+    }
+
 }

@@ -1,0 +1,364 @@
+# ----------------------------------------
+# Generate leads overview
+# Account: Default Account for Firebase
+# Property: app-toolkit-for-android
+# ----------------------------------------
+#  
+# Start date: 20260727
+# End date: 20261024
+Nth week,New users
+0000,11
+0001,18
+0002,19
+0003,57
+0004,55
+0005,16
+0006,33
+0007,24
+0008,50
+0009,75
+0010,32
+0011,25
+0012,62
+
+# Start date: 20260727
+# End date: 20261024
+Nth week,Returning users
+0000,23
+0001,27
+0002,33
+0003,35
+0004,40
+0005,33
+0006,35
+0007,21
+0008,21
+0009,31
+0010,27
+0011,20
+0012,22
+
+# Start date: 20260727
+# End date: 20261024
+Nth week,Qualified leads
+0000,0
+0001,0
+0002,0
+0003,0
+0004,0
+0005,0
+0006,0
+0007,0
+0008,0
+0009,0
+0010,0
+0011,0
+0012,0
+
+# Start date: 20260727
+# End date: 20261024
+Nth week,Converted leads
+0000,0
+0001,0
+0002,0
+0003,0
+0004,0
+0005,0
+0006,0
+0007,0
+0008,0
+0009,0
+0010,0
+0011,0
+0012,0
+
+#  
+# Start date: 20260727
+# End date: 20261024
+Platform,Key events
+Android,3852
+
+#  
+# Start date: 20260727
+# End date: 20261024
+First user primary channel group (Default Channel Group),New users
+Direct,336
+Organic Search,140
+Referral,1
+
+# How well do you retain your users?
+# Start date: 20260913
+# End date: 20261024
+Date,Week 0,Week 1,Week 2,Week 3,Week 4,Week 5
+Sep 13 - Sep 19,24,0,0,1,0
+Sep 20 - Sep 26,51,4,1,0,1
+Sep 27 - Oct 3,78,3,1,0,-1
+Oct 4 - Oct 10,32,0,0,-1,-1
+Oct 11 - Oct 17,25,0,-1,-1,-1
+Oct 18 - Oct 24,63,-1,-1,-1,-1
+
+#  
+# Start date: 20260727
+# End date: 20261024
+Audience name,Active users
+All Users,609
+
+#  
+# Start date: 20260727
+# End date: 20261024
+City,Active users
+Calpella,48
+Reston,25
+Bucharest,19
+Boardman,18
+Atlanta,17
+San Francisco,13
+Addis Ababa,11
+Frankfurt am Main,10
+Dhaka,8
+Changsha,7
+Nairobi,7
+Havana,5
+Islamabad,5
+Lagos,4
+Lusaka,4
+Port Harcourt,4
+Tehran,4
+Abuja,3
+Bengaluru,3
+Chennai,3
+Constanta,3
+Davao City,3
+Karachi,3
+Kinshasa,3
+Lahore,3
+Mountain View,3
+Omdurman,3
+Abidjan,2
+Antananarivo,2
+Bangkok,2
+Bhopal,2
+Bimbo,2
+Calamba,2
+Cape Town,2
+Delhi,2
+Fort Worth,2
+Freetown,2
+Guayaquil,2
+Hangzhou,2
+Isfahan,2
+Jaipur,2
+Jos,2
+Kampala,2
+Kochi,2
+Lae,2
+London,2
+Manila,2
+Niamey,2
+Port-au-Prince,2
+Poznan,2
+Pune,2
+Sao Paulo,2
+Singapore,2
+Sousse,2
+Tashkent,2
+16510,1
+5331,1
+Abu Hamad,1
+Accra,1
+Ahmedabad,1
+Ajman,1
+Alba Iulia,1
+Algiers,1
+Amjhupi,1
+Arad,1
+Ariana Superieur,1
+Atacames,1
+Atbara,1
+Austin,1
+Bandar,1
+Banjarmasin,1
+Barishal,1
+Bat Yam,1
+Batangas City,1
+Bath,1
+Batna,1
+Beirut,1
+Benin City,1
+Benoni,1
+Benton,1
+Bikaner,1
+Bila Tserkva,1
+Bir El Djir,1
+Bir El-Ater,1
+Birmingham,1
+Blantyre,1
+Bloemfontein,1
+Blythewood,1
+Bokaro Steel City,1
+Brazzaville,1
+Buckhannon,1
+Budapest,1
+Burlington,1
+Cabudare,1
+Cagayan De Oro City,1
+Camocim,1
+Cebu City,1
+Charlotte,1
+Chattogram,1
+Chhatrapati Sambhajinagar,1
+Chicago,1
+Ciudad Juarez,1
+Ciudad Victoria,1
+Clayton,1
+Cleveland,1
+Cochabamba,1
+Coimbatore,1
+Cologne,1
+Columbia,1
+Contagem,1
+Copenhagen,1
+Cremona,1
+Dallas,1
+Dammam,1
+Detroit,1
+Dushanbe,1
+Edinburgh,1
+El Alto,1
+Enugu,1
+Escondido,1
+Essen,1
+Fairfield,1
+Faisalabad,1
+Faridabad,1
+Fortaleza,1
+Gazipur,1
+Georgetown,1
+Glauburg,1
+Gliwice,1
+Goma,1
+Gonaives,1
+Gorakhpur,1
+Guayana City,1
+Gurugram,1
+Guwahati,1
+Hamilton,1
+Hanoi,1
+Harare,1
+Harrison,1
+Hazaribagh,1
+Ho Chi Minh City,1
+Hyderabad,1
+Iloilo City,1
+Jackson,1
+Johannesburg,1
+Kansas City,1
+Katahari,1
+Kaunas,1
+Khartoum,1
+Khulna,1
+Kingston,1
+Konya,1
+Krasnogorsk,1
+Krasnoyarsk,1
+Kulaura,1
+Kushtia,1
+La Paz,1
+La Victoria,1
+Laksam Paurashava,1
+Lecce,1
+Les Cayes,1
+Lilongwe,1
+Lisbon,1
+Ljubljana,1
+Lucknow,1
+Madrid,1
+Mahajanga,1
+Mainburg,1
+Makkah,1
+Manchester,1
+Mansehra,1
+Maputo,1
+Maracay,1
+Meherpur,1
+Mogadishu,1
+Mombasa,1
+Monroe,1
+Montreal,1
+Moscow,1
+Mumbai,1
+Naaldwijk,1
+Nashik,1
+Nashville,1
+New Delhi,1
+Newton Abbot,1
+Nova Iguacu,1
+Novosibirsk,1
+Oran,1
+Oxford,1
+Pabna,1
+Pachuca,1
+Palm Bay,1
+Pattaya City,1
+Peshawar,1
+Philadelphia,1
+Phoenix,1
+Pittsburgh,1
+Port Moresby,1
+Pretoria,1
+Pucallpa,1
+Rajbari,1
+Rajshahi,1
+Ramsgate,1
+Rawalpindi,1
+Rishon LeZion,1
+Rotterdam,1
+Sacramento,1
+Saint Michael,1
+Saint-Avertin,1
+San Salvador,1
+Sandefjord,1
+Sao Jose dos Pinhais,1
+Satu Mare,1
+Semarang,1
+Shibuya,1
+Shimla,1
+Sinnar,1
+Slough,1
+Sodertalje,1
+Springfield,1
+Stockholm,1
+Surat,1
+Sylhet,1
+Szigetszentmiklos,1
+Taguig,1
+Tanjung Karang,1
+Tapioszentmarton,1
+Tel Aviv-Yafo,1
+Tel Mond,1
+Teloloapan,1
+Tinca,1
+Tirana,1
+Toamasina,1
+Toronto,1
+Tours,1
+Vienna,1
+Warren,1
+Warsaw,1
+Weston-super-Mare,1
+Windhoek,1
+Woodside East,1
+Zalau,1
+
+#  
+# Start date: 20260727
+# End date: 20261024
+Session manual source,Sessions
+google-play,219
+google,78
+AppAgg.com,1
+
+#  
+# Start date: 20260727
+# End date: 20261024
+Nth day

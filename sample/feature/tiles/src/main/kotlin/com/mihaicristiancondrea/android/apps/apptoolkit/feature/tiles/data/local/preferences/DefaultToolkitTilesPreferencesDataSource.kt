@@ -21,6 +21,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -51,12 +52,28 @@ class DefaultToolkitTilesPreferencesDataSource(
         }
     }
 
+    override suspend fun decrementCounter() {
+        dataStore.edit { preferences ->
+            preferences[COUNTER_VALUE] = (preferences[COUNTER_VALUE] ?: 0).coerceAtLeast(1) - 1
+        }
+    }
+
+    override val rulerScale: Flow<Float> = dataStore.data.map { preferences ->
+        preferences[RULER_SCALE]?.takeIf { it.isFinite() && it in 0.5f..2f } ?: 1f
+    }.distinctUntilChanged()
+
+    override suspend fun saveRulerScale(scale: Float) {
+        require(scale.isFinite() && scale in 0.5f..2f)
+        dataStore.edit { it[RULER_SCALE] = scale }
+    }
+
     override suspend fun resetCounter() {
         dataStore.edit { preferences -> preferences.remove(COUNTER_VALUE) }
     }
 
     private companion object {
         val EXPANDED_CATEGORY_IDS = stringSetPreferencesKey("expanded_toolkit_tile_category_ids")
+        val RULER_SCALE = floatPreferencesKey("toolkit_ruler_scale")
         val COUNTER_VALUE = intPreferencesKey("toolkit_tile_counter_value")
     }
 }

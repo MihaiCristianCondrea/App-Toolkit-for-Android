@@ -22,10 +22,10 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileCategoryData
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileData
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileCategory
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
@@ -129,6 +129,12 @@ private fun String.tileVisuals(): TileVisuals = when (this) {
         ToolkitTileIcon.Sos
     )
 
+    ToolkitTileIds.UNIT_CONVERTER -> TileVisuals(R.string.tile_converter_title, R.string.tile_converter_summary, ToolkitTileIcon.Converter)
+    ToolkitTileIds.RULER -> TileVisuals(R.string.tile_ruler_title, R.string.tile_ruler_summary, ToolkitTileIcon.Ruler)
+    ToolkitTileIds.SCREEN_LIGHT -> TileVisuals(R.string.tile_screen_light_title, R.string.tile_screen_light_summary, ToolkitTileIcon.ScreenLight)
+    ToolkitTileIds.PROTRACTOR -> TileVisuals(R.string.tile_protractor_title, R.string.tile_protractor_summary, ToolkitTileIcon.Protractor)
+    ToolkitTileIds.BILL_SPLITTER -> TileVisuals(R.string.tile_bill_splitter_title, R.string.tile_bill_splitter_summary, ToolkitTileIcon.BillSplitter)
+    ToolkitTileIds.RANDOM_NUMBER -> TileVisuals(R.string.tile_random_number_title, R.string.tile_random_number_summary, ToolkitTileIcon.RandomNumber)
     else -> error("Unknown Toolkit Tile: $this")
 }
 

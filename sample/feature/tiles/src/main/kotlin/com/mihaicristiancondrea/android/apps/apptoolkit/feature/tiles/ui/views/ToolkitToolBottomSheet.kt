@@ -25,8 +25,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Close
@@ -46,12 +47,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.helperSummaryResId
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.helperTitleResId
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ProtractorToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.BillSplitterToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.RandomNumberToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.BreathingToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.CoinFlipToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.CompassToolRoute
@@ -61,9 +65,13 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigat
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.LevelToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.MorseToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ReactionTestToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.RulerToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ScreenLightToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.SosToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.UnitConverterToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.TileIconBadge
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.previews.GenericToolPreview
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
@@ -84,6 +92,16 @@ fun ToolkitToolBottomSheet(
     onAddTile: () -> Unit,
     onSetupTile: () -> Unit,
 ) {
+    when (tile.id) {
+        ToolkitTileIds.SCREEN_LIGHT -> {
+            ScreenLightToolRoute(onClose = onClose)
+            return
+        }
+        ToolkitTileIds.RULER -> {
+            RulerToolRoute(onClose = onClose)
+            return
+        }
+    }
     val sheetState = rememberBottomSheetState(
         initialValue = SheetValue.Hidden,
         enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded)
@@ -97,6 +115,7 @@ fun ToolkitToolBottomSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
                 .padding(SizeConstants.LargeSize),
             verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
         ) {
@@ -137,11 +156,11 @@ private fun ToolSheetHeader(
             )
         }
         GeneralButton(
-                    style = GeneralButtonStyle.Text,
-                    onClick = onClose,
-                    icon = ToolkitIcon.Vector(Icons.Outlined.Close),
-                    contentDescription = stringResource(id = R.string.tool_dialog_close_content_description),
-                )
+            style = GeneralButtonStyle.Text,
+            onClick = onClose,
+            icon = ToolkitIcon.Vector(Icons.Outlined.Close),
+            contentDescription = stringResource(id = R.string.tool_dialog_close_content_description),
+        )
     }
 }
 
@@ -199,6 +218,10 @@ private fun ToolInteractiveContent(
         ToolkitTileIds.MORSE -> MorseToolRoute()
         ToolkitTileIds.BREATHING -> BreathingToolRoute()
         ToolkitTileIds.FLASH_DIMMER -> FlashDimmerToolRoute()
+        ToolkitTileIds.PROTRACTOR -> ProtractorToolRoute()
+        ToolkitTileIds.BILL_SPLITTER -> BillSplitterToolRoute()
+        ToolkitTileIds.RANDOM_NUMBER -> RandomNumberToolRoute()
+        ToolkitTileIds.UNIT_CONVERTER -> UnitConverterToolRoute()
         else -> GenericToolPreview(tile = tile)
     }
 }
@@ -325,4 +348,3 @@ private fun QuickSettingsIntegrationCard(
         }
     }
 }
-

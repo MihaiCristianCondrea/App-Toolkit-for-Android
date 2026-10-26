@@ -1,0 +1,147 @@
+09:31:14.543  E  Denying clipboard access to com.d4rk.android.apps.apptoolkit, application is not in focus nor is it a system service for user 0
+09:31:14.575  E  Denying clipboard access to com.d4rk.android.apps.apptoolkit, application is not in focus nor is it a system service for user 0
+09:31:23.534  E  Denying clipboard access to com.d4rk.android.apps.apptoolkit, application is not in focus nor is it a system service for user 0
+09:31:23.542  E  Denying clipboard access to com.d4rk.android.apps.apptoolkit, application is not in focus nor is it a system service for user 0
+09:32:10.881  E  Denying clipboard access to com.d4rk.android.apps.apptoolkit, application is not in focus nor is it a system service for user 0
+09:32:10.889  E  Denying clipboard access to com.d4rk.android.apps.apptoolkit, application is not in focus nor is it a system service for user 0
+11:06:10.756  E  Attempting to externally change a non-organized container: Task{19c41d9 #63 type=standard A=10230:com.d4rk.android.apps.apptoolkit}={handlePackageUpdate:false,} playercount=2 taskorg=android.window.ITaskOrganizer$Stub$Proxy@c079bc2
+11:06:17.763  E  [1026/110617.763554:ERROR:android_webview/browser/variations/variations_seed_loader.cc:36] Seed missing signature.
+11:06:24.263  E  Failed to open rendernode: No such file or directory
+11:06:24.263  E  Failed to open rendernode: No such file or directory
+11:06:24.294  E  Failed to open rendernode: No such file or directory
+11:06:24.330  E  Failed to open rendernode: No such file or directory
+11:06:24.331  E  Failed to open rendernode: No such file or directory
+11:06:24.332  E  Failed to open rendernode: No such file or directory
+11:06:24.332  E  Failed to open rendernode: No such file or directory
+11:06:24.332  E  Failed to open rendernode: No such file or directory
+11:06:24.332  E  Failed to open rendernode: No such file or directory
+11:06:24.345  E  Failed to open rendernode: No such file or directory
+11:06:24.345  E  Failed to open rendernode: No such file or directory
+11:06:24.347  E  Failed to open rendernode: No such file or directory
+11:06:24.348  E  Failed to open rendernode: No such file or directory
+11:10:52.988  E  FATAL EXCEPTION: main (Fix with AI)
+                 Process: com.d4rk.android.apps.apptoolkit, PID: 8386
+                 java.lang.IllegalArgumentException: measure is called on a deactivated node
+                 	at androidx.compose.ui.internal.InlineClassHelperKt.throwIllegalArgumentException(InlineClassHelper.kt:36)
+                 	at androidx.compose.ui.node.LookaheadPassDelegate.remeasure-BRTryo0(LookaheadPassDelegate.kt:974)
+                 	at androidx.compose.ui.node.LookaheadPassDelegate.onBeforeLayoutChildren(LookaheadPassDelegate.kt:851)
+                 	at androidx.compose.ui.node.LookaheadPassDelegate.layoutChildren(LookaheadPassDelegate.kt:258)
+                 	at androidx.compose.ui.node.LookaheadPassDelegate.onNodePlaced$ui(LookaheadPassDelegate.kt:771)
+                 	at androidx.compose.ui.node.InnerNodeCoordinator$LookaheadDelegateImpl.placeChildren(InnerNodeCoordinator.kt:96)
+                 	at androidx.compose.ui.node.LookaheadDelegate.placeAt-f8xVGno(LookaheadDelegate.kt:649)
+                 	at androidx.compose.ui.layout.Placeable.access$placeAt-f8xVGno(Placeable.kt:36)
+                 	at androidx.compose.ui.layout.Placeable$PlacementScope.placeWithLayer(Placeable.kt:658)
+                 	at androidx.compose.ui.layout.Placeable$PlacementScope.placeWithLayer$default(Placeable.kt:321)
+                 	at androidx.compose.ui.graphics.SimpleGraphicsLayerModifier.measure_3p2s80s$lambda$0(GraphicsLayerModifier.kt:964)
+                 	at androidx.compose.ui.graphics.SimpleGraphicsLayerModifier$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+                 	at androidx.compose.ui.node.LookaheadCapablePlaceable$layout$1.placeChildren(LookaheadDelegate.kt:276)
+                 	at androidx.compose.ui.node.LookaheadDelegate.placeChildren(LookaheadDelegate.kt:669)
+                 	at androidx.compose.ui.node.LookaheadDelegate.placeAt-f8xVGno(LookaheadDelegate.kt:649)
+                 	at androidx.compose.ui.layout.Placeable.access$placeAt-f8xVGno(Placeable.kt:36)
+                 	at androidx.compose.ui.layout.Placeable$PlacementScope.place(Placeable.kt:620)
+                 	at androidx.compose.ui.layout.Placeable$PlacementScope.place$default(Placeable.kt:245)
+                 	at androidx.compose.foundation.lazy.layout.LazyLayoutBeyondBoundsProviderModifierNode.measure_3p2s80s$lambda$0(LazyLayoutBeyondBoundsModifierLocal.kt:123)
+                 	at androidx.compose.foundation.lazy.layout.LazyLayoutBeyondBoundsProviderModifierNode$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+                 	at androidx.compose.ui.node.LookaheadCapablePlaceable$layout$1.placeChildren(LookaheadDelegate.kt:276)
+                 	at androidx.compose.ui.node.LookaheadDelegate.placeChildren(LookaheadDelegate.kt:669)
+                 	at androidx.compose.ui.node.LookaheadDelegate.placeAt-f8xVGno(LookaheadDelegate.kt:649)
+                 	at androidx.compose.ui.layout.Placeable.access$placeAt-f8xVGno(Placeable.kt:36)
+                 	at androidx.compose.ui.layout.Placeable$PlacementScope.placeRelative(Placeable.kt:607)
+                 	at androidx.compose.ui.layout.Placeable$PlacementScope.placeRelative$default(Placeable.kt:231)
+                 	at androidx.compose.foundation.layout.FillNode.measure_3p2s80s$lambda$0(Size.kt:723)
+                 	at androidx.compose.foundation.layout.FillNode$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+                 	at androidx.compose.ui.node.LookaheadCapablePlaceable$layout$1.placeChildren(LookaheadDelegate.kt:276)
+                 	at androidx.compose.ui.node.LookaheadDelegate.placeChildren(LookaheadDelegate.kt:669)
+                 	at androidx.compose.ui.node.LookaheadDelegate.placeAt-f8xVGno(LookaheadDelegate.kt:649)
+                 	at androidx.compose.ui.layout.Placeable.access$placeAt-f8xVGno(Placeable.kt:36)
+                 	at androidx.compose.ui.layout.Placeable$PlacementScope.place-70tqf50(Placeable.kt:623)
+                 	at androidx.compose.ui.layout.Placeable$PlacementScope.place-70tqf50$default(Placeable.kt:258)
+                 	at androidx.compose.ui.node.LookaheadPassDelegate.layoutModifierBlock$lambda$0(LookaheadPassDelegate.kt:568)
+                 	at androidx.compose.ui.node.LookaheadPassDelegate$$ExternalSyntheticLambda2.invoke(D8$$SyntheticClass:0)
+                 	at androidx.compose.runtime.snapshots.SnapshotStateObserver.observeReads(SnapshotStateObserver.kt:758)
+                 	at androidx.compose.ui.node.LookaheadPassDelegate.placeSelf-MLgxB_4(LookaheadPassDelegate.kt:999)
+                 	at androidx.compose.ui.node.LookaheadPassDelegate.replace(LookaheadPassDelegate.kt:868)
+11:10:52.988  E  	at androidx.compose.ui.node.LayoutNode.lookaheadReplace$ui(LayoutNode.kt:1037) (Fix with AI)
+                 	at androidx.compose.ui.node.MeasureAndLayoutDelegate.remeasureAndRelayoutIfNeeded(MeasureAndLayoutDelegate.kt:601)
+                 	at androidx.compose.ui.node.MeasureAndLayoutDelegate.access$remeasureAndRelayoutIfNeeded(MeasureAndLayoutDelegate.kt:46)
+                 	at androidx.compose.ui.node.MeasureAndLayoutDelegate.measureAndLayout(MeasureAndLayoutDelegate.kt:408)
+                 	at androidx.compose.ui.platform.AndroidComposeView.measureAndLayout(AndroidComposeView.android.kt:1883)
+                 	at androidx.compose.ui.node.Owner.measureAndLayout$default(Owner.kt:257)
+                 	at androidx.compose.ui.platform.AndroidComposeView.dispatchDraw(AndroidComposeView.android.kt:2224)
+                 	at android.view.View.draw(View.java:25832)
+                 	at android.view.View.updateDisplayListIfDirty(View.java:24671)
+                 	at android.view.ViewGroup.recreateChildDisplayList(ViewGroup.java:4836)
+                 	at android.view.ViewGroup.dispatchGetDisplayList(ViewGroup.java:4809)
+                 	at android.view.View.updateDisplayListIfDirty(View.java:24625)
+                 	at android.view.ViewGroup.recreateChildDisplayList(ViewGroup.java:4836)
+                 	at android.view.ViewGroup.dispatchGetDisplayList(ViewGroup.java:4809)
+                 	at android.view.View.updateDisplayListIfDirty(View.java:24625)
+                 	at android.view.ViewGroup.recreateChildDisplayList(ViewGroup.java:4836)
+                 	at android.view.ViewGroup.dispatchGetDisplayList(ViewGroup.java:4809)
+                 	at android.view.View.updateDisplayListIfDirty(View.java:24625)
+                 	at android.view.ViewGroup.recreateChildDisplayList(ViewGroup.java:4836)
+                 	at android.view.ViewGroup.dispatchGetDisplayList(ViewGroup.java:4809)
+                 	at android.view.View.updateDisplayListIfDirty(View.java:24625)
+                 	at android.view.ViewGroup.recreateChildDisplayList(ViewGroup.java:4836)
+                 	at android.view.ViewGroup.dispatchGetDisplayList(ViewGroup.java:4809)
+                 	at android.view.View.updateDisplayListIfDirty(View.java:24625)
+                 	at android.view.ViewGroup.recreateChildDisplayList(ViewGroup.java:4836)
+                 	at android.view.ViewGroup.dispatchGetDisplayList(ViewGroup.java:4809)
+                 	at android.view.View.updateDisplayListIfDirty(View.java:24625)
+                 	at android.view.ThreadedRenderer.updateViewTreeDisplayList(ThreadedRenderer.java:717)
+                 	at android.view.ThreadedRenderer.updateRootDisplayList(ThreadedRenderer.java:723)
+                 	at android.view.ThreadedRenderer.draw(ThreadedRenderer.java:821)
+                 	at android.view.ViewRootImpl.draw(ViewRootImpl.java:6716)
+                 	at android.view.ViewRootImpl.performDraw(ViewRootImpl.java:6364)
+                 	at android.view.ViewRootImpl.performTraversals(ViewRootImpl.java:5294)
+                 	at android.view.ViewRootImpl.doTraversal(ViewRootImpl.java:3677)
+                 	at android.view.ViewRootImpl$TraversalCallback.onVsync(ViewRootImpl.java:11993)
+                 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:1916)
+                 	at android.view.Choreographer.doCallbacks(Choreographer.java:1434)
+                 	at android.view.Choreographer.doFrame(Choreographer.java:1289)
+                 	at android.view.Choreographer$FrameDisplayEventReceiver.run(Choreographer.java:1892)
+                 	at android.os.Handler.handleCallback(Handler.java:1080)
+                 	at android.os.Handler.dispatchMessageImpl(Handler.java:135)
+                 	at android.os.Handler.dispatchMessage(Handler.java:126)
+                 	at android.os.Looper.loopOnce(Looper.java:285)
+                 	at android.os.Looper.loop(Looper.java:390)
+                 	at android.app.ActivityThread.main(ActivityThread.java:9884)
+                 	at java.lang.reflect.Method.invoke(Native Method)
+                 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:575)
+                 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:906)
+11:10:54.584  E  Attempting to externally change a non-organized container: Task{daa0012 #64 type=standard A=10230:com.d4rk.android.apps.apptoolkit}={handlePackageUpdate:false,} playercount=2 taskorg=android.window.ITaskOrganizer$Stub$Proxy@c079bc2
+11:10:58.031  E  [1026/111058.031246:ERROR:android_webview/browser/variations/variations_seed_loader.cc:36] Seed missing signature.
+11:10:58.657  E  Failed to open rendernode: No such file or directory
+11:10:58.657  E  Failed to open rendernode: No such file or directory
+11:10:58.661  E  Failed to open rendernode: No such file or directory
+11:10:58.667  E  Failed to open rendernode: No such file or directory
+11:10:58.668  E  Failed to open rendernode: No such file or directory
+11:10:58.669  E  Failed to open rendernode: No such file or directory
+11:10:58.670  E  Failed to open rendernode: No such file or directory
+11:10:58.670  E  Failed to open rendernode: No such file or directory
+11:10:58.670  E  Failed to open rendernode: No such file or directory
+11:10:58.684  E  Failed to open rendernode: No such file or directory
+11:10:58.687  E  Failed to open rendernode: No such file or directory
+11:10:58.688  E  Failed to open rendernode: No such file or directory
+11:10:58.688  E  Failed to open rendernode: No such file or directory
+11:11:08.636  E  Denying clipboard access to com.d4rk.android.apps.apptoolkit, application is not in focus nor is it a system service for user 0
+11:11:08.640  E  Denying clipboard access to com.d4rk.android.apps.apptoolkit, application is not in focus nor is it a system service for user 0
+11:11:15.084  E  Denying clipboard access to com.d4rk.android.apps.apptoolkit, application is not in focus nor is it a system service for user 0
+11:11:20.199  E  Denying clipboard access to com.d4rk.android.apps.apptoolkit, application is not in focus nor is it a system service for user 0
+---------------------------- PROCESS STARTED (12105) for package com.d4rk.android.apps.apptoolkit ----------------------------
+11:11:55.272  E  [1026/111155.272194:ERROR:android_webview/browser/variations/variations_seed_loader.cc:36] Seed missing signature.
+11:11:56.007  E  Failed to open rendernode: No such file or directory
+11:11:56.012  E  Failed to open rendernode: No such file or directory
+11:11:56.031  E  Failed to open rendernode: No such file or directory
+11:11:56.044  E  Failed to open rendernode: No such file or directory
+11:11:56.044  E  Failed to open rendernode: No such file or directory
+11:11:56.046  E  Failed to open rendernode: No such file or directory
+11:11:56.047  E  Failed to open rendernode: No such file or directory
+11:11:56.047  E  Failed to open rendernode: No such file or directory
+11:11:56.047  E  Failed to open rendernode: No such file or directory
+11:11:56.064  E  Failed to open rendernode: No such file or directory
+11:11:56.066  E  Failed to open rendernode: No such file or directory
+11:11:56.070  E  Failed to open rendernode: No such file or directory
+11:11:56.070  E  Failed to open rendernode: No such file or directory
+11:15:56.730  E  Timeout waiting for NFC AIDL service (future).
+11:15:56.730  E  Exit current process to recover.

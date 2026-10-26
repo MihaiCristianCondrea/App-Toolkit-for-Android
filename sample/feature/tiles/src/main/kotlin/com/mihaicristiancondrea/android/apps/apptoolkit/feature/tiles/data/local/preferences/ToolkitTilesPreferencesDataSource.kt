@@ -34,5 +34,12 @@ interface ToolkitTilesPreferencesDataSource {
     /** Adds one to [counterValue] in a single atomic read-modify-write. */
     suspend fun incrementCounter()
 
+    /** Subtracts one atomically, keeping the count at zero when already empty. */
+    suspend fun decrementCounter()
+
+    /** Physical ruler correction, applied to the display-reported pixels per millimetre. */
+    val rulerScale: Flow<Float>
+    suspend fun saveRulerScale(scale: Float)
+
     suspend fun resetCounter()
 }

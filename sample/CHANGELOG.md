@@ -2,23 +2,36 @@
 
 ---
 
-# October 23, 2026
-
-**Version:** `26.10.36`
+# Unreleased
 
 ### Added
 
+- Six new Quick Tools: Unit Converter (length, mass, temperature, volume and data), Ruler
+  (full-screen calibrated edge measurement in millimetres and inches), Screen Light
+  (brightness and warmth controls), Protractor (on-screen angle alignment), Tip & Bill Splitter,
+  and Random Number Picker with inclusive minimum and maximum bounds.
 - The app changelog has an info button that opens App Toolkit's releases on GitHub, for the
   library's notes behind each version.
 
 ### Changed
 
+- Quick Tools filter chips now filter by tool category (All tools, Sensors & Measurement,
+  Utilities & Fun, System & Controls, Wellbeing) instead of Quick Settings sync status.
+- Quick Tools now displays one native ad between the middle category groups (after the tools
+  for a single category), and app-open ads are no longer shown on launch or resume.
+- The Counter has a minus button to correct a miscount without resetting the total.
+- Onboarding now has five pages focused on everyday tools, theme choice, Quick Settings,
+  telemetry usage and diagnostics consent, and completion. App promotions are removed. Diagnostics
+  preferences also remain available in Settings under Security and Privacy.
 - Existing app-icons widgets may need to be added again because their receiver component name
   changed during the sample architecture cleanup.
 - Existing Quick Settings tiles may need to be removed and added again after this update because
   their service component names changed.
 
 ### Improved
+
+- Tip & Bill Splitter has a highlighted per-person result, segmented tip choices and people controls.
+  Random Number Picker has compact range inputs, quick presets and a highlighted result with animated digits.
 
 - Screens move at a calmer pace and bring their content in as they open, including Apps and
   Quick Tools when picked from the navigation. Going back to a screen keeps it as it was. The
@@ -32,6 +45,12 @@
 
 ### Fixed
 
+- Quick Tools avoids recycling category groups while their expanded heights animate, addressing
+  the reported scroll-and-expand lookahead layout crash.
+- Ruler calibration uses a full-length vertical reference aligned with its measurement axis.
+- Filtered Quick Tools sections hide unavailable collapse controls, and Screen Light controls
+  remain reachable by scrolling on short screens or with large text.
+- Unit Converter accepts localized decimal digits and Arabic decimal marks.
 - Opening an installed app can fall back to its Settings page when Android denies the launcher
   lookup, rather than letting the lookup failure escape.
 - Stopping or replacing Morse and SOS playback waits for in-flight torch commands, keeping the

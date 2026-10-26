@@ -97,6 +97,8 @@ class DefaultToolkitTilesRepository(
                 tile(ToolkitTileIds.BUBBLE_LEVEL),
                 tile(ToolkitTileIds.COMPASS),
                 tile(ToolkitTileIds.REACTION_TEST),
+                tile(ToolkitTileIds.RULER),
+                tile(ToolkitTileIds.PROTRACTOR),
             ),
         ),
         ToolkitTileCategoryData(
@@ -105,6 +107,9 @@ class DefaultToolkitTilesRepository(
                 tile(ToolkitTileIds.COIN_FLIP, requestKey = ToolkitTileIds.COIN_FLIP),
                 tile(ToolkitTileIds.DICE_ROLL, requestKey = ToolkitTileIds.DICE_ROLL),
                 tile(ToolkitTileIds.COUNTER, requestKey = ToolkitTileIds.COUNTER),
+                tile(ToolkitTileIds.UNIT_CONVERTER),
+                tile(ToolkitTileIds.BILL_SPLITTER),
+                tile(ToolkitTileIds.RANDOM_NUMBER),
                 tile("material_colors", quickTool = ToolkitQuickTool.MaterialColors),
                 tile(ToolkitTileIds.MORSE),
             ),
@@ -113,6 +118,7 @@ class DefaultToolkitTilesRepository(
             id = "system",
             tiles = persistentListOf(
                 tile(ToolkitTileIds.FLASH_DIMMER, requestKey = ToolkitTileIds.FLASH_DIMMER),
+                tile(ToolkitTileIds.SCREEN_LIGHT),
             ),
         ),
         ToolkitTileCategoryData(

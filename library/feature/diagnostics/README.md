@@ -13,7 +13,7 @@ analytics and advertising consents behind it, on a settings page and on an onboa
 - `UsageAndDiagnosticsScreenContent`, the stateless switch, privacy choices row and privacy note,
   with its loading and failure states.
 - `FirebaseConsentDialog`, the privacy choices dialog, and its pages.
-- `FirebaseOnboardingPage`, the onboarding page that shows the switch and the dialog, with its own
+- `TelemetryOnboardingPage`, the onboarding page that shows the switch and the dialog, with its own
   strings.
 - `UsageAndDiagnosticsSettings`, `UsageAndDiagnosticsRepository`,
   `DefaultUsageAndDiagnosticsRepository` and `diagnosticsSettingsModule`.
@@ -25,7 +25,7 @@ analytics and advertising consents behind it, on a settings page and on an onboa
   (`UsageAndDiagnosticsPreferencesDataSource`).
 - The consent SDK calls, owned by `:library:integration:consent` (`ConsentRepository`).
 - The onboarding flow and its pager, owned by [`:library:feature:onboarding`](../onboarding/README.md);
-  a host lists `FirebaseOnboardingPage` in its `OnboardingProvider`.
+  a host lists `TelemetryOnboardingPage` in its `OnboardingProvider`.
 - The privacy page that opens this one, owned by [`:library:feature:privacy`](../privacy/README.md).
 
 ## Depends on
@@ -38,14 +38,14 @@ analytics and advertising consents behind it, on a settings page and on an onboa
 
 - [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `diagnosticsSettingsPage()` and
   includes `diagnosticsSettingsModule`.
-- `:sample:feature:onboarding`, which lists `FirebaseOnboardingPage`.
+- `:sample:feature:onboarding`, which lists `TelemetryOnboardingPage`.
 
 ## Flow chart
 
 ```mermaid
 flowchart TD
     Page[diagnosticsSettingsPage: DiagnosticsSettingsRoute] --> Screen[UsageAndDiagnosticsScreen]
-    Onboarding[FirebaseOnboardingPage] --> VM
+    Onboarding[TelemetryOnboardingPage] --> VM
     Screen --> VM[UsageAndDiagnosticsViewModel]
     Screen --> Content[UsageAndDiagnosticsScreenContent]
     Content -->|privacy choices row| Dialog[FirebaseConsentDialog]
@@ -80,11 +80,11 @@ flowchart TD
 
 ## Public contracts
 
-- `UsageAndDiagnosticsScreen()`, `diagnosticsSettingsPage()`, `FirebaseOnboardingPage(isSelected)`,
+- `UsageAndDiagnosticsScreen()`, `diagnosticsSettingsPage()`, `TelemetryOnboardingPage(isSelected)`,
   `FirebaseConsentDialog(settings, ...)`, `UsageAndDiagnosticsViewModel`, `UsageAndDiagnosticsUiState`,
   `UsageAndDiagnosticsEvent`, `UsageAndDiagnosticsSettings`, `UsageAndDiagnosticsRepository` and
   `diagnosticsSettingsModule`. `UsageAndDiagnosticsScreenContent` and
-  `FirebaseOnboardingPageContent` are internal.
+  `TelemetryOnboardingPageContent` are internal.
 - Consent defaults: every choice is granted in release builds and refused in debug builds until the
   person answers.
 
@@ -95,3 +95,12 @@ flowchart TD
 - `UsageAndDiagnosticsSettings` duplicates `ConsentSettings` from `:library:integration:consent`.
 - Changes affect both settings and onboarding, and must keep the consent defaults, the stored
   values and the order in which the SDKs receive them.
+
+## Migration notes
+
+In `3.0.0-pre30`, `FirebaseOnboardingPage` was renamed directly to `TelemetryOnboardingPage`
+(`ui.onboarding`). Hosts must update imports and calls; no compatibility alias is provided.
+The name covers the page's usage and diagnostics reporting and its analytics and advertising
+consent choices. Keep the existing page key and pass the same `isSelected` value. Consent state,
+defaults and SDK updates keep their existing behavior. See the
+[3.0.0 migration guide](../../../docs/migration/3.0.0.md#telemetry-onboarding-page-300-pre30).

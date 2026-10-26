@@ -33,7 +33,7 @@ screen of [`:library:feature:startup`](../startup/README.md).
 - Host-specific onboarding provider implementations, owned by `:sample:feature:onboarding`.
 - Consent SDK orchestration, owned by `:library:integration:consent`.
 - The diagnostics page and the privacy choices dialog it opens, owned by
-  [`:library:feature:diagnostics`](../diagnostics/README.md) (`FirebaseOnboardingPage`) along with
+  [`:library:feature:diagnostics`](../diagnostics/README.md) (`TelemetryOnboardingPage`) along with
   the state they read and write. A host lists it among its pages through `OnboardingProvider`.
 - Theme implementation and settings repositories, owned by core design system and DataStore.
 
@@ -94,7 +94,7 @@ flowchart TD
     Screen --> Pages[Provider-defined ordered pages]
     Pages --> Theme[ThemeOnboardingPageTab: OnboardingThemeViewModel]
     Theme --> ThemeRepo[ThemePreferencesRepository]
-    Pages --> Diagnostics[FirebaseOnboardingPage from feature:diagnostics]
+    Pages --> Diagnostics[TelemetryOnboardingPage from feature:diagnostics]
     Screen -->|Skip or Finish: CompleteOnboarding| VM
     VM --> Completion[OnboardingRepository]
     Completion --> Store[Preferences DataStore]
@@ -164,3 +164,11 @@ The onboarding module registers its own `data/local` source over the shared sett
 `DefaultOnboardingRepository`. The `OnboardingRepository` interface lives in
 `core.common.data.repositories`, allowing host core code to observe completion without importing
 the feature. Hosts no longer duplicate these bindings in their own onboarding module.
+
+## Migration notes
+
+From `3.0.0-pre30`, host providers call `TelemetryOnboardingPage(isSelected)` from
+`:library:feature:diagnostics` instead of `FirebaseOnboardingPage`. This is a breaking rename
+without an alias; the onboarding module still owns only the pager, not the consent page.
+Update imports and calls as shown in the
+[3.0.0 migration guide](../../../docs/migration/3.0.0.md#telemetry-onboarding-page-300-pre30).
