@@ -188,6 +188,12 @@ flowchart TD
   system's `il_wavy_line` as a divider. The wave is drawn rather than tiled from the drawable, so it
   scales with the divider's band and fits a whole number of half-waves into any length; the fitting
   is `wavyLineGeometry`, which is unit tested.
+- `AospPageIndicator` in `views/carousel` draws an Android 10-inspired page indicator whose active
+  dot stretches into a rounded capsule across page transitions. The `PagerState` overload reads
+  continuous scroll offset during drawing so swipe and programmatic page transitions never queue
+  stale targets; the `(pageCount, selectedIndex)` overload animates single-step changes and snaps
+  across multi-page jumps. Long carousels use a continuous sliding window (`pageIndicatorWindowStart`),
+  which is unit tested alongside `pageIndicatorPosition`.
 
 
 - New ViewModels extend `core.ui.screen.ScreenViewModel`, or `core.ui.screen.LoggedScreenViewModel`

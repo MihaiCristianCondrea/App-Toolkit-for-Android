@@ -92,7 +92,6 @@ class DefaultToolkitTilesRepository(
     private val catalogue: ImmutableList<ToolkitTileCategoryData> = persistentListOf(
         ToolkitTileCategoryData(
             id = "sensors",
-            initiallyExpanded = true,
             tiles = persistentListOf(
                 tile(ToolkitTileIds.BUBBLE_LEVEL),
                 tile(ToolkitTileIds.COMPASS),

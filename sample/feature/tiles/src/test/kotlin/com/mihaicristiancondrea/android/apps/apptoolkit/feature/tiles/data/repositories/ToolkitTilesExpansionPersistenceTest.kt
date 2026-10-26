@@ -30,10 +30,14 @@ import kotlin.test.assertEquals
 class ToolkitTilesExpansionPersistenceTest {
 
     @Test
-    fun `missing preference uses the catalogue default while saved empty set stays empty`() =
+    fun `missing preference defaults to all categories collapsed while saved choices are restored`() =
         runTest {
             val storedIds = MutableStateFlow<Set<String>?>(null)
             val repository = repository(storedIds)
+
+            assertEquals(emptySet(), repository.expandedCategoryIds.first())
+
+            storedIds.value = setOf("sensors")
 
             assertEquals(setOf("sensors"), repository.expandedCategoryIds.first())
 

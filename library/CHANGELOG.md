@@ -6,8 +6,19 @@
 
 **Version:** `3.0.0-pre30`
 
+### Added
+
+- `AospPageIndicator` in `:library:core:ui` (`views.carousel`) provides an Android 10-inspired
+  capsule page indicator with both continuous `PagerState` tracking and animated integer-index
+  overloads, sliding-window support for large page counts, RTL layout support and custom
+  accessibility state descriptions.
+
 ### Changed
 
+- Breaking API replacement: `DotsIndicator` and `IndicatorDot` in `:library:core:ui`
+  (`views.carousel`) and `PageIndicatorDots` in `:library:feature:onboarding`
+  (`ui.views.controls`) are removed and replaced by `AospPageIndicator` in `:library:core:ui`
+  (`views.carousel`). `CustomCarousel` and `OnboardingFooter` now use `AospPageIndicator` directly.
 - Breaking API rename: `FirebaseOnboardingPage` is now `TelemetryOnboardingPage` in
   `:library:feature:diagnostics` (`ui.onboarding`). Update host imports and calls; there is no
   deprecated alias. The page covers usage and diagnostics reporting and analytics/advertising

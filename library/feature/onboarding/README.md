@@ -172,3 +172,6 @@ From `3.0.0-pre30`, host providers call `TelemetryOnboardingPage(isSelected)` fr
 without an alias; the onboarding module still owns only the pager, not the consent page.
 Update imports and calls as shown in the
 [3.0.0 migration guide](../../../docs/migration/3.0.0.md#telemetry-onboarding-page-300-pre30).
+
+`PageIndicatorDots` in `ui.views.controls` is also removed in `3.0.0-pre30`; `OnboardingFooter` now
+uses the shared `AospPageIndicator` from `:library:core:ui`.

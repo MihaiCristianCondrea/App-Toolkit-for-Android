@@ -44,6 +44,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.carousel.AospPageIndicator
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
@@ -98,9 +99,9 @@ fun OnboardingFooter(
             modifier = Modifier.weight(1f),
             contentAlignment = Alignment.Center
         ) {
-            PageIndicatorDots(
+            AospPageIndicator(
                 pagerState = pagerState,
-                pageCount = pageCount
+                dotSize = SizeConstants.SmallSize
             )
         }
 
@@ -136,4 +137,3 @@ fun OnboardingFooter(
         }
     }
 }
-

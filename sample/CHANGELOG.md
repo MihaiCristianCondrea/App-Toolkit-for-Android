@@ -16,7 +16,8 @@
 ### Changed
 
 - Quick Tools filter chips now filter by tool category (All tools, Sensors & Measurement,
-  Utilities & Fun, System & Controls, Wellbeing) instead of Quick Settings sync status.
+  Utilities & Fun, System & Controls, Wellbeing) instead of Quick Settings sync status, and
+  all categories start collapsed by default until expanded by the user.
 - Quick Tools now displays one native ad between the middle category groups (after the tools
   for a single category), and app-open ads are no longer shown on launch or resume.
 - The Counter has a minus button to correct a miscount without resetting the total.
@@ -32,6 +33,8 @@
 
 - Tip & Bill Splitter has a highlighted per-person result, segmented tip choices and people controls.
   Random Number Picker has compact range inputs, quick presets and a highlighted result with animated digits.
+- Carousel and onboarding page indicators now follow swipe progress continuously with a smooth
+  capsule stretch.
 
 - Screens move at a calmer pace and bring their content in as they open, including Apps and
   Quick Tools when picked from the navigation. Going back to a screen keeps it as it was. The
