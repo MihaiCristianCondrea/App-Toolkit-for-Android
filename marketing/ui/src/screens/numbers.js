@@ -178,7 +178,7 @@ export default {
         <div class="bento-stack">
           <!-- Full-width clickable Counter Feature Card (NumbersCounterFeatureCard) -->
           <button
-            class="numbers-card ${bento ? "corner-bento-top" : "corner-uniform"}"
+            class="numbers-card numbers-card--feature ${bento ? "corner-bento-top" : "corner-uniform"}"
             @click=${() => s.set({ activeSheet: "counter" })}
           >
             <div class="numbers-counter-top">
@@ -202,6 +202,7 @@ export default {
               </div>
             </div>
             ${toolMetaChips({
+              palette: "gold",
               kindLabel: NUMBERS_TOOLS.counter.kindLabel,
               supportsTile: NUMBERS_TOOLS.counter.supportsTile,
               tileAdded: Boolean(s.addedTiles?.counter),
@@ -272,6 +273,7 @@ function renderBentoToolCard({ tool, cornerClass, tileAdded, onOpen }) {
         <p class="numbers-card-sub">${tool.subtitle}</p>
       </div>
       ${toolMetaChips({
+        palette: "gold",
         kindLabel: tool.kindLabel,
         supportsTile: tool.supportsTile,
         tileAdded,

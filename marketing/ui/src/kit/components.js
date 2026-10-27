@@ -25,7 +25,7 @@ export function shapeBadge({
     bg ||
     (palette === "primary"
       ? "color-mix(in srgb, var(--md-sys-color-primary-container) 45%, transparent)"
-      : `color-mix(in srgb, var(--tk-${palette}-container) 15%, transparent)`);
+      : `color-mix(in srgb, var(--tk-${palette}-container) 26%, var(--md-sys-color-surface-container-highest))`);
   const resolvedFg =
     fg ||
     (palette === "primary"
@@ -61,9 +61,10 @@ export function toolMetaChips({
   supportsTile = true,
   tileAdded = false,
   showTileStatus = false,
+  palette = "gold",
 } = {}) {
   return html`
-    <div class="tk-meta-chip-set" role="group" aria-label="Tool capabilities">
+    <div class="tk-meta-chip-set" style="--chip-bg:color-mix(in srgb, var(--tk-${palette}-container) 24%, var(--md-sys-color-surface-container-highest));--chip-fg:var(--tk-${palette}-content)" role="group" aria-label="Tool capabilities">
       <md-assist-chip class="tk-chip--type" .label=${kindLabel}></md-assist-chip>
       ${supportsTile
         ? html`
