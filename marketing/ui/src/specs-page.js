@@ -36,7 +36,7 @@ const draw = () => {
   else root.dataset.theme = "light";
 
   render(
-    referenceShell({heading: "Specifications", active: "specs", theme: view.theme, onTheme: theme => {view.theme = theme; draw();}}, html`
+    referenceShell({heading: "Specifications"}, html`
 
       <!-- Editorial Header -->
       <header class="g-header">

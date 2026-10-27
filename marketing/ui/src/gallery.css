@@ -635,4 +635,3 @@ md-text-button.g-card__title { --md-text-button-label-text-size: 17px; --md-text
 .g-card__screen[data-frame="false"] > .sc-screen { width: 100%; height: clamp(560px, 75dvh, 760px); }
 
 /* Brand content belongs to the shared shell's slot. */
-.reference-brand { display: flex; align-items: center; gap: 12px; padding: 16px; color: inherit; text-decoration: none; }

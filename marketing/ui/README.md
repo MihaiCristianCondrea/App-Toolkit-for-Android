@@ -7,7 +7,7 @@ window rules, device frames and embed lifecycle. The desktop drawer starts close
 "modal"`). Open its menu to reach Screens. Motion and Specifications remain standalone reference URLs. App Toolkit keeps its three
 screen renderers, state controls, Android app chrome, palettes and product content.
 
-It uses Material Next `^0.0.4` from npm.
+It pins Material Next to source commit `ed2ce23` until 0.0.5 is on npm. The gallery opens each screen in the same page; `screen.html` remains for captures and direct links.
 Installation needs Git and Node.js 24; npm builds the package from source.
 Gallery cards start without device frames. Opening screen detail shows a frame automatically,
 while an explicit `frame=none` URL stays frameless.

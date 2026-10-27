@@ -47,7 +47,7 @@ const draw = () => {
   else root.dataset.theme = "light";
 
   render(
-    referenceShell({heading: "Motion", active: "motion", theme: view.theme, onTheme: theme => {view.theme = theme; draw();}}, html`
+    referenceShell({heading: "Motion"}, html`
 
       <!-- Editorial Header -->
       <header class="g-header">

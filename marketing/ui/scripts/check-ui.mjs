@@ -23,20 +23,35 @@ try {
     assert.equal(await page.locator('mnw-marketing-shell .catalog-header, mnw-marketing-shell [aria-label="Filter screens"]').count(), 0);
     assert.equal(await page.locator('mnw-device-frame').count(), 0);
     assert.equal(await page.locator('.sc-screen').count(), 3);
-    assert.match(await page.locator('mnw-site-footer footer').innerText(), /Copyright © 2020–2026, Mihai-Cristian Condrea/);
-    assert.equal(await page.locator('.g-footer').count(), 0);
+    // A marketing page: no footer, no drawer, no menu button.
+    assert.equal(await page.locator('mnw-site-footer, .g-footer').count(), 0);
     const shell = page.locator('mnw-marketing-shell mnw-app-shell');
-    assert.equal(await shell.evaluate(el => el.navigationMode), 'modal');
+    assert.equal(await shell.evaluate(el => el.navigationMode), 'none');
     assert.equal(await shell.locator('.drawer').isVisible(), false);
-    await shell.locator('.bar > md-icon-button.leading').click();
-    await shell.locator('.drawer').waitFor({state: 'visible'});
-    assert.equal(await page.getByRole('link', {name: 'Specifications', exact: true}).count(), 0);
-    assert.equal(await page.getByRole('link', {name: 'Motion', exact: true}).count(), 0);
-    await page.keyboard.press('Escape');
-    await shell.locator('.drawer').waitFor({state: 'hidden'});
+    assert.equal(await shell.locator('.bar > md-icon-button.leading').count(), 0);
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true);
     await page.screenshot({path: new URL(`../captures/gallery-${width}.png`, import.meta.url).pathname});
     assert.deepEqual(errors, []);
+    await page.close();
+    checks++;
+  }
+  {
+    // Opening a screen and going back stays in one page.
+    const page = await browser.newPage({viewport: {width: 1280, height: 900}});
+    await page.goto(base);
+    await page.locator('mnw-screen-card').first().waitFor();
+    await page.evaluate(() => { window.__hub = true; });
+    const href = await page.locator('mnw-screen-card').first().getAttribute('href');
+    assert.match(href, /[?&]id=quick-tools/);
+    await page.locator('mnw-screen-card').first().locator('md-filled-button, a').last().click();
+    await page.locator('mnw-prototype-layout').waitFor();
+    assert.equal(await page.evaluate(() => window.__hub), true);
+    await page.locator('mnw-screen-inspector').locator('.back').click();
+    await page.locator('mnw-marketing-shell').waitFor();
+    assert.equal(await page.evaluate(() => window.__hub && !location.search), true);
+    await page.goForward();
+    await page.locator('mnw-prototype-layout').waitFor();
+    assert.equal(await page.evaluate(() => window.__hub), true);
     await page.close();
     checks++;
   }
@@ -75,7 +90,9 @@ try {
   for (const file of ['motion', 'specs']) {
     await page.goto(`${base}/${file}.html`);
     await page.locator('mnw-app-shell').waitFor();
-    assert.equal(await page.locator('mnw-app-shell').evaluate(el => el.navigationMode), 'modal');
+    assert.equal(await page.locator('mnw-app-shell').evaluate(el => el.navigationMode), 'none');
+    assert.equal(await page.locator('mnw-app-shell').evaluate(el => el.leading), 'back');
+    assert.equal(await page.locator('mnw-site-footer').count(), 0);
     checks++;
   }
   // Exercise the public embed API without a separate test-only product page.

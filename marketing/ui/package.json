@@ -15,7 +15,7 @@
   "dependencies": {
     "@material/web": "^2.5.0",
     "lit": "^3.3.3",
-    "material-next-web-components": "^0.0.4",
+    "material-next-web-components": "git+https://github.com/MihaiCristianCondrea/material-next-web-components.git#ed2ce23078da7371c50853f012d2303b6f54e781",
     "material-symbols": "^0.47.5"
   },
   "devDependencies": {
