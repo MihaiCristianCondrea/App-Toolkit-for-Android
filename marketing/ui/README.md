@@ -38,6 +38,13 @@ checks the web migration; Android screenshot parity remains a separate campaign 
 * `apps.js` - `AppsListScreen.kt` (developer app catalog with category filter chips and favorites).
 * `components.js` - `ComponentsShowcaseScreen.kt` (official Material Web buttons, chips, switches, sliders, and shape badges).
 
+## Opening the hub
+
+On Windows, double-click `open-marketing-ui.cmd`. On macOS or Linux, run
+`sh open-marketing-ui.sh`. Both launchers work from any current directory, refresh dependencies
+on each launch (including after a pull), sync assets and open the gallery in the browser.
+Node.js and npm must be on PATH. The Windows window stays open on failure so the error remains visible.
+
 ## Commands
 
 ```bash
