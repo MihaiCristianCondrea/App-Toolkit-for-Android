@@ -1,6 +1,6 @@
 # App Toolkit UI Kit (`@app-toolkit/ui-kit`)
 
-Interactive browser showcase for **App Toolkit for Android**, built with **Material Next 0.0.2**, **Vite**, **Lit**, and official **Material Web (`@material/web`)** components.
+Interactive browser showcase for **App Toolkit for Android**, built with **Material Next 0.0.3**, **Vite**, **Lit**, and official **Material Web (`@material/web`)** components.
 
 Material Next owns the gallery, preview controls, screen cards, prototype inspector, comparison views,
 window rules, device frames and embed lifecycle. The desktop drawer starts closed (`navigationMode:

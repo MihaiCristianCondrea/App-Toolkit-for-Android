@@ -15,7 +15,7 @@
   "dependencies": {
     "@material/web": "^2.5.0",
     "lit": "^3.3.3",
-    "material-next-web-components": "^0.0.2",
+    "material-next-web-components": "^0.0.3",
     "material-symbols": "^0.47.5"
   },
   "devDependencies": {
