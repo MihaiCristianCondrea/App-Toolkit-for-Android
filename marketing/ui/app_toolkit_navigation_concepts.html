@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>App Toolkit • Navigation Concepts</title>
+<style>
+:root{
+  font-family:Inter,Roboto,'Segoe UI',system-ui,-apple-system,sans-serif;
+  background:#f6f7fb;
+  color:#1c1b1f;
+  --surface:#fef7ff;
+  --surface-low:#f7f2fa;
+  --surface-high:#ece6f0;
+  --surface-highest:#e6e0e9;
+  --on-surface:#1d1b20;
+  --on-surface-variant:#49454f;
+  --primary:#6750a4;
+  --primary-container:#eaddff;
+  --on-primary-container:#21005d;
+  --secondary-container:#e8def8;
+  --on-secondary-container:#1d192b;
+  --tertiary-container:#ffd8e4;
+  --on-tertiary-container:#31111d;
+  --gold-container:#e2c900;
+  --gold-content:#6b5e00;
+  --teal-container:#00a091;
+  --teal-content:#006a60;
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 15% 0%,#f3edff 0,transparent 42%),linear-gradient(155deg,#faf9fd,#f0eef6);min-height:100vh;color:var(--on-surface)}
+button,input{font:inherit}
+button{cursor:pointer}
+.page{max-width:1480px;padding:36px 32px 64px;margin:0 auto}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;text-transform:uppercase;letter-spacing:1.4px;font-weight:700;color:var(--primary);background:var(--primary-container);padding:6px 12px;border-radius:999px}
+.lead{font-size:36px;letter-spacing:-1.2px;line-height:1.12;margin:14px 0 10px;font-weight:800}
+.intro{font-size:15px;color:var(--on-surface-variant);line-height:1.6;max-width:820px;margin:0 0 22px}
+.top-links{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px}
+.studio-link{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:#1d1b20;color:#fff;padding:11px 18px;border-radius:16px;font-size:13px;font-weight:700;box-shadow:0 8px 20px rgba(29,27,32,.14)}
+.switcher{display:flex;flex-wrap:wrap;gap:10px}
+.switcher button{border:1px solid #dad6e3;background:#fff;color:var(--on-surface-variant);padding:11px 16px;border-radius:16px;font-size:13px;font-weight:700;transition:.18s}
+.switcher button.active{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 6px 18px rgba(103,80,164,.25)}
+.direction-title{font-size:23px;letter-spacing:-.5px;margin:18px 0 4px;font-weight:750}
+.direction-sub{color:var(--on-surface-variant);margin:0 0 22px;font-size:14px;line-height:1.5}
+.screens{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;align-items:start}
+.screen-wrap{min-width:0}
+.route-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 6px 10px}
+.route-head b{font-size:15px}
+.route-head small{color:var(--on-surface-variant);font-size:11px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+.phone{width:100%;max-width:400px;margin:auto;border:8px solid #1d1b20;border-radius:42px;background:var(--surface);box-shadow:0 28px 55px rgba(29,27,32,.14),0 0 0 1px rgba(73,69,79,.22);overflow:hidden;min-height:800px;display:flex;flex-direction:column;position:relative}
+.phone:before{content:'';position:absolute;top:7px;left:50%;transform:translateX(-50%);width:68px;height:6px;border-radius:6px;background:#2b2930;z-index:4}
+.screen{background:var(--surface);min-height:0;display:flex;flex-direction:column;flex:1;position:relative}
+.status{height:36px;padding:14px 22px 0;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--on-surface);font-weight:700}
+.topbar{padding:16px 20px 12px;display:flex;justify-content:space-between;align-items:center}
+.topbar h3{font-size:22px;letter-spacing:-.5px;margin:0;font-weight:700}
+.icon-btn{border:none;width:36px;height:36px;border-radius:50%;background:var(--surface-high);font-size:15px;color:var(--on-surface-variant);display:grid;place-items:center}
+.content{padding:4px 16px 14px;flex:1;min-height:0;display:flex;flex-direction:column;gap:12px}
+.bottom-nav{min-height:74px;background:var(--surface-low);border-top:1px solid rgba(73,69,79,.08);display:flex;justify-content:space-around;align-items:stretch;padding:8px 6px 4px}
+.navitem{flex:1;border:0;background:none;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:4px;padding:4px 2px;font-size:11px;color:var(--on-surface-variant);font-weight:600}
+.navicon{width:58px;height:32px;border-radius:16px;display:grid;place-items:center;transition:.18s}
+.navitem.active{font-weight:700;color:var(--on-surface)}
+.navitem.active .navicon{background:var(--secondary-container);color:var(--on-secondary-container)}
+.gesture{width:108px;height:4px;border-radius:9px;background:#1d1b20;align-self:center;margin:4px 0 8px;opacity:.75}
+
+/* Numbers Screen M3 Expressive Styles */
+.numbers-hero{border-radius:28px;padding:22px 20px;background:rgba(226,201,0,.16);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.numbers-hero .watermark{position:absolute;right:-24px;bottom:-26px;width:128px;height:128px;opacity:.14;pointer-events:none}
+.numbers-hero .eyebrow-pill{display:inline-block;background:rgba(226,201,0,.25);color:var(--gold-content);font-size:10px;font-weight:800;letter-spacing:1.1px;padding:4px 10px;border-radius:999px;margin-bottom:6px}
+.numbers-hero h4{margin:0 0 6px;font-size:22px;letter-spacing:-.5px;line-height:1.18;color:var(--on-surface)}
+.numbers-hero p{margin:0;color:var(--on-surface-variant);font-size:13px;line-height:1.4}
+.shape-badge{width:68px;height:68px;flex:0 0 68px;position:relative;display:grid;place-items:center;z-index:1}
+.shape-badge svg.bg{position:absolute;inset:0;width:100%;height:100%}
+.shape-badge svg.fg{position:relative;width:32px;height:32px;color:var(--gold-content)}
+
+.section-header{font-size:15px;font-weight:700;color:var(--on-surface);padding:4px 4px 0;margin:0}
+
+/* Grouped Bento Cards */
+.bento-group{display:flex;flex-direction:column;gap:6px}
+.bento-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.tool-card{border:0;text-align:left;background:var(--surface-high);padding:16px;display:flex;flex-direction:column;justify-content:space-between;gap:12px;transition:transform .14s ease,background .14s ease;position:relative}
+.tool-card:hover{background:#e4dee9}
+.tool-card:active{transform:scale(.985)}
+.r-left{border-radius:28px 8px 8px 28px}
+.r-right{border-radius:8px 28px 28px 8px}
+.r-top{border-radius:28px 28px 8px 8px}
+.r-bl{border-radius:8px 8px 8px 28px}
+.r-br{border-radius:8px 8px 28px 8px}
+
+.tile-badge{width:52px;height:52px;flex:0 0 52px;position:relative;display:grid;place-items:center}
+.tile-badge svg.bg{position:absolute;inset:0;width:100%;height:100%}
+.tile-badge svg.ic{position:relative;width:24px;height:24px;color:var(--gold-content)}
+.tool-card h5{margin:0 0 4px;font-size:15px;font-weight:650;color:var(--on-surface)}
+.tool-card p{margin:0;font-size:12px;line-height:1.38;color:var(--on-surface-variant)}
+.chip-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.m3-chip{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:650;padding:4px 9px;border-radius:8px;background:var(--secondary-container);color:var(--on-secondary-container)}
+.m3-chip.tile{background:var(--primary-container);color:var(--on-primary-container)}
+
+.counter-feature-head{display:flex;align-items:center;gap:14px}
+.count-pill{width:48px;height:48px;flex:0 0 48px;position:relative;display:grid;place-items:center;font-weight:800;font-size:15px;color:var(--gold-content);font-variant-numeric:tabular-nums}
+.count-pill svg{position:absolute;inset:0;width:100%;height:100%}
+.count-pill span{position:relative;z-index:1}
+
+/* Quick Tools Accordion */
+.filter-bar{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.filter-chip{border:1px solid rgba(73,69,79,.22);background:transparent;color:var(--on-surface-variant);border-radius:8px;padding:6px 11px;font-size:11px;font-weight:600;white-space:nowrap}
+.filter-chip.active{background:var(--secondary-container);color:var(--on-secondary-container);border-color:transparent}
+.cat-stack{display:flex;flex-direction:column;gap:4px}
+.cat-card{background:var(--surface-low);padding:12px 14px;display:flex;align-items:center;gap:12px;border:0;width:100%;text-align:left}
+.cat-card.first{border-radius:28px 28px 6px 6px}
+.cat-card.middle{border-radius:6px}
+.cat-card.last{border-radius:6px 6px 28px 28px}
+.cat-card strong{flex:1;font-size:14px;color:var(--on-surface)}
+.cat-card span.cnt{font-size:12px;color:var(--on-surface-variant)}
+.info-banner{border-radius:28px;background:var(--tertiary-container);color:var(--on-tertiary-container);padding:16px;display:flex;gap:12px;align-items:center;margin-top:4px}
+.info-banner b{display:block;font-size:14px;margin-bottom:2px}
+.info-banner small{font-size:12px;line-height:1.35;display:block}
+
+/* Apps Catalog */
+.app-list{display:flex;flex-direction:column;gap:6px}
+.app-row{background:var(--surface-low);padding:14px;display:flex;align-items:center;gap:12px}
+.app-row.first{border-radius:24px 24px 6px 6px}
+.app-row.middle{border-radius:6px}
+.app-row.last{border-radius:6px 6px 24px 24px}
+.app-icon{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-weight:800;font-size:16px;color:#fff;flex:0 0 46px}
+.app-meta{flex:1;min-width:0}
+.app-meta b{display:block;font-size:14px;margin-bottom:2px}
+.app-meta small{display:block;font-size:11px;color:var(--on-surface-variant);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* Modal Bottom Sheet Preview inside Phone */
+.sheet-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.42);display:flex;align-items:flex-end;z-index:10;animation:fadeIn .16s ease}
+.sheet-modal{width:100%;background:var(--surface);border-radius:28px 28px 0 0;padding:20px 18px 24px;box-shadow:0 -12px 32px rgba(0,0,0,.18);display:flex;flex-direction:column;gap:14px}
+.sheet-head{display:flex;align-items:center;gap:12px}
+.sheet-head .titles{flex:1}
+.sheet-head h4{margin:0;font-size:19px}
+.sheet-head p{margin:2px 0 0;font-size:12px;color:var(--on-surface-variant)}
+.sheet-body{background:var(--surface-low);border-radius:22px;padding:18px;text-align:center}
+.sheet-big-num{font-size:46px;font-weight:800;letter-spacing:-1.5px;color:var(--on-surface);font-variant-numeric:tabular-nums;margin:6px 0 12px}
+.sheet-actions{display:flex;gap:8px;justify-content:center}
+.sheet-btn{border:0;border-radius:999px;padding:10px 18px;font-weight:700;font-size:13px;background:var(--secondary-container);color:var(--on-secondary-container)}
+.sheet-btn.primary{background:var(--primary);color:#fff}
+.qs-group{display:flex;flex-direction:column;gap:4px}
+.qs-info{background:var(--secondary-container);color:var(--on-secondary-container);border-radius:24px 24px 6px 6px;padding:12px 14px;font-size:12px;text-align:left}
+.qs-info b{display:block;margin-bottom:2px;font-size:13px}
+.qs-action{border:0;background:var(--secondary-container);color:var(--on-secondary-container);border-radius:6px 6px 24px 24px;padding:11px;font-weight:700;font-size:12px}
+
+.footnote{max-width:1180px;margin:30px auto 0;color:var(--on-surface-variant);font-size:13px;line-height:1.6;background:#fff;border:1px solid #e6e1ee;border-radius:22px;padding:18px 22px}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@media(max-width:1100px){.screens{grid-template-columns:1fr;gap:32px}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="top-links">
+    <div class="eyebrow">App Toolkit • Material 3 Expressive Architecture</div>
+    <a class="studio-link" href="index.html">Open Interactive Figma Workspace (index.html) →</a>
+  </div>
+  <h1 class="lead">Quick Tools · Numbers · Apps</h1>
+  <p class="intro">Calculation, conversion, counting, and chance tools live in the dedicated <b>Numbers</b> destination with warm gold accents, Material 3 Expressive badge silhouettes (<code>SoftBurst</code>, <code>Cookie9Sided</code>, <code>Flower</code>, <code>Gem</code>, <code>Cookie12Sided</code>), and grouped bento corners. Every card opens its interactive <code>ToolkitToolBottomSheet</code>.</p>
+
+  <div class="screens" id="screens"></div>
+
+  <div class="footnote">
+    <b>Synced with Android implementation:</b> <code>Counter</code>, <code>Dice Roll</code>, <code>Tip &amp; Bill Splitter</code>, <code>Unit Converter</code>, and <code>Random Number Picker</code> are migrated out of <code>DefaultToolkitTilesRepository</code> into <code>NumbersScreen.kt</code>. Tap any card on the <b>Numbers</b> phone above to test its bottom sheet.
+  </div>
+</div>
+
+<script>
+const SHAPES = {
+  cookie12: `<path d="M50 4 C57 4 60 9 66 9 C73 9 78 13 81 19 C84 25 90 27 93 34 C96 40 93 46 93 50 C93 54 96 60 93 66 C90 73 84 75 81 81 C78 87 73 91 66 91 C60 91 57 96 50 96 C43 96 40 91 34 91 C27 91 22 87 19 81 C16 75 10 73 7 66 C4 60 7 54 7 50 C7 46 4 40 7 34 C10 27 16 25 19 19 C22 13 27 9 34 9 C40 9 43 4 50 4 Z"/>`,
+  softBurst: `<path d="M50 3 L61 15 L77 10 L81 26 L96 33 L90 50 L96 67 L81 74 L77 90 L61 85 L50 97 L39 85 L23 90 L19 74 L4 67 L10 50 L4 33 L19 26 L23 10 L39 15 Z"/>`,
+  cookie9: `<path d="M50 4 C59 4 64 11 72 13 C80 15 88 20 91 28 C94 36 89 44 90 52 C91 60 95 68 90 76 C85 83 76 84 69 89 C62 94 56 97 50 97 C44 97 38 94 31 89 C24 84 15 83 10 76 C5 68 9 60 10 52 C11 44 6 36 9 28 C12 20 20 15 28 13 C36 11 41 4 50 4 Z"/>`,
+  flower: `<path d="M50 6 C61 6 66 16 74 18 C83 20 93 26 93 37 C93 46 84 52 84 59 C84 68 91 77 84 85 C77 92 66 88 58 91 C52 94 48 94 42 91 C34 88 23 92 16 85 C9 77 16 68 16 59 C16 52 7 46 7 37 C7 26 17 20 26 18 C34 16 39 6 50 6 Z"/>`,
+  gem: `<path d="M32 8 L68 8 L93 34 L68 92 L32 92 L7 34 Z" stroke-linejoin="round"/>`
+};
+
+const ICONS = {
+  numbers: `<path fill="currentColor" d="M280-160l40-160H160l20-80h160l40-160H220l20-80h160l40-160h80l-40 160h160l40-160h80l-40 160h160l-20 80H660l-40 160h160l-20 80H600l-40 160h-80l40-160H360l-40 160h-80Zm140-240h160l40-160H460l-40 160Z"/>`,
+  receipt: `<path fill="currentColor" d="M240-80q-50 0-85-35t-35-85v-120h120v-560l60 60 60-60 60 60 60-60 60 60 60-60 60 60 60-60 60 60 60-60v680q0 50-35 85t-85 35H240Zm480-80q17 0 28.5-11.5T760-200v-560H320v440h360v120q0 17 11.5 28.5T720-160ZM360-600v-80h240v80H360Zm0 120v-80h240v80H360Z"/>`,
+  swap: `<path fill="currentColor" d="M280-160 80-360l200-200 56 57-103 103h287v80H233l103 103-56 57Zm400-240-56-57 103-103H440v-80h287L624-743l56-57 200 200-200 200Z"/>`,
+  counter: `<path fill="currentColor" d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/>`,
+  dice: `<path fill="currentColor" d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm100-100q25 0 42.5-17.5T360-360q0-25-17.5-42.5T300-420q-25 0-42.5 17.5T240-360q0 25 17.5 42.5T300-300Zm360 0q25 0 42.5-17.5T720-360q0-25-17.5-42.5T660-420q-25 0-42.5 17.5T600-360q0 25 17.5 42.5T660-300ZM480-420q25 0 42.5-17.5T540-480q0-25-17.5-42.5T480-540q-25 0-42.5 17.5T420-480q0 25 17.5 42.5T480-420ZM300-540q25 0 42.5-17.5T360-600q0-25-17.5-42.5T300-660q-25 0-42.5 17.5T240-600q0 25 17.5 42.5T300-540Zm360 0q25 0 42.5-17.5T720-600q0-25-17.5-42.5T660-660q-25 0-42.5 17.5T600-600q0 25 17.5 42.5T660-540Z"/>`
+};
+
+let counterVal = 12;
+let diceVal = 5;
+let randomVal = 42;
+let activeSheet = null;
+
+function badgeSvg(shapeKey, iconKey, fill='rgba(226,201,0,.22)', color='#6b5e00') {
+  return `<span class="tile-badge">
+    <svg class="bg" viewBox="0 0 100 100" fill="${fill}">${SHAPES[shapeKey]}</svg>
+    <svg class="ic" viewBox="0 -960 960 960" style="color:${color}">${ICONS[iconKey]}</svg>
+  </span>`;
+}
+
+function renderQuickTools() {
+  return `
+    <div class="filter-bar">
+      <button class="filter-chip active">All</button>
+      <button class="filter-chip">Sensors</button>
+      <button class="filter-chip">Utilities</button>
+      <button class="filter-chip">System</button>
+      <button class="filter-chip">Wellbeing</button>
+    </div>
+    <div class="cat-stack">
+      <div class="cat-card first">
+        ${badgeSvg('cookie9','numbers','rgba(0,160,145,.18)','#006a60')}
+        <strong>Sensors</strong>
+        <span class="cnt">5 tools ▾</span>
+      </div>
+      <div class="cat-card middle">
+        ${badgeSvg('cookie12','dice','rgba(226,201,0,.2)','#6b5e00')}
+        <strong>Utilities</strong>
+        <span class="cnt">3 tools ▾</span>
+      </div>
+      <div class="cat-card middle">
+        ${badgeSvg('flower','numbers','rgba(226,0,142,.16)','#91005a')}
+        <strong>System</strong>
+        <span class="cnt">2 tools ▾</span>
+      </div>
+      <div class="cat-card last">
+        ${badgeSvg('softBurst','numbers','rgba(255,139,38,.18)','#8b4100')}
+        <strong>Wellbeing</strong>
+        <span class="cnt">2 tools ▾</span>
+      </div>
+    </div>
+    <div class="info-banner">
+      <div>
+        <b>How to add tiles</b>
+        <small>Open a tile-ready tool or swipe down Quick Settings and tap the pencil icon to pin tiles.</small>
+      </div>
+    </div>
+  `;
+}
+
+function renderNumbers() {
+  return `
+    <div class="numbers-hero">
+      <svg class="watermark" viewBox="0 0 100 100" fill="#e2c900">${SHAPES.softBurst}</svg>
+      <div>
+        <span class="eyebrow-pill">NUMBERS</span>
+        <h4>Count, split &amp; convert</h4>
+        <p>Simple tools for everyday tasks.</p>
+      </div>
+      <div class="shape-badge">
+        <svg class="bg" viewBox="0 0 100 100" fill="rgba(226,201,0,.28)">${SHAPES.cookie12}</svg>
+        <svg class="fg" viewBox="0 -960 960 960">${ICONS.numbers}</svg>
+      </div>
+    </div>
+
+    <h4 class="section-header">Calculate &amp; convert</h4>
+    <div class="bento-row">
+      <button class="tool-card r-left" data-sheet="bill_splitter">
+        <div>
+          ${badgeSvg('softBurst','receipt')}
+          <h5 style="margin-top:10px">Tip &amp; Bill Splitter</h5>
+          <p>Split a total with tip across your group</p>
+        </div>
+        <div class="chip-row"><span class="m3-chip">Expanded tool</span></div>
+      </button>
+      <button class="tool-card r-right" data-sheet="unit_converter">
+        <div>
+          ${badgeSvg('cookie9','swap')}
+          <h5 style="margin-top:10px">Unit Converter</h5>
+          <p>Convert length, weight, temperature, and data</p>
+        </div>
+        <div class="chip-row"><span class="m3-chip">Expanded tool</span></div>
+      </button>
+    </div>
+
+    <h4 class="section-header">Count &amp; chance</h4>
+    <div class="bento-group">
+      <button class="tool-card r-top" data-sheet="counter">
+        <div class="counter-feature-head">
+          ${badgeSvg('flower','counter')}
+          <div style="flex:1">
+            <h5>Counter</h5>
+            <p>Keep a running tally from Quick Settings or in the app</p>
+          </div>
+          <div class="count-pill">
+            <svg viewBox="0 0 100 100" fill="rgba(226,201,0,.24)">${SHAPES.cookie9}</svg>
+            <span>${counterVal}</span>
+          </div>
+        </div>
+        <div class="chip-row">
+          <span class="m3-chip">Quick tool</span>
+          <span class="m3-chip tile">✓ Tile</span>
+        </div>
+      </button>
+      <div class="bento-row">
+        <button class="tool-card r-bl" data-sheet="random_number">
+          <div>
+            ${badgeSvg('gem','numbers')}
+            <h5 style="margin-top:10px">Random Number</h5>
+            <p>Pick a number between any min and max</p>
+          </div>
+          <div class="chip-row"><span class="m3-chip">Quick tool</span></div>
+        </button>
+        <button class="tool-card r-br" data-sheet="dice_roll">
+          <div>
+            ${badgeSvg('cookie12','dice')}
+            <h5 style="margin-top:10px">Dice Roll</h5>
+            <p>Roll a six-sided die from Quick Settings</p>
+          </div>
+          <div class="chip-row">
+            <span class="m3-chip">Quick tool</span>
+            <span class="m3-chip tile">✓ Tile</span>
+          </div>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function renderApps() {
+  const apps = [
+    ['SC','#00897b','Smart Cleaner for Android','Storage & duplicate cleaner'],
+    ['QR','#5e35b1','QR & Bar Code Scanner','Fast offline code reader'],
+    ['CC','#fb8c00','Shopping Cart Calculator','Track groceries & discounts'],
+    ['NP','#1e88e5','Net Probe','Ping, DNS & network diagnostics'],
+    ['EL','#d81b60','English with Lidia Plus','Vocabulary & grammar lessons']
+  ];
+  return `
+    <div class="app-list">
+      ${apps.map(([abbr,bg,name,sub],i)=>`
+        <div class="app-row ${i===0?'first':i===apps.length-1?'last':'middle'}">
+          <div class="app-icon" style="background:${bg}">${abbr}</div>
+          <div class="app-meta"><b>${name}</b><small>${sub}</small></div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderSheetModal() {
+  if (!activeSheet) return '';
+  const meta = {
+    counter: {title:'Counter', sub:'Keep a running tally from Quick Settings or in the app', shape:'flower', icon:'counter', hasTile:true, body:`
+      <div class="sheet-big-num">${counterVal}</div>
+      <div class="sheet-actions">
+        <button class="sheet-btn" data-act="dec">− 1</button>
+        <button class="sheet-btn primary" data-act="inc">+ 1</button>
+        <button class="sheet-btn" data-act="rst">Reset</button>
+      </div>
+    `},
+    bill_splitter: {title:'Tip & Bill Splitter', sub:'Split a total with tip across your group', shape:'softBurst', icon:'receipt', hasTile:false, body:`
+      <div style="font-size:11px;font-weight:700;color:#6b5e00">EACH PERSON PAYS (4 PEOPLE · 15% TIP)</div>
+      <div class="sheet-big-num">69.00</div>
+      <div style="font-size:12px;color:#49454f">Bill: 240.00 · Tip: 36.00 · Total: 276.00</div>
+    `},
+    unit_converter: {title:'Unit Converter', sub:'Convert length, weight, temperature, and data', shape:'cookie9', icon:'swap', hasTile:false, body:`
+      <div style="font-size:11px;font-weight:700;color:#6b5e00">LENGTH · METERS TO FEET</div>
+      <div class="sheet-big-num">32.808 ft</div>
+      <div style="font-size:12px;color:#49454f">10 m = 32.8084 ft</div>
+    `},
+    random_number: {title:'Random Number Picker', sub:'Pick a number between any minimum and maximum', shape:'gem', icon:'numbers', hasTile:false, body:`
+      <div style="font-size:11px;font-weight:700;color:#6b5e00">RANGE 1 TO 100</div>
+      <div class="sheet-big-num">${randomVal}</div>
+      <div class="sheet-actions"><button class="sheet-btn primary" data-act="rand">Generate</button></div>
+    `},
+    dice_roll: {title:'Dice Roll', sub:'Roll a six-sided die from Quick Settings', shape:'cookie12', icon:'dice', hasTile:true, body:`
+      <div class="sheet-big-num">🎲 ${diceVal}</div>
+      <div class="sheet-actions"><button class="sheet-btn primary" data-act="roll">Roll again</button></div>
+    `}
+  }[activeSheet];
+
+  return `
+    <div class="sheet-backdrop" data-close-sheet>
+      <div class="sheet-modal" onclick="event.stopPropagation()">
+        <div class="sheet-head">
+          ${badgeSvg(meta.shape, meta.icon)}
+          <div class="titles"><h4>${meta.title}</h4><p>${meta.sub}</p></div>
+          <button class="icon-btn" data-close-sheet>✕</button>
+        </div>
+        <div class="sheet-body">${meta.body}</div>
+        ${meta.hasTile ? `
+          <div class="qs-group">
+            <div class="qs-info"><b>Quick Settings tile</b>Use ${meta.title} straight from your notification shade.</div>
+            <button class="qs-action">+ Add to Quick Settings</button>
+          </div>
+        ` : ''}
+      </div>
+    </div>
+  `;
+}
+
+function draw() {
+  const routes = [
+    ['Quick Tools','ToolkitTilesRoute',renderQuickTools()],
+    ['Numbers','NumbersRoute',renderNumbers()],
+    ['Apps','AppsListRoute',renderApps()]
+  ];
+  document.getElementById('screens').innerHTML = routes.map(([name,route,html],idx)=>`
+    <section class="screen-wrap">
+      <div class="route-head"><b>${idx+1}. ${name}</b><small>${route}</small></div>
+      <div class="phone">
+        <div class="screen">
+          <div class="status"><span>9:30</span><span>5G 100%</span></div>
+          <div class="topbar"><h3>${name}</h3><button class="icon-btn">⋮</button></div>
+          <main class="content">${html}</main>
+          <nav class="bottom-nav">
+            ${routes.map(([n],i)=>`
+              <button class="navitem ${i===idx?'active':''}">
+                <span class="navicon">${i===0?'⊞':i===1?'#':'▤'}</span>
+                ${n}
+              </button>
+            `).join('')}
+          </nav>
+          <div class="gesture"></div>
+          ${idx===1 ? renderSheetModal() : ''}
+        </div>
+      </div>
+    </section>
+  `).join('');
+
+  document.querySelectorAll('[data-sheet]').forEach(btn=>{
+    btn.onclick = () => { activeSheet = btn.dataset.sheet; draw(); };
+  });
+  document.querySelectorAll('[data-close-sheet]').forEach(btn=>{
+    btn.onclick = () => { activeSheet = null; draw(); };
+  });
+  document.querySelectorAll('[data-act]').forEach(btn=>{
+    btn.onclick = () => {
+      const a = btn.dataset.act;
+      if (a==='inc') counterVal++;
+      if (a==='dec') counterVal = Math.max(0, counterVal - 1);
+      if (a==='rst') counterVal = 0;
+      if (a==='rand') randomVal = 1 + Math.floor(Math.random()*100);
+      if (a==='roll') diceVal = 1 + Math.floor(Math.random()*6);
+      draw();
+    };
+  });
+}
+draw();
+</script>
+</body>
+</html>

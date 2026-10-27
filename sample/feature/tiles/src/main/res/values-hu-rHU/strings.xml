@@ -174,4 +174,9 @@
     <string name="tool_random_invalid">Adj meg egész számokat úgy, hogy a minimum ne legyen nagyobb a maximumnál.</string>
     <string name="tool_bill_add_person">Személy hozzáadása</string>
     <string name="tool_bill_remove_person">Személy eltávolítása</string>
+    <string name="numbers_title">Számok</string>
+    <string name="numbers_hero_title">Számolás, elosztás\nés átváltás</string>
+    <string name="numbers_hero_summary">Egyszerű eszközök a mindennapi feladatokhoz.</string>
+    <string name="numbers_section_calculate">Számítás és átváltás</string>
+    <string name="numbers_section_count_chance">Számlálás és véletlen</string>
 </resources>

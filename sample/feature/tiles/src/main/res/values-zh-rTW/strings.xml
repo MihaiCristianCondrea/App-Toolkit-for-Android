@@ -174,4 +174,9 @@
     <string name="tool_random_invalid">請輸入整數，且最小值不得大於最大值。</string>
     <string name="tool_bill_add_person">增加人數</string>
     <string name="tool_bill_remove_person">減少人數</string>
+    <string name="numbers_title">數字</string>
+    <string name="numbers_hero_title">計數、分攤\n與換算</string>
+    <string name="numbers_hero_summary">適合日常任務的簡單工具。</string>
+    <string name="numbers_section_calculate">計算與換算</string>
+    <string name="numbers_section_count_chance">計數與隨機</string>
 </resources>

@@ -104,11 +104,6 @@ class DefaultToolkitTilesRepository(
             id = "utilities",
             tiles = persistentListOf(
                 tile(ToolkitTileIds.COIN_FLIP, requestKey = ToolkitTileIds.COIN_FLIP),
-                tile(ToolkitTileIds.DICE_ROLL, requestKey = ToolkitTileIds.DICE_ROLL),
-                tile(ToolkitTileIds.COUNTER, requestKey = ToolkitTileIds.COUNTER),
-                tile(ToolkitTileIds.UNIT_CONVERTER),
-                tile(ToolkitTileIds.BILL_SPLITTER),
-                tile(ToolkitTileIds.RANDOM_NUMBER),
                 tile("material_colors", quickTool = ToolkitQuickTool.MaterialColors),
                 tile(ToolkitTileIds.MORSE),
             ),

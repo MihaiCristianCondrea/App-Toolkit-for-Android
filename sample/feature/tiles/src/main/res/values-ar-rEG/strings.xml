@@ -174,4 +174,5 @@
     <string name="tool_random_invalid">أدخل أعدادًا صحيحة بحيث لا يتجاوز الحد الأدنى الحد الأقصى.</string>
     <string name="tool_bill_add_person">إضافة شخص</string>
     <string name="tool_bill_remove_person">إزالة شخص</string>
+    <string name="numbers_title">الأرقام</string>
 </resources>

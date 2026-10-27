@@ -6,8 +6,10 @@
 
 ### Added
 
-- Six new Quick Tools: Unit Converter (length, mass, temperature, volume and data), Ruler
-  (full-screen calibrated edge measurement in millimetres and inches), Screen Light
+- A dedicated Numbers bottom navigation tab hosting the interactive Tip & Bill Splitter workspace
+  alongside tactile launcher cards for the Unit Converter and Random Number Picker.
+- Six new tools across Quick Tools and Numbers: Unit Converter (length, mass, temperature, volume
+  and data), Ruler (full-screen calibrated edge measurement in millimetres and inches), Screen Light
   (brightness and warmth controls), Protractor (on-screen angle alignment), Tip & Bill Splitter,
   and Random Number Picker with inclusive minimum and maximum bounds.
 - The app changelog has an info button that opens App Toolkit's releases on GitHub, for the

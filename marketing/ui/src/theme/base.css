@@ -1,0 +1,77 @@
+/*
+ * App-wide design tokens that are not colours (colours live in palettes.css).
+ * Typography: App Toolkit's AppTypography = the Material 3 baseline scale set in
+ * Google Sans Flex. Shapes: SizeConstants + the Material 3 Expressive corner scale.
+ * 1 CSS px = 1 dp; screens are laid out at 430 × 957 dp.
+ */
+@import "material-symbols/outlined.css";
+@import "material-symbols/rounded.css";
+/* Google Sans Flex is registered from JS (theme/index.js) so the asset base can change. */
+
+:root {
+  --md-ref-typeface-brand: "Google Sans Flex", system-ui, sans-serif;
+  --md-ref-typeface-plain: "Google Sans Flex", system-ui, sans-serif;
+  --md-icon-font: "Material Symbols Outlined";
+
+  /* SizeConstants (dp) */
+  --sc-extra-tiny: 2px;
+  --sc-extra-small: 4px;
+  --sc-small: 8px;
+  --sc-medium: 12px;
+  --sc-large: 16px;
+  --sc-large-medium: 18px;
+  --sc-large-increased: 20px;
+  --sc-large-expanded: 22px;
+  --sc-extra-large-compact: 24px;
+  --sc-extra-large: 28px;
+  --sc-extra-large-increased: 32px;
+
+  /* Material 3 Expressive shape scale */
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-large-increased: 20px;
+  --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-extra-large-increased: 32px;
+  --md-sys-shape-corner-extra-extra-large: 48px;
+  --md-sys-shape-corner-full: 9999px;
+
+  /* Motion (Material 3 Expressive springs, approximated as CSS easings) */
+  --md-sys-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --md-sys-motion-easing-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --md-sys-motion-easing-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+  --md-sys-motion-spring-fast-spatial: cubic-bezier(0.42, 1.67, 0.21, 0.9);
+}
+
+/* Material 3 baseline type scale (Compose Typography defaults) */
+.t-display-large { font: 400 57px/64px var(--md-ref-typeface-brand); letter-spacing: -0.25px; }
+.t-display-medium { font: 400 45px/52px var(--md-ref-typeface-brand); }
+.t-display-small { font: 400 36px/44px var(--md-ref-typeface-brand); }
+.t-headline-large { font: 400 32px/40px var(--md-ref-typeface-brand); }
+.t-headline-medium { font: 400 28px/36px var(--md-ref-typeface-brand); }
+.t-headline-small { font: 400 24px/32px var(--md-ref-typeface-brand); }
+.t-title-large { font: 400 22px/28px var(--md-ref-typeface-brand); }
+.t-title-medium { font: 500 16px/24px var(--md-ref-typeface-plain); letter-spacing: 0.15px; }
+.t-title-small { font: 500 14px/20px var(--md-ref-typeface-plain); letter-spacing: 0.1px; }
+.t-body-large { font: 400 16px/24px var(--md-ref-typeface-plain); letter-spacing: 0.5px; }
+.t-body-medium { font: 400 14px/20px var(--md-ref-typeface-plain); letter-spacing: 0.25px; }
+.t-body-small { font: 400 12px/16px var(--md-ref-typeface-plain); letter-spacing: 0.4px; }
+.t-label-large { font: 500 14px/20px var(--md-ref-typeface-plain); letter-spacing: 0.1px; }
+.t-label-medium { font: 500 12px/16px var(--md-ref-typeface-plain); letter-spacing: 0.5px; }
+.t-label-small { font: 500 11px/16px var(--md-ref-typeface-plain); letter-spacing: 0.5px; }
+
+.w-medium { font-weight: 500; }
+.w-semibold { font-weight: 600; }
+.w-bold { font-weight: 700; }
+.italic { font-style: italic; }
+.c-primary { color: var(--md-sys-color-primary); }
+.c-on-surface { color: var(--md-sys-color-on-surface); }
+.c-variant { color: var(--md-sys-color-on-surface-variant); }
+.c-error { color: var(--md-sys-color-error); }
+.c-tertiary { color: var(--md-sys-color-tertiary); }
+
+md-icon { flex-shrink: 0; }
+
+/* Android does not apply optical sizing automatically; keep opsz at the font default. */
+.sc-screen { font-optical-sizing: none; }

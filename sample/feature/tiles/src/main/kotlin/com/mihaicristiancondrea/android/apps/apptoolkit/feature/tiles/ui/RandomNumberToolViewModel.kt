@@ -34,7 +34,7 @@ class RandomNumberToolViewModel(
 ) : LoggedScreenViewModel<RandomNumberToolUiState, RandomNumberToolEvent>(
     initialState = RandomNumberToolUiState(),
     telemetryRepository = telemetryRepository,
-    screenName = AppScreenTracking.Screens.TOOLKIT_TILES.name,
+    screenName = AppScreenTracking.Screens.NUMBERS.name,
     viewModelName = "RandomNumberToolViewModel",
 ) {
     private val usage = ToolUsageTracker(telemetryRepository, ToolkitTileIds.RANDOM_NUMBER)

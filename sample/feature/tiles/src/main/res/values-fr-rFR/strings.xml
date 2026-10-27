@@ -174,4 +174,9 @@
     <string name="tool_random_invalid">Saisissez des entiers avec un minimum inférieur ou égal au maximum.</string>
     <string name="tool_bill_add_person">Ajouter une personne</string>
     <string name="tool_bill_remove_person">Retirer une personne</string>
+    <string name="numbers_title">Nombres</string>
+    <string name="numbers_hero_title">Compter, partager\n&amp; convertir</string>
+    <string name="numbers_hero_summary">Des outils simples pour le quotidien.</string>
+    <string name="numbers_section_calculate">Calculer &amp; convertir</string>
+    <string name="numbers_section_count_chance">Comptage &amp; hasard</string>
 </resources>

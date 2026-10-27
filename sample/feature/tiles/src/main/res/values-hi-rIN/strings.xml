@@ -174,4 +174,9 @@
     <string name="tool_random_invalid">ऐसे पूर्णांक दर्ज करें जिनमें न्यूनतम, अधिकतम से अधिक न हो।</string>
     <string name="tool_bill_add_person">एक व्यक्ति जोड़ें</string>
     <string name="tool_bill_remove_person">एक व्यक्ति हटाएँ</string>
+    <string name="numbers_title">संख्याएँ</string>
+    <string name="numbers_hero_title">गिनें, बाँटें\nऔर बदलें</string>
+    <string name="numbers_hero_summary">रोज़मर्रा के कामों के लिए सरल टूल।</string>
+    <string name="numbers_section_calculate">गणना और रूपांतरण</string>
+    <string name="numbers_section_count_chance">गिनती और संयोग</string>
 </resources>

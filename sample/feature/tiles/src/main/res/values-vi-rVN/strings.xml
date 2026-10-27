@@ -174,4 +174,5 @@
     <string name="tool_random_invalid">Nhập số nguyên với giới hạn nhỏ nhất không vượt quá giới hạn lớn nhất.</string>
     <string name="tool_bill_add_person">Thêm người</string>
     <string name="tool_bill_remove_person">Bớt người</string>
+    <string name="numbers_title">Con số</string>
 </resources>

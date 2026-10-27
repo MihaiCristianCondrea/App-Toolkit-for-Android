@@ -174,4 +174,9 @@
     <string name="tool_random_invalid">Podaj liczby całkowite, tak aby minimum nie przekraczało maksimum.</string>
     <string name="tool_bill_add_person">Dodaj osobę</string>
     <string name="tool_bill_remove_person">Usuń osobę</string>
+    <string name="numbers_title">Liczby</string>
+    <string name="numbers_hero_title">Licz, dziel\ni przeliczaj</string>
+    <string name="numbers_hero_summary">Proste narzędzia do codziennych zadań.</string>
+    <string name="numbers_section_calculate">Obliczenia i przeliczanie</string>
+    <string name="numbers_section_count_chance">Licznik i losowanie</string>
 </resources>

@@ -36,7 +36,7 @@ class CounterToolViewModel(
 ) : LoggedScreenViewModel<CounterToolUiState, CounterToolEvent>(
     initialState = CounterToolUiState(),
     telemetryRepository = telemetryRepository,
-    screenName = AppScreenTracking.Screens.TOOLKIT_TILES.name,
+    screenName = AppScreenTracking.Screens.NUMBERS.name,
     viewModelName = "CounterToolViewModel",
 ) {
     private val usage = ToolUsageTracker(telemetryRepository, ToolkitTileIds.COUNTER)

@@ -174,4 +174,9 @@
     <string name="tool_random_invalid">最小値が最大値以下になるよう整数を入力してください。</string>
     <string name="tool_bill_add_person">人数を増やす</string>
     <string name="tool_bill_remove_person">人数を減らす</string>
+    <string name="numbers_title">数値</string>
+    <string name="numbers_hero_title">数える・割る\n・変換する</string>
+    <string name="numbers_hero_summary">毎日の作業に使えるシンプルなツール。</string>
+    <string name="numbers_section_calculate">計算と変換</string>
+    <string name="numbers_section_count_chance">カウントとランダム</string>
 </resources>

@@ -33,7 +33,7 @@ class UnitConverterToolViewModel(
 ) : LoggedScreenViewModel<UnitConverterToolUiState, UnitConverterToolEvent>(
     initialState = UnitConverterToolUiState(),
     telemetryRepository = telemetryRepository,
-    screenName = AppScreenTracking.Screens.TOOLKIT_TILES.name,
+    screenName = AppScreenTracking.Screens.NUMBERS.name,
     viewModelName = "UnitConverterToolViewModel",
 ) {
     private val usage = ToolUsageTracker(telemetryRepository, ToolkitTileIds.UNIT_CONVERTER)

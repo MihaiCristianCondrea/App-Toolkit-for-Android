@@ -174,4 +174,9 @@
     <string name="tool_random_invalid">Introdu numere întregi, cu minimul mai mic sau egal cu maximul.</string>
     <string name="tool_bill_add_person">Adaugă o persoană</string>
     <string name="tool_bill_remove_person">Elimină o persoană</string>
+    <string name="numbers_title">Numere</string>
+    <string name="numbers_hero_title">Numără, împarte\nși convertește</string>
+    <string name="numbers_hero_summary">Instrumente simple pentru activitățile zilnice.</string>
+    <string name="numbers_section_calculate">Calcule și conversii</string>
+    <string name="numbers_section_count_chance">Numărare și hazard</string>
 </resources>

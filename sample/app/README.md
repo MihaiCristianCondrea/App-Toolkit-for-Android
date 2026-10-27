@@ -14,7 +14,7 @@ libraries with the host's own feature modules.
 - App-only bridges that intentionally connect otherwise independent features, such as the About
   version-tap callback to the Components unlock repository.
 - Serializable route keys, each in its own file under `app/navigation/` with explicit serialized identities.
-- `appGraph`, the one declaration that names every host feature: the Tiles and Apps tabs, the
+- `appGraph`, the one declaration that names every host feature: the Tiles, Numbers and Apps tabs, the
   components page, the drawer, the overflow menu and the settings shortcut's deep link, on top of
   the Toolkit's pages from `toolkitGraph { }`. `startKeyFor` maps the stored start page to its tab.
 - The drawer header's `app_logo`.
@@ -124,8 +124,9 @@ The target SDK remains 37 and the minimum SDK remains 26.
   shell at the bottom of the window while a start screen or a page covers the tabs.
 - The launcher shortcut's `OPEN_SETTINGS` action is a deep link in `appGraph`, so the shell opens
   the settings page for it at launch and while running, with no activity of its own.
-- Both tabs declare a `TabSearch`, so the app bar holds a search field that filters the quick
-  tools and the apps. The Apps tab's random-app button is declared by the list itself with
+- The Tiles and Apps tabs declare a `TabSearch`, so the app bar holds a search field that filters
+  the quick tools and the apps, while the Numbers tab presents a direct workspace without a search
+  bar. The Apps tab's random-app button is declared by the list itself with
   `ScaffoldFabs`, so the graph holds no button of its own.
 - The drawer's Components entry depends on the showcase being unlocked, so the graph is rebuilt
   when that changes; the back stacks are kept, since they are saved by position, not by graph. The

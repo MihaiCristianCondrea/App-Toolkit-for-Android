@@ -80,10 +80,10 @@ class AppGraphTest {
     }
 
     @Test
-    fun `the tabs are tiles then apps, and a launch opens on tiles`() {
+    fun `the tabs are tiles, numbers, then apps, and a launch opens on tiles`() {
         val graph = graph()
 
-        assertEquals(listOf(ToolkitTilesRoute, AppsListRoute), graph.tabs.map { it.key })
+        assertEquals(listOf(ToolkitTilesRoute, NumbersRoute, AppsListRoute), graph.tabs.map { it.key })
         assertEquals(ToolkitTilesRoute, graph.start)
     }
 
@@ -96,6 +96,7 @@ class AppGraphTest {
         }
 
         assertEquals(AppsListRoute, startFor(AppsListRoute.ROUTE_ID))
+        assertEquals(NumbersRoute, startFor(NumbersRoute.ROUTE_ID))
         assertEquals(ToolkitTilesRoute, startFor(ToolkitTilesRoute.ROUTE_ID))
         // A blank value, or one a removed page left behind, opens the default tab.
         assertEquals(ToolkitTilesRoute, startFor(""))

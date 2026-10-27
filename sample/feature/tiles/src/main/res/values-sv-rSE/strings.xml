@@ -174,4 +174,9 @@
     <string name="tool_random_invalid">Ange heltal där minimum inte är större än maximum.</string>
     <string name="tool_bill_add_person">Lägg till person</string>
     <string name="tool_bill_remove_person">Ta bort person</string>
+    <string name="numbers_title">Siffror</string>
+    <string name="numbers_hero_title">Räkna, dela\noch omvandla</string>
+    <string name="numbers_hero_summary">Enkla verktyg för vardagens uppgifter.</string>
+    <string name="numbers_section_calculate">Beräkna och omvandla</string>
+    <string name="numbers_section_count_chance">Räknare och slump</string>
 </resources>

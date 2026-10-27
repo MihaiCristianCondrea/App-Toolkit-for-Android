@@ -174,4 +174,9 @@
     <string name="tool_random_invalid">En küçük değer en büyük değeri aşmayacak şekilde tam sayılar girin.</string>
     <string name="tool_bill_add_person">Kişi ekle</string>
     <string name="tool_bill_remove_person">Kişi çıkar</string>
+    <string name="numbers_title">Sayılar</string>
+    <string name="numbers_hero_title">Say, bölüştür\nve dönüştür</string>
+    <string name="numbers_hero_summary">Günlük işler için basit araçlar.</string>
+    <string name="numbers_section_calculate">Hesapla ve dönüştür</string>
+    <string name="numbers_section_count_chance">Sayaç ve şans</string>
 </resources>

@@ -174,4 +174,9 @@
     <string name="tool_random_invalid">Insira inteiros com o mínimo menor ou igual ao máximo.</string>
     <string name="tool_bill_add_person">Adicionar pessoa</string>
     <string name="tool_bill_remove_person">Remover pessoa</string>
+    <string name="numbers_title">Números</string>
+    <string name="numbers_hero_title">Conte, divida\ne converta</string>
+    <string name="numbers_hero_summary">Ferramentas simples para tarefas do dia a dia.</string>
+    <string name="numbers_section_calculate">Calcular e converter</string>
+    <string name="numbers_section_count_chance">Contagem e sorteio</string>
 </resources>

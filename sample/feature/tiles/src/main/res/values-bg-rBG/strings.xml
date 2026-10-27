@@ -174,4 +174,9 @@
     <string name="tool_random_invalid">Въведете цели числа, като минимумът не е по-голям от максимума.</string>
     <string name="tool_bill_add_person">Добавяне на човек</string>
     <string name="tool_bill_remove_person">Премахване на човек</string>
+    <string name="numbers_title">Числа</string>
+    <string name="numbers_hero_title">Брой, раздели\nи преобразувай</string>
+    <string name="numbers_hero_summary">Прости инструменти за всекидневни задачи.</string>
+    <string name="numbers_section_calculate">Изчисляване и преобразуване</string>
+    <string name="numbers_section_count_chance">Броене и шанс</string>
 </resources>

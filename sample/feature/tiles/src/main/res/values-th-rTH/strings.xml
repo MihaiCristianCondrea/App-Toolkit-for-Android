@@ -174,4 +174,5 @@
     <string name="tool_random_invalid">ป้อนจำนวนเต็ม โดยค่าต่ำสุดไม่มากกว่าค่าสูงสุด</string>
     <string name="tool_bill_add_person">เพิ่มคน</string>
     <string name="tool_bill_remove_person">ลดคน</string>
+    <string name="numbers_title">ตัวเลข</string>
 </resources>

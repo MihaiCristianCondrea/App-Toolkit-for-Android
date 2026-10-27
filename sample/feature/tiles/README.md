@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Quick tools: the in-app tool catalogue and the Quick Settings tile services behind it.
+Quick tools and numbers workspace: the in-app tool catalogue, the dedicated Numbers calculation screen, and the Quick Settings tile services behind tile-ready tools.
 
 ## Owns
 
@@ -14,15 +14,16 @@ Quick tools: the in-app tool catalogue and the Quick Settings tile services behi
   `SosRepository`, `CounterRepository`, `UnitConversionRepository`, `BillSplitterRepository`, and
   `RulerRepository`, which
   remain the data-layer entry points and own coordination or runtime state.
-- UI catalogue models and mappers, the screen and dedicated tool ViewModels, tool composables,
-  the Quick Settings services. `ToolkitTilesRoute` belongs to app/navigation.
-- Localized Quick Tools strings and plurals, and the Quick Settings tile and coin icons.
+- UI catalogue models and mappers, `ToolkitTilesScreen`, `NumbersScreen`, the screen and dedicated
+  tool ViewModels, tool composables, and the Quick Settings services. `ToolkitTilesRoute` and
+  `NumbersRoute` belong to `app/navigation`.
+- Localized Quick Tools and Numbers strings and plurals, and the Quick Settings tile and coin icons.
 - Feature-owned manifest permissions for haptics and flashlight access. The feature
   declares no foreground service and no wake locks.
 
 ## Does not own
 
-- Its registration as a tab, done by `:sample:app`'s `appGraph`.
+- Its registration as tabs, done by `:sample:app`'s `appGraph`.
 - Native ad rendering, owned by [`:library:core:ui`](../../../library/core/ui/README.md); this
   module supplies only the quick-tools card styling.
 
@@ -40,6 +41,7 @@ Quick tools: the in-app tool catalogue and the Quick Settings tile services behi
 ```mermaid
 flowchart TD
     Screen[ToolkitTilesScreen] -->|catalog events| VM[ToolkitTilesViewModel]
+    Numbers[NumbersScreen] --> ToolVMs[Dedicated stateful tool ViewModels]
     VM --> Tiles[ToolkitTilesRepository]
     Tiles --> Catalogue[Source-neutral catalog]
     Tiles --> Preferences[ToolkitTilesPreferencesDataSource]
@@ -54,8 +56,8 @@ flowchart TD
     Published --> VM
     VM --> UiMap[Resource and artwork UI mappers]
     UiMap --> Screen
-    Screen --> ToolVMs[Dedicated stateful tool ViewModels]
-    ToolVMs --> Repositories[Sensor / breathing / system / torch repositories]
+    Screen --> ToolVMs
+    ToolVMs --> Repositories[Sensor / breathing / system / torch / calculation repositories]
     Repositories --> Sources[Feature-local Android data sources]
     Sos[SosRepository] --> Morse[MorseRepository single playback job]
     Morse --> Torch[TorchRepository shared state]
@@ -84,8 +86,9 @@ flowchart TD
   registry to the local source; data code does not import UI service declarations.
 - Each tool with behavior of its own has a dedicated ViewModel, one class per file in `ui/`, with
   its `XToolUiState` in `ui/states/` and its `XToolEvent` in `ui/contracts/`. Every one extends
-  `LoggedScreenViewModel` and reports under the `ToolkitTiles` screen name, because the tools open in
-  that screen's bottom sheet or full-screen dialog, with the class name as `viewModelName`. One-shot
+  `LoggedScreenViewModel` and reports under its owning screen name (`ToolkitTiles` for catalog tools,
+  `Numbers` for `BillSplitterToolViewModel`, `UnitConverterToolViewModel`, and `RandomNumberToolViewModel`),
+  with the class name as `viewModelName`. One-shot
   work (a flip, a roll, a counter write, a torch change) runs through `launchReport`, and repository
   streams (sensor readings, torch and Morse playback state, the stored count) through `collectReport`
   for the ViewModel's lifetime. The routes in `ToolRoutes.kt` collect `state` and send events: the
@@ -105,7 +108,7 @@ flowchart TD
 
 - `ToolkitTilesRepository`, `TorchRepository`, `MorseRepository`, `CounterRepository`,
   `UnitConversionRepository`, `BillSplitterRepository`, `RulerRepository`, `ToolkitTilesViewModel`,
-  the dedicated tool ViewModels, `ToolkitTilesScreen`, `ToolkitTilesRoute` and the source-neutral
+  the dedicated tool ViewModels, `ToolkitTilesScreen`, `NumbersScreen`, and the source-neutral
   tile models.
 
 ## Internal implementations
@@ -212,12 +215,16 @@ that update. Tile IDs and preference keys are unchanged; tile text models live i
 The in-app Counter includes a decrement button for correcting a miscount without resetting.
 It updates the count shared with the Quick Settings tile and stops at zero.
 
-## Additional offline tools
+## Numbers screen and offline tools
 
 Protractor uses on-screen alignment from 0 to 180 degrees. Tap or drag its movable arm, or use the
 accessible slider. It needs no camera permission or sensor, and belongs to Sensors & Measurement.
 
-Tip & Bill Splitter and Random Number Picker belong to Utilities & Fun. The splitter accepts a
+`NumbersScreen` (`NumbersRoute`) presents a warm gold hero banner ("Count, split & convert"),
+two clickable cards under "Calculate & convert" (`Tip & Bill Splitter` and `Unit Converter`),
+and a live interactive `Counter` workspace card alongside clickable cards for `Random Number Picker`
+and `Dice Roll` under "Count & chance". `Tip & Bill Splitter`, `Unit Converter`, and `Random Number Picker`
+have been removed from the `Quick Tools` catalogue (`DefaultToolkitTilesRepository`). The splitter accepts a
 non-negative bill with up to two decimal places, tips of 10%, 15% or 20%, and a positive whole number
 of people. `BillSplitterRepository` uses decimal arithmetic, rounds the tip once to two decimal
 places, then rounds each share up so the collected amount covers the total. The UI explains that

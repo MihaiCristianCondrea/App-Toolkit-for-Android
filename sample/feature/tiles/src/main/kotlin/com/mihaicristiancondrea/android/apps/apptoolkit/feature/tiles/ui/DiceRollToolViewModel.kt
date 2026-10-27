@@ -32,7 +32,7 @@ class DiceRollToolViewModel(
 ) : LoggedScreenViewModel<DiceRollToolUiState, DiceRollToolEvent>(
     initialState = DiceRollToolUiState(),
     telemetryRepository = telemetryRepository,
-    screenName = AppScreenTracking.Screens.TOOLKIT_TILES.name,
+    screenName = AppScreenTracking.Screens.NUMBERS.name,
     viewModelName = "DiceRollToolViewModel",
 ) {
     private val usage = ToolUsageTracker(telemetryRepository, ToolkitTileIds.DICE_ROLL)

@@ -174,4 +174,5 @@
     <string name="tool_random_invalid">Ingresa enteros con un mínimo menor o igual que el máximo.</string>
     <string name="tool_bill_add_person">Agregar persona</string>
     <string name="tool_bill_remove_person">Quitar persona</string>
+    <string name="numbers_title">Números</string>
 </resources>

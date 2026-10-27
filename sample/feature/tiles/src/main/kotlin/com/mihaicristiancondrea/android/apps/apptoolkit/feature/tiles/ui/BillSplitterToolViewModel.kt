@@ -33,7 +33,7 @@ class BillSplitterToolViewModel(
 ) : LoggedScreenViewModel<BillSplitterToolUiState, BillSplitterToolEvent>(
     initialState = BillSplitterToolUiState(),
     telemetryRepository = telemetryRepository,
-    screenName = AppScreenTracking.Screens.TOOLKIT_TILES.name,
+    screenName = AppScreenTracking.Screens.NUMBERS.name,
     viewModelName = "BillSplitterToolViewModel",
 ) {
     private val usage = ToolUsageTracker(telemetryRepository, ToolkitTileIds.BILL_SPLITTER)

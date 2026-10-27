@@ -25,6 +25,7 @@ object AppScreenTracking {
         val MAIN = TrackedScreen(name = "Main", className = "MainScreen")
         val APPS_LIST = TrackedScreen(name = "AppsList", className = "AppsListScreen")
         val TOOLKIT_TILES = TrackedScreen(name = "ToolkitTiles", className = "ToolkitTilesScreen")
+        val NUMBERS = TrackedScreen(name = "Numbers", className = "NumbersScreen")
         val COMPONENTS = TrackedScreen(name = "Components", className = "ComponentsScreen")
         val ARTICLE_DEMO = TrackedScreen(name = "ArticleDemo", className = "ArticleDemoScreen")
 
@@ -32,6 +33,7 @@ object AppScreenTracking {
             MAIN,
             APPS_LIST,
             TOOLKIT_TILES,
+            NUMBERS,
             COMPONENTS,
             ARTICLE_DEMO,
         )

@@ -174,4 +174,5 @@
     <string name="tool_random_invalid">최솟값이 최댓값 이하가 되도록 정수를 입력하세요.</string>
     <string name="tool_bill_add_person">인원 추가</string>
     <string name="tool_bill_remove_person">인원 줄이기</string>
+    <string name="numbers_title">숫자</string>
 </resources>

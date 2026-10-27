@@ -174,4 +174,9 @@
     <string name="tool_random_invalid">পূর্ণসংখ্যা লিখুন, যেখানে সর্বনিম্ন সর্বোচ্চের চেয়ে বেশি নয়।</string>
     <string name="tool_bill_add_person">একজন যোগ করুন</string>
     <string name="tool_bill_remove_person">একজন কমান</string>
+    <string name="numbers_title">সংখ্যা</string>
+    <string name="numbers_hero_title">গণনা, ভাগ\nও রূপান্তর</string>
+    <string name="numbers_hero_summary">দৈনন্দিন কাজের জন্য সহজ টুল।</string>
+    <string name="numbers_section_calculate">হিসাব ও রূপান্তর</string>
+    <string name="numbers_section_count_chance">গণনা ও দৈবচয়ন</string>
 </resources>

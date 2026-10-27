@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ReceiptLong
 import androidx.compose.material.icons.outlined.AddCircleOutline
 import androidx.compose.material.icons.outlined.Casino
 import androidx.compose.material.icons.outlined.CheckCircle
@@ -30,12 +31,11 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.MonetizationOn
 import androidx.compose.material.icons.outlined.MoreHoriz
+import androidx.compose.material.icons.outlined.Numbers
 import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.SquareFoot
 import androidx.compose.material.icons.outlined.Straighten
 import androidx.compose.material.icons.outlined.SwapHoriz
-import androidx.compose.material.icons.outlined.SquareFoot
-import androidx.compose.material.icons.automirrored.outlined.ReceiptLong
-import androidx.compose.material.icons.outlined.Numbers
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -88,20 +88,25 @@ internal fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
 internal fun ToolkitTileIcon.backgroundShape(): Shape = when (this) {
     ToolkitTileIcon.Level,
     ToolkitTileIcon.Compass,
+    ToolkitTileIcon.Protractor,
+    ToolkitTileIcon.Converter,
     ToolkitTileIcon.Timer -> MaterialShapes.Cookie9Sided
 
-    ToolkitTileIcon.Breathing -> MaterialShapes.SoftBurst
+    ToolkitTileIcon.Breathing,
+    ToolkitTileIcon.BillSplitter,
+    ToolkitTileIcon.Palette -> MaterialShapes.SoftBurst
 
-    ToolkitTileIcon.FlashDimmer -> MaterialShapes.Flower
+    ToolkitTileIcon.FlashDimmer,
+    ToolkitTileIcon.ScreenLight,
+    ToolkitTileIcon.Counter -> MaterialShapes.Flower
 
     ToolkitTileIcon.Coin,
     ToolkitTileIcon.Dice,
-    ToolkitTileIcon.Counter,
+    ToolkitTileIcon.Ruler,
     ToolkitTileIcon.Morse -> MaterialShapes.Cookie12Sided
 
+    ToolkitTileIcon.RandomNumber,
     ToolkitTileIcon.Sos -> MaterialShapes.Gem
-
-    else -> MaterialShapes.Circle
 }.toShape()
 
 internal fun ToolkitTileStatus.labelResId(): Int = when (this) {

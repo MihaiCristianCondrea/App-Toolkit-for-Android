@@ -1,0 +1,659 @@
+/* Product Showcase Shell - Official Google Material 3 Visual System */
+:root {
+  /* One inline gutter for the app bar, header, controls and catalog: content is 1288px at most. */
+  --g-gutter: max(36px, calc((100vw - 1288px) / 2));
+  --g-font: "Google Sans Flex", system-ui, -apple-system, sans-serif;
+  --g-bg: #0E1216;
+  --g-surface-lowest: #080B0E;
+  --g-surface-low: #14181E;
+  --g-surface: #1A2027;
+  --g-surface-high: #222A33;
+  --g-surface-highest: #2C3642;
+  --g-surface-tonal: #151B22; /* Tonal background for pedestals & stages */
+  --g-border: rgba(255, 255, 255, 0.08);
+  --g-border-subtle: rgba(255, 255, 255, 0.04);
+  --g-border-hover: rgba(168, 199, 250, 0.35);
+
+  /* Shell interactive accents: Google M3 Blue */
+  --g-accent: #A8C7FA;
+  --g-accent-container: #0842A0;
+  --g-on-accent-container: #D3E3FD;
+  --g-accent-glow: rgba(168, 199, 250, 0.2);
+  --g-accent-subtle: rgba(168, 199, 250, 0.12);
+  --g-on-accent: #062E6F;
+
+  /* App / Product brand accent (Android Green reserved for Android Insider brand) */
+  --g-brand: #3DDC84;
+  --g-brand-subtle: rgba(61, 220, 132, 0.12);
+  --g-brand-border: rgba(61, 220, 132, 0.25);
+  --g-on-brand: #00391C;
+
+  /* Typography */
+  --g-text: #E3E8EC;
+  --g-text-variant: #9DA8B3;
+  --g-text-subtle: #6B7885;
+  --g-glass: rgba(14, 18, 22, 0.88);
+  --g-surface-scrolled: rgba(22, 27, 34, 0.94);
+  --g-shadow-card: 0 4px 20px rgba(0, 0, 0, 0.35);
+  --g-shadow-floating: 0 16px 40px rgba(0, 0, 0, 0.45);
+  --g-shadow-device: 0 24px 56px -12px rgba(0, 0, 0, 0.65);
+
+  /* Material Web M3 theme tokens mapping to Google Blue */
+  --md-sys-color-primary: #A8C7FA;
+  --md-sys-color-on-primary: #062E6F;
+  --md-sys-color-primary-container: #0842A0;
+  --md-sys-color-on-primary-container: #D3E3FD;
+  --md-sys-color-surface: #1A2027;
+  --md-sys-color-surface-container: #14181E;
+  --md-sys-color-surface-container-high: #222A33;
+  --md-sys-color-outline: rgba(255, 255, 255, 0.12);
+  --md-sys-color-outline-variant: rgba(255, 255, 255, 0.08);
+}
+
+:root[data-theme="light"] {
+  --g-bg: #F8F9FA;
+  --g-surface-lowest: #FFFFFF;
+  --g-surface-low: #F1F3F4;
+  --g-surface: #FFFFFF;
+  --g-surface-high: #E8EAED;
+  --g-surface-highest: #DADCE0;
+  --g-surface-tonal: #EDF2F9; /* Subtle pale blue-tinted neutral plinth */
+  --g-border: rgba(0, 0, 0, 0.08);
+  --g-border-subtle: rgba(0, 0, 0, 0.04);
+  --g-border-hover: rgba(11, 87, 208, 0.35);
+
+  /* Shell interactive accents: Google M3 Blue */
+  --g-accent: #0B57D0;
+  --g-accent-container: #D3E3FD;
+  --g-on-accent-container: #041E49;
+  --g-accent-glow: rgba(11, 87, 208, 0.15);
+  --g-accent-subtle: rgba(11, 87, 208, 0.08);
+  --g-on-accent: #FFFFFF;
+
+  /* App / Product brand accent (Android Green reserved for Android Insider brand) */
+  --g-brand: #00875A;
+  --g-brand-subtle: rgba(0, 135, 90, 0.08);
+  --g-brand-border: rgba(0, 135, 90, 0.2);
+  --g-on-brand: #FFFFFF;
+
+  /* Typography */
+  --g-text: #1F1F1F;
+  --g-text-variant: #444746;
+  --g-text-subtle: #747775;
+  --g-glass: rgba(248, 249, 250, 0.92);
+  --g-surface-scrolled: rgba(241, 243, 244, 0.94);
+  --g-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.04);
+  --g-shadow-floating: 0 14px 36px rgba(0, 0, 0, 0.08);
+  --g-shadow-device: 0 20px 48px -12px rgba(15, 23, 42, 0.15);
+
+  /* Material Web M3 theme tokens mapping to Google Blue */
+  --md-sys-color-primary: #0B57D0;
+  --md-sys-color-on-primary: #FFFFFF;
+  --md-sys-color-primary-container: #D3E3FD;
+  --md-sys-color-on-primary-container: #041E49;
+  --md-sys-color-surface: #FFFFFF;
+  --md-sys-color-surface-container: #F1F3F4;
+  --md-sys-color-surface-container-high: #E8EAED;
+  --md-sys-color-outline: rgba(0, 0, 0, 0.12);
+  --md-sys-color-outline-variant: rgba(0, 0, 0, 0.06);
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--g-font);
+  background: var(--g-bg);
+  color: var(--g-text);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--g-bg);
+  color: var(--g-text);
+  font-family: var(--g-font);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3, h4, p { margin: 0; }
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ==========================================================================
+   Shell Top App Bar (Google M3 Style with Generous Whitespace)
+   ========================================================================== */
+.g-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--g-bg);
+  border-bottom: 1px solid transparent;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--g-gutter);
+  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.g-nav--scrolled {
+  background: var(--g-surface-scrolled);
+  border-bottom-color: var(--g-border-subtle);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.g-nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.g-nav__logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+}
+
+/* ==========================================================================
+   Introductory Header (Compact & Focused)
+   ========================================================================== */
+.g-header {
+  width: 100%;
+  padding: 36px var(--g-gutter) 20px;
+}
+
+.g-header__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.g-header__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--g-accent);
+}
+
+.g-header__title {
+  font-size: 34px;
+  font-weight: 750;
+  letter-spacing: -0.6px;
+  line-height: 1.15;
+  color: var(--g-text);
+}
+
+.g-header__desc {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--g-text-variant);
+  max-width: 680px;
+  margin-top: 2px;
+}
+
+/* ==========================================================================
+   Sticky Preview Controls Bar (Directly Visible)
+   ========================================================================== */
+.g-controls-wrap {
+  position: sticky;
+  top: 64px;
+  z-index: 90;
+  background: var(--g-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--g-border-subtle);
+  padding: 10px var(--g-gutter);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+/* Every group is a label over a 40px control, so all controls share one axis. */
+.g-controls-bar {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px 24px;
+  flex-wrap: wrap;
+}
+
+.g-control-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.g-control-group md-outlined-segmented-button-set { --md-outlined-segmented-button-container-height: 40px; }
+.g-control-group md-outlined-select {
+  width: 180px;
+  --md-outlined-field-top-space: 8px;
+  --md-outlined-field-bottom-space: 8px;
+}
+.g-control-group md-switch { margin-block: 4px; }
+
+.g-control-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  line-height: 16px;
+  color: var(--g-text-variant);
+  user-select: none;
+}
+
+.g-settings-reset { margin-left: auto; }
+
+/* ==========================================================================
+   Screen Catalog (Dominant Visual Content)
+   ========================================================================== */
+.g-section {
+  width: 100%;
+  padding: 32px var(--g-gutter);
+}
+
+.g-section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  gap: 16px;
+}
+
+.g-section-title {
+  font-size: 24px;
+  font-weight: 750;
+  letter-spacing: -0.4px;
+  color: var(--g-text);
+}
+
+.g-section-sub {
+  font-size: 14px;
+  color: var(--g-text-variant);
+  margin-top: 4px;
+}
+
+/* Screen Catalog Grid */
+.g-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 32px;
+}
+
+
+/* Screen Card */
+.g-card {
+  background: var(--g-surface);
+  border-radius: 28px;
+  overflow: hidden;
+  border: 1px solid var(--g-border-subtle);
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--g-shadow-card);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.g-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--g-shadow-floating);
+  border-color: var(--g-border-subtle);
+}
+
+/* Large Inspectable Screen Preview Container */
+.g-card__preview {
+  background: var(--g-surface-tonal);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 16px;
+  cursor: pointer;
+  user-select: none;
+  min-height: 480px;
+  transition: background 0.2s ease;
+}
+
+.g-card:hover .g-card__preview {
+  background: var(--g-surface-low);
+}
+
+.g-card__preview-scale {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.g-card__screen {
+  zoom: 0.68;
+  width: fit-content;
+  filter: drop-shadow(0 16px 36px rgba(0, 0, 0, 0.25));
+}
+
+[data-theme="light"] .g-card__screen {
+  filter: drop-shadow(0 16px 32px rgba(15, 23, 42, 0.12));
+}
+
+.g-card__screen > * {
+  line-height: normal;
+}
+
+/* Card Body */
+.g-card__body {
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.g-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.g-card__title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--g-text);
+  letter-spacing: -0.2px;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.g-card__title:hover {
+  color: var(--g-accent);
+}
+
+.g-tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--g-surface-low);
+  color: var(--g-text-variant);
+  border: 1px solid var(--g-border-subtle);
+  letter-spacing: 0.2px;
+}
+
+.g-card__desc {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--g-text-variant);
+}
+
+.g-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--g-border-subtle);
+}
+
+.g-card__mini-tools {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  --md-icon-button-icon-color: var(--g-text-variant);
+  --md-icon-button-selected-icon-color: var(--g-accent);
+}
+.g-filled { font-variation-settings: "FILL" 1; }
+
+/* Empty State */
+.g-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 24px;
+  background: var(--g-surface);
+  border-radius: 28px;
+  border: 1px dashed var(--g-border);
+  gap: 12px;
+}
+
+.g-empty-state md-icon {
+  --md-icon-size: 48px;
+  color: var(--g-text-subtle);
+}
+
+.g-empty-state h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--g-text);
+}
+
+.g-empty-state p {
+  font-size: 14px;
+  color: var(--g-text-variant);
+  max-width: 360px;
+}
+
+/* ==========================================================================
+   Motion Sequences Section (For motion.html)
+   ========================================================================== */
+.g-motion-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 28px;
+}
+
+.g-motion-card {
+  background: var(--g-surface);
+  border-radius: 28px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: var(--g-shadow-card);
+  border: 1px solid var(--g-border-subtle);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.g-motion-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--g-shadow-floating);
+}
+
+.g-motion-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--g-accent-subtle);
+  color: var(--g-accent);
+  width: fit-content;
+}
+
+.g-motion-card__title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--g-text);
+}
+
+.g-motion-card__subtitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--g-accent);
+}
+
+.g-motion-card__desc {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--g-text-variant);
+  flex: 1;
+}
+
+.g-motion-card__seq {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--g-border-subtle);
+}
+
+/* ==========================================================================
+   Specifications & Design System Section (For specs.html)
+   ========================================================================== */
+.g-specs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+  margin-bottom: 36px;
+}
+
+.g-spec-item {
+  background: var(--g-surface);
+  border-radius: 20px;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: var(--g-shadow-card);
+  border: 1px solid var(--g-border-subtle);
+}
+
+.g-spec-item__label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--g-text-subtle);
+  letter-spacing: 0.6px;
+}
+
+.g-spec-item__val {
+  font-size: 16px;
+  font-weight: 750;
+  color: var(--g-text);
+}
+
+.g-surface-stack {
+  background: var(--g-surface);
+  border-radius: 28px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: var(--g-shadow-card);
+  border: 1px solid var(--g-border-subtle);
+}
+
+.g-surface-tier-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.g-surface-tier-box {
+  padding: 18px;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="light"] .g-surface-tier-box {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.g-surface-tier-box__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.g-surface-tier-box__hex {
+  font-size: 12px;
+  font-family: monospace;
+  color: #A8C7FA;
+}
+
+.g-surface-tier-box__role {
+  font-size: 11.5px;
+  color: #9DA8B3;
+}
+
+/* ==========================================================================
+   Shell Footer
+   ========================================================================== */
+.g-footer {
+  margin-top: auto;
+  border-top: 1px solid var(--g-border-subtle);
+  padding: 40px 36px;
+  text-align: center;
+  background: var(--g-surface-lowest);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--g-text-variant);
+}
+
+.g-footer a {
+  color: var(--g-accent);
+}
+
+.g-footer a:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
+@media (max-width: 900px) {
+  :root { --g-gutter: 16px; }
+  .g-nav__links { display: none; }
+  .g-header { padding-top: 28px; padding-bottom: 16px; }
+  .g-section { padding-top: 24px; padding-bottom: 24px; }
+  .g-grid { grid-template-columns: 1fr; }
+}
+
+/* Hub interactions stay outside the app preview's own theme and layout. */
+.g-card__title { border: 0; padding: 0; background: transparent; font-family: inherit; text-align: left; }
+.g-card__preview { cursor: default; }
+.g-card h3 { margin: 0; }
+.g-card__body button:active, .g-controls-bar button:active { transform: scale(.97); }
+.g-card__body button:focus-visible, .g-controls-bar button:focus-visible,
+.g-palette-select:focus-visible, .g-nav a:focus-visible {
+  outline: 2px solid var(--g-accent); outline-offset: 4px;
+}
+.g-skip-link { position: fixed; top: 8px; left: 16px; z-index: 100; padding: 12px 18px;
+  border-radius: 12px; background: var(--g-surface); color: var(--g-text); transform: translateY(-150%); }
+.g-skip-link:focus { transform: translateY(0); }
+.g-card { animation: catalog-enter .35s cubic-bezier(.2,.8,.2,1) both; }
+.g-card:nth-child(2) { animation-delay: 40ms; }
+.g-card:nth-child(n+3) { animation-delay: 80ms; }
+@keyframes catalog-enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 600px) {
+  .g-controls-bar { gap: 12px 16px; }
+  .g-section-header { align-items: flex-start; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .g-card, .g-card__preview, .g-nav,
+  .g-card__body button, .g-controls-bar button { animation: none; transition: none; }
+  .g-card:hover, .g-card__body button:active, .g-controls-bar button:active { transform: none; }
+}
+
+/* Material Web owns control states, focus rings and ripple feedback. */
+md-text-button.g-card__title { --md-text-button-label-text-size: 17px; --md-text-button-label-text-weight: 700; }
+.g-card__preview:has([data-frame="false"]) { padding: 0; align-items: stretch; }
+.g-card__preview:has([data-frame="false"]) .g-card__preview-scale { width: 100%; }
+.g-card__screen[data-frame="false"] { zoom: 1; width: 100%; filter: none; }
+.g-card__screen[data-frame="false"] > .sc-screen { width: 100%; height: clamp(560px, 75dvh, 760px); }

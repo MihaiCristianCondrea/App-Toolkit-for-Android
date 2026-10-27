@@ -174,4 +174,9 @@
     <string name="tool_random_invalid">Gib ganze Zahlen ein. Das Minimum darf nicht größer als das Maximum sein.</string>
     <string name="tool_bill_add_person">Person hinzufügen</string>
     <string name="tool_bill_remove_person">Person entfernen</string>
+    <string name="numbers_title">Zahlen</string>
+    <string name="numbers_hero_title">Zählen, teilen\n&amp; umrechnen</string>
+    <string name="numbers_hero_summary">Einfache Werkzeuge für den Alltag.</string>
+    <string name="numbers_section_calculate">Berechnen &amp; umrechnen</string>
+    <string name="numbers_section_count_chance">Zählen &amp; Zufall</string>
 </resources>

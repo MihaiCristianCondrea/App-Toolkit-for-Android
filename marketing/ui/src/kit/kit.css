@@ -1,0 +1,1642 @@
+/* Layout primitives shared by every translated screen. */
+.sc-screen {
+  width: 430px;
+  height: 957px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  font-family: var(--md-ref-typeface-plain);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+.sc-screen *,
+.sc-screen *::before,
+.sc-screen *::after {
+  box-sizing: border-box;
+}
+
+.sc-part {
+  display: contents;
+  color: var(--md-sys-color-on-surface);
+  font-family: var(--md-ref-typeface-plain);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+.sc-part *,
+.sc-part *::before,
+.sc-part *::after {
+  box-sizing: border-box;
+}
+
+.sc-grow { flex: 1; }
+.sc-row { display: flex; align-items: center; }
+.sc-col { display: flex; flex-direction: column; }
+
+/* Status Bar matching Android 15/16 */
+.sc-status {
+  height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  color: var(--md-sys-color-on-surface);
+  font-family: var(--md-ref-typeface-plain);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  transition: background-color 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+.sc-status__left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sc-status__time {
+  font-weight: 600;
+  font-size: 14px;
+}
+.sc-status__right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.sc-status__icon {
+  display: inline-flex;
+  align-items: center;
+  opacity: 0.85;
+}
+
+.sc-screen--scrolled {
+  --sc-collapse: 1;
+  --sc-title-opacity: 1;
+}
+
+.sc-screen--raised .sc-status,
+.sc-screen--raised .sc-topbar,
+.sc-screen--scrolled .sc-status,
+.sc-screen--scrolled .sc-topbar {
+  background: var(--md-sys-color-surface-container);
+  transition: background-color 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+.sc-screen--article .sc-status,
+.sc-screen--article .sc-topbar {
+  background: var(--md-sys-color-surface);
+  transition: none;
+}
+
+/* Top app bars (Material 3 TopAppBar inside the App Toolkit shell): 64dp, title-large titles.
+   The shell places its 48dp icon buttons flush with the edges; the article frame keeps M3's 4dp. */
+.sc-topbar {
+  height: 64px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  position: relative;
+  transition: background-color 0.2s cubic-bezier(0.2, 0, 0, 1);
+  --md-icon-button-icon-color: var(--md-sys-color-on-surface);
+}
+/* Material Web icon buttons are 40px with a 48px touch target; 4px margins give the 48dp slot. */
+.sc-topbar:not(.sc-topbar--article) > md-icon-button { margin-inline: 4px; }
+.sc-topbar--no-nav { padding-inline-start: 16px; }
+.sc-topbar--article { padding: 0 4px; gap: 4px; }
+.sc-topbar md-icon-button:last-child { --md-icon-button-icon-color: var(--md-sys-color-on-surface-variant); }
+.sc-topbar md-icon-button:first-child { --md-icon-button-icon-color: var(--md-sys-color-on-surface); }
+.sc-topbar__title {
+  flex: 1;
+  min-width: 0;
+  font: 400 22px/28px var(--md-ref-typeface-plain);
+  color: var(--md-sys-color-on-surface);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sc-topbar__title--multiline {
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.sc-topbar:has(> .sc-topbar__title--multiline) { height: auto; min-height: 64px; padding-block: 4px; }
+
+.sc-topbar--large {
+  height: auto;
+  flex-direction: column;
+  align-items: stretch;
+}
+.sc-topbar--large .sc-topbar__title {
+  opacity: var(--sc-title-opacity, 0);
+}
+.sc-topbar__large-wrap {
+  overflow: hidden;
+  height: calc((1 - var(--sc-collapse, 0)) * var(--sc-expanded-height, 88px));
+  display: flex;
+  align-items: flex-end;
+}
+.sc-topbar__large-title {
+  padding: 0 16px 16px;
+  font: 400 28px/36px var(--md-ref-typeface-plain);
+  color: var(--md-sys-color-on-surface);
+  opacity: calc(1 - var(--sc-title-opacity, 0));
+}
+
+.ai-settings-search {
+  height: 48px;
+  border-radius: 24px;
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface-variant);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  cursor: pointer;
+  margin-bottom: 4px;
+}
+
+/* The shell's TabSearch: a 48dp full-radius field between the drawer and overflow buttons. */
+.sc-topbar--search md-filled-text-field.sc-search {
+  flex: 1;
+  min-width: 0;
+  margin-inline-end: 8px;
+  --md-filled-text-field-icon-input-space: 8px;
+  --md-filled-text-field-container-shape: 24px;
+  --md-filled-text-field-container-color: var(--md-sys-color-surface-container-high);
+  --md-filled-text-field-active-indicator-height: 0px;
+  --md-filled-text-field-hover-active-indicator-height: 0px;
+  --md-filled-text-field-focus-active-indicator-height: 0px;
+  --md-filled-field-top-space: 12px;
+  --md-filled-field-bottom-space: 12px;
+  --md-filled-text-field-leading-icon-color: var(--md-sys-color-on-surface);
+}
+.sc-content { flex: 1; min-height: 0; position: relative; overflow-y: auto; overflow-x: hidden; }
+.sc-pad { padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+
+/* Navigation Bar (M3: 80dp, label-medium labels in both states) */
+.sc-navbar {
+  flex-shrink: 0;
+  --md-navigation-bar-container-color: var(--md-sys-color-surface-container);
+  --md-navigation-bar-container-elevation: 0;
+  --md-navigation-bar-container-height: 80px;
+  --md-navigation-bar-active-indicator-color: var(--md-sys-color-secondary-container);
+  --md-navigation-bar-active-indicator-width: 56px;
+  --md-navigation-bar-active-icon-color: var(--md-sys-color-on-secondary-container);
+  --md-navigation-bar-active-label-text-color: var(--md-sys-color-secondary);
+  --md-navigation-bar-inactive-icon-color: var(--md-sys-color-on-surface-variant);
+  --md-navigation-bar-inactive-label-text-color: var(--md-sys-color-on-surface-variant);
+  --md-navigation-bar-label-text-font: var(--md-ref-typeface-plain);
+  --md-navigation-bar-label-text-size: 12px;
+  --md-navigation-bar-label-text-weight: 500;
+}
+.sc-filled { font-variation-settings: "FILL" 1; }
+
+/* System navigation. The app is edge to edge: the bottom navigation bar's container extends under
+   the system bar, and on screens without one the screen's surface shows through. */
+.sc-sysnav {
+  flex-shrink: 0;
+  width: 100%;
+  background: transparent;
+  color: var(--md-sys-color-on-surface);
+}
+.sc-screen:has(.sc-navbar) .sc-sysnav { background: var(--md-sys-color-surface-container); }
+.sc-sysnav--gesture {
+  height: 24px;
+  display: grid;
+  place-items: center;
+}
+.sc-sysnav__handle {
+  width: 108px;
+  height: 4px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.8;
+}
+.sc-sysnav--buttons {
+  height: 48px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 0 40px;
+}
+.sc-sysnav__btn {
+  justify-self: center;
+  width: 56px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 20px;
+  background: transparent;
+  color: inherit;
+  opacity: 0.8;
+  cursor: pointer;
+}
+.sc-sysnav__btn:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
+
+.sc-fab { position: absolute; right: 16px; bottom: 140px; z-index: 3; }
+
+/* Filter Row using Material Web md-chip-set and md-filter-chip (App Toolkit TopListFilters): 24 dp above and
+   below the chips, outline-variant outlines, a 24 dp check on the selected chip. */
+.ai-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 16px;
+  background: var(--md-sys-color-surface);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.ai-filter-label {
+  flex-shrink: 0;
+  font: 500 14px/20px var(--md-ref-typeface-plain);
+  letter-spacing: 0.1px;
+  color: var(--md-sys-color-on-surface);
+  margin-right: 4px;
+}
+.ai-filter-row md-chip-set {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+}
+.ai-filter-row md-filter-chip {
+  flex-shrink: 0;
+  --md-filter-chip-outline-color: var(--md-sys-color-outline-variant);
+  --md-filter-chip-icon-size: 24px;
+}
+
+/* Pixel 9 Pro XL Device Frame (1466x3101 scaled to 469x992 for 430x957 screen) */
+.sc-device {
+  position: relative;
+  width: 469px;
+  height: 992px;
+}
+.sc-device--shadow {
+  filter: drop-shadow(0 32px 70px rgba(0, 0, 0, 0.16)) drop-shadow(0 8px 24px rgba(0, 0, 0, 0.10));
+}
+[data-theme="dark"] .sc-device--shadow {
+  filter: drop-shadow(0 40px 90px rgba(0, 0, 0, 0.65)) drop-shadow(0 8px 24px rgba(0, 0, 0, 0.40));
+}
+
+.sc-device__back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.sc-device__screen {
+  position: absolute;
+  left: 18.24px;
+  top: 17.92px;
+  width: 430px;
+  height: 957px;
+  border-radius: 34.5px;
+  overflow: hidden;
+  z-index: 2;
+  background: #000000;
+}
+.sc-device__screen > .sc-screen {
+  width: 430px;
+  height: 957px;
+  border-radius: 34.5px;
+}
+.sc-device__mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Cards & Buttons */
+.sc-card {
+  --md-outlined-card-container-shape: var(--sc-card-radius, 20px);
+  --md-filled-card-container-shape: var(--sc-card-radius, 20px);
+  --md-outlined-card-outline-color: var(--md-sys-color-outline-variant);
+  --md-filled-card-container-color: var(--md-sys-color-surface-container-low);
+  display: block;
+  overflow: hidden;
+  transition: transform 0.12s ease;
+}
+
+.sc-ellipsis { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sc-ellipsis-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.sc-ellipsis-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* Android Insider Article Cards */
+.ai-article-card { cursor: pointer; }
+.ai-article-card:active { transform: scale(0.99); }
+.ai-banner-card { display: flex; flex-direction: column; }
+.ai-banner-image-wrap { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; background: var(--md-sys-color-surface-container-high); }
+.ai-banner-image { width: 100%; height: 100%; object-fit: cover; }
+.ai-banner-fallback { width: 100%; height: 100%; display: grid; place-items: center; background: color-mix(in srgb, var(--md-sys-color-primary-container) 40%, var(--md-sys-color-surface-container-highest)); }
+
+/* Guide cards (FullImageBannerLessonItem.kt, ThumbnailRowLessonItem.kt): 12 dp padding, the text 4 dp apart. */
+.ai-card-body { padding: 12px; }
+.ai-guide-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.ai-card-title { margin: 0; font: 600 22px/28px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ai-guide-desc { margin: 0; font: 400 14px/20px var(--md-ref-typeface-plain); letter-spacing: 0.25px; color: var(--md-sys-color-on-surface-variant);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+/* LessonButtonsRow: Share then Favorite, 40 dp icon buttons at the end of the row, 4 dp under the text. */
+.ai-card-actions { display: flex; justify-content: flex-end; align-items: center; padding-top: 4px; }
+.ai-square-card { padding: 12px; display: flex; flex-direction: column; }
+.ai-square-row { display: flex; align-items: flex-start; gap: 12px; }
+.ai-square-thumb { width: 104px; height: 104px; border-radius: 12px; overflow: hidden; flex-shrink: 0; background: var(--md-sys-color-surface-container-high); }
+.ai-square-artwork--reading .ai-square-thumb { border-radius: 12px 12px 0 0; }
+.ai-square-thumb-img { width: 100%; height: 100%; object-fit: cover; }
+.ai-square-fallback { width: 100%; height: 100%; display: grid; place-items: center; background: color-mix(in srgb, var(--md-sys-color-primary-container) 35%, transparent); }
+.ai-square-title { margin: 0; font: 600 16px/24px var(--md-ref-typeface-plain); letter-spacing: 0.15px; color: var(--md-sys-color-on-surface);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* Navigation Drawer */
+.ai-drawer-overlay { position: absolute; inset: 0; z-index: 20; display: flex; }
+.ai-drawer-scrim { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.45); animation: fadeIn 0.2s ease; }
+.ai-drawer-sheet {
+  position: relative;
+  width: 350px;
+  max-width: 83%;
+  height: 100%;
+  background: var(--md-sys-color-surface-container-low);
+  border-radius: 0 28px 28px 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+  animation: slideInLeft 0.25s cubic-bezier(0.1, 0.9, 0.2, 1);
+  z-index: 21;
+}
+.ai-drawer-header { padding: 48px 20px 20px; display: flex; align-items: center; gap: 14px; }
+.ai-drawer-logo { width: 34px; height: 40px; }
+.ai-drawer-title { font-size: 21px; font-weight: 600; margin: 0; color: var(--md-sys-color-on-surface); }
+.ai-drawer-body { flex: 1; }
+.ai-drawer-footer { padding: 16px 12px 28px; display: flex; flex-direction: column; gap: 4px; }
+.ai-drawer-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  border-radius: 28px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.ai-drawer-item:hover { background: var(--md-sys-color-surface-container-high); }
+
+/* Studio Bot Convo List with App Toolkit grouped corners */
+.ai-convo-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  background: var(--md-sys-color-surface-container-low);
+  border-radius: 28px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+.ai-convo-item:active { transform: scale(0.99); }
+.ai-convo-item--top { border-radius: 28px 28px 4px 4px; }
+.ai-convo-item--middle { border-radius: 4px; }
+.ai-convo-item--bottom { border-radius: 4px 4px 28px 28px; }
+.ai-convo-item--single { border-radius: 28px; }
+
+.ai-convo-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: transparent;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.ai-convo-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.ai-convo-body { flex: 1; min-width: 0; }
+.ai-convo-title { font-size: 16px; font-weight: 600; margin: 0 0 4px; color: var(--md-sys-color-on-surface); }
+.ai-convo-snippet {
+  font-size: 14px;
+  line-height: 19px;
+  color: var(--md-sys-color-on-surface-variant);
+  margin: 0 0 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.ai-convo-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--md-sys-color-on-surface-variant); }
+
+/* Extended FAB */
+md-fab.ai-extended-fab {
+  --md-fab-container-color: var(--md-sys-color-primary-container);
+  --md-fab-icon-color: var(--md-sys-color-on-primary-container);
+  --md-fab-label-text-color: var(--md-sys-color-on-primary-container);
+  --md-fab-label-text-font: var(--md-ref-typeface-plain);
+}
+
+/* Studio Bot Chat (MessageBubble.kt). The list spaces rows 12 dp apart and each BubbleRow adds 4 dp above and
+   below: 16 px of the content's gap + 4 px here. The 36 dp ProfilePicture sits before a bot bubble. */
+.ai-chat-row { display: flex; margin-bottom: 4px; width: 100%; }
+.ai-chat-row--user { justify-content: flex-end; }
+.ai-chat-row--bot { justify-content: flex-start; align-items: flex-start; }
+.ai-chat-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: transparent;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.ai-article-question {
+  margin: 16px 24px 32px;
+  padding: 24px;
+  border-radius: 28px;
+  background: linear-gradient(135deg, var(--md-sys-color-secondary-container), var(--md-sys-color-surface-container));
+  color: var(--md-sys-color-on-surface);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+.ai-article-question-brand { display: flex; align-items: center; gap: 12px; width: 100%; color: var(--md-sys-color-on-surface-variant); }
+.ai-article-question-brand > span:first-of-type { flex: 1; }
+.ai-article-question h2 { margin: 0; }
+.ai-article-question md-filled-button { max-width: 100%; align-self: flex-end; }
+.ai-article-attachment { display: flex; gap: 12px; align-items: center; padding: 16px; border-radius: 24px; background: var(--md-sys-color-surface-container-high); position: sticky; top: 0; z-index: 1; }
+.ai-article-attachment-copy { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.ai-article-attachment-copy .t-title-medium { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ai-chat-greeting { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; min-height: 160px; padding: 24px 0; text-align: center; }
+.ai-chat-greeting h2 { margin: 0; }
+.ai-article-prompts { flex-wrap: nowrap; overflow-x: auto; padding: 2px; flex-shrink: 0; }
+.ai-article-prompts md-assist-chip { flex-shrink: 0; }
+/* Card(Modifier.padding(horizontal = 8.dp).fillMaxWidth(0.9f / 0.85f)): the fraction is of what the row has
+   left after the avatar and the 8 dp margins. */
+.ai-chat-bubble { margin: 0 8px; position: relative; box-sizing: border-box; flex-shrink: 0; }
+.ai-chat-bubble--user {
+  width: calc((100% - 16px) * 0.85);
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  border-radius: 20px 20px 4px 20px;
+}
+.ai-chat-bubble--bot {
+  width: calc((100% - 52px) * 0.9);
+  background: var(--md-sys-color-surface-container-low);
+  color: var(--md-sys-color-on-surface-variant);
+  border-radius: 20px 20px 20px 4px;
+}
+/* Compose breaks a word too long for the line onto the next one, so nothing (inline code included) leaves the bubble. */
+.ai-chat-text {
+  padding: 16px;
+  font: 400 16px/24px var(--md-ref-typeface-plain);
+  letter-spacing: 0.5px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+/* Inline code as the bubble's markdown draws it: monospace on a square-cornered block that fills the line. */
+.ai-chat-text code {
+  background: var(--md-sys-color-surface-container-highest);
+  color: var(--md-sys-color-on-surface);
+  padding: 3px 4px;
+  border-radius: 0;
+  font-family: monospace;
+  font-size: 14px;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.ai-chat-bubble--user .ai-chat-text code {
+  background: rgba(0, 0, 0, 0.12);
+  color: var(--md-sys-color-on-primary-container);
+}
+.ai-chat-code-block {
+  background: var(--md-sys-color-surface-container-highest);
+  color: var(--md-sys-color-on-surface);
+  padding: 10px 12px;
+  border-radius: 10px;
+  margin: 8px 0;
+  font-family: monospace;
+  font-size: 12.5px;
+  line-height: 1.4;
+  overflow-x: auto;
+  white-space: pre;
+}
+/* TypingIndicatorBubble: three 8 dp dots, 6 dp apart, 20 x 18 dp padding, wrapping its content. */
+.ai-chat-bubble.ai-chat-typing { width: auto; display: flex; align-items: center; gap: 6px; padding: 18px 20px; }
+.ai-chat-typing-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--md-sys-color-on-surface-variant); opacity: 0.3; }
+.ai-chat-typing:not(.ai-chat-typing--timed) .ai-chat-typing-dot { animation: infinite alternate both; }
+.ai-chat-typing:not(.ai-chat-typing--timed) .ai-chat-typing-dot:nth-child(1) { animation-name: ai-typing-dot-0; animation-duration: 600ms; }
+.ai-chat-typing:not(.ai-chat-typing--timed) .ai-chat-typing-dot:nth-child(2) { animation-name: ai-typing-dot-1; animation-duration: 750ms; }
+.ai-chat-typing:not(.ai-chat-typing--timed) .ai-chat-typing-dot:nth-child(3) { animation-name: ai-typing-dot-2; animation-duration: 900ms; }
+/* tween(600, delayMillis = 150 * i) repeated in reverse: Compose holds each dot for its delay in every iteration. */
+@keyframes ai-typing-dot-0 { 0% { opacity: 0.3; animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1); } 100% { opacity: 1; } }
+@keyframes ai-typing-dot-1 { 0%, 20% { opacity: 0.3; animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1); } 100% { opacity: 1; } }
+@keyframes ai-typing-dot-2 { 0%, 33.333% { opacity: 0.3; animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1); } 100% { opacity: 1; } }
+/* Chat Input Bar: StudioBotComposer.kt pads the field 16 x 12 dp. */
+.ai-chat-input-bar {
+  padding: 12px 16px;
+  background: var(--md-sys-color-surface);
+}
+/* Compose's TextField puts its trailing content (mic + send, two 40 dp icon buttons) flush with the field's end.
+   Material Web sizes its trailing box as a square (height too), so the box holds the send action (40 px, or the
+   48 px progress box while sending), the 40 px gap before it holds the mic, and the actions are anchored to the
+   box's end. The text ends where the mic begins. */
+md-filled-text-field.ai-chat-input {
+  width: 100%;
+  --md-filled-text-field-container-shape: 28px;
+  --md-filled-text-field-container-color: var(--md-sys-color-surface-container-highest);
+  --md-filled-text-field-active-indicator-height: 0px;
+  --md-filled-text-field-hover-active-indicator-height: 0px;
+  --md-filled-text-field-focus-active-indicator-height: 0px;
+  --md-filled-text-field-trailing-icon-size: 40px;
+  --md-filled-text-field-icon-input-space: 40px;
+  --md-filled-text-field-with-trailing-icon-trailing-space: 0px;
+}
+md-filled-text-field.ai-chat-input--sending { --md-filled-text-field-trailing-icon-size: 48px; }
+/* Icon-only GeneralButton (Text) is an IconButton with iconButtonColors(): the trailing slot's onSurfaceVariant,
+   at 38% when disabled. */
+.ai-chat-input-actions {
+  display: flex;
+  align-items: center;
+  right: 0;
+  --md-icon-button-icon-color: var(--md-sys-color-on-surface-variant);
+  --md-icon-button-disabled-icon-color: var(--md-sys-color-on-surface-variant);
+  --md-icon-button-disabled-icon-opacity: 0.38;
+}
+.ai-chat-send md-icon { font-variation-settings: "FILL" 1; }
+.ai-chat-progress { display: grid; place-items: center; width: 48px; height: 48px; }
+/* CircularProgressIndicator: 24 dp with a 4 dp stroke. Material Web's size includes a 4 px margin on each side. */
+.ai-chat-progress md-circular-progress { --md-circular-progress-size: 32px; --md-circular-progress-active-indicator-width: 16.667; }
+/* MessageActions.kt: ExtraSmall (32 dp) icon buttons, 20 dp icons in the bubble's content colour at 70%;
+   the row is padded 4 dp at the start and bottom, 8 dp at the end. */
+.ai-chat-actions {
+  display: flex;
+  padding: 0 8px 4px 4px;
+  --md-icon-button-icon-size: 20px;
+  --md-icon-button-state-layer-width: 32px;
+  --md-icon-button-state-layer-height: 32px;
+  --md-icon-button-icon-color: color-mix(in srgb, currentColor 70%, transparent);
+}
+.ai-chat-actions md-icon-button { width: 32px; height: 32px; }
+/* Code Box */
+.ai-code-box {
+  background: #1e1e24;
+  color: #e2e2e8;
+  border-radius: 16px;
+  overflow: hidden;
+  margin: 12px 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+.ai-code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background: #16161a;
+  border-bottom: 1px solid #2a2a32;
+}
+.ai-code-lang { color: #8e8e98; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; font-size: 12px; }
+md-text-button.ai-code-copy {
+  --md-text-button-label-text-color: #c4c4ce;
+  --md-text-button-icon-color: #c4c4ce;
+  --md-text-button-hover-label-text-color: #ffffff;
+  --md-text-button-hover-state-layer-color: #ffffff;
+  --md-text-button-pressed-state-layer-color: #ffffff;
+}
+.ai-code-pre {
+  margin: 0;
+  padding: 16px;
+  overflow-x: auto;
+  font-family: ui-monospace, "JetBrains Mono", Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Reading Progress */
+.ai-reading-progress {
+  position: absolute;
+  top: 48px;
+  left: 0;
+  height: 3px;
+  background: var(--md-sys-color-primary);
+  z-index: 10;
+  transition: width 0.1s linear;
+}
+
+/* Empty State */
+.ai-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+  gap: 8px;
+}
+.ai-empty-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--md-sys-color-primary-container) 40%, transparent);
+  display: grid;
+  place-items: center;
+  margin-bottom: 8px;
+}
+
+/* Article Detail Screen (ArticleHeader.kt, LessonHeadingText.kt, RelatedArticlesCarousel.kt) */
+.ai-article-header-bg {
+  background: linear-gradient(180deg, var(--md-sys-color-surface) 0%, color-mix(in srgb, var(--md-sys-color-primary-container) 22%, var(--md-sys-color-background)) 50%, var(--md-sys-color-background) 100%);
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.ai-article-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+/* Date, reading time and level in label-medium, then Share and Favorite at the end of the row. */
+.ai-article-meta-left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  font: 500 12px/16px var(--md-ref-typeface-plain);
+  letter-spacing: 0.5px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+.ai-article-meta-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.ai-article-desc {
+  font: 400 18px/28px var(--md-ref-typeface-plain);
+  letter-spacing: 0.5px;
+  color: var(--md-sys-color-on-surface-variant);
+  margin: 0;
+}
+.ai-article-author {
+  font: 400 14px/20px var(--md-ref-typeface-plain);
+  letter-spacing: 0.25px;
+  color: var(--md-sys-color-on-surface);
+  margin: 0;
+}
+/* The hero's artwork is drawn at 1.2x inside its clipped frame, the room its parallax moves in. */
+.ai-article-hero { margin: 32px 16px 0; border-radius: 24px; overflow: hidden; }
+.ai-article-hero img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; transform: scale(1.2); }
+.ai-article-prose { margin-top: 32px; }
+.ai-article-prose > :first-child { margin-top: 0; }
+
+/* Heading with vertical accent bar (MarkdownHeadingText.kt): bold headline-small (## ) or headline-medium (# ),
+   8 dp above and below, 12 dp from the 4 dp rule. */
+.ai-heading-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0;
+  padding: 8px 0;
+}
+.ai-heading-rule {
+  width: 4px;
+  height: 28px;
+  border-radius: 2px;
+  background: var(--md-sys-color-primary);
+  flex-shrink: 0;
+}
+.ai-heading-rule--h1 {
+  height: 32px;
+}
+.ai-heading-text {
+  font: 700 24px/32px var(--md-ref-typeface-plain);
+  color: var(--md-sys-color-on-background);
+  margin: 0;
+}
+.ai-heading-text--h1 { font-size: 28px; line-height: 36px; }
+
+/* Inline code pill */
+.ai-inline-code {
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
+  padding: 2px 7px;
+  border-radius: 6px;
+  font-family: ui-monospace, "JetBrains Mono", Consolas, monospace;
+  font-size: 13.5px;
+}
+
+/* Article Lists */
+.ai-article-list-item {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  font-size: 15px;
+  line-height: 23px;
+  color: var(--md-sys-color-on-surface);
+  margin-bottom: 8px;
+}
+.ai-article-list-num {
+  font-weight: 600;
+  color: var(--md-sys-color-on-surface-variant);
+  flex-shrink: 0;
+}
+.ai-article-list-bullet {
+  font-size: 18px;
+  line-height: 1;
+  color: var(--md-sys-color-on-surface-variant);
+  flex-shrink: 0;
+}
+
+/* The article bar's reading progress (ArticleReadingProgress): a 3 dp primary indicator with square ends on a
+   secondary-container track across the bar's bottom edge, shown once the bar has collapsed. */
+.ai-topbar-progress-track {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--md-sys-color-secondary-container);
+  z-index: 10;
+}
+.ai-topbar-progress { height: 100%; background: var(--md-sys-color-primary); }
+
+/* More to explore (RelatedArticlesCarousel.kt) */
+.ai-related-section {
+  margin: 24px 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.ai-related-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+  padding: 0 20px;
+  color: var(--md-sys-color-on-surface);
+}
+.ai-related-carousel { display: flex; gap: 16px; overflow-x: auto; padding: 0 24px 8px; scrollbar-width: none; }
+.ai-related-carousel::-webkit-scrollbar { display: none; }
+.ai-related-vertical { display: flex; flex-direction: column; gap: 16px; padding: 0 24px 8px; }
+.ai-related-card { container-type: inline-size; width: clamp(220px, 76%, 280px); flex: 0 0 auto; --md-filled-card-container-shape: 28px; --md-filled-card-container-color: var(--md-sys-color-surface-container-low); }
+.ai-related-card md-text-button.ai-related-link { width: 100%; height: 100%; --md-text-button-container-shape: 28px; --md-text-button-container-height: auto; }
+.ai-related-link::part(content) { width: 100%; }
+.ai-related-artwork { width: 100%; aspect-ratio: 1; position: relative; display: grid; place-items: center; margin-block: 20px 12px; background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); mask-size: 100% 100%; mask-repeat: no-repeat; }
+.ai-related-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.ai-related-body { display: flex; flex-direction: column; gap: 12px; padding-bottom: 20px; text-align: start; }
+.ai-related-type, .ai-related-author { font: 500 12px/18px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
+.ai-related-name { font: 500 16px/24px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface); min-height: 72px; margin: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.ai-related-vertical .ai-related-card { container-type: inline-size; width: 100%; }
+.ai-related-controls { display: flex; align-items: center; gap: 16px; padding-inline: 24px; }
+.ai-related-controls md-linear-progress { flex: 1; --md-linear-progress-track-height: 2px; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+.ai-banner-image-wrap { border-radius: 20px; }
+.ai-banner-image-wrap--reading { border-radius: 0; }
+.ai-artwork-progress { height: 4px; background: var(--md-sys-color-primary-container); overflow: hidden; }
+.ai-square-artwork { width: 104px; flex-shrink: 0; display: flex; flex-direction: column; }
+
+md-linear-progress.ai-artwork-progress { display: block; width: 100%; --md-linear-progress-track-height: 4px; --md-linear-progress-track-shape: 0px; }
+
+/* Favorites are toggle icon buttons; the selected heart uses the app's error color. */
+md-icon-button.ai-favorite {
+  --md-icon-button-selected-icon-color: var(--md-sys-color-error);
+  --md-icon-button-selected-hover-icon-color: var(--md-sys-color-error);
+  --md-icon-button-selected-focus-icon-color: var(--md-sys-color-error);
+  --md-icon-button-selected-pressed-icon-color: var(--md-sys-color-error);
+}
+
+.ai-related-content { display: flex; flex-direction: column; width: calc(100cqw - 40px); white-space: normal; }
+
+/* Connected button group: 48dp buttons, 2dp apart, rounded outside and squarer inside. */
+.ai-related-buttons { display: flex; gap: 2px; }
+.ai-related-buttons md-filled-tonal-icon-button {
+  --md-filled-tonal-icon-button-container-width: 48px;
+  --md-filled-tonal-icon-button-container-height: 48px;
+  --md-filled-tonal-icon-button-container-color: var(--md-sys-color-surface-container-high);
+  --md-filled-tonal-icon-button-icon-color: var(--md-sys-color-on-surface);
+}
+.ai-related-buttons [data-direction="previous"] {
+  --md-filled-tonal-icon-button-container-shape-start-end: 8px;
+  --md-filled-tonal-icon-button-container-shape-end-end: 8px;
+}
+.ai-related-buttons [data-direction="next"] {
+  --md-filled-tonal-icon-button-container-shape-start-start: 8px;
+  --md-filled-tonal-icon-button-container-shape-end-start: 8px;
+}
+
+.ai-related-author { min-height: 18px; }
+
+/* News tab (NewsStoryItems.kt): an editorial lead story and story rows without card containers. */
+.ai-story-eyebrow { font: 500 14px/20px var(--md-ref-typeface-plain); color: var(--md-sys-color-primary); }
+.ai-story-lead { display: flex; flex-direction: column; gap: 12px; cursor: pointer; }
+.ai-story-lead > :not(.ai-story-lead__image):not(.ai-card-actions) { padding-inline: 4px; }
+/* The lead's column clips the image's top corners to 28 dp; the artwork's own corners are 20 dp. */
+.ai-story-lead__image { aspect-ratio: 16 / 9; border-radius: 28px 28px 20px 20px; overflow: hidden; background: var(--md-sys-color-surface-container-high); }
+.ai-story-lead__image img, .ai-story-row__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ai-story-lead__title { margin: 0; font: 400 24px/32px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface); }
+.ai-story-lead__desc { margin: 0; font: 400 16px/24px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.ai-story-row { padding-block: 8px; cursor: pointer; }
+.ai-story-row__main { display: flex; gap: 16px; align-items: flex-start; }
+.ai-story-row__text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.ai-story-row__title { margin: 0; font: 500 16px/24px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.ai-story-row__thumb { width: 96px; height: 96px; flex-shrink: 0; border-radius: 12px; overflow: hidden; background: var(--md-sys-color-surface-container-high); }
+.ai-story-row__actions { display: flex; justify-content: flex-end; }
+.ai-story-row--ad { cursor: default; }
+
+/* Native ads: the advertiser icon sits where a thumbnail or avatar would. */
+.ai-ad-icon { display: grid; place-items: center; background: var(--md-sys-color-surface-container-highest); color: var(--md-sys-color-on-surface-variant); }
+.ai-convo-item--ad { cursor: default; }
+.ai-convo-item--ad .ai-convo-avatar { border-radius: 50%; }
+.ai-ad-cta, .ai-ad-label { color: var(--md-sys-color-primary); font-weight: 500; }
+
+/* The app's code block (MarkdownCodeContent.kt). Unlike .ai-code-box above, which is a dark stand-in, this is
+   what the app draws: a surface-container card, language and Copy chip, Google Sans Code coloured by the
+   Solarized Light theme (see CODE_COLORS in components.js). */
+.ai-app-code { display: flex; flex-direction: column; gap: 12px; padding: 16px; box-sizing: border-box; border-radius: 12px; background: var(--md-sys-color-surface-container); color: var(--md-sys-color-on-surface); }
+.ai-app-code__bar { display: flex; align-items: center; justify-content: space-between; }
+.ai-app-code__lang { font: 500 14px/20px var(--md-ref-typeface-plain); letter-spacing: 0.1px; color: var(--md-sys-color-on-surface-variant); }
+.ai-app-code__pre { margin: 0; overflow: hidden; font: 400 14px/20px "Google Sans Code", ui-monospace, "JetBrains Mono", monospace; letter-spacing: 0.25px; white-space: pre; }
+.ai-app-code__pre code { font: inherit; }
+.ai-app-code__line { display: block; min-height: 20px; }
+
+/* Edge to edge on the article screen: the text scrolls behind the gesture bar, as on Android, instead of stopping
+   above a plain strip. The padding keeps the last line clear of the handle when scrolled to the end. */
+.sc-screen--article:not(:has(.sc-navbar)) > .sc-content { margin-bottom: -24px; padding-bottom: 24px; }
+.sc-screen--article:not(:has(.sc-navbar)) > .sc-sysnav { position: relative; z-index: 1; }
+
+/* Wide windows (kit/layout.js, App Toolkit ShellFrame.kt): from 600 dp the navigation sits beside the content. The
+   frame (status bar, navigation and app bar) is surface-container; a tab's content is a surface card with a 24 dp
+   top-start corner (ContentCardShape). A page over the tab (`carded: false`) is plain surface beside the frame. */
+.sc-screen--framed { background: var(--md-sys-color-surface-container); }
+.sc-screen--framed .sc-status,
+.sc-screen--framed .sc-topbar { background: transparent; }
+.sc-frame { flex: 1; min-height: 0; display: flex; }
+.sc-frame__body { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.sc-frame__card { flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column; background: var(--md-sys-color-surface); }
+.sc-screen--carded .sc-frame__card { border-start-start-radius: 24px; overflow: hidden; }
+.sc-screen--framed:not(.sc-screen--carded) .sc-frame__body { background: var(--md-sys-color-surface); }
+.sc-screen--framed:not(.sc-screen--carded) .sc-frame__body .sc-topbar { background: var(--md-sys-color-surface); }
+/* Edge to edge: the card reaches the bottom of the window and the gesture handle floats over it. */
+.sc-screen--framed > .sc-sysnav { position: absolute; left: 0; right: 0; bottom: 0; z-index: 4; background: transparent; }
+.sc-screen--framed .sc-frame__card > .sc-content { padding-bottom: 24px; }
+.sc-screen--framed .sc-topbar--search .sc-search { margin-inline-start: 16px; }
+.sc-screen--framed .sc-fab { bottom: 40px; }
+
+/* ShellRail: 96 dp, a 64 dp header with the 48 dp menu button centred, WideNavigationRailItem tabs (56 x 32
+   indicator, label-medium label 4 dp under it), the drawer entries pinned to the bottom with 8 dp under them. */
+.sc-rail { width: 96px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; padding-bottom: 32px; }
+.sc-rail__header { height: 64px; width: 100%; display: flex; align-items: center; padding-inline-start: 20px; --md-icon-button-icon-color: var(--md-sys-color-on-surface-variant); }
+.sc-rail__items { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%; }
+.sc-rail__footer { margin-top: auto; }
+.sc-rail__item { all: unset; box-sizing: border-box; width: 96px; min-height: 64px; padding: 6px 0; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; color: var(--md-sys-color-on-surface-variant); }
+.sc-rail__indicator { width: 56px; height: 32px; border-radius: 16px; display: grid; place-items: center; }
+.sc-rail__item.is-selected .sc-rail__indicator { background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); }
+.sc-rail__item.is-selected { color: var(--md-sys-color-secondary); }
+.sc-rail__label { font: 500 12px/16px var(--md-ref-typeface-plain); letter-spacing: 0.5px; text-align: center; max-width: 88px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* PermanentDrawerSheet, 300 dp: the header (mark at the title's 28 dp line height, title-large name), then
+   NavigationDrawerItem rows (56 dp pills, 12 dp side padding, label-large), the entries pinned to the bottom. */
+.sc-pdrawer { width: 300px; flex-shrink: 0; display: flex; flex-direction: column; padding-bottom: 12px; }
+.sc-pdrawer__header { display: flex; align-items: center; gap: 12px; padding: 16px 24px; margin-top: 4px; font: 400 22px/28px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface); }
+.sc-pdrawer__header img { width: 28px; height: 28px; }
+.sc-pdrawer__items { display: flex; flex-direction: column; padding-inline: 12px; }
+.sc-pdrawer__footer { margin-top: auto; }
+.sc-pdrawer__item { all: unset; box-sizing: border-box; height: 56px; border-radius: 28px; padding: 0 24px 0 16px; display: flex; align-items: center; gap: 12px; cursor: pointer;
+  font: 500 14px/20px var(--md-ref-typeface-plain); letter-spacing: 0.1px; color: var(--md-sys-color-on-surface-variant); }
+.sc-pdrawer__item.is-selected { background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); }
+
+/* ListDetailScene.kt: list 38%, a 24 dp separator with a 4 x 48 dp outline handle, the detail in the rest. */
+.sc-content--panes { overflow: hidden; display: flex; }
+.sc-screen--framed .sc-frame__card > .sc-content--panes { padding-bottom: 0; }
+.sc-panes { flex: 1; min-width: 0; min-height: 0; width: 100%; height: 100%; display: flex; }
+.sc-pane { min-width: 0; height: 100%; overflow-y: auto; overflow-x: hidden; position: relative; scrollbar-width: none; }
+.sc-pane--list { flex: 0 0 38%; }
+.sc-pane--detail { flex: 1; display: flex; flex-direction: column; }
+.sc-pane-separator { flex: 0 0 24px; display: grid; place-items: center; }
+.sc-pane-separator > span { width: 4px; height: 48px; border-radius: 2px; background: var(--md-sys-color-outline); }
+
+/* A desktop window (ChromeOS): no status bar and no system navigation. */
+.sc-screen--desktop .sc-content { padding-bottom: 0; }
+
+/* Pixel 9 Pro Fold, open (assets/device-frames/pixel_9_pro_fold/default): a 2204 x 2274 frame around a 2076 x 2152
+   display at 62, 62, drawn at 852 / 2076 so the display is the 852 x 883 dp window. */
+.sc-device--pixel_9_pro_fold { width: 904.53px; height: 933.27px; }
+.sc-device--pixel_9_pro_fold .sc-device__screen { left: 25.45px; top: 25.45px; width: 852px; height: 883px; border-radius: 48px; }
+.sc-device--pixel_9_pro_fold .sc-device__screen > .sc-screen { width: 852px; height: 883px; border-radius: 48px; }
+
+/* Wide feeds (ListingSectionRenderer.kt and ComposedSections.kt): a 16 dp grid of up to three columns. */
+.ai-feed-grid { display: grid; grid-template-columns: repeat(var(--cols, 1), minmax(0, 1fr)); gap: 16px; padding: 16px; align-items: start; }
+.ai-feed-grid > .ai-span-all { grid-column: 1 / -1; }
+.ai-feed-stack { display: flex; flex-direction: column; gap: 16px; }
+/* FullImageBannerLessonItem(fixedLines): the reading cue's 4 dp, two title lines and two summary lines always. */
+.ai-reading-cue-space { height: 4px; }
+.ai-fixed-lines .ai-card-title { min-height: 56px; }
+.ai-fixed-lines .ai-guide-desc { min-height: 40px; }
+/* LeadingBannerLessonItem: 12 dp padding, the artwork beside the text, a three-line summary. */
+.ai-banner-card--leading { padding: 12px; }
+.ai-leading-row { display: flex; gap: 12px; align-items: flex-start; }
+.ai-leading-artwork { flex-shrink: 0; }
+.ai-banner-card--leading .ai-guide-desc { -webkit-line-clamp: 3; }
+.ai-fixed-lines.ai-banner-card--leading .ai-guide-desc { min-height: 60px; }
+/* SideBySideFeaturedNewsStory: image and text 24 dp apart, centred; headline-small (24/32) or, in under 600 dp,
+   title-large (22/28) with a two-line summary. The artwork's corners are 20 dp all round here. */
+.ai-story-lead--side { flex-direction: row; align-items: center; gap: 24px; border-radius: 28px; }
+.ai-story-lead--side .ai-story-lead__image { flex-shrink: 0; border-radius: 20px; }
+.ai-story-lead__text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.ai-story-lead__text > :not(.ai-card-actions) { padding-inline: 4px; }
+.ai-story-lead--side .ai-story-lead__title { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.ai-story-lead--tight .ai-story-lead__title { font-size: 22px; line-height: 28px; }
+.ai-story-lead--tight .ai-story-lead__desc { -webkit-line-clamp: 2; }
+.ai-convo-item.ai-convo-item--selected { background: var(--md-sys-color-secondary-container); }
+/* The chat as a detail pane: its messages scroll above the composer. */
+.sc-pane--chat { overflow: hidden; }
+.sc-pane__scroll { flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: none; }
+/* An article beside its list: one 64 dp bar over both panes, the back arrow and section title over the list. */
+.sc-topbar--panes { padding-inline-start: 4px; }
+.sc-topbar__pane { display: flex; align-items: center; gap: 4px; height: 100%; }
+.sc-topbar__pane md-icon-button { --md-icon-button-icon-color: var(--md-sys-color-on-surface); }
+.sc-pane--article .ai-article-header-bg > * { width: 100%; max-width: 752px; margin-inline: auto; }
+/* ArticleHeader.kt showHeadline: display-medium from 600 dp of pane, headline-large below. */
+.ai-article-headline { margin: 0; font: 400 32px/40px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-background); }
+.ai-article-headline--display { font-size: 45px; line-height: 52px; letter-spacing: -0.25px; }
+.ai-article-column { max-width: 100%; }
+.sc-pane--article .ai-article-prose { max-width: 800px; margin-inline: auto; width: 100%; box-sizing: border-box; }
+/* ArticleContentColumn.kt: the hero up to 1040 dp wide, and no taller than 60% of the window, 16 dp from the sides. */
+.sc-pane--article .ai-article-hero { width: calc(100% - 32px); max-width: min(1008px, var(--sc-hero-max, 1008px)); margin-inline: auto; }
+.sc-screen--framed:not(:has(> .sc-sysnav)) .sc-fab { bottom: 16px; }
+/* The Fold's inner camera sits top right: the status icons keep left of the cutout, as SystemUI places them. */
+.sc-device--pixel_9_pro_fold .sc-status__right { margin-right: 44px; }
+
+/* Pixelbook Go (assets/device-frames/pixelbook_go, Google's device art): a 2188 x 1459 laptop with its 1826 x 1079
+   screen at 181, 159, drawn at 1218 / 1826 so the screen is the 1218 x 720 dp desktop window. */
+.sc-device--pixelbook_go { width: 1459.47px; height: 973.20px; }
+.sc-device__shadow { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+.sc-device--pixelbook_go .sc-device__screen { left: 120.73px; top: 106.06px; width: 1218px; height: 720px; border-radius: 0; }
+.sc-device--pixelbook_go .sc-device__screen > .sc-screen { width: 1218px; height: 720px; border-radius: 0; }
+
+/* Composed tabs (ComposedSections.kt): a title-large heading 16 dp above its group, shelves that scroll sideways
+   from edge to edge, and the native ad stand-ins (LessonNativeAdCards.kt, NewsNativeAdStory). */
+.ai-feed-heading { display: flex; align-items: center; min-height: 40px; padding-top: 16px; }
+.ai-feed-heading h2 { flex: 1; margin: 0; font: 400 22px/28px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ai-shelf { display: flex; gap: 16px; overflow-x: auto; scrollbar-width: none; margin-inline: -16px; padding-inline: 16px; }
+.ai-shelf > * { flex-shrink: 0; }
+.ai-discovery__art { aspect-ratio: 16 / 9; border-radius: 20px; overflow: hidden; background: var(--md-sys-color-surface-container-high); }
+.ai-discovery__art--square { aspect-ratio: 1; }
+.ai-discovery__art img, .ai-continue__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ai-discovery__text { padding: 12px; display: flex; flex-direction: column; gap: 4px; }
+.ai-discovery__title { margin: 0; font: 500 16px/24px var(--md-ref-typeface-plain); letter-spacing: 0.15px; color: var(--md-sys-color-on-surface);
+  min-height: 72px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.ai-continue { display: flex; gap: 12px; align-items: center; padding: 12px; }
+.ai-continue__art { width: 100px; flex-shrink: 0; }
+.ai-continue__img { aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: var(--md-sys-color-surface-container-high); }
+.ai-continue__text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.ai-continue__title { margin: 0; font: 500 14px/20px var(--md-ref-typeface-plain); letter-spacing: 0.1px; color: var(--md-sys-color-on-surface);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.ai-ad-media { display: grid; place-items: center; background: var(--md-sys-color-surface-variant); color: var(--md-sys-color-on-surface-variant); font: 500 12px/16px var(--md-ref-typeface-plain); letter-spacing: 0.5px; }
+.ai-story-lead--ad { cursor: default; }
+.ai-article-card--ad { cursor: default; }
+.ai-guide-ad__media { aspect-ratio: 16 / 9; border-radius: 20px; }
+.ai-guide-ad--compact { padding: 12px; }
+.ai-guide-ad__row { display: flex; gap: 12px; }
+.ai-guide-ad__thumb { width: 98px; height: 98px; flex-shrink: 0; border-radius: 12px; }
+.ai-guide-ad__thumb b { font: 700 14px/20px var(--md-ref-typeface-plain); color: var(--md-sys-color-primary); }
+.ai-guide-ad__body { margin-top: 4px; }
+.ai-guide-ad--compact .ai-guide-ad__body { -webkit-line-clamp: 3; }
+.ai-guide-ad__chip { padding-top: 12px; }
+
+
+/* ============================================================================
+   APP TOOLKIT SCREENS — NUMBERS, QUICK TOOLS, APPS & TOOL BOTTOM SHEET
+   Exact 1:1 translation of NumbersScreen.kt, ToolkitTilesScreen.kt,
+   TileBadges.kt, TileCatalogSections.kt, TileInfoCards.kt, AppCard.kt,
+   and ToolkitToolBottomSheet.kt.
+   Zero 1px borders on cards or assist chips — pure M3 tonal surface hierarchy.
+   ============================================================================ */
+
+/* Expressive Tool Palettes from ToolkitTileVisuals.kt (Light & Dark) */
+.sc-screen {
+  --tk-gold-container: #e2c900;
+  --tk-gold-content: #6b5e00;
+  --tk-teal-container: #00a091;
+  --tk-teal-content: #006a60;
+  --tk-orange-container: #ff8b26;
+  --tk-orange-content: #8b4100;
+  --tk-magenta-container: #e2008e;
+  --tk-magenta-content: #91005a;
+  --tk-amber-container: #ffb84d;
+  --tk-amber-content: #7a4e00;
+  --tk-red-container: #ee0000;
+  --tk-red-content: #b10000;
+}
+
+[data-theme="dark"] .sc-screen {
+  --tk-gold-container: #6b5e00;
+  --tk-gold-content: #fbe44d;
+  --tk-teal-container: #006a60;
+  --tk-teal-content: #5ce6d6;
+  --tk-orange-container: #8b4100;
+  --tk-orange-content: #ffb784;
+  --tk-magenta-container: #91005a;
+  --tk-magenta-content: #ff85c4;
+  --tk-amber-container: #7a4e00;
+  --tk-amber-content: #ffd599;
+  --tk-red-container: #b10000;
+  --tk-red-content: #ff897d;
+}
+
+.tk-screen-pad {
+  padding: 16px 16px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* TileIconBadge (TileBadges.kt): 56dp (large) or 44dp (regular),
+   15% alpha container fill masked to MaterialShapes polygon, 24dp content-colored icon. */
+.tk-shape-badge {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* ToolkitToolChips (TileBadges.kt): AssistChip with border = null and tonal container fills. */
+.tk-meta-chip-set {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tk-meta-chip-set md-assist-chip {
+  --md-assist-chip-container-height: 32px;
+  --md-assist-chip-container-shape: 8px;
+  --md-assist-chip-outline-width: 0px;
+  --md-assist-chip-label-text-font: var(--md-ref-typeface-plain);
+  --md-assist-chip-label-text-size: 14px;
+  --md-assist-chip-label-text-weight: 500;
+  --md-assist-chip-icon-size: 18px;
+  pointer-events: none;
+}
+
+/* ToolTypeChip: secondaryContainer / onSecondaryContainer, no icon */
+.tk-meta-chip-set md-assist-chip.tk-chip--type {
+  --md-assist-chip-elevated-container-color: var(--md-sys-color-secondary-container);
+  --md-assist-chip-label-text-color: var(--md-sys-color-on-secondary-container);
+  background: var(--md-sys-color-secondary-container);
+  border-radius: 8px;
+}
+
+/* TileAvailabilityChip & TileStatusChip (Added): primaryContainer / onPrimaryContainer */
+.tk-meta-chip-set md-assist-chip.tk-chip--tile,
+.tk-meta-chip-set md-assist-chip.tk-chip--added {
+  --md-assist-chip-elevated-container-color: var(--md-sys-color-primary-container);
+  --md-assist-chip-label-text-color: var(--md-sys-color-on-primary-container);
+  --md-assist-chip-icon-color: var(--md-sys-color-on-primary-container);
+  background: var(--md-sys-color-primary-container);
+  border-radius: 8px;
+}
+
+/* TileStatusChip (NotAdded): surfaceContainerHighest / onSurfaceVariant */
+.tk-meta-chip-set md-assist-chip.tk-chip--not-added {
+  --md-assist-chip-elevated-container-color: var(--md-sys-color-surface-container-highest);
+  --md-assist-chip-label-text-color: var(--md-sys-color-on-surface-variant);
+  --md-assist-chip-icon-color: var(--md-sys-color-on-surface-variant);
+  background: var(--md-sys-color-surface-container-highest);
+  border-radius: 8px;
+}
+
+/* NumbersHeroBanner (NumbersScreen.kt lines 236-310):
+   28dp rounded surface with colors.container.copy(alpha = 0.16f), zero border. */
+.numbers-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  padding: 20px;
+  background: color-mix(in srgb, var(--tk-gold-container) 16%, transparent);
+  color: var(--md-sys-color-on-surface);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* 132dp SoftBurst watermark aligned CenterEnd offset (28dp, 18dp) at 12% alpha */
+.numbers-hero-watermark {
+  position: absolute;
+  right: -28px;
+  top: calc(50% - 66px + 18px);
+  width: 132px;
+  height: 132px;
+  background: color-mix(in srgb, var(--tk-gold-container) 12%, transparent);
+  pointer-events: none;
+}
+
+/* Eyebrow pill: 16dp radius, 24% gold container, labelSmall bold gold content */
+.numbers-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 12px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--tk-gold-container) 24%, transparent);
+  color: var(--tk-gold-content);
+  font: 700 11px/16px var(--md-ref-typeface-plain);
+  letter-spacing: 0.5px;
+}
+
+.numbers-hero-title {
+  margin: 8px 0 4px;
+  font: 700 24px/32px var(--md-ref-typeface-plain);
+  color: var(--md-sys-color-on-surface);
+  white-space: pre-line;
+}
+
+.numbers-hero-sub {
+  margin: 0;
+  font: 400 14px/20px var(--md-ref-typeface-plain);
+  letter-spacing: 0.25px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* 76dp Cookie12Sided trailing hero badge at 28% alpha with 36dp numbers icon */
+.numbers-hero-badge {
+  position: relative;
+  z-index: 1;
+  width: 76px;
+  height: 76px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--tk-gold-container) 28%, transparent);
+  color: var(--tk-gold-content);
+}
+
+/* Section Headers (NumbersSectionHeader: titleMedium SemiBold, 4dp start padding) */
+.numbers-section-header {
+  padding: 0 0 0 4px;
+  margin-bottom: -4px;
+}
+.numbers-section-title {
+  font: 600 16px/24px var(--md-ref-typeface-plain);
+  letter-spacing: 0.15px;
+  color: var(--md-sys-color-on-surface);
+}
+
+/* Bento Grouped Corners (NumbersScreen.kt: 28dp outer, 8dp inner seams, 4dp gap) */
+.bento-row-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  align-items: stretch;
+}
+.bento-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* NumbersToolCard & NumbersCounterFeatureCard:
+   CardDefaults.cardColors(containerColor = surfaceContainerHigh), ZERO border. */
+.numbers-card {
+  appearance: none;
+  border: 0;
+  outline: none;
+  position: relative;
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  transition:
+    transform 0.16s cubic-bezier(0.2, 0, 0, 1),
+    background-color 0.16s cubic-bezier(0.2, 0, 0, 1);
+}
+.numbers-card:hover {
+  background: var(--md-sys-color-surface-container-highest);
+}
+.numbers-card:active {
+  transform: scale(0.985);
+}
+
+.corner-bento-left {
+  border-radius: 28px 8px 8px 28px;
+}
+.corner-bento-right {
+  border-radius: 8px 28px 28px 8px;
+}
+.corner-bento-top {
+  border-radius: 28px 28px 8px 8px;
+}
+.corner-bento-bottom-left {
+  border-radius: 8px 8px 8px 28px;
+}
+.corner-bento-bottom-right {
+  border-radius: 8px 8px 28px 8px;
+}
+.corner-uniform {
+  border-radius: 28px;
+}
+
+.numbers-card-title {
+  margin: 0;
+  font: 600 16px/24px var(--md-ref-typeface-plain);
+  letter-spacing: 0.15px;
+  color: var(--md-sys-color-on-surface);
+}
+.numbers-card-sub {
+  margin: 4px 0 0;
+  font: 400 12px/16px var(--md-ref-typeface-plain);
+  letter-spacing: 0.4px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.numbers-counter-top {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+.numbers-counter-copy {
+  flex: 1;
+  min-width: 0;
+}
+.numbers-counter-sub {
+  margin: 4px 0 0;
+  font: 400 14px/20px var(--md-ref-typeface-plain);
+  letter-spacing: 0.25px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* 52dp Cookie9Sided live counter readout badge (22% gold container, bold gold content) */
+.numbers-counter-pill {
+  width: 52px;
+  height: 52px;
+  background: color-mix(in srgb, var(--tk-gold-container) 22%, transparent);
+  color: var(--tk-gold-content);
+  display: grid;
+  place-items: center;
+  font: 700 16px/24px var(--md-ref-typeface-plain);
+  flex-shrink: 0;
+}
+
+/* Quick Tools (ToolkitTilesScreen.kt, TileCatalogSections.kt, TileInfoCards.kt)
+   Grouped category surfaces (surfaceContainerLow, 28dp outer / 4dp inner seam, 2dp gap, NO border) */
+.qt-categories-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.qt-category-card {
+  background: var(--md-sys-color-surface-container-low);
+  color: var(--md-sys-color-on-surface);
+  border: 0;
+  overflow: hidden;
+  border-radius: 4px;
+}
+.qt-category-card--single {
+  border-radius: 28px;
+}
+.qt-category-card--top {
+  border-radius: 28px 28px 4px 4px;
+}
+.qt-category-card--middle {
+  border-radius: 4px;
+}
+.qt-category-card--bottom {
+  border-radius: 4px 4px 28px 28px;
+}
+
+.qt-category-header {
+  appearance: none;
+  width: 100%;
+  padding: 16px;
+  border: 0;
+  background: transparent;
+  color: var(--md-sys-color-on-surface);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  transition: background-color 0.15s ease;
+}
+.qt-category-header:hover {
+  background: color-mix(in srgb, var(--md-sys-color-on-surface) 4%, transparent);
+}
+
+.qt-category-list {
+  padding: 0 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* ToolkitTileCard: surfaceContainerHigh, grouped corners (20dp outer / 4dp inner seam), NO border */
+.qt-tile-item {
+  appearance: none;
+  border: 0;
+  width: 100%;
+  padding: 16px;
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  border-radius: 4px;
+  transition:
+    transform 0.15s cubic-bezier(0.2, 0, 0, 1),
+    background-color 0.15s ease;
+}
+.qt-tile-item:hover {
+  background: var(--md-sys-color-surface-container-highest);
+}
+.qt-tile-item:active {
+  transform: scale(0.99);
+}
+.qt-tile-item--single {
+  border-radius: 20px;
+}
+.qt-tile-item--top {
+  border-radius: 20px 20px 4px 4px;
+}
+.qt-tile-item--middle {
+  border-radius: 4px;
+}
+.qt-tile-item--bottom {
+  border-radius: 4px 4px 20px 20px;
+}
+
+.qt-tile-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+/* HowToAddTilesCard (TileInfoCards.kt): 28dp radius, surfaceContainerLow, NO border */
+.qt-howto-card {
+  border-radius: 28px;
+  padding: 16px;
+  background: var(--md-sys-color-surface-container-low);
+  color: var(--md-sys-color-on-surface);
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.qt-howto-steps {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font: 400 14px/20px var(--md-ref-typeface-plain);
+  letter-spacing: 0.25px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* Apps Catalog (AppsList.kt & AppCard.kt):
+   2-column square aspect-ratio cards on Compact, 3 on Medium, 4 on Expanded;
+   28dp radius, tonal filled card surface, NO border. */
+.apps-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--apps-cols, 2), minmax(0, 1fr));
+  gap: 16px;
+}
+.app-tile-card {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 28px;
+  background: var(--md-sys-color-surface-container-low);
+  color: var(--md-sys-color-on-surface);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  cursor: pointer;
+  transition:
+    transform 0.16s cubic-bezier(0.2, 0, 0, 1),
+    background-color 0.16s ease;
+}
+.app-tile-card:hover {
+  background: var(--md-sys-color-surface-container);
+}
+.app-tile-card:active {
+  transform: scale(0.98);
+}
+.app-tile-actions {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: flex;
+  align-items: center;
+}
+.app-tile-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 28px;
+  display: grid;
+  place-items: center;
+  margin-top: 12px;
+  margin-bottom: 16px;
+  flex-shrink: 0;
+}
+.app-tile-name {
+  margin: 0;
+  width: 100%;
+  text-align: center;
+  font: 600 16px/22px var(--md-ref-typeface-plain);
+  color: var(--md-sys-color-on-surface);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Tonal section container for Components Showcase (no borders) */
+.app-card-surface {
+  border-radius: 28px;
+  padding: 20px;
+  background: var(--md-sys-color-surface-container-low);
+  border: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ToolkitToolBottomSheet Modal (ToolkitToolBottomSheet.kt):
+   dragHandle = null, 28dp top corners, surfaceContainerLow, 16dp padding, 16dp gap. */
+.tk-sheet-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  animation: fadeIn 0.18s ease;
+}
+.tk-sheet-surface {
+  background: var(--md-sys-color-surface-container-low);
+  color: var(--md-sys-color-on-surface);
+  border-radius: 28px 28px 0 0;
+  padding: 16px 16px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 -12px 36px rgba(0, 0, 0, 0.24);
+}
+.tk-sheet-title-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.tk-sheet-title-meta {
+  flex: 1;
+  min-width: 0;
+}
+.tk-sheet-title {
+  margin: 0;
+  font: 600 24px/32px var(--md-ref-typeface-plain);
+  color: var(--md-sys-color-on-surface);
+}
+.tk-sheet-sub {
+  margin: 4px 0 0;
+  font: 400 14px/20px var(--md-ref-typeface-plain);
+  letter-spacing: 0.25px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.tk-tool-interactive {
+  background: var(--md-sys-color-surface-container-high);
+  border-radius: 28px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.tk-counter-Readout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+.tk-counter-shape {
+  width: 108px;
+  height: 108px;
+  background: color-mix(in srgb, var(--tk-gold-container) 22%, transparent);
+  color: var(--tk-gold-content);
+  display: grid;
+  place-items: center;
+}
+.tk-action-row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+.tk-result-banner {
+  border-radius: 20px;
+  padding: 16px;
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.tk-split-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-radius: 20px;
+  background: var(--md-sys-color-surface-container-highest);
+}
+.tk-converter-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* QuickSettingsIntegrationCard (ToolkitToolBottomSheet.kt lines 155-232):
+   2-part grouped layout (28dp outer / 8dp inner seam, 4dp gap) in secondaryContainer. */
+.tk-qs-integration-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.tk-qs-integration-top {
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  padding: 16px;
+  border-radius: 28px 28px 8px 8px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.tk-qs-integration-top--single {
+  border-radius: 28px;
+}
+.tk-qs-integration-btn {
+  appearance: none;
+  border: 0;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 20px;
+  border-radius: 8px 8px 28px 28px;
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  font: 600 14px/20px var(--md-ref-typeface-plain);
+  letter-spacing: 0.1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.12s ease;
+}
+.tk-qs-integration-btn:hover {
+  filter: brightness(0.96);
+}
+.tk-qs-integration-btn:active {
+  transform: scale(0.99);
+}

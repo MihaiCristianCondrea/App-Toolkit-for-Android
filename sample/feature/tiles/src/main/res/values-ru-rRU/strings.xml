@@ -174,4 +174,9 @@
     <string name="tool_random_invalid">Введите целые числа, где минимум не больше максимума.</string>
     <string name="tool_bill_add_person">Добавить человека</string>
     <string name="tool_bill_remove_person">Убрать человека</string>
+    <string name="numbers_title">Числа</string>
+    <string name="numbers_hero_title">Счёт, деление\nи конвертация</string>
+    <string name="numbers_hero_summary">Простые инструменты для повседневных задач.</string>
+    <string name="numbers_section_calculate">Расчёты и конвертация</string>
+    <string name="numbers_section_count_chance">Счётчик и случайность</string>
 </resources>

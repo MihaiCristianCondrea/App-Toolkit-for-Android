@@ -174,4 +174,5 @@
     <string name="tool_random_invalid">Maglagay ng mga buong numero na ang minimum ay hindi mas mataas sa maximum.</string>
     <string name="tool_bill_add_person">Magdagdag ng tao</string>
     <string name="tool_bill_remove_person">Magbawas ng tao</string>
+    <string name="numbers_title">Mga Numero</string>
 </resources>

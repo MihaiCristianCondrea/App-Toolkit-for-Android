@@ -18,7 +18,9 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.material.icons.outlined.Apps
+import androidx.compose.material.icons.outlined.Calculate
 import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.NavKey
@@ -30,6 +32,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.Ar
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ComponentsScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.AboutSettingsScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R as TilesR
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.NumbersScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ToolkitTilesScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.toolkitFooter
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.toolkitGraph
@@ -51,7 +54,7 @@ import org.koin.core.qualifier.named
 const val ACTION_OPEN_SETTINGS: String = "com.d4rk.android.apps.apptoolkit.action.OPEN_SETTINGS"
 
 /**
- * The sample's whole navigation: two tabs, the drawer, the overflow menu, the components page and
+ * The sample's whole navigation: three tabs, the drawer, the overflow menu, the components page and
  * its article bar demo, the optional bottom banner and the intents it answers. The demo registers a
  * small bar, the one an article draws anyway, so it does not open large for its first frame.
  * `toolkitGraph` adds the Toolkit's own pages (settings, help, support, the first-launch start
@@ -83,6 +86,14 @@ fun appGraph(
         search = TabSearch(hint = TilesR.string.tiles_search_hint),
     ) {
         ToolkitTilesScreen()
+    }
+    tab(
+        key = NumbersRoute,
+        label = TilesR.string.numbers_title,
+        icon = ToolkitIcon.Vector(Icons.Outlined.Calculate),
+        selectedIcon = ToolkitIcon.Vector(Icons.Filled.Calculate),
+    ) {
+        NumbersScreen()
     }
     tab(
         key = AppsListRoute,
@@ -131,9 +142,10 @@ fun appGraph(
 
 /**
  * The tab a launch opens on, from the startup page chosen in the display settings, which stores
- * the tab's [AppsListRoute.ROUTE_ID] or [ToolkitTilesRoute.ROUTE_ID].
+ * the tab's [AppsListRoute.ROUTE_ID], [NumbersRoute.ROUTE_ID] or [ToolkitTilesRoute.ROUTE_ID].
  */
 fun startKeyFor(route: String): NavKey = when (route) {
+    NumbersRoute.ROUTE_ID -> NumbersRoute
     AppsListRoute.ROUTE_ID -> AppsListRoute
     else -> ToolkitTilesRoute
 }

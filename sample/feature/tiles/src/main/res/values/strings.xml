@@ -177,4 +177,9 @@
     <string name="tool_random_invalid">Enter whole numbers with Min no greater than Max.</string>
     <string name="tool_bill_add_person">Add person</string>
     <string name="tool_bill_remove_person">Remove person</string>
+    <string name="numbers_title">Numbers</string>
+    <string name="numbers_hero_title">Count, split\n&amp; convert</string>
+    <string name="numbers_hero_summary">Simple tools for everyday tasks.</string>
+    <string name="numbers_section_calculate">Calculate &amp; convert</string>
+    <string name="numbers_section_count_chance">Count &amp; chance</string>
 </resources>

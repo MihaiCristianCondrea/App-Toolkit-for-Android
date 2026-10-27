@@ -174,4 +174,5 @@
     <string name="tool_random_invalid">صحیح اعداد درج کریں جن میں کم سے کم حد زیادہ سے زیادہ حد سے بڑی نہ ہو۔</string>
     <string name="tool_bill_add_person">ایک شخص شامل کریں</string>
     <string name="tool_bill_remove_person">ایک شخص کم کریں</string>
+    <string name="numbers_title">نمبرز</string>
 </resources>

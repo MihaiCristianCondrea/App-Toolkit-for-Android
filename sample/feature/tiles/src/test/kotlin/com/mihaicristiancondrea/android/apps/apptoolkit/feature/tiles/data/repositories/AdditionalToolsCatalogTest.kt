@@ -20,17 +20,21 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.preferences.FakeToolkitTilesPreferencesDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.quicksettings.QuickSettingsTilesLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.NumbersCalculateTools
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.NumbersChanceTools
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.NumbersSecondaryTools
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.toUiModels
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class AdditionalToolsCatalogTest {
     @Test
-    fun `offline tools have visual mappings and do not request Quick Settings membership`() = runTest {
+    fun `offline tools have visual mappings and calculation tools move to NumbersScreen`() = runTest {
         val source = object : QuickSettingsTilesLocalDataSource {
             override val supportsAddTileRequest = true
             override suspend fun activeTileComponents() = emptySet<String>()
@@ -43,17 +47,31 @@ class AdditionalToolsCatalogTest {
             quickSettingsDataSource = source,
         )
         val categories = repository.currentTileCategories()
-        val expected = setOf(ToolkitTileIds.PROTRACTOR, ToolkitTileIds.BILL_SPLITTER, ToolkitTileIds.RANDOM_NUMBER)
-        val tools = categories.flatMap { it.tiles }.filter { it.id in expected }
-        assertEquals(expected, tools.map { it.id }.toSet())
-        tools.forEach {
-            assertNull(it.requestKey)
-            assertEquals(ToolkitTileStatus.Available, it.status)
-        }
-        val visuals = categories.toUiModels().flatMap { it.tiles }.filter { it.id in expected }
-        assertEquals(3, visuals.size)
-        assertTrue(visuals.all { it.titleResId != 0 && it.summaryResId != 0 })
+        val catalogIds = categories.flatMap { it.tiles }.map { it.id }.toSet()
+
+        assertTrue(ToolkitTileIds.PROTRACTOR in catalogIds)
+        assertFalse(ToolkitTileIds.BILL_SPLITTER in catalogIds)
+        assertFalse(ToolkitTileIds.UNIT_CONVERTER in catalogIds)
+        assertFalse(ToolkitTileIds.RANDOM_NUMBER in catalogIds)
+        assertFalse(ToolkitTileIds.COUNTER in catalogIds)
+        assertFalse(ToolkitTileIds.DICE_ROLL in catalogIds)
+
+        val protractor = categories.flatMap { it.tiles }.single { it.id == ToolkitTileIds.PROTRACTOR }
+        assertNull(protractor.requestKey)
+        assertEquals(ToolkitTileStatus.Available, protractor.status)
+
+        val visuals = categories.toUiModels().flatMap { it.tiles }.single { it.id == ToolkitTileIds.PROTRACTOR }
+        assertTrue(visuals.titleResId != 0 && visuals.summaryResId != 0)
         assertEquals("sensors", categories.single { category -> category.tiles.any { it.id == ToolkitTileIds.PROTRACTOR } }.id)
-        assertEquals("utilities", categories.single { category -> category.tiles.any { it.id == ToolkitTileIds.BILL_SPLITTER } }.id)
+
+        assertEquals(
+            listOf(ToolkitTileIds.BILL_SPLITTER, ToolkitTileIds.UNIT_CONVERTER),
+            NumbersCalculateTools.map { it.id },
+        )
+        assertEquals(
+            listOf(ToolkitTileIds.COUNTER, ToolkitTileIds.RANDOM_NUMBER, ToolkitTileIds.DICE_ROLL),
+            NumbersChanceTools.map { it.id },
+        )
+        assertTrue(NumbersSecondaryTools.all { it.titleResId != 0 && it.summaryResId != 0 })
     }
 }

@@ -174,4 +174,9 @@
     <string name="tool_random_invalid">Masukkan bilangan bulat dengan minimum tidak melebihi maksimum.</string>
     <string name="tool_bill_add_person">Tambah orang</string>
     <string name="tool_bill_remove_person">Kurangi orang</string>
+    <string name="numbers_title">Angka</string>
+    <string name="numbers_hero_title">Hitung, bagi\n&amp; konversi</string>
+    <string name="numbers_hero_summary">Alat sederhana untuk tugas sehari-hari.</string>
+    <string name="numbers_section_calculate">Hitung &amp; konversi</string>
+    <string name="numbers_section_count_chance">Penghitung &amp; acak</string>
 </resources>

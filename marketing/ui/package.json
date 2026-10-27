@@ -1,0 +1,24 @@
+{
+  "name": "@app-toolkit/ui-kit",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "App Toolkit web UI kit - Lit + Material Web 3 translating the Android Compose app into browser components.",
+  "scripts": {
+    "assets": "node scripts/sync-assets.mjs",
+    "palettes": "node scripts/extract-palettes.mjs",
+    "dev": "npm run assets && vite",
+    "build": "npm run assets && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@material/web": "^2.5.0",
+    "lit": "^3.3.3",
+    "material-symbols": "^0.47.5"
+  },
+  "devDependencies": {
+    "@material/material-color-utilities": "^0.3.0",
+    "playwright-core": "^1.56.1",
+    "vite": "^8.3.1"
+  }
+}
