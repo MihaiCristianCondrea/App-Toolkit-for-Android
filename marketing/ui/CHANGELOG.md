@@ -6,7 +6,7 @@
 
 ### Changed
 
-- Pin Material Next to tested source commit `ed2ce23` until npm 0.0.5 is available. The gallery and each screen's prototype are one page (`mountMarketingHub`): opening a screen no longer reloads, and All screens or Back return where the gallery was scrolled. The gallery and the reference pages have no drawer, menu button or footer; the reference pages get a back button. The device fills the stage height, and the palette menu no longer makes the settings panel scroll.
+- Use Material Next 0.0.6 from npm. The gallery and each screen's prototype are one page (`mountMarketingHub`): opening a screen no longer reloads, and All screens or Back return where the gallery was scrolled. The gallery and the reference pages have no drawer, menu button or footer; the reference pages get a back button. The device fills the stage height, and the palette menu no longer makes the settings panel scroll.
 - Used Material Next 0.0.4 from npm for the simplified gallery, automatic detail frames, the shared copyright footer, a drawer whose footer stays put while its destinations scroll, and a launcher without App Toolkit.
 
 - Moved the screen gallery, preview settings, prototype inspector, comparisons and device frames to Material Next 0.0.2. The desktop navigation drawer starts closed.
