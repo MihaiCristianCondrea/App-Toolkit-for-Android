@@ -67,9 +67,8 @@ export default {
   categoryLabel: "Numbers",
   tier: 1,
   palette: "google",
-  source: "sample/feature/tiles/src/main/kotlin/.../ui/NumbersScreen.kt",
   description:
-    "1:1 translation of NumbersScreen.kt: translucent warm-gold hero banner (16% container tint, 132dp SoftBurst watermark, 76dp Cookie12Sided badge), tonal surfaceContainerHigh bento cards (28dp outer / 8dp inner seam, 4dp gap, zero borders), clickable Counter feature card, and ToolkitToolBottomSheet.",
+    "Number tools under a warm hero banner, with a counter and a sheet for each tool.",
   defaults: {
     activeSheet: "none",
     cornerStyle: "bento",

@@ -9,9 +9,8 @@ export default {
   categoryLabel: "Components",
   tier: 2,
   palette: "google",
-  source: "sample/feature/components/src/main/kotlin/.../ComponentsShowcaseScreen.kt",
   description:
-    "Live Material Web 3 reference gallery showing tonal surfaces (zero 1px borders), official buttons, borderless tonal assist chips, switches, sliders, and MaterialShapes polygons.",
+    "Material Web 3 buttons, chips, switches, sliders and shapes on tonal surfaces.",
   defaults: {
     notificationsEnabled: true,
     hapticsEnabled: true,

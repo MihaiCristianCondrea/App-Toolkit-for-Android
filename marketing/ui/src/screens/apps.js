@@ -85,9 +85,8 @@ export default {
   categoryLabel: "Apps Catalog",
   tier: 1,
   palette: "google",
-  source: "sample/feature/apps/src/main/kotlin/.../ui/AppsListScreen.kt",
   description:
-    "1:1 translation of AppsListScreen.kt, AppsList.kt, and AppCard.kt: search top app bar, TopListFilters (All, Installed, Not installed, Favorite Apps), 2-column square aspect-ratio tonal cards (28dp radius, zero borders), and Open random app Extended FAB.",
+    "The developer's apps in a searchable grid, with All, Installed, Not installed and Favorite filters and an Open random app button.",
   defaults: {
     filter: "All",
     searchQuery: "",

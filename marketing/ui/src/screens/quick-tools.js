@@ -172,9 +172,8 @@ export default {
   categoryLabel: "Quick Tools",
   tier: 1,
   palette: "google",
-  source: "sample/feature/tiles/src/main/kotlin/.../ui/ToolkitTilesScreen.kt",
   description:
-    "1:1 translation of ToolkitTilesScreen.kt: search top app bar, TopListFilters, grouped-corner surfaceContainerLow category sections (28dp outer / 4dp inner seam, 2dp gap, zero borders), surfaceContainerHigh tool cards, and HowToAddTilesCard.",
+    "Quick Settings tiles grouped by category, with search and how to add a tile.",
   defaults: {
     selectedCategory: "all",
     searchQuery: "",
