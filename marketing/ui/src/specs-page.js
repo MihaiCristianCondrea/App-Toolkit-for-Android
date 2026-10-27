@@ -174,15 +174,6 @@ const draw = () => {
         </div>
       </main>
 
-      <!-- Footer -->
-      <footer class="g-footer">
-        <div>
-          <strong>${PRODUCT_CONFIG.name}</strong> · Design System Specifications · Build ${PRODUCT_CONFIG.buildNumber}
-        </div>
-        <div>
-          App Toolkit 3.0 · Material Design 3 Expressive · Google Sans Flex
-        </div>
-      </footer>
     `),
     document.body,
   );

@@ -1430,17 +1430,6 @@ md-icon-button.ai-favorite {
   overflow: hidden;
 }
 
-/* Tonal section container for Components Showcase (no borders) */
-.app-card-surface {
-  border-radius: 28px;
-  padding: 20px;
-  background: var(--md-sys-color-surface-container-low);
-  border: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
 /* ToolkitToolBottomSheet Modal (ToolkitToolBottomSheet.kt):
    dragHandle = null, 28dp top corners, surfaceContainerLow, 16dp padding, 16dp gap. */
 .tk-sheet-backdrop {

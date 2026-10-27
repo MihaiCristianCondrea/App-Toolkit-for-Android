@@ -139,15 +139,6 @@ const draw = () => {
         </div>
       </main>
 
-      <!-- Footer -->
-      <footer class="g-footer">
-        <div>
-          <strong>${PRODUCT_CONFIG.name}</strong> · Motion Sequences · Build ${PRODUCT_CONFIG.buildNumber}
-        </div>
-        <div>
-          Remotion · Material Web · Google Sans Flex
-        </div>
-      </footer>
     `),
     document.body,
   );

@@ -6,8 +6,7 @@ export const PRODUCT_CONFIG = {
   name: "App Toolkit",
   headline: "Product UI showcase",
   description:
-    "Browse and preview App Toolkit screens (Quick Tools, Numbers, Apps, and Components) with official Material Web 3 components.",
-  version: "3.0.0",
+    "Browse and preview App Toolkit screens (Quick Tools, Numbers, and Apps) with official Material Web 3 components.",
   buildNumber: "300000",
   toolkitVersion: "3.0.0",
   logo: "/logos/app_logo.svg",
@@ -28,7 +27,6 @@ export const PRODUCT_CONFIG = {
     { id: "numbers", label: "Numbers", icon: "numbers" },
     { id: "tools", label: "Quick Tools", icon: "widgets" },
     { id: "catalog", label: "Apps Catalog", icon: "storefront" },
-    { id: "system", label: "Components", icon: "science" },
   ],
 
   tiers: [
@@ -37,7 +35,7 @@ export const PRODUCT_CONFIG = {
     { id: 2, label: "Tier 2: Supporting", desc: "Component & design system surfaces" },
   ],
 
-  featuredScreenIds: ["numbers", "quick-tools", "apps", "components"],
+  featuredScreenIds: ["quick-tools", "numbers", "apps"],
 
   theme: {
     defaultPalette: "captured",

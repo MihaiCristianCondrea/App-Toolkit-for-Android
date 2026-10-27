@@ -141,7 +141,6 @@ export const navigationBar = (selected = "numbers", onSelect, win) =>
 
 /** The drawer's entries pinned to the bottom (App Toolkit toolkitFooter()). */
 const DRAWER_ENTRIES = [
-  { id: "components", label: "Components", icon: "science" },
   { id: "settings", label: "Settings", icon: "settings" },
   { id: "help", label: "Help & feedback", icon: "help_outline" },
   { id: "share", label: "Share", icon: "share" },
@@ -160,7 +159,7 @@ export const navigationRail = ({ tab, onSelect, expanded = false } = {}) => html
       </button>`)}
     </div>
     <div class="sc-rail__items sc-rail__footer">
-      ${DRAWER_ENTRIES.map((e) => html`<button class="sc-rail__item" @click=${() => e.id === "components" && onSelect?.("components", {})}>
+      ${DRAWER_ENTRIES.map((e) => html`<button class="sc-rail__item">
         <span class="sc-rail__indicator">${icon(e.icon)}</span><span class="sc-rail__label">${e.label}</span>
       </button>`)}
     </div>
@@ -177,7 +176,7 @@ export const permanentDrawer = ({ tab, onSelect } = {}) => html`
       </button>`)}
     </div>
     <div class="sc-pdrawer__items sc-pdrawer__footer">
-      ${DRAWER_ENTRIES.map((e) => html`<button class="sc-pdrawer__item" @click=${() => e.id === "components" && onSelect?.("components", {})}>${icon(e.icon)}<span>${e.label}</span></button>`)}
+      ${DRAWER_ENTRIES.map((e) => html`<button class="sc-pdrawer__item">${icon(e.icon)}<span>${e.label}</span></button>`)}
     </div>
   </nav>`;
 
@@ -228,10 +227,6 @@ export const navigationDrawer = ({ open = false, onClose, onNavigate } = {}) => 
         </div>
         <div class="ai-drawer-body"></div>
         <div class="ai-drawer-footer">
-          <div class="ai-drawer-item" @click=${() => { onClose?.(); onNavigate?.("components"); }}>
-            ${icon("science", { size: 24 })}
-            <span>Components Showcase</span>
-          </div>
           <div class="ai-drawer-item" @click=${() => { onClose?.(); }}>
             ${icon("help_outline", { size: 24 })}
             <span>Help &amp; feedback</span>

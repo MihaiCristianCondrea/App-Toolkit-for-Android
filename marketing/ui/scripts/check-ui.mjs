@@ -18,14 +18,20 @@ try {
     page.on('pageerror', e => errors.push(e.message));
     await page.goto(base);
     await page.locator('mnw-screen-card').first().waitFor();
-    assert.equal(await page.locator('mnw-screen-card').count(), 4);
-    assert.equal(await page.locator('.sc-screen').count(), 4);
+    assert.equal(await page.locator('mnw-screen-card').count(), 3);
+    assert.deepEqual(await page.locator('[data-screen]').evaluateAll(nodes => nodes.map(node => node.dataset.screen)), ['quick-tools', 'numbers', 'apps']);
+    assert.equal(await page.locator('mnw-marketing-shell .catalog-header, mnw-marketing-shell [aria-label="Filter screens"]').count(), 0);
+    assert.equal(await page.locator('mnw-device-frame').count(), 0);
+    assert.equal(await page.locator('.sc-screen').count(), 3);
+    assert.match(await page.locator('mnw-site-footer footer').innerText(), /Copyright © 2020–2026, Mihai-Cristian Condrea/);
+    assert.equal(await page.locator('.g-footer').count(), 0);
     const shell = page.locator('mnw-marketing-shell mnw-app-shell');
     assert.equal(await shell.evaluate(el => el.navigationMode), 'modal');
     assert.equal(await shell.locator('.drawer').isVisible(), false);
     await shell.locator('.bar > md-icon-button.leading').click();
     await shell.locator('.drawer').waitFor({state: 'visible'});
-    assert.equal(await page.getByRole('link', {name: 'Specifications', exact: true}).isVisible(), true);
+    assert.equal(await page.getByRole('link', {name: 'Specifications', exact: true}).count(), 0);
+    assert.equal(await page.getByRole('link', {name: 'Motion', exact: true}).count(), 0);
     await page.keyboard.press('Escape');
     await shell.locator('.drawer').waitFor({state: 'hidden'});
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true);
@@ -37,7 +43,7 @@ try {
   const page = await browser.newPage({viewport: {width: 1280, height: 1000}});
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
-  for (const id of ['numbers', 'quick-tools', 'apps', 'components']) {
+  for (const id of ['quick-tools', 'numbers', 'apps']) {
     for (const window of ['phone', 'fold', 'desktop']) {
       for (const theme of ['light', 'dark']) {
         await page.goto(`${base}/screen.html?id=${id}&window=${window}&theme=${theme}&frame=device&panel=none`);
@@ -57,6 +63,7 @@ try {
   }
   await page.goto(`${base}/screen.html?id=numbers&theme=light`);
   await page.locator('html[data-ready]').waitFor();
+  assert.equal(await page.locator('mnw-device-frame').count(), 1);
   await page.locator('.numbers-card').first().click();
   await page.locator('.tk-sheet-surface').waitFor();
   assert.equal(await page.locator('.tk-sheet-surface').isVisible(), true);

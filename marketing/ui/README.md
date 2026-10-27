@@ -1,18 +1,23 @@
 # App Toolkit UI Kit (`@app-toolkit/ui-kit`)
 
-Interactive browser showcase for **App Toolkit for Android**, built with **Material Next 0.0.3**, **Vite**, **Lit**, and official **Material Web (`@material/web`)** components.
+Interactive browser showcase for **App Toolkit for Android**, built with **Material Next**, **Vite**, **Lit**, and official **Material Web (`@material/web`)** components.
 
 Material Next owns the gallery, preview controls, screen cards, prototype inspector, comparison views,
 window rules, device frames and embed lifecycle. The desktop drawer starts closed (`navigationMode:
-"modal"`). Open its menu to reach Screens, Motion and Specifications. App Toolkit keeps its four
+"modal"`). Open its menu to reach Screens. Motion and Specifications remain standalone reference URLs. App Toolkit keeps its three
 screen renderers, state controls, Android app chrome, palettes and product content.
+
+The library is pinned to source commit `a4c1bbd` pending its 0.0.4 npm release.
+Installation needs Git and Node.js 24; npm builds the package from source.
+Gallery cards start without device frames. Opening screen detail shows a frame automatically,
+while an explicit `frame=none` URL stays frameless.
 
 Shared frames and badges are copied from the installed package into ignored `public/material-next/`
 at build time. App-specific fonts, logos and illustrations still come from this repository.
 
 ## Entry Points
 
-* `index.html` (`src/gallery-page.js`) - Showcase Hub with screen cards, category filters, and links to system reference pages.
+* `index.html` (`src/gallery-page.js`) - Showcase hub with Quick Tools, Numbers and Apps, without category filters.
 * `screen.html` (`src/screen-page.js`) - Live interactive device frame (`Phone`, `Fold`, `Desktop`) with palette, contrast, light/dark mode, and per-screen state controls.
 * `motion.html` (`src/motion-page.js`) - Material 3 Expressive spatial and effects springs playground and the 35 `MaterialShapes` polygon masks.
 * `specs.html` (`src/specs-page.js`) - Extracted App Toolkit color palettes, Google Sans Flex typography scale, and Compose-to-Web component mapping.
@@ -27,16 +32,15 @@ at build time. App-specific fonts, logos and illustrations still come from this 
 and frame. `mode=compare&compare=theme|nav|palette|frame` opens a comparison. Palette and theme,
 window size, frame, system navigation and screen-specific controls are available in the inspector.
 
-The browser check exercises all four screens in light and dark at phone, fold and desktop sizes,
+The browser check exercises all three screens in light and dark at phone, fold and desktop sizes,
 closed desktop navigation, interactive sheets, comparison and the public embed entry point. It
 checks the web migration; Android screenshot parity remains a separate campaign check.
 
 ## Translated Screens (`src/screens/`)
 
-* `numbers.js` - `NumbersScreen.kt` (warm-gold hero banner, grouped bento corners with 28dp outer and 8dp inner seams, clickable Counter feature card, and interactive `ToolkitToolBottomSheet` modals for Counter, Tip & Bill Splitter, Unit Converter, Random Number Picker, and Dice Roll).
 * `quick-tools.js` - `ToolkitTilesScreen.kt` (collapsible Quick Settings tile categories and pocket tools).
+* `numbers.js` - `NumbersScreen.kt` (warm-gold hero banner, grouped bento corners with 28dp outer and 8dp inner seams, clickable Counter feature card, and interactive `ToolkitToolBottomSheet` modals for Counter, Tip & Bill Splitter, Unit Converter, Random Number Picker, and Dice Roll).
 * `apps.js` - `AppsListScreen.kt` (developer app catalog with category filter chips and favorites).
-* `components.js` - `ComponentsShowcaseScreen.kt` (official Material Web buttons, chips, switches, sliders, and shape badges).
 
 ## Opening the hub
 

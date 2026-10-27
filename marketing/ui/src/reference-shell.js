@@ -1,4 +1,5 @@
 import {html} from 'lit';
+import 'material-next-web-components/site-footer.js';
 import {installHubStyles} from 'material-next-web-components/marketing.js';
 import {PRODUCT_CONFIG} from './config/product.js';
 import {hubNavigation} from './hub-navigation.js';
@@ -14,4 +15,5 @@ export const referenceShell = ({heading, active, theme, onTheme}, content) => ht
       privacy-href=${PRODUCT_CONFIG.privacyUrl} code-of-conduct-href=${PRODUCT_CONFIG.codeOfConductUrl}
       @theme-change=${e => onTheme(e.detail.theme)}></mnw-app-shell-footer>
     ${content}
+    <mnw-site-footer slot="footer"></mnw-site-footer>
   </mnw-app-shell>`;
