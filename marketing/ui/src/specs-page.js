@@ -2,12 +2,14 @@
  * Design System Specifications & Architecture Page
  * 
  * Comprehensive reference for Material Design 3 Expressive tokens,
- * device geometry, surface tiers, and system navigation in Android Insider.
+ * device geometry, surface tiers, and system navigation in App Toolkit.
  */
 import { html, render } from "lit";
 import { loadFonts } from "./theme/index.js";
 import "./theme/hub.js";
 import "./gallery.css";
+import {setHubTheme} from "material-next-web-components/marketing.js";
+import {referenceShell} from "./reference-shell.js";
 import { PALETTES, paletteLabel } from "./controls.js";
 import { PRODUCT_CONFIG } from "./config/product.js";
 
@@ -28,30 +30,18 @@ window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () 
 
 const draw = () => {
   const resolvedDark = isDark();
+  setHubTheme(resolvedDark ? "dark" : "light");
   const root = document.documentElement;
   if (resolvedDark) root.dataset.theme = "dark";
   else root.dataset.theme = "light";
 
   render(
-    html`
-      <!-- Top App Bar -->
-      <nav class="g-nav">
-        <a class="g-nav__brand" href="./">
-          <img src=${PRODUCT_CONFIG.icon} alt="" class="g-nav__logo" />
-          <span class="g-nav__title">${PRODUCT_CONFIG.name}</span>
-          <span class="g-nav__version">v${PRODUCT_CONFIG.version}</span>
-        </a>
-        <div class="g-nav__links">
-          <a class="g-nav__link" href="./">Screens</a>
-          <a class="g-nav__link" href="motion.html">Motion</a>
-          <a class="g-nav__link g-nav__link--active" href="specs.html">Specifications</a>
-        </div>
-      </nav>
+    referenceShell({heading: "Specifications", active: "specs", theme: view.theme, onTheme: theme => {view.theme = theme; draw();}}, html`
 
       <!-- Editorial Header -->
       <header class="g-header">
         <div class="g-header__inner">
-          <span class="g-header__eyebrow">Android Insider · Specifications</span>
+          <span class="g-header__eyebrow">App Toolkit · Specifications</span>
           <h1 class="g-header__title">Design system specifications</h1>
           <p class="g-header__desc">
             Tokens, geometry, typography, and surface tiers for Material Design 3 Expressive and App Toolkit.
@@ -193,7 +183,7 @@ const draw = () => {
           App Toolkit 3.0 · Material Design 3 Expressive · Google Sans Flex
         </div>
       </footer>
-    `,
+    `),
     document.body,
   );
 };

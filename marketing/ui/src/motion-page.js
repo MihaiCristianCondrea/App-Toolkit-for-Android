@@ -2,12 +2,14 @@
  * Motion Sequences & Remotion Flows Page
  * 
  * Showcases interactive animations, transitions, and programmatic
- * Remotion video workflows for Android Insider.
+ * Remotion video workflows for App Toolkit.
  */
 import { html, render } from "lit";
 import { loadFonts } from "./theme/index.js";
 import "./theme/hub.js";
 import "./gallery.css";
+import {setHubTheme} from "material-next-web-components/marketing.js";
+import {referenceShell} from "./reference-shell.js";
 import { byId } from "./screens/index.js";
 import { ScreenHost } from "./host.js";
 import { PRODUCT_CONFIG } from "./config/product.js";
@@ -39,30 +41,18 @@ const openScreen = (id) => {
 
 const draw = () => {
   const resolvedDark = isDark();
+  setHubTheme(resolvedDark ? "dark" : "light");
   const root = document.documentElement;
   if (resolvedDark) root.dataset.theme = "dark";
   else root.dataset.theme = "light";
 
   render(
-    html`
-      <!-- Top App Bar -->
-      <nav class="g-nav">
-        <a class="g-nav__brand" href="./">
-          <img src=${PRODUCT_CONFIG.icon} alt="" class="g-nav__logo" />
-          <span class="g-nav__title">${PRODUCT_CONFIG.name}</span>
-          <span class="g-nav__version">v${PRODUCT_CONFIG.version}</span>
-        </a>
-        <div class="g-nav__links">
-          <a class="g-nav__link" href="./">Screens</a>
-          <a class="g-nav__link g-nav__link--active" href="motion.html">Motion</a>
-          <a class="g-nav__link" href="specs.html">Specifications</a>
-        </div>
-      </nav>
+    referenceShell({heading: "Motion", active: "motion", theme: view.theme, onTheme: theme => {view.theme = theme; draw();}}, html`
 
       <!-- Editorial Header -->
       <header class="g-header">
         <div class="g-header__inner">
-          <span class="g-header__eyebrow">Android Insider · Motion</span>
+          <span class="g-header__eyebrow">App Toolkit · Motion</span>
           <h1 class="g-header__title">Motion sequences & Remotion flows</h1>
           <p class="g-header__desc">
             Screen sequences, transitions, and marketing motion scenes for Play Store reels, social demos, and Remotion video generation.
@@ -158,7 +148,7 @@ const draw = () => {
           Remotion · Material Web · Google Sans Flex
         </div>
       </footer>
-    `,
+    `),
     document.body,
   );
 
@@ -168,6 +158,7 @@ const draw = () => {
 const mountHosts = (resolvedDark) => {
   for (const [key, host] of hosts.entries()) {
     if (!document.contains(host.el)) {
+      host.destroy();
       hosts.delete(key);
     }
   }

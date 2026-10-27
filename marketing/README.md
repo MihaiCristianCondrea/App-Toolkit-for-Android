@@ -18,5 +18,5 @@ This directory holds the marketing, positioning, and browser-based UI showcase w
 
 * `briefs/` - Brand identity, voice, and product positioning briefs.
 * `assets/` - Logos, exported `MaterialShapes` SVG polygons, device frames, and Play Store badges.
-* `ui/` - Vite + Lit + Material Web 3 interactive UI showcase translating the Android Jetpack Compose screens (`Numbers`, `Quick Tools`, `Apps`, and `Components`) into browser components.
+* `ui/` - Material Next marketing hub with Vite, Lit and Material Web. App Toolkit owns the translated Android screens (`Numbers`, `Quick Tools`, `Apps`, and `Components`); Material Next supplies the gallery, prototype controls and shared device frames.
 * `skills/` - Shared marketing and copywriting skills.

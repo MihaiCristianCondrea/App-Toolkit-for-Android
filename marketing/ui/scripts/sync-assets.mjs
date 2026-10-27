@@ -3,7 +3,7 @@
 //  - marketing/assets/illustrations            -> public/illustrations/
 //  - marketing/assets/logos/*.svg              -> public/logos/
 //  - marketing/assets/shapes/*.svg             -> public/shapes/
-import { copyFileSync, existsSync, mkdirSync, readdirSync } from "node:fs";
+import { cpSync, copyFileSync, existsSync, mkdirSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -57,21 +57,7 @@ if (existsSync(shapesDir)) {
   }
 }
 
-for (const [device, variant] of [
-  ["pixel_9_pro_xl", ""],
-  ["pixel_9_pro_fold", "default"],
-  ["pixelbook_go", ""],
-]) {
-  const from = join(repo, "marketing", "assets", "device-frames", device, variant);
-  const to = join(pub, "device-frames", device);
-  mkdirSync(to, { recursive: true });
-  if (existsSync(from)) {
-    for (const f of readdirSync(from)) {
-      if (/\.(webp|png)$/.test(f) && !/^(thumb|land_fore)\.png$/.test(f)) {
-        copyFileSync(join(from, f), join(to, f));
-      }
-    }
-  }
-}
-
-console.log("assets synced");
+// Shared device frames, badges and launcher artwork have one source in Material Next.
+const packageAssets = fileURLToPath(new URL("../node_modules/material-next-web-components/assets/marketing/", import.meta.url));
+cpSync(packageAssets, join(pub, "material-next"), {recursive: true, filter: path => !path.endsWith("README.md")});
+console.log("App Toolkit and Material Next assets synced");

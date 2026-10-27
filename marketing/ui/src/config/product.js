@@ -12,6 +12,9 @@ export const PRODUCT_CONFIG = {
   toolkitVersion: "3.0.0",
   logo: "/logos/app_logo.svg",
   icon: "/logos/icon.svg",
+  repositoryUrl: "https://github.com/MihaiCristianCondrea/App-Toolkit-for-Android",
+  privacyUrl: "https://mihaicristiancondrea.github.io/profile/#privacy-policy",
+  codeOfConductUrl: "https://mihaicristiancondrea.github.io/profile/#code-of-conduct",
 
   badges: [
     { label: "Material 3 Expressive", icon: "palette", desc: "Expressive M3 tokens, shapes & dynamic schemes" },
@@ -37,7 +40,7 @@ export const PRODUCT_CONFIG = {
   featuredScreenIds: ["numbers", "quick-tools", "apps", "components"],
 
   theme: {
-    defaultPalette: "google",
+    defaultPalette: "captured",
     defaultTheme: "system",
     defaultNavType: "gesture",
     defaultMode: "showcase",

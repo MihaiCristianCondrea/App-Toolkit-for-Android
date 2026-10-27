@@ -1,7 +1,8 @@
 import { html, nothing } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { ref } from "lit/directives/ref.js";
-import { asset } from "./assets.js";
+import "material-next-web-components/marketing.js";
+import {asset} from "./assets.js";
 import { shellLayout, LIST_DETAIL } from "./layout.js";
 
 /**
@@ -347,20 +348,6 @@ export const screen = ({
   `;
 };
 
-export const device = (inner, { shadow = true, device: name = "pixel_9_pro_xl" } = {}) =>
-  name === "pixelbook_go"
-    ? html`
-        <div class="sc-device sc-device--${name}">
-          ${shadow ? html`<img class="sc-device__shadow" src=${asset(`/device-frames/${name}/land_shadow.png`)} alt="" />` : nothing}
-          <img class="sc-device__back" src=${asset(`/device-frames/${name}/land_back.png`)} alt="" />
-          <div class="sc-device__screen">${inner}</div>
-        </div>`
-    : html`
-        <div class="sc-device sc-device--${name} ${shadow ? "sc-device--shadow" : ""}">
-          <img class="sc-device__back" src=${asset(`/device-frames/${name}/back.webp`)} alt="" />
-          <div class="sc-device__screen">
-            ${inner}
-            <img class="sc-device__mask" src=${asset(`/device-frames/${name}/mask.webp`)} alt="" />
-          </div>
-        </div>
-      `;
+// Device artwork and display geometry are owned by Material Next.
+export const device = (inner, {shadow = true, device: name = "pixel_9_pro_xl"} = {}) =>
+  html`<mnw-device-frame device=${name} ?shadow=${shadow}>${inner}</mnw-device-frame>`;

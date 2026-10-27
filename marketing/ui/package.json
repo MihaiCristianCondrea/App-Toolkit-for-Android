@@ -9,11 +9,13 @@
     "palettes": "node scripts/extract-palettes.mjs",
     "dev": "npm run assets && vite",
     "build": "npm run assets && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "qa": "node scripts/check-ui.mjs"
   },
   "dependencies": {
     "@material/web": "^2.5.0",
     "lit": "^3.3.3",
+    "material-next-web-components": "^0.0.2",
     "material-symbols": "^0.47.5"
   },
   "devDependencies": {

@@ -267,55 +267,6 @@
   --md-filter-chip-icon-size: 24px;
 }
 
-/* Pixel 9 Pro XL Device Frame (1466x3101 scaled to 469x992 for 430x957 screen) */
-.sc-device {
-  position: relative;
-  width: 469px;
-  height: 992px;
-}
-.sc-device--shadow {
-  filter: drop-shadow(0 32px 70px rgba(0, 0, 0, 0.16)) drop-shadow(0 8px 24px rgba(0, 0, 0, 0.10));
-}
-[data-theme="dark"] .sc-device--shadow {
-  filter: drop-shadow(0 40px 90px rgba(0, 0, 0, 0.65)) drop-shadow(0 8px 24px rgba(0, 0, 0, 0.40));
-}
-
-.sc-device__back {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.sc-device__screen {
-  position: absolute;
-  left: 18.24px;
-  top: 17.92px;
-  width: 430px;
-  height: 957px;
-  border-radius: 34.5px;
-  overflow: hidden;
-  z-index: 2;
-  background: #000000;
-}
-.sc-device__screen > .sc-screen {
-  width: 430px;
-  height: 957px;
-  border-radius: 34.5px;
-}
-.sc-device__mask {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 10;
-}
-
 /* Cards & Buttons */
 .sc-card {
   --md-outlined-card-container-shape: var(--sc-card-radius, 20px);
@@ -946,11 +897,6 @@ md-icon-button.ai-favorite {
 /* A desktop window (ChromeOS): no status bar and no system navigation. */
 .sc-screen--desktop .sc-content { padding-bottom: 0; }
 
-/* Pixel 9 Pro Fold, open (assets/device-frames/pixel_9_pro_fold/default): a 2204 x 2274 frame around a 2076 x 2152
-   display at 62, 62, drawn at 852 / 2076 so the display is the 852 x 883 dp window. */
-.sc-device--pixel_9_pro_fold { width: 904.53px; height: 933.27px; }
-.sc-device--pixel_9_pro_fold .sc-device__screen { left: 25.45px; top: 25.45px; width: 852px; height: 883px; border-radius: 48px; }
-.sc-device--pixel_9_pro_fold .sc-device__screen > .sc-screen { width: 852px; height: 883px; border-radius: 48px; }
 
 /* Wide feeds (ListingSectionRenderer.kt and ComposedSections.kt): a 16 dp grid of up to three columns. */
 .ai-feed-grid { display: grid; grid-template-columns: repeat(var(--cols, 1), minmax(0, 1fr)); gap: 16px; padding: 16px; align-items: start; }
@@ -992,15 +938,7 @@ md-icon-button.ai-favorite {
 /* ArticleContentColumn.kt: the hero up to 1040 dp wide, and no taller than 60% of the window, 16 dp from the sides. */
 .sc-pane--article .ai-article-hero { width: calc(100% - 32px); max-width: min(1008px, var(--sc-hero-max, 1008px)); margin-inline: auto; }
 .sc-screen--framed:not(:has(> .sc-sysnav)) .sc-fab { bottom: 16px; }
-/* The Fold's inner camera sits top right: the status icons keep left of the cutout, as SystemUI places them. */
-.sc-device--pixel_9_pro_fold .sc-status__right { margin-right: 44px; }
 
-/* Pixelbook Go (assets/device-frames/pixelbook_go, Google's device art): a 2188 x 1459 laptop with its 1826 x 1079
-   screen at 181, 159, drawn at 1218 / 1826 so the screen is the 1218 x 720 dp desktop window. */
-.sc-device--pixelbook_go { width: 1459.47px; height: 973.20px; }
-.sc-device__shadow { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
-.sc-device--pixelbook_go .sc-device__screen { left: 120.73px; top: 106.06px; width: 1218px; height: 720px; border-radius: 0; }
-.sc-device--pixelbook_go .sc-device__screen > .sc-screen { width: 1218px; height: 720px; border-radius: 0; }
 
 /* Composed tabs (ComposedSections.kt): a title-large heading 16 dp above its group, shelves that scroll sideways
    from edge to edge, and the native ad stand-ins (LessonNativeAdCards.kt, NewsNativeAdStory). */
