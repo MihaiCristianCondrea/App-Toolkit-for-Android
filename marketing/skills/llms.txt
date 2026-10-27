@@ -40,3 +40,4 @@ design-taste/soft-skill: Focuses on an expensive, soft UI look with premium font
 design-taste/output-skill: Prevents AI from being lazy, skipping code blocks, or using placeholder comments.
 design-taste/minimalist-skill: Enforces clean, editorial-style interfaces (Notion/Linear style) with strict monochrome palettes.
 design-taste/brutalist-skill: Raw mechanical interfaces, Swiss typography, extreme scale contrast. (Beta)
+design-taste/ui-unslop: Remove formulaic AI-generated styling from existing web UI: audit the whole surface, rebuild the hierarchy, and prove the rendered result, preserving behavior, brand and accessibility.
