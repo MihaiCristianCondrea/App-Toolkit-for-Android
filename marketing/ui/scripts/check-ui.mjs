@@ -87,10 +87,10 @@ try {
         const sheet = page.locator('.tk-sheet-surface');
         await sheet.waitFor();
         if (id === 'random_number') {
-          await sheet.locator('md-filter-chip[label="1–2"]').click();
+          await sheet.locator('md-outlined-segmented-button[label="1–2"]').click();
           await sheet.locator('md-filled-button').filter({hasText:'Generate'}).click();
           assert.match(await sheet.locator('.chance-number').innerText(), /^[12]$/);
-          await sheet.locator('md-outlined-text-field').first().locator('input').fill('3');
+          await sheet.locator('md-filled-text-field').first().locator('input').fill('3');
           await page.waitForFunction(() => document.querySelector('.chance-body md-filled-button')?.disabled === true);
           assert.equal(await sheet.locator('md-filled-button').filter({hasText:'Generate'}).evaluate(el => el.disabled), true);
           assert.equal(await sheet.locator('[role="alert"]').count(), 1);

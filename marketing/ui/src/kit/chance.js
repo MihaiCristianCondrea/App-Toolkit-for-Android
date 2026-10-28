@@ -64,13 +64,25 @@ export function chanceBody(tool,state,onState) {
     const min=String(state.randomMin??1),max=String(state.randomMax??100),lo=parseLong(min),hi=parseLong(max);
     const invalid=lo===null||hi===null||lo>hi;
     const change=patch=>onState({...patch,randomResult:null});
-    return html`<div class="tk-tool-interactive chance-body">
-      <div class="chance-range">${[['Min',min,'randomMin'],['Max',max,'randomMax']].map(([label,value,key])=>html`<md-outlined-text-field label=${label} .value=${value} inputmode="numeric" ?error=${invalid} @input=${e=>e.target.value.length<=20 && change({[key]:e.target.value})}></md-outlined-text-field>`)}</div>
-      <md-chip-set aria-label="Number range">${[6,10,100,2].map(n=>html`<md-filter-chip label="1–${n}" ?selected=${lo===1n&&hi===BigInt(n)} @click=${()=>change({randomMin:'1',randomMax:String(n)})}></md-filter-chip>`)}</md-chip-set>
-      ${invalid?html`<p class="chance-error" role="alert">Enter whole numbers with Min no greater than Max.</p>`:nothing}
-      <div class="chance-number" style=${String(state.randomResult??"?").length>12?"font-size:32px":""} aria-live="polite" dir="ltr">${state.randomResult==null?'?':BigInt(state.randomResult).toLocaleString()}</div>
-      <md-filled-button style="width:100%" ?disabled=${invalid} @click=${()=>onState({randomResult:randomLong(lo,hi)})}>Generate</md-filled-button>
+    const presets=[6,10,100,2];
+    return html`<div class="tk-tool-interactive chance-body random-picker">
+      <div class="random-picker__result">
+        <span class="random-picker__eyebrow">${state.randomResult==null?'Ready to pick':'Your number'}</span>
+        <div class="chance-number" style=${String(state.randomResult??'?').length>12?'font-size:32px':''} aria-live="polite" aria-label="Random result" dir="ltr">${state.randomResult==null?'?':BigInt(state.randomResult).toLocaleString()}</div>
+        <span class="random-picker__range">${invalid?'Choose a valid range':`From ${lo.toLocaleString()} to ${hi.toLocaleString()}`}</span>
+      </div>
+      <div class="random-picker__settings">
+        <h4 class="random-picker__label">Number range</h4>
+        <md-outlined-segmented-button-set aria-label="Number range presets" @segmented-button-set-selection=${e=>{
+          if(!e.detail.selected) { e.detail.button.selected=true; return; }
+          change({randomMin:'1',randomMax:String(presets[e.detail.index])});
+        }}>${presets.map(n=>html`<md-outlined-segmented-button label="1–${n}" .selected=${lo===1n&&hi===BigInt(n)}></md-outlined-segmented-button>`)}</md-outlined-segmented-button-set>
+        <div class="chance-range">${[['Min',min,'randomMin'],['Max',max,'randomMax']].map(([label,value,key])=>html`<md-filled-text-field label=${label} .value=${value} inputmode="numeric" ?error=${invalid} @input=${e=>e.target.value.length<=20 && change({[key]:e.target.value})}></md-filled-text-field>`)}</div>
+        <p class="random-picker__hint ${invalid?'chance-error':''}" role=${invalid?'alert':'note'}>${invalid?'Enter whole numbers with Min no greater than Max.':'Both ends of the range are included.'}</p>
+      </div>
+      <md-filled-button class="random-picker__generate" ?disabled=${invalid} @click=${()=>onState({randomResult:randomLong(lo,hi)})}><md-icon slot="icon">casino</md-icon>Generate</md-filled-button>
     </div>`;
+
   }
   if(tool.id==='dice_roll') return html`<div class="tk-tool-interactive tk-tool-interactive--center chance-body">${diceVisual(state.diceResult)}<md-filled-button @click=${e=>playChance(e,'dice_roll',state,onState)}><md-icon slot="icon">play_arrow</md-icon>Roll die</md-filled-button></div>`;
   if(tool.id==='coin_flip') return html`<div class="tk-tool-interactive tk-tool-interactive--center chance-body">${coinVisual(state.coinSide)}<span class="chance-side" aria-live="polite">${state.coinSide??'Heads'}</span><md-filled-button @click=${e=>playChance(e,'coin_flip',state,onState)}><md-icon slot="icon">play_arrow</md-icon>Flip coin</md-filled-button></div>`;

@@ -1914,3 +1914,19 @@ md-icon-button.ai-favorite {
 .qt-chance__play { width:100%; max-width:128px; min-width:0; }
 .chance-body:has(.chance-dice-stage), .chance-body:has(.chance-coin-stage) { min-height:328px; }
 .chance-body:has(.chance-dice-stage) > md-filled-button, .chance-body:has(.chance-coin-stage) > md-filled-button { margin-top:auto; }
+
+/* Random picker: result, range selection, then one primary action. */
+.random-picker { gap:20px; }
+.random-picker__result { display:flex; flex-direction:column; align-items:center; gap:8px; padding:24px 16px; border-radius:28px; background:var(--md-sys-color-primary-container); color:var(--md-sys-color-on-primary-container); }
+.random-picker__eyebrow { font:500 14px/20px var(--md-ref-typeface-plain); }
+.random-picker .chance-number { background:none; padding:0; min-height:88px; width:100%; font:500 76px/1.15 var(--md-ref-typeface-plain); letter-spacing:-2px; }
+.random-picker__range { font:400 13px/20px var(--md-ref-typeface-plain); text-align:center; overflow-wrap:anywhere; max-width:100%; }
+.random-picker__settings { display:flex; flex-direction:column; gap:12px; }
+.random-picker__label { margin:0; font:500 14px/20px var(--md-ref-typeface-plain); color:var(--md-sys-color-on-surface); }
+.random-picker md-outlined-segmented-button-set { display:flex; width:100%; }
+.random-picker md-outlined-segmented-button { flex:1; min-width:0; }
+.random-picker .chance-range { gap:4px; }
+.random-picker md-filled-text-field { width:100%; min-width:0; --md-filled-text-field-container-shape:12px; }
+.random-picker__hint { margin:0; min-height:36px; font:400 12px/18px var(--md-ref-typeface-plain); color:var(--md-sys-color-on-surface-variant); }
+.random-picker__hint.chance-error { color:var(--md-sys-color-error); }
+.random-picker__generate { width:100%; --md-filled-button-container-height:56px; --md-filled-button-label-text-size:16px; }

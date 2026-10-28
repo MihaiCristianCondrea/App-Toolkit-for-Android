@@ -59,6 +59,6 @@ npm run qa       # browser checks (CHROMIUM_PATH can select a local Chromium)
 npm run palettes # regenerate src/theme/palettes.css from Kotlin Color.kt files
 ```
 
-Chance sheets follow `RandomNumberTool.kt`, `DiceRollTool.kt` and `CoinFlipTool.kt`: signed 64-bit ranges and presets, a six-sided die, and the original coin vector paths. Browser motion approximates Compose animation; device screenshot parity has not been verified.
+Chance sheets preserve signed 64-bit ranges and presets from `RandomNumberTool.kt`, the six-sided die from `DiceRollTool.kt`, and the original coin vector paths from `CoinFlipTool.kt`. Random Number has an approved web redesign: a result-first tonal panel, experimental Material Web segmented presets and paired filled range fields. Browser motion approximates Compose animation; device screenshot parity has not been verified.
 
 In Chance, tapping the die or coin plays its animation in the widget; tapping the card background opens its sheet. Both sheets reserve the same motion area and keep their height while rolling or flipping.
