@@ -27,6 +27,7 @@ export default {
   description: "Ruler, protractor, converter, bill splitter, counter, reaction test.",
   defaults: {
     activeSheet: "none",
+    reactionAutoStart: false,
     rulerUnit: "mm",
     protractorAngle: 45,
     counterValue: 42,
@@ -64,7 +65,7 @@ export default {
     { key: "counterValue", label: "Counter", min: 0, max: 99, step: 1 },
   ],
   render(s) {
-    const open = (id) => s.set?.({ activeSheet: id });
+    const open = (id) => s.set?.({ activeSheet: id, reactionAutoStart: false, ...(id === "reaction_test" ? { reactionPhase: "idle" } : {}) });
     const count = Math.max(0, Math.min(2147483647, Number(s.counterValue ?? 0)));
     const bill = billSummary(s);
     const conversion = conversionSummary(s);
@@ -115,16 +116,19 @@ export default {
         <section class="qt-section">
           ${sectionTitle("timer", "Count & time")}
           <div class="bento-stack">
-            ${widget("counter", `corner-bento-top mw-widget--counter ${count >= 1000000 ? "mw-widget--long-count" : ""}`, html`
-              <div class="mw-count" aria-live="polite" aria-label="Current count">${count}</div>
-              `, nothing, html`<div class="mw-actions">
-                <md-text-button ?disabled=${count === 0} @click=${() => s.set?.({counterValue: 0})}>Reset</md-text-button>
+            <article class="numbers-card mw-widget mw-widget--counter corner-bento-top" data-tool="counter">
+              <header class="mw-counter-header"><h3 class="mw-title"><button class="mw-open" type="button" @click=${() => open("counter")}>Counter</button></h3>
+                <md-text-button class="mw-counter-reset" ?disabled=${count === 0} @click=${() => s.set?.({counterValue: 0})}><md-icon slot="icon">refresh</md-icon>Reset</md-text-button>
+              </header>
+              <div class="mw-counter-panel ${count >= 1000 ? "mw-counter-panel--long" : ""}">
                 <md-outlined-icon-button aria-label="Subtract" ?disabled=${count === 0} @click=${() => s.set?.({counterValue: count - 1})}><md-icon>remove</md-icon></md-outlined-icon-button>
+                <div class="mw-count" aria-live="polite" aria-label="Current count">${count}</div>
                 <md-filled-button ?disabled=${count === 2147483647} @click=${() => s.set?.({counterValue: count + 1})}><md-icon slot="icon">add</md-icon>Add</md-filled-button>
-              </div>`)}
+              </div>
+            </article>
             ${widget("reaction_test", "corner-bento-bottom mw-widget--reaction", html`
               <div class="mw-reaction"><div><strong>${s.reactionBest ? html`${s.reactionBest}<small> ms</small>` : "Ready?"}</strong><span>${s.reactionBest ? "Personal best" : "Test your reflexes"}</span></div></div>
-              `, nothing, html`<div class="mw-actions"><md-filled-tonal-button @click=${() => s.set?.({activeSheet: "reaction_test", reactionPhase: "idle"})}><md-icon slot="icon">play_arrow</md-icon>Start</md-filled-tonal-button></div>`)}
+              `, nothing, html`<div class="mw-actions"><md-filled-tonal-button @click=${() => s.set?.({activeSheet: "reaction_test", reactionPhase: "idle", reactionAutoStart: true})}><md-icon slot="icon">play_arrow</md-icon>Start</md-filled-tonal-button></div>`)}
           </div>
         </section>
       </div>`;
@@ -132,7 +136,7 @@ export default {
     return previewScreen(APP, s, {
       tab: "numbers",
       content,
-      overlay: toolOverlay({ tool: TOOLS[s.activeSheet], state: s, onState: s.set, onClose: () => s.set?.({ activeSheet: "none" }) }),
+      overlay: toolOverlay({ tool: TOOLS[s.activeSheet], state: s, onState: s.set, onClose: () => s.set?.({ activeSheet: "none", reactionAutoStart: false }) }),
     });
   },
 };

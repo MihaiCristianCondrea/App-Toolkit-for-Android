@@ -114,6 +114,8 @@ Chance sheets preserve signed 64-bit ranges and presets from `RandomNumberTool.k
 
 In Chance, tapping the die or coin plays its animation in the widget; tapping the card background opens its sheet. Both sheets reserve the same motion area and keep their height while rolling or flipping.
 
+Counter supports inline add, subtract and reset. Tapping the Reaction Test card opens its sheet; its Start button opens the sheet and begins a timed round. Closing the sheet cancels a running round.
+
 ## Measure tool parity
 
 Measure tools are translated from `sample/feature/tiles/.../ui/views/tools`: Surface Ruler opens full-screen, with edge graduations, draggable bounds, mm/in units and the 30 mm calibration reference. Protractor has its graduated dial and drag/slider input. Counter uses a primary-container oval and single-step controls. Bill Splitter uses 10/15/20% segments and exact cent rounding. Unit Converter includes all app units, both editable directions, and tonal unit menus. Reaction Test has delayed signals, false starts and five-round history.

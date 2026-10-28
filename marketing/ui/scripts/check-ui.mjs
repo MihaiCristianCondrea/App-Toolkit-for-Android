@@ -164,6 +164,29 @@ try {
     assert.equal((await page.locator('.mw-share strong').innerText()).trim(), '57.50');
     checks++;
   }
+  // The reaction card only opens; its Start action opens and begins a timed round.
+  await page.goto(`${base}/screen.html?id=numbers&panel=none`);
+  const reactionCard = page.locator('[data-tool="reaction_test"]');
+  await reactionCard.locator('.mw-open').click();
+  await page.locator('.measure-reaction__pad--idle').waitFor();
+  await page.locator(SHEET_CONTENT).locator('[aria-label="Close"]').click();
+  await reactionCard.locator('md-filled-tonal-button').click();
+  await page.locator('.measure-reaction__pad--waiting').waitFor();
+  await page.locator('.measure-reaction__pad--signal').waitFor({timeout: 7000});
+  await page.locator('.measure-reaction__pad').click();
+  await page.locator('.measure-reaction__pad--result').waitFor();
+  assert.equal(await page.locator('.measure-history-chips md-assist-chip').count(), 1);
+  await page.locator(SHEET_CONTENT).locator('[aria-label="Close"]').click();
+  await reactionCard.locator('md-filled-tonal-button').focus();
+  await page.keyboard.press('Enter');
+  await page.locator('.measure-reaction__pad--waiting').waitFor();
+  await page.locator(SHEET_CONTENT).locator('[aria-label="Close"]').click();
+  await reactionCard.locator('.mw-open').click();
+  await page.locator('.measure-reaction__pad--idle').waitFor();
+  await page.waitForTimeout(5200);
+  assert.equal(await page.locator('.measure-reaction__pad--idle').count(), 1, 'closing cancels the running round');
+  await page.locator(SHEET_CONTENT).locator('[aria-label="Close"]').click();
+  checks++;
   // Compose Measure presentations at every supported window and theme.
   for(const window of ['phone','fold','desktop']) for(const theme of ['light','dark']) {
     for(const activeSheet of ['ruler','protractor','counter','bill_splitter','unit_converter','reaction_test']) {

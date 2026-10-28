@@ -1749,13 +1749,15 @@ mnw-android-screen,
 .mw-share md-icon { --md-icon-size: 40px; margin-bottom: 8px; }
 .mw-share strong { font: 500 32px/38px var(--md-ref-typeface-brand); overflow-wrap: anywhere; max-width: 100%; }
 .mw-share > span { font: 400 12px/18px var(--md-ref-typeface-plain); }
-.mw-widget--counter { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px 12px; padding: 16px 20px; }
-.mw-widget--counter .mw-title { grid-column: 1; }
-.mw-widget--counter .mw-count { grid-column: 2; grid-row: 1; text-align: end; }
-.mw-widget--counter .mw-actions { grid-column: 1 / -1; grid-row: 2; }
-.mw-widget--long-count .mw-count { grid-column: 1 / -1; grid-row: 2; font-size: 32px; line-height: 40px; }
-.mw-widget--long-count .mw-actions { grid-row: 3; }
-.mw-count { min-width: 0; margin: 0; color: var(--md-sys-color-primary); font: 500 40px/48px var(--md-ref-typeface-brand); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.mw-widget--counter { container-type: inline-size; gap: 8px; padding: 12px 16px 16px; }
+.mw-counter-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-left: 4px; }
+.mw-counter-reset { position: relative; z-index: 1; }
+.mw-counter-panel { display: flex; align-items: center; gap: 12px; padding: 16px; border-radius: 20px; background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
+.mw-counter-panel > md-outlined-icon-button, .mw-counter-panel > md-filled-button { position: relative; z-index: 1; flex-shrink: 0; }
+.mw-counter-panel > md-outlined-icon-button { --md-outlined-icon-button-outline-color: var(--md-sys-color-on-primary-container); --md-outlined-icon-button-icon-color: var(--md-sys-color-on-primary-container); }
+.mw-count { flex: 1; min-width: 0; text-align: center; font: 500 clamp(28px, 10cqi, 40px)/48px var(--md-ref-typeface-brand); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.mw-counter-panel--long { flex-wrap: wrap; justify-content: space-between; }
+.mw-counter-panel--long .mw-count { order: -1; flex-basis: 100%; font-size: 32px; line-height: 40px; }
 .mw-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
 .mw-actions > * { position: relative; z-index: 1; }
 .mw-widget--reaction { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; align-items: center; padding: 16px 20px; }
