@@ -71,6 +71,17 @@ const DEVELOPER_APPS = [
   },
 ];
 
+const TAGS = {
+  "com.d4rk.cleaner": "Cache & junk",
+  "com.d4rk.qrcodescanner.plus": "Fast reader",
+  "com.d4rk.cartcalculator": "Grocery budget",
+  "com.d4rk.netprobe": "Ping & speed",
+  "com.d4rk.androidtutorials": "Learn Android",
+  "com.d4rk.lowbrightness": "Dim below minimum",
+  "com.d4rk.musicsleeptimer.plus": "Sleep sounds",
+  "com.d4rk.englishwithlidia.plus": "English lessons",
+};
+
 const APP_FILTERS = [
   { id: "All", label: "All", icon: "apps" },
   { id: "Installed", label: "Installed", icon: "check_circle" },
@@ -174,10 +185,6 @@ export default {
                     label: "Favorite",
                     onClick: () => toggleFavorite(app.id),
                   })}
-                  ${iconButton({
-                    name: "share",
-                    label: "Share",
-                  })}
                 </div>
 
                 <div
@@ -193,6 +200,7 @@ export default {
                 </div>
 
                 <h3 class="app-tile-name">${app.name}</h3>
+                <p class="app-tile-tag">${TAGS[app.id] ?? ""}</p>
               </article>
             `;
           })}

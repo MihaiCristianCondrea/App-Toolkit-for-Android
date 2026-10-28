@@ -14,7 +14,8 @@ export const asset = (path) => base + (path.startsWith("/") ? path.slice(1) : pa
  */
 const polygon = (n, t) => {
   const seg = (2 * Math.PI) / n;
-  const m = ((t + seg / 2) % seg) - seg / 2;
+  const u = t + seg / 2;
+  const m = (((u % seg) + seg) % seg) - seg / 2;
   return Math.cos(Math.PI / n) / Math.cos(m);
 };
 const SHAPES = {

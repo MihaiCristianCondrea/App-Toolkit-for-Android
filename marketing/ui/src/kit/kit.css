@@ -1591,3 +1591,119 @@ md-icon-button.ai-favorite {
 .app-tile-card { background: var(--md-sys-color-surface-container); }
 .tk-sheet-surface { gap: 14px; }
 .tk-counter-shape { background: color-mix(in srgb, var(--tk-gold-container) 45%, transparent); color: var(--md-sys-color-on-surface); }
+
+/* ===== Concept redesign: Quick Tools tiles, live sensors, Numbers inline controls, tool sheets ===== */
+.numbers-hero { background: color-mix(in srgb, var(--tk-gold-container) 20%, var(--md-sys-color-surface-container-low)); padding: 24px 20px; display: block; }
+.numbers-hero-title { margin: 0 0 4px; }
+.numbers-section-title { margin: 8px 0 -4px 4px; font: 600 16px/24px var(--md-ref-typeface-plain); letter-spacing: 0.15px; color: var(--md-sys-color-on-surface); }
+
+.numbers-card { min-height: 0; }
+.numbers-card:focus-visible, .qt-tile:focus-visible, .qt-glance__cell:focus-visible { outline: 2px solid var(--md-sys-color-primary); outline-offset: 2px; }
+.nm-head { display: flex; align-items: center; gap: 12px; }
+.nm-head__text { min-width: 0; }
+.numbers-card .nm-head { flex-direction: column; align-items: flex-start; }
+.numbers-card--wide .nm-head { flex-direction: row; align-items: center; }
+.nm-counter-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.nm-counter-value { font: 700 32px/40px "Space Grotesk", var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; color: var(--tk-gold-content); }
+.nm-counter-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+.nm-result { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 10px 14px; border-radius: 16px; background: var(--md-sys-color-surface-container-highest); font: 500 12px/16px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
+.nm-result strong { font: 700 20px/24px "Space Grotesk", var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; color: var(--md-sys-color-on-surface); }
+.tk-gold-actions { --md-filled-button-container-color: var(--tk-gold-container); --md-filled-button-label-text-color: var(--tk-gold-content); --md-filled-button-icon-color: var(--tk-gold-content); --md-filled-tonal-button-container-color: color-mix(in srgb, var(--tk-gold-container) 28%, var(--md-sys-color-surface-container-highest)); --md-filled-tonal-button-label-text-color: var(--md-sys-color-on-surface); --md-filled-tonal-icon-button-container-color: color-mix(in srgb, var(--tk-gold-container) 28%, var(--md-sys-color-surface-container-highest)); --md-filled-tonal-icon-button-icon-color: var(--md-sys-color-on-surface); --md-text-button-label-text-color: var(--md-sys-color-on-surface-variant); }
+
+/* Quick Tools */
+.qt-section { display: flex; flex-direction: column; gap: 12px; }
+.qt-section__title { margin: 8px 0 0 4px; font: 600 16px/24px var(--md-ref-typeface-plain); letter-spacing: 0.15px; }
+.qt-glance { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.qt-glance__cell { appearance: none; border: 0; font: inherit; color: var(--md-sys-color-on-surface); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 12px; background: var(--md-sys-color-surface-container-high); transition: background-color .15s ease, transform .15s ease; }
+.qt-glance__cell:first-child { border-radius: 28px 8px 8px 28px; }
+.qt-glance__cell:last-child { border-radius: 8px 28px 28px 8px; }
+.qt-glance__cell:hover { background: var(--md-sys-color-surface-container-highest); }
+.qt-glance__cell:active { transform: scale(.985); }
+.qt-glance__label { align-self: flex-start; font: 600 12px/16px "Space Grotesk", var(--md-ref-typeface-plain); letter-spacing: .5px; text-transform: uppercase; color: var(--md-sys-color-on-surface-variant); }
+.qt-glance__value { font: 700 22px/28px "Space Grotesk", var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; color: var(--tk-teal-content); }
+.qt-glance__note { font: 400 12px/16px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
+
+.qt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.qt-tile { display: flex; flex-direction: column; justify-content: space-between; gap: 20px; min-height: 132px; padding: 16px; border-radius: 8px; background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface); cursor: pointer; transition: background-color .15s ease, transform .15s ease; }
+.qt-tile:hover { background: var(--md-sys-color-surface-container-highest); }
+.qt-tile:active { transform: scale(.985); }
+.qt-grid > .qt-tile:first-child { border-top-left-radius: 28px; }
+.qt-grid > .qt-tile:nth-child(2) { border-top-right-radius: 28px; }
+.qt-grid > .qt-tile:nth-last-child(2):nth-child(odd) { border-bottom-left-radius: 28px; }
+.qt-grid > .qt-tile:last-child { border-bottom-right-radius: 28px; }
+.qt-grid > .qt-tile:last-child:nth-child(odd) { border-bottom-left-radius: 28px; }
+.qt-grid > .qt-tile:only-child { border-radius: 28px; }
+.qt-tile--wide { grid-column: 1 / -1; flex-direction: row; align-items: center; min-height: 0; border-radius: 28px !important; }
+.qt-tile--wide .qt-tile__top { order: 2; }
+.qt-tile--wide .qt-tile__text { flex: 1; }
+.qt-tile--wide { flex-direction: row-reverse; justify-content: space-between; }
+.qt-tile__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.qt-tile--wide .qt-tile__top { flex-shrink: 0; align-items: center; gap: 12px; }
+.qt-tile__title { margin: 0; font: 600 16px/22px var(--md-ref-typeface-plain); letter-spacing: .15px; }
+.qt-tile__status { margin: 2px 0 0; font: 600 13px/18px "Space Grotesk", var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; color: var(--md-sys-color-on-surface-variant); }
+.qt-tile[data-accent="gold"] .qt-tile__status { color: var(--tk-gold-content); }
+.qt-tile[data-accent="teal"] .qt-tile__status { color: var(--tk-teal-content); }
+.qt-tile[data-accent="orange"] .qt-tile__status { color: var(--tk-orange-content); }
+.qt-tile[data-accent="magenta"] .qt-tile__status { color: var(--tk-magenta-content); }
+.qt-tile[data-accent="amber"] .qt-tile__status { color: var(--tk-amber-content); }
+.qt-howto-card { background: var(--md-sys-color-surface-container-low); border-radius: 28px; padding: 16px 20px; display: block; }
+.qt-howto-title { font: 600 16px/24px var(--md-ref-typeface-plain); }
+.qt-howto-text { margin: 4px 0 0; font: 400 14px/20px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
+
+/* Dials */
+.tk-dial { flex-shrink: 0; color: var(--tk-teal-content); }
+.tk-dial__ring { fill: color-mix(in srgb, var(--tk-teal-container) 14%, var(--md-sys-color-surface)); stroke: color-mix(in srgb, var(--tk-teal-container) 55%, transparent); stroke-width: 2; }
+.tk-dial__ticks line { stroke: var(--md-sys-color-on-surface-variant); stroke-width: 1.2; opacity: .6; }
+.tk-dial__n { font: 700 9px "Space Grotesk", sans-serif; fill: var(--md-sys-color-on-surface); }
+.tk-dial__needle { fill: var(--tk-orange-container); }
+.tk-dial__needle-tail { fill: var(--md-sys-color-on-surface-variant); opacity: .5; }
+.tk-dial__hub { fill: var(--md-sys-color-on-surface); }
+.tk-dial__guide { fill: none; stroke: var(--md-sys-color-outline); stroke-width: 1; opacity: .5; }
+.tk-dial__bubble { fill: var(--tk-teal-container); stroke: var(--tk-teal-content); stroke-width: 1.5; transition: cx .2s ease, cy .2s ease; }
+.tk-protractor { max-width: 100%; }
+.tk-protractor .tk-dial__ring { fill: color-mix(in srgb, var(--tk-orange-container) 14%, var(--md-sys-color-surface)); stroke: color-mix(in srgb, var(--tk-orange-container) 55%, transparent); }
+.tk-protractor__arm { stroke: var(--tk-orange-content); stroke-width: 2.5; stroke-linecap: round; }
+
+/* Tool sheet */
+.tk-sheet-surface { max-height: 92%; overflow-y: auto; scrollbar-width: none; }
+.tk-sheet-handle { width: 32px; height: 4px; border-radius: 2px; background: var(--md-sys-color-on-surface-variant); opacity: .4; margin: -4px auto 0; flex-shrink: 0; }
+.tk-tool-interactive--center { align-items: center; text-align: center; }
+.tk-tool-interactive--center > md-slider, .tk-tool-interactive--center > md-filled-button { align-self: stretch; }
+.tk-readout { display: flex; flex-direction: column; gap: 2px; }
+.tk-readout__value { font: 700 28px/34px "Space Grotesk", var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; }
+.tk-readout__note, .tk-muted { font: 400 13px/18px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
+.tk-result { display: flex; flex-direction: column; gap: 4px; padding: 20px; border-radius: 24px; background: color-mix(in srgb, var(--tk-gold-container) 22%, var(--md-sys-color-surface-container-highest)); }
+.tk-result__label { font: 600 12px/16px "Space Grotesk", var(--md-ref-typeface-plain); letter-spacing: .5px; text-transform: uppercase; color: var(--md-sys-color-on-surface-variant); }
+.tk-result__value { font: 700 44px/52px "Space Grotesk", var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; margin-bottom: 8px; }
+.tk-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; width: 100%; }
+.tk-stat { display: flex; flex-direction: column; gap: 2px; padding: 10px 14px; border-radius: 8px; background: var(--md-sys-color-surface-container-high); text-align: left; }
+.tk-stat:nth-child(1) { border-top-left-radius: 16px; } .tk-stat:nth-child(2) { border-top-right-radius: 16px; }
+.tk-stat:nth-child(3) { border-bottom-left-radius: 16px; } .tk-stat:nth-child(4) { border-bottom-right-radius: 16px; }
+.tk-stat:only-child, .tk-stat:nth-child(2):last-child { border-radius: 16px; }
+.tk-stat__label { font: 600 11px/16px "Space Grotesk", var(--md-ref-typeface-plain); letter-spacing: .5px; text-transform: uppercase; color: var(--md-sys-color-on-surface-variant); }
+.tk-stat__value { font: 600 16px/22px "Space Grotesk", var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; }
+.tk-field { display: flex; flex-direction: column; gap: 8px; }
+.tk-field__label { font: 600 12px/16px var(--md-ref-typeface-plain); letter-spacing: .5px; color: var(--md-sys-color-on-surface-variant); }
+.tk-toggle-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.tk-swatch { height: 96px; border-radius: 20px; transition: background-color .25s ease; }
+.tk-ruler { height: 64px; border-radius: 12px; background: var(--md-sys-color-surface-container-highest); background-image: repeating-linear-gradient(90deg, var(--md-sys-color-on-surface-variant) 0 1px, transparent 1px 8px), repeating-linear-gradient(90deg, var(--md-sys-color-on-surface) 0 2px, transparent 2px 40px); background-size: 100% 18px, 100% 32px; background-repeat: no-repeat; }
+.tk-ruler--in { background-image: repeating-linear-gradient(90deg, var(--md-sys-color-on-surface-variant) 0 1px, transparent 1px 12px), repeating-linear-gradient(90deg, var(--md-sys-color-on-surface) 0 2px, transparent 2px 48px); }
+.tk-morse { padding: 14px 16px; border-radius: 16px; background: var(--md-sys-color-surface-container-highest); font: 500 18px/28px "Space Grotesk", monospace; letter-spacing: 2px; word-break: break-all; min-height: 28px; }
+.tk-sos { --md-filled-button-container-color: var(--md-sys-color-error); --md-filled-button-label-text-color: var(--md-sys-color-on-error); --md-filled-button-icon-color: var(--md-sys-color-on-error); }
+.tk-breath { width: 168px; height: 168px; display: grid; place-items: center; }
+.tk-breath__phase { width: 56px; height: 56px; border-radius: 28%; background: color-mix(in srgb, var(--tk-amber-container) 55%, transparent); transform: scale(1); }
+.tk-breath.is-running .tk-breath__phase { animation: tk-breathe 16s linear infinite; }
+@keyframes tk-breathe { 0% { transform: scale(1); } 25% { transform: scale(2.8); } 50% { transform: scale(2.8); } 75% { transform: scale(1); } 100% { transform: scale(1); } }
+
+/* Apps */
+.app-tile-tag { margin: 2px 0 0; text-align: center; font: 400 13px/18px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
+.app-tile-card { justify-content: center; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tk-breath.is-running .tk-breath__phase { animation: none; transform: scale(2); }
+  .qt-tile, .qt-glance__cell, .numbers-card, .tk-dial__bubble, .tk-swatch { transition: none; }
+}
+
+/* The sheet is the container: tool bodies sit on it directly instead of in a second tonal card. */
+.tk-tool-interactive { background: transparent; padding: 0; border-radius: 0; }
+.tk-split-stepper { background: var(--md-sys-color-surface-container-high); }

@@ -1,5 +1,6 @@
 import { html, nothing } from "lit";
 import { shapeMaskStyle, shapeUrl } from "./assets.js";
+import { extraToolBody } from "./tool-bodies.js";
 
 /**
  * MaterialShapes polygon badge matching `TileIconBadge` in `TileBadges.kt` and
@@ -109,7 +110,8 @@ export function renderToolBottomSheet({
 
   return html`
     <div class="tk-sheet-backdrop" @click=${onClose}>
-      <div class="tk-sheet-surface" @click=${(e) => e.stopPropagation()}>
+      <div class="tk-sheet-surface" role="dialog" aria-label=${tool.title} @click=${(e) => e.stopPropagation()}>
+        <div class="tk-sheet-handle"></div>
         <div class="tk-sheet-title-row">
           ${shapeBadge({
             shape: tool.shape,
@@ -189,6 +191,8 @@ export function renderToolBottomSheet({
 }
 
 function renderToolBody(tool, state, onState) {
+  const extra = extraToolBody(tool, state, onState);
+  if (extra) return extra;
   switch (tool.id) {
     case "counter": {
       const count = Number(state.counterValue ?? 12);
