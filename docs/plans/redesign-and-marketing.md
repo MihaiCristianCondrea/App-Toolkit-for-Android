@@ -10,7 +10,8 @@ Make App Toolkit the next app that shows what the shared stack can do, on a base
 proven:
 
 1. **Stable bases first.** Material Next (0.0.7) runs the marketing UI of every app; App Toolkit's
-   own library (`3.0.0-pre30`) is validated before the app is redesigned on top of it.
+   own library (`3.0.0-pre30`) is validated before the app is redesigned on top of it. Validation
+   is local builds and the owner's manual testing on devices; the plan adds no GitHub Actions work.
 2. **A redesigned app.** The sample app on Google Play (`com.d4rk.android.apps.apptoolkit`) gets a
    coherent design, screen by screen, built from features it already has: no portfolio duplicates,
    no new sensitive permissions.
@@ -26,7 +27,7 @@ Each phase below has a "done when" line. A phase starts only when the one it dep
 | --- | --- |
 | App screens | Bottom bar: Quick Tools, Numbers, Apps. Numbers is complete (`quick_tools.md`); Quick Tools still hosts most tools; settings, about, FAQ, onboarding and support come from the library. |
 | Library | `3.0.0-pre30` with breaking API changes (`AospPageIndicator`, `TelemetryOnboardingPage`, `ScreenHost` layout). Open crash reports in `docs/crashes/open/`. |
-| Android CI | `.github/workflows/android.yml` runs only on `master`, not on `develop`, where the work happens. |
+| Testing | Manual, by the owner, on devices. GitHub Actions minutes are too limited for these builds, so the plan adds no CI. |
 | Marketing UI | `marketing/ui` on Material Next 0.0.7: one-page hub (gallery and prototype), no drawer or footer, 38 browser checks. Screens: Quick Tools, Numbers, Apps. |
 | Store listing | `sample/app/src/main/play/` (en-US only): 4 phone and 4 tablet screenshots (welcome, apps, onboarding theme, privacy), two feature graphics, icon. No source; nothing in Gradle reads this folder (no Play publisher plugin); `sample/README.md` links its images. |
 | Campaigns | None. No `creative/`, no templates. |
@@ -71,7 +72,6 @@ first explainer is written; empty folders are not added.
 
 | Work | Done when |
 | --- | --- |
-| Run `android.yml` on `develop` (push and pull requests) as well as `master` | A push to `develop` builds, lints and runs unit tests in CI |
 | Validate `3.0.0-pre30`: build the sample app and each consumer app against it, check the renamed and replaced APIs, and look at indicators, onboarding pages and `ScreenHost` layouts on a phone and a tablet | Consumers compile; a short note in `library/CHANGELOG.md` lists anything they had to change |
 | Decide every report in `docs/crashes/open/`: fixed, won't fix (with reason) or blocking the release | `open/` is empty or each remaining file says why it stays |
 | Close the cross-repo gaps already known: Cleaner's Windows screenshot paths, Profile's Jest/`deepmerge` advisory, deployed consumers checked on 0.0.7 | Each repository's full check passes |
@@ -122,7 +122,7 @@ For each screen, in this order: **Quick Tools** (largest, still being redistribu
 | --- | --- | --- |
 | 1. Review | Current screen in Compose and in the UI kit; what each element is for; what users reach for (from `research/analytics`, as context only) | A short review in `docs/plans/redesign/<screen>.md` with the problems found |
 | 2. Concept | Change the screen in `marketing/ui` first. Use `redesign-skill` and `ui-unslop` on it; check light and dark, gesture and 3-button navigation, phone, fold and desktop | The prototype page shows the concept; the owner approves it |
-| 3. Build | Implement in Compose against `3.0.0-pre30` or later | Builds in CI; screenshot tests or previews cover the new states |
+| 3. Build | Implement in Compose against `3.0.0-pre30` or later | Builds locally; previews cover the new states; the owner has tested it on a device |
 | 4. Parity | Bring the UI kit screen to match the shipped Compose screen exactly (strings, spacing, states) | Side-by-side check at the same sizes shows no drift; `npm run qa` passes |
 
 One screen ships before the next starts, so the app is never half-redesigned on `develop`.
