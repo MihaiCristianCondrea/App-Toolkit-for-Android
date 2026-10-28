@@ -13,14 +13,13 @@ const TOOLS = {
   ruler: { id: "ruler", title: "Surface Ruler", subtitle: "Measure small objects on screen", icon: "square_foot", shape: "pentagon", palette: "orange", kindLabel: "Expanded tool", supportsTile: false },
   protractor: { id: "protractor", title: "Protractor", subtitle: "Measure an angle", icon: "architecture", shape: "arch", palette: "orange", kindLabel: "Expanded tool", supportsTile: false },
   flash_dimmer: { id: "flash_dimmer", title: "Flash Dimmer", subtitle: "Set the torch brightness", icon: "flashlight_on", shape: "burst", palette: "gold", kindLabel: "Quick tool", supportsTile: true },
-  screen_light: { id: "screen_light", title: "Screen Light", subtitle: "Use the display as a soft light", icon: "wb_incandescent", shape: "very_sunny", palette: "gold", kindLabel: "Quick tool", supportsTile: true },
   morse_sos: { id: "morse_sos", title: "Morse & SOS", subtitle: "Send a message with the torch", icon: "emergency", shape: "cookie_7sided", palette: "magenta", kindLabel: "Quick tool", supportsTile: true },
   breathing_box: { id: "breathing_box", title: "Box Breathing", subtitle: "Follow a steady 4-4-4-4 rhythm", icon: "air", shape: "flower", palette: "amber", kindLabel: "Quick tool", supportsTile: false },
 };
 
 const SECTIONS = [
   { id: "sensors", title: "Measure", filter: "Sensors & measurement", tools: ["ruler", "protractor"], glance: true },
-  { id: "system", title: "Light & signals", filter: "Light & signals", tools: ["flash_dimmer", "screen_light", "morse_sos"] },
+  { id: "system", title: "Light & signals", filter: "Light & signals", tools: ["flash_dimmer", "morse_sos"] },
   { id: "wellbeing", title: "Calm", filter: "Wellbeing", tools: ["breathing_box"] },
 ];
 
@@ -39,8 +38,6 @@ export default {
     drawerOpen: false,
     flashOn: true,
     flashLevel: 3,
-    screenLightOn: false,
-    lightTemp: "warm",
     breathRunning: false,
     protractorAngle: 45,
     rulerUnit: "mm",
@@ -78,15 +75,12 @@ export default {
       ruler: s.rulerUnit === "in" ? "5.91 in" : "150 mm",
       protractor: `${s.protractorAngle}°`,
       flash_dimmer: s.flashOn ? `On · level ${s.flashLevel}` : "Off",
-      screen_light: s.screenLightOn ? `On · ${s.lightTemp}` : "Off",
       morse_sos: s.sosActive ? "SOS sending" : "Ready",
       breathing_box: s.breathRunning ? "Running" : "4 · 4 · 4 · 4",
     })[id];
 
     const swallow = (e) => e.stopPropagation();
     const control = (id) => {
-      if (id === "flash_dimmer") return html`<md-switch aria-label="Flashlight" ?selected=${s.flashOn} @click=${swallow} @change=${(e) => s.set({ flashOn: e.target.selected })}></md-switch>`;
-      if (id === "screen_light") return html`<md-switch aria-label="Screen light" ?selected=${s.screenLightOn} @click=${swallow} @change=${(e) => s.set({ screenLightOn: e.target.selected })}></md-switch>`;
       if (id === "breathing_box") return html`<md-filled-tonal-icon-button aria-label=${s.breathRunning ? "Pause breathing" : "Start breathing"} @click=${(e) => { swallow(e); s.set({ breathRunning: !s.breathRunning }); }}><md-icon>${s.breathRunning ? "pause" : "play_arrow"}</md-icon></md-filled-tonal-icon-button>`;
       return nothing;
     };
@@ -96,7 +90,7 @@ export default {
       return html`
         <div class="qt-tile ${id === "breathing_box" ? "qt-tile--wide" : ""}" data-accent=${t.palette} role="button" tabindex="0"
           @click=${() => open(id)} @keydown=${(e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), open(id))}>
-          <div class="qt-tile__top">${shapeBadge({ shape: t.shape, icon: t.icon, palette: t.palette, size: 48, iconSize: 24 })}${control(id)}</div>
+          <div class="qt-tile__top">${shapeBadge({ shape: t.shape, icon: t.icon, palette: t.palette, size: 64, iconSize: 32 })}${control(id)}</div>
           <div class="qt-tile__text"><h3 class="qt-tile__title">${t.title}</h3><p class="qt-tile__status">${status(id)}</p></div>
         </div>`;
     };

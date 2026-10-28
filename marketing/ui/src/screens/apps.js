@@ -1,91 +1,32 @@
-import { html } from "lit";
+import { html, nothing } from "lit";
 import { iconButton, navigationBar, navigationDrawer, screen, topAppBar } from "../kit/shell.js";
 
-/**
- * Developer apps catalog matching `AppsListScreen.kt`, `AppsList.kt`, and `AppCard.kt`.
- */
-const DEVELOPER_APPS = [
-  {
-    id: "com.d4rk.cleaner",
-    name: "Smart Cleaner for Android",
-    icon: "cleaning_services",
-    palette: "teal",
-    installed: true,
-    summary: "One-tap phone cleaner, storage analyzer, and duplicate remover.",
-  },
-  {
-    id: "com.d4rk.qrcodescanner.plus",
-    name: "QR & Bar Code Scanner",
-    icon: "qr_code_scanner",
-    palette: "gold",
-    installed: true,
-    summary: "Fast QR and barcode reader with custom code generator.",
-  },
-  {
-    id: "com.d4rk.cartcalculator",
-    name: "Shopping Cart Calculator",
-    icon: "shopping_cart",
-    palette: "orange",
-    installed: false,
-    summary: "Track live cart totals, discounts, and sales tax while shopping.",
-  },
-  {
-    id: "com.d4rk.netprobe",
-    name: "Net Probe - Networking Tools",
-    icon: "network_check",
-    palette: "teal",
-    installed: false,
-    summary: "Ping, traceroute, DNS lookup, and LAN port scanner.",
-  },
-  {
-    id: "com.d4rk.androidtutorials",
-    name: "Android Insider",
-    icon: "android",
-    palette: "gold",
-    installed: true,
-    summary: "Kotlin, Jetpack Compose, and Android architecture lessons.",
-  },
-  {
-    id: "com.d4rk.lowbrightness",
-    name: "Low Brightness for Android",
-    icon: "brightness_low",
-    palette: "amber",
-    installed: false,
-    summary: "Dim your screen below system minimum for comfortable night reading.",
-  },
-  {
-    id: "com.d4rk.musicsleeptimer.plus",
-    name: "Naptime: Sleep Sounds & Timer",
-    icon: "bedtime",
-    palette: "magenta",
-    installed: false,
-    summary: "Ambient sleep sounds and automatic media playback sleep timer.",
-  },
-  {
-    id: "com.d4rk.englishwithlidia.plus",
-    name: "English with Lidia Plus",
-    icon: "school",
-    palette: "orange",
-    installed: false,
-    summary: "Vocabulary, grammar lessons, and interactive English practice.",
-  },
-];
+/** Public catalog the Android app reads (ApiHost.kt, `GET api/v1/apps`). */
+const APPS_URL = "https://android-apps-metadata-backend.mihaicristiancondrea.workers.dev/api/v1/apps";
+const PLAY_URL = "https://play.google.com/store/apps/details?id=";
 
-const TAGS = {
-  "com.d4rk.cleaner": "Cache & junk",
-  "com.d4rk.qrcodescanner.plus": "Fast reader",
-  "com.d4rk.cartcalculator": "Grocery budget",
-  "com.d4rk.netprobe": "Ping & speed",
-  "com.d4rk.androidtutorials": "Learn Android",
-  "com.d4rk.lowbrightness": "Dim below minimum",
-  "com.d4rk.musicsleeptimer.plus": "Sleep sounds",
-  "com.d4rk.englishwithlidia.plus": "English lessons",
-};
+/** One request per page load; every state change reuses it. */
+let request = null;
+const loadApps = () =>
+  (request ??= fetch(APPS_URL)
+    .then((r) => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.json();
+    })
+    .then((json) => json.data.apps.map((a) => ({
+      name: a.name,
+      id: a.package_name,
+      icon: a.icon_logo,
+      summary: a.short_description ?? "",
+      category: a.category?.label ?? "",
+    })))
+    .catch((error) => {
+      request = null;
+      throw error;
+    }));
 
-const APP_FILTERS = [
+const FILTERS = [
   { id: "All", label: "All", icon: "apps" },
-  { id: "Installed", label: "Installed", icon: "check_circle" },
-  { id: "NotInstalled", label: "Not installed", icon: "block" },
   { id: "Favorites", label: "Favorite Apps", icon: "star_outline" },
 ];
 
@@ -96,143 +37,84 @@ export default {
   categoryLabel: "Apps Catalog",
   tier: 1,
   palette: "google",
-  description:
-    "The developer's apps in a searchable grid, with All, Installed, Not installed and Favorite filters and an Open random app button.",
+  description: "The developer's live app catalog from the metadata API, with search, favorites and Open random app.",
   defaults: {
     filter: "All",
     searchQuery: "",
     drawerOpen: false,
-    favorites: ["com.d4rk.cleaner", "com.d4rk.androidtutorials"],
+    favorites: [],
+    apps: null,
+    appsError: false,
   },
   controls: [
     {
       type: "presets",
       label: "Catalog states",
       options: [
-        ["All Apps Catalog", { filter: "All", searchQuery: "" }],
-        ["Installed Only", { filter: "Installed", searchQuery: "" }],
-        ["Not Installed", { filter: "NotInstalled", searchQuery: "" }],
-        ["Favorite Apps", { filter: "Favorites", searchQuery: "" }],
+        ["All apps", { filter: "All", searchQuery: "" }],
+        ["Favorite apps", { filter: "Favorites", searchQuery: "" }],
       ],
     },
-    {
-      key: "filter",
-      label: "Filter Chip",
-      type: "choice",
-      options: ["All", "Installed", "NotInstalled", "Favorites"],
-    },
+    { key: "filter", label: "Filter", type: "choice", options: ["All", "Favorites"] },
   ],
   render(s) {
-    const favSet = new Set(s.favorites || []);
-    const selectedFilter = s.filter || "All";
-    const query = (s.searchQuery || "").trim().toLowerCase();
-    const cols =
-      s.window === "desktop" ? 4 : s.window === "fold" ? 3 : 2;
+    if (!s.apps && !s.appsError) {
+      loadApps().then((apps) => s.set({ apps }), () => s.set({ appsError: true }));
+    }
 
-    const filteredApps = DEVELOPER_APPS.filter((app) => {
-      if (selectedFilter === "Installed" && !app.installed) return false;
-      if (selectedFilter === "NotInstalled" && app.installed) return false;
-      if (selectedFilter === "Favorites" && !favSet.has(app.id)) return false;
-      if (
-        query &&
-        !app.name.toLowerCase().includes(query) &&
-        !app.id.toLowerCase().includes(query) &&
-        !app.summary.toLowerCase().includes(query)
-      ) {
-        return false;
-      }
-      return true;
-    });
+    const favorites = new Set(s.favorites || []);
+    const query = (s.searchQuery || "").trim().toLowerCase();
+    const cols = s.window === "desktop" ? 4 : s.window === "fold" ? 3 : 2;
+    const apps = (s.apps || []).filter((app) =>
+      (s.filter !== "Favorites" || favorites.has(app.id)) &&
+      (!query || [app.name, app.id, app.summary].some((v) => v.toLowerCase().includes(query))));
 
     const toggleFavorite = (id) => {
-      const next = new Set(favSet);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
+      const next = new Set(favorites);
+      next.has(id) ? next.delete(id) : next.add(id);
       s.set({ favorites: [...next] });
     };
+    const openApp = (app) => window.open(PLAY_URL + encodeURIComponent(app.id), "_blank", "noopener");
+    const openRandom = () => apps.length && openApp(apps[Math.floor(Math.random() * apps.length)]);
+
+    const card = (app) => html`
+      <article class="app-tile-card" role="link" tabindex="0" aria-label="${app.name} on Google Play"
+        @click=${() => openApp(app)} @keydown=${(e) => e.key === "Enter" && openApp(app)}>
+        <div class="app-tile-actions">
+          ${iconButton({ name: "star_outline", selectedIcon: "star", selected: favorites.has(app.id), label: `Favorite ${app.name}`, onClick: () => toggleFavorite(app.id) })}
+        </div>
+        <img class="app-tile-icon" src=${app.icon} alt="" loading="lazy" referrerpolicy="no-referrer" />
+        <h3 class="app-tile-name">${app.name}</h3>
+        <p class="app-tile-tag">${app.category}</p>
+      </article>`;
+
+    const body = s.appsError
+      ? html`<div class="app-state"><p>Couldn't load the catalog.</p>
+          <md-filled-tonal-button @click=${() => s.set({ appsError: false })}>Retry</md-filled-tonal-button></div>`
+      : !s.apps
+        ? html`<div class="apps-grid" style="--apps-cols:${cols}" aria-busy="true">${Array.from({ length: cols * 3 }, () => html`<div class="app-tile-card app-tile-card--skeleton"></div>`)}</div>`
+        : apps.length
+          ? html`<div class="apps-grid" style="--apps-cols:${cols}">${apps.map(card)}</div>`
+          : html`<div class="app-state"><p>${s.filter === "Favorites" ? "No favorites yet. Tap a star to add one." : "No apps match your search."}</p></div>`;
 
     const content = html`
-      <!-- AppsListFilters (AppsList.kt lines 248-303) -->
-      <div class="ai-filter-row" style="padding:16px 16px 4px">
-        <span class="ai-filter-label">Sort by:</span>
+      <div class="ai-filter-row" style="padding:8px 16px 4px">
         <md-chip-set aria-label="Filter apps">
-          ${APP_FILTERS.map(
-            (f) => html`
-              <md-filter-chip
-                .label=${f.label}
-                ?selected=${selectedFilter === f.id}
-                @click=${() => s.set({ filter: f.id })}
-              >
-                <md-icon slot="icon">${f.icon}</md-icon>
-              </md-filter-chip>
-            `,
-          )}
+          ${FILTERS.map((f) => html`<md-filter-chip .label=${f.label} ?selected=${s.filter === f.id} @click=${() => s.set({ filter: f.id })}><md-icon slot="icon">${f.icon}</md-icon></md-filter-chip>`)}
         </md-chip-set>
       </div>
+      <div class="tk-screen-pad" style="padding-top:8px;padding-bottom:96px">${body}</div>`;
 
-      <div class="tk-screen-pad" style="padding-top:12px;padding-bottom:96px">
-        <div class="apps-grid" style="--apps-cols:${cols}">
-          ${filteredApps.map((app) => {
-            const isFav = favSet.has(app.id);
-            return html`
-              <!-- AppCard.kt: square aspect-ratio Card(shape = 28.dp), top-end Star + Share, centered 72dp icon + SemiBold name -->
-              <article class="app-tile-card">
-                <div class="app-tile-actions">
-                  ${iconButton({
-                    name: "star_outline",
-                    selectedIcon: "star",
-                    selected: isFav,
-                    label: "Favorite",
-                    onClick: () => toggleFavorite(app.id),
-                  })}
-                </div>
-
-                <div
-                  class="app-tile-icon"
-                  style="
-                    background:color-mix(in srgb, var(--tk-${app.palette}-container) 22%, var(--md-sys-color-surface-container-highest));
-                    color:var(--tk-${app.palette}-content);
-                  "
-                >
-                  <span class="material-symbols-outlined" style="font-size:36px">
-                    ${app.icon}
-                  </span>
-                </div>
-
-                <h3 class="app-tile-name">${app.name}</h3>
-                <p class="app-tile-tag">${TAGS[app.id] ?? ""}</p>
-              </article>
-            `;
-          })}
-        </div>
-      </div>
-    `;
-
-    const fab = html`
-      <md-fab
-        class="ai-extended-fab"
-        variant="primary"
-        label="Open random app"
-      >
-        <md-icon slot="icon">casino</md-icon>
-      </md-fab>
-    `;
+    const fab = s.apps?.length
+      ? html`<md-fab class="ai-extended-fab" variant="primary" label="Open random app" @click=${openRandom}><md-icon slot="icon">casino</md-icon></md-fab>`
+      : nothing;
 
     return screen({
-      top: topAppBar({
-        search: "Search apps",
-        searchValue: s.searchQuery || "",
-        onSearch: (v) => s.set({ searchQuery: v }),
-        onNav: () => s.set({ drawerOpen: true }),
-      }),
+      top: topAppBar({ search: "Search apps", searchValue: s.searchQuery || "", onSearch: (v) => s.set({ searchQuery: v }), onNav: () => s.set({ drawerOpen: true }) }),
       content,
       fab,
       bottom: navigationBar("apps", s.go, s.window),
-      drawer: navigationDrawer({
-        open: s.drawerOpen,
-        onClose: () => s.set({ drawerOpen: false }),
-        onNavigate: (target) => s.go(target, {}),
-      }),
+      drawer: navigationDrawer({ open: s.drawerOpen, onClose: () => s.set({ drawerOpen: false }), onNavigate: (t) => s.go(t, {}) }),
       navType: s.navType,
       window: s.window,
       tab: "apps",

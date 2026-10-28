@@ -99,7 +99,6 @@ export function extraToolBody(tool, state, onState) {
         <div class="tk-tool-interactive tk-tool-interactive--center">
           ${compassDial(heading, 184)}
           <div class="tk-readout"><span class="tk-readout__value">${heading}° ${cardinal(heading)}</span><span class="tk-readout__note">Magnetic north, from the geomagnetic sensor</span></div>
-          <md-slider min="0" max="359" .value=${heading} labeled aria-label="Simulated heading" @input=${(e) => onState({ compassHeading: Number(e.target.value) })}></md-slider>
         </div>`;
     }
 
@@ -112,7 +111,6 @@ export function extraToolBody(tool, state, onState) {
           ${levelDial(roll, pitch, 184)}
           <div class="tk-readout"><span class="tk-readout__value">${flat ? "Level" : "Tilted"}</span><span class="tk-readout__note">From the gravity sensor</span></div>
           <div class="tk-stat-grid">${stat("Roll", `${roll.toFixed(1)}°`)} ${stat("Pitch", `${pitch.toFixed(1)}°`)}</div>
-          <md-slider min="-10" max="10" step="0.1" .value=${roll} labeled aria-label="Simulated roll" @input=${(e) => onState({ levelRoll: Number(e.target.value) })}></md-slider>
         </div>`;
     }
 
@@ -154,30 +152,13 @@ export function extraToolBody(tool, state, onState) {
         <div class="tk-tool-interactive">
           <div class="tk-toggle-row">
             <div><div class="title-medium">Flashlight</div><div class="body-medium tk-muted">${on ? `On at level ${level} of 5` : "Off"}</div></div>
-            <md-switch aria-label="Flashlight" ?selected=${on} @change=${(e) => onState({ flashOn: e.target.selected })}></md-switch>
+            <md-filled-tonal-button @click=${() => onState({ flashOn: !on })}><md-icon slot="icon">${on ? "flashlight_off" : "flashlight_on"}</md-icon>${on ? "Turn off" : "Turn on"}</md-filled-tonal-button>
           </div>
           <div class="tk-field">
             <span class="tk-field__label">Brightness</span>
             <md-slider min="1" max="5" step="1" ticks .value=${level} labeled aria-label="Flashlight level" @input=${(e) => onState({ flashLevel: Number(e.target.value) })}></md-slider>
           </div>
           <p class="body-small tk-muted" style="margin:0">Uses the camera torch. Devices without adjustable torch strength switch it on at full brightness.</p>
-        </div>`;
-    }
-
-    case "screen_light": {
-      const on = Boolean(state.screenLightOn);
-      const temp = state.lightTemp || "warm";
-      const swatch = { warm: "#ffb866", neutral: "#fff1dc", cool: "#cfe4ff" }[temp];
-      return html`
-        <div class="tk-tool-interactive">
-          <div class="tk-swatch" style="background:${on ? swatch : "var(--md-sys-color-surface-container-highest)"}" role="img" aria-label="Screen light preview, ${on ? temp : "off"}"></div>
-          <div class="tk-toggle-row">
-            <div><div class="title-medium">Screen light</div><div class="body-medium tk-muted">${on ? "Full-brightness display" : "Off"}</div></div>
-            <md-switch aria-label="Screen light" ?selected=${on} @change=${(e) => onState({ screenLightOn: e.target.selected })}></md-switch>
-          </div>
-          <md-chip-set aria-label="Color temperature">
-            ${[["warm", "Warm"], ["neutral", "Neutral"], ["cool", "Cool"]].map(([id, label]) => html`<md-filter-chip label=${label} ?selected=${temp === id} @click=${() => onState({ lightTemp: id })}></md-filter-chip>`)}
-          </md-chip-set>
         </div>`;
     }
 

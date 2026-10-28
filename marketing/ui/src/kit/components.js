@@ -117,8 +117,8 @@ export function renderToolBottomSheet({
             shape: tool.shape,
             icon: tool.icon,
             palette: tool.palette || "gold",
-            size: 56,
-            iconSize: 24,
+            size: 64,
+            iconSize: 32,
           })}
           <div class="tk-sheet-title-meta">
             <h3 class="tk-sheet-title">${tool.title}</h3>

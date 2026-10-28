@@ -62,7 +62,7 @@ export default {
       <div class="numbers-card ${cls}" role="button" tabindex="0" @click=${() => open(id)}
         @keydown=${(e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), open(id))}>${body}</div>`;
     const head = (t) => html`
-      <div class="nm-head">${shapeBadge({ shape: t.shape, icon: t.icon, palette: t.palette, size: 48, iconSize: 24 })}
+      <div class="nm-head">${shapeBadge({ shape: t.shape, icon: t.icon, palette: t.palette, size: 64, iconSize: 32 })}
         <div class="nm-head__text"><h3 class="numbers-card-title">${t.title}</h3><p class="numbers-card-sub">${t.subtitle}</p></div></div>`;
     const chips = (t) => toolMetaChips({ kindLabel: t.kindLabel, supportsTile: t.supportsTile, tileAdded: Boolean(s.addedTiles?.[t.id]), palette: t.palette });
     const result = (label, value) => html`<div class="nm-result"><span>${label}</span><strong>${value}</strong></div>`;
