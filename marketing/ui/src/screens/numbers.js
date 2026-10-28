@@ -115,7 +115,7 @@ export default {
         <section class="qt-section">
           ${sectionTitle("timer", "Count & time")}
           <div class="bento-stack">
-            ${widget("counter", "corner-bento-top mw-widget--counter", html`
+            ${widget("counter", `corner-bento-top mw-widget--counter ${count >= 1000000 ? "mw-widget--long-count" : ""}`, html`
               <div class="mw-count" aria-live="polite" aria-label="Current count">${count}</div>
               `, nothing, html`<div class="mw-actions">
                 <md-text-button ?disabled=${count === 0} @click=${() => s.set?.({counterValue: 0})}>Reset</md-text-button>
@@ -123,7 +123,7 @@ export default {
                 <md-filled-button ?disabled=${count === 2147483647} @click=${() => s.set?.({counterValue: count + 1})}><md-icon slot="icon">add</md-icon>Add</md-filled-button>
               </div>`)}
             ${widget("reaction_test", "corner-bento-bottom mw-widget--reaction", html`
-              <div class="mw-reaction"><md-icon class="sc-rounded" aria-hidden="true">bolt</md-icon><div><strong>${s.reactionBest ? html`${s.reactionBest}<small> ms</small>` : "Ready?"}</strong><span>${s.reactionBest ? "Personal best" : "Test your reflexes"}</span></div></div>
+              <div class="mw-reaction"><div><strong>${s.reactionBest ? html`${s.reactionBest}<small> ms</small>` : "Ready?"}</strong><span>${s.reactionBest ? "Personal best" : "Test your reflexes"}</span></div></div>
               `, nothing, html`<div class="mw-actions"><md-filled-tonal-button @click=${() => s.set?.({activeSheet: "reaction_test", reactionPhase: "idle"})}><md-icon slot="icon">play_arrow</md-icon>Start</md-filled-tonal-button></div>`)}
           </div>
         </section>
