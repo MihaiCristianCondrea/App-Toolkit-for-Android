@@ -1,6 +1,7 @@
 import { html, nothing } from "lit";
-import { renderToolBottomSheet, shapeBadge, toolMetaChips } from "../kit/components.js";
-import { navigationBar, navigationDrawer, screen, topAppBar } from "../kit/shell.js";
+import { previewScreen } from "material-next-web-components/marketing.js";
+import { toolOverlay, shapeBadge, toolMetaChips } from "../kit/components.js";
+import { APP } from "../kit/app.js";
 
 /**
  * The Measure tab (route id `numbers`, NumbersScreen.kt): length and angle, conversion and splitting, counting and
@@ -40,7 +41,6 @@ export default {
     reactionLast: 231,
     reactionBest: 214,
     reactionAverage: 246,
-    drawerOpen: false,
     addedTiles: { counter: false },
   },
   controls: [
@@ -63,7 +63,7 @@ export default {
     { key: "counterValue", label: "Counter", min: 0, max: 99, step: 1 },
   ],
   render(s) {
-    const open = (id) => s.set({ activeSheet: id });
+    const open = (id) => s.set?.({ activeSheet: id });
     const swallow = (e) => e.stopPropagation();
 
     const card = (id, cls, body) => html`
@@ -102,9 +102,9 @@ export default {
               <span class="nm-counter-value" aria-label="Current count">${s.counterValue}</span>
             </div>
             <div class="nm-counter-actions tk-gold-actions">
-              <md-text-button @click=${(e) => { swallow(e); s.set({ counterValue: 0 }); }}>Reset</md-text-button>
-              <md-filled-tonal-icon-button aria-label="Subtract" @click=${(e) => { swallow(e); s.set({ counterValue: Math.max(0, s.counterValue - 1) }); }}><md-icon>remove</md-icon></md-filled-tonal-icon-button>
-              <md-filled-button @click=${(e) => { swallow(e); s.set({ counterValue: s.counterValue + s.counterStep }); }}><md-icon slot="icon">add</md-icon>Add</md-filled-button>
+              <md-text-button @click=${(e) => { swallow(e); s.set?.({ counterValue: 0 }); }}>Reset</md-text-button>
+              <md-filled-tonal-icon-button aria-label="Subtract" @click=${(e) => { swallow(e); s.set?.({ counterValue: Math.max(0, s.counterValue - 1) }); }}><md-icon>remove</md-icon></md-filled-tonal-icon-button>
+              <md-filled-button @click=${(e) => { swallow(e); s.set?.({ counterValue: s.counterValue + s.counterStep }); }}><md-icon slot="icon">add</md-icon>Add</md-filled-button>
             </div>
             ${chips(TOOLS.counter)}`)}
           ${card("reaction_test", "corner-bento-bottom numbers-card--wide", html`
@@ -113,27 +113,16 @@ export default {
               <span class="nm-counter-value nm-counter-value--small" aria-label="Best time">${s.reactionBest ? `${s.reactionBest} ms` : "None"}</span>
             </div>
             <div class="nm-counter-actions tk-gold-actions">
-              <md-filled-tonal-button @click=${(e) => { swallow(e); s.set({ activeSheet: "reaction_test", reactionPhase: "idle" }); }}><md-icon slot="icon">play_arrow</md-icon>Start</md-filled-tonal-button>
+              <md-filled-tonal-button @click=${(e) => { swallow(e); s.set?.({ activeSheet: "reaction_test", reactionPhase: "idle" }); }}><md-icon slot="icon">play_arrow</md-icon>Start</md-filled-tonal-button>
             </div>`)}
         </div>
 
       </div>`;
 
-    const activeTool = TOOLS[s.activeSheet] || null;
-    const overlay = activeTool
-      ? renderToolBottomSheet({ tool: activeTool, state: s, onState: s.set, onClose: () => s.set({ activeSheet: "none" }) })
-      : nothing;
-
-    return screen({
-      top: topAppBar({ title: "Measure", onNav: () => s.set({ drawerOpen: true }) }),
-      content,
-      bottom: navigationBar("numbers", s.go, s.window),
-      drawer: navigationDrawer({ open: s.drawerOpen, onClose: () => s.set({ drawerOpen: false }), onNavigate: (t) => s.go(t, {}) }),
-      overlay,
-      navType: s.navType,
-      window: s.window,
+    return previewScreen(APP, s, {
       tab: "numbers",
-      onSelect: s.go,
+      content,
+      overlay: toolOverlay({ tool: TOOLS[s.activeSheet], state: s, onState: s.set, onClose: () => s.set?.({ activeSheet: "none" }) }),
     });
   },
 };

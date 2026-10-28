@@ -1,5 +1,7 @@
 import { html, nothing } from "lit";
-import { iconButton, navigationBar, navigationDrawer, screen, topAppBar } from "../kit/shell.js";
+import { previewScreen } from "material-next-web-components/marketing.js";
+import { iconButton } from "../kit/shell.js";
+import { APP } from "../kit/app.js";
 
 /** Public catalog the Android app reads (ApiHost.kt, `GET api/v1/apps`). */
 const APPS_URL = "https://android-apps-metadata-backend.mihaicristiancondrea.workers.dev/api/v1/apps";
@@ -41,7 +43,6 @@ export default {
   defaults: {
     filter: "All",
     searchQuery: "",
-    drawerOpen: false,
     favorites: [],
     apps: null,
     appsError: false,
@@ -59,7 +60,7 @@ export default {
   ],
   render(s) {
     if (!s.apps && !s.appsError) {
-      loadApps().then((apps) => s.set({ apps }), () => s.set({ appsError: true }));
+      loadApps().then((apps) => s.set?.({ apps }), () => s.set?.({ appsError: true }));
     }
 
     const favorites = new Set(s.favorites || []);
@@ -72,7 +73,7 @@ export default {
     const toggleFavorite = (id) => {
       const next = new Set(favorites);
       next.has(id) ? next.delete(id) : next.add(id);
-      s.set({ favorites: [...next] });
+      s.set?.({ favorites: [...next] });
     };
     const openApp = (app) => window.open(PLAY_URL + encodeURIComponent(app.id), "_blank", "noopener");
     const openRandom = () => apps.length && openApp(apps[Math.floor(Math.random() * apps.length)]);
@@ -90,7 +91,7 @@ export default {
 
     const body = s.appsError
       ? html`<div class="app-state"><p>Couldn't load the catalog.</p>
-          <md-filled-tonal-button @click=${() => s.set({ appsError: false })}>Retry</md-filled-tonal-button></div>`
+          <md-filled-tonal-button @click=${() => s.set?.({ appsError: false })}>Retry</md-filled-tonal-button></div>`
       : !s.apps
         ? html`<div class="apps-grid" style="--apps-cols:${cols}" aria-busy="true">${Array.from({ length: cols * 3 }, () => html`<div class="app-tile-card app-tile-card--skeleton"></div>`)}</div>`
         : apps.length
@@ -100,7 +101,7 @@ export default {
     const content = html`
       <div class="ai-filter-row" style="padding:8px 16px 4px">
         <md-chip-set aria-label="Filter apps">
-          ${FILTERS.map((f) => html`<md-filter-chip .label=${f.label} ?selected=${s.filter === f.id} @click=${() => s.set({ filter: f.id })}><md-icon slot="icon">${f.icon}</md-icon></md-filter-chip>`)}
+          ${FILTERS.map((f) => html`<md-filter-chip .label=${f.label} ?selected=${s.filter === f.id} @click=${() => s.set?.({ filter: f.id })}><md-icon slot="icon">${f.icon}</md-icon></md-filter-chip>`)}
         </md-chip-set>
       </div>
       <div class="tk-screen-pad" style="padding-top:8px;padding-bottom:96px">${body}</div>`;
@@ -109,16 +110,11 @@ export default {
       ? html`<md-fab class="ai-extended-fab" variant="primary" label="Open random app" @click=${openRandom}><md-icon slot="icon">casino</md-icon></md-fab>`
       : nothing;
 
-    return screen({
-      top: topAppBar({ search: "Search apps", searchValue: s.searchQuery || "", onSearch: (v) => s.set({ searchQuery: v }), onNav: () => s.set({ drawerOpen: true }) }),
-      content,
-      fab,
-      bottom: navigationBar("apps", s.go, s.window),
-      drawer: navigationDrawer({ open: s.drawerOpen, onClose: () => s.set({ drawerOpen: false }), onNavigate: (t) => s.go(t, {}) }),
-      navType: s.navType,
-      window: s.window,
+    return previewScreen(APP, s, {
       tab: "apps",
-      onSelect: s.go,
+      search: { placeholder: "Search apps", value: s.searchQuery || "", onInput: (v) => s.set?.({ searchQuery: v }) },
+      content,
+      fab: fab === nothing ? null : fab,
     });
   },
 };

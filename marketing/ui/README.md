@@ -4,11 +4,19 @@ Interactive browser showcase for **App Toolkit for Android**, built with **Mater
 
 Material Next owns the gallery, preview controls, screen cards, prototype inspector, comparison views,
 window rules, device frames and embed lifecycle. The gallery has no drawer or footer (`navigationMode:
-"none"`). Motion and Specifications remain standalone reference URLs. App Toolkit keeps its three
-screen renderers, state controls, Android app chrome, palettes and product content.
+"none"`). Motion and Specifications remain standalone reference URLs.
 
-It uses Material Next `0.0.7` from npm. The gallery opens each screen in the same page; `screen.html` remains for captures and direct links.
-Installation needs Node.js 24; the published package includes its built components.
+Material Next also draws the app's shell: its Android preview (`definePreviewApp()`, `previewScreen()`,
+`<mnw-android-screen>`) renders the status bar, app bars and search, the navigation each window calls for
+(navigation bar and modal drawer, rail, expandable rail, permanent drawer), the system bars and insets, and the
+sheets, full-screen dialogs, drawers and overflow menu over the content. App Toolkit declares itself once in
+`src/kit/app.js` (tabs, drawer footer, overflow); each screen gives its tab, search, content, FAB and overlay, and
+nothing else. Which navigation buttons appear comes from Material Next's rules, never from a screen. App Toolkit
+keeps its screen content, tools, state controls, palettes and product copy.
+
+It uses Material Next from its Git source (`github:…#9627d8e`) until the next npm release carries the Android
+preview, so installing needs Git as well as Node.js 24; the package builds itself on install. The gallery opens
+each screen in the same page; `screen.html` remains for captures and direct links.
 Gallery cards start without device frames. Opening screen detail shows a frame automatically,
 while an explicit `frame=none` URL stays frameless.
 
@@ -25,15 +33,20 @@ at build time. App-specific fonts, logos and illustrations still come from this 
 ## Embedding and captures
 
 `src/embed.js` keeps `setup()`, `mount()`, `mountPart()`, `SCREENS`, `byId`, `WINDOWS`,
-`shellLayout` and `PARTS` for motion consumers. Its lifecycle is supplied by
-`createMarketingEmbed()`. Pass state explicitly for deterministic renders.
+`shellLayout` and `PARTS` (`shapeBadge`, `toolMetaChips`, `toolOverlay`, `icon`) for motion consumers. Its
+lifecycle is supplied by `createMarketingEmbed()`. Pass state explicitly for deterministic renders: videos have no
+`set()`, so the shell renders static and nothing a screen draws may depend on it.
+
+The drawer, rail and overflow menu are screen state like any other (`drawerOpen`, `railExpanded`, `railOpen`,
+`overflowOpen`), so `screen.html?id=quick-tools&state={"drawerOpen":true}` opens the drawer for a capture.
 
 `screen.html?id=numbers&window=fold&theme=dark&frame=device&panel=none` renders only the screen
 and frame. `mode=compare&compare=theme|nav|palette|frame` opens a comparison. Palette and theme,
 window size, frame, system navigation and screen-specific controls are available in the inspector.
 
 The browser check exercises all three screens in light and dark at phone, fold and desktop sizes,
-closed desktop navigation, interactive sheets, comparison and the public embed entry point. It
+closed desktop navigation, interactive sheets, comparison and the public embed entry point, and mounts every
+screen, preset, sheet and navigation surface the way videos do (without `set()`) to catch anything that needs it. It
 checks the web migration; Android screenshot parity remains a separate campaign check.
 
 ## Translated Screens (`src/screens/`)
@@ -47,7 +60,7 @@ checks the web migration; Android screenshot parity remains a separate campaign 
 On Windows, double-click `open-marketing-ui.cmd`. On macOS or Linux, run
 `sh open-marketing-ui.sh`. Both launchers work from any current directory, refresh dependencies
 on each launch (including after a pull), sync assets and open the gallery in the browser.
-Node.js and npm must be on PATH. The Windows window stays open on failure so the error remains visible.
+Node.js, npm and Git must be on PATH. The Windows window stays open on failure so the error remains visible.
 
 ## Commands
 

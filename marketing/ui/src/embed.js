@@ -3,10 +3,10 @@ import {setAssetBase} from "./kit/assets.js";
 import {icon} from "./kit/shell.js";
 import {loadFonts} from "./theme/index.js";
 import {SCREENS, byId} from "./screens/index.js";
-import {shapeBadge, toolMetaChips, renderToolBottomSheet} from "./kit/components.js";
+import {shapeBadge, toolMetaChips, toolOverlay} from "./kit/components.js";
 
 export {SCREENS, byId, WINDOWS, shellLayout};
-export const PARTS = {shapeBadge, toolMetaChips, renderToolBottomSheet, icon};
+export const PARTS = {shapeBadge, toolMetaChips, toolOverlay, icon};
 const embed = createMarketingEmbed({
   screens: SCREENS,
   parts: PARTS,

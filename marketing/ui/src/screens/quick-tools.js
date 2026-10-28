@@ -1,8 +1,9 @@
 import { diceVisual, coinVisual, playChance } from "../kit/chance.js";
 import { html, nothing } from "lit";
-import { renderToolBottomSheet, shapeBadge } from "../kit/components.js";
+import { previewScreen } from "material-next-web-components/marketing.js";
+import { toolOverlay, shapeBadge } from "../kit/components.js";
+import { APP } from "../kit/app.js";
 import { asset, shapeMaskStyle, shapeUrl } from "../kit/assets.js";
-import { navigationBar, navigationDrawer, screen, topAppBar } from "../kit/shell.js";
 import { BREATH_STEPS, compassRose, direction, levelDial } from "../kit/tool-bodies.js";
 
 /**
@@ -50,7 +51,6 @@ export default {
     randomMin: "1", randomMax: "100", randomResult: 73, diceResult: 5, coinSide: "Heads",
     searchQuery: "",
     activeToolId: "none",
-    drawerOpen: false,
     flashOn: true,
     flashLevel: 3,
     // The torch's maximum level comes from the device: 1 means it cannot dim (on or off only); a Pixel 8 Pro has 45.
@@ -87,7 +87,7 @@ export default {
   ],
   render(s) {
     const query = (s.searchQuery || "").trim().toLowerCase();
-    const open = (id) => s.set({ activeToolId: id });
+    const open = (id) => s.set?.({ activeToolId: id });
     const matches = (id) => !query || TOOLS[id].title.toLowerCase().includes(query) || TOOLS[id].subtitle.toLowerCase().includes(query);
     const activate = (id) => (e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), open(id));
     const flat = Math.abs(s.levelRoll) < 1 && Math.abs(s.levelPitch) < 1;
@@ -95,7 +95,7 @@ export default {
     const maxLevel = Math.max(1, Number(s.flashMaxLevel ?? 5));
     const dims = maxLevel > 1;
     const flashLevel = s.flashOn ? Math.min(s.flashLevel, maxLevel) : 0;
-    const setFlash = (level) => s.set({ flashOn: level > 0, flashLevel: level > 0 ? level : s.flashLevel });
+    const setFlash = (level) => s.set?.({ flashOn: level > 0, flashLevel: level > 0 ? level : s.flashLevel });
 
     // Every widget opens its sheet on a tap. On a torch that can dim, a vertical swipe over its shape sets the
     // brightness instead, and the shape fills like a progress bar.
@@ -218,21 +218,11 @@ export default {
         ${sections}
       </div>`;
 
-    const activeTool = TOOLS[s.activeToolId] || null;
-    const overlay = activeTool
-      ? renderToolBottomSheet({ tool: activeTool, state: s, onState: s.set, onClose: () => s.set({ activeToolId: "none" }) })
-      : nothing;
-
-    return screen({
-      top: topAppBar({ search: "Search tools", searchValue: s.searchQuery || "", onSearch: (v) => s.set({ searchQuery: v }), onNav: () => s.set({ drawerOpen: true }) }),
-      content,
-      bottom: navigationBar("quick-tools", s.go, s.window),
-      drawer: navigationDrawer({ open: s.drawerOpen, onClose: () => s.set({ drawerOpen: false }), onNavigate: (t) => s.go(t, {}) }),
-      overlay,
-      navType: s.navType,
-      window: s.window,
+    return previewScreen(APP, s, {
       tab: "quick-tools",
-      onSelect: s.go,
+      search: { placeholder: "Search tools", value: s.searchQuery || "", onInput: (v) => s.set?.({ searchQuery: v }) },
+      content,
+      overlay: toolOverlay({ tool: TOOLS[s.activeToolId], state: s, onState: s.set, onClose: () => s.set?.({ activeToolId: "none" }) }),
     });
   },
 };

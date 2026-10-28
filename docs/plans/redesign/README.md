@@ -57,6 +57,14 @@ The app today has 12 tools on Quick Tools in four categories (Sensors & Measurem
 Controls, Wellbeing), with Morse and SOS as two tools, and Screen Light. The table is the target; the Compose build
 follows it after the web screens are approved.
 
+## Shell
+
+The app's shell is Material Next's Android preview (October 28, 2026): App Toolkit declares itself once in
+`marketing/ui/src/kit/app.js`, and Material Next decides and draws the app bars, the navigation for each window,
+the insets, the drawers and the sheets, following the library's `ShellChrome.kt` and `ShellFrame.kt`. New marketing
+UI work and redesign steps build on it; Smart Cleaner and Android Insider move to it next, before smaller shared
+patterns (result pills, shape badges, grouped cards) are extracted.
+
 ## Steps
 
 | Step | What | Status |

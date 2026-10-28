@@ -1,20 +1,7 @@
 /* Layout primitives shared by every translated screen. */
-.sc-screen {
-  width: 430px;
-  height: 957px;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  background: var(--md-sys-color-surface);
-  color: var(--md-sys-color-on-surface);
-  font-family: var(--md-ref-typeface-plain);
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-.sc-screen *,
-.sc-screen *::before,
-.sc-screen *::after {
+mnw-android-screen *,
+mnw-android-screen *::before,
+mnw-android-screen *::after {
   box-sizing: border-box;
 }
 
@@ -36,20 +23,7 @@
 .sc-col { display: flex; flex-direction: column; }
 
 /* Status Bar matching Android 15/16 */
-.sc-status {
-  height: 48px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  color: var(--md-sys-color-on-surface);
-  font-family: var(--md-ref-typeface-plain);
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.1px;
-  transition: background-color 0.2s cubic-bezier(0.2, 0, 0, 1);
-}
+
 .sc-status__left {
   display: flex;
   align-items: center;
@@ -72,78 +46,12 @@
   opacity: 0.85;
 }
 
-.sc-screen--scrolled {
-  --sc-collapse: 1;
-  --sc-title-opacity: 1;
-}
-
-.sc-screen--raised .sc-status,
-.sc-screen--raised .sc-topbar,
-.sc-screen--scrolled .sc-status,
-.sc-screen--scrolled .sc-topbar {
-  background: var(--md-sys-color-surface-container);
-  transition: background-color 0.2s cubic-bezier(0.2, 0, 0, 1);
-}
-.sc-screen--article .sc-status,
-.sc-screen--article .sc-topbar {
-  background: var(--md-sys-color-surface);
-  transition: none;
-}
-
 /* Top app bars (Material 3 TopAppBar inside the App Toolkit shell): 64dp, title-large titles.
    The shell places its 48dp icon buttons flush with the edges; the article frame keeps M3's 4dp. */
-.sc-topbar {
-  height: 64px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  position: relative;
-  transition: background-color 0.2s cubic-bezier(0.2, 0, 0, 1);
-  --md-icon-button-icon-color: var(--md-sys-color-on-surface);
-}
-/* Material Web icon buttons are 40px with a 48px touch target; 4px margins give the 48dp slot. */
-.sc-topbar:not(.sc-topbar--article) > md-icon-button { margin-inline: 4px; }
-.sc-topbar--no-nav { padding-inline-start: 16px; }
-.sc-topbar--article { padding: 0 4px; gap: 4px; }
-.sc-topbar md-icon-button:last-child { --md-icon-button-icon-color: var(--md-sys-color-on-surface-variant); }
-.sc-topbar md-icon-button:first-child { --md-icon-button-icon-color: var(--md-sys-color-on-surface); }
-.sc-topbar__title {
-  flex: 1;
-  min-width: 0;
-  font: 400 22px/28px var(--md-ref-typeface-plain);
-  color: var(--md-sys-color-on-surface);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.sc-topbar__title--multiline {
-  white-space: normal;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
-.sc-topbar:has(> .sc-topbar__title--multiline) { height: auto; min-height: 64px; padding-block: 4px; }
 
-.sc-topbar--large {
-  height: auto;
-  flex-direction: column;
-  align-items: stretch;
-}
-.sc-topbar--large .sc-topbar__title {
-  opacity: var(--sc-title-opacity, 0);
-}
-.sc-topbar__large-wrap {
-  overflow: hidden;
-  height: calc((1 - var(--sc-collapse, 0)) * var(--sc-expanded-height, 88px));
-  display: flex;
-  align-items: flex-end;
-}
-.sc-topbar__large-title {
-  padding: 0 16px 16px;
-  font: 400 28px/36px var(--md-ref-typeface-plain);
-  color: var(--md-sys-color-on-surface);
-  opacity: calc(1 - var(--sc-title-opacity, 0));
-}
+/* Material Web icon buttons are 40px with a 48px touch target; 4px margins give the 48dp slot. */
+
+
 
 .ai-settings-search {
   height: 48px;
@@ -159,55 +67,16 @@
 }
 
 /* The shell's TabSearch: a 48dp full-radius field between the drawer and overflow buttons. */
-.sc-topbar--search md-filled-text-field.sc-search {
-  flex: 1;
-  min-width: 0;
-  margin-inline-end: 8px;
-  --md-filled-text-field-icon-input-space: 8px;
-  --md-filled-text-field-container-shape: 24px;
-  --md-filled-text-field-container-color: var(--md-sys-color-surface-container-high);
-  --md-filled-text-field-active-indicator-height: 0px;
-  --md-filled-text-field-hover-active-indicator-height: 0px;
-  --md-filled-text-field-focus-active-indicator-height: 0px;
-  --md-filled-field-top-space: 12px;
-  --md-filled-field-bottom-space: 12px;
-  --md-filled-text-field-leading-icon-color: var(--md-sys-color-on-surface);
-}
-.sc-content { flex: 1; min-height: 0; position: relative; overflow-y: auto; overflow-x: hidden; }
+
 .sc-pad { padding: 16px; display: flex; flex-direction: column; gap: 16px; }
 
 /* Navigation Bar (M3: 80dp, label-medium labels in both states) */
-.sc-navbar {
-  flex-shrink: 0;
-  --md-navigation-bar-container-color: var(--md-sys-color-surface-container);
-  --md-navigation-bar-container-elevation: 0;
-  --md-navigation-bar-container-height: 80px;
-  --md-navigation-bar-active-indicator-color: var(--md-sys-color-secondary-container);
-  --md-navigation-bar-active-indicator-width: 56px;
-  --md-navigation-bar-active-icon-color: var(--md-sys-color-on-secondary-container);
-  --md-navigation-bar-active-label-text-color: var(--md-sys-color-secondary);
-  --md-navigation-bar-inactive-icon-color: var(--md-sys-color-on-surface-variant);
-  --md-navigation-bar-inactive-label-text-color: var(--md-sys-color-on-surface-variant);
-  --md-navigation-bar-label-text-font: var(--md-ref-typeface-plain);
-  --md-navigation-bar-label-text-size: 12px;
-  --md-navigation-bar-label-text-weight: 500;
-}
+
 .sc-filled { font-variation-settings: "FILL" 1; }
 
 /* System navigation. The app is edge to edge: the bottom navigation bar's container extends under
    the system bar, and on screens without one the screen's surface shows through. */
-.sc-sysnav {
-  flex-shrink: 0;
-  width: 100%;
-  background: transparent;
-  color: var(--md-sys-color-on-surface);
-}
-.sc-screen:has(.sc-navbar) .sc-sysnav { background: var(--md-sys-color-surface-container); }
-.sc-sysnav--gesture {
-  height: 24px;
-  display: grid;
-  place-items: center;
-}
+
 .sc-sysnav__handle {
   width: 108px;
   height: 4px;
@@ -215,12 +84,7 @@
   background: currentColor;
   opacity: 0.8;
 }
-.sc-sysnav--buttons {
-  height: 48px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  padding: 0 40px;
-}
+
 .sc-sysnav__btn {
   justify-self: center;
   width: 56px;
@@ -235,8 +99,6 @@
   cursor: pointer;
 }
 .sc-sysnav__btn:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
-
-.sc-fab { position: absolute; inset-inline-end: 16px; bottom: calc(16px + var(--sc-system-nav-height, 0px) + var(--sc-bottom-bar-height, 0px)); z-index: 3; }
 
 /* Filter Row using Material Web md-chip-set and md-filter-chip (App Toolkit TopListFilters): 24 dp above and
    below the chips, outline-variant outlines, a 24 dp check on the selected chip. */
@@ -309,24 +171,9 @@
   display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 
 /* Navigation Drawer */
-.ai-drawer-overlay { position: absolute; inset: 0; z-index: 20; display: flex; }
-.ai-drawer-scrim { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.32); animation: fadeIn 0.2s ease; }
+
 /* ModalDrawerSheet: 360 dp at most, leaving the 56 dp the scrim keeps; 16 dp end corners; drawn under the status
    bar and above the system navigation, with 12 dp after the last entry. */
-.ai-drawer-sheet {
-  position: relative;
-  z-index: 21;
-  width: min(360px, calc(100% - 56px));
-  height: 100%;
-  box-sizing: border-box;
-  padding: 24px 0 calc(var(--sc-system-nav-height, 24px) + 12px);
-  display: flex;
-  flex-direction: column;
-  background: var(--md-sys-color-surface-container-low);
-  border-radius: 0 16px 16px 0;
-  overflow: hidden;
-  animation: slideInLeft 0.25s cubic-bezier(0.1, 0.9, 0.2, 1);
-}
 
 /* Studio Bot Convo List with App Toolkit grouped corners */
 .ai-convo-item {
@@ -824,29 +671,19 @@ md-icon-button.ai-favorite {
 
 /* Edge to edge on the article screen: the text scrolls behind the gesture bar, as on Android, instead of stopping
    above a plain strip. The padding keeps the last line clear of the handle when scrolled to the end. */
-.sc-screen--article:not(:has(.sc-navbar)) > .sc-content { margin-bottom: -24px; padding-bottom: 24px; }
-.sc-screen--article:not(:has(.sc-navbar)) > .sc-sysnav { position: relative; z-index: 1; }
 
 /* Wide windows (kit/layout.js, App Toolkit ShellFrame.kt): from 600 dp the navigation sits beside the content. The
    frame (status bar, navigation and app bar) is surface-container; a tab's content is a surface card with a 24 dp
    top-start corner (ContentCardShape). A page over the tab (`carded: false`) is plain surface beside the frame. */
-.sc-screen--framed { background: var(--md-sys-color-surface-container); }
-.sc-screen--framed .sc-status,
-.sc-screen--framed .sc-topbar { background: transparent; }
-.sc-frame { flex: 1; min-height: 0; display: flex; }
+
 .sc-frame__body { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .sc-frame__card { flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column; background: var(--md-sys-color-surface); }
-.sc-screen--carded .sc-frame__card { border-start-start-radius: 24px; overflow: hidden; }
-.sc-screen--framed:not(.sc-screen--carded) .sc-frame__body { background: var(--md-sys-color-surface); }
-.sc-screen--framed:not(.sc-screen--carded) .sc-frame__body .sc-topbar { background: var(--md-sys-color-surface); }
+
 /* Edge to edge: the card reaches the bottom of the window and the gesture handle floats over it. */
-.sc-screen--framed > .sc-sysnav { position: absolute; left: 0; right: 0; bottom: 0; z-index: 4; background: transparent; }
-.sc-screen--framed .sc-frame__card > .sc-content { padding-bottom: var(--sc-system-nav-height, 0px); }
-.sc-screen--framed .sc-topbar--search .sc-search { margin-inline-start: 16px; }
 
 /* ShellRail: 96 dp, a 64 dp header with the 48 dp menu button centred, WideNavigationRailItem tabs (56 x 32
    indicator, label-medium label 4 dp under it), the drawer entries pinned to the bottom with 8 dp under them. */
-.sc-rail { width: 96px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; padding-bottom: 32px; }
+
 .sc-rail__header { height: 64px; width: 100%; display: flex; align-items: center; padding-inline-start: 20px; --md-icon-button-icon-color: var(--md-sys-color-on-surface-variant); }
 .sc-rail__items { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%; }
 .sc-rail__footer { margin-top: auto; }
@@ -858,7 +695,7 @@ md-icon-button.ai-favorite {
 
 /* PermanentDrawerSheet, 300 dp: the header (mark at the title's 28 dp line height, title-large name), then
    NavigationDrawerItem rows (56 dp pills, 12 dp side padding, label-large), the entries pinned to the bottom. */
-.sc-pdrawer { width: 300px; flex-shrink: 0; display: flex; flex-direction: column; padding-bottom: 12px; }
+
 .sc-pdrawer__header { display: flex; align-items: center; gap: 12px; padding: 16px 24px; margin-top: 4px; font: 400 22px/28px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface); }
 .sc-pdrawer__header img { width: 28px; height: 28px; }
 .sc-pdrawer__items { display: flex; flex-direction: column; padding-inline: 12px; }
@@ -868,8 +705,7 @@ md-icon-button.ai-favorite {
 .sc-pdrawer__item.is-selected { background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); }
 
 /* ListDetailScene.kt: list 38%, a 24 dp separator with a 4 x 48 dp outline handle, the detail in the rest. */
-.sc-content--panes { overflow: hidden; display: flex; }
-.sc-screen--framed .sc-frame__card > .sc-content--panes { padding-bottom: 0; }
+
 .sc-panes { flex: 1; min-width: 0; min-height: 0; width: 100%; height: 100%; display: flex; }
 .sc-pane { min-width: 0; height: 100%; overflow-y: auto; overflow-x: hidden; position: relative; scrollbar-width: none; }
 .sc-pane--list { flex: 0 0 38%; }
@@ -878,8 +714,6 @@ md-icon-button.ai-favorite {
 .sc-pane-separator > span { width: 4px; height: 48px; border-radius: 2px; background: var(--md-sys-color-outline); }
 
 /* A desktop window (ChromeOS): no status bar and no system navigation. */
-.sc-screen--desktop .sc-content { padding-bottom: 0; }
-
 
 /* Wide feeds (ListingSectionRenderer.kt and ComposedSections.kt): a 16 dp grid of up to three columns. */
 .ai-feed-grid { display: grid; grid-template-columns: repeat(var(--cols, 1), minmax(0, 1fr)); gap: 16px; padding: 16px; align-items: start; }
@@ -909,9 +743,7 @@ md-icon-button.ai-favorite {
 .sc-pane--chat { overflow: hidden; }
 .sc-pane__scroll { flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: none; }
 /* An article beside its list: one 64 dp bar over both panes, the back arrow and section title over the list. */
-.sc-topbar--panes { padding-inline-start: 4px; }
-.sc-topbar__pane { display: flex; align-items: center; gap: 4px; height: 100%; }
-.sc-topbar__pane md-icon-button { --md-icon-button-icon-color: var(--md-sys-color-on-surface); }
+
 .sc-pane--article .ai-article-header-bg > * { width: 100%; max-width: 752px; margin-inline: auto; }
 /* ArticleHeader.kt showHeadline: display-medium from 600 dp of pane, headline-large below. */
 .ai-article-headline { margin: 0; font: 400 32px/40px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-background); }
@@ -920,7 +752,6 @@ md-icon-button.ai-favorite {
 .sc-pane--article .ai-article-prose { max-width: 800px; margin-inline: auto; width: 100%; box-sizing: border-box; }
 /* ArticleContentColumn.kt: the hero up to 1040 dp wide, and no taller than 60% of the window, 16 dp from the sides. */
 .sc-pane--article .ai-article-hero { width: calc(100% - 32px); max-width: min(1008px, var(--sc-hero-max, 1008px)); margin-inline: auto; }
-
 
 /* Composed tabs (ComposedSections.kt): a title-large heading 16 dp above its group, shelves that scroll sideways
    from edge to edge, and the native ad stand-ins (LessonNativeAdCards.kt, NewsNativeAdStory). */
@@ -952,7 +783,6 @@ md-icon-button.ai-favorite {
 .ai-guide-ad--compact .ai-guide-ad__body { -webkit-line-clamp: 3; }
 .ai-guide-ad__chip { padding-top: 12px; }
 
-
 /* ============================================================================
    APP TOOLKIT SCREENS — NUMBERS, QUICK TOOLS, APPS & TOOL BOTTOM SHEET
    Exact 1:1 translation of NumbersScreen.kt, ToolkitTilesScreen.kt,
@@ -962,7 +792,8 @@ md-icon-button.ai-favorite {
    ============================================================================ */
 
 /* Expressive Tool Palettes from ToolkitTileVisuals.kt (Light & Dark) */
-.sc-screen {
+mnw-android-screen,
+.sc-part {
   --tk-gold-container: #e2c900;
   --tk-gold-content: #6b5e00;
   --tk-teal-container: #00a091;
@@ -977,7 +808,8 @@ md-icon-button.ai-favorite {
   --tk-red-content: #b10000;
 }
 
-[data-theme="dark"] .sc-screen {
+[data-theme="dark"] mnw-android-screen,
+[data-theme="dark"] .sc-part {
   --tk-gold-container: #6b5e00;
   --tk-gold-content: #fbe44d;
   --tk-teal-container: #006a60;
@@ -1423,26 +1255,7 @@ md-icon-button.ai-favorite {
 
 /* ToolkitToolBottomSheet Modal (ToolkitToolBottomSheet.kt):
    dragHandle = null, 28dp top corners, surfaceContainerLow, 16dp padding, 16dp gap. */
-.tk-sheet-backdrop {
-  position: absolute;
-  inset: 0;
-  z-index: 20;
-  background: rgba(0, 0, 0, 0.45);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  animation: fadeIn 0.18s ease;
-}
-.tk-sheet-surface {
-  background: var(--md-sys-color-surface-container-low);
-  color: var(--md-sys-color-on-surface);
-  border-radius: 28px 28px 0 0;
-  padding: 16px 16px 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  box-shadow: 0 -12px 36px rgba(0, 0, 0, 0.24);
-}
+
 .tk-sheet-title-row {
   display: flex;
   align-items: center;
@@ -1580,7 +1393,7 @@ md-icon-button.ai-favorite {
 .qt-category-card { box-shadow: none; }
 .qt-tile-item { gap: 12px; }
 .app-tile-card { background: var(--md-sys-color-surface-container); }
-.tk-sheet-surface { gap: 14px; }
+
 .tk-counter-shape { background: color-mix(in srgb, var(--tk-gold-container) 45%, transparent); color: var(--md-sys-color-on-surface); }
 
 /* ===== Concept redesign: Quick Tools tiles, live sensors, Numbers inline controls, tool sheets ===== */
@@ -1656,8 +1469,7 @@ md-icon-button.ai-favorite {
 .tk-protractor__arm { stroke: var(--tk-orange-content); stroke-width: 2.5; stroke-linecap: round; }
 
 /* Tool sheet */
-.tk-sheet-surface { max-height: 92%; overflow-y: auto; scrollbar-width: none; }
-.tk-sheet-handle { width: 32px; height: 4px; border-radius: 2px; background: var(--md-sys-color-on-surface-variant); opacity: .4; margin: -4px auto 0; flex-shrink: 0; }
+
 .tk-tool-interactive--center { align-items: center; text-align: center; }
 .tk-tool-interactive--center > md-slider, .tk-tool-interactive--center > md-filled-button { align-self: stretch; }
 .tk-readout { display: flex; flex-direction: column; gap: 2px; }
@@ -1805,11 +1617,9 @@ md-icon-button.ai-favorite {
 
 /* ToolkitToolBottomSheet.kt: a ModalBottomSheet with no drag handle that opens straight to Expanded. The scrim fades
    in at 32% and the sheet slides up from the bottom edge with the emphasized decelerate curve. */
-.tk-sheet-backdrop { background: rgba(0, 0, 0, 0.32); animation: tk-scrim-in 250ms linear both; }
-.tk-sheet-surface { padding: 16px 16px 40px; gap: 16px; box-shadow: none; animation: tk-sheet-in 400ms cubic-bezier(0.05, 0.7, 0.1, 1) both; }
+
 @keyframes tk-scrim-in { from { opacity: 0; } }
 @keyframes tk-sheet-in { from { transform: translateY(100%); } }
-@media (prefers-reduced-motion: reduce) { .tk-sheet-backdrop, .tk-sheet-surface { animation: none; } }
 
 /* Flash Dimmer (FlashDimmerTool.kt). */
 .tk-flash { display: flex; flex-direction: column; align-items: center; gap: 12px; }
@@ -1981,3 +1791,6 @@ md-icon-button.ai-favorite {
 /* A 10px coin: faces at ±5px with rim discs between them. */
 .chance-coin__face:not(.chance-coin__face--back) { transform:translateZ(5px); }
 .chance-coin__rim { position:absolute; inset:0; border-radius:50%; background:color-mix(in srgb, var(--md-sys-color-primary) 45%, var(--md-sys-color-primary-container)); }
+
+/* ToolkitToolBottomSheet.kt: the header, the tool and the Quick Settings card 16 dp apart, inside the shell's sheet. */
+.tk-sheet-content { display: flex; flex-direction: column; gap: 16px; }
