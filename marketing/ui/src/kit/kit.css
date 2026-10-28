@@ -52,7 +52,6 @@ mnw-android-screen *::after {
 /* Material Web icon buttons are 40px with a 48px touch target; 4px margins give the 48dp slot. */
 
 
-
 .ai-settings-search {
   height: 48px;
   border-radius: 24px;
@@ -885,82 +884,6 @@ mnw-android-screen,
   border-radius: 8px;
 }
 
-/* NumbersHeroBanner (NumbersScreen.kt lines 236-310):
-   28dp rounded surface with colors.container.copy(alpha = 0.16f), zero border. */
-.numbers-hero {
-  position: relative;
-  overflow: hidden;
-  border-radius: 28px;
-  padding: 20px;
-  background: color-mix(in srgb, var(--tk-gold-container) 16%, transparent);
-  color: var(--md-sys-color-on-surface);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-/* 132dp SoftBurst watermark aligned CenterEnd offset (28dp, 18dp) at 12% alpha */
-.numbers-hero-watermark {
-  position: absolute;
-  right: -28px;
-  top: calc(50% - 66px + 18px);
-  width: 132px;
-  height: 132px;
-  background: color-mix(in srgb, var(--tk-gold-container) 12%, transparent);
-  pointer-events: none;
-}
-
-/* Eyebrow pill: 16dp radius, 24% gold container, labelSmall bold gold content */
-.numbers-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  padding: 2px 12px;
-  border-radius: 16px;
-  background: color-mix(in srgb, var(--tk-gold-container) 24%, transparent);
-  color: var(--tk-gold-content);
-  font: 700 11px/16px var(--md-ref-typeface-plain);
-  letter-spacing: 0.5px;
-}
-
-.numbers-hero-title {
-  margin: 8px 0 4px;
-  font: 700 24px/32px var(--md-ref-typeface-plain);
-  color: var(--md-sys-color-on-surface);
-  white-space: pre-line;
-}
-
-.numbers-hero-sub {
-  margin: 0;
-  font: 400 14px/20px var(--md-ref-typeface-plain);
-  letter-spacing: 0.25px;
-  color: var(--md-sys-color-on-surface-variant);
-}
-
-/* 76dp Cookie12Sided trailing hero badge at 28% alpha with 36dp numbers icon */
-.numbers-hero-badge {
-  position: relative;
-  z-index: 1;
-  width: 76px;
-  height: 76px;
-  flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  background: color-mix(in srgb, var(--tk-gold-container) 28%, transparent);
-  color: var(--tk-gold-content);
-}
-
-/* Section Headers (NumbersSectionHeader: titleMedium SemiBold, 4dp start padding) */
-.numbers-section-header {
-  padding: 0 0 0 4px;
-  margin-bottom: -4px;
-}
-.numbers-section-title {
-  font: 600 16px/24px var(--md-ref-typeface-plain);
-  letter-spacing: 0.15px;
-  color: var(--md-sys-color-on-surface);
-}
-
 /* Bento Grouped Corners (NumbersScreen.kt: 28dp outer, 8dp inner seams, 4dp gap) */
 .bento-row-2 {
   display: grid;
@@ -1379,10 +1302,6 @@ mnw-android-screen,
 .tk-meta-chip-set md-assist-chip.tk-chip--added { background: var(--chip-bg); border-radius: 14px; --md-assist-chip-label-text-color: var(--chip-fg); --md-assist-chip-icon-color: var(--chip-fg); }
 .tk-meta-chip-set md-assist-chip.tk-chip--not-added { border-radius: 14px; }
 
-.numbers-hero { padding: 24px 20px; background: linear-gradient(135deg, color-mix(in srgb, var(--tk-gold-container) 26%, var(--md-sys-color-surface-container-low)), color-mix(in srgb, var(--tk-gold-container) 10%, var(--md-sys-color-surface-container-low))); }
-.numbers-hero-title { font-size: 26px; line-height: 32px; letter-spacing: -0.2px; }
-.numbers-hero-badge { background: color-mix(in srgb, var(--tk-gold-container) 55%, transparent); color: #fff; }
-.numbers-hero-badge { color: var(--md-sys-color-on-surface); }
 
 .numbers-card { gap: 14px; justify-content: flex-start; min-height: 168px; }
 .numbers-card > .tk-meta-chip-set { margin-top: auto; }
@@ -1397,21 +1316,9 @@ mnw-android-screen,
 .tk-counter-shape { background: color-mix(in srgb, var(--tk-gold-container) 45%, transparent); color: var(--md-sys-color-on-surface); }
 
 /* ===== Concept redesign: Quick Tools tiles, live sensors, Numbers inline controls, tool sheets ===== */
-.numbers-hero { background: color-mix(in srgb, var(--tk-gold-container) 20%, var(--md-sys-color-surface-container-low)); padding: 24px 20px; display: block; }
-.numbers-hero-title { margin: 0 0 4px; }
-.numbers-section-title { margin: 8px 0 -4px 4px; font: 600 16px/24px var(--md-ref-typeface-plain); letter-spacing: 0.15px; color: var(--md-sys-color-on-surface); }
 
 .numbers-card { min-height: 0; }
 .numbers-card:focus-visible, .qt-tile:focus-visible, .qt-glance__cell:focus-visible { outline: 2px solid var(--md-sys-color-primary); outline-offset: 2px; }
-.nm-head { display: flex; align-items: center; gap: 12px; }
-.nm-head__text { min-width: 0; }
-.numbers-card .nm-head { flex-direction: column; align-items: flex-start; }
-.numbers-card--wide .nm-head { flex-direction: row; align-items: center; }
-.nm-counter-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.nm-counter-value { font: 700 32px/40px "Space Grotesk", var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; color: var(--tk-gold-content); }
-.nm-counter-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
-.nm-result { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 10px 14px; border-radius: 16px; background: var(--md-sys-color-surface-container-highest); font: 500 12px/16px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
-.nm-result strong { font: 700 20px/24px "Space Grotesk", var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; color: var(--md-sys-color-on-surface); }
 .tk-gold-actions { --md-filled-button-container-color: var(--tk-gold-container); --md-filled-button-label-text-color: var(--tk-gold-content); --md-filled-button-icon-color: var(--tk-gold-content); --md-filled-tonal-button-container-color: color-mix(in srgb, var(--tk-gold-container) 28%, var(--md-sys-color-surface-container-highest)); --md-filled-tonal-button-label-text-color: var(--md-sys-color-on-surface); --md-filled-tonal-icon-button-container-color: color-mix(in srgb, var(--tk-gold-container) 28%, var(--md-sys-color-surface-container-highest)); --md-filled-tonal-icon-button-icon-color: var(--md-sys-color-on-surface); --md-text-button-label-text-color: var(--md-sys-color-on-surface-variant); }
 
 /* Quick Tools */
@@ -1813,3 +1720,43 @@ mnw-android-screen,
 .tk-slider__input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; pointer-events: none; }
 .tk-slider:has(.tk-slider__input:nth-of-type(1):focus-visible) .tk-slider__handle[data-i="0"],
 .tk-slider:has(.tk-slider__input:nth-of-type(2):focus-visible) .tk-slider__handle[data-i="1"] { outline: 2px solid var(--md-sys-color-secondary); outline-offset: 2px; }
+
+/* Measure overview: tool readouts share the sheets' state and calculations. */
+.measure-overview { padding-top: 8px; }
+.mw-widget { min-width: 0; gap: 12px; padding: 20px 16px; cursor: default; transition: background-color .15s ease; }
+.mw-widget:active { transform: none; }
+.mw-title { margin: 0; font: 600 16px/22px var(--md-ref-typeface-plain); }
+.mw-open { appearance: none; border: 0; background: none; padding: 0; color: inherit; font: inherit; text-align: inherit; cursor: pointer; }
+.mw-open::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.mw-open:focus-visible { outline: none; }
+.mw-widget:has(.mw-open:focus-visible) { outline: 3px solid var(--md-sys-color-primary); outline-offset: 2px; }
+.mw-visual { height: 104px; display: grid; place-items: center; color: var(--md-sys-color-primary); }
+.mw-visual svg { width: 100%; height: 100%; max-width: 200px; overflow: visible; }
+.mw-visual text { font: 500 12px var(--md-ref-typeface-plain); }
+.mw-detail { display: flex; flex-direction: column; gap: 4px; color: var(--md-sys-color-on-surface-variant); font: 400 12px/18px var(--md-ref-typeface-plain); }
+.mw-detail:empty { display: none; }
+.mw-detail strong { font: 500 28px/34px var(--md-ref-typeface-brand); color: var(--md-sys-color-primary); }
+.mw-widget--convert { background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); }
+.mw-widget--bill { background: var(--md-sys-color-tertiary-container); color: var(--md-sys-color-on-tertiary-container); }
+.mw-widget--convert .mw-detail, .mw-widget--bill .mw-detail { color: inherit; }
+.mw-widget--convert:hover { background: color-mix(in srgb, var(--md-sys-color-on-secondary-container) 5%, var(--md-sys-color-secondary-container)); }
+.mw-widget--bill:hover { background: color-mix(in srgb, var(--md-sys-color-on-tertiary-container) 5%, var(--md-sys-color-tertiary-container)); }
+.mw-conversion { display: flex; flex-direction: column; gap: 6px; margin: auto 0; font: 500 16px/24px var(--md-ref-typeface-plain); }
+.mw-conversion span { overflow-wrap: anywhere; }
+.mw-conversion b { font: 500 26px/32px var(--md-ref-typeface-brand); }
+.mw-conversion md-icon { --md-icon-size: 20px; }
+.mw-share { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; margin: auto 0; }
+.mw-share md-icon { --md-icon-size: 40px; margin-bottom: 8px; }
+.mw-share strong { font: 500 32px/38px var(--md-ref-typeface-brand); overflow-wrap: anywhere; max-width: 100%; }
+.mw-share > span { font: 400 12px/18px var(--md-ref-typeface-plain); }
+.mw-widget--counter { padding: 20px; }
+.mw-count { align-self: center; min-width: 128px; max-width: 100%; padding: 12px 32px; box-sizing: border-box; border-radius: 50%; background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); font: 500 clamp(32px, 5vw, 48px)/1.2 var(--md-ref-typeface-brand); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; text-align: center; }
+.mw-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+.mw-actions > * { position: relative; z-index: 1; }
+.mw-reaction { display: flex; align-items: center; gap: 16px; }
+.mw-reaction > md-icon { --md-icon-size: 40px; color: var(--md-sys-color-primary); }
+.mw-reaction > div { display: flex; flex-direction: column; gap: 4px; }
+.mw-reaction strong { font: 500 32px/40px var(--md-ref-typeface-brand); font-variant-numeric: tabular-nums; }
+.mw-reaction small { font: 500 16px/24px var(--md-ref-typeface-plain); }
+.mw-reaction span { font: 400 12px/18px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
+@media (prefers-reduced-motion: reduce) { .mw-widget { transition: none; } }

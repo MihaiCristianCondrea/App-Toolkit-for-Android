@@ -13,16 +13,21 @@ const decimal = value => {
   return /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(text)?text:null;
 };
 const money=n=>(n/100n).toLocaleString()+'.'+String(n%100n).padStart(2,'0');
+export function billSummary(s) {
+    const bill=String(s.billAmount??''),people=decimal(s.splitPeople??1)??String(s.splitPeople??1),pct=Number(s.tipPercent??15),parsed=decimal(bill);
+    const valid=parsed!==null&&/^\+?(?:\d+(?:\.\d{0,2})?|\.\d{1,2})$/.test(parsed)&&/^\+?\d+$/.test(people)&&BigInt(people)>0n&&BigInt(people)<(1n<<63n);
+    let total,tip,share;
+    if(valid){const parts=parsed.replace('+','').split('.');const cents=BigInt(parts[0]||0)*100n+BigInt((parts[1]??'').padEnd(2,'0'));tip=(cents*BigInt(pct)+50n)/100n;total=cents+tip;share=(total+BigInt(people)-1n)/BigInt(people);}
+    return { bill, people, pct, valid, total, tip, share, perPerson: valid ? money(share) : null };
+}
+
 export function measureBody(tool,s,set) {
   if(tool.id==='counter') {
     const count=Math.max(0,Number(s.counterValue??0));
     return html`<div class="measure-body measure-counter"><div class="measure-counter__value" aria-live="polite">${count}</div><div class="measure-actions"><md-outlined-icon-button aria-label="Decrease" ?disabled=${count===0} @click=${()=>set?.({counterValue:count-1})}><md-icon>remove</md-icon></md-outlined-icon-button><md-filled-button @click=${()=>set?.({counterValue:Math.min(2147483647,count+1)})}><md-icon slot="icon">add</md-icon>Add</md-filled-button>${count?html`<md-outlined-button @click=${()=>set?.({counterValue:0})}><md-icon slot="icon">refresh</md-icon>Reset</md-outlined-button>`:nothing}</div></div>`;
   }
   if(tool.id==='bill_splitter') {
-    const bill=String(s.billAmount??''),people=decimal(s.splitPeople??1)??String(s.splitPeople??1),pct=Number(s.tipPercent??15),parsed=decimal(bill);
-    const valid=parsed!==null&&/^\+?(?:\d+(?:\.\d{0,2})?|\.\d{1,2})$/.test(parsed)&&/^\+?\d+$/.test(people)&&BigInt(people)>0n&&BigInt(people)<(1n<<63n);
-    let total,tip,share;
-    if(valid){const parts=parsed.replace('+','').split('.');const cents=BigInt(parts[0]||0)*100n+BigInt((parts[1]??'').padEnd(2,'0'));tip=(cents*BigInt(pct)+50n)/100n;total=cents+tip;share=(total+BigInt(people)-1n)/BigInt(people);}
+    const { bill, people, pct, valid, total, tip, share } = billSummary(s);
     return html`<div class="measure-body">${field('Bill amount',bill,v=>set?.({billAmount:v}),!valid&&bill!=='')}<h4>Tip</h4>${choice('Tip percentage',[10,15,20].map(v=>[v,v+'%']),pct,v=>set?.({tipPercent:v}))}<div class="measure-people"><md-icon-button aria-label="Remove person" ?disabled=${!/^\d+$/.test(people)||BigInt(people)<=1n} @click=${()=>set?.({splitPeople:String(BigInt(people)-1n)})}><md-icon>remove</md-icon></md-icon-button>${field('People',people,v=>set?.({splitPeople:v}),!valid)}<md-icon-button aria-label="Add person" ?disabled=${!/^\d+$/.test(people)||BigInt(people)<1n||BigInt(people)>=(1n<<63n)-1n} @click=${()=>set?.({splitPeople:String(BigInt(people)+1n)})}><md-icon>add</md-icon></md-icon-button></div>${!valid&&bill?html`<p class="chance-error" role="alert">Enter a non-negative bill with up to 2 decimal places and at least one person.</p>`:nothing}${valid?html`<div class="measure-bill" aria-live="polite"><span>Per person</span><strong>${money(share)}</strong><div class="measure-summary"><span>Total<b>${money(total)}</b></span><span>Tip<b>${money(tip)}</b></span></div><p><md-icon>info</md-icon>Shares round up to 2 decimal places.</p></div>`:nothing}</div>`;
   }
   if(tool.id==='unit_converter')return converter(s,set);
@@ -69,11 +74,16 @@ function convert(input,from,to) {
   if(from.category==='Temperature'&&base[0]<0n)return null;
   return format(to.id==='Fahrenheit'?add(div(mul(add(base,neg(rational('273.15'))),[9n,1n]),[5n,1n]),[32n,1n]):div(add(base,neg(rational(to.offset))),rational(to.factor)));
 }
-function converter(s,set) {
+export function conversionSummary(s) {
   const category=s.converterCategory??'Length',units=UNITS.filter(u=>u.category===category);
   const from=units.find(u=>u.id===s.converterFrom)??units.find(u=>u.id===(category==='Length'?'Metre':''))??units[0];
   const to=units.find(u=>u.id===s.converterTo)??units.find(u=>u.id===(category==='Length'?'Centimetre':''))??units[1];
   const editingLeft=s.converterEditingLeft!==false,input=String(s.converterInput??1),output=convert(input,editingLeft?from:to,editingLeft?to:from),invalid=input.trim()!==''&&output===null;
+  return { category, units, from, to, editingLeft, input, output, invalid, inputUnit: (editingLeft ? from : to).symbol, outputUnit: (editingLeft ? to : from).symbol };
+}
+
+function converter(s,set) {
+  const { category, units, from, to, editingLeft, input, output, invalid } = conversionSummary(s);
   return html`<div class="measure-body"><div class="measure-categories"><md-chip-set aria-label="Unit category">${['Length','Mass','Temperature','Volume','Data'].map(c=>html`<md-filter-chip label=${c} ?selected=${category===c} @click=${()=>{const us=UNITS.filter(u=>u.category===c);set?.({converterCategory:c,converterFrom:us[0].id,converterTo:us[1].id,converterInput:'1',converterEditingLeft:true});}}></md-filter-chip>`)}</md-chip-set></div>${[[true,'From',from],[false,'To',to]].map(([left,label,unit])=>html`<div class="measure-conversion-row">${field(label,left===editingLeft?input:output??'',v=>set?.({converterInput:v,converterEditingLeft:left}),invalid&&left===editingLeft)}<div class="measure-unit-picker"><md-filled-tonal-button aria-label="${label} unit" @click=${e=>{const menu=e.currentTarget.nextElementSibling;menu.anchorElement=e.currentTarget;menu.show();}}>${unit.symbol}</md-filled-tonal-button><md-menu positioning="absolute">${units.map(u=>html`<md-menu-item @click=${()=>set?.({[left?'converterFrom':'converterTo']:u.id})}><div slot="headline">${u.symbol}</div></md-menu-item>`)}</md-menu></div></div>`)}${invalid?html`<p class="chance-error" role="alert">Enter a valid value.</p>`:nothing}${category==='Data'?html`<p>Data units use decimal multiples (1 kB = 1000 B).</p>`:nothing}</div>`;
 }
 const rounds=new WeakMap();

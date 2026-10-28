@@ -1,6 +1,7 @@
-import { html, nothing } from "lit";
+import { html, svg, nothing } from "lit";
 import { previewScreen } from "material-next-web-components/marketing.js";
-import { toolOverlay, shapeBadge, toolMetaChips } from "../kit/components.js";
+import { toolOverlay } from "../kit/components.js";
+import { billSummary, conversionSummary } from "../kit/measure.js";
 import { APP } from "../config/identity.js";
 
 /**
@@ -8,12 +9,12 @@ import { APP } from "../config/identity.js";
  * timing. Visuals follow ToolkitTileVisuals.kt.
  */
 const TOOLS = {
-  ruler: { id: "ruler", title: "Surface Ruler", subtitle: "Measure small objects on screen", icon: "square_foot", shape: "cookie_12sided", palette: "gold", kindLabel: "Expanded tool", supportsTile: false },
-  protractor: { id: "protractor", title: "Protractor", subtitle: "Measure an angle", icon: "architecture", shape: "cookie_9sided", palette: "gold", kindLabel: "Expanded tool", supportsTile: false },
-  bill_splitter: { id: "bill_splitter", title: "Tip & Bill Splitter", subtitle: "Calculate tip and each person's share", icon: "calculate", shape: "soft_burst", palette: "gold", kindLabel: "Expanded tool", supportsTile: false },
-  unit_converter: { id: "unit_converter", title: "Unit Converter", subtitle: "Length, weight, temperature, volume and data", icon: "straighten", shape: "cookie_9sided", palette: "gold", kindLabel: "Expanded tool", supportsTile: false },
-  counter: { id: "counter", title: "Counter", subtitle: "Tap to add to a running count", icon: "dehaze", shape: "flower", palette: "gold", kindLabel: "Quick tool", supportsTile: true },
-  reaction_test: { id: "reaction_test", title: "Reaction Test", subtitle: "Test your reflexes with random delays", icon: "timer", shape: "cookie_9sided", palette: "gold", kindLabel: "Expanded tool", supportsTile: false },
+  ruler: { id: "ruler", title: "Surface Ruler", subtitle: "Measure small objects on screen", icon: "square_foot", shape: "cookie_12sided", palette: "gold", supportsTile: false },
+  protractor: { id: "protractor", title: "Protractor", subtitle: "Measure an angle", icon: "architecture", shape: "cookie_9sided", palette: "gold", supportsTile: false },
+  bill_splitter: { id: "bill_splitter", title: "Tip & Bill Splitter", subtitle: "Calculate tip and each person's share", icon: "calculate", shape: "soft_burst", palette: "gold", supportsTile: false },
+  unit_converter: { id: "unit_converter", title: "Unit Converter", subtitle: "Length, weight, temperature, volume and data", icon: "straighten", shape: "cookie_9sided", palette: "gold", supportsTile: false },
+  counter: { id: "counter", title: "Counter", subtitle: "Tap to add to a running count", icon: "dehaze", shape: "flower", palette: "gold", supportsTile: true },
+  reaction_test: { id: "reaction_test", title: "Reaction Test", subtitle: "Test your reflexes with random delays", icon: "timer", shape: "cookie_9sided", palette: "gold", supportsTile: false },
 };
 
 export default {
@@ -64,59 +65,68 @@ export default {
   ],
   render(s) {
     const open = (id) => s.set?.({ activeSheet: id });
-    const swallow = (e) => e.stopPropagation();
-
-    const card = (id, cls, body) => html`
-      <div class="numbers-card ${cls}" role="button" tabindex="0" @click=${() => open(id)}
-        @keydown=${(e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), open(id))}>${body}</div>`;
-    const head = (t) => html`
-      <div class="nm-head">${shapeBadge({ shape: t.shape, icon: t.icon, palette: t.palette, size: 64, iconSize: 32 })}
-        <div class="nm-head__text"><h3 class="numbers-card-title">${t.title}</h3><p class="numbers-card-sub">${t.subtitle}</p></div></div>`;
-    const chips = (t) => toolMetaChips({ kindLabel: t.kindLabel, supportsTile: t.supportsTile, tileAdded: Boolean(s.addedTiles?.[t.id]), palette: t.palette });
-    const result = (label, value) => html`<div class="nm-result"><span>${label}</span><strong>${value}</strong></div>`;
+    const count = Math.max(0, Math.min(2147483647, Number(s.counterValue ?? 0)));
+    const bill = billSummary(s);
+    const conversion = conversionSummary(s);
+    const angle = Math.max(0, Math.min(180, Number(s.protractorAngle ?? 45)));
+    const armX = 90 + 65 * Math.cos(angle * Math.PI / 180);
+    const armY = 90 - 65 * Math.sin(angle * Math.PI / 180);
+    const sectionTitle = (icon, title) => html`<h2 class="qt-section__title"><md-icon class="sc-rounded" aria-hidden="true">${icon}</md-icon>${title}</h2>`;
+    const widget = (id, extra, visual, detail, actions = nothing) => {
+      const tool = TOOLS[id];
+      return html`<article class="numbers-card mw-widget ${extra}" data-tool=${id}>
+        <h3 class="mw-title"><button class="mw-open" type="button" @click=${() => open(id)}>${tool.title}</button></h3>
+        ${visual}
+        <div class="mw-detail">${detail}</div>
+        ${actions}
+      </article>`;
+    };
 
     const content = html`
-      <div class="tk-screen-pad">
-        <section class="numbers-hero">
-          <h1 class="numbers-hero-title">Measure, split &amp; count</h1>
-          <p class="numbers-hero-sub">Simple tools for everyday tasks.</p>
+      <div class="tk-screen-pad measure-overview">
+        <section class="qt-section">
+          ${sectionTitle("square_foot", "Length & angle")}
+          <div class="bento-row-2">
+            ${widget("ruler", "corner-bento-left", html`
+              <div class="mw-visual mw-ruler" aria-hidden="true">
+                <svg viewBox="0 0 180 104"><rect x="10" y="18" width="160" height="68" rx="12" fill="currentColor" opacity=".12"/>
+                  ${Array.from({length: 21}, (_, i) => svg`<line x1=${20 + i * 7} x2=${20 + i * 7} y1="18" y2=${i % 5 ? 30 : 42} stroke="currentColor" stroke-width=${i % 5 ? 1 : 2}/>${i % 5 ? nothing : svg`<text x=${20 + i * 7} y="65" text-anchor="middle" fill="currentColor">${i / 5}</text>`}`)}
+                </svg>
+              </div>`, html`<strong>mm / in</strong><span>Calibrate to your screen</span>`)}
+            ${widget("protractor", "corner-bento-right", html`
+              <div class="mw-visual" aria-hidden="true"><svg viewBox="0 0 180 104">
+                <path d="M20 90 A70 70 0 0 1 160 90 Z" fill="currentColor" opacity=".12"/>
+                ${Array.from({length: 19}, (_, i) => { const r = i * Math.PI / 18; return svg`<line x1=${90 + 70 * Math.cos(r)} y1=${90 - 70 * Math.sin(r)} x2=${90 + (i % 3 ? 63 : 57) * Math.cos(r)} y2=${90 - (i % 3 ? 63 : 57) * Math.sin(r)} stroke="currentColor"/>`; })}
+                <path d="M155 90H90L${armX} ${armY}" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><circle cx="90" cy="90" r="4" fill="currentColor"/>
+              </svg></div>`, html`<strong>${angle}°</strong><span>Find the right angle</span>`)}
+          </div>
         </section>
-
-        <h2 class="numbers-section-title">Length &amp; angle</h2>
-        <div class="bento-row-2">
-          ${card("ruler", "corner-bento-left", html`${head(TOOLS.ruler)}${result("Length", s.rulerUnit === "in" ? "5.91 in" : "150 mm")}`)}
-          ${card("protractor", "corner-bento-right", html`${head(TOOLS.protractor)}${result("Angle", `${s.protractorAngle}°`)}`)}
-        </div>
-
-        <h2 class="numbers-section-title">Convert &amp; split</h2>
-        <div class="bento-row-2">
-          ${card("unit_converter", "corner-bento-left", html`${head(TOOLS.unit_converter)}${chips(TOOLS.unit_converter)}`)}
-          ${card("bill_splitter", "corner-bento-right", html`${head(TOOLS.bill_splitter)}${chips(TOOLS.bill_splitter)}`)}
-        </div>
-
-        <h2 class="numbers-section-title">Count &amp; time</h2>
-        <div class="bento-stack">
-          ${card("counter", "corner-bento-top numbers-card--wide", html`
-            <div class="nm-counter-top">
-              ${head(TOOLS.counter)}
-              <span class="nm-counter-value" aria-label="Current count">${s.counterValue}</span>
-            </div>
-            <div class="nm-counter-actions tk-gold-actions">
-              <md-text-button @click=${(e) => { swallow(e); s.set?.({ counterValue: 0 }); }}>Reset</md-text-button>
-              <md-filled-tonal-icon-button aria-label="Subtract" @click=${(e) => { swallow(e); s.set?.({ counterValue: Math.max(0, s.counterValue - 1) }); }}><md-icon>remove</md-icon></md-filled-tonal-icon-button>
-              <md-filled-button @click=${(e) => { swallow(e); s.set?.({ counterValue: s.counterValue + s.counterStep }); }}><md-icon slot="icon">add</md-icon>Add</md-filled-button>
-            </div>
-            ${chips(TOOLS.counter)}`)}
-          ${card("reaction_test", "corner-bento-bottom numbers-card--wide", html`
-            <div class="nm-counter-top">
-              ${head(TOOLS.reaction_test)}
-              <span class="nm-counter-value nm-counter-value--small" aria-label="Best time">${s.reactionBest ? `${s.reactionBest} ms` : "None"}</span>
-            </div>
-            <div class="nm-counter-actions tk-gold-actions">
-              <md-filled-tonal-button @click=${(e) => { swallow(e); s.set?.({ activeSheet: "reaction_test", reactionPhase: "idle" }); }}><md-icon slot="icon">play_arrow</md-icon>Start</md-filled-tonal-button>
-            </div>`)}
-        </div>
-
+        <section class="qt-section">
+          ${sectionTitle("swap_horiz", "Convert & split")}
+          <div class="bento-row-2">
+            ${widget("unit_converter", "corner-bento-left mw-widget--convert", html`
+              <div class="mw-conversion"><span><b>${conversion.input}</b> ${conversion.inputUnit}</span><md-icon aria-hidden="true">swap_vert</md-icon><span><b>${conversion.output ?? "—"}</b> ${conversion.outputUnit}</span></div>
+              `, html`<span>${conversion.category}</span>`)}
+            ${widget("bill_splitter", "corner-bento-right mw-widget--bill", html`
+              <div class="mw-share"><md-icon class="sc-rounded" aria-hidden="true">group</md-icon><strong>${bill.valid ? bill.perPerson : "—"}</strong><span>per person</span></div>
+              `, html`<span>${s.tipPercent}% tip · ${s.splitPeople} ${Number(s.splitPeople) === 1 ? "person" : "people"}</span>`)}
+          </div>
+        </section>
+        <section class="qt-section">
+          ${sectionTitle("timer", "Count & time")}
+          <div class="bento-stack">
+            ${widget("counter", "corner-bento-top mw-widget--counter", html`
+              <div class="mw-count" aria-live="polite" aria-label="Current count">${count}</div>
+              `, nothing, html`<div class="mw-actions">
+                <md-text-button ?disabled=${count === 0} @click=${() => s.set?.({counterValue: 0})}>Reset</md-text-button>
+                <md-outlined-icon-button aria-label="Subtract" ?disabled=${count === 0} @click=${() => s.set?.({counterValue: count - 1})}><md-icon>remove</md-icon></md-outlined-icon-button>
+                <md-filled-button ?disabled=${count === 2147483647} @click=${() => s.set?.({counterValue: count + 1})}><md-icon slot="icon">add</md-icon>Add</md-filled-button>
+              </div>`)}
+            ${widget("reaction_test", "corner-bento-bottom mw-widget--reaction", html`
+              <div class="mw-reaction"><md-icon class="sc-rounded" aria-hidden="true">bolt</md-icon><div><strong>${s.reactionBest ? html`${s.reactionBest}<small> ms</small>` : "Ready?"}</strong><span>${s.reactionBest ? "Personal best" : "Test your reflexes"}</span></div></div>
+              `, nothing, html`<div class="mw-actions"><md-filled-tonal-button @click=${() => s.set?.({activeSheet: "reaction_test", reactionPhase: "idle"})}><md-icon slot="icon">play_arrow</md-icon>Start</md-filled-tonal-button></div>`)}
+          </div>
+        </section>
       </div>`;
 
     return previewScreen(APP, s, {

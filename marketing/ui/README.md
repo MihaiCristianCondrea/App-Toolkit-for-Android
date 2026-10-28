@@ -90,7 +90,7 @@ checks the web migration; Android screenshot parity remains a separate campaign 
 ## Translated Screens (`src/screens/`)
 
 * `quick-tools.js` - `ToolkitTilesScreen.kt` (collapsible Quick Settings tile categories and pocket tools, including Chance: Random Number, Dice Roll and Coin Flip).
-* `numbers.js` - `NumbersScreen.kt` (warm-gold hero banner, grouped bento corners with 28dp outer and 8dp inner seams, clickable Counter feature card, and interactive `ToolkitToolBottomSheet` modals for Counter, Tip & Bill Splitter, Unit Converter).
+* `numbers.js` - Measure: icon-led sections, ruler and protractor previews, live conversion and per-person bill readouts, Counter controls and Reaction Test. Grouped cards keep 28dp outer and 8dp inner corners; each opens its existing Compose-style tool surface.
 * `apps.js` - `AppsListScreen.kt` (developer app catalog with category filter chips and favorites).
 
 ## Opening the hub

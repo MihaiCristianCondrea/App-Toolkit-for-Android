@@ -138,6 +138,32 @@ try {
   await page.locator('.numbers-card').first().waitFor();
   assert.equal(await page.locator('h2').filter({hasText:'Chance'}).count(), 0);
   checks++;
+  // Overview actions do not open a sheet, and its summaries follow edits made in the tools.
+  for (const window of ['phone', 'fold', 'desktop']) {
+    await page.goto(`${base}/screen.html?id=numbers&window=${window}&panel=none&state=${encodeURIComponent(JSON.stringify({counterValue: 0}))}`);
+    const counter = page.locator('[data-tool="counter"]');
+    await counter.locator('md-filled-button').click();
+    assert.equal((await counter.locator('.mw-count').innerText()).trim(), '1');
+    assert.equal(await page.locator('[role="dialog"]').count(), 0);
+    await counter.locator('[aria-label="Subtract"]').click();
+    assert.equal((await counter.locator('.mw-count').innerText()).trim(), '0');
+    assert.equal(await counter.locator('[aria-label="Subtract"]').evaluate(el => el.disabled), true);
+    await counter.locator('.mw-open').focus();
+    await page.keyboard.press('Enter');
+    await page.locator('.measure-counter__value').waitFor();
+    await page.locator('.measure-actions md-filled-button').click();
+    await page.locator(SHEET_CONTENT).locator('[aria-label="Close"]').click();
+    assert.equal((await counter.locator('.mw-count').innerText()).trim(), '1');
+    await page.locator('[data-tool="unit_converter"] .mw-open').click();
+    await page.locator('.measure-conversion-row md-outlined-text-field').first().locator('input').fill('2');
+    await page.locator(SHEET_CONTENT).locator('[aria-label="Close"]').click();
+    assert.match(await page.locator('.mw-conversion').innerText(), /2\s*m[\s\S]*200\s*cm/);
+    await page.locator('[data-tool="bill_splitter"] .mw-open').click();
+    await page.locator('md-outlined-text-field[label="Bill amount"]').locator('input').fill('200');
+    await page.locator(SHEET_CONTENT).locator('[aria-label="Close"]').click();
+    assert.equal((await page.locator('.mw-share strong').innerText()).trim(), '57.50');
+    checks++;
+  }
   // Compose Measure presentations at every supported window and theme.
   for(const window of ['phone','fold','desktop']) for(const theme of ['light','dark']) {
     for(const activeSheet of ['ruler','protractor','counter','bill_splitter','unit_converter','reaction_test']) {
