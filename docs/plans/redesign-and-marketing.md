@@ -1,6 +1,6 @@
 # Plan: App Toolkit redesign and marketing reorganization
 
-Status: plan, October 28, 2026. Phase 1 (the marketing reorganization) is done; the rest is not started. It builds on
+Status: plan, October 28, 2026. Phases 1 and 4 are done; Phase 2 has started on the web side ([`redesign/`](redesign/README.md)). It builds on
 [`quick_tools.md`](quick_tools.md) (the tool redistribution that is already under way) and does not
 replace it.
 
@@ -144,7 +144,10 @@ When the last screen's concept is approved, delete `marketing/assets/ideas/`: it
 every listed language, and the campaign README records its QA (contact sheet checked for clipped
 text, missing fonts and UI drift).
 
-## Phase 4: update the shared skills
+## Phase 4: update the shared skills: done
+
+Done on October 28, 2026 in android-skills `9b4783f`, copied to Android Insider, App Toolkit and Smart Cleaner.
+
 
 In android-skills first, then copied to every repository that carries them:
 

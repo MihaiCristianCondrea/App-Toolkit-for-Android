@@ -14,12 +14,16 @@ const TOOLS = {
   protractor: { id: "protractor", title: "Protractor", subtitle: "Measure an angle", icon: "architecture", shape: "arch", palette: "orange", kindLabel: "Expanded tool", supportsTile: false },
   flash_dimmer: { id: "flash_dimmer", title: "Flash Dimmer", subtitle: "Set the torch brightness", icon: "flashlight_on", shape: "burst", palette: "gold", kindLabel: "Quick tool", supportsTile: true },
   morse_sos: { id: "morse_sos", title: "Morse & SOS", subtitle: "Send a message with the torch", icon: "emergency", shape: "cookie_7sided", palette: "magenta", kindLabel: "Quick tool", supportsTile: true },
+  screen_light: { id: "screen_light", title: "Screen Light", subtitle: "Use your screen as a soft light", icon: "light_mode", shape: "flower", palette: "gold", kindLabel: "Expanded tool", supportsTile: false },
   breathing_box: { id: "breathing_box", title: "Box Breathing", subtitle: "Follow a steady 4-4-4-4 rhythm", icon: "air", shape: "flower", palette: "amber", kindLabel: "Quick tool", supportsTile: false },
 };
 
+// A tool that ends a section on its own spans both columns.
+const WIDE = new Set(["breathing_box", "screen_light"]);
+
 const SECTIONS = [
   { id: "sensors", title: "Measure", filter: "Sensors & measurement", tools: ["ruler", "protractor"], glance: true },
-  { id: "system", title: "Light & signals", filter: "Light & signals", tools: ["flash_dimmer", "morse_sos"] },
+  { id: "system", title: "Light & signals", filter: "Light & signals", tools: ["flash_dimmer", "morse_sos", "screen_light"] },
   { id: "wellbeing", title: "Calm", filter: "Wellbeing", tools: ["breathing_box"] },
 ];
 
@@ -46,6 +50,8 @@ export default {
     compassHeading: 312,
     levelRoll: 0.4,
     levelPitch: -0.2,
+    screenBrightness: 0.8,
+    screenWarmth: 0.3,
     addedTiles: { compass: true, flash_dimmer: false },
   },
   controls: [
@@ -60,6 +66,7 @@ export default {
         ["Flash dimmer sheet", { activeToolId: "flash_dimmer" }],
         ["Box breathing sheet", { activeToolId: "breathing_box", breathRunning: true }],
         ["Morse & SOS sheet", { activeToolId: "morse_sos" }],
+        ["Screen light sheet", { activeToolId: "screen_light" }],
       ],
     },
     { key: "selectedCategory", label: "Filter", type: "choice", options: ["all", "sensors", "system", "wellbeing"] },
@@ -76,6 +83,7 @@ export default {
       protractor: `${s.protractorAngle}°`,
       flash_dimmer: s.flashOn ? `On · level ${s.flashLevel}` : "Off",
       morse_sos: s.sosActive ? "SOS sending" : "Ready",
+      screen_light: `${Math.round(s.screenBrightness * 100)}% · ${s.screenWarmth >= 0.5 ? "Warm" : "Neutral"}`,
       breathing_box: s.breathRunning ? "Running" : "4 · 4 · 4 · 4",
     })[id];
 
@@ -88,7 +96,7 @@ export default {
     const tile = (id) => {
       const t = TOOLS[id];
       return html`
-        <div class="qt-tile ${id === "breathing_box" ? "qt-tile--wide" : ""}" data-accent=${t.palette} role="button" tabindex="0"
+        <div class="qt-tile ${WIDE.has(id) ? "qt-tile--wide" : ""}" data-accent=${t.palette} role="button" tabindex="0"
           @click=${() => open(id)} @keydown=${(e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), open(id))}>
           <div class="qt-tile__top">${shapeBadge({ shape: t.shape, icon: t.icon, palette: t.palette, size: 64, iconSize: 32 })}${control(id)}</div>
           <div class="qt-tile__text"><h3 class="qt-tile__title">${t.title}</h3><p class="qt-tile__status">${status(id)}</p></div>

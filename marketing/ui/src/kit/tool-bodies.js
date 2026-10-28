@@ -189,6 +189,65 @@ export function extraToolBody(tool, state, onState) {
         </div>`;
     }
 
+    case "screen_light": {
+      // ScreenLightTool.kt: the light is white blended toward #FFB56B by warmth.
+      const brightness = Number(state.screenBrightness ?? 0.8);
+      const warmth = Number(state.screenWarmth ?? 0.3);
+      const mix = (from, to) => Math.round(from + (to - from) * warmth);
+      const light = `rgb(${mix(255, 255)} ${mix(255, 181)} ${mix(255, 107)})`;
+      return html`
+        <div class="tk-tool-interactive">
+          <div class="tk-screen-light" style="background:${light}" role="img" aria-label="Screen light preview"></div>
+          <div class="tk-field">
+            <span class="tk-field__label">Brightness</span>
+            <md-slider min="1" max="100" .value=${Math.round(brightness * 100)} labeled aria-label="Brightness" @input=${(e) => onState({ screenBrightness: Number(e.target.value) / 100 })}></md-slider>
+          </div>
+          <div class="tk-field">
+            <span class="tk-field__label">Warmth</span>
+            <md-slider min="0" max="100" .value=${Math.round(warmth * 100)} labeled aria-label="Warmth" @input=${(e) => onState({ screenWarmth: Number(e.target.value) / 100 })}></md-slider>
+          </div>
+          <p class="body-small tk-muted" style="margin:0">Fills the screen and keeps it on while open. Your brightness comes back when you close it.</p>
+        </div>`;
+    }
+
+    case "coin_flip": {
+      const heads = (state.coinSide ?? "Heads") === "Heads";
+      return html`
+        <div class="tk-tool-interactive tk-tool-interactive--center">
+          <div class="tk-coin ${heads ? "" : "tk-coin--tails"}" role="img" aria-label=${heads ? "Heads" : "Tails"}>
+            <md-icon>${heads ? "person" : "token"}</md-icon>
+          </div>
+          <div class="tk-readout"><span class="tk-readout__value">${heads ? "Heads" : "Tails"}</span></div>
+          <md-filled-button @click=${() => onState({ coinSide: Math.random() < 0.5 ? "Heads" : "Tails" })}><md-icon slot="icon">play_arrow</md-icon>Flip coin</md-filled-button>
+        </div>`;
+    }
+
+    case "reaction_test": {
+      // ReactionTestTool.kt: one pad whose colour and prompt follow the phase.
+      const phase = state.reactionPhase ?? "idle";
+      const last = Number(state.reactionLast ?? 231);
+      const rating = last < 200 ? "Lightning ⚡" : last <= 250 ? "Fast 🚀" : last <= 350 ? "Average 👍" : "Relaxed ☕";
+      const prompt = {
+        idle: html`<span class="t-title-medium">Tap Start when ready</span>`,
+        waiting: html`<span class="t-title-large" style="font-weight:700">Wait for green…</span>`,
+        signal: html`<span class="t-headline-medium" style="font-weight:800">TAP NOW!</span>`,
+        early: html`<span class="t-headline-small" style="font-weight:700">Too early!</span>`,
+        result: html`<span class="t-headline-large" style="font-weight:700">${last} ms</span><span class="tk-reaction__rating">${rating}</span>`,
+      }[phase];
+      const running = phase === "waiting" || phase === "signal";
+      const next = { waiting: "signal", signal: "result" }[phase];
+      return html`
+        <div class="tk-tool-interactive">
+          <div class="tk-reaction tk-reaction--${phase}" role="button" tabindex="0" aria-live="polite"
+            @click=${() => next && onState({ reactionPhase: next })}>${prompt}</div>
+          <div class="tk-action-row">
+            <md-filled-button ?disabled=${running} @click=${() => onState({ reactionPhase: "waiting" })}><md-icon slot="icon">play_arrow</md-icon>${phase === "idle" ? "Start" : running ? "In progress…" : "Try again"}</md-filled-button>
+            ${state.reactionBest ? html`<md-outlined-button @click=${() => onState({ reactionPhase: "idle", reactionBest: 0, reactionAverage: 0 })}><md-icon slot="icon">refresh</md-icon>Reset</md-outlined-button>` : nothing}
+          </div>
+          ${state.reactionBest ? html`<div class="tk-stat-grid">${stat("Best", `${state.reactionBest} ms`)} ${stat("Average", `${state.reactionAverage} ms`)}</div>` : nothing}
+        </div>`;
+    }
+
     default:
       return null;
   }
