@@ -1,6 +1,6 @@
 # Plan: App Toolkit redesign and marketing reorganization
 
-Status: plan, October 28, 2026. Nothing below is implemented yet. It builds on
+Status: plan, October 28, 2026. Phase 1 (the marketing reorganization) is done; the rest is not started. It builds on
 [`quick_tools.md`](quick_tools.md) (the tool redistribution that is already under way) and does not
 replace it.
 
@@ -31,10 +31,9 @@ Each phase below has a "done when" line. A phase starts only when the one it dep
 | Library | `3.0.0-pre30` with breaking API changes (`AospPageIndicator`, `TelemetryOnboardingPage`, `ScreenHost` layout). Open crash reports in `docs/crashes/open/`. |
 | Testing | Manual, by the owner, on devices. GitHub Actions minutes are too limited for these builds, so the plan adds no CI. |
 | Marketing UI | `marketing/ui` on Material Next 0.0.7: one-page hub (gallery and prototype), no drawer or footer, 38 browser checks. Screens: Quick Tools, Numbers, Apps. |
-| Store listing | `sample/app/src/main/play/` (en-US only): 4 phone and 4 tablet screenshots (welcome, apps, onboarding theme, privacy), two feature graphics, icon. No source; nothing in Gradle reads this folder (no Play publisher plugin); `sample/README.md` links its images. |
-| Campaigns | None. No `creative/`, no templates. |
-| Research | `marketing/analytics/` (6 GA CSV exports) and `marketing/assets/ideas/` (one PNG and four Stitch ZIPs, 2.2 MB) sit beside the brand assets. |
-| README metadata | `marketing/README.md` keeps project metadata in an HTML comment; Insider and the `metadata` skill use a JSON block. |
+| Store listing | Before Phase 1: `sample/app/src/main/play/` (en-US only): 4 phone and 4 tablet screenshots (welcome, apps, onboarding theme, privacy), two feature graphics, icon. No source; nothing in Gradle read this folder. Now in `marketing/creative/store/google-play/`. |
+| Campaigns | None. `creative/social-campaigns/completed/` and `creative/templates/ui-motion-starter` are ready for the first one. |
+| Research | `marketing/research/analytics/` (6 GA CSV exports). `marketing/assets/ideas/` (one PNG and four Stitch ZIPs, 2.2 MB) stays until Phase 2 has used it. |
 
 Android Insider (`marketing/creative/{store,lessons,news,social-campaigns}`) is the reference layout.
 Smart Cleaner already follows it (`creative/social-campaigns`, `creative/templates`). The skills in
@@ -57,18 +56,16 @@ marketing/
 │   │   └── google-play/    contact files, default-language.txt, scripts/validate.mjs
 │   │       └── listings/
 │   │           ├── default/          source/ (renders visuals) and listing/<locale>/ (uploaded)
-│   │           ├── retired-2025/     today's screenshots and graphics, kept as a record
-│   │           └── custom/<id>/      custom store listings, text only (later)
+│   │           ├── default-legacy/   today's sourceless visuals, once new ones replace them (Phase 3)
+│   │           └── custom/<tool>/    one custom store listing per tool (later, after Phase 3)
 │   ├── social-campaigns/   <campaign-slug>/ in progress, completed/ when published
-│   ├── templates/          ui-motion-starter (from Smart Cleaner): Remotion over the UI kit
-│   └── tools/              optional, later: one explainer per tool, as Insider's lessons/
-├── scripts/                render launcher for campaigns (as Insider's render.cmd/.ps1)
+│   └── templates/          ui-motion-starter (from Smart Cleaner): Remotion over the UI kit
+├── scripts/                render launcher for campaigns (as Insider's render.cmd/.ps1), with the first campaign
 └── skills/                 copies from android-skills
 ```
 
-`creative/tools/` is App Toolkit's counterpart to Insider's `lessons/`: short explainers ("Add the
-Ruler to Quick Settings") that can become posts or store custom listings. Create it only when the
-first explainer is written; empty folders are not added.
+There is no counterpart to Insider's `lessons/`: App Toolkit gets no per-tool explainers. Each tool
+gets its own custom store listing instead, once the default listing is redone.
 
 ## Phase 0: stable bases
 
@@ -78,33 +75,29 @@ first explainer is written; empty folders are not added.
 | Decide every report in `docs/crashes/open/`: fixed, won't fix (with reason) or blocking the release | `open/` is empty or each remaining file says why it stays |
 | Close the cross-repo gaps already known: Cleaner's Windows screenshot paths, Profile's Jest/`deepmerge` advisory, deployed consumers checked on 0.0.7 | Each repository's full check passes |
 
-## Phase 1: reorganize marketing (no new content)
+## Phase 1: reorganize marketing (no new content): done
 
-A move, not a redesign: every file that exists today keeps working at its new path.
+Done on October 28, 2026. A move, not a redesign: every file that existed keeps working at its new path.
 
-1. **Store listing.** Create `creative/store/google-play/` with the default listing in Insider's
-   shape. Move `sample/app/src/main/play/listings/en-US/*.txt` to
-   `listings/default/listing/en-US/`, the contact and language files to the folder root, and copy
-   Insider's `scripts/validate.mjs`. Today's screenshots and feature graphics have no source, so
-   they go to `listings/retired-2025/` (with `listing.json` and a README saying what they show and
-   when they were uploaded) before anything replaces them. Update the image links in
-   `sample/README.md`, then delete `sample/app/src/main/play/`. Run `validate.mjs`.
-2. **Research.** Move `analytics/` to `research/analytics/` with a README giving its source and
-   date. The GA exports are reported context, like Smart Cleaner's redesign plan treats them, not
-   proof of what to build. `assets/ideas/` (the Stitch exports and concept PNG) is redesign input
-   only: it stays where it is until Phase 2 has used it, then it is deleted, ZIPs and images
-   alike.
-3. **Campaign scaffolding.** Create `creative/social-campaigns/completed/README.md` (the only file
-   in `completed/` until something is published) and copy Smart Cleaner's
-   `creative/templates/ui-motion-starter/`, pointed at App Toolkit's UI kit.
-4. **README and STARTUP.** Rewrite `marketing/README.md` as Insider's: layout table, campaign table,
-   preview and render commands, product fidelity rules, and the project metadata as a JSON block
-   (convert the HTML comment). Update the paths in `STARTUP.md`. Add `scripts/render.cmd` and
-   `render.ps1` once the first campaign exists.
-
-**Done when:** the tree matches the target layout, `validate.mjs` passes, `sample/README.md` shows
-its images, `marketing/ui` still passes its browser checks, and no file was lost (compare
-`git ls-files` before and after, allowing for moves).
+1. **Store listing.** `creative/store/google-play/` in Insider's shape, with Insider's
+   `scripts/validate.mjs`. The text, contact and language files moved from
+   `sample/app/src/main/play/`, which is deleted. The live visuals stay in the default listing
+   (`listings/default/listing/en-US/graphics/`, renamed as the `store-listing` skill says) until Phase 3
+   replaces them; they then move to `listings/default-legacy/`. Of the two feature graphics, the
+   1024 x 500 one is the uploaded one (Play rejects the other's 1025 px width), so the other waits in
+   `listings/default/source/unused/`. The screenshots and feature graphic were saved without their
+   alpha channel, which Play rejects; every pixel was opaque, so they look the same.
+   `validate.mjs` passes and `sample/README.md` links the new paths.
+2. **Research.** `analytics/` is `research/analytics/`, with a README giving its source, its date
+   range and that it is context, never quoted. `assets/ideas/` stays until Phase 2 has used it,
+   then it is deleted, ZIPs and images alike.
+3. **Campaign scaffolding.** `creative/social-campaigns/completed/README.md`, and Smart Cleaner's
+   `creative/templates/ui-motion-starter/` pointed at App Toolkit's UI kit: its demo turns the Compass,
+   counts on the Counter and adds people to the Bill Splitter, and renders.
+4. **README and STARTUP.** `marketing/README.md` follows Insider's (layout and campaign tables, preview
+   and render commands, render quality, product fidelity, the project metadata as a JSON block).
+   `STARTUP.md` maps the skills' older paths to `creative/` until Phase 4 updates the skills.
+   `scripts/render.cmd` and `render.ps1` come with the first campaign.
 
 ## Phase 2: redesign the app, screen by screen
 
@@ -141,8 +134,8 @@ When the last screen's concept is approved, delete `marketing/assets/ideas/`: it
    placements in campaign or store output.
 2. **Listing text.** Rewrite title, short and full description with `store-listing` and
    `writing-style`, from the new `product-positioning.md`.
-3. **Custom listings (optional).** Text-only custom listings for search themes, as Insider has
-   (`custom/<id>/`), for example Quick Settings tiles or everyday calculators.
+3. **Custom listings, later.** One custom store listing per tool (`custom/<tool>/`), after the new
+   default listing is live. Not part of this phase's first pass.
 4. **First campaign.** One launch short from `templates/ui-motion-starter` under
    `creative/social-campaigns/<slug>/`, following `marketing-startup`, `motion-video`, `metadata`
    and `social-captions`.
@@ -156,10 +149,10 @@ text, missing fonts and UI drift).
 In android-skills first, then copied to every repository that carries them:
 
 - `marketing-startup`: the `creative/` layout (`creative/store/google-play`,
-  `creative/social-campaigns`, `creative/templates`, optional content folders such as `lessons/` or
-  `tools/`), `research/` for analytics and concept material.
+  `creative/social-campaigns`, `creative/templates`, optional content folders such as Insider's
+  `lessons/`), `research/` for analytics and concept material.
 - `store-listing` and `play-store-media`: the `creative/store/google-play` path, the
-  `retired-<year>` rule for visuals without source, and moving a listing out of
+  `<name>-legacy` rule for visuals without source, and moving a listing out of
   `app/src/main/play`.
 - `marketing-ui`: bootstrap a hub with Material Next (`mountMarketingHub`,
   `navigationMode: 'none'`, `screen.html` for captures) instead of the infrastructure the skill
@@ -176,7 +169,7 @@ Phase 0 (bases) ──► Phase 1 (move) ──► Phase 2 (redesign, one screen
                          └──────────────► Phase 4 (skills) can run alongside Phase 2
 ```
 
-Phase 1 is safe to do now: it moves files and changes no screen. Phase 4 should land before the
+Phase 1 is done. Phase 4 should land before the
 next repository is set up, so it starts from the right layout.
 
 ## Decisions
@@ -188,7 +181,5 @@ Made by the owner on October 28, 2026:
 2. **The Stitch exports are not kept.** They are input for the redesign; they are deleted after
    Phase 2 has used them, with no images kept in their place.
 3. **English only** for the store listing for now.
-
-Still open:
-
-4. Whether `creative/tools/` explainers are wanted, and for which tools first.
+4. **No per-tool explainers** (no `creative/tools/`). Each tool gets its own custom store listing
+   later, after the redesign and the new default listing; not yet.

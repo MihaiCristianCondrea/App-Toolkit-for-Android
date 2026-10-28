@@ -1,0 +1,22 @@
+{
+  "name": "app-toolkit-ui-motion-starter",
+  "version": "1.0.0",
+  "description": "Remotion starter that animates the live HTML screens from marketing/ui",
+  "private": true,
+  "scripts": {
+    "assets": "node scripts/sync-assets.mjs",
+    "dev": "npm run assets && remotion studio",
+    "render": "npm run assets && remotion render UiScreensDemo out/ui-screens-demo.mp4 --codec=h264 --crf=16",
+    "lint": "tsc"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.529",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "remotion": "4.0.529"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.7",
+    "typescript": "5.9.3"
+  }
+}

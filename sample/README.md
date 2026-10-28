@@ -1,4 +1,4 @@
-![App Toolkit for Android](/sample/app/src/main/play/listings/en-US/graphics/feature-graphic/play_store_feature_graphic.png "App Toolkit for Android")
+![App Toolkit for Android](/marketing/creative/store/google-play/listings/default/listing/en-US/graphics/feature-graphic/feature-graphic.png "App Toolkit for Android")
 
 <a href="https://play.google.com/store/apps/details?id=com.mihaicristiancondrea.android.apps.apptoolkit"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" height="70"></a>
 
@@ -59,9 +59,9 @@ free and open-source software!
 <!--suppress CheckImageSize -->
 <table>
   <tr>
-    <td><img src="/sample/app/src/main/play/listings/en-US/graphics/phone-screenshots/1-screenshot_welcome.png" width="300" alt="Screenshot Welcome"></td>
-    <td><img src="/sample/app/src/main/play/listings/en-US/graphics/phone-screenshots/2-screenshot_apps.png" width="300" alt="Screenshot Apps"></td>
-    <td><img src="/sample/app/src/main/play/listings/en-US/graphics/phone-screenshots/3-screenshot_onboarding_theme.png" width="300" alt="Screenshot Onboarding Theme"></td>
+    <td><img src="/marketing/creative/store/google-play/listings/default/listing/en-US/graphics/phone-screenshots/1-screenshot_welcome.png" width="300" alt="Screenshot Welcome"></td>
+    <td><img src="/marketing/creative/store/google-play/listings/default/listing/en-US/graphics/phone-screenshots/2-screenshot_apps.png" width="300" alt="Screenshot Apps"></td>
+    <td><img src="/marketing/creative/store/google-play/listings/default/listing/en-US/graphics/phone-screenshots/3-screenshot_onboarding_theme.png" width="300" alt="Screenshot Onboarding Theme"></td>
   </tr>
 </table>
 

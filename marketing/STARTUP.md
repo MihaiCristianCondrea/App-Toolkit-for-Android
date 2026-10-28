@@ -33,6 +33,17 @@ Before any task, read `marketing/README.md` (with its "Project metadata" block),
 
 Install Remotion's official agent skills once per machine: `npx skills add remotion-dev/skills`.
 
+## Paths in this repository
+
+The skills still name the older layout (`marketing/social-campaigns/`, `marketing/store/google-play/`). Here everything
+that is made lives under `marketing/creative/`; read the skills' paths as these:
+
+| Skills say | Here |
+| --- | --- |
+| `marketing/social-campaigns/` | `marketing/creative/social-campaigns/` |
+| `marketing/store/google-play/` | `marketing/creative/store/google-play/` |
+| analytics exports | `marketing/research/analytics/` (context only, never quoted) |
+
 ## Campaign layout
 
-Every campaign lives in `marketing/social-campaigns/<campaign-slug>/`, whatever its media, and moves to `social-campaigns/completed/` once published: `README.md`, `<campaign-slug>-metadata.json`, `captions/`, `source/`, `output/` (never committed). Details in [`marketing-startup`](skills/built-in/marketing-startup/SKILL.md).
+Every campaign lives in `marketing/creative/social-campaigns/<campaign-slug>/`, whatever its media, and moves to `creative/social-campaigns/completed/` once published: `README.md`, `<campaign-slug>-metadata.json`, `captions/`, `source/`, `output/` (never committed). Start a video from [`creative/templates/ui-motion-starter`](creative/templates/ui-motion-starter/README.md). Details in [`marketing-startup`](skills/built-in/marketing-startup/SKILL.md).
