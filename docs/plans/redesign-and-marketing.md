@@ -15,7 +15,9 @@ proven:
 2. **A redesigned app.** The sample app on Google Play (`com.d4rk.android.apps.apptoolkit`) gets a
    coherent design, screen by screen, built from features it already has: no portfolio duplicates,
    no new sensitive permissions.
-3. **Marketing organized like Android Insider's.** One `marketing/creative/` folder for everything
+3. **Marketing organized like Android Insider's, for the app only.** App Toolkit is both the
+   app and the library, but the library serves only the owner's own apps and is not marketed;
+   all marketing is about the Play app. One `marketing/creative/` folder for everything
    that is made (store listing, campaigns, templates), with one editable source per output, so new
    store graphics and promotions come from the redesigned screens in the Material Next hub.
 
@@ -48,8 +50,8 @@ marketing/
 ├── briefs/                 brand.md, product-positioning.md (rewritten after the redesign)
 ├── ui/                     Material Next hub: the app's screens as web components
 ├── assets/                 logos, illustrations, shapes, device frames, Play badge (no research)
-├── research/               analytics/ (GA exports) and ideas/ (concept images, Stitch exports),
-│                           each with a README: source, date, what it may and may not be used for
+├── research/               analytics/ (GA exports), with a README: source, date, what it may and
+│                           may not be used for
 ├── creative/
 │   ├── store/
 │   │   └── google-play/    contact files, default-language.txt, scripts/validate.mjs
@@ -87,10 +89,11 @@ A move, not a redesign: every file that exists today keeps working at its new pa
    they go to `listings/retired-2025/` (with `listing.json` and a README saying what they show and
    when they were uploaded) before anything replaces them. Update the image links in
    `sample/README.md`, then delete `sample/app/src/main/play/`. Run `validate.mjs`.
-2. **Research.** Move `analytics/` and `assets/ideas/` to `research/`. Each gets a README with its
-   source and date. The GA exports are reported context, like Smart Cleaner's redesign plan treats
-   them, not proof of what to build. Decide whether the four Stitch ZIPs stay in Git or are
-   replaced by their extracted images.
+2. **Research.** Move `analytics/` to `research/analytics/` with a README giving its source and
+   date. The GA exports are reported context, like Smart Cleaner's redesign plan treats them, not
+   proof of what to build. `assets/ideas/` (the Stitch exports and concept PNG) is redesign input
+   only: it stays where it is until Phase 2 has used it, then it is deleted, ZIPs and images
+   alike.
 3. **Campaign scaffolding.** Create `creative/social-campaigns/completed/README.md` (the only file
    in `completed/` until something is published) and copy Smart Cleaner's
    `creative/templates/ui-motion-starter/`, pointed at App Toolkit's UI kit.
@@ -120,18 +123,20 @@ For each screen, in this order: **Quick Tools** (largest, still being redistribu
 
 | Step | What | Done when |
 | --- | --- | --- |
-| 1. Review | Current screen in Compose and in the UI kit; what each element is for; what users reach for (from `research/analytics`, as context only) | A short review in `docs/plans/redesign/<screen>.md` with the problems found |
+| 1. Review | Current screen in Compose and in the UI kit; what each element is for; what users reach for (from `research/analytics`, as context only); the Stitch concepts in `assets/ideas/` for that screen | A short review in `docs/plans/redesign/<screen>.md` with the problems found |
 | 2. Concept | Change the screen in `marketing/ui` first. Use `redesign-skill` and `ui-unslop` on it; check light and dark, gesture and 3-button navigation, phone, fold and desktop | The prototype page shows the concept; the owner approves it |
 | 3. Build | Implement in Compose against `3.0.0-pre30` or later | Builds locally; previews cover the new states; the owner has tested it on a device |
 | 4. Parity | Bring the UI kit screen to match the shipped Compose screen exactly (strings, spacing, states) | Side-by-side check at the same sizes shows no drift; `npm run qa` passes |
 
 One screen ships before the next starts, so the app is never half-redesigned on `develop`.
+When the last screen's concept is approved, delete `marketing/assets/ideas/`: it is not kept.
 
 ## Phase 3: store listing and first campaign from the redesigned app
 
 1. **Default listing source.** Start `listings/default/source/` from Insider's (the
    `play-store-media` skill's template): phone, tablet and desktop screenshots and the feature
-   graphic rendered from the UI kit screens, `strings/en-US.json` for the captions. Render only
+   graphic rendered from the UI kit screens, `strings/en-US.json` for the captions. The listing
+   ships in English (en-US) only for now; more languages are a later, separate decision. Render only
    after Phase 2 parity, tied to a tested app revision, showing implemented features, with no ad
    placements in campaign or store output.
 2. **Listing text.** Rewrite title, short and full description with `store-listing` and
@@ -174,11 +179,16 @@ Phase 0 (bases) ──► Phase 1 (move) ──► Phase 2 (redesign, one screen
 Phase 1 is safe to do now: it moves files and changes no screen. Phase 4 should land before the
 next repository is set up, so it starts from the right layout.
 
-## Decisions for the owner
+## Decisions
 
-1. Does App Toolkit's marketing also cover the **library** for developers (JitPack, README hero
-   images, release posts), or only the Play app? If both, add `briefs/library-positioning.md` and a
-   `creative/developers/` folder; otherwise the library keeps its README only.
-2. Keep the four Stitch ZIPs in Git, or keep only their images?
-3. Which languages beyond en-US the default listing should ship in after the redesign.
+Made by the owner on October 28, 2026:
+
+1. **Marketing covers the Play app only.** The library is for the owner's own apps and is not
+   promoted: no library brief, no developer campaigns, no `creative/developers/`.
+2. **The Stitch exports are not kept.** They are input for the redesign; they are deleted after
+   Phase 2 has used them, with no images kept in their place.
+3. **English only** for the store listing for now.
+
+Still open:
+
 4. Whether `creative/tools/` explainers are wanted, and for which tools first.
