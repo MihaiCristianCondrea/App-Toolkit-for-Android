@@ -36,6 +36,16 @@
     <string name="tile_preview_default_result">Preview coming soon</string>
     <string name="tile_preview_level_result">Level</string>
     <string name="tile_service_azimuth_format" translatable="false">%1$d°</string>
+    <string name="tool_compass_north">North</string>
+    <string name="tool_compass_northeast">Northeast</string>
+    <string name="tool_compass_east">East</string>
+    <string name="tool_compass_southeast">Southeast</string>
+    <string name="tool_compass_south">South</string>
+    <string name="tool_compass_southwest">Southwest</string>
+    <string name="tool_compass_west">West</string>
+    <string name="tool_compass_northwest">Northwest</string>
+    <string name="tool_compass_magnetic_north">Magnetic north, from the geomagnetic sensor</string>
+    <string name="tool_compass_heading_description">Compass, heading %1$d degrees %2$s</string>
     <string name="tile_service_dice_value">Rolled %1$d</string>
     <string name="tile_service_heads">Heads</string>
     <string name="tile_service_tails">Tails</string>

@@ -18,8 +18,8 @@ Made by the owner on October 28, 2026:
    ticks, degree numbers and cardinal names that turns with the phone, a fixed pointer, and a large degree and
    direction readout. Drawn for App Toolkit (MBCompass is GPL-3.0 and its rose artwork CC BY-SA 4.0; nothing is
    copied), in the web kit and in Compose alike.
-5. **The other tool sheets keep their design.** Flash Dimmer, Compass, Bubble Level, Ruler, Protractor, Morse &
-   SOS, Box Breathing and the Numbers sheets are not changed; new tools get sheets in the same style.
+5. **The other tool sheets keep their design.** Flash Dimmer, Bubble Level, Ruler, Protractor, Morse & SOS, Box
+   Breathing and the Measure sheets are not changed; new tools get sheets in the same style.
 
 ## Where each tool lives
 
@@ -44,7 +44,7 @@ follows it after the web screens are approved.
 | --- | --- | --- |
 | 1 | Every tool on its tab in the kit; sheets for Coin Flip and Reaction Test, translated from `CoinFlipTool.kt` and `ReactionTestTool.kt` | Done |
 | 2 | Quick Tools: Sensors as one grouped stack (compass rose card, level card), 28dp outer and 8dp inner corners in every group; the compass sheet redesigned; Measure tab with its four sections | Done (web) |
-| 3 | Compass in Compose (`CompassTool.kt`), matching the web rose | |
+| 3 | Compass in Compose (`CompassTool.kt`), matching the web rose | Done |
 | 4 | Expressive pass on both tabs: emphasized type, shape and colour per section, motion | |
 | 5 | Apps: real icons in captures, the Installed and Not installed filters the app has, the random app button | |
 | 6 | Phone, fold and desktop for each tab; light and dark; `ui-unslop` review | |
