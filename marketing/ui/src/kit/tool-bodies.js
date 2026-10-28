@@ -5,6 +5,9 @@ import { html, nothing, svg } from "lit";
  * glance card. Every tool here works without a special permission: sensors, display, torch.
  */
 
+/** Torch levels in the kit; real devices report their own maximum. */
+export const FLASH_LEVELS = 5;
+
 const CARDINALS = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
 export const cardinal = (deg) => CARDINALS[Math.round((((deg % 360) + 360) % 360) / 45) % 8];
 
@@ -36,7 +39,7 @@ export const direction = (deg) => DIRECTIONS[Math.round((((deg % 360) + 360) % 3
  * against the heading so the fixed pointer in the middle always points where the phone points. `labels: false`
  * leaves out the numbers and names, for small sizes.
  */
-export const compassRose = (heading = 312, size = 240, { labels = true } = {}) => {
+export const compassRose = (heading = 312, size = 240, { labels = true, face = true } = {}) => {
   const ticks = Array.from({ length: 72 }, (_, i) => {
     const deg = i * 5;
     const kind = deg % 30 === 0 ? "major" : deg % 10 === 0 ? "mid" : "minor";
@@ -52,7 +55,7 @@ export const compassRose = (heading = 312, size = 240, { labels = true } = {}) =
       transform="rotate(${deg} 100 100)">${labels ? long : short}</text>`);
   return html`<svg class="tk-rose" width=${size} height=${size} viewBox="0 0 200 200" role="img"
     aria-label="Compass, heading ${heading} degrees ${direction(heading)}">
-    <circle class="tk-rose__face" cx="100" cy="100" r="98" />
+    ${face ? svg`<circle class="tk-rose__face" cx="100" cy="100" r="98" />` : nothing}
     <g class="tk-rose__dial" style="transform:rotate(${-heading}deg)">${ticks}${numbers}${names}</g>
     <path class="tk-rose__lubber" d="M100 0 L105 9 L95 9 Z" />
     <path class="tk-rose__pointer" d="M100 62 L124 128 L100 116 L76 128 Z" />
@@ -60,12 +63,12 @@ export const compassRose = (heading = 312, size = 240, { labels = true } = {}) =
 };
 
 /** Bubble level dial; x and y are tilt in degrees and move the bubble inside the 10 degree window. */
-export const levelDial = (x = 0.4, y = -0.2, size = 96) => {
+export const levelDial = (x = 0.4, y = -0.2, size = 96, { ring = true } = {}) => {
   const px = 50 + Math.max(-1, Math.min(1, x / 10)) * 30;
   const py = 50 + Math.max(-1, Math.min(1, y / 10)) * 30;
   return html`<svg class="tk-dial tk-dial--level" width=${size} height=${size} viewBox="0 0 100 100" role="img"
     aria-label="Bubble level, ${x} degrees roll, ${y} degrees pitch">
-    <circle class="tk-dial__ring" cx="50" cy="50" r="46" />
+    ${ring ? svg`<circle class="tk-dial__ring" cx="50" cy="50" r="46" />` : nothing}
     <circle class="tk-dial__guide" cx="50" cy="50" r="18" />
     <line class="tk-dial__guide" x1="8" y1="50" x2="92" y2="50" />
     <line class="tk-dial__guide" x1="50" y1="8" x2="50" y2="92" />
@@ -182,19 +185,39 @@ export function extraToolBody(tool, state, onState) {
     }
 
     case "flash_dimmer": {
-      const level = Number(state.flashLevel ?? 3);
-      const on = Boolean(state.flashOn);
+      // FlashDimmerTool.kt: presets on the left (weight 3), a segmented level bar on the right (weight 2) that
+      // follows the finger, 240dp tall. Level 0 is off; the kit's torch has five levels.
+      const max = FLASH_LEVELS;
+      const level = state.flashOn ? Number(state.flashLevel ?? 3) : 0;
+      const half = Math.max(1, Math.floor((max + 1) / 2));
+      const setLevel = (next) => onState({ flashOn: next > 0, flashLevel: next > 0 ? next : Number(state.flashLevel ?? 3) });
+      const preset = (label, value) => level === value
+        ? html`<md-filled-button @click=${() => setLevel(value)}>${label}</md-filled-button>`
+        : html`<md-filled-tonal-button @click=${() => setLevel(value)}>${label}</md-filled-tonal-button>`;
+      const fromPointer = (e) => {
+        const r = e.currentTarget.getBoundingClientRect();
+        const y = Math.min(Math.max(e.clientY - r.top, 0), r.height);
+        const next = Math.round(max * (1 - y / r.height));
+        if (next !== level) setLevel(next);
+      };
       return html`
-        <div class="tk-tool-interactive">
-          <div class="tk-toggle-row">
-            <div><div class="title-medium">Flashlight</div><div class="body-medium tk-muted">${on ? `On at level ${level} of 5` : "Off"}</div></div>
-            <md-filled-tonal-button @click=${() => onState({ flashOn: !on })}><md-icon slot="icon">${on ? "flashlight_off" : "flashlight_on"}</md-icon>${on ? "Turn off" : "Turn on"}</md-filled-tonal-button>
+        <div class="tk-flash">
+          <p class="tk-flash__level">Brightness ${level} of ${max}</p>
+          <div class="tk-flash__row">
+            <div class="tk-flash__presets">
+              ${preset("Maximum", max)}${preset("Half", half)}${preset("Minimum", 1)}${preset("Turn off", 0)}
+            </div>
+            <div class="tk-flash__bar" role="slider" tabindex="0" aria-label="Flashlight level" aria-valuemin="0"
+              aria-valuemax=${max} aria-valuenow=${level} aria-valuetext="Brightness ${level} of ${max}"
+              @pointerdown=${(e) => { e.currentTarget.setPointerCapture(e.pointerId); fromPointer(e); }}
+              @pointermove=${(e) => e.buttons && fromPointer(e)}
+              @keydown=${(e) => {
+                const step = { ArrowUp: 1, ArrowRight: 1, ArrowDown: -1, ArrowLeft: -1 }[e.key];
+                if (step) { e.preventDefault(); setLevel(Math.min(max, Math.max(0, level + step))); }
+              }}>
+              ${Array.from({ length: max }, (_, i) => html`<span class="tk-flash__segment ${level >= max - i ? "is-on" : ""}"></span>`)}
+            </div>
           </div>
-          <div class="tk-field">
-            <span class="tk-field__label">Brightness</span>
-            <md-slider min="1" max="5" step="1" ticks .value=${level} labeled aria-label="Flashlight level" @input=${(e) => onState({ flashLevel: Number(e.target.value) })}></md-slider>
-          </div>
-          <p class="body-small tk-muted" style="margin:0">Uses the camera torch. Devices without adjustable torch strength switch it on at full brightness.</p>
         </div>`;
     }
 

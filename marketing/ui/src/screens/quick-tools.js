@@ -1,7 +1,8 @@
 import { html, nothing } from "lit";
 import { renderToolBottomSheet, shapeBadge } from "../kit/components.js";
+import { shapeMaskStyle, shapeUrl } from "../kit/assets.js";
 import { navigationBar, navigationDrawer, screen, topAppBar } from "../kit/shell.js";
-import { compassRose, direction, levelDial } from "../kit/tool-bodies.js";
+import { FLASH_LEVELS, compassRose, direction, levelDial } from "../kit/tool-bodies.js";
 
 /**
  * Quick Tools: tools that run on sensors and the torch, so none needs a special permission. Ruler, protractor,
@@ -15,9 +16,12 @@ const TOOLS = {
   breathing_box: { id: "breathing_box", title: "Box Breathing", subtitle: "Follow a steady 4-4-4-4 rhythm", icon: "air", shape: "flower", palette: "amber", kindLabel: "Quick tool", supportsTile: false },
 };
 
+// Whether the pointer on the torch shape moved since it went down: a drag sets brightness, a tap toggles.
+let torchDragged = false;
+
 const SECTIONS = [
-  { id: "sensors", title: "Sensors", tools: ["compass", "bubble_level"] },
-  { id: "light", title: "Light & signals", tools: ["flash_dimmer", "morse_sos"] },
+  { id: "sensors", title: "Sensors", tools: ["compass", "bubble_level"], live: true },
+  { id: "light", title: "Light & signals", tools: ["flash_dimmer", "morse_sos"], live: true },
   { id: "calm", title: "Calm", tools: ["breathing_box"] },
 ];
 
@@ -76,28 +80,74 @@ export default {
       breathing_box: s.breathRunning ? "Running" : "4 · 4 · 4 · 4",
     })[id];
 
-    // Sensors are read live, so their cards show the reading itself instead of an icon.
-    const sensorCard = (id) => id === "compass"
-      ? html`
-        <div class="qt-sensor qt-sensor--compass" role="button" tabindex="0" @click=${() => open(id)} @keydown=${activate(id)}
-          aria-label="Compass, ${s.compassHeading} degrees ${direction(s.compassHeading)}">
-          ${compassRose(s.compassHeading, 168, { labels: false })}
-          <div class="qt-sensor__text">
-            <span class="qt-sensor__label">Compass</span>
-            <span class="qt-sensor__value">${s.compassHeading}°</span>
-            <span class="qt-sensor__note">${direction(s.compassHeading)}</span>
-          </div>
-        </div>`
-      : html`
-        <div class="qt-sensor" role="button" tabindex="0" @click=${() => open(id)} @keydown=${activate(id)}
+    // Live widgets: each shows its tool working inside the tool's own shape. Sensors open their sheet on a tap; the
+    // torch and SOS act on a tap and open their sheet from the tune button.
+    const face = (shape, content, extra = "") => html`
+      <div class="qt-live__face ${extra}" style=${shapeMaskStyle(shapeUrl(shape))}>${content}</div>`;
+    const tune = (id) => html`<md-icon-button class="qt-live__tune" aria-label="${TOOLS[id].title} settings"
+      @click=${(e) => { swallow(e); open(id); }}><md-icon>tune</md-icon></md-icon-button>`;
+    const heading = s.compassHeading;
+    const flashLevel = s.flashOn ? s.flashLevel : 0;
+
+    // Drag on the torch shape like on the Flash Dimmer bar: the fill follows the finger. A tap without a drag
+    // switches the torch on or off.
+    const torch = {
+      down(e) { e.currentTarget.setPointerCapture(e.pointerId); torchDragged = false; },
+      move(e) {
+        if (!e.buttons) return;
+        torchDragged = true;
+        const r = e.currentTarget.getBoundingClientRect();
+        const level = Math.round(FLASH_LEVELS * (1 - Math.min(Math.max(e.clientY - r.top, 0), r.height) / r.height));
+        if (level !== flashLevel) s.set({ flashOn: level > 0, flashLevel: level > 0 ? level : s.flashLevel });
+      },
+      up() { if (!torchDragged) s.set({ flashOn: !s.flashOn }); },
+    };
+
+    const live = {
+      compass: () => html`
+        <div class="qt-live" data-accent="teal" role="button" tabindex="0" @click=${() => open("compass")} @keydown=${activate("compass")}
+          aria-label="Compass, ${heading} degrees ${direction(heading)}">
+          <span class="qt-live__label">Compass</span>
+          ${face("cookie_12sided", compassRose(heading, 132, { labels: false, face: false }))}
+          <span class="qt-live__value">${heading}°</span>
+          <span class="qt-live__note">${direction(heading)}</span>
+        </div>`,
+      bubble_level: () => html`
+        <div class="qt-live" data-accent="teal" role="button" tabindex="0" @click=${() => open("bubble_level")} @keydown=${activate("bubble_level")}
           aria-label="Bubble level, ${flat ? "level" : "tilted"}">
-          ${levelDial(s.levelRoll, s.levelPitch, 72)}
-          <div class="qt-sensor__text">
-            <span class="qt-sensor__label">Bubble Level</span>
-            <span class="qt-sensor__value qt-sensor__value--small">${flat ? "Level" : "Tilted"}</span>
-            <span class="qt-sensor__note">${Math.abs(s.levelRoll).toFixed(1)}° roll · ${Math.abs(s.levelPitch).toFixed(1)}° pitch</span>
+          <span class="qt-live__label">Bubble Level</span>
+          ${face("pill", levelDial(s.levelRoll, s.levelPitch, 128, { ring: false }))}
+          <span class="qt-live__value">${flat ? "Level" : "Tilted"}</span>
+          <span class="qt-live__note">${Math.abs(s.levelRoll).toFixed(1)}° · ${Math.abs(s.levelPitch).toFixed(1)}°</span>
+        </div>`,
+      flash_dimmer: () => html`
+        <div class="qt-live" data-accent="gold">
+          <span class="qt-live__label">Flashlight</span>${tune("flash_dimmer")}
+          <div class="qt-live__control" role="slider" tabindex="0" aria-label="Flashlight brightness" aria-valuemin="0"
+            aria-valuemax=${FLASH_LEVELS} aria-valuenow=${flashLevel}
+            @pointerdown=${torch.down} @pointermove=${torch.move} @pointerup=${torch.up}
+            @keydown=${(e) => {
+              const step = { ArrowUp: 1, ArrowRight: 1, ArrowDown: -1, ArrowLeft: -1 }[e.key];
+              if (step) { e.preventDefault(); const next = Math.min(FLASH_LEVELS, Math.max(0, flashLevel + step)); s.set({ flashOn: next > 0, flashLevel: next > 0 ? next : s.flashLevel }); }
+              else if (e.key === "Enter" || e.key === " ") { e.preventDefault(); s.set({ flashOn: !s.flashOn }); }
+            }}>
+            ${face("burst", html`<span class="qt-live__fill" style="height:${(flashLevel / FLASH_LEVELS) * 100}%"></span>
+              <md-icon class="qt-live__icon">${s.flashOn ? "flashlight_on" : "flashlight_off"}</md-icon>`, "qt-live__face--torch")}
           </div>
-        </div>`;
+          <span class="qt-live__value">${s.flashOn ? `Level ${flashLevel}` : "Off"}</span>
+          <span class="qt-live__note">Drag to set brightness</span>
+        </div>`,
+      morse_sos: () => html`
+        <div class="qt-live" data-accent="magenta">
+          <span class="qt-live__label">SOS</span>${tune("morse_sos")}
+          <button class="qt-live__control" aria-pressed=${s.sosActive ? "true" : "false"}
+            aria-label=${s.sosActive ? "Stop SOS" : "Send SOS"} @click=${() => s.set({ sosActive: !s.sosActive })}>
+            ${face("cookie_7sided", html`<span class="qt-live__sos">SOS</span>`, s.sosActive ? "qt-live__face--sending" : "")}
+          </button>
+          <span class="qt-live__value">${s.sosActive ? "Sending" : "Ready"}</span>
+          <span class="qt-live__note">${s.sosActive ? "Tap to stop" : "Tap to signal"}</span>
+        </div>`,
+    };
 
     const control = (id) => id === "breathing_box"
       ? html`<md-filled-tonal-icon-button aria-label=${s.breathRunning ? "Pause breathing" : "Start breathing"} @click=${(e) => { swallow(e); s.set({ breathRunning: !s.breathRunning }); }}><md-icon>${s.breathRunning ? "pause" : "play_arrow"}</md-icon></md-filled-tonal-icon-button>`
@@ -118,8 +168,8 @@ export default {
     const sections = SECTIONS.filter((sec) => cat === "all" || cat === sec.id).map((sec) => {
       const ids = sec.tools.filter(matches);
       if (!ids.length) return nothing;
-      const body = sec.id === "sensors"
-        ? html`<div class="qt-stack">${ids.map(sensorCard)}</div>`
+      const body = sec.live
+        ? html`<div class="qt-live-row">${ids.map((id) => live[id]())}</div>`
         : html`<div class="qt-grid">${ids.map((id) => tile(id, ids.length === 1))}</div>`;
       return html`<section class="qt-section"><h2 class="qt-section__title">${sec.title}</h2>${body}</section>`;
     });
@@ -133,12 +183,6 @@ export default {
       </div>
       <div class="tk-screen-pad" style="padding-top:8px">
         ${sections}
-        <div class="qt-howto-card">
-          <div class="qt-howto-copy">
-            <div class="qt-howto-title">Add a tool to Quick Settings</div>
-            <p class="qt-howto-text">Swipe down twice, tap the pencil, and drag a tool into your tiles. Open any tool to add it from here.</p>
-          </div>
-        </div>
       </div>`;
 
     const activeTool = TOOLS[s.activeToolId] || null;

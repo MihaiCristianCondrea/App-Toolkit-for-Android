@@ -18,8 +18,16 @@ Made by the owner on October 28, 2026:
    ticks, degree numbers and cardinal names that turns with the phone, a fixed pointer, and a large degree and
    direction readout. Drawn for App Toolkit (MBCompass is GPL-3.0 and its rose artwork CC BY-SA 4.0; nothing is
    copied), in the web kit and in Compose alike.
-5. **The other tool sheets keep their design.** Flash Dimmer, Bubble Level, Ruler, Protractor, Morse & SOS, Box
-   Breathing and the Measure sheets are not changed; new tools get sheets in the same style.
+5. **The other tool sheets keep their design.** Bubble Level, Ruler, Protractor, Morse & SOS, Box Breathing and the
+   Measure sheets are not changed; new tools get sheets in the same style. The Flash Dimmer sheet is the app's
+   (`FlashDimmerTool.kt`) one to one, and every sheet opens like the app's `ModalBottomSheet`: no drag handle,
+   straight to expanded, sliding up over a 32% scrim.
+6. **Quick Tools is live.** Sensors and Light & signals are rows of two equal live widgets, [Compass][Bubble Level]
+   and [Flashlight][SOS], each tool working inside its own MaterialShape. Dragging over the flashlight's shape sets
+   its brightness like a progress bar; a tap switches it on or off. SOS starts and stops from its shape. The "Add a
+   tool to Quick Settings" card is gone.
+7. **Kotlin waits.** The app's code is not changed during the web redesign. `CompassTool.kt` was changed once
+   (`2da90de1`) and stays as it is; nothing else in Compose changes until step 7.
 
 ## Where each tool lives
 
@@ -44,7 +52,7 @@ follows it after the web screens are approved.
 | --- | --- | --- |
 | 1 | Every tool on its tab in the kit; sheets for Coin Flip and Reaction Test, translated from `CoinFlipTool.kt` and `ReactionTestTool.kt` | Done |
 | 2 | Quick Tools: Sensors as one grouped stack (compass rose card, level card), 28dp outer and 8dp inner corners in every group; the compass sheet redesigned; Measure tab with its four sections | Done (web) |
-| 3 | Compass in Compose (`CompassTool.kt`), matching the web rose | Done |
+| 3 | Live widgets on Quick Tools; Flash Dimmer sheet and sheet motion from the app | Done (web) |
 | 4 | Expressive pass on both tabs: emphasized type, shape and colour per section, motion | |
 | 5 | Apps: real icons in captures, the Installed and Not installed filters the app has, the random app button | |
 | 6 | Phone, fold and desktop for each tab; light and dark; `ui-unslop` review | |

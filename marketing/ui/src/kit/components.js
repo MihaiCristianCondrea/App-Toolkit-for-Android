@@ -111,7 +111,6 @@ export function renderToolBottomSheet({
   return html`
     <div class="tk-sheet-backdrop" @click=${onClose}>
       <div class="tk-sheet-surface" role="dialog" aria-label=${tool.title} @click=${(e) => e.stopPropagation()}>
-        <div class="tk-sheet-handle"></div>
         <div class="tk-sheet-title-row">
           ${shapeBadge({
             shape: tool.shape,

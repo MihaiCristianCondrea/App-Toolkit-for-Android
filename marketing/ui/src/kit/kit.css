@@ -1470,7 +1470,7 @@ md-icon-button.ai-favorite {
 }
 .tk-sheet-title {
   margin: 0;
-  font: 600 24px/32px var(--md-ref-typeface-plain);
+  font: 400 24px/32px var(--md-ref-typeface-plain);
   color: var(--md-sys-color-on-surface);
 }
 .tk-sheet-sub {
@@ -1753,25 +1753,52 @@ md-icon-button.ai-favorite {
 .tk-compass-readout__dir { font: 500 22px/28px var(--md-ref-typeface-plain); color: var(--tk-teal-content); }
 @media (prefers-reduced-motion: reduce) { .tk-rose__dial { transform-origin: 100px 100px; transition: none; } }
 
-/* Quick Tools sensors: one grouped stack, 28dp outer corners and 8dp seams like every other group. */
-.qt-stack { display: flex; flex-direction: column; gap: 4px; }
-.qt-stack > * { border-radius: 8px; }
-.qt-stack > :first-child { border-top-left-radius: 28px; border-top-right-radius: 28px; }
-.qt-stack > :last-child { border-bottom-left-radius: 28px; border-bottom-right-radius: 28px; }
-.qt-sensor { display: flex; align-items: center; gap: 20px; padding: 16px 20px; background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface); cursor: pointer; transition: background-color .15s ease, transform .15s ease; }
-.qt-sensor:hover { background: var(--md-sys-color-surface-container-highest); }
-.qt-sensor:active { transform: scale(.985); }
-.qt-sensor:focus-visible { outline: 2px solid var(--md-sys-color-primary); outline-offset: 2px; }
-.qt-sensor--compass { padding: 20px; background: color-mix(in srgb, var(--tk-teal-container) 16%, var(--md-sys-color-surface-container-high)); }
-.qt-sensor__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.qt-sensor__label { font: 600 12px/16px "Space Grotesk", var(--md-ref-typeface-plain); letter-spacing: .5px; text-transform: uppercase; color: var(--md-sys-color-on-surface-variant); }
-.qt-sensor__value { font: 700 44px/52px "Space Grotesk", var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; letter-spacing: -1px; }
-.qt-sensor__value--small { font-size: 28px; line-height: 34px; letter-spacing: 0; color: var(--tk-teal-content); }
-.qt-sensor__note { font: 500 16px/22px var(--md-ref-typeface-plain); color: var(--tk-teal-content); }
-.qt-sensor:not(.qt-sensor--compass) .qt-sensor__note { font: 400 13px/18px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
+/* Quick Tools live widgets: two equal cards per row, 28dp outer corners and 8dp seams, each tool working inside its
+   own MaterialShape. */
+.qt-live-row { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.qt-live { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 16px 12px 20px; border-radius: 8px; background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface); cursor: pointer; transition: background-color .15s ease; --qt-live-accent: var(--tk-teal-container); --qt-live-content: var(--tk-teal-content); }
+.qt-live-row > :first-child { border-radius: 28px 8px 8px 28px; }
+.qt-live-row > :last-child { border-radius: 8px 28px 28px 8px; }
+.qt-live[data-accent="gold"] { --qt-live-accent: var(--tk-gold-container); --qt-live-content: var(--tk-gold-content); cursor: default; }
+.qt-live[data-accent="magenta"] { --qt-live-accent: var(--tk-magenta-container); --qt-live-content: var(--tk-magenta-content); cursor: default; }
+.qt-live[role="button"]:hover { background: var(--md-sys-color-surface-container-highest); }
+.qt-live:focus-visible, .qt-live__control:focus-visible { outline: 2px solid var(--md-sys-color-primary); outline-offset: 2px; }
+.qt-live__label { align-self: flex-start; padding-left: 4px; min-height: 40px; display: flex; align-items: center; font: 600 12px/16px "Space Grotesk", var(--md-ref-typeface-plain); letter-spacing: .5px; text-transform: uppercase; color: var(--md-sys-color-on-surface-variant); }
+.qt-live__tune { position: absolute; top: 8px; right: 8px; }
+.qt-live__face { position: relative; width: 148px; height: 148px; display: grid; place-items: center; overflow: hidden; background: color-mix(in srgb, var(--qt-live-accent) 22%, var(--md-sys-color-surface-container-lowest)); color: var(--qt-live-content); }
+.qt-live__face > * { grid-area: 1 / 1; }
+.qt-live__control { appearance: none; border: 0; padding: 0; background: none; font: inherit; color: inherit; cursor: pointer; touch-action: none; border-radius: 50%; }
+.qt-live__face--torch { cursor: ns-resize; }
+.qt-live__fill { position: absolute; left: 0; right: 0; bottom: 0; background: var(--qt-live-accent); transition: height .18s cubic-bezier(.2, 0, 0, 1); }
+.qt-live__icon { position: relative; --md-icon-size: 48px; color: var(--md-sys-color-on-surface); }
+.qt-live__sos { font: 800 30px/1 "Space Grotesk", var(--md-ref-typeface-plain); letter-spacing: 1px; }
+.qt-live__face--sending { background: var(--qt-live-accent); color: #fff; animation: qt-sos 1.2s steps(1, end) infinite; }
+@keyframes qt-sos { 50% { background: color-mix(in srgb, var(--qt-live-accent) 35%, var(--md-sys-color-surface-container-lowest)); color: var(--qt-live-content); } }
+.qt-live__value { margin-top: 8px; font: 700 28px/34px "Space Grotesk", var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; }
+.qt-live__note { font: 500 14px/20px var(--md-ref-typeface-plain); color: var(--qt-live-content); }
+.qt-live .tk-dial__guide { stroke: var(--qt-live-content); }
+@media (prefers-reduced-motion: reduce) { .qt-live__fill { transition: none; } .qt-live__face--sending { animation: none; } }
 
-.nm-counter-value--small { font-size: 28px; line-height: 34px; }
-.nm-result strong, .nm-counter-value { white-space: nowrap; }
 /* A tool alone in its section: badge, text, then its control, in reading order. */
 .qt-grid > .qt-tile--wide { flex-direction: row; justify-content: flex-start; align-items: center; gap: 16px; padding: 16px 20px; }
 .qt-grid > .qt-tile--wide .qt-tile__text { flex: 1; }
+
+/* ToolkitToolBottomSheet.kt: a ModalBottomSheet with no drag handle that opens straight to Expanded. The scrim fades
+   in at 32% and the sheet slides up from the bottom edge with the emphasized decelerate curve. */
+.tk-sheet-backdrop { background: rgba(0, 0, 0, 0.32); animation: tk-scrim-in 250ms linear both; }
+.tk-sheet-surface { padding: 16px 16px 40px; gap: 16px; box-shadow: none; animation: tk-sheet-in 400ms cubic-bezier(0.05, 0.7, 0.1, 1) both; }
+@keyframes tk-scrim-in { from { opacity: 0; } }
+@keyframes tk-sheet-in { from { transform: translateY(100%); } }
+@media (prefers-reduced-motion: reduce) { .tk-sheet-backdrop, .tk-sheet-surface { animation: none; } }
+
+/* Flash Dimmer (FlashDimmerTool.kt). */
+.tk-flash { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.tk-flash__level { margin: 0; font: 400 24px/32px var(--md-ref-typeface-plain); color: var(--md-sys-color-primary); }
+.tk-flash__row { display: flex; gap: 16px; width: 100%; height: 240px; align-items: center; }
+.tk-flash__presets { flex: 3; height: 100%; display: flex; flex-direction: column; gap: 8px; }
+/* Four equal buttons in the 240dp column: (240 - 3 x 8) / 4 = 54dp each. */
+.tk-flash__presets > * { width: 100%; --md-filled-button-container-height: 54px; --md-filled-tonal-button-container-height: 54px; }
+.tk-flash__bar { flex: 2; height: 100%; margin: 0 12px; display: flex; flex-direction: column; gap: 3px; touch-action: none; cursor: ns-resize; }
+.tk-flash__bar:focus-visible { outline: 2px solid var(--md-sys-color-primary); outline-offset: 4px; border-radius: 8px; }
+.tk-flash__segment { flex: 1; border-radius: 8px; background: var(--md-sys-color-surface-container-highest); transition: background-color .12s linear; }
+.tk-flash__segment.is-on { background: var(--md-sys-color-primary); }
