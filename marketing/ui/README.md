@@ -14,7 +14,7 @@ sheets, full-screen dialogs, drawers and overflow menu over the content. App Too
 nothing else. Which navigation buttons appear comes from Material Next's rules, never from a screen. App Toolkit
 keeps its screen content, tools, state controls, palettes and product copy.
 
-It uses Material Next from its Git source (`github:…#9627d8e`) until the next npm release carries the Android
+It uses Material Next from its Git source (`github:…#320fd41`) until the next npm release carries the Android
 preview, so installing needs Git as well as Node.js 24; the package builds itself on install. The gallery opens
 each screen in the same page; `screen.html` remains for captures and direct links.
 Gallery cards start without device frames. Opening screen detail shows a frame automatically,

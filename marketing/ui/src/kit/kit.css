@@ -1471,7 +1471,7 @@ mnw-android-screen,
 /* Tool sheet */
 
 .tk-tool-interactive--center { align-items: center; text-align: center; }
-.tk-tool-interactive--center > md-slider, .tk-tool-interactive--center > md-filled-button { align-self: stretch; }
+.tk-tool-interactive--center > .tk-slider, .tk-tool-interactive--center > md-filled-button { align-self: stretch; }
 .tk-readout { display: flex; flex-direction: column; gap: 2px; }
 .tk-readout__value { font: 700 28px/34px "Space Grotesk", var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; }
 .tk-readout__note, .tk-muted { font: 400 13px/18px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
@@ -1555,6 +1555,7 @@ mnw-android-screen,
 .qt-live { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 16px 12px 20px; border-radius: 8px; background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface); cursor: pointer; transition: background-color .15s ease; --qt-live-accent: var(--tk-teal-container); --qt-live-content: var(--tk-teal-content); }
 .qt-live-row > :first-child { border-radius: 28px 8px 8px 28px; }
 .qt-live-row > :last-child { border-radius: 8px 28px 28px 8px; }
+.qt-live-row > :only-child { border-radius: 28px; }
 .qt-live[data-accent="gold"] { --qt-live-accent: var(--tk-gold-container); --qt-live-content: var(--tk-gold-content); }
 .qt-live[data-accent="magenta"] { --qt-live-accent: var(--tk-magenta-container); --qt-live-content: var(--tk-magenta-content); }
 .qt-live:hover { background: var(--md-sys-color-surface-container-highest); }
@@ -1759,7 +1760,6 @@ mnw-android-screen,
 .measure-ruler .measure-display { font-size:32px; }
 .measure-ruler md-outlined-segmented-button-set { display:flex; }
 .measure-ruler md-outlined-segmented-button { flex:1; }
-.measure-ruler md-slider { width:100%; flex:none; }
 .measure-calibration { background:var(--md-sys-color-surface-container); border-radius:16px; padding:12px; display:flex; flex-direction:column; gap:8px; }
 .measure-calibration p { font-size:12px; }
 .measure-reaction__pad { height:160px; border-radius:16px; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:4px; background:var(--md-sys-color-surface-container-high); }
@@ -1777,6 +1777,8 @@ mnw-android-screen,
 
 .measure-unit-picker { position:relative; flex:none; align-self:center; }
 
+/* The reference keeps room for its longest calibration, so the slider under it stays put. */
+.measure-ruler__reference-box { flex:none; }
 .measure-ruler__reference { width:16px; margin:4px auto; flex:none; position:relative; border-block:2px solid var(--md-sys-color-primary); }
 .measure-ruler__reference::before { content:""; position:absolute; top:0; bottom:0; left:7px; width:2px; background:var(--md-sys-color-primary); }
 
@@ -1794,3 +1796,20 @@ mnw-android-screen,
 
 /* ToolkitToolBottomSheet.kt: the header, the tool and the Quick Settings card 16 dp apart, inside the shell's sheet. */
 .tk-sheet-content { display: flex; flex-direction: column; gap: 16px; }
+
+/* Compose Slider / RangeSlider (kit/slider.js): a 16 dp track split by a 4 x 44 dp handle with
+   6 dp gaps, 8 dp outer corners and 2 dp corners at the handle, stop dots on the inactive ends. */
+.tk-slider { --_cs: calc(2px + var(--start) * (100% - 4px)); --_ce: calc(2px + var(--end) * (100% - 4px)); position: relative; height: 44px; flex: none; touch-action: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.tk-slider__track { position: absolute; inset: 0; }
+.tk-slider__track::before, .tk-slider__track::after, .tk-slider__lo { content: ""; position: absolute; top: 14px; height: 16px; }
+/* Active: from the start (or the first handle) to the last handle. */
+.tk-slider__track::before { left: 0; right: calc(100% - var(--_ce) + 8px); border-radius: 8px 2px 2px 8px; background: var(--md-sys-color-primary); }
+.tk-slider--range .tk-slider__track::before { left: calc(var(--_cs) + 8px); border-radius: 2px; }
+/* Inactive: after the last handle, and before the first on a range. Each ends in a stop dot. */
+.tk-slider__track::after { left: calc(var(--_ce) + 8px); right: 0; max-width: 100%; border-radius: 2px 8px 8px 2px; background: radial-gradient(circle 2px at calc(100% - 8px) 50%, var(--md-sys-color-primary) 99%, transparent) var(--md-sys-color-secondary-container); }
+.tk-slider__lo { left: 0; width: max(0px, calc(var(--_cs) - 10px)); border-radius: 8px 2px 2px 8px; background: radial-gradient(circle 2px at 8px 50%, var(--md-sys-color-primary) 99%, transparent) var(--md-sys-color-secondary-container); }
+.tk-slider__handle { position: absolute; top: 0; left: calc(var(--f) * (100% - 4px)); width: 4px; height: 44px; border-radius: 2px; background: var(--md-sys-color-primary); transition: width .1s, transform .1s; }
+.tk-slider:active .tk-slider__handle { transform: scaleX(.5); }
+.tk-slider__input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; pointer-events: none; }
+.tk-slider:has(.tk-slider__input:nth-of-type(1):focus-visible) .tk-slider__handle[data-i="0"],
+.tk-slider:has(.tk-slider__input:nth-of-type(2):focus-visible) .tk-slider__handle[data-i="1"] { outline: 2px solid var(--md-sys-color-secondary); outline-offset: 2px; }

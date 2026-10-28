@@ -143,7 +143,7 @@ try {
     for(const activeSheet of ['ruler','protractor','counter','bill_splitter','unit_converter','reaction_test']) {
       await page.goto(`${base}/screen.html?id=numbers&window=${window}&theme=${theme}&panel=none&state=${encodeURIComponent(JSON.stringify({activeSheet}))}`);
       await page.locator('[role="dialog"]').waitFor();
-      if(activeSheet==='ruler') {assert.equal(await page.locator(SHEET).count(),0);assert.equal(await page.locator('mnw-android-screen .fullscreen').count(),1);assert.equal(await page.locator('md-slider[range]').count(),1);}
+      if(activeSheet==='ruler') {assert.equal(await page.locator(SHEET).count(),0);assert.equal(await page.locator('mnw-android-screen .fullscreen').count(),1);assert.equal(await page.locator('.tk-slider--range').count(),1);}
       if(activeSheet==='counter') assert.equal(await page.locator('[aria-label="Step increment"]').count(),0);
       checks++;
     }
@@ -161,10 +161,15 @@ try {
   await openMeasure('ruler');
   await page.locator('md-outlined-segmented-button[label="in"]').click();
   await page.waitForFunction(()=>document.querySelector('.measure-ruler .measure-display').textContent.includes('in'));
-  await page.locator('.measure-calibration md-slider').evaluate(el=>{el.value=2;el.dispatchEvent(new Event('input',{bubbles:true}));});
-  await page.waitForFunction(()=>document.querySelector('.measure-calibration md-slider').value===2);checks++;
+  // The calibration slider stays where it is while the reference above it grows (the card keeps its height).
+  const calibration=page.locator('.measure-calibration .tk-slider');
+  const calibrationTop=(await calibration.boundingBox()).y;
+  await calibration.locator('input').focus();
+  await page.keyboard.press('End');
+  await page.waitForFunction(()=>document.querySelector('.measure-calibration .tk-slider input').value==='2');
+  assert.equal((await calibration.boundingBox()).y,calibrationTop);checks++;
   await openMeasure('protractor');
-  await page.locator('.measure-body md-slider').locator('input').focus();
+  await page.locator('.measure-body .tk-slider input').focus();
   await page.keyboard.press('ArrowRight');
   await page.waitForFunction(()=>document.querySelector('.measure-display').textContent.includes('46'));checks++;
   await openMeasure('bill_splitter',{billAmount:'10.00',tipPercent:15,splitPeople:'3'});
@@ -253,6 +258,25 @@ try {
       return failures;
     });
     assert.deepEqual(failures, []);
+    checks++;
+  }
+  // Without set() nothing measures the page: the ruler's scale and the protractor still have to be drawn
+  // at their real size, or a capture shows the wrong millimetres.
+  for (const window of ['phone', 'fold', 'desktop']) {
+    const sizes = await page.evaluate(async (window) => {
+      const api = await import('/src/embed.js');
+      const measure = async (activeSheet, selector) => {
+        const target = document.createElement('div');
+        document.body.replaceChildren(target);
+        await api.mount(target, 'numbers', {activeSheet}, {frame: false, window});
+        const el = target.querySelector(selector);
+        const [, , w, h] = el.getAttribute('viewBox').split(' ').map(Number);
+        return {drawn: [w, h], shown: [el.clientWidth, el.clientHeight]};
+      };
+      return {ruler: await measure('ruler', '.measure-ruler__scale'), protractor: await measure('protractor', '.measure-protractor')};
+    }, window);
+    assert.ok(Math.abs(sizes.ruler.drawn[1] - sizes.ruler.shown[1]) < 1, `${window}: ruler drawn ${sizes.ruler.drawn[1]}px tall, shown ${sizes.ruler.shown[1]}px`);
+    assert.ok(Math.abs(sizes.protractor.drawn[0] - sizes.protractor.shown[0]) < 1, `${window}: protractor drawn ${sizes.protractor.drawn[0]}px wide, shown ${sizes.protractor.shown[0]}px`);
     checks++;
   }
   // Deterministic catalog data makes FAB geometry independent of the live API.
