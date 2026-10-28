@@ -7,8 +7,8 @@ window rules, device frames and embed lifecycle. The gallery has no drawer or fo
 "none"`). Motion and Specifications remain standalone reference URLs. App Toolkit keeps its three
 screen renderers, state controls, Android app chrome, palettes and product content.
 
-It pins Material Next `cf79323` until those fixes reach npm. The gallery opens each screen in the same page; `screen.html` remains for captures and direct links.
-Installation needs Git and Node.js 24; npm builds the package from source.
+It uses Material Next `0.0.7` from npm. The gallery opens each screen in the same page; `screen.html` remains for captures and direct links.
+Installation needs Node.js 24; the published package includes its built components.
 Gallery cards start without device frames. Opening screen detail shows a frame automatically,
 while an explicit `frame=none` URL stays frameless.
 

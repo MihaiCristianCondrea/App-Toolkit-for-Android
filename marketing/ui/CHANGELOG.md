@@ -6,7 +6,7 @@
 
 ### Changed
 
-- Pin Material Next to `cf79323` for launcher Edit-mode and drag animations and compact drawer alignment, pending its npm release.
+- Use Material Next `0.0.7` from npm for launcher Edit-mode and drag animations and compact drawer alignment.
 - Use Material Next 0.0.6 from npm. The gallery and each screen's prototype are one page (`mountMarketingHub`): opening a screen no longer reloads, and All screens or Back return where the gallery was scrolled. The gallery and the reference pages have no drawer, menu button or footer; the reference pages get a back button. The device fills the stage height, and the palette menu no longer makes the settings panel scroll.
 - Used Material Next 0.0.4 from npm for the simplified gallery, automatic detail frames, the shared copyright footer, a drawer whose footer stays put while its destinations scroll, and a launcher without App Toolkit.
 
