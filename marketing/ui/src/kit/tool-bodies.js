@@ -149,20 +149,24 @@ export function extraToolBody(tool, state, onState) {
     }
 
     case "bubble_level": {
-      // LevelTool.kt: pitch and roll pills over a 200dp face with a 40dp target ring and a 30dp bubble that moves
-      // 80dp at 45°, primary when level and secondary otherwise. The face is the 16-sided cookie.
+      // LevelTool.kt: a 200dp face over the pitch and roll pills, with a 40dp target ring and a 30dp bubble that moves
+      // 80dp at 45°, primary when level and secondary otherwise. The face is the 16-sided cookie, crossed edge to
+      // edge like the Quick Tools widget, and the pills sit under it.
       const roll = Number(state.levelRoll ?? 0.4);
       const pitch = Number(state.levelPitch ?? -0.2);
       const flat = Math.abs(roll) < 1 && Math.abs(pitch) < 1;
       const shift = (deg) => (-Math.max(-45, Math.min(45, deg)) / 45) * 80;
       return html`
         <div class="tk-tool-interactive tk-tool-interactive--center">
-          ${pillPair(`P: ${Math.trunc(pitch)}°`, `R: ${Math.trunc(roll)}°`)}
           <div class="tk-level" style=${shapeMaskStyle(brandShape("16 Sided Cookie"))} role="img"
             aria-label="Bubble level, ${flat ? "level" : "tilted"}, pitch ${Math.trunc(pitch)} degrees, roll ${Math.trunc(roll)} degrees">
+            <svg class="tk-level__cross" viewBox="0 0 100 100" aria-hidden="true">
+              <line x1="0" y1="50" x2="100" y2="50" /><line x1="50" y1="0" x2="50" y2="100" />
+            </svg>
             <span class="tk-level__target"></span>
             <span class="tk-level__bubble ${flat ? "is-level" : ""}" style="transform:translate(${shift(roll)}px, ${shift(pitch)}px)"></span>
           </div>
+          ${pillPair(`P: ${Math.trunc(pitch)}°`, `R: ${Math.trunc(roll)}°`)}
         </div>`;
     }
 
@@ -243,16 +247,16 @@ export function extraToolBody(tool, state, onState) {
     }
 
     case "breathing": {
-      // BreathingTool.kt: phase and seconds pills over a 200dp circle that grows to 1 on the inhale and shrinks to
+      // BreathingTool.kt: a 200dp circle over the phase and seconds pills; it grows to 1 on the inhale and shrinks to
       // 0.4 on the exhale, primary while inhaling and secondary while exhaling. It starts when the sheet opens.
       const phase = state.breathPhase ?? "INHALE";
       const tone = phase === "INHALE" ? "inhale" : phase === "EXHALE" ? "exhale" : "hold";
       return html`
         <div class="tk-tool-interactive tk-tool-interactive--center">
-          ${pillPair(phase.replace("_", " "), `${state.breathSeconds ?? 3}s`)}
           <div class="tk-breathe tk-breathe--${tone}" style="transform:scale(${Number(state.breathProgress ?? 0.7)})" role="img" aria-label="Breathing, ${phase.toLowerCase().replace("_", " ")}">
             <md-icon>favorite</md-icon>
           </div>
+          ${pillPair(phase.replace("_", " "), `${state.breathSeconds ?? 3}s`)}
         </div>`;
     }
 

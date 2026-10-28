@@ -110,7 +110,7 @@ export const topAppBar = ({
  * App Toolkit's three primary bottom navigation tabs (`Quick Tools`, `Measure`, `Apps`).
  */
 const NAV = [
-  { id: "quick-tools", label: "Quick Tools", icon: "grid_view" },
+  { id: "quick-tools", label: "Quick Tools", icon: "grid_view", rounded: true },
   { id: "numbers", label: "Measure", icon: "straighten" },
   { id: "apps", label: "Apps", icon: "apps" },
 ];
@@ -132,8 +132,8 @@ export const navigationBar = (selected = "numbers", onSelect, win) =>
         <md-navigation-bar class="sc-navbar" .activeIndex=${Math.max(0, NAV.findIndex((n) => n.id === selected))}>
           ${NAV.map(
             (n) => html`<md-navigation-tab label=${n.label} ?active=${n.id === selected} @click=${() => onSelect?.(...NAV_TARGETS[n.id])}>
-              <md-icon slot="active-icon" class="sc-filled">${n.icon}</md-icon>
-              <md-icon slot="inactive-icon">${n.inactiveIcon ?? n.icon}</md-icon>
+              <md-icon slot="active-icon" class="sc-filled ${n.rounded ? "sc-rounded" : ""}">${n.icon}</md-icon>
+              <md-icon slot="inactive-icon" class=${n.rounded ? "sc-rounded" : ""}>${n.inactiveIcon ?? n.icon}</md-icon>
             </md-navigation-tab>`,
           )}
         </md-navigation-bar>

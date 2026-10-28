@@ -25,10 +25,13 @@ const SWIPE_SLOP = 6;
 let torchPress = null;
 
 const SECTIONS = [
-  { id: "sensors", title: "Sensors", tools: ["compass", "bubble_level"], live: "sensors" },
-  { id: "light", title: "Light & signals", tools: ["flash_dimmer", "morse_sos"], live: "light" },
-  { id: "wellbeing", title: "Wellbeing", tools: ["breathing"] },
+  { id: "sensors", title: "Sensors", icon: "sensors", tools: ["compass", "bubble_level"], live: "sensors" },
+  { id: "light", title: "Light & signals", icon: "flashlight_on", tools: ["flash_dimmer", "morse_sos"], live: "light" },
+  { id: "wellbeing", title: "Wellbeing", icon: "self_improvement", tools: ["breathing"] },
 ];
+
+/** The native ad sits between Sensors and Light & signals, as the app places one between categories. */
+const AD_AFTER = "sensors";
 
 export default {
   id: "quick-tools",
@@ -39,7 +42,6 @@ export default {
   palette: "google",
   description: "Live sensors and Quick Settings tiles that need no special permission.",
   defaults: {
-    selectedCategory: "all",
     searchQuery: "",
     activeToolId: "none",
     drawerOpen: false,
@@ -62,7 +64,7 @@ export default {
       type: "presets",
       label: "Quick Tools states",
       options: [
-        ["Overview", { selectedCategory: "all", activeToolId: "none" }],
+        ["Overview", { activeToolId: "none" }],
         ["Compass sheet", { activeToolId: "compass" }],
         ["Bubble level sheet", { activeToolId: "bubble_level" }],
         ["Flash dimmer sheet", { activeToolId: "flash_dimmer" }],
@@ -73,13 +75,11 @@ export default {
         ["Morse & SOS sheet", { activeToolId: "morse_sos" }],
       ],
     },
-    { key: "selectedCategory", label: "Filter", type: "choice", options: ["all", "sensors", "light", "wellbeing"] },
     { key: "compassHeading", label: "Heading", min: 0, max: 359, step: 1 },
     { key: "flashOn", label: "Flashlight on", type: "toggle" },
   ],
   render(s) {
     const query = (s.searchQuery || "").trim().toLowerCase();
-    const cat = s.selectedCategory || "all";
     const open = (id) => s.set({ activeToolId: id });
     const matches = (id) => !query || TOOLS[id].title.toLowerCase().includes(query) || TOOLS[id].subtitle.toLowerCase().includes(query);
     const activate = (id) => (e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), open(id));
@@ -172,22 +172,36 @@ export default {
         </div>`;
     };
 
-    const sections = SECTIONS.filter((sec) => cat === "all" || cat === sec.id).map((sec) => {
+    const title = (icon, text) => html`<h2 class="qt-section__title"><md-icon class="sc-rounded" aria-hidden="true">${icon}</md-icon>${text}</h2>`;
+
+    // The native ad, drawn like a widget: the advertiser's icon in a shape, its headline and line, one action.
+    // Marketing media never shows it; the prototype's Show ads switch turns it on to check the layout.
+    const ad = () => html`
+      <section class="qt-section" aria-label="Sponsored content">
+        ${title("campaign", "Sponsored content")}
+        <div class="qt-ad">
+          <div class="qt-ad__face" style=${shapeMaskStyle(shapeUrl("cookie_9sided"))}><md-icon>apps</md-icon></div>
+          <div class="qt-ad__text">
+            <span class="qt-ad__badge">Ad</span>
+            <h3 class="qt-ad__headline">Advertiser app name</h3>
+            <p class="qt-ad__body">One short line from the advertiser about what the app does.</p>
+            <div class="qt-ad__meta"><md-icon>star</md-icon>4.6 · Free</div>
+          </div>
+          <md-filled-tonal-button class="qt-ad__cta">Install</md-filled-tonal-button>
+        </div>
+      </section>`;
+
+    const sections = SECTIONS.map((sec) => {
       const ids = sec.tools.filter(matches);
       if (!ids.length) return nothing;
       const body = sec.live
         ? html`<div class="qt-live-row qt-live-row--${sec.live}">${ids.map((id) => live[id]())}</div>`
         : breathe();
-      return html`<section class="qt-section"><h2 class="qt-section__title">${sec.title}</h2>${body}</section>`;
+      return html`<section class="qt-section">${title(sec.icon, sec.title)}${body}</section>
+        ${sec.id === AD_AFTER && s.showAds && !query ? ad() : nothing}`;
     });
 
     const content = html`
-      <div class="ai-filter-row" style="padding:8px 16px 4px">
-        <md-chip-set aria-label="Filter tools">
-          <md-filter-chip label="All tools" ?selected=${cat === "all"} @click=${() => s.set({ selectedCategory: "all" })}></md-filter-chip>
-          ${SECTIONS.map((sec) => html`<md-filter-chip label=${sec.title} ?selected=${cat === sec.id} @click=${() => s.set({ selectedCategory: sec.id })}></md-filter-chip>`)}
-        </md-chip-set>
-      </div>
       <div class="tk-screen-pad" style="padding-top:8px">
         ${sections}
       </div>`;

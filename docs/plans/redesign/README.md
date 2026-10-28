@@ -20,8 +20,8 @@ Made by the owner on October 28, 2026:
    copied), in the web kit and in Compose alike.
 5. **Sheets follow the app.** Flash Dimmer (`FlashDimmerTool.kt`), Bubble Level (`LevelTool.kt`) and Breathe
    (`BreathingTool.kt`) are the app's, one to one, with one change: two values side by side (pitch and roll; phase
-   and seconds) are a connected pair, round outside and 8dp inside, like grouped buttons. The level face is the
-   16-sided cookie. Every sheet opens like the app's `ModalBottomSheet`: no drag handle, straight to expanded,
+   and seconds) are a connected pair under the face, round outside and 8dp inside, like grouped buttons. The level
+   face is the 16-sided cookie, crossed edge to edge like its widget. Every sheet opens like the app's `ModalBottomSheet`: no drag handle, straight to expanded,
    sliding up over a 32% scrim. Ruler, Protractor, Morse & SOS and the Measure sheets keep their design.
 6. **Quick Tools is live.** Sensors and Light & signals are rows of two equal live widgets, [Compass][Bubble Level]
    and [Flashlight][SOS], each tool working inside its own shape: the compass in the 8-sided cookie, the level in
@@ -30,7 +30,12 @@ Made by the owner on October 28, 2026:
    widget opens its sheet. A vertical swipe over the flashlight's shape sets the brightness and fills the shape like
    a progress bar, only on torches that can dim; the number of levels is the device's (a Pixel 8 Pro has 45).
    Breathe (the app's name, rhythm 4-2-4-1) is one wide card without a play button. Quick Tools cards do not scale
-   when pressed. The "Add a tool to Quick Settings" card is gone.
+   when pressed. The "Add a tool to Quick Settings" card is gone, and so are the filter chips: three sections scroll
+   faster than they filter. Each section title has an icon. The Quick Tools icon in the bottom bar is the rounded
+   one, selected and not.
+8. **One native ad on Quick Tools,** between Sensors and Light & signals, under a "Sponsored content" title: drawn
+   like the widgets (the advertiser's icon in a shape, headline, line, rating, Install), with the Ad badge. It shows
+   only with the prototype's Show ads switch; marketing media never shows it.
 7. **Kotlin waits.** The app's code is not changed during the web redesign. `CompassTool.kt` was changed once
    (`2da90de1`) and stays as it is; nothing else in Compose changes until step 7.
 

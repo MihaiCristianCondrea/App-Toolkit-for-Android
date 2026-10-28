@@ -1798,9 +1798,10 @@ md-icon-button.ai-favorite {
 /* ResultPill.kt colours (primary container, headlineMedium), joined as a connected pair. */
 .tk-pill-pair { display: flex; gap: 2px; }
 .tk-pill { padding: 12px 28px; background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); font: 400 28px/36px var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; border-radius: 8px; white-space: nowrap; }
-.tk-pill-pair > :first-child { border-radius: 999px 8px 8px 999px; }
-.tk-pill-pair > :last-child { border-radius: 8px 999px 999px 8px; }
-.tk-pill--single { border-radius: 999px; }
+/* 60dp tall, so 30dp is fully round. Larger radii would make the browser scale every corner down, the 8dp ones too. */
+.tk-pill-pair > :first-child { border-radius: 30px 8px 8px 30px; }
+.tk-pill-pair > :last-child { border-radius: 8px 30px 30px 8px; }
+.tk-pill--single { border-radius: 30px; }
 
 /* LevelTool.kt, on the 16-sided cookie. */
 .tk-level { position: relative; width: 200px; height: 200px; display: grid; place-items: center; background: var(--md-sys-color-surface-variant); }
@@ -1837,3 +1838,21 @@ md-icon-button.ai-favorite {
 .tk-flash__bar:focus-visible { outline: 2px solid var(--md-sys-color-primary); outline-offset: 4px; border-radius: 8px; }
 .tk-flash__segment { flex: 1; border-radius: 8px; background: var(--md-sys-color-surface-container-highest); transition: background-color .12s linear; }
 .tk-flash__segment.is-on { background: var(--md-sys-color-primary); }
+
+.sc-rounded { --md-icon-font: "Material Symbols Rounded"; font-family: "Material Symbols Rounded"; }
+.tk-level__cross { width: 100%; height: 100%; }
+.tk-level__cross line { stroke: var(--md-sys-color-outline); stroke-width: 1; opacity: .6; }
+.qt-section__title { display: flex; align-items: center; gap: 8px; }
+.qt-section__title md-icon { --md-icon-size: 20px; color: var(--md-sys-color-primary); }
+
+/* Native ad (between Sensors and Light & signals): the widgets' card, shape and type, plus the Ad badge and one
+   action, so it reads as part of the page but never as a tool. */
+.qt-ad { display: grid; grid-template-columns: auto 1fr; grid-template-areas: "face text" "cta cta"; gap: 16px; padding: 20px; border-radius: 28px; background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface); }
+.qt-ad__face { grid-area: face; width: 88px; height: 88px; display: grid; place-items: center; background: var(--md-sys-color-tertiary-container); color: var(--md-sys-color-on-tertiary-container); --md-icon-size: 40px; }
+.qt-ad__text { grid-area: text; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.qt-ad__badge { align-self: flex-start; margin-bottom: 4px; padding: 2px 8px; border-radius: 6px; background: var(--md-sys-color-tertiary); color: var(--md-sys-color-on-tertiary); font: 700 11px/16px var(--md-ref-typeface-plain); letter-spacing: .5px; }
+.qt-ad__headline { margin: 0; font: 600 18px/24px var(--md-ref-typeface-plain); }
+.qt-ad__body { margin: 0; font: 400 14px/20px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
+.qt-ad__meta { display: flex; align-items: center; gap: 4px; margin-top: 2px; font: 500 13px/18px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); --md-icon-size: 16px; }
+.qt-ad__meta md-icon { color: var(--md-sys-color-tertiary); font-variation-settings: "FILL" 1; }
+.qt-ad__cta { grid-area: cta; width: 100%; }
