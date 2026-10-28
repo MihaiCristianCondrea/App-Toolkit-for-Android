@@ -143,6 +143,7 @@ export const navigationBar = (selected = "numbers", onSelect, win) =>
 const DRAWER_ENTRIES = [
   { id: "settings", label: "Settings", icon: "settings" },
   { id: "help", label: "Help & feedback", icon: "help_outline" },
+  { id: "updates", label: "Updates", icon: "event_note" },
   { id: "share", label: "Share", icon: "share" },
 ];
 
@@ -215,26 +216,23 @@ export const systemNavigationBar = ({ type = "gesture", onBack, onHome, onRecent
     ? threeButtonNavigation({ onBack, onHome, onRecents })
     : gestureNavigationPill();
 
+/**
+ * The modal drawer: ShellChrome.kt's ModalDrawerSheet with ShellDrawerContent (no tabs, the bar has them). The
+ * sheet is at most 360 dp wide with 16 dp end corners over a 32% scrim; the header is the app's mark at the title's
+ * line height beside "App Toolkit" in title-large, under the status bar, and toolkitFooter()'s entries sit on the
+ * bottom edge. Their pages are library screens the kit does not draw, so an entry only closes the drawer.
+ */
 export const navigationDrawer = ({ open = false, onClose, onNavigate } = {}) => {
   if (!open) return nothing;
   return html`
     <div class="ai-drawer-overlay">
       <div class="ai-drawer-scrim" @click=${() => onClose?.()}></div>
-      <aside class="ai-drawer-sheet">
-        <div class="ai-drawer-header">
-          <img src=${asset("/logos/app_logo.svg")} alt="App Toolkit Logo" class="ai-drawer-logo" />
-          <h2 class="ai-drawer-title">App Toolkit</h2>
+      <aside class="ai-drawer-sheet" aria-label="Navigation">
+        <div class="sc-pdrawer__header">
+          <img src=${asset("/logos/app_logo.svg")} alt="" /><span>App Toolkit</span>
         </div>
-        <div class="ai-drawer-body"></div>
-        <div class="ai-drawer-footer">
-          <div class="ai-drawer-item" @click=${() => { onClose?.(); }}>
-            ${icon("help_outline", { size: 24 })}
-            <span>Help &amp; feedback</span>
-          </div>
-          <div class="ai-drawer-item" @click=${() => { onClose?.(); }}>
-            ${icon("share", { size: 24 })}
-            <span>Share</span>
-          </div>
+        <div class="sc-pdrawer__items sc-pdrawer__footer">
+          ${DRAWER_ENTRIES.map((e) => html`<button class="sc-pdrawer__item" @click=${() => onClose?.()}>${icon(e.icon)}<span>${e.label}</span></button>`)}
         </div>
       </aside>
     </div>
