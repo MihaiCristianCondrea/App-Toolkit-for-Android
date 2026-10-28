@@ -6,7 +6,7 @@ export const PRODUCT_CONFIG = {
   name: "App Toolkit",
   headline: "Product UI showcase",
   description:
-    "Browse and preview App Toolkit screens (Quick Tools, Numbers, and Apps) with official Material Web 3 components.",
+    "Browse and preview App Toolkit screens (Quick Tools, Measure, and Apps) with official Material Web 3 components.",
   buildNumber: "300000",
   toolkitVersion: "3.0.0",
   logo: "/logos/app_logo.svg",

@@ -1,4 +1,4 @@
-import { html, nothing } from "lit";
+import { html, nothing, svg } from "lit";
 
 /**
  * Interactive bodies for the tool bottom sheet, plus the live sensor dials shared with the Quick Tools
@@ -24,6 +24,38 @@ export const compassDial = (heading = 312, size = 96) => {
       <path class="tk-dial__needle-tail" d="M50 78 L56 50 L44 50 Z" />
     </g>
     <circle class="tk-dial__hub" cx="50" cy="50" r="3.5" />
+  </svg>`;
+};
+
+const DIRECTIONS = ["North", "Northeast", "East", "Southeast", "South", "Southwest", "West", "Northwest"];
+/** "Northwest" for 312: the eight-point name of a heading. */
+export const direction = (deg) => DIRECTIONS[Math.round((((deg % 360) + 360) % 360) / 45) % 8];
+
+/**
+ * Compass rose: a ring of ticks every 5 degrees, degree numbers every 30 and the four cardinal names, turning
+ * against the heading so the fixed pointer in the middle always points where the phone points. `labels: false`
+ * leaves out the numbers and names, for small sizes.
+ */
+export const compassRose = (heading = 312, size = 240, { labels = true } = {}) => {
+  const ticks = Array.from({ length: 72 }, (_, i) => {
+    const deg = i * 5;
+    const kind = deg % 30 === 0 ? "major" : deg % 10 === 0 ? "mid" : "minor";
+    const len = { major: 9, mid: 6, minor: 4 }[kind];
+    return svg`<line class="tk-rose__tick tk-rose__tick--${kind} ${deg === 0 ? "tk-rose__tick--north" : ""}"
+      x1="100" y1="6" x2="100" y2="${6 + len}" transform="rotate(${deg} 100 100)" />`;
+  });
+  const numbers = labels
+    ? [30, 60, 120, 150, 210, 240, 300, 330].map((deg) => svg`<text class="tk-rose__deg" x="100" y="27" text-anchor="middle" transform="rotate(${deg} 100 100)">${deg}</text>`)
+    : nothing;
+  const names = [["N", "North", 0], ["E", "East", 90], ["S", "South", 180], ["W", "West", 270]].map(([short, long, deg]) =>
+    svg`<text class="tk-rose__card ${deg === 0 ? "tk-rose__card--north" : ""}" x="100" y="${labels ? 44 : 34}" text-anchor="middle"
+      transform="rotate(${deg} 100 100)">${labels ? long : short}</text>`);
+  return html`<svg class="tk-rose" width=${size} height=${size} viewBox="0 0 200 200" role="img"
+    aria-label="Compass, heading ${heading} degrees ${direction(heading)}">
+    <circle class="tk-rose__face" cx="100" cy="100" r="98" />
+    <g class="tk-rose__dial" style="transform:rotate(${-heading}deg)">${ticks}${numbers}${names}</g>
+    <path class="tk-rose__lubber" d="M100 0 L105 9 L95 9 Z" />
+    <path class="tk-rose__pointer" d="M100 62 L124 128 L100 116 L76 128 Z" />
   </svg>`;
 };
 
@@ -97,8 +129,12 @@ export function extraToolBody(tool, state, onState) {
       const heading = Number(state.compassHeading ?? 312);
       return html`
         <div class="tk-tool-interactive tk-tool-interactive--center">
-          ${compassDial(heading, 184)}
-          <div class="tk-readout"><span class="tk-readout__value">${heading}° ${cardinal(heading)}</span><span class="tk-readout__note">Magnetic north, from the geomagnetic sensor</span></div>
+          ${compassRose(heading, 272)}
+          <div class="tk-compass-readout">
+            <span class="tk-compass-readout__deg">${heading}°</span>
+            <span class="tk-compass-readout__dir">${direction(heading)}</span>
+            <span class="tk-readout__note">Magnetic north, from the geomagnetic sensor</span>
+          </div>
         </div>`;
     }
 
@@ -186,27 +222,6 @@ export function extraToolBody(tool, state, onState) {
             <md-filled-button class="tk-sos" @click=${() => onState({ sosActive: !sos })}><md-icon slot="icon">emergency</md-icon>${sos ? "Stop SOS" : "SOS"}</md-filled-button>
           </div>
           <p class="body-small tk-muted" style="margin:0">Blinks the camera torch. Keep it out of anyone's eyes.</p>
-        </div>`;
-    }
-
-    case "screen_light": {
-      // ScreenLightTool.kt: the light is white blended toward #FFB56B by warmth.
-      const brightness = Number(state.screenBrightness ?? 0.8);
-      const warmth = Number(state.screenWarmth ?? 0.3);
-      const mix = (from, to) => Math.round(from + (to - from) * warmth);
-      const light = `rgb(${mix(255, 255)} ${mix(255, 181)} ${mix(255, 107)})`;
-      return html`
-        <div class="tk-tool-interactive">
-          <div class="tk-screen-light" style="background:${light}" role="img" aria-label="Screen light preview"></div>
-          <div class="tk-field">
-            <span class="tk-field__label">Brightness</span>
-            <md-slider min="1" max="100" .value=${Math.round(brightness * 100)} labeled aria-label="Brightness" @input=${(e) => onState({ screenBrightness: Number(e.target.value) / 100 })}></md-slider>
-          </div>
-          <div class="tk-field">
-            <span class="tk-field__label">Warmth</span>
-            <md-slider min="0" max="100" .value=${Math.round(warmth * 100)} labeled aria-label="Warmth" @input=${(e) => onState({ screenWarmth: Number(e.target.value) / 100 })}></md-slider>
-          </div>
-          <p class="body-small tk-muted" style="margin:0">Fills the screen and keeps it on while open. Your brightness comes back when you close it.</p>
         </div>`;
     }
 

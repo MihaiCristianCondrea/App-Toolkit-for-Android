@@ -107,11 +107,11 @@ export const topAppBar = ({
 };
 
 /**
- * App Toolkit's three primary bottom navigation tabs (`Quick Tools`, `Numbers`, `Apps`).
+ * App Toolkit's three primary bottom navigation tabs (`Quick Tools`, `Measure`, `Apps`).
  */
 const NAV = [
   { id: "quick-tools", label: "Quick Tools", icon: "grid_view" },
-  { id: "numbers", label: "Numbers", icon: "calculate" },
+  { id: "numbers", label: "Measure", icon: "straighten" },
   { id: "apps", label: "Apps", icon: "apps" },
 ];
 

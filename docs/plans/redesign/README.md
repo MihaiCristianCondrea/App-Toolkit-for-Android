@@ -7,47 +7,63 @@ in `marketing/ui` before any Compose change.
 
 Made by the owner on October 28, 2026:
 
-1. **Three tabs stay:** Quick Tools, Numbers, Apps. No new tab, no device information screen.
-2. **Every tool the app has gets a place on a tab.** Coin Flip and Reaction Test join Numbers under
-   **Chance & reflex**; Screen Light joins Quick Tools under **Light & signals**. Material Colors stays in the app
-   only.
+1. **Three tabs stay:** Quick Tools, Measure, Apps. No new tab, no device information screen. The second tab was
+   called Numbers; with the ruler and protractor on it, every tool there gives a measurement or a number, so it is
+   **Measure**. Its route id stays `numbers`.
+2. **Quick Tools has three sections:** Sensors, Light & signals, Calm. Ruler and Protractor move to Measure.
+   Coin Flip and Reaction Test join Measure. Material Colors stays in the app only. **Screen Light is not
+   planned** and is not in the marketing UI.
 3. **Settings, About, Help, onboarding and the other library screens are not in the marketing UI.**
-4. **The existing tool sheets keep their design.** Flash Dimmer, Compass, Bubble Level, Ruler, Protractor, Morse &
+4. **The compass is redesigned** in the style of [MBCompass](https://github.com/CompassMB/MBCompass): a rose of
+   ticks, degree numbers and cardinal names that turns with the phone, a fixed pointer, and a large degree and
+   direction readout. Drawn for App Toolkit (MBCompass is GPL-3.0 and its rose artwork CC BY-SA 4.0; nothing is
+   copied), in the web kit and in Compose alike.
+5. **The other tool sheets keep their design.** Flash Dimmer, Compass, Bubble Level, Ruler, Protractor, Morse &
    SOS, Box Breathing and the Numbers sheets are not changed; new tools get sheets in the same style.
 
 ## Where each tool lives
 
 | Tab | Section | Tools |
 | --- | --- | --- |
-| Quick Tools | Measure | Compass and Bubble Level (live glance), Surface Ruler, Protractor |
-| Quick Tools | Light & signals | Flash Dimmer, Morse & SOS, Screen Light |
+| Quick Tools | Sensors | Compass (live rose), Bubble Level (live dial) |
+| Quick Tools | Light & signals | Flash Dimmer, Morse & SOS |
 | Quick Tools | Calm | Box Breathing |
-| Numbers | Calculate & convert | Tip & Bill Splitter, Unit Converter |
-| Numbers | Count | Counter |
-| Numbers | Chance & reflex | Random Number, Dice Roll, Coin Flip, Reaction Test |
+| Measure | Length & angle | Surface Ruler, Protractor |
+| Measure | Convert & split | Unit Converter, Tip & Bill Splitter |
+| Measure | Count & time | Counter, Reaction Test |
+| Measure | Chance | Random Number, Dice Roll, Coin Flip |
 | Apps | | The developer's apps from the metadata API |
 
 The app today has 12 tools on Quick Tools in four categories (Sensors & Measurement, Utilities & Fun, System &
-Controls, Wellbeing), with Morse and SOS as two tools. The table is the target; the Compose build follows it after
-the web screens are approved.
+Controls, Wellbeing), with Morse and SOS as two tools, and Screen Light. The table is the target; the Compose build
+follows it after the web screens are approved.
 
 ## Steps
 
 | Step | What | Status |
 | --- | --- | --- |
-| 1 | Every tool on its tab in the kit: Screen Light on Quick Tools; Count and Chance & reflex on Numbers; sheets for Screen Light, Coin Flip and Reaction Test, translated from `ScreenLightTool.kt`, `CoinFlipTool.kt` and `ReactionTestTool.kt` | Done |
-| 2 | Quick Tools layout pass: the Stitch concept's live sensor glance and tile status (on, level, ready) on every card; the Quick Settings how-to card | Next |
-| 3 | Numbers layout pass: hero, section rhythm, the counter card | |
-| 4 | Apps: real icons in captures, the Installed and Not installed filters the app has, the random app button | |
-| 5 | Phone, fold and desktop for each tab; light and dark; `ui-unslop` review | |
-| 6 | Owner approval, then Compose (`ToolkitTilesScreen.kt`, `NumbersScreen.kt`, the tile catalogue in `DefaultToolkitTilesRepository.kt`) | |
+| 1 | Every tool on its tab in the kit; sheets for Coin Flip and Reaction Test, translated from `CoinFlipTool.kt` and `ReactionTestTool.kt` | Done |
+| 2 | Quick Tools: Sensors as one grouped stack (compass rose card, level card), 28dp outer and 8dp inner corners in every group; the compass sheet redesigned; Measure tab with its four sections | Done (web) |
+| 3 | Compass in Compose (`CompassTool.kt`), matching the web rose | |
+| 4 | Expressive pass on both tabs: emphasized type, shape and colour per section, motion | |
+| 5 | Apps: real icons in captures, the Installed and Not installed filters the app has, the random app button | |
+| 6 | Phone, fold and desktop for each tab; light and dark; `ui-unslop` review | |
+| 7 | Owner approval, then Compose (`ToolkitTilesScreen.kt`, `NumbersScreen.kt`, the tile catalogue in `DefaultToolkitTilesRepository.kt`) | |
 
 Each step ends with `npm run build` and `npm run qa` passing in `marketing/ui`. The Stitch exports in
 `marketing/assets/ideas/` are read for steps 2 to 4 and deleted when step 4's concept is approved.
 
-## Known gaps in step 1
+## In the app, not in the marketing UI
+
+| Area | Missing in the kit |
+| --- | --- |
+| Quick Tools | Collapsible categories (remembered), the native ad between categories, tile status from the system (added, can add, unsupported) and the Android 13 "Add tile" request, hiding torch tools on devices without a torch |
+| Tools | Separate SOS and Morse tools (the kit shows them as one), the full-screen ruler with its 30 mm calibration, Material Colors (app only by decision), Screen Light (not planned) |
+| Apps | Installed and Not installed state, the app details sheet (screenshots, version, Open app, Google Play, Share, Copy package, and Battery, Notifications, Permissions and Storage shortcuts), Share on each card, the loading and error states with Try again |
+| Shell | Settings, Help & feedback, About, onboarding and the Components showcase: library screens, kept out of the marketing UI by decision |
+
+## Known gaps
 
 - The coin faces use Material Symbols (`person`, `token`); the app draws its own `ic_coin_heads` and
   `ic_coin_tails`.
-- The app opens Screen Light as a full-screen light with the controls at the bottom. The kit shows the same controls
-  in a sheet, with a preview of the light's colour.
+- The app's compass reads magnetic north only; the kit shows no true north or field strength either.

@@ -1201,6 +1201,9 @@ md-icon-button.ai-favorite {
 .corner-bento-top-right {
   border-radius: 8px 28px 8px 8px;
 }
+.corner-bento-bottom {
+  border-radius: 8px 8px 28px 28px;
+}
 .corner-bento-bottom-left {
   border-radius: 8px 8px 8px 28px;
 }
@@ -1719,9 +1722,6 @@ md-icon-button.ai-favorite {
 .qt-tile__top .tk-shape-badge, .nm-head .tk-shape-badge { filter: none; }
 @media (prefers-reduced-motion: reduce) { .app-tile-card--skeleton { animation: none; } }
 
-/* Screen Light (ScreenLightTool.kt): a preview of the light the screen gives. */
-.tk-screen-light { height: 120px; border-radius: 24px; border: 1px solid var(--md-sys-color-outline-variant); }
-
 /* Coin Flip (CoinFlipTool.kt): a 120dp coin, heads on primary, tails on secondary container. */
 .tk-coin { width: 120px; height: 120px; border-radius: 50%; display: grid; place-items: center; background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); box-shadow: inset 0 0 0 4px color-mix(in srgb, var(--md-sys-color-primary-container) 50%, transparent); --md-icon-size: 64px; }
 .tk-coin--tails { background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); }
@@ -1733,3 +1733,45 @@ md-icon-button.ai-favorite {
 .tk-reaction--early { background: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container); }
 .tk-reaction--result { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
 .tk-reaction__rating { padding: 6px 12px; border-radius: 8px; background: color-mix(in srgb, var(--md-sys-color-surface) 80%, transparent); color: var(--md-sys-color-on-surface); font: 500 14px/20px var(--md-ref-typeface-plain); }
+
+/* Compass rose: ticks every 5°, numbers every 30°, cardinal names; the dial turns, the pointer stays. */
+.tk-rose { flex-shrink: 0; overflow: visible; }
+.tk-rose__face { fill: color-mix(in srgb, var(--tk-teal-container) 10%, var(--md-sys-color-surface-container-lowest)); }
+.tk-rose__dial { transform-origin: 100px 100px; transition: transform .35s cubic-bezier(.2, 0, 0, 1); }
+.tk-rose__tick { stroke: var(--md-sys-color-on-surface-variant); stroke-linecap: round; }
+.tk-rose__tick--minor { stroke-width: .8; opacity: .45; }
+.tk-rose__tick--mid { stroke-width: 1.2; opacity: .7; }
+.tk-rose__tick--major { stroke: var(--md-sys-color-on-surface); stroke-width: 2.2; }
+.tk-rose__tick--north { stroke: var(--tk-orange-container); stroke-width: 3; }
+.tk-rose__deg { font: 500 9px "Space Grotesk", var(--md-ref-typeface-plain); fill: var(--md-sys-color-on-surface-variant); }
+.tk-rose__card { font: 700 11px var(--md-ref-typeface-plain); letter-spacing: .4px; fill: var(--md-sys-color-on-surface); }
+.tk-rose__card--north { fill: var(--tk-orange-content); }
+.tk-rose__lubber { fill: var(--tk-orange-container); }
+.tk-rose__pointer { fill: var(--md-sys-color-on-surface); stroke: var(--md-sys-color-surface-container-lowest); stroke-width: 2; stroke-linejoin: round; }
+.tk-compass-readout { display: flex; flex-direction: column; align-items: center; gap: 0; }
+.tk-compass-readout__deg { font: 700 48px/56px "Space Grotesk", var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; letter-spacing: -1px; }
+.tk-compass-readout__dir { font: 500 22px/28px var(--md-ref-typeface-plain); color: var(--tk-teal-content); }
+@media (prefers-reduced-motion: reduce) { .tk-rose__dial { transform-origin: 100px 100px; transition: none; } }
+
+/* Quick Tools sensors: one grouped stack, 28dp outer corners and 8dp seams like every other group. */
+.qt-stack { display: flex; flex-direction: column; gap: 4px; }
+.qt-stack > * { border-radius: 8px; }
+.qt-stack > :first-child { border-top-left-radius: 28px; border-top-right-radius: 28px; }
+.qt-stack > :last-child { border-bottom-left-radius: 28px; border-bottom-right-radius: 28px; }
+.qt-sensor { display: flex; align-items: center; gap: 20px; padding: 16px 20px; background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface); cursor: pointer; transition: background-color .15s ease, transform .15s ease; }
+.qt-sensor:hover { background: var(--md-sys-color-surface-container-highest); }
+.qt-sensor:active { transform: scale(.985); }
+.qt-sensor:focus-visible { outline: 2px solid var(--md-sys-color-primary); outline-offset: 2px; }
+.qt-sensor--compass { padding: 20px; background: color-mix(in srgb, var(--tk-teal-container) 16%, var(--md-sys-color-surface-container-high)); }
+.qt-sensor__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.qt-sensor__label { font: 600 12px/16px "Space Grotesk", var(--md-ref-typeface-plain); letter-spacing: .5px; text-transform: uppercase; color: var(--md-sys-color-on-surface-variant); }
+.qt-sensor__value { font: 700 44px/52px "Space Grotesk", var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; letter-spacing: -1px; }
+.qt-sensor__value--small { font-size: 28px; line-height: 34px; letter-spacing: 0; color: var(--tk-teal-content); }
+.qt-sensor__note { font: 500 16px/22px var(--md-ref-typeface-plain); color: var(--tk-teal-content); }
+.qt-sensor:not(.qt-sensor--compass) .qt-sensor__note { font: 400 13px/18px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
+
+.nm-counter-value--small { font-size: 28px; line-height: 34px; }
+.nm-result strong, .nm-counter-value { white-space: nowrap; }
+/* A tool alone in its section: badge, text, then its control, in reading order. */
+.qt-grid > .qt-tile--wide { flex-direction: row; justify-content: flex-start; align-items: center; gap: 16px; padding: 16px 20px; }
+.qt-grid > .qt-tile--wide .qt-tile__text { flex: 1; }
