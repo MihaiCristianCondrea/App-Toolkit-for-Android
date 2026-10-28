@@ -1,3 +1,4 @@
+import { measureBody, rulerDialog } from "./measure.js";
 import { chanceBody } from "./chance.js";
 import { html, nothing } from "lit";
 import { shapeMaskStyle, shapeUrl } from "./assets.js";
@@ -105,6 +106,7 @@ export function renderToolBottomSheet({
   showQuickSettingsAction = true,
 }) {
   if (!tool) return nothing;
+  if (tool.id === "ruler") return rulerDialog(state,onState,onClose);
 
   const isAdded = Boolean(state.addedTiles?.[tool.id]);
   const showQsCard = showQuickSettingsAction && tool.supportsTile !== false;
@@ -191,187 +193,13 @@ export function renderToolBottomSheet({
 }
 
 function renderToolBody(tool, state, onState) {
+  const measure = measureBody(tool,state,onState);
+  if (measure) return measure;
   const chance = chanceBody(tool, state, onState);
   if (chance) return chance;
   const extra = extraToolBody(tool, state, onState);
   if (extra) return extra;
   switch (tool.id) {
-    case "counter": {
-      const count = Number(state.counterValue ?? 12);
-      const step = Number(state.counterStep ?? 1);
-      return html`
-        <div class="tk-tool-interactive">
-          <div class="tk-counter-Readout">
-            <div
-              class="tk-counter-shape"
-              style=${shapeMaskStyle(shapeUrl("cookie_9sided"))}
-            >
-              <span class="display-medium" style="font-weight:700">${count}</span>
-            </div>
-            <span
-              class="label-medium"
-              style="color:var(--md-sys-color-on-surface-variant)"
-            >
-              Current tally · Step ±${step}
-            </span>
-          </div>
-
-          <md-chip-set aria-label="Step increment">
-            ${[1, 5, 10].map(
-              (s) => html`
-                <md-filter-chip
-                  label="+${s} step"
-                  ?selected=${step === s}
-                  @click=${() => onState({ counterStep: s })}
-                ></md-filter-chip>
-              `,
-            )}
-          </md-chip-set>
-
-          <div class="tk-action-row">
-            <md-filled-tonal-button
-              @click=${() => onState({ counterValue: count - step })}
-            >
-              <md-icon slot="icon">remove</md-icon>
-              -${step}
-            </md-filled-tonal-button>
-            <md-outlined-button @click=${() => onState({ counterValue: 0 })}>
-              <md-icon slot="icon">restart_alt</md-icon>
-              Reset
-            </md-outlined-button>
-            <md-filled-button
-              @click=${() => onState({ counterValue: count + step })}
-            >
-              <md-icon slot="icon">add</md-icon>
-              +${step}
-            </md-filled-button>
-          </div>
-        </div>
-      `;
-    }
-
-    case "bill_splitter": {
-      const bill = Number(state.billAmount ?? 84);
-      const tipPct = Number(state.tipPercent ?? 15);
-      const people = Math.max(1, Number(state.splitPeople ?? 3));
-      const tipTotal = (bill * tipPct) / 100;
-      const grandTotal = bill + tipTotal;
-      const perPerson = grandTotal / people;
-
-      return html`
-        <div class="tk-tool-interactive">
-          <div class="tk-result-banner">
-            <div>
-              <div class="label-small">Each person pays</div>
-              <div class="headline-medium" style="font-weight:700">
-                $${perPerson.toFixed(2)}
-              </div>
-            </div>
-            <div style="text-align:right">
-              <div class="label-small">Total with ${tipPct}% tip</div>
-              <div class="title-medium" style="font-weight:600">
-                $${grandTotal.toFixed(2)}
-              </div>
-            </div>
-          </div>
-
-          <div class="tk-form-row">
-            <md-outlined-text-field
-              label="Bill Subtotal ($)"
-              type="number"
-              style="width:100%"
-              .value=${String(bill)}
-              @input=${(e) => onState({ billAmount: Number(e.target.value) || 0 })}
-            ></md-outlined-text-field>
-          </div>
-
-          <div>
-            <div class="label-medium" style="margin-bottom:6px">Tip percentage</div>
-            <md-chip-set aria-label="Tip percentage">
-              ${[10, 15, 18, 20, 25].map(
-                (pct) => html`
-                  <md-filter-chip
-                    label="${pct}%"
-                    ?selected=${tipPct === pct}
-                    @click=${() => onState({ tipPercent: pct })}
-                  ></md-filter-chip>
-                `,
-              )}
-            </md-chip-set>
-          </div>
-
-          <div class="tk-split-stepper">
-            <span class="body-medium">
-              Split between <strong>${people}</strong> people
-            </span>
-            <div style="display:flex;gap:8px">
-              <md-filled-tonal-icon-button
-                aria-label="Fewer people"
-                @click=${() => onState({ splitPeople: Math.max(1, people - 1) })}
-              >
-                <md-icon>remove</md-icon>
-              </md-filled-tonal-icon-button>
-              <md-filled-tonal-icon-button
-                aria-label="More people"
-                @click=${() => onState({ splitPeople: people + 1 })}
-              >
-                <md-icon>add</md-icon>
-              </md-filled-tonal-icon-button>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
-    case "unit_converter": {
-      const category = state.converterCategory || "Length";
-      const inputVal = Number(state.converterInput ?? 10);
-      const conversions = {
-        Length: { from: "km", to: "mi", factor: 0.621371 },
-        Mass: { from: "kg", to: "lb", factor: 2.20462 },
-        Temperature: { from: "°C", to: "°F", calc: (c) => (c * 9) / 5 + 32 },
-        Volume: { from: "L", to: "gal", factor: 0.264172 },
-      };
-      const spec = conversions[category] || conversions.Length;
-      const outVal = spec.calc ? spec.calc(inputVal) : inputVal * spec.factor;
-
-      return html`
-        <div class="tk-tool-interactive">
-          <md-chip-set aria-label="Unit category">
-            ${Object.keys(conversions).map(
-              (cat) => html`
-                <md-filter-chip
-                  label=${cat}
-                  ?selected=${category === cat}
-                  @click=${() => onState({ converterCategory: cat })}
-                ></md-filter-chip>
-              `,
-            )}
-          </md-chip-set>
-
-          <div class="tk-converter-grid">
-            <md-outlined-text-field
-              label="Input (${spec.from})"
-              type="number"
-              .value=${String(inputVal)}
-              @input=${(e) =>
-                onState({ converterInput: Number(e.target.value) || 0 })}
-            ></md-outlined-text-field>
-
-            <div class="tk-result-banner" style="margin:0">
-              <div>
-                <div class="label-small">Converted (${spec.to})</div>
-                <div class="headline-small" style="font-weight:700">
-                  ${outVal.toFixed(2)} ${spec.to}
-                </div>
-              </div>
-              <span class="material-symbols-outlined">swap_vert</span>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
     default: {
       return html`
         <div class="tk-tool-interactive">

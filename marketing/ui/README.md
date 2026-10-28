@@ -62,3 +62,9 @@ npm run palettes # regenerate src/theme/palettes.css from Kotlin Color.kt files
 Chance sheets preserve signed 64-bit ranges and presets from `RandomNumberTool.kt`, the six-sided die from `DiceRollTool.kt`, and the original coin vector paths from `CoinFlipTool.kt`. Random Number has an approved web redesign: a result-first tonal panel, experimental Material Web segmented presets and paired filled range fields. Browser motion approximates Compose animation; device screenshot parity has not been verified.
 
 In Chance, tapping the die or coin plays its animation in the widget; tapping the card background opens its sheet. Both sheets reserve the same motion area and keep their height while rolling or flipping.
+
+## Measure tool parity
+
+Measure tools are translated from `sample/feature/tiles/.../ui/views/tools`: Surface Ruler opens full-screen, with edge graduations, draggable bounds, mm/in units and the 30 mm calibration reference. Protractor has its graduated dial and drag/slider input. Counter uses a primary-container oval and single-step controls. Bill Splitter uses 10/15/20% segments and exact cent rounding. Unit Converter includes all app units, both editable directions, and tonal unit menus. Reaction Test has delayed signals, false starts and five-round history.
+
+The web ruler uses a simulated 160 dpi baseline adjusted by calibration, not a measured physical display DPI; calibrate against a real ruler before measuring. Calibration stays in prototype state. Browser rendering, haptics, digit transitions and device screenshot parity have not been verified against an Android device.

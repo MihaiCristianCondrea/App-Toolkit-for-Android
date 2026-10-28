@@ -170,37 +170,6 @@ export function extraToolBody(tool, state, onState) {
         </div>`;
     }
 
-    case "ruler": {
-      const unit = state.rulerUnit || "mm";
-      const length = unit === "mm" ? "150 mm" : "5.91 in";
-      return html`
-        <div class="tk-tool-interactive">
-          <div class="tk-ruler tk-ruler--${unit}" role="img" aria-label="On-screen ruler, ${length}"></div>
-          <div class="tk-readout"><span class="tk-readout__value">${length}</span><span class="tk-readout__note">Scaled to this screen's pixel density</span></div>
-          <md-chip-set aria-label="Unit">
-            ${[["mm", "Millimeters"], ["in", "Inches"]].map(([id, label]) => html`<md-filter-chip label=${label} ?selected=${unit === id} @click=${() => onState({ rulerUnit: id })}></md-filter-chip>`)}
-          </md-chip-set>
-        </div>`;
-    }
-
-    case "protractor": {
-      const angle = Number(state.protractorAngle ?? 45);
-      const rad = (angle * Math.PI) / 180;
-      const x = 50 + 40 * Math.cos(Math.PI - rad);
-      const y = 56 - 40 * Math.sin(rad);
-      return html`
-        <div class="tk-tool-interactive tk-tool-interactive--center">
-          <svg class="tk-protractor" viewBox="0 0 100 62" width="248" role="img" aria-label="Protractor, ${angle} degrees">
-            <path class="tk-dial__ring" d="M10 56 A40 40 0 0 1 90 56 Z" />
-            <line class="tk-dial__guide" x1="50" y1="56" x2="50" y2="20" />
-            <line class="tk-protractor__arm" x1="50" y1="56" x2="${x.toFixed(2)}" y2="${y.toFixed(2)}" />
-            <circle class="tk-dial__hub" cx="50" cy="56" r="3" />
-          </svg>
-          <div class="tk-readout"><span class="tk-readout__value">${angle}°</span><span class="tk-readout__note">Drag to measure an angle</span></div>
-          <md-slider min="0" max="180" .value=${angle} labeled aria-label="Angle" @input=${(e) => onState({ protractorAngle: Number(e.target.value) })}></md-slider>
-        </div>`;
-    }
-
     case "flash_dimmer": {
       // FlashDimmerTool.kt: presets on the left (weight 3), a segmented level bar on the right (weight 2) that
       // follows the finger, 240dp tall. Level 0 is off; the maximum comes from the device (a Pixel 8 Pro has 45).
@@ -272,32 +241,6 @@ export function extraToolBody(tool, state, onState) {
             <md-filled-button class="tk-sos" @click=${() => onState({ sosActive: !sos })}><md-icon slot="icon">emergency</md-icon>${sos ? "Stop SOS" : "SOS"}</md-filled-button>
           </div>
           <p class="body-small tk-muted" style="margin:0">Blinks the camera torch. Keep it out of anyone's eyes.</p>
-        </div>`;
-    }
-
-    case "reaction_test": {
-      // ReactionTestTool.kt: one pad whose colour and prompt follow the phase.
-      const phase = state.reactionPhase ?? "idle";
-      const last = Number(state.reactionLast ?? 231);
-      const rating = last < 200 ? "Lightning ⚡" : last <= 250 ? "Fast 🚀" : last <= 350 ? "Average 👍" : "Relaxed ☕";
-      const prompt = {
-        idle: html`<span class="t-title-medium">Tap Start when ready</span>`,
-        waiting: html`<span class="t-title-large" style="font-weight:700">Wait for green…</span>`,
-        signal: html`<span class="t-headline-medium" style="font-weight:800">TAP NOW!</span>`,
-        early: html`<span class="t-headline-small" style="font-weight:700">Too early!</span>`,
-        result: html`<span class="t-headline-large" style="font-weight:700">${last} ms</span><span class="tk-reaction__rating">${rating}</span>`,
-      }[phase];
-      const running = phase === "waiting" || phase === "signal";
-      const next = { waiting: "signal", signal: "result" }[phase];
-      return html`
-        <div class="tk-tool-interactive">
-          <div class="tk-reaction tk-reaction--${phase}" role="button" tabindex="0" aria-live="polite"
-            @click=${() => next && onState({ reactionPhase: next })}>${prompt}</div>
-          <div class="tk-action-row">
-            <md-filled-button ?disabled=${running} @click=${() => onState({ reactionPhase: "waiting" })}><md-icon slot="icon">play_arrow</md-icon>${phase === "idle" ? "Start" : running ? "In progress…" : "Try again"}</md-filled-button>
-            ${state.reactionBest ? html`<md-outlined-button @click=${() => onState({ reactionPhase: "idle", reactionBest: 0, reactionAverage: 0 })}><md-icon slot="icon">refresh</md-icon>Reset</md-outlined-button>` : nothing}
-          </div>
-          ${state.reactionBest ? html`<div class="tk-stat-grid">${stat("Best", `${state.reactionBest} ms`)} ${stat("Average", `${state.reactionAverage} ms`)}</div>` : nothing}
         </div>`;
     }
 

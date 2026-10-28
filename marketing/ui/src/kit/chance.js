@@ -64,7 +64,7 @@ export function chanceBody(tool,state,onState) {
     const min=String(state.randomMin??1),max=String(state.randomMax??100),lo=parseLong(min),hi=parseLong(max);
     const invalid=lo===null||hi===null||lo>hi;
     const change=patch=>onState({...patch,randomResult:null});
-    const presets=[6,10,100,2];
+    const presets=[2,6,10,100];
     return html`<div class="tk-tool-interactive chance-body random-picker">
       <div class="random-picker__result">
         <span class="random-picker__eyebrow">${state.randomResult==null?'Ready to pick':'Your number'}</span>

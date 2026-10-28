@@ -10,7 +10,7 @@ const TOOLS = {
   ruler: { id: "ruler", title: "Surface Ruler", subtitle: "Measure small objects on screen", icon: "square_foot", shape: "cookie_12sided", palette: "gold", kindLabel: "Expanded tool", supportsTile: false },
   protractor: { id: "protractor", title: "Protractor", subtitle: "Measure an angle", icon: "architecture", shape: "cookie_9sided", palette: "gold", kindLabel: "Expanded tool", supportsTile: false },
   bill_splitter: { id: "bill_splitter", title: "Tip & Bill Splitter", subtitle: "Calculate tip and each person's share", icon: "calculate", shape: "soft_burst", palette: "gold", kindLabel: "Expanded tool", supportsTile: false },
-  unit_converter: { id: "unit_converter", title: "Unit Converter", subtitle: "Length, weight, volume and temperature", icon: "straighten", shape: "cookie_9sided", palette: "gold", kindLabel: "Expanded tool", supportsTile: false },
+  unit_converter: { id: "unit_converter", title: "Unit Converter", subtitle: "Length, weight, temperature, volume and data", icon: "straighten", shape: "cookie_9sided", palette: "gold", kindLabel: "Expanded tool", supportsTile: false },
   counter: { id: "counter", title: "Counter", subtitle: "Tap to add to a running count", icon: "dehaze", shape: "flower", palette: "gold", kindLabel: "Quick tool", supportsTile: true },
   reaction_test: { id: "reaction_test", title: "Reaction Test", subtitle: "Test your reflexes with random delays", icon: "timer", shape: "cookie_9sided", palette: "gold", kindLabel: "Expanded tool", supportsTile: false },
 };
@@ -28,13 +28,14 @@ export default {
     rulerUnit: "mm",
     protractorAngle: 45,
     counterValue: 42,
-    counterStep: 1,
+    rulerScale: 1, rulerStart: 0, rulerEnd: 0.5,
+    reactionHistory: [], reactionRound: 0,
     billAmount: 100,
     tipPercent: 15,
     splitPeople: 4,
     billRound: "exact",
     converterCategory: "Length",
-    converterInput: 10,
+    converterInput: "1",
     reactionPhase: "idle",
     reactionLast: 231,
     reactionBest: 214,
@@ -102,7 +103,7 @@ export default {
             </div>
             <div class="nm-counter-actions tk-gold-actions">
               <md-text-button @click=${(e) => { swallow(e); s.set({ counterValue: 0 }); }}>Reset</md-text-button>
-              <md-filled-tonal-icon-button aria-label="Subtract" @click=${(e) => { swallow(e); s.set({ counterValue: Math.max(0, s.counterValue - s.counterStep) }); }}><md-icon>remove</md-icon></md-filled-tonal-icon-button>
+              <md-filled-tonal-icon-button aria-label="Subtract" @click=${(e) => { swallow(e); s.set({ counterValue: Math.max(0, s.counterValue - 1) }); }}><md-icon>remove</md-icon></md-filled-tonal-icon-button>
               <md-filled-button @click=${(e) => { swallow(e); s.set({ counterValue: s.counterValue + s.counterStep }); }}><md-icon slot="icon">add</md-icon>Add</md-filled-button>
             </div>
             ${chips(TOOLS.counter)}`)}
@@ -112,7 +113,7 @@ export default {
               <span class="nm-counter-value nm-counter-value--small" aria-label="Best time">${s.reactionBest ? `${s.reactionBest} ms` : "None"}</span>
             </div>
             <div class="nm-counter-actions tk-gold-actions">
-              <md-filled-tonal-button @click=${(e) => { swallow(e); s.set({ activeSheet: "reaction_test", reactionPhase: "waiting" }); }}><md-icon slot="icon">play_arrow</md-icon>Start</md-filled-tonal-button>
+              <md-filled-tonal-button @click=${(e) => { swallow(e); s.set({ activeSheet: "reaction_test", reactionPhase: "idle" }); }}><md-icon slot="icon">play_arrow</md-icon>Start</md-filled-tonal-button>
             </div>`)}
         </div>
 

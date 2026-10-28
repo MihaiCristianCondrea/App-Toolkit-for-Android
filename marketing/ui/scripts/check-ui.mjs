@@ -132,12 +132,59 @@ try {
   await page.locator('.numbers-card').first().waitFor();
   assert.equal(await page.locator('h2').filter({hasText:'Chance'}).count(), 0);
   checks++;
+  // Compose Measure presentations at every supported window and theme.
+  for(const window of ['phone','fold','desktop']) for(const theme of ['light','dark']) {
+    for(const activeSheet of ['ruler','protractor','counter','bill_splitter','unit_converter','reaction_test']) {
+      await page.goto(`${base}/screen.html?id=numbers&window=${window}&theme=${theme}&panel=none&state=${encodeURIComponent(JSON.stringify({activeSheet}))}`);
+      await page.locator('[role="dialog"]').waitFor();
+      if(activeSheet==='ruler') {assert.equal(await page.locator('.tk-sheet-surface').count(),0);assert.equal(await page.locator('md-slider[range]').count(),1);}
+      if(activeSheet==='counter') assert.equal(await page.locator('[aria-label="Step increment"]').count(),0);
+      checks++;
+    }
+  }
+  const openMeasure=async(activeSheet,extra={})=>{
+    await page.goto(`${base}/screen.html?id=numbers&panel=none&state=${encodeURIComponent(JSON.stringify({activeSheet,...extra}))}`);
+    await page.locator('[role="dialog"]').waitFor();
+  };
+  await openMeasure('counter',{counterValue:0});
+  assert.equal(await page.locator('[aria-label="Decrease"]').evaluate(el=>el.disabled),true);
+  await page.locator('.measure-actions md-filled-button').click();
+  await page.waitForFunction(()=>document.querySelector('.measure-counter__value').textContent.trim()==='1');
+  await page.locator('.measure-actions md-outlined-button').click();
+  await page.waitForFunction(()=>document.querySelector('.measure-counter__value').textContent.trim()==='0');checks++;
+  await openMeasure('ruler');
+  await page.locator('md-outlined-segmented-button[label="in"]').click();
+  await page.waitForFunction(()=>document.querySelector('.measure-ruler .measure-display').textContent.includes('in'));
+  await page.locator('.measure-calibration md-slider').evaluate(el=>{el.value=2;el.dispatchEvent(new Event('input',{bubbles:true}));});
+  await page.waitForFunction(()=>document.querySelector('.measure-calibration md-slider').value===2);checks++;
+  await openMeasure('protractor');
+  await page.locator('.measure-body md-slider').locator('input').focus();
+  await page.keyboard.press('ArrowRight');
+  await page.waitForFunction(()=>document.querySelector('.measure-display').textContent.includes('46'));checks++;
+  await openMeasure('bill_splitter',{billAmount:'10.00',tipPercent:15,splitPeople:'3'});
+  assert.equal((await page.locator('.measure-bill > strong').innerText()).replaceAll(',',''),'3.84');
+  await page.locator('md-outlined-text-field').first().locator('input').fill('1.999');
+  await page.locator('.chance-error').waitFor();
+  assert.equal(await page.locator('.measure-bill').count(),0);checks++;
+  await openMeasure('unit_converter',{converterCategory:'Temperature',converterFrom:'Celsius',converterTo:'Fahrenheit',converterInput:'0'});
+  assert.equal(await page.locator('.measure-conversion-row md-outlined-text-field').nth(1).evaluate(el=>el.value),'32');
+  await page.locator('.measure-conversion-row md-outlined-text-field').nth(1).locator('input').fill('212');
+  await page.waitForFunction(()=>document.querySelector('.measure-conversion-row md-outlined-text-field').value==='100');checks++;
+  await openMeasure('reaction_test',{reactionBest:0,reactionAverage:0});
+  await page.locator('.measure-actions md-filled-button').click();
+  await page.locator('.measure-reaction__pad--waiting').click();
+  await page.locator('.measure-reaction__pad--early').waitFor();
+  await page.locator('.measure-actions md-filled-button').click();
+  await page.locator('.measure-reaction__pad--signal').waitFor({timeout:7000});
+  await page.locator('.measure-reaction__pad--signal').click();
+  await page.locator('.measure-reaction__pad--result').waitFor();
+  assert.equal(await page.locator('.measure-history-chips md-assist-chip').count(),1);checks++;
   await page.goto(`${base}/screen.html?id=numbers&theme=light`);
   await page.locator('html[data-ready]').waitFor();
   assert.equal(await page.locator('mnw-device-frame').count(), 1);
   await page.locator('.numbers-card').first().click();
-  await page.locator('.tk-sheet-surface').waitFor();
-  assert.equal(await page.locator('.tk-sheet-surface').isVisible(), true);
+  await page.locator('.measure-ruler').waitFor();
+  assert.equal(await page.locator('.measure-ruler').isVisible(), true);
   checks++;
   await page.goto(`${base}/screen.html?id=numbers&mode=compare&compare=theme`);
   await page.locator('html[data-ready]').waitFor();

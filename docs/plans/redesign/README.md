@@ -22,7 +22,7 @@ Made by the owner on October 28, 2026:
    (`BreathingTool.kt`) are the app's, one to one, with one change: two values side by side (pitch and roll; phase
    and seconds) are a connected pair under the face, round outside and 8dp inside, like grouped buttons. The level
    face is the 16-sided cookie, crossed edge to edge like its widget. Every sheet opens like the app's `ModalBottomSheet`: no drag handle, straight to expanded,
-   sliding up over a 32% scrim. Ruler, Protractor, Morse & SOS and the Measure sheets keep their design.
+   sliding up over a 32% scrim. Surface Ruler is the Compose exception: a full-screen dialog with edge graduations and calibration. Protractor, Morse & SOS and the other Measure sheets keep their design.
 6. **Quick Tools is live.** Sensors and Light & signals are rows of two equal live widgets, [Compass][Bubble Level]
    and [Flashlight][SOS], each tool working inside its own shape: the compass in the 8-sided cookie, the level in
    the 16-sided cookie (its cross reaching the shape's edges), the torch in a burst, SOS in a 7-sided cookie. Light &
@@ -77,7 +77,7 @@ Each step ends with `npm run build` and `npm run qa` passing in `marketing/ui`. 
 | Area | Missing in the kit |
 | --- | --- |
 | Quick Tools | Collapsible categories (remembered), the native ad between categories, tile status from the system (added, can add, unsupported) and the Android 13 "Add tile" request, hiding torch tools on devices without a torch |
-| Tools | Separate SOS and Morse tools (the kit shows them as one), the full-screen ruler with its 30 mm calibration, Material Colors (app only by decision), Screen Light (not planned) |
+| Tools | Separate SOS and Morse tools (the kit shows them as one), Material Colors (app only by decision), Screen Light (not planned) |
 | Apps | Installed and Not installed state, the app details sheet (screenshots, version, Open app, Google Play, Share, Copy package, and Battery, Notifications, Permissions and Storage shortcuts), Share on each card, the loading and error states with Try again |
 | Shell | Settings, Help & feedback, About, onboarding and the Components showcase: library screens, kept out of the marketing UI by decision |
 
@@ -86,3 +86,7 @@ Each step ends with `npm run build` and `npm run qa` passing in `marketing/ui`. 
 - The coin faces use Material Symbols (`person`, `token`); the app draws its own `ic_coin_heads` and
   `ic_coin_tails`.
 - The app's compass reads magnetic north only; the kit shows no true north or field strength either.
+
+### Measure tool translation
+
+The web tools now follow the existing Compose presentations: full-screen Surface Ruler with calibration, graduated Protractor, single-step Counter, Bill Splitter, bidirectional Unit Converter and timed Reaction Test. The Measure overview design remains a separate step. Random Number presets are ordered 1–2, 1–6, 1–10, 1–100. Android code is unchanged; device parity still needs review.
