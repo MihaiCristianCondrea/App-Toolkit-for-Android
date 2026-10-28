@@ -1754,30 +1754,65 @@ md-icon-button.ai-favorite {
 @media (prefers-reduced-motion: reduce) { .tk-rose__dial { transform-origin: 100px 100px; transition: none; } }
 
 /* Quick Tools live widgets: two equal cards per row, 28dp outer corners and 8dp seams, each tool working inside its
-   own MaterialShape. */
+   own MaterialShape. Quick Tools cards do not scale when pressed. */
 .qt-live-row { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
 .qt-live { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 16px 12px 20px; border-radius: 8px; background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface); cursor: pointer; transition: background-color .15s ease; --qt-live-accent: var(--tk-teal-container); --qt-live-content: var(--tk-teal-content); }
 .qt-live-row > :first-child { border-radius: 28px 8px 8px 28px; }
 .qt-live-row > :last-child { border-radius: 8px 28px 28px 8px; }
-.qt-live[data-accent="gold"] { --qt-live-accent: var(--tk-gold-container); --qt-live-content: var(--tk-gold-content); cursor: default; }
-.qt-live[data-accent="magenta"] { --qt-live-accent: var(--tk-magenta-container); --qt-live-content: var(--tk-magenta-content); cursor: default; }
-.qt-live[role="button"]:hover { background: var(--md-sys-color-surface-container-highest); }
+.qt-live[data-accent="gold"] { --qt-live-accent: var(--tk-gold-container); --qt-live-content: var(--tk-gold-content); }
+.qt-live[data-accent="magenta"] { --qt-live-accent: var(--tk-magenta-container); --qt-live-content: var(--tk-magenta-content); }
+.qt-live:hover { background: var(--md-sys-color-surface-container-highest); }
 .qt-live:focus-visible, .qt-live__control:focus-visible { outline: 2px solid var(--md-sys-color-primary); outline-offset: 2px; }
-.qt-live__label { align-self: flex-start; padding-left: 4px; min-height: 40px; display: flex; align-items: center; font: 600 12px/16px "Space Grotesk", var(--md-ref-typeface-plain); letter-spacing: .5px; text-transform: uppercase; color: var(--md-sys-color-on-surface-variant); }
-.qt-live__tune { position: absolute; top: 8px; right: 8px; }
-.qt-live__face { position: relative; width: 148px; height: 148px; display: grid; place-items: center; overflow: hidden; background: color-mix(in srgb, var(--qt-live-accent) 22%, var(--md-sys-color-surface-container-lowest)); color: var(--qt-live-content); }
+.qt-live__label { align-self: flex-start; padding-left: 4px; font: 600 12px/16px "Space Grotesk", var(--md-ref-typeface-plain); letter-spacing: .5px; text-transform: uppercase; color: var(--md-sys-color-on-surface-variant); }
+.qt-live__face { position: relative; margin-top: 8px; width: 148px; height: 148px; display: grid; place-items: center; overflow: hidden; background: color-mix(in srgb, var(--qt-live-accent) 22%, var(--md-sys-color-surface-container-lowest)); color: var(--qt-live-content); }
 .qt-live__face > * { grid-area: 1 / 1; }
-.qt-live__control { appearance: none; border: 0; padding: 0; background: none; font: inherit; color: inherit; cursor: pointer; touch-action: none; border-radius: 50%; }
-.qt-live__face--torch { cursor: ns-resize; }
+.qt-live__value { margin-top: 8px; font: 700 28px/34px "Space Grotesk", var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; }
+.qt-live__note { font: 500 14px/20px var(--md-ref-typeface-plain); color: var(--qt-live-content); }
+.qt-live .tk-dial__guide { stroke: var(--qt-live-content); }
+
+/* Light & signals: the same widgets on their tool's own colour, read from the start edge, so they do not look like
+   the sensors above them. */
+.qt-live--signal { align-items: stretch; padding: 0; background: color-mix(in srgb, var(--qt-live-accent) 16%, var(--md-sys-color-surface-container-high)); }
+.qt-live--signal:hover { background: color-mix(in srgb, var(--qt-live-accent) 24%, var(--md-sys-color-surface-container-high)); }
+.qt-live--signal, .qt-live--signal > .qt-live__control { display: flex; flex-direction: column; gap: 4px; }
+.qt-live--signal:not(:has(> .qt-live__control)), .qt-live--signal > .qt-live__control { padding: 16px 16px 20px; }
+.qt-live--signal .qt-live__face { align-self: center; width: 156px; height: 156px; background: color-mix(in srgb, var(--qt-live-accent) 30%, var(--md-sys-color-surface-container-lowest)); }
+.qt-live--signal .qt-live__value { margin-top: 12px; font-size: 24px; line-height: 30px; }
+.qt-live--signal .qt-live__label { color: var(--qt-live-content); }
+.qt-live__control { border-radius: inherit; outline: none; cursor: pointer; }
+.qt-live__face--torch { touch-action: none; }
 .qt-live__fill { position: absolute; left: 0; right: 0; bottom: 0; background: var(--qt-live-accent); transition: height .18s cubic-bezier(.2, 0, 0, 1); }
 .qt-live__icon { position: relative; --md-icon-size: 48px; color: var(--md-sys-color-on-surface); }
 .qt-live__sos { font: 800 30px/1 "Space Grotesk", var(--md-ref-typeface-plain); letter-spacing: 1px; }
 .qt-live__face--sending { background: var(--qt-live-accent); color: #fff; animation: qt-sos 1.2s steps(1, end) infinite; }
 @keyframes qt-sos { 50% { background: color-mix(in srgb, var(--qt-live-accent) 35%, var(--md-sys-color-surface-container-lowest)); color: var(--qt-live-content); } }
-.qt-live__value { margin-top: 8px; font: 700 28px/34px "Space Grotesk", var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; }
-.qt-live__note { font: 500 14px/20px var(--md-ref-typeface-plain); color: var(--qt-live-content); }
-.qt-live .tk-dial__guide { stroke: var(--qt-live-content); }
+
+/* Wellbeing: Breathe is one wide card. */
+.qt-breathe { display: flex; align-items: center; gap: 16px; padding: 16px 20px; border-radius: 28px; background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface); cursor: pointer; transition: background-color .15s ease; }
+.qt-breathe:hover { background: var(--md-sys-color-surface-container-highest); }
+.qt-breathe:focus-visible { outline: 2px solid var(--md-sys-color-primary); outline-offset: 2px; }
+.qt-breathe__title { margin: 0; font: 600 18px/24px var(--md-ref-typeface-plain); }
+.qt-breathe__rhythm { margin: 4px 0 0; display: flex; flex-wrap: wrap; gap: 4px 12px; font: 600 13px/18px "Space Grotesk", var(--md-ref-typeface-plain); color: var(--tk-orange-content); }
 @media (prefers-reduced-motion: reduce) { .qt-live__fill { transition: none; } .qt-live__face--sending { animation: none; } }
+
+/* ResultPill.kt colours (primary container, headlineMedium), joined as a connected pair. */
+.tk-pill-pair { display: flex; gap: 2px; }
+.tk-pill { padding: 12px 28px; background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); font: 400 28px/36px var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; border-radius: 8px; white-space: nowrap; }
+.tk-pill-pair > :first-child { border-radius: 999px 8px 8px 999px; }
+.tk-pill-pair > :last-child { border-radius: 8px 999px 999px 8px; }
+.tk-pill--single { border-radius: 999px; }
+
+/* LevelTool.kt, on the 16-sided cookie. */
+.tk-level { position: relative; width: 200px; height: 200px; display: grid; place-items: center; background: var(--md-sys-color-surface-variant); }
+.tk-level > * { grid-area: 1 / 1; }
+.tk-level__target { width: 40px; height: 40px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--md-sys-color-outline); }
+.tk-level__bubble { width: 30px; height: 30px; border-radius: 50%; background: var(--md-sys-color-secondary); transition: transform .2s ease; }
+.tk-level__bubble.is-level { background: var(--md-sys-color-primary); }
+
+/* BreathingTool.kt. */
+.tk-breathe { width: 200px; height: 200px; border-radius: 50%; display: grid; place-items: center; background: var(--md-sys-color-surface-variant); color: var(--md-sys-color-on-surface-variant); transition: transform .4s cubic-bezier(.2, 0, 0, 1), background-color .3s ease; --md-icon-size: 64px; }
+.tk-breathe--inhale { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-primary); }
+.tk-breathe--exhale { background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-secondary); }
 
 /* A tool alone in its section: badge, text, then its control, in reading order. */
 .qt-grid > .qt-tile--wide { flex-direction: row; justify-content: flex-start; align-items: center; gap: 16px; padding: 16px 20px; }

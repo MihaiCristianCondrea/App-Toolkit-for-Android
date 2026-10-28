@@ -1,8 +1,8 @@
 import { html, nothing } from "lit";
 import { renderToolBottomSheet, shapeBadge } from "../kit/components.js";
-import { shapeMaskStyle, shapeUrl } from "../kit/assets.js";
+import { asset, shapeMaskStyle, shapeUrl } from "../kit/assets.js";
 import { navigationBar, navigationDrawer, screen, topAppBar } from "../kit/shell.js";
-import { FLASH_LEVELS, compassRose, direction, levelDial } from "../kit/tool-bodies.js";
+import { BREATH_STEPS, compassRose, direction, levelDial } from "../kit/tool-bodies.js";
 
 /**
  * Quick Tools: tools that run on sensors and the torch, so none needs a special permission. Ruler, protractor,
@@ -13,16 +13,21 @@ const TOOLS = {
   bubble_level: { id: "bubble_level", title: "Bubble Level", subtitle: "Roll and pitch from the gravity sensor", icon: "straighten", shape: "pill", palette: "teal", kindLabel: "Quick tool", supportsTile: true },
   flash_dimmer: { id: "flash_dimmer", title: "Flash Dimmer", subtitle: "Set the torch brightness", icon: "flashlight_on", shape: "burst", palette: "gold", kindLabel: "Quick tool", supportsTile: true },
   morse_sos: { id: "morse_sos", title: "Morse & SOS", subtitle: "Send a message with the torch", icon: "emergency", shape: "cookie_7sided", palette: "magenta", kindLabel: "Quick tool", supportsTile: true },
-  breathing_box: { id: "breathing_box", title: "Box Breathing", subtitle: "Follow a steady 4-4-4-4 rhythm", icon: "air", shape: "flower", palette: "amber", kindLabel: "Quick tool", supportsTile: false },
+  // ToolkitTileVisuals.kt: Breathing is a SoftBurst in the orange role, with the FavoriteBorder icon.
+  breathing: { id: "breathing", title: "Breathe", subtitle: "Start a short guided breathing pause", icon: "favorite", shape: "soft_burst", palette: "orange", kindLabel: "Quick tool", supportsTile: false },
 };
 
-// Whether the pointer on the torch shape moved since it went down: a drag sets brightness, a tap toggles.
-let torchDragged = false;
+/** The brand's own MaterialShapes exports in marketing/assets/shapes, used as masks. */
+const brandShape = (name) => asset(`shapes/${encodeURIComponent(name)}.svg`);
+
+// A press on the torch shape is a tap until the pointer moves this far; then it is a swipe that sets brightness.
+const SWIPE_SLOP = 6;
+let torchPress = null;
 
 const SECTIONS = [
-  { id: "sensors", title: "Sensors", tools: ["compass", "bubble_level"], live: true },
-  { id: "light", title: "Light & signals", tools: ["flash_dimmer", "morse_sos"], live: true },
-  { id: "calm", title: "Calm", tools: ["breathing_box"] },
+  { id: "sensors", title: "Sensors", tools: ["compass", "bubble_level"], live: "sensors" },
+  { id: "light", title: "Light & signals", tools: ["flash_dimmer", "morse_sos"], live: "light" },
+  { id: "wellbeing", title: "Wellbeing", tools: ["breathing"] },
 ];
 
 export default {
@@ -40,7 +45,11 @@ export default {
     drawerOpen: false,
     flashOn: true,
     flashLevel: 3,
-    breathRunning: false,
+    // The torch's maximum level comes from the device: 1 means it cannot dim (on or off only); a Pixel 8 Pro has 45.
+    flashMaxLevel: 5,
+    breathPhase: "INHALE",
+    breathSeconds: 3,
+    breathProgress: 0.7,
     sosActive: false,
     morseText: "SOS",
     compassHeading: 312,
@@ -57,11 +66,14 @@ export default {
         ["Compass sheet", { activeToolId: "compass" }],
         ["Bubble level sheet", { activeToolId: "bubble_level" }],
         ["Flash dimmer sheet", { activeToolId: "flash_dimmer" }],
-        ["Box breathing sheet", { activeToolId: "breathing_box", breathRunning: true }],
+        ["Flash dimmer, Pixel 8 Pro (45 levels)", { activeToolId: "flash_dimmer", flashMaxLevel: 45, flashLevel: 30 }],
+        ["Flash dimmer, no dimming", { activeToolId: "flash_dimmer", flashMaxLevel: 1, flashLevel: 1 }],
+        ["Breathe: inhale", { activeToolId: "breathing", breathPhase: "INHALE", breathSeconds: 3, breathProgress: 0.7 }],
+        ["Breathe: exhale", { activeToolId: "breathing", breathPhase: "EXHALE", breathSeconds: 2, breathProgress: 0.6 }],
         ["Morse & SOS sheet", { activeToolId: "morse_sos" }],
       ],
     },
-    { key: "selectedCategory", label: "Filter", type: "choice", options: ["all", "sensors", "light", "calm"] },
+    { key: "selectedCategory", label: "Filter", type: "choice", options: ["all", "sensors", "light", "wellbeing"] },
     { key: "compassHeading", label: "Heading", min: 0, max: 359, step: 1 },
     { key: "flashOn", label: "Flashlight on", type: "toggle" },
   ],
@@ -70,45 +82,49 @@ export default {
     const cat = s.selectedCategory || "all";
     const open = (id) => s.set({ activeToolId: id });
     const matches = (id) => !query || TOOLS[id].title.toLowerCase().includes(query) || TOOLS[id].subtitle.toLowerCase().includes(query);
-    const swallow = (e) => e.stopPropagation();
     const activate = (id) => (e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), open(id));
     const flat = Math.abs(s.levelRoll) < 1 && Math.abs(s.levelPitch) < 1;
-
-    const status = (id) => ({
-      flash_dimmer: s.flashOn ? `On · level ${s.flashLevel}` : "Off",
-      morse_sos: s.sosActive ? "SOS sending" : "Ready",
-      breathing_box: s.breathRunning ? "Running" : "4 · 4 · 4 · 4",
-    })[id];
-
-    // Live widgets: each shows its tool working inside the tool's own shape. Sensors open their sheet on a tap; the
-    // torch and SOS act on a tap and open their sheet from the tune button.
-    const face = (shape, content, extra = "") => html`
-      <div class="qt-live__face ${extra}" style=${shapeMaskStyle(shapeUrl(shape))}>${content}</div>`;
-    const tune = (id) => html`<md-icon-button class="qt-live__tune" aria-label="${TOOLS[id].title} settings"
-      @click=${(e) => { swallow(e); open(id); }}><md-icon>tune</md-icon></md-icon-button>`;
     const heading = s.compassHeading;
-    const flashLevel = s.flashOn ? s.flashLevel : 0;
+    const maxLevel = Math.max(1, Number(s.flashMaxLevel ?? 5));
+    const dims = maxLevel > 1;
+    const flashLevel = s.flashOn ? Math.min(s.flashLevel, maxLevel) : 0;
+    const setFlash = (level) => s.set({ flashOn: level > 0, flashLevel: level > 0 ? level : s.flashLevel });
 
-    // Drag on the torch shape like on the Flash Dimmer bar: the fill follows the finger. A tap without a drag
-    // switches the torch on or off.
+    // Every widget opens its sheet on a tap. On a torch that can dim, a vertical swipe over its shape sets the
+    // brightness instead, and the shape fills like a progress bar.
     const torch = {
-      down(e) { e.currentTarget.setPointerCapture(e.pointerId); torchDragged = false; },
-      move(e) {
-        if (!e.buttons) return;
-        torchDragged = true;
-        const r = e.currentTarget.getBoundingClientRect();
-        const level = Math.round(FLASH_LEVELS * (1 - Math.min(Math.max(e.clientY - r.top, 0), r.height) / r.height));
-        if (level !== flashLevel) s.set({ flashOn: level > 0, flashLevel: level > 0 ? level : s.flashLevel });
+      down(e) {
+        torchPress = { x: e.clientX, y: e.clientY, swiping: false };
+        if (dims) e.currentTarget.setPointerCapture(e.pointerId);
       },
-      up() { if (!torchDragged) s.set({ flashOn: !s.flashOn }); },
+      move(e) {
+        if (!torchPress || !dims || !e.buttons) return;
+        if (!torchPress.swiping && Math.hypot(e.clientX - torchPress.x, e.clientY - torchPress.y) < SWIPE_SLOP) return;
+        torchPress.swiping = true;
+        const r = e.currentTarget.querySelector(".qt-live__face").getBoundingClientRect();
+        const level = Math.round(maxLevel * (1 - Math.min(Math.max(e.clientY - r.top, 0), r.height) / r.height));
+        if (level !== flashLevel) setFlash(level);
+      },
+      up() {
+        if (torchPress && !torchPress.swiping) open("flash_dimmer");
+        torchPress = null;
+      },
+      key(e) {
+        const step = { ArrowUp: 1, ArrowRight: 1, ArrowDown: -1, ArrowLeft: -1 }[e.key];
+        if (step && dims) { e.preventDefault(); setFlash(Math.min(maxLevel, Math.max(0, flashLevel + step))); }
+        else activate("flash_dimmer")(e);
+      },
     };
+
+    const face = (mask, content, extra = "") => html`
+      <div class="qt-live__face ${extra}" style=${shapeMaskStyle(mask)}>${content}</div>`;
 
     const live = {
       compass: () => html`
         <div class="qt-live" data-accent="teal" role="button" tabindex="0" @click=${() => open("compass")} @keydown=${activate("compass")}
           aria-label="Compass, ${heading} degrees ${direction(heading)}">
           <span class="qt-live__label">Compass</span>
-          ${face("cookie_12sided", compassRose(heading, 132, { labels: false, face: false }))}
+          ${face(brandShape("8 Sided Cookie"), compassRose(heading, 136, { labels: false, face: false }))}
           <span class="qt-live__value">${heading}°</span>
           <span class="qt-live__note">${direction(heading)}</span>
         </div>`,
@@ -116,52 +132,43 @@ export default {
         <div class="qt-live" data-accent="teal" role="button" tabindex="0" @click=${() => open("bubble_level")} @keydown=${activate("bubble_level")}
           aria-label="Bubble level, ${flat ? "level" : "tilted"}">
           <span class="qt-live__label">Bubble Level</span>
-          ${face("pill", levelDial(s.levelRoll, s.levelPitch, 128, { ring: false }))}
+          ${face(brandShape("16 Sided Cookie"), levelDial(s.levelRoll, s.levelPitch, 148, { ring: false, edge: true }))}
           <span class="qt-live__value">${flat ? "Level" : "Tilted"}</span>
           <span class="qt-live__note">${Math.abs(s.levelRoll).toFixed(1)}° · ${Math.abs(s.levelPitch).toFixed(1)}°</span>
         </div>`,
       flash_dimmer: () => html`
-        <div class="qt-live" data-accent="gold">
-          <span class="qt-live__label">Flashlight</span>${tune("flash_dimmer")}
-          <div class="qt-live__control" role="slider" tabindex="0" aria-label="Flashlight brightness" aria-valuemin="0"
-            aria-valuemax=${FLASH_LEVELS} aria-valuenow=${flashLevel}
-            @pointerdown=${torch.down} @pointermove=${torch.move} @pointerup=${torch.up}
-            @keydown=${(e) => {
-              const step = { ArrowUp: 1, ArrowRight: 1, ArrowDown: -1, ArrowLeft: -1 }[e.key];
-              if (step) { e.preventDefault(); const next = Math.min(FLASH_LEVELS, Math.max(0, flashLevel + step)); s.set({ flashOn: next > 0, flashLevel: next > 0 ? next : s.flashLevel }); }
-              else if (e.key === "Enter" || e.key === " ") { e.preventDefault(); s.set({ flashOn: !s.flashOn }); }
-            }}>
-            ${face("burst", html`<span class="qt-live__fill" style="height:${(flashLevel / FLASH_LEVELS) * 100}%"></span>
-              <md-icon class="qt-live__icon">${s.flashOn ? "flashlight_on" : "flashlight_off"}</md-icon>`, "qt-live__face--torch")}
+        <div class="qt-live qt-live--signal" data-accent="gold">
+          <div class="qt-live__control" role=${dims ? "slider" : "button"} tabindex="0"
+            aria-label=${dims ? "Flashlight brightness. Swipe to change, tap for settings" : "Flashlight settings"}
+            aria-valuemin=${dims ? 0 : nothing} aria-valuemax=${dims ? maxLevel : nothing} aria-valuenow=${dims ? flashLevel : nothing}
+            @pointerdown=${torch.down} @pointermove=${torch.move} @pointerup=${torch.up} @pointercancel=${() => (torchPress = null)} @keydown=${torch.key}>
+            <span class="qt-live__label">Flashlight</span>
+            ${face(shapeUrl("burst"), html`<span class="qt-live__fill" style="height:${(flashLevel / maxLevel) * 100}%"></span>
+              <md-icon class="qt-live__icon">${s.flashOn ? "flashlight_on" : "flashlight_off"}</md-icon>`, dims ? "qt-live__face--torch" : "")}
+            <span class="qt-live__value">${!s.flashOn ? "Off" : dims ? `${flashLevel} of ${maxLevel}` : "On"}</span>
+            <span class="qt-live__note">${dims ? "Swipe for brightness" : "Tap for settings"}</span>
           </div>
-          <span class="qt-live__value">${s.flashOn ? `Level ${flashLevel}` : "Off"}</span>
-          <span class="qt-live__note">Drag to set brightness</span>
         </div>`,
       morse_sos: () => html`
-        <div class="qt-live" data-accent="magenta">
-          <span class="qt-live__label">SOS</span>${tune("morse_sos")}
-          <button class="qt-live__control" aria-pressed=${s.sosActive ? "true" : "false"}
-            aria-label=${s.sosActive ? "Stop SOS" : "Send SOS"} @click=${() => s.set({ sosActive: !s.sosActive })}>
-            ${face("cookie_7sided", html`<span class="qt-live__sos">SOS</span>`, s.sosActive ? "qt-live__face--sending" : "")}
-          </button>
+        <div class="qt-live qt-live--signal" data-accent="magenta" role="button" tabindex="0" @click=${() => open("morse_sos")} @keydown=${activate("morse_sos")}
+          aria-label="SOS, ${s.sosActive ? "sending" : "ready"}">
+          <span class="qt-live__label">SOS</span>
+          ${face(shapeUrl("cookie_7sided"), html`<span class="qt-live__sos">SOS</span>`, s.sosActive ? "qt-live__face--sending" : "")}
           <span class="qt-live__value">${s.sosActive ? "Sending" : "Ready"}</span>
-          <span class="qt-live__note">${s.sosActive ? "Tap to stop" : "Tap to signal"}</span>
+          <span class="qt-live__note">Morse with the torch</span>
         </div>`,
     };
 
-    const control = (id) => id === "breathing_box"
-      ? html`<md-filled-tonal-icon-button aria-label=${s.breathRunning ? "Pause breathing" : "Start breathing"} @click=${(e) => { swallow(e); s.set({ breathRunning: !s.breathRunning }); }}><md-icon>${s.breathRunning ? "pause" : "play_arrow"}</md-icon></md-filled-tonal-icon-button>`
-      : nothing;
-
-    const tile = (id, wide) => {
-      const t = TOOLS[id];
+    // Breathe has no live sensor to show, so it is one wide card: its shape, its name and its rhythm.
+    const breathe = () => {
+      const t = TOOLS.breathing;
       return html`
-        <div class="qt-tile ${wide ? "qt-tile--wide" : ""}" data-accent=${t.palette} role="button" tabindex="0" @click=${() => open(id)} @keydown=${activate(id)}>
-          ${wide
-            ? html`${shapeBadge({ shape: t.shape, icon: t.icon, palette: t.palette, size: 56, iconSize: 28 })}
-                <div class="qt-tile__text"><h3 class="qt-tile__title">${t.title}</h3><p class="qt-tile__status">${status(id)}</p></div>${control(id)}`
-            : html`<div class="qt-tile__top">${shapeBadge({ shape: t.shape, icon: t.icon, palette: t.palette, size: 64, iconSize: 32 })}${control(id)}</div>
-                <div class="qt-tile__text"><h3 class="qt-tile__title">${t.title}</h3><p class="qt-tile__status">${status(id)}</p></div>`}
+        <div class="qt-breathe" role="button" tabindex="0" @click=${() => open("breathing")} @keydown=${activate("breathing")}>
+          ${shapeBadge({ shape: t.shape, icon: t.icon, palette: t.palette, size: 72, iconSize: 32 })}
+          <div class="qt-breathe__text">
+            <h3 class="qt-breathe__title">${t.title}</h3>
+            <p class="qt-breathe__rhythm">${BREATH_STEPS.map(([name, sec]) => html`<span>${name} ${sec}s</span>`)}</p>
+          </div>
         </div>`;
     };
 
@@ -169,8 +176,8 @@ export default {
       const ids = sec.tools.filter(matches);
       if (!ids.length) return nothing;
       const body = sec.live
-        ? html`<div class="qt-live-row">${ids.map((id) => live[id]())}</div>`
-        : html`<div class="qt-grid">${ids.map((id) => tile(id, ids.length === 1))}</div>`;
+        ? html`<div class="qt-live-row qt-live-row--${sec.live}">${ids.map((id) => live[id]())}</div>`
+        : breathe();
       return html`<section class="qt-section"><h2 class="qt-section__title">${sec.title}</h2>${body}</section>`;
     });
 

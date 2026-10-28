@@ -1,12 +1,19 @@
 import { html, nothing, svg } from "lit";
+import { asset, shapeMaskStyle } from "./assets.js";
 
 /**
  * Interactive bodies for the tool bottom sheet, plus the live sensor dials shared with the Quick Tools
  * glance card. Every tool here works without a special permission: sensors, display, torch.
  */
 
-/** Torch levels in the kit; real devices report their own maximum. */
-export const FLASH_LEVELS = 5;
+/** BreathingRepository.kt: inhale 4 s, hold 2 s, exhale 4 s, hold 1 s. */
+export const BREATH_STEPS = [["Inhale", 4], ["Hold", 2], ["Exhale", 4], ["Hold", 1]];
+
+/** The brand's own MaterialShapes exports in marketing/assets/shapes, used as masks. */
+const brandShape = (name) => asset(`shapes/${encodeURIComponent(name)}.svg`);
+
+/** Two values side by side as a connected pair: round outer corners, small inner ones (ResultPill.kt colours). */
+const pillPair = (a, b) => html`<div class="tk-pill-pair"><span class="tk-pill">${a}</span><span class="tk-pill">${b}</span></div>`;
 
 const CARDINALS = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
 export const cardinal = (deg) => CARDINALS[Math.round((((deg % 360) + 360) % 360) / 45) % 8];
@@ -63,15 +70,15 @@ export const compassRose = (heading = 312, size = 240, { labels = true, face = t
 };
 
 /** Bubble level dial; x and y are tilt in degrees and move the bubble inside the 10 degree window. */
-export const levelDial = (x = 0.4, y = -0.2, size = 96, { ring = true } = {}) => {
+export const levelDial = (x = 0.4, y = -0.2, size = 96, { ring = true, edge = false } = {}) => {
   const px = 50 + Math.max(-1, Math.min(1, x / 10)) * 30;
   const py = 50 + Math.max(-1, Math.min(1, y / 10)) * 30;
   return html`<svg class="tk-dial tk-dial--level" width=${size} height=${size} viewBox="0 0 100 100" role="img"
     aria-label="Bubble level, ${x} degrees roll, ${y} degrees pitch">
     ${ring ? svg`<circle class="tk-dial__ring" cx="50" cy="50" r="46" />` : nothing}
     <circle class="tk-dial__guide" cx="50" cy="50" r="18" />
-    <line class="tk-dial__guide" x1="8" y1="50" x2="92" y2="50" />
-    <line class="tk-dial__guide" x1="50" y1="8" x2="50" y2="92" />
+    <line class="tk-dial__guide" x1=${edge ? 0 : 8} y1="50" x2=${edge ? 100 : 92} y2="50" />
+    <line class="tk-dial__guide" x1="50" y1=${edge ? 0 : 8} x2="50" y2=${edge ? 100 : 92} />
     <circle class="tk-dial__bubble" cx="${px}" cy="${py}" r="9" />
   </svg>`;
 };
@@ -142,14 +149,20 @@ export function extraToolBody(tool, state, onState) {
     }
 
     case "bubble_level": {
+      // LevelTool.kt: pitch and roll pills over a 200dp face with a 40dp target ring and a 30dp bubble that moves
+      // 80dp at 45°, primary when level and secondary otherwise. The face is the 16-sided cookie.
       const roll = Number(state.levelRoll ?? 0.4);
       const pitch = Number(state.levelPitch ?? -0.2);
       const flat = Math.abs(roll) < 1 && Math.abs(pitch) < 1;
+      const shift = (deg) => (-Math.max(-45, Math.min(45, deg)) / 45) * 80;
       return html`
         <div class="tk-tool-interactive tk-tool-interactive--center">
-          ${levelDial(roll, pitch, 184)}
-          <div class="tk-readout"><span class="tk-readout__value">${flat ? "Level" : "Tilted"}</span><span class="tk-readout__note">From the gravity sensor</span></div>
-          <div class="tk-stat-grid">${stat("Roll", `${roll.toFixed(1)}°`)} ${stat("Pitch", `${pitch.toFixed(1)}°`)}</div>
+          ${pillPair(`P: ${Math.trunc(pitch)}°`, `R: ${Math.trunc(roll)}°`)}
+          <div class="tk-level" style=${shapeMaskStyle(brandShape("16 Sided Cookie"))} role="img"
+            aria-label="Bubble level, ${flat ? "level" : "tilted"}, pitch ${Math.trunc(pitch)} degrees, roll ${Math.trunc(roll)} degrees">
+            <span class="tk-level__target"></span>
+            <span class="tk-level__bubble ${flat ? "is-level" : ""}" style="transform:translate(${shift(roll)}px, ${shift(pitch)}px)"></span>
+          </div>
         </div>`;
     }
 
@@ -186,9 +199,17 @@ export function extraToolBody(tool, state, onState) {
 
     case "flash_dimmer": {
       // FlashDimmerTool.kt: presets on the left (weight 3), a segmented level bar on the right (weight 2) that
-      // follows the finger, 240dp tall. Level 0 is off; the kit's torch has five levels.
-      const max = FLASH_LEVELS;
-      const level = state.flashOn ? Number(state.flashLevel ?? 3) : 0;
+      // follows the finger, 240dp tall. Level 0 is off; the maximum comes from the device (a Pixel 8 Pro has 45).
+      const max = Math.max(1, Number(state.flashMaxLevel ?? 5));
+      const level = state.flashOn ? Math.min(Number(state.flashLevel ?? 3), max) : 0;
+      if (max === 1) {
+        // SimpleTorchControl: a torch that cannot dim is only on or off.
+        return html`
+          <div class="tk-tool-interactive tk-tool-interactive--center">
+            <span class="tk-pill tk-pill--single">${state.flashOn ? "On" : "Off"}</span>
+            <md-filled-button @click=${() => onState({ flashOn: !state.flashOn, flashLevel: 1 })}>${state.flashOn ? "Turn off" : "Turn on"}</md-filled-button>
+          </div>`;
+      }
       const half = Math.max(1, Math.floor((max + 1) / 2));
       const setLevel = (next) => onState({ flashOn: next > 0, flashLevel: next > 0 ? next : Number(state.flashLevel ?? 3) });
       const preset = (label, value) => level === value
@@ -221,15 +242,17 @@ export function extraToolBody(tool, state, onState) {
         </div>`;
     }
 
-    case "breathing_box": {
-      const running = Boolean(state.breathRunning);
+    case "breathing": {
+      // BreathingTool.kt: phase and seconds pills over a 200dp circle that grows to 1 on the inhale and shrinks to
+      // 0.4 on the exhale, primary while inhaling and secondary while exhaling. It starts when the sheet opens.
+      const phase = state.breathPhase ?? "INHALE";
+      const tone = phase === "INHALE" ? "inhale" : phase === "EXHALE" ? "exhale" : "hold";
       return html`
         <div class="tk-tool-interactive tk-tool-interactive--center">
-          <div class="tk-breath ${running ? "is-running" : ""}" role="img" aria-label="Breathing pacer"><span class="tk-breath__phase"></span></div>
-          <div class="tk-readout"><span class="tk-readout__value">4 · 4 · 4 · 4</span><span class="tk-readout__note">Inhale, hold, exhale, hold, four seconds each</span></div>
-          <md-filled-button @click=${() => onState({ breathRunning: !running })}>
-            <md-icon slot="icon">${running ? "pause" : "play_arrow"}</md-icon>${running ? "Pause" : "Start"}
-          </md-filled-button>
+          ${pillPair(phase.replace("_", " "), `${state.breathSeconds ?? 3}s`)}
+          <div class="tk-breathe tk-breathe--${tone}" style="transform:scale(${Number(state.breathProgress ?? 0.7)})" role="img" aria-label="Breathing, ${phase.toLowerCase().replace("_", " ")}">
+            <md-icon>favorite</md-icon>
+          </div>
         </div>`;
     }
 

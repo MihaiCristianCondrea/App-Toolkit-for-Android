@@ -10,7 +10,7 @@ Made by the owner on October 28, 2026:
 1. **Three tabs stay:** Quick Tools, Measure, Apps. No new tab, no device information screen. The second tab was
    called Numbers; with the ruler and protractor on it, every tool there gives a measurement or a number, so it is
    **Measure**. Its route id stays `numbers`.
-2. **Quick Tools has three sections:** Sensors, Light & signals, Calm. Ruler and Protractor move to Measure.
+2. **Quick Tools has three sections:** Sensors, Light & signals, Wellbeing. Ruler and Protractor move to Measure.
    Coin Flip and Reaction Test join Measure. Material Colors stays in the app only. **Screen Light is not
    planned** and is not in the marketing UI.
 3. **Settings, About, Help, onboarding and the other library screens are not in the marketing UI.**
@@ -18,14 +18,19 @@ Made by the owner on October 28, 2026:
    ticks, degree numbers and cardinal names that turns with the phone, a fixed pointer, and a large degree and
    direction readout. Drawn for App Toolkit (MBCompass is GPL-3.0 and its rose artwork CC BY-SA 4.0; nothing is
    copied), in the web kit and in Compose alike.
-5. **The other tool sheets keep their design.** Bubble Level, Ruler, Protractor, Morse & SOS, Box Breathing and the
-   Measure sheets are not changed; new tools get sheets in the same style. The Flash Dimmer sheet is the app's
-   (`FlashDimmerTool.kt`) one to one, and every sheet opens like the app's `ModalBottomSheet`: no drag handle,
-   straight to expanded, sliding up over a 32% scrim.
+5. **Sheets follow the app.** Flash Dimmer (`FlashDimmerTool.kt`), Bubble Level (`LevelTool.kt`) and Breathe
+   (`BreathingTool.kt`) are the app's, one to one, with one change: two values side by side (pitch and roll; phase
+   and seconds) are a connected pair, round outside and 8dp inside, like grouped buttons. The level face is the
+   16-sided cookie. Every sheet opens like the app's `ModalBottomSheet`: no drag handle, straight to expanded,
+   sliding up over a 32% scrim. Ruler, Protractor, Morse & SOS and the Measure sheets keep their design.
 6. **Quick Tools is live.** Sensors and Light & signals are rows of two equal live widgets, [Compass][Bubble Level]
-   and [Flashlight][SOS], each tool working inside its own MaterialShape. Dragging over the flashlight's shape sets
-   its brightness like a progress bar; a tap switches it on or off. SOS starts and stops from its shape. The "Add a
-   tool to Quick Settings" card is gone.
+   and [Flashlight][SOS], each tool working inside its own shape: the compass in the 8-sided cookie, the level in
+   the 16-sided cookie (its cross reaching the shape's edges), the torch in a burst, SOS in a 7-sided cookie. Light &
+   signals sits on its tools' own colours, read from the start edge, so it does not look like Sensors. A tap on any
+   widget opens its sheet. A vertical swipe over the flashlight's shape sets the brightness and fills the shape like
+   a progress bar, only on torches that can dim; the number of levels is the device's (a Pixel 8 Pro has 45).
+   Breathe (the app's name, rhythm 4-2-4-1) is one wide card without a play button. Quick Tools cards do not scale
+   when pressed. The "Add a tool to Quick Settings" card is gone.
 7. **Kotlin waits.** The app's code is not changed during the web redesign. `CompassTool.kt` was changed once
    (`2da90de1`) and stays as it is; nothing else in Compose changes until step 7.
 
@@ -35,7 +40,7 @@ Made by the owner on October 28, 2026:
 | --- | --- | --- |
 | Quick Tools | Sensors | Compass (live rose), Bubble Level (live dial) |
 | Quick Tools | Light & signals | Flash Dimmer, Morse & SOS |
-| Quick Tools | Calm | Box Breathing |
+| Quick Tools | Wellbeing | Breathe |
 | Measure | Length & angle | Surface Ruler, Protractor |
 | Measure | Convert & split | Unit Converter, Tip & Bill Splitter |
 | Measure | Count & time | Counter, Reaction Test |
