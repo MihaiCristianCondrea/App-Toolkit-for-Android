@@ -1,3 +1,4 @@
+import { chanceBody } from "./chance.js";
 import { html, nothing } from "lit";
 import { shapeMaskStyle, shapeUrl } from "./assets.js";
 import { extraToolBody } from "./tool-bodies.js";
@@ -190,6 +191,8 @@ export function renderToolBottomSheet({
 }
 
 function renderToolBody(tool, state, onState) {
+  const chance = chanceBody(tool, state, onState);
+  if (chance) return chance;
   const extra = extraToolBody(tool, state, onState);
   if (extra) return extra;
   switch (tool.id) {
@@ -365,110 +368,6 @@ function renderToolBody(tool, state, onState) {
               <span class="material-symbols-outlined">swap_vert</span>
             </div>
           </div>
-        </div>
-      `;
-    }
-
-    case "random_number": {
-      const min = Number(state.randomMin ?? 1);
-      const max = Number(state.randomMax ?? 100);
-      const result = Number(state.randomResult ?? 42);
-      return html`
-        <div class="tk-tool-interactive">
-          <div class="tk-counter-Readout">
-            <div
-              class="tk-counter-shape"
-              style=${shapeMaskStyle(shapeUrl("gem"))}
-            >
-              <span class="display-medium" style="font-weight:700">${result}</span>
-            </div>
-            <span
-              class="label-medium"
-              style="color:var(--md-sys-color-on-surface-variant)"
-            >
-              Range: ${min} to ${max}
-            </span>
-          </div>
-
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-            <md-outlined-text-field
-              label="Min"
-              type="number"
-              .value=${String(min)}
-              @input=${(e) => onState({ randomMin: Number(e.target.value) || 0 })}
-            ></md-outlined-text-field>
-            <md-outlined-text-field
-              label="Max"
-              type="number"
-              .value=${String(max)}
-              @input=${(e) => onState({ randomMax: Number(e.target.value) || 100 })}
-            ></md-outlined-text-field>
-          </div>
-
-          <md-filled-button
-            style="width:100%"
-            @click=${() => {
-              const lo = Math.min(min, max);
-              const hi = Math.max(min, max);
-              const next = Math.floor(Math.random() * (hi - lo + 1)) + lo;
-              onState({ randomResult: next });
-            }}
-          >
-            <md-icon slot="icon">casino</md-icon>
-            Generate Random Number
-          </md-filled-button>
-        </div>
-      `;
-    }
-
-    case "dice_roll": {
-      const sides = Number(state.diceSides ?? 6);
-      const diceResult = Number(state.diceResult ?? 5);
-      return html`
-        <div class="tk-tool-interactive">
-          <div class="tk-counter-Readout">
-            <div
-              class="tk-counter-shape"
-              style=${shapeMaskStyle(shapeUrl("cookie_12sided"))}
-            >
-              <span class="display-medium" style="font-weight:700">
-                ${diceResult}
-              </span>
-            </div>
-            <span
-              class="label-medium"
-              style="color:var(--md-sys-color-on-surface-variant)"
-            >
-              d${sides} die · Rolled ${diceResult}
-            </span>
-          </div>
-
-          <md-chip-set aria-label="Die sides">
-            ${[6, 8, 10, 12, 20].map(
-              (s) => html`
-                <md-filter-chip
-                  label="d${s}"
-                  ?selected=${sides === s}
-                  @click=${() =>
-                    onState({
-                      diceSides: s,
-                      diceResult: Math.floor(Math.random() * s) + 1,
-                    })}
-                ></md-filter-chip>
-              `,
-            )}
-          </md-chip-set>
-
-          <md-filled-button
-            style="width:100%"
-            @click=${() => {
-              const next = Math.floor(Math.random() * sides) + 1;
-              onState({ diceResult: next });
-            }}
-          >
-            <md-icon slot="icon">casino</md-icon>
-            Roll d${sides}
-          </md-filled-button>
         </div>
       `;
     }

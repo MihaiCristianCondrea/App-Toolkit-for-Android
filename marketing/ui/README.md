@@ -17,7 +17,7 @@ at build time. App-specific fonts, logos and illustrations still come from this 
 
 ## Entry Points
 
-* `index.html` (`src/gallery-page.js`) - Showcase hub with Quick Tools, Numbers and Apps, without category filters.
+* `index.html` (`src/gallery-page.js`) - Showcase hub with Quick Tools, Measure and Apps, without category filters.
 * `screen.html` (`src/screen-page.js`) - Live interactive device frame (`Phone`, `Fold`, `Desktop`) with palette, contrast, light/dark mode, and per-screen state controls.
 * `motion.html` (`src/motion-page.js`) - Material 3 Expressive spatial and effects springs playground and the 35 `MaterialShapes` polygon masks.
 * `specs.html` (`src/specs-page.js`) - Extracted App Toolkit color palettes, Google Sans Flex typography scale, and Compose-to-Web component mapping.
@@ -38,8 +38,8 @@ checks the web migration; Android screenshot parity remains a separate campaign 
 
 ## Translated Screens (`src/screens/`)
 
-* `quick-tools.js` - `ToolkitTilesScreen.kt` (collapsible Quick Settings tile categories and pocket tools).
-* `numbers.js` - `NumbersScreen.kt` (warm-gold hero banner, grouped bento corners with 28dp outer and 8dp inner seams, clickable Counter feature card, and interactive `ToolkitToolBottomSheet` modals for Counter, Tip & Bill Splitter, Unit Converter, Random Number Picker, and Dice Roll).
+* `quick-tools.js` - `ToolkitTilesScreen.kt` (collapsible Quick Settings tile categories and pocket tools, including Chance: Random Number, Dice Roll and Coin Flip).
+* `numbers.js` - `NumbersScreen.kt` (warm-gold hero banner, grouped bento corners with 28dp outer and 8dp inner seams, clickable Counter feature card, and interactive `ToolkitToolBottomSheet` modals for Counter, Tip & Bill Splitter, Unit Converter).
 * `apps.js` - `AppsListScreen.kt` (developer app catalog with category filter chips and favorites).
 
 ## Opening the hub
@@ -58,3 +58,5 @@ npm run build    # sync assets and build production bundle to dist/
 npm run qa       # browser checks (CHROMIUM_PATH can select a local Chromium)
 npm run palettes # regenerate src/theme/palettes.css from Kotlin Color.kt files
 ```
+
+Chance sheets follow `RandomNumberTool.kt`, `DiceRollTool.kt` and `CoinFlipTool.kt`: signed 64-bit ranges and presets, a six-sided die, and the original coin vector paths. Browser motion approximates Compose animation; device screenshot parity has not been verified.

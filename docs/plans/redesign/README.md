@@ -10,8 +10,8 @@ Made by the owner on October 28, 2026:
 1. **Three tabs stay:** Quick Tools, Measure, Apps. No new tab, no device information screen. The second tab was
    called Numbers; with the ruler and protractor on it, every tool there gives a measurement or a number, so it is
    **Measure**. Its route id stays `numbers`.
-2. **Quick Tools has three sections:** Sensors, Light & signals, Wellbeing. Ruler and Protractor move to Measure.
-   Coin Flip and Reaction Test join Measure. Material Colors stays in the app only. **Screen Light is not
+2. **Quick Tools has four sections:** Sensors, Light & signals, Chance, Wellbeing. Ruler and Protractor move to Measure.
+   Random Number, Dice Roll and Coin Flip belong to Chance in Quick Tools. Reaction Test stays in Measure. Material Colors stays in the app only. **Screen Light is not
    planned** and is not in the marketing UI.
 3. **Settings, About, Help, onboarding and the other library screens are not in the marketing UI.**
 4. **The compass is redesigned** in the style of [MBCompass](https://github.com/CompassMB/MBCompass): a rose of
@@ -50,7 +50,7 @@ Made by the owner on October 28, 2026:
 | Measure | Length & angle | Surface Ruler, Protractor |
 | Measure | Convert & split | Unit Converter, Tip & Bill Splitter |
 | Measure | Count & time | Counter, Reaction Test |
-| Measure | Chance | Random Number, Dice Roll, Coin Flip |
+| Quick Tools | Chance | Random Number, Dice Roll, Coin Flip |
 | Apps | | The developer's apps from the metadata API |
 
 The app today has 12 tools on Quick Tools in four categories (Sensors & Measurement, Utilities & Fun, System &

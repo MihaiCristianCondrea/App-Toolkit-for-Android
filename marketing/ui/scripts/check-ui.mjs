@@ -76,6 +76,40 @@ try {
       }
     }
   }
+  // Chance belongs to Quick Tools, with Compose range controls and six-sided dice.
+  for (const window of ['phone', 'fold', 'desktop']) {
+    for (const theme of ['light', 'dark']) {
+      await page.goto(`${base}/screen.html?id=quick-tools&window=${window}&theme=${theme}&panel=none`);
+      await page.locator('.qt-chance').first().waitFor();
+      assert.equal(await page.locator('.qt-chance').count(), 3);
+      for (const id of ['random_number', 'dice_roll', 'coin_flip']) {
+        await page.locator(`[data-tool="${id}"]`).click();
+        const sheet = page.locator('.tk-sheet-surface');
+        await sheet.waitFor();
+        if (id === 'random_number') {
+          await sheet.locator('md-filter-chip[label="1–2"]').click();
+          await sheet.locator('md-filled-button').filter({hasText:'Generate'}).click();
+          assert.match(await sheet.locator('.chance-number').innerText(), /^[12]$/);
+          await sheet.locator('md-outlined-text-field').first().locator('input').fill('3');
+          await page.waitForFunction(() => document.querySelector('.chance-body md-filled-button')?.disabled === true);
+          assert.equal(await sheet.locator('md-filled-button').filter({hasText:'Generate'}).evaluate(el => el.disabled), true);
+          assert.equal(await sheet.locator('[role="alert"]').count(), 1);
+        } else {
+          assert.equal(await sheet.locator('[aria-label="Die sides"]').count(), 0);
+          const action = sheet.locator('md-filled-button');
+          await action.click();
+          await page.waitForFunction(() => !document.querySelector('.chance-body md-filled-button')?.disabled);
+          assert.match(await sheet.locator('[role="img"]').getAttribute('aria-label'), id === 'dice_roll' ? /^Die showing [1-6]$/ : /^(Heads|Tails)$/);
+        }
+        await sheet.locator('[aria-label="Close"]').click();
+        checks++;
+      }
+    }
+  }
+  await page.goto(`${base}/screen.html?id=numbers&panel=none`);
+  await page.locator('.numbers-card').first().waitFor();
+  assert.equal(await page.locator('h2').filter({hasText:'Chance'}).count(), 0);
+  checks++;
   await page.goto(`${base}/screen.html?id=numbers&theme=light`);
   await page.locator('html[data-ready]').waitFor();
   assert.equal(await page.locator('mnw-device-frame').count(), 1);

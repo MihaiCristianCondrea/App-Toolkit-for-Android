@@ -1,3 +1,4 @@
+import { diceVisual, coinVisual } from "../kit/chance.js";
 import { html, nothing } from "lit";
 import { renderToolBottomSheet, shapeBadge } from "../kit/components.js";
 import { asset, shapeMaskStyle, shapeUrl } from "../kit/assets.js";
@@ -6,9 +7,12 @@ import { BREATH_STEPS, compassRose, direction, levelDial } from "../kit/tool-bod
 
 /**
  * Quick Tools: tools that run on sensors and the torch, so none needs a special permission. Ruler, protractor,
- * counter, chance and the calculators live on the Measure tab.
+ * counter and the calculators live on the Measure tab.
  */
 const TOOLS = {
+  random_number: { id: "random_number", title: "Random Number", subtitle: "Pick a number within a range", icon: "casino", shape: "gem", palette: "gold", kindLabel: "Quick tool", supportsTile: false },
+  coin_flip: { id: "coin_flip", title: "Coin Flip", subtitle: "Flip heads or tails instantly", icon: "monetization_on", shape: "cookie_12sided", palette: "gold", kindLabel: "Quick tool", supportsTile: true },
+  dice_roll: { id: "dice_roll", title: "Dice Roll", subtitle: "Roll a six-sided die", icon: "casino", shape: "cookie_12sided", palette: "gold", kindLabel: "Quick tool", supportsTile: true },
   compass: { id: "compass", title: "Compass", subtitle: "Heading from the geomagnetic sensor", icon: "explore", shape: "sunny", palette: "teal", kindLabel: "Quick tool", supportsTile: true },
   bubble_level: { id: "bubble_level", title: "Bubble Level", subtitle: "Roll and pitch from the gravity sensor", icon: "straighten", shape: "pill", palette: "teal", kindLabel: "Quick tool", supportsTile: true },
   flash_dimmer: { id: "flash_dimmer", title: "Flash Dimmer", subtitle: "Set the torch brightness", icon: "flashlight_on", shape: "burst", palette: "gold", kindLabel: "Quick tool", supportsTile: true },
@@ -27,6 +31,7 @@ let torchPress = null;
 const SECTIONS = [
   { id: "sensors", title: "Sensors", icon: "sensors", tools: ["compass", "bubble_level"], live: "sensors" },
   { id: "light", title: "Light & signals", icon: "flashlight_on", tools: ["flash_dimmer", "morse_sos"], live: "light" },
+  { id: "chance", title: "Chance", icon: "casino", tools: ["random_number", "dice_roll", "coin_flip"], live: "chance" },
   { id: "wellbeing", title: "Wellbeing", icon: "self_improvement", tools: ["breathing"] },
 ];
 
@@ -42,6 +47,7 @@ export default {
   palette: "google",
   description: "Live sensors and Quick Settings tiles that need no special permission.",
   defaults: {
+    randomMin: "1", randomMax: "100", randomResult: 73, diceResult: 5, coinSide: "Heads",
     searchQuery: "",
     activeToolId: "none",
     drawerOpen: false,
@@ -65,6 +71,7 @@ export default {
       label: "Quick Tools states",
       options: [
         ["Overview", { activeToolId: "none" }],
+        ...["random_number", "dice_roll", "coin_flip"].map(id => [TOOLS[id].title + " sheet", { activeToolId: id }]),
         ["Compass sheet", { activeToolId: "compass" }],
         ["Bubble level sheet", { activeToolId: "bubble_level" }],
         ["Flash dimmer sheet", { activeToolId: "flash_dimmer" }],
@@ -119,7 +126,12 @@ export default {
     const face = (mask, content, extra = "") => html`
       <div class="qt-live__face ${extra}" style=${shapeMaskStyle(mask)}>${content}</div>`;
 
+    const chance = (id, value, note, visual) => html`<div class="qt-live qt-chance" data-tool=${id} role="button" tabindex="0" @click=${() => open(id)} @keydown=${activate(id)} aria-label=${TOOLS[id].title}>
+      <span class="qt-live__label">${TOOLS[id].title}</span><div class="qt-chance__visual">${visual}</div><span class="qt-live__value">${value}</span><span class="qt-live__note">${note}</span></div>`;
     const live = {
+      random_number: () => chance("random_number", s.randomResult ?? "?", `${s.randomMin} to ${s.randomMax}`, shapeBadge({shape:"gem",icon:"numbers",palette:"gold",size:88,iconSize:40})),
+      dice_roll: () => chance("dice_roll", "Roll a die", "Six sides, one result", diceVisual(s.diceResult, true)),
+      coin_flip: () => chance("coin_flip", s.coinSide, "Heads or tails", coinVisual(s.coinSide, true)),
       compass: () => html`
         <div class="qt-live" data-accent="teal" role="button" tabindex="0" @click=${() => open("compass")} @keydown=${activate("compass")}
           aria-label="Compass, ${heading} degrees ${direction(heading)}">

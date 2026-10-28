@@ -1855,3 +1855,41 @@ md-icon-button.ai-favorite {
 .qt-ad__meta { display: flex; align-items: center; gap: 4px; margin-top: 2px; font: 500 13px/18px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); --md-icon-size: 16px; }
 .qt-ad__meta md-icon { color: var(--md-sys-color-tertiary); font-variation-settings: "FILL" 1; }
 .qt-ad__cta { grid-area: cta; width: 100%; }
+
+/* Chance: a wide number picker above a connected pair of tactile tools. */
+.qt-live-row--chance { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:4px; }
+.qt-live-row--chance .qt-chance { min-width:0; background:var(--md-sys-color-secondary-container); color:var(--md-sys-color-on-secondary-container); border-radius:8px; cursor:pointer; }
+.qt-live-row--chance .qt-chance:first-child { grid-column:1/-1; border-radius:28px 28px 8px 8px; display:grid; grid-template-columns:1fr auto; text-align:start; padding:24px; }
+.qt-live-row--chance .qt-chance:first-child .qt-chance__visual { grid-column:2; grid-row:1/4; }
+.qt-live-row--chance .qt-chance:nth-child(2) { border-bottom-left-radius:28px; }
+.qt-live-row--chance .qt-chance:last-child { border-bottom-right-radius:28px; }
+.qt-chance:focus-visible { outline:3px solid var(--md-sys-color-primary); outline-offset:2px; }
+.qt-chance__visual { min-height:100px; display:grid; place-items:center; }
+.qt-chance .qt-live__value { font-size:24px; }
+.qt-chance:first-child .qt-live__value { font-size:48px; overflow-wrap:anywhere; }
+.chance-range { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.chance-range md-outlined-text-field { width:100%; min-width:0; }
+.chance-number { min-height:100px; padding:16px; display:grid; place-items:center; border-radius:28px; background:var(--md-sys-color-surface-container-high); font:400 57px/1.2 var(--md-ref-typeface-plain); overflow-wrap:anywhere; font-variant-numeric:tabular-nums; }
+.chance-number:has(+ md-filled-button) { text-align:center; }
+.chance-error { color:var(--md-sys-color-error); margin:0; }
+.chance-coin { width:120px; height:120px; flex-shrink:0; border-radius:50%; display:grid; place-items:center; background:var(--md-sys-color-primary-container); color:var(--md-sys-color-on-primary-container); }
+.chance-coin--tails { background:var(--md-sys-color-secondary-container); color:var(--md-sys-color-on-secondary-container); }
+.chance-coin svg { width:64px; height:64px; }
+.chance-coin--small { width:88px; height:88px; }
+.chance-coin--small svg { width:48px; height:48px; }
+.chance-side { font:500 16px/24px var(--md-ref-typeface-plain); color:var(--md-sys-color-on-surface-variant); }
+.chance-dice-stage { width:150px; height:150px; display:grid; place-items:center; perspective:480px; }
+.chance-dice { width:86px; height:86px; position:relative; transform-style:preserve-3d; }
+.chance-dice__face { position:absolute; inset:0; display:grid; grid-template:repeat(3,1fr)/repeat(3,1fr); gap:5px; padding:16px; border:3px solid var(--md-sys-color-outline); border-radius:12px; backface-visibility:hidden; background:var(--md-sys-color-tertiary-container); }
+.chance-dice__face i { border-radius:50%; background:var(--md-sys-color-on-primary-container); }
+.chance-dice__face .blank { visibility:hidden; }
+.chance-dice__face--0 { transform:translateZ(43px); }
+.chance-dice__face--1 { transform:rotateY(180deg) translateZ(43px); }
+.chance-dice__face--2 { transform:rotateY(90deg) translateZ(43px); background:var(--md-sys-color-secondary-container); }
+.chance-dice__face--3 { transform:rotateY(-90deg) translateZ(43px); background:var(--md-sys-color-secondary-container); }
+.chance-dice__face--4 { transform:rotateX(90deg) translateZ(43px); background:var(--md-sys-color-primary-container); }
+.chance-dice__face--5 { transform:rotateX(-90deg) translateZ(43px); background:var(--md-sys-color-primary-container); }
+.chance-dice-stage--small { width:100px; height:100px; transform:scale(.8); }
+
+.chance-body[data-flipping] .chance-side { font-size:0; }
+.chance-body[data-flipping] .chance-side::after { content:"Ready?"; font-size:16px; }

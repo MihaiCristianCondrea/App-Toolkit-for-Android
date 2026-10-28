@@ -275,18 +275,6 @@ export function extraToolBody(tool, state, onState) {
         </div>`;
     }
 
-    case "coin_flip": {
-      const heads = (state.coinSide ?? "Heads") === "Heads";
-      return html`
-        <div class="tk-tool-interactive tk-tool-interactive--center">
-          <div class="tk-coin ${heads ? "" : "tk-coin--tails"}" role="img" aria-label=${heads ? "Heads" : "Tails"}>
-            <md-icon>${heads ? "person" : "token"}</md-icon>
-          </div>
-          <div class="tk-readout"><span class="tk-readout__value">${heads ? "Heads" : "Tails"}</span></div>
-          <md-filled-button @click=${() => onState({ coinSide: Math.random() < 0.5 ? "Heads" : "Tails" })}><md-icon slot="icon">play_arrow</md-icon>Flip coin</md-filled-button>
-        </div>`;
-    }
-
     case "reaction_test": {
       // ReactionTestTool.kt: one pad whose colour and prompt follow the phase.
       const phase = state.reactionPhase ?? "idle";
