@@ -266,7 +266,9 @@ export const screen = ({
   carded = true,
 }) => {
   const layout = shellLayout(win);
-  const size = win ? `width:${layout.width}px;height:${layout.height}px` : "";
+  const systemInset = layout.systemNav ? (navType === "buttons" ? 48 : 24) : 0;
+  const bottomInset = bottom && bottom !== nothing && !layout.framed ? 80 : 0;
+  const size = `${win ? `width:${layout.width}px;height:${layout.height}px;` : ""}--sc-system-nav-height:${systemInset}px;--sc-bottom-bar-height:${bottomInset}px`;
   const handleScroll = (e) => {
     const scrollTop = e.target.scrollTop;
     const isScrolled = scrollTop > 4;

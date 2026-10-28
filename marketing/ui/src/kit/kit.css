@@ -236,7 +236,7 @@
 }
 .sc-sysnav__btn:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
 
-.sc-fab { position: absolute; right: 16px; bottom: 140px; z-index: 3; }
+.sc-fab { position: absolute; inset-inline-end: 16px; bottom: calc(16px + var(--sc-system-nav-height, 0px) + var(--sc-bottom-bar-height, 0px)); z-index: 3; }
 
 /* Filter Row using Material Web md-chip-set and md-filter-chip (App Toolkit TopListFilters): 24 dp above and
    below the chips, outline-variant outlines, a 24 dp check on the selected chip. */
@@ -857,9 +857,8 @@ md-icon-button.ai-favorite {
 .sc-screen--framed:not(.sc-screen--carded) .sc-frame__body .sc-topbar { background: var(--md-sys-color-surface); }
 /* Edge to edge: the card reaches the bottom of the window and the gesture handle floats over it. */
 .sc-screen--framed > .sc-sysnav { position: absolute; left: 0; right: 0; bottom: 0; z-index: 4; background: transparent; }
-.sc-screen--framed .sc-frame__card > .sc-content { padding-bottom: 24px; }
+.sc-screen--framed .sc-frame__card > .sc-content { padding-bottom: var(--sc-system-nav-height, 0px); }
 .sc-screen--framed .sc-topbar--search .sc-search { margin-inline-start: 16px; }
-.sc-screen--framed .sc-fab { bottom: 40px; }
 
 /* ShellRail: 96 dp, a 64 dp header with the 48 dp menu button centred, WideNavigationRailItem tabs (56 x 32
    indicator, label-medium label 4 dp under it), the drawer entries pinned to the bottom with 8 dp under them. */
@@ -937,7 +936,6 @@ md-icon-button.ai-favorite {
 .sc-pane--article .ai-article-prose { max-width: 800px; margin-inline: auto; width: 100%; box-sizing: border-box; }
 /* ArticleContentColumn.kt: the hero up to 1040 dp wide, and no taller than 60% of the window, 16 dp from the sides. */
 .sc-pane--article .ai-article-hero { width: calc(100% - 32px); max-width: min(1008px, var(--sc-hero-max, 1008px)); margin-inline: auto; }
-.sc-screen--framed:not(:has(> .sc-sysnav)) .sc-fab { bottom: 16px; }
 
 
 /* Composed tabs (ComposedSections.kt): a title-large heading 16 dp above its group, shelves that scroll sideways

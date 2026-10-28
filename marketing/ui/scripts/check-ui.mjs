@@ -30,7 +30,7 @@ try {
     assert.equal(await shell.locator('.drawer').isVisible(), false);
     assert.equal(await shell.locator('.bar > md-icon-button.leading').count(), 0);
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true);
-    await page.screenshot({path: new URL(`../captures/gallery-${width}.png`, import.meta.url).pathname});
+    await page.screenshot({path: fileURLToPath(new URL(`../captures/gallery-${width}.png`, import.meta.url))});
     assert.deepEqual(errors, []);
     await page.close();
     checks++;
@@ -107,6 +107,49 @@ try {
   });
   assert.deepEqual(embedded, {screen: true, sheet: true, frame: 'pixel_9_pro_fold'});
   checks++;
+  // Deterministic catalog data makes FAB geometry independent of the live API.
+  for (const window of ['phone', 'fold', 'desktop']) {
+    for (const navType of ['gesture', 'buttons']) {
+      for (const direction of ['ltr', 'rtl']) {
+        const geometry = await page.evaluate(async ({window, navType, direction}) => {
+          const api = await import('/src/embed.js');
+          document.documentElement.dir = direction;
+          const target = document.createElement('div');
+          document.body.replaceChildren(target);
+          await api.mount(target, 'apps', {
+            navType,
+            apps: Array.from({length: 24}, (_, i) => ({id: `example.app${i}`, name: `Example ${i}`, summary: 'Fixture', icon: '', category: ''})),
+          }, {frame: false, window});
+          await target.querySelector('md-fab').updateComplete;
+          const measure = () => {
+            const screen = target.querySelector('.sc-screen');
+            const pane = screen.querySelector('.sc-frame__card') ?? screen;
+            const fab = screen.querySelector('.sc-fab').getBoundingClientRect();
+            const bounds = pane.getBoundingClientRect();
+            const nav = screen.querySelector('.sc-navbar');
+            const system = screen.querySelector('.sc-sysnav');
+            return {
+              end: direction === 'rtl' ? fab.left - bounds.left : bounds.right - fab.right,
+              bottom: (nav?.getBoundingClientRect().top ?? system?.getBoundingClientRect().top ?? bounds.bottom) - fab.bottom,
+              inside: fab.left >= bounds.left && fab.right <= bounds.right && fab.top >= bounds.top,
+            };
+          };
+          const before = measure();
+          const scroller = target.querySelector('.sc-content');
+          scroller.scrollTop = 100;
+          return {before, after: measure(), scrollTop: scroller.scrollTop};
+        }, {window, navType, direction});
+        assert.ok(geometry.scrollTop > 0, `${window}/${navType}/${direction}: fixture actually scrolls`);
+        for (const bounds of [geometry.before, geometry.after]) {
+          assert.ok(bounds.inside, `${window}/${navType}/${direction}: FAB inside pane`);
+          assert.ok(Math.abs(bounds.end - 16) < 1, `${window}/${navType}/${direction}: end gap ${bounds.end}`);
+          assert.ok(Math.abs(bounds.bottom - 16) < 1, `${window}/${navType}/${direction}: bottom gap ${bounds.bottom}`);
+        }
+        checks++;
+      }
+    }
+  }
+  await page.evaluate(() => { document.documentElement.dir = 'ltr'; });
   assert.deepEqual(errors, []);
   await page.close();
   console.log(`${checks} marketing UI checks passed`);
