@@ -83,7 +83,7 @@ try {
       await page.locator('.qt-chance').first().waitFor();
       assert.equal(await page.locator('.qt-chance').count(), 3);
       for (const id of ['random_number', 'dice_roll', 'coin_flip']) {
-        await page.locator(`[data-tool="${id}"]`).click();
+        await page.locator(`[data-tool="${id}"] .qt-live__label`).click();
         const sheet = page.locator('.tk-sheet-surface');
         await sheet.waitFor();
         if (id === 'random_number') {
@@ -105,6 +105,28 @@ try {
         checks++;
       }
     }
+  }
+  // Direct object taps animate in the widget; the surrounding card opens a stable sheet.
+  for (const id of ['dice_roll','coin_flip']) {
+    await page.goto(`${base}/screen.html?id=quick-tools&panel=none`);
+    const card = page.locator(`[data-tool="${id}"]`);
+    await card.locator('.qt-chance__play').click();
+    assert.equal(await page.locator('.tk-sheet-surface').count(),0);
+    await page.waitForFunction(id=>!document.querySelector(`[data-tool="${id}"]`).dataset.tossing,id);
+    await card.locator('.qt-live__label').click();
+    const sheet = page.locator('.tk-sheet-surface');
+    await sheet.waitFor();
+    await page.waitForFunction(()=>document.querySelector('.tk-sheet-surface').getAnimations().every(a=>a.playState==='finished'));
+    for(let repeat=0;repeat<2;repeat++) {
+      const before=await sheet.boundingBox();
+      await sheet.locator('.chance-body md-filled-button').click();
+      const samples=await sheet.evaluate(el=>new Promise(resolve=>{
+        const heights=[];const sample=()=>{heights.push(el.getBoundingClientRect().height);if(el.querySelector('[data-tossing]'))requestAnimationFrame(sample);else resolve(heights);};sample();
+      }));
+      assert.ok(samples.every(h=>Math.abs(h-before.height)<1),'sheet height remains stable during motion');
+      assert.equal(await sheet.locator('.chance-body [data-tossing]').count(),0);
+    }
+    checks++;
   }
   await page.goto(`${base}/screen.html?id=numbers&panel=none`);
   await page.locator('.numbers-card').first().waitFor();

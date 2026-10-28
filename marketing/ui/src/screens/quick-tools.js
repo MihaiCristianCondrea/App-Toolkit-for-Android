@@ -1,4 +1,4 @@
-import { diceVisual, coinVisual } from "../kit/chance.js";
+import { diceVisual, coinVisual, playChance } from "../kit/chance.js";
 import { html, nothing } from "lit";
 import { renderToolBottomSheet, shapeBadge } from "../kit/components.js";
 import { asset, shapeMaskStyle, shapeUrl } from "../kit/assets.js";
@@ -127,11 +127,11 @@ export default {
       <div class="qt-live__face ${extra}" style=${shapeMaskStyle(mask)}>${content}</div>`;
 
     const chance = (id, value, note, visual) => html`<div class="qt-live qt-chance" data-tool=${id} role="button" tabindex="0" @click=${() => open(id)} @keydown=${activate(id)} aria-label=${TOOLS[id].title}>
-      <span class="qt-live__label">${TOOLS[id].title}</span><div class="qt-chance__visual">${visual}</div><span class="qt-live__value">${value}</span><span class="qt-live__note">${note}</span></div>`;
+      <span class="qt-live__label">${TOOLS[id].title}</span><div class="qt-chance__visual">${id==='random_number'?visual:html`<button class="qt-chance__play" aria-label=${id==='dice_roll'?'Roll die':'Flip coin'} @click=${e=>playChance(e,id,s,s.set)} @keydown=${e=>e.stopPropagation()}>${visual}</button>`}</div><span class="qt-live__value">${value}</span><span class="qt-live__note">${note}</span></div>`;
     const live = {
       random_number: () => chance("random_number", s.randomResult ?? "?", `${s.randomMin} to ${s.randomMax}`, shapeBadge({shape:"gem",icon:"numbers",palette:"gold",size:88,iconSize:40})),
-      dice_roll: () => chance("dice_roll", "Roll a die", "Six sides, one result", diceVisual(s.diceResult, true)),
-      coin_flip: () => chance("coin_flip", s.coinSide, "Heads or tails", coinVisual(s.coinSide, true)),
+      dice_roll: () => chance("dice_roll", "Roll a die", "Tap die to roll", diceVisual(s.diceResult, true)),
+      coin_flip: () => chance("coin_flip", s.coinSide, "Tap coin to flip", coinVisual(s.coinSide, true)),
       compass: () => html`
         <div class="qt-live" data-accent="teal" role="button" tabindex="0" @click=${() => open("compass")} @keydown=${activate("compass")}
           aria-label="Compass, ${heading} degrees ${direction(heading)}">

@@ -60,3 +60,5 @@ npm run palettes # regenerate src/theme/palettes.css from Kotlin Color.kt files
 ```
 
 Chance sheets follow `RandomNumberTool.kt`, `DiceRollTool.kt` and `CoinFlipTool.kt`: signed 64-bit ranges and presets, a six-sided die, and the original coin vector paths. Browser motion approximates Compose animation; device screenshot parity has not been verified.
+
+In Chance, tapping the die or coin plays its animation in the widget; tapping the card background opens its sheet. Both sheets reserve the same motion area and keep their height while rolling or flipping.
