@@ -222,6 +222,41 @@ try {
   });
   assert.deepEqual(embedded, {screen: true, sheet: true, frame: 'pixel_9_pro_fold'});
   checks++;
+  // One identity names the app everywhere: the drawer header, the hub and the pickers read it, and a host that
+  // moves the asset base (Remotion's staticFile root) moves the drawer's mark with it.
+  {
+    const identity = await page.evaluate(async () => {
+      const api = await import('/src/embed.js');
+      const {PRODUCT_CONFIG} = await import('/src/config/product.js');
+      const {PALETTES} = await import('/src/controls.js');
+      const header = async (assetBase) => {
+        await api.setup({assetBase});
+        const target = document.createElement('div');
+        document.body.replaceChildren(target);
+        await api.mount(target, 'numbers', {drawerOpen: true}, {frame: false, window: 'phone'});
+        const el = target.querySelector('mnw-android-screen').shadowRoot.querySelector('.drawer__header');
+        return {name: el.textContent.trim(), logo: el.querySelector('img').getAttribute('src')};
+      };
+      const moved = await header('/kit-base/');
+      const home = await header('/');
+      return {
+        moved, home,
+        name: api.IDENTITY.config.name,
+        product: PRODUCT_CONFIG.name === api.IDENTITY.config.name && PRODUCT_CONFIG.icon === '/logos/icon.svg',
+        palettes: PALETTES === api.IDENTITY.palettes,
+        typeface: getComputedStyle(document.documentElement).getPropertyValue('--md-ref-typeface-plain').trim(),
+      };
+    });
+    assert.deepEqual(identity, {
+      moved: {name: 'App Toolkit', logo: '/kit-base/logos/app_logo.svg'},
+      home: {name: 'App Toolkit', logo: '/logos/app_logo.svg'},
+      name: 'App Toolkit',
+      product: true,
+      palettes: true,
+      typeface: '"Google Sans Flex", system-ui, sans-serif',
+    });
+    checks++;
+  }
   // Videos mount screens without set(): every preset, every sheet and the navigation surfaces must render
   // without errors, including tools that measure themselves after rendering (Ruler, Protractor).
   {

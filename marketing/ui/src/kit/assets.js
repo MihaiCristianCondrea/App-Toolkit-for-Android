@@ -1,12 +1,11 @@
+import { IDENTITY } from "../config/identity.js";
+
 /**
- * Base URL for fonts, illustrations and logos. Vite serves public/ at "/";
- * other hosts (e.g. Remotion's staticFile) call setAssetBase() before rendering.
+ * Base URL for fonts, illustrations and logos: the identity's, so its logo and fonts move with everything else.
+ * Vite serves public/ at "/"; other hosts (e.g. Remotion's staticFile) call setAssetBase() before rendering.
  */
-let base = "/";
-export const setAssetBase = (b) => {
-  base = b.endsWith("/") ? b : b + "/";
-};
-export const asset = (path) => base + (path.startsWith("/") ? path.slice(1) : path);
+export const setAssetBase = (b) => IDENTITY.setAssetBase(b);
+export const asset = (path) => IDENTITY.asset(path);
 
 /**
  * MaterialShapes are drawn as polar curves and served as data-URI masks, so every tool shape

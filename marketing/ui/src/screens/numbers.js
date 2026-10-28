@@ -1,7 +1,7 @@
 import { html, nothing } from "lit";
 import { previewScreen } from "material-next-web-components/marketing.js";
 import { toolOverlay, shapeBadge, toolMetaChips } from "../kit/components.js";
-import { APP } from "../kit/app.js";
+import { APP } from "../config/identity.js";
 
 /**
  * The Measure tab (route id `numbers`, NumbersScreen.kt): length and angle, conversion and splitting, counting and

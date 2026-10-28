@@ -2,7 +2,7 @@ import { diceVisual, coinVisual, playChance } from "../kit/chance.js";
 import { html, nothing } from "lit";
 import { previewScreen } from "material-next-web-components/marketing.js";
 import { toolOverlay, shapeBadge } from "../kit/components.js";
-import { APP } from "../kit/app.js";
+import { APP } from "../config/identity.js";
 import { asset, shapeMaskStyle, shapeUrl } from "../kit/assets.js";
 import { BREATH_STEPS, compassRose, direction, levelDial } from "../kit/tool-bodies.js";
 

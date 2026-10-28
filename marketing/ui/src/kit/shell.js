@@ -1,7 +1,7 @@
 import { html } from "lit";
 
 // The app's shell (status bar, app bars, navigation, insets, drawers and sheets) is Material Next's Android
-// preview, declared once in kit/app.js. These are the small pieces screens still draw themselves.
+// preview, declared once in config/identity.js. These are the small pieces screens still draw themselves.
 
 /**
  * Material Symbol icon (https://fonts.google.com/icons). `fill` mirrors Compose's Filled

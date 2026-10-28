@@ -1,47 +1,16 @@
+import { IDENTITY } from "./identity.js";
+
 /**
- * Product Showcase Configuration for App Toolkit for Android.
+ * What only the marketing pages show about App Toolkit: the motion stories, the specs and the release. The
+ * name, icon, links and palettes come from the identity (config/identity.js), so the hub, the previews and the
+ * app bars always agree.
  */
 export const PRODUCT_CONFIG = {
-  id: "app-toolkit",
-  name: "App Toolkit",
-  headline: "Product UI showcase",
-  description:
-    "Browse and preview App Toolkit screens (Quick Tools, Measure, and Apps) with official Material Web 3 components.",
-  buildNumber: "300000",
+  ...IDENTITY.product,
   toolkitVersion: "3.0.0",
-  logo: "/logos/app_logo.svg",
-  icon: "/logos/icon.svg",
-  repositoryUrl: "https://github.com/MihaiCristianCondrea/App-Toolkit-for-Android",
-  privacyUrl: "https://mihaicristiancondrea.github.io/profile/#privacy-policy",
-  codeOfConductUrl: "https://mihaicristiancondrea.github.io/profile/#code-of-conduct",
-
-  badges: [
-    { label: "Material 3 Expressive", icon: "palette", desc: "Expressive M3 tokens, shapes & dynamic schemes" },
-    { label: "Compose Parity", icon: "code", desc: "1:1 parity with Kotlin Jetpack Compose" },
-    { label: "Quick Settings Tiles", icon: "widgets", desc: "Hardware sensors, utilities & tile shortcuts" },
-    { label: "Numbers Bento", icon: "numbers", desc: "Warm-gold bento grid for counting, splitting & converting" },
-  ],
-
-  categories: [
-    { id: "all", label: "All Screens", icon: "apps" },
-    { id: "numbers", label: "Numbers", icon: "numbers" },
-    { id: "tools", label: "Quick Tools", icon: "widgets" },
-    { id: "catalog", label: "Apps Catalog", icon: "storefront" },
-  ],
-
-  tiers: [
-    { id: 0, label: "All Tiers", desc: "Full catalog" },
-    { id: 1, label: "Tier 1: Lead", desc: "Primary flagship destinations" },
-    { id: 2, label: "Tier 2: Supporting", desc: "Component & design system surfaces" },
-  ],
-
-  featuredScreenIds: ["quick-tools", "numbers", "apps"],
 
   theme: {
-    defaultPalette: "captured",
     defaultTheme: "system",
-    defaultNavType: "gesture",
-    defaultMode: "showcase",
   },
 
   motion: {

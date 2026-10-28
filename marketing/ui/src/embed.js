@@ -6,6 +6,7 @@ import {SCREENS, byId} from "./screens/index.js";
 import {shapeBadge, toolMetaChips, toolOverlay} from "./kit/components.js";
 
 export {SCREENS, byId, WINDOWS, shellLayout};
+export {IDENTITY} from "./config/identity.js";
 export const PARTS = {shapeBadge, toolMetaChips, toolOverlay, icon};
 const embed = createMarketingEmbed({
   screens: SCREENS,

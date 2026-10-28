@@ -6,11 +6,10 @@
  */
 @import "material-symbols/outlined.css";
 @import "material-symbols/rounded.css";
-/* Google Sans Flex is registered from JS (theme/index.js) so the asset base can change. */
+/* The typefaces (--md-ref-typeface-brand, --md-ref-typeface-plain) and Google Sans Flex come from the
+ * identity (config/identity.js), registered from JS so the asset base can change. */
 
 :root {
-  --md-ref-typeface-brand: "Google Sans Flex", system-ui, sans-serif;
-  --md-ref-typeface-plain: "Google Sans Flex", system-ui, sans-serif;
   --md-icon-font: "Material Symbols Outlined";
 
   /* SizeConstants (dp) */

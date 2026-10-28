@@ -1,7 +1,7 @@
 import { html, nothing } from "lit";
 import { previewScreen } from "material-next-web-components/marketing.js";
 import { iconButton } from "../kit/shell.js";
-import { APP } from "../kit/app.js";
+import { APP } from "../config/identity.js";
 
 /** Public catalog the Android app reads (ApiHost.kt, `GET api/v1/apps`). */
 const APPS_URL = "https://android-apps-metadata-backend.mihaicristiancondrea.workers.dev/api/v1/apps";

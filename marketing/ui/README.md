@@ -9,12 +9,51 @@ window rules, device frames and embed lifecycle. The gallery has no drawer or fo
 Material Next also draws the app's shell: its Android preview (`definePreviewApp()`, `previewScreen()`,
 `<mnw-android-screen>`) renders the status bar, app bars and search, the navigation each window calls for
 (navigation bar and modal drawer, rail, expandable rail, permanent drawer), the system bars and insets, and the
-sheets, full-screen dialogs, drawers and overflow menu over the content. App Toolkit declares itself once in
-`src/kit/app.js` (tabs, drawer footer, overflow); each screen gives its tab, search, content, FAB and overlay, and
-nothing else. Which navigation buttons appear comes from Material Next's rules, never from a screen. App Toolkit
-keeps its screen content, tools, state controls, palettes and product copy.
+sheets, full-screen dialogs, drawers and overflow menu over the content. Each screen gives its tab, search,
+content, FAB and overlay, and nothing else. Which navigation buttons appear comes from Material Next's rules, never
+from a screen. App Toolkit keeps its screen content, tools, state controls, palettes, assets and product copy.
 
-It uses Material Next from its Git source (`github:…#320fd41`) until the next npm release carries the Android
+## Product identity
+
+`src/config/identity.js` is the one place App Toolkit names itself, as `AppGraph.kt` does with
+`toolkitGraph(appTitle, appIcon) { ... }`. Material Next's `defineProductIdentity()` takes:
+
+| Field | App Toolkit | Read by |
+| --- | --- | --- |
+| `id`, `name` | `app-toolkit`, App Toolkit | App bars, expanded rail, drawer header, hub, saved preview settings |
+| `icons` | `app: /logos/icon.svg` (launcher), `logo: /logos/app_logo.svg` (`R.drawable.app_logo`) | Hub; drawer header |
+| `fonts` | Google Sans Flex from `fonts/GoogleSansFlex.ttf`; Material Symbols Outlined and Rounded | `--md-ref-typeface-brand` / `-plain`, `loadFonts()` |
+| `colors` | The `theme/palettes.css` palettes in picker order, starting at `captured` | Palette pickers, prototype and gallery defaults |
+| `destinations` | Quick Tools, Measure (`numbers`), Apps; `toolkitFooter()`; `overflow: [supportUs()]` | The Android preview |
+| `links` | Repository, privacy policy, code of conduct | Hub drawer |
+
+Everything else derives from it: `APP` (the shell declaration screens pass to `previewScreen()`),
+`PRODUCT_CONFIG` (which adds only what the hub alone shows: motion stories, specs, the release), `PALETTES`,
+`loadFonts()`, and `asset()` / `setAssetBase()`, which move the identity's logo and fonts with every other asset.
+The assets themselves stay in `public/`.
+
+### Migration notes
+
+From `src/kit/app.js` and the old `PRODUCT_CONFIG` (Material Next `320fd41` and earlier):
+
+- `import {APP} from "../kit/app.js"` becomes `import {APP} from "../config/identity.js"`; `kit/app.js` is gone.
+- `PRODUCT_CONFIG` no longer carries `id`, `name`, `icon`, `logo`, `privacyUrl`, `codeOfConductUrl` or
+  `repositoryUrl` of its own: it spreads `IDENTITY.product`. The unused `badges`, `categories`, `tiers`,
+  `featuredScreenIds`, `buildNumber`, `headline` and `description` fields were removed, as were the theme defaults
+  nothing read (`defaultPalette` is `IDENTITY.defaultPalette`).
+- `PALETTES` (`src/controls.js`) is `IDENTITY.palettes`; add a palette to the identity, next to its CSS.
+- `--md-ref-typeface-brand` and `--md-ref-typeface-plain` are no longer in `theme/base.css`: the identity sets them
+  when `theme/index.js` loads.
+- The drawer's mark resolves when the drawer draws, so `setAssetBase()` after import (Remotion) now moves it too.
+- The drawer footer and overflow are Material Next's `toolkitFooter()` and `supportUs()`, the library's own entries.
+
+Android Insider ports the same way: its identity declares its name, icons, fonts, palettes and tabs, and
+`drawer: {footer: toolkitFooter()}, overflow: [supportUs()]` as its `AppNavigationGraph.kt` does; the App Toolkit
+shell, rails, drawers and sheets come with Material Next.
+
+## Dependencies
+
+It uses Material Next from its Git source (`github:…#9d09ea0`) until the next npm release carries the Android
 preview, so installing needs Git as well as Node.js 24; the package builds itself on install. The gallery opens
 each screen in the same page; `screen.html` remains for captures and direct links.
 Gallery cards start without device frames. Opening screen detail shows a frame automatically,
@@ -32,7 +71,7 @@ at build time. App-specific fonts, logos and illustrations still come from this 
 
 ## Embedding and captures
 
-`src/embed.js` keeps `setup()`, `mount()`, `mountPart()`, `SCREENS`, `byId`, `WINDOWS`,
+`src/embed.js` keeps `setup()`, `mount()`, `mountPart()`, `IDENTITY`, `SCREENS`, `byId`, `WINDOWS`,
 `shellLayout` and `PARTS` (`shapeBadge`, `toolMetaChips`, `toolOverlay`, `icon`) for motion consumers. Its
 lifecycle is supplied by `createMarketingEmbed()`. Pass state explicitly for deterministic renders: videos have no
 `set()`, so the shell renders static and nothing a screen draws may depend on it.
