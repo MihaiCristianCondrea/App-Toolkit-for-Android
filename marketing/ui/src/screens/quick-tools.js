@@ -174,7 +174,8 @@ export default {
 
     const title = (icon, text) => html`<h2 class="qt-section__title"><md-icon class="sc-rounded" aria-hidden="true">${icon}</md-icon>${text}</h2>`;
 
-    // The native ad, drawn like a widget: the advertiser's icon in a shape, its headline and line, one action.
+    // The native ad, drawn like a widget: the advertiser's icon in a shape, its headline and line, one action. The
+    // "Sponsored content" title marks it, so it carries no badge of its own.
     // Marketing media never shows it; the prototype's Show ads switch turns it on to check the layout.
     const ad = () => html`
       <section class="qt-section" aria-label="Sponsored content">
@@ -182,7 +183,6 @@ export default {
         <div class="qt-ad">
           <div class="qt-ad__face" style=${shapeMaskStyle(shapeUrl("cookie_9sided"))}><md-icon>apps</md-icon></div>
           <div class="qt-ad__text">
-            <span class="qt-ad__badge">Ad</span>
             <h3 class="qt-ad__headline">Advertiser app name</h3>
             <p class="qt-ad__body">One short line from the advertiser about what the app does.</p>
             <div class="qt-ad__meta"><md-icon>star</md-icon>4.6 · Free</div>

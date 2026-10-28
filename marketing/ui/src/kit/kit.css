@@ -1845,12 +1845,11 @@ md-icon-button.ai-favorite {
 .qt-section__title { display: flex; align-items: center; gap: 8px; }
 .qt-section__title md-icon { --md-icon-size: 20px; color: var(--md-sys-color-primary); }
 
-/* Native ad (between Sensors and Light & signals): the widgets' card, shape and type, plus the Ad badge and one
-   action, so it reads as part of the page but never as a tool. */
+/* Native ad (between Sensors and Light & signals): the widgets' card, shape and type under a "Sponsored content"
+   title, with one action, so it reads as part of the page but never as a tool. */
 .qt-ad { display: grid; grid-template-columns: auto 1fr; grid-template-areas: "face text" "cta cta"; gap: 16px; padding: 20px; border-radius: 28px; background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface); }
 .qt-ad__face { grid-area: face; width: 88px; height: 88px; display: grid; place-items: center; background: var(--md-sys-color-tertiary-container); color: var(--md-sys-color-on-tertiary-container); --md-icon-size: 40px; }
 .qt-ad__text { grid-area: text; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.qt-ad__badge { align-self: flex-start; margin-bottom: 4px; padding: 2px 8px; border-radius: 6px; background: var(--md-sys-color-tertiary); color: var(--md-sys-color-on-tertiary); font: 700 11px/16px var(--md-ref-typeface-plain); letter-spacing: .5px; }
 .qt-ad__headline { margin: 0; font: 600 18px/24px var(--md-ref-typeface-plain); }
 .qt-ad__body { margin: 0; font: 400 14px/20px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
 .qt-ad__meta { display: flex; align-items: center; gap: 4px; margin-top: 2px; font: 500 13px/18px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); --md-icon-size: 16px; }

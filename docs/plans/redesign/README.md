@@ -34,7 +34,8 @@ Made by the owner on October 28, 2026:
    faster than they filter. Each section title has an icon. The Quick Tools icon in the bottom bar is the rounded
    one, selected and not.
 8. **One native ad on Quick Tools,** between Sensors and Light & signals, under a "Sponsored content" title: drawn
-   like the widgets (the advertiser's icon in a shape, headline, line, rating, Install), with the Ad badge. It shows
+   like the widgets (the advertiser's icon in a shape, headline, line, rating, Install). The section title marks it, so it has
+   no Ad badge of its own. It shows
    only with the prototype's Show ads switch; marketing media never shows it.
 7. **Kotlin waits.** The app's code is not changed during the web redesign. `CompassTool.kt` was changed once
    (`2da90de1`) and stays as it is; nothing else in Compose changes until step 7.
