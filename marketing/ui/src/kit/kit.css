@@ -1902,7 +1902,7 @@ md-icon-button.ai-favorite {
 .chance-coin { position:relative; display:block; background:none; width:120px; height:120px; transform-style:preserve-3d; }
 .chance-coin-stage--small .chance-coin { width:88px; height:88px; }
 .chance-coin__face { position:absolute; inset:0; display:grid; place-items:center; border-radius:50%; backface-visibility:hidden; background:var(--md-sys-color-primary-container); color:var(--md-sys-color-on-primary-container); border:4px solid color-mix(in srgb,var(--md-sys-color-primary) 25%,transparent); }
-.chance-coin__face--back { transform:rotateY(180deg); background:var(--md-sys-color-secondary-container); color:var(--md-sys-color-on-secondary-container); }
+.chance-coin__face--back { transform:rotateY(180deg) translateZ(5px); background:var(--md-sys-color-secondary-container); color:var(--md-sys-color-on-secondary-container); }
 .chance-coin-stage--small svg { width:48px; height:48px; }
 .qt-chance__play { border:0; padding:0; background:transparent; color:inherit; cursor:pointer; border-radius:24px; display:grid; place-items:center; width:128px; height:128px; }
 .qt-chance__play:focus-visible { outline:3px solid var(--md-sys-color-primary); outline-offset:2px; }
@@ -1988,3 +1988,12 @@ md-icon-button.ai-favorite {
 
 .measure-categories { overflow-x:auto; max-width:100%; }
 .measure-categories md-chip-set { width:max-content; }
+
+/* A solid die: three planes crossing at its centre fill the gaps the rounded faces leave at the edges, so it never
+   looks hollow mid-roll. */
+.chance-dice__core { position:absolute; inset:1px; background:color-mix(in srgb, var(--md-sys-color-outline) 55%, var(--md-sys-color-tertiary-container)); }
+.chance-dice__core--x { transform:rotateX(90deg); }
+.chance-dice__core--y { transform:rotateY(90deg); }
+/* A 10px coin: faces at ±5px with rim discs between them. */
+.chance-coin__face:not(.chance-coin__face--back) { transform:translateZ(5px); }
+.chance-coin__rim { position:absolute; inset:0; border-radius:50%; background:color-mix(in srgb, var(--md-sys-color-primary) 45%, var(--md-sys-color-primary-container)); }
