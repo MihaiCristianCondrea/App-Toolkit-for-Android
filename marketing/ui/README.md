@@ -34,7 +34,7 @@ The assets themselves stay in `public/`.
 
 ### Migration notes
 
-From `src/kit/app.js` and the old `PRODUCT_CONFIG` (Material Next `320fd41` and earlier):
+From `src/kit/app.js` and the old `PRODUCT_CONFIG` (before Material Next `0.0.9`):
 
 - `import {APP} from "../kit/app.js"` becomes `import {APP} from "../config/identity.js"`; `kit/app.js` is gone.
 - `PRODUCT_CONFIG` no longer carries `id`, `name`, `icon`, `logo`, `privacyUrl`, `codeOfConductUrl` or
@@ -53,8 +53,7 @@ shell, rails, drawers and sheets come with Material Next.
 
 ## Dependencies
 
-It uses Material Next from its Git source (`github:…#9d09ea0`) until the next npm release carries the Android
-preview, so installing needs Git as well as Node.js 24; the package builds itself on install. The gallery opens
+It uses Material Next `0.0.9` from npm and needs Node.js 24. The gallery opens
 each screen in the same page; `screen.html` remains for captures and direct links.
 Gallery cards start without device frames. Opening screen detail shows a frame automatically,
 while an explicit `frame=none` URL stays frameless.
@@ -99,7 +98,7 @@ checks the web migration; Android screenshot parity remains a separate campaign 
 On Windows, double-click `open-marketing-ui.cmd`. On macOS or Linux, run
 `sh open-marketing-ui.sh`. Both launchers work from any current directory, refresh dependencies
 on each launch (including after a pull), sync assets and open the gallery in the browser.
-Node.js, npm and Git must be on PATH. The Windows window stays open on failure so the error remains visible.
+Node.js and npm must be on PATH. The Windows window stays open on failure so the error remains visible.
 
 ## Commands
 
