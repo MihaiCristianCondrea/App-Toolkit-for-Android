@@ -7,7 +7,7 @@ description: >
   or revised marketing video, from the beat sheet to the final 2K master.
 metadata:
   author: Mihai-Cristian Condrea
-  last-updated: '2026-10-16'
+  last-updated: '2026-10-28'
   keywords:
   - remotion
   - video-promo
@@ -51,7 +51,7 @@ npx skills add remotion-dev/skills
 
 ## 2. Start a new film
 
-Every film lives in its campaign: `marketing/social-campaigns/<campaign-slug>/source/` (see [`marketing-startup`](../marketing-startup/SKILL.md)). Published films move to `social-campaigns/completed/` and are a record: don't re-render or edit them unless the owner asks. Start each new film in a new campaign.
+Every film lives in its campaign: `marketing/creative/social-campaigns/<campaign-slug>/source/` (see [`marketing-startup`](../marketing-startup/SKILL.md)). Published films move to `creative/social-campaigns/completed/` and are a record: don't re-render or edit them unless the owner asks. Start each new film in a new campaign, from a copy of `marketing/creative/templates/ui-motion-starter/` when the repository has one (its `LitScreen` already mounts the kit's screens frame by frame).
 
 Every film renders at 2K and 90 fps: lay out at 1920x1080, scale with `Config.setScale()` in `remotion.config.ts`, set `fps={90}` in `Root.tsx`, and write all timing in seconds (frames = seconds x fps), so a 60 fps delivery cut is the same film.
 

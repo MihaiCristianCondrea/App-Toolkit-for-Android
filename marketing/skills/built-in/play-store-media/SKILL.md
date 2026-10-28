@@ -52,7 +52,7 @@ Translated text without translated graphics shows the default language's graphic
 - **Shapes that never bother.** A scattered shape sits whole inside one image and keeps clear of the device by a margin; only the seam shapes cross a seam or an edge. A small shape half hidden behind a device, or cut by the image's edge, looks like a mistake. Leave out the palette's near-black tones (on-primary-container and the like): small dark shapes read as holes in the ground.
 - **No ads.** Screenshots never show ad UI: mount screens with ads off (the kit's default).
 - **Large screens show the large-screen app.** Tablet and desktop screenshots mount the kit's screens at a wide window (`window: "fold"` or `"desktop"`, see [`marketing-ui`](../marketing-ui/SKILL.md)), which apply the Android client's own adaptive rules: the rail or permanent drawer, the grid columns, list and detail side by side. If the kit can't draw a screen at that width yet, port the rule from the Android code first; never fake it in the store source.
-- **Tablet set.** The app on the Pixel 9 Pro Fold, open (`assets/device-frames/pixel_9_pro_fold/default`), centred and unscaled on a 1920 x 1080 canvas captured at 2x (3840 x 2160). The images are cut from one strip like the phone set: the same ground, shapes on the seams, a seeded scatter that never overlaps a shape or a device. No captions.
+- **Tablet set.** The app on the Pixel 9 Pro Fold, open (Material Next's `device-frames/pixel_9_pro_fold`, copied with `npx mnw-marketing-assets`; see `assets/device-frames/README.md`), centred and unscaled on a 1920 x 1080 canvas captured at 2x (3840 x 2160). The images are cut from one strip like the phone set: the same ground, shapes on the seams, a seeded scatter that never overlaps a shape or a device. No captions.
 - **Desktop set.** The app's desktop window on the Pixelbook Go (Google's device art from the Device Art Generator, `assets/device-frames/pixelbook_go`: shadow, laptop, screen; the glare layer left out), centred and unscaled on a 1920 x 1080 canvas at 2x (3840 x 2160), cut from one strip like the tablet set. No captions.
 - **Captions.** Two short lines in the top band, one of them on a pill; the screen's benefit in the user's words. Under 20% of the image (the renderer measures it).
 - **Order.** Lead with the product's core: the first three tell what the app is. Then the features, then the habit (saving, history).
@@ -61,7 +61,7 @@ Translated text without translated graphics shows the default language's graphic
 
 ## 4. Build it
 
-Each listing has one source that renders every language: `marketing/store/google-play/listings/<listing>/source/` (layout in [`store-listing`](../store-listing/SKILL.md)). Start it from [`template/`](template/), a complete working source (Android Insider's default listing, October 2026):
+Each listing has one source that renders every language: `marketing/creative/store/google-play/listings/<listing>/source/` (layout in [`store-listing`](../store-listing/SKILL.md)). Start it from [`template/`](template/), a complete working source (Android Insider's default listing, October 2026):
 
 ```text
 source/

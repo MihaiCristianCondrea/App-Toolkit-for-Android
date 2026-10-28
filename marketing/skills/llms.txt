@@ -3,13 +3,13 @@
 Start with ../STARTUP.md: it routes each task to these skills in order.
 
 # Built-in (edit here)
-built-in/marketing-startup: Entry point. Reads the product, sets up marketing/ and a campaign in marketing/social-campaigns/<campaign-slug>/, writes the campaign README.
+built-in/marketing-startup: Entry point. Reads the product, sets up marketing/ and a campaign in marketing/creative/social-campaigns/<campaign-slug>/, writes the campaign README.
 built-in/writing-style: The writing rules for every word: no em or en dashes, no emojis, no AI cliches. Other skills link here instead of repeating them.
 built-in/marketing-ui: Build a marketing hub in any repo: the app's screens as Lit and Material Web components in marketing/ui, with captures, an embed API for videos, and a parity check.
 built-in/motion-video: Code-built videos with Remotion, Python sound and one timeline, in the Pixel and Material You motion style, with reference films, technical rules and a fidelity gate.
 built-in/metadata: Writes SEO, rights and accessibility metadata into every finished file (images, audio, video, SVG, HTML, PDF, sidecars) and verifies nothing else changed. Runs at the end of every task.
 built-in/play-store-media: Google Play visuals from the app's real screens: 8 screenshots cut from one continuous panorama, feature graphic and icon, per language and per custom listing, checked against Play's rules.
-built-in/store-listing: The Google Play listing in marketing/store/google-play: live text and graphics, every design with its source, custom listings with status and a bin, keywords, history of past listings, and a validator for Play's rules.
+built-in/store-listing: The Google Play listing in marketing/creative/store/google-play: live text and graphics, every design with its source, custom listings with status and a bin, keywords, history of past listings, and a validator for Play's rules.
 built-in/social-captions: Paste-ready post text, one file per platform (YouTube, Instagram, X, LinkedIn, TikTok, Facebook, Threads), with templates, examples and audience-first keywords in references/. Asks which platforms first.
 
 built-in/material-ui: Material Design 3 for Jetpack Compose and the web (m3) with the m3.material.io documentation snapshot (m3-documentation).

@@ -2,14 +2,14 @@
 name: store-listing
 description: >
   Keep an app's Google Play store listings in the repository under
-  marketing/store/google-play/listings/: the default listing and custom store
+  marketing/creative/store/google-play/listings/: the default listing and custom store
   listings, each with source/ (what renders it) and listing/<locale>/ (what is
   uploaded), plus status, keywords, retired uploads and a validator for Play's rules.
   Use when changing listing text, publishing new visuals, adding a language or
   a custom listing, or moving an existing listing (app/src/main/play) in.
 metadata:
   author: Mihai-Cristian Condrea
-  last-updated: '2026-10-16'
+  last-updated: '2026-10-28'
   keywords:
   - google-play
   - store-listing
@@ -25,7 +25,7 @@ Every store listing lives in one place, and every listing has the same two parts
 ## Layout
 
 ```text
-marketing/store/google-play/
+marketing/creative/store/google-play/
 ├── README.md                       a table of the listings and their status
 ├── contact-email.txt, contact-website.txt, default-language.txt
 ├── scripts/validate.mjs            Play's rules for every listing and language (copy from this skill)
@@ -99,6 +99,10 @@ Most apps keep the listing in `app/src/main/play/` or nowhere.
 2. The contact files and `default-language.txt` go to `google-play/`.
 3. Those images have no source: when new visuals replace them, the listing becomes a retired listing, `listings/<name>-legacy/`, with its README (or its files move into a custom listing that keeps using them, such as a compatibility listing). Extras that were never uploaded (framed screenshots) go with them.
 4. Fix every link to the old paths (the app's README often shows the feature graphic and screenshots) and validate.
+5. Fix what the validator finds without guessing. A PNG with an alpha channel whose pixels are all opaque can be saved
+   without the channel: it looks the same and Play accepts it. Two feature graphics, or one at a size Play rejects
+   (1025 x 500), mean only one was uploaded: keep the one Play accepts in `feature-graphic/` and put the other in
+   `source/unused/`, named with its size, until the retired listing takes it.
 
 ## Copy for the listing
 
