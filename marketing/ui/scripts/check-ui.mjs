@@ -156,13 +156,15 @@ try {
     await playPage.goto(`${base}/screen.html?id=play&panel=none`);
     await playPage.locator('[data-tool="decision_wheel"]').click();
     await playPage.locator('.wheel-body md-filled-button').click();
-    await playPage.waitForFunction(()=>['Yes','No','Maybe'].includes(document.querySelector('.wheel-result')?.textContent.trim()));
-    await playPage.locator('md-filter-chip[label="Custom list"]').click();
+    await playPage.waitForFunction(()=>['Option 1','Option 2'].includes(document.querySelector('.wheel-result')?.textContent.trim()));
+    assert.equal(await playPage.locator('.wheel-body md-chip-set').count(),0);
     await playPage.locator('.wheel-body md-outlined-text-field').locator('textarea').fill('Only one');
     assert.equal(await playPage.locator('.wheel-body md-filled-button').evaluate(el=>el.disabled),true);
     await playPage.locator('.wheel-body md-outlined-text-field').locator('textarea').fill('Alpha\nBeta');
     await playPage.locator('.wheel-body md-filled-button').click();
     await playPage.waitForFunction(()=>['Alpha','Beta'].includes(document.querySelector('.wheel-result')?.textContent.trim()));
+    await playPage.locator('.wheel-body md-outlined-text-field').locator('textarea').fill(Array.from({length:13},(_,i)=>String(i)).join('\n'));
+    assert.equal(await playPage.locator('.wheel-body md-filled-button').evaluate(el=>el.disabled),true);
     checks++;
     for(const scroll of [0,100,200,300,400]) {
       await playPage.goto(`${base}/?id=quick-tools`);
@@ -173,6 +175,19 @@ try {
       checks++;
     }
     await playPage.close();
+  }
+  {
+    await page.goto(`${base}/screen.html?id=quick-tools&panel=none&state=${encodeURIComponent(JSON.stringify({activeToolId:'morse_sos'}))}`);
+    await page.locator('.sos-primary').click();
+    assert.equal(await page.locator('.sos-signal').getAttribute('data-active'),'true');
+    await page.locator('.sos-primary').click();
+    await page.locator('md-outlined-segmented-button[label="Morse message"]').click();
+    await page.locator('md-outlined-text-field[label="Message"]').locator('input').fill('HELP1');
+    assert.equal((await page.locator('.sos-code-panel .tk-morse').innerText()).trim(),'.... . .-.. .--. .----');
+    await page.locator('.sos-primary').click();
+    assert.equal(await page.locator('md-outlined-text-field[label="Message"]').evaluate(el=>el.disabled),true);
+    await page.locator(SHEET_CONTENT).locator('[aria-label="Close"]').click();
+    checks++;
   }
   await page.goto(`${base}/screen.html?id=numbers&panel=none`);
   await page.locator('.numbers-card').first().waitFor();

@@ -85,7 +85,7 @@ export const levelDial = (x = 0.4, y = -0.2, size = 96, { ring = true, edge = fa
 
 const stat = (label, value) => html`<div class="tk-stat"><span class="tk-stat__label">${label}</span><span class="tk-stat__value">${value}</span></div>`;
 
-const MORSE = { S: "...", O: "---", E: ".", T: "-", A: ".-", N: "-.", I: "..", M: "--", H: "....", R: ".-.", L: ".-..", D: "-..", U: "..-", W: ".--", K: "-.-", G: "--.", C: "-.-.", B: "-...", F: "..-.", P: ".--.", J: ".---", Q: "--.-", V: "...-", X: "-..-", Y: "-.--", Z: "--..", " ": "/" };
+const MORSE = { S: "...", O: "---", E: ".", T: "-", A: ".-", N: "-.", I: "..", M: "--", H: "....", R: ".-.", L: ".-..", D: "-..", U: "..-", W: ".--", K: "-.-", G: "--.", C: "-.-.", B: "-...", F: "..-.", P: ".--.", J: ".---", Q: "--.-", V: "...-", X: "-..-", Y: "-.--", Z: "--..", " ": "/", 0:"-----", 1:".----", 2:"..---", 3:"...--", 4:"....-", 5:".....", 6:"-....", 7:"--...", 8:"---..", 9:"----." };
 const toMorse = (text) => [...text.toUpperCase()].map((c) => MORSE[c] ?? "").filter(Boolean).join(" ");
 
 const roundShare = (value, mode) => (mode === "up" ? Math.ceil(value) : mode === "five" ? Math.ceil(value / 5) * 5 : value);
@@ -230,18 +230,18 @@ export function extraToolBody(tool, state, onState) {
     }
 
     case "morse_sos": {
-      const text = state.morseText ?? "SOS";
-      const sos = Boolean(state.sosActive);
-      return html`
-        <div class="tk-tool-interactive">
-          <md-outlined-text-field label="Message" style="width:100%" .value=${text} @input=${(e) => onState({ morseText: e.target.value })}></md-outlined-text-field>
-          <div class="tk-morse" aria-live="polite">${toMorse(text) || "Type a message"}</div>
-          <div class="tk-action-row">
-            <md-filled-tonal-button @click=${() => onState({ sosActive: false })}><md-icon slot="icon">flash_on</md-icon>Flash message</md-filled-tonal-button>
-            <md-filled-button class="tk-sos" @click=${() => onState({ sosActive: !sos })}><md-icon slot="icon">emergency</md-icon>${sos ? "Stop SOS" : "SOS"}</md-filled-button>
-          </div>
-          <p class="body-small tk-muted" style="margin:0">Blinks the camera torch. Keep it out of anyone's eyes.</p>
-        </div>`;
+      const messageMode=state.morseMode==='message',text=messageMode?(state.morseText??'SOS'):'SOS',sending=Boolean(state.sosActive),code=toMorse(text),valid=/[a-z0-9]/i.test(text);
+      return html`<div class="sos-body">
+        <md-outlined-segmented-button-set aria-label="Signal mode" @segmented-button-set-selection=${e=>{if(e.detail.selected&&!sending)onState?.({morseMode:e.detail.index?'message':'sos'});}}>
+          <md-outlined-segmented-button label="SOS" .selected=${!messageMode} ?disabled=${sending}></md-outlined-segmented-button>
+          <md-outlined-segmented-button label="Morse message" .selected=${messageMode} ?disabled=${sending}></md-outlined-segmented-button>
+        </md-outlined-segmented-button-set>
+        <div class="sos-signal" data-active=${sending}><div class="sos-signal-mark" aria-hidden="true"><md-icon>${messageMode?'sms':'emergency'}</md-icon></div><span class="sos-signal-label">${messageMode?'YOUR MESSAGE':'DISTRESS SIGNAL'}</span><strong>${messageMode?'Morse code':'SOS'}</strong><span class="sos-status" role="status">${sending?'Preview running':'Ready'}</span></div>
+        ${messageMode?html`<md-outlined-text-field label="Message" supporting-text="Letters A–Z and numbers 0–9" maxlength="120" style="width:100%" .value=${state.morseText??'SOS'} ?disabled=${sending} @input=${e=>onState?.({morseText:e.target.value})}></md-outlined-text-field>`:nothing}
+        <div class="sos-code-panel"><span>${messageMode?'MORSE CODE':'THREE SHORT · THREE LONG · THREE SHORT'}</span><div class="tk-morse" aria-label="Signal code">${code||'Type a message'}</div></div>
+        <md-filled-button class="sos-primary" ?disabled=${!valid&&!sending} @click=${()=>onState?.({sosActive:!sending})}><md-icon slot="icon">${sending?'stop':'play_arrow'}</md-icon>${sending?'Stop preview':messageMode?'Preview message':'Start SOS preview'}</md-filled-button>
+        <p class="sos-guidance"><md-icon aria-hidden="true">visibility</md-icon>Keep flashing light out of anyone's eyes.</p>
+      </div>`;
     }
 
     default:

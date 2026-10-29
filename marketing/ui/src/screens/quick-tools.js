@@ -215,7 +215,7 @@ export default {
       tab: "quick-tools",
       search: { placeholder: "Search tools", value: s.searchQuery || "", onInput: (v) => s.set?.({ searchQuery: v }) },
       content,
-      overlay: toolOverlay({ tool: TOOLS[s.activeToolId], state: s, onState: s.set, onClose: () => s.set?.({ activeToolId: "none", waterRunning:false, waterSeconds:30 }) }),
+      overlay: toolOverlay({ tool: TOOLS[s.activeToolId], state: s, onState: s.set, onClose: () => s.set?.({ activeToolId: "none", waterRunning:false, waterSeconds:30, sosActive:false }) }),
     });
   },
 };

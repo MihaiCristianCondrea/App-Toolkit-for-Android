@@ -12,7 +12,7 @@ const TOOLS={
 };
 export default {
  id:'play',title:'Play & Decide',category:'play',categoryLabel:'Play & Decide',tier:1,palette:'google',description:'Random numbers, dice and coin flips for everyday choices.',
- defaults:{searchQuery:'',activeToolId:'none',randomMin:'1',randomMax:'100',randomResult:73,diceResult:5,coinSide:'Heads',wheelPreset:'answers',wheelText:'Option 1\nOption 2',wheelRotation:0,wheelWinner:'',wheelSpinning:false},
+ defaults:{searchQuery:'',activeToolId:'none',randomMin:'1',randomMax:'100',randomResult:73,diceResult:5,coinSide:'Heads',wheelText:'Option 1\nOption 2',wheelRotation:0,wheelWinner:'',wheelSpinning:false},
  controls:[{type:'presets',label:'Play & Decide states',options:[['Overview',{activeToolId:'none'}],...Object.values(TOOLS).map(t=>[t.title+' sheet',{activeToolId:t.id}])]}],
  render(s){const open=id=>s.set?.({activeToolId:id});const activate=id=>e=>{if(e.target===e.currentTarget&&['Enter',' '].includes(e.key)){e.preventDefault();open(id);}};
  const query=(s.searchQuery||'').trim().toLowerCase();
