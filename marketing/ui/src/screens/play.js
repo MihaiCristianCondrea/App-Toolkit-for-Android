@@ -11,7 +11,7 @@ const TOOLS={
   dice_roll: { id: "dice_roll", title: "Dice Roll", subtitle: "Roll a six-sided die", icon: "casino", shape: "cookie_12sided", palette: "gold", kindLabel: "Quick tool", supportsTile: true },
 };
 export default {
- id:'play',title:'Play & Decide',category:'play',categoryLabel:'Play & Decide',tier:1,palette:'google',description:'Random numbers, dice and coin flips for everyday choices.',
+ id:'play',title:'Play & Decide',category:'play',categoryLabel:'Play & Decide',tier:1,palette:'google',description:'A decision wheel, random numbers, dice and coin flips for everyday choices.',
  defaults:{searchQuery:'',activeToolId:'none',randomMin:'1',randomMax:'100',randomResult:73,diceResult:5,coinSide:'Heads',wheelText:'Option 1\nOption 2',wheelRotation:0,wheelWinner:'',wheelSpinning:false},
  controls:[{type:'presets',label:'Play & Decide states',options:[['Overview',{activeToolId:'none'}],...Object.values(TOOLS).map(t=>[t.title+' sheet',{activeToolId:t.id}])]}],
  render(s){const open=id=>s.set?.({activeToolId:id});const activate=id=>e=>{if(e.target===e.currentTarget&&['Enter',' '].includes(e.key)){e.preventDefault();open(id);}};
