@@ -1868,33 +1868,32 @@ mnw-android-screen,
 /* Keep projected tool hit regions inside the scroll viewport, clear of shell navigation. */
 mnw-android-screen > div:not([slot]):has(.qt-overview) { height:100%; overflow:auto; contain:paint; isolation:isolate; scrollbar-width:none; }
 
-.wheel-body { gap:12px; align-items:stretch; }
-.wheel-body > md-chip-set { padding-block:4px; }
-.wheel-stage { display:flex; flex-direction:column; align-items:center; gap:16px; padding:16px 16px 20px; border-radius:28px 28px 8px 8px; background:var(--md-sys-color-secondary-container); color:var(--md-sys-color-on-secondary-container); }
+.wheel-body { gap:8px; align-items:stretch; }
+.wheel-stage { display:flex; flex-direction:column; align-items:center; gap:12px; padding:12px 16px; border-radius:28px 28px 8px 8px; background:var(--md-sys-color-secondary-container); color:var(--md-sys-color-on-secondary-container); }
 .wheel-stage-meta { display:flex; justify-content:space-between; align-items:center; gap:12px; width:100%; font:500 12px/16px var(--md-ref-typeface-plain); }
 .wheel-stage-meta > :first-child { letter-spacing:1px; }
-.wheel-stage .decision-wheel { width:min(280px,100%); border-radius:50%; padding:8px; box-sizing:border-box; background:var(--md-sys-color-surface); }
+.wheel-stage .decision-wheel { width:min(248px,100%); border-radius:50%; padding:8px; box-sizing:border-box; background:var(--md-sys-color-surface); }
 .wheel-stage .wheel-pointer { top:-2px; }
 .wheel-stage .wheel-plate { border-radius:50%; }
-.wheel-outcome { margin-top:-8px; padding:16px 20px; border-radius:8px 8px 28px 28px; display:flex; flex-direction:column; gap:6px; align-items:center; background:var(--md-sys-color-secondary-container); color:var(--md-sys-color-on-secondary-container); }
+.wheel-outcome { margin-top:-4px; padding:12px 16px; border-radius:8px 8px 28px 28px; display:flex; flex-direction:column; gap:6px; align-items:center; background:var(--md-sys-color-secondary-container); color:var(--md-sys-color-on-secondary-container); }
 .wheel-outcome-label { font:600 11px/16px var(--md-ref-typeface-plain); letter-spacing:1px; }
 .wheel-outcome .wheel-result { font:500 28px/36px var(--md-ref-typeface-brand); }
 .wheel-body > md-filled-button { min-height:56px; width:100%; margin-top:4px; --md-filled-button-container-shape:28px; --md-filled-button-label-text-size:16px; }
 
-.sos-body { display:flex; flex-direction:column; gap:12px; }
+.sos-body { display:flex; flex-direction:column; gap:8px; }
 .sos-body md-outlined-segmented-button-set { display:flex; width:100%; }
 .sos-body md-outlined-segmented-button { flex:1; min-width:0; }
-.sos-signal { display:flex; flex-direction:column; align-items:center; gap:8px; padding:24px 16px; border-radius:28px 28px 8px 8px; background:var(--md-sys-color-tertiary-container); color:var(--md-sys-color-on-tertiary-container); }
-.sos-signal-mark { display:grid; place-items:center; width:64px; height:64px; border-radius:24px; background:var(--md-sys-color-surface); color:var(--md-sys-color-tertiary); }
+.sos-signal { display:flex; flex-direction:column; align-items:center; gap:6px; padding:16px; border-radius:28px 28px 8px 8px; background:var(--md-sys-color-tertiary-container); color:var(--md-sys-color-on-tertiary-container); }
+.sos-signal-mark { display:grid; place-items:center; width:56px; height:56px; border-radius:20px; background:var(--md-sys-color-surface); color:var(--md-sys-color-tertiary); }
 .sos-signal-mark md-icon { --md-icon-size:32px; }
 .sos-signal-label { font:600 11px/16px var(--md-ref-typeface-plain); letter-spacing:1px; }
 .sos-signal strong { font:500 48px/56px var(--md-ref-typeface-brand); }
 .sos-status { font:500 12px/16px var(--md-ref-typeface-plain); padding:6px 12px; border-radius:16px; background:var(--md-sys-color-surface); color:var(--md-sys-color-on-surface); }
 .sos-signal[data-active="true"] .sos-signal-mark { animation:sos-preview 1.4s ease-in-out infinite; }
 @keyframes sos-preview { 50% { transform:scale(1.08); opacity:.55; } }
-.sos-code-panel { padding:16px; border-radius:8px 8px 28px 28px; background:var(--md-sys-color-surface-container-high); text-align:center; }
+.sos-code-panel { padding:12px 16px; border-radius:8px 8px 28px 28px; background:var(--md-sys-color-surface-container-high); text-align:center; }
 .sos-code-panel > span { font:500 10px/16px var(--md-ref-typeface-plain); letter-spacing:.6px; color:var(--md-sys-color-on-surface-variant); }
-.sos-code-panel .tk-morse { margin:8px 0 0; padding:0; background:transparent; font:500 26px/36px var(--md-ref-typeface-plain); overflow-wrap:anywhere; }
+.sos-code-panel .tk-morse { margin:4px 0 0; padding:0; background:transparent; font:500 26px/36px var(--md-ref-typeface-plain); overflow-wrap:anywhere; }
 .sos-primary { width:100%; min-height:56px; }
 .sos-guidance { display:flex; align-items:center; gap:8px; margin:0; font:400 12px/18px var(--md-ref-typeface-plain); color:var(--md-sys-color-on-surface-variant); }
 .sos-guidance md-icon { --md-icon-size:18px; }
