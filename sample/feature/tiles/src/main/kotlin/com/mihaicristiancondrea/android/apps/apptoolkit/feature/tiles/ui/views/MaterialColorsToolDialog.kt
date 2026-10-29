@@ -49,6 +49,10 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetState
+import androidx.compose.runtime.LaunchedEffect
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.toolOpenedEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -79,6 +83,8 @@ import java.util.Locale
 fun MaterialColorsToolDialog(
     onClose: () -> Unit,
 ) {
+    val telemetry = LocalTelemetry.current
+    LaunchedEffect(Unit) { telemetry.logEvent(toolOpenedEvent(ToolkitTileIds.MATERIAL_COLORS)) }
     val colorScheme = MaterialTheme.colorScheme
     val appColorTableTitle = stringResource(id = R.string.tool_material_colors_app_scheme)
     val appColorTable = remember(colorScheme, appColorTableTitle) {

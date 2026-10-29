@@ -52,6 +52,27 @@ The existing Quick Tools native placement follows Sensors and is suppressed duri
 
 Quick Settings service names, request keys and the released application ID remain unchanged. Android 13+ uses the existing system add-tile request. Older releases retain manual setup instructions. The catalogue still hides torch tools on devices without a torch. No new manifest permission is introduced by this redesign.
 
+## Product analytics
+
+The shared tool sheet host emits one custom `tool_opened` event on entry, including full-screen
+ruler and protractor. It replaces Quick Tools' former `view_item` opening signal; Measure and Play
+now have the same coverage. Recomposition does not emit another opening. Restoring an open tool
+is a new visit. Material Colors has its own sheet and emits the same opening event there.
+
+`tool_used` retains its once-per-use-session semantics and now includes the bounded `workspace`
+(`quick_tools`, `measure`, `play`). Inline coin, dice and counter actions also count as use;
+they do not manufacture a sheet opening. A use-session can include inline actions followed by a
+sheet visit until that tool's existing lifecycle resets its tracker.
+
+Water Eject counts use only when playback publishes its first countdown. Stop, background or
+dismissal resets its use-session. Each accepted playback job reports `tool_cycle_finished` with
+`completed`, `cancelled` or `failed`, including failures before playback. Duplicate Start and idle
+Stop do not produce extra cycle results. Cancellation reasons are grouped, and completion means
+the audio cycle returned, not that water was removed. No audio, inputs, readings, wheel labels,
+winners, bill amounts or search text are attached to these events.
+
+Consent, transport, destination screen views and ad impressions remain library-owned.
+
 ## Validation
 
 Run the tiles unit and Compose tests, app navigation/DI tests, module-boundary verification and Android lint. `RedesignStateTest` covers currency/tip restoration, converter swaps, wheel locking and selection, protractor geometry and audio cancellation/retry. `RedesignVisualTest` renders native overview captures under Robolectric for comparison with marketing. Hardware behavior still needs a device check, especially sensor calibration, torch strength and speaker output.

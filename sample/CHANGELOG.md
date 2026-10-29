@@ -11,6 +11,8 @@
 
 ### Improved
 
+- Sample analytics now distinguish tool openings and meaningful use across all three workspaces, with bounded Water Eject completion, cancellation and failure outcomes. Tool inputs and results are not collected.
+
 - Dark tool colours use coordinated muted containers and softer gold, teal, pink and orange accents. Light colours and the app background are unchanged.
 - Tool headings and cards enter individually using the shared motion settings.
 - Tool screens use fixed gold, cream, pink and neutral colours in light and dark mode, independent of wallpaper.

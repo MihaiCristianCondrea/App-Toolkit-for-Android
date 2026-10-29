@@ -70,7 +70,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.a
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.EmptyFilterCard
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.HiddenAdPreloaders
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageToastHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
@@ -78,7 +77,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenSta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.LocalNativeAdViewFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellSearch
 import kotlinx.collections.immutable.ImmutableList
@@ -201,7 +199,6 @@ private fun ToolkitTilesCatalog(
     live: LiveToolsUiState, onFlashLevel: (Int) -> Unit,
 ) {
     val showAds = rememberAdsEnabled()
-    val telemetry = LocalTelemetry.current
     var selectedId by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf<String?>(null) }
     val resources = LocalResources.current
     // Chance and Measure have tabs of their own; Quick Tools shows the rest, Colors last.
@@ -209,7 +206,6 @@ private fun ToolkitTilesCatalog(
         .toImmutableList().search(searchQuery, resources::getString)
     val ad = ToolkitTilesListItem.Ad("ad_trailing", AdsConstants.QUICK_TOOLS_NATIVE_AD_UNIT_ID)
     fun open(tile: ToolkitTile) {
-        telemetry.logViewItem(itemId = tile.id, itemName = tile.id, itemCategory = "quick_tools")
         selectedId = tile.id
     }
     Box(Modifier.fillMaxSize()) {

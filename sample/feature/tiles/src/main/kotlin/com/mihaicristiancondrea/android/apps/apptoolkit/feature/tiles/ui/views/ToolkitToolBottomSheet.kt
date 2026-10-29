@@ -40,6 +40,9 @@ import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetState
+import androidx.compose.runtime.LaunchedEffect
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.toolOpenedEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -89,6 +92,10 @@ fun ToolkitToolBottomSheet(
     onSetupTile: () -> Unit,
     startReaction: Boolean = false,
 ) {
+    val telemetry = LocalTelemetry.current
+    LaunchedEffect(tile.id) {
+        telemetry.logEvent(toolOpenedEvent(tile.id))
+    }
     when (tile.id) {
         ToolkitTileIds.PROTRACTOR -> {
             ProtractorToolRoute(onClose = onClose)

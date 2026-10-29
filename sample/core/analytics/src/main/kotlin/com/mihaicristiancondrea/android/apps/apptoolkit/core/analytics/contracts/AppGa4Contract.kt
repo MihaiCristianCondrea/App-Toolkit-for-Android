@@ -20,6 +20,8 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contract
 /** Stable GA4 schema used by sample-owned events. */
 object AppGa4Contract {
     object EventName {
+        const val TOOL_OPENED = "tool_opened"
+        const val TOOL_CYCLE_FINISHED = "tool_cycle_finished"
         const val APP_CARD_INTERACTION = "app_card_interaction"
         const val COMPONENTS_CLICK = "components_click"
         const val SELECT_CONTENT = "select_content"
@@ -35,8 +37,8 @@ object AppGa4Contract {
         const val POST_SCORE = "post_score"
 
         /**
-         * A quick tool was actually used, not just opened: reported once per time its sheet is
-         * open, at the first action that shows real use.
+         * A tool was actually used, not just opened: reported once per use-session,
+         * including inline overview actions, at the first action that shows real use.
          */
         const val TOOL_USED = "tool_used"
 
@@ -45,6 +47,7 @@ object AppGa4Contract {
     }
 
     object Param {
+        const val WORKSPACE = "workspace"
         const val SCREEN = "screen"
         const val COMPONENT = "component"
         const val VARIANT = "variant"
@@ -69,6 +72,14 @@ object AppGa4Contract {
         const val TOOL_ID = "tool_id"
         const val TILE_ID = "tile_id"
         const val OUTCOME = "outcome"
+    }
+
+    /** A cycle result, never a claim that the hardware achieved a physical effect. */
+    object ToolCycleOutcome {
+        const val COMPLETED = "completed"
+        const val CANCELLED = "cancelled"
+        const val FAILED = "failed"
+        val all: Set<String> = setOf(COMPLETED, CANCELLED, FAILED)
     }
 
     /** Bounded values for [Param.OUTCOME] on [EventName.QUICK_SETTINGS_TILE_REQUEST]. */
@@ -100,6 +111,8 @@ object AppGa4Contract {
     )
 
     private val requiredParamsByEvent: Map<String, Set<String>> = mapOf(
+        EventName.TOOL_OPENED to setOf(Param.TOOL_ID, Param.WORKSPACE),
+        EventName.TOOL_CYCLE_FINISHED to setOf(Param.TOOL_ID, Param.WORKSPACE, Param.OUTCOME),
         EventName.APP_CARD_INTERACTION to setOf(
             Param.SOURCE,
             Param.INTERACTION,
