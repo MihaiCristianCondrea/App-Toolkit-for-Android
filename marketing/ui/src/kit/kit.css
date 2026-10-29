@@ -1846,11 +1846,23 @@ mnw-android-screen,
 .wheel-plate text { font:600 12px var(--md-ref-typeface-plain); }
 .wheel-pointer { position:absolute; top:0; left:calc(50% - 10px); border-inline:10px solid transparent; border-top:20px solid var(--md-sys-color-primary); z-index:1; }
 .wheel-result { font:500 24px/32px var(--md-ref-typeface-brand); text-align:center; min-height:32px; overflow-wrap:anywhere; }
-.play-wheel-card { display:flex; align-items:center; gap:16px; padding:20px; border:0; border-radius:28px; background:var(--md-sys-color-tertiary-container); color:var(--md-sys-color-on-tertiary-container); cursor:pointer; text-align:start; }
-.play-wheel-card .decision-wheel { width:96px; flex:none; }
+.play-chance-group { container-type:inline-size; display:flex; flex-direction:column; gap:4px; }
+.play-wheel-card { display:grid; grid-template-columns:minmax(0,1fr) 136px; align-items:center; gap:16px; padding:24px; border:0; border-radius:28px 28px 8px 8px; background:var(--md-sys-color-secondary-container); color:var(--md-sys-color-on-secondary-container); cursor:pointer; text-align:start; font:inherit; }
+.play-wheel-card:focus-visible { outline:3px solid var(--md-sys-color-primary); outline-offset:2px; }
+.play-wheel-card:hover { background:color-mix(in srgb,var(--md-sys-color-on-secondary-container) 5%,var(--md-sys-color-secondary-container)); }
+.play-wheel-card .decision-wheel { width:136px; padding:6px; box-sizing:border-box; border-radius:50%; background:var(--md-sys-color-surface); }
 .play-wheel-card .wheel-plate text { display:none; }
-.play-wheel-card > span { display:flex; flex:1; min-width:0; flex-direction:column; gap:4px; font:400 14px/20px var(--md-ref-typeface-plain); }
-.play-wheel-card strong { font:600 20px/26px var(--md-ref-typeface-brand); }
+.play-wheel-card .wheel-plate path:nth-of-type(3n+1) { fill:var(--md-sys-color-primary); }
+.play-wheel-card .wheel-plate path:nth-of-type(3n+2) { fill:var(--md-sys-color-primary-container); }
+.play-wheel-card .wheel-plate path:nth-of-type(3n) { fill:color-mix(in srgb,var(--md-sys-color-primary) 45%,var(--md-sys-color-surface)); }
+.play-wheel-card .wheel-pointer { top:-2px; left:calc(50% - 8px); border-inline-width:8px; border-top-width:16px; }
+.play-wheel-copy { display:flex; min-width:0; flex-direction:column; gap:10px; }
+.play-wheel-copy > .qt-live__label { font:600 12px/16px var(--md-ref-typeface-plain); letter-spacing:.8px; text-transform:uppercase; }
+.play-wheel-copy strong { font:500 26px/32px var(--md-ref-typeface-brand); overflow-wrap:anywhere; }
+.play-wheel-options { font:400 12px/18px var(--md-ref-typeface-plain); }
+.play-chance-group:has(.play-wheel-card) .qt-live-row--chance .qt-chance:first-child { border-top-left-radius:8px; border-top-right-radius:8px; }
+.play-chance-group:not(:has(.qt-chance)) .play-wheel-card { border-radius:28px; }
+@container (max-width:350px) { .play-wheel-card { grid-template-columns:minmax(0,1fr) 112px; padding:20px 16px; gap:12px; } .play-wheel-card .decision-wheel { width:112px; } }
 @media(prefers-reduced-motion:reduce) { .water-eject[data-running="true"] .water-wave,.water-eject[data-running="true"] .water-wave::before,.water-eject[data-running="true"] .water-wave::after { animation:none; } }
 
 /* Keep projected tool hit regions inside the scroll viewport, clear of shell navigation. */
