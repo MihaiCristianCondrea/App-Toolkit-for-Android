@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdCallToActionStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdPresentation
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdCache
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdSlot
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberNativeAdBadgeShape
@@ -45,6 +46,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememb
  *
  * @param initiallyLoaded Suppresses the first `false` status when moving an already visible ad
  * from preloading into the list, preventing a transient layout gap.
+ * @param cache Shares an overview's already loaded ad with the renderer.
+ * @param cacheKey Identifies this placement within that screen-owned cache.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -53,6 +56,8 @@ fun QuickToolsNativeAdCard(
     adUnitId: String,
     initiallyLoaded: Boolean = false,
     onStatusChanged: (Boolean) -> Unit = {},
+    cache: NativeAdCache? = null,
+    cacheKey: Any? = null,
 ) {
     var isFirstReport: Boolean by remember(adUnitId) { mutableStateOf(value = true) }
 
@@ -66,6 +71,8 @@ fun QuickToolsNativeAdCard(
 
     NativeAdSlot(
         adUnitId = adUnitId,
+        cache = cache,
+        cacheKey = cacheKey,
         presentation = NativeAdPresentation.Compact,
         modifier = modifier.fillMaxWidth(),
         showContainer = false,

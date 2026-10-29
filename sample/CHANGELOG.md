@@ -23,6 +23,7 @@
 
 ### Added
 
+- One native ad between the conversion and counting sections in Measure, and one below Chance in Play & Decide. Search hides the placements; unavailable ads leave no empty space.
 - Three redesigned native workspaces matching the approved marketing UI: Quick Tools, Measure
   and Play & Decide, with live widgets in each tool's colours, shapes and readouts.
 - Material Colors is the last Quick Tools section: a strip of the app's colour scheme that opens

@@ -48,7 +48,7 @@ Surface Ruler and Protractor use full-screen native dialogs. The ruler covers th
 
 ## Ads and Quick Settings
 
-The existing Quick Tools native placement follows Sensors and is suppressed during search. `QuickToolsNativeAdViewFactory` lays it out as the marketing kit's `.qt-ad`: the disclosure label drawn as a "Sponsored content" section title inside the `NativeAdView`, then a card with the icon in a nine-sided cookie and a full-width tonal action. Tool sheets and the other redesigned overviews do not add ad placements. Native ad rendering and ownership remain in core UI.
+The existing Quick Tools native placement follows Sensors and is suppressed during search. `QuickToolsNativeAdViewFactory` lays it out as the marketing kit's `.qt-ad`: the disclosure label drawn as a "Sponsored content" section title inside the `NativeAdView`, then a card with the icon in a nine-sided cookie and a full-width tonal action. Measure adds one native placement between Convert & split and Count & time. Play & Decide adds one below the complete Chance group. Both use the existing general native ad unit, with separate screen-owned caches and placement keys. The shared ad state loads before exposing the slot, so loading or unavailable ads leave no gap and rendering reuses the loaded ad. Search suppresses both the request and placement. Tool sheets and full-screen tools add no placements. Native ad rendering and ownership remain in core UI.
 
 Quick Settings service names, request keys and the released application ID remain unchanged. Android 13+ uses the existing system add-tile request. Older releases retain manual setup instructions. The catalogue still hides torch tools on devices without a torch. No new manifest permission is introduced by this redesign.
 

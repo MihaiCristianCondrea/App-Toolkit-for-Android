@@ -17,6 +17,9 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ads.rememberOverviewNativeAd
+import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
+
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolDesignTheme
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
@@ -117,9 +120,15 @@ fun NumbersScreen() {
     val conversion by converter.state.collectAsStateWithLifecycle()
     val reflex by reaction.state.collectAsStateWithLifecycle()
     val angle by protractor.state.collectAsStateWithLifecycle()
+    val query = LocalShellSearch.current?.query.orEmpty()
+    val overviewAd = rememberOverviewNativeAd(
+        placementKey = "measure_overview",
+        adUnitId = AdsConstants.NATIVE_AD_UNIT_ID,
+        enabled = query.isBlank(),
+    )
     ScreenHost(screen = AppScreenTracking.Screens.NUMBERS) {
         NumbersScreenContent(count, contentPadding(), split, conversion, reflex,
-            searchQuery = LocalShellSearch.current?.query.orEmpty(), onCounter = counter::onEvent, protractorAngle = angle.angle,
+            searchQuery = query, overviewAd = overviewAd, onCounter = counter::onEvent, protractorAngle = angle.angle,
             catalogTools = catalogTools, onTileAdded = { catalogViewModel.onEvent(ToolkitTilesEvent.TileAdded(it)) })
     }
 }
@@ -133,6 +142,7 @@ internal fun NumbersScreenContent(
     protractorAngle: Float = 45f,
     catalogTools: List<ToolkitTile> = MeasureTools,
     onTileAdded: (String) -> Unit = {},
+    overviewAd: (@Composable () -> Unit)? = null,
 ) {
     ToolDesignTheme {
 
@@ -213,6 +223,9 @@ internal fun NumbersScreenContent(
                             }
                         }
                     }
+                }
+                if (query.isBlank() && title == R.string.section_convert && visible.isNotEmpty()) {
+                    overviewAd?.invoke()
                 }
             }
         }

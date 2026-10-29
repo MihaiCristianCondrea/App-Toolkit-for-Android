@@ -17,6 +17,9 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ads.rememberOverviewNativeAd
+import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
+
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolDesignTheme
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
@@ -108,8 +111,14 @@ fun PlayScreen() {
     val roll by dice.state.collectAsStateWithLifecycle()
     val pick by random.state.collectAsStateWithLifecycle()
     val spin by wheel.state.collectAsStateWithLifecycle()
+    val query = LocalShellSearch.current?.query.orEmpty()
+    val overviewAd = rememberOverviewNativeAd(
+        placementKey = "play_overview",
+        adUnitId = AdsConstants.NATIVE_AD_UNIT_ID,
+        enabled = query.isBlank(),
+    )
     ScreenHost(screen = AppScreenTracking.Screens.PLAY) {
-        PlayScreenContent(flip, roll, pick, spin, contentPadding(), LocalShellSearch.current?.query.orEmpty(),
+        PlayScreenContent(flip, roll, pick, spin, contentPadding(), query, overviewAd = overviewAd,
             onFlip = { coin.onEvent(CoinFlipToolEvent.Flip) }, onRoll = { dice.onEvent(DiceRollToolEvent.Roll) },
             catalogTools = catalogTools, onTileAdded = { catalogViewModel.onEvent(ToolkitTilesEvent.TileAdded(it)) })
     }
@@ -120,6 +129,7 @@ internal fun PlayScreenContent(coin: CoinFlipToolUiState, dice: DiceRollToolUiSt
     random: RandomNumberToolUiState, wheel: WheelToolUiState, padding: PaddingValues, searchQuery: String = "",
     onFlip: () -> Unit = {}, onRoll: () -> Unit = {},
     catalogTools: List<ToolkitTile> = PlayTools, onTileAdded: (String) -> Unit = {},
+    overviewAd: (@Composable () -> Unit)? = null,
 ) {
     ToolDesignTheme {
 
@@ -200,6 +210,7 @@ internal fun PlayScreenContent(coin: CoinFlipToolUiState, dice: DiceRollToolUiSt
                     }
                 }
             }
+            if (query.isBlank() && tools.isNotEmpty()) overviewAd?.invoke()
         }
         catalogTools.firstOrNull { it.id == selectedId }?.let { tile ->
             ToolkitToolBottomSheet(tile, onClose = { selectedId = null }, onAddTile = { tile.requestKey?.let { requestQuickSettingsTile(context,it, onTileAdded = onTileAdded) } }, onSetupTile = {})
