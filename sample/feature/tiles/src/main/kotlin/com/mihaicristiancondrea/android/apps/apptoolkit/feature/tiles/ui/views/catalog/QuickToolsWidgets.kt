@@ -25,7 +25,6 @@ import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -40,6 +39,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -200,7 +200,6 @@ private fun WaterEjectWidget(tile: ToolkitTile, modifier: Modifier, onOpen: () -
 }
 
 /** Breathe has no live reading, so it is one wide card: its shape, its name and its rhythm. */
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun BreatheCard(tile: ToolkitTile, onOpen: () -> Unit) {
     val accent = ToolkitTileIcon.Breathing.iconColors()

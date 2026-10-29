@@ -30,9 +30,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.key
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalContext
@@ -299,18 +300,4 @@ private fun ToolkitTilesScreenContentLoadingPreview() {
             onEvent = {},
         )
     }
-}
-
-private val ToolkitTilesListItem.stableKey: String
-    get() = when (this) {
-        is ToolkitTilesListItem.Category -> category.id
-        is ToolkitTilesListItem.Ad -> id
-    }
-
-private fun ToolkitTilesListItem.isVisible(
-    loadedAdIds: Set<String>,
-    showAds: Boolean,
-): Boolean = when (this) {
-    is ToolkitTilesListItem.Category -> true
-    is ToolkitTilesListItem.Ad -> showAds && id in loadedAdIds
 }
