@@ -58,6 +58,17 @@
 
 ### Fixed
 
+- The Flash Dimmer tile steps through its levels again instead of restarting at the first one on
+  every tap, and the Flash Dimmer slider no longer flickers the torch: stopping Morse with nothing
+  playing leaves the torch alone.
+- Tool sheets, the Material Colors page and the Protractor's landscape controls keep clear of the
+  system navigation (gesture bar or buttons).
+- The coin flips when tapped on its widget, as the die rolls, and the die no longer shows a square
+  ripple.
+- A Morse message the torch cannot send is not counted as a use; a double tap on the Reaction Test
+  signal records one result; restarting Breathe cannot be reset by the session it replaced; the
+  torch state keeps following the hardware after a callback error.
+
 - Quick Tools avoids recycling category groups while their expanded heights animate, addressing
   the reported scroll-and-expand lookahead layout crash.
 - Ruler calibration uses a full-length vertical reference aligned with its measurement axis.

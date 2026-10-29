@@ -94,8 +94,10 @@ class ReactionTestToolViewModel(
     }
 
     private fun finishRound(reactionTimeMs: Long) {
+        // The result lands before anything is launched, so a second tap on the same signal finds the
+        // round over and is ignored rather than recorded twice.
+        setState { withResult(reactionTimeMs) }
         launchReport(action = Actions.FINISH_ROUND) {
-            setState { withResult(reactionTimeMs) }
             telemetryRepository.logReactionScore(reactionTimeMs = reactionTimeMs)
             usage.markUsed()
         }

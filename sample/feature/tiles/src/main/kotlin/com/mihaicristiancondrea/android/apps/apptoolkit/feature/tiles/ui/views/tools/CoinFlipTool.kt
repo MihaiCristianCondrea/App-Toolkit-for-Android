@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools
 
+import androidx.compose.ui.semantics.Role
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -119,6 +120,14 @@ fun CoinFlipTool(side: CoinSide, flipRequest: Int, onFlip: () -> Unit, compact: 
             rotationY = rotation,
             diameter = if (compact) 88.dp else 120.dp,
             modifier = Modifier
+                .clickable(
+                    interactionSource = null,
+                    indication = null,
+                    enabled = !flipping,
+                    onClickLabel = stringResource(R.string.tool_coin_flip_action),
+                    role = Role.Button,
+                    onClick = onFlip,
+                )
                 .graphicsLayer {
                     this.scaleX = scale
                     this.scaleY = scale

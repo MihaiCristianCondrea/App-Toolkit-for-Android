@@ -70,6 +70,23 @@ class ReactionTestToolViewModelTest {
     }
 
     @Test
+    fun `a double tap on the signal records one result`() {
+        val viewModel = createViewModel()
+
+        viewModel.onEvent(ReactionTestToolEvent.Start)
+        simulatedTimeMs = 3_000L
+        advance()
+        simulatedTimeMs = 3_250L
+        // Both taps arrive before anything launched by the first has run.
+        viewModel.onEvent(ReactionTestToolEvent.Tap)
+        viewModel.onEvent(ReactionTestToolEvent.Tap)
+        advance()
+
+        assertEquals(ReactionTestPhase.Result, viewModel.state.value.phase)
+        assertEquals(1, viewModel.state.value.history.size)
+    }
+
+    @Test
     fun `starting test enters Waiting phase`() {
         val viewModel = createViewModel()
 

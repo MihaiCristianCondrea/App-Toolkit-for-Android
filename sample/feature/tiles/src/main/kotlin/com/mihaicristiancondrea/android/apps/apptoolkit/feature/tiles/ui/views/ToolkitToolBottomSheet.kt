@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views
 
+import androidx.compose.foundation.layout.navigationBarsPadding
 import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -116,6 +117,8 @@ fun ToolkitToolBottomSheet(
             modifier = Modifier
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
+                // The sheet reaches behind the system navigation; its last control stays above it.
+                .navigationBarsPadding()
                 .padding(SizeConstants.LargeSize),
             verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
         ) {

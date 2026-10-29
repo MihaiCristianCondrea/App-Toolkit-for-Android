@@ -45,8 +45,12 @@ class BreathingRepository(
     private var job: Job? = null
 
     fun start() {
-        job?.cancel()
+        val previous = job
+        previous?.cancel()
         job = repositoryScope.launch {
+            // The cancelled session resets the state as it ends; wait for that, so it cannot land
+            // after this session's first phase.
+            previous?.join()
             try {
                 runPhase(BreathingPhase.PREPARING, DURATION_PREPARING, 1f, 1f)
                 while (isActive) runCycle()

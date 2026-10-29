@@ -83,10 +83,13 @@ class MorseRepository(
     /** Waits for an in-flight torch call to finish before completing shutdown. */
     suspend fun stop() = playbackMutex.withLock { stopPlayback() }
 
+    // Only a running message owns the torch. With nothing playing, stopping leaves the torch as it is:
+    // the Flash Dimmer and its tile stop Morse before setting a level, and turning the torch off there
+    // made the tile restart from its first level on every tap and the slider flicker.
     private suspend fun stopPlayback() = withContext(NonCancellable + dispatchers.default) {
-        val previous = playbackJob
+        val previous = playbackJob ?: return@withContext
         playbackJob = null
-        previous?.cancelAndJoin()
+        previous.cancelAndJoin()
         torchRepository.turnOff()
         mutableState.value = MorsePlaybackState(isAvailable = state.value.isAvailable)
     }

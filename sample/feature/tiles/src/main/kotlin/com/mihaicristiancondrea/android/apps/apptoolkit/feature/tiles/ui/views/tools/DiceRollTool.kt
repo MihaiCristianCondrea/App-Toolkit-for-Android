@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools
 
+import androidx.compose.ui.semantics.Role
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -213,7 +214,15 @@ fun DiceRollTool(
             rotationZ = { rotationZ.value },
             modifier = Modifier
                 .size(if (compact) 118.dp else 150.dp)
-                .clickable(enabled = !rolling, onClickLabel = stringResource(R.string.tool_dice_roll_action), onClick = onRoll)
+                // No ripple: a rectangle of ink spreading over the die looked wrong. The roll is the feedback.
+                .clickable(
+                    interactionSource = null,
+                    indication = null,
+                    enabled = !rolling,
+                    onClickLabel = stringResource(R.string.tool_dice_roll_action),
+                    role = Role.Button,
+                    onClick = onRoll,
+                )
                 .graphicsLayer {
                     scaleX = scale.value
                     scaleY = scale.value

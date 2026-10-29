@@ -26,7 +26,9 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.retryWhen
+import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -48,7 +50,14 @@ class DefaultTorchRepository(
                     error = null,
                 )
             }
-            .catch { error -> mutableState.value = mutableState.value.copy(error = error) }
+            // One failed callback registration must not end the observation for the rest of the
+            // process: report it, then listen again, so later changes from the system flashlight
+            // or another app still reach the tile and the dimmer.
+            .retryWhen { error, _ ->
+                mutableState.value = mutableState.value.copy(error = error)
+                delay(HARDWARE_RETRY_DELAY)
+                true
+            }
             .launchIn(scope)
     }
 
@@ -96,3 +105,5 @@ class DefaultTorchRepository(
         return listOf(1, (maximum + 1) / 2, maximum).distinct().sorted()
     }
 }
+
+private val HARDWARE_RETRY_DELAY = 1.seconds

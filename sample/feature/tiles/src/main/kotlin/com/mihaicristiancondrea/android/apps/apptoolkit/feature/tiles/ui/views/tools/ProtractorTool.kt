@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools
 
+import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.Canvas
@@ -126,7 +127,8 @@ fun ProtractorTool(state: ProtractorToolUiState, onEvent: (ProtractorToolEvent) 
                     Text(title, style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f))
                     IconButton(onClick = onClose) { Icon(Icons.Outlined.Close, stringResource(R.string.tool_dialog_close_content_description)) }
                 }
-                val dock = if (geometry.landscape) Modifier.align(Alignment.CenterEnd).width(280.dp).padding(24.dp)
+                // In landscape the three-button navigation sits at the side: the dock keeps clear of it.
+                val dock = if (geometry.landscape) Modifier.align(Alignment.CenterEnd).navigationBarsPadding().displayCutoutPadding().width(280.dp).padding(24.dp)
                     else Modifier.align(Alignment.BottomCenter).fillMaxWidth().navigationBarsPadding().padding(20.dp)
                 Column(dock.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     HorizontalDivider()

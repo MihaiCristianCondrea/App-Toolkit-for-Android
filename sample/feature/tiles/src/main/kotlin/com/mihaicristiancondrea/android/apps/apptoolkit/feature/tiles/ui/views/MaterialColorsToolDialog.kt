@@ -17,6 +17,9 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views
 
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.ColorRes
@@ -122,6 +125,8 @@ fun MaterialColorsToolDialog(
             }
             LazyColumn(
                 modifier = Modifier.weight(1f),
+                // The palettes scroll behind the system navigation and end above it.
+                contentPadding = WindowInsets.navigationBars.asPaddingValues(),
                 verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
             ) {
                 item {

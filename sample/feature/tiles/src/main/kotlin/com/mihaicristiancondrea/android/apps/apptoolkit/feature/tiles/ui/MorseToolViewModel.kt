@@ -80,8 +80,8 @@ class MorseToolViewModel(
         if (error != null) return
 
         launchReport(action = Actions.START_MESSAGE) {
-            repository.start(message)
-            usage.markUsed()
+            // A message the torch could not send is not a use.
+            if (repository.start(message)) usage.markUsed()
         }
     }
 
