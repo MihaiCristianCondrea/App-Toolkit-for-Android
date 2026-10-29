@@ -129,7 +129,6 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        multiDexEnabled = true
 
         val githubProps = Properties()
         val githubFile = rootProject.file("github.properties")

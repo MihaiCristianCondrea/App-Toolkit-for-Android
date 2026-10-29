@@ -51,6 +51,7 @@ import androidx.compose.material3.rememberRangeSliderState
 import androidx.compose.material3.rememberSliderState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -441,7 +442,7 @@ private fun RulerSetting(title: String, content: @Composable () -> Unit) {
 
 /** A row of segmented choices without check marks, so three of them fit between two scales. */
 @Composable
-private fun RulerChoice(options: List<String>, selected: Int, onSelect: (Int) -> Unit) {
+private fun RulerChoice(options: List<String>, selected: Int, onSelect: (Int) -> Unit) { // FIXME: Parameter 'options' has runtime-determined stability
     SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
         options.forEachIndexed { index, label ->
             SegmentedButton(
@@ -486,7 +487,7 @@ internal class RulerGeometry(val landscape: Boolean, val countFromEnd: Boolean, 
     }
 }
 
-private fun DrawScope.drawStrip(units: RulerUnits, edge: RulerEdge, geometry: RulerGeometry, thickness: Float, color: Color) {
+private fun DrawScope.drawStrip(units: RulerUnits, edge: RulerEdge, geometry: RulerGeometry, thickness: Float, color: Color) { // FIXME: Parameter "units" is never used
     val topLeft = geometry.point(0f, if (edge == RulerEdge.Start) 0f else thickness, edge, size)
     val stripSize = if (geometry.landscape) Size(size.width, thickness) else Size(thickness, size.height)
     val origin = if (geometry.landscape) Offset(0f, topLeft.y) else Offset(topLeft.x, 0f)
