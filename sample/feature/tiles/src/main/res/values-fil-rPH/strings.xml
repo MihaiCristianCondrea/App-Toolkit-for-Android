@@ -256,4 +256,9 @@
     <string name="widget_reaction_ready">Handa na?</string>
     <string name="widget_reaction_prompt">Subukan ang iyong reflexes</string>
     <string name="widget_reaction_best">Personal na pinakamahusay</string>
+    <string name="random_ready">Handa nang pumili</string>
+    <string name="random_result">Iyong numero</string>
+    <string name="random_range">Saklaw ng numero</string>
+    <string name="random_inclusive">Kasama ang parehong hangganan.</string>
+    <string name="tool_converter_unit">Yunit</string>
 </resources>

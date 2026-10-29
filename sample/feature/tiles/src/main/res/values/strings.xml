@@ -259,4 +259,9 @@
     <string name="widget_reaction_ready">Ready?</string>
     <string name="widget_reaction_prompt">Test your reflexes</string>
     <string name="widget_reaction_best">Personal best</string>
+    <string name="random_ready">Ready to pick</string>
+    <string name="random_result">Your number</string>
+    <string name="random_range">Number range</string>
+    <string name="random_inclusive">Both ends of the range are included.</string>
+    <string name="tool_converter_unit">Unit</string>
 </resources>

@@ -256,4 +256,9 @@
     <string name="widget_reaction_ready">Bereit?</string>
     <string name="widget_reaction_prompt">Teste deine Reflexe</string>
     <string name="widget_reaction_best">Persönliche Bestzeit</string>
+    <string name="random_ready">Bereit zur Auswahl</string>
+    <string name="random_result">Deine Zahl</string>
+    <string name="random_range">Zahlenbereich</string>
+    <string name="random_inclusive">Beide Grenzen sind eingeschlossen.</string>
+    <string name="tool_converter_unit">Einheit</string>
 </resources>

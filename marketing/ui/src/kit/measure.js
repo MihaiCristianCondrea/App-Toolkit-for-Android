@@ -104,8 +104,8 @@ export function rulerDialog(s,set,close) {
   const panel = advanced ? html`
     <div class="measure-ruler__controls" style=${inset}>
       <header><h3>Surface Ruler</h3>${closeButton}</header>
-      <div>${rulerReading(units, mm)}</div>
       ${choice('Ruler mode', [['simple', 'Simple'], ['advanced', 'Advanced']], 'advanced', v => set?.({ rulerAdvanced: v === 'advanced' }), true)}
+      <div>${rulerReading(units, mm)}</div>
       <h4>Units</h4>${choice('Ruler units', [['metric', 'Metric'], ['imperial', 'Imperial'], ['both', 'Both']], units, v => set?.({ rulerUnits: v }), true)}
       <h4>Scale edge</h4>${choice('Scale edge', [['start', first], ['end', second]], edge, v => set?.({ rulerEdge: v }), true)}
       <h4>Zero at</h4>${choice('Zero at', [['start', zeroFirst], ['end', zeroSecond]], fromEnd ? 'end' : 'start', v => set?.({ rulerFromEnd: v === 'end' }), true)}
@@ -114,7 +114,7 @@ export function rulerDialog(s,set,close) {
       <section class="measure-calibration"><header><h4>Calibration</h4><md-text-button ?disabled=${scale === 1} @click=${() => set?.({ rulerScale: 1 })}>Reset</md-text-button></header><p>Match the line below to 3 cm on a real ruler before measuring.</p><div class="measure-ruler__reference-box" style="height:${30 * 160 / 25.4 * 2 + 8}px"><div class="measure-ruler__reference" style="height:${30 * ppm}px" role="img" aria-label="30 millimetre reference"></div></div>${slider({ value: scale, min: 0.5, max: 2, step: 0.01, label: 'Calibration', onInput: set && (v => set?.({ rulerScale: v })) })}${s.rulerSaveFailed ? html`<p class="chance-error">Could not save calibration.</p>` : nothing}</section>
     </div>` : html`
     <div class="measure-ruler__simple" style=${inset}>
-      <div class="measure-ruler__bar"><md-filled-tonal-button @click=${() => set?.({ rulerAdvanced: true })}><md-icon slot="icon">tune</md-icon>Advanced</md-filled-tonal-button>${closeButton}</div>
+      <div class="measure-ruler__bar"><h3>Surface Ruler</h3>${closeButton}</div>${choice('Ruler mode', [['simple', 'Simple'], ['advanced', 'Advanced']], 'simple', v => set?.({ rulerAdvanced: v === 'advanced' }), true)}
       <div class="measure-ruler__card">${rulerReading(units, mm)}<p>Drag anywhere to measure from zero</p></div>
     </div>`;
   return html`<div class="measure-ruler" ?data-landscape=${landscape} ?data-advanced=${advanced}>
@@ -200,7 +200,7 @@ function reaction(s,set) {
 export function protractorDialog(s,set,close) {
   const win=windowOf(s.window),width=s.protractorWidth??win.width,height=s.protractorHeight??win.height;
   const landscape=width>=650 || width>height;
-  const angle=Math.max(0,Math.min(180,Number(s.protractorAngle??45))),cy=landscape?height:Math.max(140,(height-204)/2),cx=landscape?(width-320)/2:0,r=Math.max(60,landscape?Math.min((width-368)/2,height-96):Math.min(width-24,cy-96));
+  const angle=Math.max(0,Math.min(180,Number(s.protractorAngle??45))),cy=landscape?height:Math.max(140,(height-204)/2),cx=landscape?(width-320)/2:0,r=Math.max(60,landscape?Math.min((width-368)/2,height-144):Math.min(width-24,cy-144));
   const point=(d,dist)=>landscape?[cx+Math.cos(d*Math.PI/180)*dist,cy-Math.sin(d*Math.PI/180)*dist]:[Math.sin(d*Math.PI/180)*dist,cy-Math.cos(d*Math.PI/180)*dist];
   const [x,y]=point(angle,r);
   const move=e=>{if(e.type==='pointermove'&&!e.buttons)return;const rect=e.currentTarget.getBoundingClientRect(),px=Math.max(0,(e.clientX-rect.left)*width/rect.width),py=(e.clientY-rect.top)*height/rect.height;set?.({protractorAngle:Math.round((landscape?Math.atan2(Math.max(0,cy-py),px-cx):Math.atan2(px,cy-py))*180/Math.PI)});};
@@ -212,6 +212,6 @@ export function protractorDialog(s,set,close) {
       <path d=${landscape?`M${cx+r} ${cy}H${cx}L${x} ${y}`:`M0 ${cy-r}V${cy}L${x} ${y}`} fill="none" stroke="var(--md-sys-color-primary)" stroke-width="4"/><circle cx=${cx} cy=${cy} r="9" fill="var(--md-sys-color-primary)"/><circle cx=${x} cy=${y} r="8" fill="var(--md-sys-color-primary)" stroke="var(--md-sys-color-surface)" stroke-width="3"/>
     </svg>
     <header><h3>Protractor</h3><md-icon-button aria-label="Close" @click=${close}><md-icon>close</md-icon></md-icon-button></header>
-    <div class="measure-protractor-controls measure-body"><div class="protractor-readout"><div><span class="protractor-eyebrow">ANGLE</span><div class="measure-display" aria-live="polite">${angle}°</div></div><span class="protractor-kind">${angle===0?"Zero":angle<90?"Acute":angle===90?"Right angle":angle<180?"Obtuse":"Straight"}</span></div><p>Align the edge, then drag the arm.</p>${slider({value:angle,min:0,max:180,step:1,label:'Protractor angle',onInput:set&&(v=>set({protractorAngle:v}))})}<div class="protractor-presets">${[0,45,90,180].map(value=>html`<md-text-button aria-label="Set angle to ${value} degrees" @click=${()=>set?.({protractorAngle:value})}>${value}°</md-text-button>`)}</div></div>
+    <div class="measure-protractor-controls measure-body"><div class="protractor-readout"><div><div class="measure-display" aria-live="polite">${angle}°</div></div><span class="protractor-kind">${angle===0?"Zero":angle<90?"Acute":angle===90?"Right angle":angle<180?"Obtuse":"Straight"}</span></div>${slider({value:angle,min:0,max:180,step:1,label:'Protractor angle',onInput:set&&(v=>set({protractorAngle:v}))})}<div class="protractor-presets">${[0,45,90,180].map(value=>html`<md-text-button aria-label="Set angle to ${value} degrees" @click=${()=>set?.({protractorAngle:value})}>${value}°</md-text-button>`)}</div></div>
   </div>`;
 }

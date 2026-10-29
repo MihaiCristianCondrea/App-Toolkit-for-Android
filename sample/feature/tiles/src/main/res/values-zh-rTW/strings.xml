@@ -256,4 +256,9 @@
     <string name="widget_reaction_ready">準備好了嗎？</string>
     <string name="widget_reaction_prompt">測試你的反應</string>
     <string name="widget_reaction_best">個人最佳</string>
+    <string name="random_ready">準備選取</string>
+    <string name="random_result">你的數字</string>
+    <string name="random_range">數字範圍</string>
+    <string name="random_inclusive">包含範圍的兩端。</string>
+    <string name="tool_converter_unit">單位</string>
 </resources>

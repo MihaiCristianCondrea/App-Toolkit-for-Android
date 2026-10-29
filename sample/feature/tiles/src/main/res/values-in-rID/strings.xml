@@ -256,4 +256,9 @@
     <string name="widget_reaction_ready">Siap?</string>
     <string name="widget_reaction_prompt">Uji refleks Anda</string>
     <string name="widget_reaction_best">Rekor pribadi</string>
+    <string name="random_ready">Siap memilih</string>
+    <string name="random_result">Angka Anda</string>
+    <string name="random_range">Rentang angka</string>
+    <string name="random_inclusive">Kedua batas rentang disertakan.</string>
+    <string name="tool_converter_unit">Satuan</string>
 </resources>

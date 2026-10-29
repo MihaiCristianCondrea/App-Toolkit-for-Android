@@ -256,4 +256,9 @@
     <string name="widget_reaction_ready">প্রস্তুত?</string>
     <string name="widget_reaction_prompt">আপনার রিফ্লেক্স পরীক্ষা করুন</string>
     <string name="widget_reaction_best">ব্যক্তিগত সেরা</string>
+    <string name="random_ready">বাছাই করতে প্রস্তুত</string>
+    <string name="random_result">আপনার সংখ্যা</string>
+    <string name="random_range">সংখ্যার সীমা</string>
+    <string name="random_inclusive">সীমার উভয় প্রান্ত অন্তর্ভুক্ত।</string>
+    <string name="tool_converter_unit">একক</string>
 </resources>

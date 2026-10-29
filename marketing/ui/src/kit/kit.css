@@ -1924,3 +1924,11 @@ mnw-android-screen,
 .mc-swatch { height: 72px; padding: 8px; border-radius: 8px; display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
 .mc-swatch__name { font: 500 12px/16px var(--md-ref-typeface-plain); letter-spacing: .5px; }
 .mc-swatch__hex { font: 500 11px/16px var(--md-ref-typeface-plain); letter-spacing: .5px; }
+
+.measure-ruler__bar { gap: 8px; }
+.measure-ruler__bar md-outlined-segmented-button-set { flex: 1; min-width: 0; }
+
+.measure-ruler__simple { gap: 12px; }
+.measure-ruler__simple > md-outlined-segmented-button-set { pointer-events: auto; }
+
+.measure-ruler__simple, .measure-ruler__controls { padding: 16px; }

@@ -30,6 +30,6 @@ internal fun protractorGeometry(width: Float, height: Float): ProtractorGeometry
     val landscape = width >= 650f || width > height
     val y = if (landscape) height else ((height - 204f) / 2f).coerceAtLeast(140f)
     val x = if (landscape) (width - 320f) / 2f else 0f
-    val radius = (if (landscape) min((width - 368f) / 2f, height - 96f) else min(width - 24f, y - 96f)).coerceAtLeast(60f)
+    val radius = (if (landscape) min((width - 368f) / 2f, height - 144f) else min(width - 24f, y - 144f)).coerceAtLeast(60f)
     return ProtractorGeometry(x, y, radius, landscape)
 }

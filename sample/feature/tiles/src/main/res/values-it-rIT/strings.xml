@@ -256,4 +256,9 @@
     <string name="widget_reaction_ready">Pronto?</string>
     <string name="widget_reaction_prompt">Metti alla prova i riflessi</string>
     <string name="widget_reaction_best">Record personale</string>
+    <string name="random_ready">Pronto a scegliere</string>
+    <string name="random_result">Il tuo numero</string>
+    <string name="random_range">Intervallo numerico</string>
+    <string name="random_inclusive">Entrambi i limiti sono inclusi.</string>
+    <string name="tool_converter_unit">Unità</string>
 </resources>

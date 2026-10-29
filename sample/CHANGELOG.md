@@ -4,6 +4,12 @@
 
 # Unreleased
 
+### Fixed
+
+- Align the Protractor endpoint, dial details and angle badge with the preview, remove its instructions and keep the title clear of the dial.
+- Match Unit Converter cards and Random Number result-first controls to the marketing layouts.
+- Use the same Simple and Advanced ruler selector in both modes.
+
 ### Added
 
 - Three redesigned native workspaces matching the approved marketing UI: Quick Tools, Measure

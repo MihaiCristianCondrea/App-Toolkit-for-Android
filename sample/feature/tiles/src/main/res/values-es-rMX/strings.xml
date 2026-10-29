@@ -256,4 +256,9 @@
     <string name="widget_reaction_ready">¿Listo?</string>
     <string name="widget_reaction_prompt">Pon a prueba tus reflejos</string>
     <string name="widget_reaction_best">Mejor marca personal</string>
+    <string name="random_ready">Listo para elegir</string>
+    <string name="random_result">Tu número</string>
+    <string name="random_range">Rango numérico</string>
+    <string name="random_inclusive">Ambos límites están incluidos.</string>
+    <string name="tool_converter_unit">Unidad</string>
 </resources>

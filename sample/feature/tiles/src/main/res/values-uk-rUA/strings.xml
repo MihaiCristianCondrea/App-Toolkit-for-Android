@@ -256,4 +256,9 @@
     <string name="widget_reaction_ready">Готові?</string>
     <string name="widget_reaction_prompt">Перевірте реакцію</string>
     <string name="widget_reaction_best">Особистий рекорд</string>
+    <string name="random_ready">Готово до вибору</string>
+    <string name="random_result">Ваше число</string>
+    <string name="random_range">Діапазон чисел</string>
+    <string name="random_inclusive">Обидві межі включено.</string>
+    <string name="tool_converter_unit">Одиниця</string>
 </resources>

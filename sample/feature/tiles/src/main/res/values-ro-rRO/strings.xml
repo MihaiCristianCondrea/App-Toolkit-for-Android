@@ -256,4 +256,9 @@
     <string name="widget_reaction_ready">Gata?</string>
     <string name="widget_reaction_prompt">Testează-ți reflexele</string>
     <string name="widget_reaction_best">Record personal</string>
+    <string name="random_ready">Gata de ales</string>
+    <string name="random_result">Numărul tău</string>
+    <string name="random_range">Interval numeric</string>
+    <string name="random_inclusive">Ambele limite ale intervalului sunt incluse.</string>
+    <string name="tool_converter_unit">Unitate</string>
 </resources>

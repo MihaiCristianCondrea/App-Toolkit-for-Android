@@ -256,4 +256,9 @@
     <string name="widget_reaction_ready">Hazır mısınız?</string>
     <string name="widget_reaction_prompt">Reflekslerinizi test edin</string>
     <string name="widget_reaction_best">Kişisel rekor</string>
+    <string name="random_ready">Seçmeye hazır</string>
+    <string name="random_result">Sayınız</string>
+    <string name="random_range">Sayı aralığı</string>
+    <string name="random_inclusive">Her iki sınır da dahildir.</string>
+    <string name="tool_converter_unit">Birim</string>
 </resources>

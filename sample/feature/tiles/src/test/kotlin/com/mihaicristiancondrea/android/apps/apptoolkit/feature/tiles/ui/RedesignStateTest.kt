@@ -114,6 +114,13 @@ class RedesignStateTest {
         model.onEvent(WheelToolEvent.Spin)
         assertFalse(model.state.value.spinning)
     }
+    @Test fun protractorLeavesRoomForTheHeader() {
+        for ((width, height) in listOf(430f to 957f, 360f to 640f, 957f to 430f, 840f to 780f)) {
+            val geometry = protractorGeometry(width, height)
+            assertTrue(geometry.y - geometry.radius >= 144f, "Dial overlaps the header at $width x $height")
+        }
+    }
+
     @Test fun protractorGeometryMatchesTouchCoordinates() {
         val portrait = protractorGeometry(430f,957f)
         assertFalse(portrait.landscape)

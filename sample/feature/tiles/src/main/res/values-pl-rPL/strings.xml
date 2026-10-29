@@ -256,4 +256,9 @@
     <string name="widget_reaction_ready">Gotowy?</string>
     <string name="widget_reaction_prompt">Sprawdź swój refleks</string>
     <string name="widget_reaction_best">Rekord osobisty</string>
+    <string name="random_ready">Gotowe do losowania</string>
+    <string name="random_result">Twoja liczba</string>
+    <string name="random_range">Zakres liczb</string>
+    <string name="random_inclusive">Obie granice są uwzględnione.</string>
+    <string name="tool_converter_unit">Jednostka</string>
 </resources>

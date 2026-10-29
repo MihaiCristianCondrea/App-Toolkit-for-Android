@@ -256,4 +256,9 @@
     <string name="widget_reaction_ready">جاهز؟</string>
     <string name="widget_reaction_prompt">اختبر ردود أفعالك</string>
     <string name="widget_reaction_best">أفضل نتيجة شخصية</string>
+    <string name="random_ready">جاهز للاختيار</string>
+    <string name="random_result">رقمك</string>
+    <string name="random_range">نطاق الأرقام</string>
+    <string name="random_inclusive">يشمل طرفي النطاق.</string>
+    <string name="tool_converter_unit">الوحدة</string>
 </resources>

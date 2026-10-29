@@ -256,4 +256,9 @@
     <string name="widget_reaction_ready">準備はいい？</string>
     <string name="widget_reaction_prompt">反射神経をテスト</string>
     <string name="widget_reaction_best">自己ベスト</string>
+    <string name="random_ready">選択の準備完了</string>
+    <string name="random_result">選ばれた数</string>
+    <string name="random_range">数値の範囲</string>
+    <string name="random_inclusive">範囲の両端を含みます。</string>
+    <string name="tool_converter_unit">単位</string>
 </resources>

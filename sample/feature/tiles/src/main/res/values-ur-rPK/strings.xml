@@ -256,4 +256,9 @@
     <string name="widget_reaction_ready">تیار ہیں؟</string>
     <string name="widget_reaction_prompt">اپنے ردعمل کو آزمائیں</string>
     <string name="widget_reaction_best">ذاتی بہترین</string>
+    <string name="random_ready">انتخاب کے لیے تیار</string>
+    <string name="random_result">آپ کا نمبر</string>
+    <string name="random_range">نمبروں کی حد</string>
+    <string name="random_inclusive">حد کے دونوں سرے شامل ہیں۔</string>
+    <string name="tool_converter_unit">اکائی</string>
 </resources>

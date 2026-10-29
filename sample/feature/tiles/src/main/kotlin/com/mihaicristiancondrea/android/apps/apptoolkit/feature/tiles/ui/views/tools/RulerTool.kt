@@ -39,7 +39,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.SegmentedButton
@@ -52,7 +51,6 @@ import androidx.compose.material3.rememberRangeSliderState
 import androidx.compose.material3.rememberSliderState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -239,14 +237,9 @@ private fun SimpleRulerOverlay(
     onEvent: (RulerToolEvent) -> Unit,
     onClose: () -> Unit,
 ) {
-    Column(Modifier.fillMaxSize().padding(SizeConstants.MediumSize)) {
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            GeneralButton(
-                style = GeneralButtonStyle.Tonal,
-                onClick = { onEvent(RulerToolEvent.AdvancedChanged(true)) },
-                icon = ToolkitIcon.Vector(Icons.Outlined.Tune),
-                label = stringResource(R.string.tool_ruler_advanced),
-            )
+    Column(Modifier.fillMaxSize().padding(SizeConstants.MediumSize), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+            Text(stringResource(R.string.tile_ruler_title), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f))
             GeneralButton(
                 style = GeneralButtonStyle.Text,
                 onClick = onClose,
@@ -254,6 +247,11 @@ private fun SimpleRulerOverlay(
                 contentDescription = stringResource(R.string.tool_dialog_close_content_description),
             )
         }
+        RulerChoice(
+            options = listOf(stringResource(R.string.tool_ruler_simple), stringResource(R.string.tool_ruler_advanced)),
+            selected = 0,
+            onSelect = { onEvent(RulerToolEvent.AdvancedChanged(it == 1)) },
+        )
         Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
             Surface(
                 shape = MaterialTheme.shapes.extraLarge,
@@ -316,7 +314,7 @@ private fun AdvancedRulerPanel(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surface)
             .verticalScroll(rememberScrollState())
-            .padding(SizeConstants.LargeSize),
+            .padding(SizeConstants.MediumSize),
         verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
     ) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -332,13 +330,13 @@ private fun AdvancedRulerPanel(
                 contentDescription = stringResource(R.string.tool_dialog_close_content_description),
             )
         }
-        Column { RulerReading(settings.units, millimetres) }
-
         RulerChoice(
             options = listOf(stringResource(R.string.tool_ruler_simple), stringResource(R.string.tool_ruler_advanced)),
             selected = 1,
             onSelect = { if (it == 0) onEvent(RulerToolEvent.AdvancedChanged(false)) },
         )
+        Column { RulerReading(settings.units, millimetres) }
+
         RulerSetting(stringResource(R.string.tool_ruler_units)) {
             RulerChoice(
                 options = listOf(

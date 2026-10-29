@@ -256,4 +256,9 @@
     <string name="widget_reaction_ready">Sẵn sàng?</string>
     <string name="widget_reaction_prompt">Kiểm tra phản xạ</string>
     <string name="widget_reaction_best">Kỷ lục cá nhân</string>
+    <string name="random_ready">Sẵn sàng chọn</string>
+    <string name="random_result">Số của bạn</string>
+    <string name="random_range">Khoảng số</string>
+    <string name="random_inclusive">Bao gồm cả hai đầu của khoảng.</string>
+    <string name="tool_converter_unit">Đơn vị</string>
 </resources>

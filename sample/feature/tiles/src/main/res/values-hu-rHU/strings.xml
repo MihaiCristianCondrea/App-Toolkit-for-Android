@@ -256,4 +256,9 @@
     <string name="widget_reaction_ready">Kész vagy?</string>
     <string name="widget_reaction_prompt">Teszteld a reflexeidet</string>
     <string name="widget_reaction_best">Egyéni csúcs</string>
+    <string name="random_ready">Készen a választásra</string>
+    <string name="random_result">A számod</string>
+    <string name="random_range">Számtartomány</string>
+    <string name="random_inclusive">Mindkét határérték beletartozik.</string>
+    <string name="tool_converter_unit">Egység</string>
 </resources>

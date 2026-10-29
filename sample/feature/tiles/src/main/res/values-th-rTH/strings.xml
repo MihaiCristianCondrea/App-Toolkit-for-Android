@@ -256,4 +256,9 @@
     <string name="widget_reaction_ready">พร้อมไหม</string>
     <string name="widget_reaction_prompt">ทดสอบปฏิกิริยาของคุณ</string>
     <string name="widget_reaction_best">สถิติส่วนตัว</string>
+    <string name="random_ready">พร้อมเลือก</string>
+    <string name="random_result">ตัวเลขของคุณ</string>
+    <string name="random_range">ช่วงตัวเลข</string>
+    <string name="random_inclusive">รวมค่าขอบเขตทั้งสองด้าน</string>
+    <string name="tool_converter_unit">หน่วย</string>
 </resources>

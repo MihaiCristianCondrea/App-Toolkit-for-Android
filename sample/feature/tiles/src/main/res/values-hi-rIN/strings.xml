@@ -256,4 +256,9 @@
     <string name="widget_reaction_ready">तैयार?</string>
     <string name="widget_reaction_prompt">अपनी प्रतिक्रिया परखें</string>
     <string name="widget_reaction_best">निजी सर्वश्रेष्ठ</string>
+    <string name="random_ready">चुनने के लिए तैयार</string>
+    <string name="random_result">आपकी संख्या</string>
+    <string name="random_range">संख्या सीमा</string>
+    <string name="random_inclusive">सीमा के दोनों सिरे शामिल हैं।</string>
+    <string name="tool_converter_unit">इकाई</string>
 </resources>

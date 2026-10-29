@@ -256,4 +256,9 @@
     <string name="widget_reaction_ready">Готови?</string>
     <string name="widget_reaction_prompt">Проверете рефлексите си</string>
     <string name="widget_reaction_best">Личен рекорд</string>
+    <string name="random_ready">Готово за избор</string>
+    <string name="random_result">Вашето число</string>
+    <string name="random_range">Числов диапазон</string>
+    <string name="random_inclusive">Двете граници са включени.</string>
+    <string name="tool_converter_unit">Единица</string>
 </resources>

@@ -17,6 +17,16 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools
 
+import android.os.Build
+import android.icu.util.Measure
+import android.icu.text.MeasureFormat
+import android.icu.util.MeasureUnit
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.material.icons.outlined.Straighten
+import androidx.compose.material.icons.outlined.Scale
+import androidx.compose.material.icons.outlined.Thermostat
+import androidx.compose.material.icons.outlined.WaterDrop
+import androidx.compose.material.icons.outlined.Storage
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,21 +40,24 @@ import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.SwapVert
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -54,8 +67,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.model
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.UnitConverterToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.UnitConverterToolUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 
 @Composable
 fun UnitConverterTool(state: UnitConverterToolUiState, onEvent: (UnitConverterToolEvent) -> Unit) {
@@ -67,18 +78,30 @@ fun UnitConverterTool(state: UnitConverterToolUiState, onEvent: (UnitConverterTo
                     selected = state.category == category,
                     onClick = { onEvent(UnitConverterToolEvent.CategorySelected(category)) },
                     label = { Text(stringResource(category.labelResId())) },
+                    leadingIcon = { Icon(when(category) {
+                        ConversionCategory.Length -> Icons.Outlined.Straighten
+                        ConversionCategory.Mass -> Icons.Outlined.Scale
+                        ConversionCategory.Temperature -> Icons.Outlined.Thermostat
+                        ConversionCategory.Volume -> Icons.Outlined.WaterDrop
+                        ConversionCategory.Data -> Icons.Outlined.Storage
+                    }, null) },
                 )
             }
         }
-        ConversionInput(state.left, state.from, R.string.tool_converter_from, state.invalidInput && state.editingLeft,
-            onInput = { onEvent(UnitConverterToolEvent.InputChanged(it, left = true)) },
-            onUnit = { onEvent(UnitConverterToolEvent.UnitSelected(it, left = true)) })
-        FilledTonalIconButton(onClick = { onEvent(UnitConverterToolEvent.Swap) }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            Icon(Icons.Outlined.SwapVert, stringResource(R.string.swap_units))
+        Box {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                ConversionInput(state.left, state.from, R.string.tool_converter_from, state.invalidInput && state.editingLeft,
+                    onInput = { onEvent(UnitConverterToolEvent.InputChanged(it, left = true)) },
+                    onUnit = { onEvent(UnitConverterToolEvent.UnitSelected(it, left = true)) })
+                ConversionInput(state.right, state.to, R.string.tool_converter_to, state.invalidInput && !state.editingLeft,
+                    onInput = { onEvent(UnitConverterToolEvent.InputChanged(it, left = false)) },
+                    onUnit = { onEvent(UnitConverterToolEvent.UnitSelected(it, left = false)) })
+            }
+            FilledTonalIconButton(onClick = { onEvent(UnitConverterToolEvent.Swap) },
+                modifier = Modifier.align(Alignment.CenterEnd).padding(end = 24.dp).size(40.dp)) {
+                Icon(Icons.Outlined.SwapVert, stringResource(R.string.swap_units))
+            }
         }
-        ConversionInput(state.right, state.to, R.string.tool_converter_to, state.invalidInput && !state.editingLeft,
-            onInput = { onEvent(UnitConverterToolEvent.InputChanged(it, left = false)) },
-            onUnit = { onEvent(UnitConverterToolEvent.UnitSelected(it, left = false)) })
         if (state.invalidInput) Text(stringResource(R.string.tool_converter_invalid), color = MaterialTheme.colorScheme.error)
         if (state.category == ConversionCategory.Data) Text(stringResource(R.string.tool_converter_decimal_note))
     }
@@ -93,35 +116,57 @@ private fun ConversionInput(
     onInput: (String) -> Unit,
     onUnit: (ConversionUnit) -> Unit,
 ) {
-    var expanded by remember { mutableStateOf(false) }
-    Surface(shape = RoundedCornerShape(24.dp), color = if (label == R.string.tool_converter_to) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh) {
-    Row(Modifier.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize)) {
-        OutlinedTextField(
-            modifier = Modifier.weight(1f),
-            value = value,
-            onValueChange = onInput,
-            label = { Text(stringResource(label)) },
-            isError = invalid,
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            textStyle = MaterialTheme.typography.headlineSmall,
-        )
-        Box {
-            GeneralButton(
-                onClick = { expanded = true },
-                style = GeneralButtonStyle.Tonal,
-                label = unit.symbol,
-            )
-            DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                ConversionUnit.entries.filter { it.category == unit.category }.forEach { candidate ->
-                    DropdownMenuItem(
-                        text = { Text(candidate.symbol) },
-                        onClick = { expanded = false; onUnit(candidate) },
-                    )
-                }
+    val result = label == R.string.tool_converter_to
+    Surface(
+        shape = if (result) RoundedCornerShape(8.dp, 8.dp, 24.dp, 24.dp) else RoundedCornerShape(24.dp, 24.dp, 8.dp, 8.dp),
+        color = if (result) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
+    ) {
+        Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Text(unit.displayName(), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+                UnitPicker(unit, onUnit)
             }
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = androidx.compose.ui.graphics.Color.Transparent,
+                    unfocusedBorderColor = androidx.compose.ui.graphics.Color.Transparent,
+                ),
+                value = value,
+                onValueChange = onInput,
+                label = { Text(stringResource(label)) },
+                isError = invalid,
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                textStyle = MaterialTheme.typography.headlineLarge,
+            )
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun UnitPicker(unit: ConversionUnit, onUnit: (ConversionUnit) -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+    ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = it }) {
+        OutlinedTextField(
+            value = unit.symbol,
+            onValueChange = {},
+            readOnly = true,
+            singleLine = true,
+            label = { Text(stringResource(R.string.tool_converter_unit)) },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
+            shape = RoundedCornerShape(28.dp),
+            modifier = Modifier.width(140.dp).menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+        )
+        ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            ConversionUnit.entries.filter { it.category == unit.category }.forEach { candidate ->
+                DropdownMenuItem(
+                    text = { Column { Text(candidate.symbol); Text(candidate.displayName(), style = MaterialTheme.typography.bodySmall) } },
+                    onClick = { expanded = false; onUnit(candidate) },
+                )
+            }
+        }
     }
 }
 
@@ -131,4 +176,41 @@ internal fun ConversionCategory.labelResId(): Int = when (this) {
     ConversionCategory.Temperature -> R.string.tool_converter_temperature
     ConversionCategory.Volume -> R.string.tool_converter_volume
     ConversionCategory.Data -> R.string.tool_converter_data
+}
+
+@Composable
+private fun ConversionUnit.displayName(): String {
+    val locale = LocalConfiguration.current.locales[0]
+    val measureUnit = when (this) {
+        ConversionUnit.Millimetre -> MeasureUnit.MILLIMETER
+        ConversionUnit.Centimetre -> MeasureUnit.CENTIMETER
+        ConversionUnit.Metre -> MeasureUnit.METER
+        ConversionUnit.Kilometre -> MeasureUnit.KILOMETER
+        ConversionUnit.Inch -> MeasureUnit.INCH
+        ConversionUnit.Foot -> MeasureUnit.FOOT
+        ConversionUnit.Yard -> MeasureUnit.YARD
+        ConversionUnit.Mile -> MeasureUnit.MILE
+        ConversionUnit.Gram -> MeasureUnit.GRAM
+        ConversionUnit.Kilogram -> MeasureUnit.KILOGRAM
+        ConversionUnit.Ounce -> MeasureUnit.OUNCE
+        ConversionUnit.Pound -> MeasureUnit.POUND
+        ConversionUnit.Stone -> MeasureUnit.STONE
+        ConversionUnit.Celsius -> MeasureUnit.CELSIUS
+        ConversionUnit.Fahrenheit -> MeasureUnit.FAHRENHEIT
+        ConversionUnit.Kelvin -> MeasureUnit.KELVIN
+        ConversionUnit.Millilitre -> MeasureUnit.MILLILITER
+        ConversionUnit.Litre -> MeasureUnit.LITER
+        ConversionUnit.CubicMetre -> MeasureUnit.CUBIC_METER
+        ConversionUnit.UsGallon -> MeasureUnit.GALLON
+        ConversionUnit.Byte -> MeasureUnit.BYTE
+        ConversionUnit.Kilobyte -> MeasureUnit.KILOBYTE
+        ConversionUnit.Megabyte -> MeasureUnit.MEGABYTE
+        ConversionUnit.Gigabyte -> MeasureUnit.GIGABYTE
+        ConversionUnit.Terabyte -> MeasureUnit.TERABYTE
+    }
+    return remember(locale, measureUnit) {
+        val format = MeasureFormat.getInstance(locale, MeasureFormat.FormatWidth.WIDE)
+        if (Build.VERSION.SDK_INT >= 28) format.getUnitDisplayName(measureUnit)
+        else format.formatMeasures(Measure(1, measureUnit))
+    }
 }

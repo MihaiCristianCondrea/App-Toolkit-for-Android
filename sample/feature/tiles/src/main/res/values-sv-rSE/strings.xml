@@ -256,4 +256,9 @@
     <string name="widget_reaction_ready">Redo?</string>
     <string name="widget_reaction_prompt">Testa dina reflexer</string>
     <string name="widget_reaction_best">Personbästa</string>
+    <string name="random_ready">Redo att välja</string>
+    <string name="random_result">Ditt tal</string>
+    <string name="random_range">Talintervall</string>
+    <string name="random_inclusive">Båda gränserna ingår.</string>
+    <string name="tool_converter_unit">Enhet</string>
 </resources>
