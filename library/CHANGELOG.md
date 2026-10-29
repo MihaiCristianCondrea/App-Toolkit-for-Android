@@ -26,6 +26,9 @@
 - `ScreenHost` lays its content out in a `Box` that passes its minimum size on, so it can watch the
   content's scrolling. A screen with one root element is unaffected; several root elements now
   stack in that `Box` instead of following the parent's layout, so wrap them in one.
+- The default animated splash icon (`anim_splash`) draws App Toolkit's new toolbox: the box hops
+  once a second while the wrench and screwdriver rock. Apps that set their own `anim_splash` are
+  unaffected.
 
 ### Fixed
 

@@ -17,6 +17,9 @@
 
 ### Changed
 
+- A new app icon: a toolbox with a wrench and screwdriver, in the launcher, the themed icon (the
+  tools cut out of the box), the drawer, the splash screen, the widget preview and the Android TV
+  banner.
 - Quick Tools filter chips now filter by tool category (All tools, Sensors & Measurement,
   Utilities & Fun, System & Controls, Wellbeing) instead of Quick Settings sync status, and
   all categories start collapsed by default until expanded by the user.

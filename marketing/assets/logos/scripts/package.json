@@ -1,0 +1,13 @@
+{
+  "name": "app-toolkit-icons",
+  "private": true,
+  "type": "module",
+  "description": "Generates the launcher, themed, logo, splash and TV banner resources from .idea/icon.svg",
+  "scripts": {
+    "icons": "node icons.mjs",
+    "banner": "node tv-banner.mjs"
+  },
+  "dependencies": {
+    "svgpath": "2.6.0"
+  }
+}
