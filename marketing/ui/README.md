@@ -130,4 +130,8 @@ Unit Converter pairs two editable value cards with full unit names, category ico
 
 Protractor docks its controls beside the dial in landscape and below it in portrait. Converter unit selectors use Material Web select popovers; the swap action uses a momentary button with keyboard focus indication.
 
-Navigation now has Quick Tools, Measure and Play & Decide. The existing Chance tools live under Play & Decide; Discover our apps opens the catalog from the drawer. Water Eject is an explicit-start 165 Hz sine tone with a 30-second limit; Stop, sheet dismissal, leaving the screen or hiding the page stop audio and release its context. The feature is a marketing web prototype, with no water-damage-repair guarantee. The wheel, finger chooser and team maker are not implemented.
+Navigation now has Quick Tools, Measure and Play & Decide. The existing Chance tools live under Play & Decide; Discover our apps opens the catalog from the drawer. Water Eject is an explicit-start 165 Hz sine tone with a 30-second limit; Stop, sheet dismissal, leaving the screen or hiding the page stop audio and release its context. The feature is a marketing web prototype, with no water-damage-repair guarantee. Finger chooser and team maker are not implemented.
+
+Decision Wheel includes Yes/No/Maybe, food and player presets plus a custom list of 2–12 options. Spinning locks edits until the chosen segment settles; reduced motion shows the result without a prolonged spin. Water Eject uses expanding rings with a reduced-motion fallback and fills its section row.
+
+Quick Tools bounds its projected content to an explicit scroll viewport so tool hit regions cannot extend over the shell navigation. Touch regression checks switch tabs at five scroll offsets.

@@ -207,7 +207,7 @@ export default {
     });
 
     const content = html`
-      <div class="tk-screen-pad" style="padding-top:8px">
+      <div class="tk-screen-pad qt-overview" style="padding-top:8px">
         ${sections}
       </div>`;
 

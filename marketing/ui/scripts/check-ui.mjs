@@ -151,6 +151,29 @@ try {
     await waterPage.waitForFunction(()=>window.__audio.closed===3);
     await waterPage.close();checks++;
   }
+  {
+    const playPage=await browser.newPage({viewport:{width:1280,height:1100},reducedMotion:'reduce',hasTouch:true});
+    await playPage.goto(`${base}/screen.html?id=play&panel=none`);
+    await playPage.locator('[data-tool="decision_wheel"]').click();
+    await playPage.locator('.wheel-body md-filled-button').click();
+    await playPage.waitForFunction(()=>['Yes','No','Maybe'].includes(document.querySelector('.wheel-result')?.textContent.trim()));
+    await playPage.locator('md-filter-chip[label="Custom list"]').click();
+    await playPage.locator('.wheel-body md-outlined-text-field').locator('textarea').fill('Only one');
+    assert.equal(await playPage.locator('.wheel-body md-filled-button').evaluate(el=>el.disabled),true);
+    await playPage.locator('.wheel-body md-outlined-text-field').locator('textarea').fill('Alpha\nBeta');
+    await playPage.locator('.wheel-body md-filled-button').click();
+    await playPage.waitForFunction(()=>['Alpha','Beta'].includes(document.querySelector('.wheel-result')?.textContent.trim()));
+    checks++;
+    for(const scroll of [0,100,200,300,400]) {
+      await playPage.goto(`${base}/?id=quick-tools`);
+      await playPage.locator('mnw-android-screen').evaluate((el,y)=>{el.querySelector(':scope > div').scrollTop=y;},scroll);
+      await playPage.getByRole('button',{name:'Play & Decide',exact:true}).tap();
+      await playPage.waitForURL(/id=play/);
+      assert.equal(await playPage.locator('.tk-sheet-title').count(),0,'tab tap cannot open SOS');
+      checks++;
+    }
+    await playPage.close();
+  }
   await page.goto(`${base}/screen.html?id=numbers&panel=none`);
   await page.locator('.numbers-card').first().waitFor();
   assert.equal(await page.locator('h2').filter({hasText:'Chance'}).count(), 0);
@@ -418,7 +441,7 @@ try {
       }
       for (const activeSheet of ['ruler', 'protractor', 'counter', 'bill_splitter', 'unit_converter', 'reaction_test']) states.push(['numbers', {activeSheet}]);
       for (const activeToolId of ['compass', 'bubble_level', 'flash_dimmer', 'morse_sos', 'breathing', 'water_eject']) states.push(['quick-tools', {activeToolId}]);
-      for(const activeToolId of ['random_number','dice_roll','coin_flip']) states.push(['play',{activeToolId}]);
+      for(const activeToolId of ['random_number','dice_roll','coin_flip','decision_wheel']) states.push(['play',{activeToolId}]);
       const onError = (e) => failures.push(String(e.message ?? e.reason));
       addEventListener('error', onError);
       addEventListener('unhandledrejection', onError);
