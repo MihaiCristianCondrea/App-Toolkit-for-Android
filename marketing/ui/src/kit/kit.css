@@ -1815,3 +1815,16 @@ mnw-android-screen,
 .measure-protractor-controls { background:transparent; border-radius:0; border-top:1px solid var(--md-sys-color-outline-variant); inset-inline:16px; width:auto; padding:16px 4px 0; }
 .measure-protractor-dialog[data-landscape] .measure-protractor-controls { inset-inline-start:auto; inset-inline-end:24px; top:96px; bottom:24px; width:280px; overflow-y:auto; border-top:0; border-inline-start:1px solid var(--md-sys-color-outline-variant); padding:12px 0 12px 24px; justify-content:center; }
 .measure-protractor-dialog[data-landscape] .protractor-readout { flex-wrap:wrap; }
+
+.qt-live-row--sound > :only-child { border-radius:28px; }
+.water-eject { display:flex; flex-direction:column; align-items:center; gap:16px; padding:12px 0; }
+.water-wave { display:grid; place-items:center; width:144px; height:144px; border-radius:50%; color:var(--md-sys-color-on-primary-container); background:var(--md-sys-color-primary-container); outline:1px solid var(--md-sys-color-outline-variant); outline-offset:12px; margin:16px; }
+.water-wave md-icon { --md-icon-size:64px; }
+.water-eject[data-running="true"] .water-wave { animation:water-pulse 1s ease-in-out infinite alternate; }
+.water-readout { display:flex; flex-direction:column; align-items:center; gap:4px; }
+.water-readout strong { font:400 48px/56px var(--md-ref-typeface-brand); font-variant-numeric:tabular-nums; }
+.water-readout small { font-size:20px; }
+.water-eject p { margin:0; font:400 14px/20px var(--md-ref-typeface-plain); }
+.water-note { color:var(--md-sys-color-on-surface-variant); }
+@keyframes water-pulse { to { outline-offset:24px; } }
+@media(prefers-reduced-motion:reduce) { .water-eject[data-running="true"] .water-wave { animation:none; } }

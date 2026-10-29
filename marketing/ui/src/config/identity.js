@@ -32,9 +32,9 @@ export const IDENTITY = defineProductIdentity({
     tabs: [
       { id: "quick-tools", label: "Quick Tools", icon: { name: "grid_view", rounded: true } },
       { id: "numbers", label: "Measure", icon: "straighten" },
-      { id: "apps", label: "Apps", icon: "apps" },
+      { id: "play", label: "Play & Decide", icon: "casino" },
     ],
-    drawer: { footer: toolkitFooter() },
+    drawer: { entries: [{id:"apps",label:"Discover our apps",icon:"apps",screen:"apps"}], footer: toolkitFooter() },
     overflow: [supportUs()],
   },
   links: {

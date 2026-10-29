@@ -22,11 +22,11 @@ try {
     page.on('pageerror', e => errors.push(e.message));
     await page.goto(base);
     await page.locator('mnw-screen-card').first().waitFor();
-    assert.equal(await page.locator('mnw-screen-card').count(), 3);
-    assert.deepEqual(await page.locator('[data-screen]').evaluateAll(nodes => nodes.map(node => node.dataset.screen)), ['quick-tools', 'numbers', 'apps']);
+    assert.equal(await page.locator('mnw-screen-card').count(), 4);
+    assert.deepEqual(await page.locator('[data-screen]').evaluateAll(nodes => nodes.map(node => node.dataset.screen)), ['quick-tools', 'numbers', 'play', 'apps']);
     assert.equal(await page.locator('mnw-marketing-shell .catalog-header, mnw-marketing-shell [aria-label="Filter screens"]').count(), 0);
     assert.equal(await page.locator('mnw-device-frame').count(), 0);
-    assert.equal(await page.locator('mnw-android-screen').count(), 3);
+    assert.equal(await page.locator('mnw-android-screen').count(), 4);
     // A marketing page: no footer, no drawer, no menu button.
     assert.equal(await page.locator('mnw-site-footer, .g-footer').count(), 0);
     const shell = page.locator('mnw-marketing-shell mnw-app-shell');
@@ -62,7 +62,7 @@ try {
   const page = await browser.newPage({viewport: {width: 1280, height: 1000}});
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
-  for (const id of ['quick-tools', 'numbers', 'apps']) {
+  for (const id of ['quick-tools', 'numbers', 'play', 'apps']) {
     for (const window of ['phone', 'fold', 'desktop']) {
       for (const theme of ['light', 'dark']) {
         await page.goto(`${base}/screen.html?id=${id}&window=${window}&theme=${theme}&frame=device&panel=none`);
@@ -83,7 +83,7 @@ try {
   // Chance belongs to Quick Tools, with Compose range controls and six-sided dice.
   for (const window of ['phone', 'fold', 'desktop']) {
     for (const theme of ['light', 'dark']) {
-      await page.goto(`${base}/screen.html?id=quick-tools&window=${window}&theme=${theme}&panel=none`);
+      await page.goto(`${base}/screen.html?id=play&window=${window}&theme=${theme}&panel=none`);
       await page.locator('.qt-chance').first().waitFor();
       assert.equal(await page.locator('.qt-chance').count(), 3);
       for (const id of ['random_number', 'dice_roll', 'coin_flip']) {
@@ -112,7 +112,7 @@ try {
   }
   // Direct object taps animate in the widget; the surrounding card opens a stable sheet.
   for (const id of ['dice_roll','coin_flip']) {
-    await page.goto(`${base}/screen.html?id=quick-tools&panel=none`);
+    await page.goto(`${base}/screen.html?id=play&panel=none`);
     const card = page.locator(`[data-tool="${id}"]`);
     await card.locator('.qt-chance__play').click();
     assert.equal(await page.locator(SHEET).count(),0);
@@ -133,6 +133,23 @@ try {
       assert.equal(await sheet.locator('.chance-body [data-tossing]').count(),0);
     }
     checks++;
+  }
+  {
+    const waterPage=await browser.newPage({viewport:{width:1280,height:1100}});
+    await waterPage.addInitScript(()=>{window.__audio={started:0,stopped:0,closed:0,frequency:0};window.AudioContext=class{destination={};createOscillator(){const frequency={value:0};return {frequency,connect(){},start(){window.__audio.started++;window.__audio.frequency=frequency.value;},stop(){window.__audio.stopped++;}};}createGain(){return {gain:{value:0},connect(){}};}resume(){return Promise.resolve();}close(){window.__audio.closed++;return Promise.resolve();}};});
+    await waterPage.clock.install();
+    await waterPage.goto(`${base}/screen.html?id=quick-tools&panel=none`);
+    assert.equal(await waterPage.locator('.qt-chance').count(),0);
+    await waterPage.locator('[data-tool="water_eject"]').click();
+    const action=waterPage.locator('.water-eject md-filled-button');
+    assert.equal(await waterPage.evaluate(()=>window.__audio.started),0);
+    await action.click();assert.equal(await waterPage.evaluate(()=>window.__audio.frequency),165);
+    await action.click();assert.equal(await waterPage.evaluate(()=>window.__audio.closed),1);
+    await action.click();await waterPage.clock.fastForward(31000);
+    assert.equal(await waterPage.evaluate(()=>window.__audio.closed),2);
+    await action.click();await waterPage.locator(SHEET_CONTENT).locator('[aria-label="Close"]').click();
+    await waterPage.waitForFunction(()=>window.__audio.closed===3);
+    await waterPage.close();checks++;
   }
   await page.goto(`${base}/screen.html?id=numbers&panel=none`);
   await page.locator('.numbers-card').first().waitFor();
@@ -400,7 +417,8 @@ try {
         for (const patch of [{}, ...presets, {drawerOpen: true}, {railOpen: true}, {overflowOpen: true}]) states.push([screen.id, patch]);
       }
       for (const activeSheet of ['ruler', 'protractor', 'counter', 'bill_splitter', 'unit_converter', 'reaction_test']) states.push(['numbers', {activeSheet}]);
-      for (const activeToolId of ['compass', 'bubble_level', 'flash_dimmer', 'morse_sos', 'breathing', 'random_number', 'dice_roll', 'coin_flip']) states.push(['quick-tools', {activeToolId}]);
+      for (const activeToolId of ['compass', 'bubble_level', 'flash_dimmer', 'morse_sos', 'breathing', 'water_eject']) states.push(['quick-tools', {activeToolId}]);
+      for(const activeToolId of ['random_number','dice_roll','coin_flip']) states.push(['play',{activeToolId}]);
       const onError = (e) => failures.push(String(e.message ?? e.reason));
       addEventListener('error', onError);
       addEventListener('unhandledrejection', onError);

@@ -63,7 +63,7 @@ at build time. App-specific fonts, logos and illustrations still come from this 
 
 ## Entry Points
 
-* `index.html` (`src/gallery-page.js`) - Showcase hub with Quick Tools, Measure and Apps, without category filters.
+* `index.html` (`src/gallery-page.js`) - Showcase hub with Quick Tools, Measure, Play & Decide and Apps, without category filters.
 * `screen.html` (`src/screen-page.js`) - Live interactive device frame (`Phone`, `Fold`, `Desktop`) with palette, contrast, light/dark mode, and per-screen state controls.
 * `motion.html` (`src/motion-page.js`) - Material 3 Expressive spatial and effects springs playground and the 35 `MaterialShapes` polygon masks.
 * `specs.html` (`src/specs-page.js`) - Extracted App Toolkit color palettes, Google Sans Flex typography scale, and Compose-to-Web component mapping.
@@ -82,14 +82,14 @@ The drawer, rail and overflow menu are screen state like any other (`drawerOpen`
 and frame. `mode=compare&compare=theme|nav|palette|frame` opens a comparison. Palette and theme,
 window size, frame, system navigation and screen-specific controls are available in the inspector.
 
-The browser check exercises all three screens in light and dark at phone, fold and desktop sizes,
+The browser check exercises all four screens in light and dark at phone, fold and desktop sizes,
 closed desktop navigation, interactive sheets, comparison and the public embed entry point, and mounts every
 screen, preset, sheet and navigation surface the way videos do (without `set()`) to catch anything that needs it. It
 checks the web migration; Android screenshot parity remains a separate campaign check.
 
 ## Translated Screens (`src/screens/`)
 
-* `quick-tools.js` - `ToolkitTilesScreen.kt` (collapsible Quick Settings tile categories and pocket tools, including Chance: Random Number, Dice Roll and Coin Flip).
+* `quick-tools.js` - `ToolkitTilesScreen.kt` (collapsible Quick Settings tile categories and pocket tools, including Water Eject under Hardware & sound).
 * `numbers.js` - Measure: icon-led sections, ruler and protractor previews, live conversion and per-person bill readouts, Counter controls and Reaction Test. Grouped cards keep 28dp outer and 8dp inner corners; each opens its existing Compose-style tool surface.
 * `apps.js` - `AppsListScreen.kt` (developer app catalog with category filter chips and favorites).
 
@@ -129,3 +129,5 @@ Measure uses the shared shell search bar to filter tool names and descriptions. 
 Unit Converter pairs two editable value cards with full unit names, category icons and a swap action that preserves the quantity. Protractor adds angle classification, a highlighted sector and 0/45/90/180-degree presets.
 
 Protractor docks its controls beside the dial in landscape and below it in portrait. Converter unit selectors use Material Web select popovers; the swap action uses a momentary button with keyboard focus indication.
+
+Navigation now has Quick Tools, Measure and Play & Decide. The existing Chance tools live under Play & Decide; Discover our apps opens the catalog from the drawer. Water Eject is an explicit-start 165 Hz sine tone with a 30-second limit; Stop, sheet dismissal, leaving the screen or hiding the page stop audio and release its context. The feature is a marketing web prototype, with no water-damage-repair guarantee. The wheel, finger chooser and team maker are not implemented.

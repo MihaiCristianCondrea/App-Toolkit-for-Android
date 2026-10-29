@@ -1,3 +1,4 @@
+import {waterBody} from "./water-eject.js";
 import { measureBody, rulerDialog, protractorDialog } from "./measure.js";
 import { chanceBody } from "./chance.js";
 import { html, nothing } from "lit";
@@ -148,6 +149,7 @@ export function toolOverlay({ tool, state, onState, onClose, showQuickSettingsAc
 }
 
 function renderToolBody(tool, state, onState) {
+  if(tool.id === "water_eject") return waterBody(state,onState);
   const measure = measureBody(tool,state,onState);
   if (measure) return measure;
   const chance = chanceBody(tool, state, onState);

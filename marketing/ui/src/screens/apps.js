@@ -111,7 +111,9 @@ export default {
       : nothing;
 
     return previewScreen(APP, s, {
-      tab: "apps",
+      kind: "page",
+      title: "Discover our apps",
+      onBack: () => s.go?.("quick-tools", {}),
       search: { placeholder: "Search apps", value: s.searchQuery || "", onInput: (v) => s.set?.({ searchQuery: v }) },
       content,
       fab: fab === nothing ? null : fab,
