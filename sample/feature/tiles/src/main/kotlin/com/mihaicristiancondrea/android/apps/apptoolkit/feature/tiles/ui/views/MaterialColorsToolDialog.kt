@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.WindowInsets
@@ -39,8 +40,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -119,7 +118,7 @@ fun MaterialColorsToolDialog(
                 GeneralButton(
                     style = GeneralButtonStyle.Text,
                     onClick = onClose,
-                    icon = ToolkitIcon.Vector(Icons.Outlined.Close),
+                    icon = ToolkitIcon.Vector(ToolSymbols.Close),
                     contentDescription = stringResource(id = R.string.tool_dialog_close_content_description),
                 )
             }

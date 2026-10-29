@@ -17,13 +17,10 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.outlined.Group
-import androidx.compose.material.icons.outlined.PlayArrow
-import androidx.compose.material.icons.outlined.Refresh
-import androidx.compose.material.icons.outlined.SwapVert
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Size
@@ -51,10 +48,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.SquareFoot
-import androidx.compose.material.icons.outlined.SwapHoriz
-import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -149,9 +142,9 @@ internal fun NumbersScreenContent(
     ToolWorkspace(contentPadding) {
         if (tools.isEmpty()) Text(stringResource(R.string.tiles_filter_empty))
         val sections = listOf(
-            Triple(R.string.section_length, Icons.Outlined.SquareFoot, listOf(ToolkitTileIds.RULER, ToolkitTileIds.PROTRACTOR)),
-            Triple(R.string.section_convert, Icons.Outlined.SwapHoriz, listOf(ToolkitTileIds.UNIT_CONVERTER, ToolkitTileIds.BILL_SPLITTER)),
-            Triple(R.string.section_count, Icons.Outlined.Timer, listOf(ToolkitTileIds.COUNTER, ToolkitTileIds.REACTION_TEST)),
+            Triple(R.string.section_length, ToolSymbols.Rounded.SquareFoot, listOf(ToolkitTileIds.RULER, ToolkitTileIds.PROTRACTOR)),
+            Triple(R.string.section_convert, ToolSymbols.Rounded.SwapHoriz, listOf(ToolkitTileIds.UNIT_CONVERTER, ToolkitTileIds.BILL_SPLITTER)),
+            Triple(R.string.section_count, ToolSymbols.Rounded.Timer, listOf(ToolkitTileIds.COUNTER, ToolkitTileIds.REACTION_TEST)),
         )
         sections.forEachIndexed { sectionIndex, (title, icon, ids) ->
             val visible = tools.filter { it.id in ids }
@@ -163,7 +156,7 @@ internal fun NumbersScreenContent(
                             ToolWidget(tile, { selectedId = tile.id; startReaction = false }, Modifier.fillMaxWidth(), shape,
                                 headerAction = {
                                     TextButton(onClick = { onCounter(CounterToolEvent.Reset) }, enabled = counterState.count > 0) {
-                                        Icon(Icons.Outlined.Refresh, null, Modifier.size(18.dp))
+                                        Icon(ToolSymbols.Refresh, null, Modifier.size(18.dp))
                                         Spacer(Modifier.width(8.dp))
                                         Text(stringResource(R.string.tool_counter_reset))
                                     }
@@ -197,13 +190,13 @@ internal fun NumbersScreenContent(
                             ToolkitTileIds.UNIT_CONVERTER -> {
                                 Column(Modifier.weight(1f, fill = false), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                                     ConversionLine(converter.left, converter.from.symbol)
-                                    Icon(Icons.Outlined.SwapVert, null, Modifier.size(20.dp))
+                                    Icon(ToolSymbols.SwapVert, null, Modifier.size(20.dp))
                                     ConversionLine(converter.right, converter.to.symbol)
                                 }
                                 Text(stringResource(converter.category.labelResId()), style = WidgetDetailStyle)
                             }
                             ToolkitTileIds.BILL_SPLITTER -> {
-                                Icon(Icons.Outlined.Group, null, Modifier.padding(bottom = 4.dp).size(40.dp))
+                                Icon(ToolSymbols.Rounded.Group, null, Modifier.padding(bottom = 4.dp).size(40.dp))
                                 Text(bill.result?.let { formatBillAmount(it.perPerson, bill.currency, locale) } ?: "—",
                                     style = MaterialTheme.typography.headlineLarge.copy(fontSize = 32.sp, lineHeight = 38.sp), fontWeight = FontWeight.Medium, maxLines = 1)
                                 Text(stringResource(R.string.tool_bill_per_person).lowercase(locale), style = WidgetDetailStyle)
@@ -265,7 +258,7 @@ private fun ReactionWidget(tile: ToolkitTile, bestMs: Long?, shape: Shape, onOpe
                 }
             }
             FilledTonalButton(onClick = onStart) {
-                Icon(Icons.Outlined.PlayArrow, null, Modifier.size(18.dp))
+                Icon(ToolSymbols.PlayArrow, null, Modifier.size(18.dp))
                 Spacer(Modifier.width(8.dp))
                 Text(stringResource(R.string.tool_reaction_test_start))
             }

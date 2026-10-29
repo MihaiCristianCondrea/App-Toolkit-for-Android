@@ -161,9 +161,10 @@
     <string name="tool_converter_from">From</string>
     <string name="tool_converter_to">To</string>
     <string name="tool_converter_invalid">Enter a valid value.</string>
+    <string name="tool_converter_hint">Edit either value to convert back.</string>
     <string name="tool_ruler_calibration">Calibration</string>
     <string name="tool_ruler_range">Measurement range</string>
-    <string name="tool_ruler_reference">Match the line below to 3 cm on a real ruler before measuring.</string>
+    <string name="tool_ruler_reference">Hold a real ruler against a scale and move the slider until the marks line up.</string>
     <string name="tool_ruler_save_failed">Could not save calibration.</string>
     <string name="tool_ruler_advanced">Advanced</string>
     <string name="tool_ruler_simple">Simple</string>

@@ -148,9 +148,10 @@
     <string name="tool_converter_from">থেকে</string>
     <string name="tool_converter_to">এ</string>
     <string name="tool_converter_invalid">সঠিক মান লিখুন।</string>
+    <string name="tool_converter_hint">উল্টো দিকে রূপান্তর করতে যেকোনো মান সম্পাদনা করুন।</string>
     <string name="tool_ruler_calibration">ক্যালিব্রেশন</string>
     <string name="tool_ruler_range">পরিমাপের পরিসর</string>
-    <string name="tool_ruler_reference">মাপার আগে নিচের রেখাটি আসল রুলারের ৩ সেমির সঙ্গে মেলান।</string>
+    <string name="tool_ruler_reference">একটি আসল রুলার স্কেলের পাশে ধরে স্লাইডারটি সরান যতক্ষণ না দাগগুলো মিলে যায়।</string>
     <string name="tool_ruler_save_failed">ক্যালিব্রেশন সেভ করা যায়নি।</string>
     <string name="tool_ruler_advanced">উন্নত</string>
     <string name="tool_ruler_simple">সহজ</string>

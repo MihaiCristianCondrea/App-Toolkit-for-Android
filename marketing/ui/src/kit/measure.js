@@ -101,21 +101,21 @@ export function rulerDialog(s,set,close) {
   const [first, second] = landscape ? ['Top', 'Bottom'] : ['Left', 'Right'];
   const [zeroFirst, zeroSecond] = landscape ? ['Left', 'Right'] : ['Top', 'Bottom'];
   const closeButton = html`<md-icon-button aria-label="Close" @click=${close}><md-icon>close</md-icon></md-icon-button>`;
-  const panel = advanced ? html`
-    <div class="measure-ruler__controls" style=${inset}>
-      <header><h3>Surface Ruler</h3>${closeButton}</header>
-      ${choice('Ruler mode', [['simple', 'Simple'], ['advanced', 'Advanced']], 'advanced', v => set?.({ rulerAdvanced: v === 'advanced' }), true)}
-      <div>${rulerReading(units, mm)}</div>
-      <h4>Units</h4>${choice('Ruler units', [['metric', 'Metric'], ['imperial', 'Imperial'], ['both', 'Both']], units, v => set?.({ rulerUnits: v }), true)}
-      <h4>Scale edge</h4>${choice('Scale edge', [['start', first], ['end', second]], edge, v => set?.({ rulerEdge: v }), true)}
-      <h4>Zero at</h4>${choice('Zero at', [['start', zeroFirst], ['end', zeroSecond]], fromEnd ? 'end' : 'start', v => set?.({ rulerFromEnd: v === 'end' }), true)}
-      ${units === 'metric' ? nothing : html`<h4>Inch steps</h4>${choice('Inch steps', [8, 16, 32].map(n => [n, `1/${n}`]), steps, v => set?.({ rulerInchSteps: v }), true)}`}
-      <h4>Measurement range</h4>${rangeSlider({ start, end, min: 0, max: 1, step: 0.001, labelStart: 'Range start', labelEnd: 'Range end', onInput: set && (([a, b]) => set?.({ rulerStart: a, rulerEnd: b })) })}
-      <section class="measure-calibration"><header><h4>Calibration</h4><md-text-button ?disabled=${scale === 1} @click=${() => set?.({ rulerScale: 1 })}>Reset</md-text-button></header><p>Match the line below to 3 cm on a real ruler before measuring.</p><div class="measure-ruler__reference-box" style="height:${30 * 160 / 25.4 * 2 + 8}px"><div class="measure-ruler__reference" style="height:${30 * ppm}px" role="img" aria-label="30 millimetre reference"></div></div>${slider({ value: scale, min: 0.5, max: 2, step: 0.01, label: 'Calibration', onInput: set && (v => set?.({ rulerScale: v })) })}${s.rulerSaveFailed ? html`<p class="chance-error">Could not save calibration.</p>` : nothing}</section>
-    </div>` : html`
-    <div class="measure-ruler__simple" style=${inset}>
-      <div class="measure-ruler__bar"><h3>Surface Ruler</h3>${closeButton}</div>${choice('Ruler mode', [['simple', 'Simple'], ['advanced', 'Advanced']], 'simple', v => set?.({ rulerAdvanced: v === 'advanced' }), true)}
-      <div class="measure-ruler__card">${rulerReading(units, mm)}<p>Drag anywhere to measure from zero</p></div>
+  // One panel for both modes: title, switch and reading stay put; the settings unfold under them. In simple mode the
+  // panel lets drags through to the ruler, apart from its controls.
+  const panel = html`
+    <div class="measure-ruler__panel" style=${inset} ?data-advanced=${advanced}>
+      <div class="measure-ruler__bar"><h3>Surface Ruler</h3>${closeButton}</div>
+      ${choice('Ruler mode', [['simple', 'Simple'], ['advanced', 'Advanced']], advanced ? 'advanced' : 'simple', v => set?.({ rulerAdvanced: v === 'advanced' }), true)}
+      <div class="measure-ruler__card">${rulerReading(units, mm)}<p ?hidden=${advanced}>Drag anywhere to measure from zero</p></div>
+      <div class="measure-ruler__settings" ?inert=${!advanced} aria-hidden=${!advanced}><div>
+        <h4>Units</h4>${choice('Ruler units', [['metric', 'Metric'], ['imperial', 'Imperial'], ['both', 'Both']], units, v => set?.({ rulerUnits: v }), true)}
+        <h4>Scale edge</h4>${choice('Scale edge', [['start', first], ['end', second]], edge, v => set?.({ rulerEdge: v }), true)}
+        <h4>Zero at</h4>${choice('Zero at', [['start', zeroFirst], ['end', zeroSecond]], fromEnd ? 'end' : 'start', v => set?.({ rulerFromEnd: v === 'end' }), true)}
+        ${units === 'metric' ? nothing : html`<h4>Inch steps</h4>${choice('Inch steps', [8, 16, 32].map(n => [n, `1/${n}`]), steps, v => set?.({ rulerInchSteps: v }), true)}`}
+        <h4>Measurement range</h4>${rangeSlider({ start, end, min: 0, max: 1, step: 0.001, labelStart: 'Range start', labelEnd: 'Range end', onInput: set && (([a, b]) => set?.({ rulerStart: a, rulerEnd: b })) })}
+        <section class="measure-calibration"><header><h4>Calibration</h4><md-text-button ?disabled=${scale === 1} @click=${() => set?.({ rulerScale: 1 })}>Reset</md-text-button></header><p>Hold a real ruler against a scale and move the slider until the marks line up.</p>${slider({ value: scale, min: 0.5, max: 2, step: 0.01, label: 'Calibration', onInput: set && (v => set?.({ rulerScale: v })) })}${s.rulerSaveFailed ? html`<p class="chance-error">Could not save calibration.</p>` : nothing}</section>
+      </div></div>
     </div>`;
   return html`<div class="measure-ruler" ?data-landscape=${landscape} ?data-advanced=${advanced}>
     <svg class="measure-ruler__scale" ${ref(el => { if (el) requestAnimationFrame(() => { if (el.isConnected && (Math.abs(el.clientHeight - height) > 1 || Math.abs(el.clientWidth - width) > 1)) set?.({ rulerWidth: el.clientWidth, rulerHeight: el.clientHeight }); }); })}

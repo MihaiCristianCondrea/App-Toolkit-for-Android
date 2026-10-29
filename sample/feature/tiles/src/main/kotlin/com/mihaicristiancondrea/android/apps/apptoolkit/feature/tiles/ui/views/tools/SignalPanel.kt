@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,8 +25,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -41,7 +40,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 internal fun SignalPanel(active: Boolean, message: String, code: String) {
     Surface(shape = RoundedCornerShape(28.dp,28.dp,8.dp,8.dp), color = MaterialTheme.colorScheme.tertiaryContainer) {
         Column(Modifier.fillMaxWidth().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Icon(Icons.Outlined.WarningAmber, null, Modifier.size(48.dp))
+            Icon(ToolSymbols.Emergency, null, Modifier.size(48.dp))
             Text(message, style = MaterialTheme.typography.displaySmall, maxLines = 2)
             Text(stringResource(if (active) R.string.morse_active else R.string.morse_ready), style = MaterialTheme.typography.labelLarge)
         }

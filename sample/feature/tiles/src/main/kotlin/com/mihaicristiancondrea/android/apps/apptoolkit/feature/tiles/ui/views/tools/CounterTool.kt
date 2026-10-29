@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.FilledIconButton
@@ -35,10 +36,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Refresh
-import androidx.compose.material.icons.outlined.Remove
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -101,7 +98,7 @@ fun CounterTool(count: Int, onIncrement: () -> Unit, onDecrement: () -> Unit, on
                 style = GeneralButtonStyle.Outlined,
                 enabled = count > 0,
                 onClick = onDecrement,
-                icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Remove),
+                icon = ToolkitIcon.Vector(imageVector = ToolSymbols.Remove),
                 contentDescription = stringResource(R.string.tool_counter_decrement),
                 measurements = ButtonMeasurements.Medium,
             )
@@ -109,7 +106,7 @@ fun CounterTool(count: Int, onIncrement: () -> Unit, onDecrement: () -> Unit, on
                 modifier = Modifier.weight(1f),
                 onClick = onIncrement,
                 measurements = ButtonMeasurements.Medium,
-                icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Add),
+                icon = ToolkitIcon.Vector(imageVector = ToolSymbols.Add),
                 label = stringResource(id = R.string.tool_counter_increment),
             )
             if (count != 0) {
@@ -117,7 +114,7 @@ fun CounterTool(count: Int, onIncrement: () -> Unit, onDecrement: () -> Unit, on
                     style = GeneralButtonStyle.Outlined,
                     measurements = ButtonMeasurements.Medium,
                     onClick = onReset,
-                    icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Refresh),
+                    icon = ToolkitIcon.Vector(imageVector = ToolSymbols.Refresh),
                     label = stringResource(id = R.string.tool_counter_reset),
                 )
             }
@@ -147,7 +144,7 @@ internal fun CounterControls(count: Int, onIncrement: () -> Unit, onDecrement: (
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             OutlinedIconButton(onClick = { haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove); onDecrement() }, enabled = count > 0, modifier = Modifier.size(64.dp)) {
-                Icon(Icons.Outlined.Remove, stringResource(R.string.tool_counter_decrement))
+                Icon(ToolSymbols.Remove, stringResource(R.string.tool_counter_decrement))
             }
             Surface(Modifier.weight(1f), shape = CircleShape, color = MaterialTheme.colorScheme.primaryContainer) {
                 BoxWithConstraints(Modifier.padding(horizontal = 12.dp, vertical = 16.dp), contentAlignment = Alignment.Center) {
@@ -157,7 +154,7 @@ internal fun CounterControls(count: Int, onIncrement: () -> Unit, onDecrement: (
                 }
             }
             FilledIconButton(onClick = { haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove); onIncrement() }, enabled = count < Int.MAX_VALUE, modifier = Modifier.size(64.dp)) {
-                Icon(Icons.Outlined.Add, stringResource(R.string.tool_counter_increment))
+                Icon(ToolSymbols.Add, stringResource(R.string.tool_counter_increment))
             }
         }
     }

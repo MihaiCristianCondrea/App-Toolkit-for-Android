@@ -17,28 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ReceiptLong
-import androidx.compose.material.icons.automirrored.outlined.RotateRight
-import androidx.compose.material.icons.outlined.WaterDrop
-import androidx.compose.material.icons.outlined.AddCircleOutline
-import androidx.compose.material.icons.outlined.Casino
-import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.Dehaze
-import androidx.compose.material.icons.outlined.Explore
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.FlashlightOn
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.MonetizationOn
-import androidx.compose.material.icons.outlined.MoreHoriz
-import androidx.compose.material.icons.outlined.Numbers
-import androidx.compose.material.icons.outlined.Palette
-import androidx.compose.material.icons.outlined.SquareFoot
-import androidx.compose.material.icons.outlined.Straighten
-import androidx.compose.material.icons.outlined.SwapHoriz
-import androidx.compose.material.icons.outlined.Timer
-import androidx.compose.material.icons.outlined.WarningAmber
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
@@ -63,24 +42,24 @@ internal fun ToolkitTile.previewTextResId(): Int = when (id) {
 }
 
 internal fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
-    ToolkitTileIcon.Wheel -> Icons.AutoMirrored.Outlined.RotateRight
-    ToolkitTileIcon.Water -> Icons.Outlined.WaterDrop
-    ToolkitTileIcon.Protractor -> Icons.Outlined.SquareFoot
-    ToolkitTileIcon.BillSplitter -> Icons.AutoMirrored.Outlined.ReceiptLong
-    ToolkitTileIcon.RandomNumber -> Icons.Outlined.Numbers
-    ToolkitTileIcon.Level -> Icons.Outlined.Straighten
-    ToolkitTileIcon.Compass -> Icons.Outlined.Explore
-    ToolkitTileIcon.Coin -> Icons.Outlined.MonetizationOn
-    ToolkitTileIcon.Dice -> Icons.Outlined.Casino
-    ToolkitTileIcon.Counter -> Icons.Outlined.Dehaze
-    ToolkitTileIcon.Breathing -> Icons.Outlined.FavoriteBorder
-    ToolkitTileIcon.Sos -> Icons.Outlined.WarningAmber
-    ToolkitTileIcon.Morse -> Icons.Outlined.MoreHoriz
-    ToolkitTileIcon.FlashDimmer -> Icons.Outlined.FlashlightOn
-    ToolkitTileIcon.Palette -> Icons.Outlined.Palette
-    ToolkitTileIcon.Timer -> Icons.Outlined.Timer
-    ToolkitTileIcon.Converter -> Icons.Outlined.SwapHoriz
-    ToolkitTileIcon.Ruler -> Icons.Outlined.Straighten
+    ToolkitTileIcon.Wheel -> ToolSymbols.RotateRight
+    ToolkitTileIcon.Water -> ToolSymbols.WaterDrop
+    ToolkitTileIcon.Protractor -> ToolSymbols.Architecture
+    ToolkitTileIcon.BillSplitter -> ToolSymbols.Calculate
+    ToolkitTileIcon.RandomNumber -> ToolSymbols.Casino
+    ToolkitTileIcon.Level -> ToolSymbols.Straighten
+    ToolkitTileIcon.Compass -> ToolSymbols.Explore
+    ToolkitTileIcon.Coin -> ToolSymbols.MonetizationOn
+    ToolkitTileIcon.Dice -> ToolSymbols.Casino
+    ToolkitTileIcon.Counter -> ToolSymbols.Dehaze
+    ToolkitTileIcon.Breathing -> ToolSymbols.Favorite
+    ToolkitTileIcon.Sos -> ToolSymbols.Emergency
+    ToolkitTileIcon.Morse -> ToolSymbols.Emergency
+    ToolkitTileIcon.FlashDimmer -> ToolSymbols.FlashlightOn
+    ToolkitTileIcon.Palette -> ToolSymbols.Palette
+    ToolkitTileIcon.Timer -> ToolSymbols.Timer
+    ToolkitTileIcon.Converter -> ToolSymbols.Straighten
+    ToolkitTileIcon.Ruler -> ToolSymbols.SquareFoot
 }
 
 /**
@@ -100,6 +79,19 @@ internal fun ToolkitTileIcon.backgroundShape(): Shape = when (this) {
     ToolkitTileIcon.RandomNumber -> MaterialShapes.Gem.toShape()
 }
 
+/**
+ * The shape of a tool's badge in its sheet header, the kit's `TOOLS[id].shape`. It is the live face's
+ * shape for every tool but two: the compass and the level draw their faces in the brand cookies and
+ * their badges in the Material shapes the kit names, `sunny` and `pill`.
+ */
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+internal fun ToolkitTileIcon.badgeShape(): Shape = when (this) {
+    ToolkitTileIcon.Compass -> MaterialShapes.Sunny.toShape()
+    ToolkitTileIcon.Level -> MaterialShapes.Pill.toShape()
+    else -> backgroundShape()
+}
+
 internal fun ToolkitTileStatus.labelResId(): Int = when (this) {
     ToolkitTileStatus.Added -> R.string.tiles_status_added
     ToolkitTileStatus.Available -> R.string.tiles_status_available
@@ -108,10 +100,10 @@ internal fun ToolkitTileStatus.labelResId(): Int = when (this) {
 }
 
 internal fun ToolkitTileStatus.icon(): ImageVector = when (this) {
-    ToolkitTileStatus.Added -> Icons.Outlined.CheckCircle
-    ToolkitTileStatus.Available -> Icons.Outlined.Info
-    ToolkitTileStatus.NotAdded -> Icons.Outlined.AddCircleOutline
-    ToolkitTileStatus.Unsupported -> Icons.Outlined.Close
+    ToolkitTileStatus.Added -> ToolSymbols.CheckCircle
+    ToolkitTileStatus.Available -> ToolSymbols.Info
+    ToolkitTileStatus.NotAdded -> ToolSymbols.AddCircle
+    ToolkitTileStatus.Unsupported -> ToolSymbols.Close
 }
 
 /** The tool accents of marketing/ui/src/kit/kit.css (--tk-teal, --tk-orange, --tk-magenta, --tk-gold), light and dark. */

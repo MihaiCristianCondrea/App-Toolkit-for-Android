@@ -148,9 +148,10 @@
     <string name="tool_converter_from">De</string>
     <string name="tool_converter_to">Vers</string>
     <string name="tool_converter_invalid">Saisissez une valeur valide.</string>
+    <string name="tool_converter_hint">Modifiez l’une ou l’autre valeur pour convertir dans l’autre sens.</string>
     <string name="tool_ruler_calibration">Étalonnage</string>
     <string name="tool_ruler_range">Plage de mesure</string>
-    <string name="tool_ruler_reference">Avant de mesurer, ajustez la ligne ci-dessous à 3 cm sur une vraie règle.</string>
+    <string name="tool_ruler_reference">Placez une vraie règle contre une graduation et déplacez le curseur jusqu’à ce que les traits coïncident.</string>
     <string name="tool_ruler_save_failed">Impossible d’enregistrer l’étalonnage.</string>
     <string name="tool_ruler_advanced">Avancée</string>
     <string name="tool_ruler_simple">Simple</string>

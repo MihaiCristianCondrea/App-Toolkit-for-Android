@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.ui.semantics.Role
 import androidx.compose.animation.AnimatedVisibility
@@ -35,10 +36,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Remove
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -108,7 +105,7 @@ fun BillSplitterTool(state: BillSplitterToolUiState, onEvent: (BillSplitterToolE
                 onClick = { onEvent(BillSplitterToolEvent.RemovePerson) },
                 enabled = people != null && people > 1,
             ) {
-                Icon(Icons.Outlined.Remove, stringResource(R.string.tool_bill_remove_person))
+                Icon(ToolSymbols.Remove, stringResource(R.string.tool_bill_remove_person))
             }
             OutlinedTextField(
                 value = state.people,
@@ -123,7 +120,7 @@ fun BillSplitterTool(state: BillSplitterToolUiState, onEvent: (BillSplitterToolE
                 onClick = { onEvent(BillSplitterToolEvent.AddPerson) },
                 enabled = people != null && people in 1 until Long.MAX_VALUE,
             ) {
-                Icon(Icons.Outlined.Add, stringResource(R.string.tool_bill_add_person))
+                Icon(ToolSymbols.Add, stringResource(R.string.tool_bill_add_person))
             }
         }
         if (state.invalidInput) {
@@ -147,7 +144,7 @@ fun BillSplitterTool(state: BillSplitterToolUiState, onEvent: (BillSplitterToolE
                         BillSummary(stringResource(R.string.tool_bill_tip), money(result.tip), Modifier.weight(1f))
                     }
                     Row(horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize)) {
-                        Icon(Icons.Outlined.Info, contentDescription = null)
+                        Icon(ToolSymbols.Info, contentDescription = null)
                         Text(stringResource(R.string.bill_rounding, state.currency.digits), style = MaterialTheme.typography.bodySmall)
                     }
                 }

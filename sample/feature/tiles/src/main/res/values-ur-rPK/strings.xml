@@ -148,9 +148,10 @@
     <string name="tool_converter_from">سے</string>
     <string name="tool_converter_to">میں</string>
     <string name="tool_converter_invalid">درست قدر درج کریں۔</string>
+    <string name="tool_converter_hint">الٹا تبدیل کرنے کے لیے کسی بھی قدر میں ترمیم کریں۔</string>
     <string name="tool_ruler_calibration">کیلیبریشن</string>
     <string name="tool_ruler_range">پیمائش کی حد</string>
-    <string name="tool_ruler_reference">پیمائش سے پہلے نیچے کی لکیر کو اصل پیمانے کے 3 سینٹی میٹر سے ملائیں۔</string>
+    <string name="tool_ruler_reference">اصلی رولر کو پیمانے کے ساتھ رکھیں اور سلائیڈر کو اس وقت تک کھسکائیں جب تک نشان مل نہ جائیں۔</string>
     <string name="tool_ruler_save_failed">کیلیبریشن محفوظ نہیں ہو سکی۔</string>
     <string name="tool_ruler_advanced">جدید</string>
     <string name="tool_ruler_simple">آسان</string>

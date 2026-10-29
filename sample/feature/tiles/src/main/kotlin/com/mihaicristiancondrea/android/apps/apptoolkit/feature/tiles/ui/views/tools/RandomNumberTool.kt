@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,8 +25,6 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Casino
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -144,7 +143,7 @@ fun RandomNumberTool(state: RandomNumberToolUiState, onEvent: (RandomNumberToolE
         GeneralButton(
             onClick = { onEvent(RandomNumberToolEvent.Generate) },
             label = stringResource(R.string.tool_random_generate),
-            icon = ToolkitIcon.Vector(Icons.Outlined.Casino),
+            icon = ToolkitIcon.Vector(ToolSymbols.Casino),
             enabled = !state.invalidInput,
             modifier = Modifier.fillMaxWidth().height(56.dp),
         )

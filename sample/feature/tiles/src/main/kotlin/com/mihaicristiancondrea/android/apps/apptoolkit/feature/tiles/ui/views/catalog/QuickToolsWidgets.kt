@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -32,10 +33,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.FlashlightOff
-import androidx.compose.material.icons.outlined.FlashlightOn
-import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -178,7 +175,7 @@ private fun FlashlightWidget(
     ) {
         Box(Modifier.fillMaxWidth().fillMaxHeight(fraction).align(Alignment.BottomCenter).background(accent.container))
         Icon(
-            imageVector = if (torch.isEnabled) Icons.Outlined.FlashlightOn else Icons.Outlined.FlashlightOff,
+            imageVector = if (torch.isEnabled) ToolSymbols.FlashlightOn else ToolSymbols.FlashlightOff,
             contentDescription = null,
             modifier = Modifier.size(48.dp),
             tint = MaterialTheme.colorScheme.onSurface,
@@ -197,7 +194,7 @@ private fun WaterEjectWidget(tile: ToolkitTile, modifier: Modifier, onOpen: () -
         onClick = onOpen,
         modifier = modifier,
     ) {
-        Icon(Icons.Outlined.WaterDrop, null, Modifier.size(48.dp), tint = MaterialTheme.colorScheme.onSurface)
+        Icon(ToolSymbols.WaterDrop, null, Modifier.size(48.dp), tint = MaterialTheme.colorScheme.onSurface)
     }
 }
 

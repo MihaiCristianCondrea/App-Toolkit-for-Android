@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import androidx.compose.ui.semantics.Role
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -30,8 +31,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -240,7 +239,7 @@ fun DiceRollTool(
             },
             enabled = !rolling,
             measurements = ButtonMeasurements.Medium,
-            icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.PlayArrow),
+            icon = ToolkitIcon.Vector(imageVector = ToolSymbols.PlayArrow),
             label = stringResource(id = R.string.tool_dice_roll_action),
         )
     }

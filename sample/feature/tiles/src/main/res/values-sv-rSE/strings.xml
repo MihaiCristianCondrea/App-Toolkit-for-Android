@@ -148,9 +148,10 @@
     <string name="tool_converter_from">Från</string>
     <string name="tool_converter_to">Till</string>
     <string name="tool_converter_invalid">Ange ett giltigt värde.</string>
+    <string name="tool_converter_hint">Redigera något av värdena för att räkna om åt andra hållet.</string>
     <string name="tool_ruler_calibration">Kalibrering</string>
     <string name="tool_ruler_range">Mätområde</string>
-    <string name="tool_ruler_reference">Anpassa linjen nedan till 3 cm på en riktig linjal innan du mäter.</string>
+    <string name="tool_ruler_reference">Håll en riktig linjal mot en skala och dra reglaget tills strecken stämmer överens.</string>
     <string name="tool_ruler_save_failed">Kunde inte spara kalibreringen.</string>
     <string name="tool_ruler_advanced">Avancerad</string>
     <string name="tool_ruler_simple">Enkel</string>

@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.animateFloat
@@ -30,8 +31,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -80,6 +79,6 @@ internal fun WaterEjectVisual(running: Boolean, compact: Boolean = false) {
             }
             drawCircle(colors.primaryContainer, radius)
         }
-        Icon(Icons.Outlined.WaterDrop, null, Modifier.size(if (compact) 40.dp else 64.dp), tint = colors.onPrimaryContainer)
+        Icon(ToolSymbols.WaterDrop, null, Modifier.size(if (compact) 40.dp else 64.dp), tint = colors.onPrimaryContainer)
     }
 }

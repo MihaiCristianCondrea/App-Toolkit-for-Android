@@ -148,9 +148,10 @@
     <string name="tool_converter_from">Kaynak</string>
     <string name="tool_converter_to">Hedef</string>
     <string name="tool_converter_invalid">Geçerli bir değer girin.</string>
+    <string name="tool_converter_hint">Geri dönüştürmek için değerlerden birini düzenleyin.</string>
     <string name="tool_ruler_calibration">Kalibrasyon</string>
     <string name="tool_ruler_range">Ölçüm aralığı</string>
-    <string name="tool_ruler_reference">Ölçmeden önce aşağıdaki çizgiyi gerçek bir cetveldeki 3 cm ile eşleştirin.</string>
+    <string name="tool_ruler_reference">Gerçek bir cetveli ölçeğe dayayın ve çizgiler hizalanana kadar kaydırıcıyı hareket ettirin.</string>
     <string name="tool_ruler_save_failed">Kalibrasyon kaydedilemedi.</string>
     <string name="tool_ruler_advanced">Gelişmiş</string>
     <string name="tool_ruler_simple">Basit</string>

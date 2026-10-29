@@ -148,9 +148,10 @@
     <string name="tool_converter_from">จาก</string>
     <string name="tool_converter_to">เป็น</string>
     <string name="tool_converter_invalid">ป้อนค่าที่ถูกต้อง</string>
+    <string name="tool_converter_hint">แก้ไขค่าใดก็ได้เพื่อแปลงกลับ</string>
     <string name="tool_ruler_calibration">การปรับเทียบ</string>
     <string name="tool_ruler_range">ช่วงการวัด</string>
-    <string name="tool_ruler_reference">ก่อนวัด ให้ปรับเส้นด้านล่างให้เท่ากับ 3 ซม. บนไม้บรรทัดจริง</string>
+    <string name="tool_ruler_reference">วางไม้บรรทัดจริงทาบกับสเกล แล้วเลื่อนแถบเลื่อนจนขีดตรงกัน</string>
     <string name="tool_ruler_save_failed">บันทึกการปรับเทียบไม่ได้</string>
     <string name="tool_ruler_advanced">ขั้นสูง</string>
     <string name="tool_ruler_simple">แบบง่าย</string>

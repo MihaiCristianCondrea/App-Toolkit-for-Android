@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.rememberScrollState
@@ -34,8 +35,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -122,7 +121,11 @@ fun ProtractorTool(state: ProtractorToolUiState, onEvent: (ProtractorToolEvent) 
                         if (degree % (if (radius < 200.dp.toPx()) 30 else 10) == 0) {
                             val label = textMeasurer.measure(degree.toString(), labelStyle)
                             val p = point(degree.toFloat(), radius - 38.dp.toPx())
-                            drawText(label, topLeft = Offset(p.x - label.size.width / 2f, (p.y - label.size.height / 2f).coerceIn(0f, size.height - label.size.height)))
+                            // Kept on screen: 0 and 180 sit on the edge the pivot is on.
+                            drawText(label, topLeft = Offset(
+                                (p.x - label.size.width / 2f).coerceIn(4.dp.toPx(), (size.width - label.size.width - 4.dp.toPx()).coerceAtLeast(4.dp.toPx())),
+                                (p.y - label.size.height / 2f).coerceIn(4.dp.toPx(), (size.height - label.size.height - 4.dp.toPx()).coerceAtLeast(4.dp.toPx())),
+                            ))
                         }
                     }
                     drawLine(accent, pivot, point(0f, radius), 4.dp.toPx(), cap = StrokeCap.Round)
@@ -134,7 +137,7 @@ fun ProtractorTool(state: ProtractorToolUiState, onEvent: (ProtractorToolEvent) 
                 }
                 Row(Modifier.fillMaxWidth().statusBarsPadding().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                     Text(title, style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f))
-                    IconButton(onClick = onClose) { Icon(Icons.Outlined.Close, stringResource(R.string.tool_dialog_close_content_description)) }
+                    IconButton(onClick = onClose) { Icon(ToolSymbols.Close, stringResource(R.string.tool_dialog_close_content_description)) }
                 }
                 // In landscape the three-button navigation sits at the side: the dock keeps clear of it.
                 val dock = if (geometry.landscape) Modifier.align(Alignment.CenterEnd).navigationBarsPadding().displayCutoutPadding().width(280.dp).padding(24.dp)

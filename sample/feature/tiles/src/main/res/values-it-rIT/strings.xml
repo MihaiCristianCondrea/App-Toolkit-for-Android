@@ -148,9 +148,10 @@
     <string name="tool_converter_from">Da</string>
     <string name="tool_converter_to">A</string>
     <string name="tool_converter_invalid">Inserisci un valore valido.</string>
+    <string name="tool_converter_hint">Modifica uno dei due valori per convertire al contrario.</string>
     <string name="tool_ruler_calibration">Calibrazione</string>
     <string name="tool_ruler_range">Intervallo di misura</string>
-    <string name="tool_ruler_reference">Prima di misurare, allinea la linea qui sotto a 3 cm su un righello reale.</string>
+    <string name="tool_ruler_reference">Appoggia un righello vero a una scala e sposta il cursore finché le tacche non coincidono.</string>
     <string name="tool_ruler_save_failed">Impossibile salvare la calibrazione.</string>
     <string name="tool_ruler_advanced">Avanzato</string>
     <string name="tool_ruler_simple">Semplice</string>

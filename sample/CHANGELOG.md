@@ -35,6 +35,17 @@
   you drag to measure from zero. Advanced adds a measurement range and settings for the units, the
   scale's edge, where zero is, the inch steps (1/8, 1/16 or 1/32) and calibration, all saved.
 - The coin turns as a 10 dp thick disc, rising as it spins, as the marketing UI draws it.
+- The tools draw the same icons as the marketing UI: Material Symbols (outlined, and rounded for
+  section titles and the converter's categories) instead of the older Material Icons, including
+  symbols those lacked, such as `weight`. The converter's selected category shows a check mark,
+  and its hint to edit either value is back.
+- Tool sheet badges take the kit's colours and shapes: the compass badge is `MaterialShapes.Sunny`
+  and the level's `MaterialShapes.Pill`, while their live faces keep the brand cookies.
+- The ruler's Simple and Advanced modes share one panel: the title, the switch and the reading
+  stay put and the settings unfold under them. Calibration rescales the ruler itself, so there is
+  no reference line making the card grow.
+- The protractor keeps its 0 and 180 labels on screen and reads whole degrees; the Play overview's
+  wheel shows its two starting choices; the random number badge shows `#` again.
 - The Quick Tools ad matches the marketing UI: a "Sponsored content" title like the sections', then
   a widget card with the advertiser's icon in a nine-sided cookie and one full-width action. The
   title is the ad's disclosure label, so there is no chip inside the card.

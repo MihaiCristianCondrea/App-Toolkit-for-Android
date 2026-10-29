@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -46,8 +47,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Casino
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -128,7 +127,7 @@ internal fun PlayScreenContent(coin: CoinFlipToolUiState, dice: DiceRollToolUiSt
     val tools = catalogTools.filter { query.isBlank() || resources.getString(it.titleResId).contains(query,true) || resources.getString(it.summaryResId).contains(query,true) }
     ToolWorkspace(padding) {
         if (tools.isEmpty()) Text(stringResource(R.string.tiles_filter_empty))
-        else ToolSection(stringResource(R.string.section_chance), Icons.Outlined.Casino, Modifier.animateVisibility(0)) {
+        else ToolSection(stringResource(R.string.section_chance), ToolSymbols.Rounded.Casino, Modifier.animateVisibility(0)) {
             // The kit's Chance group (marketing/ui/src/screens/play.js): every card on the secondary container,
             // 28 dp on the group's outer corners and 8 dp between cards.
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -167,7 +166,7 @@ internal fun PlayScreenContent(coin: CoinFlipToolUiState, dice: DiceRollToolUiSt
                                 WidgetNote(stringResource(R.string.tool_random_range, random.minimum.toLongOrNull() ?: 1L, random.maximum.toLongOrNull() ?: 100L), ToolkitTileIcon.Compass.iconColors().content)
                             }
                             Box(Modifier.size(88.dp).clip(tile.icon.backgroundShape()).background(lerp(MaterialTheme.colorScheme.surfaceContainerLowest, gold.container, .35f)), contentAlignment = Alignment.Center) {
-                                Icon(tile.icon.imageVector(), null, Modifier.size(40.dp), tint = gold.content)
+                                Icon(ToolSymbols.Numbers, null, Modifier.size(40.dp), tint = gold.content)
                             }
                         }
                     }

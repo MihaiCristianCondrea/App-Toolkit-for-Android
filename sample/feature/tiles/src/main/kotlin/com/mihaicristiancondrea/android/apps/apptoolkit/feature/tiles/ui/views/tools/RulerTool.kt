@@ -17,8 +17,15 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import android.os.Build
 import android.view.WindowManager
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
@@ -37,8 +44,6 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.SegmentedButton
@@ -88,6 +93,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlin.math.abs
 
 /**
@@ -165,8 +173,8 @@ fun RulerTool(
                     },
             ) {
                 val thickness = RulerStripWidth.toPx()
-                for ((units, edge) in scales) {
-                    drawStrip(units, edge, geometry, thickness, colors.strip)
+                for ((_, edge) in scales) {
+                    drawStrip(edge, geometry, thickness, colors.strip)
                 }
                 if (settings.advanced) {
                     val from = geometry.along(state.start)
@@ -203,11 +211,7 @@ fun RulerTool(
                 bottom = if (landscape && RulerEdge.End in edges) RulerStripWidth else 0.dp,
             )
             Box(Modifier.fillMaxSize().then(inset).safeDrawingPadding()) {
-                if (settings.advanced) {
-                    AdvancedRulerPanel(state, reading, landscape, density.density, metrics.ydpi, onEvent, onClose)
-                } else {
-                    SimpleRulerOverlay(settings, reading, onEvent, onClose)
-                }
+                RulerPanel(state, reading, landscape, onEvent, onClose)
             }
         }
     }
@@ -231,38 +235,61 @@ private fun FullScreenRulerWindow() {
     }
 }
 
+/**
+ * The ruler's controls, the same in both modes: the title, the Simple / Advanced switch and the
+ * reading stay where they are, and the advanced settings unfold under them. In simple mode the
+ * panel is see-through, so a drag anywhere outside the reading moves the reading line.
+ */
 @Composable
-private fun SimpleRulerOverlay(
-    settings: RulerSettings,
+private fun RulerPanel(
+    state: RulerToolUiState,
     millimetres: Float,
+    landscape: Boolean,
     onEvent: (RulerToolEvent) -> Unit,
     onClose: () -> Unit,
 ) {
-    Column(Modifier.fillMaxSize().padding(SizeConstants.MediumSize), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-            Text(stringResource(R.string.tile_ruler_title), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f))
+    val settings = state.settings
+    val background by animateColorAsState(
+        targetValue = if (settings.advanced) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surface.copy(alpha = 0f),
+        label = "rulerPanel",
+    )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(background)
+            .verticalScroll(rememberScrollState(), enabled = settings.advanced)
+            .padding(SizeConstants.MediumSize),
+        verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+    ) {
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = stringResource(R.string.tile_ruler_title),
+                style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.weight(1f),
+            )
             GeneralButton(
                 style = GeneralButtonStyle.Text,
                 onClick = onClose,
-                icon = ToolkitIcon.Vector(Icons.Outlined.Close),
+                icon = ToolkitIcon.Vector(ToolSymbols.Close),
                 contentDescription = stringResource(R.string.tool_dialog_close_content_description),
             )
         }
         RulerChoice(
-            options = listOf(stringResource(R.string.tool_ruler_simple), stringResource(R.string.tool_ruler_advanced)),
-            selected = 0,
+            options = persistentListOf(stringResource(R.string.tool_ruler_simple), stringResource(R.string.tool_ruler_advanced)),
+            selected = if (settings.advanced) 1 else 0,
             onSelect = { onEvent(RulerToolEvent.AdvancedChanged(it == 1)) },
         )
-        Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
-            Surface(
-                shape = MaterialTheme.shapes.extraLarge,
-                color = MaterialTheme.colorScheme.surfaceContainerHigh,
+        Surface(
+            shape = MaterialTheme.shapes.extraLarge,
+            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Column(
+                modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Column(
-                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    RulerReading(settings.units, millimetres)
+                RulerReading(settings.units, millimetres)
+                AnimatedVisibility(visible = !settings.advanced) {
                     Text(
                         text = stringResource(R.string.tool_ruler_drag_hint),
                         style = MaterialTheme.typography.bodySmall,
@@ -272,6 +299,13 @@ private fun SimpleRulerOverlay(
                     )
                 }
             }
+        }
+        AnimatedVisibility(
+            visible = settings.advanced,
+            enter = expandVertically(expandFrom = Alignment.Top) + fadeIn(),
+            exit = shrinkVertically(shrinkTowards = Alignment.Top) + fadeOut(),
+        ) {
+            RulerSettingsPanel(state, landscape, onEvent)
         }
     }
 }
@@ -291,15 +325,12 @@ private fun RulerReading(units: RulerUnits, millimetres: Float) {
     }
 }
 
+/** The advanced ruler's settings: scales, measurement range and calibration. */
 @Composable
-private fun AdvancedRulerPanel(
+private fun RulerSettingsPanel(
     state: RulerToolUiState,
-    millimetres: Float,
     landscape: Boolean,
-    density: Float,
-    ydpi: Float,
     onEvent: (RulerToolEvent) -> Unit,
-    onClose: () -> Unit,
 ) {
     val settings = state.settings
     val rangeLabel = stringResource(R.string.tool_ruler_range)
@@ -309,38 +340,10 @@ private fun AdvancedRulerPanel(
     val zeroFirst = stringResource(if (landscape) R.string.tool_ruler_left else R.string.tool_ruler_top)
     val zeroSecond = stringResource(if (landscape) R.string.tool_ruler_right else R.string.tool_ruler_bottom)
 
-    // Opaque, so the range's band and handles show on the scales and not through the settings.
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface)
-            .verticalScroll(rememberScrollState())
-            .padding(SizeConstants.MediumSize),
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
-    ) {
-        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = stringResource(R.string.tile_ruler_title),
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.weight(1f),
-            )
-            GeneralButton(
-                style = GeneralButtonStyle.Text,
-                onClick = onClose,
-                icon = ToolkitIcon.Vector(Icons.Outlined.Close),
-                contentDescription = stringResource(R.string.tool_dialog_close_content_description),
-            )
-        }
-        RulerChoice(
-            options = listOf(stringResource(R.string.tool_ruler_simple), stringResource(R.string.tool_ruler_advanced)),
-            selected = 1,
-            onSelect = { if (it == 0) onEvent(RulerToolEvent.AdvancedChanged(false)) },
-        )
-        Column { RulerReading(settings.units, millimetres) }
-
+    Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize)) {
         RulerSetting(stringResource(R.string.tool_ruler_units)) {
             RulerChoice(
-                options = listOf(
+                options = persistentListOf(
                     stringResource(R.string.tool_ruler_units_metric),
                     stringResource(R.string.tool_ruler_units_imperial),
                     stringResource(R.string.tool_ruler_units_both),
@@ -351,14 +354,14 @@ private fun AdvancedRulerPanel(
         }
         RulerSetting(stringResource(R.string.tool_ruler_edge)) {
             RulerChoice(
-                options = listOf(first, second),
+                options = persistentListOf(first, second),
                 selected = settings.edge.ordinal,
                 onSelect = { onEvent(RulerToolEvent.EdgeSelected(RulerEdge.entries[it])) },
             )
         }
         RulerSetting(stringResource(R.string.tool_ruler_zero)) {
             RulerChoice(
-                options = listOf(zeroFirst, zeroSecond),
+                options = persistentListOf(zeroFirst, zeroSecond),
                 selected = if (settings.countFromEnd) 1 else 0,
                 onSelect = { onEvent(RulerToolEvent.CountFromEndChanged(it == 1)) },
             )
@@ -366,7 +369,7 @@ private fun AdvancedRulerPanel(
         if (settings.units != RulerUnits.Metric) {
             RulerSetting(stringResource(R.string.tool_ruler_inch_steps)) {
                 RulerChoice(
-                    options = RulerSettings.InchDivisions.map { stringResource(R.string.tool_ruler_inch_step, it) },
+                    options = RulerSettings.InchDivisions.map { stringResource(R.string.tool_ruler_inch_step, it) }.toPersistentList(),
                     selected = RulerSettings.InchDivisions.indexOf(settings.inchDivisions),
                     onSelect = { onEvent(RulerToolEvent.InchDivisionsSelected(RulerSettings.InchDivisions[it])) },
                 )
@@ -402,20 +405,8 @@ private fun AdvancedRulerPanel(
                         label = stringResource(R.string.tool_ruler_reset),
                     )
                 }
+                // The scales are the reference: they follow the slider, so a real ruler held against one shows when they agree.
                 Text(text = stringResource(R.string.tool_ruler_reference), style = MaterialTheme.typography.bodySmall)
-                // The reference stands upright, so it uses the vertical density; its box fits the longest it can be.
-                val verticalDpi = ydpi.takeIf { it.isFinite() && it > 0f } ?: (density * 160f)
-                val referencePixels = 30f * verticalDpi / 25.4f
-                val markerColor = MaterialTheme.colorScheme.primary
-                Canvas(Modifier.fillMaxWidth().height(((referencePixels * 2f) / density).dp + 8.dp)) {
-                    val x = size.width / 2f
-                    val top = 4.dp.toPx()
-                    val bottom = top + referencePixels * state.scale
-                    val cap = 8.dp.toPx()
-                    drawLine(markerColor, Offset(x, top), Offset(x, bottom), 2.dp.toPx())
-                    drawLine(markerColor, Offset(x - cap, top), Offset(x + cap, top), 2.dp.toPx())
-                    drawLine(markerColor, Offset(x - cap, bottom), Offset(x + cap, bottom), 2.dp.toPx())
-                }
                 val scaleSliderState = rememberSliderState(value = state.scale, trackRange = 0.5f..2f)
                 scaleSliderState.value = state.scale
                 Slider(
@@ -442,7 +433,7 @@ private fun RulerSetting(title: String, content: @Composable () -> Unit) {
 
 /** A row of segmented choices without check marks, so three of them fit between two scales. */
 @Composable
-private fun RulerChoice(options: List<String>, selected: Int, onSelect: (Int) -> Unit) { // FIXME: Parameter 'options' has runtime-determined stability
+private fun RulerChoice(options: ImmutableList<String>, selected: Int, onSelect: (Int) -> Unit) {
     SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
         options.forEachIndexed { index, label ->
             SegmentedButton(
@@ -487,7 +478,7 @@ internal class RulerGeometry(val landscape: Boolean, val countFromEnd: Boolean, 
     }
 }
 
-private fun DrawScope.drawStrip(units: RulerUnits, edge: RulerEdge, geometry: RulerGeometry, thickness: Float, color: Color) { // FIXME: Parameter "units" is never used
+private fun DrawScope.drawStrip(edge: RulerEdge, geometry: RulerGeometry, thickness: Float, color: Color) {
     val topLeft = geometry.point(0f, if (edge == RulerEdge.Start) 0f else thickness, edge, size)
     val stripSize = if (geometry.landscape) Size(size.width, thickness) else Size(thickness, size.height)
     val origin = if (geometry.landscape) Offset(0f, topLeft.y) else Offset(topLeft.x, 0f)

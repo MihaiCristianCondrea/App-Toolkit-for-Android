@@ -148,9 +148,10 @@
     <string name="tool_converter_from">Von</string>
     <string name="tool_converter_to">Nach</string>
     <string name="tool_converter_invalid">Gib einen gültigen Wert ein.</string>
+    <string name="tool_converter_hint">Bearbeiten Sie einen der Werte, um zurückzurechnen.</string>
     <string name="tool_ruler_calibration">Kalibrierung</string>
     <string name="tool_ruler_range">Messbereich</string>
-    <string name="tool_ruler_reference">Passe die Linie vor der Messung an 3 cm auf einem echten Lineal an.</string>
+    <string name="tool_ruler_reference">Halten Sie ein echtes Lineal an eine Skala und verschieben Sie den Regler, bis die Striche übereinstimmen.</string>
     <string name="tool_ruler_save_failed">Kalibrierung konnte nicht gespeichert werden.</string>
     <string name="tool_ruler_advanced">Erweitert</string>
     <string name="tool_ruler_simple">Einfach</string>

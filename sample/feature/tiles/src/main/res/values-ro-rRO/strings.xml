@@ -148,9 +148,10 @@
     <string name="tool_converter_from">Din</string>
     <string name="tool_converter_to">În</string>
     <string name="tool_converter_invalid">Introdu o valoare validă.</string>
+    <string name="tool_converter_hint">Editează oricare dintre valori pentru a converti invers.</string>
     <string name="tool_ruler_calibration">Calibrare</string>
     <string name="tool_ruler_range">Interval de măsurare</string>
-    <string name="tool_ruler_reference">Potrivește linia de mai jos cu 3 cm de pe o riglă reală înainte de măsurare.</string>
+    <string name="tool_ruler_reference">Ține o riglă reală lângă o scală și mută glisorul până când gradațiile se aliniază.</string>
     <string name="tool_ruler_save_failed">Calibrarea nu a putut fi salvată.</string>
     <string name="tool_ruler_advanced">Avansată</string>
     <string name="tool_ruler_simple">Simplă</string>

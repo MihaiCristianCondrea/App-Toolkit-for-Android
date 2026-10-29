@@ -148,9 +148,10 @@
     <string name="tool_converter_from">से</string>
     <string name="tool_converter_to">में</string>
     <string name="tool_converter_invalid">मान्य मान दर्ज करें।</string>
+    <string name="tool_converter_hint">उलटा बदलने के लिए किसी भी मान में बदलाव करें।</string>
     <string name="tool_ruler_calibration">कैलिब्रेशन</string>
     <string name="tool_ruler_range">माप सीमा</string>
-    <string name="tool_ruler_reference">मापने से पहले नीचे की रेखा को असली रूलर के 3 सेमी से मिलाएँ।</string>
+    <string name="tool_ruler_reference">किसी स्केल के सामने असली रूलर रखें और निशान मिलने तक स्लाइडर खिसकाएँ।</string>
     <string name="tool_ruler_save_failed">कैलिब्रेशन सेव नहीं हो सका।</string>
     <string name="tool_ruler_advanced">एडवांस</string>
     <string name="tool_ruler_simple">सामान्य</string>

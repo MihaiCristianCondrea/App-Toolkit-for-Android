@@ -148,9 +148,10 @@
     <string name="tool_converter_from">Erről</string>
     <string name="tool_converter_to">Erre</string>
     <string name="tool_converter_invalid">Adj meg érvényes értéket.</string>
+    <string name="tool_converter_hint">Bármelyik értéket szerkesztheti a visszafelé váltáshoz.</string>
     <string name="tool_ruler_calibration">Kalibrálás</string>
     <string name="tool_ruler_range">Mérési tartomány</string>
-    <string name="tool_ruler_reference">Mérés előtt igazítsd az alábbi vonalat egy valódi vonalzó 3 cm-es szakaszához.</string>
+    <string name="tool_ruler_reference">Tartson egy valódi vonalzót a skálához, és mozgassa a csúszkát, amíg a jelölések egybe nem esnek.</string>
     <string name="tool_ruler_save_failed">A kalibrálás mentése sikertelen.</string>
     <string name="tool_ruler_advanced">Speciális</string>
     <string name="tool_ruler_simple">Egyszerű</string>

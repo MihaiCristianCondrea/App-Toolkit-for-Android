@@ -148,9 +148,10 @@
     <string name="tool_converter_from">От</string>
     <string name="tool_converter_to">В</string>
     <string name="tool_converter_invalid">Въведете валидна стойност.</string>
+    <string name="tool_converter_hint">Редактирайте която и да е стойност, за да преобразувате обратно.</string>
     <string name="tool_ruler_calibration">Калибриране</string>
     <string name="tool_ruler_range">Обхват на измерване</string>
-    <string name="tool_ruler_reference">Преди измерване подравнете линията отдолу с 3 см на истинска линия.</string>
+    <string name="tool_ruler_reference">Поставете истинска линийка до скалата и местете плъзгача, докато деленията съвпаднат.</string>
     <string name="tool_ruler_save_failed">Калибрирането не бе запазено.</string>
     <string name="tool_ruler_advanced">Разширен</string>
     <string name="tool_ruler_simple">Опростен</string>

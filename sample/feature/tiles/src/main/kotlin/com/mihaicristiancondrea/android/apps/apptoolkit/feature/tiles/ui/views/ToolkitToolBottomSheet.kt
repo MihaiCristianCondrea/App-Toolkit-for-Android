@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import androidx.compose.foundation.layout.navigationBarsPadding
 import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
@@ -29,11 +30,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -161,7 +157,7 @@ private fun ToolSheetHeader(
         GeneralButton(
             style = GeneralButtonStyle.Text,
             onClick = onClose,
-            icon = ToolkitIcon.Vector(Icons.Outlined.Close),
+            icon = ToolkitIcon.Vector(ToolSymbols.Close),
             contentDescription = stringResource(id = R.string.tool_dialog_close_content_description),
         )
     }
@@ -187,7 +183,7 @@ private fun ToolStatusSummary(tile: ToolkitTile) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                imageVector = Icons.Outlined.Info,
+                imageVector = ToolSymbols.Info,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
             )
@@ -308,7 +304,7 @@ private fun QuickSettingsIntegrationCard(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.Widgets,
+                    imageVector = ToolSymbols.Widgets,
                     contentDescription = null,
                     tint = contentColor
                 )
@@ -346,7 +342,7 @@ private fun QuickSettingsIntegrationCard(
                 measurements = ButtonMeasurements.Medium,
                 onClick = onAddTile,
                 label = stringResource(id = R.string.tiles_add_to_qs),
-                icon = ToolkitIcon.Vector(Icons.Outlined.Add),
+                icon = ToolkitIcon.Vector(ToolSymbols.Add),
                 shape = actionShape,
                 containerColor = containerColor,
                 contentColor = contentColor,

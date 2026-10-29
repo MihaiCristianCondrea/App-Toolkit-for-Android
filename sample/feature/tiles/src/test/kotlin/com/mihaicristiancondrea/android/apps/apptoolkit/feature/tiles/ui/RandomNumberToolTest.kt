@@ -67,6 +67,6 @@ class RandomNumberToolTest {
         compose.mainClock.autoAdvance = true
         compose.onNodeWithText(NumberFormat.getIntegerInstance(Locale.US).format(Long.MIN_VALUE)).assertIsDisplayed()
         compose.runOnIdle { state.value = state.value.copy(result = null) }
-        compose.onNodeWithText("…").assertIsDisplayed()
+        compose.onNodeWithText("?").assertIsDisplayed()
     }
 }

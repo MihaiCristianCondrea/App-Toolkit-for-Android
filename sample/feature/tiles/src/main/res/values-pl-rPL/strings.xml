@@ -148,9 +148,10 @@
     <string name="tool_converter_from">Z</string>
     <string name="tool_converter_to">Na</string>
     <string name="tool_converter_invalid">Wpisz prawidłową wartość.</string>
+    <string name="tool_converter_hint">Edytuj dowolną wartość, aby przeliczyć w drugą stronę.</string>
     <string name="tool_ruler_calibration">Kalibracja</string>
     <string name="tool_ruler_range">Zakres pomiaru</string>
-    <string name="tool_ruler_reference">Przed pomiarem dopasuj linię poniżej do 3 cm na prawdziwej linijce.</string>
+    <string name="tool_ruler_reference">Przyłóż prawdziwą linijkę do skali i przesuwaj suwak, aż podziałki się pokryją.</string>
     <string name="tool_ruler_save_failed">Nie udało się zapisać kalibracji.</string>
     <string name="tool_ruler_advanced">Zaawansowana</string>
     <string name="tool_ruler_simple">Prosta</string>

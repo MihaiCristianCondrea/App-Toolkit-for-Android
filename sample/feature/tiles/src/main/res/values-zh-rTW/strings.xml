@@ -148,9 +148,10 @@
     <string name="tool_converter_from">從</string>
     <string name="tool_converter_to">轉為</string>
     <string name="tool_converter_invalid">請輸入有效數值。</string>
+    <string name="tool_converter_hint">編輯任一數值即可反向換算。</string>
     <string name="tool_ruler_calibration">校正</string>
     <string name="tool_ruler_range">測量範圍</string>
-    <string name="tool_ruler_reference">測量前，請將下方線段調整為實體尺上的 3 公分。</string>
+    <string name="tool_ruler_reference">將真實尺規貼著刻度，拖動滑桿直到刻度對齊。</string>
     <string name="tool_ruler_save_failed">無法儲存校正。</string>
     <string name="tool_ruler_advanced">進階</string>
     <string name="tool_ruler_simple">簡易</string>

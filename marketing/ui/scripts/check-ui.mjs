@@ -311,7 +311,7 @@ try {
     for(const activeSheet of ['ruler','protractor','counter','bill_splitter','unit_converter','reaction_test']) {
       await page.goto(`${base}/screen.html?id=numbers&window=${window}&theme=${theme}&panel=none&state=${encodeURIComponent(JSON.stringify({activeSheet}))}`);
       await page.locator('[role="dialog"]').waitFor();
-      if(activeSheet==='ruler') {assert.equal(await page.locator(SHEET).count(),0);assert.equal(await page.locator('mnw-android-screen .fullscreen').count(),1);assert.equal(await page.locator('.tk-slider--range').count(),0);assert.equal(await page.locator('.measure-ruler__card').count(),1);}
+      if(activeSheet==='ruler') {assert.equal(await page.locator(SHEET).count(),0);assert.equal(await page.locator('mnw-android-screen .fullscreen').count(),1);assert.equal(await page.locator('.measure-ruler__settings[aria-hidden="true"]').count(),1);assert.equal(await page.locator('.measure-ruler__card').count(),1);}
       if(activeSheet==='protractor') { assert.equal(await page.locator(SHEET).count(),0); assert.equal(await page.locator('mnw-android-screen .fullscreen').count(),1); }
       if(activeSheet==='counter') assert.equal(await page.locator('[aria-label="Step increment"]').count(),0);
       checks++;
@@ -333,11 +333,11 @@ try {
   await page.mouse.move(rulerBox.x+8,rulerBox.y+rulerBox.height/4);
   await page.mouse.down();await page.mouse.up();
   await page.waitForFunction(()=>Math.abs(parseFloat(document.querySelector('.measure-ruler__card .measure-display').textContent)-parseFloat(document.querySelector('.measure-ruler__scale').clientHeight)/4/(160/25.4))<0.2);
-  await page.locator('.measure-ruler__bar md-filled-tonal-button').click();
-  await page.locator('.tk-slider--range').waitFor();
+  await page.locator('md-outlined-segmented-button[label="Advanced"]').click();
+  await page.locator('.measure-ruler__panel[data-advanced] .tk-slider--range').waitFor();
   await page.locator('md-outlined-segmented-button[label="Imperial"]').click();
   await page.waitForFunction(()=>document.querySelector('.measure-ruler .measure-display').textContent.includes('in'));
-  // The calibration slider stays where it is while the reference above it grows (the card keeps its height).
+  // Calibrating rescales the ruler itself, so the slider stays where it is: nothing in the panel grows.
   const calibration=page.locator('.measure-calibration .tk-slider');
   await calibration.locator('input').focus();
   await calibration.scrollIntoViewIfNeeded();

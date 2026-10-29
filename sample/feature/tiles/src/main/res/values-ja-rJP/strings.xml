@@ -148,9 +148,10 @@
     <string name="tool_converter_from">変換元</string>
     <string name="tool_converter_to">変換先</string>
     <string name="tool_converter_invalid">有効な値を入力してください。</string>
+    <string name="tool_converter_hint">どちらの値を編集しても逆方向に換算できます。</string>
     <string name="tool_ruler_calibration">校正</string>
     <string name="tool_ruler_range">測定範囲</string>
-    <string name="tool_ruler_reference">測定前に、下の線を実物の定規の3 cmに合わせてください。</string>
+    <string name="tool_ruler_reference">本物の定規を目盛りに当て、目盛りが揃うまでスライダーを動かします。</string>
     <string name="tool_ruler_save_failed">校正を保存できませんでした。</string>
     <string name="tool_ruler_advanced">詳細</string>
     <string name="tool_ruler_simple">シンプル</string>

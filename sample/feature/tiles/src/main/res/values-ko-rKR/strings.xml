@@ -148,9 +148,10 @@
     <string name="tool_converter_from">변환 전</string>
     <string name="tool_converter_to">변환 후</string>
     <string name="tool_converter_invalid">올바른 값을 입력하세요.</string>
+    <string name="tool_converter_hint">두 값 중 하나를 수정하면 반대로 변환됩니다.</string>
     <string name="tool_ruler_calibration">보정</string>
     <string name="tool_ruler_range">측정 범위</string>
-    <string name="tool_ruler_reference">측정 전에 아래 선을 실제 자의 3 cm에 맞추세요.</string>
+    <string name="tool_ruler_reference">실제 자를 눈금에 대고 눈금이 맞을 때까지 슬라이더를 움직이세요.</string>
     <string name="tool_ruler_save_failed">보정값을 저장하지 못했습니다.</string>
     <string name="tool_ruler_advanced">고급</string>
     <string name="tool_ruler_simple">간단히</string>

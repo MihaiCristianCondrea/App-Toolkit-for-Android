@@ -148,9 +148,10 @@
     <string name="tool_converter_from">من</string>
     <string name="tool_converter_to">إلى</string>
     <string name="tool_converter_invalid">أدخل قيمة صالحة.</string>
+    <string name="tool_converter_hint">عدّل أيًّا من القيمتين للتحويل في الاتجاه الآخر.</string>
     <string name="tool_ruler_calibration">المعايرة</string>
     <string name="tool_ruler_range">نطاق القياس</string>
-    <string name="tool_ruler_reference">طابق الخط أدناه مع 3 سم على مسطرة حقيقية قبل القياس.</string>
+    <string name="tool_ruler_reference">ضع مسطرة حقيقية بمحاذاة المقياس وحرّك شريط التمرير حتى تتطابق العلامات.</string>
     <string name="tool_ruler_save_failed">تعذر حفظ المعايرة.</string>
     <string name="tool_ruler_advanced">متقدّم</string>
     <string name="tool_ruler_simple">بسيط</string>

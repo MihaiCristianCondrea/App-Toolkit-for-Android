@@ -148,9 +148,10 @@
     <string name="tool_converter_from">Dari</string>
     <string name="tool_converter_to">Ke</string>
     <string name="tool_converter_invalid">Masukkan nilai yang valid.</string>
+    <string name="tool_converter_hint">Edit salah satu nilai untuk mengonversi balik.</string>
     <string name="tool_ruler_calibration">Kalibrasi</string>
     <string name="tool_ruler_range">Rentang pengukuran</string>
-    <string name="tool_ruler_reference">Cocokkan garis di bawah dengan 3 cm pada penggaris asli sebelum mengukur.</string>
+    <string name="tool_ruler_reference">Tempelkan penggaris asli ke skala dan geser penggeser hingga tanda-tandanya sejajar.</string>
     <string name="tool_ruler_save_failed">Tidak dapat menyimpan kalibrasi.</string>
     <string name="tool_ruler_advanced">Lanjutan</string>
     <string name="tool_ruler_simple">Sederhana</string>

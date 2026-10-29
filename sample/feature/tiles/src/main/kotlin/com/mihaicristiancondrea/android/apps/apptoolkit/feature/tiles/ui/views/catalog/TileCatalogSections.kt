@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,14 +30,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Casino
-import androidx.compose.material.icons.outlined.ExpandLess
-import androidx.compose.material.icons.outlined.ExpandMore
-import androidx.compose.material.icons.outlined.Explore
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.FlashlightOn
-import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -169,7 +162,7 @@ internal fun TileCategorySection(
                         style = GeneralButtonStyle.Text,
                         onClick = onToggle,
                         iconSize = SizeConstants.ButtonIconSize,
-                        icon = ToolkitIcon.Vector(if (expanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore),
+                        icon = ToolkitIcon.Vector(if (expanded) ToolSymbols.ExpandLess else ToolSymbols.ExpandMore),
                         contentDescription = stringResource(
                             id = if (expanded) R.string.tiles_collapse_category else R.string.tiles_expand_category,
                         ),
@@ -255,26 +248,26 @@ private val ToolkitTilesFilterItems: ImmutableList<ToolkitTilesFilterItem> = per
     ToolkitTilesFilterItem(
         ToolkitTilesFilter.All,
         R.string.tiles_filter_all,
-        Icons.Outlined.GridView,
+        ToolSymbols.GridView,
     ),
     ToolkitTilesFilterItem(
         ToolkitTilesFilter.Sensors,
         R.string.tiles_category_sensors,
-        Icons.Outlined.Explore,
+        ToolSymbols.Explore,
     ),
     ToolkitTilesFilterItem(
         ToolkitTilesFilter.Utilities,
         R.string.tiles_category_utilities,
-        Icons.Outlined.Casino,
+        ToolSymbols.Casino,
     ),
     ToolkitTilesFilterItem(
         ToolkitTilesFilter.System,
         R.string.tiles_category_system,
-        Icons.Outlined.FlashlightOn,
+        ToolSymbols.FlashlightOn,
     ),
     ToolkitTilesFilterItem(
         ToolkitTilesFilter.Wellbeing,
         R.string.tiles_category_wellbeing,
-        Icons.Outlined.FavoriteBorder,
+        ToolSymbols.Favorite,
     ),
 )

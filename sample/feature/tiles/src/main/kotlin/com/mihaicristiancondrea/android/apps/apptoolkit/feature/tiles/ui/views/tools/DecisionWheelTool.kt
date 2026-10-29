@@ -107,8 +107,9 @@ internal fun DecisionWheelVisual(state: WheelToolUiState, compact: Boolean = fal
         val radius = size.minDimension / 2f - 8.dp.toPx()
         drawCircle(colors.surface, radius + 6.dp.toPx())
         val items = state.choices.take(12)
+        // Without choices the wheel shows the two it starts with, as the kit's overview does.
         if (items.size < 2) {
-            for (i in 0..5) drawArc(fills[i % 3], -90f + i * 60f, 60f, true, center - Offset(radius,radius), Size(radius*2,radius*2))
+            for (i in 0..1) drawArc(fills[i], -90f + i * 180f, 180f, true, center - Offset(radius,radius), Size(radius*2,radius*2))
         }
         if (items.size >= 2) rotate(rotation.value) {
             val sweep = 360f / items.size

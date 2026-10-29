@@ -17,16 +17,12 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import android.os.Build
 import android.icu.util.Measure
 import android.icu.text.MeasureFormat
 import android.icu.util.MeasureUnit
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.material.icons.outlined.Straighten
-import androidx.compose.material.icons.outlined.Scale
-import androidx.compose.material.icons.outlined.Thermostat
-import androidx.compose.material.icons.outlined.WaterDrop
-import androidx.compose.material.icons.outlined.Storage
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,8 +33,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Surface
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.SwapVert
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -80,12 +74,13 @@ fun UnitConverterTool(state: UnitConverterToolUiState, onEvent: (UnitConverterTo
                     selected = state.category == category,
                     onClick = { onEvent(UnitConverterToolEvent.CategorySelected(category)) },
                     label = { Text(stringResource(category.labelResId())) },
-                    leadingIcon = { Icon(when(category) {
-                        ConversionCategory.Length -> Icons.Outlined.Straighten
-                        ConversionCategory.Mass -> Icons.Outlined.Scale
-                        ConversionCategory.Temperature -> Icons.Outlined.Thermostat
-                        ConversionCategory.Volume -> Icons.Outlined.WaterDrop
-                        ConversionCategory.Data -> Icons.Outlined.Storage
+                    // A selected chip trades its icon for a check mark, as the kit's filter chips do.
+                    leadingIcon = { Icon(if (category == state.category) ToolSymbols.Check else when(category) {
+                        ConversionCategory.Length -> ToolSymbols.Rounded.Straighten
+                        ConversionCategory.Mass -> ToolSymbols.Rounded.Weight
+                        ConversionCategory.Temperature -> ToolSymbols.Rounded.Thermostat
+                        ConversionCategory.Volume -> ToolSymbols.Rounded.WaterDrop
+                        ConversionCategory.Data -> ToolSymbols.Rounded.Storage
                     }, null) },
                 )
             }
@@ -101,10 +96,17 @@ fun UnitConverterTool(state: UnitConverterToolUiState, onEvent: (UnitConverterTo
             }
             FilledTonalIconButton(onClick = { onEvent(UnitConverterToolEvent.Swap) },
                 modifier = Modifier.align(Alignment.CenterEnd).padding(end = 24.dp).size(40.dp)) {
-                Icon(Icons.Outlined.SwapVert, stringResource(R.string.swap_units))
+                Icon(ToolSymbols.SwapVert, stringResource(R.string.swap_units))
             }
         }
-        if (state.invalidInput) Text(stringResource(R.string.tool_converter_invalid), color = MaterialTheme.colorScheme.error)
+        if (state.invalidInput) {
+            Text(stringResource(R.string.tool_converter_invalid), color = MaterialTheme.colorScheme.error)
+        } else {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Icon(ToolSymbols.Edit, null, Modifier.size(18.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.tool_converter_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        }
         if (state.category == ConversionCategory.Data) Text(stringResource(R.string.tool_converter_decimal_note))
     }
 }

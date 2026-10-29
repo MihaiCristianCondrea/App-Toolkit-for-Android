@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
@@ -44,12 +45,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Sensors
-import androidx.compose.material.icons.rounded.FlashlightOn
-import androidx.compose.material.icons.rounded.Speaker
-import androidx.compose.material.icons.rounded.SelfImprovement
-import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.LifecycleStartEffect
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.LiveToolsUiState
@@ -237,11 +232,11 @@ private fun ToolkitTilesCatalog(
             filtered.forEachIndexed { index, category ->
                 Box(Modifier.animateVisibility(index)) {
                     ToolSection(stringResource(category.titleResId), when (category.id) {
-                        "sensors" -> Icons.Rounded.Sensors
-                        "system" -> Icons.Rounded.FlashlightOn
-                        "sound" -> Icons.Rounded.Speaker
-                        "wellbeing" -> Icons.Rounded.SelfImprovement
-                        "colors" -> Icons.Rounded.Palette
+                        "sensors" -> ToolSymbols.Rounded.Sensors
+                        "system" -> ToolSymbols.Rounded.FlashlightOn
+                        "sound" -> ToolSymbols.Rounded.Speaker
+                        "wellbeing" -> ToolSymbols.Rounded.SelfImprovement
+                        "colors" -> ToolSymbols.Rounded.Palette
                         else -> category.icon.imageVector()
                     }) {
                         QuickToolsWidgets(category.tiles, live, ::open, onFlashLevel)

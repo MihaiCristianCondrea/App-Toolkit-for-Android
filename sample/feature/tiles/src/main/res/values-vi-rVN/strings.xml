@@ -148,9 +148,10 @@
     <string name="tool_converter_from">Từ</string>
     <string name="tool_converter_to">Sang</string>
     <string name="tool_converter_invalid">Nhập giá trị hợp lệ.</string>
+    <string name="tool_converter_hint">Sửa một trong hai giá trị để chuyển đổi ngược lại.</string>
     <string name="tool_ruler_calibration">Hiệu chuẩn</string>
     <string name="tool_ruler_range">Phạm vi đo</string>
-    <string name="tool_ruler_reference">Trước khi đo, căn đường bên dưới bằng 3 cm trên thước thật.</string>
+    <string name="tool_ruler_reference">Đặt một thước thật áp vào thang đo và kéo thanh trượt cho đến khi các vạch khớp nhau.</string>
     <string name="tool_ruler_save_failed">Không thể lưu hiệu chuẩn.</string>
     <string name="tool_ruler_advanced">Nâng cao</string>
     <string name="tool_ruler_simple">Đơn giản</string>

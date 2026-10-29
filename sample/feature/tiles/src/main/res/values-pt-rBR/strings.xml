@@ -148,9 +148,10 @@
     <string name="tool_converter_from">De</string>
     <string name="tool_converter_to">Para</string>
     <string name="tool_converter_invalid">Insira um valor válido.</string>
+    <string name="tool_converter_hint">Edite qualquer um dos valores para converter de volta.</string>
     <string name="tool_ruler_calibration">Calibração</string>
     <string name="tool_ruler_range">Intervalo de medição</string>
-    <string name="tool_ruler_reference">Antes de medir, ajuste a linha abaixo a 3 cm em uma régua real.</string>
+    <string name="tool_ruler_reference">Encoste uma régua de verdade em uma escala e mova o controle até as marcas coincidirem.</string>
     <string name="tool_ruler_save_failed">Não foi possível salvar a calibração.</string>
     <string name="tool_ruler_advanced">Avançada</string>
     <string name="tool_ruler_simple">Simples</string>

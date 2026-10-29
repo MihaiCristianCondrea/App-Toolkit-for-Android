@@ -148,9 +148,10 @@
     <string name="tool_converter_from">Mula</string>
     <string name="tool_converter_to">Patungo</string>
     <string name="tool_converter_invalid">Maglagay ng wastong halaga.</string>
+    <string name="tool_converter_hint">I-edit ang alinmang value para i-convert pabalik.</string>
     <string name="tool_ruler_calibration">Kalibrasyon</string>
     <string name="tool_ruler_range">Saklaw ng sukat</string>
-    <string name="tool_ruler_reference">Itugma ang linya sa ibaba sa 3 cm sa totoong ruler bago magsukat.</string>
+    <string name="tool_ruler_reference">Itapat ang totoong ruler sa isang scale at galawin ang slider hanggang magtugma ang mga marka.</string>
     <string name="tool_ruler_save_failed">Hindi na-save ang kalibrasyon.</string>
     <string name="tool_ruler_advanced">Advanced</string>
     <string name="tool_ruler_simple">Simple</string>

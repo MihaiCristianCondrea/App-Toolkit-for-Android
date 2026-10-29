@@ -148,9 +148,10 @@
     <string name="tool_converter_from">З</string>
     <string name="tool_converter_to">У</string>
     <string name="tool_converter_invalid">Введіть коректне значення.</string>
+    <string name="tool_converter_hint">Змініть будь-яке значення, щоб перерахувати у зворотний бік.</string>
     <string name="tool_ruler_calibration">Калібрування</string>
     <string name="tool_ruler_range">Діапазон вимірювання</string>
-    <string name="tool_ruler_reference">Перед вимірюванням сумістіть лінію нижче з 3 см на справжній лінійці.</string>
+    <string name="tool_ruler_reference">Прикладіть справжню лінійку до шкали й рухайте повзунок, доки поділки не збіжаться.</string>
     <string name="tool_ruler_save_failed">Не вдалося зберегти калібрування.</string>
     <string name="tool_ruler_advanced">Розширена</string>
     <string name="tool_ruler_simple">Проста</string>
