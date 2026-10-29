@@ -1,6 +1,7 @@
 import "./palettes.css";
 import "./base.css";
 import "../kit/kit.css";
+import "./toolkit.css";
 import "../kit/md.js";
 import { applyProductTypefaces, loadProductFonts } from "material-next-web-components/marketing.js";
 import { IDENTITY } from "../config/identity.js";

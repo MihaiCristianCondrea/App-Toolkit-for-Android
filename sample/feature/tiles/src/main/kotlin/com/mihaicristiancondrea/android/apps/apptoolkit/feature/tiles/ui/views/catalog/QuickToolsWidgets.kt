@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
+
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
@@ -38,7 +40,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -209,7 +210,7 @@ private fun BreatheCard(tile: ToolkitTile, onOpen: () -> Unit) {
         R.string.breathe_exhale to BreathingRepository.DURATION_EXHALE,
         R.string.breathe_hold to BreathingRepository.DURATION_HOLD_EMPTY,
     )
-    Surface(onClick = onOpen, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp), color = MaterialTheme.colorScheme.surfaceContainerHigh) {
+    Surface(onClick = onOpen, modifier = Modifier.fillMaxWidth().animateVisibility(), shape = RoundedCornerShape(28.dp), color = MaterialTheme.colorScheme.surfaceContainerHigh) {
         Row(Modifier.padding(horizontal = 20.dp, vertical = 16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             Box(Modifier.size(72.dp).clip(tile.icon.backgroundShape()).background(accent.container.copy(alpha = 0.22f)), contentAlignment = Alignment.Center) {
                 Icon(tile.icon.imageVector(), null, Modifier.size(32.dp), tint = accent.content)
@@ -239,7 +240,7 @@ private fun MaterialColorsCard(tile: ToolkitTile, onOpen: () -> Unit) {
         scheme.primary, scheme.primaryContainer, scheme.secondary,
         scheme.secondaryContainer, scheme.tertiary, scheme.tertiaryContainer,
     )
-    Surface(onClick = onOpen, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp), color = scheme.surfaceContainerHigh) {
+    Surface(onClick = onOpen, modifier = Modifier.fillMaxWidth().animateVisibility(), shape = RoundedCornerShape(28.dp), color = scheme.surfaceContainerHigh) {
         Column(Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             WidgetLabel(stringResource(tile.titleResId))
             Row(Modifier.fillMaxWidth().height(56.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {

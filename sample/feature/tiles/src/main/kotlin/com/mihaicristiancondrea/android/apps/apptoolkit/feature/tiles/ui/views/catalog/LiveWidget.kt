@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -121,7 +123,7 @@ internal fun LiveWidget(
     val container = if (signal) lerp(scheme.surfaceContainerHigh, accent.container, 0.16f) else scheme.surfaceContainerHigh
     val faceColor = lerp(scheme.surfaceContainerLowest, accent.container, if (signal) 0.30f else 0.22f)
     val faceSize: Dp = if (signal) 156.dp else 148.dp
-    Surface(onClick = onClick, modifier = modifier, shape = shape, color = container, contentColor = scheme.onSurface) {
+    Surface(onClick = onClick, modifier = modifier.animateVisibility(), shape = shape, color = container, contentColor = scheme.onSurface) {
         Column(
             modifier = Modifier.padding(
                 start = if (signal) 16.dp else 12.dp,

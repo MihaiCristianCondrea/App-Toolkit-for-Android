@@ -34,6 +34,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.border
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -50,10 +53,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -95,7 +96,13 @@ fun UnitConverterTool(state: UnitConverterToolUiState, onEvent: (UnitConverterTo
                     onUnit = { onEvent(UnitConverterToolEvent.UnitSelected(it, left = false)) })
             }
             FilledTonalIconButton(onClick = { onEvent(UnitConverterToolEvent.Swap) },
-                modifier = Modifier.align(Alignment.CenterEnd).padding(end = 24.dp).size(40.dp)) {
+                shape = CircleShape,
+                colors = IconButtonDefaults.filledTonalIconButtonColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                ),
+                modifier = Modifier.align(Alignment.CenterEnd).padding(end = 20.dp)
+                    .size(48.dp).border(4.dp, MaterialTheme.colorScheme.surface, CircleShape).padding(4.dp)) {
                 Icon(ToolSymbols.SwapVert, stringResource(R.string.swap_units))
             }
         }

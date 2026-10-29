@@ -17,30 +17,22 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolDesignTheme
+
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
-import android.content.Context
 import android.widget.Toast
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalContext
@@ -63,14 +55,11 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.Ap
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitQuickTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ToolkitTilesEvent
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.PositionedToolkitTilesListItem
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileCategory
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTilesListItem
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ToolkitTilesFilter
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ToolkitTilesUiState
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils.filterFor
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils.requestQuickSettingsTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils.search
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.MaterialColorsToolDialog
@@ -79,11 +68,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.a
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ads.QuickToolsNativeAdViewFactory
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.EmptyFilterCard
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.HiddenAdPreloaders
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.HowToAddTilesCard
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.TileCategorySection
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.TilesFilters
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageToastHost
@@ -93,10 +78,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.LocalNativeAdViewFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellSearch
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -191,20 +173,23 @@ internal fun ToolkitTilesScreenContent(
     live: LiveToolsUiState = LiveToolsUiState(),
     onFlashLevel: (Int) -> Unit = {},
 ) {
-    ScreenStateHandler(
-        state = state.categories,
-        contentPadding = contentPadding,
-        onRetry = { onEvent(ToolkitTilesEvent.Load) },
-        showAd = false,
-    ) { ready ->
-        ToolkitTilesCatalog(
-            categories = ready.value,
-            state = state,
+    ToolDesignTheme {
+
+        ScreenStateHandler(
+            state = state.categories,
             contentPadding = contentPadding,
-            onEvent = onEvent,
-            searchQuery = searchQuery,
-            live = live, onFlashLevel = onFlashLevel,
-        )
+            onRetry = { onEvent(ToolkitTilesEvent.Load) },
+            showAd = false,
+        ) { ready ->
+            ToolkitTilesCatalog(
+                categories = ready.value,
+                state = state,
+                contentPadding = contentPadding,
+                onEvent = onEvent,
+                searchQuery = searchQuery,
+                live = live, onFlashLevel = onFlashLevel,
+            )
+        }
     }
 }
 
@@ -230,7 +215,7 @@ private fun ToolkitTilesCatalog(
         ToolWorkspace(contentPadding) {
             if (filtered.isEmpty()) EmptyFilterCard()
             filtered.forEachIndexed { index, category ->
-                Box(Modifier.animateVisibility(index)) {
+                Box {
                     ToolSection(stringResource(category.titleResId), when (category.id) {
                         "sensors" -> ToolSymbols.Rounded.Sensors
                         "system" -> ToolSymbols.Rounded.FlashlightOn

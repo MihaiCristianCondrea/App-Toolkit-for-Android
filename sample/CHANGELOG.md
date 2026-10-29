@@ -4,6 +4,12 @@
 
 # Unreleased
 
+### Improved
+
+- Tool headings and cards enter individually using the shared motion settings.
+- Tool screens use fixed gold, cream, pink and neutral colours in light and dark mode, independent of wallpaper.
+- Align the converter swap button with the preview and keep the marketing ruler title below the camera cutout.
+
 ### Fixed
 
 - Align the Protractor endpoint, dial details and angle badge with the preview, remove its instructions and keep the title clear of the dial.

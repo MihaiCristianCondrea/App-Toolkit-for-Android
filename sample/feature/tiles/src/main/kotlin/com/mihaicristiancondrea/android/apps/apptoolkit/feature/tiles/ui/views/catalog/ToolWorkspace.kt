@@ -17,6 +17,9 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
+
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -48,12 +51,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.imageVector
 
 /** Shared dimensions mirror the marketing bento groups; the shell owns all system insets. */
 @Composable
 internal fun ToolWorkspace(padding: PaddingValues, content: @Composable ColumnScope.() -> Unit) {
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(
+    Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface).verticalScroll(rememberScrollState()).padding(
         start = 16.dp, end = 16.dp, top = padding.calculateTopPadding() + 8.dp,
         bottom = padding.calculateBottomPadding() + 16.dp,
     ), verticalArrangement = Arrangement.spacedBy(24.dp), content = content)
@@ -62,7 +64,7 @@ internal fun ToolWorkspace(padding: PaddingValues, content: @Composable ColumnSc
 @Composable
 internal fun ToolSection(title: String, icon: ImageVector, modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit) {
     Column(modifier, verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Row(Modifier.padding(start = 4.dp), verticalAlignment = Alignment.CenterVertically,
+        Row(Modifier.animateVisibility().padding(start = 4.dp), verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Icon(icon, null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
             Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
@@ -90,7 +92,7 @@ internal fun ToolWidget(tile: ToolkitTile, onOpen: () -> Unit, modifier: Modifie
     spacing: Dp = 12.dp,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    Surface(onClick = onOpen, modifier = modifier, shape = shape, color = color) {
+    Surface(onClick = onOpen, modifier = modifier.animateVisibility(), shape = shape, color = color) {
         Column(Modifier.padding(padding), verticalArrangement = Arrangement.spacedBy(spacing)) {
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 Text(

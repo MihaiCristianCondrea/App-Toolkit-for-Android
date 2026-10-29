@@ -22,6 +22,8 @@ The native Quick Tools, Measure and Play & Decide workspaces, their tool sheets,
 
 The widgets follow the marketing kit's (`marketing/ui`): `views/catalog/LiveWidget.kt` draws its live widget (a small uppercase label, the tool's face in its shape on a tint of its accent, a bold value and a note), and the tool accents in `iconColors()` are the kit's `--tk-*` tokens. `RedesignVisualTest` renders the three tabs, light and dark, to `build/outputs/redesign/` for side-by-side review with the kit.
 
+Tool headings and individual overview cards join the shared screen entrance cascade. Sections do not animate as a second enclosing layer. Motion settings and reduced motion remain owned by the library. `ToolDesignTheme` supplies fixed light and dark product colours to the workspaces and their tool sheets; wallpaper colours and the selected shell palette do not recolour these tools. The marketing preview uses the same roles in `src/theme/toolkit.css`.
+
 All three primary tabs read their localized search query from `LocalShellSearch`. Empty sections disappear when searching. Quick Tools no longer shows category chips or collapse controls; the old expansion preference is retained for compatibility and is not applied to the new overview.
 
 The overview and sheet use the same entry-owned tool ViewModels. Currency, tip selection, converter values, counter updates and chance results therefore stay in sync. Dice and coin visuals are directly interactive; the surrounding card opens their sheet. Reaction Test Start both opens the sheet and starts a round.

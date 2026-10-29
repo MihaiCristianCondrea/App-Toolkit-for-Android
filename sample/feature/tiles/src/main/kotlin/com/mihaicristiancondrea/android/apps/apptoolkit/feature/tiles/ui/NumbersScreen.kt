@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolDesignTheme
+
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Spacer
@@ -56,8 +58,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.tooling.preview.Preview
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
@@ -132,90 +132,93 @@ internal fun NumbersScreenContent(
     catalogTools: List<ToolkitTile> = MeasureTools,
     onTileAdded: (String) -> Unit = {},
 ) {
-    var selectedId by rememberSaveable { mutableStateOf<String?>(null) }
-    var startReaction by rememberSaveable { mutableStateOf(false) }
-    val resources = LocalResources.current
-    val locale = LocalConfiguration.current.locales[0]
-    val context = LocalContext.current
-    val query = searchQuery.trim()
-    val tools = catalogTools.filter { query.isBlank() || resources.getString(it.titleResId).contains(query, true) || resources.getString(it.summaryResId).contains(query, true) }
-    ToolWorkspace(contentPadding) {
-        if (tools.isEmpty()) Text(stringResource(R.string.tiles_filter_empty))
-        val sections = listOf(
-            Triple(R.string.section_length, ToolSymbols.Rounded.SquareFoot, listOf(ToolkitTileIds.RULER, ToolkitTileIds.PROTRACTOR)),
-            Triple(R.string.section_convert, ToolSymbols.Rounded.SwapHoriz, listOf(ToolkitTileIds.UNIT_CONVERTER, ToolkitTileIds.BILL_SPLITTER)),
-            Triple(R.string.section_count, ToolSymbols.Rounded.Timer, listOf(ToolkitTileIds.COUNTER, ToolkitTileIds.REACTION_TEST)),
-        )
-        sections.forEachIndexed { sectionIndex, (title, icon, ids) ->
-            val visible = tools.filter { it.id in ids }
-            if (visible.isNotEmpty()) ToolSection(stringResource(title), icon, Modifier.animateVisibility(sectionIndex)) {
-                if (title == R.string.section_count) Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    visible.forEachIndexed { index, tile ->
-                        val shape = toolCorners(0, 1, top = index == 0, bottom = index == visible.lastIndex)
-                        if (tile.id == ToolkitTileIds.COUNTER) {
-                            ToolWidget(tile, { selectedId = tile.id; startReaction = false }, Modifier.fillMaxWidth(), shape,
-                                headerAction = {
-                                    TextButton(onClick = { onCounter(CounterToolEvent.Reset) }, enabled = counterState.count > 0) {
-                                        Icon(ToolSymbols.Refresh, null, Modifier.size(18.dp))
-                                        Spacer(Modifier.width(8.dp))
-                                        Text(stringResource(R.string.tool_counter_reset))
-                                    }
-                                },
-                                padding = PaddingValues(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 16.dp),
-                                spacing = 8.dp) {
-                                CounterControls(counterState.count,
-                                    onIncrement = { onCounter(CounterToolEvent.Increment) },
-                                    onDecrement = { onCounter(CounterToolEvent.Decrement) })
-                            }
-                        } else ReactionWidget(tile, reaction.bestTimeMs, shape,
-                            onOpen = { selectedId = tile.id; startReaction = false },
-                            onStart = { startReaction = true; selectedId = tile.id })
-                    }
-                } else ToolPair(visible) { tile, shape ->
-                    ToolWidget(tile, { selectedId = tile.id }, Modifier.weight(1f).fillMaxHeight(), shape,
-                        when (tile.id) {
-                            ToolkitTileIds.UNIT_CONVERTER -> MaterialTheme.colorScheme.secondaryContainer
-                            ToolkitTileIds.BILL_SPLITTER -> MaterialTheme.colorScheme.tertiaryContainer
-                            else -> MaterialTheme.colorScheme.surfaceContainerHigh
-                        }) {
-                        when (tile.id) {
-                            ToolkitTileIds.RULER -> {
-                                MeasureFace(protractor = false)
-                                MeasureDetail("mm / in", stringResource(R.string.widget_ruler_note))
-                            }
-                            ToolkitTileIds.PROTRACTOR -> {
-                                MeasureFace(protractor = true, angle = protractorAngle)
-                                MeasureDetail(stringResource(R.string.tile_service_azimuth_format, protractorAngle.roundToInt()), stringResource(R.string.widget_protractor_note))
-                            }
-                            ToolkitTileIds.UNIT_CONVERTER -> {
-                                Column(Modifier.weight(1f, fill = false), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                                    ConversionLine(converter.left, converter.from.symbol)
-                                    Icon(ToolSymbols.SwapVert, null, Modifier.size(20.dp))
-                                    ConversionLine(converter.right, converter.to.symbol)
+    ToolDesignTheme {
+
+        var selectedId by rememberSaveable { mutableStateOf<String?>(null) }
+        var startReaction by rememberSaveable { mutableStateOf(false) }
+        val resources = LocalResources.current
+        val locale = LocalConfiguration.current.locales[0]
+        val context = LocalContext.current
+        val query = searchQuery.trim()
+        val tools = catalogTools.filter { query.isBlank() || resources.getString(it.titleResId).contains(query, true) || resources.getString(it.summaryResId).contains(query, true) }
+        ToolWorkspace(contentPadding) {
+            if (tools.isEmpty()) Text(stringResource(R.string.tiles_filter_empty))
+            val sections = listOf(
+                Triple(R.string.section_length, ToolSymbols.Rounded.SquareFoot, listOf(ToolkitTileIds.RULER, ToolkitTileIds.PROTRACTOR)),
+                Triple(R.string.section_convert, ToolSymbols.Rounded.SwapHoriz, listOf(ToolkitTileIds.UNIT_CONVERTER, ToolkitTileIds.BILL_SPLITTER)),
+                Triple(R.string.section_count, ToolSymbols.Rounded.Timer, listOf(ToolkitTileIds.COUNTER, ToolkitTileIds.REACTION_TEST)),
+            )
+            sections.forEach { (title, icon, ids) ->
+                val visible = tools.filter { it.id in ids }
+                if (visible.isNotEmpty()) ToolSection(stringResource(title), icon, Modifier) {
+                    if (title == R.string.section_count) Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        visible.forEachIndexed { index, tile ->
+                            val shape = toolCorners(0, 1, top = index == 0, bottom = index == visible.lastIndex)
+                            if (tile.id == ToolkitTileIds.COUNTER) {
+                                ToolWidget(tile, { selectedId = tile.id; startReaction = false }, Modifier.fillMaxWidth(), shape,
+                                    headerAction = {
+                                        TextButton(onClick = { onCounter(CounterToolEvent.Reset) }, enabled = counterState.count > 0) {
+                                            Icon(ToolSymbols.Refresh, null, Modifier.size(18.dp))
+                                            Spacer(Modifier.width(8.dp))
+                                            Text(stringResource(R.string.tool_counter_reset))
+                                        }
+                                    },
+                                    padding = PaddingValues(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 16.dp),
+                                    spacing = 8.dp) {
+                                    CounterControls(counterState.count,
+                                        onIncrement = { onCounter(CounterToolEvent.Increment) },
+                                        onDecrement = { onCounter(CounterToolEvent.Decrement) })
                                 }
-                                Text(stringResource(converter.category.labelResId()), style = WidgetDetailStyle)
-                            }
-                            ToolkitTileIds.BILL_SPLITTER -> {
-                                Icon(ToolSymbols.Rounded.Group, null, Modifier.padding(bottom = 4.dp).size(40.dp))
-                                Text(bill.result?.let { formatBillAmount(it.perPerson, bill.currency, locale) } ?: "—",
-                                    style = MaterialTheme.typography.headlineLarge.copy(fontSize = 32.sp, lineHeight = 38.sp), fontWeight = FontWeight.Medium, maxLines = 1)
-                                Text(stringResource(R.string.tool_bill_per_person).lowercase(locale), style = WidgetDetailStyle)
-                                Text(
-                                    text = (if (bill.tipEnabled) stringResource(R.string.tool_tip_percent, bill.tipPercent) + " " + stringResource(R.string.tool_bill_tip).lowercase(locale) else stringResource(R.string.no_tip)) +
-                                        " · " + (bill.people.toIntOrNull() ?: 1).let { pluralStringResource(R.plurals.widget_people, it, it) },
-                                    style = WidgetDetailStyle,
-                                )
+                            } else ReactionWidget(tile, reaction.bestTimeMs, shape,
+                                onOpen = { selectedId = tile.id; startReaction = false },
+                                onStart = { startReaction = true; selectedId = tile.id })
+                        }
+                    } else ToolPair(visible) { tile, shape ->
+                        ToolWidget(tile, { selectedId = tile.id }, Modifier.weight(1f).fillMaxHeight(), shape,
+                            when (tile.id) {
+                                ToolkitTileIds.UNIT_CONVERTER -> MaterialTheme.colorScheme.secondaryContainer
+                                ToolkitTileIds.BILL_SPLITTER -> MaterialTheme.colorScheme.tertiaryContainer
+                                else -> MaterialTheme.colorScheme.surfaceContainerHigh
+                            }) {
+                            when (tile.id) {
+                                ToolkitTileIds.RULER -> {
+                                    MeasureFace(protractor = false)
+                                    MeasureDetail("mm / in", stringResource(R.string.widget_ruler_note))
+                                }
+                                ToolkitTileIds.PROTRACTOR -> {
+                                    MeasureFace(protractor = true, angle = protractorAngle)
+                                    MeasureDetail(stringResource(R.string.tile_service_azimuth_format, protractorAngle.roundToInt()), stringResource(R.string.widget_protractor_note))
+                                }
+                                ToolkitTileIds.UNIT_CONVERTER -> {
+                                    Column(Modifier.weight(1f, fill = false), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                                        ConversionLine(converter.left, converter.from.symbol)
+                                        Icon(ToolSymbols.SwapVert, null, Modifier.size(20.dp))
+                                        ConversionLine(converter.right, converter.to.symbol)
+                                    }
+                                    Text(stringResource(converter.category.labelResId()), style = WidgetDetailStyle)
+                                }
+                                ToolkitTileIds.BILL_SPLITTER -> {
+                                    Icon(ToolSymbols.Rounded.Group, null, Modifier.padding(bottom = 4.dp).size(40.dp))
+                                    Text(bill.result?.let { formatBillAmount(it.perPerson, bill.currency, locale) } ?: "—",
+                                        style = MaterialTheme.typography.headlineLarge.copy(fontSize = 32.sp, lineHeight = 38.sp), fontWeight = FontWeight.Medium, maxLines = 1)
+                                    Text(stringResource(R.string.tool_bill_per_person).lowercase(locale), style = WidgetDetailStyle)
+                                    Text(
+                                        text = (if (bill.tipEnabled) stringResource(R.string.tool_tip_percent, bill.tipPercent) + " " + stringResource(R.string.tool_bill_tip).lowercase(locale) else stringResource(R.string.no_tip)) +
+                                            " · " + (bill.people.toIntOrNull() ?: 1).let { pluralStringResource(R.plurals.widget_people, it, it) },
+                                        style = WidgetDetailStyle,
+                                    )
+                                }
                             }
                         }
                     }
                 }
             }
         }
-    }
-    catalogTools.firstOrNull { it.id == selectedId }?.let { tile ->
-        ToolkitToolBottomSheet(tile = tile, onClose = { selectedId = null; startReaction = false },
-            startReaction = startReaction,
-            onAddTile = { tile.requestKey?.let { requestQuickSettingsTile(context, it, onTileAdded = onTileAdded) } }, onSetupTile = {})
+        catalogTools.firstOrNull { it.id == selectedId }?.let { tile ->
+            ToolkitToolBottomSheet(tile = tile, onClose = { selectedId = null; startReaction = false },
+                startReaction = startReaction,
+                onAddTile = { tile.requestKey?.let { requestQuickSettingsTile(context, it, onTileAdded = onTileAdded) } }, onSetupTile = {})
+        }
     }
 }
 
@@ -239,7 +242,7 @@ private fun ConversionLine(value: String, unit: String) {
 /** Reaction Test: the best time or a prompt, and Start, which opens the test already running. */
 @Composable
 private fun ReactionWidget(tile: ToolkitTile, bestMs: Long?, shape: Shape, onOpen: () -> Unit, onStart: () -> Unit) {
-    Surface(onClick = onOpen, modifier = Modifier.fillMaxWidth(), shape = shape, color = MaterialTheme.colorScheme.surfaceContainerHigh) {
+    Surface(onClick = onOpen, modifier = Modifier.fillMaxWidth().animateVisibility(), shape = shape, color = MaterialTheme.colorScheme.surfaceContainerHigh) {
         Row(Modifier.padding(horizontal = 20.dp, vertical = 16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(stringResource(tile.titleResId), style = WidgetTitleStyle)

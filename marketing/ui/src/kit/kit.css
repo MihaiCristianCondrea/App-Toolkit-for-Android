@@ -1925,3 +1925,6 @@ mnw-android-screen,
 .mc-swatch { height: 72px; padding: 8px; border-radius: 8px; display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
 .mc-swatch__name { font: 500 12px/16px var(--md-ref-typeface-plain); letter-spacing: .5px; }
 .mc-swatch__hex { font: 500 11px/16px var(--md-ref-typeface-plain); letter-spacing: .5px; }
+
+/* Full-screen ruler controls keep clear of the preview camera cutout. */
+.measure-ruler:not([data-landscape]) .measure-ruler__panel { padding-top: calc(16px + max(48px, var(--_status-bar, 0px))); }
