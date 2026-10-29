@@ -1,4 +1,4 @@
-/* Fixed product colours. Gold, cream and pink are independent of the preview palette. */
+/* Fixed product accents. The preview palette still owns the screen background and neutral surfaces. */
 mnw-android-screen {
   --md-sys-color-primary: #6B5E00;
   --md-sys-color-on-primary: #FFFFFF;
@@ -12,30 +12,7 @@ mnw-android-screen {
   --md-sys-color-on-tertiary: #FFFFFF;
   --md-sys-color-tertiary-container: #FFD9E5;
   --md-sys-color-on-tertiary-container: #30101E;
-  --md-sys-color-background: #FFFBF5;
-  --md-sys-color-on-background: #1E1B16;
-  --md-sys-color-surface: #FFFBF5;
-  --md-sys-color-on-surface: #1E1B16;
-  --md-sys-color-surface-variant: #EAE2CF;
-  --md-sys-color-on-surface-variant: #4B4639;
-  --md-sys-color-surface-container-lowest: #FFFFFF;
-  --md-sys-color-surface-container-low: #FAF5EA;
-  --md-sys-color-surface-container: #F4EFE4;
-  --md-sys-color-surface-container-high: #EEE9DE;
-  --md-sys-color-surface-container-highest: #E8E3D8;
-  --md-sys-color-surface-bright: #FFFBF5;
-  --md-sys-color-surface-dim: #DED9CE;
-  --md-sys-color-outline: #7C7667;
-  --md-sys-color-outline-variant: #CEC6B5;
-  --md-sys-color-inverse-surface: #33302A;
-  --md-sys-color-inverse-on-surface: #F7F0E5;
   --md-sys-color-inverse-primary: #E2C900;
-  --md-sys-color-surface-tint: #6B5E00;
-  --md-sys-color-error: #BA1A1A;
-  --md-sys-color-on-error: #FFFFFF;
-  --md-sys-color-error-container: #FFDAD6;
-  --md-sys-color-on-error-container: #410002;
-  --md-sys-color-scrim: #000000;
 }
 [data-theme="dark"] mnw-android-screen {
   --md-sys-color-primary: #E2C900;
@@ -50,28 +27,5 @@ mnw-android-screen {
   --md-sys-color-on-tertiary: #472534;
   --md-sys-color-tertiary-container: #603C49;
   --md-sys-color-on-tertiary-container: #FFD9E5;
-  --md-sys-color-background: #16140F;
-  --md-sys-color-on-background: #E8E2D7;
-  --md-sys-color-surface: #16140F;
-  --md-sys-color-on-surface: #E8E2D7;
-  --md-sys-color-surface-variant: #4B4639;
-  --md-sys-color-on-surface-variant: #CEC6B5;
-  --md-sys-color-surface-container-lowest: #100E0A;
-  --md-sys-color-surface-container-low: #1E1C17;
-  --md-sys-color-surface-container: #22201B;
-  --md-sys-color-surface-container-high: #2D2A25;
-  --md-sys-color-surface-container-highest: #38352F;
-  --md-sys-color-surface-bright: #3D3933;
-  --md-sys-color-surface-dim: #16140F;
-  --md-sys-color-outline: #969080;
-  --md-sys-color-outline-variant: #4B4639;
-  --md-sys-color-inverse-surface: #E8E2D7;
-  --md-sys-color-inverse-on-surface: #33302A;
   --md-sys-color-inverse-primary: #6B5E00;
-  --md-sys-color-surface-tint: #E2C900;
-  --md-sys-color-error: #FFB4AB;
-  --md-sys-color-on-error: #690005;
-  --md-sys-color-error-container: #93000A;
-  --md-sys-color-on-error-container: #FFDAD6;
-  --md-sys-color-scrim: #000000;
 }

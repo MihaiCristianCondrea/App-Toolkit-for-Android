@@ -4,6 +4,11 @@
 
 # Unreleased
 
+### Fixed
+
+- Keep the Quick Tools, Measure and Play & Decide scroll viewports above the shell and system navigation bars.
+- Preserve the app screen background and neutral surfaces while keeping custom tool accent colours.
+
 ### Improved
 
 - Tool headings and cards enter individually using the shared motion settings.

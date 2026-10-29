@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog
 
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
@@ -24,7 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 
-/** Product-owned colours, identical in the native tools and the marketing preview. */
+/** Product accent roles, shared with the marketing preview. Host surface roles are preserved. */
 internal val ToolLightColors = lightColorScheme(
     primary = Color(0xFF6B5E00),
     onPrimary = Color(0xFFFFFFFF),
@@ -104,6 +105,25 @@ internal val ToolDarkColors = darkColorScheme(
 
 @Composable
 internal fun ToolDesignTheme(content: @Composable () -> Unit) {
-    val dark = MaterialTheme.colorScheme.surface.luminance() < .5f
-    MaterialTheme(colorScheme = if (dark) ToolDarkColors else ToolLightColors, content = content)
+    MaterialTheme(colorScheme = toolColorScheme(MaterialTheme.colorScheme), content = content)
+}
+
+/** Keep the app's backdrop and neutral surfaces while fixing the coloured tool roles. */
+internal fun toolColorScheme(host: ColorScheme): ColorScheme {
+    val accents = if (host.surface.luminance() < .5f) ToolDarkColors else ToolLightColors
+    return host.copy(
+        primary = accents.primary,
+        onPrimary = accents.onPrimary,
+        primaryContainer = accents.primaryContainer,
+        onPrimaryContainer = accents.onPrimaryContainer,
+        inversePrimary = accents.inversePrimary,
+        secondary = accents.secondary,
+        onSecondary = accents.onSecondary,
+        secondaryContainer = accents.secondaryContainer,
+        onSecondaryContainer = accents.onSecondaryContainer,
+        tertiary = accents.tertiary,
+        onTertiary = accents.onTertiary,
+        tertiaryContainer = accents.tertiaryContainer,
+        onTertiaryContainer = accents.onTertiaryContainer,
+    )
 }

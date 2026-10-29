@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
 
-import androidx.compose.foundation.background
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -52,13 +52,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
 
-/** Shared dimensions mirror the marketing bento groups; the shell owns all system insets. */
+/** The shell supplies bar insets; reserve them outside the clipped scrolling viewport. */
 @Composable
 internal fun ToolWorkspace(padding: PaddingValues, content: @Composable ColumnScope.() -> Unit) {
-    Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface).verticalScroll(rememberScrollState()).padding(
-        start = 16.dp, end = 16.dp, top = padding.calculateTopPadding() + 8.dp,
-        bottom = padding.calculateBottomPadding() + 16.dp,
-    ), verticalArrangement = Arrangement.spacedBy(24.dp), content = content)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding)
+            .clipToBounds()
+            .verticalScroll(rememberScrollState())
+            .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
+        content = content,
+    )
 }
 
 @Composable
