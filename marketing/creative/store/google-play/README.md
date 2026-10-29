@@ -9,9 +9,10 @@ google-play/
 ├── scripts/validate.mjs            Play's rules, for every listing and language
 └── listings/
     ├── default/                    the main store listing
-    │   ├── source/                 what makes it: code, strings/<locale>.json, metadata.json, README
+    │   ├── source/                 what makes it: a Remotion project, strings/<locale>.json, metadata.json, README
     │   └── listing/<locale>/       what is uploaded: title, short and full description, graphics/
     │       └── graphics/           icon/, feature-graphic/, phone-, tablet-, desktop-screenshots/
+    ├── default-legacy/             the default listing before the redesign, retired (no source)
     └── custom/                     one custom store listing per audience (none yet)
 ```
 
@@ -20,14 +21,14 @@ in English (en-US) only for now.
 
 | Listing | Status | Visuals |
 | --- | --- | --- |
-| [default](listings/default/source/README.md) | live | 4 phone and 4 tablet screenshots, feature graphic and icon, made outside this repository (no source) |
+| [default](listings/default/source/README.md) | ready, upload with the redesigned release | 8 phone, 4 tablet and 4 desktop screenshots, feature graphic and icon, rendered with Remotion from the UI kit |
+| [default-legacy](listings/default-legacy/README.md) | retired | The listing before the redesign: 4 phone and 4 tablet screenshots, feature graphic and icon, no source |
 | [custom](listings/custom/README.md) | none yet | One listing per tool is planned, after the redesign |
 
 ## Change a listing
 
 1. Text: edit `listing/<locale>/*.txt`.
-2. Visuals: edit `source/` (code or strings), then render it; it writes straight into `listing/`. The default
-   listing's current visuals have no source: before new ones replace them, they move to a retired listing of their own
-   (`listings/<name>-legacy/` with a `listing.json` and a full README), as the `store-listing` skill describes.
-   Anything rendered from `source/` can be rebuilt from Git history.
+2. Visuals: edit `source/` (code or strings), then render it with `npm run render`; it writes straight into
+   `listing/`. Anything rendered from `source/` can be rebuilt from Git history; visuals without a source move to a
+   retired listing of their own first (`listings/<name>-legacy/`), as the `store-listing` skill describes.
 3. `node scripts/validate.mjs` here, then upload.

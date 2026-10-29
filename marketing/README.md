@@ -18,7 +18,7 @@ in order.
 | [creative/social-campaigns](creative/social-campaigns) | One folder per campaign in progress (`creative/social-campaigns/<campaign-slug>/`), every media type; published ones in `completed/` |
 | [creative/templates](creative/templates) | Starting points for new work: [`ui-motion-starter`](creative/templates/ui-motion-starter/README.md), Remotion over the UI kit's live screens |
 | [research](research/README.md) | Google Analytics exports: context, not claims |
-| [assets](assets) | Logos, illustrations, `MaterialShapes` SVGs, device frames and the official Play badge; `ideas/` holds redesign input until the redesign has used it |
+| [assets](assets) | Logos (with `logos/scripts`, which generates the app's icon resources from `.idea/icon.svg`), illustrations, `MaterialShapes` SVGs, device frames and the official Play badge |
 | [skills](skills/llms.txt) | `built-in/` (ours, from [android-skills](https://github.com/MihaiCristianCondrea/android-skills)), `design-taste/`, `google/` and `social-media/` (installed, never edited) |
 
 ### Campaigns
@@ -97,7 +97,7 @@ campaigns.
     "language": "en",
     "monetization": "Free with ads",
     "formFactors": ["Phone", "Tablet", "Foldable", "Desktop"],
-    "keywords": ["App Toolkit", "Android", "Quick Settings tiles", "compass", "bubble level", "unit converter", "tip calculator", "counter"]
+    "keywords": ["App Toolkit", "Android", "Quick Settings tiles", "compass", "bubble level", "ruler", "protractor", "unit converter", "tip calculator", "bill splitter", "counter", "Morse code", "decision wheel", "water eject"]
   },
   "credits": {
     "creator": "Mihai-Cristian Condrea",

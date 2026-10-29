@@ -1,0 +1,10 @@
+{
+  "id": "default-legacy",
+  "audience": "Everyone who saw App Toolkit on Google Play before the October 2026 redesign",
+  "targeting": { "url": false, "countries": [], "keywords": null, "googleAds": false },
+  "status": "retired",
+  "log": [
+    { "date": "2026-10-28", "status": "live", "note": "moved from sample/app/src/main/play/ as the default listing" },
+    { "date": "2026-10-29", "status": "retired", "note": "replaced by the redesigned default listing, rendered from listings/default/source/" }
+  ]
+}

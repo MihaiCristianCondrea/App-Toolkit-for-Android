@@ -1,6 +1,6 @@
 # Plan: App Toolkit redesign and marketing reorganization
 
-Status: plan, October 28, 2026. Phases 1 and 4 are done; Phase 2 has started on the web side ([`redesign/`](redesign/README.md)). It builds on
+Status: October 29, 2026. Phases 1 and 4 are done. Phase 2's web concepts are done in the UI kit ([`redesign/`](redesign/README.md)), the Stitch exports are deleted, and the new toolbox icon is in the app; the Compose build is next. Phase 3's default listing is rendered from the concepts and waits for the release that ships them. It builds on
 [`quick_tools.md`](quick_tools.md) (the tool redistribution that is already under way) and does not
 replace it.
 
@@ -139,6 +139,11 @@ When the last screen's concept is approved, delete `marketing/assets/ideas/`: it
 4. **First campaign.** One launch short from `templates/ui-motion-starter` under
    `creative/social-campaigns/<slug>/`, following `marketing-startup`, `motion-video`, `metadata`
    and `social-captions`.
+
+Progress, October 29, 2026: the owner chose to render the default listing from the approved UI kit concepts ahead of
+the Compose build. `listings/default/source/` is a Remotion project (stills of the kit's screens), the listing text is
+rewritten, and the earlier visuals are `listings/default-legacy/`. Upload it with the release that ships the redesign;
+re-render after Phase 2 parity if the Compose screens differ.
 
 **Done when:** `validate.mjs` passes for every listing, the default listing renders from source in
 every listed language, and the campaign README records its QA (contact sheet checked for clipped

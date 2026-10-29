@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "3.0",
+  "campaign": {
+    "slug": "play-2026-10-toolbox-redesign",
+    "title": "Google Play listing, October 2026 redesign",
+    "releaseDate": "2026-10-29"
+  },
+  "software": "Android Studio",
+  "copy": {
+    "title": "App Toolkit on Google Play",
+    "headline": "Everyday tools to measure, signal and decide",
+    "description": "Google Play listing visuals for App Toolkit: Quick Tools with a live compass and level, the Measure tab with a ruler, protractor, unit converter and bill splitter, and Play & Decide with the Decision Wheel.",
+    "keywords": [
+      "App Toolkit",
+      "Android tools",
+      "compass",
+      "bubble level",
+      "protractor",
+      "unit converter",
+      "bill splitter",
+      "decision wheel",
+      "Morse code SOS",
+      "water eject"
+    ],
+    "hashtags": []
+  },
+  "files": {
+    "../listing/en-US/graphics/phone-screenshots/1-quick-tools.png": {
+      "title": "App Toolkit: Handy tools, one tap away",
+      "altText": "Quick Tools with a live compass, bubble level, flashlight and SOS, grouped by sensors and light"
+    },
+    "../listing/en-US/graphics/phone-screenshots/2-measure.png": {
+      "title": "App Toolkit: Measure, count and convert",
+      "altText": "Measure tab with live previews of the ruler, protractor, unit converter, bill splitter and counter"
+    },
+    "../listing/en-US/graphics/phone-screenshots/3-play.png": {
+      "title": "App Toolkit: Leave it to chance",
+      "altText": "Play & Decide tab with the Decision Wheel, a random number, a coin flip and a dice roll"
+    },
+    "../listing/en-US/graphics/phone-screenshots/4-decision-wheel.png": {
+      "title": "App Toolkit: Let the wheel decide",
+      "altText": "Decision Wheel sheet with four choices typed in and Sushi picked by the wheel"
+    },
+    "../listing/en-US/graphics/phone-screenshots/5-protractor.png": {
+      "title": "App Toolkit: Measure angles on screen",
+      "altText": "Full-screen protractor reading 60 degrees, with the arm along the screen's edge"
+    },
+    "../listing/en-US/graphics/phone-screenshots/6-bill-splitter.png": {
+      "title": "App Toolkit: Split the bill, tip included",
+      "altText": "Tip and Bill Splitter sharing a 100 dollar bill and a 15 percent tip between four people"
+    },
+    "../listing/en-US/graphics/phone-screenshots/7-water-eject.png": {
+      "title": "App Toolkit: A tone for a wet speaker",
+      "altText": "Water Eject sheet ready to play a 30 second 165 Hz tone through the speaker"
+    },
+    "../listing/en-US/graphics/phone-screenshots/8-sos.png": {
+      "title": "App Toolkit: Signal SOS with the torch",
+      "altText": "Morse and SOS sheet ready to flash the SOS pattern with the flashlight"
+    },
+    "../listing/en-US/graphics/tablet-screenshots/1-quick-tools.png": {
+      "title": "App Toolkit on a foldable",
+      "altText": "Quick Tools on a foldable, with the navigation rail and the tool groups in two columns"
+    },
+    "../listing/en-US/graphics/tablet-screenshots/2-measure.png": {
+      "title": "App Toolkit on a foldable",
+      "altText": "Measure tab on a foldable with live previews of every measuring tool"
+    },
+    "../listing/en-US/graphics/tablet-screenshots/3-play.png": {
+      "title": "App Toolkit on a foldable",
+      "altText": "Play & Decide on a foldable with the Decision Wheel, random number, coin and dice"
+    },
+    "../listing/en-US/graphics/tablet-screenshots/4-unit-converter.png": {
+      "title": "App Toolkit on a foldable",
+      "altText": "Unit Converter on a foldable converting one metre to 100 centimetres"
+    },
+    "../listing/en-US/graphics/desktop-screenshots/1-quick-tools.png": {
+      "title": "App Toolkit on a Chromebook",
+      "altText": "Quick Tools in a desktop window with the permanent navigation drawer"
+    },
+    "../listing/en-US/graphics/desktop-screenshots/2-measure.png": {
+      "title": "App Toolkit on a Chromebook",
+      "altText": "Measure tab in a desktop window with the ruler, protractor, converter and counter"
+    },
+    "../listing/en-US/graphics/desktop-screenshots/3-play.png": {
+      "title": "App Toolkit on a Chromebook",
+      "altText": "Play & Decide in a desktop window with the Decision Wheel and chance tools"
+    },
+    "../listing/en-US/graphics/desktop-screenshots/4-unit-converter.png": {
+      "title": "App Toolkit on a Chromebook",
+      "altText": "Unit Converter in a desktop window converting one metre to 100 centimetres"
+    },
+    "../listing/en-US/graphics/feature-graphic/feature-graphic.png": {
+      "title": "App Toolkit: Everyday tools to measure, signal and decide",
+      "altText": "App Toolkit, everyday tools to measure, signal and decide, between the Quick Tools and Play & Decide screens"
+    },
+    "../listing/en-US/graphics/icon/icon.png": {
+      "title": "App Toolkit icon",
+      "altText": "A cream toolbox with an amber handle, a wrench and a screwdriver"
+    }
+  }
+}

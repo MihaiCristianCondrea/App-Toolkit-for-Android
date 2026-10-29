@@ -5,86 +5,65 @@
 App Toolkit for Android
 ==================
 
-**Your ultimate all-in-one productivity and utility companion.**
+**Compass, level, ruler, unit converter, bill splitter and a decision wheel.**
 
-App Toolkit is a clean, lightweight, and versatile multi-tool app designed to simplify your daily
-life with essential utilities, device insights, and wellness tools.
-
-It includes quick-access tools like decision makers, tally counters, a precise compass and level,
-emergency flash and dimmer, Morse code messaging, reaction tests, and Quick Settings tiles. All in one fast,
-battery-friendly package.
-
-Whether you need a quick tool on the go, a relaxing breathing exercise, or a quick reaction test to sharpen your
-reflexes, App Toolkit provides a clean experience built with modern Material You theming.
-
-Our app is designed to be simple and easy to use, while also being fast and lightweight. Plus, it's
-free and open-source software!
+App Toolkit puts the small tools you reach for every day in one app: a compass and a bubble level, a ruler and a
+protractor on the screen, a unit converter, a tip and bill splitter, a counter, a flashlight you can dim, Morse and
+SOS signals, a decision wheel, coins and dice. Each tool opens in a sheet, and the ones Android supports can sit in
+your Quick Settings as tiles.
 
 # Features
 
-🛠️ Essential Quick-Access Utilities
+## Quick Tools
 
-- **Smart Decision Tools**: Instantly flip a coin or roll dice for quick choices and games.
-- **Tally Counter**: Effortlessly track tasks, habits, or repetitions with a simple interface.
-- **Precision Compass & Level**: High-accuracy tools for navigation and perfect alignment.
-- **Reaction Test**: Test and train your visual reflexes with random delay signals and score tracking.
-- **SOS Emergency Flash**: One-touch SOS signaling and a powerful flashlight for any situation.
-- **Flash Dimmer**: Adjust supported flashlight strength in-app or cycle levels from Quick Settings.
-- **Morse Flashlight**: Flash a custom letters-and-numbers message in Morse code.
-- **Toolkit Tiles**: Discover, manage, and sync supported Quick Settings tiles for instant access.
+Live previews you can read at a glance, grouped by what they do.
 
-📱 Device & Design Insights
+- **Compass**: your heading from the phone's magnetic sensor, with the direction spelled out.
+- **Bubble Level**: roll and pitch from the gravity sensor.
+- **Flash Dimmer**: turn the flashlight on and set its brightness, on phones whose torch can dim.
+- **Morse & SOS**: flash the SOS pattern, or send a typed message in Morse code with the torch.
+- **Water Eject**: a short low tone through the speaker after it gets wet. It can help shake droplets out; it does
+  not repair water damage.
+- **Breathe**: a short guided breathing pause.
 
-- **Material Colors Explorer**: Preview and explore your device's unique Material You color palette.
+## Measure
 
-🧘 Wellness & Focus
+Count, measure, convert and split, with each tool's latest result on the overview.
 
-- **Guided Breathing Helper**: Destress and relax with simple, effective breathing exercises.
+- **Surface Ruler**: measure small objects on the screen, in millimetres or inches.
+- **Protractor**: lay the phone's edge along a line and drag the arm to read the angle, full screen.
+- **Unit Converter**: length, weight, temperature, volume and data, both ways.
+- **Tip & Bill Splitter**: the bill, the tip and each person's share, in the currency you choose.
+- **Counter**: tap to add to a running count, with a minus button for a miscount.
+- **Reaction Test**: wait for the signal, tap, and see your time against your best and your average.
 
-# Benefits
+## Play & Decide
 
-🛠️ All-in-One Productivity Hub
+- **Decision Wheel**: type up to 12 choices, one per line, and spin.
+- **Random Number**: a number between any two you set.
+- **Coin Flip** and **Dice Roll**: tap the coin or the die right on the overview.
 
-- **Eliminate App Clutter**: Replace dozens of single-purpose utility apps with one lightweight,
-  high-performance toolkit.
-- **Everyday Convenience**: Instantly access practical tools for decision making, measurement,
-  emergency signaling, and focus.
-- **Battery & Resource Friendly**: Designed for maximum efficiency with minimal battery and memory
-  footprint.
-- **Sleek & Adaptive Design**: Enjoy a gorgeous interface featuring dynamic Material You theming and
-  smooth animations.
+## Made for every screen
+
+App Toolkit follows Material 3 Expressive: it takes your wallpaper's colours, works in light and dark themes, and
+lays itself out for phones, foldables, tablets and Chromebooks, with a navigation rail or drawer on wide screens.
 
 # Screenshots
 
 <!--suppress CheckImageSize -->
 <table>
   <tr>
-    <td><img src="/marketing/creative/store/google-play/listings/default/listing/en-US/graphics/phone-screenshots/1-screenshot_welcome.png" width="300" alt="Screenshot Welcome"></td>
-    <td><img src="/marketing/creative/store/google-play/listings/default/listing/en-US/graphics/phone-screenshots/2-screenshot_apps.png" width="300" alt="Screenshot Apps"></td>
-    <td><img src="/marketing/creative/store/google-play/listings/default/listing/en-US/graphics/phone-screenshots/3-screenshot_onboarding_theme.png" width="300" alt="Screenshot Onboarding Theme"></td>
+    <td><img src="/marketing/creative/store/google-play/listings/default/listing/en-US/graphics/phone-screenshots/1-quick-tools.png" width="300" alt="Quick Tools"></td>
+    <td><img src="/marketing/creative/store/google-play/listings/default/listing/en-US/graphics/phone-screenshots/2-measure.png" width="300" alt="Measure"></td>
+    <td><img src="/marketing/creative/store/google-play/listings/default/listing/en-US/graphics/phone-screenshots/3-play.png" width="300" alt="Play and Decide"></td>
+    <td><img src="/marketing/creative/store/google-play/listings/default/listing/en-US/graphics/phone-screenshots/4-decision-wheel.png" width="300" alt="Decision Wheel"></td>
   </tr>
 </table>
 
-# How it works
-
-App Toolkit is built for speed and reliability, bringing together a rich suite of utilities under a
-cohesive, modern interface. Every tool is optimized for instant response and smooth everyday use.
-
-# Get started today
-
-Download App Toolkit from the Google Play Store and enjoy a powerful, clutter-free utility
-experience. It's free, easy to navigate, and designed to make everyday tasks effortless.
-
 # Feedback
 
-We are constantly updating and improving App Toolkit to give you the best possible experience. If
-you have any suggested features or improvements, please leave a review. In case something is not
-working
-correctly please let me know. When posting a low rating please describe what is wrong to give the
-possibility to fix that issue.
-
-Thank you for choosing App Toolkit! We hope you enjoy using our app as much as we enjoyed creating
-it for you!
+If something doesn't work as you expect, or you'd like a tool added, open an issue or write a review on Google Play
+with the details, or use Help & feedback in the app.
 
 # License
 

@@ -1,0 +1,36 @@
+{
+  "screenshots": [
+    { "id": "quick-tools", "lines": ["Handy tools,", "one tap away"], "pill": 1,
+      "alt": "Quick Tools with a live compass, bubble level, flashlight and SOS, grouped by sensors and light" },
+    { "id": "measure", "lines": ["Measure, count", "and convert"], "pill": 1,
+      "alt": "Measure tab with live previews of the ruler, protractor, unit converter, bill splitter and counter" },
+    { "id": "play", "lines": ["Leave it", "to chance"], "pill": 1,
+      "alt": "Play & Decide tab with the Decision Wheel, a random number, a coin flip and a dice roll" },
+    { "id": "decision-wheel", "lines": ["Let the wheel", "decide"], "pill": 1,
+      "alt": "Decision Wheel sheet with four choices typed in and Sushi picked by the wheel" },
+    { "id": "protractor", "lines": ["Measure angles", "on screen"], "pill": 1,
+      "alt": "Full-screen protractor reading 60 degrees, with the arm along the screen's edge" },
+    { "id": "bill-splitter", "lines": ["Split the bill,", "tip included"], "pill": 1,
+      "alt": "Tip and Bill Splitter sharing a 100 dollar bill and a 15 percent tip between four people" },
+    { "id": "water-eject", "lines": ["A tone for", "a wet speaker"], "pill": 1,
+      "alt": "Water Eject sheet ready to play a 30 second 165 Hz tone through the speaker" },
+    { "id": "sos", "lines": ["Signal SOS", "with the torch"], "pill": 1,
+      "alt": "Morse and SOS sheet ready to flash the SOS pattern with the flashlight" }
+  ],
+  "tabletScreenshots": [
+    { "id": "quick-tools", "alt": "Quick Tools on a foldable, with the navigation rail and the tool groups in two columns" },
+    { "id": "measure", "alt": "Measure tab on a foldable with live previews of every measuring tool" },
+    { "id": "play", "alt": "Play & Decide on a foldable with the Decision Wheel, random number, coin and dice" },
+    { "id": "unit-converter", "alt": "Unit Converter on a foldable converting one metre to 100 centimetres" }
+  ],
+  "desktopScreenshots": [
+    { "id": "quick-tools", "alt": "Quick Tools in a desktop window with the permanent navigation drawer" },
+    { "id": "measure", "alt": "Measure tab in a desktop window with the ruler, protractor, converter and counter" },
+    { "id": "play", "alt": "Play & Decide in a desktop window with the Decision Wheel and chance tools" },
+    { "id": "unit-converter", "alt": "Unit Converter in a desktop window converting one metre to 100 centimetres" }
+  ],
+  "featureGraphic": {
+    "title": "App Toolkit",
+    "tagline": "Everyday tools to measure, signal and decide"
+  }
+}

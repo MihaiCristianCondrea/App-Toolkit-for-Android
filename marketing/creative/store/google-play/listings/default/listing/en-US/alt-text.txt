@@ -1,0 +1,16 @@
+phone-screenshots/1-quick-tools.png	Quick Tools with a live compass, bubble level, flashlight and SOS, grouped by sensors and light
+phone-screenshots/2-measure.png	Measure tab with live previews of the ruler, protractor, unit converter, bill splitter and counter
+phone-screenshots/3-play.png	Play & Decide tab with the Decision Wheel, a random number, a coin flip and a dice roll
+phone-screenshots/4-decision-wheel.png	Decision Wheel sheet with four choices typed in and Sushi picked by the wheel
+phone-screenshots/5-protractor.png	Full-screen protractor reading 60 degrees, with the arm along the screen's edge
+phone-screenshots/6-bill-splitter.png	Tip and Bill Splitter sharing a 100 dollar bill and a 15 percent tip between four people
+phone-screenshots/7-water-eject.png	Water Eject sheet ready to play a 30 second 165 Hz tone through the speaker
+phone-screenshots/8-sos.png	Morse and SOS sheet ready to flash the SOS pattern with the flashlight
+tablet-screenshots/1-quick-tools.png	Quick Tools on a foldable, with the navigation rail and the tool groups in two columns
+tablet-screenshots/2-measure.png	Measure tab on a foldable with live previews of every measuring tool
+tablet-screenshots/3-play.png	Play & Decide on a foldable with the Decision Wheel, random number, coin and dice
+tablet-screenshots/4-unit-converter.png	Unit Converter on a foldable converting one metre to 100 centimetres
+desktop-screenshots/1-quick-tools.png	Quick Tools in a desktop window with the permanent navigation drawer
+desktop-screenshots/2-measure.png	Measure tab in a desktop window with the ruler, protractor, converter and counter
+desktop-screenshots/3-play.png	Play & Decide in a desktop window with the Decision Wheel and chance tools
+desktop-screenshots/4-unit-converter.png	Unit Converter in a desktop window converting one metre to 100 centimetres

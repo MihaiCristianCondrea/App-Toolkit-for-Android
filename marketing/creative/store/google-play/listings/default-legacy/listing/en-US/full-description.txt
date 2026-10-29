@@ -1,0 +1,44 @@
+App Toolkit is a clean, lightweight, and versatile multi-tool app designed to simplify your daily life with essential utilities, device insights, and wellness tools.
+
+It includes quick-access tools like decision makers, tally counters, a precise compass and level, emergency flash and dimmer, Morse code messaging, reaction tests, and Quick Settings tiles. All in one fast, battery-friendly package.
+
+Whether you need a quick tool on the go, a relaxing breathing exercise, or a quick reaction test to sharpen your reflexes, App Toolkit provides a seamless, beautifully designed experience built with modern Material You theming.
+
+Our app is designed to be simple and easy to use, while also being fast and lightweight. Plus, it's free and open-source software!
+
+Features
+
+🛠️ Essential Quick-Access Utilities
+• Smart Decision Tools: Instantly flip a coin or roll dice for quick choices and games.
+• Tally Counter: Effortlessly track tasks, habits, or repetitions with a simple interface.
+• Precision Compass & Level: High-accuracy tools for navigation and perfect alignment.
+• Reaction Test: Test and train your visual reflexes with random delay signals and score tracking.
+• SOS Emergency Flash: One-touch SOS signaling and a powerful flashlight for any situation.
+• Flash Dimmer: Adjust supported flashlight strength in-app or cycle levels from Quick Settings.
+• Morse Flashlight: Flash a custom letters-and-numbers message in Morse code.
+• Toolkit Tiles: Discover, manage, and sync supported Quick Settings tiles for instant access.
+
+📱 Device & Design Insights
+• Material Colors Explorer: Preview and explore your device's unique Material You color palette.
+
+🧘 Wellness & Focus
+• Guided Breathing Helper: Destress and relax with simple, effective breathing exercises.
+
+Benefits
+
+🛠️ All-in-One Productivity Hub
+• Eliminate App Clutter: Replace dozens of single-purpose utility apps with one lightweight, high-performance toolkit.
+• Everyday Convenience: Instantly access practical tools for decision making, measurement, emergency signaling, and focus.
+• Battery & Resource Friendly: Designed for maximum efficiency with minimal battery and memory footprint.
+• Sleek & Adaptive Design: Enjoy a gorgeous interface featuring dynamic Material You theming and smooth animations.
+
+How it works
+App Toolkit is built for speed and reliability, bringing together a rich suite of utilities under a cohesive, modern interface. Every tool is optimized for instant response and smooth everyday use.
+
+Get started today
+Download App Toolkit from the Google Play Store and enjoy a powerful, clutter-free utility experience. It's free, easy to navigate, and designed to make everyday tasks effortless.
+
+Feedback
+We are constantly updating and improving App Toolkit to give you the best possible experience. If you have any suggested features or improvements, please leave a review. In case something is not working correctly please let me know. When posting a low rating please describe what is wrong to give the possibility to fix that issue.
+
+Thank you for choosing App Toolkit! We hope you enjoy using our app as much as we enjoyed creating it for you!
