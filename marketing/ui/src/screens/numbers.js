@@ -120,7 +120,7 @@ export default {
               <header class="mw-counter-header"><h3 class="mw-title"><button class="mw-open" type="button" @click=${() => open("counter")}>Counter</button></h3>
                 <md-text-button class="mw-counter-reset" ?disabled=${count === 0} @click=${() => s.set?.({counterValue: 0})}><md-icon slot="icon">refresh</md-icon>Reset</md-text-button>
               </header>
-              <div class="mw-counter-panel ${count >= 1000 ? "mw-counter-panel--long" : ""}">
+              <div class="mw-counter-panel" style=${`--count-digits:${String(count).length}`}>
                 <md-outlined-icon-button aria-label="Subtract" ?disabled=${count === 0} @click=${() => s.set?.({counterValue: count - 1})}><md-icon>remove</md-icon></md-outlined-icon-button>
                 <div class="measure-counter__value mw-count" aria-live="polite" aria-label="Current count">${count}</div>
                 <md-filled-icon-button aria-label="Add" ?disabled=${count === 2147483647} @click=${() => s.set?.({counterValue: count + 1})}><md-icon>add</md-icon></md-filled-icon-button>

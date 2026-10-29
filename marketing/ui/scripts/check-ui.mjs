@@ -187,6 +187,36 @@ try {
   assert.equal(await page.locator('.measure-reaction__pad--idle').count(), 1, 'closing cancels the running round');
   await page.locator(SHEET_CONTENT).locator('[aria-label="Close"]').click();
   checks++;
+  // Counter keeps its weighted shape and single-row controls as the count grows.
+  for (const width of [320, 360, 430, 852]) {
+    const sizes = [];
+    for (const count of [0, 999, 1000000, 2147483647]) {
+      sizes.push(await page.evaluate(async ({width, count}) => {
+        const api = await import('/src/embed.js');
+        await api.setup();
+        const target = document.createElement('div');
+        document.body.append(target);
+        try {
+          await api.mount(target, 'numbers', {counterValue: count}, {window: {width, height: 957, system: 'android'}, frame: false});
+          const number = target.querySelector('.mw-count');
+          const minus = target.querySelector('.mw-counter-panel > md-outlined-icon-button');
+          const plus = target.querySelector('.mw-counter-panel > md-filled-icon-button');
+          const style = getComputedStyle(number), bounds = number.getBoundingClientRect();
+          const range = document.createRange(); range.selectNodeContents(number);
+          return {fits: range.getBoundingClientRect().width <= number.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight),
+            startGap: bounds.left - minus.getBoundingClientRect().right, endGap: plus.getBoundingClientRect().left - bounds.right,
+            font: parseFloat(style.fontSize), height: bounds.height};
+        } finally { target.remove(); }
+      }, {width, count}));
+    }
+    for (const size of sizes) {
+      assert.ok(size.fits, 'counter digits fit inside the shape');
+      assert.ok(Math.abs(size.startGap - 8) < 1 && Math.abs(size.endGap - 8) < 1, 'shape fills space between controls');
+      assert.equal(size.height, sizes[0].height, 'shape height stays fixed');
+    }
+    assert.ok(sizes[3].font <= sizes[0].font, 'larger counts never grow the font');
+    checks++;
+  }
   // Compose Measure presentations at every supported window and theme.
   for(const window of ['phone','fold','desktop']) for(const theme of ['light','dark']) {
     for(const activeSheet of ['ruler','protractor','counter','bill_splitter','unit_converter','reaction_test']) {

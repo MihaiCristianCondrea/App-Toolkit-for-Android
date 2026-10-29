@@ -1752,15 +1752,11 @@ mnw-android-screen,
 .mw-widget--counter { container-type: inline-size; gap: 8px; padding: 12px 16px 16px; }
 .mw-counter-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-left: 4px; }
 .mw-counter-reset { position: relative; z-index: 1; }
-.mw-counter-panel { display: grid; grid-template-columns: 64px minmax(0, 1fr) 64px; align-items: center; gap: 8px; width: 100%; max-width: 360px; align-self: center; }
+.mw-counter-panel { display: grid; grid-template-columns: 64px minmax(0, 1fr) 64px; align-items: center; gap: 8px; width: 100%; container-type: inline-size; align-self: center; }
 .mw-counter-panel > md-outlined-icon-button, .mw-counter-panel > md-filled-icon-button { position: relative; z-index: 1; width: 64px; height: 64px; --md-icon-size: 32px; }
 .mw-counter-panel > md-outlined-icon-button { --md-outlined-icon-button-container-size: 64px; --md-outlined-icon-button-icon-size: 32px; }
 .mw-counter-panel > md-filled-icon-button { --md-filled-icon-button-container-size: 64px; --md-filled-icon-button-icon-size: 32px; }
-.mw-count { justify-self: center; width: max-content; min-width: 104px; max-width: 100%; margin: 8px 0; padding: 16px 12px; box-sizing: border-box; text-align: center; font-size: clamp(28px, 11cqi, 45px); font-variant-numeric: tabular-nums; }
-.mw-counter-panel--long { grid-template-columns: 1fr 1fr; gap: 8px 16px; }
-.mw-counter-panel--long .mw-count { grid-column: 1 / -1; grid-row: 1; justify-self: center; max-width: 100%; padding-inline: 24px; font-size: 28px; }
-.mw-counter-panel--long > md-outlined-icon-button { grid-column: 1; justify-self: end; }
-.mw-counter-panel--long > md-filled-icon-button { grid-column: 2; justify-self: start; }
+.mw-count { justify-self: stretch; width: 100%; min-width: 0; margin: 8px 0; padding: 16px 12px; box-sizing: border-box; text-align: center; font-size: min(45px, calc((100cqi - 168px) / var(--count-digits) / .75)); line-height: 48px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
 .mw-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
 .mw-actions > * { position: relative; z-index: 1; }
